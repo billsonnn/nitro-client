@@ -1,0 +1,1 @@
+export class NitroEvent extends Event {}

@@ -1,0 +1,10 @@
+/dist
+/node_modules
+/assets
+.git
+.vs
+.vscode
+npm-debug.log
+.DS_Store
+Thumbs.db
+*.zip
