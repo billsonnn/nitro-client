@@ -1,6 +1,6 @@
-import { IDisposeable } from '../common/disposable/IDisposable';
+import { IDisposable } from '../common/disposable/IDisposable';
 
-export interface IEventDispatcher extends IDisposeable
+export interface IEventDispatcher extends IDisposable
 {
     addEventListener(type: string, callback: Function): void
     removeEventListener(type: string, callback: Function): void;

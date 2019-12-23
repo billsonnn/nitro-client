@@ -119,4 +119,9 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
     {
         this._preventNextClick = flag;
     }
+
+    public get totalTimeRunning(): number
+    {
+        return PIXI.Ticker.shared.lastTime;
+    }
 }

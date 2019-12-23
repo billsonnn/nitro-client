@@ -1,0 +1,8 @@
+import { IRoomObjectManager } from './IRoomObjectManager';
+import { IRoomObjectController } from './object/IRoomObjectController';
+
+export interface IRoomInstanceContainer
+{
+    initalizeObject(object: IRoomObjectController): IRoomObjectController;
+    createRoomObjectManager(): IRoomObjectManager;
+}

@@ -1,11 +1,15 @@
+import { EventDispatcher } from '../events/EventDispatcher';
+import { IEventDispatcher } from '../events/IEventDispatcher';
 import { Disposable } from './disposable/Disposable';
-import { IDisposeable } from './disposable/IDisposable';
+import { INitroManager } from './INitroManager';
 import { INitroLogger } from './logger/INitroLogger';
 import { NitroLogger } from './logger/NitroLogger';
 
-export class NitroManager extends Disposable implements IDisposeable
+export class NitroManager extends Disposable implements INitroManager
 {
     private _logger: INitroLogger;
+
+    private _events: IEventDispatcher;
 
     private _isLoaded: boolean;
     private _isLoading: boolean;
@@ -15,6 +19,8 @@ export class NitroManager extends Disposable implements IDisposeable
         super();
 
         this._logger        = logger instanceof NitroLogger ? logger : new NitroLogger(this.constructor.name);
+
+        this._events        = new EventDispatcher();
 
         this._isLoaded      = false;
         this._isLoading     = false;
@@ -39,7 +45,9 @@ export class NitroManager extends Disposable implements IDisposeable
 
     protected onDispose(): void
     {
-        return;
+        if(this._events) this._events.dispose();
+
+        super.onDispose();
     }
 
     public reload(): void
@@ -51,6 +59,11 @@ export class NitroManager extends Disposable implements IDisposeable
     public get logger(): INitroLogger
     {
         return this._logger;
+    }
+
+    public get events(): IEventDispatcher
+    {
+        return this._events;
     }
 
     public get isLoaded(): boolean

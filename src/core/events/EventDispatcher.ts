@@ -1,8 +1,8 @@
 import { Disposable } from '../common/disposable/Disposable';
-import { IDisposeable } from '../common/disposable/IDisposable';
+import { IDisposable } from '../common/disposable/IDisposable';
 import { IEventDispatcher } from './IEventDispatcher';
 
-export class EventDispatcher extends Disposable implements IEventDispatcher, IDisposeable
+export class EventDispatcher extends Disposable implements IEventDispatcher, IDisposable
 {
     private _listeners: Map<string, Function[]>;
 
@@ -16,6 +16,8 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     protected onDispose(): void
     {
         this.removeAllListeners();
+
+        super.onDispose();
     }
 
     public addEventListener(type: string, callback: Function): void
@@ -44,9 +46,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         for(let [ index, callback ] of existing.entries())
         {
-            if(!callback) continue;
-
-            if(callback !== callback) continue;
+            if(!callback || callback !== callback) continue;
 
             existing.splice(index, 1);
 
@@ -59,6 +59,8 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     public dispatchEvent(event: Event): boolean
     {
         if(!event) return false;
+
+        //NitroLogger.printMessage(`Event Dispatched: ${ event.type }`);
 
         this.processEvent(event);
 

@@ -11,4 +11,5 @@ export interface INitroRenderer extends PIXI.Application
     pixiRenderer: PIXI.Renderer | PIXI.CanvasRenderer;
     preventEvents: boolean;
     preventNextClick: boolean;
+    totalTimeRunning: number;
 }

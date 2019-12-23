@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js-legacy';
-import { IDisposeable } from './IDisposable';
+import { IDisposable } from './IDisposable';
 
-export class DisposableContainer extends PIXI.Container implements IDisposeable
+export class DisposableContainer extends PIXI.Container implements IDisposable
 {
     private _isDisposed: boolean;
     private _isDisposing: boolean;

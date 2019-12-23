@@ -1,6 +1,6 @@
-import { IDisposeable } from './IDisposable';
+import { IDisposable } from './IDisposable';
 
-export class Disposable implements IDisposeable
+export class Disposable implements IDisposable
 {
     private _isDisposed: boolean;
     private _isDisposing: boolean;

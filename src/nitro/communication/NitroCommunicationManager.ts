@@ -60,6 +60,8 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
             this._connection.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
             this._connection.removeEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
         }
+
+        super.onDispose();
     }
 
     private onConnectionOpenedEvent(event: Event): void

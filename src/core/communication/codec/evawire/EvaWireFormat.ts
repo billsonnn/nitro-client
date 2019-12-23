@@ -65,14 +65,14 @@ export class EvaWireFormat implements ICodec
 
             const length = buffer.readInt();
 
-            if(length < 2)
+            if(length < 2) return dataWrapper;
+
+            if(buffer.remaining() < length)
             {
-                //buffer = buffer.slice();
+                buffer.offset -= 4;
 
                 return dataWrapper;
             }
-
-            if(buffer.remaining() < length) return dataWrapper;
 
             const extracted = buffer.readBytes(length);
 

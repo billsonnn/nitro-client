@@ -1,21 +1,24 @@
 import { AssetManager } from './asset/AssetManager';
 import { IAssetManager } from './asset/IAssetManager';
+import { Disposable } from './common/disposable/Disposable';
 import { CommunicationManager } from './communication/CommunicationManager';
 import { ICommunicationManager } from './communication/ICommunicationManager';
 import { INitroCore } from './INitroCore';
 
-export class NitroCore implements INitroCore
+export class NitroCore extends Disposable implements INitroCore
 {
     private _asset: IAssetManager;
     private _communication: ICommunicationManager;
 
     constructor()
     {
+        super();
+
         this._asset         = new AssetManager();
         this._communication = new CommunicationManager();
     }
 
-    public dispose(): void
+    protected onDispose(): void
     {
         if(this._asset)
         {

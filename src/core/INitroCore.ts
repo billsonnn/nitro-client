@@ -1,9 +1,9 @@
 import { IAssetManager } from './asset/IAssetManager';
+import { IDisposable } from './common/disposable/IDisposable';
 import { ICommunicationManager } from './communication/ICommunicationManager';
 
-export interface INitroCore
+export interface INitroCore extends IDisposable
 {
-    dispose(): void;
     asset: IAssetManager;
     communication: ICommunicationManager;
 }

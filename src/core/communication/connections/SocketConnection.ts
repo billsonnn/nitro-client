@@ -2,6 +2,7 @@ import * as ByteBuffer from 'bytebuffer';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { EvaWireFormat } from '../codec/evawire/EvaWireFormat';
 import { ICodec } from '../codec/ICodec';
+import { SocketConnectionEvent } from '../events/SocketConnectionEvent';
 import { ICommunicationManager } from '../ICommunicationManager';
 import { IMessageComposer } from '../messages/IMessageComposer';
 import { IMessageConfiguration } from '../messages/IMessageConfiguration';
@@ -92,22 +93,24 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     private onOpen(event: Event): void
     {
-        this.dispatchEvent(event);
+        this.dispatchConnectionEvent(SocketConnectionEvent.CONNECTION_OPENED, event);
     }
 
     private onClose(event: CloseEvent): void
     {
-        this.dispatchEvent(event);
+        this.dispatchConnectionEvent(SocketConnectionEvent.CONNECTION_CLOSED, event);
     }
 
     private onError(event: Event): void
     {
-        this.dispatchEvent(event);
+        this.dispatchConnectionEvent(SocketConnectionEvent.CONNECTION_ERROR, event);
     }
 
     private onMessage(event: MessageEvent): void
     {
         if(!event) return;
+
+        this.dispatchConnectionEvent(SocketConnectionEvent.CONNECTION_MESSAGE, event);
 
         const reader = new FileReader();
 
@@ -115,11 +118,17 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         reader.onloadend = progress =>
         {
-            //this._dataBuffer = ByteBuffer.concat([ this._dataBuffer, ByteBuffer.wrap(new Uint8Array(<ArrayBuffer> reader.result)) ])
-            this._dataBuffer = ByteBuffer.wrap(new Uint8Array(<ArrayBuffer> reader.result));
+            const buffer = ByteBuffer.wrap(new Uint8Array(<ArrayBuffer> reader.result));
+
+            this._dataBuffer = buffer;
 
             this.processReceivedData();
         }
+    }
+
+    private dispatchConnectionEvent(type: string, event: Event): void
+    {
+        this.dispatchEvent(new SocketConnectionEvent(type, this, event));
     }
 
     public authenticated(): void
@@ -196,6 +205,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
             const messages = this.getMessagesForWrapper(wrapper);
 
             if(!messages || !messages.length) continue;
+
+            console.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+
+            if(!messages || !messages.length) continue;
             
             this.handleMessages(...messages);
         }
@@ -211,10 +224,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         const messages = this._codec.decode(this._dataBuffer);
 
-        if(this._dataBuffer.remaining() === 0)
-        {
-            this._dataBuffer = new ByteBuffer();
-        }
+        if(this._dataBuffer.remaining() === 0) this._dataBuffer = new ByteBuffer();
 
         return messages;
     }
@@ -227,18 +237,11 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         if(!events || !events.length) return null;
 
-        const messages: IMessageEvent[] = [];
+        const parser = events[0].parser;
 
-        for(let event of events)
-        {
-            if(!event || !event.parser.flush() || !event.parser.parse(wrapper)) continue;
+        if(!parser || !parser.flush() || !parser.parse(wrapper)) return null;
 
-            messages.push(event);
-        }
-
-        if(!messages || !messages.length) return null;
-
-        return messages;
+        return events;
     }
 
     private handleMessages(...messages: IMessageEvent[]): void

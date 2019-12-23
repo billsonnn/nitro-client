@@ -1,6 +1,6 @@
 import { NitroManager } from '../../../core/common/NitroManager';
-import { WebSocketEventEnum } from '../../../core/communication/connections/enums/WebSocketEventEnum';
 import { IConnection } from '../../../core/communication/connections/IConnection';
+import { SocketConnectionEvent } from '../../../core/communication/events/SocketConnectionEvent';
 import { NitroEvent } from '../../../core/events/NitroEvent';
 import { NitroInstance } from '../../NitroInstance';
 import { NitroCommunicationEventEnum } from '../enums/NitroCommunicationEventEnum';
@@ -35,8 +35,8 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(connection)
         {
-            connection.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-            connection.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
         }
 
         this._communication.registerMessageEvent(new ClientPingEvent(this.onClientPingEvent.bind(this)));
@@ -51,12 +51,14 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(connection)
         {
-            connection.removeEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-            connection.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
         }
 
         this._sso           = null;
         this._handShaking   = false;
+
+        super.onDispose();
     }
 
     private onConnectionOpenedEvent(event: Event): void

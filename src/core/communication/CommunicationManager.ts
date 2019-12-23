@@ -1,27 +1,29 @@
+import { Disposable } from '../common/disposable/Disposable';
 import { IConnection } from './connections/IConnection';
 import { IConnectionStateListener } from './connections/IConnectionStateListener';
 import { SocketConnection } from './connections/SocketConnection';
 import { ICommunicationManager } from './ICommunicationManager';
 
-export class CommunicationManager implements ICommunicationManager
+export class CommunicationManager extends Disposable implements ICommunicationManager
 {
     private _connections: IConnection[]
 
     constructor()
     {
+        super();
+
         this._connections = [];
     }
 
-    public dispose(): void
+    protected onDispose(): void
     {
-        if(this._connections)
+        if(!this._connections || !this._connections.length) return;
+        
+        for(let connection of this._connections.values())
         {
-            for(let connection of this._connections.values())
-            {
-                if(!connection) continue;
+            if(!connection) continue;
 
-                connection.dispose();
-            }
+            connection.dispose();
         }
     }
 

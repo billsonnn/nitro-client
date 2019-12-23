@@ -1,22 +1,20 @@
+import { Disposable } from '../common/disposable/Disposable';
 import { AssetLoader } from './AssetLoader';
 import { DownloadQueue } from './download/DownloadQueue';
 import { IDownloadQueue } from './download/IDownloadQueue';
 import { IAssetData } from './interfaces';
 
-export class AssetManager
+export class AssetManager extends Disposable
 {
     private _assets: Map<string, IAssetData>;
     private _queue: IDownloadQueue;
 
     constructor()
     {
+        super();
+
         this._assets    = new Map();
         this._queue     = new DownloadQueue();
-    }
-
-    public dispose(): void
-    {
-        return;
     }
 
     public getAsset(name: string): IAssetData

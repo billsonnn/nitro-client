@@ -18,33 +18,38 @@ export class NitroLogger implements INitroLogger
     
     public log(message: any): void
     {
-        this.printMessage(message, null);
+        this.printMessage(message);
     }
     
     public error(message: any, trace?: any): void
     {
-        this.printMessage(trace || message, null);
+        this.printMessage(trace || message);
     }
     
     public warn(message: any): void
     {
-        this.printMessage(message, null);
-    }
-    
-    public printMessage(message: any, color?: any): void
-    {
-        if(!this._print) return;
-        
-        console.log(`[Nitro] ${ moment().format('M/D/YY h:mm:ss A') } [${ this._name }] ${ message } ${ this.getTimestamp() }`);
+        this.printMessage(message);
     }
 
-    private getTimestamp(): string
+    public static printMessage(message: string, name: string = 'Nitro'): void
+    {
+        console.log(`[Nitro] ${ moment().format('M/D/YY h:mm:ss A') } [${ name }] ${ message } ${ this.getTimestamp() }`);
+    }
+    
+    public printMessage(message: any): void
+    {
+        if(!this._print) return;
+
+        NitroLogger.printMessage(message, this._name);
+    }
+
+    public static getTimestamp(): string
     {
         const now = Date.now();
 
         const result = ` +${ now - NitroLogger.LAST_TIMESTAMP || 0 }ms`;
         
-        NitroLogger.LAST_TIMESTAMP = now;
+        this.LAST_TIMESTAMP = now;
 
         return result;
     }

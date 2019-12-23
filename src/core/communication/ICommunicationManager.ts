@@ -1,8 +1,8 @@
+import { IDisposable } from '../common/disposable/IDisposable';
 import { IConnection } from './connections/IConnection';
 import { IConnectionStateListener } from './connections/IConnectionStateListener';
 
-export interface ICommunicationManager
+export interface ICommunicationManager extends IDisposable
 {
-    dispose(): void;
     createConnection(stateListener?: IConnectionStateListener): IConnection;
 }

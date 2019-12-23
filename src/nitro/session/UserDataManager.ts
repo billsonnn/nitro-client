@@ -1,31 +1,24 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
-import { IConnection } from '../../core/communication/connections/IConnection';
+import { IRoomSession } from './IRoomSession';
 
 export class UserDataManager extends Disposable
 {
-    private _connection: IConnection;
+    private _roomSession: IRoomSession;
 
-    constructor()
+    constructor(roomSession: IRoomSession)
     {
         super();
 
-        this._connection = null;
+        this._roomSession = roomSession;
     }
 
     protected onDispose(): void
     {
-        this._connection = null;
+        this._roomSession = null;
     }
 
-    public setConnection(connection: IConnection)
+    public get roomSession(): IRoomSession
     {
-        if(!connection) return;
-
-        this._connection = connection;
-    }
-
-    public get connection(): IConnection
-    {
-        return this._connection;
+        return this._roomSession;
     }
 }
