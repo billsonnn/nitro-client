@@ -1,4 +1,5 @@
 import { Disposable } from '../core/common/disposable/Disposable';
+import { NitroInstance } from '../nitro/NitroInstance';
 import { RoomObjectCategory } from '../nitro/room/object/RoomObjectCategory';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
@@ -43,6 +44,44 @@ export class RoomInstance extends Disposable implements IRoomInstance
             if(renderer === this._renderer) return;
 
             this.destroyRenderer();
+        }
+
+        document.body.onkeydown         = event => renderer.keyDown(event);
+        document.body.onkeyup           = event => renderer.keyUp(event);
+
+        NitroInstance.instance.renderer.view.onclick = event =>
+        {
+            if(NitroInstance.instance.renderer.preventEvents) return;
+
+            if(NitroInstance.instance.renderer.preventNextClick)
+            {
+                NitroInstance.instance.renderer.preventNextClick = false;
+
+                return;
+            }
+
+            //this._session.room.container.click(event);
+        }
+
+        NitroInstance.instance.renderer.view.onmousemove = event =>
+        {
+            if(NitroInstance.instance.renderer.preventEvents) return;
+
+            //this._session.room.container.mouseMove(event);
+        }
+
+        NitroInstance.instance.renderer.view.onmousedown = event =>
+        {
+            if(NitroInstance.instance.renderer.preventEvents) return;
+
+            //this._session.room.container.mouseDown(event);
+        }
+
+        NitroInstance.instance.renderer.view.onmouseup = event =>
+        {
+            if(NitroInstance.instance.renderer.preventEvents) return;
+
+            //this._session.room.container.mouseUp(event);
         }
 
         this._renderer = renderer;

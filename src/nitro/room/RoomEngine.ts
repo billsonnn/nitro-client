@@ -6,19 +6,26 @@ import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogi
 import { IRoomObjectVisualizationFactory } from '../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
 import { RoomRendererFactory } from '../../room/renderer/RoomRendererFactory';
+import { RoomModelParser } from '../communication/messages/parser/room/mapping/RoomModelParser';
 import { NitroInstance } from '../NitroInstance';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
 import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
+import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { ObjectVisualizationFactory } from './object/visualization/ObjectVisualizationFactory';
 import { RoomMessageHandler } from './RoomMessageHandler';
-import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { RoomInstanceData } from './utils/RoomInstanceData';
 
 export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator
 {
+    private static ROOM_OBJECT_ID: number       = -1;
+    private static ROOM_OBJECT_TYPE: string     = 'room';
+
+    private static CURSOR_OBJECT_ID: number     = -2;
+    private static CURSOR_OBJECT_TYPE: string   = 'tile_cursor';
+
     private _communication: INitroCommunicationManager;
     private _roomSession: IRoomSessionManager;
     private _roomMessageHandler: RoomMessageHandler;
@@ -84,7 +91,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this.removeRoomInstance(roomId);
     }
 
-    private getRoomInstance(roomId: number): RoomInstanceData
+    public getRoomInstance(roomId: number): IRoomInstance
+    {
+        if(!this._roomSession || !this._roomSession.roomManager) return;
+
+        return this._roomSession.roomManager.getRoomInstance(roomId);
+    }
+
+    private getRoomInstanceData(roomId: number): RoomInstanceData
     {
         const existing = this._roomInstanceData.get(roomId);
 
@@ -99,7 +113,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     public removeRoomInstance(roomId: number): void
     {
-        const instance = this._roomSession.roomManager.getRoomInstance(roomId);
+        const instance = this.getRoomInstance(roomId);
 
         if(instance)
         {
@@ -156,13 +170,26 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return instance;
     }
 
-    public getWallGeometry(roomId: number): LegacyWallGeometry
+    public initializeRoomInstance(roomId: number, model: RoomModelParser): void
     {
-        const data = this.getRoomInstance(roomId);
+        const instance = this.getRoomInstance(roomId);
 
-        if(!data) return null;
+        if(!instance) return;
 
-        return data.legacyGeometry;
+        if(model)
+        {
+            const object = instance.createObject(RoomEngine.ROOM_OBJECT_ID, RoomEngine.ROOM_OBJECT_TYPE, RoomObjectCategory.ROOM);
+
+            object.setRoom(instance);
+
+            this._roomSession.roomManager.initalizeObject(object, model);
+        }
+
+        const tileCursor = instance.createObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
+
+        tileCursor.setRoom(instance);
+
+        this._roomSession.roomManager.initalizeObject(tileCursor); 
     }
 
     public get roomSession(): IRoomSessionManager

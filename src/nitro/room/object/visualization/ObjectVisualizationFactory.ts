@@ -1,4 +1,3 @@
-import { IAssetData } from '../../../../core/asset/interfaces';
 import { IRoomObjectSpriteVisualization } from '../../../../room/object/visualization/IRoomObjectSpriteVisualization';
 import { IObjectVisualizationData } from '../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { IRoomObjectVisualizationFactory } from '../../../../room/object/visualization/IRoomObjectVisualizationFactory';
@@ -132,13 +131,15 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
         return visualization;
     }
 
-    public getVisualizationData(type: string, visualizationType: string, asset: IAssetData): IObjectVisualizationData
+    public getVisualizationData(type: string, visualizationType: string, ...args: any[]): IObjectVisualizationData
     {
         const existing = this._visualizationDatas.get(type);
 
         if(existing) return existing;
 
         let visualizationData: IObjectVisualizationData = null;
+
+        let save = true;
 
         switch(visualizationType)
         {
@@ -179,7 +180,8 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
                 //_local_5 = FurnitureMannequinVisualizationData;
                 break;
             case ObjectVisualizationType.ROOM:
-                visualizationData = new RoomVisualizationData();
+                visualizationData   = new RoomVisualizationData();
+                save                = false;
                 break;
             case ObjectVisualizationType.USER:
             case ObjectVisualizationType.BOT:
@@ -193,14 +195,14 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
 
         if(!visualizationData) return null;
 
-        if(!visualizationData.initialize(asset))
+        if(!visualizationData.initialize(...args))
         {
             visualizationData.dispose();
 
             return null;
         }
 
-        this._visualizationDatas.set(type, visualizationData);
+        if(save) this._visualizationDatas.set(type, visualizationData);
 
         return visualizationData;
     }

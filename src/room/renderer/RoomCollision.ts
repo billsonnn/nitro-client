@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js-legacy';
 import { NitroInstance } from '../../nitro/NitroInstance';
-import { IRoomObjectSprite } from '../object/visualization/IRoomObjectSprite';
+import { IRoomCollision } from './IRoomCollision';
 
-export class RoomCollision extends PIXI.Container
+export class RoomCollision extends PIXI.Container implements IRoomCollision
 {
     constructor()
     {
@@ -11,21 +11,21 @@ export class RoomCollision extends PIXI.Container
         this.sortableChildren = true;
     }
 
-    public addCollision(sprite: IRoomObjectSprite): void
+    public addCollision(sprite: PIXI.DisplayObject): void
     {
         if(!sprite) return;
 
         this.addChild(sprite);
     }
 
-    public removeCollision(sprite: IRoomObjectSprite): void
+    public removeCollision(sprite: PIXI.DisplayObject): void
     {
         if(!sprite) return;
 
         this.removeChild(sprite);
     }
 
-    public findCollision(point: PIXI.Point): IRoomObjectSprite | PIXI.DisplayObject
+    public findCollision(point: PIXI.Point): PIXI.DisplayObject
     {
         return NitroInstance.instance.renderer.pixiRenderer.plugins.interaction.hitTest(point, this);
     }

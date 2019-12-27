@@ -7,7 +7,6 @@ import { UserInfoEvent } from '../communication/messages/incoming/user/data/User
 import { RoomModel2Composer } from '../communication/messages/outgoing/room/mapping/RoomModel2Composer';
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
 import { IRoomCreator } from './IRoomCreator';
-import { RoomObjectCategory } from './object/RoomObjectCategory';
 
 export class RoomMessageHandler extends Disposable
 {
@@ -100,9 +99,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!instance) return;
 
-        const object = instance.createObject(0, 'room', RoomObjectCategory.ROOM);
-
-        this._roomCreator.roomSession.roomManager.initalizeObject(object);
+        this._roomCreator.initializeRoomInstance(instance.id, event.getParser());
     }
 
     private onFurnitureFloorEvent(event: FurnitureFloorEvent): void

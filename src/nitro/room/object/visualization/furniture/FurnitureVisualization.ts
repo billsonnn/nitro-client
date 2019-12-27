@@ -137,6 +137,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     {
         this.reset();
 
+        if(this._data) this._data.dispose();
+
         super.onDispose();
     }
 
@@ -148,15 +150,15 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         this._screenPosition = this.object.getScreenPosition();
 
-        // if(this._selfContainer)
-        // {
-        //     if(this._screenPosition.x !== this._selfContainer.x || this._screenPosition.y !== this._selfContainer.y)
-        //     {
-        //         this._selfContainer.x       = this._screenPosition.x;
-        //         this._selfContainer.y       = this._screenPosition.y;
-        //         this._selfContainer.zIndex  = this._screenPosition.depth + 4;
-        //     }
-        // }
+        if(this._selfContainer)
+        {
+            if(this._screenPosition.x !== this._selfContainer.x || this._screenPosition.y !== this._selfContainer.y)
+            {
+                this._selfContainer.x       = this._screenPosition.x;
+                this._selfContainer.y       = this._screenPosition.y;
+                this._selfContainer.zIndex  = this._screenPosition.depth + 4;
+            }
+        }
 
         this.setDirection(this.object.position.direction);
 
@@ -303,11 +305,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 sprite.zIndex       = (this._screenPosition.depth + this._screenPosition.z) - 1000 + 0.001;
             }
 
-            // if(!this._isSelfContained)
-            // {
-            //     sprite.x += this._screenPosition.x;
-            //     sprite.y += this._screenPosition.y;
-            // }
+            if(!this._selfContainer)
+            {
+                sprite.x += this._screenPosition.x;
+                sprite.y += this._screenPosition.y;
+            }
         }
     }
 

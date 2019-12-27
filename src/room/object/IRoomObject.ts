@@ -1,4 +1,5 @@
 import { IDisposable } from '../../core/common/disposable/IDisposable';
+import { IRoomInstance } from '../IRoomInstance';
 import { Position } from '../utils/Position';
 import { IRoomObjectModel } from './IRoomObjectModel';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
@@ -11,6 +12,7 @@ export interface IRoomObject extends IDisposable
     instanceId: number;
     type: string;
     model: IRoomObjectModel;
+    room: IRoomInstance;
     visualization: IRoomObjectSpriteVisualization;
     logic: IRoomObjectLogic;
     position: Position;

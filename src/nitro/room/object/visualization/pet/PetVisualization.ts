@@ -20,13 +20,15 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     {
         super();
 
+        this._data          = null;
+
         this._posture       = '';
         this._gesture       = '';
         this._isSleeping    = false;
         this._headDirection = -1;
         this._color         = 0xFFFFFF;
 
-        //this._isSelfContained = true;
+        this._selfContained = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean

@@ -2,6 +2,9 @@ import { IAssetData } from '../core/asset/interfaces/IAssetData';
 import { NitroManager } from '../core/common/NitroManager';
 import { NitroInstance } from '../nitro/NitroInstance';
 import { IRoomEngine } from '../nitro/room/IRoomEngine';
+import { RoomObjectModelKey } from '../nitro/room/object/RoomObjectModelKey';
+import { RoomObjectType } from '../nitro/room/object/RoomObjectType';
+import { NitroConfiguration } from '../NitroConfiguration';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomManager } from './IRoomManager';
@@ -27,6 +30,8 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
     protected onDispose(): void
     {
+        super.onDispose();
+        
         return;
     }
 
@@ -63,7 +68,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return true;
     }
 
-    public initalizeObject(object: IRoomObjectController): IRoomObjectController
+    public initalizeObject(object: IRoomObjectController, ...args: any[]): IRoomObjectController
     {
         if(object.isReady) return object;
         
@@ -71,16 +76,16 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         let logic: string           = object.type;
         let assetName: string       = object.type;
 
-        // if(RoomObjectType.AVATAR_TYPES.indexOf(object.type) >= 0)
-        // {
-        //     if(object.type === RoomObjectType.PET)
-        //     {
-        //         const petType = object.model.getValue(RoomObjectModelKey.PET_TYPE);
+        if(RoomObjectType.AVATAR_TYPES.indexOf(object.type) >= 0)
+        {
+            if(object.type === RoomObjectType.PET)
+            {
+                const petType = object.model.getValue(RoomObjectModelKey.PET_TYPE);
 
-        //         if(petType >= 0) assetName = NitroConfiguration.PET_TYPES[petType];
-        //     }
-        // }
-        // else assetName = object.type;
+                if(petType >= 0) assetName = NitroConfiguration.PET_TYPES[petType];
+            }
+        }
+        else assetName = object.type;
 
         let asset: IAssetData = null;
 
@@ -103,7 +108,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(visualInstance)
         {
-            const data = this._roomEngine.visualizationFactory.getVisualizationData(assetName, visualization, asset);
+            const data = this._roomEngine.visualizationFactory.getVisualizationData(assetName, visualization, ...args);
 
             if(!data || !visualInstance.initialize(data))
             {
@@ -113,7 +118,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
             }
         }
 
-        if(logicInstance) logicInstance.initialize(asset);
+        if(logicInstance) logicInstance.initialize(...args);
 
         object.isReady = true;
 

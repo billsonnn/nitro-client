@@ -67,7 +67,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!connection) return;
 
-        this.dispatchEvent(NitroCommunicationEventEnum.CONNECTION_ESTABLISHED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_ESTABLISHED);
 
         this.startHandshake(connection);
 
@@ -101,7 +101,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         this.completeHandshake(event.connection);
 
-        this.dispatchEvent(NitroCommunicationEventEnum.CONNECTION_AUTHENTICATED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_AUTHENTICATED);
 
         event.connection.send(new UserInfoComposer());
     }
@@ -126,19 +126,19 @@ export class NitroCommunicationDemo extends NitroManager
 
     private startHandshake(connection: IConnection): void
     {
-        this.dispatchEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKING);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKING);
 
         this._handShaking = true;
     }
 
     private completeHandshake(connection: IConnection): void
     {
-        this.dispatchEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKED);
 
         this._handShaking = false;
     }
 
-    private dispatchEvent(type: string): void
+    private dispatchCommunicationDemoEvent(type: string): void
     {
         NitroInstance.instance.events.dispatchEvent(new NitroEvent(type));
     }

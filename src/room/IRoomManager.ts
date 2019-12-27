@@ -7,5 +7,5 @@ export interface IRoomManager extends INitroManager
     getRoomInstance(roomId: number): IRoomInstance;
     createRoomInstance(roomId: number): IRoomInstance;
     removeRoomInstance(roomId: number): boolean;
-    initalizeObject(object: IRoomObjectController): IRoomObjectController;
+    initalizeObject(object: IRoomObjectController, ...args: any[]): IRoomObjectController;
 }

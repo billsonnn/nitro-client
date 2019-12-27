@@ -1,4 +1,5 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
+import { IRoomInstance } from '../IRoomInstance';
 import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
 import { Position } from '../utils/Position';
 import { IRoomObjectController } from './IRoomObjectController';
@@ -15,6 +16,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _instanceId: number;
     private _type: string;
     private _model: IRoomObjectModel;
+    private _room: IRoomInstance;
 
     private _visualization: IRoomObjectSpriteVisualization;
     private _logic: IRoomObjectLogic;
@@ -35,6 +37,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._instanceId            = RoomObject.OBJECT_COUNTER++;
         this._type                  = type;
         this._model                 = new RoomObjectModel();
+        this._room                  = null;
 
         this._visualization         = null;
         this._logic                 = null;
@@ -88,6 +91,13 @@ export class RoomObject extends Disposable implements IRoomObjectController
         screenPosition.y += additionalHeight;
 
         return screenPosition;
+    }
+
+    public setRoom(room: IRoomInstance): void
+    {
+        if(this._room) return;
+
+        this._room = room;
     }
 
     public setPosition(position: Position): void
@@ -178,6 +188,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
     public get model(): IRoomObjectModel
     {
         return this._model;
+    }
+
+    public get room(): IRoomInstance
+    {
+        return this._room;
     }
 
     public get visualization(): IRoomObjectSpriteVisualization

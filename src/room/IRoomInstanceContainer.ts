@@ -3,6 +3,6 @@ import { IRoomObjectController } from './object/IRoomObjectController';
 
 export interface IRoomInstanceContainer
 {
-    initalizeObject(object: IRoomObjectController): IRoomObjectController;
+    initalizeObject(object: IRoomObjectController, ...args: any[]): IRoomObjectController;
     createRoomObjectManager(): IRoomObjectManager;
 }

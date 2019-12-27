@@ -1,3 +1,5 @@
+import { IRoomCollision } from '../../renderer/IRoomCollision';
+import { RoomCollision } from '../../renderer/RoomCollision';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 import { IRoomObjectSpriteVisualization } from './IRoomObjectSpriteVisualization';
@@ -14,6 +16,9 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
     private _updateObjectCounter: number;
     private _updateModelCounter: number;
 
+    protected _selfContained: boolean;
+    protected _selfContainer: IRoomCollision;
+
     constructor()
     {
         super();
@@ -24,10 +29,23 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
 
         this._updateObjectCounter   = -1;
         this._updateModelCounter    = -1;
+
+        this._selfContained         = false;
+        this._selfContainer         = null;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
     {
+        if(this._selfContained)
+        {
+            if(!this._selfContainer)
+            {
+                this._selfContainer = new RoomCollision();
+
+                if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.addCollision(this._selfContainer);
+            }
+        }
+        
         return false;
     }
 
@@ -39,6 +57,15 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
     protected onDispose(): void
     {
         this.removeSprites();
+
+        if(this._selfContainer)
+        {
+            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(this._selfContainer);
+
+            this._selfContainer.destroy();
+
+            this._selfContainer = null;
+        }
         
         super.onDispose();
     }
@@ -72,7 +99,14 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
 
         this._sprites.set(name, sprite);
 
-        //if(this._object.room && this._object.room.mapManager && this._object.room.mapManager.collision) this._object.room.mapManager.collision.addCollision(sprite);
+        if(this._selfContainer)
+        {
+            this._selfContainer.addCollision(sprite);
+        }
+        else
+        {
+            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.addCollision(sprite);
+        }
 
         this._spriteCounter++;
 
@@ -86,13 +120,15 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
         for(let sprite of this._sprites.values())
         {
             if(!sprite) continue;
-            
-            if(!sprite) continue;
 
-            // if(this._object.room && this._object.room.mapManager && this._object.room.mapManager.collision)
-            // {
-            //     this._object.room.mapManager.collision.removeCollision(sprite);
-            // }
+            if(this._selfContainer)
+            {
+                this._selfContainer.removeCollision(sprite);
+            }
+            else
+            {
+                if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(sprite);
+            }
 
             sprite.destroy();
         }
@@ -109,7 +145,14 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
 
         if(!existing || existing !== sprite) return;
 
-        // if(this._object.room && this._object.room.mapManager && this._object.room.mapManager.collision) this._object.room.mapManager.collision.removeCollision(existing);
+        if(this._selfContainer)
+        {
+            this._selfContainer.removeCollision(sprite);
+        }
+        else
+        {
+            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(sprite);
+        }
 
         this._sprites.delete(sprite.name);
 
