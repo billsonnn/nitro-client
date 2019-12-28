@@ -6,6 +6,7 @@ import { FurnitureBadgeDisplayLogic } from './furniture/FurnitureBadgeDisplayLog
 import { FurnitureChangeStateWhenStepOnLogic } from './furniture/FurnitureChangeStateWhenStepOnLogic';
 import { FurnitureCounterClockLogic } from './furniture/FurnitureCounterClockLogic';
 import { FurnitureCreditLogic } from './furniture/FurnitureCreditLogic';
+import { FurnitureCustomStackHeightLogic } from './furniture/FurnitureCustomStackHeightLogic';
 import { FurnitureDiceLogic } from './furniture/FurnitureDiceLogic';
 import { FurnitureEditableInternalLinkLogic } from './furniture/FurnitureEditableInternalLinkLogic';
 import { FurnitureFireworksLogic } from './furniture/FurnitureFireworksLogic';
@@ -75,6 +76,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case ObjectLogicType.FURNITURE_CREDIT:
                 logic = FurnitureCreditLogic;
+                break;
+            case ObjectLogicType.FURNITURE_CUSTOM_STACK_HEIGHT:
+                logic = FurnitureCustomStackHeightLogic;
                 break;
             case ObjectLogicType.FURNITURE_DICE:
                 logic = FurnitureDiceLogic;

@@ -1,7 +1,8 @@
 export class NitroConfiguration
 {
     public static RELEASE_VERSION       = 'PRODUCTION-201611291003-338511768';
-    public static FURNIDATA_URL         = 'https://assets.nitrots.co/gamedata/json/FurnitureData.json';
+    public static ASSET_URL             = 'https://assets.nitrots.co';
+    public static FURNIDATA_URL         = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
     public static BACKGROUND_COLOR      = 0x000000;
     public static TILE_REAL_WIDTH       = 64;
     public static TILE_REAL_HEIGHT      = 32;

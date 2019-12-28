@@ -10,11 +10,13 @@ import { RoomSessionHandler } from './handler/RoomSessionHandler';
 import { IRoomHandlerListener } from './IRoomHandlerListener';
 import { IRoomSession } from './IRoomSession';
 import { IRoomSessionManager } from './IRoomSessionManager';
+import { ISessionDataManager } from './ISessionDataManager';
 import { RoomSession } from './RoomSession';
 
 export class RoomSessionManager extends NitroManager implements IRoomSessionManager, IRoomHandlerListener
 {
     private _communication: INitroCommunicationManager;
+    private _sessionData: ISessionDataManager;
     private _roomEngine: IRoomEngine;
     private _roomManager: IRoomManager;
 
@@ -25,11 +27,12 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     private _sessionStarting: boolean;
     private _viewerSession: IRoomSession;
 
-    constructor(communication: INitroCommunicationManager)
+    constructor(communication: INitroCommunicationManager, sessionData: ISessionDataManager)
     {
         super();
         
         this._communication     = communication;
+        this._sessionData       = sessionData;
         this._roomEngine        = new RoomEngine(communication, this);
         this._roomManager       = new RoomManager(this._roomEngine);
 
@@ -205,6 +208,11 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     public get communication(): INitroCommunicationManager
     {
         return this._communication;
+    }
+
+    public get sessionData(): ISessionDataManager
+    {
+        return this._sessionData;
     }
 
     public get roomEngine(): IRoomEngine

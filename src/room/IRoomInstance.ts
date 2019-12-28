@@ -9,10 +9,6 @@ export interface IRoomInstance extends IDisposable
     setRenderer(renderer: IRoomRenderer): void;
     getManager(category: number): IRoomObjectManager;
     getObject(id: number, category: number): IRoomObjectController;
-    getUnit(id: number): IRoomObjectController;
-    removeUnit(id: number): void;
-    getFurniture(id: number): IRoomObjectController;
-    removeFurniture(id: number): void;
     createObject(id: number, type: string, category: number): IRoomObjectController;
     removeObject(id: number, category: number): void;
     removeAllManagers(): void;

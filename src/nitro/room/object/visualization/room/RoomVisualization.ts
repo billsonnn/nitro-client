@@ -34,6 +34,12 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         this.generateMap();
 
+        if(this._selfContainer)
+        {
+            this._selfContainer.x -= 34;
+            this._selfContainer.y -= 1;
+        }
+
         return true;
     }
 
@@ -56,7 +62,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
     {
         this.resetMap();
 
-        if(this._data) this._data.dispose();
+        if(this._data && !this._data.saveable) this._data.dispose();
 
         super.onDispose();
     }

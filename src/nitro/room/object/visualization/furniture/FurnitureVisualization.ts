@@ -137,7 +137,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     {
         this.reset();
 
-        if(this._data) this._data.dispose();
+        if(this._data && !this._data.saveable) this._data.dispose();
 
         super.onDispose();
     }

@@ -4,16 +4,16 @@ import { IMessageParser } from '../../../../../../../core/communication/messages
 export class FurnitureFloorRemoveParser implements IMessageParser
 {
     private _itemId: number;
-    private _animateRemoval: boolean;
+    private _isExpired: boolean;
     private _userId: number;
-    private _someInt: number;
+    private _delay: number;
 
     public flush(): boolean
     {
         this._itemId            = 0;
-        this._animateRemoval    = true;
+        this._isExpired    = true;
         this._userId            = 0;
-        this._someInt           = 0;
+        this._delay           = 0;
 
         return true;
     }
@@ -22,10 +22,10 @@ export class FurnitureFloorRemoveParser implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._itemId            = parseInt(wrapper.readString());
-        this._animateRemoval    = wrapper.readBoolean() === false ? true : false;
-        this._userId            = wrapper.readInt();
-        this._someInt           = wrapper.readInt();
+        this._itemId    = parseInt(wrapper.readString());
+        this._isExpired = wrapper.readBoolean();
+        this._userId    = wrapper.readInt();
+        this._delay     = wrapper.readInt();
 
         return true;
     }
@@ -35,9 +35,9 @@ export class FurnitureFloorRemoveParser implements IMessageParser
         return this._itemId;
     }
 
-    public get animateRemoval(): boolean
+    public get isExpired(): boolean
     {
-        return this._animateRemoval;
+        return this._isExpired;
     }
 
     public get userId(): number
@@ -45,8 +45,8 @@ export class FurnitureFloorRemoveParser implements IMessageParser
         return this._userId;
     }
 
-    public get someInt(): number
+    public get delay(): number
     {
-        return this._someInt;
+        return this._delay;
     }
 }

@@ -30,7 +30,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
         this._core          = core;
         this._communication = new NitroCommunicationManager(core.communication);
         this._session       = new SessionDataManager(this._communication);
-        this._roomSession   = new RoomSessionManager(this._communication);
+        this._roomSession   = new RoomSessionManager(this._communication, this._session);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
         this._renderer      = new NitroRenderer({

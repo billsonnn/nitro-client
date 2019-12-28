@@ -1,6 +1,5 @@
 import { Disposable } from '../core/common/disposable/Disposable';
 import { NitroInstance } from '../nitro/NitroInstance';
-import { RoomObjectCategory } from '../nitro/room/object/RoomObjectCategory';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
@@ -131,26 +130,6 @@ export class RoomInstance extends Disposable implements IRoomInstance
         if(!object) return null;
 
         return object;
-    }
-
-    public getUnit(id: number): IRoomObjectController
-    {
-        return this.getObject(id, RoomObjectCategory.UNIT);
-    }
-
-    public removeUnit(id: number): void
-    {
-        return this.removeObject(id, RoomObjectCategory.UNIT);
-    }
-
-    public getFurniture(id: number): IRoomObjectController
-    {
-        return this.getObject(id, RoomObjectCategory.FURNITURE);
-    }
-
-    public removeFurniture(id: number): void
-    {
-        return this.removeObject(id, RoomObjectCategory.FURNITURE);
     }
 
     public createObject(id: number, type: string, category: number): IRoomObjectController

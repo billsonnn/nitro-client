@@ -95,6 +95,8 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             if(asset)
             {
+                args.unshift(asset);
+                
                 visualization   = asset.visualizationType;
                 logic           = asset.logicType;
             }

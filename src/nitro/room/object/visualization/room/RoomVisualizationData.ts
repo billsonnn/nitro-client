@@ -45,4 +45,9 @@ export class RoomVisualizationData extends Disposable implements IObjectVisualiz
     {
         return this._heightMap;
     }
+
+    public get saveable(): boolean
+    {
+        return false;
+    }
 }
