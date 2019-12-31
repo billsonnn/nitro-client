@@ -4,6 +4,9 @@ import { INitroCamera } from './INitroCamera';
 import { INitroRenderer } from './INitroRenderer';
 import { NitroCamera } from './NitroCamera';
 
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.Ticker.shared.maxFPS = 24;
+
 export class NitroRenderer extends PIXI.Application implements INitroRenderer
 {
     private _camera: INitroCamera;

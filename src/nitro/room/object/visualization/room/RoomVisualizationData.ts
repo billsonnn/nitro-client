@@ -4,24 +4,18 @@ import { RoomModelParser } from '../../../../communication/messages/parser/room/
 
 export class RoomVisualizationData extends Disposable implements IObjectVisualizationData
 {
-    private _width: number;
-    private _height: number;
-    private _heightMap: number[][];
+    private _modelParser: RoomModelParser;
 
     constructor()
     {
         super();
 
-        this._width     = 0;
-        this._height    = 0;
-        this._heightMap = [];
+        this._modelParser = null;
     }
 
     public initialize(parser: RoomModelParser): boolean
     {
-        this._width     = parser.width;
-        this._height    = parser.height;
-        this._heightMap = parser.heightMap;
+        this._modelParser = parser;
 
         return true;
     }
@@ -31,19 +25,9 @@ export class RoomVisualizationData extends Disposable implements IObjectVisualiz
         super.onDispose();
     }
 
-    public get width(): number
+    public get modelParser(): RoomModelParser
     {
-        return this._width;
-    }
-
-    public get height(): number
-    {
-        return this._height;
-    }
-
-    public get heightMap(): number[][]
-    {
-        return this._heightMap;
+        return this._modelParser;
     }
 
     public get saveable(): boolean

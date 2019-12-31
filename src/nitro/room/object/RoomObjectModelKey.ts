@@ -17,6 +17,11 @@ export class RoomObjectModelKey
     public static FIGURE_SIGN: string                         = 'figure_sign';
     public static FIGURE_FLAT_CONTROL: string                 = 'figure_flat_control';
     public static FIGURE_IS_TYPING: string                    = 'figure_is_typing';
+    public static FIGURE_IS_MUTED: string                     = 'figure_is_muted';
+    public static FIGURE_GAINED_EXPERIENCE: string            = 'figure_gained_experience';
+    public static FIGURE_NUMBER_VALUE: string                 = 'figure_number_value';
+    public static FIGURE_IS_PLAYING_GAME: string              = 'figure_is_playing_game';
+    public static FIGURE_GUIDE_STATUS: string                 = 'figure_guide_status';
     public static FIGURE_EXPRESSION: string                   = 'figure_expression';
     public static HEAD_DIRECTION: string                      = 'head_direction';
     public static FURNITURE_DATA_FORMAT: string               = 'furniture_data_format';

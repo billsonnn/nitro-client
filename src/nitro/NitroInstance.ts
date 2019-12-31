@@ -2,6 +2,7 @@ import { NitroManager } from '../core/common/NitroManager';
 import { INitroCore } from '../core/INitroCore';
 import { INitroRenderer } from '../core/renderer/INitroRenderer';
 import { NitroRenderer } from '../core/renderer/NitroRenderer';
+import { AvatarManager } from './avatar/AvatarManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
 import { INitroInstance } from './INitroInstance';
@@ -18,6 +19,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
 
     private _core: INitroCore;
     private _communication: INitroCommunicationManager;
+    private _avatar: AvatarManager;
     private _session: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
     private _navigator: INitroNavigator;
@@ -29,6 +31,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
 
         this._core          = core;
         this._communication = new NitroCommunicationManager(core.communication);
+        this._avatar        = new AvatarManager();
         this._session       = new SessionDataManager(this._communication);
         this._roomSession   = new RoomSessionManager(this._communication, this._session);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
@@ -47,6 +50,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
         this._renderer.setup();
 
         if(this._communication) this._communication.init();
+        if(this._avatar)        this._avatar.init();
         if(this._session)       this._session.init();
         if(this._roomSession)   this._roomSession.init();
         if(this._navigator)     this._navigator.init();
@@ -74,6 +78,13 @@ export class NitroInstance extends NitroManager implements INitroInstance
 
             this._session = null;
         }
+
+        if(this._avatar)
+        {
+            this._avatar.dispose();
+
+            this._avatar = null;
+        }
         
         if(this._communication)
         {
@@ -93,6 +104,11 @@ export class NitroInstance extends NitroManager implements INitroInstance
     public get communication(): INitroCommunicationManager
     {
         return this._communication;
+    }
+
+    public get avatar(): AvatarManager
+    {
+        return this._avatar;
     }
 
     public get session(): ISessionDataManager

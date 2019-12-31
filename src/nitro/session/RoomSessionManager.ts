@@ -7,6 +7,7 @@ import { RoomEngine } from '../room/RoomEngine';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { BaseHandler } from './handler/BaseHandler';
 import { RoomSessionHandler } from './handler/RoomSessionHandler';
+import { RoomUsersHandler } from './handler/RoomUsersHandler';
 import { IRoomHandlerListener } from './IRoomHandlerListener';
 import { IRoomSession } from './IRoomSession';
 import { IRoomSessionManager } from './IRoomSessionManager';
@@ -69,7 +70,8 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         if(!connection) return;
 
         this._handlers.push(
-            new RoomSessionHandler(connection, this)
+            new RoomSessionHandler(connection, this),
+            new RoomUsersHandler(connection, this)
         );
     }
 

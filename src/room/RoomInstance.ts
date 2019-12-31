@@ -142,6 +142,8 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(!object) return null;
 
+        object.setRoom(this);
+
         return object;
     }
 

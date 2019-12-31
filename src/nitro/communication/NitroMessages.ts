@@ -28,6 +28,19 @@ import { RoomModelEvent } from './messages/incoming/room/mapping/RoomModelEvent'
 import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNameEvent';
 import { RoomStackHeightEvent } from './messages/incoming/room/mapping/RoomStackHeightEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
+import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
+import { RoomUnitChatShoutEvent } from './messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
+import { RoomUnitChatWhisperEvent } from './messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
+import { RoomUnitTypingEvent } from './messages/incoming/room/unit/chat/RoomUnitTypingEvent';
+import { RoomUnitDanceEvent } from './messages/incoming/room/unit/RoomUnitDanceEvent';
+import { RoomUnitEffectEvent } from './messages/incoming/room/unit/RoomUnitEffectEvent';
+import { RoomUnitEvent } from './messages/incoming/room/unit/RoomUnitEvent';
+import { RoomUnitExpressionEvent } from './messages/incoming/room/unit/RoomUnitExpressionEvent';
+import { RoomUnitHandItemEvent } from './messages/incoming/room/unit/RoomUnitHandItemEvent';
+import { RoomUnitIdleEvent } from './messages/incoming/room/unit/RoomUnitIdleEvent';
+import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEvent';
+import { RoomUnitRemoveEvent } from './messages/incoming/room/unit/RoomUnitRemoveEvent';
+import { RoomUnitStatusEvent } from './messages/incoming/room/unit/RoomUnitStatusEvent';
 import { AuthenticatedEvent } from './messages/incoming/security/AuthenticatedEvent';
 import { UserPerksEvent } from './messages/incoming/user/access/UserPerksEvent';
 import { UserPermissionsEvent } from './messages/incoming/user/access/UserPermissionsEvent';
@@ -105,6 +118,23 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
             this._events.set(IncomingHeader.ROOM_STACK_HEIGHT, RoomStackHeightEvent);
             this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
+
+            // UNIT
+            this._events.set(IncomingHeader.UNIT_DANCE, RoomUnitDanceEvent);
+            this._events.set(IncomingHeader.UNIT_EFFECT, RoomUnitEffectEvent);
+            this._events.set(IncomingHeader.UNIT, RoomUnitEvent);
+            this._events.set(IncomingHeader.UNIT_EXPRESSION, RoomUnitExpressionEvent);
+            this._events.set(IncomingHeader.UNIT_HAND_ITEM, RoomUnitHandItemEvent);
+            this._events.set(IncomingHeader.UNIT_IDLE, RoomUnitIdleEvent);
+            this._events.set(IncomingHeader.UNIT_INFO, RoomUnitInfoEvent);
+            this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
+            this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
+
+                // CHAT
+                this._events.set(IncomingHeader.UNIT_CHAT, RoomUnitChatEvent);
+                this._events.set(IncomingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutEvent);
+                this._events.set(IncomingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperEvent);
+                this._events.set(IncomingHeader.UNIT_TYPING, RoomUnitTypingEvent);
 
         // SECURITY
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);

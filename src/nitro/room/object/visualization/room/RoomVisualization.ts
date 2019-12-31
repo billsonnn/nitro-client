@@ -1,3 +1,4 @@
+import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Position } from '../../../../../room/utils/Position';
@@ -36,7 +37,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         if(this._selfContainer)
         {
-            this._selfContainer.x -= 34;
+            this._selfContainer.x -= NitroConfiguration.TILE_WIDTH;
             this._selfContainer.y -= 1;
         }
 
@@ -71,17 +72,15 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
     {
         this.resetMap();
 
-        if(!this._data.heightMap) return;
-
         let y = 0;
 
-        while(y < this._data.height)
+        while(y < this._data.modelParser.height)
         {
             let x = 0;
 
-            while(x < this._data.width)
+            while(x < this._data.modelParser.width)
             {
-                let height = this._data.heightMap[y][x];
+                let height = this._data.modelParser.heightMap[y][x];
 
                 if(height === undefined) height = -110;
 
@@ -92,7 +91,28 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
                     continue;
                 }
 
-                const tile = new RoomTile(new Position(x, y, height), RoomTileType.TILE);
+                const position = new Position(x, y, height);
+
+                let tile: RoomTile = null;
+                
+                const nextTileHeight = this._data.modelParser.getHeight(x, y - 1);
+
+                if(nextTileHeight >= 0)
+                {
+                    if(nextTileHeight === (height + 1)) tile = new RoomTile(position, RoomTileType.STAIR_RIGHT);
+                }
+
+                if(!tile)
+                {
+                    const nextTileHeight = this._data.modelParser.getHeight(x - 1, y);
+
+                    if(nextTileHeight >= 0)
+                    {
+                        if(nextTileHeight === (height + 1)) tile = new RoomTile(position, RoomTileType.STAIR_LEFT);
+                    }
+                }
+
+                if(!tile) tile = new RoomTile(position, RoomTileType.TILE);
 
                 if(this._map[x] === undefined) this._map[x] = [];
 

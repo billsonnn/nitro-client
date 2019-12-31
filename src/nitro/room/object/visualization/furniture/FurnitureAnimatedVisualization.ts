@@ -13,6 +13,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected _data: FurnitureAnimatedVisualizationData;
 
     protected _animationId: number;
+    protected _realAnimationId: number;
     protected _animationAfterTransition: number;
     protected _animationFinished: boolean;
     protected _currentFrames: AnimationFrameData[];
@@ -27,6 +28,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         super();
 
         this._animationId               = -1;
+        this._realAnimationId           = -1;
         this._animationAfterTransition  = -1;
         this._animationFinished         = false;
         this._currentFrames             = [];
@@ -74,7 +76,12 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         {
             const state = this.object.state;
 
-            if(state !== this._animationId) this.setAnimation(state);
+            if(state !== this._realAnimationId)
+            {
+                this.setAnimation(state);
+
+                this._realAnimationId = state;
+            }
 
             return true;
         }

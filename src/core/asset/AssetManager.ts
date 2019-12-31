@@ -66,4 +66,9 @@ export class AssetManager extends Disposable
 
         return cb(true);
     }
+
+    public get queue(): IDownloadQueue
+    {
+        return this._queue;
+    }
 }

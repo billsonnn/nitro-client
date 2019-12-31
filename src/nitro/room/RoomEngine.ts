@@ -17,13 +17,33 @@ import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
 import { IRoomEngineServices } from './IRoomEngineServices';
+import { ObjectAvatarCarryObjectUpdateMessage } from './messages/ObjectAvatarCarryObjectUpdateMessage';
+import { ObjectAvatarChatUpdateMessage } from './messages/ObjectAvatarChatUpdateMessage';
+import { ObjectAvatarDanceUpdateMessage } from './messages/ObjectAvatarDanceUpdateMessage';
+import { ObjectAvatarEffectUpdateMessage } from './messages/ObjectAvatarEffectUpdateMessage';
+import { ObjectAvatarExperienceUpdateMessage } from './messages/ObjectAvatarExperienceUpdateMessage';
+import { ObjectAvatarExpressionUpdateMessage } from './messages/ObjectAvatarExpressionUpdateMessage';
+import { ObjectAvatarFigureUpdateMessage } from './messages/ObjectAvatarFigureUpdateMessage';
+import { ObjectAvatarFlatControlUpdateMessage } from './messages/ObjectAvatarFlatControlUpdateMessage';
+import { ObjectAvatarGuideStatusUpdateMessage } from './messages/ObjectAvatarGuideStatusUpdateMessage';
+import { ObjectAvatarMutedUpdateMessage } from './messages/ObjectAvatarMutedUpdateMessage';
+import { ObjectAvatarPlayerValueUpdateMessage } from './messages/ObjectAvatarPlayerValueUpdateMessage';
+import { ObjectAvatarPlayingGameUpdateMessage } from './messages/ObjectAvatarPlayingGameUpdateMessage';
+import { ObjectAvatarPostureUpdateMessage } from './messages/ObjectAvatarPostureUpdateMessage';
+import { ObjectAvatarSignUpdateMessage } from './messages/ObjectAvatarSignUpdateMessage';
+import { ObjectAvatarSleepUpdateMessage } from './messages/ObjectAvatarSleepUpdateMessage';
+import { ObjectAvatarTypingUpdateMessage } from './messages/ObjectAvatarTypingUpdateMessage';
+import { ObjectAvatarUpdateMessage } from './messages/ObjectAvatarUpdateMessage';
+import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseObjectUpdateMessage';
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
+import { ObjectUpdateStateMessage } from './messages/ObjectUpdateStateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
 import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
+import { RoomObjectType } from './object/RoomObjectType';
 import { ObjectVisualizationFactory } from './object/visualization/ObjectVisualizationFactory';
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
@@ -205,16 +225,50 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             const object = instance.createObject(RoomEngine.ROOM_OBJECT_ID, RoomEngine.ROOM_OBJECT_TYPE, RoomObjectCategory.ROOM);
 
-            object.setRoom(instance);
-
             this._roomSession.roomManager.initalizeObject(object, model);
         }
 
         const tileCursor = instance.createObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
 
-        tileCursor.setRoom(instance);
-
         this._roomSession.roomManager.initalizeObject(tileCursor); 
+    }
+
+    private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return null;
+
+        return instance.createObject(objectId, type, category);
+    }
+
+    public addRoomObjects(...objects: IRoomObject[]): void
+    {
+        this._pendingObjects.push(...objects);
+
+        this.processObjects();
+    }
+
+    private roomObjectReady(object: IRoomObjectController): void
+    {
+        if(!object) return;
+
+        if(RoomObjectType.AVATAR_TYPES.indexOf(object.type) >= 0)
+        {
+            object = this._roomSession.roomManager.initalizeObject(object, NitroInstance.instance.avatar);
+
+            if(!object) return;
+        }
+        else
+        {
+            object = this._roomSession.roomManager.initalizeObject(object);
+
+            if(!object) return;
+
+            this.refreshObjectData(object);
+        }
+
+        object.visualization.start();
     }
 
     public getRoomUnitObject(roomId: number, objectId: number): IRoomObjectController
@@ -255,24 +309,121 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         instance.removeObject(objectId, category);
     }
 
-    public addObjects(...objects: IRoomObject[]): void
+    public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string): boolean
     {
-        this._pendingObjects.push(...objects);
+        const existing = this.getRoomUnitObject(roomId, objectId);
 
-        this.processObjects();
+        if(existing) return false;
+
+        const object = this.createRoomObject(roomId, objectId, type, RoomObjectCategory.UNIT);
+
+        if(!object) return false;
+
+        object.setPosition(position);
+
+        object.model.setValue(RoomObjectModelKey.FIGURE, figure);
+        object.model.setValue(RoomObjectModelKey.GENDER, 'M');
+
+        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
+
+        this.roomObjectReady(object);
     }
 
-    private objectReady(object: IRoomObjectController): void
+    public updateRoomUnitLocation(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, slide: boolean = false, headDirection: number = null): void
     {
-        if(!object) return;
-
-        object = this._roomSession.roomManager.initalizeObject(object);
+        const object = this.getRoomUnitObject(roomId, objectId);
 
         if(!object) return;
 
-        this.refreshObjectData(object);
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(fromPosition, toPosition, slide));
+    }
 
-        object.visualization.start();
+    public updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarFlatControlUpdateMessage(parseInt(level)));
+    }
+
+    public updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
+    }
+
+    public updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
+    }
+
+    public updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        let message: ObjectUpdateStateMessage = null;
+        
+        switch(action)
+        {
+            case RoomObjectModelKey.FIGURE_TALK:
+                message = new ObjectAvatarChatUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_SLEEP:
+                message = new ObjectAvatarSleepUpdateMessage(value === 1);
+                break;
+            case RoomObjectModelKey.FIGURE_IS_TYPING:
+                message = new ObjectAvatarTypingUpdateMessage(value === 1);
+                break;
+            case RoomObjectModelKey.FIGURE_IS_MUTED:
+                message = new ObjectAvatarMutedUpdateMessage(value === 1);
+                break;
+            case RoomObjectModelKey.FIGURE_CARRY_OBJECT:
+                message = new ObjectAvatarCarryObjectUpdateMessage(value, parameter);
+                break;
+            case RoomObjectModelKey.FIGURE_USE_OBJECT:
+                message = new ObjectAvatarUseObjectUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_DANCE:
+                message = new ObjectAvatarDanceUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_GAINED_EXPERIENCE:
+                message = new ObjectAvatarExperienceUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_NUMBER_VALUE:
+                message = new ObjectAvatarPlayerValueUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_SIGN:
+                message = new ObjectAvatarSignUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_EXPRESSION:
+                message = new ObjectAvatarExpressionUpdateMessage(value);
+                break;
+            case RoomObjectModelKey.FIGURE_IS_PLAYING_GAME:
+                message = new ObjectAvatarPlayingGameUpdateMessage(value === 1);
+                break;
+            case RoomObjectModelKey.FIGURE_GUIDE_STATUS:
+                message = new ObjectAvatarGuideStatusUpdateMessage(value);
+                break;
+        }
+
+        if(!message) return;
+
+        object.processUpdateMessage(message);
+    }
+
+    public updateRoomUnitObject(roomId: number, objectId: number, position: Position): void
+    {
+
     }
 
     public updateRoomFurnitureObject(roomId: number, objectId: number, position: Position, state: number, data: IObjectData = null): void
@@ -346,7 +497,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 continue;
             }
             
-            this.objectReady(object);
+            this.roomObjectReady(object);
         }
 
         if(!downloadUrls.length && !downloadObjects.length) return this.processObjects(true);
@@ -362,7 +513,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             {
                 if(!object) continue;
 
-                this.objectReady(object);
+                this.roomObjectReady(object);
             }
 
             this.processObjects(true);

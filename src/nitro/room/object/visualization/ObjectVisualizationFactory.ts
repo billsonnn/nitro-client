@@ -2,6 +2,8 @@ import { IRoomObjectSpriteVisualization } from '../../../../room/object/visualiz
 import { IObjectVisualizationData } from '../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { IRoomObjectVisualizationFactory } from '../../../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { RoomObjectSpriteVisualization } from '../../../../room/object/visualization/RoomObjectSpriteVisualization';
+import { AvatarVisualization } from './avatar/AvatarVisualization';
+import { AvatarVisualizationData } from './avatar/AvatarVisualizationData';
 import { FurnitureAnimatedVisualization } from './furniture/FurnitureAnimatedVisualization';
 import { FurnitureAnimatedVisualizationData } from './furniture/FurnitureAnimatedVisualizationData';
 import { FurnitureBackgroundVisualization } from './furniture/FurnitureBackgroundVisualization';
@@ -63,7 +65,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
             case ObjectVisualizationType.USER:
             case ObjectVisualizationType.BOT:
             case ObjectVisualizationType.RENTABLE_BOT:
-                //visualization = AvatarVisualization;
+                visualization = AvatarVisualization;
                 break;
             case ObjectVisualizationType.PET_ANIMATED:
                 visualization = PetVisualization;
@@ -186,7 +188,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
             case ObjectVisualizationType.USER:
             case ObjectVisualizationType.BOT:
             case ObjectVisualizationType.RENTABLE_BOT:
-                //visualizationData = new AvatarVisualizationData();
+                visualizationData = new AvatarVisualizationData();
                 break;
             case ObjectVisualizationType.PET_ANIMATED:
                 visualizationData = new PetVisualizationData();

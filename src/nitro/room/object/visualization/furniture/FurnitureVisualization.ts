@@ -156,7 +156,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
             {
                 this._selfContainer.x       = this._screenPosition.x;
                 this._selfContainer.y       = this._screenPosition.y;
-                this._selfContainer.zIndex  = this._screenPosition.depth + 4;
+                this._selfContainer.zIndex  = this._screenPosition.depth;
             }
         }
 

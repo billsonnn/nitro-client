@@ -88,10 +88,20 @@ export class PlayableVisualization extends Disposable implements IPlayableVisual
         this._isPlaying = false;
     }
 
+    public resetFrameCount(): void
+    {
+        this._frameCount = 0;
+    }
+
+    public resetTimeRunning(): void
+    {
+        this._totalTimeRunning = 0;
+    }
+
     public resetTicker(): void
     {
-        this._frameCount        = 0;
-        this._totalTimeRunning  = 0;
+        this.resetFrameCount();
+        this.resetTimeRunning();
     }
 
     public onStart(): void

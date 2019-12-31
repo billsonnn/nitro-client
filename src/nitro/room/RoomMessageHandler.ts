@@ -10,6 +10,15 @@ import { FurnitureFloorUpdateEvent } from '../communication/messages/incoming/ro
 import { FurnitureStateEvent } from '../communication/messages/incoming/room/furniture/FurnitureStateEvent';
 import { RoomModelEvent } from '../communication/messages/incoming/room/mapping/RoomModelEvent';
 import { RoomModelNameEvent } from '../communication/messages/incoming/room/mapping/RoomModelNameEvent';
+import { RoomUnitTypingEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitTypingEvent';
+import { RoomUnitDanceEvent } from '../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
+import { RoomUnitEffectEvent } from '../communication/messages/incoming/room/unit/RoomUnitEffectEvent';
+import { RoomUnitEvent } from '../communication/messages/incoming/room/unit/RoomUnitEvent';
+import { RoomUnitExpressionEvent } from '../communication/messages/incoming/room/unit/RoomUnitExpressionEvent';
+import { RoomUnitHandItemEvent } from '../communication/messages/incoming/room/unit/RoomUnitHandItemEvent';
+import { RoomUnitIdleEvent } from '../communication/messages/incoming/room/unit/RoomUnitIdleEvent';
+import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
+import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
 import { RoomModel2Composer } from '../communication/messages/outgoing/room/mapping/RoomModel2Composer';
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
@@ -58,6 +67,15 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new FurnitureFloorRemoveEvent(this.onFurnitureFloorRemoveEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorUpdateEvent(this.onFurnitureFloorUpdateEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureStateEvent(this.onFurnitureStateEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitDanceEvent(this.onRoomUnitDanceEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitEffectEvent(this.onRoomUnitEffectEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitEvent(this.onRoomUnitEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitExpressionEvent(this.onRoomUnitExpressionEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitHandItemEvent(this.onRoomUnitHandItemEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitIdleEvent(this.onRoomUnitIdleEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitStatusEvent(this.onRoomUnitStatusEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitTypingEvent(this.onRoomUnitTypingEvent.bind(this)));
     }
 
     public setRoomId(id: number): void
@@ -128,8 +146,6 @@ export class RoomMessageHandler extends Disposable
 
         if(!object) return null;
 
-        object.setRoom(instance);
-
         object.setPosition(new Position(parser.x, parser.y, parser.z, parser.direction));
 
         object.model.setValue(RoomObjectModelKey.FURNITURE_COLOR, data.colorId);
@@ -158,7 +174,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!instance) return;
 
-        this._roomCreator.addObjects(this.createFloorFurnitureFromParser(instance, item));
+        this._roomCreator.addRoomObjects(this.createFloorFurnitureFromParser(instance, item));
     }
 
     private onFurnitureFloorEvent(event: FurnitureFloorEvent): void
@@ -188,7 +204,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!objects || !objects.length) return;
 
-        this._roomCreator.addObjects(...objects);
+        this._roomCreator.addRoomObjects(...objects);
     }
 
     private onFurnitureFloorRemoveEvent(event: FurnitureFloorRemoveEvent): void
@@ -214,6 +230,147 @@ export class RoomMessageHandler extends Disposable
         if(!(event instanceof FurnitureStateEvent) || !event.connection || !this._roomCreator) return;
 
         this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().itemId, null, event.getParser().state);
+    }
+
+    private onRoomUnitDanceEvent(event: RoomUnitDanceEvent): void
+    {
+        if(!(event instanceof RoomUnitDanceEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_DANCE, event.getParser().danceId);
+    }
+
+    private onRoomUnitEffectEvent(event: RoomUnitEffectEvent): void
+    {
+        if(!(event instanceof RoomUnitEffectEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitEffect(this._currentRoomId, event.getParser().unitId, event.getParser().effectId, event.getParser().delay);
+    }
+
+    private onRoomUnitEvent(event: RoomUnitEvent): void
+    {
+        if(!(event instanceof RoomUnitEvent) || !event.connection || !this._roomCreator) return;
+
+        const units = event.getParser().units;
+
+        if(!units || !units.length) return;
+
+        for(let unit of units)
+        {
+            if(!unit) continue;
+
+            const position  = new Position(unit.x, unit.y, unit.z, unit.direction);
+
+            this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, position, unit.type, unit.figure);
+        }
+    }
+
+    private onRoomUnitExpressionEvent(event: RoomUnitExpressionEvent): void
+    {
+        if(!(event instanceof RoomUnitExpressionEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_EXPRESSION, event.getParser().expression);
+    }
+
+    private onRoomUnitHandItemEvent(event: RoomUnitHandItemEvent): void
+    {
+        if(!(event instanceof RoomUnitHandItemEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_CARRY_OBJECT, event.getParser().handId);
+    }
+
+    private onRoomUnitIdleEvent(event: RoomUnitIdleEvent): void
+    {
+        if(!(event instanceof RoomUnitIdleEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_SLEEP, (event.getParser().isIdle ? 1 : 0));
+    }
+
+    private onRoomUnitRemoveEvent(event: RoomUnitRemoveEvent): void
+    {
+        if(!(event instanceof RoomUnitRemoveEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.removeRoomUnitObject(this._currentRoomId, event.getParser().unitId);
+    }
+
+    private onRoomUnitStatusEvent(event: RoomUnitStatusEvent): void
+    {
+        if(!(event instanceof RoomUnitStatusEvent) || !event.connection || !this._roomCreator) return;
+
+        const statuses = event.getParser().statuses;
+
+        if(!statuses || !statuses.length) return;
+
+        for(let status of statuses)
+        {
+            if(!status) continue;
+
+            const position = new Position(status.x, status.y, status.z, status.direction);
+
+            let goal: Position = null;
+
+            if(status.didMove)
+            {
+                goal = position.copy();
+
+                goal.x = status.targetX;
+                goal.y = status.targetY;
+                goal.z = status.targetZ;
+            }
+
+            this._roomCreator.updateRoomUnitLocation(this._currentRoomId, status.id, position, goal, status.isSlide);
+
+            this._roomCreator.updateRoomUnitFlatControl(this._currentRoomId, status.id, null);
+
+            let isPosture       = true;
+            let postureUpdate   = false;
+            let postureType     = RoomObjectModelKey.STD;
+            let parameter       = '';
+
+            if(status.actions && status.actions.length)
+            {
+                for(let action of status.actions)
+                {
+                    if(!action) continue;
+
+                    switch(action.action)
+                    {
+                        case 'flatctrl':
+                            this._roomCreator.updateRoomUnitFlatControl(this._currentRoomId, status.id, action.value);
+                            break;
+                        case 'sign':
+                            if(status.actions.length === 1) isPosture = false;
+
+                            this._roomCreator.updateRoomUnitAction(this._currentRoomId, status.id, RoomObjectModelKey.FIGURE_SIGN, parseInt(action.value));
+                            break;
+                        case 'gst':
+                            if(status.actions.length === 1) isPosture = false;
+
+                            break;
+                        case 'wav':
+                        case 'mv':
+                            postureUpdate   = true;
+                            postureType     = action.action;
+                            parameter       = action.value;
+                            break;
+                        case 'trd': break;
+                        default:
+                            postureUpdate   = true;
+                            postureType     = action.action;
+                            parameter       = action.value;
+                            break;
+                    }
+
+                    if(postureUpdate) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, postureType, parameter);else if(isPosture) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, RoomObjectModelKey.STD, '');
+                }
+            }
+        }
+    }
+
+    private onRoomUnitTypingEvent(event: RoomUnitTypingEvent): void
+    {
+        if(!(event instanceof RoomUnitTypingEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_IS_TYPING, event.getParser().isTyping ? 1 : 0);
     }
 
     public get currentRoomId(): number

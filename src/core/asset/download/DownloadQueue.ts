@@ -5,18 +5,23 @@ export class DownloadQueue implements IDownloadQueue
 {
     private _queued: { object: IDownloadable, cb: Function }[];
 
+    private _autoDownload: boolean;
     private _isDownloading: boolean;
 
-    constructor()
+    constructor(autoDownload: boolean = true)
     {
         this._queued = [];
 
+        this._autoDownload  = autoDownload;
         this._isDownloading = false;
     }
 
     public startDownloading(fromQueue: boolean = false): void
     {
-        if(this._isDownloading && fromQueue) return;
+        if(this._isDownloading)
+        {
+            if(!fromQueue) return;
+        }
 
         this._isDownloading = true;
 
@@ -26,15 +31,15 @@ export class DownloadQueue implements IDownloadQueue
 
         queued.object.download(() =>
         {
-            queued.cb(true);
-
             this.downloadNext();
+
+            queued.cb(true);
         });
     }
 
     public downloadNext(): void
     {
-        if(this._queued.length) return this.startDownloading();
+        if(this._queued.length) return this.startDownloading(true);
 
         this._isDownloading = false;
     }
@@ -43,6 +48,6 @@ export class DownloadQueue implements IDownloadQueue
     {
         this._queued.push({ object, cb });
 
-        this.startDownloading(true);
+        if(this._autoDownload) this.startDownloading();
     }
 }

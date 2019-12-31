@@ -1,4 +1,5 @@
 import * as ByteBuffer from 'bytebuffer';
+import { NitroConfiguration } from '../../../NitroConfiguration';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { EvaWireFormat } from '../codec/evawire/EvaWireFormat';
 import { ICodec } from '../codec/ICodec';
@@ -150,7 +151,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(header === -1)
             {
-                console.log(`Unknown Composer: ${ composer.constructor.name }`);
+                if(NitroConfiguration.PACKET_LOG) console.log(`Unknown Composer: ${ composer.constructor.name }`);
 
                 continue;
             }
@@ -159,12 +160,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!encoded)
             {
-                console.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(NitroConfiguration.PACKET_LOG) console.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            console.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(NitroConfiguration.PACKET_LOG) console.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
             this.write(encoded.toBuffer());
         }
@@ -206,7 +207,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            console.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+            if(NitroConfiguration.PACKET_LOG) console.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
 
             if(!messages || !messages.length) continue;
             

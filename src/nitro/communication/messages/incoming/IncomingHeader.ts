@@ -129,7 +129,7 @@ export class IncomingHeader
     public static TRADE_ERROR                  = 217;
     public static TRADE_UPDATE                 = 2024;
     public static UNIT                         = 374;
-    public static UNIT_ACTION                  = 1631;
+    public static UNIT_EXPRESSION              = 1631;
     public static UNIT_CHANGE_NAME             = 2182;
     public static UNIT_CHAT                    = 1446;
     public static UNIT_CHAT_SHOUT              = 1036;

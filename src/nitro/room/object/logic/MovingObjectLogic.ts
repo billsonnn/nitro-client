@@ -1,11 +1,9 @@
 import TWEEN from '@tweenjs/tween.js';
-import { NitroConfiguration } from '../../../../NitroConfiguration';
 import { RoomObjectUpdateMessage } from '../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
 import { Position } from '../../../../room/utils/Position';
 import { ObjectMoveUpdateMessage } from '../../messages/ObjectMoveUpdateMessage';
 import { RoomObjectModelKey } from '../RoomObjectModelKey';
-import { RoomObjectType } from '../RoomObjectType';
 
 export class MovingObjectLogic extends RoomObjectLogicBase
 {
@@ -97,28 +95,13 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
         let screenPosition: Position        = this.object.getScreenPosition();
         let goalScreenPosition: Position    = position.toScreenPosition();
-        let additionalHeight: number        = 0;
-
-        if(RoomObjectType.AVATAR_TYPES.indexOf(this.object.type) >= 0)
-        {
-            if(this.object.type !== RoomObjectType.PET) goalScreenPosition.x -= NitroConfiguration.TILE_WIDTH;
-
-            // const map = this.object && this.object.room && this.object.room.mapManager && this.object.room.mapManager.map;
-
-            // if(map)
-            // {
-            //     const tile = map.getTile(position);
-
-            //     if(tile && (tile.type === RoomTileType.STAIR_LEFT || tile.type === RoomTileType.STAIR_RIGHT)) additionalHeight -= GameConfiguration.TILE_HEIGHT;
-            // }
-        }
 
         this.object.setTempPosition(screenPosition);
 
         goalScreenPosition.depth = position.calculatedDepth;
 
         this._tween = new TWEEN.Tween(this.object.tempPosition)
-            .to({ x: goalScreenPosition.x, y: goalScreenPosition.y + additionalHeight, depth: goalScreenPosition.depth }, MovingObjectLogic.TWEEN_DURATION)
+            .to({ x: goalScreenPosition.x, y: goalScreenPosition.y, depth: goalScreenPosition.depth }, MovingObjectLogic.TWEEN_DURATION)
             .onUpdate(() =>
             {
                 this.object.updateCounter++;

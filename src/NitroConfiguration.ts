@@ -23,5 +23,6 @@ export class NitroConfiguration
     public static WALL_HEIGHT           = 115;
     public static WALLS_ENABLED         = true;
     public static CULLING_ENABLED       = false;
+    public static PACKET_LOG            = false;
     public static PET_TYPES             = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
 }

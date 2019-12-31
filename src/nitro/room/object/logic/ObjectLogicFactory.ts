@@ -1,6 +1,7 @@
 import { IRoomObjectLogic } from '../../../../room/object/logic/IRoomObjectLogic';
 import { IRoomObjectLogicFactory } from '../../../../room/object/logic/IRoomObjectLogicFactory';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
+import { AvatarLogic } from './avatar/AvatarLogic';
 import { FurnitureBackgroundLogic } from './furniture/FurnitureBackgroundLogic';
 import { FurnitureBadgeDisplayLogic } from './furniture/FurnitureBadgeDisplayLogic';
 import { FurnitureChangeStateWhenStepOnLogic } from './furniture/FurnitureChangeStateWhenStepOnLogic';
@@ -54,7 +55,7 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.USER:
             case ObjectLogicType.BOT:
             case ObjectLogicType.RENTABLE_BOT:
-                //logic = AvatarLogic;
+                logic = AvatarLogic;
                 break;
             case ObjectLogicType.PET:
                 logic = PetLogic;
