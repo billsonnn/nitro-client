@@ -42,6 +42,8 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
             {
                 this._selfContainer = new RoomCollision();
 
+                this._selfContainer.setObject(this._object);
+
                 if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.addCollision(this._selfContainer);
             }
         }

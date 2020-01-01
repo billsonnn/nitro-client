@@ -59,28 +59,28 @@ export class RoomInstance extends Disposable implements IRoomInstance
                 return;
             }
 
-            //this._session.room.container.click(event);
+            renderer.click(event);
         }
 
         NitroInstance.instance.renderer.view.onmousemove = event =>
         {
             if(NitroInstance.instance.renderer.preventEvents) return;
 
-            //this._session.room.container.mouseMove(event);
+            renderer.mouseMove(event);
         }
 
         NitroInstance.instance.renderer.view.onmousedown = event =>
         {
             if(NitroInstance.instance.renderer.preventEvents) return;
 
-            //this._session.room.container.mouseDown(event);
+            renderer.mouseDown(event);
         }
 
         NitroInstance.instance.renderer.view.onmouseup = event =>
         {
             if(NitroInstance.instance.renderer.preventEvents) return;
 
-            //this._session.room.container.mouseUp(event);
+            renderer.mouseUp(event);
         }
 
         this._renderer = renderer;

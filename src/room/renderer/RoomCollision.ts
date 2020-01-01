@@ -1,14 +1,25 @@
 import * as PIXI from 'pixi.js-legacy';
 import { NitroInstance } from '../../nitro/NitroInstance';
+import { IRoomObjectController } from '../object/IRoomObjectController';
+import { ICollision } from './ICollision';
 import { IRoomCollision } from './IRoomCollision';
 
-export class RoomCollision extends PIXI.Container implements IRoomCollision
+export class RoomCollision extends PIXI.Container implements IRoomCollision, ICollision
 {
+    private _object: IRoomObjectController;
+
     constructor()
     {
         super();
+
+        this._object = null;
         
         this.sortableChildren = true;
+    }
+
+    public setObject(object: IRoomObjectController): void
+    {
+        this._object = object;
     }
 
     public addCollision(sprite: PIXI.DisplayObject): void
@@ -25,8 +36,13 @@ export class RoomCollision extends PIXI.Container implements IRoomCollision
         this.removeChild(sprite);
     }
 
-    public findCollision(point: PIXI.Point): PIXI.DisplayObject
+    public findCollision(point: PIXI.Point): ICollision
     {
-        return NitroInstance.instance.renderer.pixiRenderer.plugins.interaction.hitTest(point, this);
+        return NitroInstance.instance.renderer.pixiRenderer.plugins.interaction.hitTest(point, this) as ICollision;
+    }
+
+    public get object(): IRoomObjectController
+    {
+        return this._object;
     }
 }

@@ -103,9 +103,15 @@ export class RoomModelParser implements IMessageParser
     {
         if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return -110;
 
-        const row = this._heightMap[x];
+        const row = this._heightMap[y];
 
-        return row[y];
+        if(row === undefined) return -110;
+
+        const height = row[x];
+
+        if(height === undefined) return -110;
+
+        return height;
     }
 
     public get model(): string

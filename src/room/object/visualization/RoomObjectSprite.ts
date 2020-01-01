@@ -1,20 +1,21 @@
 import * as PIXI from 'pixi.js-legacy';
-import { IRoomObject } from '../IRoomObject';
+import { ICollision } from '../../renderer/ICollision';
+import { IRoomObjectController } from '../IRoomObjectController';
 import { RoomObject } from '../RoomObject';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 
-export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite
+export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, ICollision
 {
     private static SPRITE_COUNTER: number = 0;
 
     private _instanceId: number;
-    private _object: IRoomObject;
+    private _object: IRoomObjectController;
     private _boundingRectangle: PIXI.Rectangle;
 
     private _tag: string;
     private _doesntHide: boolean;
 
-    constructor(name: string, object: IRoomObject)
+    constructor(name: string, object: IRoomObjectController)
     {
         super(PIXI.Texture.from(name));
 
@@ -156,7 +157,7 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite
         return this._instanceId;
     }
 
-    public get object(): IRoomObject
+    public get object(): IRoomObjectController
     {
         return this._object;
     }

@@ -78,7 +78,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this._additions         = {};
 
-        this._selfContained = true;
+        this._selfContained     = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -88,6 +88,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         this._data  = data;
 
         super.initialize(data);
+
+        if(this._selfContainer) this._selfContainer.interactive = true;
 
         return true;
     }
@@ -455,7 +457,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         }
             
         sprite.x            = -assetData.x;
-        sprite.y            = -assetData.y;
+        sprite.y            = -assetData.y + 1;
         sprite.alpha        = 0.2;
         sprite.visible      = true;
         sprite.doesntHide   = true;

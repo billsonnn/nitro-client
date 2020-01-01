@@ -1,9 +1,9 @@
 import { NitroConfiguration } from '../../../../../../../NitroConfiguration';
 import { TileTexture } from './TileTexture';
 
-export class WallRightTexture extends TileTexture
+export class DoorWallTexture extends TileTexture
 {
-    public static TYPE: string = 'wallr';
+    public static TYPE: string = 'doorw';
 
     protected static getColors(): [ number, number ]
     {
@@ -38,15 +38,15 @@ export class WallRightTexture extends TileTexture
         {
             graphic.beginFill(leftColor);
             graphic.moveTo(verticies[1].x, verticies[1].y);
-            graphic.lineTo(verticies[1].x, verticies[1].y + height);
-            graphic.lineTo(verticies[2].x, verticies[2].y + height);
+            graphic.lineTo(verticies[1].x, verticies[1].y + height - 86);
+            graphic.lineTo(verticies[2].x, verticies[2].y + height - 86);
             graphic.lineTo(verticies[2].x, verticies[2].y);
             graphic.endFill();
 
             graphic.beginFill(rightColor);
             graphic.moveTo(verticies[3].x, verticies[3].y);
-            graphic.lineTo(verticies[3].x, verticies[3].y + height);
-            graphic.lineTo(verticies[2].x, verticies[2].y + height);
+            graphic.lineTo(verticies[3].x, verticies[3].y + height + 86);
+            graphic.lineTo(verticies[2].x, verticies[2].y + height + 86);
             graphic.lineTo(verticies[2].x, verticies[2].y);
             graphic.endFill();
         }

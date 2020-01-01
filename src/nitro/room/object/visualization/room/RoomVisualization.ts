@@ -1,4 +1,3 @@
-import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Position } from '../../../../../room/utils/Position';
@@ -37,8 +36,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         if(this._selfContainer)
         {
-            this._selfContainer.x -= NitroConfiguration.TILE_WIDTH;
-            this._selfContainer.y -= 1;
+            this._selfContainer.x -= 35;
+            this._selfContainer.y -= 2;
         }
 
         return true;
@@ -72,23 +71,47 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
     {
         this.resetMap();
 
-        let y = 0;
+        const mapHeight = this._data.modelParser.height;
+        const mapWidth  = this._data.modelParser.width;
 
-        while(y < this._data.modelParser.height)
+        let doorX = 0;
+        let doorY = 0;
+        let doorZ = 0;
+        let doorDirection = 0;
+
+        let y = -1;
+
+        while(y < mapHeight)
         {
-            let x = 0;
+            y++;
 
-            while(x < this._data.modelParser.width)
+            let x = -1;
+
+            while(x < mapWidth)
             {
-                let height = this._data.modelParser.heightMap[y][x];
+                x++;
 
-                if(height === undefined) height = -110;
+                const height = this._data.modelParser.getHeight(x, y);
 
-                if(height < 0)
+                if(height < 0) continue;
+
+                if((((y > 0) && (y < (mapHeight - 1))) || ((x > 0) && (x < (mapWidth - 1)))) && height !== -110)
                 {
-                    x++;
+                    if(((this._data.modelParser.getHeight(x, (y - 1)) === -110) && (this._data.modelParser.getHeight((x - 1), y) === -110)) && (this._data.modelParser.getHeight(x, (y + 1)) === -110))
+                    {
+                        doorX           = x;
+                        doorY           = y;
+                        doorZ           = height;
+                        doorDirection   = 90;
+                    }
 
-                    continue;
+                    if(((this._data.modelParser.getHeight(x, (y - 1)) === -110) && (this._data.modelParser.getHeight((x - 1), y) === -110)) && (this._data.modelParser.getHeight((x + 1), y) === -110))
+                    {
+                        doorX           = x;
+                        doorY           = y;
+                        doorZ           = height;
+                        doorDirection   = 180;
+                    }
                 }
 
                 const position = new Position(x, y, height);
@@ -124,16 +147,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
                 this._tiles.push(tile);
 
-                sprite.x        += tile.position.calculateX;
-                sprite.y        += tile.position.calculateY - tile.position.calculateZ;
-                sprite.zIndex   = (x + y) * 1000;
+                sprite.x    = tile.position.calculateX;
+                sprite.y    = tile.position.calculateY - tile.position.calculateZ;
 
                 if(this._selfContainer) this._selfContainer.addCollision(tile.graphic);
-                
-                x++;
             }
-
-            y++;
         }
+
+        const door = new Position(doorX, doorY, doorZ, doorDirection);
     }
 }
