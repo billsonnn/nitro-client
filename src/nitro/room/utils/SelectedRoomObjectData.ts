@@ -8,4 +8,19 @@ export class SelectedRoomObjectData
     {
         return;
     }
+
+    public get id(): number
+    {
+        return this._id;
+    }
+
+    public get category(): number
+    {
+        return this._category;
+    }
+
+    public get operation(): string
+    {
+        return this._operation;
+    }
 }

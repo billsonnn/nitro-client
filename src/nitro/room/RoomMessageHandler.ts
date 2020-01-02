@@ -1,5 +1,6 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { Position } from '../../room/utils/Position';
@@ -27,7 +28,9 @@ import { FurnitureFloorDataParser } from '../communication/messages/parser/room/
 import { IRoomCreator } from './IRoomCreator';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
+import { RoomObjectType } from './object/RoomObjectType';
 import { FurnitureQueueTileVisualization } from './object/visualization/furniture/FurnitureQueueTileVisualization';
+import { ObjectRolling } from './utils/ObjectRolling';
 
 export class RoomMessageHandler extends Disposable
 {
@@ -144,7 +147,55 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof RoomRollingEvent) || !event.connection || !this._roomCreator) return;
 
-        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().rollerId, null, null, FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE);
+        if(event.getParser().rollerId) this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().rollerId, null, null, FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE);
+
+        const furnitureRolling = event.getParser().itemsRolling;
+
+        if(furnitureRolling && furnitureRolling.length)
+        {
+            for(let rollData of furnitureRolling)
+            {
+                if(!rollData) continue;
+
+                this._roomCreator.rollRoomFurnitureObject(this._currentRoomId, rollData.id, rollData.fromPosition, rollData.toPosition); 
+            }
+        }
+
+        const unitRollData = event.getParser().unitRolling;
+
+        if(unitRollData)
+        {
+
+            const object = this._roomCreator.getRoomUnitObject(this._currentRoomId, unitRollData.id);
+
+            if(object)
+            {
+                unitRollData.fromPosition.direction = object.position.direction;
+                unitRollData.toPosition.direction   = object.position.direction;
+
+                this._roomCreator.updateRoomUnitLocation(this._currentRoomId, unitRollData.id, unitRollData.fromPosition, unitRollData.toPosition, true);
+
+                if(NitroConfiguration.ROLLING_OVERRIDES_POSTURE)
+                {
+                    if(object.type !== RoomObjectType.MONSTER_PLANT)
+                    {
+                        let posture: string = 'std';
+
+                        switch(unitRollData.movementType)
+                        {
+                            case ObjectRolling.MOVE:
+                                posture = 'mv';
+                                break;
+                            case ObjectRolling.SLIDE:
+                                posture = 'std';
+                                break;
+                        }
+
+                        this._roomCreator.updateRoomUnitPosture(this._currentRoomId, unitRollData.id, posture);
+                    }
+                }
+            }
+        }
     }
 
     private createFloorFurnitureFromParser(instance: IRoomInstance, parser: FurnitureFloorDataParser): IRoomObjectController

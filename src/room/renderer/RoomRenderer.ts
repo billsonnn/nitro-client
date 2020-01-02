@@ -111,7 +111,7 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_DOWN, point);
 
-        if(event.altKey || event.shiftKey) NitroInstance.instance.renderer.toggleDrag();
+        if(event.altKey || event.ctrlKey || event.shiftKey) NitroInstance.instance.renderer.toggleDrag();
     }
 
     public mouseUp(event: MouseEvent): void

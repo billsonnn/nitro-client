@@ -13,6 +13,7 @@ import { IRoomEngineServices } from './IRoomEngineServices';
 import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdateMessage';
 import { ObjectOperationType } from './object/logic/ObjectOperationType';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
+import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
 export class RoomObjectEventHandler extends Disposable
 {
@@ -77,19 +78,14 @@ export class RoomObjectEventHandler extends Disposable
     {
         if(!event) return;
 
-        if(event.object)
-        {
-            if(event.object.type === 'user')
-            {
-                const position = event.object.position;
-
-                if(position) this.sendLookUpdate(position.x, position.y);
-
-                return;
-            }
-        }
-
         let operation = ObjectOperationType.OBJECT_UNDEFINED;
+
+        const selectedData: SelectedRoomObjectData = this._roomEngine.getSelectedRoomObjectData(roomId);
+
+        if(selectedData)
+        {
+            operation = selectedData.operation;
+        }
 
         if(NitroConfiguration.WALKING_ENABLED)
         {
@@ -100,6 +96,18 @@ export class RoomObjectEventHandler extends Disposable
                 if(position) this.sendWalkUpdate(position.x, position.y);
             }
         }
+
+        // if(event.object)
+        // {
+        //     if(event.object.type === 'user')
+        //     {
+        //         const position = event.object.position;
+
+        //         if(position) this.sendLookUpdate(position.x, position.y);
+
+        //         return;
+        //     }
+        // }
     }
 
     private handleRoomObjectMouseDoubleClickEvent(event: RoomObjectMouseEvent, roomId: number): void

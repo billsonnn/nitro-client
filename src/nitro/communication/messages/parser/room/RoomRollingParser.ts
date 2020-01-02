@@ -1,27 +1,16 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
+import { Position } from '../../../../../room/utils/Position';
+import { ObjectRolling } from '../../../../room/utils/ObjectRolling';
 
 export class RoomRollingParser implements IMessageParser
 {
-    private _x: number;
-    private _y: number;
-
-    private _nextX: number;
-    private _nextY: number;
-
     private _rollerId: number;
-
-    private _itemsRolling: { itemId: number, height: number, nextHeight: number}[];
-    private _unitRolling: { unitId: number, animationType: number, height: number, nextHeight: number};
+    private _itemsRolling: ObjectRolling[];
+    private _unitRolling: ObjectRolling;
 
     public flush(): boolean
     {
-        this._x             = 0;
-        this._y             = 0;
-
-        this._nextX         = 0;
-        this._nextY         = 0;
-
         this._rollerId      = 0;
 
         this._itemsRolling  = [];
@@ -32,58 +21,51 @@ export class RoomRollingParser implements IMessageParser
     
     public parse(wrapper: IMessageDataWrapper): boolean
     {
-        this._x     = wrapper.readInt();
-        this._y     = wrapper.readInt();
-
-        this._nextX = wrapper.readInt();
-        this._nextY = wrapper.readInt();
+        const x     = wrapper.readInt();
+        const y     = wrapper.readInt();
+        const nextX = wrapper.readInt();
+        const nextY = wrapper.readInt();
 
         let totalItems = wrapper.readInt();
 
         while(totalItems > 0)
         {
-            this._itemsRolling.push({
-                itemId: wrapper.readInt(),
-                height: parseFloat(wrapper.readString()),
-                nextHeight: parseFloat(wrapper.readString())
-            });
+            const id            = wrapper.readInt();
+            const height        = parseFloat(wrapper.readString());
+            const nextHeight    = parseFloat(wrapper.readString());
+            const fromPosition  = new Position(x, y, height);
+            const toPosition    = new Position(nextX, nextY, nextHeight);
+
+            const rollingData = new ObjectRolling(id, fromPosition, toPosition);
+
+            this._itemsRolling.push(rollingData);
 
             totalItems--;
         }
 
         this._rollerId = wrapper.readInt();
 
-        if(wrapper.bytesAvailable)
+        if(!wrapper.bytesAvailable) return true;
+
+        const movementType  = wrapper.readInt();
+        const unitId        = wrapper.readInt();
+        const height        = parseFloat(wrapper.readString());
+        const nextHeight    = parseFloat(wrapper.readString());
+        const fromPosition  = new Position(x, y, height);
+        const toPosition    = new Position(nextX, nextY, nextHeight);
+
+        switch(movementType)
         {
-            this._unitRolling = {
-                animationType: wrapper.readInt(),
-                unitId: wrapper.readInt(),
-                height: parseFloat(wrapper.readString()),
-                nextHeight: parseFloat(wrapper.readString())
-            };
+            case 0: break;
+            case 1:
+                this._unitRolling = new ObjectRolling(unitId, fromPosition, toPosition, ObjectRolling.MOVE);
+                break;
+            case 2:
+                this._unitRolling = new ObjectRolling(unitId, fromPosition, toPosition, ObjectRolling.SLIDE);
+                break;
         }
 
         return true;
-    }
-
-    public get x(): number
-    {
-        return this._x;
-    }
-
-    public get y(): number
-    {
-        return this._y;
-    }
-
-    public get nextX(): number
-    {
-        return this._nextX;
-    }
-
-    public get nextY(): number
-    {
-        return this._nextY;
     }
 
     public get rollerId(): number
@@ -91,12 +73,12 @@ export class RoomRollingParser implements IMessageParser
         return this._rollerId;
     }
 
-    public get itemsRolling(): { itemId: number, height: number, nextHeight: number}[]
+    public get itemsRolling(): ObjectRolling[]
     {
         return this._itemsRolling;
     }
 
-    public get unitRolling(): { unitId: number, animationType: number, height: number, nextHeight: number}
+    public get unitRolling(): ObjectRolling
     {
         return this._unitRolling;
     }

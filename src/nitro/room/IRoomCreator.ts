@@ -21,11 +21,12 @@ export interface IRoomCreator
     getRoomFurnitureObject(roomId: number, objectId: number): IRoomObjectController;
     removeRoomFurnitureObject(roomId: number, objectId: number): void;
     updateRoomFurnitureObject(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, state: number, data?: IObjectData): void;
+    rollRoomFurnitureObject(roomId: number, objectId: number, fromPosition: Position, toPosition: Position): void;
     addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string): boolean;
     updateRoomUnitLocation(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, isSlide?: boolean, headDirection?: number): void;
     updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): void;
     updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void;
     updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay?: number): void
-    updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string): void;
+    updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter?: string): void;
     roomSession: IRoomSessionManager;
 }
