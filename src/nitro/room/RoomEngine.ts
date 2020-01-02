@@ -390,7 +390,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition, true));
     }
 
-    public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string): boolean
+    public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string, gender: string): boolean
     {
         const existing = this.getRoomUnitObject(roomId, objectId);
 
@@ -403,9 +403,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.setPosition(position);
 
         object.model.setValue(RoomObjectModelKey.FIGURE, figure);
-        object.model.setValue(RoomObjectModelKey.GENDER, 'M');
+        object.model.setValue(RoomObjectModelKey.GENDER, gender);
 
-        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
+        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
 
         this.roomObjectReady(object);
     }
@@ -476,6 +476,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!message) return;
 
         object.processUpdateMessage(message);
+    }
+
+    public updateRoomUnitFigure(roomId: number, objectId: number, figure: string, gender: string): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
     }
 
     public updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void

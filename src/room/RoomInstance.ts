@@ -85,6 +85,12 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._renderer.dispose();
 
         this._renderer = null;
+
+        NitroInstance.instance.renderer.view.onclick        = null;
+        NitroInstance.instance.renderer.view.onmousemove    = null;
+        NitroInstance.instance.renderer.view.onmousedown    = null;
+        NitroInstance.instance.renderer.view.onmouseup      = null;
+
     }
 
     public getManager(category: number): IRoomObjectManager

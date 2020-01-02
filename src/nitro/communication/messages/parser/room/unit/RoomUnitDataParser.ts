@@ -13,7 +13,7 @@ export class RoomUnitDataParser
     private _y: number;
     private _z: number;
     private _direction: number;
-    private _type: string;
+    private _type: number;
 
     constructor(wrapper: IMessageDataWrapper)
     {
@@ -53,9 +53,11 @@ export class RoomUnitDataParser
         this._y         = wrapper.readInt();
         this._z         = parseFloat(wrapper.readString());
         this._direction = wrapper.readInt();
-        this._type      = RoomObjectType.getTypeName(wrapper.readInt());
+        this._type      = wrapper.readInt();
 
-        if(this._type === RoomObjectType.USER)
+        const typeName = RoomObjectType.getTypeName(this._type);
+
+        if(typeName === RoomObjectType.USER)
         {
             this._gender            = wrapper.readString().toLocaleUpperCase();
             const groupId           = wrapper.readInt();
@@ -66,7 +68,7 @@ export class RoomUnitDataParser
             const something         = wrapper.readBoolean();
         }
 
-        else if(this._type === RoomObjectType.PET)
+        else if(typeName === RoomObjectType.PET)
         {
             const breed         = wrapper.readInt();
             const ownerId       = wrapper.readInt();
@@ -82,12 +84,12 @@ export class RoomUnitDataParser
             const something2    = wrapper.readString();
         }
 
-        else if(this._type === RoomObjectType.BOT)
+        else if(typeName === RoomObjectType.BOT)
         {
 
         }
 
-        else if(this._type === RoomObjectType.RENTABLE_BOT)
+        else if(typeName === RoomObjectType.RENTABLE_BOT)
         {
             const gender            = wrapper.readString().toLocaleUpperCase();
             const ownerId           = wrapper.readInt();
@@ -157,7 +159,7 @@ export class RoomUnitDataParser
         return this._direction;
     }
 
-    public get type(): string
+    public get type(): number
     {
         return this._type;
     }

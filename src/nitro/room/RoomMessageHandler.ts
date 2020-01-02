@@ -19,6 +19,7 @@ import { RoomUnitEvent } from '../communication/messages/incoming/room/unit/Room
 import { RoomUnitExpressionEvent } from '../communication/messages/incoming/room/unit/RoomUnitExpressionEvent';
 import { RoomUnitHandItemEvent } from '../communication/messages/incoming/room/unit/RoomUnitHandItemEvent';
 import { RoomUnitIdleEvent } from '../communication/messages/incoming/room/unit/RoomUnitIdleEvent';
+import { RoomUnitInfoEvent } from '../communication/messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
@@ -79,6 +80,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomUnitExpressionEvent(this.onRoomUnitExpressionEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitHandItemEvent(this.onRoomUnitHandItemEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitIdleEvent(this.onRoomUnitIdleEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitInfoEvent(this.onRoomUnitInfoEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitStatusEvent(this.onRoomUnitStatusEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitTypingEvent(this.onRoomUnitTypingEvent.bind(this)));
@@ -324,7 +326,9 @@ export class RoomMessageHandler extends Disposable
 
             const position  = new Position(unit.x, unit.y, unit.z, unit.direction);
 
-            this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, position, unit.type, unit.figure);
+            const type = RoomObjectType.getTypeName(unit.type);
+
+            this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, position, type, unit.figure, unit.gender);
         }
     }
 
@@ -347,6 +351,13 @@ export class RoomMessageHandler extends Disposable
         if(!(event instanceof RoomUnitIdleEvent) || !event.connection || !this._roomCreator) return;
 
         this._roomCreator.updateRoomUnitAction(this._currentRoomId, event.getParser().unitId, RoomObjectModelKey.FIGURE_SLEEP, (event.getParser().isIdle ? 1 : 0));
+    }
+
+    private onRoomUnitInfoEvent(event: RoomUnitInfoEvent): void
+    {
+        if(!(event instanceof RoomUnitInfoEvent) || !event.connection || !this._roomCreator) return;
+
+        this._roomCreator.updateRoomUnitFigure(this._currentRoomId, event.getParser().unitId, event.getParser().figure, event.getParser().gender);
     }
 
     private onRoomUnitRemoveEvent(event: RoomUnitRemoveEvent): void

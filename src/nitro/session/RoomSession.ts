@@ -24,7 +24,7 @@ export class RoomSession extends Disposable implements IRoomSession
         this._roomId        = 0;
         this._password      = null;
 
-        this._userData      = new UserDataManager(this);
+        this._userData      = new UserDataManager();
         this._state         = RoomSessionEvent.CREATED;
     }
 
@@ -45,6 +45,8 @@ export class RoomSession extends Disposable implements IRoomSession
         if(this._connection || !connection) return;
 
         this._connection = connection;
+
+        if(this._userData) this._userData.setConnection(connection);
     }
 
     public start(): boolean
