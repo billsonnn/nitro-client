@@ -29,6 +29,7 @@ import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLog
 import { ObjectLogicType } from './ObjectLogicType';
 import { PetLogic } from './pet/PetLogic';
 import { RoomLogic } from './room/RoomLogic';
+import { TileCursorLogic } from './room/TileCursorLogic';
 
 export class ObjectLogicFactory implements IRoomObjectLogicFactory
 {
@@ -51,6 +52,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
         {
             case ObjectLogicType.ROOM:
                 logic = RoomLogic;
+                break;
+            case ObjectLogicType.TILE_CURSOR:
+                logic = TileCursorLogic;
                 break;
             case ObjectLogicType.USER:
             case ObjectLogicType.BOT:

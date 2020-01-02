@@ -1,5 +1,7 @@
 export class RoomObjectModelKey
 {
+    public static OBJECT_ROOM_ID: string                      = 'object_room_id';
+    public static TILE_CURSOR_HEIGHT: string                  = 'tile_cursor_height';
     public static FIGURE:  string                             = 'figure';
     public static GENDER:  string                             = 'gender';
     public static OWN_USER: string                            = 'own_user';

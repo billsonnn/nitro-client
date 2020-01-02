@@ -38,16 +38,8 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(renderer === this._renderer) return;
 
-        if(this._renderer)
-        {
-            if(renderer === this._renderer) return;
-
-            this.destroyRenderer();
-        }
-
-        document.body.onkeydown         = event => renderer.keyDown(event);
-        document.body.onkeyup           = event => renderer.keyUp(event);
-
+        if(this._renderer) this.destroyRenderer();
+        
         NitroInstance.instance.renderer.view.onclick = event =>
         {
             if(NitroInstance.instance.renderer.preventEvents) return;

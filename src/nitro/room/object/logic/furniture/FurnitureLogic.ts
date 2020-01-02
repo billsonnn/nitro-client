@@ -4,6 +4,7 @@ import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObject
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { Direction } from '../../../../../room/utils/Direction';
 import { Position } from '../../../../../room/utils/Position';
+import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
@@ -91,9 +92,9 @@ export class FurnitureLogic extends MovingObjectLogic
         return model.getValue(RoomObjectModelKey.FURNITURE_AD_URL);
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        super.update(delta);
+        super.update(totalTimeRunning);
 
         if(this._bouncingStep > 0)
         {
@@ -200,5 +201,17 @@ export class FurnitureLogic extends MovingObjectLogic
         }
 
         return this._locationOffset;
+    }
+
+    public useObject(): void
+    {
+        if(!this.object) return;
+
+        const adUrl = this.getAdClickUrl(this.object.model);
+
+        if(this.eventHandler)
+        {
+            this.eventHandler.handleRoomObjectEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
+        }
     }
 }

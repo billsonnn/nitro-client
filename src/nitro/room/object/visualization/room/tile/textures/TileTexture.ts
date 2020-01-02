@@ -18,7 +18,7 @@ export class TileTexture
         return lookup;
     }
 
-    protected static getTexture(thickness: number): PIXI.RenderTexture
+    public static getTexture(thickness: number): PIXI.RenderTexture
     {
         if(thickness === null) return null;
 

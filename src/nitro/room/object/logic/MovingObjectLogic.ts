@@ -29,9 +29,9 @@ export class MovingObjectLogic extends RoomObjectLogicBase
         super.dispose();
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        super.update(delta);
+        super.update(totalTimeRunning);
 
         if(this._tween) TWEEN.update();
 
@@ -78,10 +78,17 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
         const goal = message.goal;
 
-        if(!goal) return;
+        if(goal)
+        {
+            if(message.isSlide)
+            {
+                this.slideToPosition(goal);
 
-        if(message.isSlide) this.slideToPosition(goal);
-        else this.object.setPosition(goal);
+                return;
+            }
+            
+            this.object.setPosition(goal);
+        }
     }
 
     protected getLocationOffset(): Position
@@ -91,7 +98,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
     private slideToPosition(position: Position): void
     {
-        if(!position) return;
+        if(!position || position.compareStrict(this.object.position)) return;
 
         let screenPosition: Position        = this.object.getScreenPosition();
         let goalScreenPosition: Position    = position.toScreenPosition();

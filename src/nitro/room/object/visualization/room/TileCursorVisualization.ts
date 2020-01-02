@@ -2,5 +2,8 @@ import { FurnitureAnimatedVisualization } from '../furniture/FurnitureAnimatedVi
 
 export class TileCursorVisualization extends FurnitureAnimatedVisualization
 {
-    
+    protected getAdditionalLayerCount(): number
+    {
+        return 0;
+    }
 }

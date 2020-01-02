@@ -1,5 +1,5 @@
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
-import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
+import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
@@ -9,17 +9,24 @@ export class FurnitureCounterClockLogic extends FurnitureLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        const collision = event.collision as IRoomObjectSprite;
-
-        switch(event.type)
+        if(event.collision instanceof RoomObjectSprite)
         {
-            case RoomObjectMouseEvent.DOUBLE_CLICK:
-                switch(collision.tag)
-                {
-                    //case 'start_stop': return Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 1));
-                    //case 'reset': return Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 2));
-                }
-                break;
+            if(event.collision.ignoreMouse) return;
+
+             switch(event.type)
+            {
+                case RoomObjectMouseEvent.DOUBLE_CLICK:
+                    switch(event.collision.tag)
+                    {
+                        case 'start_stop':
+                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 1));
+                            return;
+                        case 'reset':
+                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 2));
+                            return;
+                    }
+                    break;
+            }
         }
 
         super.mouseEvent(event);

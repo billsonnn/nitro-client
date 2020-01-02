@@ -1,4 +1,5 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
@@ -20,9 +21,9 @@ export class FurnitureScoreLogic extends FurnitureMultiStateLogic
         this._scoreTimer        = 0;
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        super.update(delta);
+        super.update(totalTimeRunning);
 
         const currentScore = this.object.state;
 
@@ -69,7 +70,7 @@ export class FurnitureScoreLogic extends FurnitureMultiStateLogic
             if((difference * 50) > 3000) this._scoreIncreaser = 3000 / difference;
             else this._scoreIncreaser = 50;
 
-            this._scoreTimer = this.totalTimeRunning + 0;
+            this._scoreTimer = NitroInstance.instance.renderer.totalTimeRunning + 0;
         }
     }
 }

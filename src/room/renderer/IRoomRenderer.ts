@@ -8,7 +8,5 @@ export interface IRoomRenderer extends PIXI.Container, IDisposable
     mouseDown(event: MouseEvent): void;
     mouseUp(event: MouseEvent): void;
     click(event: MouseEvent): void;
-    keyDown(event: KeyboardEvent): void;
-    keyUp(event: KeyboardEvent): void;
     collision: IRoomCollision;
 }

@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js-legacy';
 import { ICollision } from '../../renderer/ICollision';
+import { Position } from '../../utils/Position';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { RoomObject } from '../RoomObject';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
@@ -9,23 +10,23 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
     private static SPRITE_COUNTER: number = 0;
 
     private _instanceId: number;
-    private _object: IRoomObjectController;
     private _boundingRectangle: PIXI.Rectangle;
+    private _object: IRoomObjectController;
+    private _tilePosition: Position;
 
     private _tag: string;
     private _doesntHide: boolean;
 
-    constructor(name: string, object: IRoomObjectController)
+    constructor(object: IRoomObjectController, name: string, source: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture, texture: PIXI.Texture = null)
     {
-        super(PIXI.Texture.from(name));
+        super(texture ? texture : PIXI.Texture.from(source));
 
         if(!(object instanceof RoomObject)) throw new Error('invalid_object');
 
-        this.name = name;
-
         this._instanceId        = RoomObjectSprite.SPRITE_COUNTER++;
-        this._object            = object;
         this._boundingRectangle = null;
+        this._object            = object;
+        this._tilePosition      = null;
 
         this._tag               = null;
         this._doesntHide        = false;
@@ -157,14 +158,24 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
         return this._instanceId;
     }
 
+    public get boundingRectangle(): PIXI.Rectangle
+    {
+        return this._boundingRectangle;
+    }
+
     public get object(): IRoomObjectController
     {
         return this._object;
     }
 
-    public get boundingRectangle(): PIXI.Rectangle
+    public get tilePosition(): Position
     {
-        return this._boundingRectangle;
+        return this._tilePosition;
+    }
+
+    public set tilePosition(position: Position)
+    {
+        this._tilePosition = position;
     }
 
     public get tag(): string

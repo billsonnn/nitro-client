@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js-legacy';
 import { IRoomCollision } from '../../renderer/IRoomCollision';
 import { RoomCollision } from '../../renderer/RoomCollision';
 import { IRoomObjectController } from '../IRoomObjectController';
@@ -81,11 +82,11 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
         return existing;
     }
 
-    public createAndAddSprite(name: string, source: string): IRoomObjectSprite
+    public createAndAddSprite(name: string, source: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture, texture: PIXI.Texture = null): IRoomObjectSprite
     {
-        if(!name || !source) return null;
+        if(!name) return null;
 
-        return this.addSprite(name, new RoomObjectSprite(source, this._object));
+        return this.addSprite(name, new RoomObjectSprite(this._object, name, source, texture));
     }
 
     public addSprite(name: string, sprite: IRoomObjectSprite): IRoomObjectSprite

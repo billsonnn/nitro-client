@@ -1,7 +1,15 @@
 import * as PIXI from 'pixi.js-legacy';
 import { DisposableContainer } from '../../core/common/disposable/DisposableContainer';
-import { RoomTile } from '../../nitro/room/object/visualization/room/tile/RoomTile';
+import { NitroInstance } from '../../nitro/NitroInstance';
+import { RoomObjectCategory } from '../../nitro/room/object/RoomObjectCategory';
+import { RoomVisualization } from '../../nitro/room/object/visualization/room/RoomVisualization';
+import { RoomEngine } from '../../nitro/room/RoomEngine';
+import { RoomObjectEventHandler } from '../../nitro/room/RoomObjectEventHandler';
 import { NitroConfiguration } from '../../NitroConfiguration';
+import { RoomObjectMouseEvent } from '../events/RoomObjectMouseEvent';
+import { IRoomInstance } from '../IRoomInstance';
+import { IRoomObjectController } from '../object/IRoomObjectController';
+import { Position } from '../utils/Position';
 import { ICollision } from './ICollision';
 import { IRoomCollision } from './IRoomCollision';
 import { IRoomRenderer } from './IRoomRenderer';
@@ -9,53 +17,52 @@ import { RoomCollision } from './RoomCollision';
 
 export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 {
+    private _eventHandler: RoomObjectEventHandler;
+    private _instance: IRoomInstance;
     private _collision: IRoomCollision;
 
-    private _selectedTile: RoomTile;
+    private _roomObject: IRoomObjectController;
+    private _selectedPosition: Position;
     private _selectedCollision: ICollision;
 
     private _isMouseDown: boolean;
-    private _isShiftDown: boolean;
-    private _isCtrlDown: boolean;
-    private _isAltDown: boolean;
+    private _didMouseMove: boolean;
 
     private _lastClick: number;
     private _clickCount: number;
 
-    private _pressedKeys: { [index: number]: boolean };
-    private _releasedKeys: { [index: number]: number };
-    private _didMouseMove: boolean;
-
-    constructor()
+    constructor(eventHandler: RoomObjectEventHandler, roomInstance: IRoomInstance)
     {
         super();
 
+        this._eventHandler          = eventHandler;
+        this._instance              = roomInstance;
         this._collision             = null;
 
-        this._selectedTile          = null;
+        this._roomObject            = null;
+        this._selectedPosition      = null;
         this._selectedCollision     = null;
 
         this._isMouseDown           = false;
-        this._isShiftDown           = false;
-        this._isCtrlDown            = false;
-        this._isAltDown             = false;
+        this._didMouseMove          = false;
 
         this._lastClick             = 0;
         this._clickCount            = 0;
 
-        this._pressedKeys           = {};
-        this._releasedKeys          = {};
-        this._didMouseMove          = false;
-
-        this.setupCollision();
-
         this.sortableChildren       = true;
         this.interactiveChildren    = false;
+
+        this.setupCollision();
     }
 
     protected onDispose(): void
     {
-        
+        if(this._collision)
+        {
+            this._collision.destroy();
+
+            this._collision = null;
+        }
     }
 
     public zoomIn(): void
@@ -85,7 +92,11 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         this._didMouseMove = true;
 
-        this.onMouseMove(point);
+        document.body.style.cursor = 'default';
+
+        this.setMouseLocation(point);
+
+        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_MOVE, point);
     }
 
     public mouseDown(event: MouseEvent): void
@@ -96,7 +107,11 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         this._didMouseMove = false;
 
-        this.onMouseDown(point);
+        this._isMouseDown = true;
+
+        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_DOWN, point);
+
+        if(event.altKey || event.shiftKey) NitroInstance.instance.renderer.toggleDrag();
     }
 
     public mouseUp(event: MouseEvent): void
@@ -105,7 +120,9 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         const point = new PIXI.Point(event.clientX, event.clientY);
 
-        this.onMouseUp(point);
+        this._isMouseDown = false;
+
+        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_UP, point);
     }
 
     public click(event: MouseEvent): void
@@ -131,98 +148,35 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         const point = new PIXI.Point(event.clientX, event.clientY);
 
-        console.log(point);
-    }
-
-    public keyDown(event: KeyboardEvent): void
-    {
-        if(!event) return;
-
-        const code = event.keyCode;
-
-        const time = new Date().getTime();
-
-        const released = this._releasedKeys[code];
-
-        if(released && time < released + 100) return;
-
-        this._pressedKeys[code] = true;
-
-        this.onKeyDown(code);
-    }
-
-    public keyUp(event: KeyboardEvent): void
-    {
-        if(!event) return;
-
-        const code = event.keyCode;
-
-        delete this._pressedKeys[code];
-
-        this._releasedKeys[code] = new Date().getTime();
-
-        this.onKeyUp(code);
-    }
-
-    private onMouseMove(point: PIXI.Point): void
-    {
-        document.body.style.cursor = 'default';
-
-        this.setMouseLocation(point);
-    }
-
-    private onMouseDown(point: PIXI.Point): void
-    {
-        this._isMouseDown = true;
-    }
-
-    private onMouseUp(point: PIXI.Point): void
-    {
-        this._isMouseDown = false;
-    }
-
-    private onKeyDown(code: number): void
-    {
-        switch(code)
+        if(isDouble)
         {
-            case 16: this._isShiftDown  = true; return;
-            case 17: this._isCtrlDown   = true; return;
-            case 18: this._isAltDown    = true; return;
-            case 107: this.zoomIn(); break;
-            case 109: this.zoomOut(); break;
+            this.dispatchMouseEvent(event, RoomObjectMouseEvent.DOUBLE_CLICK, point);
+
+            return;
         }
+
+        this.dispatchMouseEvent(event, RoomObjectMouseEvent.CLICK, point);
     }
 
-    private onKeyUp(code: number): void
+    private dispatchMouseEvent(event: MouseEvent, type: string, point: PIXI.Point): void
     {
-        switch(code)
-        {
-            case 16: this._isShiftDown  = false; return;
-            case 17: this._isCtrlDown   = false; return;
-            case 18: this._isAltDown    = false; return;
-        }
+        if(!type || !point || !this._eventHandler) return;
+
+        this._eventHandler.handleRoomObjectEvent(this.createMouseEvent(event, type, point, this._selectedCollision));
+    }
+
+    public createMouseEvent(event: MouseEvent, type: string, point: PIXI.Point, collision: ICollision): RoomObjectMouseEvent
+    {
+        if(!event || !type || !point) return null;
+        
+        return new RoomObjectMouseEvent(type, collision || null, point, this._selectedPosition || null, event.altKey, event.ctrlKey, event.shiftKey);
     }
 
     private setMouseLocation(point: PIXI.Point): void
     {
         if(!point) return;
 
-        let tile: RoomTile = null;
-
-        const hoverLocation = new PIXI.Point(point.x - NitroConfiguration.TILE_WIDTH, point.y);
-
-        if(tile)
-        {
-            this._selectedTile = tile;
-
-            //if(this._selectedObject || !this._isMouseDown) this.hoverSelectedTile();
-        }
-        else
-        {
-            this._selectedTile = null;
-
-            //this._room.mapManager.tileCursor.visible = false;
-        }
+        this._selectedPosition = this.getPositionForPoint(point);
 
         this.findCollision(point);
     }
@@ -244,6 +198,22 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
         if(this._selectedCollision === collision) return;
 
         this._selectedCollision = collision;
+    }
+
+    private getPositionForPoint(point: PIXI.Point): Position
+    {
+        if(!this._roomObject)
+        {
+            this._roomObject = this._instance.getObject(RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
+        }
+
+        if(!this._roomObject) return null;
+
+        const visualization = this._roomObject.visualization as RoomVisualization;
+
+        if(!visualization) return null;
+        
+        return visualization.getPositionForPoint(new PIXI.Point(point.x - (NitroConfiguration.TILE_WIDTH * this.scale.x), point.y));
     }
 
     public get collision(): IRoomCollision

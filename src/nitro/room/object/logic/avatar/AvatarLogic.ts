@@ -1,9 +1,8 @@
 
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { IRoomObjectCollision } from '../../../../../room/object/visualization/IRoomObjectCollision';
+import { RoomCollision } from '../../../../../room/renderer/RoomCollision';
 import { AvatarAction } from '../../../../avatar/actions/AvatarAction';
-import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectAvatarCarryObjectUpdateMessage } from '../../../messages/ObjectAvatarCarryObjectUpdateMessage';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarDanceUpdateMessage } from '../../../messages/ObjectAvatarDanceUpdateMessage';
@@ -42,7 +41,7 @@ export class AvatarLogic extends MovingObjectLogic
     {
         super();
 
-        this._blinkingStartTimestamp        = NitroInstance.instance.renderer.totalTimeRunning + this.randomBlinkStartTimestamp();
+        this._blinkingStartTimestamp        = this.totalTimeRunning + this.randomBlinkStartTimestamp();
         this._blinkingEndTimestamp          = 0;
         this._talkingEndTimestamp           = 0;
         this._talkingPauseStartTimestamp    = 0;
@@ -55,19 +54,17 @@ export class AvatarLogic extends MovingObjectLogic
         this._gestureEndTimestamp           = 0;
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        super.update(delta);
+        super.update(totalTimeRunning);
 
         const model = this.object && this.object.model;
 
         if(!model) return;
 
-        const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
-
         if(this._talkingEndTimestamp > 0)
         {
-            if(totalTimeRunning > this._talkingEndTimestamp)
+            if(this.totalTimeRunning > this._talkingEndTimestamp)
             {
                 model.setValue(RoomObjectModelKey.FIGURE_TALK, 0);
 
@@ -79,12 +76,12 @@ export class AvatarLogic extends MovingObjectLogic
             {
                 if(!this._talkingPauseEndTimestamp && !this._talkingPauseStartTimestamp)
                 {
-                    this._talkingPauseStartTimestamp    = totalTimeRunning + this.randomTalkingPauseStartTimestamp();
+                    this._talkingPauseStartTimestamp    = this.totalTimeRunning + this.randomTalkingPauseStartTimestamp();
                     this._talkingPauseEndTimestamp      = this._talkingPauseStartTimestamp + this.randomTalkingPauseEndTimestamp();
                 }
                 else
                 {
-                    if((this._talkingPauseStartTimestamp > 0) && (totalTimeRunning > this._talkingPauseStartTimestamp))
+                    if((this._talkingPauseStartTimestamp > 0) && (this.totalTimeRunning > this._talkingPauseStartTimestamp))
                     {
                         model.setValue(RoomObjectModelKey.FIGURE_TALK, 0);
 
@@ -92,7 +89,7 @@ export class AvatarLogic extends MovingObjectLogic
                     }
                     else
                     {
-                        if((this._talkingPauseEndTimestamp > 0) && (totalTimeRunning > this._talkingPauseEndTimestamp))
+                        if((this._talkingPauseEndTimestamp > 0) && (this.totalTimeRunning > this._talkingPauseEndTimestamp))
                         {
                             model.setValue(RoomObjectModelKey.FIGURE_TALK, 1);
                             
@@ -103,21 +100,21 @@ export class AvatarLogic extends MovingObjectLogic
             }
         }
 
-        if((this._animationEndTimestamp > 0) && (totalTimeRunning > this._animationEndTimestamp))
+        if((this._animationEndTimestamp > 0) && (this.totalTimeRunning > this._animationEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_EXPRESSION, 0);
 
             this._animationEndTimestamp = 0;
         }
 
-        if((this._gestureEndTimestamp > 0) && (totalTimeRunning > this._gestureEndTimestamp))
+        if((this._gestureEndTimestamp > 0) && (this.totalTimeRunning > this._gestureEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_GESTURE, 0);
 
             this._gestureEndTimestamp = 0;
         }
 
-        if((this._signEndTimestamp > 0) && (totalTimeRunning > this._signEndTimestamp))
+        if((this._signEndTimestamp > 0) && (this.totalTimeRunning > this._signEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_SIGN, -1);
 
@@ -126,7 +123,7 @@ export class AvatarLogic extends MovingObjectLogic
 
         if(this._carryObjectEndTimestamp > 0)
         {
-            if(totalTimeRunning > this._carryObjectEndTimestamp)
+            if(this.totalTimeRunning > this._carryObjectEndTimestamp)
             {
                 model.setValue(RoomObjectModelKey.FIGURE_CARRY_OBJECT, 0);
                 model.setValue(RoomObjectModelKey.FIGURE_USE_OBJECT, 0);
@@ -139,9 +136,9 @@ export class AvatarLogic extends MovingObjectLogic
 
         if(this._allowUseCarryObject)
         {
-            if((totalTimeRunning - this._carryObjectStartTimestamp) > 5000)
+            if((this.totalTimeRunning - this._carryObjectStartTimestamp) > 5000)
             {
-                if(((totalTimeRunning - this._carryObjectStartTimestamp) % 10000) < 1000)
+                if(((this.totalTimeRunning - this._carryObjectStartTimestamp) % 10000) < 1000)
                 {
                     model.setValue(RoomObjectModelKey.FIGURE_USE_OBJECT, 1);
                 }
@@ -152,15 +149,15 @@ export class AvatarLogic extends MovingObjectLogic
             }
         }
 
-        if((this._blinkingStartTimestamp > -1) && (totalTimeRunning > this._blinkingStartTimestamp))
+        if((this._blinkingStartTimestamp > -1) && (this.totalTimeRunning > this._blinkingStartTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_BLINK, 1);
 
-            this._blinkingStartTimestamp    = totalTimeRunning + this.randomBlinkStartTimestamp();
-            this._blinkingEndTimestamp      = totalTimeRunning + this.randomBlinkEndTimestamp();
+            this._blinkingStartTimestamp    = this.totalTimeRunning + this.randomBlinkStartTimestamp();
+            this._blinkingEndTimestamp      = this.totalTimeRunning + this.randomBlinkEndTimestamp();
         }
 
-        if((this._blinkingEndTimestamp > 0) && (totalTimeRunning > this._blinkingEndTimestamp))
+        if((this._blinkingEndTimestamp > 0) && (this.totalTimeRunning > this._blinkingEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_BLINK, 0);
 
@@ -177,8 +174,6 @@ export class AvatarLogic extends MovingObjectLogic
         const model = this.object && this.object.model;
 
         if(!model) return;
-
-        const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
 
         if(message instanceof ObjectAvatarUpdateMessage)
         {
@@ -207,7 +202,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectModelKey.FIGURE_TALK, 1);
 
-            this._talkingEndTimestamp = NitroInstance.instance.renderer.totalTimeRunning + (message.numberOfWords * 1000);
+            this._talkingEndTimestamp = this.totalTimeRunning + (message.numberOfWords * 1000);
 
             return;
         }
@@ -216,7 +211,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectModelKey.FIGURE_GESTURE, message.gesture);
 
-            this._gestureEndTimestamp = NitroInstance.instance.renderer.totalTimeRunning + 3000;
+            this._gestureEndTimestamp = this.totalTimeRunning + 3000;
 
             return;
         }
@@ -234,7 +229,7 @@ export class AvatarLogic extends MovingObjectLogic
 
             this._animationEndTimestamp = AvatarAction.getExpressionTimeout(model.getValue(RoomObjectModelKey.FIGURE_EXPRESSION));
 
-            if(this._animationEndTimestamp > -1) this._animationEndTimestamp += totalTimeRunning;
+            if(this._animationEndTimestamp > -1) this._animationEndTimestamp += this.totalTimeRunning;
 
             return;
         }
@@ -250,7 +245,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectModelKey.FIGURE_SIGN, message.signType);
 
-            this._signEndTimestamp = NitroInstance.instance.renderer.totalTimeRunning + 5000;
+            this._signEndTimestamp = this.totalTimeRunning + 5000;
         }
 
         else if(message instanceof ObjectAvatarSleepUpdateMessage)
@@ -258,7 +253,7 @@ export class AvatarLogic extends MovingObjectLogic
             model.setValue(RoomObjectModelKey.FIGURE_SLEEP, message.isSleeping ? 1 : 0);
 
             if(message.isSleeping) this._blinkingStartTimestamp = -1;
-            else this._blinkingStartTimestamp = totalTimeRunning + this.randomBlinkStartTimestamp();
+            else this._blinkingStartTimestamp = this.totalTimeRunning + this.randomBlinkStartTimestamp();
 
             return;
         }
@@ -275,7 +270,7 @@ export class AvatarLogic extends MovingObjectLogic
             model.setValue(RoomObjectModelKey.FIGURE_CARRY_OBJECT, message.itemType);
             model.setValue(RoomObjectModelKey.FIGURE_USE_OBJECT, 0);
 
-            this._carryObjectStartTimestamp = totalTimeRunning;
+            this._carryObjectStartTimestamp = this.totalTimeRunning;
 
             if(message.itemType < AvatarLogic.MAX_HAND_ID)
             {
@@ -308,16 +303,17 @@ export class AvatarLogic extends MovingObjectLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        const collision = event.collision as IRoomObjectCollision;
-
-        switch(event.type)
+        if(event.collision instanceof RoomCollision)
         {
-            case RoomObjectMouseEvent.MOUSE_MOVE:
-                document.body.style.cursor = 'pointer';
-                break;
-            case RoomObjectMouseEvent.CLICK:
-                //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
-                break;
+            switch(event.type)
+            {
+                case RoomObjectMouseEvent.MOUSE_MOVE:
+                    document.body.style.cursor = 'pointer';
+                    break;
+                case RoomObjectMouseEvent.CLICK:
+                    //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
+                    break;
+            }
         }
     }
 

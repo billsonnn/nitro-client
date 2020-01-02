@@ -28,6 +28,7 @@ import { RoomModelEvent } from './messages/incoming/room/mapping/RoomModelEvent'
 import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNameEvent';
 import { RoomStackHeightEvent } from './messages/incoming/room/mapping/RoomStackHeightEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
+import { RoomRollingEvent } from './messages/incoming/room/RoomRollingEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from './messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from './messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -52,8 +53,25 @@ import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComp
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
+import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
+import { ItemPickupComposer } from './messages/outgoing/room/furniture/ItemPickupComposer';
+import { ItemPlaceComposer } from './messages/outgoing/room/furniture/ItemPlaceComposer';
+import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
+import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
+import { FurnitureMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { RoomModel2Composer } from './messages/outgoing/room/mapping/RoomModel2Composer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
+import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
+import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
+import { RoomUnitChatWhisperComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
+import { RoomUnitTypingStartComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
+import { RoomUnitTypingStopComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
+import { RoomUnitActionComposer } from './messages/outgoing/room/unit/RoomUnitActionComposer';
+import { RoomUnitDanceComposer } from './messages/outgoing/room/unit/RoomUnitDanceComposer';
+import { RoomUnitLookComposer } from './messages/outgoing/room/unit/RoomUnitLookComposer';
+import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSignComposer';
+import { RoomUnitSitComposer } from './messages/outgoing/room/unit/RoomUnitSitComposer';
+import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
 import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer';
 
@@ -80,6 +98,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.DESKTOP_VIEW, DesktopViewEvent);
 
         // ROOM
+        this._events.set(IncomingHeader.ROOM_ROLLING, RoomRollingEvent);
 
             // ACCESS
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
@@ -167,10 +186,37 @@ export class NitroMessages implements IMessageConfiguration
             // DATA
             this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
 
+            // FURNITURE
+            this._composers.set(OutgoingHeader.FURNITURE_PICKUP, ItemPickupComposer);
+            this._composers.set(OutgoingHeader.FURNITURE_PLACE, ItemPlaceComposer);
+
+                // FLOOR
+                this._composers.set(OutgoingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateComposer);
+
+                // LOGIC
+                this._composers.set(OutgoingHeader.ITEM_DICE_CLICK, FurnitureDiceActivateComposer);
+                this._composers.set(OutgoingHeader.ITEM_DICE_CLOSE, FurnitureDiceDeactivateComposer);
+                this._composers.set(OutgoingHeader.FURNITURE_MULTISTATE, FurnitureMultiStateComposer);
+
             // MAPPING
             this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
             this._composers.set(OutgoingHeader.ROOM_MODEL2, RoomModel2Composer);
-        
+
+            // UNIT
+            this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);
+            this._composers.set(OutgoingHeader.UNIT_DANCE, RoomUnitDanceComposer);
+            this._composers.set(OutgoingHeader.UNIT_LOOK, RoomUnitLookComposer);
+            this._composers.set(OutgoingHeader.UNIT_SIGN, RoomUnitSignComposer);
+            this._composers.set(OutgoingHeader.UNIT_SIT, RoomUnitSitComposer);
+            this._composers.set(OutgoingHeader.UNIT_WALK, RoomUnitWalkComposer);
+
+                // CHAT
+                this._composers.set(OutgoingHeader.UNIT_CHAT, RoomUnitChatComposer);
+                this._composers.set(OutgoingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutComposer);
+                this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
+                this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
+                this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
+                
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 

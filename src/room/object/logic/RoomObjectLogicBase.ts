@@ -1,5 +1,7 @@
 import { IAssetData } from '../../../core/asset/interfaces/IAssetData';
 import { Disposable } from '../../../core/common/disposable/Disposable';
+import { NitroInstance } from '../../../nitro/NitroInstance';
+import { RoomObjectEventHandler } from '../../../nitro/room/RoomObjectEventHandler';
 import { RoomObjectMouseEvent } from '../../events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../messages/RoomObjectUpdateMessage';
 import { IRoomObjectController } from '../IRoomObjectController';
@@ -8,6 +10,8 @@ import { IRoomObjectLogic } from './IRoomObjectLogic';
 export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
 {
     private _object: IRoomObjectController;
+    private _eventHandler: RoomObjectEventHandler;
+
     private _totalTimeRunning: number;
 
     constructor()
@@ -15,6 +19,8 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         super();
 
         this._object            = null;
+        this._eventHandler      = null;
+
         this._totalTimeRunning  = 0;
     }
 
@@ -25,14 +31,13 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
 
     protected onDispose(): void
     {
-        this._object            = null;
-        this._totalTimeRunning  = 0;
+        this._object = null;
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        this._totalTimeRunning += delta;
-
+        this._totalTimeRunning = totalTimeRunning;
+        
         return;
     }
 
@@ -53,9 +58,14 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         return;
     }
 
-    public setObject(object: IRoomObjectController)
+    public setObject(object: IRoomObjectController): void
     {
         this._object = object;
+    }
+
+    public setEventHandler(eventHandler: RoomObjectEventHandler): void
+    {
+        this._eventHandler = eventHandler;
     }
 
     public get object(): IRoomObjectController
@@ -63,8 +73,13 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         return this._object;
     }
 
-    protected get totalTimeRunning(): number
+    public get eventHandler(): RoomObjectEventHandler
     {
-        return this._totalTimeRunning;
+        return this._eventHandler;
+    }
+
+    public get totalTimeRunning(): number
+    {
+        return NitroInstance.instance.renderer.totalTimeRunning;
     }
 }

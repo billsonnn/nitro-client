@@ -90,12 +90,17 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
         });
     }
 
-    public resizeRenderer(width: number, height: number): void
+    public resizeRenderer(width: number = window.innerWidth, height: number = window.innerHeight): void
     {
         this.view.width     = width;
         this.view.height    = height;
         
-        if(this._camera) this._camera.resize(width, height, width, height);
+        if(this._camera)
+        {
+            this._camera.resize(width, height, width, height);
+
+            //this._camera.position.set((width / 2), (height / 3));
+        }
     }
 
     public get camera(): INitroCamera

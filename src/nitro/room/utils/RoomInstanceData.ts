@@ -1,4 +1,5 @@
 import { LegacyWallGeometry } from './LegacyWallGeometry';
+import { SelectedRoomObjectData } from './SelectedRoomObjectData';
 
 export class RoomInstanceData
 {
@@ -6,6 +7,7 @@ export class RoomInstanceData
 
     private _modelName: string;
     private _legacyGeometry: LegacyWallGeometry;
+    private _selectedObject: SelectedRoomObjectData;
 
     constructor(roomId: number)
     {
@@ -13,6 +15,22 @@ export class RoomInstanceData
 
         this._modelName         = null;
         this._legacyGeometry    = new LegacyWallGeometry();
+        this._selectedObject    = null;
+    }
+
+    public setModelName(name: string): void
+    {
+        this._modelName = name;
+    }
+
+    public setSelectedObject(data: SelectedRoomObjectData): void
+    {
+        if(this._selectedObject)
+        {
+            this._selectedObject.dispose();
+        }
+
+        this._selectedObject = data;
     }
 
     public dispose(): void
@@ -33,5 +51,10 @@ export class RoomInstanceData
     public get legacyGeometry(): LegacyWallGeometry
     {
         return this._legacyGeometry;
+    }
+
+    public get selectedObject(): SelectedRoomObjectData
+    {
+        return this._selectedObject;
     }
 }

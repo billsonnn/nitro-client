@@ -1,4 +1,5 @@
 import { NitroManager } from '../../core/common/NitroManager';
+import { IConnection } from '../../core/communication/connections/IConnection';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomObject } from '../../room/object/IRoomObject';
@@ -37,6 +38,7 @@ import { ObjectAvatarUpdateMessage } from './messages/ObjectAvatarUpdateMessage'
 import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseObjectUpdateMessage';
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
+import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdateMessage';
 import { ObjectUpdateStateMessage } from './messages/ObjectUpdateStateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
@@ -51,17 +53,18 @@ import { RoomInstanceData } from './utils/RoomInstanceData';
 
 export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator, IRoomEngineServices
 {
-    private static ROOM_OBJECT_ID: number       = -1;
-    private static ROOM_OBJECT_TYPE: string     = 'room';
+    public static ROOM_OBJECT_ID: number       = -1;
+    public static ROOM_OBJECT_TYPE: string     = 'room';
 
-    private static CURSOR_OBJECT_ID: number     = -2;
-    private static CURSOR_OBJECT_TYPE: string   = 'tile_cursor';
+    public static CURSOR_OBJECT_ID: number     = -2;
+    public static CURSOR_OBJECT_TYPE: string   = 'tile_cursor';
 
     private _communication: INitroCommunicationManager;
     private _roomSession: IRoomSessionManager;
     private _roomObjectEventHandler: RoomObjectEventHandler;
     private _roomMessageHandler: RoomMessageHandler;
 
+    private _activeRoomId: number;
     private _roomInstanceData: Map<number, RoomInstanceData>;
 
     private _roomRendererFactory: IRoomRendererFactory;
@@ -80,6 +83,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomObjectEventHandler    = new RoomObjectEventHandler(this);
         this._roomMessageHandler        = new RoomMessageHandler(this);
 
+        this._activeRoomId              = -1;
         this._roomInstanceData          = new Map();
 
         this._roomRendererFactory       = new RoomRendererFactory();
@@ -118,6 +122,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             case RoomSessionEvent.STARTED:
                 if(this._roomMessageHandler) this._roomMessageHandler.setRoomId(event.session.roomId);
+
+                this._activeRoomId = event.session.roomId;
                 return;
             case RoomSessionEvent.ENDED:
                 if(this._roomMessageHandler)
@@ -125,6 +131,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     this._roomMessageHandler.clearRoomId();
                     this.removeRoomInstance(event.session.roomId);
                 }
+
+                this._activeRoomId = -1;
                 return;
         }
     }
@@ -139,19 +147,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!this._roomSession || !this._roomSession.roomManager) return;
 
         return this._roomSession.roomManager.getRoomInstance(roomId);
-    }
-
-    private getRoomInstanceData(roomId: number): RoomInstanceData
-    {
-        const existing = this._roomInstanceData.get(roomId);
-
-        if(existing) return existing;
-
-        const data = new RoomInstanceData(roomId);
-
-        this._roomInstanceData.set(data.roomId, data);
-
-        return data;
     }
 
     public removeRoomInstance(roomId: number): void
@@ -202,7 +197,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return null;
 
-        const renderer = this._roomRendererFactory.createRenderer();
+        const renderer = this._roomRendererFactory.createRenderer(this._roomObjectEventHandler, instance);
 
         if(!renderer) return;
 
@@ -228,9 +223,50 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             this._roomSession.roomManager.initalizeObject(object, model);
         }
 
-        const tileCursor = instance.createObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
+        if(NitroConfiguration.TILE_CURSOR_ENABLED)
+        {
+            const tileCursor = instance.createObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
 
-        this._roomSession.roomManager.initalizeObject(tileCursor); 
+            if(tileCursor)
+            {
+                tileCursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(null));
+
+                this.roomObjectReady(tileCursor);
+            }
+        }
+
+        let x = ~~(window.innerWidth - (model.width * NitroConfiguration.TILE_REAL_WIDTH));
+        let y = ~~(window.innerHeight - ((model.height * NitroConfiguration.TILE_REAL_HEIGHT)));
+
+        if(x < 0) x = 0;
+        if(y < 0) y = 0;
+
+        instance.renderer.position.x = x;
+        instance.renderer.position.y = y;
+
+        NitroInstance.instance.renderer.resizeRenderer();
+    }
+
+    private getRoomInstanceData(roomId: number): RoomInstanceData
+    {
+        const existing = this._roomInstanceData.get(roomId);
+
+        if(existing) return existing;
+
+        const data = new RoomInstanceData(roomId);
+
+        this._roomInstanceData.set(data.roomId, data);
+
+        return data;
+    }
+
+    public setRoomInstanceModelName(roomId: number, name: string): void
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return;
+
+        instanceData.setModelName(name);
     }
 
     private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
@@ -268,7 +304,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             this.refreshObjectData(object);
         }
 
+        if(this._roomObjectEventHandler) object.logic.setEventHandler(this._roomObjectEventHandler);
+
         object.visualization.start();
+    }
+
+    public getTileCursorObject(roomId: number): IRoomObjectController
+    {
+        return this.getRoomObject(roomId, RoomEngine.CURSOR_OBJECT_ID, RoomObjectCategory.ROOM);
     }
 
     public getRoomUnitObject(roomId: number, objectId: number): IRoomObjectController
@@ -309,6 +352,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         instance.removeObject(objectId, category);
     }
 
+    public updateRoomFurnitureObject(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, state: number, data: IObjectData = null): void
+    {
+        const object = this.getRoomFurnitureObject(roomId, objectId);
+
+        if(!object) return;
+
+        fromPosition    = fromPosition ? fromPosition : object.position;
+        toPosition      = toPosition ? toPosition : object.position;
+        
+        object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition));
+        object.processUpdateMessage(new ObjectDataUpdateMessage(state, data));
+    }
+
     public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string): boolean
     {
         const existing = this.getRoomUnitObject(roomId, objectId);
@@ -329,40 +385,16 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this.roomObjectReady(object);
     }
 
-    public updateRoomUnitLocation(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, slide: boolean = false, headDirection: number = null): void
+    public updateRoomUnitLocation(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, isSlide: boolean = false, headDirection: number = null): void
     {
         const object = this.getRoomUnitObject(roomId, objectId);
 
         if(!object) return;
 
-        object.processUpdateMessage(new ObjectAvatarUpdateMessage(fromPosition, toPosition, slide));
-    }
+        fromPosition    = fromPosition ? fromPosition : object.position;
+        toPosition      = toPosition ? toPosition : object.position;
 
-    public updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void
-    {
-        const object = this.getRoomUnitObject(roomId, objectId);
-
-        if(!object) return;
-
-        object.processUpdateMessage(new ObjectAvatarFlatControlUpdateMessage(parseInt(level)));
-    }
-
-    public updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
-    {
-        const object = this.getRoomUnitObject(roomId, objectId);
-
-        if(!object) return;
-
-        object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
-    }
-
-    public updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string): void
-    {
-        const object = this.getRoomUnitObject(roomId, objectId);
-
-        if(!object) return;
-
-        object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(fromPosition, toPosition, isSlide, headDirection));
     }
 
     public updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
@@ -421,39 +453,42 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(message);
     }
 
-    public updateRoomUnitObject(roomId: number, objectId: number, position: Position): void
+    public updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void
     {
-
-    }
-
-    public updateRoomFurnitureObject(roomId: number, objectId: number, position: Position, state: number, data: IObjectData = null): void
-    {
-        const object = this.getRoomFurnitureObject(roomId, objectId);
+        const object = this.getRoomUnitObject(roomId, objectId);
 
         if(!object) return;
 
-        if(position)
-        {
-            const newPosition = object.position.copy();
+        object.processUpdateMessage(new ObjectAvatarFlatControlUpdateMessage(parseInt(level)));
+    }
 
-            newPosition.x          = position.x;
-            newPosition.y          = position.y;
-            newPosition.z          = position.z;
-            newPosition.direction  = position.direction;
+    public updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
 
-            object.processUpdateMessage(new ObjectMoveUpdateMessage(object.position, newPosition));
-        }
-        
-        object.processUpdateMessage(new ObjectDataUpdateMessage(state, data));
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
+    }
+
+    public updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
     }
 
     private refreshObjectData(object: IRoomObjectController)
     {
         if(!object || !object.model || !object.logic) return;
 
-        const dataFormat = parseInt(object.model.getValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT));
+        const dataFormat = object.model.getValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT);
 
-        const objectData = ObjectDataFactory.getData(dataFormat);
+        if(dataFormat === undefined) return;
+
+        const objectData = ObjectDataFactory.getData(parseInt(dataFormat));
 
         if(!objectData) return;
 
@@ -520,6 +555,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         });
     }
 
+    public get connection(): IConnection
+    {
+        return this._communication.connection;
+    }
+
     public get roomSession(): IRoomSessionManager
     {
         return this._roomSession;
@@ -538,5 +578,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public get logicFactory(): IRoomObjectLogicFactory
     {
         return this._logicFactory;
+    }
+
+    public get activeRoomId(): number
+    {
+        return this._activeRoomId;
     }
 }

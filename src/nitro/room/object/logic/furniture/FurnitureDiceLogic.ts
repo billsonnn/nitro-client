@@ -1,5 +1,6 @@
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
-import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
+import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
+import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
@@ -9,16 +10,27 @@ export class FurnitureDiceLogic extends FurnitureLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        const collision = event.collision as IRoomObjectSprite;
-
-        switch(event.type)
+        if(event.collision instanceof RoomObjectSprite)
         {
-            case RoomObjectMouseEvent.DOUBLE_CLICK:
-                //if(collision.tag === 'activate' || this.object.state === 0 || this.object.state === 100) return Nitro.networkManager.processOutgoing(new ItemDiceActivateComposer(this.object.id));
+            let action: RoomObjectFurnitureActionEvent = null;
 
-                //else if(collision.tag === 'deactivate') return Nitro.networkManager.processOutgoing(new ItemDiceDeactivateComposer(this.object.id));
+            switch(event.type)
+            {
+                case RoomObjectMouseEvent.DOUBLE_CLICK:
+                    if(event.collision.tag === 'activate' || this.object.state === 0 || this.object.state === 100)
+                    {
+                        action = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
+                    }
+                    
+                    else if(event.collision.tag === 'deactivate')
+                    {
+                        action = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_OFF, this.object);
+                    }
 
-                return;
+                    if(action && this.eventHandler) this.eventHandler.handleRoomObjectEvent(action);
+
+                    return;
+            }
         }
 
         super.mouseEvent(event);

@@ -1,14 +1,15 @@
 export class ObjectOperationType
 {
-    public static OBJECT_MOVE: string               = 'object_move';
-    public static OBJECT_PLACE: string              = 'object_place';
-    public static OBJECT_ROTATE_POSITIVE: string    = 'object_rotate_positive';
-    public static OBJECT_ROTATE_NEGATIVE: string    = 'object_rotate_negative';
-    public static OBJECT_MOVE_TO: string            = 'object_move_to';
-    public static OBJECT_PLACE_TO: string           = 'object_place_to';
-    public static OBJECT_PICKUP: string             = 'object_pickup';
-    public static OBJECT_PICKUP_BOT: string         = 'object_pickup_bot';
-    public static OBJECT_PICKUP_PET: string         = 'object_pickup_pet';
-    public static OBJECT_EJECT: string              = 'object_eject';
-    public static OBJECT_SAVE_DATA: string          = 'object_save_data';
+    public static OBJECT_UNDEFINED: string          = 'OBJECT_UNDEFINED';
+    public static OBJECT_MOVE: string               = 'OBJECT_MOVE';
+    public static OBJECT_PLACE: string              = 'OBJECT_PLACE';
+    public static OBJECT_ROTATE_POSITIVE: string    = 'OBJECT_ROTATE_POSITIVE';
+    public static OBJECT_ROTATE_NEGATIVE: string    = 'OBJECT_ROTATE_NEGATIVE';
+    public static OBJECT_MOVE_TO: string            = 'OBJECT_MOVE_TO';
+    public static OBJECT_PLACE_TO: string           = 'OBJECT_PLACE_TO';
+    public static OBJECT_PICKUP: string             = 'OBJECT_PICKUP';
+    public static OBJECT_PICKUP_BOT: string         = 'OBJECT_PICKUP_BOT';
+    public static OBJECT_PICKUP_PET: string         = 'OBJECT_PICKUP_PET';
+    public static OBJECT_EJECT: string              = 'OBJECT_EJECT';
+    public static OBJECT_SAVE_STUFF_DATA: string    = 'OBJECT_SAVE_STUFF_DATA';
 }

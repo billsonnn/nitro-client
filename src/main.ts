@@ -3,6 +3,7 @@ import { INitroCore } from './core/INitroCore';
 import { NitroCoreFactory } from './core/NitroCoreFactory';
 import { INitroInstance } from './nitro/INitroInstance';
 import { NitroInstance } from './nitro/NitroInstance';
+import { NitroConfiguration } from './NitroConfiguration';
 //@ts-ignore
 window.PIXI = PIXI;
 
@@ -11,24 +12,29 @@ const instances: INitroInstance[]   = [ new NitroInstance(core) ];
 
 function init(): void
 {
-    try
+    core.asset.downloadAssets([
+        NitroConfiguration.LOCAL_ASSET_URL + `/tile_cursor/tile_cursor.json`
+    ], (status: boolean) =>
     {
-        for(let instance of instances)
+        try
         {
-            if(!instance) continue;
+            for(let instance of instances)
+            {
+                if(!instance) continue;
 
-            instance.init();
+                instance.init();
 
-            if(instance.renderer) document.body.appendChild(instance.renderer.view);
+                if(instance.renderer) document.body.appendChild(instance.renderer.view);
+            }
         }
-    }
 
-    catch(err)
-    {
-        console.error(err.message || err);
+        catch(err)
+        {
+            console.error(err.message || err);
 
-        core.dispose();
-    }
+            core.dispose();
+        }
+    });
 }
 
 init();

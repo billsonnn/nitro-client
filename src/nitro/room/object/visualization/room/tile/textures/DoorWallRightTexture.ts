@@ -1,9 +1,9 @@
 import { NitroConfiguration } from '../../../../../../../NitroConfiguration';
 import { TileTexture } from './TileTexture';
 
-export class DoorWallTexture extends TileTexture
+export class DoorWallRightTexture extends TileTexture
 {
-    public static TYPE: string = 'doorw';
+    public static TYPE: string = 'doorwr';
 
     protected static getColors(): [ number, number ]
     {
@@ -18,9 +18,9 @@ export class DoorWallTexture extends TileTexture
         const graphic = new PIXI.Graphics();
 
         const [ leftColor, rightColor ] = this.getColors();
-
-        const startX    = -Math.abs(0.75 * NitroConfiguration.TILE_REAL_HEIGHT);
-        const startY    = (0.75 * NitroConfiguration.TILE_HEIGHT) - NitroConfiguration.TILE_REAL_HEIGHT;
+        
+        const startX    = 0;
+        const startY    = 0;
         
         const verticies = [
             new PIXI.Point(startX, startY),
@@ -45,8 +45,8 @@ export class DoorWallTexture extends TileTexture
 
             graphic.beginFill(rightColor);
             graphic.moveTo(verticies[3].x, verticies[3].y);
-            graphic.lineTo(verticies[3].x, verticies[3].y + height + 86);
-            graphic.lineTo(verticies[2].x, verticies[2].y + height + 86);
+            graphic.lineTo(verticies[3].x, verticies[3].y + height);
+            graphic.lineTo(verticies[2].x, verticies[2].y + height);
             graphic.lineTo(verticies[2].x, verticies[2].y);
             graphic.endFill();
         }

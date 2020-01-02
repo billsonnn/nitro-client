@@ -1,30 +1,39 @@
-import { IRoomObjectSprite } from '../object/visualization/IRoomObjectSprite';
-import { RoomObjectCollision } from '../object/visualization/RoomObjectCollision';
+import { ICollision } from '../renderer/ICollision';
+import { Position } from '../utils/Position';
+import { RoomObjectEvent } from './RoomObjectEvent';
 
-export class RoomObjectMouseEvent
+export class RoomObjectMouseEvent extends RoomObjectEvent
 {
-    public static CLICK: string         = 'click';
-    public static DOUBLE_CLICK: string  = 'double_click';
-    public static MOUSE_MOVE: string    = 'mouse_move';
-    public static MOUSE_DOWN: string    = 'mouse_down';
-    public static MOUSE_UP: string      = 'mouse_up';
+    public static CLICK: string         = 'ROE_MOUSE_CLICK';
+    public static DOUBLE_CLICK: string  = 'ROW_MOUSE_DOUBLE_CLICK';
+    public static MOUSE_MOVE: string    = 'ROE_MOUSE_MOVE';
+    public static MOUSE_DOWN: string    = 'ROW_MOUSE_DOWN';
+    public static MOUSE_UP: string      = 'ROE_MOUSE_UP';
     
-    private _type: string;
     private _point: PIXI.Point;
-    private _collision: IRoomObjectSprite | RoomObjectCollision | PIXI.DisplayObject;
+    private _position: Position;
+    private _collision: ICollision;
 
-    constructor(type: string, point: PIXI.Point, collision: IRoomObjectSprite | RoomObjectCollision | PIXI.DisplayObject)
+    private _altKey: boolean;
+    private _ctrlKey: boolean;
+    private _shiftKey: boolean;
+
+    constructor(type: string, collision: ICollision, point: PIXI.Point, position: Position, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
     {
-        if(!type) throw new Error('invalid_type');
+        super(type, collision ? collision.object : null);
 
-        this._type      = type;
-        this._point     = point;
         this._collision = collision;
+        this._point     = point;
+        this._position  = position;
+
+        this._altKey    = altKey;
+        this._ctrlKey   = ctrlKey;
+        this._shiftKey  = shiftKey;
     }
 
-    public get type(): string
+    public get collision(): ICollision
     {
-        return this._type;
+        return this._collision;
     }
 
     public get point(): PIXI.Point
@@ -32,8 +41,23 @@ export class RoomObjectMouseEvent
         return this._point;
     }
 
-    public get collision(): IRoomObjectSprite | RoomObjectCollision | PIXI.DisplayObject
+    public get position(): Position
     {
-        return this._collision;
+        return this._position;
+    }
+
+    public get altKey(): boolean
+    {
+        return this._altKey;
+    }
+
+    public get ctrlKey(): boolean
+    {
+        return this._ctrlKey;
+    }
+
+    public get shiftKey(): boolean
+    {
+        return this._shiftKey;
     }
 }

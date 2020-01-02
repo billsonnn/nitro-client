@@ -6,7 +6,7 @@ export class ObjectDataUpdateMessage extends RoomObjectUpdateMessage
     private _state: number;
     private _data: IObjectData;
 
-    constructor(state: number, data: IObjectData)
+    constructor(state: number, data: IObjectData = null)
     {
         super(null);
 

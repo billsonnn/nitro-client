@@ -2,6 +2,7 @@ export class NitroConfiguration
 {
     public static RELEASE_VERSION       = 'PRODUCTION-201611291003-338511768';
     public static ASSET_URL             = 'https://assets.nitrots.co';
+    public static LOCAL_ASSET_URL       = 'https://system.nitrots.co';
     public static FURNIDATA_URL         = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
     public static BACKGROUND_COLOR      = 0x000000;
     public static TILE_REAL_WIDTH       = 64;
@@ -24,5 +25,7 @@ export class NitroConfiguration
     public static WALLS_ENABLED         = true;
     public static CULLING_ENABLED       = false;
     public static PACKET_LOG            = false;
+    public static TILE_CURSOR_ENABLED   = true;
+    public static WALKING_ENABLED       = true;
     public static PET_TYPES             = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
 }

@@ -1,26 +1,22 @@
+import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
+import { Direction } from '../../../../../room/utils/Direction';
 import { Position } from '../../../../../room/utils/Position';
 import { RoomVisualizationData } from './RoomVisualizationData';
-import { RoomTile } from './tile/RoomTile';
-import { RoomTileType } from './tile/RoomTileType';
+import { StairLeftTexture } from './tile/textures/StairLeftTexture';
+import { StairRightTexture } from './tile/textures/StairRightTexture';
+import { TileTexture } from './tile/textures/TileTexture';
 
 export class RoomVisualization extends RoomObjectSpriteVisualization
 {
     protected _data: RoomVisualizationData;
 
-    private _map: RoomTile[][];
-    private _tiles: RoomTile[];
-
     constructor()
     {
         super();
 
-        this._data  = null;
-
-        this._map   = [];
-        this._tiles = [];
-
+        this._data          = null;
         this._selfContained = true;
     }
 
@@ -43,25 +39,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
         return true;
     }
 
-    private resetMap(): void
-    {
-        if(!this._tiles || !this._tiles.length) return;
-
-        for(let tile of this._tiles)
-        {
-            if(!tile) continue;
-
-            tile.dispose();
-        }
-
-        this._map   = [];
-        this._tiles = [];
-    }
-
     protected onDispose(): void
     {
-        this.resetMap();
-
         if(this._data && !this._data.saveable) this._data.dispose();
 
         super.onDispose();
@@ -69,8 +48,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
     private generateMap(): void
     {
-        this.resetMap();
-
         const mapHeight = this._data.modelParser.height;
         const mapWidth  = this._data.modelParser.width;
 
@@ -81,6 +58,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         let y = -1;
 
+        let counter = -1;
+
         while(y < mapHeight)
         {
             y++;
@@ -89,6 +68,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
             while(x < mapWidth)
             {
+                counter++;
+
                 x++;
 
                 const height = this._data.modelParser.getHeight(x, y);
@@ -116,44 +97,75 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
                 const position = new Position(x, y, height);
 
-                let tile: RoomTile = null;
+                let tileTexture: typeof TileTexture = TileTexture;
+                let isStair: boolean                = false;
                 
-                const nextTileHeight = this._data.modelParser.getHeight(x, y - 1);
+                let nextTileHeight = this._data.modelParser.getHeight(x, y - 1);
 
                 if(nextTileHeight >= 0)
                 {
-                    if(nextTileHeight === (height + 1)) tile = new RoomTile(position, RoomTileType.STAIR_RIGHT);
-                }
-
-                if(!tile)
-                {
-                    const nextTileHeight = this._data.modelParser.getHeight(x - 1, y);
-
-                    if(nextTileHeight >= 0)
+                    if(nextTileHeight === (height + 1))
                     {
-                        if(nextTileHeight === (height + 1)) tile = new RoomTile(position, RoomTileType.STAIR_LEFT);
+                        tileTexture = StairRightTexture;
+
+                        isStair = true;
                     }
                 }
+                
+                nextTileHeight = this._data.modelParser.getHeight(x - 1, y);
 
-                if(!tile) tile = new RoomTile(position, RoomTileType.TILE);
+                if(nextTileHeight === (height + 1))
+                {
+                    tileTexture = StairLeftTexture;
 
-                if(this._map[x] === undefined) this._map[x] = [];
+                    isStair = true;
+                }
 
-                this._map[x][y] = tile;
+                const sprite = this.createAndAddSprite(`${ counter }`, null, tileTexture.getTexture(10));
 
-                const sprite = tile.createGraphic();
+                sprite.x            = position.calculateX;
+                sprite.y            = position.calculateY - position.calculateZ;
+                sprite.hitArea      = tileTexture.POLYGON;
+                sprite.tilePosition = position;
 
-                if(!sprite) continue;
-
-                this._tiles.push(tile);
-
-                sprite.x    = tile.position.calculateX;
-                sprite.y    = tile.position.calculateY - tile.position.calculateZ;
-
-                if(this._selfContainer) this._selfContainer.addCollision(tile.graphic);
+                if(isStair) sprite.y -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
             }
         }
 
-        const door = new Position(doorX, doorY, doorZ, doorDirection);
+        this.addDoor(new Position(doorX, doorY, doorZ, Direction.angleToDirection(doorDirection)));
+    }
+
+    private addDoor(position: Position): void
+    {
+        if(!position) return;
+
+        // sprite.x        = tile.position.calculateX - NitroConfiguration.TILE_HEIGHT
+        // sprite.y        = (tile.position.calculateY - tile.position.calculateZ) - NitroConfiguration.WALL_HEIGHT + NitroConfiguration.TILE_THICKNESS
+        // sprite.zIndex   = tile.position.depth + 500;
+
+        // this.object.room.renderer.collision.addCollision(sprite);
+    }
+
+    public getPositionForPoint(point: PIXI.Point): Position
+    {
+        if(!point || !this.sprites || !this.sprites.size) return null;
+
+        if(this._selfContainer)
+        {
+            for(let sprite of this.sprites.values())
+            {
+                if(!sprite || !sprite.hitArea) continue;
+
+                const transform = sprite.worldTransform.applyInverse(point);
+
+                if(!sprite.hitArea.contains(transform.x, transform.y)) continue;
+
+                if(sprite.tilePosition) return sprite.tilePosition;
+
+                break;
+            }
+        }
+
+        return null;
     }
 }

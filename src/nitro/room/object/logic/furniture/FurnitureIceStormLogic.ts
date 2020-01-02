@@ -1,5 +1,4 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { LegacyDataType } from '../../data/type/LegacyDataType';
 import { ObjectLogicType } from '../ObjectLogicType';
@@ -20,9 +19,9 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
         this._nextStateTimestamp    = 0;
     }
 
-    public update(delta: number): void
+    public update(totalTimeRunning: number): void
     {
-        if((this._nextStateTimestamp > 0) && (NitroInstance.instance.renderer.totalTimeRunning >= this._nextStateTimestamp))
+        if((this._nextStateTimestamp > 0) && (totalTimeRunning >= this._nextStateTimestamp))
         {
             this._nextStateTimestamp = 0;
 
@@ -33,7 +32,7 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
             super.processUpdateMessage(new ObjectDataUpdateMessage(this._nextState, data))
         }
 
-        super.update(delta);
+        super.update(totalTimeRunning);
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -63,7 +62,7 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
         else
         {
             this._nextState             = state;
-            this._nextStateTimestamp    = NitroInstance.instance.renderer.totalTimeRunning + time;
+            this._nextStateTimestamp    = this.totalTimeRunning + time;
         }
     }
 }

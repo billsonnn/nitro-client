@@ -1,5 +1,5 @@
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
-import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
+import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
@@ -9,23 +9,30 @@ export class FurnitureHockeyScoreLogic extends FurnitureLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        const collision = event.collision as IRoomObjectSprite;
-
-        switch(event.type)
+        if(event.collision instanceof RoomObjectSprite)
         {
-            case RoomObjectMouseEvent.DOUBLE_CLICK:
-                switch(collision.tag)
-                {
-                    //case 'off': return Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 3));
-                }
-                break;
-            case RoomObjectMouseEvent.CLICK:
-                switch(collision.tag)
-                {
-                    //case 'inc': return Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 2));
-                    //case 'dec': return Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 1));
-                }
-                break;
+            switch(event.type)
+            {
+                case RoomObjectMouseEvent.DOUBLE_CLICK:
+                    switch(event.collision.tag)
+                    {
+                        case 'off':
+                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 3));
+                            return;
+                    }
+                    break;
+                case RoomObjectMouseEvent.CLICK:
+                    switch(event.collision.tag)
+                    {
+                        case 'inc':
+                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 2));
+                            return;
+                        case 'dec':
+                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 1));
+                            return;
+                    }
+                    break;
+            }
         }
 
         super.mouseEvent(event);

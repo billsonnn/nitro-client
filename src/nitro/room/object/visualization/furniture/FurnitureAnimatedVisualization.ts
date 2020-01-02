@@ -214,6 +214,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
             if(this._data.hasAnimation(animationTransition)) animationId = animationTransition;
         }
+        else
+        {
+            this._realAnimationId = animationId;
+        }
 
         this.resetTicker();
 
