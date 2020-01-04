@@ -1,22 +1,24 @@
+import { IRoomObjectController } from '../../../room/object/IRoomObjectController';
+
 export class SelectedRoomObjectData
 {
-    private _id: number;
-    private _category: number;
+    private _object: IRoomObjectController;
     private _operation: string;
+
+    constructor(object: IRoomObjectController, operation: string)
+    {
+        this._object    = object;
+        this._operation = operation;
+    }
 
     public dispose(): void
     {
         return;
     }
 
-    public get id(): number
+    public get object(): IRoomObjectController
     {
-        return this._id;
-    }
-
-    public get category(): number
-    {
-        return this._category;
+        return this._object;
     }
 
     public get operation(): string

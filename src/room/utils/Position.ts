@@ -141,7 +141,7 @@ export class Position
 
     public get calculateZ(): number
     {
-        return Math.floor((this._z * NitroConfiguration.Z_SCALE) * NitroConfiguration.TILE_HEIGHT);
+        return Position.calculateZ(this._z);
     }
 
     public static calculateZ(z: number): number

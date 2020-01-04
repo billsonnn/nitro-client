@@ -5,7 +5,6 @@ import { RoomObjectCategory } from '../../nitro/room/object/RoomObjectCategory';
 import { RoomVisualization } from '../../nitro/room/object/visualization/room/RoomVisualization';
 import { RoomEngine } from '../../nitro/room/RoomEngine';
 import { RoomObjectEventHandler } from '../../nitro/room/RoomObjectEventHandler';
-import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomObjectMouseEvent } from '../events/RoomObjectMouseEvent';
 import { IRoomInstance } from '../IRoomInstance';
 import { IRoomObjectController } from '../object/IRoomObjectController';
@@ -213,7 +212,7 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
 
         if(!visualization) return null;
         
-        return visualization.getPositionForPoint(new PIXI.Point(point.x - (NitroConfiguration.TILE_WIDTH * this.scale.x), point.y));
+        return visualization.getPositionForPoint(new PIXI.Point(point.x, point.y), this.scale.x);
     }
 
     public get collision(): IRoomCollision

@@ -121,7 +121,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
                     isStair = true;
                 }
 
-                const sprite = this.createAndAddSprite(`${ counter }`, null, tileTexture.getTexture(10));
+                const sprite = this.createAndAddSprite(`${ counter }`, null, tileTexture.getTexture(NitroConfiguration.TILE_THICKNESS));
 
                 sprite.x            = position.calculateX;
                 sprite.y            = position.calculateY - position.calculateZ;
@@ -146,9 +146,11 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
         // this.object.room.renderer.collision.addCollision(sprite);
     }
 
-    public getPositionForPoint(point: PIXI.Point): Position
+    public getPositionForPoint(point: PIXI.Point, scale: number = 1): Position
     {
         if(!point || !this.sprites || !this.sprites.size) return null;
+
+        point.x -= NitroConfiguration.TILE_WIDTH * scale;
 
         if(this._selfContainer)
         {

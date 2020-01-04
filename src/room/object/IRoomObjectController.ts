@@ -7,8 +7,9 @@ import { IRoomObjectSpriteVisualization } from './visualization/IRoomObjectSprit
 
 export interface IRoomObjectController extends IRoomObject
 {
+    setCategory(category: number): void;
     setRoom(room: IRoomInstance): void;
-    setPosition(position: Position): void;
+    setPosition(position: Position, real?: boolean): void;
     setTempPosition(position: Position, silent?: boolean): void;
     setState(state: number, silent?: boolean): void;
     setVisualization(visualization: IRoomObjectSpriteVisualization): void;

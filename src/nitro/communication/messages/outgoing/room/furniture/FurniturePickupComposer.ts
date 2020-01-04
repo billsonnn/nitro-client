@@ -1,12 +1,12 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class ItemPickupComposer implements IMessageComposer
+export class FurniturePickupComposer implements IMessageComposer
 {
     private _data: any[];
 
-    constructor(itemId: number)
+    constructor(category: number, objectId: number)
     {
-        this._data = [ itemId ];
+        this._data = [ category, objectId ];
     }
 
     public getMessageArray(): any[]

@@ -15,6 +15,7 @@ export interface IRoomCreator
     initializeRoomInstance(roomId: number, model: RoomModelParser): void;
     setRoomInstanceModelName(roomId: number, name: string): void;
     addRoomObjects(...objects: IRoomObject[]): void;
+    getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
     getTileCursorObject(roomId: number): IRoomObjectController;
     getRoomUnitObject(roomId: number, objectId: number): IRoomObjectController;
     removeRoomUnitObject(roomId: number, objectId: number): void;

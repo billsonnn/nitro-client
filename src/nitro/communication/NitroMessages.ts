@@ -54,7 +54,7 @@ import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
-import { ItemPickupComposer } from './messages/outgoing/room/furniture/ItemPickupComposer';
+import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
 import { ItemPlaceComposer } from './messages/outgoing/room/furniture/ItemPlaceComposer';
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
@@ -187,7 +187,7 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
 
             // FURNITURE
-            this._composers.set(OutgoingHeader.FURNITURE_PICKUP, ItemPickupComposer);
+            this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
             this._composers.set(OutgoingHeader.FURNITURE_PLACE, ItemPlaceComposer);
 
                 // FLOOR

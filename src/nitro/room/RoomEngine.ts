@@ -279,6 +279,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return instanceData.selectedObject;
     }
 
+    public setSelectedRoomObjectData(roomId: number, data: SelectedRoomObjectData): void
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return null;
+        
+        instanceData.setSelectedObject(data);
+    }
+
     private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
     {
         const instance = this.getRoomInstance(roomId);
@@ -319,6 +328,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.visualization.start();
     }
 
+    public getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return null;
+
+        return instance.getObject(objectId, category);
+    }
+
     public getTileCursorObject(roomId: number): IRoomObjectController
     {
         return this.getRoomObject(roomId, RoomEngine.CURSOR_OBJECT_ID, RoomObjectCategory.ROOM);
@@ -342,15 +360,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public removeRoomFurnitureObject(roomId: number, objectId: number): void
     {
         return this.removeRoomObject(roomId, objectId, RoomObjectCategory.FURNITURE);
-    }
-
-    private getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
-    {
-        const instance = this.getRoomInstance(roomId);
-
-        if(!instance) return null;
-
-        return instance.getObject(objectId, category);
     }
 
     private removeRoomObject(roomId: number, objectId: number, category: number): void

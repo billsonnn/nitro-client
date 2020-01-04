@@ -127,8 +127,8 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return object;
     }
 
-    public createRoomObjectManager(): IRoomObjectManager
+    public createRoomObjectManager(category: number): IRoomObjectManager
     {
-        return new RoomObjectManager();
+        return new RoomObjectManager(category);
     }
 }

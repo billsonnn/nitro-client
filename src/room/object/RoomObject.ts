@@ -15,6 +15,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _id: number;
     private _instanceId: number;
     private _type: string;
+    private _category: number;
     private _model: IRoomObjectModel;
     private _room: IRoomInstance;
 
@@ -23,6 +24,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _pendingLogicMessages: RoomObjectUpdateMessage[];
 
     private _position: Position;
+    private _realPosition: Position;
     private _tempPosition: Position;
     private _state: number;
     private _updateCounter: number;
@@ -36,6 +38,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._id                    = id;
         this._instanceId            = RoomObject.OBJECT_COUNTER++;
         this._type                  = type;
+        this._category              = -1;
         this._model                 = new RoomObjectModel();
         this._room                  = null;
 
@@ -44,6 +47,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._pendingLogicMessages  = [];
 
         this._position              = new Position();
+        this._realPosition          = new Position();
         this._tempPosition          = null;
         this._state                 = 0;
         this._updateCounter         = 0;
@@ -93,6 +97,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return screenPosition;
     }
 
+    public setCategory(category: number): void
+    {
+        this._category = category;
+    }
+
     public setRoom(room: IRoomInstance): void
     {
         if(this._room) return;
@@ -100,9 +109,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._room = room;
     }
 
-    public setPosition(position: Position): void
+    public setPosition(position: Position, real: boolean = true): void
     {
         if(!position) return;
+
+        if(real) this._realPosition = position;
 
         if(this._position.compareStrict(position)) return;
 
@@ -110,8 +121,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._position.y            = position.y;
         this._position.z            = position.z;
         this._position.direction    = position.direction;
-        this._position.depth        = this._position.calculatedDepth;
-        this._position.isScreen     = position.isScreen;
+        this._position.depth        = position.calculatedDepth;
 
         this._tempPosition = null;
 
@@ -120,6 +130,8 @@ export class RoomObject extends Disposable implements IRoomObjectController
 
     public setTempPosition(position: Position, silent: boolean = false): void
     {
+        if(!position.isScreen) position = position.toScreenPosition();
+        
         if(this._tempPosition === position) return;
         
         if(this._tempPosition && this._tempPosition.compareStrict(position)) return;
@@ -185,6 +197,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._type;
     }
 
+    public get category(): number
+    {
+        return this._category;
+    }
+
     public get model(): IRoomObjectModel
     {
         return this._model;
@@ -208,6 +225,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
     public get position(): Position
     {
         return this._position;
+    }
+
+    public get realPosition(): Position
+    {
+        return this._realPosition;
     }
 
     public get tempPosition(): Position

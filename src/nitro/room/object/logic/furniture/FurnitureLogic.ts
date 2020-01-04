@@ -70,11 +70,11 @@ export class FurnitureLogic extends MovingObjectLogic
 
         const directions = asset.directions;
 
-        if(directions)
+        if(directions && directions.length)
         {
-            const totalDirections = directions.length;
+            for(let direction of directions) this._directions.push(direction);
 
-            if(totalDirections) for(let i = 0; i < totalDirections; i++) this._directions.push(directions[i]);
+            this._directions.sort((a, b) => { return a - b });
         }
 
         model.setValue(RoomObjectModelKey.FURNITURE_SIZE_X, this._sizeX);

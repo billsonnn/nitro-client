@@ -108,7 +108,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(existing) return existing;
 
-        const manager = this._container.createRoomObjectManager();
+        const manager = this._container.createRoomObjectManager(category);
 
         if(!manager) return null;
 

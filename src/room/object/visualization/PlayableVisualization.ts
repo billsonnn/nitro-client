@@ -1,10 +1,10 @@
 import { Disposable } from '../../../core/common/disposable/Disposable';
+import { NitroConfiguration } from '../../../NitroConfiguration';
 import { IPlayableVisualization } from './IPlayableVisualization';
 
 export class PlayableVisualization extends Disposable implements IPlayableVisualization
 {
-    public static FPS           = 24;
-    public static FPS_TIME_MS   = 60 / PlayableVisualization.FPS;
+    public static FPS_TIME_MS = 60 / NitroConfiguration.FPS;
 
     private _frameCount: number;
     private _totalTimeRunning: number;

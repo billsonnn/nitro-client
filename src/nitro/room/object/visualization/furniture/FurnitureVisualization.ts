@@ -1,4 +1,5 @@
 import { IAsset } from '../../../../../core/asset/interfaces';
+import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { PlayableVisualization } from '../../../../../room/object/visualization/PlayableVisualization';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
@@ -68,6 +69,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._xOffsets          = [];
         this._yOffsets          = [];
         this._zOffsets          = [];
+
+        if(NitroConfiguration.ALL_FURNI_ARE_ICONS) this._isIcon = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -125,8 +128,10 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(this.updateModel()) updateSprites = true;
 
-        if(this._isIcon) updateSprites = false;
-        else if(this.updateAnimation()) updateSprites = true;
+        if(!this._isIcon)
+        {
+            if(this.updateAnimation()) updateSprites = true;
+        }
 
         if(!updateSprites) return;
 
@@ -304,12 +309,12 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 sprite.ignoreMouse  = true;
                 sprite.zIndex       = (this._screenPosition.depth + this._screenPosition.z) - 1000 + 0.001;
             }
+        }
 
-            if(!this._selfContainer)
-            {
-                sprite.x += this._screenPosition.x;
-                sprite.y += this._screenPosition.y;
-            }
+        if(!this._selfContainer)
+        {
+            sprite.x += this._screenPosition.x;
+            sprite.y += this._screenPosition.y;
         }
     }
 

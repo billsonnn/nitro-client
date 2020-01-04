@@ -11,11 +11,13 @@ export interface IRoomObject extends IDisposable
     id: number;
     instanceId: number;
     type: string;
+    category: number;
     model: IRoomObjectModel;
     room: IRoomInstance;
     visualization: IRoomObjectSpriteVisualization;
     logic: IRoomObjectLogic;
     position: Position;
+    realPosition: Position;
     tempPosition: Position;
     state: number;
     updateCounter: number;
