@@ -4,7 +4,6 @@ import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { Direction } from '../../room/utils/Direction';
-import { Position } from '../../room/utils/Position';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurnitureDiceActivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
@@ -12,7 +11,6 @@ import { FurnitureDiceDeactivateComposer } from '../communication/messages/outgo
 import { FurnitureMultiStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { RoomUnitLookComposer } from '../communication/messages/outgoing/room/unit/RoomUnitLookComposer';
 import { RoomUnitWalkComposer } from '../communication/messages/outgoing/room/unit/RoomUnitWalkComposer';
-import { NitroInstance } from '../NitroInstance';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { IRoomEngineServices } from './IRoomEngineServices';
@@ -85,8 +83,6 @@ export class RoomObjectEventHandler extends Disposable
                 this.handleRoomObjectMouseUpEvent(event, roomId);
                 return;
         }
-
-        //event.object.logic.mouseEvent(event);
     }
 
     private handleRoomObjectMouseClickEvent(event: RoomObjectMouseEvent, roomId: number): void
@@ -216,20 +212,20 @@ export class RoomObjectEventHandler extends Disposable
         {
             case ObjectOperationType.OBJECT_UNDEFINED:
 
-            switch(object.category)
-            {
-                case RoomObjectCategory.UNIT:
-                    break;
-                case RoomObjectCategory.FURNITURE:
-                    if(event.altKey && !event.ctrlKey && !event.shiftKey)
-                    {
-                        this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_MOVE);
-                    }
+                switch(object.category)
+                {
+                    case RoomObjectCategory.UNIT:
+                        break;
+                    case RoomObjectCategory.FURNITURE:
+                        if(event.altKey && !event.ctrlKey && !event.shiftKey)
+                        {
+                            this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_MOVE);
+                        }
 
-                    else object.logic && object.logic.mouseEvent(event);
+                        else object.logic && object.logic.mouseEvent(event);
 
-                    break;
-            }
+                        break;
+                }
             
             break;
         }
@@ -305,17 +301,40 @@ export class RoomObjectEventHandler extends Disposable
 
     }
 
+    private toggleObjectIcon(object: IRoomObjectController, isIcon: boolean): void
+    {
+        if(!object) return;
+
+        if(object.category !== RoomObjectCategory.FURNITURE) return;
+
+        const visualization = object.visualization as FurnitureVisualization;
+
+        if(!visualization) return;
+
+        isIcon ? visualization.enableIcon() : visualization.disableIcon();
+    }
+
     private setSelectedRoomObjectData(roomId: number, object: IRoomObjectController, operation: string): void
     {
         if(!this._roomEngine) return;
 
-        // clear previous
+        this.clearSelectedRoomObjectData(roomId);
+
         this._roomEngine.setSelectedRoomObjectData(roomId, new SelectedRoomObjectData(object, operation));
     }
 
     private clearSelectedRoomObjectData(roomId: number): void
     {
         if(!this._roomEngine) return;
+
+        const selectedData: SelectedRoomObjectData = this._roomEngine.getSelectedRoomObjectData(roomId);
+
+        if(!selectedData) return;
+
+        if((selectedData.operation === ObjectOperationType.OBJECT_MOVE) || (selectedData.operation === ObjectOperationType.OBJECT_MOVE_TO))
+        {
+            this.setObjectAlpha(selectedData.object, 1);
+        }
 
         this._roomEngine.setSelectedRoomObjectData(roomId, null);
     }
@@ -376,18 +395,9 @@ export class RoomObjectEventHandler extends Disposable
 
         if(!selectedData || !selectedData.object) return;
 
-        let position: Position = null;
-
         if(event.position)
         {
-            if(selectedData.object.category === RoomObjectCategory.FURNITURE)
-            {
-                const visualization = selectedData.object.visualization as FurnitureVisualization;
-
-                if(visualization) visualization.disableIcon();
-            }
-
-            position = selectedData.object.position.copy();
+            const position = selectedData.object.position.copy();
 
             position.x      = event.position.x;
             position.y      = event.position.y;
@@ -398,24 +408,6 @@ export class RoomObjectEventHandler extends Disposable
         else
         {
             selectedData.object.setPosition(selectedData.object.realPosition, false);
-
-            if(selectedData.object.category === RoomObjectCategory.FURNITURE)
-            {
-                const visualization = selectedData.object.visualization as FurnitureVisualization;
-
-                if(visualization)
-                {
-                    visualization.enableIcon();
-
-                    NitroInstance.instance.renderer.stage.worldTransform.apply(event.point, event.point);
-
-                    const tempPosition = new Position(event.point.x, event.point.y);
-
-                    tempPosition.isScreen = true;
-
-                    selectedData.object.setTempPosition(tempPosition, false);
-                }
-            }
         }
     }
 

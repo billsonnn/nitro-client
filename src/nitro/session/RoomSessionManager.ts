@@ -22,7 +22,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     private _roomManager: IRoomManager;
 
     private _handlers: BaseHandler[];
-    private _sessions: Map<number, IRoomSession>;
+    private _sessions: Map<string, IRoomSession>;
     private _pendingSession: IRoomSession;
 
     private _sessionStarting: boolean;
@@ -98,7 +98,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     public getSession(id: number): IRoomSession
     {
-        const existing = this._sessions.get(id);
+        const existing = this._sessions.get(this.getRoomId(id));
 
         if(!existing) return null;
         
@@ -130,7 +130,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         roomSession.setConnection(this._communication.connection);
 
-        this._sessions.set(roomSession.roomId, roomSession);
+        this._sessions.set(this.getRoomId(roomSession.roomId), roomSession);
 
         this.events.dispatchEvent(new RoomSessionEvent(RoomSessionEvent.CREATED, roomSession));
 
@@ -167,7 +167,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         if(!session) return;
 
-        this._sessions.delete(session.roomId);
+        this._sessions.delete(this.getRoomId(id));
 
         this.events.dispatchEvent(new RoomSessionEvent(RoomSessionEvent.ENDED, session));
 
@@ -194,17 +194,22 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     public sessionReinitialize(fromRoomId: number, toRoomId: number): void
     {
-        const existing = this._sessions.get(fromRoomId);
+        const existing = this.getSession(fromRoomId);
 
         if(!existing) return;
         
-        this._sessions.delete(fromRoomId);
+        this._sessions.delete(this.getRoomId(fromRoomId));
 
         existing.reset(toRoomId);
 
-        this._sessions.set(existing.roomId, existing);
+        this._sessions.set(this.getRoomId(fromRoomId), existing);
 
         this.setHandlers(existing);
+    }
+
+    private getRoomId(id: number): string
+    {
+        return 'hard_coded_room_id';
     }
 
     public get communication(): INitroCommunicationManager

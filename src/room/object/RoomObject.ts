@@ -132,8 +132,6 @@ export class RoomObject extends Disposable implements IRoomObjectController
     {
         if(!position.isScreen) position = position.toScreenPosition();
         
-        if(this._tempPosition === position) return;
-        
         if(this._tempPosition && this._tempPosition.compareStrict(position)) return;
 
         this._tempPosition = position;

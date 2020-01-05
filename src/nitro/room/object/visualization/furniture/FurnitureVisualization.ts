@@ -1,5 +1,4 @@
 import { IAsset } from '../../../../../core/asset/interfaces';
-import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { PlayableVisualization } from '../../../../../room/object/visualization/PlayableVisualization';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
@@ -69,8 +68,6 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._xOffsets          = [];
         this._yOffsets          = [];
         this._zOffsets          = [];
-
-        if(NitroConfiguration.ALL_FURNI_ARE_ICONS) this._isIcon = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -132,6 +129,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         {
             if(this.updateAnimation()) updateSprites = true;
         }
+        else updateSprites = true;
 
         if(!updateSprites) return;
 
