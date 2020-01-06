@@ -393,31 +393,24 @@ export class RoomObjectEventHandler extends Disposable
 
         if(!selectedData || !selectedData.object) return;
 
+        const visualization = selectedData.object.visualization as FurnitureVisualization;
+
+        if(!visualization) return;
+
         let didMove = false;
 
         if(event.position)
         {
-            if(!event.position.compare(selectedData.object.realPosition))
+            switch(selectedData.object.category)
             {
-                switch(selectedData.object.category)
-                {
-                    case RoomObjectCategory.FURNITURE:
-                    case RoomObjectCategory.UNIT:
-                        selectedData.object.position.direction = selectedData.object.realPosition.direction;
-                        
-                        if(this.isValidPlacement(selectedData, event.position, this._roomEngine.getFurnitureStackingHeightMap(roomId))) didMove = true;
-                        break;
-                }
-            }
-            else
-            {
-                selectedData.object.setPosition(selectedData.object.realPosition, false);
-
-                return;
+                case RoomObjectCategory.FURNITURE:
+                case RoomObjectCategory.UNIT:
+                    selectedData.object.position.direction = selectedData.object.realPosition.direction;
+                    
+                    if(this.isValidPlacement(selectedData, event.position, this._roomEngine.getFurnitureStackingHeightMap(roomId))) didMove = true;
+                    break;
             }
         }
-
-        const visualization = selectedData.object.visualization as FurnitureVisualization;
 
         if(!didMove)
         {
@@ -452,6 +445,13 @@ export class RoomObjectEventHandler extends Disposable
         newPosition.x      = position.x;
         newPosition.y      = position.y;
         newPosition.depth  = position.calculatedDepth;
+
+        if(newPosition.compare(selectedData.object.realPosition))
+        {
+            selectedData.object.setPosition(selectedData.object.realPosition, false);
+
+            return true;
+        }
 
         const sizeX = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_X) as number;
         const sizeY = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_Y) as number;

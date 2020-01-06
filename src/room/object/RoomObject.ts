@@ -115,7 +115,12 @@ export class RoomObject extends Disposable implements IRoomObjectController
 
         if(real) this._realPosition = position;
 
-        if(this._position.compareStrict(position)) return;
+        if(this._position.compareStrict(position))
+        {
+            this._tempPosition = null;
+
+            return;
+        }
 
         this._position.x            = position.x;
         this._position.y            = position.y;

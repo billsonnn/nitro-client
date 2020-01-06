@@ -16,8 +16,8 @@ export class AvatarFigureContainer implements IDownloadable
     private _figurePartsHidden: string[];
     private _figureColors: { [index: string]: { [index: string]: number } };
 
-    private _handItem: IFigurePart;
-    private _sign: IFigurePart;
+    private _rightItem: IFigurePart;
+    private _leftItem: IFigurePart;
 
     private _isDownloaded: boolean;
 
@@ -30,7 +30,7 @@ export class AvatarFigureContainer implements IDownloadable
         this._figurePartsHidden = [];
         this._figureColors      = {};
 
-        this._handItem          = null;
+        this._rightItem          = null;
 
         this._isDownloaded  = false;
 
@@ -47,64 +47,64 @@ export class AvatarFigureContainer implements IDownloadable
 
     public setRightItem(itemType: number): void
     {
-        if(!itemType)
+        if(this._rightItem)
         {
-            if(this._handItem)
-            {
-                const index = this._figureParts.indexOf(this._handItem);
+            if(this._rightItem.id === itemType) return;
 
-                if(index >= 0) this._figureParts.splice(index, 1);
+            const index = this._figureParts.indexOf(this._rightItem);
 
-                this._handItem = null;
-            }
+            if(index >= 0) this._figureParts.splice(index, 1);
 
-            return;
+            this._rightItem = null;
         }
 
-        const part: IFigurePart = {
-            id: itemType,
-            type: 'ri',
-            breed: 0,
-            index: 0,
-            colorLayerIndex: 0,
-            paletteMapId: 0,
-            library: 'hh_human_item'
-        };
+        if(itemType !== null)
+        {
+            const part: IFigurePart = {
+                id: itemType,
+                type: 'ri',
+                breed: 0,
+                index: 0,
+                colorLayerIndex: 0,
+                paletteMapId: 0,
+                library: 'hh_human_item'
+            };
 
-        this._figureParts.push(part);
+            this._figureParts.push(part);
 
-        this._handItem = part;
+            this._rightItem = part;
+        }
     }
 
     public setLeftItem(itemType: number): void
     {
-        if(itemType)
+        if(this._leftItem)
         {
-            if(this._sign)
-            {
-                const index = this._figureParts.indexOf(this._sign);
+            if(this._leftItem.id === itemType) return;
 
-                if(index >= 0) this._figureParts.splice(index, 1);
+            const index = this._figureParts.indexOf(this._leftItem);
 
-                this._sign = null;
-            }
+            if(index >= 0) this._figureParts.splice(index, 1);
 
-            return;
+            this._leftItem = null;
         }
 
-        const part: IFigurePart = {
-            id: itemType,
-            type: 'li',
-            breed: 0,
-            index: 0,
-            colorLayerIndex: 0,
-            paletteMapId: 0,
-            library: 'hh_human_item'
-        };
-
-        this._figureParts.push(part);
-
-        this._sign = part;
+        if(itemType !== null)
+        {
+            const part: IFigurePart = {
+                id: itemType,
+                type: 'li',
+                breed: 0,
+                index: 0,
+                colorLayerIndex: 0,
+                paletteMapId: 0,
+                library: 'hh_human_item'
+            };
+    
+            this._figureParts.push(part);
+    
+            this._leftItem = part;
+        }
     }
 
     private parseFigure(figure: string): void
@@ -362,6 +362,6 @@ export class AvatarFigureContainer implements IDownloadable
 
     public get handItem(): IFigurePart
     {
-        return this._handItem;
+        return this._rightItem;
     }
 }

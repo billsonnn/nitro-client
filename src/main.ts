@@ -13,7 +13,9 @@ const instances: INitroInstance[]   = [ new NitroInstance(core) ];
 function init(): void
 {
     core.asset.downloadAssets([
-        NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`
+        NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`,
+        NitroConfiguration.ASSET_URL + `/figure/hh_human_body/hh_human_body.json`,
+        NitroConfiguration.ASSET_URL + `/figure/hh_human_item/hh_human_item.json`,
     ], (status: boolean) =>
     {
         try

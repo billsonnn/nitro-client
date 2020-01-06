@@ -26,6 +26,5 @@ export class NitroConfiguration
     public static PACKET_LOG                = false;
     public static WALKING_ENABLED           = true;
     public static ROLLING_OVERRIDES_POSTURE = true;
-    public static ALL_FURNI_ARE_ICONS       = false;
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
 }
