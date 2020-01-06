@@ -26,6 +26,7 @@ export class RoomObjectModelKey
     public static FIGURE_GUIDE_STATUS: string                 = 'figure_guide_status';
     public static FIGURE_EXPRESSION: string                   = 'figure_expression';
     public static HEAD_DIRECTION: string                      = 'head_direction';
+    public static FURNITURE_ALWAYS_STACKABLE: string          = 'furniture_always_stackable';
     public static FURNITURE_DATA_FORMAT: string               = 'furniture_data_format';
     public static FURNITURE_UNIQUE_SERIAL_NUMBER: string      = 'furniture_unique_serial_number';
     public static FURNITURE_UNIQUE_EDITION_SIZE: string       = 'furniture_unique_edition_size';

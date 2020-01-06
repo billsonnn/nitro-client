@@ -1,9 +1,11 @@
+import * as PIXI from 'pixi.js-legacy';
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { Direction } from '../../room/utils/Direction';
+import { Position } from '../../room/utils/Position';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurnitureDiceActivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
@@ -20,6 +22,7 @@ import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
 import { RoomObjectType } from './object/RoomObjectType';
 import { FurnitureVisualization } from './object/visualization/furniture/FurnitureVisualization';
+import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
 export class RoomObjectEventHandler extends Disposable
@@ -285,7 +288,6 @@ export class RoomObjectEventHandler extends Disposable
                 this.setSelectedRoomObjectData(roomId, object, operation);
                 break;
             case ObjectOperationType.OBJECT_MOVE_TO:
-                this.setObjectAlpha(object, 1);
 
                 switch(object.category)
                 {
@@ -299,19 +301,6 @@ export class RoomObjectEventHandler extends Disposable
                 break;
         }
 
-    }
-
-    private toggleObjectIcon(object: IRoomObjectController, isIcon: boolean): void
-    {
-        if(!object) return;
-
-        if(object.category !== RoomObjectCategory.FURNITURE) return;
-
-        const visualization = object.visualization as FurnitureVisualization;
-
-        if(!visualization) return;
-
-        isIcon ? visualization.enableIcon() : visualization.disableIcon();
     }
 
     private setSelectedRoomObjectData(roomId: number, object: IRoomObjectController, operation: string): void
@@ -333,6 +322,15 @@ export class RoomObjectEventHandler extends Disposable
 
         if((selectedData.operation === ObjectOperationType.OBJECT_MOVE) || (selectedData.operation === ObjectOperationType.OBJECT_MOVE_TO))
         {
+            if(selectedData.object.category === RoomObjectCategory.FURNITURE)
+            {
+                const visualization = selectedData.object.visualization as FurnitureVisualization;
+
+                visualization.disableIcon();
+            }
+
+            selectedData.object.setTempPosition(null);
+
             this.setObjectAlpha(selectedData.object, 1);
         }
 
@@ -395,20 +393,85 @@ export class RoomObjectEventHandler extends Disposable
 
         if(!selectedData || !selectedData.object) return;
 
+        let didMove = false;
+
         if(event.position)
         {
-            const position = selectedData.object.position.copy();
+            if(!event.position.compare(selectedData.object.realPosition))
+            {
+                switch(selectedData.object.category)
+                {
+                    case RoomObjectCategory.FURNITURE:
+                    case RoomObjectCategory.UNIT:
+                        selectedData.object.position.direction = selectedData.object.realPosition.direction;
+                        
+                        if(this.isValidPlacement(selectedData, event.position, this._roomEngine.getFurnitureStackingHeightMap(roomId))) didMove = true;
+                        break;
+                }
+            }
+            else
+            {
+                selectedData.object.setPosition(selectedData.object.realPosition, false);
 
-            position.x      = event.position.x;
-            position.y      = event.position.y;
-            position.depth  = position.calculatedDepth;
+                return;
+            }
+        }
 
-            selectedData.object.setPosition(position, false);
+        const visualization = selectedData.object.visualization as FurnitureVisualization;
+
+        if(!didMove)
+        {
+            selectedData.object.setPosition(selectedData.object.realPosition, false);
+
+            visualization.enableIcon();
+
+            let point: PIXI.Point = new PIXI.Point();
+
+            selectedData.object.room && selectedData.object.room.renderer.worldTransform.applyInverse(event.point, point);
+
+            if(!point) return;
+            
+            const mousePosition = new Position(point.x, point.y);
+
+            mousePosition.isScreen = true;
+
+            selectedData.object.setTempPosition(mousePosition);
         }
         else
         {
-            selectedData.object.setPosition(selectedData.object.realPosition, false);
+            visualization.disableIcon();
         }
+    }
+
+    private isValidPlacement(selectedData: SelectedRoomObjectData, position: Position, heightMap: FurnitureStackingHeightMap): boolean
+    {
+        if(!selectedData || !selectedData.object || !heightMap) return false;
+
+        const newPosition = selectedData.object.position.copy();
+
+        newPosition.x      = position.x;
+        newPosition.y      = position.y;
+        newPosition.depth  = position.calculatedDepth;
+
+        const sizeX = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_X) as number;
+        const sizeY = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_Y) as number;
+
+        const stackable = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_ALWAYS_STACKABLE) == 1;
+
+        let validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+
+        if(!validPosition)
+        {
+            newPosition.direction = this.getNextObjectDirection(selectedData.object, true);
+
+            validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+
+            if(!validPosition) return false;
+        }
+
+        selectedData.object.setPosition(validPosition, false);
+
+        return true;
     }
 
     private useObject(roomId: number, objectId: number, type: string, action: string): void

@@ -115,7 +115,7 @@ export class IncomingHeader
     public static ROOM_SETTINGS_SAVE_ERROR     = 1555;
     public static ROOM_SETTINGS_UPDATED        = 3297;
     public static ROOM_SPECTATOR               = 1033;
-    public static ROOM_STACK_HEIGHT            = 558;
+    public static ROOM_HEIGHT_MAP_UPDATE       = 558;
     public static ROOM_THICKNESS               = 3547;
     public static SECURITY_DEBUG               = 3284;
     public static SECURITY_MACHINE             = 1488;

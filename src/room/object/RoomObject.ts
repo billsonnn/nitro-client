@@ -130,6 +130,15 @@ export class RoomObject extends Disposable implements IRoomObjectController
 
     public setTempPosition(position: Position, silent: boolean = false): void
     {
+        if(!position)
+        {
+            this._tempPosition = null;
+
+            if(!silent) this._updateCounter++;
+
+            return;
+        }
+        
         if(!position.isScreen) position = position.toScreenPosition();
         
         if(this._tempPosition && this._tempPosition.compareStrict(position)) return;

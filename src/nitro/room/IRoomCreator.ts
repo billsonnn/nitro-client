@@ -5,6 +5,7 @@ import { Position } from '../../room/utils/Position';
 import { RoomModelParser } from '../communication/messages/parser/room/mapping/RoomModelParser';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { IObjectData } from './object/data/IObjectData';
+import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 
 export interface IRoomCreator
 {
@@ -14,6 +15,8 @@ export interface IRoomCreator
     createRoomInstance(roomId: number): IRoomInstance;
     initializeRoomInstance(roomId: number, model: RoomModelParser): void;
     setRoomInstanceModelName(roomId: number, name: string): void;
+    getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
+    setFurnitureStackingHeightMap(roomId: number, heightMap: FurnitureStackingHeightMap): void;
     addRoomObjects(...objects: IRoomObject[]): void;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
     getTileCursorObject(roomId: number): IRoomObjectController;

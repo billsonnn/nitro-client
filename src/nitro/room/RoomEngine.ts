@@ -49,6 +49,7 @@ import { RoomObjectType } from './object/RoomObjectType';
 import { ObjectVisualizationFactory } from './object/visualization/ObjectVisualizationFactory';
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
+import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { RoomInstanceData } from './utils/RoomInstanceData';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
@@ -286,6 +287,24 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!instanceData) return null;
         
         instanceData.setSelectedObject(data);
+    }
+
+    public getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return null;
+
+        return instanceData.furnitureStackingHeightMap;
+    }
+
+    public setFurnitureStackingHeightMap(roomId: number, heightMap: FurnitureStackingHeightMap): void
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return null;
+
+        instanceData.setFurnitureStackingHeightMap(heightMap);
     }
 
     private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController

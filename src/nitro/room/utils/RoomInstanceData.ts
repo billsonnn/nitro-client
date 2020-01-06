@@ -1,3 +1,4 @@
+import { FurnitureStackingHeightMap } from './FurnitureStackingHeightMap';
 import { LegacyWallGeometry } from './LegacyWallGeometry';
 import { SelectedRoomObjectData } from './SelectedRoomObjectData';
 
@@ -8,14 +9,16 @@ export class RoomInstanceData
     private _modelName: string;
     private _legacyGeometry: LegacyWallGeometry;
     private _selectedObject: SelectedRoomObjectData;
+    private _furnitureStackingHeightMap: FurnitureStackingHeightMap;
 
     constructor(roomId: number)
     {
-        this._roomId            = roomId;
+        this._roomId                        = roomId;
 
-        this._modelName         = null;
-        this._legacyGeometry    = new LegacyWallGeometry();
-        this._selectedObject    = null;
+        this._modelName                     = null;
+        this._legacyGeometry                = new LegacyWallGeometry();
+        this._selectedObject                = null;
+        this._furnitureStackingHeightMap    = null;
     }
 
     public setModelName(name: string): void
@@ -31,6 +34,11 @@ export class RoomInstanceData
         }
 
         this._selectedObject = data;
+    }
+
+    public setFurnitureStackingHeightMap(heightMap: FurnitureStackingHeightMap): void
+    {
+        this._furnitureStackingHeightMap = heightMap;
     }
 
     public dispose(): void
@@ -56,5 +64,10 @@ export class RoomInstanceData
     public get selectedObject(): SelectedRoomObjectData
     {
         return this._selectedObject;
+    }
+
+    public get furnitureStackingHeightMap(): FurnitureStackingHeightMap
+    {
+        return this._furnitureStackingHeightMap;
     }
 }

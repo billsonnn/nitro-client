@@ -1,42 +1,72 @@
-import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
+import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
 export class RoomHeightMapParser implements IMessageParser
 {
     private _width: number;
     private _height: number;
-    private _totalTiles: number;
-    private _heights: any[];
+    private _heights: Map<number, number>;
 
     public flush(): boolean
     {
-        this._width         = 0;
-        this._height        = 0;
-        this._totalTiles    = 0;
-        this._heights       = [];
+        this._width     = 0;
+        this._height    = 0;
+        this._heights   = new Map();
 
         return true;
+    }
+
+    public static convertHeight(height: number): number
+    {
+        return (height < 0) ? -1 : ((height & 16383) / 256);
+    }
+
+    public static isHeightStackable(height: number): boolean
+    {
+        return (height & 16384) === 0;
+    }
+
+    public static isValidHeight(height: number): boolean
+    {
+        return height >= 0;
+    }
+
+    public getHeight(x: number, y: number): number
+    {
+        if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return -1;
+
+        return RoomHeightMapParser.convertHeight(this._heights.get((y * this._width) + x));
+    }
+
+    public isStackable(x: number, y: number): boolean
+    {
+        if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return false;
+
+        return RoomHeightMapParser.isHeightStackable(this._heights.get((y * this._width) + x)); 
+    }
+
+    public isTile(x: number, y: number): boolean
+    {
+        if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return false;
+
+        return RoomHeightMapParser.isValidHeight(this._heights.get((y * this._width) + x));
     }
     
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
-        this._width         = wrapper.readInt();
-        this._totalTiles    = wrapper.readInt();
-        this._height        = this._totalTiles / this._width;
+        this._width     = wrapper.readInt();
+        let totalTiles  = wrapper.readInt();
+        this._height    = totalTiles / this._width;
 
-        for(let y = 0; y < this._height; y++)
+        let iterator = 0;
+
+        while(iterator < totalTiles)
         {
-            for(let x = 0; x < this._width; x++)
-            {
-                let height = wrapper.readShort();
-
-                if(height === 32767) height = -1;
-                else height /= 256;
-
-                this._heights.push({ x, y, height });
-            }
+            this._heights.set(iterator, wrapper.readShort());
+            
+            iterator++;
         }
 
         return true;
@@ -52,12 +82,7 @@ export class RoomHeightMapParser implements IMessageParser
         return this._height;
     }
 
-    public get totalTiles(): number
-    {
-        return this._totalTiles;
-    }
-
-    public get heights(): any[]
+    public get heights(): Map<number, number>
     {
         return this._heights;
     }

@@ -9,6 +9,8 @@ import { FurnitureFloorEvent } from '../communication/messages/incoming/room/fur
 import { FurnitureFloorRemoveEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
 import { FurnitureFloorUpdateEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorUpdateEvent';
 import { FurnitureStateEvent } from '../communication/messages/incoming/room/furniture/FurnitureStateEvent';
+import { RoomHeightMapEvent } from '../communication/messages/incoming/room/mapping/RoomHeightMapEvent';
+import { RoomHeightMapUpdateEvent } from '../communication/messages/incoming/room/mapping/RoomHeightMapUpdateEvent';
 import { RoomModelEvent } from '../communication/messages/incoming/room/mapping/RoomModelEvent';
 import { RoomModelNameEvent } from '../communication/messages/incoming/room/mapping/RoomModelNameEvent';
 import { RoomRollingEvent } from '../communication/messages/incoming/room/RoomRollingEvent';
@@ -31,6 +33,7 @@ import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
 import { RoomObjectType } from './object/RoomObjectType';
 import { FurnitureQueueTileVisualization } from './object/visualization/furniture/FurnitureQueueTileVisualization';
+import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { ObjectRolling } from './utils/ObjectRolling';
 
 export class RoomMessageHandler extends Disposable
@@ -68,6 +71,8 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
         this._connection.addMessageEvent(new RoomModelNameEvent(this.onRoomModelNameEvent.bind(this)));
         this._connection.addMessageEvent(new RoomModelEvent(this.onRoomModelEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomHeightMapEvent(this.onRoomHeightMapEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomHeightMapUpdateEvent(this.onRoomHeightMapUpdateEvent.bind(this)));
         this._connection.addMessageEvent(new RoomRollingEvent(this.onRoomRollingEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorAddEvent(this.onFurnitureFloorAddEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorEvent(this.onFurnitureFloorEvent.bind(this)));
@@ -143,6 +148,59 @@ export class RoomMessageHandler extends Disposable
         if(!instance) return;
 
         this._roomCreator.initializeRoomInstance(instance.id, event.getParser());
+    }
+
+    private onRoomHeightMapEvent(event: RoomHeightMapEvent): void
+    {
+        if(!(event instanceof RoomHeightMapEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const width     = parser.width;
+        const height    = parser.height;
+        const heightMap = new FurnitureStackingHeightMap(width, height);
+
+        let y = 0;
+
+        while(y < height)
+        {
+            let x = 0;
+
+            while(x < width)
+            {
+                heightMap.setHeight(x, y, parser.getHeight(x, y));
+                heightMap.setStackable(x, y, parser.isStackable(x, y));
+                heightMap.setTile(x, y, parser.isTile(x, y));
+
+                x++;
+            }
+
+            y++;
+        }
+        
+        this._roomCreator.setFurnitureStackingHeightMap(this._currentRoomId, heightMap);
+    }
+
+    private onRoomHeightMapUpdateEvent(event: RoomHeightMapUpdateEvent): void
+    {
+        if(!(event instanceof RoomHeightMapUpdateEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const heightMap = this._roomCreator.getFurnitureStackingHeightMap(this._currentRoomId);
+
+        if(!heightMap) return;
+
+        while(parser.next())
+        {
+            heightMap.setHeight(parser.x, parser.y, parser.getHeight());
+            heightMap.setStackable(parser.x, parser.y, parser.isStackable());
+            heightMap.setTile(parser.x, parser.y, parser.isTile());
+        }
     }
 
     private onRoomRollingEvent(event: RoomRollingEvent): void

@@ -24,9 +24,9 @@ import { FurnitureWallRemoveEvent } from './messages/incoming/room/furniture/wal
 import { FurnitureWallUpdateEvent } from './messages/incoming/room/furniture/wall/FurnitureWallUpdateEvent';
 import { RoomDoorEvent } from './messages/incoming/room/mapping/RoomDoorEvent';
 import { RoomHeightMapEvent } from './messages/incoming/room/mapping/RoomHeightMapEvent';
+import { RoomHeightMapUpdateEvent } from './messages/incoming/room/mapping/RoomHeightMapUpdateEvent';
 import { RoomModelEvent } from './messages/incoming/room/mapping/RoomModelEvent';
 import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNameEvent';
-import { RoomStackHeightEvent } from './messages/incoming/room/mapping/RoomStackHeightEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { RoomRollingEvent } from './messages/incoming/room/RoomRollingEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
@@ -133,9 +133,9 @@ export class NitroMessages implements IMessageConfiguration
             // MAPPING
             this._events.set(IncomingHeader.ROOM_MODEL_DOOR, RoomDoorEvent);
             this._events.set(IncomingHeader.ROOM_HEIGHT_MAP, RoomHeightMapEvent);
+            this._events.set(IncomingHeader.ROOM_HEIGHT_MAP_UPDATE, RoomHeightMapUpdateEvent);
             this._events.set(IncomingHeader.ROOM_MODEL, RoomModelEvent);
             this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
-            this._events.set(IncomingHeader.ROOM_STACK_HEIGHT, RoomStackHeightEvent);
             this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
 
             // UNIT
