@@ -120,6 +120,9 @@ export class RoomObjectEventHandler extends Disposable
                 switch(object.category)
                 {
                     case RoomObjectCategory.UNIT:
+                        const position = object.position;
+                        
+                        if(position) this.sendLookUpdate(position.x, position.y);
                         break;
                     case RoomObjectCategory.FURNITURE:
                         if(event.ctrlKey && !event.altKey && !event.shiftKey)
@@ -366,6 +369,11 @@ export class RoomObjectEventHandler extends Disposable
 
     private requestWalkUpdate(roomId: number, event: RoomObjectMouseEvent): boolean
     {
+        if(event.object)
+        {
+            if(event.object.category === RoomObjectCategory.UNIT) return false;
+        }
+
         if(event.position) this.sendWalkUpdate(event.position.x, event.position.y);
 
         return true;

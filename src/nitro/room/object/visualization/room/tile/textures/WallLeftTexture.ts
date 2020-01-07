@@ -10,13 +10,4 @@ export class WallLeftTexture extends WallRightTexture
 
         return [ rightColor, leftColor ];
     }
-
-    protected static createGraphic(thickness: number = 0): PIXI.Graphics
-    {
-        const graphic = super.createGraphic(thickness);
-        
-        graphic.scale.x = -1;
-
-        return graphic;
-    }
 }

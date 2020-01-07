@@ -22,7 +22,7 @@ export class NitroConfiguration
     public static WALL_RIGHT_COLOR          = 0x9599A5;
     public static WALL_THICKNESS            = 0.75;
     public static WALL_HEIGHT               = 115;
-    public static WALLS_ENABLED             = true;
+    public static WALLS_ENABLED             = false;
     public static PACKET_LOG                = false;
     public static WALKING_ENABLED           = true;
     public static ROLLING_OVERRIDES_POSTURE = true;

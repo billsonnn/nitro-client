@@ -1,12 +1,18 @@
 import { NitroConfiguration } from '../../../../../NitroConfiguration';
+import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
+import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
 import { Position } from '../../../../../room/utils/Position';
 import { RoomVisualizationData } from './RoomVisualizationData';
+import { DoorWallLeftTexture } from './tile/textures/DoorWallLeftTexture';
+import { DoorWallRightTexture } from './tile/textures/DoorWallRightTexture';
 import { StairLeftTexture } from './tile/textures/StairLeftTexture';
 import { StairRightTexture } from './tile/textures/StairRightTexture';
 import { TileTexture } from './tile/textures/TileTexture';
+import { WallLeftTexture } from './tile/textures/WallLeftTexture';
+import { WallRightTexture } from './tile/textures/WallRightTexture';
 
 export class RoomVisualization extends RoomObjectSpriteVisualization
 {
@@ -48,17 +54,16 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
     private generateMap(): void
     {
-        const mapHeight = this._data.modelParser.height;
-        const mapWidth  = this._data.modelParser.width;
+        const mapHeight     = this._data.modelParser.height;
+        const mapWidth      = this._data.modelParser.width;
 
-        let doorX = 0;
-        let doorY = 0;
-        let doorZ = 0;
-        let doorDirection = 0;
+        let doorX           = 0;
+        let doorY           = 0;
+        let doorZ           = 0;
+        let doorDirection   = 0;
 
-        let y = -1;
-
-        let counter = -1;
+        let y               = -1;
+        let counter         = -1;
 
         while(y < mapHeight)
         {
@@ -72,9 +77,9 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
                 x++;
 
-                const height = this._data.modelParser.getHeight(x, y);
+                let thickness: number = NitroConfiguration.TILE_THICKNESS;
 
-                if(height < 0) continue;
+                const height = this._data.modelParser.getHeight(x, y);
 
                 if((((y > 0) && (y < (mapHeight - 1))) || ((x > 0) && (x < (mapWidth - 1)))) && height !== -110)
                 {
@@ -97,53 +102,119 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
                 const position = new Position(x, y, height);
 
-                let tileTexture: typeof TileTexture = TileTexture;
-                let isStair: boolean                = false;
-                
-                let nextTileHeight = this._data.modelParser.getHeight(x, y - 1);
+                let tileTextures: typeof TileTexture[]  = [ TileTexture ];
+                let isStair: boolean                    = false;
+                let isWall: boolean                     = false;
 
-                if(nextTileHeight >= 0)
+                if(height === -110 && NitroConfiguration.WALLS_ENABLED)
                 {
+                    let nextTileHeight = this._data.modelParser.getHeight(x + 1, y);
+
+                    if(nextTileHeight >= 0)
+                    {
+                        tileTextures = [ WallLeftTexture ];
+
+                        isWall = true;
+
+                        thickness = NitroConfiguration.WALL_HEIGHT + NitroConfiguration.TILE_THICKNESS;
+
+                        position.z = nextTileHeight;
+
+                        nextTileHeight = this._data.modelParser.getHeight(x, y + 1);
+
+                        if(nextTileHeight >= 0) tileTextures.push(WallRightTexture);
+                    }
+                    else
+                    {
+                        nextTileHeight = this._data.modelParser.getHeight(x, y + 1);
+
+                        if(nextTileHeight >= 0)
+                        {
+                            tileTextures = [ WallRightTexture ];
+
+                            isWall = true;
+
+                            thickness = NitroConfiguration.WALL_HEIGHT + NitroConfiguration.TILE_THICKNESS;
+
+                            position.z = nextTileHeight;
+
+                            nextTileHeight = this._data.modelParser.getHeight(x + 1, y);
+
+                            if(nextTileHeight >= 0) tileTextures.push(WallLeftTexture);
+                        }
+                        else continue;
+                    }
+                }
+                else
+                {
+                    let nextTileHeight = this._data.modelParser.getHeight(x, y - 1);
+
+                    if(nextTileHeight >= 0)
+                    {
+                        if(nextTileHeight === (height + 1))
+                        {
+                            tileTextures = [ StairRightTexture ];
+
+                            isStair = true;
+                        }
+                    }
+                    
+                    nextTileHeight = this._data.modelParser.getHeight(x - 1, y);
+
                     if(nextTileHeight === (height + 1))
                     {
-                        tileTexture = StairRightTexture;
+                        tileTextures = [ StairLeftTexture ];
 
                         isStair = true;
                     }
                 }
-                
-                nextTileHeight = this._data.modelParser.getHeight(x - 1, y);
 
-                if(nextTileHeight === (height + 1))
+                for(let [ index, texture ] of tileTextures.entries())
                 {
-                    tileTexture = StairLeftTexture;
+                    counter += index;
+                    
+                    let sprite: IRoomObjectSprite = this.createAndAddSprite(`${ counter }`, null, texture.getTexture(thickness));
+                
+                    sprite.x            = position.calculateX;
+                    sprite.y            = position.calculateY - position.calculateZ;
+                    sprite.hitArea      = texture.POLYGON;
+                    sprite.tilePosition = position;
+                    sprite.zIndex       = position.depth;
 
-                    isStair = true;
+                    if(isStair) sprite.y -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
+
+                    if(isWall)
+                    {
+                        //sprite.x += 65;
+                        //sprite.y -= NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS - 4;
+                        //sprite.zIndex = 0;
+
+                        if(texture === WallLeftTexture) sprite.scale.x = -1;
+                    }
                 }
-
-                const sprite = this.createAndAddSprite(`${ counter }`, null, tileTexture.getTexture(NitroConfiguration.TILE_THICKNESS));
-
-                sprite.x            = position.calculateX;
-                sprite.y            = position.calculateY - position.calculateZ;
-                sprite.hitArea      = tileTexture.POLYGON;
-                sprite.tilePosition = position;
-
-                if(isStair) sprite.y -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
             }
         }
 
-        this.addDoor(new Position(doorX, doorY, doorZ, Direction.angleToDirection(doorDirection)));
+        if(NitroConfiguration.WALLS_ENABLED) this.addDoor(new Position(doorX, doorY, doorZ, Direction.angleToDirection(doorDirection)));
     }
 
     private addDoor(position: Position): void
     {
         if(!position) return;
 
-        // sprite.x        = tile.position.calculateX - NitroConfiguration.TILE_HEIGHT
-        // sprite.y        = (tile.position.calculateY - tile.position.calculateZ) - NitroConfiguration.WALL_HEIGHT + NitroConfiguration.TILE_THICKNESS
-        // sprite.zIndex   = tile.position.depth + 500;
+        const texture: typeof TileTexture = position.direction === Direction.EAST ? DoorWallLeftTexture : DoorWallRightTexture;
+        
+        if(!texture) return;
 
-        // this.object.room.renderer.collision.addCollision(sprite);
+        const doorTexture = texture.getTexture(NitroConfiguration.WALL_HEIGHT);
+
+        const sprite = new RoomObjectSprite(this.object, 'door', null, doorTexture);
+
+        sprite.x        = position.calculateX;
+        sprite.y        = (position.calculateY - position.calculateZ) - NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS;
+        sprite.zIndex   = position.depth + 500;
+
+        this.object.room.renderer.collision.addCollision(sprite);
     }
 
     public getPositionForPoint(point: PIXI.Point, scale: number = 1): Position

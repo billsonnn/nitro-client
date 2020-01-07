@@ -105,8 +105,6 @@ export class TileTexture
 
         const sprite = PIXI.Sprite.from(texture);
 
-        sprite.hitArea = this.POLYGON;
-
         return sprite;
     }
 }
