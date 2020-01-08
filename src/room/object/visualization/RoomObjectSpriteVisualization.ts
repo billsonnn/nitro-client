@@ -199,11 +199,6 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
         return this._spriteCounter
     }
 
-    public get depth(): number
-    {
-        return this._object.position.calculatedDepth;
-    }
-
     public get updateObjectCounter(): number
     {
         return this._updateObjectCounter;
@@ -222,5 +217,15 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
     public set updateModelCounter(count: number)
     {
         this._updateModelCounter = count;
+    }
+
+    public get selfContainer(): IRoomCollision
+    {
+        return this._selfContainer;
+    }
+
+    public get depth(): number
+    {
+        return this._object.position.calculatedDepth;
     }
 }

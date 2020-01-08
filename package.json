@@ -6,18 +6,26 @@
   "dependencies": {
     "@tweenjs/tween.js": "^18.3.1",
     "bytebuffer": "^5.0.1",
-    "eventemitter3": "^4.0.0",
     "moment": "^2.24.0",
     "pixi-viewport": "^4.2.3",
     "pixi.js-legacy": "^5.1.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
     "@types/bytebuffer": "^5.0.40",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
     "@types/tween.js": "^17.2.0",
     "@types/xml2js": "^0.4.5",
     "css-loader": "^3.2.0",
-    "style-loader": "^0.23.1",
+    "file-loader": "^5.0.2",
+    "node-sass": "^4.13.0",
+    "react-hot-loader": "^4.12.18",
+    "sass-loader": "^8.0.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^1.1.2",
     "ts-loader": "^6.2.0",
     "typescript": "^3.6.3",
     "webpack": "^4.41.0",
@@ -26,7 +34,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "start:dev": "webpack-dev-server"
+    "start:dev": "webpack-dev-server --hot"
   },
   "author": "Billsonnn",
   "license": "ISC",

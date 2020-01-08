@@ -83,6 +83,20 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
         this.addChild(this._collision);
     }
 
+    public resize(event: UIEvent): void
+    {
+        const object = this._instance.getObject(RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
+
+        if(!object) return;
+
+        const container = object.visualization && object.visualization.selfContainer;
+
+        if(!container) return;
+
+        this.x = ~~((container.width / 2) + ((window.innerWidth - container.width) / 2) + 17);
+        this.y = ~~((window.innerHeight - container.height) / 3);
+    }
+
     public mouseMove(event: MouseEvent): void
     {
         if(!event) return;

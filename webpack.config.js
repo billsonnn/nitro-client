@@ -1,23 +1,48 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/main.ts',
+    entry: './src/app/app.tsx',
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'ts-loader'
+                    }
+                ]
             },
             {
-                test: /\.scss$/,
+                enforce: 'pre',
+                test: /\.js$/,
+                loader: 'source-map-loader'
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader"
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'webfonts/'
+                        }
+                    }
                 ]
-            }
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                  'style-loader',
+                  'css-loader',
+                  'sass-loader',
+                ],
+            },
         ]
+    },
+    externals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM'
     },
     devServer: {
         host: '0.0.0.0',
@@ -25,7 +50,7 @@ module.exports = {
         disableHostCheck: false
     },
     resolve: {
-        extensions: [ '.ts', '.js' ]
+        extensions: [ '.ts', '.tsx', '.js' ]
     },
     output: {
         filename: 'bundle.js',

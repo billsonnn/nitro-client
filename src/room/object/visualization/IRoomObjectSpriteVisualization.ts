@@ -1,3 +1,4 @@
+import { IRoomCollision } from '../../renderer/IRoomCollision';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IPlayableVisualization } from './IPlayableVisualization';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
@@ -18,5 +19,6 @@ export interface IRoomObjectSpriteVisualization extends IPlayableVisualization
     sprites: Map<string, IRoomObjectSprite>;
     updateObjectCounter: number;
     updateModelCounter: number;
+    selfContainer: IRoomCollision;
     depth: number;
 }

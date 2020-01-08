@@ -1,5 +1,5 @@
 import { Disposable } from '../core/common/disposable/Disposable';
-import { NitroInstance } from '../nitro/NitroInstance';
+import { RendererViewEvent } from '../core/renderer/RendererViewEvent';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
@@ -39,41 +39,6 @@ export class RoomInstance extends Disposable implements IRoomInstance
         if(renderer === this._renderer) return;
 
         if(this._renderer) this.destroyRenderer();
-        
-        NitroInstance.instance.renderer.view.onclick = event =>
-        {
-            if(NitroInstance.instance.renderer.preventEvents) return;
-
-            if(NitroInstance.instance.renderer.preventNextClick)
-            {
-                NitroInstance.instance.renderer.preventNextClick = false;
-
-                return;
-            }
-
-            renderer.click(event);
-        }
-
-        NitroInstance.instance.renderer.view.onmousemove = event =>
-        {
-            if(NitroInstance.instance.renderer.preventEvents) return;
-
-            renderer.mouseMove(event);
-        }
-
-        NitroInstance.instance.renderer.view.onmousedown = event =>
-        {
-            if(NitroInstance.instance.renderer.preventEvents) return;
-
-            renderer.mouseDown(event);
-        }
-
-        NitroInstance.instance.renderer.view.onmouseup = event =>
-        {
-            if(NitroInstance.instance.renderer.preventEvents) return;
-
-            renderer.mouseUp(event);
-        }
 
         this._renderer = renderer;
     }
@@ -85,12 +50,30 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._renderer.dispose();
 
         this._renderer = null;
+    }
 
-        NitroInstance.instance.renderer.view.onclick        = null;
-        NitroInstance.instance.renderer.view.onmousemove    = null;
-        NitroInstance.instance.renderer.view.onmousedown    = null;
-        NitroInstance.instance.renderer.view.onmouseup      = null;
+    public onRendererViewEvent(event: RendererViewEvent): void
+    {
+        if(!event || !this._renderer) return;
 
+        switch(event.type)
+        {
+            case RendererViewEvent.RESIZE:
+                this._renderer.resize(event.originalEvent as UIEvent);
+                return;
+            case RendererViewEvent.CLICK:
+                this._renderer.click(event.originalEvent as MouseEvent);
+                return;
+            case RendererViewEvent.MOUSE_MOVE:
+                this._renderer.mouseMove(event.originalEvent as MouseEvent);
+                return;
+            case RendererViewEvent.MOUSE_DOWN:
+                this._renderer.mouseDown(event.originalEvent as MouseEvent);
+                return;
+            case RendererViewEvent.MOUSE_UP:
+                this._renderer.mouseUp(event.originalEvent as MouseEvent);
+                return;
+        }
     }
 
     public getManager(category: number): IRoomObjectManager

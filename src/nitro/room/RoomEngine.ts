@@ -1,5 +1,6 @@
 import { NitroManager } from '../../core/common/NitroManager';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { RendererViewEvent } from '../../core/renderer/RendererViewEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomObject } from '../../room/object/IRoomObject';
@@ -67,6 +68,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _roomMessageHandler: RoomMessageHandler;
 
     private _activeRoomId: number;
+    private _activeRoomInstance: IRoomInstance;
     private _roomInstanceData: Map<number, RoomInstanceData>;
 
     private _roomRendererFactory: IRoomRendererFactory;
@@ -86,6 +88,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomMessageHandler        = new RoomMessageHandler(this);
 
         this._activeRoomId              = -1;
+        this._activeRoomInstance        = null;
         this._roomInstanceData          = new Map();
 
         this._roomRendererFactory       = new RoomRendererFactory();
@@ -102,6 +105,12 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.RESIZE, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.CLICK, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
     }
 
     protected onDispose(): void
@@ -112,8 +121,21 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         
         this._roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.RESIZE, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.CLICK, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
         
         super.onDispose();
+    }
+
+    private onRendererViewEvent(event: RendererViewEvent): void
+    {
+        if(!event || !this._activeRoomInstance) return;
+
+        this._activeRoomInstance.onRendererViewEvent(event);
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -134,7 +156,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     this.removeRoomInstance(event.session.roomId);
                 }
 
-                this._activeRoomId = -1;
+                this._activeRoomId          = -1;
+                this._activeRoomInstance    = null;
                 return;
         }
     }
@@ -237,14 +260,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             }
         }
 
-        let x = ~~(window.innerWidth - (model.width * NitroConfiguration.TILE_REAL_WIDTH));
-        let y = ~~(window.innerHeight - ((model.height * NitroConfiguration.TILE_REAL_HEIGHT)));
-
-        if(x < 0) x = 0;
-        if(y < 0) y = 0;
-
-        instance.renderer.position.x = x;
-        instance.renderer.position.y = y;
+        this._activeRoomInstance = instance;
 
         NitroInstance.instance.renderer.resizeRenderer();
     }

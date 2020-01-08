@@ -9,7 +9,7 @@ export class AffectedPositions
             
         const positions: Position[] = [];
 
-        if(position.direction === Direction.EAST || position.direction === Direction.SOUTH) [ sizeX, sizeY ] = [ sizeY, sizeX ];
+        if(position.direction === Direction.EAST || position.direction === Direction.WEST) [ sizeX, sizeY ] = [ sizeY, sizeX ];
 
         for(let tempX = position.x; tempX < position.x + sizeX; tempX++)
         {

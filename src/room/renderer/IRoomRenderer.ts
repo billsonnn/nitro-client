@@ -4,6 +4,7 @@ import { IRoomCollision } from './IRoomCollision';
 
 export interface IRoomRenderer extends PIXI.Container, IDisposable
 {
+    resize(event: UIEvent): void;
     mouseMove(event: MouseEvent): void;
     mouseDown(event: MouseEvent): void;
     mouseUp(event: MouseEvent): void;

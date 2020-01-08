@@ -15,7 +15,7 @@ export class NitroConfiguration
     public static TILE_RIGHT_COLOR          = 0x6F6F49;
     public static TILE_TOP_LINE_COLOR       = 0x8E8E5E;
     public static TILE_SIDE_LINE_COLOR      = 0x7A7A51;
-    public static TILE_THICKNESS            = 10;
+    public static TILE_THICKNESS            = 8;
     public static Z_SCALE                   = 2;
     public static WALL_TOP_COLOR            = 0x6E717B;
     public static WALL_LEFT_COLOR           = 0xBBC0CF;

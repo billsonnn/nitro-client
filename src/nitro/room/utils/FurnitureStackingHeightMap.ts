@@ -81,7 +81,7 @@ export class FurnitureStackingHeightMap
         {
             if(!pos) continue;
 
-            if(!this.isTile(pos.x, pos.y) || (!this.isStackable(pos.x, pos.y) && !stackable)) return null;
+            if((!this.isTile(pos.x, pos.y) || !this.isStackable(pos.x, pos.y)) && !stackable) return null;
 
             const height = this.getHeight(pos.x, pos.y);
 

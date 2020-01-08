@@ -1,0 +1,19 @@
+.toolbar {
+	position: fixed;
+	z-index: 1;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	height: 50px;
+	border-top: 2px solid rgb(83, 82, 79);
+	border-bottom: 1px solid rgb(83, 82, 79);
+	background-color: rgb(46, 46, 44);
+	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, .6);
+
+	&.is-client {
+		background-color: rgba(46, 46, 44, 0.66);
+	}
+}
