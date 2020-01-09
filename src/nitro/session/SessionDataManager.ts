@@ -3,6 +3,7 @@ import { NitroConfiguration } from '../../NitroConfiguration';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { SessionDataEvent } from './events/SessionDataEvent';
 import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
 import { ISessionDataManager } from './ISessionDataManager';
@@ -67,12 +68,21 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
     }
 
+    private dispatchSessionDataEvent(type: string): void
+    {
+        if(!this.events) return;
+
+        this.events.dispatchEvent(new SessionDataEvent(type, this));
+    }
+
     private onUserFigureEvent(event: UserFigureEvent): void
     {
         if(!(event instanceof UserFigureEvent) || !event.connection) return;
 
         this._figure    = event.getParser().figure;
         this._gender    = event.getParser().gender;
+
+        this.dispatchSessionDataEvent(SessionDataEvent.FIGURE_UPDATED);
     }
 
     private onUserInfoEvent(event: UserInfoEvent): void
@@ -89,6 +99,9 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._name      = userInfo.username;
         this._figure    = userInfo.figure;
         this._gender    = userInfo.gender;
+
+        this.dispatchSessionDataEvent(SessionDataEvent.UPDATED);
+        this.dispatchSessionDataEvent(SessionDataEvent.FIGURE_UPDATED);
     }
 
     private onFurnitureDataReadyEvent(event: Event): void

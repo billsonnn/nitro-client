@@ -17,6 +17,7 @@ export class NitroCommunicationDemo extends NitroManager
 
     private _sso: string;
     private _handShaking: boolean;
+    private _didConnect: boolean;
 
     constructor(communication: INitroCommunicationManager)
     {
@@ -26,6 +27,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         this._sso           = null;
         this._handShaking   = false;
+        this._didConnect    = false;
     }
 
     protected onInit(): void
@@ -36,6 +38,7 @@ export class NitroCommunicationDemo extends NitroManager
         {
             connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
             connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
         }
 
         this._communication.registerMessageEvent(new ClientPingEvent(this.onClientPingEvent.bind(this)));
@@ -52,6 +55,7 @@ export class NitroCommunicationDemo extends NitroManager
         {
             connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
             connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
         }
 
         this._sso           = null;
@@ -66,6 +70,8 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!connection) return;
 
+        this._didConnect = true;
+
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, connection);
 
         this.startHandshake(connection);
@@ -77,7 +83,20 @@ export class NitroCommunicationDemo extends NitroManager
 
     private onConnectionClosedEvent(event: CloseEvent): void
     {
-        console.log('The connection was closed');
+        const connection = this._communication.connection;
+
+        if(!connection) return;
+
+        if(this._didConnect) this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_CLOSED, connection);
+    }
+
+    private onConnectionErrorEvent(event: CloseEvent): void
+    {
+        const connection = this._communication.connection;
+
+        if(!connection) return;
+
+        this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ERROR, connection);
     }
 
     private tryAuthentication(connection: IConnection): void

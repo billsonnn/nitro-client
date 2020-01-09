@@ -19,6 +19,7 @@ export interface NitroComponentState
 	isHandshaked: boolean;
 	isAuthenticated: boolean;
 	isError: boolean;
+	isClosed: boolean;
 	loadingMessage: string;
 	loadingPercentage: number;
 }
@@ -37,6 +38,7 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 			isHandshaked: false,
 			isAuthenticated: false,
 			isError: false,
+			isClosed: false,
 			loadingMessage: 'Please Wait',
 			loadingPercentage: 0
 		};
@@ -48,31 +50,21 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 	{
 		if(!this.props.nitroInstance) return;
 
-		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroCommunicationDemoEvent);
 		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, this.onNitroCommunicationDemoEvent);
 		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, this.onNitroCommunicationDemoEvent);
 		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED, this.onNitroCommunicationDemoEvent);
 		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, this.onNitroCommunicationDemoEvent);
+		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroCommunicationDemoEvent);
+		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ERROR, this.onNitroCommunicationDemoEvent);
+		this.props.nitroInstance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_CLOSED, this.onNitroCommunicationDemoEvent);
 
-		this.setState({ isDownloading: true, loadingMessage: 'Loading Assets', loadingPercentage: 25 });
+		this.setState({ isDownloading: true, loadingMessage: 'Loading Assets', loadingPercentage: 20 });
 
 		this.props.nitroInstance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) =>
 		{
-			this.setState({ isDownloading: false, isConnecting: true });
+			this.setState({ isDownloading: false, isConnecting: true, loadingMessage: 'Connecting', loadingPercentage: 40 });
 
-			try
-			{
-				this.props.nitroInstance.init();
-			}
-	
-			catch(err)
-			{
-				this.setState({ isError: true, loadingMessage: 'An error occurred', loadingPercentage: 0 });
-
-				console.error(err.message || err);
-	
-				this.props.nitroInstance.core.dispose();
-			}
+			this.props.nitroInstance.init();
 		});
 	}
 
@@ -80,11 +72,13 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 	{
 		if(this.props.nitroInstance)
 		{
-			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroCommunicationDemoEvent);
 			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, this.onNitroCommunicationDemoEvent);
 			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, this.onNitroCommunicationDemoEvent);
 			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED, this.onNitroCommunicationDemoEvent);
 			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, this.onNitroCommunicationDemoEvent);
+			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroCommunicationDemoEvent);
+			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_ERROR, this.onNitroCommunicationDemoEvent);
+			this.props.nitroInstance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_CLOSED, this.onNitroCommunicationDemoEvent);
 		}
 	}
 
@@ -95,26 +89,32 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 		switch(event.type)
 		{
 			case NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED:
-				this.setState({ isConnecting: false, isConnected: true });
+				this.setState({ isConnecting: false, isConnected: true, loadingMessage: 'Connected' });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING:
-				this.setState({ isHandshaking: true, loadingMessage: 'Handshaking', loadingPercentage: 50 });
+				this.setState({ isHandshaking: true, loadingMessage: 'Handshaking', loadingPercentage: 60 });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED:
-				this.setState({ isHandshaking: false, isHandshaked: true, loadingMessage: 'Handshaked', loadingPercentage: 75 });
+				this.setState({ isHandshaking: false, isHandshaked: true, loadingMessage: 'Handshaked', loadingPercentage: 80 });
+				return;
+			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
+				this.setState({ isHandshaking: false, isError: true, loadingMessage: 'An error occured', loadingPercentage: 0 });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
 				this.setState({ isAuthenticated: true, loadingMessage: 'Authenticated', loadingPercentage: 100 });
 				return;
-			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
-				this.setState({ isHandshaking: false, isError: true, loadingMessage: 'An error occured', loadingPercentage: 0 });
+			case NitroCommunicationDemoEvent.CONNECTION_ERROR:
+				this.setState({ isError: true, loadingMessage: 'Connection Error', loadingPercentage: 0 });
+				return;
+			case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
+				this.setState({ isClosed: true, loadingMessage: 'Connection Closed', loadingPercentage: 0 });
 				return;
 		}
 	}
 
 	public render(): JSX.Element
 	{
-		const isLoading = !this.state.isAuthenticated || this.state.isError;
+		const isLoading = !this.state.isAuthenticated || this.state.isError || this.state.isClosed
 
 		return (
 			<section className="nitro">

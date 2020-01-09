@@ -1,0 +1,66 @@
+.currency-item {
+	height: 19px;
+	margin-left: 5px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	text-shadow: 0 1px rgba(0, 0, 0, .3);
+	cursor: pointer;
+	pointer-events: auto;
+
+	.icon {
+		float: right;
+		width: 15px;
+		height: 15px;
+		margin-left: 3px;
+	}
+	
+	&.currency--1 {
+		color: #d1ab21;
+
+		.icon {
+			background-image: url('../assets/images/wallet/icons/credit.png');
+		}
+
+		&:hover {
+			color: #fefb6e;
+
+			.icon {
+				background-image: url('../assets/images/wallet/icons/credit_glow.png');
+			}
+		}
+	}
+
+	&.currency-0 {
+		color: #d283cf;
+
+		.icon {
+			background-image: url('../assets/images/wallet/icons/ducket.png');
+		}
+
+		&:hover {
+			color: #fed3fe;
+
+			.icon {
+				background-image: url('../assets/images/wallet/icons/ducket_glow.png');
+			}
+		}
+	}
+
+	&.currency-5 {
+		color: #38c5e4;
+
+		.icon {
+			background-image: url('../assets/images/wallet/icons/diamond.png');
+		}
+
+		&:hover {
+			color: #84fefe;
+
+			.icon {
+				background-image: url('../assets/images/wallet/icons/diamond_glow.png');
+			}
+		}
+	}
+}

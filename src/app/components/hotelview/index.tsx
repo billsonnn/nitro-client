@@ -21,7 +21,7 @@ export class HotelViewComponent extends React.Component<HotelViewComponentProps,
 	{
 		return (
             <section className="hotel-view">
-				<div className='hotel'>
+				<div className="hotel">
 				</div>
             </section>
         );

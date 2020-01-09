@@ -55,6 +55,7 @@ export class ToolbarComponent extends React.Component<ToolbarComponentProps, Too
                         { this.props.isInRoom && <span className="icon icon-inventory"></span> }
 
                         <UserComponent nitroInstance={ this.props.nitroInstance } />
+                        <span className="icon icon-camera"></span>
                     </div>
                 </div>
             </section>

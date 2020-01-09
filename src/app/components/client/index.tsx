@@ -11,15 +11,26 @@ export interface ClientComponentState {}
 
 export class ClientComponent extends React.Component<ClientComponentProps, ClientComponentState>
 {
+	constructor(props: ClientComponentProps)
+	{
+		super(props);
+
+		this.state = {};
+	}
+
 	public componentDidMount(): void
 	{
-		if(!this.props.nitroInstance) return;
+		if(this.props.nitroInstance)
+		{
+			const node = ReactDOM.findDOMNode(this) as HTMLElement;
 
-		const node = ReactDOM.findDOMNode(this) as HTMLElement;
+			if(node)
+			{
+				const renderer = this.props.nitroInstance.renderer.view;
 
-		const renderer = this.props.nitroInstance.renderer.view;
-
-		if(renderer) node.append(renderer);
+				renderer && node.append(renderer);
+			}
+		}
 	}
 
 	public render(): JSX.Element

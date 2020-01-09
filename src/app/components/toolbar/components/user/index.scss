@@ -2,16 +2,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-left: 0;
+	margin-left: 15px;
 	position: relative;
-	width: 70px;
+	width: 50px;
 	height: 100%;
 
 	.user-avatar {
 		background-position: center;
 		background-repeat: no-repeat;
 		image-rendering: pixelated;
-		width: 60px;
+		width: 50px;
 		height: 62px;
 		margin-top: 18px;
 	}

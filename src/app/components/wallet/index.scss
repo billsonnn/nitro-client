@@ -1,6 +1,5 @@
 .wallet {
 	position: fixed;
-	width: 190px;
 	right: 4px;
 	top: 0;
 	z-index: 1;
@@ -17,110 +16,10 @@
 	justify-content: space-between;
 	font-size: 11px;
 	font-weight: 600;
+	pointer-events: none;
 
 	.icon::before {
 		filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .3));
-	}
-
-	.currencies {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		flex-grow: 1;
-
-		.currency-item {
-			height: 19px;
-			overflow: hidden;
-			display: flex;
-			align-items: center;
-			justify-content: flex-end;
-			text-shadow: 0 1px rgba(0, 0, 0, .3);
-			cursor: pointer;
-
-			.icon {
-				width: 18px;
-
-				&::before {
-					float: right;
-					width: 15px;
-					height: 15px;
-					margin-left: 3px;
-				}
-
-				&.icon-credit::before {
-					background-image: url('../assets/images/notifications/icons/credit.png');
-				}
-
-				&.icon-diamond::before {
-					background-image: url('../assets/images/notifications/icons/diamond.png');
-				}
-					
-				&.icon-ducket::before {
-					background-image: url('../assets/images/notifications/icons/ducket.png');
-				}
-			}
-
-			&.currency-diamonds {
-				color: #38c5e4;
-
-				&:hover {
-					color: #84fefe;
-
-					.icon::before {
-						background-image: url('../assets/images/notifications/icons/diamond_glow.png');
-					}
-				}
-			}
-			
-			&.currency-credits {
-				color: #d1ab21;
-
-				&:hover {
-					color: #fefb6e;
-
-					.icon::before {
-						background-image: url('../assets/images/notifications/icons/credit_glow.png');
-					}
-				}
-			}
-
-			&.currency-duckets {
-				color: #d283cf;
-
-				&:hover {
-					color: #fed3fe;
-
-					.icon::before {
-						background-image: url('../assets/images/notifications/icons/ducket_glow.png');
-					}
-				}
-			}
-		}
-	}
-
-	.club {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		border-radius: 8px;
-		background: rgba(64, 56, 48, 0.8);
-		width: 48px;
-		margin: 0 6px;
-		color: #03babd;
-		cursor: pointer;
-
-		.icon-hc {
-			margin-bottom: 6px;
-		}
-
-		&:hover {
-			color: #4cfefe;
-
-			.icon-hc::before {
-				background-image: url('../assets/images/notifications/icons/hc_glow.png');
-			}
-		}
 	}
 
 	.buttons {
@@ -179,3 +78,5 @@
 		}
 	}
 }
+
+@import './components';

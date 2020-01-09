@@ -48,6 +48,9 @@ import { UserPermissionsEvent } from './messages/incoming/user/access/UserPermis
 import { UserRightsEvent } from './messages/incoming/user/access/UserRightsEvent';
 import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
+import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
+import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
+import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
@@ -75,6 +78,8 @@ import { RoomUnitSitComposer } from './messages/outgoing/room/unit/RoomUnitSitCo
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
 import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer';
+import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
+import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -169,6 +174,15 @@ export class NitroMessages implements IMessageConfiguration
             // DATA
             this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);
             this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
+
+            // INVENTORY
+
+                // CURRENCY
+                this._events.set(IncomingHeader.USER_CREDITS, UserCreditsEvent);
+                this._events.set(IncomingHeader.USER_CURRENCY, UserCurrencyEvent);
+
+                // SUBSCRIPTION
+                this._events.set(IncomingHeader.USER_SUBSCRIPTION, UserSubscriptionEvent);
     }
 
     private registerComposers(): void
@@ -224,6 +238,14 @@ export class NitroMessages implements IMessageConfiguration
 
         // USER
         this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
+
+            // INVENTORY
+
+                // CURRENCY
+                this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);
+
+                // SUBSCRIPTION
+                this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
     }
 
     public get events(): Map<number, Function>

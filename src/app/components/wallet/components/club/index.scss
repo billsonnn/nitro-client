@@ -1,0 +1,33 @@
+.wallet-club {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 8px;
+	background: rgba(64, 56, 48, 0.8);
+	width: 48px;
+	margin: 0 6px;
+	color: #03babd;
+	cursor: pointer;
+	pointer-events: auto;
+	padding: 5px 0;
+
+	.icon-hc {
+		width: 15px;
+		height: 15px;
+		background-image: url('../assets/images/wallet/icons/hc.png');
+	}
+
+	&:hover {
+		color: #4cfefe;
+
+		.icon-hc {
+			background-image: url('../assets/images/wallet/icons/hc_glow.png');
+		}
+	}
+
+	p {
+		margin: 0;
+		padding: 5px 0;
+	}
+}
