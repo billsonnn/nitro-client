@@ -4,12 +4,20 @@ export interface LoadingComponentProps
 {
 	message?: string;
 	percentage?: number;
+	hideProgress?: boolean;
 }
 
 export interface LoadingComponentState {}
 
 export default class LoadingComponent extends React.Component<LoadingComponentProps, LoadingComponentState>
 {
+	constructor(props: LoadingComponentProps)
+	{
+		super(props);
+
+		this.state = {};
+	}
+
 	public render(): JSX.Element
 	{
 		return (
@@ -19,10 +27,14 @@ export default class LoadingComponent extends React.Component<LoadingComponentPr
 					<div className="frame" />
 				</div>
 				{ this.props.message && <div className="text">{ this.props.message }</div> }
-   			 	<div className="loading-progress">
-   					<div className="bar" style={{ width: (this.props.percentage || 0) + '%' }}></div>
-   				</div>
-   				<div className="percent">{ this.props.percentage || 0 }%</div>
+				{ !this.props.hideProgress &&
+					<div>
+						<div className="loading-progress">
+   							<div className="bar" style={{ width: (this.props.percentage || 0) + '%' }}></div>
+						</div>
+						<div className="percent">{ this.props.percentage || 0 }%</div>
+					</div>
+				}
 			</section>
    		);
 	}

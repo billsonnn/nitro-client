@@ -22,6 +22,7 @@ export interface NitroComponentState
 	isClosed: boolean;
 	loadingMessage: string;
 	loadingPercentage: number;
+	loadingHideProgress: boolean;
 }
 
 export class NitroComponent extends React.Component<NitroComponentProps, NitroComponentState>
@@ -40,7 +41,8 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 			isError: false,
 			isClosed: false,
 			loadingMessage: 'Please Wait',
-			loadingPercentage: 0
+			loadingPercentage: 0,
+			loadingHideProgress: false
 		};
 
 		this.onNitroCommunicationDemoEvent	= this.onNitroCommunicationDemoEvent.bind(this);
@@ -98,16 +100,16 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 				this.setState({ isHandshaking: false, isHandshaked: true, loadingMessage: 'Handshaked', loadingPercentage: 80 });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
-				this.setState({ isHandshaking: false, isError: true, loadingMessage: 'An error occured', loadingPercentage: 0 });
+				this.setState({ isHandshaking: false, isError: true, loadingMessage: 'An error occured', loadingPercentage: 0, loadingHideProgress: true });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
 				this.setState({ isAuthenticated: true, loadingMessage: 'Authenticated', loadingPercentage: 100 });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_ERROR:
-				this.setState({ isError: true, loadingMessage: 'Connection Error', loadingPercentage: 0 });
+				this.setState({ isError: true, loadingMessage: 'Connection Error', loadingPercentage: 0, loadingHideProgress: true });
 				return;
 			case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
-				this.setState({ isClosed: true, loadingMessage: 'Connection Closed', loadingPercentage: 0 });
+				this.setState({ isClosed: true, loadingMessage: 'Connection Closed', loadingPercentage: 0, loadingHideProgress: true });
 				return;
 		}
 	}
@@ -118,7 +120,7 @@ export class NitroComponent extends React.Component<NitroComponentProps, NitroCo
 
 		return (
 			<section className="nitro">
-				{ isLoading ? <LoadingComponent message={ this.state.loadingMessage } percentage={ this.state.loadingPercentage } /> : <DesktopComponent nitroInstance={ this.props.nitroInstance } /> }
+				{ isLoading ? <LoadingComponent message={ this.state.loadingMessage } percentage={ this.state.loadingPercentage } hideProgress={ this.state.loadingHideProgress } /> : <DesktopComponent nitroInstance={ this.props.nitroInstance } /> }
 			</section>
         );
 	}

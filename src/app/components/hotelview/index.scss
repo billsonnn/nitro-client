@@ -129,5 +129,17 @@
                 }
             }
         }
-    }
+	}
+	
+	.user-avatar {
+		background-position: center;
+		background-repeat: no-repeat;
+		image-rendering: pixelated;
+		width: 70px;
+		height: 120px;
+		bottom: 70px;
+		left: 143px;
+		position: fixed;
+		z-index: 2;
+	}
 }
