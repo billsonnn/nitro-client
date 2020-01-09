@@ -46,6 +46,7 @@ import { AuthenticatedEvent } from './messages/incoming/security/AuthenticatedEv
 import { UserPerksEvent } from './messages/incoming/user/access/UserPerksEvent';
 import { UserPermissionsEvent } from './messages/incoming/user/access/UserPermissionsEvent';
 import { UserRightsEvent } from './messages/incoming/user/access/UserRightsEvent';
+import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
@@ -166,6 +167,7 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.USER_RIGHTS, UserRightsEvent);
 
             // DATA
+            this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);
             this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
     }
 

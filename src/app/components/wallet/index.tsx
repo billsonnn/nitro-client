@@ -1,6 +1,10 @@
 import React from 'react';
+import { INitroInstance } from '../../../nitro/INitroInstance';
 
-export interface WalletComponentProps {}
+export interface WalletComponentProps
+{
+	nitroInstance: INitroInstance;
+}
 
 export interface WalletComponentState {}
 
@@ -20,10 +24,10 @@ export class WalletComponent extends React.Component<WalletComponentProps, Walle
 		]
 	}
 
-	render() {
+	public render(): JSX.Element
+	{
 		return (
 			<div className='wallet'>
-
 				<div className="currencies">
 					{this.data.map((data, index) => 
 						<div key={index} className={"currency-item currency-" + data.name}>
@@ -31,18 +35,16 @@ export class WalletComponent extends React.Component<WalletComponentProps, Walle
 						</div>
 					)}
 				</div>
-
 				<span className="club">
 					<i className="icon icon-hc"></i>
 					<p>Join</p>
 				</span>
-
 				<div className="buttons">
 					<a className="btn-blue">Help</a>
 					<a className="btn-red icon icon-logout"></a>
 					<a className="btn-gray icon icon-settings"></a>
 				</div>
 			</div>
-		)
+		);
 	}
 }

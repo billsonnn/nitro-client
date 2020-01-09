@@ -36,7 +36,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         if(this._selfContainer)
         {
-            this._selfContainer.x -= 35;
+            this._selfContainer.x -= 34;
             this._selfContainer.y -= 1;
         }
 

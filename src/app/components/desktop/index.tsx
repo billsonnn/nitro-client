@@ -59,9 +59,9 @@ export class DesktopComponent extends React.Component<DesktopComponentProps, Des
 	{
 		return (
 			<section className="desktop">
-				{ this.state.isInRoom ? <ClientComponent /> : <HotelViewComponent /> }
-				<WalletComponent />
-				<ToolbarComponent isClient={ this.state.isInRoom } />
+				{ this.state.isInRoom ? <ClientComponent nitroInstance={ this.props.nitroInstance } /> : <HotelViewComponent nitroInstance={ this.props.nitroInstance } /> }
+				<WalletComponent nitroInstance={ this.props.nitroInstance } />
+				<ToolbarComponent nitroInstance={ this.props.nitroInstance } isInRoom={ this.state.isInRoom } />
 			</section>
         );
 	}

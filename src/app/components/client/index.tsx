@@ -1,16 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { NitroInstance } from '../../../nitro/NitroInstance';
+import { INitroInstance } from '../../../nitro/INitroInstance';
 
-export interface ClientComponentProps {}
+export interface ClientComponentProps
+{
+	nitroInstance: INitroInstance;
+}
 
-export class ClientComponent extends React.Component<ClientComponentProps, {}>
+export interface ClientComponentState {}
+
+export class ClientComponent extends React.Component<ClientComponentProps, ClientComponentState>
 {
 	public componentDidMount(): void
 	{
+		if(!this.props.nitroInstance) return;
+
 		const node = ReactDOM.findDOMNode(this) as HTMLElement;
 
-		const renderer = NitroInstance.instance.renderer.view;
+		const renderer = this.props.nitroInstance.renderer.view;
 
 		if(renderer) node.append(renderer);
 	}

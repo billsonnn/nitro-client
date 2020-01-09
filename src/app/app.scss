@@ -5,6 +5,15 @@
     src: url('../assets/fonts/ubuntu_condensed/UbuntuCondensed-Regular.ttf') format('truetype');
 }
 
+@mixin no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 html,
 body {
     font-family: "Ubuntu Condensed", sans-serif;
@@ -17,6 +26,8 @@ body {
     height: 100%;
     overflow: hidden;
     image-rendering: pixelated;
+    @include no-select();
 }
 
 @import './components';
+@import './nitro';

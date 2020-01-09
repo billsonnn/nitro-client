@@ -82,7 +82,12 @@ export class NitroCommunicationDemo extends NitroManager
 
     private tryAuthentication(connection: IConnection): void
     {
-        if(!connection || !this._sso) return;
+        if(!connection || !this._sso)
+        {
+            this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, connection);
+
+            return;
+        }
 
         connection.send(new SecurityTicketComposer(this._sso));
     }

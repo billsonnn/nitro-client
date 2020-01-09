@@ -1,6 +1,7 @@
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
 import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
@@ -36,6 +37,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         this.loadFurnitureData();
 
+        this._communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
     }
 
@@ -63,6 +65,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.events.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
         this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
+    }
+
+    private onUserFigureEvent(event: UserFigureEvent): void
+    {
+        if(!(event instanceof UserFigureEvent) || !event.connection) return;
+
+        this._figure    = event.getParser().figure;
+        this._gender    = event.getParser().gender;
     }
 
     private onUserInfoEvent(event: UserInfoEvent): void
