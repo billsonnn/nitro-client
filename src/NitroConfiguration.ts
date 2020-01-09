@@ -27,4 +27,10 @@ export class NitroConfiguration
     public static WALKING_ENABLED           = true;
     public static ROLLING_OVERRIDES_POSTURE = true;
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
+
+    public static PRELOAD_ASSETS: string[]  = [
+        NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`,
+        NitroConfiguration.ASSET_URL + `/figure/hh_human_body/hh_human_body.json`,
+        NitroConfiguration.ASSET_URL + `/figure/hh_human_item/hh_human_item.json`,
+    ];
 }

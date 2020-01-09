@@ -31,6 +31,12 @@ module.exports = {
                 ]
             },
             {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    'url-loader',
+                ],
+            },
+            {
                 test: /\.s[ac]ss$/i,
                 use: [
                   'style-loader',

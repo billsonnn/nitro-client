@@ -18,9 +18,7 @@ export class ClientComponent extends React.Component<ClientComponentProps, {}>
 	public render(): JSX.Element
 	{
 		return (
-			<section className="client">
-				
-			</section>
+			<section className="client"></section>
 		);
 	}
 }

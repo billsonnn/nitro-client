@@ -1,9 +1,7 @@
 import { NitroManager } from '../../../core/common/NitroManager';
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { SocketConnectionEvent } from '../../../core/communication/events/SocketConnectionEvent';
-import { NitroEvent } from '../../../core/events/NitroEvent';
 import { NitroInstance } from '../../NitroInstance';
-import { NitroCommunicationEventEnum } from '../enums/NitroCommunicationEventEnum';
 import { INitroCommunicationManager } from '../INitroCommunicationManager';
 import { ClientPingEvent } from '../messages/incoming/client/ClientPingEvent';
 import { AuthenticatedEvent } from '../messages/incoming/security/AuthenticatedEvent';
@@ -11,6 +9,7 @@ import { ClientPongComposer } from '../messages/outgoing/client/ClientPongCompos
 import { ClientReleaseVersionComposer } from '../messages/outgoing/client/ClientReleaseVersionComposer';
 import { SecurityTicketComposer } from '../messages/outgoing/security/SecurityTicketComposer';
 import { UserInfoComposer } from '../messages/outgoing/user/data/UserInfoComposer';
+import { NitroCommunicationDemoEvent } from './NitroCommunicationDemoEvent';
 
 export class NitroCommunicationDemo extends NitroManager
 {
@@ -67,7 +66,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!connection) return;
 
-        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_ESTABLISHED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, connection);
 
         this.startHandshake(connection);
 
@@ -101,7 +100,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         this.completeHandshake(event.connection);
 
-        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_AUTHENTICATED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, event.connection);
 
         event.connection.send(new UserInfoComposer());
     }
@@ -126,20 +125,20 @@ export class NitroCommunicationDemo extends NitroManager
 
     private startHandshake(connection: IConnection): void
     {
-        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKING);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, connection);
 
         this._handShaking = true;
     }
 
     private completeHandshake(connection: IConnection): void
     {
-        this.dispatchCommunicationDemoEvent(NitroCommunicationEventEnum.CONNECTION_HANDSHAKED);
+        this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED, connection);
 
         this._handShaking = false;
     }
 
-    private dispatchCommunicationDemoEvent(type: string): void
+    private dispatchCommunicationDemoEvent(type: string, connection: IConnection): void
     {
-        NitroInstance.instance.events.dispatchEvent(new NitroEvent(type));
+        NitroInstance.instance.events.dispatchEvent(new NitroCommunicationDemoEvent(type, connection));
     }
 } 
