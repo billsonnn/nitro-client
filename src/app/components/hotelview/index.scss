@@ -11,14 +11,13 @@
 		z-index: 1;
 		display: block;
 		position: fixed;
-		height: calc(100% - 50px);
+		height: 100%;
 		width: 100%;
 		background-color: #68E5FF;
 		background: url('../assets/images/hotelview/rainbow19_background_left.png'), 
 				   url('../assets/images/hotelview/background_right_easter2016.png'),
-				   url('../assets/images/hotelview/drape.png'),
 				   url('../assets/images/hotelview/rainbow19_background_gradient.png');
-		background-repeat: no-repeat, no-repeat, no-repeat, repeat-x;
+		background-repeat: no-repeat, no-repeat, repeat-x;
 		background-position: left bottom, right bottom, 100px top;
 		background-size: auto, auto, auto, 1% 100%;
 
@@ -137,7 +136,7 @@
 		image-rendering: pixelated;
 		width: 70px;
 		height: 120px;
-		bottom: 70px;
+		bottom: 20px;
 		left: 143px;
 		position: fixed;
 		z-index: 2;

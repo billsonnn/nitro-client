@@ -1,12 +1,9 @@
 import React from 'react';
-import { INitroInstance } from '../../../nitro/INitroInstance';
 import { WalletClubComponent } from './components/club';
 import { WalletCurrencyComponent } from './components/currency';
+import { WalletOptionsComponent } from './components/options';
 
-export interface WalletComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface WalletComponentProps {}
 
 export interface WalletComponentState {}
 
@@ -18,17 +15,16 @@ export class WalletComponent extends React.Component<WalletComponentProps, Walle
 	{
 		super(props);
 
-		this.state = {
-			currencies: new Map()
-		};
+		this.state = {};
 	}
 
 	public render(): JSX.Element
 	{
 		return (
 			<section className="wallet">
-				<WalletCurrencyComponent nitroInstance={ this.props.nitroInstance } />
-				<WalletClubComponent nitroInstance={ this.props.nitroInstance } />
+				<WalletCurrencyComponent />
+				<WalletClubComponent />
+				<WalletOptionsComponent />
 			</section>
 		);
 	}

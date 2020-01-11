@@ -1,6 +1,6 @@
 import { AvatarVisualization } from '../AvatarVisualization';
 import { ExpressionAddition } from './ExpressionAddition';
-import { FloatingHeart } from './FloatingHeart';
+import { FloatingHeartAddition } from './FloatingHeartAddition';
 import { IExpressionAddition } from './IExpressionAddition';
 
 export class ExpressionAdditionFactory
@@ -15,7 +15,7 @@ export class ExpressionAdditionFactory
     {
         switch(type)
         {
-            case this.BLOW: return new FloatingHeart(id, this.BLOW, visualization);
+            case this.BLOW: return new FloatingHeartAddition(id, this.BLOW, visualization);
             default: return new ExpressionAddition(id, type, visualization);
         }
     }

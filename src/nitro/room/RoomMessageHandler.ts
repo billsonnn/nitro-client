@@ -14,6 +14,9 @@ import { RoomHeightMapUpdateEvent } from '../communication/messages/incoming/roo
 import { RoomModelEvent } from '../communication/messages/incoming/room/mapping/RoomModelEvent';
 import { RoomModelNameEvent } from '../communication/messages/incoming/room/mapping/RoomModelNameEvent';
 import { RoomRollingEvent } from '../communication/messages/incoming/room/RoomRollingEvent';
+import { RoomUnitChatEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatEvent';
+import { RoomUnitChatShoutEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
+import { RoomUnitChatWhisperEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
 import { RoomUnitTypingEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitTypingEvent';
 import { RoomUnitDanceEvent } from '../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
 import { RoomUnitEffectEvent } from '../communication/messages/incoming/room/unit/RoomUnitEffectEvent';
@@ -88,12 +91,15 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomUnitInfoEvent(this.onRoomUnitInfoEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitStatusEvent(this.onRoomUnitStatusEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitChatEvent(this.onRoomUnitChatEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitChatShoutEvent(this.onRoomUnitChatEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitChatWhisperEvent(this.onRoomUnitChatEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitTypingEvent(this.onRoomUnitTypingEvent.bind(this)));
     }
 
     public setRoomId(id: number): void
     {
-        if(this._currentRoomId)
+        if(this._currentRoomId !== 0)
         {
             if(this._roomCreator) this._roomCreator.destroyRoom(this._currentRoomId);
         }
@@ -382,11 +388,16 @@ export class RoomMessageHandler extends Disposable
         {
             if(!unit) continue;
 
-            const position  = new Position(unit.x, unit.y, unit.z, unit.direction);
+            const position = new Position(unit.x, unit.y, unit.z, unit.direction);
 
             const type = RoomObjectType.getTypeName(unit.type);
 
             this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, position, type, unit.figure, unit.gender);
+
+            if(unit.id === this._ownUserId)
+            {
+                this._roomCreator.updateRoomUnitOwnUser(this._currentRoomId, unit.unitId);
+            }
         }
     }
 
@@ -498,6 +509,18 @@ export class RoomMessageHandler extends Disposable
                 }
             }
         }
+    }
+
+    private onRoomUnitChatEvent(event: RoomUnitChatEvent): void
+    {
+        if(!(event instanceof RoomUnitChatEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._roomCreator.updateRoomUnitGesture(this._currentRoomId, parser.unitId, parser.gesture);
+        this._roomCreator.updateRoomUnitAction(this._currentRoomId, parser.unitId, RoomObjectModelKey.FIGURE_TALK, (parser.message.length / 10));
     }
 
     private onRoomUnitTypingEvent(event: RoomUnitTypingEvent): void

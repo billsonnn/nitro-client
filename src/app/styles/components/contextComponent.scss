@@ -1,0 +1,60 @@
+.nitro-component-context {
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+    width: 215px;
+    max-width: 215px;
+    pointer-events: none;
+    z-index: 300;
+
+    .component-header {
+
+        .header-title {
+            font-size: 16px;
+        }
+    }
+
+    .component-body {
+        padding: 0 15px;
+
+        .body-info {
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+
+            .body-description {
+                font-size: 12px;
+                text-align: center;
+                padding-bottom: 10px;
+            }
+        }
+    }
+
+    &.nitro-component-context-furniture {
+
+        .component-body {
+
+            .body-canvas {
+
+                .canvas {
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
+    &.nitro-component-context-user {
+
+        .component-body {
+
+            .body-info {
+    
+                .body-description {
+                    text-transform: none;
+                }
+            }
+        }
+        
+    }
+}

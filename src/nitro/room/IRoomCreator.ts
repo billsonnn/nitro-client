@@ -31,7 +31,9 @@ export interface IRoomCreator
     updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): void;
     updateRoomUnitFigure(roomId: number, objectId: number, figure: string, gender: string): void;
     updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void;
-    updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay?: number): void
+    updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay?: number): void;
+    updateRoomUnitGesture(roomId: number, objectId: number, gestureId: number): void;
     updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter?: string): void;
+    updateRoomUnitOwnUser(roomId: number, objectId: number): void;
     roomSession: IRoomSessionManager;
 }

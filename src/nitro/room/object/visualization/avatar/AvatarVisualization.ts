@@ -11,9 +11,10 @@ import { AvatarBodyPart } from '../../../../avatar/structure/AvatarBodyPart';
 import { NitroInstance } from '../../../../NitroInstance';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
-import { FloatingIdleZ } from './additions/FloatingIdleZ';
+import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
 import { IAvatarAddition } from './additions/IAvatarAddition';
-import { TypingBubble } from './additions/TypingBubble';
+import { OwnUserAddition } from './additions/OwnUserAddition';
+import { TypingBubbleAddition } from './additions/TypingBubbleAddition';
 import { AvatarVisualizationData } from './AvatarVisualizationData';
 
 export class AvatarVisualization extends RoomObjectSpriteVisualization
@@ -21,6 +22,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     private static FLOATING_IDLE_Z_ID: number   = 1;
     private static TYPING_BUBBLE_ID: number     = 2;
     private static EXPRESSION_ID: number        = 3;
+    private static OWN_USER_ID: number          = 4;
 
     protected _data: AvatarVisualizationData;
 
@@ -323,6 +325,15 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         {
             this._ownUser = ownUser;
 
+            let ownUserAddition = this.getAddition(AvatarVisualization.OWN_USER_ID);
+            
+            if(!ownUserAddition) ownUserAddition = this.addAddition(new OwnUserAddition(AvatarVisualization.OWN_USER_ID, this));
+
+            setTimeout(() =>
+            {
+                this.removeAddition(AvatarVisualization.OWN_USER_ID);
+            }, OwnUserAddition.ADDITION_TIMEOUT);
+
             needsUpdate = true;
         }
 
@@ -349,7 +360,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         if(this._sleep)
         {
-            if(!idleAddition) idleAddition = this.addAddition(new FloatingIdleZ(AvatarVisualization.FLOATING_IDLE_Z_ID, this));
+            if(!idleAddition) idleAddition = this.addAddition(new FloatingIdleZAddition(AvatarVisualization.FLOATING_IDLE_Z_ID, this));
 
             needsUpdate = true;
         }
@@ -364,7 +375,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         if(isTyping)
         {
-            if(!typingAddition) typingAddition = this.addAddition(new TypingBubble(AvatarVisualization.TYPING_BUBBLE_ID, this));
+            if(!typingAddition) typingAddition = this.addAddition(new TypingBubbleAddition(AvatarVisualization.TYPING_BUBBLE_ID, this));
 
             needsUpdate = true;
         }

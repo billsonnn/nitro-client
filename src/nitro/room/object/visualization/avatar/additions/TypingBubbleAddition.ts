@@ -3,7 +3,7 @@ import { IRoomObjectSprite } from '../../../../../../room/object/visualization/I
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
 
-export class TypingBubble implements IAvatarAddition
+export class TypingBubbleAddition implements IAvatarAddition
 {
     private _id: number;
     private _visualization: AvatarVisualization;

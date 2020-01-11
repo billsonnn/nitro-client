@@ -1,12 +1,9 @@
 import React from 'react';
 import { UserFigureEvent } from '../../../../../nitro/communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../../../../../nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { INitroInstance } from '../../../../../nitro/INitroInstance';
+import { NitroContext } from '../../../../providers/nitro/context';
 
-export interface UserComponentProps
-{
-    nitroInstance: INitroInstance;
-}
+export interface UserComponentProps {}
 
 export interface UserComponentComponentState
 {
@@ -14,8 +11,10 @@ export interface UserComponentComponentState
     gender: string;
 }
 
-export class UserComponent extends React.Component<UserComponentProps, UserComponentComponentState>
+export class ToolbarUserComponent extends React.Component<UserComponentProps, UserComponentComponentState>
 {
+    public static contextType = NitroContext;
+
     private _userInfoEvent: UserInfoEvent;
     private _userFigureEvent: UserFigureEvent;
 
@@ -34,9 +33,9 @@ export class UserComponent extends React.Component<UserComponentProps, UserCompo
 
     public componentDidMount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
             if(connection)
             {
@@ -48,9 +47,9 @@ export class UserComponent extends React.Component<UserComponentProps, UserCompo
 
 	public componentWillUnmount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
             if(connection)
             {
@@ -91,9 +90,7 @@ export class UserComponent extends React.Component<UserComponentProps, UserCompo
     public render(): JSX.Element
     {
 		return (
-            <section className="user">
-                <div className="user-avatar" style={{backgroundImage: "url('https://habbo.com.br/habbo-imaging/avatarimage?figure=" + ( this.state.figure ) +"&headonly=0&direction=2&head_direction=2&action=&gesture=&size=m')" }} />
-            </section>
+            <div className="nitro-avatar" style={{backgroundImage: "url('https://habbo.com.br/habbo-imaging/avatarimage?figure=" + ( this.state.figure ) +"&headonly=1&direction=2&head_direction=2&action=&gesture=&size=m')" }} />
         );
 	}
 }

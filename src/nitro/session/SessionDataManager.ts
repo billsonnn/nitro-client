@@ -127,6 +127,18 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return existing;
     }
 
+    public getFloorItemDataByName(name: string): FurnitureData
+    {
+        if(!name || !this._floorItems || !this._floorItems.size) return null;
+
+        for(let item of this._floorItems.values())
+        {
+            if(!item || item.className !== name) continue;
+
+            return item;
+        }
+    }
+
     public getWallItemData(id: number): FurnitureData
     {
         const existing = this._wallItems.get(id);
@@ -134,6 +146,18 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if(!existing) return null;
 
         return existing;
+    }
+
+    public getWallItemDataByName(name: string): FurnitureData
+    {
+        if(!name || !this._wallItems || !this._wallItems.size) return null;
+
+        for(let item of this._wallItems.values())
+        {
+            if(!item || item.className !== name) continue;
+
+            return item;
+        }
     }
 
     public get communication(): INitroCommunicationManager

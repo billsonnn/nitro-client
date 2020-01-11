@@ -5,7 +5,7 @@ import { NitroInstance } from '../../../../../NitroInstance';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
 
-export class FloatingIdleZ implements IAvatarAddition
+export class FloatingIdleZAddition implements IAvatarAddition
 {
     private static DELAY_BEFORE_ANIMATION: number   = 2000;
     private static DELAY_PER_FRAME: number          = 2000;
@@ -51,7 +51,7 @@ export class FloatingIdleZ implements IAvatarAddition
         if(this._visualization.posture === 'lay') direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
 
         const isLeft    = direction >= Direction.SOUTH_EAST && direction <= Direction.WEST;
-        const assetName = this.getSpriteAssetName(isLeft, this._state === FloatingIdleZ.STATE_FRAME_A ? 1 : 2);
+        const assetName = this.getSpriteAssetName(isLeft, this._state === FloatingIdleZAddition.STATE_FRAME_A ? 1 : 2);
 
         let sprite = this._visualization.getSprite(assetName);
 
@@ -85,29 +85,29 @@ export class FloatingIdleZ implements IAvatarAddition
         
         const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
 
-        if(this._state === FloatingIdleZ.STATE_DELAY)
+        if(this._state === FloatingIdleZAddition.STATE_DELAY)
         {
-            if((totalTimeRunning - this._startTime) >= FloatingIdleZ.DELAY_BEFORE_ANIMATION)
+            if((totalTimeRunning - this._startTime) >= FloatingIdleZAddition.DELAY_BEFORE_ANIMATION)
             {
-                this._state     = FloatingIdleZ.STATE_FRAME_A;
+                this._state     = FloatingIdleZAddition.STATE_FRAME_A;
                 this._startTime = totalTimeRunning;
             }
         }
 
-        if(this._state === FloatingIdleZ.STATE_FRAME_A)
+        if(this._state === FloatingIdleZAddition.STATE_FRAME_A)
         {
-            if((totalTimeRunning - this._startTime) >= FloatingIdleZ.DELAY_PER_FRAME)
+            if((totalTimeRunning - this._startTime) >= FloatingIdleZAddition.DELAY_PER_FRAME)
             {
-                this._state     = FloatingIdleZ.STATE_FRAME_B;
+                this._state     = FloatingIdleZAddition.STATE_FRAME_B;
                 this._startTime = totalTimeRunning;
             }
         }
 
-        if(this._state === FloatingIdleZ.STATE_FRAME_B)
+        if(this._state === FloatingIdleZAddition.STATE_FRAME_B)
         {
-            if((totalTimeRunning - this._startTime) >= FloatingIdleZ.DELAY_PER_FRAME)
+            if((totalTimeRunning - this._startTime) >= FloatingIdleZAddition.DELAY_PER_FRAME)
             {
-                this._state     = FloatingIdleZ.STATE_FRAME_A;
+                this._state     = FloatingIdleZAddition.STATE_FRAME_A;
                 this._startTime = totalTimeRunning;
             }
         }

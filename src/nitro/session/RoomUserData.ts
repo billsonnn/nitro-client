@@ -76,7 +76,7 @@ export class RoomUserData
 
     public get motto(): string
     {
-        return this._figure;
+        return this._motto;
     }
 
     public set motto(motto: string)

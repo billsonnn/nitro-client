@@ -1,10 +1,15 @@
 import React from 'react';
 
-export interface LoadingComponentProps
+export interface LoadingOptions
 {
 	message?: string;
 	percentage?: number;
 	hideProgress?: boolean;
+}
+
+export interface LoadingComponentProps
+{
+	options?: LoadingOptions;
 }
 
 export interface LoadingComponentState {}
@@ -26,13 +31,13 @@ export default class LoadingComponent extends React.Component<LoadingComponentPr
 					<div className="photo" />
 					<div className="frame" />
 				</div>
-				{ this.props.message && <div className="text">{ this.props.message }</div> }
-				{ !this.props.hideProgress &&
+				{ this.props.options.message && <div className="text">{ this.props.options.message }</div> }
+				{ !this.props.options.hideProgress &&
 					<div>
 						<div className="loading-progress">
-   							<div className="bar" style={{ width: (this.props.percentage || 0) + '%' }}></div>
+   							<div className="bar" style={{ width: (this.props.options.percentage || 0) + '%' }}></div>
 						</div>
-						<div className="percent">{ this.props.percentage || 0 }%</div>
+						<div className="percent">{ this.props.options.percentage || 0 }%</div>
 					</div>
 				}
 			</section>

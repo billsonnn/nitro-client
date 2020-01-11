@@ -1,15 +1,12 @@
 import React from 'react';
-import { INitroInstance } from '../../../nitro/INitroInstance';
 import { RoomSessionEvent } from '../../../nitro/session/events/RoomSessionEvent';
+import { NitroContext } from '../../providers/nitro/context';
 import { ClientComponent } from '../client';
 import { HotelViewComponent } from '../hotelview';
 import { ToolbarComponent } from '../toolbar';
 import { WalletComponent } from '../wallet';
 
-export interface DesktopComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface DesktopComponentProps {}
 
 export interface DesktopComponentState
 {
@@ -18,6 +15,8 @@ export interface DesktopComponentState
 
 export class DesktopComponent extends React.Component<DesktopComponentProps, DesktopComponentState>
 {
+	public static contextType = NitroContext;
+
 	constructor(props: DesktopComponentProps)
 	{
 		super(props);
@@ -29,19 +28,19 @@ export class DesktopComponent extends React.Component<DesktopComponentProps, Des
 
 	public componentDidMount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-			this.props.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-			this.props.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+			this.context.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
+			this.context.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
         }
 	}
 
 	public componentWillUnmount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-			this.props.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-			this.props.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+			this.context.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
+			this.context.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
         }
 	}
 
@@ -64,9 +63,9 @@ export class DesktopComponent extends React.Component<DesktopComponentProps, Des
 	{
 		return (
 			<section className="desktop">
-				{ this.state.isInRoom ? <ClientComponent nitroInstance={ this.props.nitroInstance } /> : <HotelViewComponent nitroInstance={ this.props.nitroInstance } /> }
-				<WalletComponent nitroInstance={ this.props.nitroInstance } />
-				<ToolbarComponent nitroInstance={ this.props.nitroInstance } isInRoom={ this.state.isInRoom } />
+				{ this.state.isInRoom ? <ClientComponent /> : <HotelViewComponent /> }
+				<WalletComponent />
+				<ToolbarComponent isInRoom={ this.state.isInRoom } />
 			</section>
         );
 	}

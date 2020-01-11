@@ -24,6 +24,6 @@ export class RoomChatHandler extends BaseHandler
 
         if(!session) return;
 
-        console.log('chat')
+        console.log('chat');
     }
 }

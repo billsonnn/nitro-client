@@ -17,6 +17,9 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
     private _allowedDirections: number[];
     private _assetData: IAssetData;
 
+    private _tempRender: PIXI.Renderer;
+    private _tempColor: number;
+
     constructor()
     {
         super();
@@ -25,6 +28,9 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
         this._size              = null;
         this._allowedDirections = [];
         this._assetData         = null;
+
+        this._tempRender        = null;
+        this._tempColor         = 0;
     }
 
     public initialize(asset: IAssetData): boolean
@@ -54,6 +60,13 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
         this._size              = null;
         this._allowedDirections = [];
         this._assetData         = null;
+
+        if(this._tempRender)
+        {
+            this._tempRender.destroy();
+
+            this._tempRender = null;
+        }
 
         super.onDispose();
     }
@@ -214,6 +227,118 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
         if(!this._size) return LayerData.DEFAULT_ZOFFSET;
 
         return this._size.getLayerZOffset(direction, layerId);
+    }
+
+    public getAssetName(direction: number, layerId: number): string
+    {
+        let layerCode = FurnitureVisualizationData.LAYER_LETTERS[layerId] || '';
+
+        if(layerCode === '') return null;
+
+        return `${ this._type }_64_${ layerCode }_${ direction }_`;
+    }
+
+    public getAssetSourceName(assetName: string, asset: IAsset): string
+    {
+        if(!assetName || !asset) return null;
+
+        let source = assetName;
+            
+        if(asset.source) source = asset.source;
+
+        source = `${ this._type }_${ source }.png`;
+
+        return source;
+    }
+
+    public renderFurniture(direction: number, colorId: number): PIXI.Renderer
+    {
+        if(this._tempRender)
+        {
+            if(this._tempColor === colorId) return this._tempRender;
+
+            this._tempRender.destroy();
+
+            this._tempRender = null;
+        }
+
+        this._tempRender = PIXI.autoDetectRenderer({
+            clearBeforeRender: false,
+            transparent: true
+        });
+
+        this._tempColor = colorId;
+
+        let left    = 0;
+        let right   = 0;
+        let top     = 0;
+        let bottom  = 0;
+
+        const sprites: PIXI.Sprite[] = [];
+
+        for(let layerId = 0; layerId < this.layerCount; layerId++)
+        {
+            const assetName = this.getAssetName(direction, layerId) + '0';
+            const assetData = this.getAsset(assetName);
+
+            if(!assetData) continue;
+
+            const sprite = PIXI.Sprite.from(this.getAssetSourceName(assetName, assetData));
+
+            if(assetData.flipH) sprite.scale.x = -1;
+
+            sprite.x        = -assetData.x;
+            sprite.y        = -assetData.y;
+
+            if(assetData.flipH) sprite.x *= -1;
+
+            sprite.blendMode    = this.getLayerInk(direction, layerId);
+            sprite.alpha        = this.getLayerAlpha(direction, layerId);
+            sprite.tint         = this.getLayerColor(colorId, layerId);
+            sprite.x            = (sprite.x + this.getLayerXOffset(direction, layerId));
+            sprite.y            = (sprite.y + this.getLayerYOffset(direction, layerId));
+
+            if(layerId === 0)
+            {
+                top     = sprite.y + sprite.height;
+                bottom  = sprite.y;
+                left    = sprite.x;
+                right   = sprite.x + sprite.width;
+            }
+            else
+            {
+                if(sprite.x < left) left = sprite.x;
+                if((sprite.x + sprite.width) > right) right = sprite.x + sprite.width;
+                if((sprite.y + sprite.height) > top) top = sprite.y + sprite.height;
+                if(sprite.y < bottom) bottom = sprite.y;
+            }
+
+            sprites.push(sprite);
+        }
+
+        const width     = Math.abs(left - right);
+        const height    = Math.abs(top - bottom);
+
+        this._tempRender.resize(width, height);
+
+        for(let sprite of sprites)
+        {
+            if(!sprite) continue;
+
+            if(left < 0)
+            {
+                sprite.x += Math.abs(left);
+            }
+
+            if(bottom < 0)
+            {
+                sprite.y += Math.abs(bottom);
+            }
+
+            this._tempRender.render(sprite);
+        }
+
+        return this._tempRender;
     }
 
     public get type(): string

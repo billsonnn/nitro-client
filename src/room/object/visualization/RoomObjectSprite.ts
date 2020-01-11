@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js-legacy';
 import { ICollision } from '../../renderer/ICollision';
 import { Position } from '../../utils/Position';
 import { IRoomObjectController } from '../IRoomObjectController';
-import { RoomObject } from '../RoomObject';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 
 export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, ICollision
@@ -20,8 +19,6 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
     constructor(object: IRoomObjectController, name: string, source: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture, texture: PIXI.Texture = null)
     {
         super(texture ? texture : PIXI.Texture.from(source));
-
-        if(!(object instanceof RoomObject)) throw new Error('invalid_object');
 
         this._instanceId        = RoomObjectSprite.SPRITE_COUNTER++;
         this._boundingRectangle = null;

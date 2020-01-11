@@ -27,8 +27,10 @@ import { ObjectAvatarExperienceUpdateMessage } from './messages/ObjectAvatarExpe
 import { ObjectAvatarExpressionUpdateMessage } from './messages/ObjectAvatarExpressionUpdateMessage';
 import { ObjectAvatarFigureUpdateMessage } from './messages/ObjectAvatarFigureUpdateMessage';
 import { ObjectAvatarFlatControlUpdateMessage } from './messages/ObjectAvatarFlatControlUpdateMessage';
+import { ObjectAvatarGestureUpdateMessage } from './messages/ObjectAvatarGestureUpdateMessage';
 import { ObjectAvatarGuideStatusUpdateMessage } from './messages/ObjectAvatarGuideStatusUpdateMessage';
 import { ObjectAvatarMutedUpdateMessage } from './messages/ObjectAvatarMutedUpdateMessage';
+import { ObjectAvatarOwnMessage } from './messages/ObjectAvatarOwnMessage';
 import { ObjectAvatarPlayerValueUpdateMessage } from './messages/ObjectAvatarPlayerValueUpdateMessage';
 import { ObjectAvatarPlayingGameUpdateMessage } from './messages/ObjectAvatarPlayingGameUpdateMessage';
 import { ObjectAvatarPostureUpdateMessage } from './messages/ObjectAvatarPostureUpdateMessage';
@@ -549,6 +551,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
     }
 
+    public updateRoomUnitGesture(roomId: number, objectId: number, gestureId: number): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarGestureUpdateMessage(gestureId));
+    }
+
     public updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string = null): void
     {
         const object = this.getRoomUnitObject(roomId, objectId);
@@ -556,6 +567,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
+    }
+
+    public updateRoomUnitOwnUser(roomId: number, objectId: number): void
+    {
+        const object = this.getRoomUnitObject(roomId, objectId);
+
+        if(!object) return;
+
+        object.processUpdateMessage(new ObjectAvatarOwnMessage());
     }
 
     private refreshObjectData(object: IRoomObjectController)

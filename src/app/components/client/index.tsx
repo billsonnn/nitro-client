@@ -1,42 +1,43 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { INitroInstance } from '../../../nitro/INitroInstance';
+import { NitroContext } from '../../providers/nitro/context';
+import { ClientChatComponent } from './components/chat';
+import { ClientContextInfoComponent } from './components/contextinfo';
 
-export interface ClientComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface ClientComponentProps {}
 
 export interface ClientComponentState {}
 
 export class ClientComponent extends React.Component<ClientComponentProps, ClientComponentState>
 {
+	public static contextType = NitroContext;
+
+	public clientRef: React.RefObject<HTMLDivElement>;
+
 	constructor(props: ClientComponentProps)
 	{
 		super(props);
 
-		this.state = {};
+		this.clientRef	= React.createRef();
+		this.state 		= {};
 	}
 
 	public componentDidMount(): void
 	{
-		if(this.props.nitroInstance)
+		if(this.context.nitroInstance)
 		{
-			const node = ReactDOM.findDOMNode(this) as HTMLElement;
+			const renderer = this.context.nitroInstance.renderer.view;
 
-			if(node)
-			{
-				const renderer = this.props.nitroInstance.renderer.view;
-
-				renderer && node.append(renderer);
-			}
+			renderer && this.clientRef && this.clientRef.current.append(renderer);
 		}
 	}
 
 	public render(): JSX.Element
 	{
 		return (
-			<section className="client"></section>
+			<section className="client" ref={ this.clientRef }>
+				<ClientChatComponent />
+				<ClientContextInfoComponent />
+			</section>
 		);
 	}
 }

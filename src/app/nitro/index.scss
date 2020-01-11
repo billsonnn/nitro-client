@@ -1,6 +1,10 @@
-@import './components';
-
 .nitro {
     width: 100%;
     height: 100%;
+
+    @import './components';
+}
+
+.btn {
+    pointer-events: all;
 }

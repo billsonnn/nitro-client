@@ -1,0 +1,22 @@
+.nitro-component-chat-input {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 0;
+    height: 100px;
+    z-index: 400;
+    pointer-events: none;
+
+    .chat-input {
+        width: 500px;
+        height: 25px;
+        font-size: 18px;
+        padding: 8px;
+        pointer-events: all;
+        border-radius: 8px;
+        border: 2px solid rgb(0, 0, 0);
+        outline: 0;
+    }
+}

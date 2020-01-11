@@ -13,4 +13,5 @@ export interface IRoomSessionManager extends INitroManager
     sessionData: ISessionDataManager;
     roomEngine: IRoomEngine;
     roomManager: IRoomManager;
+    viewerSession: IRoomSession;
 }

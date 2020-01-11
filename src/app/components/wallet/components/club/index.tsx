@@ -1,12 +1,9 @@
 import React from 'react';
 import { UserSubscriptionEvent } from '../../../../../nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { UserSubscriptionComposer } from '../../../../../nitro/communication/messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
-import { INitroInstance } from '../../../../../nitro/INitroInstance';
+import { NitroContext } from '../../../../providers/nitro/context';
 
-export interface WalletClubComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface WalletClubComponentProps {}
 
 export interface WalletClubComponentState
 {
@@ -17,6 +14,8 @@ export interface WalletClubComponentState
 
 export class WalletClubComponent extends React.Component<WalletClubComponentProps, WalletClubComponentState>
 {
+	public static contextType = NitroContext;
+
 	private static SUBSCRIPTION_TYPE: string 		= 'habbo_club';
 	private static SUBSCRIPTION_INTERVAL: number	= 60000;
 
@@ -41,9 +40,9 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 
 	public componentDidMount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
 			if(connection)
 			{
@@ -58,9 +57,9 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 	{
 		this.stopRequesting();
 
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
 			if(connection)
 			{
@@ -89,9 +88,9 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 	
 	private requestSubscriptionUpdate(): void
 	{
-		if(!this.props.nitroInstance) return;
+		if(!this.context.nitroInstance) return;
 
-		this.props.nitroInstance.communication.connection.send(new UserSubscriptionComposer(WalletClubComponent.SUBSCRIPTION_TYPE));
+		this.context.nitroInstance.communication.connection.send(new UserSubscriptionComposer(WalletClubComponent.SUBSCRIPTION_TYPE));
 	}
     
     private onUserSubscriptionEvent(event: UserSubscriptionEvent): void

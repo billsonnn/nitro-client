@@ -1,11 +1,8 @@
 import React from 'react';
-import { INitroInstance } from '../../../nitro/INitroInstance';
 import { SessionDataEvent } from '../../../nitro/session/events/SessionDataEvent';
+import { NitroContext } from '../../providers/nitro/context';
 
-export interface HotelViewComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface HotelViewComponentProps {}
 
 export interface HotelViewComponentState
 {
@@ -14,6 +11,8 @@ export interface HotelViewComponentState
 
 export class HotelViewComponent extends React.Component<HotelViewComponentProps, HotelViewComponentState>
 {
+	public static contextType = NitroContext;
+
 	constructor(props: HotelViewComponentProps)
 	{
 		super(props);
@@ -25,19 +24,19 @@ export class HotelViewComponent extends React.Component<HotelViewComponentProps,
 
 	public componentDidMount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-			this.props.nitroInstance.session.events.addEventListener(SessionDataEvent.FIGURE_UPDATED, this.onSessionDataEvent.bind(this));
+			this.context.nitroInstance.session.events.addEventListener(SessionDataEvent.FIGURE_UPDATED, this.onSessionDataEvent.bind(this));
 		}
 		
-		this.setState({ figure: this.props.nitroInstance.session.figure });
+		this.setState({ figure: this.context.nitroInstance.session.figure });
 	}
 
 	public componentWillUnmount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-			this.props.nitroInstance.session.events.removeEventListener(SessionDataEvent.FIGURE_UPDATED, this.onSessionDataEvent.bind(this));
+			this.context.nitroInstance.session.events.removeEventListener(SessionDataEvent.FIGURE_UPDATED, this.onSessionDataEvent.bind(this));
         }
 	}
 
@@ -48,7 +47,6 @@ export class HotelViewComponent extends React.Component<HotelViewComponentProps,
 		switch(event.type)
 		{
 			case SessionDataEvent.FIGURE_UPDATED:
-				console.log('update figure')
 				this.setState({ figure: event.session.figure });
 				return;
 		}

@@ -13,6 +13,7 @@ import { FurnitureDiceDeactivateComposer } from '../communication/messages/outgo
 import { FurnitureMultiStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { RoomUnitLookComposer } from '../communication/messages/outgoing/room/unit/RoomUnitLookComposer';
 import { RoomUnitWalkComposer } from '../communication/messages/outgoing/room/unit/RoomUnitWalkComposer';
+import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { IRoomEngineServices } from './IRoomEngineServices';
@@ -29,11 +30,15 @@ export class RoomObjectEventHandler extends Disposable
 {
     private _roomEngine: IRoomEngineServices;
 
+    private _selectedObject: IRoomObjectController;
+
     constructor(roomEngine: IRoomEngineServices)
     {
         super();
 
-        this._roomEngine = roomEngine;
+        this._roomEngine        = roomEngine;
+
+        this._selectedObject    = null;
     }
 
     public handleRoomObjectEvent(event: RoomObjectEvent): void
@@ -105,8 +110,6 @@ export class RoomObjectEventHandler extends Disposable
 
         const object = selectedData ? (selectedData.object || null) : ((event.collision && event.collision.object) || null);
 
-        if(!object) return;
-
         switch(operation)
         {
             case ObjectOperationType.OBJECT_MOVE:
@@ -117,27 +120,27 @@ export class RoomObjectEventHandler extends Disposable
                 break;
             case ObjectOperationType.OBJECT_UNDEFINED:
 
-                switch(object.category)
+                this.selectObject(roomId, object);
+
+                if(object)
                 {
-                    case RoomObjectCategory.UNIT:
-                        const position = object.position;
-                        
-                        if(position) this.sendLookUpdate(position.x, position.y);
-                        break;
-                    case RoomObjectCategory.FURNITURE:
-                        if(event.ctrlKey && !event.altKey && !event.shiftKey)
-                        {
-                            this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_PICKUP);
-                        }
-    
-                        else if(event.shiftKey && !event.altKey && !event.ctrlKey)
-                        {
-                            this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
-                        }
+                    switch(object.category)
+                    {
+                        case RoomObjectCategory.FURNITURE:
+                            if(event.ctrlKey && !event.altKey && !event.shiftKey)
+                            {
+                                this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_PICKUP);
+                            }
+        
+                            else if(event.shiftKey && !event.altKey && !event.ctrlKey)
+                            {
+                                this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                            }
 
-                        else object.logic && object.logic.mouseEvent(event);
+                            else object.logic && object.logic.mouseEvent(event);
 
-                        break;
+                            break;
+                    }
                 }
 
                 break;
@@ -338,6 +341,27 @@ export class RoomObjectEventHandler extends Disposable
         }
 
         this._roomEngine.setSelectedRoomObjectData(roomId, null);
+    }
+
+    private selectObject(roomId: number, object: IRoomObjectController): void
+    {
+        this._selectedObject = null;
+
+        if(object)
+        {
+            switch(object.category)
+            {
+                case RoomObjectCategory.UNIT:
+                    const position = object.position;
+                    
+                    if(position) this.sendLookUpdate(position.x, position.y);
+                    break;
+                case RoomObjectCategory.FURNITURE:
+                    break;
+            }
+        }
+
+        this._roomEngine.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.SELECTED, roomId, object));
     }
 
     private setObjectAlpha(object: IRoomObjectController, alpha: number): void

@@ -2,13 +2,10 @@ import React from 'react';
 import { UserCreditsEvent } from '../../../../../nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from '../../../../../nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyComposer } from '../../../../../nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
-import { INitroInstance } from '../../../../../nitro/INitroInstance';
+import { NitroContext } from '../../../../providers/nitro/context';
 import { WalletCurrencyItemComponent } from './components/item';
 
-export interface WalletCurrencyComponentProps
-{
-	nitroInstance: INitroInstance;
-}
+export interface WalletCurrencyComponentProps {}
 
 export interface WalletCurrencyComponentState
 {
@@ -17,6 +14,8 @@ export interface WalletCurrencyComponentState
 
 export class WalletCurrencyComponent extends React.Component<WalletCurrencyComponentProps, WalletCurrencyComponentState>
 {
+	public static contextType = NitroContext;
+
 	private static CREDITS_TYPE: number = -1;
 
 	private _creditsEvent: UserCreditsEvent;
@@ -36,9 +35,9 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 
 	public componentDidMount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
             if(connection)
             {
@@ -52,9 +51,9 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 
 	public componentWillUnmount(): void
 	{
-        if(this.props.nitroInstance)
+        if(this.context.nitroInstance)
         {
-            const connection = this.props.nitroInstance.communication.connection;
+            const connection = this.context.nitroInstance.communication.connection;
 
             if(connection)
             {
@@ -66,9 +65,9 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 	
 	private requestCurrencyUpdate(): void
 	{
-		if(!this.props.nitroInstance) return;
+		if(!this.context.nitroInstance) return;
 
-		this.props.nitroInstance.communication.connection.send(new UserCurrencyComposer());
+		this.context.nitroInstance.communication.connection.send(new UserCurrencyComposer());
 	}
     
     private onUserCreditsEvent(event: UserCreditsEvent): void

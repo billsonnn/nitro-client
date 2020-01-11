@@ -263,7 +263,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!sprite)
         {
-            const sourceName = this.getAssetSourceName(layerId, assetName, assetData);
+            const sourceName = this.getAssetSourceName(assetName, assetData);
 
             sprite = this.createAndAddSprite(assetName, sourceName);
 
@@ -349,7 +349,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(layerCode === '') return null;
 
-        const assetName = `${ this._type }_64_${ layerCode }_${ this._direction }_`;
+        const assetName = this._data.getAssetName(this._direction, layerId);
 
         this._assetNames[layerId] = assetName;
 
@@ -534,17 +534,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return this._data.getAsset(name);
     }
 
-    protected getAssetSourceName(layerId: number, assetName: string, asset: IAsset): string
+    protected getAssetSourceName(assetName: string, asset: IAsset): string
     {
-        if(!assetName || !asset) return null;
+        return this._data.getAssetSourceName(assetName, asset);
+    }
 
-        let source = assetName;
-            
-        if(asset.source) source = asset.source;
-
-        source = `${ this._type }_${ source }.png`;
-
-        return source;
+    public get data(): FurnitureVisualizationData
+    {
+        return this._data;
     }
 
     public get type(): string

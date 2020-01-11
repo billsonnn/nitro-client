@@ -4,7 +4,7 @@ import { NitroInstance } from '../../../../../NitroInstance';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { ExpressionAddition } from './ExpressionAddition';
 
-export class FloatingHeart extends ExpressionAddition
+export class FloatingHeartAddition extends ExpressionAddition
 {
     private static DELAY_BEFORE_ANIMATION: number   = 300;
     private static STATE_DELAY: number              = 0;
@@ -83,11 +83,11 @@ export class FloatingHeart extends ExpressionAddition
 
         const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
 
-        if(this._state === FloatingHeart.STATE_DELAY)
+        if(this._state === FloatingHeartAddition.STATE_DELAY)
         {
-            if((totalTimeRunning - this._startTime) < FloatingHeart.DELAY_BEFORE_ANIMATION) return;
+            if((totalTimeRunning - this._startTime) < FloatingHeartAddition.DELAY_BEFORE_ANIMATION) return;
 
-            this._state = FloatingHeart.STATE_FADE_IN;
+            this._state = FloatingHeartAddition.STATE_FADE_IN;
             this._delta = 0;
 
             this._sprite.alpha      = 0;
@@ -96,7 +96,7 @@ export class FloatingHeart extends ExpressionAddition
             return;
         }
 
-        if(this._state === FloatingHeart.STATE_FADE_IN)
+        if(this._state === FloatingHeartAddition.STATE_FADE_IN)
         {
             this._delta += 0.1;
 
@@ -105,7 +105,7 @@ export class FloatingHeart extends ExpressionAddition
 
             if(this._delta >= 1)
             {
-                this._state = FloatingHeart.STATE_FLOAT;
+                this._state = FloatingHeartAddition.STATE_FLOAT;
                 this._delta = 0;
 
                 this._sprite.alpha  = 1;
@@ -114,7 +114,7 @@ export class FloatingHeart extends ExpressionAddition
             return;
         }
 
-        if(this._state === FloatingHeart.STATE_FLOAT)
+        if(this._state === FloatingHeartAddition.STATE_FLOAT)
         {
             const alpha = Math.pow(this._delta, 0.9);
 
@@ -126,7 +126,7 @@ export class FloatingHeart extends ExpressionAddition
 
             if(this._sprite.alpha <= 0)
             {
-                this._state = FloatingHeart.STATE_COMPLETE;
+                this._state = FloatingHeartAddition.STATE_COMPLETE;
 
                 this._sprite.visible = false;
             }

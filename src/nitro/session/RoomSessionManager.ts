@@ -128,7 +128,10 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this._sessionStarting = true;
 
-        this.removeSession(roomSession.roomId);
+        if(this._sessions.get(this.getRoomId(roomSession.roomId)))
+        {
+            this.removeSession(roomSession.roomId);
+        }
 
         roomSession.setConnection(this._communication.connection);
 
@@ -232,5 +235,10 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
+    }
+
+    public get viewerSession(): IRoomSession
+    {
+        return this._viewerSession;
     }
 }
