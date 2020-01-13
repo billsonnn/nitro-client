@@ -1,3 +1,37 @@
+@import './bootstrap/bootstrap';
+@import './dependencies/font-awesome.min';
+
+@font-face {
+	font-family: "Ubuntu Condensed";
+	font-style: "normal";
+	font-weight: 400;
+    src: url('../assets/fonts/ubuntu_condensed/UbuntuCondensed-Regular.ttf') format('truetype');
+}
+
+* {
+    -webkit-overflow-scrolling: touch;
+    @include no-select();
+}
+
+html,
+body {
+    font-family: "Ubuntu Condensed", sans-serif;
+    font-size: 16px;
+    background-color: rgb(0, 0, 0);
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    image-rendering: pixelated;
+}
+
+#nitro {
+    width: 100%;
+    height: 100%;
+}
+
 @import './mixins';
 @import './utils';
 @import './components';

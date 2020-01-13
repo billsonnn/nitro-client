@@ -1,5 +1,6 @@
 import React from 'react';
 import { INitroInstance } from '../../../../../../../nitro/INitroInstance';
+import { ObjectOperationType } from '../../../../../../../nitro/room/object/logic/ObjectOperationType';
 import { RoomObjectModelKey } from '../../../../../../../nitro/room/object/RoomObjectModelKey';
 import { FurnitureVisualization } from '../../../../../../../nitro/room/object/visualization/furniture/FurnitureVisualization';
 import { FurnitureVisualizationData } from '../../../../../../../nitro/room/object/visualization/furniture/FurnitureVisualizationData';
@@ -31,6 +32,11 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
         this.state          = {
             furnitureData: null
         };
+
+        this.closePreview   = this.closePreview.bind(this);
+        this.moveObject     = this.moveObject.bind(this);
+        this.rotateObject   = this.rotateObject.bind(this);
+        this.pickupObject   = this.pickupObject.bind(this);
     }
 
     public componentDidMount(): void
@@ -88,22 +94,62 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
         element.appendChild(render.view);
     }
 
+    private closePreview(): void
+    {
+        const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+        nitroInstance.roomSession.roomEngine
+    }
+
+    private moveObject(): void
+    {
+        const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
+    }
+
+    private rotateObject(): void
+    {
+        const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
+    }
+
+    private pickupObject(): void
+    {
+        const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
+    }
+
     public render(): JSX.Element
     {
+        const name          = (this.state.furnitureData && this.state.furnitureData.name) || '';
+        const description   = (this.state.furnitureData && this.state.furnitureData.description) || '';
+        const ownerId       = this.props.object && this.props.object.model.getValue(RoomObjectModelKey.FURNITURE_OWNER_ID) as number;
+        const ownerName     = this.props.object && this.props.object.model.getValue(RoomObjectModelKey.FURNITURE_OWNER_NAME) as string;
+
         return (
             <div className="nitro-component nitro-component-context nitro-component-context-furniture">
                 <div className="component-header">
-                    <div className="header-title">{ (this.state.furnitureData && this.state.furnitureData.name) || '' }</div>
-                    <div className="header-close"><i className="icon close-button"></i></div>
+                    <div className="header-title">{ name }</div>
+                    <div className="header-close" onClick={ this.closePreview }><i className="fas fa-times"></i></div>
                 </div>
                 <div className="component-body">
                     <div className="body-canvas" ref={ this.rendererRef }></div>
                     <div className="body-info">
-                        <div className="body-description">{ (this.state.furnitureData && this.state.furnitureData.description) || '' }</div>
+                        <div className="body-description">{ description }</div>
+
+                        { ownerName }
                     </div>
                 </div>
                 <div className="component-footer">
-
+                    <div className="btn-group btn-group-toggle d-flex justify-content-center">
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.moveObject }>Move</button>
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.rotateObject }>Rotate</button>
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.pickupObject }>Pickup</button>
+                        <button type="button" className="btn btn-sm btn-destiny">Use</button>
+                    </div>
                 </div>
             </div>
         );

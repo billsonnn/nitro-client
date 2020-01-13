@@ -61,6 +61,12 @@ export class RoomInstance extends Disposable implements IRoomInstance
             case RendererViewEvent.RESIZE:
                 this._renderer.resize(event.originalEvent as UIEvent);
                 return;
+            case RendererViewEvent.TOUCH_START:
+                this._renderer.touchStart(event.originalEvent as TouchEvent);
+                return;
+            case RendererViewEvent.TOUCH_END:
+                this._renderer.touchEnd(event.originalEvent as TouchEvent);
+                return;
             case RendererViewEvent.CLICK:
                 this._renderer.click(event.originalEvent as MouseEvent);
                 return;

@@ -15,7 +15,7 @@ export class FurnitureFloorDataParser
     private _type: number;
     private _data: IObjectData;
     private _someInt: number;
-    private _canToggle: boolean;
+    private _usagePolicy: number;
     private _userId: number;
     private _username: string;
 
@@ -39,7 +39,7 @@ export class FurnitureFloorDataParser
         this._type          = 0;
         this._data          = null;
         this._someInt       = 0;
-        this._canToggle     = false;
+        this._usagePolicy   = 0;
         this._userId        = 0;
         this._username      = null;
 
@@ -60,7 +60,7 @@ export class FurnitureFloorDataParser
         this._type          = wrapper.readInt();
         this._data          = FurnitureDataParser.parseObjectData(wrapper);
         this._someInt       = wrapper.readInt();
-        this._canToggle     = wrapper.readInt() === 1;
+        this._usagePolicy   = wrapper.readInt();
         this._userId        = wrapper.readInt();
         this._username      = null;
 
@@ -117,9 +117,9 @@ export class FurnitureFloorDataParser
         return this._someInt;
     }
 
-    public get canToggle(): boolean
+    public get usagePolicy(): number
     {
-        return this._canToggle;
+        return this._usagePolicy;
     }
 
     public get userId(): number

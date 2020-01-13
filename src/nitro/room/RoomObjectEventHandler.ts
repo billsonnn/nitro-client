@@ -264,7 +264,7 @@ export class RoomObjectEventHandler extends Disposable
         }
     }
 
-    private handleRoomObjectOperation(roomId: number, object: IRoomObjectController, operation: string): boolean
+    public handleRoomObjectOperation(roomId: number, object: IRoomObjectController, operation: string): boolean
     {
         if(!object || !operation || !this._roomEngine || !this._roomEngine.connection) return;
 
@@ -345,23 +345,44 @@ export class RoomObjectEventHandler extends Disposable
 
     private selectObject(roomId: number, object: IRoomObjectController): void
     {
-        this._selectedObject = null;
-
-        if(object)
+        if(this._selectedObject)
         {
-            switch(object.category)
-            {
-                case RoomObjectCategory.UNIT:
-                    const position = object.position;
-                    
-                    if(position) this.sendLookUpdate(position.x, position.y);
-                    break;
-                case RoomObjectCategory.FURNITURE:
-                    break;
-            }
+            if(this._selectedObject !== object) this.deselectObject(roomId, this._selectedObject);
         }
 
+        if(!object) return;
+
+        switch(object.category)
+        {
+            case RoomObjectCategory.UNIT:
+                const position = object.position;
+                
+                if(position) this.sendLookUpdate(position.x, position.y);
+                break;
+            case RoomObjectCategory.FURNITURE:
+                break;
+        }
+
+        this._selectedObject = object;
+
         this._roomEngine.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.SELECTED, roomId, object));
+    }
+
+    private deselectObject(roomId: number, object: IRoomObjectController): void
+    {
+        this._selectedObject = null;
+
+        if(!object) return;
+
+        switch(object.category)
+        {
+            case RoomObjectCategory.UNIT:
+                break;
+            case RoomObjectCategory.FURNITURE:
+                break;
+        }
+
+        this._roomEngine.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.DESELECTED, roomId, object));
     }
 
     private setObjectAlpha(object: IRoomObjectController, alpha: number): void

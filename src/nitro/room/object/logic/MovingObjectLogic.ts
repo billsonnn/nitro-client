@@ -35,28 +35,28 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
         if(this._tween) TWEEN.update();
 
-        const locationOffset = this.getLocationOffset();
+        const locationOffset    = this.getLocationOffset();
+        const model             = this.object && this.object.model;
 
-        const model = this.object && this.object.model;
-
-        if(!model) return;
-        
-        if(locationOffset)
+        if(model)
         {
-            if(this._liftAmount !== locationOffset.z)
+            if(locationOffset)
             {
-                this._liftAmount = locationOffset.z;
-
-                model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                if(this._liftAmount !== locationOffset.z)
+                {
+                    this._liftAmount = locationOffset.z;
+    
+                    model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                }
             }
-        }
-        else
-        {
-            if(this._liftAmount !== 0)
+            else
             {
-                this._liftAmount = 0;
-
-                model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                if(this._liftAmount !== 0)
+                {
+                    this._liftAmount = 0;
+    
+                    model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                }
             }
         }
     }
@@ -72,14 +72,14 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     {
         if(!message || !this.object) return;
 
-        this.stopTweening();
-
         if(message.position) this.object.setPosition(message.position);
 
         const goal = message.goal;
 
         if(goal)
         {
+            this.stopTweening();
+
             if(message.isSlide)
             {
                 this.slideToPosition(goal);
@@ -103,6 +103,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
         let screenPosition: Position        = this.object.getScreenPosition();
         let goalScreenPosition: Position    = position.toScreenPosition();
 
+        this.object.setPosition(position);
         this.object.setTempPosition(screenPosition);
 
         goalScreenPosition.depth = position.calculatedDepth;
@@ -117,7 +118,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
             {
                 this._tween = null;
 
-                this.object.setPosition(position);
+                this.object.setTempPosition(null);
             })
             .start();
     }

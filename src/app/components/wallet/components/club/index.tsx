@@ -9,7 +9,7 @@ export interface WalletClubComponentState
 {
 	hasSubscription: boolean;
 	secondsRemaining: number;
-	remaining: string;
+	remaining: number;
 }
 
 export class WalletClubComponent extends React.Component<WalletClubComponentProps, WalletClubComponentState>
@@ -34,7 +34,7 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 		this.state = {
 			hasSubscription: false,
 			secondsRemaining: 0,
-			remaining: ''
+			remaining: 0
 		};
 	}
 
@@ -104,17 +104,18 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 		this.setState({
 			hasSubscription: true,
 			secondsRemaining: parser.totalSeconds,
-			remaining: `${ Math.floor(parser.totalSeconds / 86400) } d`
+			remaining: Math.floor(parser.totalSeconds / 86400)
 		});
 	}
 
 	public render(): JSX.Element
 	{
 		return (
-			<section className="wallet-club">
-				<i className="icon icon-hc"></i>
-				<p>{ this.state.hasSubscription ? this.state.remaining : 'Join' }</p>
-			</section>
+			<div className="nitro-component-wallet-club rounded">
+				<div className="text-center">
+					{ this.state.hasSubscription && (<div>{ this.state.remaining }<br />Days</div>) }
+				</div>
+			</div>
 		);
 	}
 }

@@ -97,6 +97,24 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
         this.y = ~~((window.innerHeight - container.height) / 3);
     }
 
+    public touchStart(event: TouchEvent): void
+    {
+        const touch = event.targetTouches[0];
+
+        if(!touch) return;
+
+        const point = new PIXI.Point(touch.clientX, touch.clientY);
+    }
+
+    public touchEnd(event: TouchEvent): void
+    {
+        const touch = event.touches[0];
+
+        if(!touch) return;
+
+        const point = new PIXI.Point(touch.clientX, touch.clientY);
+    }
+
     public mouseMove(event: MouseEvent): void
     {
         if(!event) return;

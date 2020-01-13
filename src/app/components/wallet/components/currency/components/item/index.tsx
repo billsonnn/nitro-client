@@ -14,7 +14,7 @@ export class WalletCurrencyItemComponent extends React.Component<WalletCurrencyI
 	{
 		return (
 			<div className={ "currency-item currency-" + this.props.type }>
-				{ this.props.amount }<i className={ "icon icon-" + this.props.type }></i>
+				{ this.props.amount }<i className={ "icon icon-currency-" + this.props.type }></i>
 			</div>
 		);
 	}

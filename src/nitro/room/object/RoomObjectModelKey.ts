@@ -56,6 +56,9 @@ export class RoomObjectModelKey
     public static FURNITURE_BRANDING_OFFSET_Y: string         = 'furniture_branding_offset_y';
     public static FURNITURE_BRANDING_OFFSET_Z: string         = 'furniture_branding_offset_z';
     public static FURNITURE_ALPHA_MULTIPLIER: string          = 'furniture_alpha_multiplier';
+    public static FURNITURE_USAGE_POLICY: string              = 'furniture_usage_policy';
+    public static FURNITURE_OWNER_ID: string                  = 'furniture_owner_id';
+    public static FURNITURE_OWNER_NAME: string                = 'furniture_owner_name';
     public static PET_PALETTE_INDEX: string                   = 'pet_palette_index';
     public static PET_COLOR: string                           = 'pet_color';
     public static PET_HEAD_ONLY: string                       = 'pet_head_only';

@@ -58,7 +58,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this._avatarImage       = null;
         this._shadow            = null;
-        this._isAvatarReady     = null;
+        this._isAvatarReady     = false;
         this._needsUpdate       = false;
 
         this._figure            = null;
@@ -145,7 +145,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this.updateAdditions();
 
-        if(this._isAvatarReady && (needsUpdate || this._needsUpdate))
+        if((needsUpdate || this._needsUpdate))
         {
             this._needsUpdate = false;
 
@@ -698,8 +698,12 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             sprite.visible  = true;
             sprite.zIndex   = i;
 
-            if(!this._isAvatarReady) sprite.alpha = 0.5;
-            else sprite.alpha = 1;
+            // if(!this._isAvatarReady)
+            // {
+            //     sprite.alpha = 0.5;
+            //     console.log('here');
+            // }
+            // else sprite.alpha = 1;
 
             if(!(isFlipped && flipH) && (isFlipped || flipH))
             {

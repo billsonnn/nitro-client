@@ -1,7 +1,6 @@
 import React from 'react';
 import { WalletClubComponent } from './components/club';
 import { WalletCurrencyComponent } from './components/currency';
-import { WalletOptionsComponent } from './components/options';
 
 export interface WalletComponentProps {}
 
@@ -21,11 +20,12 @@ export class WalletComponent extends React.Component<WalletComponentProps, Walle
 	public render(): JSX.Element
 	{
 		return (
-			<section className="wallet">
-				<WalletCurrencyComponent />
-				<WalletClubComponent />
-				<WalletOptionsComponent />
-			</section>
+			<div className="nitro-component nitro-component-wallet">
+				<div className="component-body">
+					<WalletCurrencyComponent />
+					<WalletClubComponent />
+				</div>
+			</div>
 		);
 	}
 }

@@ -349,7 +349,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(layerCode === '') return null;
 
-        const assetName = this._data.getAssetName(this._direction, layerId);
+        const assetName = `${ this._type }_64_${ layerCode }_${ this._direction }_`;
 
         this._assetNames[layerId] = assetName;
 

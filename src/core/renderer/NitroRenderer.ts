@@ -56,10 +56,12 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
         this.view.className = 'nitro-client';
 
         window.onresize         = this.onResize.bind(this);
-        this.view.onclick       = this.onMouseEvent.bind(this);
-        this.view.onmousemove   = this.onMouseEvent.bind(this);
-        this.view.onmousedown   = this.onMouseEvent.bind(this);
-        this.view.onmouseup     = this.onMouseEvent.bind(this);
+        this.view.onclick       = this.onInputEvent.bind(this);
+        this.view.onmousemove   = this.onInputEvent.bind(this);
+        this.view.onmousedown   = this.onInputEvent.bind(this);
+        this.view.onmouseup     = this.onInputEvent.bind(this);
+        this.view.ontouchstart  = this.onInputEvent.bind(this);
+        this.view.ontouchend    = this.onInputEvent.bind(this);
 
         this.setBackgroundColor(NitroConfiguration.BACKGROUND_COLOR);
 
@@ -124,7 +126,7 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
         this.eventDispatcher.dispatchEvent(new RendererViewEvent(RendererViewEvent.RESIZE, event));
     }
 
-    private onMouseEvent(event: MouseEvent): void
+    private onInputEvent(event: Event): void
     {
         if(!event || this._preventEvents) return;
 

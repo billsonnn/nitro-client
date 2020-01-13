@@ -117,17 +117,20 @@ export class FurnitureLogic extends MovingObjectLogic
 
         else if(message instanceof ObjectMoveUpdateMessage)
         {
-            const current   = message.position;
-            const goal      = message.goal;
+            const current  = this.object.position;
+            const goal     = message.position;
 
-            if(current.x === goal.x && current.y === goal.y && current.z === goal.z)
+            if(current && goal)
             {
-                if(current.direction !== goal.direction)
+                if(current.x === goal.x && current.y === goal.y && current.z === goal.z)
                 {
-                    this._bouncingStep          = 1;
-                    this._storedRotateMessage   = message;
+                    if(current.direction !== goal.direction)
+                    {
+                        this._bouncingStep          = 1;
+                        this._storedRotateMessage   = message;
 
-                    return;
+                        return;
+                    }
                 }
             }
         }

@@ -102,13 +102,13 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 	public render(): JSX.Element
 	{
 		return (
-			<section className="wallet-currencies">
+			<div className="nitro-component-wallet-currency">
 				{
 					[...this.state.currencies.entries()].map(([key, value]) => {
 						return <WalletCurrencyItemComponent key={ key } type={ key } amount={ value } />
 					})
 				}
-			</section>
+			</div>
 		);
 	}
 }

@@ -1,0 +1,66 @@
+.nitro-component-wallet {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    .component-header {
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .component-body {
+        display: flex;
+        flex-direction: row;
+
+        .nitro-component-wallet-currency {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+
+            .icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .currency-item {
+                display: flex;
+                align-items: center;
+                text-align: right;
+                justify-content: flex-end;
+
+                &.currency--1 {
+                    color: #d1ab21;
+            
+                    &:hover {
+                        color: #fefb6e;
+                    }
+                }
+            
+                &.currency-0 {
+                    color: #d283cf;
+            
+                    &:hover {
+                        color: #fed3fe;
+                    }
+                }
+            
+                &.currency-5 {
+                    color: #38c5e4;
+            
+                    &:hover {
+                        color: #84fefe;
+                    }
+                }
+            }
+        }
+
+        .nitro-component-wallet-club {
+            display: flex;
+            width: 50px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #1E1E1E;
+        }
+    }
+}

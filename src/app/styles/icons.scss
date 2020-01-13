@@ -1,4 +1,29 @@
 i.icon {
+    display: inline-block;
+    image-rendering: pixelated;
+    outline: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &.icon-currency--1 {
+        background-image: url('../assets/images/wallet/icons/credit.png');
+        width: 15px;
+        height: 15px;
+    }
+
+    &.icon-currency-0 {
+        background-image: url('../assets/images/wallet/icons/ducket.png');
+        width: 15px;
+        height: 15px;
+    }
+
+    &.icon-currency-5 {
+        background-image: url('../assets/images/wallet/icons/diamond.png');
+        width: 15px;
+        height: 15px;
+    }
+
     &.icon-catalog {
         background-image: url('../assets/images/toolbar/icons/catalog.png');
         width: 37px;
@@ -72,6 +97,20 @@ i.icon {
 
         &.is-unsee {
             background-image: url('../assets/images/toolbar/icons/message_unsee.gif');
+        }
+    }
+
+    &.spin {
+        animation: rotating 1s linear infinite;
+    }
+
+    @keyframes rotating {
+        from {
+            transform: rotate(0);
+        }
+        
+        to {
+            transform: rotate(360deg);
         }
     }
 }

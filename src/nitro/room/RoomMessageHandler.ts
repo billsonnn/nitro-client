@@ -231,7 +231,6 @@ export class RoomMessageHandler extends Disposable
 
         if(unitRollData)
         {
-
             const object = this._roomCreator.getRoomUnitObject(this._currentRoomId, unitRollData.id);
 
             if(object)
@@ -279,6 +278,9 @@ export class RoomMessageHandler extends Disposable
         object.setPosition(new Position(parser.x, parser.y, parser.z, parser.direction));
 
         object.model.setValue(RoomObjectModelKey.FURNITURE_COLOR, data.colorId);
+        object.model.setValue(RoomObjectModelKey.FURNITURE_USAGE_POLICY, parser.usagePolicy);
+        object.model.setValue(RoomObjectModelKey.FURNITURE_OWNER_ID, parser.userId);
+        object.model.setValue(RoomObjectModelKey.FURNITURE_OWNER_NAME, parser.username);
 
         const objectData = parser.data;
 
@@ -352,7 +354,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!item) return;
 
-        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, item.itemId, null, new Position(item.x, item.y, item.z, item.direction), item.data.state, item.data);
+        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, item.itemId, new Position(item.x, item.y, item.z, item.direction), null, item.data.state, item.data);
     }
 
     private onFurnitureStateEvent(event: FurnitureStateEvent): void

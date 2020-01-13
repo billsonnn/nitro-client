@@ -113,6 +113,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
         NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
         NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.TOUCH_START, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.TOUCH_END, this.onRendererViewEvent.bind(this));
     }
 
     protected onDispose(): void
@@ -129,6 +131,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
         NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
         NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.TOUCH_START, this.onRendererViewEvent.bind(this));
+        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.TOUCH_END, this.onRendererViewEvent.bind(this));
         
         super.onDispose();
     }
@@ -414,10 +418,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!object) return;
 
-        fromPosition    = fromPosition ? fromPosition : object.position;
-        toPosition      = toPosition ? toPosition : object.position;
+        if(fromPosition || toPosition) object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition));
         
-        object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition));
         object.processUpdateMessage(new ObjectDataUpdateMessage(state, data));
     }
 
@@ -427,13 +429,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!object) return;
 
-        fromPosition    = fromPosition ? fromPosition : object.position;
-        toPosition      = toPosition ? toPosition : object.position;
-
         fromPosition.direction  = object.position.direction;
         toPosition.direction    = object.position.direction;
-        
-        object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition, true));
+
+        if(fromPosition || toPosition) object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition, true));
     }
 
     public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string, gender: string): boolean
@@ -661,6 +660,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public get roomSession(): IRoomSessionManager
     {
         return this._roomSession;
+    }
+
+    public get objectEventHandler(): RoomObjectEventHandler
+    {
+        return this._roomObjectEventHandler;
     }
 
     public get roomRendererFactory(): IRoomRendererFactory
