@@ -47,7 +47,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
 
         if(this._demo) this._demo.init();
 
-        this._connection.init('wss://system.nitrots.co');
+        this._connection.init('wss://nitro-socket.nextgenhabbo.com');
     }
 
     protected onDispose(): void

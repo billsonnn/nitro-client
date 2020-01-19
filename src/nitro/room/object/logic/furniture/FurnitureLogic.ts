@@ -1,9 +1,10 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomObjectController } from '../../../../../room/object/IRoomObjectController';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
-import { Direction } from '../../../../../room/utils/Direction';
-import { Position } from '../../../../../room/utils/Position';
+import { IVector3D } from '../../../../../room/utils/IVector3D';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
@@ -13,21 +14,21 @@ import { MovingObjectLogic } from '../MovingObjectLogic';
 export class FurnitureLogic extends MovingObjectLogic
 {
     private static BOUNCING_STEPS: number   = 8;
-    private static BOUNCING_Z: number       = 0.0625;
+    private static BOUNCING_Z: number       = 0.03125;
 
     private _sizeX: number;
     private _sizeY: number;
     private _sizeZ: number;
-
     private _centerX: number;
     private _centerY: number;
     private _centerZ: number;
 
     private _directions: number[];
 
-    private _locationOffset: Position;
+    private _locationOffset: IVector3D;
     private _bouncingStep: number;
-    private _storedRotateMessage: ObjectMoveUpdateMessage;
+    private _storedRotateMessage: RoomObjectUpdateMessage;
+    private _directionInitialized: boolean;
 
     constructor()
     {
@@ -36,16 +37,16 @@ export class FurnitureLogic extends MovingObjectLogic
         this._sizeX                 = 0;
         this._sizeY                 = 0;
         this._sizeZ                 = 0;
-
         this._centerX               = 0;
         this._centerY               = 0;
         this._centerZ               = 0;
 
         this._directions            = [];
 
-        this._locationOffset        = new Position();
+        this._locationOffset        = new Vector3d();
         this._bouncingStep          = 0;
         this._storedRotateMessage   = null;
+        this._directionInitialized  = false;
     }
 
     public initialize(asset: IAssetData): void
@@ -87,6 +88,13 @@ export class FurnitureLogic extends MovingObjectLogic
         model.setValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER, 1);
     }
 
+    public setObject(object: IRoomObjectController): void
+    {
+        super.setObject(object);
+
+        if(object && object.location && object.location.length > 0) this._directionInitialized = true;
+    }
+
     protected getAdClickUrl(model: IRoomObjectModel): string
     {
         return model.getValue(RoomObjectModelKey.FURNITURE_AD_URL);
@@ -115,24 +123,26 @@ export class FurnitureLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectMoveUpdateMessage)
+        if(message.location && message.direction)
         {
-            const current  = this.object.position;
-            const goal     = message.position;
-
-            if(current && goal)
+            if(!(message instanceof ObjectMoveUpdateMessage))
             {
-                if(current.x === goal.x && current.y === goal.y && current.z === goal.z)
+                const direction = this.object.getDirection();
+                const location  = this.object.getLocation();
+
+                if((direction.x !== message.direction.x) && this._directionInitialized)
                 {
-                    if(current.direction !== goal.direction)
+                    if((location.x === message.location.x) && (location.y === message.location.y) && (location.z === message.location.z))
                     {
                         this._bouncingStep          = 1;
-                        this._storedRotateMessage   = message;
+                        this._storedRotateMessage   = new RoomObjectUpdateMessage(message.location, message.direction);
 
-                        return;
+                        message = null;
                     }
                 }
             }
+
+            this._directionInitialized = true;
         }
 
         super.processUpdateMessage(message);
@@ -148,38 +158,9 @@ export class FurnitureLogic extends MovingObjectLogic
         }
     }
 
-    public requestRotation(): void
+    protected getLocationOffset(): IVector3D
     {
-        const currentAngle = Direction.directionToAngle(this.object.position.direction);
-
-        const index = this._directions.indexOf(currentAngle);
-
-        if(index === -1) return;
-
-        const nextIndex = index === (this._directions.length - 1) ? 0 : index + 1;
-
-        const position = this.object.position.copy();
-
-        position.direction = Direction.angleToDirection(this._directions[nextIndex]);
-
-        if(position.direction === this.object.position.direction) return;
-
-        //Nitro.networkManager.processOutgoing(new ItemFloorUpdateComposer(this.object.id, position));
-    }
-
-    public requestPickup(): void
-    {
-        //Nitro.networkManager.processOutgoing(new ItemPickupComposer(this.object.id));
-    }
-
-    protected getLocationOffset(): Position
-    {
-        if(this._bouncingStep <= 0)
-        {
-            this._locationOffset.z = 0;
-
-            return null;
-        }
+        if(this._bouncingStep <= 0) return null;
 
         this._locationOffset.x  = 0;
         this._locationOffset.y  = 0;

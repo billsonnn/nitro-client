@@ -8,8 +8,6 @@ export interface WalletComponentState {}
 
 export class WalletComponent extends React.Component<WalletComponentProps, WalletComponentState>
 {
-	private static CREDITS_TYPE: number = -1;
-
 	constructor(props: WalletComponentProps)
 	{
 		super(props);

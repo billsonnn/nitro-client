@@ -1,11 +1,11 @@
-import * as PIXI from 'pixi.js-legacy';
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { Direction } from '../../room/utils/Direction';
-import { Position } from '../../room/utils/Position';
+import { IVector3D } from '../../room/utils/IVector3D';
+import { Vector3d } from '../../room/utils/Vector3d';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurnitureDiceActivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
@@ -183,7 +183,7 @@ export class RoomObjectEventHandler extends Disposable
         {
             const cursor = this._roomEngine.getTileCursorObject(roomId);
 
-            if(cursor) cursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(event.position));
+            if(cursor) cursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(event.location, null));
         }
 
         const object = selectedData ? (selectedData.object || null) : ((event.collision && event.collision.object) || null);
@@ -272,7 +272,7 @@ export class RoomObjectEventHandler extends Disposable
         {
             case ObjectOperationType.OBJECT_ROTATE_NEGATIVE:
             case ObjectOperationType.OBJECT_ROTATE_POSITIVE:
-                let direction = 0;
+                let direction: IVector3D = new Vector3d();
 
                 if(operation === ObjectOperationType.OBJECT_ROTATE_NEGATIVE) direction = this.getNextObjectDirection(object, false);
                 else direction = this.getNextObjectDirection(object, true);
@@ -282,7 +282,7 @@ export class RoomObjectEventHandler extends Disposable
 
                 }
 
-                else if(object.category === RoomObjectCategory.FURNITURE) this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.position.x, object.position.y, direction));
+                else if(object.category === RoomObjectCategory.FURNITURE) this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.location.x, object.location.y, direction.x));
 
                 break;
             case ObjectOperationType.OBJECT_EJECT:
@@ -298,7 +298,7 @@ export class RoomObjectEventHandler extends Disposable
                 switch(object.category)
                 {
                     case RoomObjectCategory.FURNITURE:
-                        this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.position.x, object.position.y, object.position.direction));
+                        this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.location.x, object.location.y, object.direction.x));
                         break;
                 }
 
@@ -335,7 +335,7 @@ export class RoomObjectEventHandler extends Disposable
                 visualization.disableIcon();
             }
 
-            selectedData.object.setTempPosition(null);
+            selectedData.object.setTempLocation(null);
 
             this.setObjectAlpha(selectedData.object, 1);
         }
@@ -355,9 +355,9 @@ export class RoomObjectEventHandler extends Disposable
         switch(object.category)
         {
             case RoomObjectCategory.UNIT:
-                const position = object.position;
+                const location = object.realLocation;
                 
-                if(position) this.sendLookUpdate(position.x, position.y);
+                if(location) this.sendLookUpdate(location.x, location.y);
                 break;
             case RoomObjectCategory.FURNITURE:
                 break;
@@ -419,7 +419,7 @@ export class RoomObjectEventHandler extends Disposable
             if(event.object.category === RoomObjectCategory.UNIT) return false;
         }
 
-        if(event.position) this.sendWalkUpdate(event.position.x, event.position.y);
+        if(event.location) this.sendWalkUpdate(event.location.x, event.location.y);
 
         return true;
     }
@@ -452,22 +452,22 @@ export class RoomObjectEventHandler extends Disposable
 
         let didMove = false;
 
-        if(event.position)
+        if(event.location)
         {
             switch(selectedData.object.category)
             {
                 case RoomObjectCategory.FURNITURE:
                 case RoomObjectCategory.UNIT:
-                    selectedData.object.position.direction = selectedData.object.realPosition.direction;
+                    //selectedData.object.position.direction = selectedData.object.realPosition.direction;
                     
-                    if(this.isValidPlacement(selectedData, event.position, this._roomEngine.getFurnitureStackingHeightMap(roomId))) didMove = true;
+                    if(this.isValidPlacement(selectedData, event.location, selectedData.object.direction, this._roomEngine.getFurnitureStackingHeightMap(roomId))) didMove = true;
                     break;
             }
         }
 
         if(!didMove)
         {
-            selectedData.object.setPosition(selectedData.object.realPosition, false);
+            selectedData.object.setLocation(selectedData.object.realLocation);
 
             visualization.enableIcon();
 
@@ -476,12 +476,10 @@ export class RoomObjectEventHandler extends Disposable
             selectedData.object.room && selectedData.object.room.renderer.worldTransform.applyInverse(event.point, point);
 
             if(!point) return;
-            
-            const mousePosition = new Position(point.x, point.y);
 
-            mousePosition.isScreen = true;
+            const mousePosition = new Vector3d(point.x, point.y, 0, true);
 
-            selectedData.object.setTempPosition(mousePosition);
+            selectedData.object.setTempLocation(mousePosition);
         }
         else
         {
@@ -489,40 +487,76 @@ export class RoomObjectEventHandler extends Disposable
         }
     }
 
-    private isValidPlacement(selectedData: SelectedRoomObjectData, position: Position, heightMap: FurnitureStackingHeightMap): boolean
+    private isValidPlacement(selectedData: SelectedRoomObjectData, location: IVector3D, direction: IVector3D, heightMap: FurnitureStackingHeightMap): boolean
     {
         if(!selectedData || !selectedData.object || !heightMap) return false;
 
-        const newPosition = selectedData.object.position.copy();
+        const existingLocation = selectedData.object.realLocation;
 
-        newPosition.x      = position.x;
-        newPosition.y      = position.y;
-        newPosition.depth  = position.calculatedDepth;
-
-        if(newPosition.compare(selectedData.object.realPosition))
+        if(Vector3d.compare(existingLocation, location))
         {
-            selectedData.object.setPosition(selectedData.object.realPosition, false);
+            selectedData.object.setLocation(existingLocation);
 
             return true;
         }
 
-        const sizeX = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_X) as number;
-        const sizeY = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_Y) as number;
-
+        const sizeX     = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_X) as number;
+        const sizeY     = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_Y) as number;
         const stackable = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_ALWAYS_STACKABLE) == 1;
 
-        let validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+        let validLocation = heightMap.getValidPlacement(location, direction, sizeX, sizeY, stackable);
 
-        if(!validPosition)
+        if(!validLocation)
         {
-            newPosition.direction = this.getNextObjectDirection(selectedData.object, true);
+            direction = this.getNextObjectDirection(selectedData.object, true);
 
-            validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+            validLocation = heightMap.getValidPlacement(location, direction, sizeX, sizeY, stackable);
 
-            if(!validPosition) return false;
+            if(!validLocation) return false;
         }
 
-        selectedData.object.setPosition(validPosition, false);
+        selectedData.object.setLocation(validLocation, false);
+        selectedData.object.setDirection(direction);
+
+        return true;
+
+
+        // location = new Vector3d();
+
+
+        // let vector      = new Vector3d()._Str_2427(location);
+        // direction = new Vector3d()._Str_2427(direction); 
+
+        // const newPosition = selectedData.object.position.copy();
+
+        // newPosition.x      = position.x;
+        // newPosition.y      = position.y;
+        // newPosition.depth  = position.calculatedDepth;
+
+        // if(newPosition.compare(selectedData.object.realPosition))
+        // {
+        //     selectedData.object.setPosition(selectedData.object.realPosition, false);
+
+        //     return true;
+        // }
+
+        // const sizeX = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_X) as number;
+        // const sizeY = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_SIZE_Y) as number;
+
+        // const stackable = selectedData.object.model.getValue(RoomObjectModelKey.FURNITURE_ALWAYS_STACKABLE) == 1;
+
+        // let validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+
+        // if(!validPosition)
+        // {
+        //     newPosition.direction = this.getNextObjectDirection(selectedData.object, true);
+
+        //     validPosition = heightMap.getValidPlacement(newPosition, sizeX, sizeY, stackable);
+
+        //     if(!validPosition) return false;
+        // }
+
+        // selectedData.object.setPosition(validPosition, false);
 
         return true;
     }
@@ -569,11 +603,11 @@ export class RoomObjectEventHandler extends Disposable
         this.useObject(roomId, event.object.id, event.object.type, event.type);
     }
 
-    private getNextObjectDirection(object: IRoomObjectController, positive: boolean = true): number
+    private getNextObjectDirection(object: IRoomObjectController, positive: boolean = true): IVector3D
     {
         if(!object) return null;
 
-        let direction: number       = Direction.directionToAngle(object.position.direction);
+        let direction: number       = Direction.directionToAngle(object.direction.x);
         let directions: number[]    = [];
 
         if(object.model)
@@ -614,7 +648,7 @@ export class RoomObjectEventHandler extends Disposable
             direction = directions[index];
         }
 
-        return Direction.angleToDirection(direction);
+        return new Vector3d(Direction.angleToDirection(direction));
     }
 
     public get engine(): IRoomEngineServices

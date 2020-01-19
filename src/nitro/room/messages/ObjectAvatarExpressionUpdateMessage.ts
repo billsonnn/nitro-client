@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarExpressionUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarExpressionUpdateMessage extends ObjectStateUpdateMessage
 {
     private _expressionType: number;
 

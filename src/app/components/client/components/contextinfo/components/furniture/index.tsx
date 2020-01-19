@@ -34,9 +34,6 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
         };
 
         this.closePreview   = this.closePreview.bind(this);
-        this.moveObject     = this.moveObject.bind(this);
-        this.rotateObject   = this.rotateObject.bind(this);
-        this.pickupObject   = this.pickupObject.bind(this);
     }
 
     public componentDidMount(): void
@@ -59,7 +56,7 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
 
         if(nitroInstance && this.props.object)
         {
-            const data = nitroInstance.roomSession.sessionData.getFloorItemDataByName(this.props.object.type);
+            const data = nitroInstance.session.getFloorItemDataByName(this.props.object.type);
 
             if(data) furnitureData = data.data;
         }
@@ -98,28 +95,38 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
     {
         const nitroInstance = this.context.nitroInstance as INitroInstance;
 
-        nitroInstance.roomSession.roomEngine
+        //nitroInstance.roomSession.roomEngine
     }
 
-    private moveObject(): void
+    private handleOperation(operation: string): void
     {
+        if(!operation || !this.canMove(this.props.object)) return;
+
         const nitroInstance = this.context.nitroInstance as INitroInstance;
 
-        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
+        if(!nitroInstance) return;
+
+        const session = nitroInstance.roomSession.viewerSession;
+
+        if(!session) return;
+
+        switch(operation)
+        {
+            case ObjectOperationType.OBJECT_MOVE:
+                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
+                return;
+            case ObjectOperationType.OBJECT_ROTATE_POSITIVE:
+                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                return;
+            case ObjectOperationType.OBJECT_PICKUP:
+                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
+                return;
+        }
     }
 
-    private rotateObject(): void
+    private canMove(object: IRoomObjectController): boolean
     {
-        const nitroInstance = this.context.nitroInstance as INitroInstance;
-
-        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
-    }
-
-    private pickupObject(): void
-    {
-        const nitroInstance = this.context.nitroInstance as INitroInstance;
-
-        nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
+        return true;
     }
 
     public render(): JSX.Element
@@ -145,9 +152,9 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
                 </div>
                 <div className="component-footer">
                     <div className="btn-group btn-group-toggle d-flex justify-content-center">
-                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.moveObject }>Move</button>
-                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.rotateObject }>Rotate</button>
-                        <button type="button" className="btn btn-sm btn-destiny" onClick={ this.pickupObject }>Pickup</button>
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ () => this.handleOperation(ObjectOperationType.OBJECT_MOVE) }>Move</button>
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ () => this.handleOperation(ObjectOperationType.OBJECT_ROTATE_POSITIVE) }>Rotate</button>
+                        <button type="button" className="btn btn-sm btn-destiny" onClick={ () => this.handleOperation(ObjectOperationType.OBJECT_PICKUP) }>Pickup</button>
                         <button type="button" className="btn btn-sm btn-destiny">Use</button>
                     </div>
                 </div>

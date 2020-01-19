@@ -3,13 +3,15 @@ import { IConnection } from '../../core/communication/connections/IConnection';
 import { RendererViewEvent } from '../../core/renderer/RendererViewEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
+import { RoomObjectUpdateMessage } from '../../room/messages/RoomObjectUpdateMessage';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
 import { IRoomObjectVisualizationFactory } from '../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
 import { RoomRendererFactory } from '../../room/renderer/RoomRendererFactory';
-import { Position } from '../../room/utils/Position';
+import { IVector3D } from '../../room/utils/IVector3D';
+import { Vector3d } from '../../room/utils/Vector3d';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { RoomModelParser } from '../communication/messages/parser/room/mapping/RoomModelParser';
 import { NitroInstance } from '../NitroInstance';
@@ -40,9 +42,10 @@ import { ObjectAvatarTypingUpdateMessage } from './messages/ObjectAvatarTypingUp
 import { ObjectAvatarUpdateMessage } from './messages/ObjectAvatarUpdateMessage';
 import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseObjectUpdateMessage';
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
+import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
+import { ObjectStateUpdateMessage } from './messages/ObjectStateUpdateMessage';
 import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdateMessage';
-import { ObjectUpdateStateMessage } from './messages/ObjectUpdateStateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
 import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
@@ -53,6 +56,7 @@ import { ObjectVisualizationFactory } from './object/visualization/ObjectVisuali
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
+import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { RoomInstanceData } from './utils/RoomInstanceData';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
@@ -260,7 +264,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             if(tileCursor)
             {
-                tileCursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(null));
+                tileCursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(null, null));
 
                 this.roomObjectReady(tileCursor);
             }
@@ -329,6 +333,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         instanceData.setFurnitureStackingHeightMap(heightMap);
     }
 
+    public getLegacyWallGeometry(roomId: number): LegacyWallGeometry
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return null;
+
+        return instanceData.legacyGeometry;
+    }
+
     private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
     {
         const instance = this.getRoomInstance(roomId);
@@ -364,9 +377,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             this.refreshObjectData(object);
         }
 
-        if(this._roomObjectEventHandler) object.logic.setEventHandler(this._roomObjectEventHandler);
+        if(object.logic && this._roomObjectEventHandler) object.logic.setEventHandler(this._roomObjectEventHandler);
 
-        object.visualization.start();
+        if(object.visualization) object.visualization.start();
     }
 
     public getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
@@ -412,30 +425,35 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         instance.removeObject(objectId, category);
     }
 
-    public updateRoomFurnitureObject(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, state: number, data: IObjectData = null): void
+    public updateRoomFurnitureObject(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra: number = NaN): void
     {
         const object = this.getRoomFurnitureObject(roomId, objectId);
 
         if(!object) return;
-
-        if(fromPosition || toPosition) object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition));
         
-        object.processUpdateMessage(new ObjectDataUpdateMessage(state, data));
+        object.processUpdateMessage(new RoomObjectUpdateMessage(location, direction));
+        object.processUpdateMessage(new ObjectDataUpdateMessage(state, data, extra));
     }
 
-    public rollRoomFurnitureObject(roomId: number, objectId: number, fromPosition: Position, toPosition: Position): void
+    public updateRoomFurnitureObjectHeight(roomId: number, objectId: number, height: number): void
+    {
+        const object = this.getRoomFurnitureObject(roomId, objectId);
+
+        if(!object) return;
+        
+        object.processUpdateMessage(new ObjectHeightUpdateMessage(null, null, height));
+    }
+
+    public rollRoomFurnitureObject(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D): void
     {
         const object = this.getRoomFurnitureObject(roomId, objectId);
 
         if(!object) return;
 
-        fromPosition.direction  = object.position.direction;
-        toPosition.direction    = object.position.direction;
-
-        if(fromPosition || toPosition) object.processUpdateMessage(new ObjectMoveUpdateMessage(fromPosition, toPosition, true));
+        object.processUpdateMessage(new ObjectMoveUpdateMessage(location, targetLocation, null, !!targetLocation));
     }
 
-    public addRoomUnit(roomId: number, objectId: number, position: Position, type: string, figure: string, gender: string): boolean
+    public addRoomUnit(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, type: string, figure: string, gender: string): boolean
     {
         const existing = this.getRoomUnitObject(roomId, objectId);
 
@@ -445,26 +463,45 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!object) return false;
 
-        object.setPosition(position);
-
-        object.model.setValue(RoomObjectModelKey.FIGURE, figure);
-        object.model.setValue(RoomObjectModelKey.GENDER, gender);
+        object.setLocation(location);
+        object.setDirection(direction);
 
         object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
 
-        this.roomObjectReady(object);
+        this.addRoomObjects(object);
+
+        return true;
     }
 
-    public updateRoomUnitLocation(roomId: number, objectId: number, fromPosition: Position, toPosition: Position, isSlide: boolean = false, headDirection: number = null): void
+    public updateRoomUnitLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp: boolean = false, baseY: number = 0, direction: IVector3D = null, headDirection: number = NaN): void
     {
         const object = this.getRoomUnitObject(roomId, objectId);
 
         if(!object) return;
 
-        fromPosition    = fromPosition ? fromPosition : object.position;
-        toPosition      = toPosition ? toPosition : object.position;
+        if(!location) location = object.getLocation();
 
-        object.processUpdateMessage(new ObjectAvatarUpdateMessage(fromPosition, toPosition, isSlide, headDirection));
+        if(!direction) direction = object.getDirection();
+
+        if(isNaN(headDirection)) headDirection = object.model.getValue(RoomObjectModelKey.HEAD_DIRECTION) as number;
+
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), this.getLocationWithOffset(roomId, targetLocation), direction, headDirection, canStandUp, baseY));
+    }
+
+    private getLocationWithOffset(roomId: number, location: IVector3D): IVector3D
+    {
+        if(!location) return null;
+        
+        const heightMap     = this.getFurnitureStackingHeightMap(roomId);
+        const wallGeometry  = this.getLegacyWallGeometry(roomId);
+
+        if(!heightMap || !wallGeometry) return location;
+
+        let height: number = location.z;
+
+        const floorHeight: number = heightMap.getHeight(location.x, location.y);
+
+        return new Vector3d(location.x, location.y, height);
     }
 
     public updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
@@ -473,7 +510,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!object) return;
 
-        let message: ObjectUpdateStateMessage = null;
+        let message: ObjectStateUpdateMessage = null;
         
         switch(action)
         {
@@ -577,7 +614,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(new ObjectAvatarOwnMessage());
     }
 
-    private refreshObjectData(object: IRoomObjectController)
+    private refreshObjectData(object: IRoomObjectController): void
     {
         if(!object || !object.model || !object.logic) return;
 
@@ -612,23 +649,41 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         while(this._pendingObjects.length)
         {
-            const object = this._pendingObjects.shift() as IRoomObjectController
+            const object = this._pendingObjects.shift() as IRoomObjectController;
 
             if(!object) continue;
 
-            const asset = NitroInstance.instance.core.asset.getAsset(object.type);
+            let downloadUrl: string = null;
 
-            if(!asset)
+            switch(object.type)
             {
-                const url = NitroConfiguration.ASSET_URL + `/furniture/${ object.type }/${ object.type }.json`;
+                case RoomObjectType.USER:
+                    break;
+                case RoomObjectType.PET:
+                    const petType = object.model.getValue(RoomObjectModelKey.PET_TYPE);
 
-                if(downloadUrls.indexOf(url) === -1) downloadUrls.push(url);
+                    console.log('pet', petType);
+                    break;
+                case RoomObjectType.BOT:
+                    break;
+                case RoomObjectType.RENTABLE_BOT:
+                    break;
+                default:
+                    const asset = NitroInstance.instance.core.asset.getAsset(object.type);
+
+                    if(!asset) downloadUrl = NitroConfiguration.ASSET_URL + `/furniture/${ object.type }/${ object.type }.json`;
+                    break;
+            }
+
+            if(downloadUrl)
+            {
+                if(downloadUrls.indexOf(downloadUrl) === -1) downloadUrls.push(downloadUrl);
 
                 downloadObjects.push(object);
 
                 continue;
             }
-            
+
             this.roomObjectReady(object);
         }
 

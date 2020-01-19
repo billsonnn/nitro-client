@@ -1,9 +1,9 @@
 import { RoomObjectUpdateMessage } from '../../../room/messages/RoomObjectUpdateMessage';
 
-export class ObjectUpdateStateMessage extends RoomObjectUpdateMessage
+export class ObjectStateUpdateMessage extends RoomObjectUpdateMessage
 {
     constructor()
     {
-        super(null);
+        super(null, null);
     }
 }

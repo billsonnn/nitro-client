@@ -11,7 +11,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
     {
         if(!(message instanceof ObjectTileCursorUpdateMessage)) return;
 
-        if(!message.position)
+        if(!message.location)
         {
             this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE);
             
@@ -20,6 +20,6 @@ export class TileCursorLogic extends RoomObjectLogicBase
         
         this.object.setState(TileCursorLogic.CURSOR_VISIBLE_STATE);
         
-        this.object.setPosition(message.position);
+        this.object.setLocation(message.location);
     }
 }

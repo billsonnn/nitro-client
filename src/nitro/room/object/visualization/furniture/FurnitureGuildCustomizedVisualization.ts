@@ -24,6 +24,8 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
     {
         const flag = super.updateModel();
 
+        if(!flag) return false;
+
         this._color1 = this.object.model.getValue(RoomObjectModelKey.FURNITURE_GUILD_CUSTOMIZED_COLOR_1) as number;
         this._color2 = this.object.model.getValue(RoomObjectModelKey.FURNITURE_GUILD_CUSTOMIZED_COLOR_2) as number;
 

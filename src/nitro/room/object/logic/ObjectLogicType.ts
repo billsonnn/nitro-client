@@ -66,7 +66,7 @@ export class ObjectLogicType
     public static USER                                = 'user';
     public static BOT                                 = 'bot';
     public static RENTABLE_BOT                        = 'rentable_bot';
-    public static PET                                 = 'pet';
+    public static PET                                 = 'pet_animated';
     public static TILE_CURSOR                         = 'tile_cursor';
     public static SELECTION_ARROW                     = 'selection_arrow';
     public static GAME_SNOWBALL                       = 'game_snowball';

@@ -9,7 +9,7 @@ export interface WalletClubComponentState
 {
 	hasSubscription: boolean;
 	secondsRemaining: number;
-	remaining: number;
+	daysRemaining: number;
 }
 
 export class WalletClubComponent extends React.Component<WalletClubComponentProps, WalletClubComponentState>
@@ -34,21 +34,19 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 		this.state = {
 			hasSubscription: false,
 			secondsRemaining: 0,
-			remaining: 0
+			daysRemaining: 0
 		};
 	}
 
 	public componentDidMount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+		if(!this.context.nitroInstance) return;
+		
+		const connection = this.context.nitroInstance.communication.connection;
 
-			if(connection)
-			{
-				connection.addMessageEvent(this._subscriptionEvent);
-			}
-		}
+		if(!connection) return;
+		
+		connection.addMessageEvent(this._subscriptionEvent);
 		
 		this.startRequesting();
 	}
@@ -57,15 +55,13 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 	{
 		this.stopRequesting();
 
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+		if(!this.context.nitroInstance) return;
+		
+		const connection = this.context.nitroInstance.communication.connection;
 
-			if(connection)
-			{
-				connection.removeMessageEvent(this._subscriptionEvent);
-			}
-        }
+		if(!connection) return;
+		
+		connection.removeMessageEvent(this._subscriptionEvent);
 	}
 
 	private startRequesting(): void
@@ -104,7 +100,7 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 		this.setState({
 			hasSubscription: true,
 			secondsRemaining: parser.totalSeconds,
-			remaining: Math.floor(parser.totalSeconds / 86400)
+			daysRemaining: Math.floor(parser.totalSeconds / 86400)
 		});
 	}
 
@@ -113,7 +109,8 @@ export class WalletClubComponent extends React.Component<WalletClubComponentProp
 		return (
 			<div className="nitro-component-wallet-club rounded">
 				<div className="text-center">
-					{ this.state.hasSubscription && (<div>{ this.state.remaining }<br />Days</div>) }
+					{ this.state.hasSubscription && (<div>{ this.state.daysRemaining }<br />Days</div>) }
+					{ !this.state.hasSubscription && (<div>Join</div>) }
 				</div>
 			</div>
 		);

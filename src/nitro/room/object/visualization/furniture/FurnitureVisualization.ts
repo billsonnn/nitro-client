@@ -2,7 +2,8 @@ import { IAsset } from '../../../../../core/asset/interfaces';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { PlayableVisualization } from '../../../../../room/object/visualization/PlayableVisualization';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
-import { Position } from '../../../../../room/utils/Position';
+import { IVector3D } from '../../../../../room/utils/IVector3D';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { ColorData } from '../data/ColorData';
 import { LayerData } from '../data/LayerData';
@@ -16,7 +17,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     protected _data: FurnitureVisualizationData;
 
     protected _type: string;
-    protected _screenPosition: Position;
+    protected _location: IVector3D;
+    protected _screenLocation: IVector3D;
     protected _direction: number;
     protected _colorId: number;
     protected _clickUrl: string;
@@ -46,7 +48,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._data              = null;
 
         this._type              = null;
-        this._screenPosition    = new Position();
+        this._location          = new Vector3d();
+        this._screenLocation    = new Vector3d();
         this._direction         = -1;
         this._colorId           = 0;
         this._clickUrl          = null;
@@ -151,19 +154,20 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(this.updateObjectCounter === this.object.updateCounter) return false;
 
-        this._screenPosition = this.object.getScreenPosition();
+        this._location          = this.object.getLocation();
+        this._screenLocation    = this._location.toScreen();
 
         if(this._selfContainer)
         {
-            if(this._screenPosition.x !== this._selfContainer.x || this._screenPosition.y !== this._selfContainer.y)
+            if(this._screenLocation.x !== this._selfContainer.x || this._screenLocation.y !== this._selfContainer.y)
             {
-                this._selfContainer.x       = this._screenPosition.x;
-                this._selfContainer.y       = this._screenPosition.y;
-                this._selfContainer.zIndex  = this._screenPosition.depth;
+                this._selfContainer.x       = this._screenLocation.x;
+                this._selfContainer.y       = this._screenLocation.y;
+                this._selfContainer.zIndex  = this.getDepth();
             }
         }
 
-        this.setDirection(this.object.position.direction);
+        this.setDirection(this.object.direction.x);
 
         this.updateObjectCounter = this.object.updateCounter;
 
@@ -200,9 +204,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected setDirection(direction: number): void
     {
-        if(this._data) direction = this._data.getValidDirection(direction);
-
-        if(direction === this._direction) return;
+        if(this._direction === direction) return;
 
         this._direction = direction;
 
@@ -252,17 +254,17 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         const assetData = this.getAsset(assetName);
 
-        if(!assetData)
-        {
-            this._skippedAssets.push(assetName);
-            
-            return;
-        }
-
         let sprite = this.getSprite(assetName);
 
         if(!sprite)
         {
+            if(!assetData)
+            {
+                this._skippedAssets.push(assetName);
+
+                return;
+            }
+
             const sourceName = this.getAssetSourceName(assetName, assetData);
 
             sprite = this.createAndAddSprite(assetName, sourceName);
@@ -276,12 +278,16 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
             if(assetData.flipH) sprite.scale.x = -1;
         }
-        
-        sprite.x        = -assetData.x;
-        sprite.y        = -assetData.y;
-        sprite.visible  = true;
 
-        if(assetData.flipH) sprite.x *= -1;
+        if(assetData)
+        {
+            sprite.x    = -assetData.x;
+            sprite.y    = -assetData.y;
+
+            if(assetData.flipH) sprite.x *= -1;
+        }
+        
+        sprite.visible  = true;
 
         if(this._isIcon)
         {
@@ -299,20 +305,21 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 sprite.ignoreMouse  = this.getLayerIgnoreMouse(this._direction, layerId);
                 sprite.x            = (sprite.x + this.getLayerXOffset(this._direction, layerId));
                 sprite.y            = (sprite.y + this.getLayerYOffset(this._direction, layerId));
-                sprite.zIndex       = (this._screenPosition.depth + this._screenPosition.z) + this.getLayerZOffset(this._direction, layerId) + (layerId * 0.001);
+                sprite.zIndex       = this.getLayerZOffset(this._direction, layerId) + (layerId * 0.001);
             }
             else
             {
                 sprite.alpha        = (48 * this._alphaMultiplier) / 255;
                 sprite.ignoreMouse  = true;
-                sprite.zIndex       = (this._screenPosition.depth + this._screenPosition.z) - 1000 + 0.001;
+                sprite.zIndex       = -1000 + 0.001;
             }
         }
 
         if(!this._selfContainer)
         {
-            sprite.x += this._screenPosition.x;
-            sprite.y += this._screenPosition.y;
+            sprite.x        += this._screenLocation.x;
+            sprite.y        += this._screenLocation.y;
+            sprite.zIndex   += this.getDepth();
         }
     }
 
@@ -537,6 +544,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     protected getAssetSourceName(assetName: string, asset: IAsset): string
     {
         return this._data.getAssetSourceName(assetName, asset);
+    }
+
+    protected getDepth(): number
+    {
+        return this._location.length + ((this._location.x + this._location.y) * 1000);
     }
 
     public get data(): FurnitureVisualizationData

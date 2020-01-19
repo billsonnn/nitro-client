@@ -7,5 +7,6 @@ export interface IAssetManager
     getAsset(name: string): IAssetData;
     createAsset(name: string, data: IAssetData): IAssetData;
     downloadAssets(urls: string[], cb: Function): void;
+    downloadImages(urls: string[], cb: Function): void;
     queue: IDownloadQueue;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { UserCreditsEvent } from '../../../../../nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from '../../../../../nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyComposer } from '../../../../../nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
+import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { NitroContext } from '../../../../providers/nitro/context';
 import { WalletCurrencyItemComponent } from './components/item';
 
@@ -35,32 +36,28 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 
 	public componentDidMount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+		if(!this.context.nitroInstance) return;
+		
+		const connection = this.context.nitroInstance.communication.connection;
 
-            if(connection)
-            {
-                connection.addMessageEvent(this._creditsEvent);
-                connection.addMessageEvent(this._currencyEvent);
-			}
-			
-			this.requestCurrencyUpdate();
-        }
+		if(!connection) return;
+		
+		connection.addMessageEvent(this._creditsEvent);
+		connection.addMessageEvent(this._currencyEvent);
+		
+		this.requestCurrencyUpdate();
 	}
 
 	public componentWillUnmount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+		if(!this.context.nitroInstance) return;
 
-            if(connection)
-            {
-                connection.removeMessageEvent(this._creditsEvent);
-                connection.removeMessageEvent(this._currencyEvent);
-            }
-        }
+		const connection = this.context.nitroInstance.communication.connection;
+
+		if(!connection) return;
+		
+		connection.removeMessageEvent(this._creditsEvent);
+		connection.removeMessageEvent(this._currencyEvent);
 	}
 	
 	private requestCurrencyUpdate(): void
@@ -91,13 +88,17 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 
 		if(!parser) return;
 
-		if(parser.currencies && parser.currencies.size)
-		{
-			for(let [ type, amount ] of parser.currencies.entries()) this.state.currencies.set(type, amount);
-		}
+		if(!parser.currencies || !parser.currencies.size) return;
+		
+		for(let [ type, amount ] of parser.currencies.entries()) this.state.currencies.set(type, amount);
 
 		this.forceUpdate();
-    }
+	}
+	
+	private isHidden(type: number): boolean
+	{
+		return NitroConfiguration.DISPLAYED_CURRENCY_TYPES.indexOf(type) === -1;
+	}
 
 	public render(): JSX.Element
 	{
@@ -105,7 +106,7 @@ export class WalletCurrencyComponent extends React.Component<WalletCurrencyCompo
 			<div className="nitro-component-wallet-currency">
 				{
 					[...this.state.currencies.entries()].map(([key, value]) => {
-						return <WalletCurrencyItemComponent key={ key } type={ key } amount={ value } />
+						return !this.isHidden(key) && <WalletCurrencyItemComponent key={ key } type={ key } amount={ value } />
 					})
 				}
 			</div>

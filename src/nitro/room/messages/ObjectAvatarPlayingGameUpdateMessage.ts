@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarPlayingGameUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarPlayingGameUpdateMessage extends ObjectStateUpdateMessage
 {
     private _isPlayingGame: boolean;
 

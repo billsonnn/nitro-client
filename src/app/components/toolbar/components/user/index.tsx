@@ -33,30 +33,26 @@ export class ToolbarUserComponent extends React.Component<UserComponentProps, Us
 
     public componentDidMount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+        if(!this.context.nitroInstance) return;
+        
+        const connection = this.context.nitroInstance.communication.connection;
 
-            if(connection)
-            {
-                connection.addMessageEvent(this._userInfoEvent);
-                connection.addMessageEvent(this._userFigureEvent);
-            }
-        }
+        if(!connection) return;
+        
+        connection.addMessageEvent(this._userInfoEvent);
+        connection.addMessageEvent(this._userFigureEvent);
 	}
 
 	public componentWillUnmount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-            const connection = this.context.nitroInstance.communication.connection;
+        if(!this.context.nitroInstance) return;
+        
+        const connection = this.context.nitroInstance.communication.connection;
 
-            if(connection)
-            {
-                connection.removeMessageEvent(this._userInfoEvent);
-                connection.removeMessageEvent(this._userFigureEvent);
-            }
-        }
+        if(!connection) return;
+        
+        connection.removeMessageEvent(this._userInfoEvent);
+        connection.removeMessageEvent(this._userFigureEvent);
     }
     
     private onUserInfoEvent(event: UserInfoEvent): void

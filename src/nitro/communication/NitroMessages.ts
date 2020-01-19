@@ -2,6 +2,9 @@ import { IMessageConfiguration } from '../../core/communication/messages/IMessag
 import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
+import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
+import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
 import { RoomFowardEvent } from './messages/incoming/room/access/RoomFowardEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
@@ -109,6 +112,11 @@ export class NitroMessages implements IMessageConfiguration
             // ACCESS
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
             this._events.set(IncomingHeader.ROOM_FORWARD, RoomFowardEvent);
+
+            // RIGHTS
+            this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
+            this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
+            this._events.set(IncomingHeader.ROOM_RIGHTS, RoomRightsEvent);
 
             // DATA
             this._events.set(IncomingHeader.ROOM_SETTINGS_CHAT, RoomChatSettingsEvent);

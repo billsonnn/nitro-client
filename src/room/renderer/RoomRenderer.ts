@@ -8,7 +8,7 @@ import { RoomObjectEventHandler } from '../../nitro/room/RoomObjectEventHandler'
 import { RoomObjectMouseEvent } from '../events/RoomObjectMouseEvent';
 import { IRoomInstance } from '../IRoomInstance';
 import { IRoomObjectController } from '../object/IRoomObjectController';
-import { Position } from '../utils/Position';
+import { IVector3D } from '../utils/IVector3D';
 import { ICollision } from './ICollision';
 import { IRoomCollision } from './IRoomCollision';
 import { IRoomRenderer } from './IRoomRenderer';
@@ -21,7 +21,7 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
     private _collision: IRoomCollision;
 
     private _roomObject: IRoomObjectController;
-    private _selectedPosition: Position;
+    private _selectedVector: IVector3D;
     private _selectedCollision: ICollision;
 
     private _isMouseDown: boolean;
@@ -39,7 +39,7 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
         this._collision             = null;
 
         this._roomObject            = null;
-        this._selectedPosition      = null;
+        this._selectedVector        = null;
         this._selectedCollision     = null;
 
         this._isMouseDown           = false;
@@ -200,14 +200,14 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
     {
         if(!event || !type || !point) return null;
         
-        return new RoomObjectMouseEvent(type, collision || null, point, this._selectedPosition || null, event.altKey, event.ctrlKey, event.shiftKey);
+        return new RoomObjectMouseEvent(type, collision || null, point, this._selectedVector || null, event.altKey, event.ctrlKey, event.shiftKey);
     }
 
     private setMouseLocation(point: PIXI.Point): void
     {
         if(!point) return;
 
-        this._selectedPosition = this.getPositionForPoint(point);
+        this._selectedVector = this.getPositionForPoint(point);
 
         this.findCollision(point);
     }
@@ -231,7 +231,7 @@ export class RoomRenderer extends DisposableContainer implements IRoomRenderer
         this._selectedCollision = collision;
     }
 
-    private getPositionForPoint(point: PIXI.Point): Position
+    private getPositionForPoint(point: PIXI.Point): IVector3D
     {
         if(!this._roomObject)
         {

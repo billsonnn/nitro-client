@@ -5,6 +5,8 @@ export class RoomObjectModelKey
     public static FIGURE:  string                             = 'figure';
     public static GENDER:  string                             = 'gender';
     public static OWN_USER: string                            = 'own_user';
+    public static FIGURE_CAN_STAND_UP: string                 = 'figure_can_stand_up';
+    public static FIGURE_VERTICAL_OFFSET: string              = 'figure_vertical_offset';
     public static FIGURE_TALK: string                         = 'figure_talk';
     public static FIGURE_DANCE: string                        = 'figure_dance';
     public static FIGURE_SLEEP: string                        = 'figure_sleep';

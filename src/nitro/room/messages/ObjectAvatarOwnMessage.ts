@@ -1,3 +1,3 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarOwnMessage extends ObjectUpdateStateMessage {}
+export class ObjectAvatarOwnMessage extends ObjectStateUpdateMessage {}

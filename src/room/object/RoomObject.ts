@@ -1,7 +1,8 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IRoomInstance } from '../IRoomInstance';
 import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
-import { Position } from '../utils/Position';
+import { IVector3D } from '../utils/IVector3D';
+import { Vector3d } from '../utils/Vector3d';
 import { IRoomObjectController } from './IRoomObjectController';
 import { IRoomObjectModel } from './IRoomObjectModel';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
@@ -19,16 +20,17 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _model: IRoomObjectModel;
     private _room: IRoomInstance;
 
+    private _state: number;
+    private _location: IVector3D;
+    private _direction: IVector3D;
+    private _tempLocation: IVector3D;
+    private _realLocation: IVector3D;
+
     private _visualization: IRoomObjectSpriteVisualization;
     private _logic: IRoomObjectLogic;
     private _pendingLogicMessages: RoomObjectUpdateMessage[];
 
-    private _position: Position;
-    private _realPosition: Position;
-    private _tempPosition: Position;
-    private _state: number;
     private _updateCounter: number;
-
     private _isReady: boolean;
 
     constructor(id: number, type: string)
@@ -42,16 +44,17 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._model                 = new RoomObjectModel();
         this._room                  = null;
 
+        this._state                 = 0;
+        this._location              = new Vector3d();
+        this._direction             = new Vector3d();
+        this._tempLocation          = null;
+        this._realLocation          = new Vector3d();
+
         this._visualization         = null;
         this._logic                 = null;
         this._pendingLogicMessages  = [];
-
-        this._position              = new Position();
-        this._realPosition          = new Position();
-        this._tempPosition          = null;
-        this._state                 = 0;
+        
         this._updateCounter         = 0;
-
         this._isReady               = false;
     }
 
@@ -68,33 +71,25 @@ export class RoomObject extends Disposable implements IRoomObjectController
         super.onDispose();
     }
 
-    public getScreenPosition(): Position
+    public getLocation(): IVector3D
     {
-        if(this._tempPosition) return this._tempPosition;
+        if(this._tempLocation) return this._tempLocation;
 
-        if(this._position.isScreen) return this._position;
+        return this._location;
+    }
 
-        const screenPosition = this._position.toScreenPosition();
+    public getDirection(): IVector3D
+    {
+        return this._direction;
+    }
 
-        let additionalHeight = 0;
+    public getScreenLocation(): IVector3D
+    {
+        const location = this.getLocation();
 
-        // if(RoomObjectType.AVATAR_TYPES.indexOf(this._type) >= 0)
-        // {
-        //     if(this._type !== RoomObjectType.PET) screenPosition.x -= GameConfiguration.TILE_WIDTH;
+        if(location.isScreen) return location;
 
-        //     const map = this.room.mapManager && this.room.mapManager.map;
-
-        //     if(map)
-        //     {
-        //         const tile = map.getTile(this._position);
-
-        //         if(tile && (tile.type === RoomTileType.STAIR_LEFT || tile.type === RoomTileType.STAIR_RIGHT)) additionalHeight -= GameConfiguration.TILE_HEIGHT;
-        //     }
-        // }
-
-        screenPosition.y += additionalHeight;
-
-        return screenPosition;
+        return location.toScreen();
     }
 
     public setCategory(category: number): void
@@ -109,46 +104,39 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._room = room;
     }
 
-    public setPosition(position: Position, real: boolean = true): void
+    public setLocation(vector: IVector3D, real: boolean = true): void
     {
-        if(!position) return;
+        if(!vector) return;
 
-        if(real) this._realPosition = position;
+        this._location.x        = vector.x;
+        this._location.y        = vector.y;
+        this._location.z        = vector.z;
+        this._location.isScreen = vector.isScreen;
+        this._tempLocation      = null;
 
-        if(this._position.compareStrict(position))
-        {
-            this._tempPosition = null;
-
-            return;
-        }
-
-        this._position.x            = position.x;
-        this._position.y            = position.y;
-        this._position.z            = position.z;
-        this._position.direction    = position.direction;
-        this._position.depth        = position.calculatedDepth;
-
-        this._tempPosition = null;
+        if(real) this._realLocation = vector;
 
         this._updateCounter++;
     }
 
-    public setTempPosition(position: Position, silent: boolean = false): void
+    public setDirection(vector: IVector3D): void
     {
-        if(!position)
-        {
-            this._tempPosition = null;
+        if(!vector) return;
 
-            if(!silent) this._updateCounter++;
+        if((vector.x === this._location.x) && (vector.y === this._location.y) && (vector.z === this._location.z)) return;
 
-            return;
-        }
-        
-        if(!position.isScreen) position = position.toScreenPosition();
-        
-        if(this._tempPosition && this._tempPosition.compareStrict(position)) return;
+        this._direction.x = (((vector.x % 360) + 360) % 360);
+        this._direction.y = (((vector.x % 360) + 360) % 360);
+        this._direction.z = (((vector.x % 360) + 360) % 360);
 
-        this._tempPosition = position;
+        this._updateCounter++;
+    }
+
+    public setTempLocation(vector: IVector3D, silent: boolean = false): void
+    {
+        if(!vector || Vector3d.compare(this._location, vector)) return;
+
+        this._tempLocation = vector;
 
         if(!silent) this._updateCounter++;
     }
@@ -234,19 +222,24 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._logic;
     }
 
-    public get position(): Position
+    public get location(): IVector3D
     {
-        return this._position;
+        return this._location;
     }
 
-    public get realPosition(): Position
+    public get direction(): IVector3D
     {
-        return this._realPosition;
+        return this._direction;
     }
 
-    public get tempPosition(): Position
+    public get tempLocation(): IVector3D
     {
-        return this._tempPosition;
+        return this._tempLocation;
+    }
+
+    public get realLocation(): IVector3D
+    {
+        return this._realLocation;
     }
 
     public get state(): number

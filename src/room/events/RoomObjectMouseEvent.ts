@@ -1,5 +1,5 @@
 import { ICollision } from '../renderer/ICollision';
-import { Position } from '../utils/Position';
+import { IVector3D } from '../utils/IVector3D';
 import { RoomObjectEvent } from './RoomObjectEvent';
 
 export class RoomObjectMouseEvent extends RoomObjectEvent
@@ -11,20 +11,20 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
     public static MOUSE_UP: string      = 'ROE_MOUSE_UP';
     
     private _point: PIXI.Point;
-    private _position: Position;
+    private _location: IVector3D;
     private _collision: ICollision;
 
     private _altKey: boolean;
     private _ctrlKey: boolean;
     private _shiftKey: boolean;
 
-    constructor(type: string, collision: ICollision, point: PIXI.Point, position: Position, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
+    constructor(type: string, collision: ICollision, point: PIXI.Point, location: IVector3D, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
     {
         super(type, collision ? collision.object : null);
 
         this._collision = collision;
         this._point     = point;
-        this._position  = position;
+        this._location  = location;
 
         this._altKey    = altKey;
         this._ctrlKey   = ctrlKey;
@@ -41,9 +41,9 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
         return this._point;
     }
 
-    public get position(): Position
+    public get location(): IVector3D
     {
-        return this._position;
+        return this._location;
     }
 
     public get altKey(): boolean

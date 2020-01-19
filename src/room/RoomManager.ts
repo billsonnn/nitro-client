@@ -105,11 +105,11 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         const visualInstance    = this._roomEngine.visualizationFactory.getVisualization(visualization);
         const logicInstance     = this._roomEngine.logicFactory.getLogic(logic);
 
-        object.setVisualization(visualInstance);
-        object.setLogic(logicInstance);
-
-        if(visualInstance)
+        if(visualInstance && logicInstance)
         {
+            object.setVisualization(visualInstance);
+            object.setLogic(logicInstance);
+
             const data = this._roomEngine.visualizationFactory.getVisualizationData(assetName, visualization, ...args);
 
             if(!data || !visualInstance.initialize(data))
@@ -118,11 +118,11 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
                 return null;
             }
+            
+            logicInstance.initialize(...args);
+
+            object.isReady = true;
         }
-
-        if(logicInstance) logicInstance.initialize(...args);
-
-        object.isReady = true;
 
         return object;
     }

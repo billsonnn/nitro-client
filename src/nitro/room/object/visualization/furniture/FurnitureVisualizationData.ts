@@ -253,6 +253,8 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
             this._tempRender = null;
         }
 
+        //direction = 0
+
         this._tempRender = PIXI.autoDetectRenderer({
             clearBeforeRender: false,
             transparent: true
@@ -280,14 +282,16 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
 
             if(!assetData) continue;
 
+            if(this.getLayerInk(direction, layerId) !== PIXI.BLEND_MODES.NORMAL) continue;
+
             const sprite = PIXI.Sprite.from(this.getAssetSourceName(assetName, assetData));
 
-            //if(assetData.flipH) sprite.scale.x = -1;
+            if(assetData.flipH) sprite.scale.x = -1;
 
             sprite.x        = -assetData.x;
             sprite.y        = -assetData.y;
-
-           // if(assetData.flipH) sprite.x *= -1;
+            
+            if(assetData.flipH) sprite.x *= -1;
 
             sprite.blendMode    = this.getLayerInk(direction, layerId);
             sprite.alpha        = this.getLayerAlpha(direction, layerId);
@@ -297,15 +301,17 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
 
             if(layerId === 0)
             {
-                top     = sprite.y + sprite.height;
-                bottom  = sprite.y;
                 left    = sprite.x;
                 right   = sprite.x + sprite.width;
+                
+                top     = sprite.y + sprite.height;
+                bottom  = sprite.y;
             }
             else
             {
                 if(sprite.x < left) left = sprite.x;
                 if((sprite.x + sprite.width) > right) right = sprite.x + sprite.width;
+
                 if((sprite.y + sprite.height) > top) top = sprite.y + sprite.height;
                 if(sprite.y < bottom) bottom = sprite.y;
             }

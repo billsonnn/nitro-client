@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarExperienceUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarExperienceUpdateMessage extends ObjectStateUpdateMessage
 {
     private _gainedExperience: number;
 

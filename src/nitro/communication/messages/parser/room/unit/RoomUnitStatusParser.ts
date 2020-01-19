@@ -44,18 +44,20 @@ export class RoomUnitStatusParser implements IMessageParser
         if(!wrapper) return null;
         
         const unitId        = wrapper.readInt();
-        const x             = wrapper.readInt();
-        const y             = wrapper.readInt();
-        const z             = parseFloat(wrapper.readString());
+        let x             = wrapper.readInt();
+        let y             = wrapper.readInt();
+        let z             = parseFloat(wrapper.readString());
         const headDirection = wrapper.readInt();
         const direction     = wrapper.readInt();
         const actions       = wrapper.readString();
 
-        let targetX = 0;
-        let targetY = 0;
-        let targetZ = 0;
-        let didMove = false;
-        let isSlide = false;
+        let targetX     = 0;
+        let targetY     = 0;
+        let targetZ     = 0;
+        let height      = 0;
+        let canStandUp  = false;
+        let didMove     = false;
+        let isSlide     = false;
 
         if(actions)
         {
@@ -73,7 +75,7 @@ export class RoomUnitStatusParser implements IMessageParser
 
                     if(!action) continue;
 
-                    const [ key, value ] = action.split(' ');
+                    const [ key, value, extra ] = action.split(' ');
 
                     if(!key || !value) continue;
 
@@ -83,19 +85,23 @@ export class RoomUnitStatusParser implements IMessageParser
                             [ targetX, targetY, targetZ ] = value.split(',').map(a => parseFloat(a));
 
                             didMove = true;
-                            isSlide = true;
 
                             break;
                         case 'sit':
-                            [ targetX, targetY, targetZ ] = [ x, y, z + parseFloat(value) - 1 ];
+                            const sitHeight = parseFloat(value);
+                            // -1
 
-                            didMove = true;
+                            if(extra !== undefined) canStandUp = value === '1';
+
+                            height = sitHeight;
 
                             break;
                         case 'lay':
-                            [ targetX, targetY, targetZ ] = [ !direction ? x : x + 1.7, !direction ? y + 1.7 : y, z + parseFloat(value) - 1 + 0.33 ];
+                            const layHeight = parseFloat(value);
 
-                            didMove = true;
+                            [ x, y ] = [ !direction ? x : x + 1.7, !direction ? y + 1 : y ];
+
+                            height = layHeight;
 
                             break;
                     }
@@ -104,7 +110,7 @@ export class RoomUnitStatusParser implements IMessageParser
                 }
             }
 
-            this._statuses.push(new RoomUnitStatusMessage(unitId, x, y, z, headDirection, direction, targetX, targetY, targetZ, didMove, isSlide, statusActions))
+            this._statuses.push(new RoomUnitStatusMessage(unitId, x, y, z, height, headDirection, direction, targetX, targetY, targetZ, didMove, canStandUp, statusActions));
         }
     }
 

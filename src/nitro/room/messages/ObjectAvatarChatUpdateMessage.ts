@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarChatUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarChatUpdateMessage extends ObjectStateUpdateMessage
 {
     private _numberOfWords: number;
 

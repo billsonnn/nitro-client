@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarGuideStatusUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarGuideStatusUpdateMessage extends ObjectStateUpdateMessage
 {
     private _guideStatus: number;
 

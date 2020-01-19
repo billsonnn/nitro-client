@@ -55,7 +55,7 @@ export class ClientContextMenuComponent extends React.Component<ContextMenuCompo
 
         const node = ReactDOM.findDOMNode(this) as HTMLElement;
 
-        const screenPosition = object.getScreenPosition();
+        const screenPosition = object.getScreenLocation();
 
         const gloalPoint = object.room.renderer.toGlobal(new PIXI.Point(screenPosition.x, screenPosition.y));
 

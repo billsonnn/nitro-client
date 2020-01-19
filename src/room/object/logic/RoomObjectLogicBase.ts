@@ -44,8 +44,9 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
         if(!message || !this._object) return;
-
-        if(message.position) this._object.setPosition(message.position);
+        
+        this._object.setLocation(message.location);
+        this._object.setDirection(message.direction);
     }
 
     public mouseEvent(event: RoomObjectMouseEvent): void

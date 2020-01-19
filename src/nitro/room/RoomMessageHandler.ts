@@ -2,8 +2,10 @@ import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
+import { RoomObjectUpdateMessage } from '../../room/messages/RoomObjectUpdateMessage';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
-import { Position } from '../../room/utils/Position';
+import { IVector3D } from '../../room/utils/IVector3D';
+import { Vector3d } from '../../room/utils/Vector3d';
 import { FurnitureFloorAddEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorAddEvent';
 import { FurnitureFloorEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
@@ -32,6 +34,7 @@ import { RoomModel2Composer } from '../communication/messages/outgoing/room/mapp
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
 import { IRoomCreator } from './IRoomCreator';
+import { LegacyDataType } from './object/data/type/LegacyDataType';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
 import { RoomObjectType } from './object/RoomObjectType';
@@ -213,7 +216,10 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof RoomRollingEvent) || !event.connection || !this._roomCreator) return;
 
-        if(event.getParser().rollerId) this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().rollerId, null, null, FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE);
+        if(event.getParser().rollerId)
+        {
+            this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().rollerId, null, null, FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE, null);
+        }
 
         const furnitureRolling = event.getParser().itemsRolling;
 
@@ -223,7 +229,7 @@ export class RoomMessageHandler extends Disposable
             {
                 if(!rollData) continue;
 
-                this._roomCreator.rollRoomFurnitureObject(this._currentRoomId, rollData.id, rollData.fromPosition, rollData.toPosition); 
+                this._roomCreator.rollRoomFurnitureObject(this._currentRoomId, rollData.id, rollData.location, rollData.targetLocation); 
             }
         }
 
@@ -231,34 +237,27 @@ export class RoomMessageHandler extends Disposable
 
         if(unitRollData)
         {
+            this._roomCreator.updateRoomUnitLocation(this._currentRoomId, unitRollData.id, unitRollData.location, unitRollData.targetLocation);
+
+            if(!NitroConfiguration.ROLLING_OVERRIDES_POSTURE) return;
+
             const object = this._roomCreator.getRoomUnitObject(this._currentRoomId, unitRollData.id);
 
-            if(object)
+            if(object && object.type !== RoomObjectType.MONSTER_PLANT)
             {
-                unitRollData.fromPosition.direction = object.position.direction;
-                unitRollData.toPosition.direction   = object.position.direction;
+                let posture: string = 'std';
 
-                this._roomCreator.updateRoomUnitLocation(this._currentRoomId, unitRollData.id, unitRollData.fromPosition, unitRollData.toPosition, true);
-
-                if(NitroConfiguration.ROLLING_OVERRIDES_POSTURE)
+                switch(unitRollData.movementType)
                 {
-                    if(object.type !== RoomObjectType.MONSTER_PLANT)
-                    {
-                        let posture: string = 'std';
-
-                        switch(unitRollData.movementType)
-                        {
-                            case ObjectRolling.MOVE:
-                                posture = 'mv';
-                                break;
-                            case ObjectRolling.SLIDE:
-                                posture = 'std';
-                                break;
-                        }
-
-                        this._roomCreator.updateRoomUnitPosture(this._currentRoomId, unitRollData.id, posture);
-                    }
+                    case ObjectRolling.MOVE:
+                        posture = 'mv';
+                        break;
+                    case ObjectRolling.SLIDE:
+                        posture = 'std';
+                        break;
                 }
+                
+                this._roomCreator.updateRoomUnitPosture(this._currentRoomId, unitRollData.id, posture);
             }
         }
     }
@@ -275,7 +274,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!object) return null;
 
-        object.setPosition(new Position(parser.x, parser.y, parser.z, parser.direction));
+        object.processUpdateMessage(new RoomObjectUpdateMessage(new Vector3d(parser.x, parser.y, parser.z), new Vector3d(parser.direction)));
 
         object.model.setValue(RoomObjectModelKey.FURNITURE_COLOR, data.colorId);
         object.model.setValue(RoomObjectModelKey.FURNITURE_USAGE_POLICY, parser.usagePolicy);
@@ -354,14 +353,20 @@ export class RoomMessageHandler extends Disposable
 
         if(!item) return;
 
-        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, item.itemId, new Position(item.x, item.y, item.z, item.direction), null, item.data.state, item.data);
+        const location: IVector3D   = new Vector3d(item.x, item.y, item.z);
+        const direction: IVector3D  = new Vector3d(item.direction);
+
+        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, item.itemId, location, direction, item.data.state, item.data);
+        this._roomCreator.updateRoomFurnitureObjectHeight(this._currentRoomId, item.itemId, item.stackHeight);
     }
 
     private onFurnitureStateEvent(event: FurnitureStateEvent): void
     {
         if(!(event instanceof FurnitureStateEvent) || !event.connection || !this._roomCreator) return;
 
-        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().itemId, null, null, event.getParser().state);
+        const data = new LegacyDataType();
+
+        this._roomCreator.updateRoomFurnitureObject(this._currentRoomId, event.getParser().itemId, null, null, event.getParser().state, data);
     }
 
     private onRoomUnitDanceEvent(event: RoomUnitDanceEvent): void
@@ -390,16 +395,14 @@ export class RoomMessageHandler extends Disposable
         {
             if(!unit) continue;
 
-            const position = new Position(unit.x, unit.y, unit.z, unit.direction);
+            const location  = new Vector3d(unit.x, unit.y, unit.z);
+            const direction = new Vector3d(unit.direction);
 
             const type = RoomObjectType.getTypeName(unit.type);
 
-            this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, position, type, unit.figure, unit.gender);
+            this._roomCreator.addRoomUnit(this._currentRoomId, unit.unitId, location, direction, type, unit.figure, unit.gender);
 
-            if(unit.id === this._ownUserId)
-            {
-                this._roomCreator.updateRoomUnitOwnUser(this._currentRoomId, unit.unitId);
-            }
+            if(unit.id === this._ownUserId) this._roomCreator.updateRoomUnitOwnUser(this._currentRoomId, unit.unitId);
         }
     }
 
@@ -446,25 +449,22 @@ export class RoomMessageHandler extends Disposable
 
         if(!statuses || !statuses.length) return;
 
+        const zScale = NitroConfiguration.Z_SCALE;
+
         for(let status of statuses)
         {
             if(!status) continue;
 
-            const position = new Position(status.x, status.y, status.z, status.direction);
+            let height = status.height;
 
-            let goal: Position = null;
+            const location  = new Vector3d(status.x, status.y, status.z);
+            const direction = new Vector3d(status.direction);
 
-            if(status.didMove)
-            {
-                goal = position.copy();
+            let goal: IVector3D = null;
 
-                goal.x = status.targetX;
-                goal.y = status.targetY;
-                goal.z = status.targetZ;
-            }
+            if(status.didMove) goal = new Vector3d(status.targetX, status.targetY, status.targetZ);
 
-            this._roomCreator.updateRoomUnitLocation(this._currentRoomId, status.id, position, goal, status.isSlide, status.headDirection);
-
+            this._roomCreator.updateRoomUnitLocation(this._currentRoomId, status.id, location, goal, status.canStandUp, height, direction, status.headDirection);
             this._roomCreator.updateRoomUnitFlatControl(this._currentRoomId, status.id, null);
 
             let isPosture       = true;
@@ -505,11 +505,11 @@ export class RoomMessageHandler extends Disposable
                             parameter       = action.value;
                             break;
                     }
-
-                    if(postureUpdate) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, postureType, parameter);
-                    else if(isPosture) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, RoomObjectModelKey.STD, '');
                 }
             }
+
+            if(postureUpdate) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, postureType, parameter);
+            else if(isPosture) this._roomCreator.updateRoomUnitPosture(this._currentRoomId, status.id, RoomObjectModelKey.STD, '');
         }
     }
 

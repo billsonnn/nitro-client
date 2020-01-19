@@ -1,16 +1,23 @@
-import { Position } from '../utils/Position';
+import { IVector3D } from '../utils/IVector3D';
 
 export class RoomObjectUpdateMessage
 {
-    private _position: Position;
+    private _location: IVector3D;
+    private _direction: IVector3D;
 
-    constructor(position: Position)
+    constructor(location: IVector3D, direction: IVector3D)
     {
-        this._position = position || null;
+        this._location  = location;
+        this._direction = direction;
     }
 
-    public get position(): Position
+    public get location(): IVector3D
     {
-        return this._position;
+        return this._location;
+    }
+
+    public get direction(): IVector3D
+    {
+        return this._direction;
     }
 }

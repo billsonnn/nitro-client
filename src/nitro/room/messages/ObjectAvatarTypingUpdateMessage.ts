@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarTypingUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarTypingUpdateMessage extends ObjectStateUpdateMessage
 {
     private _isTyping: boolean;
 

@@ -1,7 +1,6 @@
 
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { RoomCollision } from '../../../../../room/renderer/RoomCollision';
 import { AvatarAction } from '../../../../avatar/actions/AvatarAction';
 import { ObjectAvatarCarryObjectUpdateMessage } from '../../../messages/ObjectAvatarCarryObjectUpdateMessage';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
@@ -178,11 +177,13 @@ export class AvatarLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.HEAD_DIRECTION, message.headDirection);
+            model.setValue(RoomObjectModelKey.FIGURE_CAN_STAND_UP, message.canStandUp);
+            model.setValue(RoomObjectModelKey.FIGURE_VERTICAL_OFFSET, message.baseY);
 
             return;
         }
 
-        else if(message instanceof ObjectAvatarFigureUpdateMessage)
+        if(message instanceof ObjectAvatarFigureUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE, message.figure);
             model.setValue(RoomObjectModelKey.GENDER, message.gender);
@@ -190,7 +191,7 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarPostureUpdateMessage)
+        if(message instanceof ObjectAvatarPostureUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_POSTURE, message.postureType);
             model.setValue(RoomObjectModelKey.FIGURE_POSTURE_PARAMETER, message.parameter);
@@ -198,7 +199,7 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarChatUpdateMessage)
+        if(message instanceof ObjectAvatarChatUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_TALK, 1);
 
@@ -207,7 +208,7 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarGestureUpdateMessage)
+        if(message instanceof ObjectAvatarGestureUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_GESTURE, message.gesture);
 
@@ -216,14 +217,14 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarDanceUpdateMessage)
+        if(message instanceof ObjectAvatarDanceUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_DANCE, message.danceStyle)
 
             return;
         }
 
-        else if(message instanceof ObjectAvatarExpressionUpdateMessage)
+        if(message instanceof ObjectAvatarExpressionUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_EXPRESSION, message.expressionType);
 
@@ -234,21 +235,23 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarFlatControlUpdateMessage)
+        if(message instanceof ObjectAvatarFlatControlUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_FLAT_CONTROL, message.level);
 
             return;
         }
 
-        else if(message instanceof ObjectAvatarSignUpdateMessage)
+        if(message instanceof ObjectAvatarSignUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_SIGN, message.signType);
 
             this._signEndTimestamp = this.totalTimeRunning + 5000;
+
+            return;
         }
 
-        else if(message instanceof ObjectAvatarSleepUpdateMessage)
+        if(message instanceof ObjectAvatarSleepUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_SLEEP, message.isSleeping ? 1 : 0);
 
@@ -258,14 +261,14 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarTypingUpdateMessage)
+        if(message instanceof ObjectAvatarTypingUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_IS_TYPING, message.isTyping ? 1 : 0);
 
             return;
         }
 
-        else if(message instanceof ObjectAvatarCarryObjectUpdateMessage)
+        if(message instanceof ObjectAvatarCarryObjectUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_CARRY_OBJECT, message.itemType);
             model.setValue(RoomObjectModelKey.FIGURE_USE_OBJECT, 0);
@@ -286,14 +289,14 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        else if(message instanceof ObjectAvatarUseObjectUpdateMessage)
+        if(message instanceof ObjectAvatarUseObjectUpdateMessage)
         {
             model.setValue(RoomObjectModelKey.FIGURE_USE_OBJECT, message.itemType);
 
             return;
         }
 
-        else if(message instanceof ObjectAvatarOwnMessage)
+        if(message instanceof ObjectAvatarOwnMessage)
         {
             model.setValue(RoomObjectModelKey.OWN_USER, 1);
 
@@ -303,17 +306,14 @@ export class AvatarLogic extends MovingObjectLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        if(event.collision instanceof RoomCollision)
+        switch(event.type)
         {
-            switch(event.type)
-            {
-                case RoomObjectMouseEvent.MOUSE_MOVE:
-                    document.body.style.cursor = 'pointer';
-                    break;
-                case RoomObjectMouseEvent.CLICK:
-                    //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
-                    break;
-            }
+            case RoomObjectMouseEvent.MOUSE_MOVE:
+                document.body.style.cursor = 'pointer';
+                break;
+            case RoomObjectMouseEvent.CLICK:
+                //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
+                break;
         }
     }
 

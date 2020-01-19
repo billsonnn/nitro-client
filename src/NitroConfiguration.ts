@@ -1,7 +1,7 @@
 export class NitroConfiguration
 {
     public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
-    public static ASSET_URL                 = 'https://assets.nitrots.co';
+    public static ASSET_URL                 = 'https://nitro-assets.nextgenhabbo.com';
     public static LOCAL_ASSET_URL           = 'https://system.nitrots.co';
     public static FPS                       = 24;
     public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
@@ -26,7 +26,11 @@ export class NitroConfiguration
     public static PACKET_LOG                = false;
     public static WALKING_ENABLED           = true;
     public static ROLLING_OVERRIDES_POSTURE = true;
+
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
+
+    // -1 is credits
+    public static DISPLAYED_CURRENCY_TYPES  = [ -1, 0, 5 ];
 
     public static PRELOAD_ASSETS: string[]  = [
         NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`,

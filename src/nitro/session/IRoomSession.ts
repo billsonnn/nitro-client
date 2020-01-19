@@ -5,10 +5,14 @@ import { UserDataManager } from './UserDataManager';
 export interface IRoomSession extends IDisposable
 {
     setConnection(connection: IConnection): void;
+    setControllerLevel(level: number): void;
+    setRoomOwner(): void;
     start(): boolean;
     reset(roomId: number): void;
     connection: IConnection;
     roomId: number;
-    userData: UserDataManager;
     state: string;
+    userData: UserDataManager;
+    controllerLevel: number;
+    roomOwner: boolean;
 }

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js-legacy';
 import { ICollision } from '../../renderer/ICollision';
-import { Position } from '../../utils/Position';
+import { IVector3D } from '../../utils/IVector3D';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 
@@ -11,7 +11,7 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
     private _instanceId: number;
     private _boundingRectangle: PIXI.Rectangle;
     private _object: IRoomObjectController;
-    private _tilePosition: Position;
+    private _tilePosition: IVector3D;
 
     private _tag: string;
     private _doesntHide: boolean;
@@ -60,13 +60,11 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
 
     public containsPoint(point: PIXI.Point): boolean
     {
-        if(this.blendMode !== PIXI.BLEND_MODES.NORMAL) return false;
+        if(!this.interactive || this.blendMode !== PIXI.BLEND_MODES.NORMAL) return false;
 
         const localPoint = this.worldTransform.applyInverse(point);
 
-        let bounds = this._boundingRectangle;
-
-        if(!bounds) bounds = this.createBounds();
+        let bounds = this._boundingRectangle || this.createBounds();
 
         if(!bounds) return false;
 
@@ -94,7 +92,7 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
         return (hitMap[num32] & (1 << numRest)) > 0;
     }
     
-    public static generateHitMap(baseTexture: PIXI.BaseTexture, threshold: number): boolean
+    private static generateHitMap(baseTexture: PIXI.BaseTexture, threshold: number): boolean
     {
         if(!baseTexture.resource) return false;
 
@@ -165,14 +163,14 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
         return this._object;
     }
 
-    public get tilePosition(): Position
+    public get tilePosition(): IVector3D
     {
         return this._tilePosition;
     }
 
-    public set tilePosition(position: Position)
+    public set tilePosition(vector: IVector3D)
     {
-        this._tilePosition = position;
+        this._tilePosition = vector;
     }
 
     public get tag(): string

@@ -1,5 +1,6 @@
-import { AffectedPositions } from '../../../room/utils/AffectedPositions';
-import { Position } from '../../../room/utils/Position';
+import { AffectedVectors } from '../../../room/utils/AffectedVectors';
+import { IVector3D } from '../../../room/utils/IVector3D';
+import { Vector3d } from '../../../room/utils/Vector3d';
 
 export class FurnitureStackingHeightMap
 {
@@ -69,26 +70,26 @@ export class FurnitureStackingHeightMap
         this._isTile.set((y * this._width) + x, isTile);
     }
 
-    public getValidPlacement(position: Position, sizeX: number, sizeY: number, stackable: boolean = false): Position
+    public getValidPlacement(location: IVector3D, direction: IVector3D, sizeX: number, sizeY: number, stackable: boolean = false): IVector3D
     {
-        const positions = AffectedPositions.getPositions(sizeX, sizeY, position);
+        const vectors = AffectedVectors.getVectors(sizeX, sizeY, location, direction);
 
-        if(!positions || !positions.length) return null;
+        if(!vectors || !vectors.length) return null;
 
-        const goalHeight = this.getHeight(position.x, position.y);
+        const goalHeight = this.getHeight(location.x, location.y);
 
-        for(let pos of positions)
+        for(let vector of vectors)
         {
-            if(!pos) continue;
+            if(!vector) continue;
 
-            if((!this.isTile(pos.x, pos.y) || !this.isStackable(pos.x, pos.y)) && !stackable) return null;
+            if((!this.isTile(vector.x, vector.y) || !this.isStackable(vector.x, vector.y)) && !stackable) return null;
 
-            const height = this.getHeight(pos.x, pos.y);
+            const height = this.getHeight(vector.x, vector.y);
 
             if(height !== goalHeight) return null;
         }
 
-        return new Position(position.x, position.y, goalHeight, position.direction);
+        return new Vector3d(location.x, location.y, goalHeight);
     }
 
     public get width(): number

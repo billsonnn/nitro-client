@@ -14,6 +14,7 @@ export class FurnitureFloorDataParser
     private _stackHeight: number;
     private _type: number;
     private _data: IObjectData;
+    private _state: number;
     private _someInt: number;
     private _usagePolicy: number;
     private _userId: number;
@@ -38,6 +39,7 @@ export class FurnitureFloorDataParser
         this._stackHeight   = 0;
         this._type          = 0;
         this._data          = null;
+        this._state         = 0;
         this._someInt       = 0;
         this._usagePolicy   = 0;
         this._userId        = 0;
@@ -59,10 +61,13 @@ export class FurnitureFloorDataParser
         this._stackHeight   = parseFloat(wrapper.readString());
         this._type          = wrapper.readInt();
         this._data          = FurnitureDataParser.parseObjectData(wrapper);
+        this._state         = parseFloat(this._data && this._data.getLegacyString()) || 0;
         this._someInt       = wrapper.readInt();
         this._usagePolicy   = wrapper.readInt();
         this._userId        = wrapper.readInt();
         this._username      = null;
+
+        if(this._spriteId < 0) wrapper.readString();
 
         return true;
     }
@@ -110,6 +115,11 @@ export class FurnitureFloorDataParser
     public get data(): IObjectData
     {
         return this._data;
+    }
+
+    public get state(): number
+    {
+        return this._state;
     }
 
     public get someInt(): number

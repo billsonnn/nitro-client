@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarSleepUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarSleepUpdateMessage extends ObjectStateUpdateMessage
 {
     private _isSleeping: boolean;
 

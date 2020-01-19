@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarPetGestureUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarPetGestureUpdateMessage extends ObjectStateUpdateMessage
 {
     private _gesture: string;
 

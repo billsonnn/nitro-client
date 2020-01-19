@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarCarryObjectUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarCarryObjectUpdateMessage extends ObjectStateUpdateMessage
 {
     private _itemType: number;
     private _itemName: string;

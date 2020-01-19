@@ -6,8 +6,8 @@ import { AvatarVisualization } from './avatar/AvatarVisualization';
 import { AvatarVisualizationData } from './avatar/AvatarVisualizationData';
 import { FurnitureAnimatedVisualization } from './furniture/FurnitureAnimatedVisualization';
 import { FurnitureAnimatedVisualizationData } from './furniture/FurnitureAnimatedVisualizationData';
-import { FurnitureBackgroundVisualization } from './furniture/FurnitureBackgroundVisualization';
 import { FurnitureBadgeDisplayVisualization } from './furniture/FurnitureBadgeDisplayVisualization';
+import { FurnitureBBVisualization } from './furniture/FurnitureBBVisualization';
 import { FurnitureBottleVisualization } from './furniture/FurnitureBottleVisualization';
 import { FurnitureCounterClockVisualization } from './furniture/FurnitureCounterClockVisualization';
 import { FurnitureFireworksVisualization } from './furniture/FurnitureFireworksVisualization';
@@ -16,6 +16,7 @@ import { FurnitureHabboWheelVisualization } from './furniture/FurnitureHabboWhee
 import { FurniturePosterVisualization } from './furniture/FurniturePosterVisualization';
 import { FurnitureQueueTileVisualization } from './furniture/FurnitureQueueTileVisualization';
 import { FurnitureResettingAnimatedVisualization } from './furniture/FurnitureResettingAnimatedVisualization';
+import { FurnitureRoomBackgroundVisualization } from './furniture/FurnitureRoomBackgroundVisualization';
 import { FurnitureScoreBoardVisualization } from './furniture/FurnitureScoreBoardVisualization';
 import { FurnitureSoundBlockVisualization } from './furniture/FurnitureSoundBlockVisualization';
 import { FurnitureVisualization } from './furniture/FurnitureVisualization';
@@ -80,10 +81,13 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
                 visualization = FurnitureResettingAnimatedVisualization;
                 break;
             case ObjectVisualizationType.FURNITURE_BG:
-                visualization = FurnitureBackgroundVisualization;
+                visualization = FurnitureRoomBackgroundVisualization;
                 break;
             case ObjectVisualizationType.FURNITURE_BADGE_DISPLAY:
                 visualization = FurnitureBadgeDisplayVisualization;
+                break;
+            case ObjectVisualizationType.FURNITURE_BB:
+                visualization = FurnitureBBVisualization;
                 break;
             case ObjectVisualizationType.FURNITURE_BOTTLE:
                 visualization = FurnitureBottleVisualization;

@@ -1,4 +1,5 @@
 import * as ByteBuffer from 'bytebuffer';
+import { IConnection } from '../../connections/IConnection';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
 import { Byte } from '../Byte';
 import { ICodec } from '../ICodec';
@@ -53,30 +54,28 @@ export class EvaWireFormat implements ICodec
         return buffer.slice(0, buffer.offset);
     }
 
-    public decode(buffer: ByteBuffer): IMessageDataWrapper[]
+    public decode(connection: IConnection): IMessageDataWrapper[]
     {
-        if(!buffer) return null;
+        if(!connection || !connection.dataBuffer || !connection.dataBuffer.byteLength) return null;
 
-        const dataWrapper: IMessageDataWrapper[] = [];
+        const wrappers: IMessageDataWrapper[] = [];
 
-        while(true)
+        while(connection.dataBuffer.byteLength)
         {
-            if(buffer.remaining() < 6) return dataWrapper;
+            if(connection.dataBuffer.byteLength < 4) break;
+            
+            const container = ByteBuffer.wrap(connection.dataBuffer);
+            const length    = container.readInt32();
 
-            const length = buffer.readInt();
+            if(length > (connection.dataBuffer.byteLength - 4)) break;
 
-            if(length < 2) return dataWrapper;
+            const extracted = container.readBytes(length);
 
-            if(buffer.remaining() < length)
-            {
-                buffer.offset -= 4;
+            wrappers.push(new EvaWireDataWrapper(extracted.readShort(), extracted));
 
-                return dataWrapper;
-            }
-
-            const extracted = buffer.readBytes(length);
-
-            dataWrapper.push(new EvaWireDataWrapper(extracted.readShort(), extracted));
+            connection.dataBuffer = connection.dataBuffer.slice(length + 4);
         }
+
+        return wrappers;
     }
 }

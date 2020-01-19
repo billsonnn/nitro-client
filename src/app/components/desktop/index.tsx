@@ -5,6 +5,7 @@ import { ClientComponent } from '../client';
 import { HotelViewComponent } from '../hotelview';
 import { ToolbarComponent } from '../toolbar';
 import { WalletComponent } from '../wallet';
+import { WidgetsComponent } from '../widgets';
 
 export interface DesktopComponentProps {}
 
@@ -64,6 +65,7 @@ export class DesktopComponent extends React.Component<DesktopComponentProps, Des
 		return (
 			<section className="desktop">
 				{ this.state.isInRoom ? <ClientComponent /> : <HotelViewComponent /> }
+				<WidgetsComponent />
 				<WalletComponent />
 				<ToolbarComponent isInRoom={ this.state.isInRoom } />
 			</section>

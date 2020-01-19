@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarMutedUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarMutedUpdateMessage extends ObjectStateUpdateMessage
 {
     private _isMuted: boolean;
 

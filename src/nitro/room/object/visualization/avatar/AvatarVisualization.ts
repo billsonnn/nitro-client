@@ -4,6 +4,8 @@ import { IObjectVisualizationData } from '../../../../../room/object/visualizati
 import { PlayableVisualization } from '../../../../../room/object/visualization/PlayableVisualization';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
+import { IVector3D } from '../../../../../room/utils/IVector3D';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { AvatarAction } from '../../../../avatar/actions/AvatarAction';
 import { AvatarImage } from '../../../../avatar/AvatarImage';
 import { AnimationAction } from '../../../../avatar/structure/animation/AnimationAction';
@@ -28,14 +30,17 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     private _avatarImage: AvatarImage;
     private _shadow: IRoomObjectSprite;
-    private _isAvatarReady: boolean;
-    private _needsUpdate: boolean;
+
+    private _location: IVector3D;
+    private _screenLocation: IVector3D;
 
     private _figure: string;
     private _direction: number;
     private _headDirection: number;
     private _posture: string;
     private _postureParameter: string;
+    private _canStandUp: boolean;
+    private _verticalOffset: number;
     private _talk: boolean;
     private _expression: number;
     private _sleep: boolean;
@@ -48,7 +53,10 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     private _useObject: number;
     private _ownUser: boolean;
 
-    private _additions: { [index: string]: IAvatarAddition };
+    private _isAvatarReady: boolean;
+    private _needsUpdate: boolean;
+
+    private _additions: Map<number, IAvatarAddition>;
 
     constructor()
     {
@@ -58,14 +66,16 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this._avatarImage       = null;
         this._shadow            = null;
-        this._isAvatarReady     = false;
-        this._needsUpdate       = false;
+        this._location          = new Vector3d();
+        this._screenLocation    = new Vector3d();
 
         this._figure            = null;
         this._direction         = -1;
         this._headDirection     = -1;
         this._posture           = '';
         this._postureParameter  = '';
+        this._canStandUp        = false;
+        this._verticalOffset    = 0;
         this._talk              = false;
         this._expression        = 0;
         this._sleep             = false;
@@ -78,7 +88,10 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         this._useObject         = 0;
         this._ownUser           = false;
 
-        this._additions         = {};
+        this._isAvatarReady     = false;
+        this._needsUpdate       = false;
+
+        this._additions         = new Map();
 
         this._selfContained     = true;
     }
@@ -123,12 +136,12 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         {
             this._avatarImage = this._data.createAvatarImage(this._figure);
 
+            this.createShadow();
+
             this.sortParts();
 
             this._avatarImage.structure.downloadFigure(this._avatarImage.figure, () =>
             {
-                this.createShadow();
-
                 this._isAvatarReady = true;
                 this._needsUpdate   = true;
             });
@@ -159,21 +172,23 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         if(this.updateObjectCounter === this.object.updateCounter) return false;
 
-        const position = this.object.getScreenPosition();
+        this._location          = this.object.getLocation();
+
+        if(this._verticalOffset > 0) this._location.z += (this._verticalOffset - 1);
+
+        this._screenLocation    = this._location.toScreen();
 
         if(this._selfContainer)
         {
-            if(position.x !== this._selfContainer.x || position.y !== this._selfContainer.y)
+            if(this._screenLocation.x !== this._selfContainer.x || this._screenLocation.y !== this._selfContainer.y)
             {
-                const additionalZ = 4 + (this._ownUser ? .99999 : 0);
-
-                this._selfContainer.x       = position.x - NitroConfiguration.TILE_WIDTH;
-                this._selfContainer.y       = position.y;
-                this._selfContainer.zIndex  = position.depth + additionalZ;
+                this._selfContainer.x       = this._screenLocation.x - NitroConfiguration.TILE_WIDTH;
+                this._selfContainer.y       = this._screenLocation.y;
+                this._selfContainer.zIndex  = this.getDepth();
             }
         }
         
-        this.setDirection(this.object.position.direction)
+        this.setDirection(this.object.direction.x);
 
         this.updateObjectCounter = this.object.updateCounter;
 
@@ -259,6 +274,24 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         if(postureParameter !== this._postureParameter)
         {
             this._postureParameter = postureParameter;
+
+            needsUpdate = true;
+        }
+
+        const canStandUp = model.getValue(RoomObjectModelKey.FIGURE_CAN_STAND_UP);
+
+        if(canStandUp !== this._canStandUp)
+        {
+            this._canStandUp = canStandUp;
+
+            needsUpdate = true;
+        }
+
+        const verticalOffset = model.getValue(RoomObjectModelKey.FIGURE_VERTICAL_OFFSET);
+
+        if(verticalOffset !== this._verticalOffset)
+        {
+            this._verticalOffset = verticalOffset;
 
             needsUpdate = true;
         }
@@ -411,21 +444,18 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     private updateAdditions(): void
     {
-        for(let key in this._additions)
+        for(let addition of this._additions.values())
         {
-            const addition = this._additions[key];
-
             if(!addition) continue;
 
             addition.update();
-
             addition.animate();
         }
     }
 
     protected setDirection(direction: number): void
     {
-        if(direction === this._direction) return;
+        if(this._direction === direction) return;
 
         this._direction = direction;
 
@@ -693,17 +723,17 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
                 }
             }
             
-            sprite.x        = -assetData.x + additionalX;
-            sprite.y        = -assetData.y + additionalY;
-            sprite.visible  = true;
-            sprite.zIndex   = i;
+            sprite.x            = -assetData.x + additionalX;
+            sprite.y            = -assetData.y + additionalY;
+            sprite.visible      = true;
+            sprite.zIndex       = i;
+            sprite.ignoreMouse  = false;
 
-            // if(!this._isAvatarReady)
-            // {
-            //     sprite.alpha = 0.5;
-            //     console.log('here');
-            // }
-            // else sprite.alpha = 1;
+            if(!this._isAvatarReady)
+            {
+                sprite.alpha = 0.5;
+            }
+            else sprite.alpha = 1;
 
             if(!(isFlipped && flipH) && (isFlipped || flipH))
             {
@@ -752,7 +782,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     {
         if(!this._additions) return null;
 
-        const existing = this._additions[id.toString()];
+        const existing = this._additions.get(id);
 
         if(!existing) return null;
 
@@ -761,13 +791,11 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     private addAddition(addition: IAvatarAddition): IAvatarAddition
     {
-        if(!this._additions) return;
-
-        const existing = this._additions[addition.id.toString()];
+        const existing = this.getAddition(addition.id)
 
         if(existing) return;
 
-        this._additions[addition.id.toString()] = addition;
+        this._additions.set(addition.id, addition);
 
         return addition;
     }
@@ -780,7 +808,12 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         addition.dispose();
 
-        delete this._additions[id.toString()];
+        this._additions.delete(addition.id);
+    }
+
+    protected getDepth(): number
+    {
+        return this._location.length + ((this._location.x + this._location.y) * 1000) + ( 4 + (this._ownUser ? .99999 : 0));
     }
 
     public get direction(): number

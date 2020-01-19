@@ -223,9 +223,4 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
     {
         return this._selfContainer;
     }
-
-    public get depth(): number
-    {
-        return this._object.position.calculatedDepth;
-    }
 }

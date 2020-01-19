@@ -20,5 +20,4 @@ export interface IRoomObjectSpriteVisualization extends IPlayableVisualization
     updateObjectCounter: number;
     updateModelCounter: number;
     selfContainer: IRoomCollision;
-    depth: number;
 }

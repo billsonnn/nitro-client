@@ -5,7 +5,7 @@ export class RoomObjectType
     public static BOT: string               = 'bot';
     public static RENTABLE_BOT: string      = 'rentable_bot';
     public static MONSTER_PLANT: string     = 'monsterplant';
-    public static AVATAR_TYPES: string[]    = [ 'user', 'pet_animated', 'bot', 'rentable_bot' ];
+    public static AVATAR_TYPES: string[]    = [ 'user', 'bot', 'rentable_bot' ];
 
     public static getTypeId(type: string): number
     {

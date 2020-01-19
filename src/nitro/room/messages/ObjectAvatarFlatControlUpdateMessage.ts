@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarFlatControlUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarFlatControlUpdateMessage extends ObjectStateUpdateMessage
 {
     private _level: number;
 

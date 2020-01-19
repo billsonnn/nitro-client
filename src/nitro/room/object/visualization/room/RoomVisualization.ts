@@ -4,7 +4,8 @@ import { IObjectVisualizationData } from '../../../../../room/object/visualizati
 import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
-import { Position } from '../../../../../room/utils/Position';
+import { IVector3D } from '../../../../../room/utils/IVector3D';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomVisualizationData } from './RoomVisualizationData';
 import { DoorWallLeftTexture } from './tile/textures/DoorWallLeftTexture';
 import { DoorWallRightTexture } from './tile/textures/DoorWallRightTexture';
@@ -36,8 +37,9 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         if(this._selfContainer)
         {
-            this._selfContainer.x -= 34;
-            this._selfContainer.y -= 1;
+            this._selfContainer.x      -= NitroConfiguration.TILE_WIDTH + 2;
+            this._selfContainer.y      -= NitroConfiguration.TILE_HEIGHT + 1;
+            this._selfContainer.zIndex  = -10000000;
         }
 
         return true;
@@ -100,7 +102,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
                 if(height < 0) continue;
 
-                const position = new Position(x, y, height);
+                const location = new Vector3d(x, y, height);
 
                 let tileTextures: typeof TileTexture[]  = [ TileTexture ];
                 let isStair: boolean                    = false;
@@ -131,26 +133,25 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
                     counter += index;
                     
                     let sprite: IRoomObjectSprite = this.createAndAddSprite(`${ counter }`, null, texture.getTexture(thickness));
-                
-                    sprite.x            = position.calculateX;
-                    sprite.y            = position.calculateY - position.calculateZ;
+
+                    const screenLocation = location.toScreen();
+
+                    sprite.x            = screenLocation.x;
+                    sprite.y            = screenLocation.y;
                     sprite.hitArea      = texture.POLYGON;
-                    sprite.tilePosition = position;
-                    sprite.zIndex       = position.depth;
+                    sprite.tilePosition = location;
 
                     if(isStair) sprite.y -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
                 }
             }
         }
 
-        if(NitroConfiguration.WALLS_ENABLED) this.addDoor(new Position(doorX, doorY, doorZ, Direction.angleToDirection(doorDirection)));
+        if(NitroConfiguration.WALLS_ENABLED) this.addDoor(doorX, doorY, doorZ, Direction.angleToDirection(doorDirection));
     }
 
-    private addDoor(position: Position): void
+    private addDoor(x: number, y: number, z: number, direction: number): void
     {
-        if(!position) return;
-
-        const texture: typeof TileTexture = position.direction === Direction.EAST ? DoorWallLeftTexture : DoorWallRightTexture;
+        const texture: typeof TileTexture = direction === Direction.EAST ? DoorWallLeftTexture : DoorWallRightTexture;
         
         if(!texture) return;
 
@@ -158,14 +159,16 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         const sprite = new RoomObjectSprite(this.object, 'door', null, doorTexture);
 
-        sprite.x        = position.calculateX;
-        sprite.y        = (position.calculateY - position.calculateZ) - NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS;
-        sprite.zIndex   = position.depth + 500;
+        const location = new Vector3d(x, y, z).toScreen();
+
+        location.y -= NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS;
+
+        //sprite.zIndex   = position.depth + 500;
 
         this.object.room.renderer.collision.addCollision(sprite);
     }
 
-    public getPositionForPoint(point: PIXI.Point, scale: number = 1): Position
+    public getPositionForPoint(point: PIXI.Point, scale: number = 1): IVector3D
     {
         if(!point || !this.sprites || !this.sprites.size) return null;
 

@@ -1,8 +1,9 @@
 import { Disposable } from '../common/disposable/Disposable';
-import { AssetLoader } from './AssetLoader';
 import { DownloadQueue } from './download/DownloadQueue';
 import { IDownloadQueue } from './download/IDownloadQueue';
 import { IAssetData } from './interfaces';
+import { AssetLoader } from './loaders/AssetLoader';
+import { ImageLoader } from './loaders/ImageLoader';
 
 export class AssetManager extends Disposable
 {
@@ -53,6 +54,25 @@ export class AssetManager extends Disposable
 
         loader
             .use(AssetLoader)
+            .add(urls)
+            .on('complete', () => this.onChuckDownloaded(loader, cb))
+            .load();
+    }
+
+    public downloadImages(urls: string[], cb: Function): void
+    {
+        if(!cb) return;
+
+        if(!urls) return cb(true);
+
+        const totalUrls = urls.length;
+
+        if(!totalUrls) return cb(true);
+
+        const loader = new PIXI.Loader();
+
+        loader
+            .use(ImageLoader)
             .add(urls)
             .on('complete', () => this.onChuckDownloaded(loader, cb))
             .load();

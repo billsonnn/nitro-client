@@ -13,4 +13,5 @@ export interface IConnection extends IEventDispatcher
     addMessageEvent(event: IMessageEvent): void;
     removeMessageEvent(event: IMessageEvent): void;
     isAuthenticated: boolean;
+    dataBuffer: ArrayBuffer;
 }

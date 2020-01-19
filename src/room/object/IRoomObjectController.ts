@@ -1,6 +1,6 @@
 import { IRoomInstance } from '../IRoomInstance';
 import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
-import { Position } from '../utils/Position';
+import { IVector3D } from '../utils/IVector3D';
 import { IRoomObject } from './IRoomObject';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
 import { IRoomObjectSpriteVisualization } from './visualization/IRoomObjectSpriteVisualization';
@@ -9,8 +9,9 @@ export interface IRoomObjectController extends IRoomObject
 {
     setCategory(category: number): void;
     setRoom(room: IRoomInstance): void;
-    setPosition(position: Position, real?: boolean): void;
-    setTempPosition(position: Position, silent?: boolean): void;
+    setLocation(vector: IVector3D, real?: boolean): void;
+    setDirection(vector: IVector3D): void;
+    setTempLocation(vector: IVector3D, silent?: boolean): void;
     setState(state: number, silent?: boolean): void;
     setVisualization(visualization: IRoomObjectSpriteVisualization): void;
     setLogic(logic: IRoomObjectLogic): void;

@@ -1,4 +1,3 @@
-import * as ByteBuffer from 'bytebuffer';
 import { NitroConfiguration } from '../../../NitroConfiguration';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { EvaWireFormat } from '../codec/evawire/EvaWireFormat';
@@ -21,7 +20,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private _socket: WebSocket;
     private _messages: MessageClassManager;
     private _codec: ICodec;
-    private _dataBuffer: ByteBuffer;
+    private _dataBuffer: ArrayBuffer;
 
     private _isAuthenticated: boolean;
 
@@ -68,9 +67,8 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         this.destroySocket();
 
-        this._dataBuffer = new ByteBuffer();
-        
-        this._socket = new WebSocket(socketUrl);
+        this._dataBuffer    = new ArrayBuffer(0);
+        this._socket        = new WebSocket(socketUrl);
 
         this._socket.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen.bind(this));
         this._socket.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose.bind(this));
@@ -117,11 +115,9 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         reader.readAsArrayBuffer(event.data);
 
-        reader.onloadend = progress =>
+        reader.onloadend = () =>
         {
-            const buffer = ByteBuffer.wrap(new Uint8Array(<ArrayBuffer> reader.result));
-
-            this._dataBuffer = buffer;
+            this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, <ArrayBuffer> reader.result);
 
             this.processReceivedData();
         }
@@ -197,7 +193,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         const wrappers = this.splitReceivedMessages();
 
-        if(!wrappers) return;
+        if(!wrappers || !wrappers.length) return;
 
         for(let wrapper of wrappers)
         {
@@ -217,17 +213,19 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     private splitReceivedMessages(): IMessageDataWrapper[]
     {
-        if(!this._dataBuffer) return null;
+        if(!this._dataBuffer || !this._dataBuffer.byteLength) return null;
 
-        this._dataBuffer.offset = 0;
+        return this._codec.decode(this);
+    }
 
-        if(this._dataBuffer.remaining() === 0) return null;
-
-        const messages = this._codec.decode(this._dataBuffer);
-
-        if(this._dataBuffer.remaining() === 0) this._dataBuffer = new ByteBuffer();
-
-        return messages;
+    private concatArrayBuffers(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer
+    {
+        const newBuffer = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+        
+        newBuffer.set(new Uint8Array(buffer1), 0);
+        newBuffer.set(new Uint8Array(buffer2), buffer1.byteLength);
+        
+        return newBuffer.buffer;
     }
 
     private getMessagesForWrapper(wrapper: IMessageDataWrapper): IMessageEvent[]
@@ -238,9 +236,19 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         if(!events || !events.length) return null;
 
-        const parser = events[0].parser;
+        try
+        {
+            const parser = events[0].parser;
 
-        if(!parser || !parser.flush() || !parser.parse(wrapper)) return null;
+            if(!parser || !parser.flush() || !parser.parse(wrapper)) return null;
+        }
+
+        catch(e)
+        {
+            console.log('Error parsing message: ' + e);
+
+            return null;
+        }
 
         return events;
     }
@@ -283,5 +291,15 @@ export class SocketConnection extends EventDispatcher implements IConnection
     public get isAuthenticated(): boolean
     {
         return this._isAuthenticated;
+    }
+
+    public get dataBuffer(): ArrayBuffer
+    {
+        return this._dataBuffer;
+    }
+
+    public set dataBuffer(buffer: ArrayBuffer)
+    {
+        this._dataBuffer = buffer;
     }
 }

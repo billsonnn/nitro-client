@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
-import { Position } from '../../../../../room/utils/Position';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { ObjectRolling } from '../../../../room/utils/ObjectRolling';
 
 export class RoomRollingParser implements IMessageParser
@@ -33,10 +33,7 @@ export class RoomRollingParser implements IMessageParser
             const id            = wrapper.readInt();
             const height        = parseFloat(wrapper.readString());
             const nextHeight    = parseFloat(wrapper.readString());
-            const fromPosition  = new Position(x, y, height);
-            const toPosition    = new Position(nextX, nextY, nextHeight);
-
-            const rollingData = new ObjectRolling(id, fromPosition, toPosition);
+            const rollingData   = new ObjectRolling(id, new Vector3d(x, y, height), new Vector3d(nextX, nextY, nextHeight));
 
             this._itemsRolling.push(rollingData);
 
@@ -51,17 +48,15 @@ export class RoomRollingParser implements IMessageParser
         const unitId        = wrapper.readInt();
         const height        = parseFloat(wrapper.readString());
         const nextHeight    = parseFloat(wrapper.readString());
-        const fromPosition  = new Position(x, y, height);
-        const toPosition    = new Position(nextX, nextY, nextHeight);
 
         switch(movementType)
         {
             case 0: break;
             case 1:
-                this._unitRolling = new ObjectRolling(unitId, fromPosition, toPosition, ObjectRolling.MOVE);
+                this._unitRolling = new ObjectRolling(unitId, new Vector3d(x, y, height), new Vector3d(nextX, nextY, nextHeight), ObjectRolling.MOVE);
                 break;
             case 2:
-                this._unitRolling = new ObjectRolling(unitId, fromPosition, toPosition, ObjectRolling.SLIDE);
+                this._unitRolling = new ObjectRolling(unitId, new Vector3d(x, y, height), new Vector3d(nextX, nextY, nextHeight), ObjectRolling.SLIDE);
                 break;
         }
 

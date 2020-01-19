@@ -99,11 +99,12 @@ export class IncomingHeader
     public static ROOM_MODEL_NAME              = 2031;
     public static ROOM_MUTE                    = 2533;
     public static ROOM_MUTE_USER               = 826;
-    public static ROOM_OWNER                   = 339;
+    public static ROOM_RIGHTS_OWNER            = 339;
     public static ROOM_PAINT                   = 2454;
     public static ROOM_PROMOTION               = 2274;
     public static ROOM_QUEUE_STATUS            = 2208;
     public static ROOM_RIGHTS                  = 780;
+    public static ROOM_RIGHTS_CLEAR            = 2392;
     public static ROOM_RIGHTS_LIST             = 1284;
     public static ROOM_RIGHTS_LIST_ADD         = 2088;
     public static ROOM_RIGHTS_LIST_REMOVE      = 1327;

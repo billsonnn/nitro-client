@@ -1,4 +1,4 @@
-import { Position } from '../../../room/utils/Position';
+import { IVector3D } from '../../../room/utils/IVector3D';
 
 export class ObjectRolling
 {
@@ -6,16 +6,16 @@ export class ObjectRolling
     public static SLIDE: string = 'sld';
     
     private _id: number;
-    private _fromPosition: Position;
-    private _toPosition: Position;
+    private _location: IVector3D;
+    private _targetLocation: IVector3D;
     private _movementType: string;
 
-    constructor(id: number, fromPosition: Position, toPosition: Position, movementType: string = null)
+    constructor(id: number, location: IVector3D, targetLocation: IVector3D, movementType: string = null)
     {
-        this._id            = id;
-        this._fromPosition  = fromPosition;
-        this._toPosition    = toPosition;
-        this._movementType  = movementType;
+        this._id                = id;
+        this._location          = location;
+        this._targetLocation    = targetLocation;
+        this._movementType      = movementType;
     }
 
     public get id(): number
@@ -23,14 +23,14 @@ export class ObjectRolling
         return this._id;
     }
 
-    public get fromPosition(): Position
+    public get location(): IVector3D
     {
-        return this._fromPosition;
+        return this._location;
     }
 
-    public get toPosition(): Position
+    public get targetLocation(): IVector3D
     {
-        return this._toPosition;
+        return this._targetLocation;
     }
 
     public get movementType(): string

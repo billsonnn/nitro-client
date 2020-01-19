@@ -1,6 +1,6 @@
-import { ObjectUpdateStateMessage } from './ObjectUpdateStateMessage';
+import { ObjectStateUpdateMessage } from './ObjectStateUpdateMessage';
 
-export class ObjectAvatarEffectUpdateMessage extends ObjectUpdateStateMessage
+export class ObjectAvatarEffectUpdateMessage extends ObjectStateUpdateMessage
 {
     private _effect: number;
     private _delayMilliseconds: number;

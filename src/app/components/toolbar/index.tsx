@@ -40,6 +40,8 @@ export class ToolbarComponent extends React.Component<ToolbarComponentProps, Too
 
     private toggleDesktop(event: SyntheticEvent): void
     {
+        if(!this.context.nitroInstance) return;
+        
         const connection = this.context.nitroInstance.communication.connection;
 
         if(!connection) return;

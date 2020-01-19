@@ -2,7 +2,6 @@ import { IRoomObjectLogic } from '../../../../room/object/logic/IRoomObjectLogic
 import { IRoomObjectLogicFactory } from '../../../../room/object/logic/IRoomObjectLogicFactory';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
 import { AvatarLogic } from './avatar/AvatarLogic';
-import { FurnitureBackgroundLogic } from './furniture/FurnitureBackgroundLogic';
 import { FurnitureBadgeDisplayLogic } from './furniture/FurnitureBadgeDisplayLogic';
 import { FurnitureChangeStateWhenStepOnLogic } from './furniture/FurnitureChangeStateWhenStepOnLogic';
 import { FurnitureCounterClockLogic } from './furniture/FurnitureCounterClockLogic';
@@ -11,6 +10,7 @@ import { FurnitureCustomStackHeightLogic } from './furniture/FurnitureCustomStac
 import { FurnitureDiceLogic } from './furniture/FurnitureDiceLogic';
 import { FurnitureEditableInternalLinkLogic } from './furniture/FurnitureEditableInternalLinkLogic';
 import { FurnitureFireworksLogic } from './furniture/FurnitureFireworksLogic';
+import { FurnitureFloorHoleLogic } from './furniture/FurnitureFloorHoleLogic';
 import { FurnitureGuildCustomizedLogic } from './furniture/FurnitureGuildCustomizedLogic';
 import { FurnitureHighScoreLogic } from './furniture/FurnitureHighScoreLogic';
 import { FurnitureHockeyScoreLogic } from './furniture/FurnitureHockeyScoreLogic';
@@ -18,12 +18,17 @@ import { FurnitureIceStormLogic } from './furniture/FurnitureIceStormLogic';
 import { FurnitureLogic } from './furniture/FurnitureLogic';
 import { FurnitureMultiHeightLogic } from './furniture/FurnitureMultiHeightLogic';
 import { FurnitureMultiStateLogic } from './furniture/FurnitureMultiStateLogic';
+import { FurnitureOneWayDoorLogic } from './furniture/FurnitureOneWayDoorLogic';
 import { FurniturePetCustomizationLogic } from './furniture/FurniturePetCustomizationLogic';
 import { FurniturePresentLogic } from './furniture/FurniturePresentLogic';
 import { FurniturePurchaseableClothingLogic } from './furniture/FurniturePurchaseableClothingLogic';
 import { FurniturePushableLogic } from './furniture/FurniturePushableLogic';
+import { FurnitureRoomBackgroundColorLogic } from './furniture/FurnitureRoomBackgroundColorLogic';
+import { FurnitureRoomBackgroundLogic } from './furniture/FurnitureRoomBackgroundLogic';
+import { FurnitureRoomBillboardLogic } from './furniture/FurnitureRoomBillboardLogic';
 import { FurnitureScoreLogic } from './furniture/FurnitureScoreLogic';
 import { FurnitureSoundBlockLogic } from './furniture/FurnitureSoundBlockLogic';
+import { FurnitureTrophyLogic } from './furniture/FurnitureTrophyLogic';
 import { FurnitureVoteCounterLogic } from './furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLogic';
 import { ObjectLogicType } from './ObjectLogicType';
@@ -67,9 +72,6 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.FURNITURE_BASIC:
                 logic = FurnitureLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BG:
-                logic = FurnitureBackgroundLogic;
-                break;
             case ObjectLogicType.FURNITURE_BADGE_DISPLAY:
                 logic = FurnitureBadgeDisplayLogic;
                 break;
@@ -94,6 +96,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.FURNITURE_FIREWORKS:
                 logic = FurnitureFireworksLogic;
                 break;
+            case ObjectLogicType.FURNITURE_FLOOR_HOLE:
+                logic = FurnitureFloorHoleLogic;
+                break;
             case ObjectLogicType.FURNITURE_GUILD_CUSTOMIZED:
                 logic = FurnitureGuildCustomizedLogic;
                 break;
@@ -112,6 +117,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.FURNITURE_MULTISTATE:
                 logic = FurnitureMultiStateLogic;
                 break;
+            case ObjectLogicType.FURNITURE_ONE_WAY_DOOR:
+                logic = FurnitureOneWayDoorLogic;
+                break;
             case ObjectLogicType.FURNITURE_PET_CUSTOMIZATION:
                 logic = FurniturePetCustomizationLogic;
                 break;
@@ -124,11 +132,23 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.FURNITURE_PUSHABLE:
                 logic = FurniturePushableLogic;
                 break;
-            case ObjectLogicType.FURNITURE_SOUNDBLOCK:
-                logic = FurnitureSoundBlockLogic;
+            case ObjectLogicType.FURNITURE_BACKGROUND_COLOR:
+                logic = FurnitureRoomBackgroundColorLogic;
+                break;
+            case ObjectLogicType.FURNITURE_BG:
+                logic = FurnitureRoomBackgroundLogic;
+                break;
+            case ObjectLogicType.FURNITURE_BB:
+                logic = FurnitureRoomBillboardLogic;
                 break;
             case ObjectLogicType.FURNITURE_SCORE:
                 logic = FurnitureScoreLogic;
+                break;
+            case ObjectLogicType.FURNITURE_SOUNDBLOCK:
+                logic = FurnitureSoundBlockLogic;
+                break;
+            case ObjectLogicType.FURNITURE_TROPHY:
+                logic = FurnitureTrophyLogic;
                 break;
             case ObjectLogicType.FURNITURE_VOTE_COUNTER:
                 logic = FurnitureVoteCounterLogic;

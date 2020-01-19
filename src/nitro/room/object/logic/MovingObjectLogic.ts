@@ -1,29 +1,37 @@
-import TWEEN from '@tweenjs/tween.js';
 import { RoomObjectUpdateMessage } from '../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
-import { Position } from '../../../../room/utils/Position';
+import { IVector3D } from '../../../../room/utils/IVector3D';
+import { Vector3d } from '../../../../room/utils/Vector3d';
 import { ObjectMoveUpdateMessage } from '../../messages/ObjectMoveUpdateMessage';
 import { RoomObjectModelKey } from '../RoomObjectModelKey';
 
 export class MovingObjectLogic extends RoomObjectLogicBase
 {
-    private static TWEEN_DURATION: number = 500;
+    private static TEMP_VECTOR: Vector3d = new Vector3d();
 
-    private _tween: TWEEN.Tween;
     private _liftAmount: number;
+
+    private _location: Vector3d;
+    private _locationDelta: Vector3d;
+    private _lastUpdateTime: number;
+    private _changeTime: number;
+    private _updateInterval: number;
 
     constructor()
     {
         super();
 
-        this._tween         = null;
-        this._liftAmount    = 0;
+        this._liftAmount        = 0;
+
+        this._location          = new Vector3d();
+        this._locationDelta     = new Vector3d();
+        this._lastUpdateTime    = 0;
+        this._changeTime        = 0;
+        this._updateInterval    = 500;
     }
 
     public dispose(): void
     {
-        this.stopTweening();
-
         this._liftAmount = 0;
         
         super.dispose();
@@ -33,7 +41,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     {
         super.update(totalTimeRunning);
 
-        if(this._tween) TWEEN.update();
+        totalTimeRunning = this.totalTimeRunning;
 
         const locationOffset    = this.getLocationOffset();
         const model             = this.object && this.object.model;
@@ -59,76 +67,66 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 }
             }
         }
+
+        if((this._locationDelta.length > 0) || locationOffset)
+        {
+            const vector = MovingObjectLogic.TEMP_VECTOR;
+
+            let difference = (totalTimeRunning - this._changeTime);
+
+            if(difference === (this._updateInterval >> 1)) difference++;
+
+            if(difference > this._updateInterval) difference = this._updateInterval;
+
+            if(this._locationDelta.length > 0)
+            {
+                vector.set(this._locationDelta);
+                vector.multiply((difference / this._updateInterval));
+                vector.add(this._location);
+            }
+            else
+            {
+                vector.set(this._location);
+            }
+
+            if(locationOffset) vector.add(new Vector3d(locationOffset.x, locationOffset.y, locationOffset.z));
+
+            this.object.setLocation(vector, false);
+
+            if(difference === this._updateInterval)
+            {
+                this._locationDelta.x = 0;
+                this._locationDelta.y = 0;
+                this._locationDelta.z = 0;
+            }
+        }
+
+        this._lastUpdateTime = totalTimeRunning;
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
-        if(message instanceof ObjectMoveUpdateMessage) return this.processMoveMessage(message);
+        if(!message) return;
 
         super.processUpdateMessage(message);
+
+        if(message.location) this._location.set(message.location);
+
+        if(message instanceof ObjectMoveUpdateMessage) return this.processMoveMessage(message);
     }
 
     private processMoveMessage(message: ObjectMoveUpdateMessage): void
     {
         if(!message || !this.object) return;
 
-        if(message.position) this.object.setPosition(message.position);
+        this._changeTime = this._lastUpdateTime;
 
-        const goal = message.goal;
-
-        if(goal)
-        {
-            this.stopTweening();
-
-            if(message.isSlide)
-            {
-                this.slideToPosition(goal);
-
-                return;
-            }
-            
-            this.object.setPosition(goal);
-        }
+        this._locationDelta.set(message.targetLocation);
+        this._locationDelta.subtract(this._location);
     }
 
-    protected getLocationOffset(): Position
+    protected getLocationOffset(): IVector3D
     {
         return null;
-    }
-
-    private slideToPosition(position: Position): void
-    {
-        if(!position || position.compareStrict(this.object.position)) return;
-
-        let screenPosition: Position        = this.object.getScreenPosition();
-        let goalScreenPosition: Position    = position.toScreenPosition();
-
-        this.object.setPosition(position);
-        this.object.setTempPosition(screenPosition);
-
-        goalScreenPosition.depth = position.calculatedDepth;
-
-        this._tween = new TWEEN.Tween(this.object.tempPosition)
-            .to({ x: goalScreenPosition.x, y: goalScreenPosition.y, depth: goalScreenPosition.depth }, MovingObjectLogic.TWEEN_DURATION)
-            .onUpdate(() =>
-            {
-                this.object.updateCounter++;
-            })
-            .onComplete(() =>
-            {
-                this._tween = null;
-
-                this.object.setTempPosition(null);
-            })
-            .start();
-    }
-
-    private stopTweening(): void
-    {
-        if(!this._tween) return;
-
-        this._tween.stop();
-
-        this._tween = null;
     }
 }
