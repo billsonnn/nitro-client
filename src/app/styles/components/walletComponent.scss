@@ -27,6 +27,11 @@
                 align-items: center;
                 text-align: right;
                 justify-content: flex-end;
+                pointer-events: all;
+
+                &:hover {
+                    cursor: pointer;
+                }
 
                 &.currency--1 {
                     color: #d1ab21;

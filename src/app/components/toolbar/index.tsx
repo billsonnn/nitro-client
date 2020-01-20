@@ -30,7 +30,6 @@ export class ToolbarComponent extends React.Component<ToolbarComponentProps, Too
         this.toggleNavigator    = this.toggleNavigator.bind(this);
         this.toggleInventory    = this.toggleInventory.bind(this);
         this.toggleCatalog      = this.toggleCatalog.bind(this);
-        this.toggleCamera       = this.toggleCamera.bind(this);
     }
 
     private toggleOpen(event: SyntheticEvent): void
@@ -63,11 +62,6 @@ export class ToolbarComponent extends React.Component<ToolbarComponentProps, Too
     {
         return;
     }
-
-    private toggleCamera(event: SyntheticEvent): void
-    {
-        return;
-    }
     
     public render(): JSX.Element
     {
@@ -89,9 +83,6 @@ export class ToolbarComponent extends React.Component<ToolbarComponentProps, Too
                         </div>
                         <div className="toolbar-item" onClick={ this.toggleCatalog }>
                             <i className="icon icon-catalog" />
-                        </div>
-                        <div className="toolbar-item" onClick={ this.toggleCamera }>
-                            <i className="icon icon-camera" />
                         </div>
                     </div>
                 </div> }

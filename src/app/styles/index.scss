@@ -25,11 +25,20 @@ body {
     height: 100%;
     overflow: hidden;
     image-rendering: pixelated;
+    pointer-events: none;
 }
 
 #nitro {
     width: 100%;
     height: 100%;
+}
+
+.btn {
+    pointer-events: all;
+}
+
+input {
+    pointer-events: all;
 }
 
 @import './mixins';

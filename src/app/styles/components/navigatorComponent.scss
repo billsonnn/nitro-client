@@ -1,0 +1,182 @@
+.nitro-component-navigator {
+    position: absolute;
+    top: 20px;
+    left: 120px;
+    width: 515px;
+
+    .component-body {
+        padding: 0 15px 15px;
+
+        .body-results {
+            margin: 10px 0 0;
+            height: 378px;
+            max-height: 378px;
+            overflow-y: auto;
+            
+            .nitro-navigator-component-search-result {
+                margin: 0 auto 5px;
+                border-radius: 3px;
+                background-color: rgba(30, 30, 30, 1);
+                box-shadow: 0 0 6px 0 rgba(0, 0, 0, .3);
+                @include no-select();
+
+                .result-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 10px 15px;
+                    font-size: 16px;
+                    text-transform: uppercase;
+
+                    .header-icon {
+                        font-size: 10px;
+                        line-height: 0;
+                        cursor: pointer;
+                    }
+
+                    .header-left {
+                        cursor: pointer;
+
+                        .header-icon {
+                            padding-right: 8px;
+                        }
+                    }
+
+                    .header-right {
+
+                        .header-icons {
+                            padding-left: 8px;
+                        }
+                    }
+                }
+
+                .result-body {
+                    padding: 0 10px 10px;
+
+                    &.result-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr;
+                        grid-template-areas: ". . .";
+
+                        .nitro-navigator-component-search-item {
+                            width: 130px;
+                            height: 130px;
+                            margin: 5px auto !important;
+                            justify-content: center;
+
+                            .item-info {
+                                justify-content: center;
+                                flex-direction: column;
+
+                                .info-name {
+                                    text-align: center;
+                                    padding-bottom: 5px;
+                                }
+                            }
+                        }
+                    }
+
+                    .nitro-navigator-component-search-item {
+                        display: flex;
+                        align-items: center;
+                        margin: 3px 0;
+                        padding: 10px;
+                        font-size: 14px;
+                        border-radius: 3px;
+                        background-color: rgba(19, 19, 19, 1);
+                        box-shadow: 0 0 6px 0 rgba(0, 0, 0, .2);
+                        cursor: pointer;
+
+                        .item-info {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 100%;
+
+                            .info-name {
+                                text-align: left;
+                            }
+
+                            .info-right {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+
+                                .info-icon {
+                                    font-size: 10px;
+                                    padding-right: 5px;
+                                    line-height: 0;
+
+                                    &.group-icon {
+                                        font-size: 12px;
+                                        padding-right: 8px;
+                                    }
+                                }
+
+                                .info-usercount {
+                                    padding: 5px 10px;
+                                    border-radius: 3px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    &.green {
+                                        background-color: green;
+                                    }
+
+                                    &.yellow {
+                                        background-color: yellow;
+                                    }
+
+                                    &.red {
+                                        background-color: red;
+                                    }
+
+                                    &.dark-red {
+                                        background-color: darkred;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+*::-webkit-scrollbar {
+    height: 17px;
+    width: 13px;
+}
+  
+*::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+  
+*::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 0;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    background-color: rgba(30, 30, 30, 1);
+    border-color: transparent;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .3);
+}
+  
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-color: transparent;
+    border-width: 0px;
+    background-clip: padding-box;
+    border-radius: 3px;
+    width: 0px;
+    border-style: solid;
+}
+  
+*::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+}

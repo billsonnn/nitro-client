@@ -1,11 +1,15 @@
 import React from 'react';
-import { CameraComponent } from './components/camera';
+import { CatalogComponent } from './catalog';
+import { InventoryComponent } from './inventory';
+import { NavigatorComponent } from './navigator';
 
 export interface WidgetsComponentProps {}
 
 export interface WidgetsComponentState
 {
-	cameraVisible: boolean;
+	catalogVisible: boolean;
+	inventoryVisible: boolean;
+	navigatorVisible: boolean;
 }
 
 export class WidgetsComponent extends React.Component<WidgetsComponentProps, WidgetsComponentState>
@@ -15,7 +19,9 @@ export class WidgetsComponent extends React.Component<WidgetsComponentProps, Wid
 		super(props);
 
 		this.state = {
-			cameraVisible: false
+			catalogVisible: false,
+			inventoryVisible: false,
+			navigatorVisible: false
 		};
 	}
 
@@ -23,7 +29,9 @@ export class WidgetsComponent extends React.Component<WidgetsComponentProps, Wid
 	{
 		return (
 			<div>
-				{ this.state.cameraVisible && <CameraComponent /> }
+				{ this.state.catalogVisible && <CatalogComponent /> }
+				{ this.state.inventoryVisible && <InventoryComponent /> }
+				{ this.state.navigatorVisible && <NavigatorComponent /> }
 			</div>
 		);
 	}
