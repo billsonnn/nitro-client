@@ -1,0 +1,100 @@
+import * as PIXI from 'pixi.js-legacy';
+import { GraphicAsset } from './GraphicAsset';
+import { IAsset, IAssetData } from './interfaces';
+
+export class GraphicAssetCollection
+{
+    private _name: string;
+    private _data: IAssetData;
+    private _textures: Map<string, PIXI.Texture>;
+    private _graphics: Map<string, GraphicAsset>;
+
+    constructor(data: IAssetData, spritesheet: PIXI.Spritesheet)
+    {
+        if(!data || !spritesheet) throw new Error('invalid_collection');
+
+        this._name      = data.name;
+        this._data      = data;
+        this._textures  = new Map();
+        this._graphics  = new Map();
+
+        this.setTextures(spritesheet.textures);
+        this.buildAssets(data.assets);
+    }
+
+    private setTextures(textures: PIXI.Texture[]): void
+    {
+        if(!textures) return;
+
+        for(let name in textures)
+        {
+            if(!name) continue;
+
+            const texture = textures[name];
+
+            if(!texture) continue;
+
+            this._textures.set(name, texture);
+        }
+    }
+
+    private buildAssets(assets: { [index: string]: IAsset }): void
+    {
+        if(!assets) return;
+
+        for(let name in assets)
+        {
+            if(!name) continue;
+
+            const asset = assets[name];
+
+            if(!asset) continue;
+
+            let source = (asset.source) ? asset.source : name;
+
+            const texture = this.getTexture(source);
+
+            if(!texture) continue;
+
+            const graphic = GraphicAsset.createAsset(name, source, texture, -(asset.x), -(asset.y), asset.flipH, false);
+
+            if(!graphic) continue;
+
+            this._graphics.set(name, graphic);
+        }
+    }
+
+    public getTexture(name: string): PIXI.Texture
+    {
+        if(!name) return null;
+
+        name = this._name + '_' + name + '.png';
+
+        const texture = this._textures.get(name);
+
+        if(!texture) return null;
+
+        return texture;
+    }
+
+    public getGraphic(name: string): GraphicAsset
+    {
+        if(!name) return null;
+
+        const existing = this._graphics.get(name);
+
+        if(!existing) return null;
+
+        return existing;
+    }
+
+    public get name(): string
+    {
+        return this._name;
+    }
+
+    public get data(): IAssetData
+    {
+        return this._data;
+    }
+}

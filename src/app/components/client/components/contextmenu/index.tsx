@@ -27,7 +27,7 @@ export class ClientContextMenuComponent extends React.Component<ContextMenuCompo
 
         if(nitroInstance)
         {
-            nitroInstance.roomSession.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
         }
     }
 
@@ -37,7 +37,7 @@ export class ClientContextMenuComponent extends React.Component<ContextMenuCompo
 
         if(nitroInstance)
         {
-            nitroInstance.roomSession.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
         }
     }
 
@@ -57,10 +57,10 @@ export class ClientContextMenuComponent extends React.Component<ContextMenuCompo
 
         const screenPosition = object.getScreenLocation();
 
-        const gloalPoint = object.room.renderer.toGlobal(new PIXI.Point(screenPosition.x, screenPosition.y));
+        //const gloalPoint = object.room.renderer.toGlobal(new PIXI.Point(screenPosition.x, screenPosition.y));
 
-        node.style.top = `${ gloalPoint.y }px`;
-        node.style.left = `${ gloalPoint.x }px`;
+        //node.style.top = `${ gloalPoint.y }px`;
+        //node.style.left = `${ gloalPoint.x }px`;
     }
 
     public render(): JSX.Element

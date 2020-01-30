@@ -19,13 +19,6 @@ export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualizat
         this._animationCounter = -1;
     }
 
-    protected onDispose(): void
-    {
-        this._animationCounter = -1;
-
-        super.onDispose();
-    }
-
     protected setAnimation(animationId: number, transition: boolean = true): boolean
     {
         if(animationId === FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE)

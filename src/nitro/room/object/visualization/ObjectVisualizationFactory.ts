@@ -1,4 +1,5 @@
-import { IRoomObjectSpriteVisualization } from '../../../../room/object/visualization/IRoomObjectSpriteVisualization';
+import { IAssetData } from '../../../../core/asset/interfaces';
+import { IRoomObjectGraphicVisualization } from '../../../../room/object/visualization/IRoomObjectGraphicVisualization';
 import { IObjectVisualizationData } from '../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { IRoomObjectVisualizationFactory } from '../../../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { RoomObjectSpriteVisualization } from '../../../../room/object/visualization/RoomObjectSpriteVisualization';
@@ -33,6 +34,8 @@ import { TileCursorVisualization } from './room/TileCursorVisualization';
 
 export class ObjectVisualizationFactory implements IRoomObjectVisualizationFactory
 {
+    private static CACHING_ENABLED: boolean = true;
+
     private _visualizationDatas: Map<string, IObjectVisualizationData>;
 
     constructor()
@@ -40,7 +43,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
         this._visualizationDatas = new Map();
     }
 
-    public getVisualization(type: string): IRoomObjectSpriteVisualization
+    public getVisualization(type: string): IRoomObjectGraphicVisualization
     {
         const visualization = this.getVisualizationType(type);
 
@@ -137,7 +140,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
         return visualization;
     }
 
-    public getVisualizationData(type: string, visualizationType: string, ...args: any[]): IObjectVisualizationData
+    public getVisualizationData(type: string, visualization: string, asset: IAssetData): IObjectVisualizationData
     {
         const existing = this._visualizationDatas.get(type);
 
@@ -145,9 +148,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
 
         let visualizationData: IObjectVisualizationData = null;
 
-        let save = true;
-
-        switch(visualizationType)
+        switch(visualization)
         {
             case ObjectVisualizationType.FURNITURE_STATIC:
             case ObjectVisualizationType.FURNITURE_GIFT_WRAPPED:
@@ -187,7 +188,6 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
                 break;
             case ObjectVisualizationType.ROOM:
                 visualizationData   = new RoomVisualizationData();
-                save                = false;
                 break;
             case ObjectVisualizationType.USER:
             case ObjectVisualizationType.BOT:
@@ -201,14 +201,14 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
 
         if(!visualizationData) return null;
 
-        if(!visualizationData.initialize(...args))
+        if(!visualizationData.initialize(asset))
         {
             visualizationData.dispose();
 
             return null;
         }
 
-        if(save) this._visualizationDatas.set(type, visualizationData);
+        if(ObjectVisualizationFactory.CACHING_ENABLED) this._visualizationDatas.set(type, visualizationData);
 
         return visualizationData;
     }

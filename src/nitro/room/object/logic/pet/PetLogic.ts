@@ -1,7 +1,6 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { RoomCollision } from '../../../../../room/renderer/RoomCollision';
 import { PetFigureData } from '../../../../avatar/pets/PetFigureData';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarFigureUpdateMessage';
@@ -91,7 +90,7 @@ export class PetLogic extends MovingObjectLogic
 
         if(!model) return;
 
-        if((this._gestureEndTimestamp > 0) && (this.totalTimeRunning > this._gestureEndTimestamp))
+        if((this._gestureEndTimestamp > 0) && (this.time > this._gestureEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_GESTURE, null);
 
@@ -100,7 +99,7 @@ export class PetLogic extends MovingObjectLogic
 
         if(this._talkingEndTimestamp > 0)
         {
-            if(this.totalTimeRunning > this._talkingEndTimestamp)
+            if(this.time > this._talkingEndTimestamp)
             {
                 model.setValue(RoomObjectModelKey.FIGURE_TALK, 0);
 
@@ -108,7 +107,7 @@ export class PetLogic extends MovingObjectLogic
             }
         }
 
-        if((this._expressionEndTimestamp > 0) && (this.totalTimeRunning > this._expressionEndTimestamp))
+        if((this._expressionEndTimestamp > 0) && (this.time > this._expressionEndTimestamp))
         {
             model.setValue(RoomObjectModelKey.FIGURE_EXPRESSION, 0);
 
@@ -158,7 +157,7 @@ export class PetLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectModelKey.FIGURE_TALK, 1);
 
-            this._talkingEndTimestamp = this.totalTimeRunning + (message.numberOfWords * 1000);
+            this._talkingEndTimestamp = this.time + (message.numberOfWords * 1000);
 
             return;
         }
@@ -174,7 +173,7 @@ export class PetLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectModelKey.FIGURE_GESTURE, message.gesture);
 
-            this._gestureEndTimestamp = this.totalTimeRunning + 3000;
+            this._gestureEndTimestamp = this.time + 3000;
 
             return;
         }
@@ -182,17 +181,14 @@ export class PetLogic extends MovingObjectLogic
 
     public mouseEvent(event: RoomObjectMouseEvent): void
     {
-        if(event.collision instanceof RoomCollision)
+        switch(event.type)
         {
-            switch(event.type)
-            {
-                case RoomObjectMouseEvent.MOUSE_MOVE:
-                    document.body.style.cursor = 'pointer';
-                    break;
-                case RoomObjectMouseEvent.CLICK:
-                    //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
-                    break;
-            }
+            case RoomObjectMouseEvent.MOUSE_MOVE:
+                document.body.style.cursor = 'pointer';
+                break;
+            case RoomObjectMouseEvent.CLICK:
+                //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
+                break;
         }
     }
 }

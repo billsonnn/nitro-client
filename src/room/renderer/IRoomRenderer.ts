@@ -1,15 +1,7 @@
-import * as PIXI from 'pixi.js-legacy';
-import { IDisposable } from '../../core/common/disposable/IDisposable';
-import { IRoomCollision } from './IRoomCollision';
+import { IRoomRendererBase } from './IRoomRendererBase';
+import { IRoomRenderingCanvas } from './IRoomRenderingCanvas';
 
-export interface IRoomRenderer extends PIXI.Container, IDisposable
+export interface IRoomRenderer extends IRoomRendererBase 
 {
-    resize(event: UIEvent): void;
-    touchStart(event: TouchEvent): void;
-    touchEnd(event: TouchEvent): void;
-    mouseMove(event: MouseEvent): void;
-    mouseDown(event: MouseEvent): void;
-    mouseUp(event: MouseEvent): void;
-    click(event: MouseEvent): void;
-    collision: IRoomCollision;
+    createCanvas(id: number, width: number, height: number, scale: number): IRoomRenderingCanvas;
 }

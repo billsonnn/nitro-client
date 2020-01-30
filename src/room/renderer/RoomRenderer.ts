@@ -1,254 +1,172 @@
-import * as PIXI from 'pixi.js-legacy';
-import { DisposableContainer } from '../../core/common/disposable/DisposableContainer';
-import { NitroInstance } from '../../nitro/NitroInstance';
-import { RoomObjectCategory } from '../../nitro/room/object/RoomObjectCategory';
-import { RoomVisualization } from '../../nitro/room/object/visualization/room/RoomVisualization';
-import { RoomEngine } from '../../nitro/room/RoomEngine';
-import { RoomObjectEventHandler } from '../../nitro/room/RoomObjectEventHandler';
-import { RoomObjectMouseEvent } from '../events/RoomObjectMouseEvent';
-import { IRoomInstance } from '../IRoomInstance';
-import { IRoomObjectController } from '../object/IRoomObjectController';
-import { IVector3D } from '../utils/IVector3D';
-import { ICollision } from './ICollision';
-import { IRoomCollision } from './IRoomCollision';
+import { IRoomObject } from '../object/IRoomObject';
 import { IRoomRenderer } from './IRoomRenderer';
-import { RoomCollision } from './RoomCollision';
+import { IRoomRenderingCanvas } from './IRoomRenderingCanvas';
+import { IRoomSpriteCanvasContainer } from './IRoomSpriteCanvasContainer';
+import { RoomSpriteCanvas } from './RoomSpriteCanvas';
 
-export class RoomRenderer extends DisposableContainer implements IRoomRenderer
+export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer 
 {
-    private _eventHandler: RoomObjectEventHandler;
-    private _instance: IRoomInstance;
-    private _collision: IRoomCollision;
+    private _objects: Map<number, IRoomObject>;
+    private _canvases: Map<number, IRoomRenderingCanvas>;
 
-    private _roomObject: IRoomObjectController;
-    private _selectedVector: IVector3D;
-    private _selectedCollision: ICollision;
+    private _disposed: boolean;
+    private _roomObjectVariableAccurateZ: string;
 
-    private _isMouseDown: boolean;
-    private _didMouseMove: boolean;
-
-    private _lastClick: number;
-    private _clickCount: number;
-
-    constructor(eventHandler: RoomObjectEventHandler, roomInstance: IRoomInstance)
+    constructor()
     {
-        super();
+        this._objects                       = new Map();
+        this._canvases                      = new Map();
 
-        this._eventHandler          = eventHandler;
-        this._instance              = roomInstance;
-        this._collision             = null;
-
-        this._roomObject            = null;
-        this._selectedVector        = null;
-        this._selectedCollision     = null;
-
-        this._isMouseDown           = false;
-        this._didMouseMove          = false;
-
-        this._lastClick             = 0;
-        this._clickCount            = 0;
-
-        this.sortableChildren       = true;
-        this.interactiveChildren    = false;
-
-        this.setupCollision();
+        this._disposed                      = false;
+        this._roomObjectVariableAccurateZ   = null;
     }
 
-    protected onDispose(): void
+    public dispose(): void
     {
-        if(this._collision)
+        if(this._disposed) return;
+
+        if(this._canvases)
         {
-            this._collision.destroy();
+            for(let [ key, canvas ] of this._canvases.entries())
+            {
+                this._canvases.delete(key);
 
-            this._collision = null;
+                if(!canvas) continue;
+
+                canvas.dispose();
+            }
+
+            this._canvases = null;
         }
+
+        if(this._objects)
+        {
+            this._objects = null;
+        }
+
+        this._disposed = true;
     }
 
-    public zoomIn(): void
+    public reset(): void 
     {
-        this.scale.set(this.scale.x + 1);
+        this._objects.clear();
     }
 
-    public zoomOut(): void
+    public getInstanceId(object: IRoomObject): number
     {
-        this.scale.set(this.scale.x - 1 < 1 ? 1 : this.scale.x - 1);
+        if(!object) return -1;
+
+        return object.instanceId;
     }
 
-    private setupCollision(): void
+    public getRoomObject(instanceId: number): IRoomObject
     {
-        if(this._collision) return;
-
-        this._collision = new RoomCollision();
-
-        this.addChild(this._collision);
+        return this._objects.get(instanceId);
     }
 
-    public resize(event: UIEvent): void
+    public addObject(object: IRoomObject): void
     {
-        const object = this._instance.getObject(RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
-
         if(!object) return;
-
-        const container = object.visualization && object.visualization.selfContainer;
-
-        if(!container) return;
-
-        this.x = ~~((container.width / 2) + ((window.innerWidth - container.width) / 2) + 17);
-        this.y = ~~((window.innerHeight - container.height) / 3);
-    }
-
-    public touchStart(event: TouchEvent): void
-    {
-        const touch = event.targetTouches[0];
-
-        if(!touch) return;
-
-        const point = new PIXI.Point(touch.clientX, touch.clientY);
-    }
-
-    public touchEnd(event: TouchEvent): void
-    {
-        const touch = event.touches[0];
-
-        if(!touch) return;
-
-        const point = new PIXI.Point(touch.clientX, touch.clientY);
-    }
-
-    public mouseMove(event: MouseEvent): void
-    {
-        if(!event) return;
-
-        const point = new PIXI.Point(event.clientX, event.clientY);
-
-        this._didMouseMove = true;
-
-        document.body.style.cursor = 'default';
-
-        this.setMouseLocation(point);
-
-        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_MOVE, point);
-    }
-
-    public mouseDown(event: MouseEvent): void
-    {
-        if(!event) return;
-
-        const point = new PIXI.Point(event.clientX, event.clientY);
-
-        this._didMouseMove = false;
-
-        this._isMouseDown = true;
-
-        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_DOWN, point);
-
-        if(event.altKey || event.ctrlKey || event.shiftKey) NitroInstance.instance.renderer.toggleDrag();
-    }
-
-    public mouseUp(event: MouseEvent): void
-    {
-        if(!event) return;
-
-        const point = new PIXI.Point(event.clientX, event.clientY);
-
-        this._isMouseDown = false;
-
-        this.dispatchMouseEvent(event, RoomObjectMouseEvent.MOUSE_UP, point);
-    }
-
-    public click(event: MouseEvent): void
-    {
-        let isDouble = false;
-            
-        if(this._lastClick)
-        {
-            this._clickCount = 1;
-                
-            if(this._lastClick >= Date.now() - 300) this._clickCount++;
-        }
-
-        this._lastClick = Date.now();
-
-        if(this._clickCount === 2)
-        {
-            if(!this._didMouseMove) isDouble = true;
-
-            this._clickCount = 0;
-            this._lastClick = null;
-        }
-
-        const point = new PIXI.Point(event.clientX, event.clientY);
-
-        if(isDouble)
-        {
-            this.dispatchMouseEvent(event, RoomObjectMouseEvent.DOUBLE_CLICK, point);
-
-            return;
-        }
-
-        this.dispatchMouseEvent(event, RoomObjectMouseEvent.CLICK, point);
-    }
-
-    private dispatchMouseEvent(event: MouseEvent, type: string, point: PIXI.Point): void
-    {
-        if(!type || !point || !this._eventHandler) return;
-
-        this._eventHandler.handleRoomObjectEvent(this.createMouseEvent(event, type, point, this._selectedCollision));
-    }
-
-    public createMouseEvent(event: MouseEvent, type: string, point: PIXI.Point, collision: ICollision): RoomObjectMouseEvent
-    {
-        if(!event || !type || !point) return null;
         
-        return new RoomObjectMouseEvent(type, collision || null, point, this._selectedVector || null, event.altKey, event.ctrlKey, event.shiftKey);
+        this._objects.set(this.getInstanceId(object), object);
     }
 
-    private setMouseLocation(point: PIXI.Point): void
+    public removeObject(object: IRoomObject): void
     {
-        if(!point) return;
+        const instanceId = this.getInstanceId(object);
 
-        this._selectedVector = this.getPositionForPoint(point);
+        this._objects.delete(instanceId);
 
-        this.findCollision(point);
-    }
-
-    private findCollision(point: PIXI.Point): void
-    {        
-        this.setCollision(this._collision.findCollision(point));
-    }
-
-    private setCollision(collision: ICollision): void
-    {
-        if(!collision)
+        for(let canvas of this._canvases.values())
         {
-            this._selectedCollision = null;
+            if(!canvas) continue;
 
-            return;
+            //remove canvas cache for object instance id
         }
-
-        if(this._selectedCollision === collision) return;
-
-        this._selectedCollision = collision;
     }
 
-    private getPositionForPoint(point: PIXI.Point): IVector3D
+    public render(): void
     {
-        if(!this._roomObject)
-        {
-            this._roomObject = this._instance.getObject(RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
-        }
+        if(!this._canvases || !this._canvases.size) return;
 
-        if(!this._roomObject) return null;
+        const time = PIXI.Ticker.shared.lastTime;
 
-        const visualization = this._roomObject.visualization as RoomVisualization;
+        for(let canvas of this._canvases.values()) canvas && canvas.render(time);
+    }
 
-        if(!visualization) return null;
+    public update(time: number): void
+    {
+        if(!this._canvases || !this._canvases.size) return;
+
+        this.render();
         
-        return visualization.getPositionForPoint(new PIXI.Point(point.x, point.y), this.scale.x);
+        for(let canvas of this._canvases.values()) canvas && canvas.update();
     }
 
-    public get collision(): IRoomCollision
+    public getCanvas(id: number): IRoomRenderingCanvas
     {
-        return this._collision;
+        const existing = this._canvases.get(id);
+
+        if(!existing) return;
+
+        return existing;
+    }
+
+    public createCanvas(id: number, width: number, height: number, scale: number): IRoomRenderingCanvas
+    {
+        const existing = this._canvases.get(id) as IRoomRenderingCanvas;
+
+        if(existing)
+        {
+            existing.initialize(width, height);
+
+            if(existing.geometry) existing.geometry.scale = scale;
+
+            return existing;
+        }
+
+        const canvas = this.createSpriteCanvas(id, width, height, scale);
+
+        if(!canvas) return;
+
+        this._canvases.set(id, canvas);
+
+        return canvas;
+    }
+
+    private createSpriteCanvas(id: number, width: number, height: number, scale: number): IRoomRenderingCanvas
+    {
+        return new RoomSpriteCanvas(this, id, width, height, scale);
+    }
+
+    public removeCanvas(id: number): void
+    {
+        const existing = this._canvases.get(id);
+
+        if(!existing) return;
+
+        this._canvases.delete(id);
+
+        existing.dispose();
+    }
+
+    public get objects(): Map<number, IRoomObject>
+    {
+        return this._objects;
+    }
+
+    public get disposed(): boolean
+    {
+        return this._disposed;
+    }
+
+    public get roomObjectVariableAccurateZ(): string
+    {
+        return this._roomObjectVariableAccurateZ;
+    }
+
+    public set roomObjectVariableAccurateZ(z: string)
+    {
+        this._roomObjectVariableAccurateZ = z;
     }
 }

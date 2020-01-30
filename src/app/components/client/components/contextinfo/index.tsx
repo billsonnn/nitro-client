@@ -35,8 +35,8 @@ export class ClientContextInfoComponent extends React.Component<ClientContextInf
 
         if(nitroInstance)
         {
-            nitroInstance.roomSession.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
-            nitroInstance.roomSession.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
         }
     }
 
@@ -46,8 +46,8 @@ export class ClientContextInfoComponent extends React.Component<ClientContextInf
 
         if(nitroInstance)
         {
-            nitroInstance.roomSession.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
-            nitroInstance.roomSession.roomEngine.events.removeEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+            nitroInstance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
         }
     }
 
@@ -74,7 +74,7 @@ export class ClientContextInfoComponent extends React.Component<ClientContextInf
 
         switch(this.state.object.category)
         {
-            case RoomObjectCategory.FURNITURE:
+            case RoomObjectCategory.FLOOR:
                 contextComponent = <ClientContextInfoFurnitureComponent object={ this.state.object } />;
                 break;
             case RoomObjectCategory.UNIT:

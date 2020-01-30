@@ -1,3 +1,4 @@
+import { IAssetData } from '../../../../../core/asset/interfaces';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { AvatarImage } from '../../../../avatar/AvatarImage';
@@ -12,11 +13,11 @@ export class AvatarVisualizationData extends Disposable implements IObjectVisual
         super();
     }
 
-    public initialize(avatarManager: AvatarManager): boolean
+    public initialize(asset: IAssetData): boolean
     {
-        if(!(avatarManager instanceof AvatarManager)) return false;
+        //if(!(avatarManager instanceof AvatarManager)) return false;
 
-        this._avatarManager = avatarManager;
+        //this._avatarManager = avatarManager;
 
         return true;
     }

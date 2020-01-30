@@ -1,7 +1,7 @@
 import { NitroManager } from '../../../core/common/NitroManager';
 import { FurnitureData } from './FurnitureData';
 import { FurnitureType } from './FurnitureType';
-import { IFurnitureData } from './interfaces/IFurnitureData';
+import { IFurnitureData } from './IFurnitureData';
 
 export class FurnitureDataParser extends NitroManager
 {

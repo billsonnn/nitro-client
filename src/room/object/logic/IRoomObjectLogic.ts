@@ -1,3 +1,4 @@
+import { IAssetData } from '../../../core/asset/interfaces';
 import { IDisposable } from '../../../core/common/disposable/IDisposable';
 import { RoomObjectEventHandler } from '../../../nitro/room/RoomObjectEventHandler';
 import { RoomObjectMouseEvent } from '../../events/RoomObjectMouseEvent';
@@ -6,7 +7,7 @@ import { IRoomObjectController } from '../IRoomObjectController';
 
 export interface IRoomObjectLogic extends IDisposable
 {
-    initialize(...args: any[]): void;
+    initialize(asset: IAssetData): void;
     update(totalTimeRunning: number): void;
     processUpdateMessage(message: RoomObjectUpdateMessage): void;
     mouseEvent(event: RoomObjectMouseEvent): void;

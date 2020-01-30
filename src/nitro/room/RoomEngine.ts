@@ -1,13 +1,17 @@
-import { NitroManager } from '../../core/common/NitroManager';
+import * as PIXI from 'pixi.js-legacy';
 import { IConnection } from '../../core/communication/connections/IConnection';
-import { RendererViewEvent } from '../../core/renderer/RendererViewEvent';
+import { EventDispatcher } from '../../core/events/EventDispatcher';
+import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { IRoomInstance } from '../../room/IRoomInstance';
+import { IRoomManager } from '../../room/IRoomManager';
+import { IRoomManagerListener } from '../../room/IRoomManagerListener';
 import { RoomObjectUpdateMessage } from '../../room/messages/RoomObjectUpdateMessage';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
 import { IRoomObjectVisualizationFactory } from '../../room/object/visualization/IRoomObjectVisualizationFactory';
+import { IRoomRenderer } from '../../room/renderer/IRoomRenderer';
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
 import { RoomRendererFactory } from '../../room/renderer/RoomRendererFactory';
 import { IVector3D } from '../../room/utils/IVector3D';
@@ -17,6 +21,7 @@ import { RoomModelParser } from '../communication/messages/parser/room/mapping/R
 import { NitroInstance } from '../NitroInstance';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
+import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
@@ -45,22 +50,22 @@ import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
 import { ObjectStateUpdateMessage } from './messages/ObjectStateUpdateMessage';
-import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
 import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
-import { RoomObjectType } from './object/RoomObjectType';
 import { ObjectVisualizationFactory } from './object/visualization/ObjectVisualizationFactory';
+import { RoomContentLoader } from './RoomContentLoader';
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
+import { FurnitureData } from './utils/FurnitureData';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { RoomInstanceData } from './utils/RoomInstanceData';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
-export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator, IRoomEngineServices
+export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener
 {
     public static ROOM_OBJECT_ID: number       = -1;
     public static ROOM_OBJECT_TYPE: string     = 'room';
@@ -68,13 +73,16 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public static CURSOR_OBJECT_ID: number     = -2;
     public static CURSOR_OBJECT_TYPE: string   = 'tile_cursor';
 
+    private _events: IEventDispatcher;
     private _communication: INitroCommunicationManager;
+    private _sessionData: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
+    private _roomManager: IRoomManager;
     private _roomObjectEventHandler: RoomObjectEventHandler;
     private _roomMessageHandler: RoomMessageHandler;
+    private _roomContentLoader: RoomContentLoader;
 
     private _activeRoomId: number;
-    private _activeRoomInstance: IRoomInstance;
     private _roomInstanceData: Map<number, RoomInstanceData>;
 
     private _roomRendererFactory: IRoomRendererFactory;
@@ -84,17 +92,21 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _pendingObjects: IRoomObject[];
     private _processingObjects: boolean;
 
-    constructor(communication: INitroCommunicationManager, roomSession: IRoomSessionManager)
-    {
-        super();
+    private _isReady: boolean;
+    private _isDisposed: boolean;
 
+    constructor(communication: INitroCommunicationManager)
+    {
+        this._events                    = new EventDispatcher();
         this._communication             = communication;
-        this._roomSession               = roomSession;
+        this._sessionData               = null;
+        this._roomSession               = null;
+        this._roomManager               = null;
         this._roomObjectEventHandler    = new RoomObjectEventHandler(this);
         this._roomMessageHandler        = new RoomMessageHandler(this);
+        this._roomContentLoader         = new RoomContentLoader();
 
         this._activeRoomId              = -1;
-        this._activeRoomInstance        = null;
         this._roomInstanceData          = new Map();
 
         this._roomRendererFactory       = new RoomRendererFactory();
@@ -103,26 +115,44 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this._pendingObjects            = [];
         this._processingObjects         = false;
+
+        this._isReady                   = false;
+        this._isDisposed                = false;
     }
 
-    protected onInit(): void
+    public initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void
     {
+        if(this._isReady) return;
+
+        this._sessionData   = sessionData;
+        this._roomSession   = roomSession;
+        this._roomManager   = roomManager;
+
+        this._roomManager.setContentLoader(this._roomContentLoader);
+        this._roomManager.addUpdateCategory(RoomObjectCategory.FLOOR);
+        this._roomManager.addUpdateCategory(RoomObjectCategory.WALL);
+        this._roomManager.addUpdateCategory(RoomObjectCategory.UNIT);
+        this._roomManager.addUpdateCategory(RoomObjectCategory.ROOM);
+
         this._roomMessageHandler.setConnection(this._communication.connection);
+
+        this._roomContentLoader.initialize(this._events);
+        this._roomContentLoader.setSessionDataManager(this._sessionData);
 
         this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.RESIZE, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.CLICK, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.TOUCH_START, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.addEventListener(RendererViewEvent.TOUCH_END, this.onRendererViewEvent.bind(this));
+        PIXI.Ticker.shared.add(this.update, this);
+
+        this._isReady = true;
     }
 
-    protected onDispose(): void
+    public dispose(): void
     {
+        if(!this._isReady || this._isDisposed) return;
+
+        PIXI.Ticker.shared.remove(this.update, this);
+
         if(this._roomObjectEventHandler) this._roomObjectEventHandler.dispose();
 
         if(this._roomMessageHandler) this._roomMessageHandler.dispose();
@@ -130,22 +160,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.RESIZE, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.CLICK, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_DOWN, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_UP, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.MOUSE_MOVE, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.TOUCH_START, this.onRendererViewEvent.bind(this));
-        NitroInstance.instance.renderer.eventDispatcher.removeEventListener(RendererViewEvent.TOUCH_END, this.onRendererViewEvent.bind(this));
-        
-        super.onDispose();
-    }
-
-    private onRendererViewEvent(event: RendererViewEvent): void
-    {
-        if(!event || !this._activeRoomInstance) return;
-
-        this._activeRoomInstance.onRendererViewEvent(event);
+        this._isDisposed = true;
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -166,8 +181,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     this.removeRoomInstance(event.session.roomId);
                 }
 
-                this._activeRoomId          = -1;
-                this._activeRoomInstance    = null;
+                this._activeRoomId = -1;
                 return;
         }
     }
@@ -179,9 +193,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     public getRoomInstance(roomId: number): IRoomInstance
     {
-        if(!this._roomSession || !this._roomSession.roomManager) return;
-
-        return this._roomSession.roomManager.getRoomInstance(roomId);
+        return (this._roomManager && this._roomManager.getRoomInstance(roomId)) || null;
     }
 
     public removeRoomInstance(roomId: number): void
@@ -190,25 +202,24 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(instance)
         {
-            if(instance.renderer) NitroInstance.instance.renderer.camera.removeChild(instance.renderer);
-
-            this._roomSession.roomManager.removeRoomInstance(roomId);
+            this._roomManager && this._roomManager.removeRoomInstance(roomId);
         }
 
         const existing = this._roomInstanceData.get(roomId);
 
-        if(!existing) return;
+        if(existing)
+        {
+            this._roomInstanceData.delete(existing.roomId);
 
-        this._roomInstanceData.delete(existing.roomId);
+            existing.dispose();
+        }
 
-        existing.dispose();
-
-        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.DISPOSED, roomId));
+        this._events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.DISPOSED, roomId));
     }
 
     public createRoomInstance(roomId: number): IRoomInstance
     {
-        if(!this.isLoaded)
+        if(!this._isReady)
         {
             console.log('Room Engine not initilized yet, can not create room. Room data stored for later initialization.');
 
@@ -219,28 +230,20 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return;
 
-        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
+        this._events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
 
         return instance;
     }
 
     private setupRoomInstance(roomId: number): IRoomInstance
     {
-        if(!this.isLoaded) return;
+        if(!this._isReady) return;
 
-        const instance = this._roomSession.roomManager.createRoomInstance(roomId);
+        const instance = this._roomManager.createRoomInstance(roomId);
 
         if(!instance) return null;
 
-        const renderer = this._roomRendererFactory.createRenderer(this._roomObjectEventHandler, instance);
-
-        if(!renderer) return;
-
-        instance.setRenderer(renderer);
-
         this._pendingObjects = [];
-
-        if(instance.renderer) NitroInstance.instance.renderer.camera.addChild(instance.renderer);
 
         return instance;
     }
@@ -253,26 +256,161 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(model)
         {
-            const object = instance.createObject(RoomEngine.ROOM_OBJECT_ID, RoomEngine.ROOM_OBJECT_TYPE, RoomObjectCategory.ROOM);
+            const object = instance.createRoomObject(RoomEngine.ROOM_OBJECT_ID, RoomEngine.ROOM_OBJECT_TYPE, RoomObjectCategory.ROOM);
 
-            this._roomSession.roomManager.initalizeObject(object, model);
+            this._roomManager.createRoomObjectAndInitalize(roomId, RoomEngine.ROOM_OBJECT_ID, RoomEngine.ROOM_OBJECT_TYPE, RoomObjectCategory.ROOM);
         }
 
         if(NitroConfiguration.WALKING_ENABLED)
         {
-            const tileCursor = instance.createObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
+            const tileCursor = instance.createRoomObject(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.ROOM);
 
             if(tileCursor)
             {
-                tileCursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(null, null));
+                //tileCursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(null, null));
 
-                this.roomObjectReady(tileCursor);
+                //this.roomObjectReady(tileCursor);
             }
         }
 
-        this._activeRoomInstance = instance;
-
         NitroInstance.instance.renderer.resizeRenderer();
+    }
+
+    public getRoomDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return null;
+
+        let renderer = instance.renderer as IRoomRenderer;
+
+        if(!renderer)
+        {
+            renderer = this._roomRendererFactory.createRenderer();
+
+            if(!renderer) return null;
+        }
+
+        instance.setRenderer(renderer);
+
+        const canvas = renderer.createCanvas(id, width, height, scale);
+
+        if(!canvas) return null;
+
+        canvas.setMouseListener(this._roomObjectEventHandler);
+
+        if(canvas.geometry)
+        {
+            canvas.geometry._Str_17100 = 1; // z scale
+        }
+
+        return canvas.displayObject;
+    }
+
+    public update(time: number): void
+    {
+        if(!this._roomManager) return;
+
+        time = PIXI.Ticker.shared.lastTime;
+
+        this.processPendingFurniture();
+
+        this._roomManager.update(time);
+    }
+
+    private processPendingFurniture(): void
+    {
+        const furniturePerTick: number = 5;
+
+        const startTime = Date.now();
+
+        for(let instanceData of this._roomInstanceData.values())
+        {
+            if(!instanceData) continue;
+
+            let pendingData: FurnitureData = null;
+
+            let totalFurnitureAdded: number = 0;
+            let furnitureAdded: boolean     = false;
+
+            while(pendingData = instanceData.getNextPendingFurniture())
+            {
+                furnitureAdded = this.processPendingFurnitureFloor(instanceData.roomId, pendingData.id, pendingData);
+
+                if(!(++totalFurnitureAdded % furniturePerTick))
+                {
+                    if((Date.now() - startTime) >= 40) return;
+                }
+            }
+        }
+    }
+
+    private processPendingFurnitureFloor(roomId: number, id: number, data: FurnitureData): boolean
+    {
+        if(!data)
+        {
+            const instanceData = this.getRoomInstanceData(roomId);
+
+            if(instanceData) data = instanceData.getPendingFurniture(id);
+
+            if(!data) return false;
+        }
+
+        let type    = data.type;
+        let didLoad = false;
+
+        if(!type)
+        {
+            type    = this.getFurnitureFloorNameForTypeId(data.typeId);
+            didLoad = true;
+
+        }
+
+        const object = this.createRoomObjectFloor(roomId, id, type);
+
+        if(!object) return false;
+
+        const model = object.model;
+
+        if(model)
+        {
+            model.setValue(RoomObjectModelKey.FURNITURE_COLOR, this.getFurnitureColorIndexForTypeId(data.typeId));
+            model.setValue(RoomObjectModelKey.FURNITURE_TYPE_ID, data.typeId);
+            model.setValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
+            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRY_TIME, data.expiryTime);
+            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+            model.setValue(RoomObjectModelKey.FURNITURE_USAGE_POLICY, data.usagePolicy);
+            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_ID, data.ownerId);
+            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_NAME, data.ownerName);
+        }
+
+        if(!this.updateRoomObjectFloor(roomId, id, data.location, data.direction, data.state, data.data, data.extra)) return false;
+
+        if(data.sizeZ >= 0)
+        {
+            if(!this.updateRoomObjectFloorHeight(roomId, id, data.sizeZ)) return false;
+        }
+
+        if(object.isReady && data.synchronized)
+        {
+            
+        }
+
+        return true;
+    }
+
+    public getFurnitureFloorNameForTypeId(typeId: number): string
+    {
+        if(!this._roomContentLoader) return null;
+
+        return this._roomContentLoader.getFurnitureFloorNameForTypeId(typeId);
+    }
+
+    public getFurnitureColorIndexForTypeId(typeId: number): number
+    {
+        if(!this._roomContentLoader) return null;
+
+        return this._roomContentLoader.getColorIndex(typeId);
     }
 
     private getRoomInstanceData(roomId: number): RoomInstanceData
@@ -348,38 +486,21 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return null;
 
-        return instance.createObject(objectId, type, category);
+        return instance.createRoomObject(objectId, type, category)  as IRoomObjectController;
+    }
+
+    private createRoomObjectAndInitialize(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return null;
+
+        return instance.createRoomObjectAndInitalize(objectId, type, category) as IRoomObjectController;
     }
 
     public addRoomObjects(...objects: IRoomObject[]): void
     {
         this._pendingObjects.push(...objects);
-
-        this.processObjects();
-    }
-
-    private roomObjectReady(object: IRoomObjectController): void
-    {
-        if(!object) return;
-
-        if(RoomObjectType.AVATAR_TYPES.indexOf(object.type) >= 0)
-        {
-            object = this._roomSession.roomManager.initalizeObject(object, NitroInstance.instance.avatar);
-
-            if(!object) return;
-        }
-        else
-        {
-            object = this._roomSession.roomManager.initalizeObject(object);
-
-            if(!object) return;
-
-            this.refreshObjectData(object);
-        }
-
-        if(object.logic && this._roomObjectEventHandler) object.logic.setEventHandler(this._roomObjectEventHandler);
-
-        if(object.visualization) object.visualization.start();
     }
 
     public getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
@@ -388,32 +509,37 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return null;
 
-        return instance.getObject(objectId, category);
+        return instance.getRoomObject(objectId, category) as IRoomObjectController;
     }
 
-    public getTileCursorObject(roomId: number): IRoomObjectController
+    public getRoomObjectCursor(roomId: number): IRoomObjectController
     {
         return this.getRoomObject(roomId, RoomEngine.CURSOR_OBJECT_ID, RoomObjectCategory.ROOM);
     }
 
-    public getRoomUnitObject(roomId: number, objectId: number): IRoomObjectController
+    public getRoomObjectUser(roomId: number, objectId: number): IRoomObjectController
     {
         return this.getRoomObject(roomId, objectId, RoomObjectCategory.UNIT);
     }
 
-    public removeRoomUnitObject(roomId: number, objectId: number): void
+    public removeRoomObjectUser(roomId: number, objectId: number): void
     {
         return this.removeRoomObject(roomId, objectId, RoomObjectCategory.UNIT);
     }
 
-    public getRoomFurnitureObject(roomId: number, objectId: number): IRoomObjectController
+    public getRoomObjectFloor(roomId: number, objectId: number): IRoomObjectController
     {
-        return this.getRoomObject(roomId, objectId, RoomObjectCategory.FURNITURE);
+        return this.getRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
     }
 
-    public removeRoomFurnitureObject(roomId: number, objectId: number): void
+    public removeRoomObjectFloor(roomId: number, objectId: number): void
     {
-        return this.removeRoomObject(roomId, objectId, RoomObjectCategory.FURNITURE);
+        return this.removeRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
+    }
+
+    public createRoomObjectFloor(roomId: number, id: number, type: string): IRoomObjectController
+    {
+        return this.createRoomObjectAndInitialize(roomId, id, type, RoomObjectCategory.FLOOR);
     }
 
     private removeRoomObject(roomId: number, objectId: number, category: number): void
@@ -422,40 +548,55 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return null;
 
-        instance.removeObject(objectId, category);
+        instance.removeRoomObject(objectId, category);
     }
 
-    public updateRoomFurnitureObject(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra: number = NaN): void
+    public addFurniture(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, objectData: IObjectData, extra: number = NaN, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', synchronized: boolean = true, realRoomObject: boolean = true, sizeZ: number = -1): void
     {
-        const object = this.getRoomFurnitureObject(roomId, objectId);
+        const instanceData = this.getRoomInstanceData(roomId);
 
-        if(!object) return;
+        if(!instanceData) return null;
+
+        const furnitureData = new FurnitureData(id, typeId, null, location, direction, state, objectData, extra, expires, usagePolicy, ownerId, ownerName, synchronized, realRoomObject, sizeZ);
+
+        instanceData.addPendingFurniture(furnitureData);
+    }
+
+    public updateRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra: number = NaN): boolean
+    {
+        const object = this.getRoomObjectFloor(roomId, objectId);
+
+        if(!object) return false;
         
         object.processUpdateMessage(new RoomObjectUpdateMessage(location, direction));
         object.processUpdateMessage(new ObjectDataUpdateMessage(state, data, extra));
+        
+        return true;
     }
 
-    public updateRoomFurnitureObjectHeight(roomId: number, objectId: number, height: number): void
+    public updateRoomObjectFloorHeight(roomId: number, objectId: number, height: number): boolean
     {
-        const object = this.getRoomFurnitureObject(roomId, objectId);
+        const object = this.getRoomObjectFloor(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
         
         object.processUpdateMessage(new ObjectHeightUpdateMessage(null, null, height));
+
+        return true;
     }
 
-    public rollRoomFurnitureObject(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D): void
+    public rollRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D): void
     {
-        const object = this.getRoomFurnitureObject(roomId, objectId);
+        const object = this.getRoomObjectFloor(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectMoveUpdateMessage(location, targetLocation, null, !!targetLocation));
     }
 
-    public addRoomUnit(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, type: string, figure: string, gender: string): boolean
+    public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, type: string, figure: string, gender: string): boolean
     {
-        const existing = this.getRoomUnitObject(roomId, objectId);
+        const existing = this.getRoomObjectUser(roomId, objectId);
 
         if(existing) return false;
 
@@ -473,9 +614,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return true;
     }
 
-    public updateRoomUnitLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp: boolean = false, baseY: number = 0, direction: IVector3D = null, headDirection: number = NaN): void
+    public updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp: boolean = false, baseY: number = 0, direction: IVector3D = null, headDirection: number = NaN): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
@@ -504,9 +645,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return new Vector3d(location.x, location.y, height);
     }
 
-    public updateRoomUnitAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
+    public updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
@@ -560,161 +701,97 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(message);
     }
 
-    public updateRoomUnitFigure(roomId: number, objectId: number, figure: string, gender: string): void
+    public updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
     }
 
-    public updateRoomUnitFlatControl(roomId: number, objectId: number, level: string): void
+    public updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarFlatControlUpdateMessage(parseInt(level)));
     }
 
-    public updateRoomUnitEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
+    public updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
     }
 
-    public updateRoomUnitGesture(roomId: number, objectId: number, gestureId: number): void
+    public updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarGestureUpdateMessage(gestureId));
     }
 
-    public updateRoomUnitPosture(roomId: number, objectId: number, type: string, parameter: string = null): void
+    public updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter: string = null): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
     }
 
-    public updateRoomUnitOwnUser(roomId: number, objectId: number): void
+    public updateRoomObjectUserOwn(roomId: number, objectId: number): void
     {
-        const object = this.getRoomUnitObject(roomId, objectId);
+        const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarOwnMessage());
     }
 
-    private refreshObjectData(object: IRoomObjectController): void
+    public refreshRoomObjectWallData(roomId: number, objectId: number): void
     {
-        if(!object || !object.model || !object.logic) return;
 
-        const dataFormat = object.model.getValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT);
-
-        if(dataFormat === undefined) return;
-
-        const objectData = ObjectDataFactory.getData(parseInt(dataFormat));
-
-        if(!objectData) return;
-
-        objectData.initializeFromRoomObjectModel(object.model);
-
-        object.processUpdateMessage(new ObjectDataUpdateMessage(object.state, objectData));
     }
 
-    private processObjects(fromSelf: boolean = false): void
+    public refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void
     {
-        if(this._processingObjects && !fromSelf) return;
-
-        if(!this._pendingObjects.length)
+        if(category === RoomObjectCategory.WALL)
         {
-            this._processingObjects = false;
-
-            return;
+            this.refreshRoomObjectWallData(roomId, objectId);
         }
 
-        this._processingObjects = true;
+        const object = this.getRoomObject(roomId, objectId, category);
 
-        const downloadUrls: string[]                    = [];
-        const downloadObjects: IRoomObjectController[]  = [];
-
-        while(this._pendingObjects.length)
+        if(object)
         {
-            const object = this._pendingObjects.shift() as IRoomObjectController;
+            const dataFormat = object.model.getValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT);
 
-            if(!object) continue;
-
-            let downloadUrl: string = null;
-
-            switch(object.type)
+            if(!isNaN(dataFormat))
             {
-                case RoomObjectType.USER:
-                    break;
-                case RoomObjectType.PET:
-                    const petType = object.model.getValue(RoomObjectModelKey.PET_TYPE);
+                const data = ObjectDataFactory.getData(dataFormat);
 
-                    console.log('pet', petType);
-                    break;
-                case RoomObjectType.BOT:
-                    break;
-                case RoomObjectType.RENTABLE_BOT:
-                    break;
-                default:
-                    const asset = NitroInstance.instance.core.asset.getAsset(object.type);
+                data.initializeFromRoomObjectModel(object.model);
 
-                    if(!asset) downloadUrl = NitroConfiguration.ASSET_URL + `/furniture/${ object.type }/${ object.type }.json`;
-                    break;
+                object.processUpdateMessage(new ObjectDataUpdateMessage(object.state, data));
             }
-
-            if(downloadUrl)
-            {
-                if(downloadUrls.indexOf(downloadUrl) === -1) downloadUrls.push(downloadUrl);
-
-                downloadObjects.push(object);
-
-                continue;
-            }
-
-            this.roomObjectReady(object);
         }
-
-        if(!downloadUrls.length && !downloadObjects.length) return this.processObjects(true);
-
-        this.downloadObjects(downloadUrls, downloadObjects);
     }
 
-    private downloadObjects(urls: string[], objects: IRoomObjectController[]): void
+    public get events(): IEventDispatcher
     {
-        NitroInstance.instance.core.asset.downloadAssets(urls, () =>
-        {
-            for(let object of objects)
-            {
-                if(!object) continue;
-
-                this.roomObjectReady(object);
-            }
-
-            this.processObjects(true);
-        });
+        return this._events;
     }
 
     public get connection(): IConnection
     {
         return this._communication.connection;
-    }
-
-    public get roomSession(): IRoomSessionManager
-    {
-        return this._roomSession;
     }
 
     public get objectEventHandler(): RoomObjectEventHandler
@@ -740,5 +817,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public get activeRoomId(): number
     {
         return this._activeRoomId;
+    }
+
+    public get isReady(): boolean
+    {
+        return this._isReady;
+    }
+
+    public get isDisposed(): boolean
+    {
+        return this._isDisposed;
     }
 }

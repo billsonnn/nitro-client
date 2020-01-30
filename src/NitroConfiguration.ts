@@ -1,7 +1,8 @@
 export class NitroConfiguration
 {
     public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
-    public static ASSET_URL                 = 'https://nitro-assets.nextgenhabbo.com';
+    public static SOCKET_URL                = 'wss://system.nitrots.co';
+    public static ASSET_URL                 = 'https://assets.nitrots.co';
     public static LOCAL_ASSET_URL           = 'https://system.nitrots.co';
     public static FPS                       = 24;
     public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
@@ -34,6 +35,8 @@ export class NitroConfiguration
 
     public static PRELOAD_ASSETS: string[]  = [
         NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`,
+        NitroConfiguration.ASSET_URL + `/room/place_holder/place_holder.json`,
+        NitroConfiguration.ASSET_URL + `/room/place_holder_wall_item/place_holder_wall_item.json`,
         NitroConfiguration.ASSET_URL + `/figure/hh_human_body/hh_human_body.json`,
         NitroConfiguration.ASSET_URL + `/figure/hh_human_item/hh_human_item.json`,
     ];

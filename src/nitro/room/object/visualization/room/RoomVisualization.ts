@@ -1,14 +1,10 @@
 import { NitroConfiguration } from '../../../../../NitroConfiguration';
-import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomVisualizationData } from './RoomVisualizationData';
-import { DoorWallLeftTexture } from './tile/textures/DoorWallLeftTexture';
-import { DoorWallRightTexture } from './tile/textures/DoorWallRightTexture';
 import { StairLeftTexture } from './tile/textures/StairLeftTexture';
 import { StairRightTexture } from './tile/textures/StairRightTexture';
 import { TileTexture } from './tile/textures/TileTexture';
@@ -22,7 +18,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
         super();
 
         this._data          = null;
-        this._selfContained = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -35,21 +30,14 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         this.generateMap();
 
-        if(this._selfContainer)
-        {
-            this._selfContainer.x      -= NitroConfiguration.TILE_WIDTH + 2;
-            this._selfContainer.y      -= NitroConfiguration.TILE_HEIGHT + 1;
-            this._selfContainer.zIndex  = -10000000;
-        }
-
         return true;
     }
 
-    protected onDispose(): void
+    public dispose(): void
     {
-        if(this._data && !this._data.saveable) this._data.dispose();
+        super.dispose();
 
-        super.onDispose();
+        if(this._data && !this._data.saveable) this._data.dispose();
     }
 
     private generateMap(): void
@@ -132,16 +120,17 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
                 {
                     counter += index;
                     
-                    let sprite: IRoomObjectSprite = this.createAndAddSprite(`${ counter }`, null, texture.getTexture(thickness));
+                    // let sprite: IRoomObjectSprite = this.createAndAddSprite(`${ counter }`, null, texture.getTexture(thickness));
 
-                    const screenLocation = location.toScreen();
+                    // const screenLocation = location.toScreen();
 
-                    sprite.x            = screenLocation.x;
-                    sprite.y            = screenLocation.y;
-                    sprite.hitArea      = texture.POLYGON;
-                    sprite.tilePosition = location;
+                    // sprite.offsetX            = screenLocation.x;
+                    // sprite.offsetY            = screenLocation.y;
+                    // sprite.hitArea      = texture.POLYGON;
+                    // sprite.tilePosition = location;
+                    // sprite.relativeDepth       = -2000
 
-                    if(isStair) sprite.y -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
+                    // if(isStair) sprite.offsetY -= NitroConfiguration.TILE_HEIGHT + (NitroConfiguration.TILE_HEIGHT / 2);
                 }
             }
         }
@@ -151,44 +140,41 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
     private addDoor(x: number, y: number, z: number, direction: number): void
     {
-        const texture: typeof TileTexture = direction === Direction.EAST ? DoorWallLeftTexture : DoorWallRightTexture;
+        // const texture: typeof TileTexture = direction === Direction.EAST ? DoorWallLeftTexture : DoorWallRightTexture;
         
-        if(!texture) return;
+        // if(!texture) return;
 
-        const doorTexture = texture.getTexture(NitroConfiguration.WALL_HEIGHT);
+        // const doorTexture = texture.getTexture(NitroConfiguration.WALL_HEIGHT);
 
-        const sprite = new RoomObjectSprite(this.object, 'door', null, doorTexture);
+        // const sprite = new RoomObjectSprite(this.object, 'door', null, doorTexture);
 
-        const location = new Vector3d(x, y, z).toScreen();
+        // const location = new Vector3d(x, y, z).toScreen();
 
-        location.y -= NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS;
+        // location.y -= NitroConfiguration.WALL_HEIGHT - NitroConfiguration.TILE_THICKNESS;
 
         //sprite.zIndex   = position.depth + 500;
 
-        this.object.room.renderer.collision.addCollision(sprite);
+        //this.object.room.renderer.collision.addCollision(sprite);
     }
 
     public getPositionForPoint(point: PIXI.Point, scale: number = 1): IVector3D
     {
-        if(!point || !this.sprites || !this.sprites.size) return null;
+        // if(!point || !this.sprites || !this.sprites.size) return null;
 
-        point.x -= NitroConfiguration.TILE_WIDTH * scale;
+        // point.x -= NitroConfiguration.TILE_WIDTH * scale;
 
-        if(this._selfContainer)
-        {
-            for(let sprite of this.sprites.values())
-            {
-                if(!sprite || !sprite.hitArea) continue;
+        // for(let sprite of this.sprites.values())
+        // {
+        //     if(!sprite || !sprite.hitArea) continue;
 
-                const transform = sprite.worldTransform.applyInverse(point);
+        //     const transform = sprite.worldTransform.applyInverse(point);
 
-                if(!sprite.hitArea.contains(transform.x, transform.y)) continue;
+        //     if(!sprite.hitArea.contains(transform.x, transform.y)) continue;
 
-                if(sprite.tilePosition) return sprite.tilePosition;
+        //     if(sprite.tilePosition) return sprite.tilePosition;
 
-                break;
-            }
-        }
+        //     return null;
+        // }
 
         return null;
     }

@@ -1,6 +1,7 @@
 export class RoomObjectModelKey
 {
     public static OBJECT_ROOM_ID: string                      = 'object_room_id';
+    public static OBJECT_ACCURATE_Z_VALUE: string             = 'object_accurate_z_value';
     public static TILE_CURSOR_HEIGHT: string                  = 'tile_cursor_height';
     public static FIGURE:  string                             = 'figure';
     public static GENDER:  string                             = 'gender';
@@ -51,6 +52,10 @@ export class RoomObjectModelKey
     public static FURNITURE_CENTER_Z: string                  = 'furniture_center_z';
     public static FURNITURE_ALLOWED_DIRECTIONS: string        = 'furniture_allowed_directions';
     public static FURNITURE_AD_URL: string                    = 'furniture_ad_url';
+    public static FURNITURE_TYPE_ID: string                   = 'furniture_type_id';
+    public static FURNITURE_EXPIRY_TIME: string               = 'furniture_expiry_time';
+    public static FURNITURE_EXPIRTY_TIMESTAMP: string         = 'furniture_expiry_timestamp';
+    public static FURNITURE_REAL_ROOM_OBJECT: string          = 'furniture_real_room_object';
     public static FURNITURE_BRANDING_IMAGE_STATUS: string     = 'furniture_branding_image_status';
     public static FURNITURE_BRANDING_IMAGE_URL: string        = 'furniture_branding_image_url';
     public static FURNITURE_BRANDING_URL: string              = 'furniture_branding_url';

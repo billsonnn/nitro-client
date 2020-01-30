@@ -1,26 +1,28 @@
 import { Disposable } from '../core/common/disposable/Disposable';
-import { RendererViewEvent } from '../core/renderer/RendererViewEvent';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
+import { IRoomObject } from './object/IRoomObject';
 import { IRoomObjectController } from './object/IRoomObjectController';
-import { IRoomRenderer } from './renderer/IRoomRenderer';
+import { IRoomRendererBase } from './renderer/IRoomRendererBase';
 
 export class RoomInstance extends Disposable implements IRoomInstance
 {
     private _id: number;
     private _container: IRoomInstanceContainer;
-    private _renderer: IRoomRenderer;
+    private _renderer: IRoomRendererBase;
     private _managers: Map<number, IRoomObjectManager>;
+    private _updateCategories: number[];
 
     constructor(id: number, container: IRoomInstanceContainer)
     {
         super();
         
-        this._id        = id;
-        this._container = container;
-        this._renderer  = null;
-        this._managers  = new Map();
+        this._id                = id;
+        this._container         = container;
+        this._renderer          = null;
+        this._managers          = new Map();
+        this._updateCategories  = [];
     }
 
     protected onDispose(): void
@@ -32,15 +34,36 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._container = null;
     }
 
-    public setRenderer(renderer: IRoomRenderer): void
+    public setRenderer(renderer: IRoomRendererBase): void
     {
-        if(!renderer) return;
-
         if(renderer === this._renderer) return;
 
         if(this._renderer) this.destroyRenderer();
 
         this._renderer = renderer;
+
+        if(!this._renderer) return;
+
+        this._renderer.reset();
+
+        if(this._managers.size)
+        {
+            for(let manager of this._managers.values())
+            {
+                if(!manager) continue;
+
+                const objects = manager.objects;
+
+                if(!objects.size) continue;
+
+                for(let object of objects.values())
+                {
+                    if(!object) continue;
+
+                    this._renderer.addObject(object);
+                }
+            }
+        }
     }
 
     private destroyRenderer(): void
@@ -50,36 +73,6 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._renderer.dispose();
 
         this._renderer = null;
-    }
-
-    public onRendererViewEvent(event: RendererViewEvent): void
-    {
-        if(!event || !this._renderer) return;
-
-        switch(event.type)
-        {
-            case RendererViewEvent.RESIZE:
-                this._renderer.resize(event.originalEvent as UIEvent);
-                return;
-            case RendererViewEvent.TOUCH_START:
-                this._renderer.touchStart(event.originalEvent as TouchEvent);
-                return;
-            case RendererViewEvent.TOUCH_END:
-                this._renderer.touchEnd(event.originalEvent as TouchEvent);
-                return;
-            case RendererViewEvent.CLICK:
-                this._renderer.click(event.originalEvent as MouseEvent);
-                return;
-            case RendererViewEvent.MOUSE_MOVE:
-                this._renderer.mouseMove(event.originalEvent as MouseEvent);
-                return;
-            case RendererViewEvent.MOUSE_DOWN:
-                this._renderer.mouseDown(event.originalEvent as MouseEvent);
-                return;
-            case RendererViewEvent.MOUSE_UP:
-                this._renderer.mouseUp(event.originalEvent as MouseEvent);
-                return;
-        }
     }
 
     public getManager(category: number): IRoomObjectManager
@@ -106,7 +99,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return manager;
     }
 
-    public getObject(id: number, category: number): IRoomObjectController
+    public getRoomObject(id: number, category: number): IRoomObjectController
     {
         const manager = this.getManager(category);
 
@@ -119,7 +112,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return object;
     }
 
-    public createObject(id: number, type: string, category: number): IRoomObjectController
+    public createRoomObject(id: number, type: string, category: number): IRoomObjectController
     {
         const manager = this.getManagerOrCreate(category);
 
@@ -129,16 +122,31 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(!object) return null;
 
+        if(this._renderer) this._renderer.addObject(object);
+
         object.setRoom(this);
 
         return object;
     }
 
-    public removeObject(id: number, category: number): void
+    public createRoomObjectAndInitalize(objectId: number, type: string, category: number): IRoomObject
+    {
+        if(!this._container) return null;
+
+        return this._container.createRoomObjectAndInitalize(this._id, objectId, type, category);
+    }
+
+    public removeRoomObject(id: number, category: number): void
     {
         const manager = this.getManager(category);
 
         if(!manager) return;
+
+        const object = manager.getObject(id);
+
+        if(!object) return;
+
+        if(this._renderer) this._renderer.removeObject(object);
 
         manager.removeObject(id);
     }
@@ -149,10 +157,64 @@ export class RoomInstance extends Disposable implements IRoomInstance
         {
             if(!manager) continue;
 
+            if(this._renderer)
+            {
+                const objects = manager.objects;
+
+                if(objects.size)
+                {
+                    for(let object of objects.values())
+                    {
+                        if(!object) continue;
+
+                        this._renderer.removeObject(object);
+                    }
+                }
+            }
+
             manager.dispose();
         }
 
         this._managers.clear();
+    }
+
+    public addUpdateCategory(category: number): void
+    {
+        const index = this._updateCategories.indexOf(category);
+
+        if(index >= 0) return;
+
+        this._updateCategories.push(category);
+    }
+
+    public removeUpdateCategory(category: number): void
+    {
+        const index = this._updateCategories.indexOf(category);
+
+        if(index === -1) return;
+
+        this._updateCategories.splice(index, 1);
+    }
+
+    public update(time: number): void
+    {
+        for(let category of this._updateCategories)
+        {
+            const manager = this.getManager(category);
+
+            if(!manager) continue;
+
+            for(let object of manager.objects.values())
+            {
+                if(!object) continue;
+
+                const logic = object.logic;
+
+                if(logic) logic.update(time);
+            }
+        }
+
+        this._renderer && this._renderer.update(time);
     }
 
     public get id(): number
@@ -165,8 +227,13 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return this._container;
     }
 
-    public get renderer(): IRoomRenderer
+    public get renderer(): IRoomRendererBase
     {
         return this._renderer;
+    }
+
+    public get managers(): Map<number, IRoomObjectManager>
+    {
+        return this._managers;
     }
 }

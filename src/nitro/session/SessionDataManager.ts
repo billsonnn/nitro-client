@@ -6,6 +6,7 @@ import { UserInfoEvent } from '../communication/messages/incoming/user/data/User
 import { SessionDataEvent } from './events/SessionDataEvent';
 import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
+import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
 import { ISessionDataManager } from './ISessionDataManager';
 
 export class SessionDataManager extends NitroManager implements ISessionDataManager
@@ -21,17 +22,21 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _wallItems: Map<number, FurnitureData>;
     private _furnitureData: FurnitureDataParser;
 
+    private _pendingFurniDataListeners: IFurnitureDataListener[];
+
     constructor(communication: INitroCommunicationManager)
     {
         super();
         
-        this._communication = communication;
+        this._communication             = communication;
 
         this.resetUserInfo();
 
-        this._floorItems    = new Map();
-        this._wallItems     = new Map();
-        this._furnitureData = null;
+        this._floorItems                = new Map();
+        this._wallItems                 = new Map();
+        this._furnitureData             = null;
+
+        this._pendingFurniDataListeners = [];
     }
 
     protected onInit(): void
@@ -66,6 +71,47 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.events.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
         this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
+    }
+
+    public getAllFurnitureData(listener: IFurnitureDataListener): FurnitureData[]
+    {
+        if(!this._floorItems || !this._floorItems.size)
+        {
+            if(this._pendingFurniDataListeners.indexOf(listener) === -1) this._pendingFurniDataListeners.push(listener);
+
+            return;
+        }
+
+        const furnitureData: FurnitureData[] = [];
+
+        for(let data of this._floorItems.values())
+        {
+            if(!data) continue;
+
+            furnitureData.push(data);
+        }
+
+        for(let data of this._wallItems.values())
+        {
+            if(!data) continue;
+
+            furnitureData.push(data);
+        }
+
+        if(!furnitureData || !furnitureData.length) return null;
+
+        return furnitureData;
+    }
+
+    public removePendingFurniDataListener(listener: IFurnitureDataListener): void
+    {
+        if(!this._pendingFurniDataListeners) return;
+
+        const index = this._pendingFurniDataListeners.indexOf(listener);
+
+        if(index === -1) return;
+
+        this._pendingFurniDataListeners.splice(index, 1);
     }
 
     private dispatchSessionDataEvent(type: string): void
@@ -107,6 +153,16 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private onFurnitureDataReadyEvent(event: Event): void
     {
         this._furnitureData.events.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+
+        if(this._pendingFurniDataListeners)
+        {
+            for(let listener of this._pendingFurniDataListeners)
+            {
+                if(!listener) continue;
+
+                listener.loadFurnitureData();
+            }
+        }
     }
 
     private destroyFurnitureData(): void

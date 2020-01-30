@@ -1,187 +1,125 @@
 import * as PIXI from 'pixi.js-legacy';
-import { IRoomCollision } from '../../renderer/IRoomCollision';
-import { RoomCollision } from '../../renderer/RoomCollision';
+import { GraphicAssetCollection } from '../../../core/asset/GraphicAssetCollection';
+import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 import { IRoomObjectSpriteVisualization } from './IRoomObjectSpriteVisualization';
 import { IObjectVisualizationData } from './IRoomObjectVisualizationData';
-import { PlayableVisualization } from './PlayableVisualization';
 import { RoomObjectSprite } from './RoomObjectSprite';
 
-export class RoomObjectSpriteVisualization extends PlayableVisualization implements IRoomObjectSpriteVisualization
+export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualization
 {
+    private static VISUALIZATION_COUNTER: number = 0;
+
+    private _id: number;
     private _object: IRoomObjectController;
-    private _sprites: Map<string, IRoomObjectSprite>;
-    private _spriteCounter: number;
+    private _asset: GraphicAssetCollection;
+    private _sprites: IRoomObjectSprite[];
 
     private _updateObjectCounter: number;
     private _updateModelCounter: number;
-
-    protected _selfContained: boolean;
-    protected _selfContainer: IRoomCollision;
+    private _updateSpriteCounter: number;
 
     constructor()
     {
-        super();
-
+        this._id                    = RoomObjectSpriteVisualization.VISUALIZATION_COUNTER++;
         this._object                = null;
-        this._sprites               = new Map();
-        this._spriteCounter         = 0;
+        this._asset                 = null;
+        this._sprites               = [];
 
         this._updateObjectCounter   = -1;
         this._updateModelCounter    = -1;
-
-        this._selfContained         = false;
-        this._selfContainer         = null;
+        this._updateSpriteCounter   = -1;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
     {
-        if(this._selfContained)
-        {
-            if(!this._selfContainer)
-            {
-                this._selfContainer = new RoomCollision();
-
-                this._selfContainer.setObject(this._object);
-
-                if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.addCollision(this._selfContainer);
-            }
-        }
-        
         return false;
     }
 
-    public onUpdate(): void
-    {
-        this.object.logic && this.object.logic.update(this.totalTimeRunning);
-    }
-
-    protected onDispose(): void
-    {
-        this.removeSprites();
-
-        if(this._selfContainer)
-        {
-            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(this._selfContainer);
-
-            this._selfContainer.destroy();
-
-            this._selfContainer = null;
-        }
-        
-        super.onDispose();
-    }
-
-    public getSprite(name: string): IRoomObjectSprite
-    {
-        const existing = this._sprites.get(name);
-
-        if(!existing) return null;
-
-        return existing;
-    }
-
-    public createAndAddSprite(name: string, source: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture, texture: PIXI.Texture = null): IRoomObjectSprite
-    {
-        if(!name) return null;
-
-        return this.addSprite(name, new RoomObjectSprite(this._object, name, source, texture));
-    }
-
-    public addSprite(name: string, sprite: IRoomObjectSprite): IRoomObjectSprite
-    {
-        const existing = this.getSprite(name);
-
-        if(existing)
-        {
-            sprite.destroy();
-
-            return existing;
-        }
-
-        this._sprites.set(name, sprite);
-
-        if(this._selfContainer)
-        {
-            this._selfContainer.addCollision(sprite);
-        }
-        else
-        {
-            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.addCollision(sprite);
-        }
-
-        this._spriteCounter++;
-
-        return sprite;
-    }
-
-    public removeSprites(): void
-    {
-        if(!this._sprites || !this._sprites.size) return;
-
-        for(let sprite of this._sprites.values())
-        {
-            if(!sprite) continue;
-
-            if(this._selfContainer)
-            {
-                this._selfContainer.removeCollision(sprite);
-            }
-            else
-            {
-                if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(sprite);
-            }
-
-            sprite.destroy();
-        }
-
-        this._sprites.clear();
-        this._spriteCounter = 0;
-    }
-
-    public removeSprite(sprite: IRoomObjectSprite): void
-    {
-        if(!sprite) return;
-
-        const existing = this._sprites.get(sprite.name);
-
-        if(!existing || existing !== sprite) return;
-
-        if(this._selfContainer)
-        {
-            this._selfContainer.removeCollision(sprite);
-        }
-        else
-        {
-            if(this._object.room && this._object.room.renderer && this._object.room.renderer.collision) this._object.room.renderer.collision.removeCollision(sprite);
-        }
-
-        this._sprites.delete(sprite.name);
-
-        existing.destroy();
-    }
-
-    public hideSprites(): void
-    {
-        if(!this._sprites || !this._sprites.size) return;
-
-        for(let sprite of this._sprites.values())
-        {
-            if(!sprite || sprite.doesntHide) continue;
-
-            sprite.visible = false;
-        }
-    }
-
-    public updateSprites(): void
+    public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
     {
         return;
     }
 
-    public setObject(object: IRoomObjectController)
+    public dispose(): void
     {
-        this._object = object;
+        
+    }
+
+    public getSprite(index: number): IRoomObjectSprite
+    {
+        if((index >= 0) && (index < this._sprites.length)) return this._sprites[index];
+
+        return null;
+    }
+
+    protected setSpriteCount(count: number): void
+    {
+        while(this._sprites.length > count)
+        {
+            const sprite = this._sprites[(this._sprites.length - 1)] as RoomObjectSprite;
+
+            if(sprite) sprite.dispose();
+
+            this._sprites.pop();
+        }
+
+        while(this._sprites.length < count)
+        {
+            this._sprites.push(new RoomObjectSprite());
+        }
+    }
+
+    public getBoundingRectangle(): PIXI.Rectangle
+    {
+        const totalSprites = this.totalSprites;
+
+        const rectangle = new PIXI.Rectangle();
+
+        let iterator = 0;
+
+        while(iterator < totalSprites)
+        {
+            const sprite = this.getSprite(iterator);
+
+            if(sprite && sprite.visible)
+            {
+                const texture = sprite.texture;
+
+                if(texture)
+                {
+                    const point = new PIXI.Point(sprite.offsetX, sprite.offsetY);
+
+                    if(iterator === 0)
+                    {
+                        rectangle.left      = point.x;
+                        rectangle.top       = point.y;
+                        rectangle.right     = (point.x + texture.width);
+                        rectangle.bottom    = (point.y + texture.height);
+                    }
+                    else
+                    {
+                        if(point.x < rectangle.left) rectangle.left = point.x;
+
+                        if(point.y < rectangle.top) rectangle.top = point.y;
+
+                        if((point.x + sprite.width) > rectangle.right) rectangle.right = (point.x + sprite.width);
+
+                        if((point.y + sprite.height) > rectangle.bottom) rectangle.bottom = (point.y + sprite.height);
+                    }
+                }
+            }
+
+            iterator++;
+        }
+
+        return rectangle;
+    }
+
+    public get instanceId(): number
+    {
+        return this._id;
     }
 
     public get object(): IRoomObjectController
@@ -189,14 +127,29 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
         return this._object;
     }
 
-    public get sprites(): Map<string, IRoomObjectSprite>
+    public set object(object: IRoomObjectController)
+    {
+        this._object = object;
+    }
+
+    public get asset(): GraphicAssetCollection
+    {
+        return this._asset;
+    }
+
+    public set asset(asset: GraphicAssetCollection)
+    {
+        this._asset = asset;
+    }
+
+    public get sprites(): IRoomObjectSprite[]
     {
         return this._sprites;
     }
 
     public get totalSprites(): number
     {
-        return this._spriteCounter
+        return this._sprites.length;
     }
 
     public get updateObjectCounter(): number
@@ -219,8 +172,13 @@ export class RoomObjectSpriteVisualization extends PlayableVisualization impleme
         this._updateModelCounter = count;
     }
 
-    public get selfContainer(): IRoomCollision
+    public get updateSpriteCounter(): number
     {
-        return this._selfContainer;
+        return this._updateSpriteCounter;
+    }
+
+    public set updateSpriteCounter(count: number)
+    {
+        this._updateSpriteCounter = count;
     }
 }

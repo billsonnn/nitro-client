@@ -115,12 +115,12 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     {
         if(!this._imageUrl) return;
 
-        const sprite = this.createAndAddSprite(this._imageUrl, this._imageUrl);
+        // const sprite = this.createAndAddSprite(this._imageUrl, this._imageUrl);
 
-        if(!sprite) return;
+        // if(!sprite) return;
 
-        sprite.doesntHide = true;
+        // sprite.doesntHide = true;
 
-        this.resetLayers();
+        // this.resetLayers();
     }
 }

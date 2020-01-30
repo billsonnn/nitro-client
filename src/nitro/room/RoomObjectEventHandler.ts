@@ -3,6 +3,7 @@ import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
+import { IRoomCanvasMouseListener } from '../../room/renderer/IRoomCanvasMouseListener';
 import { Direction } from '../../room/utils/Direction';
 import { IVector3D } from '../../room/utils/IVector3D';
 import { Vector3d } from '../../room/utils/Vector3d';
@@ -21,12 +22,12 @@ import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdate
 import { ObjectOperationType } from './object/logic/ObjectOperationType';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectModelKey } from './object/RoomObjectModelKey';
-import { RoomObjectType } from './object/RoomObjectType';
+import { RoomObjectUserType } from './object/RoomObjectUserType';
 import { FurnitureVisualization } from './object/visualization/furniture/FurnitureVisualization';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
-export class RoomObjectEventHandler extends Disposable
+export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMouseListener
 {
     private _roomEngine: IRoomEngineServices;
 
@@ -126,7 +127,7 @@ export class RoomObjectEventHandler extends Disposable
                 {
                     switch(object.category)
                     {
-                        case RoomObjectCategory.FURNITURE:
+                        case RoomObjectCategory.FLOOR:
                             if(event.ctrlKey && !event.altKey && !event.shiftKey)
                             {
                                 this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_PICKUP);
@@ -181,7 +182,7 @@ export class RoomObjectEventHandler extends Disposable
 
         if(this._roomEngine && NitroConfiguration.WALKING_ENABLED)
         {
-            const cursor = this._roomEngine.getTileCursorObject(roomId);
+            const cursor = this._roomEngine.getRoomObjectCursor(roomId);
 
             if(cursor) cursor.processUpdateMessage(new ObjectTileCursorUpdateMessage(event.location, null));
         }
@@ -225,7 +226,7 @@ export class RoomObjectEventHandler extends Disposable
                 {
                     case RoomObjectCategory.UNIT:
                         break;
-                    case RoomObjectCategory.FURNITURE:
+                    case RoomObjectCategory.FLOOR:
                         if(event.altKey && !event.ctrlKey && !event.shiftKey)
                         {
                             this.handleRoomObjectOperation(roomId, object, ObjectOperationType.OBJECT_MOVE);
@@ -277,12 +278,12 @@ export class RoomObjectEventHandler extends Disposable
                 if(operation === ObjectOperationType.OBJECT_ROTATE_NEGATIVE) direction = this.getNextObjectDirection(object, false);
                 else direction = this.getNextObjectDirection(object, true);
 
-                if(object.type === RoomObjectType.MONSTER_PLANT)
+                if(object.type === RoomObjectUserType.MONSTER_PLANT)
                 {
 
                 }
 
-                else if(object.category === RoomObjectCategory.FURNITURE) this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.location.x, object.location.y, direction.x));
+                else if(object.category === RoomObjectCategory.FLOOR) this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.location.x, object.location.y, direction.x));
 
                 break;
             case ObjectOperationType.OBJECT_EJECT:
@@ -297,7 +298,7 @@ export class RoomObjectEventHandler extends Disposable
 
                 switch(object.category)
                 {
-                    case RoomObjectCategory.FURNITURE:
+                    case RoomObjectCategory.FLOOR:
                         this._roomEngine.connection.send(new FurnitureFloorUpdateComposer(object.id, object.location.x, object.location.y, object.direction.x));
                         break;
                 }
@@ -328,11 +329,11 @@ export class RoomObjectEventHandler extends Disposable
 
         if((selectedData.operation === ObjectOperationType.OBJECT_MOVE) || (selectedData.operation === ObjectOperationType.OBJECT_MOVE_TO))
         {
-            if(selectedData.object.category === RoomObjectCategory.FURNITURE)
+            if(selectedData.object.category === RoomObjectCategory.FLOOR)
             {
                 const visualization = selectedData.object.visualization as FurnitureVisualization;
 
-                visualization.disableIcon();
+                //visualization.disableIcon();
             }
 
             selectedData.object.setTempLocation(null);
@@ -359,7 +360,7 @@ export class RoomObjectEventHandler extends Disposable
                 
                 if(location) this.sendLookUpdate(location.x, location.y);
                 break;
-            case RoomObjectCategory.FURNITURE:
+            case RoomObjectCategory.FLOOR:
                 break;
         }
 
@@ -378,7 +379,7 @@ export class RoomObjectEventHandler extends Disposable
         {
             case RoomObjectCategory.UNIT:
                 break;
-            case RoomObjectCategory.FURNITURE:
+            case RoomObjectCategory.FLOOR:
                 break;
         }
 
@@ -394,7 +395,9 @@ export class RoomObjectEventHandler extends Disposable
 
     private updateObjectState(roomId: number, objectId: number, type: string, state: number, isRandom: boolean): void
     {
-        const category = RoomObjectCategory.getCategory(type);
+        //const category = RoomObjectCategory.getCategory(type);
+
+        const category = 0;
 
         this.sendStateUpdate(roomId, objectId, category, state, isRandom);
     }
@@ -403,7 +406,7 @@ export class RoomObjectEventHandler extends Disposable
     {
         if(!this._roomEngine || !this._roomEngine.connection) return;
 
-        if(category === RoomObjectCategory.FURNITURE)
+        if(category === RoomObjectCategory.FLOOR)
         {
             if(!isRandom)
             {
@@ -456,7 +459,7 @@ export class RoomObjectEventHandler extends Disposable
         {
             switch(selectedData.object.category)
             {
-                case RoomObjectCategory.FURNITURE:
+                case RoomObjectCategory.FLOOR:
                 case RoomObjectCategory.UNIT:
                     //selectedData.object.position.direction = selectedData.object.realPosition.direction;
                     
@@ -469,11 +472,11 @@ export class RoomObjectEventHandler extends Disposable
         {
             selectedData.object.setLocation(selectedData.object.realLocation);
 
-            visualization.enableIcon();
+            //visualization.enableIcon();
 
             let point: PIXI.Point = new PIXI.Point();
 
-            selectedData.object.room && selectedData.object.room.renderer.worldTransform.applyInverse(event.point, point);
+            //selectedData.object.room && selectedData.object.room.renderer.worldTransform.applyInverse(event.point, point);
 
             if(!point) return;
 
@@ -483,7 +486,7 @@ export class RoomObjectEventHandler extends Disposable
         }
         else
         {
-            visualization.disableIcon();
+            //visualization.disableIcon();
         }
     }
 
@@ -612,7 +615,7 @@ export class RoomObjectEventHandler extends Disposable
 
         if(object.model)
         {
-            if(object.type === RoomObjectType.MONSTER_PLANT)
+            if(object.type === RoomObjectUserType.MONSTER_PLANT)
             {
                 directions = object.model.getValue(RoomObjectModelKey.PET_ALLOWED_DIRECTIONS);
             }

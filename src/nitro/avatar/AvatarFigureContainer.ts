@@ -273,7 +273,8 @@ export class AvatarFigureContainer implements IDownloadable
                 part.library = library;
             }
 
-            const asset = NitroInstance.instance.core.asset.getAsset(part.library);
+            const asset: any = null;
+            //const asset = NitroInstance.instance.core.asset.getAsset(part.library);
 
             if(asset) continue;
 

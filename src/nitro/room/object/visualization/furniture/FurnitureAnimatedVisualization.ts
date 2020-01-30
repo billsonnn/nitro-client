@@ -46,13 +46,13 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return super.initialize(data);
     }
 
-    protected onDispose(): void
+    public dispose(): void
     {
+        super.dispose();
+
         this.resetAnimation();
 
         this._needsAnimationUpdate = false;
-
-        super.onDispose();
     }
 
     private resetAnimation(): void
@@ -92,6 +92,8 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected updateAnimation(): boolean
     {
         if(!this._needsAnimationUpdate) return false;
+
+        let currentFrameCount = 0;
 
         if(this._animationFinished)
         {
@@ -153,7 +155,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                 {
                     const lastFrameNumber = currentSequence.frameNumbers[currentSequence.frameNumbers.length - 1];
 
-                    const frameData = currentSequence.getFrameForCount(this.frameCount);
+                    const frameData = currentSequence.getFrameForCount(currentFrameCount);
 
                     if(frameData)
                     {
@@ -219,7 +221,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
             this._realAnimationId = animationId;
         }
 
-        this.resetTicker();
+        //this.resetTicker();
 
         this.object.setState(animationId, true);
 

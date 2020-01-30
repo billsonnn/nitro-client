@@ -89,7 +89,6 @@ export class RoomUnitStatusParser implements IMessageParser
                             break;
                         case 'sit':
                             const sitHeight = parseFloat(value);
-                            // -1
 
                             if(extra !== undefined) canStandUp = value === '1';
 
@@ -98,8 +97,6 @@ export class RoomUnitStatusParser implements IMessageParser
                             break;
                         case 'lay':
                             const layHeight = parseFloat(value);
-
-                            [ x, y ] = [ !direction ? x : x + 1.7, !direction ? y + 1 : y ];
 
                             height = layHeight;
 

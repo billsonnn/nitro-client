@@ -1,10 +1,10 @@
 import { FurnitureType } from './FurnitureType';
-import { IFurnitureData } from './interfaces/IFurnitureData';
+import { IFurnitureData } from './IFurnitureData';
 
 export class FurnitureData
 {
     private _id: number;
-    private _type: FurnitureType;
+    private _type: string;
     private _fullName: string;
     private _className: string;
     private _colorId: number;
@@ -29,7 +29,7 @@ export class FurnitureData
         return this._id;
     }
 
-    public get type(): FurnitureType
+    public get type(): string
     {
         return this._type;
     }

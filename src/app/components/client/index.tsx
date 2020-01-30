@@ -1,4 +1,5 @@
 import React from 'react';
+import { INitroInstance } from '../../../nitro/INitroInstance';
 import { NitroContext } from '../../providers/nitro/context';
 import { ClientChatComponent } from './components/chat';
 import { ClientContextInfoComponent } from './components/contextinfo';
@@ -23,11 +24,32 @@ export class ClientComponent extends React.Component<ClientComponentProps, Clien
 
 	public componentDidMount(): void
 	{
-		if(this.context.nitroInstance)
-		{
-			const renderer = this.context.nitroInstance.renderer.view;
+		const nitroInstance = this.context.nitroInstance as INitroInstance;
 
-			renderer && this.clientRef && this.clientRef.current.append(renderer);
+		if(nitroInstance)
+		{
+			const renderer = nitroInstance.renderer;
+
+			if(!renderer) return;
+
+			const camera = renderer.camera;
+
+			if(!camera) return;
+
+			const roomEngine = nitroInstance.roomEngine;
+
+			if(roomEngine)
+			{
+				const roomId = roomEngine.activeRoomId;
+
+				const display = roomEngine.getRoomDisplay(roomId, 1, window.innerWidth, window.innerHeight, 64);
+
+				if(!display || display.parent === camera) return;
+
+				camera.addChild(display);
+			}
+
+			this.clientRef && this.clientRef.current.append(renderer.view);
 		}
 	}
 

@@ -3,7 +3,7 @@ import { IRoomInstance } from '../IRoomInstance';
 import { IVector3D } from '../utils/IVector3D';
 import { IRoomObjectModel } from './IRoomObjectModel';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
-import { IRoomObjectSpriteVisualization } from './visualization/IRoomObjectSpriteVisualization';
+import { IRoomObjectVisualization } from './visualization/IRoomObjectVisualization';
 
 export interface IRoomObject extends IDisposable
 {
@@ -16,7 +16,7 @@ export interface IRoomObject extends IDisposable
     category: number;
     model: IRoomObjectModel;
     room: IRoomInstance;
-    visualization: IRoomObjectSpriteVisualization;
+    visualization: IRoomObjectVisualization;
     logic: IRoomObjectLogic;
     location: IVector3D;
     direction: IVector3D;

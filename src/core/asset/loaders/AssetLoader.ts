@@ -15,7 +15,7 @@ export function AssetLoader(resource: PIXI.LoaderResource, next: Function): void
         {
             if(!res.spritesheet) next();
 
-            NitroInstance.instance.core.asset.createAsset(assetData.name, assetData);
+            NitroInstance.instance.core.asset.createCollection(assetData, res.spritesheet);
 
             next();
         });

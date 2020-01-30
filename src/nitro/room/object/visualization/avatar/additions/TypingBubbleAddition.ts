@@ -1,4 +1,3 @@
-import { NitroConfiguration } from '../../../../../../NitroConfiguration';
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
@@ -18,12 +17,12 @@ export class TypingBubbleAddition implements IAvatarAddition
 
     public dispose(): void
     {
-        if(this._sprite)
-        {
-            this._visualization.removeSprite(this._sprite);
+        // if(this._sprite)
+        // {
+        //     this._visualization.removeSprite(this._sprite);
 
-            this._sprite = null;
-        }
+        //     this._sprite = null;
+        // }
     }
 
     private getSpriteAssetName(): string
@@ -33,35 +32,35 @@ export class TypingBubbleAddition implements IAvatarAddition
 
     public update(): void
     {
-        const assetName = this.getSpriteAssetName();
+        // const assetName = this.getSpriteAssetName();
 
-        let sprite = this._visualization.getSprite(assetName);
+        // let sprite = this._visualization.getSprite(assetName);
 
-        if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
+        // if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
 
-        if(!sprite)
-        {
-            sprite = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
+        // if(!sprite)
+        // {
+        //     sprite = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
 
-            sprite.name = assetName;
+        //     sprite.name = assetName;
 
-            sprite.doesntHide = true;
-        }
+        //     sprite.doesntHide = true;
+        // }
 
-        this._sprite = sprite;
+        // this._sprite = sprite;
 
-        if(!this._sprite) return;
+        // if(!this._sprite) return;
 
-        let offsetX = 46;
-        let offsetY = -83;
+        // let offsetX = 46;
+        // let offsetY = -83;
 
-        //if(this._visualization.posture === 'lay')
+        // //if(this._visualization.posture === 'lay')
         
-        this._sprite.x          = offsetX;
-        this._sprite.y          = offsetY;
-        this._sprite.zIndex     = 100;
+        // this._sprite.x          = offsetX;
+        // this._sprite.y          = offsetY;
+        // this._sprite.zIndex     = 100;
 
-        if(!this._sprite.visible) this._sprite.visible = true;
+        // if(!this._sprite.visible) this._sprite.visible = true;
     }
 
     public animate(): void

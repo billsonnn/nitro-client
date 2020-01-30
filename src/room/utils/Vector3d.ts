@@ -20,6 +20,52 @@ export class Vector3d implements IVector3D
         this._isScreen = isScreen;
     }
 
+    public static sum(vector1: IVector3D, vector2: IVector3D): Vector3d
+    {
+        if(!vector1 || !vector2) return null;
+
+        return new Vector3d((vector1.x + vector2.x), (vector1.y + vector2.y), (vector1.z + vector2.z));
+    }
+
+    public static subtract(vector1: IVector3D, vector2: IVector3D): Vector3d
+    {
+        if(!vector1 || !vector2) return null;
+
+        return new Vector3d((vector1.x - vector2.x), (vector1.y - vector2.y), (vector1.z - vector2.z));
+    }
+
+    public static product(vector: IVector3D, value: number): Vector3d
+    {
+        if(!vector) return null;
+
+        return new Vector3d((vector.x * value), (vector.y * value), (vector.z * value));
+    }
+
+    public static _Str_18283(vector1: IVector3D, vector2: IVector3D): number
+    {
+        if(!vector1 || !vector2) return null;
+
+        return (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
+    }
+
+    public static _Str_4733(vector1: IVector3D, vector2: IVector3D): number
+    {
+        if(!vector1 || !vector2) return null;
+
+        const length = vector2.length;
+
+        if(length <= 0) return -1;
+
+        return ((vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z)) / length;
+    }
+
+    public static _Str_7423(vector1: IVector3D, vector2: IVector3D):Vector3d
+    {
+        if(!vector1 || !vector2) return null;
+
+        return new Vector3d(((vector1.y * vector2.z) - (vector1.z * vector2.y)), ((vector1.z * vector2.x) - (vector1.x * vector2.z)), ((vector1.x * vector2.y) - (vector1.y * vector2.x)));
+    }
+
     public static compare(vector1: IVector3D, vector2: IVector3D): boolean
     {
         if(!vector1 || !vector2) return false;

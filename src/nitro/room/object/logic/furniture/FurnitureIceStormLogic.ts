@@ -62,7 +62,7 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
         else
         {
             this._nextState             = state;
-            this._nextStateTimestamp    = this.totalTimeRunning + time;
+            this._nextStateTimestamp    = this.time + time;
         }
     }
 }

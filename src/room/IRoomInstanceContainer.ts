@@ -1,8 +1,8 @@
 import { IRoomObjectManager } from './IRoomObjectManager';
-import { IRoomObjectController } from './object/IRoomObjectController';
+import { IRoomObject } from './object/IRoomObject';
 
 export interface IRoomInstanceContainer
 {
-    initalizeObject(object: IRoomObjectController, ...args: any[]): IRoomObjectController;
+    createRoomObjectAndInitalize(roomId: number, objectId: number, type: string, category: number): IRoomObject;
     createRoomObjectManager(category: number): IRoomObjectManager;
 }

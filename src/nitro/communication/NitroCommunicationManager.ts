@@ -6,6 +6,7 @@ import { ICommunicationManager } from '../../core/communication/ICommunicationMa
 import { IMessageConfiguration } from '../../core/communication/messages/IMessageConfiguration';
 import { IMessageEvent } from '../../core/communication/messages/IMessageEvent';
 import { NitroEvent } from '../../core/events/NitroEvent';
+import { NitroConfiguration } from '../../NitroConfiguration';
 import { NitroInstance } from '../NitroInstance';
 import { NitroCommunicationDemo } from './demo/NitroCommunicationDemo';
 import { NitroCommunicationDemoEvent } from './demo/NitroCommunicationDemoEvent';
@@ -47,7 +48,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
 
         if(this._demo) this._demo.init();
 
-        this._connection.init('wss://nitro-socket.nextgenhabbo.com');
+        this._connection.init(NitroConfiguration.SOCKET_URL);
     }
 
     protected onDispose(): void

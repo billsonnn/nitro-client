@@ -1,6 +1,5 @@
 import { IAssetData } from '../../../core/asset/interfaces/IAssetData';
 import { Disposable } from '../../../core/common/disposable/Disposable';
-import { NitroInstance } from '../../../nitro/NitroInstance';
 import { RoomObjectEventHandler } from '../../../nitro/room/RoomObjectEventHandler';
 import { RoomObjectMouseEvent } from '../../events/RoomObjectMouseEvent';
 import { RoomObjectUpdateMessage } from '../../messages/RoomObjectUpdateMessage';
@@ -12,7 +11,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
     private _object: IRoomObjectController;
     private _eventHandler: RoomObjectEventHandler;
 
-    private _totalTimeRunning: number;
+    private _time: number;
 
     constructor()
     {
@@ -21,7 +20,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         this._object            = null;
         this._eventHandler      = null;
 
-        this._totalTimeRunning  = 0;
+        this._time              = 0;
     }
 
     public initialize(asset: IAssetData): void
@@ -34,9 +33,9 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         this._object = null;
     }
 
-    public update(totalTimeRunning: number): void
+    public update(time: number): void
     {
-        this._totalTimeRunning = totalTimeRunning;
+        this._time = time;
         
         return;
     }
@@ -79,8 +78,8 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         return this._eventHandler;
     }
 
-    public get totalTimeRunning(): number
+    public get time(): number
     {
-        return NitroInstance.instance.renderer.totalTimeRunning;
+        return this._time;
     }
 }

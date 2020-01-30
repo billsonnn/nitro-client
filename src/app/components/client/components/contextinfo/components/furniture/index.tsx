@@ -4,7 +4,7 @@ import { ObjectOperationType } from '../../../../../../../nitro/room/object/logi
 import { RoomObjectModelKey } from '../../../../../../../nitro/room/object/RoomObjectModelKey';
 import { FurnitureVisualization } from '../../../../../../../nitro/room/object/visualization/furniture/FurnitureVisualization';
 import { FurnitureVisualizationData } from '../../../../../../../nitro/room/object/visualization/furniture/FurnitureVisualizationData';
-import { IFurnitureData } from '../../../../../../../nitro/session/furniture/interfaces/IFurnitureData';
+import { IFurnitureData } from '../../../../../../../nitro/session/furniture/IFurnitureData';
 import { IRoomObjectController } from '../../../../../../../room/object/IRoomObjectController';
 import { NitroContext } from '../../../../../../providers/nitro/context';
 
@@ -84,11 +84,11 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
 
         element.children[0] && element.children[0].remove();
 
-        const render = data.renderFurniture(data.getValidDirection(4), this.props.object.model.getValue(RoomObjectModelKey.FURNITURE_COLOR) as number);
+        // const render = data.renderFurniture(data.getValidDirection(4), this.props.object.model.getValue(RoomObjectModelKey.FURNITURE_COLOR) as number);
 
-        render.view.className = 'canvas';
+        // render.view.className = 'canvas';
 
-        element.appendChild(render.view);
+        // element.appendChild(render.view);
     }
 
     private closePreview(): void
@@ -113,13 +113,13 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
         switch(operation)
         {
             case ObjectOperationType.OBJECT_MOVE:
-                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
+                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
                 return;
             case ObjectOperationType.OBJECT_ROTATE_POSITIVE:
-                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 return;
             case ObjectOperationType.OBJECT_PICKUP:
-                nitroInstance.roomSession.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
+                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
                 return;
         }
     }

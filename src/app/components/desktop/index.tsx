@@ -1,5 +1,6 @@
 import React from 'react';
-import { RoomSessionEvent } from '../../../nitro/session/events/RoomSessionEvent';
+import { INitroInstance } from '../../../nitro/INitroInstance';
+import { RoomEngineEvent } from '../../../nitro/room/events/RoomEngineEvent';
 import { NitroContext } from '../../providers/nitro/context';
 import { ClientComponent } from '../client';
 import { HotelViewComponent } from '../hotelview';
@@ -29,32 +30,36 @@ export class DesktopComponent extends React.Component<DesktopComponentProps, Des
 
 	public componentDidMount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-			this.context.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-			this.context.nitroInstance.roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
-        }
+		const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+		if(nitroInstance)
+		{
+			nitroInstance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
+			nitroInstance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
+		}
 	}
 
 	public componentWillUnmount(): void
 	{
-        if(this.context.nitroInstance)
-        {
-			this.context.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-			this.context.nitroInstance.roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
-        }
+        const nitroInstance = this.context.nitroInstance as INitroInstance;
+
+		if(nitroInstance)
+		{
+			nitroInstance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
+			nitroInstance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
+		}
 	}
 
-	private onRoomSessionEvent(event: RoomSessionEvent): void
+	private onRoomEngineEvent(event: RoomEngineEvent): void
 	{
 		if(!event) return;
 
 		switch(event.type)
 		{
-			case RoomSessionEvent.STARTED:
+			case RoomEngineEvent.INITIALIZED:
 				this.setState({ isInRoom: true });
 				return;
-			case RoomSessionEvent.ENDED:
+			case RoomEngineEvent.DISPOSED:
 				this.setState({ isInRoom: false });
 				return;
 		}

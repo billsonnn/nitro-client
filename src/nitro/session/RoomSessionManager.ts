@@ -1,9 +1,6 @@
 import { NitroManager } from '../../core/common/NitroManager';
-import { IRoomManager } from '../../room/IRoomManager';
-import { RoomManager } from '../../room/RoomManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { IRoomEngine } from '../room/IRoomEngine';
-import { RoomEngine } from '../room/RoomEngine';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { BaseHandler } from './handler/BaseHandler';
 import { RoomChatHandler } from './handler/RoomChatHandler';
@@ -13,15 +10,12 @@ import { RoomUsersHandler } from './handler/RoomUsersHandler';
 import { IRoomHandlerListener } from './IRoomHandlerListener';
 import { IRoomSession } from './IRoomSession';
 import { IRoomSessionManager } from './IRoomSessionManager';
-import { ISessionDataManager } from './ISessionDataManager';
 import { RoomSession } from './RoomSession';
 
 export class RoomSessionManager extends NitroManager implements IRoomSessionManager, IRoomHandlerListener
 {
     private _communication: INitroCommunicationManager;
-    private _sessionData: ISessionDataManager;
     private _roomEngine: IRoomEngine;
-    private _roomManager: IRoomManager;
 
     private _handlers: BaseHandler[];
     private _sessions: Map<string, IRoomSession>;
@@ -30,14 +24,12 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     private _sessionStarting: boolean;
     private _viewerSession: IRoomSession;
 
-    constructor(communication: INitroCommunicationManager, sessionData: ISessionDataManager)
+    constructor(communication: INitroCommunicationManager, roomEngine: IRoomEngine)
     {
         super();
         
         this._communication     = communication;
-        this._sessionData       = sessionData;
-        this._roomEngine        = new RoomEngine(communication, this);
-        this._roomManager       = new RoomManager(this._roomEngine);
+        this._roomEngine        = roomEngine;
 
         this._handlers          = [];
         this._sessions          = new Map();
@@ -49,9 +41,6 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     protected onInit(): void
     {
-        if(this._roomEngine) this._roomEngine.init();
-        if(this._roomManager) this._roomManager.init();
-        
         this.createHandlers();
 
         this.processPendingSession();
@@ -59,9 +48,6 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     protected onDispose(): void
     {
-        if(this._roomManager) this._roomManager.dispose();
-        if(this._roomEngine) this._roomEngine.dispose();
-
         super.onDispose();
     }
 
@@ -121,7 +107,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     private addSession(roomSession: IRoomSession): boolean
     {
-        if(!this._roomEngine.isLoaded)
+        if(!this._roomEngine.isReady)
         {
             this._pendingSession = roomSession;
 
@@ -224,19 +210,9 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         return this._communication;
     }
 
-    public get sessionData(): ISessionDataManager
-    {
-        return this._sessionData;
-    }
-
     public get roomEngine(): IRoomEngine
     {
         return this._roomEngine;
-    }
-
-    public get roomManager(): IRoomManager
-    {
-        return this._roomManager;
     }
 
     public get viewerSession(): IRoomSession

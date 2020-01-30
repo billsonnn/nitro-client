@@ -1,20 +1,23 @@
 import { IDisposable } from '../core/common/disposable/IDisposable';
-import { RendererViewEvent } from '../core/renderer/RendererViewEvent';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
-import { IRoomObjectController } from './object/IRoomObjectController';
-import { IRoomRenderer } from './renderer/IRoomRenderer';
+import { IRoomObject } from './object/IRoomObject';
+import { IRoomRendererBase } from './renderer/IRoomRendererBase';
 
 export interface IRoomInstance extends IDisposable
 {
-    setRenderer(renderer: IRoomRenderer): void;
-    onRendererViewEvent(event: RendererViewEvent): void;
+    setRenderer(renderer: IRoomRendererBase): void;
     getManager(category: number): IRoomObjectManager;
-    getObject(id: number, category: number): IRoomObjectController;
-    createObject(id: number, type: string, category: number): IRoomObjectController;
-    removeObject(id: number, category: number): void;
+    getRoomObject(id: number, category: number): IRoomObject;
+    createRoomObject(id: number, type: string, category: number): IRoomObject;
+    createRoomObjectAndInitalize(objectId: number, type: string, category: number): IRoomObject;
+    removeRoomObject(id: number, category: number): void;
     removeAllManagers(): void;
+    addUpdateCategory(category: number): void;
+    removeUpdateCategory(category: number): void;
+    update(time: number): void;
     id: number;
     container: IRoomInstanceContainer;
-    renderer: IRoomRenderer;
+    renderer: IRoomRendererBase;
+    managers: Map<number, IRoomObjectManager>;
 }

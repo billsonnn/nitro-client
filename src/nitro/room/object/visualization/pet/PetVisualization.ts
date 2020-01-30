@@ -27,8 +27,6 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         this._isSleeping    = false;
         this._headDirection = -1;
         this._color         = 0xFFFFFF;
-
-        this._selfContained = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -89,8 +87,6 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
     protected getLayerColor(colorId: number, layerId: number): number
     {
-        if(this._isIcon) return this.getLayerIconColor(colorId, layerId);
-
         return this._color;
     }
 

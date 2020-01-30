@@ -1,13 +1,24 @@
-import { IVector3D } from '../../utils/IVector3D';
-import { IRoomObject } from '../IRoomObject';
-
-export interface IRoomObjectSprite extends PIXI.Sprite
+export interface IRoomObjectSprite
 {
-    instanceId: number;
-    boundingRectangle: PIXI.Rectangle;
-    object: IRoomObject;
-    tilePosition: IVector3D;
+    id: number;
+    name: string;
+    type: string;
+    spriteType: number;
+    texture: PIXI.Texture;
+    width: number;
+    height: number;
+    offsetX: number;
+    offsetY: number;
+    flipH: boolean;
+    flipV: boolean;
+    direction: number;
+    alpha: number;
+    blendMode: number;
+    color: number;
+    relativeDepth: number;
+    visible: boolean;
     tag: string;
-    doesntHide: boolean;
+    filters: PIXI.Filter[];
     ignoreMouse: boolean;
+    updateCounter: number;
 }

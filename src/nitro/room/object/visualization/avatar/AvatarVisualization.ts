@@ -1,16 +1,12 @@
-import { NitroConfiguration } from '../../../../../NitroConfiguration';
 import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { PlayableVisualization } from '../../../../../room/object/visualization/PlayableVisualization';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
-import { IVector3D } from '../../../../../room/utils/IVector3D';
-import { Vector3d } from '../../../../../room/utils/Vector3d';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { AvatarAction } from '../../../../avatar/actions/AvatarAction';
 import { AvatarImage } from '../../../../avatar/AvatarImage';
 import { AnimationAction } from '../../../../avatar/structure/animation/AnimationAction';
 import { AvatarBodyPart } from '../../../../avatar/structure/AvatarBodyPart';
-import { NitroInstance } from '../../../../NitroInstance';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
@@ -30,9 +26,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     private _avatarImage: AvatarImage;
     private _shadow: IRoomObjectSprite;
-
-    private _location: IVector3D;
-    private _screenLocation: IVector3D;
 
     private _figure: string;
     private _direction: number;
@@ -66,8 +59,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this._avatarImage       = null;
         this._shadow            = null;
-        this._location          = new Vector3d();
-        this._screenLocation    = new Vector3d();
 
         this._figure            = null;
         this._direction         = -1;
@@ -92,8 +83,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         this._needsUpdate       = false;
 
         this._additions         = new Map();
-
-        this._selfContained     = true;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -104,30 +93,22 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         super.initialize(data);
 
-        if(this._selfContainer) this._selfContainer.interactive = true;
-
         return true;
     }
 
-    public onDispose(): void
+    public dispose(): void
     {
+        super.dispose();
+
         if(this._avatarImage) this._avatarImage.dispose();
 
         this._shadow = null;
-        
-        super.onDispose();
     }
 
-    public onUpdate(): void
+    public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
     {
-        const frameCount = Math.round(this.totalTimeRunning / PlayableVisualization.FPS_TIME_MS);
-
-        if(this.frameCount === frameCount) return;
-
-        this.frameCount = frameCount;
-
-        super.onUpdate();
-
+        if(!geometry) return;
+        
         let needsUpdate = false;
 
         const modelUpdated = this.updateModel();
@@ -171,22 +152,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         if(!this.object) return false;
 
         if(this.updateObjectCounter === this.object.updateCounter) return false;
-
-        this._location          = this.object.getLocation();
-
-        if(this._verticalOffset > 0) this._location.z += (this._verticalOffset - 1);
-
-        this._screenLocation    = this._location.toScreen();
-
-        if(this._selfContainer)
-        {
-            if(this._screenLocation.x !== this._selfContainer.x || this._screenLocation.y !== this._selfContainer.y)
-            {
-                this._selfContainer.x       = this._screenLocation.x - NitroConfiguration.TILE_WIDTH;
-                this._selfContainer.y       = this._screenLocation.y;
-                this._selfContainer.zIndex  = this.getDepth();
-            }
-        }
         
         this.setDirection(this.object.direction.x);
 
@@ -477,33 +442,35 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     private createShadow(): void
     {
-        if(this._shadow) return;
+        // if(this._shadow) return;
 
-        const asset = NitroInstance.instance.core.asset.getAsset('hh_human_body');
+        this._shadow = null;
 
-        if(!asset) return;
+        // const asset = NitroInstance.instance.core.asset.getAsset('hh_human_body');
 
-        const assetName = this.getSpriteAssetName(asset.name, RoomObjectModelKey.STD, AvatarBodyPart.SHADOW, 1, 0, 0);
-        const assetData = asset.assets[assetName];
+        // if(!asset) return;
 
-        if(!assetData) return;
+        // const assetName = this.getSpriteAssetName(asset.name, RoomObjectModelKey.STD, AvatarBodyPart.SHADOW, 1, 0, 0);
+        // const assetData = asset.assets[assetName];
 
-        let sprite = this.getSprite(assetName);
+        // if(!assetData) return;
 
-        if(!sprite)
-        {
-            sprite = this.createAndAddSprite(assetName, assetName + '.png');
+        // let sprite = this.getSprite(assetName);
 
-            if(!sprite) return;
-        }
+        // if(!sprite)
+        // {
+        //     sprite = this.createAndAddSprite(assetName, assetName + '.png');
+
+        //     if(!sprite) return;
+        // }
             
-        sprite.x            = -assetData.x;
-        sprite.y            = -assetData.y + 1;
-        sprite.alpha        = 0.2;
-        sprite.visible      = true;
-        sprite.doesntHide   = true;
+        // sprite.offsetX            = -assetData.x;
+        // sprite.offsetY            = -assetData.y + 1;
+        // sprite.alpha        = 0.2;
+        // sprite.visible      = true;
+        // sprite.doesntHide   = true;
 
-        this._shadow = sprite;
+        // this._shadow = sprite;
     }
 
     private updateActions(): boolean
@@ -547,7 +514,9 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
     public updateSprites(): void
     {
-        this.hideSprites();
+        //this.hideSprites();
+
+        const currentFrameCount = 0;
         
         if(!this._avatarImage) return;
 
@@ -610,7 +579,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
                 if(animation)
                 {
-                    const offsets = animation.getAnimationOffset(this.frameCount, direction);
+                    const offsets = animation.getAnimationOffset(currentFrameCount, direction);
 
                     if(offsets)
                     {
@@ -633,8 +602,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
                             if(partMatch.indexOf(bodyPart) === -1) continue;
 
-                            additionalX = point.x;
-                            additionalY = point.y;
+                            additionalX += point.x;
+                            additionalY += point.y;
 
                             break;
                         }
@@ -644,7 +613,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
                     if(animationPart)
                     {
-                        const animationFrame = animationPart.getFrame(this.frameCount);
+                        const animationFrame = animationPart.getFrame(currentFrameCount);
                         
                         if(animationFrame)
                         {
@@ -682,7 +651,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
             let library = part.library;
 
-            const asset = NitroInstance.instance.core.asset.getAsset(library);
+            const asset: any = null;
+            //const asset = NitroInstance.instance.core.asset.getAsset(library);
 
             if(!asset) continue;
 
@@ -697,55 +667,55 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
                 if(!assetData) continue;
             }
 
-            let sprite = this.getSprite(assetName);
+            // let sprite = this.getSprite(assetName);
 
-            if(!sprite)
-            {
-                let sourceName = assetName;
+            // if(!sprite)
+            // {
+            //     let sourceName = assetName;
 
-                if(assetData.source) sourceName = library + '_' + assetData.source;
+            //     if(assetData.source) sourceName = library + '_' + assetData.source;
     
-                if(!sourceName) continue;
+            //     if(!sourceName) continue;
     
-                sprite = this.createAndAddSprite(assetName, sourceName + '.png');
+            //     sprite = this.createAndAddSprite(assetName, sourceName + '.png');
     
-                if(!sprite) continue;
+            //     if(!sprite) continue;
 
-                if(bodyPart === AvatarBodyPart.EYES)
-                {
-                    sprite.tint = 0xFFFFFF;
-                }
-                else
-                {
-                    const color = this._avatarImage.figure.getColorForPart(partId, bodyPart);
+            //     if(bodyPart === AvatarBodyPart.EYES)
+            //     {
+            //         sprite.tint = 0xFFFFFF;
+            //     }
+            //     else
+            //     {
+            //         const color = this._avatarImage.figure.getColorForPart(partId, bodyPart);
                 
-                    if(color) sprite.tint = color;
-                }
-            }
+            //         if(color) sprite.tint = color;
+            //     }
+            // }
             
-            sprite.x            = -assetData.x + additionalX;
-            sprite.y            = -assetData.y + additionalY;
-            sprite.visible      = true;
-            sprite.zIndex       = i;
-            sprite.ignoreMouse  = false;
+            // sprite.offsetX            = -assetData.x + additionalX;
+            // sprite.offsetY            = -assetData.y + additionalY;
+            // sprite.visible      = true;
+            // sprite.relativeDepth       = i;
+            // sprite.ignoreMouse  = false;
 
-            if(!this._isAvatarReady)
-            {
-                sprite.alpha = 0.5;
-            }
-            else sprite.alpha = 1;
+            // if(!this._isAvatarReady)
+            // {
+            //     sprite.alpha = 0.5;
+            // }
+            // else sprite.alpha = 1;
 
-            if(!(isFlipped && flipH) && (isFlipped || flipH))
-            {
-                sprite.scale.x  = -1;
-                sprite.x *= -1;
+            // if(!(isFlipped && flipH) && (isFlipped || flipH))
+            // {
+            //     sprite.scale.x  = -1;
+            //     sprite.offsetX *= -1;
 
-                sprite.x += NitroConfiguration.TILE_REAL_WIDTH + 3;
-            }
-            else
-            {
-                sprite.scale.x = 1;
-            }
+            //     //sprite.x += NitroConfiguration.TILE_REAL_WIDTH + 3;
+            // }
+            // else
+            // {
+            //     sprite.scale.x = 1;
+            // }
         }
     }
 
@@ -769,7 +739,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     {
         if(!this._avatarImage) return;
 
-        this.removeSprites();
+        //this.removeSprites();
 
         this._avatarImage.dispose();
 
@@ -809,11 +779,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         addition.dispose();
 
         this._additions.delete(addition.id);
-    }
-
-    protected getDepth(): number
-    {
-        return this._location.length + ((this._location.x + this._location.y) * 1000) + ( 4 + (this._ownUser ? .99999 : 0));
     }
 
     public get direction(): number

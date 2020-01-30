@@ -1,4 +1,3 @@
-import { ICollision } from '../renderer/ICollision';
 import { IVector3D } from '../utils/IVector3D';
 import { RoomObjectEvent } from './RoomObjectEvent';
 
@@ -12,13 +11,13 @@ export class RoomSpriteMouseEvent extends RoomObjectEvent
     
     private _point: PIXI.Point;
     private _location: IVector3D;
-    private _collision: ICollision;
+    private _collision: any;
 
     private _altKey: boolean;
     private _ctrlKey: boolean;
     private _shiftKey: boolean;
 
-    constructor(type: string, collision: ICollision, point: PIXI.Point, location: IVector3D, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
+    constructor(type: string, collision: any, point: PIXI.Point, location: IVector3D, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
     {
         super(type, collision ? collision.object : null);
 
@@ -31,7 +30,7 @@ export class RoomSpriteMouseEvent extends RoomObjectEvent
         this._shiftKey  = shiftKey;
     }
 
-    public get collision(): ICollision
+    public get collision(): any
     {
         return this._collision;
     }

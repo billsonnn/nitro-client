@@ -1,3 +1,4 @@
+import { IAssetData } from '../../../../../core/asset/interfaces';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomModelParser } from '../../../../communication/messages/parser/room/mapping/RoomModelParser';
@@ -13,9 +14,9 @@ export class RoomVisualizationData extends Disposable implements IObjectVisualiz
         this._modelParser = null;
     }
 
-    public initialize(parser: RoomModelParser): boolean
+    public initialize(asset: IAssetData): boolean
     {
-        this._modelParser = parser;
+        //this._modelParser = parser;
 
         return true;
     }

@@ -102,14 +102,14 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!asset) return;
 
-        const existing = asset.getAsset(imageUrl);
+        // const existing = asset.getAsset(imageUrl);
 
-        if(!existing)
-        {
-            asset.downloadImages([ imageUrl ], () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
+        // if(!existing)
+        // {
+        //     asset.downloadImages([ imageUrl ], () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
 
-            return;
-        }
+        //     return;
+        // }
 
         this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED));
     }

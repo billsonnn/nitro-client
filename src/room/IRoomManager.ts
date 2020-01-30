@@ -1,11 +1,17 @@
 import { INitroManager } from '../core/common/INitroManager';
+import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { IRoomInstance } from './IRoomInstance';
-import { IRoomObjectController } from './object/IRoomObjectController';
+import { IRoomObject } from './object/IRoomObject';
 
 export interface IRoomManager extends INitroManager
 {
     getRoomInstance(roomId: number): IRoomInstance;
     createRoomInstance(roomId: number): IRoomInstance;
     removeRoomInstance(roomId: number): boolean;
-    initalizeObject(object: IRoomObjectController, ...args: any[]): IRoomObjectController;
+    addUpdateCategory(category: number): void;
+    removeUpdateCategory(category: number): void;
+    createRoomObjectAndInitalize(roomId: number, objectId: number, type: string, category: number): IRoomObject;
+    setContentLoader(loader: RoomContentLoader): void;
+    update(time: number): void;
+    rooms: Map<number, IRoomInstance>
 }

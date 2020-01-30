@@ -1,176 +1,278 @@
 import * as PIXI from 'pixi.js-legacy';
-import { ICollision } from '../../renderer/ICollision';
-import { IVector3D } from '../../utils/IVector3D';
-import { IRoomObjectController } from '../IRoomObjectController';
+import { RoomObjectSpriteType } from '../enum/RoomObjectSpriteType';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 
-export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, ICollision
+export class RoomObjectSprite implements IRoomObjectSprite
 {
     private static SPRITE_COUNTER: number = 0;
 
-    private _instanceId: number;
-    private _boundingRectangle: PIXI.Rectangle;
-    private _object: IRoomObjectController;
-    private _tilePosition: IVector3D;
+    private _id: number;
+    private _name: string;
+    private _type: string;
+    private _spriteType: number;
+    private _texture: PIXI.Texture;
 
+    private _width: number;
+    private _height: number;
+    private _offsetX: number;
+    private _offsetY: number;
+    private _flipH: boolean;
+    private _flipV: boolean;
+    private _direction: number;
+
+    private _alpha: number;
+    private _blendMode: number;
+    private _color: number;
+    private _relativeDepth: number;
+    private _visible: boolean;
     private _tag: string;
-    private _doesntHide: boolean;
+    private _filters: PIXI.Filter[];
+    private _ignoreMouse: boolean;
 
-    constructor(object: IRoomObjectController, name: string, source: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture, texture: PIXI.Texture = null)
+    private _updateCounter: number;
+
+    constructor()
     {
-        super(texture ? texture : PIXI.Texture.from(source));
+        this._id            = RoomObjectSprite.SPRITE_COUNTER++;
+        this._name          = '';
+        this._type          = '';
+        this._spriteType    = RoomObjectSpriteType.DEFAULT;
+        this._texture       = null;
 
-        this._instanceId        = RoomObjectSprite.SPRITE_COUNTER++;
-        this._boundingRectangle = null;
-        this._object            = object;
-        this._tilePosition      = null;
+        this._width         = 0;
+        this._height        = 0;
+        this._offsetX       = 0;
+        this._offsetY       = 0;
+        this._flipH         = false;
+        this._flipV         = false;
+        this._direction     = 0;
 
-        this._tag               = null;
-        this._doesntHide        = false;
+        this._alpha         = 255;
+        this._blendMode     = PIXI.BLEND_MODES.NORMAL;
+        this._color         = 0xFFFFFF;
+        this._relativeDepth = 0;
+        this._visible       = true;
+        this._tag           = '';
+        this._filters       = [];
+        this._ignoreMouse   = false;
 
-        this.name = name;
+        this._updateCounter = 0;
     }
 
-    public destroy(options?: {
-        children?: boolean;
-        texture?: boolean;
-        baseTexture?: boolean;
-    })
+    public dispose(): void
     {
-        this._boundingRectangle = null;
-
-        super.destroy(options);
+        this._texture   = null;
+        this._width     = 0;
+        this._height    = 0;
     }
 
-    private createBounds(): PIXI.Rectangle
+    public get id(): number
     {
-        if(this._boundingRectangle) return this._boundingRectangle;
-
-        const width     = this.texture.orig.width;
-        const height    = this.texture.orig.height;
-        const x         = -width * this.anchor.x;
-        const y         = -height * this.anchor.y;
-
-        const rectangle = new PIXI.Rectangle(x, y, width, height);
-
-        this._boundingRectangle = rectangle;
-
-        return this._boundingRectangle;
+        return this._id;
     }
 
-    public containsPoint(point: PIXI.Point): boolean
+    public get name(): string
     {
-        if(!this.interactive || this.blendMode !== PIXI.BLEND_MODES.NORMAL) return false;
+        return this._name;
+    }
 
-        const localPoint = this.worldTransform.applyInverse(point);
+    public set name(name: string)
+    {
+        if(this._name === name) return;
 
-        let bounds = this._boundingRectangle || this.createBounds();
+        this._name = name;
 
-        if(!bounds) return false;
+        this._updateCounter++;
+    }
 
-        if(!bounds.contains(localPoint.x, localPoint.y)) return false;
+    public get type(): string
+    {
+        return this._type;
+    }
 
-        const texture       = this.texture;
-        const baseTexture   = texture.baseTexture;
+    public set type(type: string)
+    {
+        this._type = type;
+    }
 
-        //@ts-ignore
-        if(!baseTexture.hitMap)
+    public get spriteType(): number
+    {
+        return this._spriteType;
+    }
+
+    public set spriteType(type: number)
+    {
+        this._spriteType = type;
+    }
+
+    public get texture(): PIXI.Texture
+    {
+        return this._texture;
+    }
+
+    public set texture(texture: PIXI.Texture)
+    {
+        if(this._texture === texture) return;
+
+        if(texture)
         {
-            if(!RoomObjectSprite.generateHitMap(baseTexture, 127)) return false;
+            this._width     = texture.width;
+            this._height    = texture.height;
         }
 
-        //@ts-ignore
-        const hitMap        = baseTexture.hitMap;
-        const resolution    = baseTexture.resolution;
-        const dx            = Math.round((localPoint.x - bounds.x + texture.frame.x) * resolution);
-        const dy            = Math.round((localPoint.y - bounds.y + texture.frame.y) * resolution);
-        //@ts-ignore
-        const num           = dx + dy * baseTexture.hitMapWidth;
-        const num32         = num / 32 | 0;
-        const numRest       = num - num32 * 32;
-        
-        return (hitMap[num32] & (1 << numRest)) > 0;
-    }
-    
-    private static generateHitMap(baseTexture: PIXI.BaseTexture, threshold: number): boolean
-    {
-        if(!baseTexture.resource) return false;
+        this._texture = texture;
 
-        //@ts-ignore
-        const source = baseTexture.resource.source as HTMLCanvasElement;
-
-        if(!source) return false;
-
-        let canvas: HTMLCanvasElement           = null;
-        let context: CanvasRenderingContext2D   = null;
-
-        if(source.getContext)
-        {
-            canvas  = source;
-            context = canvas.getContext('2d');
-        }
-        
-        else if(source instanceof Image)
-        {
-            canvas          = document.createElement('canvas');
-            canvas.width    = source.width;
-            canvas.height   = source.height;
-            context         = canvas.getContext('2d');
-
-            context.drawImage(source, 0, 0);
-        }
-        
-        else return false;
-
-        const width     = canvas.width;
-        const height    = canvas.height;
-        const imageData = context.getImageData(0, 0, width, height);
-
-        const hitMap = new Uint32Array(Math.ceil(width * height / 32));
-    
-        for(let j = 0; j < height; j++)
-        {
-            for(let i = 0; i < width; i++)
-            {
-                const num       = j * width + i;
-                const num32     = num / 32 | 0;
-                const numRest   = num - num32 * 32;
-                
-                if(imageData.data[4 * num + 3] >= threshold) hitMap[num32] |= (1 << numRest);
-            }
-        }
-
-        //@ts-ignore
-        baseTexture.hitMap      = hitMap;
-        //@ts-ignore
-        baseTexture.hitMapWidth = width;
-
-        return true;
+        this._updateCounter++;
     }
 
-    public get instanceId(): number
+    public get width(): number
     {
-        return this._instanceId;
+        return this._width;
     }
 
-    public get boundingRectangle(): PIXI.Rectangle
+    public get height(): number
     {
-        return this._boundingRectangle;
+        return this._height;
     }
 
-    public get object(): IRoomObjectController
+    public get offsetX(): number
     {
-        return this._object;
+        return this._offsetX;
     }
 
-    public get tilePosition(): IVector3D
+    public set offsetX(x: number)
     {
-        return this._tilePosition;
+        if(this._offsetX === x) return;
+
+        this._offsetX = x;
+
+        this._updateCounter++;
     }
 
-    public set tilePosition(vector: IVector3D)
+    public get offsetY(): number
     {
-        this._tilePosition = vector;
+        return this._offsetY;
+    }
+
+    public set offsetY(y: number)
+    {
+        if(this._offsetY === y) return;
+
+        this._offsetY = y;
+
+        this._updateCounter++;
+    }
+
+    public get flipH(): boolean
+    {
+        return this._flipH;
+    }
+
+    public set flipH(flip: boolean)
+    {
+        if(this._flipH === flip) return;
+
+        this._flipH = flip;
+
+        this._updateCounter++;
+    }
+
+    public get flipV(): boolean
+    {
+        return this._flipH;
+    }
+
+    public set flipV(flip: boolean)
+    {
+        if(this._flipV === flip) return;
+
+        this._flipV = flip;
+
+        this._updateCounter++;
+    }
+
+    public get direction(): number
+    {
+        return this._direction;
+    }
+
+    public set direction(direction: number)
+    {
+        this._direction = direction;
+    }
+
+    public get alpha(): number
+    {
+        return this._alpha;
+    }
+
+    public set alpha(alpha: number)
+    {
+        alpha = (alpha & 0xFF);
+
+        if(this._alpha === alpha) return;
+
+        this._alpha = alpha;
+
+        this._updateCounter++;
+    }
+
+    public get blendMode(): number
+    {
+        return this._blendMode;
+    }
+
+    public set blendMode(blend: number)
+    {
+        if(this._blendMode === blend) return;
+
+        this._blendMode = blend;
+
+        this._updateCounter++;
+    }
+
+    public get color(): number
+    {
+        return this._color;
+    }
+
+    public set color(color: number)
+    {
+        color = (color & 0xFFFFFF);
+
+        if(this._color === color) return;
+
+        this._color = color;
+
+        this._updateCounter++;
+    }
+
+    public get relativeDepth(): number
+    {
+        return this._relativeDepth;
+    }
+
+    public set relativeDepth(depth: number)
+    {
+        if(this._relativeDepth === depth) return;
+
+        this._relativeDepth = depth;
+
+        this._updateCounter++;
+    }
+
+    public get visible(): boolean
+    {
+        return this._visible;
+    }
+
+    public set visible(visible: boolean)
+    {
+        if(this._visible === visible) return;
+
+        this._visible = visible;
+
+        this._updateCounter++;
     }
 
     public get tag(): string
@@ -180,26 +282,39 @@ export class RoomObjectSprite extends PIXI.Sprite implements IRoomObjectSprite, 
 
     public set tag(tag: string)
     {
+        if(this._tag === tag) return;
+
         this._tag = tag;
+
+        this._updateCounter++;
     }
 
-    public get doesntHide(): boolean
+    public get filters(): PIXI.Filter[]
     {
-        return this._doesntHide;
+        return this._filters;
     }
 
-    public set doesntHide(flag: boolean)
+    public set filters(filters: PIXI.Filter[])
     {
-        this._doesntHide = flag;
+        this._filters = filters;
     }
 
     public get ignoreMouse(): boolean
     {
-        return !this.interactive;
+        return this._ignoreMouse;
     }
 
-    public set ignoreMouse(flag: boolean)
+    public set ignoreMouse(ignore: boolean)
     {
-        this.interactive = !flag;
+        if(this._ignoreMouse === ignore) return;
+
+        this._ignoreMouse = ignore;
+
+        this._updateCounter++;
+    }
+
+    public get updateCounter(): number
+    {
+        return this._updateCounter;
     }
 }

@@ -7,6 +7,7 @@ import { INitroRenderer } from './INitroRenderer';
 import { NitroCamera } from './NitroCamera';
 import { RendererViewEvent } from './RendererViewEvent';
 
+PIXI.settings.ROUND_PIXELS = true;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.Ticker.shared.maxFPS = NitroConfiguration.FPS;
 
@@ -118,9 +119,6 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
         if(this._camera)
         {
             this._camera.resize(width, height);
-            
-            this._camera.position.x = 0;
-            this._camera.position.y = 0;
         }
 
         this.eventDispatcher.dispatchEvent(new RendererViewEvent(RendererViewEvent.RESIZE, event));

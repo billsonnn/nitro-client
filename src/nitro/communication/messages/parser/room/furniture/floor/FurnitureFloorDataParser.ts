@@ -15,7 +15,7 @@ export class FurnitureFloorDataParser
     private _type: number;
     private _data: IObjectData;
     private _state: number;
-    private _someInt: number;
+    private _expires: number;
     private _usagePolicy: number;
     private _userId: number;
     private _username: string;
@@ -40,7 +40,7 @@ export class FurnitureFloorDataParser
         this._type          = 0;
         this._data          = null;
         this._state         = 0;
-        this._someInt       = 0;
+        this._expires       = 0;
         this._usagePolicy   = 0;
         this._userId        = 0;
         this._username      = null;
@@ -62,7 +62,7 @@ export class FurnitureFloorDataParser
         this._type          = wrapper.readInt();
         this._data          = FurnitureDataParser.parseObjectData(wrapper);
         this._state         = parseFloat(this._data && this._data.getLegacyString()) || 0;
-        this._someInt       = wrapper.readInt();
+        this._expires       = wrapper.readInt();
         this._usagePolicy   = wrapper.readInt();
         this._userId        = wrapper.readInt();
         this._username      = null;
@@ -122,9 +122,9 @@ export class FurnitureFloorDataParser
         return this._state;
     }
 
-    public get someInt(): number
+    public get expires(): number
     {
-        return this._someInt;
+        return this._expires;
     }
 
     public get usagePolicy(): number

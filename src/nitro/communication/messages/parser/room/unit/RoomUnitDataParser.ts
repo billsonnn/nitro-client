@@ -55,9 +55,7 @@ export class RoomUnitDataParser
         this._direction = wrapper.readInt();
         this._type      = wrapper.readInt();
 
-        const typeName = RoomObjectType.getTypeName(this._type);
-
-        if(typeName === RoomObjectType.USER)
+        if(this._type === RoomObjectType.USER)
         {
             this._gender            = wrapper.readString().toLocaleUpperCase();
             const groupId           = wrapper.readInt();
@@ -68,7 +66,7 @@ export class RoomUnitDataParser
             const something         = wrapper.readBoolean();
         }
 
-        else if(typeName === RoomObjectType.PET)
+        else if(this._type === RoomObjectType.PET)
         {
             const breed         = wrapper.readInt();
             const ownerId       = wrapper.readInt();
@@ -84,12 +82,12 @@ export class RoomUnitDataParser
             const something2    = wrapper.readString();
         }
 
-        else if(typeName === RoomObjectType.BOT)
+        else if(this._type === RoomObjectType.BOT)
         {
 
         }
 
-        else if(typeName === RoomObjectType.RENTABLE_BOT)
+        else if(this._type === RoomObjectType.RENTABLE_BOT)
         {
             const gender            = wrapper.readString().toLocaleUpperCase();
             const ownerId           = wrapper.readInt();

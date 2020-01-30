@@ -7,6 +7,7 @@ import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
+import { ObjectHeightUpdateMessage } from '../../../messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { MovingObjectLogic } from '../MovingObjectLogic';
@@ -14,7 +15,7 @@ import { MovingObjectLogic } from '../MovingObjectLogic';
 export class FurnitureLogic extends MovingObjectLogic
 {
     private static BOUNCING_STEPS: number   = 8;
-    private static BOUNCING_Z: number       = 0.03125;
+    private static BOUNCING_Z: number       = 0.0625;
 
     private _sizeX: number;
     private _sizeY: number;
@@ -92,7 +93,7 @@ export class FurnitureLogic extends MovingObjectLogic
     {
         super.setObject(object);
 
-        if(object && object.location && object.location.length > 0) this._directionInitialized = true;
+        if(object && object.getLocation().length) this._directionInitialized = true;
     }
 
     protected getAdClickUrl(model: IRoomObjectModel): string
@@ -123,6 +124,13 @@ export class FurnitureLogic extends MovingObjectLogic
             return;
         }
 
+        if(message instanceof ObjectHeightUpdateMessage)
+        {
+            this.processObjectHeightUpdateMessage(message);
+
+            return;
+        }
+
         if(message.location && message.direction)
         {
             if(!(message instanceof ObjectMoveUpdateMessage))
@@ -146,6 +154,15 @@ export class FurnitureLogic extends MovingObjectLogic
         }
 
         super.processUpdateMessage(message);
+    }
+
+    private processObjectHeightUpdateMessage(message: ObjectHeightUpdateMessage): void
+    {
+        const model = this.object && this.object.model;
+
+        if(!model) return;
+
+        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, message.height);
     }
 
     public mouseEvent(event: RoomObjectMouseEvent): void

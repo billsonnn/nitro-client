@@ -1,6 +1,4 @@
-import { NitroConfiguration } from '../../../../../../NitroConfiguration';
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
-import { Direction } from '../../../../../../room/utils/Direction';
 import { NitroInstance } from '../../../../../NitroInstance';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
@@ -31,12 +29,12 @@ export class FloatingIdleZAddition implements IAvatarAddition
 
     public dispose(): void
     {
-        if(this._sprite)
-        {
-            this._visualization.removeSprite(this._sprite);
+        // if(this._sprite)
+        // {
+        //     this._visualization.removeSprite(this._sprite);
 
-            this._sprite = null;
-        }
+        //     this._sprite = null;
+        // }
     }
 
     private getSpriteAssetName(left: boolean, state: number): string
@@ -46,37 +44,37 @@ export class FloatingIdleZAddition implements IAvatarAddition
 
     public update(): void
     {
-        let direction = this._visualization.direction;
+        // let direction = this._visualization.direction;
 
-        if(this._visualization.posture === 'lay') direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
+        // if(this._visualization.posture === 'lay') direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
 
-        const isLeft    = direction >= Direction.SOUTH_EAST && direction <= Direction.WEST;
-        const assetName = this.getSpriteAssetName(isLeft, this._state === FloatingIdleZAddition.STATE_FRAME_A ? 1 : 2);
+        // const isLeft    = direction >= Direction.SOUTH_EAST && direction <= Direction.WEST;
+        // const assetName = this.getSpriteAssetName(isLeft, this._state === FloatingIdleZAddition.STATE_FRAME_A ? 1 : 2);
 
-        let sprite = this._visualization.getSprite(assetName);
+        // let sprite = this._visualization.getSprite(assetName);
 
-        if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
+        // if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
 
-        if(!sprite)
-        {
-            sprite              = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
-            sprite.name         = assetName;
-            sprite.visible      = false;
-            sprite.doesntHide   = true;
-        }
+        // if(!sprite)
+        // {
+        //     sprite              = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
+        //     sprite.name         = assetName;
+        //     sprite.visible      = false;
+        //     sprite.doesntHide   = true;
+        // }
 
-        this._sprite = sprite;
+        // this._sprite = sprite;
 
-        if(!this._sprite) return;
+        // if(!this._sprite) return;
 
-        let offsetX = isLeft ? 2 : 53;
-        let offsetY = -70;
+        // let offsetX = isLeft ? 2 : 53;
+        // let offsetY = -70;
 
-        if(this._visualization.posture === 'lay') offsetX -= isLeft ? -53 : 53;
+        // if(this._visualization.posture === 'lay') offsetX -= isLeft ? -53 : 53;
         
-        this._sprite.x          = offsetX;
-        this._sprite.y          = offsetY;
-        this._sprite.zIndex     = 100;
+        // this._sprite.x          = offsetX;
+        // this._sprite.y          = offsetY;
+        // this._sprite.zIndex     = 100;
     }
 
     public animate(): void

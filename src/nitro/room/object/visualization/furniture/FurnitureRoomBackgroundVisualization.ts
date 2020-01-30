@@ -12,11 +12,11 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
     {
         super.updateImage();
 
-        const sprite = this.getSprite(this._imageUrl);
+        // const sprite = this.getSprite(this._imageUrl);
 
-        if(!sprite) return;
+        // if(!sprite) return;
 
-        this.setImageOffset(sprite.width, sprite.height);
+        // this.setImageOffset(sprite.width, sprite.height);
     }
 
     private setImageOffset(width: number, height: number): void

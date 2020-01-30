@@ -1,4 +1,5 @@
 import { RoomObjectUpdateMessage } from '../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomObjectController } from '../../../../room/object/IRoomObjectController';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
 import { IVector3D } from '../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../room/utils/Vector3d';
@@ -41,7 +42,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     {
         super.update(totalTimeRunning);
 
-        totalTimeRunning = this.totalTimeRunning;
+        totalTimeRunning = this.time;
 
         const locationOffset    = this.getLocationOffset();
         const model             = this.object && this.object.model;
@@ -89,7 +90,10 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 vector.set(this._location);
             }
 
-            if(locationOffset) vector.add(new Vector3d(locationOffset.x, locationOffset.y, locationOffset.z));
+            if(locationOffset)
+            {
+                vector.add(locationOffset);
+            }
 
             this.object.setLocation(vector, false);
 
@@ -102,6 +106,13 @@ export class MovingObjectLogic extends RoomObjectLogicBase
         }
 
         this._lastUpdateTime = totalTimeRunning;
+    }
+
+    public setObject(object: IRoomObjectController): void
+    {
+        super.setObject(object);
+
+        if(object) this._location.set(object.getLocation());
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void

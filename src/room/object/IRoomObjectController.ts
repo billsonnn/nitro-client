@@ -3,7 +3,7 @@ import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
 import { IVector3D } from '../utils/IVector3D';
 import { IRoomObject } from './IRoomObject';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
-import { IRoomObjectSpriteVisualization } from './visualization/IRoomObjectSpriteVisualization';
+import { IRoomObjectGraphicVisualization } from './visualization/IRoomObjectGraphicVisualization';
 
 export interface IRoomObjectController extends IRoomObject
 {
@@ -13,7 +13,7 @@ export interface IRoomObjectController extends IRoomObject
     setDirection(vector: IVector3D): void;
     setTempLocation(vector: IVector3D, silent?: boolean): void;
     setState(state: number, silent?: boolean): void;
-    setVisualization(visualization: IRoomObjectSpriteVisualization): void;
+    setVisualization(visualization: IRoomObjectGraphicVisualization): void;
     setLogic(logic: IRoomObjectLogic): void;
     processUpdateMessage(message: RoomObjectUpdateMessage): void;
     isReady: boolean;

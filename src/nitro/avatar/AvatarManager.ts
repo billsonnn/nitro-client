@@ -3,7 +3,6 @@ import { Parser } from 'xml2js';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { Direction } from '../../room/utils/Direction';
-import { NitroInstance } from '../NitroInstance';
 import { AvatarAction } from './actions/AvatarAction';
 import { AvatarFigureContainer } from './AvatarFigureContainer';
 import { AvatarImage } from './AvatarImage';
@@ -146,7 +145,9 @@ export class AvatarManager extends NitroManager
 
             let library = part.library;
 
-            const asset = NitroInstance.instance.core.asset.getAsset(library);
+            const asset: any = null;
+
+           // const asset = NitroInstance.instance.core.asset.getAsset(library);
 
             if(!asset) continue;
 

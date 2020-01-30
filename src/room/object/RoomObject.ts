@@ -7,7 +7,7 @@ import { IRoomObjectController } from './IRoomObjectController';
 import { IRoomObjectModel } from './IRoomObjectModel';
 import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
 import { RoomObjectModel } from './RoomObjectModel';
-import { IRoomObjectSpriteVisualization } from './visualization/IRoomObjectSpriteVisualization';
+import { IRoomObjectVisualization } from './visualization/IRoomObjectVisualization';
 
 export class RoomObject extends Disposable implements IRoomObjectController
 {
@@ -26,7 +26,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _tempLocation: IVector3D;
     private _realLocation: IVector3D;
 
-    private _visualization: IRoomObjectSpriteVisualization;
+    private _visualization: IRoomObjectVisualization;
     private _logic: IRoomObjectLogic;
     private _pendingLogicMessages: RoomObjectUpdateMessage[];
 
@@ -150,28 +150,40 @@ export class RoomObject extends Disposable implements IRoomObjectController
         if(!silent) this._updateCounter++;
     }
 
-    public setVisualization(visualization: IRoomObjectSpriteVisualization): void
+    public setVisualization(visualization: IRoomObjectVisualization): void
     {
-        if(!visualization) return;
+        if(this._visualization === visualization) return;
 
-        visualization.setObject(this);
+        if(this._visualization) this._visualization.dispose();
 
         this._visualization = visualization;
+
+        if(this._visualization) this._visualization.object = this;
     }
 
     public setLogic(logic: IRoomObjectLogic): void
     {
-        if(!logic) return;
+        if(this._logic === logic) return;
 
-        logic.setObject(this);
+        if(this._logic)
+        {
+            this._logic.setObject(null);
+
+            this._logic = null;
+        }
 
         this._logic = logic;
 
-        while(this._pendingLogicMessages.length)
+        if(this._logic)
         {
-            const message = this._pendingLogicMessages.shift();
+            this._logic.setObject(this);
 
-            this._logic.processUpdateMessage(message);
+            while(this._pendingLogicMessages.length)
+            {
+                const message = this._pendingLogicMessages.shift();
+
+                this._logic.processUpdateMessage(message);
+            }
         }
     }
 
@@ -212,7 +224,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._room;
     }
 
-    public get visualization(): IRoomObjectSpriteVisualization
+    public get visualization(): IRoomObjectVisualization
     {
         return this._visualization;
     }
