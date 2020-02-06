@@ -9,36 +9,29 @@ import { FurnitureVisualization } from './FurnitureVisualization';
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_ANIMATED;
-
     private static FRAME_INCREASE_AMOUNT: number = 1;
 
-    public static _Str_13674: number = 0;
+    public static TYPE: string                  = ObjectVisualizationType.FURNITURE_ANIMATED;
+    public static DEFAULT_ANIMATION_ID: number  = 0;
 
     protected _data: FurnitureAnimatedVisualizationData;
 
-    private _Str_621: number;
-    private _animationStateData: AnimationStateData;
-    private _Str_16292: number;
-    private _Str_12376: number;
-    private _Str_5575: number;
-    private _Str_9825: number;
-    private _Str_9006: boolean;
-
+    private _state: number;
+    private _animationData: AnimationStateData;
+    private _animationChangeTime: number;
+    private _animatedLayerCount: number;
+    private _directionChanged: boolean;
     private _didSet: boolean;
 
     constructor()
     {
         super();
 
-        this._Str_621               = -1;
-        this._animationStateData    = new AnimationStateData();
-        this._Str_16292             = 0;
-        this._Str_12376             = 1;
-        this._Str_5575              = 0;
-        this._Str_9825              = 0;
-        this._Str_9006              = false;
-
+        this._state                 = -1;
+        this._animationData         = new AnimationStateData();
+        this._animationChangeTime   = 0;
+        this._animatedLayerCount    = 0;
+        this._directionChanged      = false;
         this._didSet                = false;
     }
 
@@ -53,22 +46,17 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         super.dispose();
 
-        if(this._animationStateData)
+        if(this._animationData)
         {
-            this._animationStateData.dispose();
+            this._animationData.dispose();
 
-            this._animationStateData = null;
+            this._animationData = null;
         }
     }
 
-    protected get _Str_24695(): number
+    protected get animatedLayerCount(): number
     {
-        return this._Str_9825;
-    }
-
-    protected get frameIncrease(): number
-    {
-        return FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT;
+        return this._animatedLayerCount;
     }
 
     protected setDirection(direction: number): void
@@ -77,22 +65,19 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
         super.setDirection(direction);
         
-        this._Str_9006 = true;
+        this._directionChanged = true;
     }
 
     public get animationId(): number
     {
-        return this._animationStateData.animationId;
+        return this._animationData.animationId;
     }
 
-    protected getAnimationId(k:AnimationStateData): number
+    protected getAnimationId(animationData: AnimationStateData): number
     {
-        var _local_2: number = this.animationId;
-        if (((!(_local_2 == FurnitureAnimatedVisualization._Str_13674)) && (this._data.hasAnimation(_local_2))))
-        {
-            return _local_2;
-        }
-        return FurnitureAnimatedVisualization._Str_13674;
+        if((this.animationId !== FurnitureAnimatedVisualization.DEFAULT_ANIMATION_ID) && this._data.hasAnimation(this.animationId)) return this.animationId;
+
+        return FurnitureAnimatedVisualization.DEFAULT_ANIMATION_ID;
     }
 
     protected updateObject(direction: number): boolean
@@ -101,13 +86,13 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         {
             const state = this.object.state;
 
-            if(state !== this._Str_621)
+            if(state !== this._state)
             {
                 this.setAnimation(state);
 
-                this._Str_621 = state;
+                this._state = state;
 
-                this._Str_16292 = this.object.model.getValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME) as number || 0;
+                this._animationChangeTime = this.object.model.getValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME) as number || 0;
             }
 
             return true;
@@ -124,11 +109,11 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
             {
                 const updateTime = this.object.model.getValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME);
 
-                if(updateTime > this._Str_16292)
+                if(updateTime > this._animationChangeTime)
                 {
-                    this._Str_16292 = updateTime;
+                    this._animationChangeTime = updateTime;
 
-                    this.setAnimation(this._Str_621);
+                    this.setAnimation(this._state);
                 }
             }
 
@@ -146,102 +131,95 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return false;
     }
 
-    private _Str_25107(k:AnimationStateData, _arg_2: number): boolean
+    private isPlayingTransition(animationData: AnimationStateData, animationId: number): boolean
     {
-        var _local_3: number = k.animationId;
-        if (((AnimationData.isTransitionFromAnimation(_local_3)) || (AnimationData.isTransitionToAnimation(_local_3))))
-        {
-            if (_arg_2 == k.animationAfterTransitionId)
-            {
-                if (!k.animationOver)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        if(!AnimationData.isTransitionFromAnimation(animationData.animationId) && !AnimationData.isTransitionToAnimation(animationData.animationId)) return false;
+
+        if(animationId !== animationData.animationAfterTransitionId) return false;
+
+        if(animationData.animationOver) return false;
+
+        return true;
     }
 
-    private _Str_22935(k:AnimationStateData): number
+    private getCurrentState(animationData: AnimationStateData): number
     {
-        var _local_2: number = k.animationId;
-        if (((AnimationData.isTransitionFromAnimation(_local_2)) || (AnimationData.isTransitionToAnimation(_local_2))))
-        {
-            return k.animationAfterTransitionId;
-        }
-        return _local_2;
+        if(!AnimationData.isTransitionFromAnimation(animationData.animationId) && !AnimationData.isTransitionToAnimation(animationData.animationId)) return animationData.animationId;
+
+        return animationData.animationAfterTransitionId;
     }
 
-    protected setAnimation(k: number):void
+    protected setAnimation(animationId: number):void
     {
         if(!this._data) return;
         
-        this._Str_17687(this._animationStateData, k, (this._Str_621 >= 0));
+        this.setSubAnimation(this._animationData, animationId, (this._state >= 0));
     }
 
-    protected _Str_17687(k:AnimationStateData, _arg_2: number, _arg_3: boolean=true): boolean
+    protected setSubAnimation(animationData: AnimationStateData, animationId: number, _arg_3: boolean = true): boolean
     {
-        var _local_5: number;
-        var _local_6: number;
-        var _local_4: number = k.animationId;
-        if (_arg_3)
+        if(_arg_3)
         {
-            if (this._Str_25107(k, _arg_2))
+            if(this.isPlayingTransition(animationData, animationId)) return false;
+
+            const state = this.getCurrentState(animationData);
+
+            if(animationId !== state)
             {
-                return false;
-            }
-            _local_5 = this._Str_22935(k);
-            if (_arg_2 != _local_5)
-            {
-                if (!this._data.isImmediateChange(_arg_2, _local_5))
+                if(!this._data.isImmediateChange(animationId, state))
                 {
-                    _local_6 = AnimationData.getTransitionFromAnimationId(_local_5);
-                    if (this._data.hasAnimation(_local_6))
+                    let transition = AnimationData.getTransitionFromAnimationId(state);
+
+                    if(this._data.hasAnimation(transition))
                     {
-                        k.animationAfterTransitionId = _arg_2;
-                        _arg_2 = _local_6;
+                        animationData.animationAfterTransitionId = animationId;
+                        animationId = transition;
                     }
                     else
                     {
-                        _local_6 = AnimationData.getTransitionToAnimationId(_arg_2);
-                        if (this._data.hasAnimation(_local_6))
+                        transition = AnimationData.getTransitionToAnimationId(animationId);
+
+                        if(this._data.hasAnimation(transition))
                         {
-                            k.animationAfterTransitionId = _arg_2;
-                            _arg_2 = _local_6;
+                            animationData.animationAfterTransitionId = animationId;
+                            animationId = transition;
                         }
                     }
                 }
             }
             else
             {
-                if (AnimationData.isTransitionFromAnimation(_local_4))
+                if(AnimationData.isTransitionFromAnimation(animationData.animationId))
                 {
-                    _local_6 = AnimationData.getTransitionToAnimationId(_arg_2);
-                    if (this._data.hasAnimation(_local_6))
+                    const transition = AnimationData.getTransitionToAnimationId(animationId);
+
+                    if(this._data.hasAnimation(transition))
                     {
-                        k.animationAfterTransitionId = _arg_2;
-                        _arg_2 = _local_6;
+                        animationData.animationAfterTransitionId = animationId;
+                        animationId = transition;
                     }
                 }
                 else
                 {
-                    if (!AnimationData.isTransitionToAnimation(_local_4))
+                    if(!AnimationData.isTransitionToAnimation(animationData.animationId))
                     {
-                        if (this.usesAnimationResetting())
+                        if(this.usesAnimationResetting())
                         {
-                            _local_6 = AnimationData.getTransitionFromAnimationId(_local_5);
-                            if (this._data.hasAnimation(_local_6))
+                            const transition = AnimationData.getTransitionFromAnimationId(state);
+
+                            if(this._data.hasAnimation(transition))
                             {
-                                k.animationAfterTransitionId = _arg_2;
-                                _arg_2 = _local_6;
+                                animationData.animationAfterTransitionId = animationId;
+                                animationId = transition;
                             }
                             else
                             {
-                                _local_6 = AnimationData.getTransitionToAnimationId(_arg_2);
-                                if (this._data.hasAnimation(_local_6))
+                                const transition = AnimationData.getTransitionToAnimationId(animationId);
+
+                                if(this._data.hasAnimation(transition))
                                 {
-                                    k.animationAfterTransitionId = _arg_2;
-                                    _arg_2 = _local_6;
+                                    animationData.animationAfterTransitionId = animationId;
+                                    animationId = transition;
                                 }
                             }
                         }
@@ -249,138 +227,148 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                 }
             }
         }
-        if (_local_4 != _arg_2)
+
+        if(animationData.animationId !== animationId)
         {
-            k.animationId = _arg_2;
+            animationData.animationId = animationId;
+
             return true;
         }
+
         return false;
     }
 
-    protected _Str_6660(k: number): boolean
+    protected getLastFramePlayed(layerId: number): boolean
     {
-        return this._animationStateData.getLastFramePlayed(k);
+        return this._animationData.getLastFramePlayed(layerId);
     }
 
-    protected resetAllAnimationFrames():void
+    protected resetAllAnimationFrames(): void
     {
-        if (this._animationStateData != null)
-        {
-            this._animationStateData.setLayerCount(this._Str_9825);
-        }
+        if(!this._animationData) return;
+        
+        this._animationData.setLayerCount(this._animatedLayerCount);
     }
 
     protected updateAnimation(): number
     {
-        if (this._data == null)
-        {
-            return 0;
-        }
+        if(!this._data) return 0;
+
         if(!this._didSet)
         {
-            this._Str_9825 = this._data.layerCount;
+            this._animatedLayerCount = this._data.layerCount;
             this.resetAllAnimationFrames();
 
             this._didSet = true;
         }
-        var _local_2: number = this.updateAnimations();
-        this._Str_9006 = false;
-        return _local_2;
+
+        const update = this.updateAnimations();
+
+        this._directionChanged = false;
+
+        return update;;
     }
 
     protected updateAnimations(): number
     {
-        var _local_2: number;
-        if (((!(this._animationStateData.animationOver)) || (this._Str_9006)))
+        if(this._animationData.animationOver && !this._directionChanged) return 0;
+
+        const update = this.updateFramesForAnimation(this._animationData);
+
+        if(this._animationData.animationOver)
         {
-            _local_2 = this._Str_18198(this._animationStateData);
-            if (this._animationStateData.animationOver)
+            if((AnimationData.isTransitionFromAnimation(this._animationData.animationId)) || (AnimationData.isTransitionToAnimation(this._animationData.animationId)))
             {
-                if (((AnimationData.isTransitionFromAnimation(this._animationStateData.animationId)) || (AnimationData.isTransitionToAnimation(this._animationStateData.animationId))))
-                {
-                    this.setAnimation(this._animationStateData.animationAfterTransitionId);
-                    this._animationStateData.animationOver = false;
-                }
+                this.setAnimation(this._animationData.animationAfterTransitionId);
+                this._animationData.animationOver = false;
             }
         }
-        return _local_2;
+
+        return update;
     }
 
-    protected _Str_18198(k:AnimationStateData): number
+    protected updateFramesForAnimation(animationData: AnimationStateData): number
     {
-        var _local_8: boolean;
-        var _local_9: boolean;
-        var _local_10:AnimationFrame;
-        var sequenceId: number;
-        if (((k.animationOver) && (!(this._Str_9006))))
-        {
-            return 0;
-        }
-        var frameCount: number = k.frameCounter;
-        var _local_4: number = this.getAnimationId(k);
-        if (frameCount == 0)
-        {
-            frameCount = this._data.getStartFrame(_local_4, this._direction);
-        }
-        frameCount = (frameCount + this.frameIncrease);
-        k.frameCounter = frameCount;
-        var _local_5: number;
-        k.animationOver = true;
-        var _local_6 = (1 << (this._Str_9825 - 1));
-        var layerId: number = (this._Str_9825 - 1);
+        if((animationData.animationOver) && (!(this._directionChanged))) return 0;
+
+        let animationId = this.getAnimationId(animationData);
+        let frameCount  = animationData.frameCounter;
+
+        if(!frameCount) frameCount = this._data.getStartFrame(animationId, this._direction);
+
+        frameCount                  = (frameCount + FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT);
+        animationData.frameCounter  = frameCount;
+        animationData.animationOver = true;
+
+        let animationPlayed = false;
+        let layerId         = (this._animatedLayerCount - 1);
+        let update          = 0;
+        let layerUpdate     = (1 << (this._animatedLayerCount - 1));
+
         while (layerId >= 0)
         {
-            _local_8 = k.getAnimationPlayed(layerId);
-            if (((!(_local_8)) || (this._Str_9006)))
+            let sequenceId: number = 0;
+
+            animationPlayed = animationData.getAnimationPlayed(layerId);
+
+            if(!animationPlayed || this._directionChanged)
             {
-                _local_9 = k.getLastFramePlayed(layerId);
-                _local_10 = k.getFrame(layerId);
-                if (_local_10 != null)
+                let lastFramePlayed = animationData.getLastFramePlayed(layerId);
+                let frame           = animationData.getFrame(layerId);
+
+                if(frame)
                 {
-                    if (((_local_10.isLastFrame) && (_local_10.remainingFrameRepeats <= this.frameIncrease)))
+                    if(frame.isLastFrame && (frame.remainingFrameRepeats <= FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT))
                     {
-                        _local_9 = true;
+                        lastFramePlayed = true;
                     }
                 }
-                if ((((this._Str_9006) || (_local_10 == null)) || ((_local_10.remainingFrameRepeats >= 0) && ((_local_10.remainingFrameRepeats = (_local_10.remainingFrameRepeats - this.frameIncrease)) <= 0))))
+
+                if((this._directionChanged || !frame) || ((frame.remainingFrameRepeats >= 0) && ((frame.remainingFrameRepeats = (frame.remainingFrameRepeats - FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT)) <= 0)))
                 {
                     sequenceId = AnimationFrame.SEQUENCE_NOT_DEFINED;
-                    if (_local_10 != null)
+
+                    if(frame) sequenceId = frame.activeSequence;
+
+                    if(sequenceId === AnimationFrame.SEQUENCE_NOT_DEFINED)
                     {
-                        sequenceId = _local_10.activeSequence;
-                    }
-                    if (sequenceId == AnimationFrame.SEQUENCE_NOT_DEFINED)
-                    {
-                        _local_10 = this._data.getFrame(_local_4, this._direction, layerId, frameCount);
+                        frame = this._data.getFrame(animationId, this._direction, layerId, frameCount);
                     }
                     else
                     {
-                        _local_10 = this._data.getFrameFromSequence(_local_4, this._direction, layerId, sequenceId, (_local_10.activeSequenceOffset + _local_10.repeats), frameCount);
+                        frame = this._data.getFrameFromSequence(animationId, this._direction, layerId, sequenceId, (frame.activeSequenceOffset + frame.repeats), frameCount);
                     }
-                    k.setFrame(layerId, _local_10);
-                    _local_5 = (_local_5 | _local_6);
+
+                    animationData.setFrame(layerId, frame);
+
+                    update = (update | layerUpdate);
                 }
-                if (((_local_10 == null) || (_local_10.remainingFrameRepeats == AnimationFrame.FRAME_REPEAT_FOREVER)))
+
+                if(!frame || (frame.remainingFrameRepeats == AnimationFrame.FRAME_REPEAT_FOREVER))
                 {
-                    _local_9 = true;
-                    _local_8 = true;
+                    lastFramePlayed = true;
+                    animationPlayed = true;
                 }
                 else
                 {
-                    k.animationOver = false;
+                    animationData.animationOver = false;
                 }
-                k.setLastFramePlayed(layerId, _local_9);
-                k.setAnimationPlayed(layerId, _local_8);
+
+                animationData.setLastFramePlayed(layerId, lastFramePlayed);
+                animationData.setAnimationPlayed(layerId, animationPlayed);
             }
-            _local_6 = (_local_6 >> 1);
+
+            layerUpdate = (layerUpdate >> 1);
+
             layerId--;
         }
-        return _local_5;
+        
+        return update;
     }
 
     protected getFrameNumber(layerId: number): number
     {
-        const currentFrame = this._animationStateData.getFrame(layerId);
+        const currentFrame = this._animationData.getFrame(layerId);
 
         if(!currentFrame) return super.getFrameNumber(layerId);
 
@@ -391,7 +379,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         const offset = super.getLayerXOffset(direction, layerId);
 
-        const currentFrame = this._animationStateData.getFrame(layerId);
+        const currentFrame = this._animationData.getFrame(layerId);
 
         if(!currentFrame) return offset;
 
@@ -402,7 +390,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         const offset = super.getLayerYOffset(direction, layerId);
 
-        const currentFrame = this._animationStateData.getFrame(layerId);
+        const currentFrame = this._animationData.getFrame(layerId);
 
         if(!currentFrame) return offset;
 

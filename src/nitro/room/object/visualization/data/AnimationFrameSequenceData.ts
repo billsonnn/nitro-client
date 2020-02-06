@@ -94,12 +94,12 @@ export class AnimationFrameSequenceData
 
         if(this._isRandom)
         {
-            frameCount = ~~((Math.random() * this._frameIndexes.length));
+            frameCount = Math.floor((Math.random() * this._frameIndexes.length));
 
             if(frameCount === this._frameIndexes.length) frameCount--;
         }
 
-        return ~~(frameCount);
+        return Math.floor(frameCount);
     }
 
     public getRepeats(frameCount: number): number
