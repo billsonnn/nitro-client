@@ -12,22 +12,22 @@ export class AnimationFrameDirectionalData extends AnimationFrameData
         this._directionalOffsets = offsets;
     }
 
-    public get hasDirectionalOffsets(): boolean
+    public hasDirectionalOffsets(): boolean
     {
         return this._directionalOffsets !== null;
     }
 
-    public x(direction: number): number
+    public getX(direction: number): number
     {
-        if(this._directionalOffsets) return this._directionalOffsets.getXOffset(direction, super.x(direction));
-
-        return super.x(direction);
+        if(!this._directionalOffsets) return super.getX(direction);
+        
+        return this._directionalOffsets.getXOffset(direction, super.getX(direction));
     }
 
-    public y(direction: number): number
+    public getY(direction: number): number
     {
-        if(this._directionalOffsets) return this._directionalOffsets.getYOffset(direction, super.y(direction));
-
-        return super.y(direction);
+        if(!this._directionalOffsets) return super.getY(direction);
+        
+        return this._directionalOffsets.getYOffset(direction, super.getY(direction));
     }
 }

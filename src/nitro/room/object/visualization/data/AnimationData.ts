@@ -1,139 +1,196 @@
-import { IAssetAnimation, IAssetAnimationSequence, IAssetAnimationSequenceFrameOffset } from '../../../../../core/asset/interfaces/visualization';
+import { IAssetAnimation, IAssetAnimationLayer, IAssetAnimationSequenceFrame } from '../../../../../core/asset/interfaces/visualization';
+import { AnimationFrame } from './AnimationFrame';
 import { AnimationLayerData } from './AnimationLayerData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
 
-export class AnimationData
+export class AnimationData 
 {
-    private static TRANSITION_KEY: number = 10;
+    private static TRANSITION_TO_ANIMATION_OFFSET: number   = 1000000;
+    private static TRANSITION_FROM_ANIMATION_OFFSET: number = 2000000;
 
-    private _layers: AnimationLayerData[];
+    public static DEFAULT_FRAME_NUMBER: number = 0;
+
+    private _layers: Map<number, AnimationLayerData>;
     private _frameCount: number;
     private _randomStart: boolean;
-    private _transitionTo: number;
+    private _immediateChanges: number[];
 
     constructor()
     {
-        this._layers        = [];
-        this._frameCount    = -1;
-        this._randomStart   = false;
-        this._transitionTo  = -1;
+        this._layers            = new Map();
+        this._frameCount        = -1;
+        this._randomStart       = false;
+        this._immediateChanges  = [];
     }
 
-    public initialize(animation: IAssetAnimation): boolean
+    public static getTransitionToAnimationId(animationId: number): number
     {
-        if(!animation) return false;
+        return AnimationData.TRANSITION_TO_ANIMATION_OFFSET + animationId;
+    }
 
-        const transitionTo = animation.transitionTo;
+    public static getTransitionFromAnimationId(animationId: number): number
+    {
+        return AnimationData.TRANSITION_FROM_ANIMATION_OFFSET + animationId;
+    }
 
-        if(transitionTo >= 0) this._transitionTo = transitionTo;
+    public static isTransitionToAnimation(animationId: number): boolean
+    {
+        return (animationId >= AnimationData.TRANSITION_TO_ANIMATION_OFFSET) && (animationId < AnimationData.TRANSITION_FROM_ANIMATION_OFFSET);
+    }
 
-        const layers = animation.layers;
-
-        if(layers)
-        {
-            for(let key in layers)
-            {
-                const layer = layers[key];
-
-                if(!layer) continue;
-
-                const layerId       = parseInt(key);
-                const loopCount     = layer.loopCount !== undefined ? layer.loopCount : 1;
-                const frameRepeat   = layer.frameRepeat !== undefined ? layer.frameRepeat : 1;
-                const isRandom      = layer.random !== undefined ? layer.random === 1 : false;
-
-                if(!this.processAnimationLayer(layerId, loopCount, frameRepeat, isRandom, layer.frameSequences)) return false;
-            }
-        }
-
-        return true;
+    public static isTransitionFromAnimation(animationId: number): boolean
+    {
+        return animationId >= AnimationData.TRANSITION_FROM_ANIMATION_OFFSET;
     }
 
     public dispose(): void
     {
-        for(let i = this._layers.length - 1; i >= 0; i--)
+        for(let layer of this._layers.values())
         {
-            const layer = this._layers[i];
-
             if(!layer) continue;
 
             layer.dispose();
         }
 
-        this._transitionTo  = -1;
-        this._layers        = [];
+        this._layers.clear();
+
+        this._immediateChanges = null;
     }
 
-    private processAnimationLayer(layerId: number, loopCount: number, frameRepeat: number, isRandom: boolean, frameSequences: { [index: string]: IAssetAnimationSequence }): boolean
+    public setImmediateChanges(k: number[]): void
     {
-        const animationLayerData = new AnimationLayerData(loopCount, frameRepeat, isRandom);
+        this._immediateChanges = k;
+    }
 
-        if(!animationLayerData) return false;
+    public isImmediateChange(k: number): boolean
+    {
+        if(!this._immediateChanges || (this._immediateChanges.indexOf(k) === -1)) return false;
 
-        for(let key in frameSequences)
-        {
-            const frameSequence = frameSequences[key];
-
-            if(!frameSequence) continue;
-
-            const sequenceData = animationLayerData.createFrameSequence();
-
-            for(let frame in frameSequence.frames)
-            {
-                const frameData = frameSequence.frames[frame];
-
-                if(!frameData) continue;
-
-                let randomX = 0;
-                let randomY = 0;
-                
-                sequenceData.addFrame(frameData.id, frameData.x, frameData.y, randomX, randomY, this.processDirectionalOffsets(frameData.offsets));
-            }
-        }
-
-        this._layers[layerId] = animationLayerData;
-        
         return true;
     }
 
-    private processDirectionalOffsets(offsets: IAssetAnimationSequenceFrameOffset[]): DirectionalOffsetData
+    public getStartFrame(direction: number): number
     {
-        if(!offsets) return null;
+        if(!this._randomStart) return 0;
+        
+        return Math.random() * this._frameCount;
+    }
 
-        const totalOffsets = offsets.length;
+    public initialize(k: IAssetAnimation): boolean
+    {
+        this._randomStart = false;
 
-        if(!totalOffsets) return null;
+        // if (int(k.@randomStart) != 0)
+        // {
+        //     this._randomStart = true;
+        // }
 
-        const directionalOffsetData = new DirectionalOffsetData();
-
-        for(let i = 0; i < totalOffsets; i++)
+        if(k.layers)
         {
-            const offset = offsets[i];
+            for(let key in k.layers)
+            {
+                const layer = k.layers[key];
 
-            if(!offset) continue;
+                if(!layer) return false;
 
-            directionalOffsetData.setDirection(offset.direction, offset.x, offset.y);
+                const animationId = parseInt(key);
+
+                let loopCount   = (layer.loopCount !== undefined) ? layer.loopCount : 1;
+                let frameRepeat = (layer.frameRepeat !== undefined) ? layer.frameRepeat : 1;
+                let isRandom    = ((layer.random !== undefined) && (layer.random !== 0)) ? true : false;
+
+                if(!this.addLayer(animationId, loopCount, frameRepeat, isRandom, layer)) return false;
+            }
         }
 
-        return directionalOffsetData;
+        return true;
     }
 
-    public getLayer(layerId: number): AnimationLayerData
+    private addLayer(animationId: number, loopCount: number, frameRepeat: number, isRandom: boolean, layer: IAssetAnimationLayer): boolean
     {
-        const existing = this._layers[layerId];
+        const layerData = new AnimationLayerData(loopCount, frameRepeat, isRandom);
 
-        if(!existing) return null;
+        if(layer.frameSequences)
+        {
+            for(let key in layer.frameSequences)
+            {
+                const animationSequence = layer.frameSequences[key];
 
-        return existing;
+                if(!animationSequence) continue;
+
+                let loopCount        = (animationSequence.loopCount !== undefined) ? animationSequence.loopCount : 1;
+                let isSequenceRandom = ((layer.random !== undefined) && (layer.random !== 0)) ? true : false;
+
+                const frame = layerData.addFrameSequence(loopCount, isSequenceRandom);
+
+                if(animationSequence.frames)
+                {
+                    for(let key in animationSequence.frames)
+                    {
+                        const animationFrame = animationSequence.frames[key];
+
+                        if(!animationFrame)
+                        {
+                            layerData.dispose();
+
+                            return false;
+                        }
+
+                        frame.addFrame(animationFrame.id, animationFrame.x || 0, animationFrame.y || 0, animationFrame.randomX || 0, animationFrame.randomY || 0, this.readDirectionalOffsets(animationFrame));
+                    }
+                }
+
+                frame.initialize();
+            }
+        }
+        
+        layerData.calculateLength();
+
+        this._layers.set(animationId, layerData);
+
+        const frameCount: number = layerData.frameCount;
+
+        if(frameCount > this._frameCount) this._frameCount = frameCount;
+
+        return true;
     }
 
-    public static getAnimationToTransition(animationId: number): number
+    private readDirectionalOffsets(frame: IAssetAnimationSequenceFrame): DirectionalOffsetData
     {
-        return parseInt('' + AnimationData.TRANSITION_KEY + animationId);
+        let directionalOffset: DirectionalOffsetData = null;
+
+        if(frame && frame.offsets)
+        {
+            for(let directionId in frame.offsets)
+            {
+                const offset = frame.offsets[directionId];
+
+                if(!offset) continue;
+
+                if(directionalOffset) directionalOffset = new DirectionalOffsetData();
+
+                directionalOffset.setDirection(offset.direction, offset.x, offset.y);
+            }
+        }
+
+        return directionalOffset;
     }
 
-    public get transitionTo(): number
+    public getFrame(direction: number, layerId: number, frameCount: number): AnimationFrame
     {
-        return this._transitionTo;
+        const layer = this._layers.get(layerId);
+
+        if(!layer) return null;
+        
+        return layer.getFrame(direction, frameCount);
+    }
+
+    public getFrameFromSequence(direction: number, layerId: number, _arg_3: number, offset: number, _arg_5: number): AnimationFrame
+    {
+        const layer = this._layers.get(layerId);
+
+        if(!layer) return null;
+        
+        return layer.getFrameFromSequence(direction, _arg_3, offset, _arg_5);
     }
 }

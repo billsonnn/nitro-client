@@ -12,7 +12,7 @@ export class GraphicAsset
 
     private _initialized: boolean;
 
-    public static createAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean)
+    public static createAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean = false, flipV: boolean = false)
     {
         const asset = new GraphicAsset();
 
@@ -30,10 +30,10 @@ export class GraphicAsset
             asset._initialized  = true;
         }
 
-        asset._x        = x;
-        asset._y        = y;
-        asset._flipH    = flipH || false;
-        asset._flipV    = flipV || false;
+        asset._x        = x || 0;
+        asset._y        = y || 0;
+        asset._flipH    = flipH;
+        asset._flipV    = flipV;
 
         return asset;
     }

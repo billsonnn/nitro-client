@@ -11,14 +11,15 @@ import { FurnitureVisualizationData } from './FurnitureVisualizationData';
 
 export class FurnitureVisualization extends RoomObjectSpriteVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_STATIC;
-
     protected static DEPTH_MULTIPLIER: number = Math.sqrt(0.5);
+    
+    public static TYPE: string = ObjectVisualizationType.FURNITURE_STATIC;
 
     protected _data: FurnitureVisualizationData;
 
     protected _type: string;
     protected _direction: number;
+    protected _geometryDirection: number;
     protected _colorId: number;
     protected _clickUrl: string;
     protected _liftAmount: number;
@@ -38,6 +39,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     protected _yOffsets: number[];
     protected _zOffsets: number[];
 
+    private _animationNumber: number;
+
     constructor()
     {
         super();
@@ -46,6 +49,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         this._type              = null;
         this._direction         = -1;
+        this._geometryDirection = -1;
         this._colorId           = 0;
         this._clickUrl          = null;
         this._liftAmount        = 0;
@@ -64,6 +68,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._xOffsets          = [];
         this._yOffsets          = [];
         this._zOffsets          = [];
+
+        this._animationNumber   = 0;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -82,7 +88,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected reset(): void
     {
-        this._direction = -1;
+        this.setDirection(-1);
 
         this.resetLayers();
     }
@@ -110,15 +116,25 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         let updateSprites = false;
 
-        if(this.updateObject()) updateSprites = true;
+        if(this.updateObject(geometry.direction.x)) updateSprites = true;
 
         if(this.updateModel()) updateSprites = true;
 
-        if(this.updateAnimation()) updateSprites = true;
+        let number = 0;
 
-        if(updateSprites)
+        if(skipUpdate)
         {
-            this.updateSprites(updateSprites);
+            this._animationNumber = this._animationNumber | this.updateAnimation();
+        }
+        else
+        {
+            number = this.updateAnimation() | this._animationNumber;
+            this._animationNumber = 0;
+        }
+
+        if(updateSprites || number !== 0)
+        {
+            this.updateSprites(updateSprites, number);
 
             this.updateSpriteCounter++;
         }
@@ -133,14 +149,20 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         if(this._data && !this._data.saveable) this._data.dispose();
     }
 
-    protected updateObject(): boolean
+    protected updateObject(direction: number): boolean
     {
         if(!this.object) return false;
 
-        if(this.updateObjectCounter === this.object.updateCounter) return false;
+        if((this.updateObjectCounter === this.object.updateCounter) && (this._geometryDirection === direction)) return false;
 
-        this.setDirection(this.object.direction.x);
+        let offsetDirection = (this.object.getDirection().x - (direction + 135));
 
+        offsetDirection = (((offsetDirection) % 360) % 360);
+
+        this.setDirection(offsetDirection);
+
+        this._geometryDirection = direction;
+        
         this.updateObjectCounter = this.object.updateCounter;
 
         return true;
@@ -176,8 +198,6 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected setDirection(direction: number): void
     {
-        if(this._direction === direction) return;
-
         direction = this._data.getValidDirection(direction);
 
         this._direction = direction;
@@ -185,7 +205,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this.resetLayers();
     }
 
-    protected updateSprites(update: boolean): void
+    protected updateSprites(update: boolean, animation: number): void
     {
         if(this._layerCount !== this.totalSprites)
         {
@@ -201,6 +221,17 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 this.updateSprite(layerId);
 
                 layerId--;
+            }
+        }
+        else
+        {
+            let layerId = 0;
+            while(animation > 0)
+            {
+                if(animation) this.updateSprite(layerId);
+
+                layerId++;
+                animation = (animation >> 1);
             }
         }
 
@@ -445,9 +476,9 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return 1;
     }
 
-    protected updateAnimation(): boolean
+    protected updateAnimation(): number
     {
-        return false;
+        return 0;
     }
 
     protected getFrameNumber(layerId: number): number

@@ -2,80 +2,110 @@ import { AnimationFrameData } from './AnimationFrameData';
 import { AnimationFrameDirectionalData } from './AnimationFrameDirectionalData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
 
-export class AnimationFrameSequenceData
+export class AnimationFrameSequenceData 
 {
-    private _loopCount: number;
-    private _frameRepeat: number;
     private _frames: AnimationFrameData[];
-    private _frameNumbers: number[];
+    private _frameIndexes: number[];
+    private _frameRepeats: number[];
+    private _isRandom: boolean;
+    private _loopCount: number;
 
-    constructor(loopCount: number, frameRepeat: number)
+    constructor(loopCount: number, isRandom: boolean)
     {
-        this._loopCount     = loopCount < 0 ? 0 : loopCount;
-        this._frameRepeat   = frameRepeat < 1 ? 1 : frameRepeat;
         this._frames        = [];
-        this._frameNumbers  = [];
+        this._frameIndexes  = [];
+        this._frameRepeats  = [];
+        this._isRandom      = isRandom;
+        this._loopCount     = (loopCount < 1) ? 1 : loopCount;
     }
 
-    public dispose(): void
+    public get isRandom(): boolean
     {
-        this._loopCount     = 1;
-        this._frameRepeat   = 1;
-        this._frames        = [];
-        this._frameNumbers  = [];
-    }
-
-    public getFrame(frame: number): AnimationFrameData
-    {
-        const existing = this._frames[frame];
-
-        if(!existing) return null;
-
-        return existing;
-    }
-
-    public getFrameForCount(frameCount: number): AnimationFrameData
-    {
-        frameCount = Math.floor((frameCount % (this._frames.length * this._frameRepeat)) / this._frameRepeat);
-
-        return this.getFrame(frameCount);
-    }
-
-    public addFrame(id: number, x: number, y: number, randomX: number, randomY: number, offsets: DirectionalOffsetData = null): AnimationFrameData
-    {
-        let frameData: AnimationFrameData = null;
-
-        if(offsets) frameData = new AnimationFrameDirectionalData(id, x, y, randomX, randomY, offsets, 0)
-        else frameData = new AnimationFrameData(id, x, y, randomX, randomY, 0);
-
-        this._frames.push(frameData);
-        this._frameNumbers.push(id);
-
-        return frameData;
-    }
-
-    public get loopCount(): number
-    {
-        return this._loopCount;
-    }
-
-    public get frameRepeat(): number
-    {
-        return this._frameRepeat;
-    }
-
-    public get frames(): AnimationFrameData[]
-    {
-        return this._frames;
-    }
-
-    public get frameNumbers(): number[]
-    {
-        return this._frameNumbers;
+        return this._isRandom;
     }
 
     public get frameCount(): number
     {
-        return this._frames.length;
+        return (this._frameIndexes.length * this._loopCount);
+    }
+
+    public dispose(): void
+    {
+        this._frames = [];
+    }
+
+    public initialize(): void
+    {
+        let frameIndex: number  = (this._frameIndexes.length - 1);
+        let realIndex: number   = -1;
+        let nextIndex: number   = 1;
+
+        while(frameIndex >= 0)
+        {
+            if (this._frameIndexes[frameIndex] === realIndex)
+            {
+                nextIndex++;
+            }
+            else
+            {
+                realIndex = this._frameIndexes[frameIndex];
+                nextIndex = 1;
+            }
+
+            this._frameRepeats[frameIndex] = nextIndex;
+
+            frameIndex--;
+        }
+    }
+
+    public addFrame(id: number, x: number, y: number, randomX: number, randomY: number, directionalOffset: DirectionalOffsetData):void
+    {
+        let repeats: number = 1;
+
+        if(this._frames.length > 0)
+        {
+            const frame = this._frames[(this._frames.length - 1)];
+
+            if((((((((frame.id == id) && (!(frame.hasDirectionalOffsets()))) && (frame.x == x)) && (frame.y == y)) && (frame.randomX == randomX)) && (randomX == 0)) && (frame.randomY == randomY)) && (randomY == 0))
+            {
+                repeats = (repeats + frame.repeats);
+
+                this._frames.pop();
+            }
+        }
+
+        const frame = (directionalOffset) ? new AnimationFrameDirectionalData(id, x, y, randomX, randomY, directionalOffset, repeats) : new AnimationFrameData(id, x, y, randomX, randomY, repeats);
+
+        this._frames.push(frame);
+        this._frameIndexes.push((this._frames.length - 1));
+        this._frameRepeats.push(1);
+    }
+
+    public getFrame(frameCount: number): AnimationFrameData
+    {
+        if((!this._frames.length || (frameCount < 0)) || (frameCount >= this.frameCount)) return null;
+
+        return this._frames[this._frameIndexes[(frameCount % this._frameIndexes.length)]];
+    }
+
+    public getFrameIndex(frameCount: number): number
+    {
+        if(((frameCount < 0) || (frameCount >= this.frameCount))) return -1;
+
+        if(this._isRandom)
+        {
+            frameCount = ~~((Math.random() * this._frameIndexes.length));
+
+            if(frameCount === this._frameIndexes.length) frameCount--;
+        }
+
+        return ~~(frameCount);
+    }
+
+    public getRepeats(frameCount: number): number
+    {
+        if(((frameCount < 0) || (frameCount >= this.frameCount))) return 0;
+        
+        return this._frameRepeats[(frameCount % this._frameRepeats.length)];
     }
 }

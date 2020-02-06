@@ -156,6 +156,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case ObjectLogicType.FURNITURE_VOTE_MAJORITY:
                 logic = FurnitureVoteMajorityLogic;
                 break;
+            default:
+                logic = FurnitureLogic;
+                break;
         }
 
         if(!logic)

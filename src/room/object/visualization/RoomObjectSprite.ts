@@ -24,6 +24,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _blendMode: number;
     private _color: number;
     private _relativeDepth: number;
+    private _Str_8253: boolean;
     private _visible: boolean;
     private _tag: string;
     private _filters: PIXI.Filter[];
@@ -51,6 +52,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._blendMode     = PIXI.BLEND_MODES.NORMAL;
         this._color         = 0xFFFFFF;
         this._relativeDepth = 0;
+        this._Str_8253      = false;
         this._visible       = true;
         this._tag           = '';
         this._filters       = [];
@@ -179,7 +181,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
 
     public get flipV(): boolean
     {
-        return this._flipH;
+        return this._flipV;
     }
 
     public set flipV(flip: boolean)
@@ -257,6 +259,20 @@ export class RoomObjectSprite implements IRoomObjectSprite
         if(this._relativeDepth === depth) return;
 
         this._relativeDepth = depth;
+
+        this._updateCounter++;
+    }
+
+    public get _Str_4593(): boolean
+    {
+        return this._Str_8253;
+    }
+
+    public set _Str_4593(flag: boolean)
+    {
+        if(flag === this._Str_8253) return;
+
+        this._Str_8253 = flag;
 
         this._updateCounter++;
     }

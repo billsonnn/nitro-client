@@ -12,7 +12,7 @@ export class SizeData
     private _angle: number;
 
     private _defaultDirection: DirectionData;
-    private _directions: DirectionData[];
+    private _directions: Map<number, DirectionData>;
     private _colors: ColorData[];
     private _iconColors: ColorData[];
     private _lastDirectionData: DirectionData;
@@ -20,11 +20,11 @@ export class SizeData
 
     constructor(layerCount: number, angle: number)
     {
-        this._layerCount        = layerCount < 0 ? 0 : layerCount > SizeData.MAX_LAYERS ? SizeData.MAX_LAYERS : layerCount;
+        this._layerCount        = ((layerCount < 0) ? 0 : ((layerCount > SizeData.MAX_LAYERS) ? SizeData.MAX_LAYERS : layerCount));
         this._angle             = angle < 1 ? 1 : angle > 360 ? 360 : angle;
         
         this._defaultDirection  = new DirectionData(this._layerCount);
-        this._directions        = [];
+        this._directions        = new Map();
         this._colors            = [];
         this._iconColors        = [];
         this._lastDirectionData = null;
@@ -35,28 +35,22 @@ export class SizeData
     {
         if(this._defaultDirection) this._defaultDirection.dispose();
 
-        for(let i = this._directions.length - 1; i >= 0; i--)
+        for(let direction of this._directions.values())
         {
-            const direction = this._directions[i];
-
             if(!direction) continue;
 
             direction.dispose();
         }
 
-        for(let i = this._colors.length - 1; i >= 0; i--)
+        for(let color of this._colors)
         {
-            const color = this._colors[i];
-
             if(!color) continue;
 
             color.dispose();
         }
 
-        for(let i = this._iconColors.length - 1; i >= 0; i--)
+        for(let color of this._iconColors)
         {
-            const color = this._iconColors[i];
-
             if(!color) continue;
 
             color.dispose();
@@ -68,11 +62,12 @@ export class SizeData
     protected reset(): void
     {
         this._defaultDirection  = null;
-        this._directions        = [];
         this._colors            = [];
         this._iconColors        = [];
         this._lastDirectionData = null;
         this._lastDirection     = -1;
+
+        this._directions.clear();
     }
 
     public processLayers(layers: { [index: string]: IAssetVisualizationLayer }): boolean
@@ -94,7 +89,7 @@ export class SizeData
 
             const directionNumber = parseInt(key);
 
-            if(this._directions[directionNumber]) return false;
+            if(this._directions.get(directionNumber)) return false;
 
             const directionData = new DirectionData(this._layerCount);
 
@@ -102,7 +97,7 @@ export class SizeData
 
             this.setDirectionLayers(directionData, direction.layers);
 
-            this._directions[directionNumber] = directionData;
+            this._directions.set(directionNumber, directionData);
 
             this._lastDirectionData = null;
             this._lastDirection     = -1;
@@ -205,17 +200,48 @@ export class SizeData
 
             if(layer.y !== undefined) directionData.setLayerYOffset(layerId, layer.y);
 
-            if(layer.z !== undefined) directionData.setLayerZOffset(layerId, layer.z);
+            if(layer.z !== undefined) directionData.setLayerZOffset(layerId, (layer.z / -1000));
         }
 
         return true;
+    }
+
+    public getValidDirection(direction: number): number
+    {
+        let directionNumber: number = (((((direction % 360) + 360) + (this._angle / 2)) % 360) / this._angle);
+
+        const existing = this._directions.get(directionNumber);
+
+        if(existing) return directionNumber;
+
+        directionNumber = (((direction % 360) + 360) % 360);
+
+        let currentAngle    = -1;
+        let validDirection  = -1;
+
+        for(let key of this._directions.keys())
+        {
+            let angle = ((((key * this._angle) - directionNumber) + 360) % 360);
+
+            if(angle > 180) angle = (360 - angle);
+
+            if((angle < currentAngle) || (currentAngle < 0))
+            {
+                currentAngle    = angle;
+                validDirection  = key;
+            }
+        }
+
+        if(validDirection >= 0) return ~~validDirection;
+
+        return 0;
     }
 
     public getDirectionData(direction: number): DirectionData
     {
         if(direction === this._lastDirection && this._lastDirectionData) return this._lastDirectionData;
 
-        let directionData = this._directions[direction];
+        let directionData = this._directions.get(direction);
 
         if(!directionData) directionData = this._defaultDirection;
 

@@ -1,6 +1,7 @@
 import { FurnitureData } from './FurnitureData';
 import { FurnitureStackingHeightMap } from './FurnitureStackingHeightMap';
 import { LegacyWallGeometry } from './LegacyWallGeometry';
+import { RoomCamera } from './RoomCamera';
 import { SelectedRoomObjectData } from './SelectedRoomObjectData';
 
 export class RoomInstanceData
@@ -9,6 +10,7 @@ export class RoomInstanceData
 
     private _modelName: string;
     private _legacyGeometry: LegacyWallGeometry;
+    private _roomCamera: RoomCamera;
     private _selectedObject: SelectedRoomObjectData;
     private _furnitureStackingHeightMap: FurnitureStackingHeightMap;
 
@@ -20,6 +22,7 @@ export class RoomInstanceData
 
         this._modelName                     = null;
         this._legacyGeometry                = new LegacyWallGeometry();
+        this._roomCamera                    = new RoomCamera();
         this._selectedObject                = null;
         this._furnitureStackingHeightMap    = null;
 
@@ -89,6 +92,11 @@ export class RoomInstanceData
     public get legacyGeometry(): LegacyWallGeometry
     {
         return this._legacyGeometry;
+    }
+
+    public get roomCamera(): RoomCamera
+    {
+        return this._roomCamera;
     }
 
     public get selectedObject(): SelectedRoomObjectData

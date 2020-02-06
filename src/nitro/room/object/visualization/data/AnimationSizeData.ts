@@ -1,60 +1,66 @@
 import { IAssetAnimation } from '../../../../../core/asset/interfaces/visualization';
 import { AnimationData } from './AnimationData';
+import { AnimationFrame } from './AnimationFrame';
 import { SizeData } from './SizeData';
 
-export class AnimationSizeData extends SizeData
+export class AnimationSizeData extends SizeData 
 {
-    private _animations: { [index: string]: AnimationData };
+    private _animations: Map<number, AnimationData>;
     private _animationIds: number[];
 
     constructor(layerCount: number, angle: number)
     {
         super(layerCount, angle);
 
-        this._animations    = {};
+        this._animations    = new Map();
         this._animationIds  = [];
     }
 
     public dispose(): void
     {
-        for(let key in this._animations)
-        {
-            const animation = this._animations[key];
+        super.dispose();
 
+        for(let animation of this._animations.values())
+        {
             if(!animation) continue;
 
             animation.dispose();
         }
 
-        this._animations    = {};
-        this._animationIds  = [];
-
-        super.dispose();
+        this._animations.clear();
+        
+        this._animationIds = [];
     }
 
-    protected reset(): void
+    public defineAnimations(animations: { [index: string]: IAssetAnimation }): boolean
     {
-        super.reset();
-
-        this._animations    = {};
-        this._animationIds  = [];
-    }
-
-    public processAnimations(animations: { [index: string]: IAssetAnimation }): boolean
-    {
-        if(!animations) return false;
+        if(!animations) return true;
 
         for(let key in animations)
         {
             const animation = animations[key];
 
-            if(!animation) continue;
+            if(!animation) return false;
 
-            const animationId = parseInt(key);
+            let animationId     = parseInt(key);
+            let isTransition    = false;
 
-            if(this._animations[animationId]) return false;
+            const transitionTo      = animation.transitionTo;
+            const transitionFrom    = animation.transitionFrom;
 
-            const animationData = new AnimationData();
+            if(transitionTo !== undefined)
+            {
+                animationId     = AnimationData.getTransitionToAnimationId(transitionTo);
+                isTransition    = true;
+            }
+
+            if(transitionFrom !== undefined)
+            {
+                animationId     = AnimationData.getTransitionFromAnimationId(transitionFrom);
+                isTransition    = true;
+            }
+
+            const animationData = this.createAnimationData();
 
             if(!animationData.initialize(animation))
             {
@@ -63,25 +69,73 @@ export class AnimationSizeData extends SizeData
                 return false;
             }
 
-            this._animations[key] = animationData;
-            
-            this._animationIds.push(animationId);
+            this._animations.set(animationId, animationData);
+
+            if(!isTransition) this._animationIds.push(animationId);
         }
 
         return true;
     }
 
-    public getAnimation(animationId: number): AnimationData
+    protected createAnimationData(): AnimationData
     {
-        const existing = this._animations[animationId.toString()];
-
-        if(!existing) return null;
-
-        return existing;
+        return new AnimationData();
     }
 
     public hasAnimation(animationId: number): boolean
     {
-        return this.getAnimation(animationId) !== null;
+        if(!this._animations.get(animationId)) return false;
+        
+        return true;
+    }
+
+    public getAnimationCount(): number
+    {
+        return this._animationIds.length || 0;
+    }
+
+    public getAnimationId(animationId: number): number
+    {
+        const totalAnimations = this.getAnimationCount();
+
+        if((animationId < 0) || (totalAnimations <= 0)) return 0;
+        
+        return this._animationIds[(animationId % totalAnimations)];
+    }
+
+    public isImmediateChange(animationId: number, _arg_2: number): boolean
+    {
+        const animation = this._animations.get(animationId);
+
+        if(!animation) return false;
+        
+        return animation.isImmediateChange(_arg_2);
+    }
+
+    public getStartFrame(animationId: number, direction: number): number
+    {
+        const animation = this._animations.get(animationId);
+
+        if(!animation) return 0;
+        
+        return animation.getStartFrame(direction);
+    }
+
+    public getFrame(animationId: number, direction: number, layerId: number, frameCount: number): AnimationFrame
+    {
+        const animation = this._animations.get(animationId);
+
+        if(!animation) return null;
+        
+        return animation.getFrame(direction, layerId, frameCount);
+    }
+
+    public getFrameFromSequence(animationId: number, direction: number, layerId: number, sequenceId: number, offset: number, frameCount: number): AnimationFrame
+    {
+        const animation = this._animations.get(animationId);
+
+        if(!animation) return null;
+        
+        return animation.getFrameFromSequence(direction, layerId, sequenceId, offset, frameCount);
     }
 }

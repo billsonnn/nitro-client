@@ -16,6 +16,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     private _userData: UserDataManager;
     private _controllerLevel: number;
+    private _ownUserRoomId: number;
     private _isRoomOwner: boolean;
 
     constructor()
@@ -30,6 +31,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
         this._userData          = new UserDataManager();
         this._controllerLevel   = RoomControllerLevel.NONE;
+        this._ownUserRoomId     = -1;
         this._isRoomOwner       = false;
     }
 
@@ -64,6 +66,11 @@ export class RoomSession extends Disposable implements IRoomSession
         }
 
         this._controllerLevel = RoomControllerLevel.NONE;
+    }
+
+    public setOwnUserRoomId(userId: number): void
+    {
+        this._ownUserRoomId = userId;
     }
 
     public setRoomOwner(): void
@@ -134,6 +141,11 @@ export class RoomSession extends Disposable implements IRoomSession
     public get controllerLevel(): number
     {
         return this._controllerLevel;
+    }
+
+    public get ownerUserRoomId(): number
+    {
+        return this._ownUserRoomId;
     }
 
     public get roomOwner(): boolean

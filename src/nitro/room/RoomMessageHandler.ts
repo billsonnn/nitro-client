@@ -348,6 +348,7 @@ export class RoomMessageHandler extends Disposable
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
     {
+        return;
         if(!(event instanceof RoomUnitEvent) || !event.connection || !this._roomCreator) return;
 
         const units = event.getParser().units;
@@ -366,7 +367,11 @@ export class RoomMessageHandler extends Disposable
 
             this._roomCreator.addRoomObjectUser(this._currentRoomId, unit.unitId, location, direction, type, unit.figure, unit.gender);
 
-            if(unit.id === this._ownUserId) this._roomCreator.updateRoomObjectUserOwn(this._currentRoomId, unit.unitId);
+            if(unit.id === this._ownUserId)
+            {
+                //this._roomCreator.setRoomSessionOwnUser(this._currentRoomId, unit.unitId);
+                this._roomCreator.updateRoomObjectUserOwn(this._currentRoomId, unit.unitId);
+            }
         }
     }
 

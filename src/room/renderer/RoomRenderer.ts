@@ -81,7 +81,9 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         {
             if(!canvas) continue;
 
-            //remove canvas cache for object instance id
+            const spriteCanvas = canvas as RoomSpriteCanvas;
+
+            spriteCanvas.removeFromCache(instanceId.toString());
         }
     }
 

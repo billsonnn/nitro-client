@@ -1,5 +1,4 @@
-﻿import { NitroConfiguration } from '../../NitroConfiguration';
-import { IVector3D } from './IVector3D';
+﻿import { IVector3D } from './IVector3D';
 
 export class Vector3d implements IVector3D 
 {
@@ -8,16 +7,12 @@ export class Vector3d implements IVector3D
     private _z: number;
     private _length: number;
 
-    private _isScreen: boolean;
-
-    constructor(x: number = 0, y: number = 0, z: number = 0, isScreen: boolean = false)
+    constructor(x: number = 0, y: number = 0, z: number = 0)
     {
         this._x         = x;
         this._y         = y;
         this._z         = z;
         this._length    = NaN;
-
-        this._isScreen = isScreen;
     }
 
     public static sum(vector1: IVector3D, vector2: IVector3D): Vector3d
@@ -75,19 +70,6 @@ export class Vector3d implements IVector3D
         return true;
     }
 
-    public toScreen(): IVector3D
-    {
-        const vector = new Vector3d();
-
-        const z = Math.floor((this._z * NitroConfiguration.Z_SCALE) * NitroConfiguration.TILE_HEIGHT);
-
-        vector.x = ((this._x * NitroConfiguration.TILE_WIDTH) - (this._y * NitroConfiguration.TILE_WIDTH));
-        vector.y = ((this._x * NitroConfiguration.TILE_HEIGHT) + (this._y * NitroConfiguration.TILE_HEIGHT)) - z;
-        vector.z = 0;
-
-        return vector;
-    }
-
     public add(vector: IVector3D): void
     {
         if(!vector) return;
@@ -113,6 +95,14 @@ export class Vector3d implements IVector3D
         this._x        *= amount;
         this._y        *= amount;
         this._z        *= amount;
+        this._length    = NaN;
+    }
+
+    public divide(amount: number): void
+    {
+        this._x        /= amount;
+        this._y        /= amount;
+        this._z        /= amount;
         this._length    = NaN;
     }
 
@@ -167,15 +157,5 @@ export class Vector3d implements IVector3D
         }
 
         return this._length;
-    }
-
-    public get isScreen(): boolean
-    {
-        return this._isScreen;
-    }
-
-    public set isScreen(flag: boolean)
-    {
-        this._isScreen = flag;
     }
 }

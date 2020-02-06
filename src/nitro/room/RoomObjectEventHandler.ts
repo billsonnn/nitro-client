@@ -480,7 +480,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             if(!point) return;
 
-            const mousePosition = new Vector3d(point.x, point.y, 0, true);
+            const mousePosition = new Vector3d(point.x, point.y, 0);
 
             selectedData.object.setTempLocation(mousePosition);
         }

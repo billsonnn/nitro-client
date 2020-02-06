@@ -83,15 +83,6 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._direction;
     }
 
-    public getScreenLocation(): IVector3D
-    {
-        const location = this.getLocation();
-
-        if(location.isScreen) return location;
-
-        return location.toScreen();
-    }
-
     public setCategory(category: number): void
     {
         this._category = category;
@@ -108,10 +99,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
     {
         if(!vector) return;
 
+        if((vector.x === this._location.x) && (vector.y === this._location.y) && (vector.z === this._location.z)) return;
+
         this._location.x        = vector.x;
         this._location.y        = vector.y;
         this._location.z        = vector.z;
-        this._location.isScreen = vector.isScreen;
         this._tempLocation      = null;
 
         if(real) this._realLocation = vector;
@@ -123,11 +115,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
     {
         if(!vector) return;
 
-        if((vector.x === this._location.x) && (vector.y === this._location.y) && (vector.z === this._location.z)) return;
+        if((vector.x === this._direction.x) && (vector.y === this._direction.y) && (vector.z === this._direction.z)) return;
 
         this._direction.x = (((vector.x % 360) + 360) % 360);
-        this._direction.y = (((vector.x % 360) + 360) % 360);
-        this._direction.z = (((vector.x % 360) + 360) % 360);
+        this._direction.y = (((vector.y % 360) + 360) % 360);
+        this._direction.z = (((vector.z % 360) + 360) % 360);
 
         this._updateCounter++;
     }

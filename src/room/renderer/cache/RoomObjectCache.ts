@@ -4,7 +4,7 @@ import { RoomObjectCacheItem } from './RoomObjectCacheItem';
 
 export class RoomObjectCache 
 {
-    private static _Str_14703: number = 200;
+    private static MAX_SIZE_FOR_AVG_COLOR: number = 200;
 
     private _data: Map<string, RoomObjectCacheItem>;
     private _roomObjectVariableAccurateZ: string;
@@ -32,7 +32,7 @@ export class RoomObjectCache
         }
     }
 
-    public _Str_23830(k: string): RoomObjectCacheItem
+    public getObjectCache(k: string): RoomObjectCacheItem
     {
         let existing = this._data.get(k);
 
@@ -46,7 +46,7 @@ export class RoomObjectCache
         return existing;
     }
 
-    public _Str_18669(k: string): void
+    public removeObjectCache(k: string): void
     {
         const existing = this._data.get(k);
 
@@ -57,7 +57,7 @@ export class RoomObjectCache
         existing.dispose();
     }
 
-    public _Str_15625(): RoomObjectSpriteData[]
+    public getSortableSpriteList(): RoomObjectSpriteData[]
     {
         const spriteData: RoomObjectSpriteData[] = [];
 
@@ -98,27 +98,4 @@ export class RoomObjectCache
 
         return spriteData;
     }
-
-    // public _Str_14588(): SortableSprite[]
-    // {
-    //     const sprites: SortableSprite[] = [];
-
-    //     for(let item of this._data.values())
-    //     {
-    //         if(!item) continue;
-
-    //         for(let sprite of item._Str_9272._Str_9272)
-    //         {
-    //             if(!sprite) continue;
-
-    //             if((sprite.sprite.type !== RoomObjectSpriteType._Str_8616)) continue;
-
-    //             sprites.push(sprite);
-    //         }
-    //     }
-
-    //     if(!sprites || !sprites.length) return null;
-
-    //     return sprites;
-    // }
 }

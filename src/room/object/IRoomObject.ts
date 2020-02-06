@@ -9,7 +9,6 @@ export interface IRoomObject extends IDisposable
 {
     getLocation(): IVector3D;
     getDirection(): IVector3D;
-    getScreenLocation(): IVector3D;
     id: number;
     instanceId: number;
     type: string;

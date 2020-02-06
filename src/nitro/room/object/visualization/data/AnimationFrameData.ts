@@ -1,19 +1,19 @@
-export class AnimationFrameData
+export class AnimationFrameData 
 {
-    private _id: number;
-    private _x: number;
-    private _y: number;
-    private _randomX: number;
-    private _randomY: number;
-    private _repeats: number;
+    private _id: number = 0;
+    private _x: number = 0;
+    private _y: number = 0;
+    private _randomX: number = 0;
+    private _randomY: number = 0;
+    private _repeats: number = 1;
 
     constructor(id: number, x: number, y: number, randomX: number, randomY: number, repeats: number)
     {
-        this._id        = id || 0;
-        this._x         = x || 0;
-        this._y         = y || 0;
-        this._randomX   = randomX || 0;
-        this._randomY   = randomY || 0;
+        this._id        = id;
+        this._x         = x;
+        this._y         = y;
+        this._randomX   = randomX;
+        this._randomY   = randomY;
         this._repeats   = repeats;
     }
 
@@ -22,19 +22,29 @@ export class AnimationFrameData
         return this._id;
     }
 
-    public get hasDirectionalOffsets(): boolean
+    public hasDirectionalOffsets(): boolean
     {
         return false;
     }
 
-    public x(direction: number): number
+    public getX(k: number): number
     {
         return this._x;
     }
 
-    public y(direction: number): number
+    public getY(k: number): number
     {
         return this._y;
+    }
+
+    public get x(): number
+    {
+        return this._x;
+    }
+
+    public get y(): number
+    {
+        return this._x;
     }
 
     public get randomX(): number

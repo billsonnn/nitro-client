@@ -266,7 +266,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     {
         type = RoomObjectUserType.getRealType(type);
 
-        if((type === ObjectVisualizationType.USER)) return false;
+        if(type === ObjectVisualizationType.USER) return false;
 
         return true;
     }

@@ -6,6 +6,7 @@ export interface IRoomSession extends IDisposable
 {
     setConnection(connection: IConnection): void;
     setControllerLevel(level: number): void;
+    setOwnUserRoomId(userId: number): void;
     setRoomOwner(): void;
     start(): boolean;
     reset(roomId: number): void;
@@ -14,5 +15,6 @@ export interface IRoomSession extends IDisposable
     state: string;
     userData: UserDataManager;
     controllerLevel: number;
+    ownerUserRoomId: number
     roomOwner: boolean;
 }

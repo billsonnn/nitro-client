@@ -14,6 +14,7 @@ export interface IRoomCreator
     removeRoomInstance(roomId: number): void;
     createRoomInstance(roomId: number): IRoomInstance;
     initializeRoomInstance(roomId: number, model: RoomModelParser): void;
+    setRoomSessionOwnUser(roomId: number, objectId: number): void;
     setRoomInstanceModelName(roomId: number, name: string): void;
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
     setFurnitureStackingHeightMap(roomId: number, heightMap: FurnitureStackingHeightMap): void;

@@ -2,7 +2,6 @@ import { IAsset, IAssetData } from '../../../../../core/asset/interfaces';
 import { IAssetVisualizationData } from '../../../../../core/asset/interfaces/visualization';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { Direction } from '../../../../../room/utils/Direction';
 import { ColorData } from '../data/ColorData';
 import { LayerData } from '../data/LayerData';
 import { SizeData } from '../data/SizeData';
@@ -90,7 +89,7 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
 
         if(!totalDirections) return;
 
-        for(let i = 0; i < totalDirections; i++) this._allowedDirections.push(Direction.angleToDirection(directions[i]));
+        for(let i = 0; i < totalDirections; i++) this._allowedDirections.push(directions[i]);
     }
 
     protected processVisualization(visualization: IAssetVisualizationData): boolean
@@ -146,11 +145,9 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
 
     public getValidDirection(direction: number): number
     {
-        const index = this._allowedDirections.indexOf(direction);
+        if(!this._size) return 0;
 
-        if(index === -1) return this._allowedDirections[0] || 0;
-
-        return this._allowedDirections[index];
+        return this._size.getValidDirection(direction);
     }
 
     public getLayerTag(direction: number, layerId: number): string

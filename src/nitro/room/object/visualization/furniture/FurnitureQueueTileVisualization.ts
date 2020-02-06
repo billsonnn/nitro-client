@@ -19,7 +19,7 @@ export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualizat
         this._animationCounter = -1;
     }
 
-    protected setAnimation(animationId: number, transition: boolean = true): boolean
+    protected setAnimation(animationId: number, transition: boolean = true): void
     {
         if(animationId === FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE)
         {
@@ -27,10 +27,10 @@ export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualizat
         }
         else this._animationCounter = -1;
 
-        return super.setAnimation(animationId, false);
+        return super.setAnimation(animationId);
     }
 
-    protected updateAnimation(): boolean
+    protected updateAnimation(): number
     {
         if(this._animationCounter === 0) this.setAnimation(FurnitureQueueTileVisualization.ROLL_FINISHED_STATE);
         

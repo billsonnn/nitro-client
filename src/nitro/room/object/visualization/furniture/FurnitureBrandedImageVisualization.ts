@@ -24,9 +24,9 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         this._offsetZ       = 0;
     }
 
-    protected updateObject(): boolean
+    protected updateObject(direction: number): boolean
     {
-        if(!super.updateObject()) return false;
+        if(!super.updateObject(direction)) return false;
 
         //if(this._imageReady) this.updateImage();
 

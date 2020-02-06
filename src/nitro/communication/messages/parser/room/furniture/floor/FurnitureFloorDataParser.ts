@@ -56,7 +56,7 @@ export class FurnitureFloorDataParser
         this._spriteId      = wrapper.readInt();
         this._x             = wrapper.readInt();
         this._y             = wrapper.readInt();
-        this._direction     = wrapper.readInt();
+        this._direction     = ((wrapper.readInt() % 8) * 45);
         this._z             = parseFloat(wrapper.readString());
         this._stackHeight   = parseFloat(wrapper.readString());
         this._type          = wrapper.readInt();

@@ -8,7 +8,7 @@ import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureRoomBrandingLogic extends FurnitureLogic
 {
-    public static STATE: string         = 'imageUrl';
+    public static STATE: string         = 'state';
     public static IMAGEURL_KEY: string  = 'imageUrl';
     public static CLICKURL_KEY: string  = 'clickUrl';
     public static OFFSETX_KEY: string   = 'offsetX';

@@ -298,9 +298,9 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             if(!collection)
             {
-                console.log('bad collection');
+                this.logger.log(`Invalid Collection: ${ type }`);
 
-                return;
+                continue;
             }
 
             this.reinitializeRoomObjectsByType(type);
