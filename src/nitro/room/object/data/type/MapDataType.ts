@@ -37,7 +37,7 @@ export class MapDataType extends ObjectDataBase
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._data = model.getValue(RoomObjectModelKey.FURNITURE_DATA);
+        this._data = model.getValue(RoomObjectModelKey.FURNITURE_DATA) || {};
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void

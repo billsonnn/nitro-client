@@ -1,6 +1,4 @@
 import { Disposable } from '../common/disposable/Disposable';
-import { DownloadQueue } from './download/DownloadQueue';
-import { IDownloadQueue } from './download/IDownloadQueue';
 import { GraphicAssetCollection } from './GraphicAssetCollection';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
@@ -9,17 +7,37 @@ import { ImageLoader } from './loaders/ImageLoader';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
-    private _assets: Map<string, IAssetData>;
+    private _textures: Map<string, PIXI.Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
-    private _queue: IDownloadQueue;
+
+    private _pendingCallbacks: Map<string, Function[]>;
 
     constructor()
     {
         super();
 
-        this._assets        = new Map();
+        this._textures      = new Map();
         this._collections   = new Map();
-        this._queue         = new DownloadQueue();
+
+        this._pendingCallbacks  = new Map();
+    }
+
+    public getTexture(name: string): PIXI.Texture
+    {
+        if(!name) return null;
+
+        const existing = this._textures.get(name);
+
+        if(!existing) return null;
+
+        return existing;
+    }
+
+    public setTexture(name: string, texture: PIXI.Texture): void
+    {
+        if(!name || !texture) return;
+
+        this._textures.set(name, texture);
     }
 
     public getCollection(name: string): GraphicAssetCollection
@@ -46,18 +64,41 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!cb) return;
 
-        if(!urls) return cb(true);
+        if(!urls || !urls.length) return cb(true);
 
-        const totalUrls = urls.length;
+        let downloadUrls: string[] = [];
 
-        if(!totalUrls) return cb(true);
+        for(let url of urls)
+        {
+            if(!url) continue;
 
+            const existing = this._pendingCallbacks.get(url);
+
+            if(existing)
+            {
+                if(existing.indexOf(cb) >= 0) continue;
+
+                existing.push(cb);
+
+                continue;
+            }
+
+            this._pendingCallbacks.set(url, [ cb ]);
+
+            downloadUrls.push(url);
+        }
+
+        for(let url of downloadUrls) this.downloadAsset(url);
+    }
+
+    private downloadAsset(url: string): void
+    {
         const loader = new PIXI.Loader();
 
         loader
             .use(AssetLoader)
-            .add(urls)
-            .on('complete', () => this.onChuckDownloaded(loader, cb))
+            .add(url)
+            .on('complete', () => this.onChuckDownloaded(loader, url))
             .load();
     }
 
@@ -65,32 +106,59 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!cb) return;
 
-        if(!urls) return cb(true);
+        if(!urls || !urls.length) return cb(true);
 
-        const totalUrls = urls.length;
+        let downloadUrls: string[] = [];
 
-        if(!totalUrls) return cb(true);
+        for(let url of urls)
+        {
+            if(!url) continue;
 
+            const existing = this._pendingCallbacks.get(url);
+
+            if(existing)
+            {
+                if(existing.indexOf(cb) >= 0) continue;
+
+                existing.push(cb);
+
+                continue;
+            }
+
+            this._pendingCallbacks.set(url, [ cb ]);
+
+            downloadUrls.push(url);
+        }
+
+        for(let url of downloadUrls) this.downloadImage(url);
+    }
+
+    private downloadImage(url: string): void
+    {
         const loader = new PIXI.Loader();
 
         loader
             .use(ImageLoader)
-            .add(urls)
-            .on('complete', () => this.onChuckDownloaded(loader, cb))
+            .add(url)
+            .on('complete', () => this.onChuckDownloaded(loader, url))
             .load();
     }
 
-    private onChuckDownloaded(loader: PIXI.Loader, cb: Function): void
+    private onChuckDownloaded(loader: PIXI.Loader, url: string): void
     {
         if(loader) loader.destroy();
 
-        if(!cb) return;
+        const callbacks = this._pendingCallbacks.get(url);
 
-        return cb(true);
-    }
+        if(!callbacks || !callbacks.length) return;
 
-    public get queue(): IDownloadQueue
-    {
-        return this._queue;
+        for(let callback of callbacks)
+        {
+            if(!callbacks) continue;
+
+            callback(true);
+        }
+
+        this._pendingCallbacks.delete(url);
     }
 }

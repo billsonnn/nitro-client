@@ -1,9 +1,9 @@
 export class NitroConfiguration
 {
     public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
-    public static SOCKET_URL                = 'wss://system.nitrots.co';
+    //public static SOCKET_URL                = 'wss://system.nitrots.co';
     public static ASSET_URL                 = 'https://assets.nitrots.co';
-    //public static SOCKET_URL                = 'wss://nitro-socket.nextgenhabbo.com';
+    public static SOCKET_URL                = 'wss://nitro-socket.nextgenhabbo.com';
     //public static ASSET_URL                 = 'https://nitro-assets.nextgenhabbo.com';
     public static LOCAL_ASSET_URL           = 'https://system.nitrots.co';
     public static FPS                       = 24;

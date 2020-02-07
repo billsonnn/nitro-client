@@ -52,16 +52,29 @@ export class GraphicAssetCollection
 
             let source = (asset.source) ? asset.source : name;
 
+            if(!source) continue;
+
             const texture = this.getTexture(source);
 
             if(!texture) continue;
 
-            const graphic = GraphicAsset.createAsset(name, source, texture, -(asset.x), -(asset.y), asset.flipH, false);
-
-            if(!graphic) continue;
-
-            this._graphics.set(name, graphic);
+            if(!this.addAsset(name, source, texture, -(asset.x), -(asset.y), asset.flipH, false)) return;
         }
+    }
+
+    public addAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean): boolean
+    {
+        const existing = this.getGraphic(name);
+
+        if(existing) return true;
+
+        const graphic = GraphicAsset.createAsset(name, source, texture, x, y, flipH, flipV);
+
+        if(!graphic) return false;
+
+        this._graphics.set(name, graphic);
+
+        return true;
     }
 
     public getTexture(name: string): PIXI.Texture

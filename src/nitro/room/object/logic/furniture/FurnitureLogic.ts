@@ -101,9 +101,9 @@ export class FurnitureLogic extends MovingObjectLogic
         return model.getValue(RoomObjectModelKey.FURNITURE_AD_URL);
     }
 
-    public update(totalTimeRunning: number): void
+    public update(time: number): void
     {
-        super.update(totalTimeRunning);
+        super.update(time);
 
         if(this._bouncingStep > 0)
         {
@@ -117,9 +117,7 @@ export class FurnitureLogic extends MovingObjectLogic
     {
         if(message instanceof ObjectDataUpdateMessage)
         {
-            this.object.setState(message.state);
-        
-            if(message.data) message.data.writeRoomObjectModel(this.object.model);
+            this.processDataUpdateMessage(message);
 
             return;
         }
@@ -156,13 +154,24 @@ export class FurnitureLogic extends MovingObjectLogic
         super.processUpdateMessage(message);
     }
 
+    private processDataUpdateMessage(message: ObjectDataUpdateMessage): void
+    {
+        if(!message) return;
+
+        this.object.setState(message.state);
+        
+        if(message.data) message.data.writeRoomObjectModel(this.object.model);
+
+        if(!isNaN(message.extra)) this.object.model.setValue(RoomObjectModelKey.FURNITURE_EXTRAS, message.extra);
+
+        this.object.model.setValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME, this.lastUpdateTime);
+    }
+
     private processObjectHeightUpdateMessage(message: ObjectHeightUpdateMessage): void
     {
-        const model = this.object && this.object.model;
-
-        if(!model) return;
-
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, message.height);
+        if(!message) return;
+        
+        this.object.model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, message.height);
     }
 
     public mouseEvent(event: RoomObjectMouseEvent): void

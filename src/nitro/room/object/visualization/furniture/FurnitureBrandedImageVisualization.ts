@@ -1,3 +1,4 @@
+import { NitroInstance } from '../../../../NitroInstance';
 import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { FurnitureVisualization } from './FurnitureVisualization';
 
@@ -28,7 +29,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     {
         if(!super.updateObject(direction)) return false;
 
-        //if(this._imageReady) this.updateImage();
+        if(this._imageReady) this.checkAndCreateImageForCurrentState();
 
         return true;
     }
@@ -42,29 +43,88 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
             this._offsetX   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_X) as number;
             this._offsetY   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Y) as number;
             this._offsetZ   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Z) as number;
-
-            const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL) as string;
-
-            if(!imageUrl || (this._imageUrl !== imageUrl))
-            {
-                this._imageUrl      = null;
-                this._imageReady    = false;
-            }
         }
 
         if(!this._imageReady)
         {
-            this._imageReady = this.checkImageReady();
+            this._imageReady = this.checkIfImageReady();
 
             if(this._imageReady)
             {
-                this.updateImage();
+                this.checkAndCreateImageForCurrentState();
+
+                return true;
+            }
+        }
+        else
+        {
+            if(this.checkIfImageChanged())
+            {
+                this._imageReady    = false;
+                this._imageUrl      = null;
 
                 return true;
             }
         }
 
         return flag;
+    }
+
+    protected imageReady(texture: PIXI.Texture, imageUrl: string): void
+    {
+        if(!texture)
+        {
+            this._imageUrl = null;
+
+            return;
+        }
+
+        this._imageUrl = imageUrl;
+    }
+
+    private checkIfImageChanged(): boolean
+    {
+        const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL);
+
+        if(imageUrl && (imageUrl === this._imageUrl)) return false;
+
+        return true;
+    }
+
+    protected checkIfImageReady(): boolean
+    {
+        const model = this.object && this.object.model;
+
+        if(!model) return false;
+
+        const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL) as string;
+
+        if(!imageUrl) return false;
+
+        if(this._imageUrl && (this._imageUrl === imageUrl)) return false;
+
+        const imageStatus = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS) as number;
+
+        if(!imageStatus) return false;
+
+        const texture = NitroInstance.instance.core.asset.getTexture(imageUrl);
+
+        if(!texture) return false;
+        
+        this.imageReady(texture, imageUrl);
+
+        return true;
+    }
+
+    protected checkAndCreateImageForCurrentState(): void
+    {
+        if(!this._imageUrl) return;
+
+        const texture = NitroInstance.instance.core.asset.getTexture(this._imageUrl);
+
+        if(!texture) return;
+
+        this.asset.addAsset(this._imageUrl, null, texture, 0, 0, false, false);
     }
 
     protected getSpriteAssetName(layerId: number): string
@@ -83,44 +143,5 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         if(tag !== FurnitureBrandedImageVisualization.BRANDED_IMAGE) return super.getLayerIgnoreMouse(direction, layerId);
 
         return true;
-    }
-
-    private checkImageReady(): boolean
-    {
-        const model = this.object && this.object.model;
-
-        if(!model) return false;
-
-        const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL) as string;
-
-        if(!imageUrl) return false;
-
-        if(this._imageUrl && (this._imageUrl === imageUrl)) return false;
-
-        const imageStatus = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS) as number;
-
-        if(!imageStatus) return false;
-
-        this.imageReady(imageUrl);
-
-        return true;
-    }
-
-    protected imageReady(imageUrl: string): void
-    {
-        this._imageUrl = imageUrl;
-    }
-
-    protected updateImage(): void
-    {
-        if(!this._imageUrl) return;
-
-        // const sprite = this.createAndAddSprite(this._imageUrl, this._imageUrl);
-
-        // if(!sprite) return;
-
-        // sprite.doesntHide = true;
-
-        // this.resetLayers();
     }
 }

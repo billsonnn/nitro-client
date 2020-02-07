@@ -54,6 +54,7 @@ export class RoomObjectModelKey
     public static FURNITURE_ALLOWED_DIRECTIONS: string        = 'furniture_allowed_directions';
     public static FURNITURE_AD_URL: string                    = 'furniture_ad_url';
     public static FURNITURE_TYPE_ID: string                   = 'furniture_type_id';
+    public static FURNITURE_EXTRAS: string                    = 'furniture_extras';
     public static FURNITURE_EXPIRY_TIME: string               = 'furniture_expiry_time';
     public static FURNITURE_EXPIRTY_TIMESTAMP: string         = 'furniture_expiry_timestamp';
     public static FURNITURE_REAL_ROOM_OBJECT: string          = 'furniture_real_room_object';

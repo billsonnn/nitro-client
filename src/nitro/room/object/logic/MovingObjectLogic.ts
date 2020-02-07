@@ -38,11 +38,9 @@ export class MovingObjectLogic extends RoomObjectLogicBase
         super.dispose();
     }
 
-    public update(totalTimeRunning: number): void
+    public update(time: number): void
     {
-        super.update(totalTimeRunning);
-
-        totalTimeRunning = this.time;
+        super.update(time);
 
         const locationOffset    = this.getLocationOffset();
         const model             = this.object && this.object.model;
@@ -73,7 +71,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
         {
             const vector = MovingObjectLogic.TEMP_VECTOR;
 
-            let difference = (totalTimeRunning - this._changeTime);
+            let difference = (this.time - this._changeTime);
 
             if(difference === (this._updateInterval >> 1)) difference++;
 
@@ -90,10 +88,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 vector.set(this._location);
             }
 
-            if(locationOffset)
-            {
-                vector.add(locationOffset);
-            }
+            if(locationOffset) vector.add(locationOffset);
 
             this.object.setLocation(vector, false);
 
@@ -105,7 +100,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
             }
         }
 
-        this._lastUpdateTime = totalTimeRunning;
+        this._lastUpdateTime = this.time;
     }
 
     public setObject(object: IRoomObjectController): void
@@ -128,7 +123,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
     private processMoveMessage(message: ObjectMoveUpdateMessage): void
     {
-        if(!message || !this.object) return;
+        if(!message || !this.object || !message.location) return;
 
         this._changeTime = this._lastUpdateTime;
 
@@ -139,5 +134,10 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     protected getLocationOffset(): IVector3D
     {
         return null;
+    }
+
+    protected get lastUpdateTime(): number
+    {
+        return this._lastUpdateTime;
     }
 }

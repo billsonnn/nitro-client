@@ -19,12 +19,12 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
     {
         super.processUpdateMessage(message);
 
-        if(message instanceof ObjectDataUpdateMessage) this.processAdDataUpdate(message);
+        if(message instanceof ObjectDataUpdateMessage) this.processAdDataUpdateMessage(message);
 
         if(message instanceof ObjectAdUpdateMessage) this.processAdUpdate(message);
     }
 
-    private processAdDataUpdate(message: ObjectDataUpdateMessage): void
+    private processAdDataUpdateMessage(message: ObjectDataUpdateMessage): void
     {
         if(!message) return;
 
@@ -102,14 +102,14 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!asset) return;
 
-        // const existing = asset.getAsset(imageUrl);
+        const texture = asset.getTexture(imageUrl);
 
-        // if(!existing)
-        // {
-        //     asset.downloadImages([ imageUrl ], () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
+        if(!texture)
+        {
+            asset.downloadImages([ imageUrl ], () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
 
-        //     return;
-        // }
+            return;
+        }
 
         this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED));
     }

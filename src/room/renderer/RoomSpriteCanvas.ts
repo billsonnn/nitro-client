@@ -69,9 +69,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._screenOffset                  = new PIXI.Point();
         this._scale                         = 1;
 
-        this._noSpriteVisibilityChecking    = true;
+        this._noSpriteVisibilityChecking    = false;
         this._usesExclusionRectangles       = false;
-        this._usesMask                      = false;
+        this._usesMask                      = true;
 
         this._objectCache                   = new RoomObjectCache(this._container.roomObjectVariableAccurateZ);
 

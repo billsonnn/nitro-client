@@ -8,15 +8,13 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
 
     private _imageOffset: DirectionalOffsetData;
 
-    protected updateImage(): void
+    protected imageReady(texture: PIXI.Texture, imageUrl: string): void
     {
-        super.updateImage();
+        super.imageReady(texture, imageUrl);
 
-        // const sprite = this.getSprite(this._imageUrl);
+        if(!texture) return;
 
-        // if(!sprite) return;
-
-        // this.setImageOffset(sprite.width, sprite.height);
+        this.setImageOffset(texture.width, texture.height);
     }
 
     private setImageOffset(width: number, height: number): void
