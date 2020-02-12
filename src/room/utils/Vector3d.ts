@@ -22,7 +22,7 @@ export class Vector3d implements IVector3D
         return new Vector3d((vector1.x + vector2.x), (vector1.y + vector2.y), (vector1.z + vector2.z));
     }
 
-    public static subtract(vector1: IVector3D, vector2: IVector3D): Vector3d
+    public static dif(vector1: IVector3D, vector2: IVector3D): Vector3d
     {
         if(!vector1 || !vector2) return null;
 
@@ -36,14 +36,21 @@ export class Vector3d implements IVector3D
         return new Vector3d((vector.x * value), (vector.y * value), (vector.z * value));
     }
 
-    public static _Str_18283(vector1: IVector3D, vector2: IVector3D): number
+    public static dotProduct(vector1: IVector3D, vector2: IVector3D): number
     {
         if(!vector1 || !vector2) return null;
 
         return (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
     }
 
-    public static _Str_4733(vector1: IVector3D, vector2: IVector3D): number
+    public static crossProduct(vector1: IVector3D, vector2: IVector3D):Vector3d
+    {
+        if(!vector1 || !vector2) return null;
+
+        return new Vector3d(((vector1.y * vector2.z) - (vector1.z * vector2.y)), ((vector1.z * vector2.x) - (vector1.x * vector2.z)), ((vector1.x * vector2.y) - (vector1.y * vector2.x)));
+    }
+
+    public static scalarProjection(vector1: IVector3D, vector2: IVector3D): number
     {
         if(!vector1 || !vector2) return null;
 
@@ -54,20 +61,31 @@ export class Vector3d implements IVector3D
         return ((vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z)) / length;
     }
 
-    public static _Str_7423(vector1: IVector3D, vector2: IVector3D):Vector3d
+    public static cosAngle(vector1: IVector3D, vector2:IVector3D): number
     {
-        if(!vector1 || !vector2) return null;
+        if(!vector1 || !vector2) return 0;
 
-        return new Vector3d(((vector1.y * vector2.z) - (vector1.z * vector2.y)), ((vector1.z * vector2.x) - (vector1.x * vector2.z)), ((vector1.x * vector2.y) - (vector1.y * vector2.x)));
+        const totalLength = (vector1.length * vector2.length);
+
+        if(!totalLength) return 0;
+        
+        return (Vector3d.dotProduct(vector1, vector2) / totalLength);
     }
 
-    public static compare(vector1: IVector3D, vector2: IVector3D): boolean
+    public static isEqual(vector1: IVector3D, vector2: IVector3D): boolean
     {
         if(!vector1 || !vector2) return false;
 
         if((vector1.x !== vector2.x) || (vector1.y !== vector2.y) || (vector1.z !== vector2.z)) return false;
 
         return true;
+    }
+
+    public negate(): void
+    {
+        this._x = -(this._x);
+        this._y = -(this._y);
+        this._z = -(this._z);
     }
 
     public add(vector: IVector3D): void
@@ -106,7 +124,7 @@ export class Vector3d implements IVector3D
         this._length    = NaN;
     }
 
-    public set(vector: IVector3D): void
+    public assign(vector: IVector3D): void
     {
         if(!vector) return;
 

@@ -1,53 +1,76 @@
-import { IVector3D } from '../utils/IVector3D';
-import { RoomObjectEvent } from './RoomObjectEvent';
-
-export class RoomSpriteMouseEvent extends RoomObjectEvent
+export class RoomSpriteMouseEvent 
 {
-    public static CLICK: string         = 'ROE_MOUSE_CLICK';
-    public static DOUBLE_CLICK: string  = 'ROW_MOUSE_DOUBLE_CLICK';
-    public static MOUSE_MOVE: string    = 'ROE_MOUSE_MOVE';
-    public static MOUSE_DOWN: string    = 'ROW_MOUSE_DOWN';
-    public static MOUSE_UP: string      = 'ROE_MOUSE_UP';
-    
-    private _point: PIXI.Point;
-    private _location: IVector3D;
-    private _collision: any;
+    private _type: string = "";
+    private _eventId: string = "";
+    private _canvasId: string = "";
+    private _spriteTag: string = "";
+    private _screenX: number = 0;
+    private _screenY: number = 0;
+    private _localX: number = 0;
+    private _localY: number = 0;
+    private _ctrlKey: boolean = false;
+    private _altKey: boolean = false;
+    private _shiftKey: boolean = false;
+    private _buttonDown: boolean = false;
+    private _spriteOffsetX: number = 0;
+    private _spriteOffsetY: number = 0;
 
-    private _altKey: boolean;
-    private _ctrlKey: boolean;
-    private _shiftKey: boolean;
-
-    constructor(type: string, collision: any, point: PIXI.Point, location: IVector3D, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false)
+    constructor(type: string, eventId: string, canvasId: string, spriteTag: string, screenX: number, screenY: number, localX: number = 0, localY: number = 0, ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false, buttonDown: boolean = false)
     {
-        super(type, collision ? collision.object : null);
-
-        this._collision = collision;
-        this._point     = point;
-        this._location  = location;
-
-        this._altKey    = altKey;
-        this._ctrlKey   = ctrlKey;
-        this._shiftKey  = shiftKey;
+        this._type          = type;
+        this._eventId       = eventId;
+        this._canvasId      = canvasId;
+        this._spriteTag     = spriteTag;
+        this._screenX       = screenX;
+        this._screenY       = screenY;
+        this._localX        = localX;
+        this._localY        = localY;
+        this._ctrlKey       = ctrlKey;
+        this._altKey        = altKey;
+        this._shiftKey      = shiftKey;
+        this._buttonDown    = buttonDown;
+        this._spriteOffsetX = 0;
+        this._spriteOffsetY = 0;
     }
 
-    public get collision(): any
+    public get type(): string
     {
-        return this._collision;
+        return this._type;
     }
 
-    public get point(): PIXI.Point
+    public get _Str_3463(): string
     {
-        return this._point;
+        return this._eventId;
     }
 
-    public get location(): IVector3D
+    public get canvasId(): string
     {
-        return this._location;
+        return this._canvasId;
     }
 
-    public get altKey(): boolean
+    public get _Str_4216(): string
     {
-        return this._altKey;
+        return this._spriteTag;
+    }
+
+    public get _Str_24406(): number
+    {
+        return this._screenX;
+    }
+
+    public get _Str_25684(): number
+    {
+        return this._screenY;
+    }
+
+    public get localX(): number
+    {
+        return this._localX;
+    }
+
+    public get localY(): number
+    {
+        return this._localY;
     }
 
     public get ctrlKey(): boolean
@@ -55,8 +78,38 @@ export class RoomSpriteMouseEvent extends RoomObjectEvent
         return this._ctrlKey;
     }
 
+    public get altKey(): boolean
+    {
+        return this._altKey;
+    }
+
     public get shiftKey(): boolean
     {
         return this._shiftKey;
+    }
+
+    public get buttonDown(): boolean
+    {
+        return this._buttonDown;
+    }
+
+    public get _Str_4595(): number
+    {
+        return this._spriteOffsetX;
+    }
+
+    public set _Str_4595(k: number)
+    {
+        this._spriteOffsetX = k;
+    }
+
+    public get _Str_4534(): number
+    {
+        return this._spriteOffsetY;
+    }
+
+    public set _Str_4534(k: number)
+    {
+        this._spriteOffsetY = k;
     }
 }

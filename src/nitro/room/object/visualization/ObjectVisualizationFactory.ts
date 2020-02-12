@@ -1,4 +1,5 @@
 import { IAssetData } from '../../../../core/asset/interfaces';
+import { NitroLogger } from '../../../../core/common/logger/NitroLogger';
 import { IRoomObjectGraphicVisualization } from '../../../../room/object/visualization/IRoomObjectGraphicVisualization';
 import { IObjectVisualizationData } from '../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { IRoomObjectVisualizationFactory } from '../../../../room/object/visualization/IRoomObjectVisualizationFactory';
@@ -132,7 +133,7 @@ export class ObjectVisualizationFactory implements IRoomObjectVisualizationFacto
 
         if(!visualization)
         {
-            console.log(`Invalid Visualization: ${ type }`);
+            NitroLogger.printMessage(`Unknown Visualization: ${ type }`);
 
             return null;
         }

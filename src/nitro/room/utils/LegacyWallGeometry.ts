@@ -290,10 +290,10 @@ export class LegacyWallGeometry
         {
             return null;
         }
-        var _local_4: number = ~~(_local_3[0]);
-        var _local_5: number = ~~(_local_3[1]);
-        var _local_6: number = ~~(_local_3[2]);
-        var _local_7: number = ~~(_local_3[3]);
+        var _local_4: number = Math.floor(_local_3[0]);
+        var _local_5: number = Math.floor(_local_3[1]);
+        var _local_6: number = Math.floor(_local_3[2]);
+        var _local_7: number = Math.floor(_local_3[3]);
         var _local_8: string = _local_3[4];
         var _local_9: string = (((((((((":w=" + _local_4) + ",") + _local_5) + " l=") + _local_6) + ",") + _local_7) + " ") + _local_8);
         return _local_9;
@@ -313,7 +313,7 @@ export class LegacyWallGeometry
         var _local_3: number;
         _local_3 = this._Str_2754(k, _arg_2);
         var _local_4: number = (_local_3 + 1);
-        return _local_3 + (((((((((~~(this._Str_2754((k - 1), (_arg_2 - 1))) == _local_4) || (~~(this._Str_2754(k, (_arg_2 - 1))) == _local_4)) || (~~(this._Str_2754((k + 1), (_arg_2 - 1))) == _local_4)) || (~~(this._Str_2754((k - 1), _arg_2)) == _local_4)) || (~~(this._Str_2754((k + 1), _arg_2)) == _local_4)) || (~~(this._Str_2754((k - 1), (_arg_2 + 1))) == _local_4)) || (~~(this._Str_2754(k, (_arg_2 + 1))) == _local_4)) || (~~(this._Str_2754((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
+        return _local_3 + (((((((((Math.floor(this._Str_2754((k - 1), (_arg_2 - 1))) == _local_4) || (Math.floor(this._Str_2754(k, (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k - 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k + 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754(k, (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
     }
 
     public _Str_10375(k: number, _arg_2: number): boolean

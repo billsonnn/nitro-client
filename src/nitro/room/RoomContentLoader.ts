@@ -17,7 +17,7 @@ import { ObjectVisualizationType } from './object/visualization/ObjectVisualizat
 export class RoomContentLoader implements IFurnitureDataListener
 {
     private static PLACE_HOLDER: string         = 'place_holder';
-    private static WALL_PLACE_HOLDER: string    = 'wall_place_holder';
+    private static PLACE_HOLDER_WALL: string    = 'place_holder_wall';
     private static PET_PLACE_HOLDER: string     = 'pet_place_holder';
     private static DEFAULT_PLACE_HOLDER: string = RoomContentLoader.PLACE_HOLDER;
     private static TILE_CURSOR: string          = 'tile_cursor';
@@ -159,15 +159,31 @@ export class RoomContentLoader implements IFurnitureDataListener
     public getFurnitureFloorNameForTypeId(typeId: number): string
     {
         const type = this._activeObjectTypes.get(typeId);
+        
+        return this.removeColorIndex(type);
+    }
 
-        if(!type) return null;
+    public getFurnitureWallNameForTypeId(typeId: number, extra: string = null): string
+    {
+        let type = this._wallItemTypes.get(typeId);
+
+        if((type === 'poster') && (extra !== null)) type = (type + extra);
 
         return this.removeColorIndex(type);
     }
 
-    public getColorIndex(typeId: number): number
+    public getFurnitureFloorColorIndex(typeId: number): number
     {
         const type = this._activeObjectTypes.get(typeId);
+
+        if(!type) return -1;
+
+        return this.getColorIndexFromName(type);
+    }
+
+    public getFurnitureWallColorIndex(typeId: number): number
+    {
+        const type = this._wallItemTypes.get(typeId);
 
         if(!type) return -1;
 
@@ -232,7 +248,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     {
         if(this._activeObjects[type]) return RoomContentLoader.PLACE_HOLDER;
 
-        if(this._wallItems[type]) return RoomContentLoader.WALL_PLACE_HOLDER;
+        if(this._wallItems[type]) return RoomContentLoader.PLACE_HOLDER_WALL;
         
         return RoomContentLoader.DEFAULT_PLACE_HOLDER;
     }
@@ -353,15 +369,15 @@ export class RoomContentLoader implements IFurnitureDataListener
         switch(type)
         {
             case RoomContentLoader.PLACE_HOLDER:
-                return [ this.getAssetUrlWithBase('place_holder') ];
-            case RoomContentLoader.WALL_PLACE_HOLDER:
-                return [ this.getAssetUrlWithBase('wall_place_holder') ];
+                return [ this.getAssetUrlWithRoomBase('place_holder') ];
+            case RoomContentLoader.PLACE_HOLDER_WALL:
+                return [ this.getAssetUrlWithRoomBase('place_holder_wall') ];
             case RoomContentLoader.PET_PLACE_HOLDER:
-                return [ this.getAssetUrlWithBase('pet_place_holder') ];
+                return [ this.getAssetUrlWithRoomBase('pet_place_holder') ];
             case RoomContentLoader.TILE_CURSOR:
-                return [ this.getAssetUrlWithBase('tile_cursor') ];
+                return [ this.getAssetUrlWithRoomBase('tile_cursor') ];
             case RoomContentLoader.SELECTION_ARROW:
-                return [ this.getAssetUrlWithBase('selection_arrow') ];
+                return [ this.getAssetUrlWithRoomBase('selection_arrow') ];
             default:
                 const category = this.getCategoryForType(type);
 
@@ -374,18 +390,24 @@ export class RoomContentLoader implements IFurnitureDataListener
                 {
 
                 }
-                return;
+
+                if(category === RoomObjectCategory.ROOM)
+                {
+                    return [ this.getAssetUrlWithRoomBase(type) ];
+                }
+
+                return null;
         }
     }
 
-    private getAssetUrlWithBase(assetName: string): string
+    private getAssetUrlWithRoomBase(assetName: string): string
     {
-        return assetName;
+        return NitroConfiguration.ASSET_URL + `/room/${ assetName }/${ assetName }.json`;
     }
 
     public getAssetUrlWithFurniBase(assetName: string): string
     {
-        return NitroConfiguration.ASSET_URL + `/furniture/${ assetName }/${ assetName }.json`;
+        return NitroConfiguration.ASSET_URL + `/furniture-ngh/${ assetName }/${ assetName }.json`;
     }
 
     public setRoomObjectRoomId(object: IRoomObject, roomId: number): void

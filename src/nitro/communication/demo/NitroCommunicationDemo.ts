@@ -1,3 +1,4 @@
+import { NitroLogger } from '../../../core/common/logger/NitroLogger';
 import { NitroManager } from '../../../core/common/NitroManager';
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { SocketConnectionEvent } from '../../../core/communication/events/SocketConnectionEvent';
@@ -139,7 +140,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!sso)
         {
-            console.log('Login without an SSO ticket is not supported');
+            NitroLogger.printMessage(`Login without an SSO ticket is not supported`);
 
             return;
         }

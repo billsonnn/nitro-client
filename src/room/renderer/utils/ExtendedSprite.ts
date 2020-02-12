@@ -4,8 +4,7 @@ export class ExtendedSprite extends PIXI.Sprite
 {
     private _tag: string;
     private _Str_8253: boolean;
-
-    private _boundingRectangle: PIXI.Rectangle
+    private _ignoreMouse: boolean;
 
     private _pairedSpriteId: number;
     private _pairedSpriteUpdateCounter: number;
@@ -13,43 +12,23 @@ export class ExtendedSprite extends PIXI.Sprite
     constructor(texture?: PIXI.Texture)
     {
         super(texture);
-
-        this._tag                       = null;
+        
+        this._tag                       = '';
         this._Str_8253                  = false;
-
-        this._boundingRectangle         = null;
+        this._ignoreMouse               = true;
 
         this._pairedSpriteId            = -1;
         this._pairedSpriteUpdateCounter = -1;
     }
 
-    private createBounds(): PIXI.Rectangle
-    {
-        if(this._boundingRectangle) return this._boundingRectangle;
-
-        const width     = this.texture.orig.width;
-        const height    = this.texture.orig.height;
-        const x         = -width * this.anchor.x;
-        const y         = -height * this.anchor.y;
-
-        const rectangle = new PIXI.Rectangle(x, y, width, height);
-
-        this._boundingRectangle = rectangle;
-
-        return this._boundingRectangle;
-    }
-
     public containsPoint(point: PIXI.Point): boolean
     {
-        if(!this.interactive || this.blendMode !== PIXI.BLEND_MODES.NORMAL) return false;
+        if(this.ignoreMouse || (this.blendMode !== PIXI.BLEND_MODES.NORMAL) || !this.texture) return false;
 
-        const localPoint = this.worldTransform.applyInverse(point);
+        const localPoint    = this.worldTransform.applyInverse(point);
+        const bounds        = this.getLocalBounds();
 
-        let bounds = this._boundingRectangle || this.createBounds();
-
-        if(!bounds) return false;
-
-        if(!bounds.contains(localPoint.x, localPoint.y)) return false;
+        if(!bounds || !bounds.contains(localPoint.x, localPoint.y)) return false;
 
         const texture       = this.texture;
         const baseTexture   = texture.baseTexture;
@@ -139,19 +118,17 @@ export class ExtendedSprite extends PIXI.Sprite
         return true;
     }
 
-    public set texture(texture: PIXI.Texture)
+    public setTexture(texture: PIXI.Texture): void
     {
         if(texture === this.texture) return;
 
-        this._boundingRectangle = null;
+        this.texture = texture;
 
         if(!texture)
         {
             this._pairedSpriteId            = -1;
             this._pairedSpriteUpdateCounter = -1;
         }
-
-        super.texture = texture;
     }
 
     public get tag(): string
@@ -172,5 +149,15 @@ export class ExtendedSprite extends PIXI.Sprite
     public set _Str_4593(flag: boolean)
     {
         this._Str_8253 = flag;
+    }
+
+    public get ignoreMouse(): boolean
+    {
+        return this._ignoreMouse;
+    }
+
+    public set ignoreMouse(flag: boolean)
+    {
+        this._ignoreMouse = flag;
     }
 }

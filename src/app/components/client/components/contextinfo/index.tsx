@@ -53,17 +53,17 @@ export class ClientContextInfoComponent extends React.Component<ClientContextInf
 
     private onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
     {
-        if(!event) return;
+        // if(!event) return;
 
-        switch(event.type)
-        {
-            case RoomEngineObjectEvent.SELECTED:
-                this.setState({ object: event.object });
-                break;
-            case RoomEngineObjectEvent.DESELECTED:
-                this.setState({ object: null });
-                break;
-        }
+        // switch(event.type)
+        // {
+        //     case RoomEngineObjectEvent.SELECTED:
+        //         this.setState({ object: event.object });
+        //         break;
+        //     case RoomEngineObjectEvent.DESELECTED:
+        //         this.setState({ object: null });
+        //         break;
+        // }
     }
 
     public render(): JSX.Element

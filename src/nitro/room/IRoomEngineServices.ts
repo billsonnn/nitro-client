@@ -10,6 +10,7 @@ export interface IRoomEngineServices
     setSelectedRoomObjectData(roomId: number, data: SelectedRoomObjectData): void;
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
+    getRoomObjectCategoryForType(type: string): number;
     getRoomObjectCursor(roomId: number): IRoomObjectController;
     connection: IConnection;
     activeRoomId: number;

@@ -45,13 +45,13 @@ export class ClientContextMenuComponent extends React.Component<ContextMenuCompo
     {
         if(!event) return;
 
-        const object = event.object;
+        //const object = event.object;
 
-        if(!object)
-        {
-            // clear existing context menu
-            return;
-        }
+        // if(!object)
+        // {
+        //     // clear existing context menu
+        //     return;
+        // }
 
         const node = ReactDOM.findDOMNode(this) as HTMLElement;
 

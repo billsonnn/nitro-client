@@ -79,13 +79,13 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
             if(this._locationDelta.length > 0)
             {
-                vector.set(this._locationDelta);
+                vector.assign(this._locationDelta);
                 vector.multiply((difference / this._updateInterval));
                 vector.add(this._location);
             }
             else
             {
-                vector.set(this._location);
+                vector.assign(this._location);
             }
 
             if(locationOffset) vector.add(locationOffset);
@@ -107,7 +107,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     {
         super.setObject(object);
 
-        if(object) this._location.set(object.getLocation());
+        if(object) this._location.assign(object.getLocation());
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -116,7 +116,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
         super.processUpdateMessage(message);
 
-        if(message.location) this._location.set(message.location);
+        if(message.location) this._location.assign(message.location);
 
         if(message instanceof ObjectMoveUpdateMessage) return this.processMoveMessage(message);
     }
@@ -127,7 +127,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
         this._changeTime = this._lastUpdateTime;
 
-        this._locationDelta.set(message.targetLocation);
+        this._locationDelta.assign(message.targetLocation);
         this._locationDelta.subtract(this._location);
     }
 

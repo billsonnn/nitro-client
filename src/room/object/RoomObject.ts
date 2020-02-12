@@ -5,7 +5,8 @@ import { IVector3D } from '../utils/IVector3D';
 import { Vector3d } from '../utils/Vector3d';
 import { IRoomObjectController } from './IRoomObjectController';
 import { IRoomObjectModel } from './IRoomObjectModel';
-import { IRoomObjectLogic } from './logic/IRoomObjectLogic';
+import { IRoomObjectEventHandler } from './logic/IRoomObjectEventHandler';
+import { IRoomObjectMouseHandler } from './logic/IRoomObjectMouseHandler';
 import { RoomObjectModel } from './RoomObjectModel';
 import { IRoomObjectVisualization } from './visualization/IRoomObjectVisualization';
 
@@ -27,7 +28,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _realLocation: IVector3D;
 
     private _visualization: IRoomObjectVisualization;
-    private _logic: IRoomObjectLogic;
+    private _logic: IRoomObjectEventHandler;
     private _pendingLogicMessages: RoomObjectUpdateMessage[];
 
     private _updateCounter: number;
@@ -60,13 +61,12 @@ export class RoomObject extends Disposable implements IRoomObjectController
 
     protected onDispose(): void
     {
-        if(this._model) this._model.dispose();
-        
-        if(this._visualization) this._visualization.dispose();
-
-        if(this._logic) this._logic.dispose();
-
         this._pendingLogicMessages = [];
+
+        this.setVisualization(null);
+        this.setLogic(null);
+
+        if(this._model) this._model.dispose();
 
         super.onDispose();
     }
@@ -126,7 +126,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
 
     public setTempLocation(vector: IVector3D, silent: boolean = false): void
     {
-        if(!vector || Vector3d.compare(this._location, vector)) return;
+        if(!vector || Vector3d.isEqual(this._location, vector)) return;
 
         this._tempLocation = vector;
 
@@ -153,15 +153,17 @@ export class RoomObject extends Disposable implements IRoomObjectController
         if(this._visualization) this._visualization.object = this;
     }
 
-    public setLogic(logic: IRoomObjectLogic): void
+    public setLogic(logic: IRoomObjectEventHandler): void
     {
         if(this._logic === logic) return;
 
-        if(this._logic)
-        {
-            this._logic.setObject(null);
+        const eventHandler = this._logic;
 
+        if(eventHandler)
+        {
             this._logic = null;
+
+            eventHandler.setObject(null);
         }
 
         this._logic = logic;
@@ -221,7 +223,12 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._visualization;
     }
 
-    public get logic(): IRoomObjectLogic
+    public get mouseHandler(): IRoomObjectMouseHandler
+    {
+        return this._logic as IRoomObjectMouseHandler;
+    }
+
+    public get logic(): IRoomObjectEventHandler
     {
         return this._logic;
     }

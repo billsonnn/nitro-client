@@ -39,14 +39,14 @@ export class RoomObjectLocationCacheItem
 
         const location = object.getLocation();
 
-        if((geometry._Str_3795 !== this._geometryUpdateId) || (object.updateCounter !== this._objectUpdateId))
+        if((geometry.updateId !== this._geometryUpdateId) || (object.updateCounter !== this._objectUpdateId))
         {
             this._objectUpdateId = object.updateCounter;
 
-            if((geometry._Str_3795 !== this._geometryUpdateId) || (location.x !== this._location.x) || (location.y !== this._location.y) || (location.z !== this._location.z))
+            if((geometry.updateId !== this._geometryUpdateId) || (location.x !== this._location.x) || (location.y !== this._location.y) || (location.z !== this._location.z))
             {
-                this._geometryUpdateId = geometry._Str_3795;
-                this._location.set(location);
+                this._geometryUpdateId = geometry.updateId;
+                this._location.assign(location);
 
                 locationChanged = true;
             }
@@ -56,7 +56,7 @@ export class RoomObjectLocationCacheItem
 
         if(this._locationChanged)
         {
-            const screenLocation = geometry._Str_4202(location);
+            const screenLocation = geometry.getScreenPosition(location);
 
             if(!screenLocation) return null;
 
@@ -68,20 +68,20 @@ export class RoomObjectLocationCacheItem
 
                 if((rounded.x !== location.x) || (rounded.y !== location.y))
                 {
-                    const roundedScreen = geometry._Str_4202(rounded);
+                    const roundedScreen = geometry.getScreenPosition(rounded);
 
-                    this._screenLocation.set(screenLocation);
+                    this._screenLocation.assign(screenLocation);
 
                     if(roundedScreen) this._screenLocation.z = roundedScreen.z;
                 }
                 else
                 {
-                    this._screenLocation.set(screenLocation);
+                    this._screenLocation.assign(screenLocation);
                 }
             }
             else
             {
-                this._screenLocation.set(screenLocation);
+                this._screenLocation.assign(screenLocation);
             }
 
             this._screenLocation.x = Math.round(this._screenLocation.x);

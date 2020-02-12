@@ -1,15 +1,15 @@
-import { IAssetData } from '../../../core/asset/interfaces/IAssetData';
 import { Disposable } from '../../../core/common/disposable/Disposable';
-import { RoomObjectEventHandler } from '../../../nitro/room/RoomObjectEventHandler';
-import { RoomObjectMouseEvent } from '../../events/RoomObjectMouseEvent';
+import { IEventDispatcher } from '../../../core/events/IEventDispatcher';
+import { RoomSpriteMouseEvent } from '../../events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../messages/RoomObjectUpdateMessage';
+import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IRoomObjectController } from '../IRoomObjectController';
-import { IRoomObjectLogic } from './IRoomObjectLogic';
+import { IRoomObjectEventHandler } from './IRoomObjectEventHandler';
 
-export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
+export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventHandler
 {
+    private _events: IEventDispatcher;
     private _object: IRoomObjectController;
-    private _eventHandler: RoomObjectEventHandler;
 
     private _time: number;
 
@@ -17,13 +17,13 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
     {
         super();
 
-        this._object            = null;
-        this._eventHandler      = null;
+        this._object    = null;
+        this._events    = null;
 
-        this._time              = 0;
+        this._time      = 0;
     }
 
-    public initialize(asset: IAssetData): void
+    public initialize(data: any): void
     {
         return;
     }
@@ -48,7 +48,26 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
         this._object.setDirection(message.direction);
     }
 
-    public mouseEvent(event: RoomObjectMouseEvent): void
+    public getEventTypes(): string[]
+    {
+        return [];
+    }
+
+    protected mergeTypes(k: string[], _arg_2: string[]): string[]
+    {
+        const types = k.concat();
+
+        for(let type of _arg_2)
+        {
+            if(!type || (types.indexOf(type) >= 0)) continue;
+
+            types.push(type);
+        }
+
+        return types;
+    }
+
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry)
     {
         return;
     }
@@ -60,22 +79,39 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectLogic
 
     public setObject(object: IRoomObjectController): void
     {
+        if(this._object === object) return;
+
+        if(this._object)
+        {
+            this._object.setLogic(null);
+        }
+
+        if(!object)
+        {
+            this.dispose();
+
+            this._object = null;
+
+            return;
+        }
+
         this._object = object;
+        this._object.setLogic(this);
     }
-
-    public setEventHandler(eventHandler: RoomObjectEventHandler): void
-    {
-        this._eventHandler = eventHandler;
-    }
-
+    
     public get object(): IRoomObjectController
     {
         return this._object;
     }
 
-    public get eventHandler(): RoomObjectEventHandler
+    public get eventDispatcher(): IEventDispatcher
     {
-        return this._eventHandler;
+        return this._events;
+    }
+
+    public set eventDispatcher(events: IEventDispatcher)
+    {
+        this._events = events;
     }
 
     public get time(): number

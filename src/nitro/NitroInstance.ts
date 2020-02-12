@@ -16,6 +16,7 @@ import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomSessionManager } from './session/RoomSessionManager';
 import { SessionDataManager } from './session/SessionDataManager';
+import { RoomUI } from './ui/RoomUI';
 
 export class NitroInstance extends NitroManager implements INitroInstance
 {
@@ -28,7 +29,9 @@ export class NitroInstance extends NitroManager implements INitroInstance
     private _session: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
     private _roomManager: IRoomManager;
+    private _roomUI: RoomUI;
     private _navigator: INitroNavigator;
+    
     private _renderer: INitroRenderer;
 
     constructor(core: INitroCore)
@@ -41,7 +44,8 @@ export class NitroInstance extends NitroManager implements INitroInstance
         this._roomEngine    = new RoomEngine(this._communication);
         this._session       = new SessionDataManager(this._communication);
         this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
-        this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory)
+        this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
+        this._roomUI        = new RoomUI(this._communication, this._roomEngine, this._session, this._roomSession);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
         this._renderer      = new NitroRenderer({
@@ -78,6 +82,13 @@ export class NitroInstance extends NitroManager implements INitroInstance
             this._navigator.dispose();
 
             this._navigator = null;
+        }
+
+        if(this._roomUI)
+        {
+            this._roomUI.dispose();
+
+            this._roomUI = null;
         }
 
         if(this._roomManager)
@@ -158,6 +169,11 @@ export class NitroInstance extends NitroManager implements INitroInstance
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
+    }
+
+    public get roomUI(): RoomUI
+    {
+        return this._roomUI;
     }
 
     public get navigator(): INitroNavigator

@@ -117,7 +117,7 @@ export class RoomCamera
 
     public set _Str_16185(k:IVector3D)
     {
-        this._targetObjectLoc.set(k);
+        this._targetObjectLoc.assign(k);
     }
 
     public set _Str_16562(k: number)
@@ -188,8 +188,8 @@ export class RoomCamera
         }
         if ((((!(this._targetLoc.x == k.x)) || (!(this._targetLoc.y == k.y))) || (!(this._targetLoc.z == k.z))))
         {
-            this._targetLoc.set(k);
-            _local_2 = Vector3d.subtract(this._targetLoc, this._currentLoc);
+            this._targetLoc.assign(k);
+            _local_2 = Vector3d.dif(this._targetLoc, this._currentLoc);
             this._moveDistance = _local_2.length;
             this._maintainPreviousMoveSpeed = true;
         }
@@ -208,7 +208,7 @@ export class RoomCamera
             return;
         }
         this._currentLoc = new Vector3d();
-        this._currentLoc.set(k);
+        this._currentLoc.assign(k);
     }
 
     public _Str_25467(k:IVector3D):void
@@ -217,7 +217,7 @@ export class RoomCamera
         {
             this._currentLoc = new Vector3d();
         }
-        this._currentLoc.set(k);
+        this._currentLoc.assign(k);
     }
 
     public update(k: number, _arg_2: number):void
@@ -236,7 +236,7 @@ export class RoomCamera
                 this._targetLoc = null;
                 return;
             }
-            _local_3 = Vector3d.subtract(this._targetLoc, this._currentLoc);
+            _local_3 = Vector3d.dif(this._targetLoc, this._currentLoc);
             if (_local_3.length > this._moveDistance)
             {
                 this._moveDistance = _local_3.length;

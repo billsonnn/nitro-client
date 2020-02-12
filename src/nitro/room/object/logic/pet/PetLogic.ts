@@ -1,6 +1,8 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
+import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { PetFigureData } from '../../../../avatar/pets/PetFigureData';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarFigureUpdateMessage';
@@ -179,12 +181,12 @@ export class PetLogic extends MovingObjectLogic
         }
     }
 
-    public mouseEvent(event: RoomObjectMouseEvent): void
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         switch(event.type)
         {
             case RoomObjectMouseEvent.MOUSE_MOVE:
-                document.body.style.cursor = 'pointer';
+                //document.body.style.cursor = 'pointer';
                 break;
             case RoomObjectMouseEvent.CLICK:
                 //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));

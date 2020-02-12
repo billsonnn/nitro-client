@@ -161,6 +161,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         this.setDirection(offsetDirection);
 
+        console.log(this._direction)
+
         this._geometryDirection = direction;
         
         this.updateObjectCounter = this.object.updateCounter;

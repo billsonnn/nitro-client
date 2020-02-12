@@ -1,10 +1,13 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
+import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { IRoomObjectController } from '../../../../../room/object/IRoomObjectController';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
+import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from '../../../messages/ObjectHeightUpdateMessage';
@@ -48,6 +51,13 @@ export class FurnitureLogic extends MovingObjectLogic
         this._bouncingStep          = 0;
         this._storedRotateMessage   = null;
         this._directionInitialized  = false;
+    }
+
+    public getEventTypes(): string[]
+    {
+        const types = [ RoomObjectStateChangedEvent.STATE_CHANGE, RoomObjectMouseEvent.CLICK, RoomObjectMouseEvent.MOUSE_DOWN ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
     }
 
     public initialize(asset: IAssetData): void
@@ -174,13 +184,13 @@ export class FurnitureLogic extends MovingObjectLogic
         this.object.model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, message.height);
     }
 
-    public mouseEvent(event: RoomObjectMouseEvent): void
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         switch(event.type)
         {
-            case RoomObjectMouseEvent.DOUBLE_CLICK:
+            case MouseEventType.DOUBLE_CLICK:
                 this.useObject();
-                break;
+                return;
         }
     }
 
@@ -219,9 +229,9 @@ export class FurnitureLogic extends MovingObjectLogic
 
         const adUrl = this.getAdClickUrl(this.object.model);
 
-        if(this.eventHandler)
+        if(this.eventDispatcher)
         {
-            this.eventHandler.handleRoomObjectEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
+            this.eventDispatcher.dispatchEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
         }
     }
 }

@@ -1,7 +1,92 @@
+import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { RoomObjectHSLColorEnableEvent } from '../../../events/RoomObjectHSLColorEnableEvent';
+import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
+import { NumberDataType } from '../../data/type/NumberDataType';
+import { RoomObjectModelKey } from '../../RoomObjectModelKey';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 {
     public static TYPE: string = ObjectLogicType.FURNITURE_BACKGROUND_COLOR;
+
+    private _roomColorUpdated: boolean;
+
+    constructor()
+    {
+        super();
+
+        this._roomColorUpdated = false;
+    }
+
+    public getEventTypes(): string[]
+    {
+        const types = [ RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
+    }
+
+    public dispose(): void
+    {
+        if(this._roomColorUpdated)
+        {
+            if(this.eventDispatcher && this.object)
+            {
+                const realRoomObject = this.object.model.getValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT);
+
+                if(realRoomObject === 1)
+                {
+                    this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR, this.object, false, 0, 0, 0));
+                }
+            }
+
+            this._roomColorUpdated = false;
+        }
+
+        super.dispose();
+    }
+
+    public processUpdateMessage(message: RoomObjectUpdateMessage): void
+    {
+        super.processUpdateMessage(message);
+
+        if(message instanceof ObjectDataUpdateMessage)
+        {
+            message.data.writeRoomObjectModel(this.object.model);
+
+            const realRoomObject = this.object.model.getValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT);
+
+            if(realRoomObject === 1) this.processColorUpdate();
+        }
+    }
+
+    private processColorUpdate(): void
+    {
+        if(!this.object || !this.object.model) return;
+
+        const numberData = new NumberDataType();
+
+        numberData.initializeFromRoomObjectModel(this.object.model);
+
+        const state         = numberData.getValue(0);
+        const hue           = numberData.getValue(1);
+        const saturation    = numberData.getValue(2);
+        const lightness     = numberData.getValue(3);
+
+        if((state > -1) && (hue > -1) && (saturation > -1) && (lightness > -1))
+        {
+            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_HUE, hue);
+            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_SATURATION, saturation);
+            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_LIGHTNESS, lightness);
+
+            this.object.setState(state);
+
+            if(this.eventDispatcher)
+            {
+                this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR, this.object, (state === 1), hue, saturation, lightness));
+            }
+
+            this._roomColorUpdated = true;
+        }
+    }
 }

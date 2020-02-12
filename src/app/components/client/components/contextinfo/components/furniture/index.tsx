@@ -113,13 +113,13 @@ export class ClientContextInfoFurnitureComponent extends React.Component<ClientC
         switch(operation)
         {
             case ObjectOperationType.OBJECT_MOVE:
-                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
+                //nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_MOVE);
                 return;
             case ObjectOperationType.OBJECT_ROTATE_POSITIVE:
-                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                //nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 return;
             case ObjectOperationType.OBJECT_PICKUP:
-                nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
+                //nitroInstance.roomEngine.objectEventHandler.handleRoomObjectOperation(this.props.object.room.id, this.props.object, ObjectOperationType.OBJECT_PICKUP);
                 return;
         }
     }

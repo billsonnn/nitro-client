@@ -2,6 +2,7 @@ import { IDisposable } from '../core/common/disposable/IDisposable';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
 import { IRoomObject } from './object/IRoomObject';
+import { IRoomObjectModel } from './object/IRoomObjectModel';
 import { IRoomRendererBase } from './renderer/IRoomRendererBase';
 
 export interface IRoomInstance extends IDisposable
@@ -20,4 +21,5 @@ export interface IRoomInstance extends IDisposable
     container: IRoomInstanceContainer;
     renderer: IRoomRendererBase;
     managers: Map<number, IRoomObjectManager>;
+    model: IRoomObjectModel;
 }

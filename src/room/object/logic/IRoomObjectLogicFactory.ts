@@ -1,6 +1,8 @@
-import { IRoomObjectLogic } from './IRoomObjectLogic';
+import { IRoomObjectEventHandler } from './IRoomObjectEventHandler';
 
 export interface IRoomObjectLogicFactory
 {
-    getLogic(type: string): IRoomObjectLogic;
+    getLogic(type: string): IRoomObjectEventHandler;
+    registerEventFunction(func: Function): void;
+    removeEventFunction(func: Function): void;
 }

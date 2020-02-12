@@ -1,5 +1,8 @@
-import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
-import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
+import { RoomObjectEvent } from '../../../../../room/events/RoomObjectEvent';
+import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { MouseEventType } from '../../../../ui/MouseEventType';
+import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
@@ -7,39 +10,56 @@ export class FurnitureHockeyScoreLogic extends FurnitureLogic
 {
     public static TYPE: string = ObjectLogicType.FURNITURE_HOCKEY_SCORE;
 
-    public mouseEvent(event: RoomObjectMouseEvent): void
+    public getEventTypes(): string[]
     {
-        if(event.collision instanceof RoomObjectSprite)
+        const types = [ RoomObjectStateChangedEvent.STATE_CHANGE ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
+    }
+
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
+    {
+        if(!event || !geometry || !this.object) return;
+
+        let objectEvent: RoomObjectEvent = null;
+
+        switch(event.type)
         {
-            switch(event.type)
-            {
-                case RoomObjectMouseEvent.DOUBLE_CLICK:
-                    switch(event.collision.tag)
-                    {
-                        case 'off':
-                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 3));
-                            return;
-                    }
-                    break;
-                case RoomObjectMouseEvent.CLICK:
-                    switch(event.collision.tag)
-                    {
-                        case 'inc':
-                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 2));
-                            return;
-                        case 'dec':
-                            //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 1));
-                            return;
-                    }
-                    break;
-            }
+            case MouseEventType.DOUBLE_CLICK:
+                switch(event._Str_4216)
+                {
+                    case 'off':
+                        objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 3);
+                        break;
+                }
+                break;
+            case MouseEventType.CLICK:
+                switch(event._Str_4216)
+                {
+                    case 'inc':
+                        objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 2);
+                        break;
+                    case 'dec':
+                        objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 1);
+                        break;
+                }
+                break;
         }
 
-        super.mouseEvent(event);
+        if(this.eventDispatcher && objectEvent)
+        {
+            this.eventDispatcher.dispatchEvent(objectEvent);
+
+            return;
+        }
+
+        super.mouseEvent(event, geometry);
     }
 
     public useObject(): void
     {
-        //Nitro.networkManager.processOutgoing(new ItemMultiStateComposer(this.object.id, 3));
+        if(!this.object || !this.eventDispatcher) return;
+
+        this.eventDispatcher.dispatchEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 3));
     }
 }

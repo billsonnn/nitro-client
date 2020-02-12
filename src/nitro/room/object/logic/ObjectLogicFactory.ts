@@ -1,4 +1,7 @@
-import { IRoomObjectLogic } from '../../../../room/object/logic/IRoomObjectLogic';
+import { NitroLogger } from '../../../../core/common/logger/NitroLogger';
+import { EventDispatcher } from '../../../../core/events/EventDispatcher';
+import { IEventDispatcher } from '../../../../core/events/IEventDispatcher';
+import { IRoomObjectEventHandler } from '../../../../room/object/logic/IRoomObjectEventHandler';
 import { IRoomObjectLogicFactory } from '../../../../room/object/logic/IRoomObjectLogicFactory';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
 import { AvatarLogic } from './avatar/AvatarLogic';
@@ -38,13 +41,96 @@ import { TileCursorLogic } from './room/TileCursorLogic';
 
 export class ObjectLogicFactory implements IRoomObjectLogicFactory
 {
-    public getLogic(type: string): IRoomObjectLogic
+    private _events: IEventDispatcher;
+
+    private _cachedEvents: Map<string, boolean>;
+    private _registeredEvents: Map<string, boolean>;
+    private _functions: Function[];
+
+    constructor()
+    {
+        this._events            = new EventDispatcher();
+
+        this._cachedEvents      = new Map();
+        this._registeredEvents  = new Map();
+        this._functions         = [];
+    }
+
+    public getLogic(type: string): IRoomObjectEventHandler
     {
         const logic = this.getLogicType(type);
 
         if(!logic) return null;
 
-        return new logic();
+        const instance = new logic() as IRoomObjectEventHandler;
+
+        if(!instance) return null;
+
+        instance.eventDispatcher = this._events;
+
+        if(!this._cachedEvents.get(type))
+        {
+            this._cachedEvents.set(type, true);
+
+            const eventTypes = instance.getEventTypes();
+
+            for(let eventType of eventTypes)
+            {
+                if(!eventType) continue;
+
+                this.registerEventType(eventType);
+            }
+        }
+
+        return instance;
+    }
+
+    private registerEventType(type: string): void
+    {
+        if(this._registeredEvents.get(type)) return;
+
+        this._registeredEvents.set(type, true);
+
+        for(let func of this._functions)
+        {
+            if(!func) continue;
+
+            this._events.addEventListener(type, func);
+        }
+    }
+
+    public registerEventFunction(func: Function): void
+    {
+        if(!func) return;
+
+        if(this._functions.indexOf(func) >= 0) return;
+
+        this._functions.push(func);
+
+        for(let eventType of this._registeredEvents.keys())
+        {
+            if(!eventType) continue;
+
+            this._events.addEventListener(eventType, func);
+        }
+    }
+
+    public removeEventFunction(func: Function): void
+    {
+        if(!func) return;
+
+        const index = this._functions.indexOf(func);
+
+        if(index === -1) return;
+
+        this._functions.splice(index, 1);
+
+        for(let event of this._registeredEvents.keys())
+        {
+            if(!event) continue;
+
+            this._events.removeEventListener(event, func);
+        }
     }
 
     public getLogicType(type: string): typeof RoomObjectLogicBase
@@ -163,7 +249,7 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
 
         if(!logic)
         {
-            console.log(`Invalid Logic: ${ type }`);
+            NitroLogger.printMessage(`Unknown Logic: ${ type }`);
 
             return null;
         }

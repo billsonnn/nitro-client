@@ -123,56 +123,54 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             visualization   = asset.data.visualizationType;
             logic           = asset.data.logicType;
-
-            const object = instance.createRoomObject(objectId, type, category) as IRoomObjectController;
-
-            if(!object) return null;
-
-            if(this._visualizationFactory)
-            {
-                const visualizationInstance = this._visualizationFactory.getVisualization(visualization);
-
-                if(!visualizationInstance)
-                {
-                    instance.removeRoomObject(objectId, category);
-
-                    return null;
-                }
-
-                visualizationInstance.asset = asset;
-
-                const visualizationData = this._visualizationFactory.getVisualizationData(assetName, visualization, asset.data);
-
-                if(!visualizationData || !visualizationInstance.initialize(visualizationData))
-                {
-                    instance.removeRoomObject(objectId, category);
-
-                    return null;
-                }
-
-                object.setVisualization(visualizationInstance);
-            }
-
-            if(this._logicFactory)
-            {
-                const logicInstance = this._logicFactory.getLogic(logic);
-
-                logicInstance.setObject(object);
-
-                if(logicInstance)
-                {
-                    logicInstance.initialize(asset.data);
-                }
-
-                object.setLogic(logicInstance);
-            }
-
-            if(!isLoading) object.isReady = true;
-
-            this._contentLoader.setRoomObjectRoomId(object, roomId);
-
-            return object;
         }
+
+        const object = instance.createRoomObject(objectId, type, category) as IRoomObjectController;
+
+        if(!object) return null;
+
+        if(this._visualizationFactory)
+        {
+            const visualizationInstance = this._visualizationFactory.getVisualization(visualization);
+
+            if(!visualizationInstance)
+            {
+                instance.removeRoomObject(objectId, category);
+
+                return null;
+            }
+
+            visualizationInstance.asset = asset;
+
+            const visualizationData = this._visualizationFactory.getVisualizationData(assetName, visualization, asset.data);
+
+            if(!visualizationData || !visualizationInstance.initialize(visualizationData))
+            {
+                instance.removeRoomObject(objectId, category);
+
+                return null;
+            }
+
+            object.setVisualization(visualizationInstance);
+        }
+
+        if(this._logicFactory)
+        {
+            const logicInstance = this._logicFactory.getLogic(logic);
+
+            object.setLogic(logicInstance);
+
+            if(logicInstance && asset && asset.data)
+            {
+                logicInstance.initialize(asset.data);
+            }
+        }
+
+        if(!isLoading) object.isReady = true;
+
+        this._contentLoader.setRoomObjectRoomId(object, roomId);
+
+        return object;
     }
 
     private reinitializeRoomObjectsByType(type: string): void
@@ -215,14 +213,12 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
                             const logicInstance = this._logicFactory.getLogic(logic);
 
-                            logicInstance.setObject(object);
+                            object.setLogic(logicInstance);
 
                             if(logicInstance)
                             {
                                 logicInstance.initialize(asset.data);
                             }
-
-                            object.setLogic(logicInstance);
 
                             object.isReady = true;
 

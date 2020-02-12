@@ -59,7 +59,7 @@ export class AvatarManager extends NitroManager
         return new AvatarImage(this._structure, figureContainer);
     }
 
-    public renderAvatar(figure: string, rotation: number = 0, headRotation: number = 0): PIXI.Renderer
+    public renderAvatar(figure: string, rotation: number = 0, headRotation: number = 0): PIXI.Renderer | PIXI.CanvasRenderer
     {
         if(!figure) return null;
 

@@ -9,6 +9,7 @@ import { INitroNavigator } from './navigator/INitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
+import { RoomUI } from './ui/RoomUI';
 
 export interface INitroInstance extends INitroManager
 {
@@ -20,6 +21,7 @@ export interface INitroInstance extends INitroManager
     session: ISessionDataManager;
     roomSession: IRoomSessionManager;
     roomManager: IRoomManager;
+    roomUI: RoomUI;
     navigator: INitroNavigator;
     renderer: INitroRenderer;
 }

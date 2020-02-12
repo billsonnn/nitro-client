@@ -7,7 +7,7 @@ export class NitroConfiguration
     //public static ASSET_URL                 = 'https://nitro-assets.nextgenhabbo.com';
     public static LOCAL_ASSET_URL           = 'https://system.nitrots.co';
     public static FPS                       = 24;
-    public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
+    public static FURNIDATA_URL             = 'https://nitro-assets.nextgenhabbo.com/gamedata/json/FurnitureData.json';
     public static BACKGROUND_COLOR          = 0x000000;
     public static TILE_REAL_WIDTH           = 64;
     public static TILE_REAL_HEIGHT          = 32;
@@ -36,9 +36,10 @@ export class NitroConfiguration
     public static DISPLAYED_CURRENCY_TYPES  = [ -1, 0, 5 ];
 
     public static PRELOAD_ASSETS: string[]  = [
+        NitroConfiguration.ASSET_URL + `/room/room/room.json`,
         NitroConfiguration.ASSET_URL + `/room/tile_cursor/tile_cursor.json`,
         NitroConfiguration.ASSET_URL + `/room/place_holder/place_holder.json`,
-        NitroConfiguration.ASSET_URL + `/room/place_holder_wall_item/place_holder_wall_item.json`,
+        NitroConfiguration.ASSET_URL + `/room/place_holder_wall/place_holder_wall.json`,
         NitroConfiguration.ASSET_URL + `/figure/hh_human_body/hh_human_body.json`,
         NitroConfiguration.ASSET_URL + `/figure/hh_human_item/hh_human_item.json`,
     ];

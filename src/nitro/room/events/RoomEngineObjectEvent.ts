@@ -1,4 +1,3 @@
-import { IRoomObjectController } from '../../../room/object/IRoomObjectController';
 import { RoomEngineEvent } from './RoomEngineEvent';
 
 export class RoomEngineObjectEvent extends RoomEngineEvent
@@ -15,17 +14,24 @@ export class RoomEngineObjectEvent extends RoomEngineEvent
     public static MOUSE_ENTER: string       = 'REOE_MOUSE_ENTER';
     public static MOUSE_LEAVE: string       = 'REOE_MOUSE_LEAVE';
 
-    private _object: IRoomObjectController;
+    private _objectId: number;
+    private _category: number;
 
-    constructor(type: string, roomId: number, object: IRoomObjectController)
+    constructor(type: string, roomId: number, objectId: number, category: number)
     {
         super(type, roomId);
 
-        this._object = object;
+        this._objectId  = objectId;
+        this._category  = category;
     }
 
-    public get object(): IRoomObjectController
+    public get objectId(): number
     {
-        return this._object;
+        return this._objectId;
+    }
+
+    public get category(): number
+    {
+        return this._category;
     }
 }

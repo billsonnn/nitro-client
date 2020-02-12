@@ -28,7 +28,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization
 
         super.initialize(data);
 
-        this.generateMap();
+        //this.generateMap();
 
         return true;
     }

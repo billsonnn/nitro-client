@@ -25,32 +25,8 @@ export class ClientComponent extends React.Component<ClientComponentProps, Clien
 	public componentDidMount(): void
 	{
 		const nitroInstance = this.context.nitroInstance as INitroInstance;
-
-		if(nitroInstance)
-		{
-			const renderer = nitroInstance.renderer;
-
-			if(!renderer) return;
-
-			const camera = renderer.camera;
-
-			if(!camera) return;
-
-			const roomEngine = nitroInstance.roomEngine;
-
-			if(roomEngine)
-			{
-				const roomId = roomEngine.activeRoomId;
-
-				const display = roomEngine.getRoomDisplay(roomId, 1, window.innerWidth, window.innerHeight, 64);
-
-				if(!display || display.parent === camera) return;
-
-				camera.addChild(display);
-			}
-
-			this.clientRef && this.clientRef.current.append(renderer.view);
-		}
+		
+		nitroInstance && this.clientRef && this.clientRef.current.append(nitroInstance.renderer.view);
 	}
 
 	public render(): JSX.Element

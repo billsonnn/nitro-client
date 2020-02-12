@@ -4,6 +4,8 @@ import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomObjectManager } from './IRoomObjectManager';
 import { IRoomObject } from './object/IRoomObject';
 import { IRoomObjectController } from './object/IRoomObjectController';
+import { IRoomObjectModel } from './object/IRoomObjectModel';
+import { RoomObjectModel } from './object/RoomObjectModel';
 import { IRoomRendererBase } from './renderer/IRoomRendererBase';
 
 export class RoomInstance extends Disposable implements IRoomInstance
@@ -13,6 +15,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
     private _renderer: IRoomRendererBase;
     private _managers: Map<number, IRoomObjectManager>;
     private _updateCategories: number[];
+    private _model: IRoomObjectModel;
 
     constructor(id: number, container: IRoomInstanceContainer)
     {
@@ -23,6 +26,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._renderer          = null;
         this._managers          = new Map();
         this._updateCategories  = [];
+        this._model             = new RoomObjectModel();
     }
 
     protected onDispose(): void
@@ -32,6 +36,8 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this.destroyRenderer();
 
         this._container = null;
+
+        this._model.dispose();
     }
 
     public setRenderer(renderer: IRoomRendererBase): void
@@ -235,5 +241,10 @@ export class RoomInstance extends Disposable implements IRoomInstance
     public get managers(): Map<number, IRoomObjectManager>
     {
         return this._managers;
+    }
+
+    public get model(): IRoomObjectModel
+    {
+        return this._model;
     }
 }

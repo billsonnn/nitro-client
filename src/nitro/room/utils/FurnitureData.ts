@@ -39,8 +39,8 @@ export class FurnitureData
         this._location          = new Vector3d();
         this._direction         = new Vector3d();
 
-        this._location.set(location);
-        this._direction.set(direction);
+        this._location.assign(location);
+        this._direction.assign(direction);
     }
 
     public get id(): number

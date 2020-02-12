@@ -4,6 +4,8 @@ import { IRoomManager } from '../../room/IRoomManager';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
 import { IRoomObjectVisualizationFactory } from '../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
+import { IRoomRenderingCanvas } from '../../room/renderer/IRoomRenderingCanvas';
+import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
@@ -12,8 +14,13 @@ export interface IRoomEngine
 {
     initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void;
     dispose(): void;
-    getRoomDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
+    getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
+    getRoomInstanceRenderingCanvas(roomId: number, canvasId: number): IRoomRenderingCanvas;
+    initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;
+    getRoomInstanceGeometry(roomId: number, canvasId: number): IRoomGeometry;
+    getRoomInstanceNumber(roomId: number, key: string): number;
     refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void;
+    dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
     events: IEventDispatcher;
     objectEventHandler: RoomObjectEventHandler;
     roomRendererFactory: IRoomRendererFactory;

@@ -14,7 +14,8 @@ export class RoomInstanceData
     private _selectedObject: SelectedRoomObjectData;
     private _furnitureStackingHeightMap: FurnitureStackingHeightMap;
 
-    private _furnitureStack: Map<number, FurnitureData>;
+    private _floorStack: Map<number, FurnitureData>;
+    private _wallStack: Map<number, FurnitureData>;
 
     constructor(roomId: number)
     {
@@ -26,7 +27,8 @@ export class RoomInstanceData
         this._selectedObject                = null;
         this._furnitureStackingHeightMap    = null;
 
-        this._furnitureStack                = new Map();
+        this._floorStack                    = new Map();
+        this._wallStack                     = new Map();
     }
 
     public dispose(): void
@@ -54,29 +56,58 @@ export class RoomInstanceData
         this._furnitureStackingHeightMap = heightMap;
     }
 
-    public addPendingFurniture(data: FurnitureData): void
+    public addPendingFurnitureFloor(data: FurnitureData): void
     {
         if(!data) return;
 
-        this._furnitureStack.set(data.id, data);
+        this._floorStack.set(data.id, data);
     }
 
-    public getPendingFurniture(id: number): FurnitureData
+    public getPendingFurnitureFloor(id: number): FurnitureData
     {
-        const existing = this._furnitureStack.get(id);
+        const existing = this._floorStack.get(id);
 
         if(!existing) return null;
 
-        this._furnitureStack.delete(id);
+        this._floorStack.delete(id);
 
         return existing;
     }
 
-    public getNextPendingFurniture(): FurnitureData
+    public getNextPendingFurnitureFloor(): FurnitureData
     {
-        if(!this._furnitureStack.size) return null;
+        if(!this._floorStack.size) return null;
 
-        return this.getPendingFurniture(this._furnitureStack.keys().next().value as number);
+        const keys = this._floorStack.keys();
+
+        return this.getPendingFurnitureFloor(keys.next().value as number);
+    }
+
+    public addPendingFurnitureWall(data: FurnitureData): void
+    {
+        if(!data) return;
+
+        this._wallStack.set(data.id, data);
+    }
+
+    public getPendingFurnitureWall(id: number): FurnitureData
+    {
+        const existing = this._wallStack.get(id);
+
+        if(!existing) return null;
+
+        this._wallStack.delete(id);
+
+        return existing;
+    }
+
+    public getNextPendingFurnitureWall(): FurnitureData
+    {
+        if(!this._wallStack.size) return null;
+
+        const keys = this._wallStack.keys();
+
+        return this.getPendingFurnitureWall(keys.next().value as number);
     }
 
     public get roomId(): number

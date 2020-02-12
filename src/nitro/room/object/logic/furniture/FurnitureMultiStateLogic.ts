@@ -1,5 +1,7 @@
-import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
-import { RoomObjectSprite } from '../../../../../room/object/visualization/RoomObjectSprite';
+import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { MouseEventType } from '../../../../ui/MouseEventType';
+import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
 import { ObjectLogicType } from '../ObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
@@ -7,20 +9,27 @@ export class FurnitureMultiStateLogic extends FurnitureLogic
 {
     public static TYPE: string = ObjectLogicType.FURNITURE_MULTISTATE;
 
-    public mouseEvent(event: RoomObjectMouseEvent): void
+    public getEventTypes(): string[]
     {
-        if(event.collision instanceof RoomObjectSprite)
-        {
-            if(event.collision.ignoreMouse) return;
+        const types = [ RoomObjectFurnitureActionEvent.MOUSE_BUTTON, RoomObjectFurnitureActionEvent.MOUSE_ARROW ];
 
-            switch(event.type)
-            {
-                case RoomObjectMouseEvent.MOUSE_MOVE:
-                    document.body.style.cursor = 'pointer';
-                    break;
-            }
+        return this.mergeTypes(super.getEventTypes(), types);
+    }
+
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
+    {
+        if(!event || !geometry || !this.object) return;
+
+        switch(event.type)
+        {
+            case MouseEventType.OVER:
+                this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.MOUSE_BUTTON, this.object));
+                break;
+            case MouseEventType.OUT:
+                this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.MOUSE_ARROW, this.object));
+                break;
         }
 
-        super.mouseEvent(event);
+        super.mouseEvent(event, geometry);
     }
 }
