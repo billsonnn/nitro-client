@@ -54,6 +54,10 @@ import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseOb
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
+import { ObjectRoomMaskUpdateMessage } from './messages/ObjectRoomMaskUpdateMessage';
+import { ObjectRoomPlanePropertyUpdateMessage } from './messages/ObjectRoomPlanePropertyUpdateMessage';
+import { ObjectRoomPlaneVisibilityUpdateMessage } from './messages/ObjectRoomPlaneVisibilityUpdateMessage';
+import { ObjectRoomUpdateMessage } from './messages/ObjectRoomUpdateMessage';
 import { ObjectStateUpdateMessage } from './messages/ObjectStateUpdateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
@@ -62,8 +66,9 @@ import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
 import { RoomLogic } from './object/logic/room/RoomLogic';
 import { RoomMapData } from './object/RoomMapData';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
-import { RoomObjectModelKey } from './object/RoomObjectModelKey';
-import { ObjectVisualizationFactory } from './object/visualization/ObjectVisualizationFactory';
+import { RoomObjectUserType } from './object/RoomObjectUserType';
+import { RoomObjectVariable } from './object/RoomObjectVariable';
+import { RoomObjectVisualizationFactory } from './object/RoomObjectVisualizationFactory';
 import { RoomContentLoader } from './RoomContentLoader';
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
@@ -72,6 +77,7 @@ import { FurnitureData } from './utils/FurnitureData';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { RoomCamera } from './utils/RoomCamera';
+import { RoomData } from './utils/RoomData';
 import { RoomInstanceData } from './utils/RoomInstanceData';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
@@ -96,13 +102,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private _activeRoomId: number;
     private _roomInstanceData: Map<number, RoomInstanceData>;
+    private _pendingRoomData: Map<number, RoomData>;
 
     private _roomRendererFactory: IRoomRendererFactory;
     private _visualizationFactory: IRoomObjectVisualizationFactory;
     private _logicFactory: IRoomObjectLogicFactory;
-
-    private _pendingObjects: IRoomObject[];
-    private _processingObjects: boolean;
 
     private _mouseX: number;
     private _mouseY: number;
@@ -129,13 +133,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         this._activeRoomId              = -1;
         this._roomInstanceData          = new Map();
+        this._pendingRoomData           = new Map();
 
         this._roomRendererFactory       = new RoomRendererFactory();
-        this._visualizationFactory      = new ObjectVisualizationFactory();
+        this._visualizationFactory      = new RoomObjectVisualizationFactory();
         this._logicFactory              = new ObjectLogicFactory();
-
-        this._pendingObjects            = [];
-        this._processingObjects         = false;
 
         this._mouseX                    = 0;
         this._mouseY                    = 0;
@@ -251,14 +253,57 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance
     {
+        let floorType       = '111';
+        let wallType        = '201';
+        let landscapeType   = '1';
+
         if(!this._isReady)
         {
-            NitroLogger.printMessage(`Room Engine not initilized yet, can not create room. Room data stored for later initialization.`);
+            let data = this._pendingRoomData.get(roomId);
+
+            if(data)
+            {
+                this._pendingRoomData.delete(roomId);
+
+                floorType       = data._Str_5207;
+                wallType        = data._Str_5259;
+                landscapeType   = data._Str_5109;
+            }
+
+            data = new RoomData(roomId, roomMap);
+
+            data._Str_5207  = floorType;
+            data._Str_5259  = wallType;
+            data._Str_5109  = landscapeType;
+
+            this._pendingRoomData.set(roomId, data);
+
+            NitroLogger.log(`Room Engine not initilized yet, can not create room. Room data stored for later initialization.`);
 
             return;
         }
 
-        const instance = this.setupRoomInstance(roomId, roomMap);
+        if(!roomMap)
+        {
+            NitroLogger.log(`Room property messages received before floor height map, will initialize when floor height map received.`);
+
+            return;
+        }
+
+        const data = this._pendingRoomData.get(roomId);
+
+        if(data)
+        {
+            this._pendingRoomData.delete(roomId);
+
+            if(data._Str_5207) floorType = data._Str_5207;
+
+            if(data._Str_5259) wallType = data._Str_5259;
+
+            if(data._Str_5109) landscapeType = data._Str_5109;
+        }
+
+        const instance = this.setupRoomInstance(roomId, roomMap, floorType, wallType, landscapeType, this.getRoomInstanceModelName(roomId));
 
         if(!instance) return;
 
@@ -267,7 +312,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return instance;
     }
 
-    private setupRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance
+    private setupRoomInstance(roomId: number, roomMap: RoomMapData, floorType: string, wallType: string, landscapeType: string, worldType: string): IRoomInstance
     {
         if(!this._isReady) return;
 
@@ -300,16 +345,77 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
                 const seed = ((((minX * 423) + (maxX * 671)) + (minY * 913)) + (maxY * 7509));
 
-                if(roomObject)
-                {
-                    roomObject.model.setValue(RoomObjectModelKey.ROOM_RANDOM_SEED, seed);
-                }
+                if(roomObject && roomObject.model) roomObject.model.setValue(RoomObjectVariable.ROOM_RANDOM_SEED, seed);
             }
         }
 
         const logic = (roomObject && roomObject.logic as RoomLogic) || null;
 
-        if(roomObject && roomObject.logic) logic.initialize(roomMap);
+        if(logic)
+        {
+            logic.initialize(roomMap);
+
+            if(floorType)
+            {
+                logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_FLOOR_UPDATE, floorType));
+                instance.model.setValue(RoomObjectVariable.ROOM_FLOOR_TYPE, floorType);
+            }
+
+            if(wallType)
+            {
+                logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_WALL_UPDATE, wallType));
+                instance.model.setValue(RoomObjectVariable.ROOM_WALL_TYPE, wallType);
+            }
+
+            if(landscapeType)
+            {
+                logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_LANDSCAPE_UPDATE, landscapeType));
+                instance.model.setValue(RoomObjectVariable.ROOM_LANDSCAPE_TYPE, landscapeType);
+            }
+        }
+
+        if(roomMap && roomMap.doors.length)
+        {
+            let doorIndex = 0;
+
+            while(doorIndex < roomMap.doors.length)
+            {
+                const door = roomMap.doors[doorIndex];
+
+                if(door)
+                {
+                    const doorX     = door.x;
+                    const doorY     = door.y;
+                    const doorZ     = door.z;
+                    const doorDir   = door.dir;
+                    const maskType  = ObjectRoomMaskUpdateMessage.DOOR;
+                    const maskId    = 'door_' + doorIndex;
+                    const maskLocation  = new Vector3d(doorX, doorY, doorZ);
+
+                    logic.processUpdateMessage(new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.RORMUM_ADD_MASK, maskId, maskType, maskLocation, ObjectRoomMaskUpdateMessage.HOLE));
+
+                    if((doorDir === 90) || (doorDir === 180))
+                    {
+                        if(doorDir === 90)
+                        {
+                            instance.model.setValue(RoomObjectVariable.ROOM_DOOR_X, (doorX - 0.5));
+                            instance.model.setValue(RoomObjectVariable.ROOM_DOOR_Y, doorY);
+                        }
+
+                        if(doorDir === 180)
+                        {
+                            instance.model.setValue(RoomObjectVariable.ROOM_DOOR_X, doorX);
+                            instance.model.setValue(RoomObjectVariable.ROOM_DOOR_Y, (doorY - 0.5));
+                        }
+
+                        instance.model.setValue(RoomObjectVariable.ROOM_DOOR_Z, doorZ);
+                        instance.model.setValue(RoomObjectVariable.ROOM_DOOR_DIR, doorDir);
+                    }
+                }
+
+                doorIndex++;
+            }
+        }
 
         instance.createRoomObjectAndInitalize(RoomEngine.CURSOR_OBJECT_ID, RoomEngine.CURSOR_OBJECT_TYPE, RoomObjectCategory.CURSOR);
 
@@ -399,6 +505,81 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return (instance.model && instance.model.getValue(key)) || NaN;
     }
 
+    public updateRoomInstancePlaneVisibility(roomId: number, wallVisible: boolean, floorVisible: boolean = true): boolean
+    {
+        const object = this.getRoomOwnObject(roomId);
+
+        if(!object) return false;
+
+        object.processUpdateMessage(new ObjectRoomPlaneVisibilityUpdateMessage(ObjectRoomPlaneVisibilityUpdateMessage.WALL_VISIBILITY, wallVisible));
+        object.processUpdateMessage(new ObjectRoomPlaneVisibilityUpdateMessage(ObjectRoomPlaneVisibilityUpdateMessage.FLOOR_VISIBILITY, floorVisible));
+
+        return true;
+    }
+
+    public updateRoomInstancePlaneThickness(roomId: number, wallThickness: number, floorThickness: number): boolean
+    {
+        const object = this.getRoomOwnObject(roomId);
+
+        if(!object) return false;
+
+        object.processUpdateMessage(new ObjectRoomPlanePropertyUpdateMessage(ObjectRoomPlanePropertyUpdateMessage.WALL_THICKNESS, wallThickness));
+        object.processUpdateMessage(new ObjectRoomPlanePropertyUpdateMessage(ObjectRoomPlanePropertyUpdateMessage.FLOOR_THICKNESS, floorThickness));
+
+        return true;
+    }
+
+    public updateRoomInstancePlaneType(roomId: number, floorType: string = null, wallType: string = null, landscapeType: string = null, _arg_5: boolean = false): boolean
+    {
+        const roomObject    = this.getRoomOwnObject(roomId);
+        const roomInstance  = this.getRoomInstance(roomId);
+
+        if(!roomObject)
+        {
+            let roomData = this._pendingRoomData.get(roomId);
+
+            if(!roomData)
+            {
+                roomData = new RoomData(roomId, null);
+
+                this._pendingRoomData.set(roomId, roomData);
+            }
+
+            if(floorType) roomData._Str_5207 = floorType;
+
+            if(wallType) roomData._Str_5259 = wallType;
+
+            if(landscapeType) roomData._Str_5109 = landscapeType;
+
+            return true;
+        }
+
+        if(!roomObject.logic) return false;
+
+        if(floorType)
+        {
+            if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_FLOOR_TYPE, floorType);
+
+            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_FLOOR_UPDATE, floorType));
+        }
+
+        if(wallType)
+        {
+            if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_WALL_TYPE, wallType);
+
+            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_WALL_UPDATE, wallType));
+        }
+
+        if(landscapeType)
+        {
+            if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_LANDSCAPE_TYPE, landscapeType);
+
+            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_LANDSCAPE_UPDATE, landscapeType));
+        }
+
+        return true;
+    }
+
     public update(time: number): void
     {
         if(!this._roomManager) return;
@@ -478,14 +659,14 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(model)
         {
-            model.setValue(RoomObjectModelKey.FURNITURE_COLOR, this.getFurnitureFloorColorIndex(data.typeId));
-            model.setValue(RoomObjectModelKey.FURNITURE_TYPE_ID, data.typeId);
-            model.setValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
-            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
-            model.setValue(RoomObjectModelKey.FURNITURE_USAGE_POLICY, data.usagePolicy);
-            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_ID, data.ownerId);
-            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_NAME, data.ownerName);
+            model.setValue(RoomObjectVariable.FURNITURE_COLOR, this.getFurnitureFloorColorIndex(data.typeId));
+            model.setValue(RoomObjectVariable.FURNITURE_TYPE_ID, data.typeId);
+            model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+            model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
+            model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
+            model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
         }
 
         if(!this.updateRoomObjectFloor(roomId, id, data.location, data.direction, data.state, data.data, data.extra)) return false;
@@ -532,15 +713,15 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(model)
         {
-            model.setValue(RoomObjectModelKey.FURNITURE_COLOR, this.getFurnitureWallColorIndex(data.typeId));
-            model.setValue(RoomObjectModelKey.FURNITURE_TYPE_ID, data.typeId);
-            model.setValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
-            model.setValue(RoomObjectModelKey.OBJECT_ACCURATE_Z_VALUE, 1);
-            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectModelKey.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
-            model.setValue(RoomObjectModelKey.FURNITURE_USAGE_POLICY, data.usagePolicy);
-            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_ID, data.ownerId);
-            model.setValue(RoomObjectModelKey.FURNITURE_OWNER_NAME, data.ownerName);
+            model.setValue(RoomObjectVariable.FURNITURE_COLOR, this.getFurnitureWallColorIndex(data.typeId));
+            model.setValue(RoomObjectVariable.FURNITURE_TYPE_ID, data.typeId);
+            model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
+            model.setValue(RoomObjectVariable.OBJECT_ACCURATE_Z_VALUE, 1);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+            model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
+            model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
+            model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
         }
 
         if(!this.updateRoomObjectWall(roomId, id, data.location, data.direction, data.state, extra)) return false;
@@ -962,6 +1143,15 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return data;
     }
 
+    public getRoomInstanceModelName(roomId: number): string
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return null;
+
+        return instanceData.modelName;
+    }
+
     public setRoomInstanceModelName(roomId: number, name: string): void
     {
         const instanceData = this.getRoomInstanceData(roomId);
@@ -1048,11 +1238,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return instance.createRoomObjectAndInitalize(objectId, type, category) as IRoomObjectController;
     }
 
-    public addRoomObjects(...objects: IRoomObject[]): void
-    {
-        this._pendingObjects.push(...objects);
-    }
-
     public getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
     {
         const instance = this.getRoomInstance(roomId);
@@ -1071,7 +1256,12 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public getRoomObjectCursor(roomId: number): IRoomObjectController
     {
-        return this.getRoomObject(roomId, RoomEngine.CURSOR_OBJECT_ID, RoomObjectCategory.ROOM);
+        return this.getRoomObject(roomId, RoomEngine.CURSOR_OBJECT_ID, RoomObjectCategory.CURSOR);
+    }
+
+    public getRoomOwnObject(roomId: number): IRoomObjectController
+    {
+        return this.getRoomObject(roomId, RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
     }
 
     public getRoomObjectUser(roomId: number, objectId: number): IRoomObjectController
@@ -1082,6 +1272,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     public removeRoomObjectUser(roomId: number, objectId: number): void
     {
         return this.removeRoomObject(roomId, objectId, RoomObjectCategory.UNIT);
+    }
+
+    public createRoomObjectUser(roomId: number, objectId: number, type: string): IRoomObjectController
+    {
+        return this.createRoomObjectAndInitialize(roomId, objectId, type, RoomObjectCategory.UNIT);
     }
 
     public getRoomObjectFloor(roomId: number, objectId: number): IRoomObjectController
@@ -1200,8 +1395,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!object) return false;
 
-        object.model.setValue(RoomObjectModelKey.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectModelKey.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
 
         return true;
     }
@@ -1212,8 +1407,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!object) return false;
 
-        object.model.setValue(RoomObjectModelKey.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectModelKey.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
 
         return true;
     }
@@ -1227,22 +1422,25 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         object.processUpdateMessage(new ObjectMoveUpdateMessage(location, targetLocation, null, !!targetLocation));
     }
 
-    public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, type: string, figure: string, gender: string): boolean
+    public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, realDirection: number, type: number, figure: string): boolean
     {
         const existing = this.getRoomObjectUser(roomId, objectId);
 
         if(existing) return false;
 
-        const object = this.createRoomObject(roomId, objectId, type, RoomObjectCategory.UNIT);
+        let objectType = RoomObjectUserType.getTypeString(type);
+
+        if(objectType === RoomObjectUserType.PET) objectType = this.getPetTypeFromString(figure);
+
+        const object = this.createRoomObjectUser(roomId, objectId, objectType);
 
         if(!object) return false;
 
-        object.setLocation(location);
-        object.setDirection(direction);
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(location, null, direction, realDirection, false, 0));
 
-        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
+        if(figure) object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
 
-        this.addRoomObjects(object);
+        if(this.events) this.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.ADDED, roomId, objectId, RoomObjectCategory.UNIT));
 
         return true;
     }
@@ -1257,7 +1455,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!direction) direction = object.getDirection();
 
-        if(isNaN(headDirection)) headDirection = object.model.getValue(RoomObjectModelKey.HEAD_DIRECTION) as number;
+        if(isNaN(headDirection)) headDirection = object.model.getValue(RoomObjectVariable.HEAD_DIRECTION) as number;
 
         object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), this.getLocationWithOffset(roomId, targetLocation), direction, headDirection, canStandUp, baseY));
     }
@@ -1288,43 +1486,43 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         
         switch(action)
         {
-            case RoomObjectModelKey.FIGURE_TALK:
+            case RoomObjectVariable.FIGURE_TALK:
                 message = new ObjectAvatarChatUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_SLEEP:
+            case RoomObjectVariable.FIGURE_SLEEP:
                 message = new ObjectAvatarSleepUpdateMessage(value === 1);
                 break;
-            case RoomObjectModelKey.FIGURE_IS_TYPING:
+            case RoomObjectVariable.FIGURE_IS_TYPING:
                 message = new ObjectAvatarTypingUpdateMessage(value === 1);
                 break;
-            case RoomObjectModelKey.FIGURE_IS_MUTED:
+            case RoomObjectVariable.FIGURE_IS_MUTED:
                 message = new ObjectAvatarMutedUpdateMessage(value === 1);
                 break;
-            case RoomObjectModelKey.FIGURE_CARRY_OBJECT:
+            case RoomObjectVariable.FIGURE_CARRY_OBJECT:
                 message = new ObjectAvatarCarryObjectUpdateMessage(value, parameter);
                 break;
-            case RoomObjectModelKey.FIGURE_USE_OBJECT:
+            case RoomObjectVariable.FIGURE_USE_OBJECT:
                 message = new ObjectAvatarUseObjectUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_DANCE:
+            case RoomObjectVariable.FIGURE_DANCE:
                 message = new ObjectAvatarDanceUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_GAINED_EXPERIENCE:
+            case RoomObjectVariable.FIGURE_GAINED_EXPERIENCE:
                 message = new ObjectAvatarExperienceUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_NUMBER_VALUE:
+            case RoomObjectVariable.FIGURE_NUMBER_VALUE:
                 message = new ObjectAvatarPlayerValueUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_SIGN:
+            case RoomObjectVariable.FIGURE_SIGN:
                 message = new ObjectAvatarSignUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_EXPRESSION:
+            case RoomObjectVariable.FIGURE_EXPRESSION:
                 message = new ObjectAvatarExpressionUpdateMessage(value);
                 break;
-            case RoomObjectModelKey.FIGURE_IS_PLAYING_GAME:
+            case RoomObjectVariable.FIGURE_IS_PLAYING_GAME:
                 message = new ObjectAvatarPlayingGameUpdateMessage(value === 1);
                 break;
-            case RoomObjectModelKey.FIGURE_GUIDE_STATUS:
+            case RoomObjectVariable.FIGURE_GUIDE_STATUS:
                 message = new ObjectAvatarGuideStatusUpdateMessage(value);
                 break;
         }
@@ -1404,7 +1602,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(object)
         {
-            const dataFormat = object.model.getValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT);
+            const dataFormat = object.model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT);
 
             if(!isNaN(dataFormat))
             {
@@ -1433,7 +1631,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 {
                     if(this.events)
                     {
-                        //events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.DESELECTED, this._activeRoomId, -1, RoomObjectCategoryEnum.CONST_MIN2));
+                        this.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.DESELECTED, this._activeRoomId, -1, RoomObjectCategory.MINIMUM));
                     }
 
                     eventType = RoomObjectMouseEvent.CLICK;
@@ -1579,7 +1777,23 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     {
         if(!object || !object.model) return null;
 
-        return (object.model.getValue(RoomObjectModelKey.OBJECT_ROOM_ID)).toString();
+        return (object.model.getValue(RoomObjectVariable.OBJECT_ROOM_ID)).toString();
+    }
+
+    private getPetTypeFromString(type: string): string
+    {
+        if(!type) return null;
+
+        const parts = type.split(' ');
+
+        if(parts.length > 1)
+        {
+            const typeId = parseInt(type[0]);
+
+            if(this._roomContentLoader) return this._roomContentLoader.getPetNameForType(typeId);
+        }
+
+        return null;
     }
 
     public get events(): IEventDispatcher

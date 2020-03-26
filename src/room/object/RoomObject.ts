@@ -121,6 +121,8 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._direction.y = (((vector.y % 360) + 360) % 360);
         this._direction.z = (((vector.z % 360) + 360) % 360);
 
+        //console.log(vector, this._direction);
+
         this._updateCounter++;
     }
 

@@ -1,82 +1,78 @@
+import { ActionDefinition } from '../actions/ActionDefinition';
+import { IActionDefinition } from '../actions/IActionDefinition';
 import { ActivePartSet } from './parts/ActivePartSet';
 import { PartDefinition } from './parts/PartDefinition';
 
 export class PartSetsData
 {
-    private _parts: { [index: string]: PartDefinition };
-    private _activePartSets: { [index: string]: ActivePartSet };
-
-    private _isReady: boolean;
+    private _parts: Map<string, PartDefinition>;
+    private _activePartSets: Map<string, ActivePartSet>;
 
     constructor()
     {
-        this._parts             = {};
-        this._activePartSets    = {};
-
-        this._isReady           = false;
+        this._parts             = new Map();
+        this._activePartSets    = new Map();
     }
 
     public parse(data: any): boolean
     {
-        if(!data) return false;
-
-        for(let part of data.partSet[0].part)
+        if(data.partSet && (data.partSet.length > 0))
         {
-            const newPart = new PartDefinition(part);
-
-            if(!newPart) continue;
-
-            this._parts[newPart.setType] = newPart;
-        }
-
-        for(let partSet of data.activePartSet)
-        {
-            const newPartSet = new ActivePartSet(partSet);
-
-            if(!newPartSet) continue;
-
-            if(newPartSet.id === 'handRightAndHead')
+            for(let part of data.partSet)
             {
-                const activePartSet = this.getActivePartSet('head');
+                if(!part) continue;
 
-                if(activePartSet)
-                {
-                    const activeParts = activePartSet.parts;
-
-                    if(activeParts)
-                    {
-                        for(let i = activeParts.length - 1; i >= 0; i--)
-                        {
-                            const part = activeParts[i];
-
-                            if(!part) continue;
-
-                            if(newPartSet.parts.indexOf(part) === -1) newPartSet.parts.push(part);
-                        }
-                    }
-                }
+                this._parts.set(part.setType, new PartDefinition(part));
             }
-
-            this._activePartSets[newPartSet.id] = newPartSet;
         }
 
-        this._isReady = true;
+        if(data.activePartSets && (data.activePartSets.length > 0))
+        {
+            for(let activePart of data.activePartSets)
+            {
+                if(!activePart) continue;
+
+                this._activePartSets.set(activePart.id, new ActivePartSet(activePart));
+            }
+        }
 
         return true;
     }
 
-    public getPartDefinition(part: string): PartDefinition
+    public _Str_1795(k:IActionDefinition): string[]
     {
-        return this._parts[part] || null;
+        const activePartSet = this._activePartSets.get(k.activePartSet);
+
+        if(!activePartSet) return [];
+
+        return activePartSet.parts;
     }
 
-    public getActivePartSet(id: string): ActivePartSet
+    public _Str_1102(part: string): PartDefinition
     {
-        return this._activePartSets[id] || null;
+        const existing = this._parts.get(part);
+
+        if(!existing) return null;
+
+        return existing;
     }
 
-    public get isReady(): boolean
+    public _Str_1113(k: ActionDefinition): ActivePartSet
     {
-        return this._isReady;
+        const existing = this._activePartSets.get(k.activePartSet);
+
+        if(!existing) return null;
+
+        return existing;
+    }
+
+    public get _Str_806(): Map<string, PartDefinition>
+    {
+        return this._parts;
+    }
+
+    public get _Str_1979(): Map<string, ActivePartSet>
+    {
+        return this._activePartSets;
     }
 }

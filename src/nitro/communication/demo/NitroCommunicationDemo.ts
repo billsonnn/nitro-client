@@ -140,7 +140,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!sso)
         {
-            NitroLogger.printMessage(`Login without an SSO ticket is not supported`);
+            NitroLogger.log(`Login without an SSO ticket is not supported`);
 
             return;
         }

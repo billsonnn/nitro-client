@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
 
@@ -33,14 +33,14 @@ export class VoteDataType extends ObjectDataBase
     {
         super.writeRoomObjectModel(model);
 
-        model.setValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT, VoteDataType.FORMAT_KEY);
+        model.setValue(RoomObjectVariable.FURNITURE_DATA_FORMAT, VoteDataType.FORMAT_KEY);
 
         const data: { [index: string]: string } = {};
 
         data['S'] = this._state;
         data['R'] = this._result.toString();
 
-        model.setValue(RoomObjectModelKey.FURNITURE_DATA, data);
+        model.setValue(RoomObjectVariable.FURNITURE_DATA, data);
     }
 
     public getLegacyString(): string

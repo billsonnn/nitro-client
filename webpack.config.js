@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/app/app.tsx',
+    entry: './src/app/app.ts',
     module: {
         rules: [
             {
@@ -53,7 +53,7 @@ module.exports = {
     devServer: {
         host: '0.0.0.0',
         port: 3000,
-        disableHostCheck: false
+        disableHostCheck: true
     },
     resolve: {
         extensions: [ '.ts', '.tsx', '.js' ]

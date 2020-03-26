@@ -1,9 +1,9 @@
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
 
 export class FurnitureBBVisualization extends FurnitureBrandedImageVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_BB;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_BB;
 
     protected getLayerXOffset(direction: number, layerId: number): number
     {

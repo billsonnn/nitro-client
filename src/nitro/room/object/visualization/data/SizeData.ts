@@ -208,20 +208,18 @@ export class SizeData
 
     public getValidDirection(direction: number): number
     {
-        let directionNumber: number = (((((direction % 360) + 360) + (this._angle / 2)) % 360) / this._angle);
+        const existing = this._directions.get(direction);
 
-        const existing = this._directions.get(directionNumber);
+        if(existing) return direction;
 
-        if(existing) return directionNumber;
-
-        directionNumber = (((direction % 360) + 360) % 360);
+        direction = (((direction % 360) + 360) % 360);
 
         let currentAngle    = -1;
         let validDirection  = -1;
 
         for(let key of this._directions.keys())
         {
-            let angle = ((((key * this._angle) - directionNumber) + 360) % 360);
+            let angle = ((((key * this._angle) - direction) + 360) % 360);
 
             if(angle > 180) angle = (360 - angle);
 

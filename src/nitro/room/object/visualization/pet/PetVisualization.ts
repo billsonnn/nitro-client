@@ -1,12 +1,12 @@
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from '../furniture/FurnitureAnimatedVisualization';
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
 import { PetVisualizationData } from './PetVisualizationData';
 
 export class PetVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.PET_ANIMATED;
+    public static TYPE: string = RoomObjectVisualizationType.PET_ANIMATED;
 
     protected _data: PetVisualizationData;
 
@@ -44,24 +44,24 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        let posture = model.getValue(RoomObjectModelKey.FIGURE_POSTURE);
-        let gesture = model.getValue(RoomObjectModelKey.FIGURE_GESTURE);
+        let posture = model.getValue(RoomObjectVariable.FIGURE_POSTURE);
+        let gesture = model.getValue(RoomObjectVariable.FIGURE_GESTURE);
 
         const postureAnimation = this._data.postureToAnimation(posture);
 
         this.object.setState(postureAnimation);
 
-        this._isSleeping = model.getValue(RoomObjectModelKey.FIGURE_SLEEP) > 0;
+        this._isSleeping = model.getValue(RoomObjectVariable.FIGURE_SLEEP) > 0;
 
-        const headDirection = model.getValue(RoomObjectModelKey.HEAD_DIRECTION);
+        const headDirection = model.getValue(RoomObjectVariable.HEAD_DIRECTION);
 
         if(!isNaN(headDirection)) this._headDirection = headDirection;
 
-        const color = model.getValue(RoomObjectModelKey.PET_COLOR);
+        const color = model.getValue(RoomObjectVariable.PET_COLOR);
 
         if(!isNaN(color) && this._color !== color) this._color = color;
 
-        let alphaMultiplier = model.getValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER);
+        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
 
         if(isNaN(alphaMultiplier)) alphaMultiplier = 1;
         

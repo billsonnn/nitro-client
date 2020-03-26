@@ -1,7 +1,7 @@
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureVoteCounterLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_VOTE_COUNTER;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_VOTE_COUNTER;
 }

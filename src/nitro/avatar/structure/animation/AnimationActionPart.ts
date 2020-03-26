@@ -2,48 +2,25 @@ import { AnimationFrame } from './AnimationFrame';
 
 export class AnimationActionPart
 {
-    private _setType: string;
     private _frames: AnimationFrame[];
 
     constructor(data: any)
     {
-        if(!data) throw new Error('invalid_data');
-        
-        this._setType   = data['$']['set-type'];
-        this._frames    = [];
+        this._frames = [];
 
-        for(let frame of data.frame)
+        if(data.frames && (data.frames.length > 0))
         {
-            if(!frame) continue;
+            for(let frame of data.frames)
+            {
+                if(!frame) continue;
 
-            const newFrame = new AnimationFrame(frame);
+                this._frames.push(new AnimationFrame(frame));
 
-            if(!newFrame) continue;
+                let repeats = frame.repeats || 0;
 
-            for(let i = 0; i < newFrame.repeats; i++) this._frames.push(newFrame);
+                if(repeats > 0) while(--repeats > 0) this._frames.push(this._frames[(this._frames.length - 1)]);
+            }
         }
-    }
-
-    public getFrame(frameCount: number = 0): AnimationFrame
-    {
-        if(!this._frames) return null;
-
-        const totalFrames = this._frames.length;
-
-        if(!totalFrames) return null;
-
-        const frameNumber = Math.floor(frameCount % this._frames.length);
-
-        const frame = this._frames[frameNumber];
-
-        if(!frame) return null;
-
-        return frame;
-    }
-
-    public get setType(): string
-    {
-        return this._setType;
     }
 
     public get frames(): AnimationFrame[]

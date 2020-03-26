@@ -1,5 +1,5 @@
 import { NitroInstance } from '../../../../NitroInstance';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureVisualization } from './FurnitureVisualization';
 
 export class FurnitureBrandedImageVisualization extends FurnitureVisualization
@@ -40,9 +40,9 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         
         if(flag)
         {
-            this._offsetX   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_X) as number;
-            this._offsetY   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Y) as number;
-            this._offsetZ   = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Z) as number;
+            this._offsetX   = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_X) as number;
+            this._offsetY   = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Y) as number;
+            this._offsetZ   = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Z) as number;
         }
 
         if(!this._imageReady)
@@ -84,7 +84,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
     private checkIfImageChanged(): boolean
     {
-        const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL);
+        const imageUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
 
         if(imageUrl && (imageUrl === this._imageUrl)) return false;
 
@@ -97,13 +97,13 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         if(!model) return false;
 
-        const imageUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL) as string;
+        const imageUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL) as string;
 
         if(!imageUrl) return false;
 
         if(this._imageUrl && (this._imageUrl === imageUrl)) return false;
 
-        const imageStatus = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS) as number;
+        const imageStatus = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS) as number;
 
         if(!imageStatus) return false;
 

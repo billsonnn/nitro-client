@@ -12,7 +12,7 @@ import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChan
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from '../../../messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { MovingObjectLogic } from '../MovingObjectLogic';
 
 export class FurnitureLogic extends MovingObjectLogic
@@ -89,14 +89,22 @@ export class FurnitureLogic extends MovingObjectLogic
             this._directions.sort((a, b) => { return a - b });
         }
 
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_X, this._sizeX);
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Y, this._sizeY);
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, this._sizeZ);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_X, this._centerX);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_Y, this._centerY);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_Z, this._centerZ);
-        model.setValue(RoomObjectModelKey.FURNITURE_ALLOWED_DIRECTIONS, this._directions);
-        model.setValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER, 1);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_X, this._sizeX);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Y, this._sizeY);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, this._sizeZ);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_X, this._centerX);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Y, this._centerY);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Z, this._centerZ);
+        model.setValue(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS, this._directions);
+        model.setValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER, 1);
+    }
+
+    public dispose(): void
+    {
+        super.dispose();
+
+        this._storedRotateMessage   = null;
+        this._directions            = null;
     }
 
     public setObject(object: IRoomObjectController): void
@@ -108,7 +116,7 @@ export class FurnitureLogic extends MovingObjectLogic
 
     protected getAdClickUrl(model: IRoomObjectModel): string
     {
-        return model.getValue(RoomObjectModelKey.FURNITURE_AD_URL);
+        return model.getValue(RoomObjectVariable.FURNITURE_AD_URL);
     }
 
     public update(time: number): void
@@ -172,16 +180,16 @@ export class FurnitureLogic extends MovingObjectLogic
         
         if(message.data) message.data.writeRoomObjectModel(this.object.model);
 
-        if(!isNaN(message.extra)) this.object.model.setValue(RoomObjectModelKey.FURNITURE_EXTRAS, message.extra);
+        if(!isNaN(message.extra)) this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra);
 
-        this.object.model.setValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME, this.lastUpdateTime);
+        this.object.model.setValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME, this.lastUpdateTime);
     }
 
     private processObjectHeightUpdateMessage(message: ObjectHeightUpdateMessage): void
     {
         if(!message) return;
         
-        this.object.model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, message.height);
+        this.object.model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, message.height);
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void

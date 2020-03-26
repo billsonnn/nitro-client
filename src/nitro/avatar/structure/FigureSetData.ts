@@ -1,5 +1,5 @@
-import { IFigurePartSet } from './figure/interfaces/IFigurePartSet';
-import { IPalette } from './figure/interfaces/IPalette';
+import { IFigurePartSet } from './figure/IFigurePartSet';
+import { IPalette } from './figure/IPalette';
 import { Palette } from './figure/Palette';
 import { SetType } from './figure/SetType';
 

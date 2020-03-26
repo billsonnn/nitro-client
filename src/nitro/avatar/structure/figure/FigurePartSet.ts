@@ -1,6 +1,6 @@
 import { FigurePart } from './FigurePart';
-import { IFigurePart } from './interfaces/IFigurePart';
-import { IFigurePartSet } from './interfaces/IFigurePartSet';
+import { IFigurePart } from './IFigurePart';
+import { IFigurePartSet } from './IFigurePartSet';
 
 export class FigurePartSet implements IFigurePartSet
 {

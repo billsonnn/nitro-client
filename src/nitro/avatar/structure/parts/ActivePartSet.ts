@@ -5,19 +5,18 @@ export class ActivePartSet
 
     constructor(data: any)
     {
-        if(!data) throw new Error('invalid_data');
-        
-        this._id    = data['$'].id;
+        this._id    = data.id;
         this._parts = [];
 
-        const parts = data.activePart;
+        if(data.activeParts && (data.activeParts.length > 0))
+        {
+            for(let part of data.activeParts)
+            {
+                if(!part) continue;
 
-        if(parts) for(let part of parts) this._parts.push(part['$']['set-type']);
-    }
-
-    public get id(): string
-    {
-        return this._id;
+                this._parts.push(part.setType);
+            }
+        }
     }
 
     public get parts(): string[]

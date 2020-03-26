@@ -1,7 +1,7 @@
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_FLOOR_HOLE;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_FLOOR_HOLE;
 }

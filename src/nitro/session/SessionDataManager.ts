@@ -189,7 +189,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         for(let item of this._floorItems.values())
         {
-            if(!item || item.className !== name) continue;
+            if(!item || (item.className !== name)) continue;
 
             return item;
         }
@@ -210,7 +210,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         for(let item of this._wallItems.values())
         {
-            if(!item || item.className !== name) continue;
+            if(!item || (item.className !== name)) continue;
 
             return item;
         }

@@ -7,21 +7,12 @@ export class ActionType
 
     constructor(data: any)
     {
-        if(!data) throw new Error('invalid_data');
-
-        this._id                = parseInt(data['$'].id);
-        this._prevents          = [];
-        this._preventHeadTurn   = data['$'].preventheadturn === 'true';
+        this._id                = parseInt(data.id);
+        this._prevents          = data.prevents || [];
+        this._preventHeadTurn   = data.preventHeadTurn || false;
         this._isAnimated        = true;
 
-        const prevents = data['$'].prevents;
-
-        if(prevents) this._prevents = prevents.split(',');
-
-        const isAnimated = data['$'].animated;
-
-        if(isAnimated === undefined || isAnimated === '') this._isAnimated = true;
-        else this._isAnimated = isAnimated === 'true' ? true : false;
+        if((data.animated !== undefined) && (data.animated === false)) this._isAnimated = false;
     }
 
     public get id(): number

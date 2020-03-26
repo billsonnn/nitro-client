@@ -4,7 +4,8 @@ import { INitroRenderer } from '../core/renderer/INitroRenderer';
 import { NitroRenderer } from '../core/renderer/NitroRenderer';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
-import { AvatarManager } from './avatar/AvatarManager';
+import { AvatarRenderManager } from './avatar/AvatarRenderManager';
+import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
 import { INitroInstance } from './INitroInstance';
@@ -24,7 +25,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
 
     private _core: INitroCore;
     private _communication: INitroCommunicationManager;
-    private _avatar: AvatarManager;
+    private _avatar: IAvatarRenderManager;
     private _roomEngine: IRoomEngine;
     private _session: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
@@ -40,7 +41,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
 
         this._core          = core;
         this._communication = new NitroCommunicationManager(core.communication);
-        this._avatar        = new AvatarManager();
+        this._avatar        = new AvatarRenderManager();
         this._roomEngine    = new RoomEngine(this._communication);
         this._session       = new SessionDataManager(this._communication);
         this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
@@ -146,7 +147,7 @@ export class NitroInstance extends NitroManager implements INitroInstance
         return this._communication;
     }
 
-    public get avatar(): AvatarManager
+    public get avatar(): IAvatarRenderManager
     {
         return this._avatar;
     }

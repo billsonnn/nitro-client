@@ -1,33 +1,38 @@
+import { NitroLogger } from '../../../../../core/common/logger/NitroLogger';
 import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { Direction } from '../../../../../room/utils/Direction';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
-import { AvatarAction } from '../../../../avatar/actions/AvatarAction';
-import { AvatarImage } from '../../../../avatar/AvatarImage';
-import { AnimationAction } from '../../../../avatar/structure/animation/AnimationAction';
-import { AvatarBodyPart } from '../../../../avatar/structure/AvatarBodyPart';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { IAvatarImage } from '../../../../avatar/IAvatarImage';
+import { IAvatarImageListener } from '../../../../avatar/IAvatarImageListener';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
 import { IAvatarAddition } from './additions/IAvatarAddition';
-import { OwnUserAddition } from './additions/OwnUserAddition';
 import { TypingBubbleAddition } from './additions/TypingBubbleAddition';
 import { AvatarVisualizationData } from './AvatarVisualizationData';
 
-export class AvatarVisualization extends RoomObjectSpriteVisualization
+export class AvatarVisualization extends RoomObjectSpriteVisualization implements IAvatarImageListener
 {
-    private static FLOATING_IDLE_Z_ID: number   = 1;
-    private static TYPING_BUBBLE_ID: number     = 2;
-    private static EXPRESSION_ID: number        = 3;
-    private static OWN_USER_ID: number          = 4;
+    private static FLOATING_IDLE_Z_ID: number       = 1;
+    private static TYPING_BUBBLE_ID: number         = 2;
+    private static EXPRESSION_ID: number            = 3;
+    private static OWN_USER_ID: number              = 4;
+    private static UPDATE_TIME_INCREASER: number    = 41;
+    private static OFFSET_MULTIPLIER: number        = 1000;
 
     protected _data: AvatarVisualizationData;
 
-    private _avatarImage: AvatarImage;
+    private _avatarImage: IAvatarImage;
+    private _cachedAvatars: Map<string, IAvatarImage>;
+    private _cachedAvatarEffects: Map<string, IAvatarImage>;
     private _shadow: IRoomObjectSprite;
+    private _lastUpdate: number;
+    private _isDisposed: boolean;
 
     private _figure: string;
+    private _gender: string;
     private _direction: number;
     private _headDirection: number;
     private _posture: string;
@@ -58,9 +63,14 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         this._data              = null;
 
         this._avatarImage       = null;
+        this._cachedAvatars     = new Map();
+        this._cachedAvatarEffects   = new Map();
         this._shadow            = null;
+        this._lastUpdate        = -1000;
+        this._isDisposed        = false;
 
         this._figure            = null;
+        this._gender            = null;
         this._direction         = -1;
         this._headDirection     = -1;
         this._posture           = '';
@@ -103,48 +113,66 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
         if(this._avatarImage) this._avatarImage.dispose();
 
         this._shadow = null;
+
+        this._isDisposed = true;
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
     {
-        if(!geometry) return;
-        
-        let needsUpdate = false;
+        if(!this.object || !geometry || !this._data) return;
 
-        const modelUpdated = this.updateModel();
+        if(time < (this._lastUpdate + AvatarVisualization.UPDATE_TIME_INCREASER)) return;
+
+        this._lastUpdate += AvatarVisualization.UPDATE_TIME_INCREASER;
+
+        if((this._lastUpdate + AvatarVisualization.UPDATE_TIME_INCREASER) < time) this._lastUpdate = (time - AvatarVisualization.UPDATE_TIME_INCREASER);
+
+        const effect = this._effect;
+
+        const updateModel = this.updateModel();
+
+        if(!updateModel && this._avatarImage) return;
 
         if(!this._avatarImage)
         {
-            this._avatarImage = this._data.createAvatarImage(this._figure);
+            this._avatarImage = this.createAvatarImage(64, effect);
+        }
+    }
 
-            this.createShadow();
+    private createAvatarImage(scale: number, effectId: number): IAvatarImage
+    {
+        let cachedImage: IAvatarImage   = null;
+        let imageName                   = 'avatarImage' + scale.toString();
 
-            this.sortParts();
+        if(!effectId)
+        {
+            cachedImage = this._cachedAvatars.get(imageName);
+        }
+        else
+        {
+            imageName += '-' + effectId;
 
-            this._avatarImage.structure.downloadFigure(this._avatarImage.figure, () =>
+            cachedImage = this._cachedAvatarEffects.get(imageName);
+        }
+
+        if(!cachedImage)
+        {
+            cachedImage = this._data.createAvatarImage(this._figure, 64, this._gender, this);
+
+            if(cachedImage)
             {
-                this._isAvatarReady = true;
-                this._needsUpdate   = true;
-            });
+                if(!effectId)
+                {
+                    this._cachedAvatars.set(imageName, cachedImage);
+                }
+                else
+                {
+                    this._cachedAvatarEffects.set(imageName, cachedImage);
+                }
+            }
         }
 
-        if(modelUpdated)
-        {
-            this.updateActions();
-
-            needsUpdate = true;
-        }
-
-        this.updateObject();
-
-        this.updateAdditions();
-
-        if((needsUpdate || this._needsUpdate))
-        {
-            this._needsUpdate = false;
-
-            this.updateSprites();
-        }
+        return cachedImage;
     }
 
     protected updateObject(): boolean
@@ -172,7 +200,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         let needsUpdate = false;
 
-        const talk = model.getValue(RoomObjectModelKey.FIGURE_TALK);
+        const talk = (model.getValue(RoomObjectVariable.FIGURE_TALK) > 0);
 
         if(talk !== this._talk)
         {
@@ -181,7 +209,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const expression = model.getValue(RoomObjectModelKey.FIGURE_EXPRESSION);
+        const expression = model.getValue(RoomObjectVariable.FIGURE_EXPRESSION);
 
         if(expression !== this._expression)
         {
@@ -190,7 +218,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const sleep = model.getValue(RoomObjectModelKey.FIGURE_SLEEP) > 0;
+        const sleep = (model.getValue(RoomObjectVariable.FIGURE_SLEEP) > 0);
 
         if(sleep !== this._sleep)
         {
@@ -199,7 +227,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const blink = model.getValue(RoomObjectModelKey.FIGURE_BLINK) > 0;
+        const blink = (model.getValue(RoomObjectVariable.FIGURE_BLINK) > 0);
 
         if(blink !== this._blink)
         {
@@ -208,7 +236,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const gesture = model.getValue(RoomObjectModelKey.FIGURE_GESTURE) || 0;
+        const gesture = model.getValue(RoomObjectVariable.FIGURE_GESTURE) || 0;
 
         if(gesture !== this._gesture)
         {
@@ -217,24 +245,16 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const posture = model.getValue(RoomObjectModelKey.FIGURE_POSTURE);
+        const posture = model.getValue(RoomObjectVariable.FIGURE_POSTURE);
 
         if(posture !== this._posture)
         {
             this._posture = posture;
 
-            if(this._shadow)
-            {
-                if(this._posture === 'lay' || this._posture === 'sit') this._shadow.visible = false;
-                else this._shadow.visible = true;
-            }
-
-            this.sortParts();
-
             needsUpdate = true;
         }
 
-        const postureParameter = model.getValue(RoomObjectModelKey.FIGURE_POSTURE_PARAMETER);
+        const postureParameter = model.getValue(RoomObjectVariable.FIGURE_POSTURE_PARAMETER);
 
         if(postureParameter !== this._postureParameter)
         {
@@ -243,7 +263,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const canStandUp = model.getValue(RoomObjectModelKey.FIGURE_CAN_STAND_UP);
+        const canStandUp = (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) > 0);
 
         if(canStandUp !== this._canStandUp)
         {
@@ -252,7 +272,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const verticalOffset = model.getValue(RoomObjectModelKey.FIGURE_VERTICAL_OFFSET);
+        const verticalOffset = (model.getValue(RoomObjectVariable.FIGURE_VERTICAL_OFFSET) * AvatarVisualization.OFFSET_MULTIPLIER);
 
         if(verticalOffset !== this._verticalOffset)
         {
@@ -261,7 +281,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const dance = model.getValue(RoomObjectModelKey.FIGURE_DANCE) || 0;
+        const dance = model.getValue(RoomObjectVariable.FIGURE_DANCE) || 0;
 
         if(dance !== this._dance)
         {
@@ -270,7 +290,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const effect = model.getValue(RoomObjectModelKey.FIGURE_EFFECT) || 0;
+        const effect = model.getValue(RoomObjectVariable.FIGURE_EFFECT) || 0;
 
         if(effect !== this._effect)
         {
@@ -279,18 +299,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        let sign = model.getValue(RoomObjectModelKey.FIGURE_SIGN) as number;
-
-        if(sign === null) sign = -1;
-
-        if(this._sign !== sign)
-        {
-            this._sign = sign;
-
-            needsUpdate = true;
-        }
-
-        const carryObject = model.getValue(RoomObjectModelKey.FIGURE_CARRY_OBJECT) || 0;
+        const carryObject = model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) || 0;
 
         if(carryObject !== this._carryObject)
         {
@@ -299,7 +308,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const useObject = model.getValue(RoomObjectModelKey.FIGURE_USE_OBJECT) || 0;
+        const useObject = model.getValue(RoomObjectVariable.FIGURE_USE_OBJECT) || 0;
 
         if(useObject !== this._useObject)
         {
@@ -308,29 +317,11 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             needsUpdate = true;
         }
 
-        const headDirection = model.getValue(RoomObjectModelKey.HEAD_DIRECTION);
+        const headDirection = model.getValue(RoomObjectVariable.HEAD_DIRECTION);
 
         if(headDirection !== this._headDirection)
         {
             this._headDirection = headDirection;
-
-            needsUpdate = true;
-        }
-
-        const ownUser = model.getValue(RoomObjectModelKey.OWN_USER) > 0;
-
-        if(ownUser !== this._ownUser)
-        {
-            this._ownUser = ownUser;
-
-            let ownUserAddition = this.getAddition(AvatarVisualization.OWN_USER_ID);
-            
-            if(!ownUserAddition) ownUserAddition = this.addAddition(new OwnUserAddition(AvatarVisualization.OWN_USER_ID, this));
-
-            setTimeout(() =>
-            {
-                this.removeAddition(AvatarVisualization.OWN_USER_ID);
-            }, OwnUserAddition.ADDITION_TIMEOUT);
 
             needsUpdate = true;
         }
@@ -367,7 +358,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             if(idleAddition) this.removeAddition(AvatarVisualization.FLOATING_IDLE_Z_ID);
         }
 
-        const isTyping = model.getValue(RoomObjectModelKey.FIGURE_IS_TYPING) > 0;
+        const isTyping = model.getValue(RoomObjectVariable.FIGURE_IS_TYPING) > 0;
 
         let typingAddition = this.getAddition(AvatarVisualization.TYPING_BUBBLE_ID);
 
@@ -400,7 +391,36 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
             if(expressionAddition) this.removeAddition(AvatarVisualization.EXPRESSION_ID);
         }
 
-        if(this.updateFigure(model.getValue(RoomObjectModelKey.FIGURE))) needsUpdate = true;
+        const gender = model.getValue(RoomObjectVariable.GENDER);
+
+        if(gender !== this._gender)
+        {
+            this._gender = gender;
+
+            needsUpdate = true;
+        }
+
+        if(this.updateFigure(model.getValue(RoomObjectVariable.FIGURE))) needsUpdate = true;
+
+        let sign = model.getValue(RoomObjectVariable.FIGURE_SIGN);
+
+        if(sign === null) sign = -1;
+
+        if(this._sign !== sign)
+        {
+            this._sign = sign;
+
+            needsUpdate = true;
+        }
+
+        const ownUser = model.getValue(RoomObjectVariable.OWN_USER) > 0;
+
+        if(ownUser !== this._ownUser)
+        {
+            this._ownUser = ownUser;
+
+            needsUpdate = true;
+        }
 
         this.updateModelCounter = model.updateCounter;
 
@@ -437,7 +457,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         if(this._posture === 'lay') direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
         
-        this._avatarImage.figure.sortParts(this._posture, direction);
+        //this._avatarImage.figure.sortParts(this._posture, direction);
     }
 
     private createShadow(): void
@@ -477,247 +497,249 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     {
         if(!this._avatarImage) return false;
 
-        this._avatarImage.resetActions();
+        return false;
 
-        this._avatarImage.appendAction(AvatarAction.POSTURE, this._posture);
+        // this._avatarImage.resetActions();
 
-        if(this._gesture > 0) this._avatarImage.appendAction(AvatarAction.GESTURE, AvatarAction.getGesture(this._gesture));
-        if(this._dance > 0) this._avatarImage.appendAction(AvatarAction.DANCE, this._dance);
-        if(this._sign > -1) this._avatarImage.appendAction(AvatarAction.SIGN, this._sign);
-        if(this._carryObject > 0) this._avatarImage.appendAction(AvatarAction.CARRY_OBJECT, this._carryObject);
-        if(this._useObject > 0) this._avatarImage.appendAction(AvatarAction.USE_OBJECT, this._useObject);
-        if(this._talk) this._avatarImage.appendAction(AvatarAction.TALK);
-        if(this._sleep || this._blink) this._avatarImage.appendAction(AvatarAction.SLEEP);
+        // this._avatarImage.appendAction(AvatarAction.POSTURE, this._posture);
 
-        if(this._expression > 0)
-        {
-            const expression = AvatarAction.getExpression(this._expression);
+        // if(this._gesture > 0) this._avatarImage.appendAction(AvatarAction.GESTURE, AvatarAction.getGesture(this._gesture));
+        // if(this._dance > 0) this._avatarImage.appendAction(AvatarAction.DANCE, this._dance);
+        // if(this._sign > -1) this._avatarImage.appendAction(AvatarAction.SIGN, this._sign);
+        // if(this._carryObject > 0) this._avatarImage.appendAction(AvatarAction.CARRY_OBJECT, this._carryObject);
+        // if(this._useObject > 0) this._avatarImage.appendAction(AvatarAction.USE_OBJECT, this._useObject);
+        // if(this._talk) this._avatarImage.appendAction(AvatarAction.TALK);
+        // if(this._sleep || this._blink) this._avatarImage.appendAction(AvatarAction.SLEEP);
 
-            if(expression !== '')
-            {
-                switch(expression)
-                {
-                    case AvatarAction.DANCE:
-                        this._avatarImage.appendAction(AvatarAction.DANCE, 2);
-                        break;
-                    default:
-                        this._avatarImage.appendAction(expression);
-                        break;
-                }
-            }
-        }
+        // if(this._expression > 0)
+        // {
+        //     const expression = AvatarAction.getExpression(this._expression);
 
-        if(this._effect > 0) this._avatarImage.appendAction(AvatarAction.EFFECT, this._effect);
+        //     if(expression !== '')
+        //     {
+        //         switch(expression)
+        //         {
+        //             case AvatarAction.DANCE:
+        //                 this._avatarImage.appendAction(AvatarAction.DANCE, 2);
+        //                 break;
+        //             default:
+        //                 this._avatarImage.appendAction(expression);
+        //                 break;
+        //         }
+        //     }
+        // }
 
-        return this._avatarImage.updateActions();
+        // if(this._effect > 0) this._avatarImage.appendAction(AvatarAction.EFFECT, this._effect);
+
+        // return this._avatarImage.updateActions();
     }
 
-    public updateSprites(): void
-    {
-        //this.hideSprites();
+    // public updateSprites(): void
+    // {
+    //     //this.hideSprites();
 
-        const currentFrameCount = 0;
+    //     const currentFrameCount = 0;
         
-        if(!this._avatarImage) return;
+    //     if(!this._avatarImage) return;
 
-        const parts = this._avatarImage.figure.figureParts;
+    //     const parts = this._avatarImage.figure.figureParts;
 
-        if(!parts) return;
+    //     if(!parts) return;
 
-        const totalParts = parts.length;
+    //     const totalParts = parts.length;
 
-        if(!totalParts) return;
+    //     if(!totalParts) return;
 
-        const actions = this._avatarImage.validatedActions;
+    //     const actions = this._avatarImage.validatedActions;
 
-        if(!actions) return;
+    //     if(!actions) return;
 
-        const totalActions = actions.length;
+    //     const totalActions = actions.length;
 
-        if(!totalActions) return;
+    //     if(!totalActions) return;
 
-        for(let i = 0; i < totalParts; i++)
-        {
-            const part = parts[i];
+    //     for(let i = 0; i < totalParts; i++)
+    //     {
+    //         const part = parts[i];
 
-            if(!part) continue;
+    //         if(!part) continue;
 
-            let partId              = part.id;
-            let bodyPart            = part.type;
-            let direction           = AvatarBodyPart.HEAD_PARTS.indexOf(bodyPart) >= 0 ? this._headDirection : this._direction;
-            let assetPartDefinition = RoomObjectModelKey.STD;
-            let flipH               = false;
-            let additionalX         = 0;
-            let additionalY         = 0;
-            let frameNumber         = 0;
+    //         let partId              = part.id;
+    //         let bodyPart            = part.type;
+    //         let direction           = AvatarBodyPart.HEAD_PARTS.indexOf(bodyPart) >= 0 ? this._headDirection : this._direction;
+    //         let assetPartDefinition = RoomObjectModelKey.STD;
+    //         let flipH               = false;
+    //         let additionalX         = 0;
+    //         let additionalY         = 0;
+    //         let frameNumber         = 0;
 
-            if(direction === Direction.NORTH_WEST && (bodyPart === AvatarBodyPart.FACE || bodyPart === AvatarBodyPart.EYES)) continue;
+    //         if(direction === Direction.NORTH_WEST && (bodyPart === AvatarBodyPart.FACE || bodyPart === AvatarBodyPart.EYES)) continue;
 
-            const partDefinition = this._avatarImage.structure.getPartDefinition(bodyPart);
+    //         const partDefinition = this._avatarImage.structure.getPartDefinition(bodyPart);
 
-            if(!partDefinition) continue;
+    //         if(!partDefinition) continue;
 
-            let animation: AnimationAction = null;
+    //         let animation: AnimationAction = null;
 
-            for(let j = totalActions - 1; j >= 0; j--)
-            {
-                const action = actions[j];
+    //         for(let j = totalActions - 1; j >= 0; j--)
+    //         {
+    //             const action = actions[j];
 
-                if(!action) continue;
+    //             if(!action) continue;
 
-                const activePartSet = this._avatarImage.structure.getActivePartSet(action.definition.activePartSet);
+    //             const activePartSet = this._avatarImage.structure.getActivePartSet(action.definition.activePartSet);
 
-                if(!activePartSet) continue;
+    //             if(!activePartSet) continue;
 
-                if(activePartSet.parts.indexOf(bodyPart) === -1) continue;
+    //             if(activePartSet.parts.indexOf(bodyPart) === -1) continue;
 
-                if(action.definition.assetPartDefinition) assetPartDefinition = action.definition.assetPartDefinition;
+    //             if(action.definition.assetPartDefinition) assetPartDefinition = action.definition.assetPartDefinition;
 
-                if(action.definition.preventHeadTurn && bodyPart === AvatarBodyPart.HEAD) direction = this._direction;
+    //             if(action.definition.preventHeadTurn && bodyPart === AvatarBodyPart.HEAD) direction = this._direction;
 
-                animation = this._avatarImage.structure.getAnimation(action.id);
+    //             animation = this._avatarImage.structure.getAnimation(action.id);
 
-                if(animation)
-                {
-                    const offsets = animation.getAnimationOffset(currentFrameCount, direction);
+    //             if(animation)
+    //             {
+    //                 const offsets = animation.getAnimationOffset(currentFrameCount, direction);
 
-                    if(offsets)
-                    {
-                        for(let offset in offsets)
-                        {
-                            if(!offset) continue;
+    //                 if(offsets)
+    //                 {
+    //                     for(let offset in offsets)
+    //                     {
+    //                         if(!offset) continue;
 
-                            const point = offsets[offset];
+    //                         const point = offsets[offset];
 
-                            if(!point) continue;
+    //                         if(!point) continue;
 
-                            let partMatch: string[] = [];
+    //                         let partMatch: string[] = [];
 
-                            if(offset === 'leftarm')         partMatch = AvatarBodyPart.LEFT_ARM_PARTS;
-                            else if(offset === 'rightarm')   partMatch = AvatarBodyPart.RIGHT_ARM_PARTS;
-                            else if(offset === 'torso')      partMatch = AvatarBodyPart.TORSO_PARTS;
-                            else if(offset === 'head')       partMatch = AvatarBodyPart.HEAD_PARTS;
+    //                         if(offset === 'leftarm')         partMatch = AvatarBodyPart.LEFT_ARM_PARTS;
+    //                         else if(offset === 'rightarm')   partMatch = AvatarBodyPart.RIGHT_ARM_PARTS;
+    //                         else if(offset === 'torso')      partMatch = AvatarBodyPart.TORSO_PARTS;
+    //                         else if(offset === 'head')       partMatch = AvatarBodyPart.HEAD_PARTS;
 
-                            if(!partMatch) continue;
+    //                         if(!partMatch) continue;
 
-                            if(partMatch.indexOf(bodyPart) === -1) continue;
+    //                         if(partMatch.indexOf(bodyPart) === -1) continue;
 
-                            additionalX += point.x;
-                            additionalY += point.y;
+    //                         additionalX += point.x;
+    //                         additionalY += point.y;
 
-                            break;
-                        }
-                    }
+    //                         break;
+    //                     }
+    //                 }
 
-                    const animationPart = animation.getPartForType(bodyPart);
+    //                 const animationPart = animation.getPartForType(bodyPart);
 
-                    if(animationPart)
-                    {
-                        const animationFrame = animationPart.getFrame(currentFrameCount);
+    //                 if(animationPart)
+    //                 {
+    //                     const animationFrame = animationPart.getFrame(currentFrameCount);
                         
-                        if(animationFrame)
-                        {
-                            this._needsUpdate = true;
+    //                     if(animationFrame)
+    //                     {
+    //                         this._needsUpdate = true;
                             
-                            if(animationFrame.assetPartDefinition) assetPartDefinition = animationFrame.assetPartDefinition;
+    //                         if(animationFrame.assetPartDefinition) assetPartDefinition = animationFrame.assetPartDefinition;
 
-                            frameNumber = animationFrame.number;
-                        }
-                    }
-                }
+    //                         frameNumber = animationFrame.number;
+    //                     }
+    //                 }
+    //             }
 
-                if(action.actionType === AvatarAction.POSTURE_LAY) direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
+    //             if(action.actionType === AvatarAction.POSTURE_LAY) direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
 
-                break;
-            }
+    //             break;
+    //         }
 
-            const isFlipped = direction >= Direction.SOUTH && direction <= Direction.WEST;
+    //         const isFlipped = direction >= Direction.SOUTH && direction <= Direction.WEST;
 
-            if(isFlipped)
-            {
-                if((assetPartDefinition === 'wav' && (bodyPart === AvatarBodyPart.LEFT_HAND || bodyPart === AvatarBodyPart.LEFT_SLEEVE || bodyPart === AvatarBodyPart.LEFT_COAT_SLEEVE)) || (assetPartDefinition === 'drk' && (bodyPart === AvatarBodyPart.RIGHT_HAND || bodyPart === AvatarBodyPart.RIGHT_SLEEVE || bodyPart === AvatarBodyPart.RIGHT_COAT_SLEEVE)) || (assetPartDefinition === 'blw' && bodyPart === AvatarBodyPart.RIGHT_HAND) || ((assetPartDefinition === 'sig' || assetPartDefinition === 'respect') && bodyPart === AvatarBodyPart.LEFT_HAND) || bodyPart === AvatarBodyPart.RIGHT_HAND_ITEM || bodyPart === AvatarBodyPart.LEFT_HAND_ITEM || bodyPart === AvatarBodyPart.CHEST_PRINT) flipH = true;
+    //         if(isFlipped)
+    //         {
+    //             if((assetPartDefinition === 'wav' && (bodyPart === AvatarBodyPart.LEFT_HAND || bodyPart === AvatarBodyPart.LEFT_SLEEVE || bodyPart === AvatarBodyPart.LEFT_COAT_SLEEVE)) || (assetPartDefinition === 'drk' && (bodyPart === AvatarBodyPart.RIGHT_HAND || bodyPart === AvatarBodyPart.RIGHT_SLEEVE || bodyPart === AvatarBodyPart.RIGHT_COAT_SLEEVE)) || (assetPartDefinition === 'blw' && bodyPart === AvatarBodyPart.RIGHT_HAND) || ((assetPartDefinition === 'sig' || assetPartDefinition === 'respect') && bodyPart === AvatarBodyPart.LEFT_HAND) || bodyPart === AvatarBodyPart.RIGHT_HAND_ITEM || bodyPart === AvatarBodyPart.LEFT_HAND_ITEM || bodyPart === AvatarBodyPart.CHEST_PRINT) flipH = true;
                 
-                else
-                {
-                    if(direction === Direction.SOUTH) direction = Direction.EAST;
+    //             else
+    //             {
+    //                 if(direction === Direction.SOUTH) direction = Direction.EAST;
 
-                    else if(direction === Direction.SOUTH_WEST) direction = Direction.NORTH_EAST;
+    //                 else if(direction === Direction.SOUTH_WEST) direction = Direction.NORTH_EAST;
                     
-                    else if(direction === Direction.WEST) direction = Direction.NORTH;
+    //                 else if(direction === Direction.WEST) direction = Direction.NORTH;
 
-                    if(partDefinition.flippedSetType) bodyPart = partDefinition.flippedSetType;
-                }
-            }
+    //                 if(partDefinition.flippedSetType) bodyPart = partDefinition.flippedSetType;
+    //             }
+    //         }
 
-            let library = part.library;
+    //         let library = part.library;
 
-            const asset: any = null;
-            //const asset = NitroInstance.instance.core.asset.getAsset(library);
+    //         const asset: any = null;
+    //         //const asset = NitroInstance.instance.core.asset.getAsset(library);
 
-            if(!asset) continue;
+    //         if(!asset) continue;
 
-            let assetName = this.getSpriteAssetName(library, assetPartDefinition, bodyPart, partId, direction, frameNumber);
-            let assetData = asset.assets[assetName];
+    //         let assetName = this.getSpriteAssetName(library, assetPartDefinition, bodyPart, partId, direction, frameNumber);
+    //         let assetData = asset.assets[assetName];
 
-            if(!assetData)
-            {
-                assetName = this.getSpriteAssetName(library, 'std', bodyPart, partId, direction, frameNumber);
-                assetData = asset.assets[assetName];
+    //         if(!assetData)
+    //         {
+    //             assetName = this.getSpriteAssetName(library, 'std', bodyPart, partId, direction, frameNumber);
+    //             assetData = asset.assets[assetName];
 
-                if(!assetData) continue;
-            }
+    //             if(!assetData) continue;
+    //         }
 
-            // let sprite = this.getSprite(assetName);
+    //         // let sprite = this.getSprite(assetName);
 
-            // if(!sprite)
-            // {
-            //     let sourceName = assetName;
+    //         // if(!sprite)
+    //         // {
+    //         //     let sourceName = assetName;
 
-            //     if(assetData.source) sourceName = library + '_' + assetData.source;
+    //         //     if(assetData.source) sourceName = library + '_' + assetData.source;
     
-            //     if(!sourceName) continue;
+    //         //     if(!sourceName) continue;
     
-            //     sprite = this.createAndAddSprite(assetName, sourceName + '.png');
+    //         //     sprite = this.createAndAddSprite(assetName, sourceName + '.png');
     
-            //     if(!sprite) continue;
+    //         //     if(!sprite) continue;
 
-            //     if(bodyPart === AvatarBodyPart.EYES)
-            //     {
-            //         sprite.tint = 0xFFFFFF;
-            //     }
-            //     else
-            //     {
-            //         const color = this._avatarImage.figure.getColorForPart(partId, bodyPart);
+    //         //     if(bodyPart === AvatarBodyPart.EYES)
+    //         //     {
+    //         //         sprite.tint = 0xFFFFFF;
+    //         //     }
+    //         //     else
+    //         //     {
+    //         //         const color = this._avatarImage.figure.getColorForPart(partId, bodyPart);
                 
-            //         if(color) sprite.tint = color;
-            //     }
-            // }
+    //         //         if(color) sprite.tint = color;
+    //         //     }
+    //         // }
             
-            // sprite.offsetX            = -assetData.x + additionalX;
-            // sprite.offsetY            = -assetData.y + additionalY;
-            // sprite.visible      = true;
-            // sprite.relativeDepth       = i;
-            // sprite.ignoreMouse  = false;
+    //         // sprite.offsetX            = -assetData.x + additionalX;
+    //         // sprite.offsetY            = -assetData.y + additionalY;
+    //         // sprite.visible      = true;
+    //         // sprite.relativeDepth       = i;
+    //         // sprite.ignoreMouse  = false;
 
-            // if(!this._isAvatarReady)
-            // {
-            //     sprite.alpha = 0.5;
-            // }
-            // else sprite.alpha = 1;
+    //         // if(!this._isAvatarReady)
+    //         // {
+    //         //     sprite.alpha = 0.5;
+    //         // }
+    //         // else sprite.alpha = 1;
 
-            // if(!(isFlipped && flipH) && (isFlipped || flipH))
-            // {
-            //     sprite.scale.x  = -1;
-            //     sprite.offsetX *= -1;
+    //         // if(!(isFlipped && flipH) && (isFlipped || flipH))
+    //         // {
+    //         //     sprite.scale.x  = -1;
+    //         //     sprite.offsetX *= -1;
 
-            //     //sprite.x += NitroConfiguration.TILE_REAL_WIDTH + 3;
-            // }
-            // else
-            // {
-            //     sprite.scale.x = 1;
-            // }
-        }
-    }
+    //         //     //sprite.x += NitroConfiguration.TILE_REAL_WIDTH + 3;
+    //         // }
+    //         // else
+    //         // {
+    //         //     sprite.scale.x = 1;
+    //         // }
+    //     }
+    // }
 
     protected getSpriteAssetName(library: string, action: string, bodyPart: string, partId: number = 1, direction: number = 0, frame: number = 0): string
     {
@@ -730,18 +752,32 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
 
         this._figure = figure;
 
-        this.resetFigure();
+        this.clearFigure();
+
+        NitroLogger.log('Figure Updated')
+
+        // destroy sprites & reset
 
         return true;
     }
 
-    private resetFigure(): void
+    public resetFigure(figure: string): void
     {
-        if(!this._avatarImage) return;
+        this.clearFigure();
+
+        NitroLogger.log('Avatar Reset');
+    }
+
+    private clearFigure(): void
+    {
+        if(this._avatarImage)
+        {
+            this._avatarImage.dispose();
+
+            this._avatarImage = null;
+        }
 
         //this.removeSprites();
-
-        this._avatarImage.dispose();
 
         this._avatarImage   = null;
         this._shadow        = null;
@@ -789,5 +825,10 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization
     public get posture(): string
     {
         return this._posture;
+    }
+
+    public get isDisposed(): boolean
+    {
+        return this._isDisposed;
     }
 }

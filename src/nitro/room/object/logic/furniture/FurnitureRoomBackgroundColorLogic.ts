@@ -2,13 +2,13 @@ import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObject
 import { RoomObjectHSLColorEnableEvent } from '../../../events/RoomObjectHSLColorEnableEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { NumberDataType } from '../../data/type/NumberDataType';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_BACKGROUND_COLOR;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_BACKGROUND_COLOR;
 
     private _roomColorUpdated: boolean;
 
@@ -32,7 +32,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
         {
             if(this.eventDispatcher && this.object)
             {
-                const realRoomObject = this.object.model.getValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT);
+                const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
                 if(realRoomObject === 1)
                 {
@@ -54,7 +54,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
         {
             message.data.writeRoomObjectModel(this.object.model);
 
-            const realRoomObject = this.object.model.getValue(RoomObjectModelKey.FURNITURE_REAL_ROOM_OBJECT);
+            const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
             if(realRoomObject === 1) this.processColorUpdate();
         }
@@ -75,9 +75,9 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 
         if((state > -1) && (hue > -1) && (saturation > -1) && (lightness > -1))
         {
-            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_HUE, hue);
-            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_SATURATION, saturation);
-            this.object.model.setValue(RoomObjectModelKey.FURNITURE_ROOM_BACKGROUND_COLOR_LIGHTNESS, lightness);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_ROOM_BACKGROUND_COLOR_HUE, hue);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_ROOM_BACKGROUND_COLOR_SATURATION, saturation);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_ROOM_BACKGROUND_COLOR_LIGHTNESS, lightness);
 
             this.object.setState(state);
 

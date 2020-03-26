@@ -210,7 +210,11 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
             if(!manager) continue;
 
-            for(let object of manager.objects.values())
+            const objects = manager.objects;
+
+            if(!objects.size) continue;
+
+            for(let object of objects.values())
             {
                 if(!object) continue;
 

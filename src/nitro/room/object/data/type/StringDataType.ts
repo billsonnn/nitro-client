@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
 
@@ -36,15 +36,15 @@ export class StringDataType extends ObjectDataBase
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._data = model.getValue(RoomObjectModelKey.FURNITURE_DATA);
+        this._data = model.getValue(RoomObjectVariable.FURNITURE_DATA);
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void
     {
         super.writeRoomObjectModel(model);
 
-        model.setValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT, StringDataType.FORMAT_KEY);
-        model.setValue(RoomObjectModelKey.FURNITURE_DATA, this._data);
+        model.setValue(RoomObjectVariable.FURNITURE_DATA_FORMAT, StringDataType.FORMAT_KEY);
+        model.setValue(RoomObjectVariable.FURNITURE_DATA, this._data);
     }
 
     public getLegacyString(): string

@@ -58,7 +58,7 @@ export class GraphicAssetCollection
 
             if(!texture) continue;
 
-            if(!this.addAsset(name, source, texture, -(asset.x), -(asset.y), asset.flipH, false)) return;
+            if(!this.addAsset(name, source, texture, -(asset.x || 0), -(asset.y || 0), asset.flipH || false, false)) return;
         }
     }
 

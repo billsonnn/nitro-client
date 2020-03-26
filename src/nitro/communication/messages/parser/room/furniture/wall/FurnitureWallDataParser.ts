@@ -89,9 +89,6 @@ export class FurnitureWallDataParser
                             this._localX    = localX;
                             this._localY    = localY;
                             this._direction = direction;
-
-                            
-                            console.log(`width: ${ width } height: ${ height } localX: ${ localX }, localY: ${ localY }, dir: ${ direction } ${ this._location }`);
                         }
                     }
                 }

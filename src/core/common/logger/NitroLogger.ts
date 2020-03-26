@@ -30,17 +30,17 @@ export class NitroLogger implements INitroLogger
     {
         this.printMessage(message);
     }
-
-    public static printMessage(message: string, name: string = 'Nitro'): void
-    {
-        console.log(`[Nitro] ${ moment().format('M/D/YY h:mm:ss A') } [${ name }] ${ message } ${ this.getTimestamp() }`);
-    }
     
     public printMessage(message: any): void
     {
         if(!this._print) return;
 
-        NitroLogger.printMessage(message, this._name);
+        NitroLogger.log(message, this._name);
+    }
+
+    public static log(message: string, name: string = 'Nitro'): void
+    {
+        console.log(`[Nitro] ${ moment().format('M/D/YY h:mm:ss A') } [${ name }] ${ message } ${ this.getTimestamp() }`);
     }
 
     public static getTimestamp(): string

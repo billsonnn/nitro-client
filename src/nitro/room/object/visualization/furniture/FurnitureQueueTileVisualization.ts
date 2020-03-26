@@ -1,9 +1,9 @@
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_QUEUE_TILE;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_QUEUE_TILE;
 
     public static ROLL_ANIMATION_STATE: number = 2;
     public static ROLL_FINISHED_STATE: number  = 0;

@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../room/object/IRoomObjectModel';
-import { RoomObjectModelKey } from '../RoomObjectModelKey';
+import { RoomObjectVariable } from '../RoomObjectVariable';
 import { IObjectData } from './IObjectData';
 import { ObjectDataFlags } from './ObjectDataFlags';
 
@@ -28,16 +28,16 @@ export class ObjectDataBase implements IObjectData
 
     public initializeFromRoomObjectModel(model: IRoomObjectModel): void
     {
-        this._uniqueNumber  = parseInt(model.getValue(RoomObjectModelKey.FURNITURE_UNIQUE_SERIAL_NUMBER));
-        this._uniqueSeries  = parseInt(model.getValue(RoomObjectModelKey.FURNITURE_UNIQUE_EDITION_SIZE));
+        this._uniqueNumber  = parseInt(model.getValue(RoomObjectVariable.FURNITURE_UNIQUE_SERIAL_NUMBER));
+        this._uniqueSeries  = parseInt(model.getValue(RoomObjectVariable.FURNITURE_UNIQUE_EDITION_SIZE));
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void
     {
         if(!model) return;
 
-        model.setValue(RoomObjectModelKey.FURNITURE_UNIQUE_SERIAL_NUMBER, this._uniqueNumber);
-        model.setValue(RoomObjectModelKey.FURNITURE_UNIQUE_EDITION_SIZE, this._uniqueSeries);
+        model.setValue(RoomObjectVariable.FURNITURE_UNIQUE_SERIAL_NUMBER, this._uniqueNumber);
+        model.setValue(RoomObjectVariable.FURNITURE_UNIQUE_EDITION_SIZE, this._uniqueSeries);
     }
 
     public getLegacyString(): string

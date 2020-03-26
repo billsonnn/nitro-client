@@ -19,6 +19,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _flipH: boolean;
     private _flipV: boolean;
     private _direction: number;
+    private _matrix: PIXI.Matrix;
 
     private _alpha: number;
     private _blendMode: number;
@@ -47,6 +48,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._flipH         = false;
         this._flipV         = false;
         this._direction     = 0;
+        this._matrix        = null;
 
         this._alpha         = 255;
         this._blendMode     = PIXI.BLEND_MODES.NORMAL;
@@ -71,6 +73,11 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public get id(): number
     {
         return this._id;
+    }
+
+    public set id(id: number)
+    {
+        this._id = id;
     }
 
     public get name(): string
@@ -201,6 +208,18 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public set direction(direction: number)
     {
         this._direction = direction;
+    }
+
+    public get matrix(): PIXI.Matrix
+    {
+        return this._matrix;
+    }
+
+    public set matrix(matrix: PIXI.Matrix)
+    {
+        this._matrix = matrix;
+
+        this._updateCounter++;
     }
 
     public get alpha(): number

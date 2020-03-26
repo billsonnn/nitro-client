@@ -142,7 +142,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             visualizationInstance.asset = asset;
 
-            const visualizationData = this._visualizationFactory.getVisualizationData(assetName, visualization, asset.data);
+            const visualizationData = this._visualizationFactory.getVisualizationData(assetName, visualization, ((asset && asset.data) || null));
 
             if(!visualizationData || !visualizationInstance.initialize(visualizationData))
             {
@@ -160,9 +160,9 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             object.setLogic(logicInstance);
 
-            if(logicInstance && asset && asset.data)
+            if(logicInstance)
             {
-                logicInstance.initialize(asset.data);
+                logicInstance.initialize((asset && asset.data) || null);
             }
         }
 

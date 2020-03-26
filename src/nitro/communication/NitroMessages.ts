@@ -30,6 +30,7 @@ import { RoomHeightMapEvent } from './messages/incoming/room/mapping/RoomHeightM
 import { RoomHeightMapUpdateEvent } from './messages/incoming/room/mapping/RoomHeightMapUpdateEvent';
 import { RoomModelEvent } from './messages/incoming/room/mapping/RoomModelEvent';
 import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNameEvent';
+import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { RoomRollingEvent } from './messages/incoming/room/RoomRollingEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
@@ -150,6 +151,7 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_HEIGHT_MAP_UPDATE, RoomHeightMapUpdateEvent);
             this._events.set(IncomingHeader.ROOM_MODEL, RoomModelEvent);
             this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
+            this._events.set(IncomingHeader.ROOM_PAINT, RoomPaintEvent);
             this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
 
             // UNIT

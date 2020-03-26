@@ -1,10 +1,10 @@
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_GUILD_CUSTOMIZED;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_GUILD_CUSTOMIZED;
 
     public static DEFAULT_COLOR_1: number    = 0xEEEEEE;
     public static DEFAULT_COLOR_2: number    = 0x4B4B4B;
@@ -26,8 +26,8 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
 
         if(!flag) return false;
 
-        this._color1 = this.object.model.getValue(RoomObjectModelKey.FURNITURE_GUILD_CUSTOMIZED_COLOR_1) as number;
-        this._color2 = this.object.model.getValue(RoomObjectModelKey.FURNITURE_GUILD_CUSTOMIZED_COLOR_2) as number;
+        this._color1 = this.object.model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_1) as number;
+        this._color2 = this.object.model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_2) as number;
 
         return flag;
     }

@@ -1,10 +1,10 @@
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { DirectionalOffsetData } from '../data/DirectionalOffsetData';
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
 import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
 
 export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_BG;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_BG;
 
     private _imageOffset: DirectionalOffsetData;
 

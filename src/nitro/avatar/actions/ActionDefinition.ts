@@ -1,5 +1,5 @@
 import { ActionType } from './ActionType';
-import { IActionDefinition } from './interfaces/IActionDefinition';
+import { IActionDefinition } from './IActionDefinition';
 
 export class ActionDefinition implements IActionDefinition
 {
@@ -16,104 +16,140 @@ export class ActionDefinition implements IActionDefinition
     private _startFromFrameZero: boolean;
     private _prevents: string[];
     private _preventHeadTurn: boolean;
-    private _types: { [index: string]: ActionType };
-    private _params: { [index: string]: string };
+    private _types: Map<number, ActionType>;
+    private _params: Map<string, string>;
     private _defaultParameterValue: string;
+    private _canvasOffsets: Map<string, Map<number, []>>;
 
     constructor(data: any)
     {
-        if(!data) throw new Error('invalid_data');
-        
-        this._id                    = data['$'].id;
-        this._state                 = data['$'].state;
-        this._precedence            = parseInt(data['$'].precedence);
-        this._activePartSet         = data['$'].activepartset;
-        this._assetPartDefinition   = data['$'].assetpartdefinition;
-        this._lay                   = data['$'].lay;
-        this._geometryType          = data['$'].geometrytype;
-        this._isMain                = parseInt(data['$'].main) === 1;
-        this._isDefault             = parseInt(data['$'].isdefault) === 1;
-        this._isAnimation           = parseInt(data['$'].animation) === 1;
-        this._startFromFrameZero    = data['$'].startfromframezero === 'true';
-        this._prevents              = [];
-        this._preventHeadTurn       = data['$'].preventheadturn === 'true';
-        this._types                 = {};
-        this._params                = {};
+        this._id                    = data.id;
+        this._state                 = data.state;
+        this._precedence            = data.precedence;
+        this._activePartSet         = data.activePartSet;
+        this._assetPartDefinition   = data.assetPartDefinition;
+        this._lay                   = data.lay;
+        this._geometryType          = data.geometryType;
+        this._isMain                = data.main || false;
+        this._isDefault             = data.isDefault || false;
+        this._isAnimation           = data.animation || false;
+        this._startFromFrameZero    = data.startFromFrameZero || false;
+        this._prevents              = data.prevents || [];
+        this._preventHeadTurn       = data.preventHeadTurn || false;
+        this._types                 = new Map();
+        this._params                = new Map();
         this._defaultParameterValue = '';
+        this._canvasOffsets         = null;
 
-        const prevents = data['$'].prevents;
-
-        if(prevents) this._prevents = prevents.split(',');
-
-        const params = data.param;
-
-        if(params)
+        if(data.params && (data.params.length > 0))
         {
-            for(let param of params)
+            for(let param of data.params)
             {
-                const paramId       = param['$'].id;
-                const paramValue    = param['$'].value;
+                if(!param) continue;
 
-                if(paramId === 'default') this._defaultParameterValue = paramValue;
-                else this._params[paramId] = paramValue;
+                if(param.id === 'default') this._defaultParameterValue = param.value;
+                else this._params.set(param.id, param.value);
             }
         }
 
-        const types = data.type;
-
-        if(types)
+        if(data.types && (data.types.length > 0))
         {
-            for(let type of types)
+            for(let type of data.types)
             {
-                const typeId = type['$'].id;
-                this._types[typeId] = new ActionType(type);
+                if(!type) continue;
+
+                const action = new ActionType(type);
+
+                this._types.set(action.id, action);
             }
         }
+    }
+
+    public _Str_772(k: string, _arg_2: number, _arg_3: []): void
+    {
+        if(!this._canvasOffsets) this._canvasOffsets = new Map();
+
+        let existing = this._canvasOffsets.get(k);
+
+        if(!existing)
+        {
+            existing = new Map();
+
+            this._canvasOffsets.set(k, existing);
+        }
+
+        existing.set(_arg_2, _arg_3);
+    }
+
+    public _Str_805(k: string, _arg_2: number): []
+    {
+        if(!this._canvasOffsets) return null;
+
+        const existing = this._canvasOffsets.get(k);
+
+        if(!existing) return null;
+
+        return existing.get(_arg_2);
     }
 
     public getType(id: string): ActionType
     {
         if(!id) return null;
 
-        const type = this._types[id];
+        const existing = this._types.get(parseInt(id));
 
-        if(!type) return null;
+        if(!existing) return null;
 
-        return type;
+        return existing;
     }
 
-    public getParameter(id: string): string
+    public _Str_1350(id: string): string
     {
         if(!id) return '';
 
-        const existing = this._params[id];
+        const existing = this._params.get(id);
 
         if(!existing) return this._defaultParameterValue;
 
         return existing;
     }
 
-    public getPreventionWithType(type: string = null): string[]
+    public _Str_733(type: string): string[]
     {
-        return this._prevents.concat(this.getTypePrevention(type));
+        return this._prevents.concat(this._Str_1889(type));
     }
 
-    private getTypePrevention(type: string = null): string[]
+    private _Str_1889(type: string): string[]
     {
         if(!type) return [];
 
-        const existingType = this._types[type] as ActionType;
+        const existing = this._types.get(parseInt(type));
 
-        if(!existingType) return [];
+        if(!existing) return [];
 
-        return existingType.prevents;
+        return existing.prevents;
     }
 
-    public getValueForParam(id: number): string
+    public _Str_715(k: string): boolean
     {
-        const existingParam = this._params[id];
+        if(!k) return this._preventHeadTurn;
 
-        return existingParam ? existingParam : null;
+        const type = this.getType(k);
+
+        if(!type) return this._preventHeadTurn;
+
+        return type.preventHeadTurn;
+    }
+
+    public _Str_801(k: string): boolean
+    {
+        if(!k) return true;
+
+        const type = this.getType(k);
+
+        if(!type) return true;
+
+        return type.isAnimated;
     }
 
     public get id(): string
@@ -136,7 +172,7 @@ export class ActionDefinition implements IActionDefinition
         return this._activePartSet;
     }
 
-    public get assetPartDefinition(): string
+    public get _Str_778(): string
     {
         return this._assetPartDefinition;
     }
@@ -146,27 +182,27 @@ export class ActionDefinition implements IActionDefinition
         return this._lay;
     }
 
-    public get geometryType(): string
+    public get _Str_868(): string
     {
         return this._geometryType;
     }
 
-    public get isMain(): boolean
+    public get _Str_779(): boolean
     {
         return this._isMain;
     }
 
-    public get isDefault(): boolean
+    public get _Str_804(): boolean
     {
         return this._isDefault;
     }
 
-    public get isAnimation(): boolean
+    public get _Str_861(): boolean
     {
         return this._isAnimation;
     }
 
-    public get startFromFrameZero(): boolean
+    public get _Str_812(): boolean
     {
         return this._startFromFrameZero;
     }
@@ -181,7 +217,7 @@ export class ActionDefinition implements IActionDefinition
         return this._preventHeadTurn;
     }
 
-    public get params(): { [index: string]: string }
+    public get params(): Map<string, string>
     {
         return this._params;
     }

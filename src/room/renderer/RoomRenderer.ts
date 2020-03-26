@@ -87,11 +87,9 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         }
     }
 
-    public render(): void
+    public render(time: number): void
     {
         if(!this._canvases || !this._canvases.size) return;
-
-        const time = PIXI.Ticker.shared.lastTime;
 
         for(let canvas of this._canvases.values()) canvas && canvas.render(time);
     }
@@ -100,7 +98,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
     {
         if(!this._canvases || !this._canvases.size) return;
 
-        this.render();
+        this.render(time);
         
         for(let canvas of this._canvases.values()) canvas && canvas.update();
     }

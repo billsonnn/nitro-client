@@ -1,5 +1,5 @@
-import { IPalette } from './interfaces/IPalette';
-import { IPartColor } from './interfaces/IPartColor';
+import { IPalette } from './IPalette';
+import { IPartColor } from './IPartColor';
 import { PartColor } from './PartColor';
 
 export class Palette implements IPalette

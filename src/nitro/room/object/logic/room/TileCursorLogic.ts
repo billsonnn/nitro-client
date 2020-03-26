@@ -1,7 +1,7 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectLogicBase } from '../../../../../room/object/logic/RoomObjectLogicBase';
 import { ObjectTileCursorUpdateMessage } from '../../../messages/ObjectTileCursorUpdateMessage';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 
 export class TileCursorLogic extends RoomObjectLogicBase
 {
@@ -24,7 +24,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
     {
         if(!this.object) return;
 
-        this.object.model.setValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER, 1);
+        this.object.model.setValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER, 1);
 
         this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE);
     }
@@ -53,7 +53,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
                 }
                 else
                 {
-                    this.object.model.setValue(RoomObjectModelKey.TILE_CURSOR_HEIGHT, message.height);
+                    this.object.model.setValue(RoomObjectVariable.TILE_CURSOR_HEIGHT, message.height);
 
                     this.object.setState((message.height > 0.8) ? TileCursorLogic.CURSOR_HEIGHT_STATE : TileCursorLogic.CURSOR_VISIBLE_STATE);
                 }

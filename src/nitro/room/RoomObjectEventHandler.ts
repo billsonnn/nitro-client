@@ -11,14 +11,16 @@ import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
 import { FurnitureDiceActivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
 import { FurnitureMultiStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent';
+import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
 import { RoomObjectHSLColorEnabledEvent } from './events/RoomObjectHSLColorEnabledEvent';
 import { RoomObjectHSLColorEnableEvent } from './events/RoomObjectHSLColorEnableEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { IRoomEngineServices } from './IRoomEngineServices';
 import { ObjectTileCursorUpdateMessage } from './messages/ObjectTileCursorUpdateMessage';
-import { ObjectOperationType } from './object/logic/ObjectOperationType';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
+import { RoomObjectOperationType } from './object/RoomObjectOperationType';
 
 export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMouseListener
 {
@@ -104,6 +106,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectStateChangedEvent.STATE_RANDOM:
                 this.onStateChangeRandomEvent(event as RoomObjectStateChangedEvent, roomId);
                 return;
+            case RoomObjectDimmerStateUpdateEvent.DIMMER_STATE:
+                this.onRoomObjectDimmerStateUpdateEvent(event as RoomObjectDimmerStateUpdateEvent, roomId);
+                return;
             case RoomObjectFurnitureActionEvent.DICE_ACTIVATE:
             case RoomObjectFurnitureActionEvent.DICE_OFF:
                 this.onFurnitureActionEvent(event as RoomObjectFurnitureActionEvent, roomId);
@@ -116,7 +121,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 this.onHSLColorEnableEvent(event as RoomObjectHSLColorEnableEvent, roomId);
                 return;
             default:
-                NitroLogger.printMessage(`Unhandled Event: ${ event.constructor.name }`, `Object ID: ${ event.object.id }`);
+                NitroLogger.log(`Unhandled Event: ${ event.constructor.name }`, `Object ID: ${ event.object.id }`);
                 return;
         }
     }
@@ -151,7 +156,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     {
         if(!event) return;
 
-        let operation = ObjectOperationType.OBJECT_UNDEFINED;
+        let operation = RoomObjectOperationType.OBJECT_UNDEFINED;
 
         const selectedData = this._roomEngine.getSelectedRoomObjectData(roomId);
 
@@ -169,7 +174,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 {
                     if(NitroConfiguration.WALKING_ENABLED)
                     {
-
+                        console.log('do dis')
                     }
                 }
                 else
@@ -181,10 +186,10 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         switch(operation)
         {
-            case ObjectOperationType.OBJECT_MOVE:
+            case RoomObjectOperationType.OBJECT_MOVE:
                 //if(category === RoomObjectCategory.ROOM) this.moveObject(event, roomId);
                 return;
-            case ObjectOperationType.OBJECT_PLACE:
+            case RoomObjectOperationType.OBJECT_PLACE:
                 return;
         }
     }
@@ -211,6 +216,18 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(!event) return;
 
         this.updateRoomObjectState(roomId, event.object.id, event.object.type, event.state, true);
+    }
+
+    private onRoomObjectDimmerStateUpdateEvent(event: RoomObjectDimmerStateUpdateEvent, roomId: number): void
+    {
+        if(!event) return;
+
+        switch(event.type)
+        {
+            case RoomObjectDimmerStateUpdateEvent.DIMMER_STATE:
+                this._roomEngine.events.dispatchEvent(new RoomEngineDimmerStateEvent(roomId, event.state, event._Str_14686, event._Str_6815, event.color, event._Str_5123));
+                return;
+        }
     }
 
     private onFurnitureActionEvent(event: RoomObjectFurnitureActionEvent, roomId: number): void

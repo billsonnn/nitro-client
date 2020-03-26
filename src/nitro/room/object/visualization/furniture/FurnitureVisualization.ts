@@ -3,17 +3,17 @@ import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoo
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { ColorData } from '../data/ColorData';
 import { LayerData } from '../data/LayerData';
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
 import { FurnitureVisualizationData } from './FurnitureVisualizationData';
 
 export class FurnitureVisualization extends RoomObjectSpriteVisualization
 {
     protected static DEPTH_MULTIPLIER: number = Math.sqrt(0.5);
     
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_STATIC;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_STATIC;
 
     protected _data: FurnitureVisualizationData;
 
@@ -132,7 +132,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
             this._animationNumber = 0;
         }
 
-        if(updateSprites || number !== 0)
+        if(updateSprites || (number !== 0))
         {
             this.updateSprites(updateSprites, number);
 
@@ -145,8 +145,6 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         super.dispose();
 
         this.reset();
-
-        if(this._data && !this._data.saveable) this._data.dispose();
     }
 
     protected updateObject(direction: number): boolean
@@ -157,11 +155,9 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         let offsetDirection = (this.object.getDirection().x - (direction + 135));
 
-        offsetDirection = (((offsetDirection) % 360) % 360);
+        offsetDirection = ((((offsetDirection) % 360) + 360) % 360);
 
         this.setDirection(offsetDirection);
-
-        console.log(this._direction)
 
         this._geometryDirection = direction;
         
@@ -178,11 +174,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        this._colorId       = model.getValue(RoomObjectModelKey.FURNITURE_COLOR);
-        this._clickUrl      = model.getValue(RoomObjectModelKey.FURNITURE_AD_URL);
-        this._liftAmount    = model.getValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT);
+        this._colorId       = model.getValue(RoomObjectVariable.FURNITURE_COLOR);
+        this._clickUrl      = model.getValue(RoomObjectVariable.FURNITURE_AD_URL);
+        this._liftAmount    = model.getValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT);
 
-        let alphaMultiplier = model.getValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER)
+        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER)
 
         if(isNaN(alphaMultiplier)) alphaMultiplier = 1;
         

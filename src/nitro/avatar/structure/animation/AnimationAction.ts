@@ -1,92 +1,123 @@
+import * as PIXI from 'pixi.js-legacy';
 import { AnimationActionPart } from './AnimationActionPart';
 
 export class AnimationAction
 {
+    private static _Str_1934: PIXI.Point = new PIXI.Point(0, 0);
     private _id: string;
-    private _actionParts: { [index: string]: AnimationActionPart };
-    private _bodyPartOffsets: { [index: number]: { [index: number]: { [index: string]: PIXI.Point } } };
+    private _actionParts: Map<string, AnimationActionPart>;
+    private _bodyPartOffsets: Map<number, Map<number, Map<string, PIXI.Point>>>;
     private _frameCount: number;
+    private _frameIndexes: number[];
 
     constructor(data: any)
     {
-        if(!data) throw new Error('invalid_data');
-
-        this._id                = data['$'].id;
-        this._actionParts       = {};
-        this._bodyPartOffsets   = {};
+        this._id                = data.id;
+        this._actionParts       = new Map();
+        this._bodyPartOffsets   = new Map();
         this._frameCount        = 0;
+        this._frameIndexes      = [];
 
-        for(let part of data.part)
+        if(data.parts && (data.parts.length > 0))
         {
-            const newPart = new AnimationActionPart(part);
+            for(let part of data.parts)
+            {
+                if(!part) continue;
 
-            this._actionParts[newPart.setType] = newPart;
+                const newPart = new AnimationActionPart(part);
 
-            this._frameCount = Math.max(this._frameCount, newPart.frames.length);
+                this._actionParts.set(part.setType, newPart);
+
+                this._frameCount = Math.max(this._frameCount, newPart.frames.length);
+            }
         }
 
-        if(data.offsets && data.offsets[0] && data.offsets[0].frame)
+        if(data.offsets && data.offsets.frames && (data.offsets.frames.length > 0))
         {
-            for(let offset of data.offsets[0].frame)
+            for(let frame of data.offsets.frames)
             {
-                const frameId = parseInt(offset['$'].id);
+                if(!frame) continue;
+
+                const frameId = frame.id;
 
                 this._frameCount = Math.max(this._frameCount, frameId);
 
-                const frameOffsets: { [index: number]: { [index: number]: PIXI.Point } } = [];
+                const directions: Map<number, Map<string, PIXI.Point>> = new Map();
 
-                this._bodyPartOffsets[frameId] = frameOffsets;
+                this._bodyPartOffsets.set(frameId, directions);
 
-                if(offset.directions && offset.directions[0])
+                if(frame.directions && (frame.directions.length > 0))
                 {
-                    for(let directionOffset of offset.directions[0].direction)
+                    for(let direction of frame.directions)
                     {
-                        const direction = parseInt(directionOffset['$'].id);
+                        if(!direction) continue;
 
-                        const directionOffsets: { [index: string]: PIXI.Point } = {};
+                        const directionId = direction.id;
 
-                        frameOffsets[direction] = directionOffsets;
-                        
-                        for(let bodyPart of directionOffset.bodypart)
+                        const offsets: Map<string, PIXI.Point> = new Map();
+
+                        directions.set(directionId, offsets);
+
+                        if(direction.bodyParts && (direction.bodyParts.length > 0))
                         {
-                            const id    = bodyPart['$'].id;
-                            const x     = parseInt(bodyPart['$'].dx) || 0;
-                            const y     = parseInt(bodyPart['$'].dy) || 0;
+                            for(let part of direction.bodyParts)
+                            {
+                                if(!part) continue;
 
-                            directionOffsets[id] = new PIXI.Point(x, y);
+                                const partId = part.id;
+
+                                let dx = 0;
+                                let dy = 0;
+
+                                if(part.dx !== undefined) dx = part.dx;
+                                if(part.dy !== undefined) dy = part.dy;
+
+                                offsets.set(partId, new PIXI.Point(dx, dy));
+                            }
                         }
                     }
                 }
 
-                //let repeats = parseInt(offset['$'].repeats);
+                this._frameIndexes.push(frameId);
+
+                if(frame.repeats !== undefined)
+                {
+                    let repeats = frame.repeats || 0;
+
+                    if(repeats > 1) while(--repeats > 0) this._frameIndexes.push(frameId);
+                }
             }
         }
     }
 
-    public getPartForType(type: string): AnimationActionPart
+    public _Str_989(type: string): AnimationActionPart
     {
         if(!type) return null;
 
-        const existing = this._actionParts[type];
+        const existing = this._actionParts.get(type);
 
         if(!existing) return null;
 
         return existing;
     }
 
-    public getAnimationOffset(frameCount: number = 0, direction: number = 0): { [index: string]: PIXI.Point }
+    public _Str_1888(frameId: number, frameCount: number, partId: string): PIXI.Point
     {
-        const frameNumber = Math.floor(frameCount % this._frameCount);
+        const frameIndex    = (frameCount % this._frameIndexes.length);
+        const frameNumber   = this._frameIndexes[frameIndex];
+        const offsets       = this._bodyPartOffsets.get(frameNumber);
 
-        const existingFrame = this._bodyPartOffsets[frameNumber];
+        if(!offsets) return AnimationAction._Str_1934;
 
-        if(!existingFrame) return null;
+        const frameOffset = offsets.get(frameId);
 
-        const existingDirectionalOffset = existingFrame[direction];
+        if(!frameOffset) return AnimationAction._Str_1934;
 
-        if(!existingDirectionalOffset) return null;
+        const offset = frameOffset.get(partId);
 
-        return existingDirectionalOffset;
+        if(!frameOffset) return AnimationAction._Str_1934;
+
+        return offset;
     }
 
     public get id(): string
@@ -94,7 +125,7 @@ export class AnimationAction
         return this._id;
     }
 
-    public get actionsParts(): { [index: string]: AnimationActionPart }
+    public get actionsParts(): Map<string, AnimationActionPart>
     {
         return this._actionParts;
     }

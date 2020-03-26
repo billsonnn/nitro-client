@@ -3,12 +3,12 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureCounterClockLogic extends FurnitureLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_COUNTER_CLOCK;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_COUNTER_CLOCK;
 
     public getEventTypes(): string[]
     {

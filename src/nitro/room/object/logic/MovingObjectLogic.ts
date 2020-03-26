@@ -4,7 +4,7 @@ import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLog
 import { IVector3D } from '../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../room/utils/Vector3d';
 import { ObjectMoveUpdateMessage } from '../../messages/ObjectMoveUpdateMessage';
-import { RoomObjectModelKey } from '../RoomObjectModelKey';
+import { RoomObjectVariable } from '../RoomObjectVariable';
 
 export class MovingObjectLogic extends RoomObjectLogicBase
 {
@@ -53,7 +53,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 {
                     this._liftAmount = locationOffset.z;
     
-                    model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                    model.setValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT, this._liftAmount);
                 }
             }
             else
@@ -62,7 +62,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 {
                     this._liftAmount = 0;
     
-                    model.setValue(RoomObjectModelKey.FURNITURE_LIFT_AMOUNT, this._liftAmount);
+                    model.setValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT, this._liftAmount);
                 }
             }
         }

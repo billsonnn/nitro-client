@@ -1,4 +1,5 @@
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../room/events/RoomObjectHSLColorEnabledEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
@@ -102,6 +103,8 @@ export class RoomUI
             case RoomEngineEvent.DISPOSED:
                 this.destroyDesktop(roomId);
                 this._isInRoom = false;
+                return;
+            case RoomEngineDimmerStateEvent.REDSE_ROOM_COLOR:
                 return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
                 const colorEvent = event as RoomObjectHSLColorEnabledEvent;

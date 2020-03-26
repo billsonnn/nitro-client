@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js-legacy';
+
 export interface IRoomObjectSprite
 {
     id: number;
@@ -22,4 +24,5 @@ export interface IRoomObjectSprite
     filters: PIXI.Filter[];
     ignoreMouse: boolean;
     updateCounter: number;
+    matrix?: PIXI.Matrix;
 }

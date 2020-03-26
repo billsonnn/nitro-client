@@ -1,5 +1,4 @@
 import { IRoomInstance } from '../../room/IRoomInstance';
-import { IRoomObject } from '../../room/object/IRoomObject';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IVector3D } from '../../room/utils/IVector3D';
 import { IObjectData } from './object/data/IObjectData';
@@ -11,6 +10,9 @@ export interface IRoomCreator
 {
     destroyRoom(id: number): void;
     getRoomInstance(roomId: number): IRoomInstance;
+    updateRoomInstancePlaneVisibility(roomId: number, wallVisible: boolean, floorVisible?: boolean): boolean;
+    updateRoomInstancePlaneThickness(roomId: number, wallThickness: number, floorThickness: number): boolean;
+    updateRoomInstancePlaneType(roomId: number, floorType?: string, wallType?: string, landscapeType?: string, _arg_5?: boolean): boolean;
     removeRoomInstance(roomId: number): void;
     createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance
     setRoomSessionOwnUser(roomId: number, objectId: number): void;
@@ -18,7 +20,6 @@ export interface IRoomCreator
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
     setFurnitureStackingHeightMap(roomId: number, heightMap: FurnitureStackingHeightMap): void;
     getLegacyWallGeometry(roomId: number): LegacyWallGeometry;
-    addRoomObjects(...objects: IRoomObject[]): void;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
     getRoomObjectCursor(roomId: number): IRoomObjectController;
     getRoomObjectUser(roomId: number, objectId: number): IRoomObjectController;
@@ -34,7 +35,7 @@ export interface IRoomCreator
     updateRoomObjectFloorExpiration(roomId: number, objectId: number, expires: number): boolean;
     updateRoomObjectWallExpiration(roomId: number, objectId: number, expires: number): boolean;
     rollRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D): void;
-    addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, type: string, figure: string, gender: string): boolean;
+    addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, realDirection: number, type: number, figure: string): boolean;
     updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp?: boolean, baseY?: number, direction?: IVector3D, headDirection?: number): void;
     updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): void;
     updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string): void;

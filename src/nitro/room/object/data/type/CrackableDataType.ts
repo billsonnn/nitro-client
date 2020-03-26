@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { IObjectData } from '../IObjectData';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
@@ -37,19 +37,19 @@ export class CrackableDataType extends ObjectDataBase implements IObjectData
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._state     = model.getValue(RoomObjectModelKey.FURNITURE_CRACKABLE_STATE);
-        this._hits      = parseInt(model.getValue(RoomObjectModelKey.FURNITURE_CRACKABLE_HITS));
-        this._target    = parseInt(model.getValue(RoomObjectModelKey.FURNITURE_CRACKABLE_TARGET));
+        this._state     = model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_STATE);
+        this._hits      = parseInt(model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_HITS));
+        this._target    = parseInt(model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_TARGET));
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void
     {
         super.writeRoomObjectModel(model);
 
-        model.setValue(RoomObjectModelKey.FURNITURE_DATA_FORMAT, CrackableDataType.FORMAT_KEY);
-        model.setValue(RoomObjectModelKey.FURNITURE_CRACKABLE_STATE, this._state);
-        model.setValue(RoomObjectModelKey.FURNITURE_CRACKABLE_HITS, this._hits);
-        model.setValue(RoomObjectModelKey.FURNITURE_CRACKABLE_TARGET, this._target);
+        model.setValue(RoomObjectVariable.FURNITURE_DATA_FORMAT, CrackableDataType.FORMAT_KEY);
+        model.setValue(RoomObjectVariable.FURNITURE_CRACKABLE_STATE, this._state);
+        model.setValue(RoomObjectVariable.FURNITURE_CRACKABLE_HITS, this._hits);
+        model.setValue(RoomObjectVariable.FURNITURE_CRACKABLE_TARGET, this._target);
     }
 
     public getLegacyString(): string

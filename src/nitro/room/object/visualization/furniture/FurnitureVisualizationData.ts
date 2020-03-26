@@ -232,9 +232,4 @@ export class FurnitureVisualizationData extends Disposable implements IObjectVis
     {
         return (this._size && this._size.layerCount) || 0;
     }
-
-    public get saveable(): boolean
-    {
-        return true;
-    }
 }

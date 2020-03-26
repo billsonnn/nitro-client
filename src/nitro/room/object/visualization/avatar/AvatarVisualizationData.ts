@@ -1,12 +1,14 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { AvatarImage } from '../../../../avatar/AvatarImage';
-import { AvatarManager } from '../../../../avatar/AvatarManager';
+import { AvatarScaleType } from '../../../../avatar/enum/AvatarScaleType';
+import { IAvatarImage } from '../../../../avatar/IAvatarImage';
+import { IAvatarImageListener } from '../../../../avatar/IAvatarImageListener';
+import { IAvatarRenderManager } from '../../../../avatar/IAvatarRenderManager';
 
 export class AvatarVisualizationData extends Disposable implements IObjectVisualizationData
 {
-    private _avatarManager: AvatarManager;
+    private _avatarRenderer: IAvatarRenderManager;
 
     constructor()
     {
@@ -27,18 +29,28 @@ export class AvatarVisualizationData extends Disposable implements IObjectVisual
         super.onDispose();
     }
 
-    public createAvatarImage(figure: string): AvatarImage
+    public createAvatarImage(figure: string, size: number, gender: string = null, avatarListener: IAvatarImageListener = null): IAvatarImage
     {
-        return this._avatarManager.createAvatarImage(figure);
+        let avatarImage: IAvatarImage = null;
+
+        if(size > 48) avatarImage = this._avatarRenderer.createAvatarImage(figure, AvatarScaleType.LARGE, gender, avatarListener);
+        else avatarImage = this._avatarRenderer.createAvatarImage(figure, AvatarScaleType.SMALL, gender, avatarListener);
+
+        return avatarImage;
+    }
+
+    public get avatarManager(): IAvatarRenderManager
+    {
+        return this._avatarRenderer;
+    }
+
+    public set avatarManager(renderer: IAvatarRenderManager)
+    {
+        this._avatarRenderer = renderer;
     }
 
     public get layerCount(): number
     {
         return 0;
-    }
-
-    public get saveable(): boolean
-    {
-        return true;
     }
 }

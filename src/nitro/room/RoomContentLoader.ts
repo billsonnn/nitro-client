@@ -10,15 +10,15 @@ import { IFurnitureDataListener } from '../session/furniture/IFurnitureDataListe
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
-import { RoomObjectModelKey } from './object/RoomObjectModelKey';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
-import { ObjectVisualizationType } from './object/visualization/ObjectVisualizationType';
+import { RoomObjectVariable } from './object/RoomObjectVariable';
+import { RoomObjectVisualizationType } from './object/RoomObjectVisualizationType';
 
 export class RoomContentLoader implements IFurnitureDataListener
 {
     private static PLACE_HOLDER: string         = 'place_holder';
     private static PLACE_HOLDER_WALL: string    = 'place_holder_wall';
-    private static PET_PLACE_HOLDER: string     = 'pet_place_holder';
+    private static PLACE_HOLDER_PET: string     = 'place_holder_pet';
     private static DEFAULT_PLACE_HOLDER: string = RoomContentLoader.PLACE_HOLDER;
     private static TILE_CURSOR: string          = 'tile_cursor';
     private static SELECTION_ARROW: string      = 'selection_arrow';
@@ -36,6 +36,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _wallItems: { [index: string]: number };
     private _wallItemTypes: Map<number, string>;
     private _wallItemTypeIds: Map<string, number>;
+    private _pets: { [index: string]: number };
 
     private _pendingContentTypes: string[];
 
@@ -54,6 +55,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._wallItems                     = {};
         this._wallItemTypes                 = new Map();
         this._wallItemTypeIds               = new Map();
+        this._pets                          = {};
 
         this._pendingContentTypes           = [];
     }
@@ -63,6 +65,8 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._stateEvents = events;
 
         this.setFurnitureData();
+
+        for(let [ index, name ] of NitroConfiguration.PET_TYPES.entries()) this._pets[name] = index;
     }
 
     public dispose(): void
@@ -246,9 +250,11 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPlaceholderName(type: string): string
     {
-        if(this._activeObjects[type]) return RoomContentLoader.PLACE_HOLDER;
+        if(this._activeObjects[type] !== undefined) return RoomContentLoader.PLACE_HOLDER;
 
-        if(this._wallItems[type]) return RoomContentLoader.PLACE_HOLDER_WALL;
+        if(this._wallItems[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_WALL;
+
+        if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
         
         return RoomContentLoader.DEFAULT_PLACE_HOLDER;
     }
@@ -257,9 +263,11 @@ export class RoomContentLoader implements IFurnitureDataListener
     {
         if(!type) return RoomObjectCategory.MINIMUM;
 
-        if(this._activeObjects[type]) return RoomObjectCategory.FLOOR;
+        if(this._activeObjects[type] !== undefined) return RoomObjectCategory.FLOOR;
 
-        if(this._wallItems[type]) return RoomObjectCategory.WALL;
+        if(this._wallItems[type] !== undefined) return RoomObjectCategory.WALL;
+
+        if(this._pets[type] !== undefined) return RoomObjectCategory.UNIT;
 
         if(type.indexOf('poster') === 0) return RoomObjectCategory.WALL;
 
@@ -278,11 +286,16 @@ export class RoomContentLoader implements IFurnitureDataListener
         return RoomObjectCategory.MINIMUM;
     }
 
+    public getPetNameForType(type: number): string
+    {
+        return NitroConfiguration.PET_TYPES[type] || null;
+    }
+
     public isLoaderType(type: string): boolean
     {
         type = RoomObjectUserType.getRealType(type);
 
-        if(type === ObjectVisualizationType.USER) return false;
+        if(type === RoomObjectVisualizationType.USER) return false;
 
         return true;
     }
@@ -372,8 +385,8 @@ export class RoomContentLoader implements IFurnitureDataListener
                 return [ this.getAssetUrlWithRoomBase('place_holder') ];
             case RoomContentLoader.PLACE_HOLDER_WALL:
                 return [ this.getAssetUrlWithRoomBase('place_holder_wall') ];
-            case RoomContentLoader.PET_PLACE_HOLDER:
-                return [ this.getAssetUrlWithRoomBase('pet_place_holder') ];
+            case RoomContentLoader.PLACE_HOLDER_PET:
+                return [ this.getAssetUrlWithRoomBase('place_holder_pet') ];
             case RoomContentLoader.TILE_CURSOR:
                 return [ this.getAssetUrlWithRoomBase('tile_cursor') ];
             case RoomContentLoader.SELECTION_ARROW:
@@ -388,7 +401,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if(category === RoomObjectCategory.UNIT)
                 {
-
+                    return [ this.getAssetUrlWithPetBase(type) ];
                 }
 
                 if(category === RoomObjectCategory.ROOM)
@@ -410,13 +423,18 @@ export class RoomContentLoader implements IFurnitureDataListener
         return NitroConfiguration.ASSET_URL + `/furniture-ngh/${ assetName }/${ assetName }.json`;
     }
 
+    public getAssetUrlWithPetBase(assetName: string): string
+    {
+        return NitroConfiguration.ASSET_URL + `/pet/${ assetName }/${ assetName }.json`;
+    }
+
     public setRoomObjectRoomId(object: IRoomObject, roomId: number): void
     {
         const model = object && object.model;
 
         if(!model) return;
 
-        model.setValue(RoomObjectModelKey.OBJECT_ROOM_ID, roomId);
+        model.setValue(RoomObjectVariable.OBJECT_ROOM_ID, roomId);
     }
 
     private getOrRemoveEventDispatcher(type: string, remove: boolean = false): IEventDispatcher

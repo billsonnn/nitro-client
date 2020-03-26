@@ -1,9 +1,9 @@
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureCounterClockVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = ObjectVisualizationType.FURNITURE_COUNTER_CLOCK;
+    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_COUNTER_CLOCK;
 
     private static SECONDS_SPRITE: string       = 'seconds_sprite';
     private static TEN_SECONDS_SPRITE: string   = 'ten_seconds_sprite';

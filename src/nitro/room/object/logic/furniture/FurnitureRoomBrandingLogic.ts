@@ -3,7 +3,7 @@ import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectAdUpdateMessage } from '../../../messages/ObjectAdUpdateMessage';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { MapDataType } from '../../data/type/MapDataType';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureRoomBrandingLogic extends FurnitureLogic
@@ -40,12 +40,12 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(imageUrl)
         {
-            const existingUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL);
+            const existingUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
 
             if(!existingUrl || (existingUrl !== imageUrl))
             {
-                this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL, imageUrl);
-                this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS, 0);
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL, imageUrl);
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS, 0);
 
                 this.downloadBackground();
             }
@@ -55,11 +55,11 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(clickUrl)
         {
-            const existingUrl = this.object.model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_URL);
+            const existingUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_URL);
 
             if(!existingUrl || existingUrl !== clickUrl)
             {
-                this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_URL, clickUrl);
+                if(this.object.model) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_URL, clickUrl);
             }
         }
 
@@ -67,9 +67,9 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
         const offsetY = parseInt(objectData.getValue(FurnitureRoomBrandingLogic.OFFSETY_KEY));
         const offsetZ = parseInt(objectData.getValue(FurnitureRoomBrandingLogic.OFFSETZ_KEY));
 
-        if(!isNaN(offsetX)) this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_X, offsetX);
-        if(!isNaN(offsetY)) this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Y, offsetY);
-        if(!isNaN(offsetZ)) this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_OFFSET_Z, offsetZ);
+        if(!isNaN(offsetX)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_X, offsetX);
+        if(!isNaN(offsetY)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Y, offsetY);
+        if(!isNaN(offsetZ)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Z, offsetZ);
     }
 
     private processAdUpdate(message: ObjectAdUpdateMessage): void
@@ -79,10 +79,10 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
         switch(message.type)
         {
             case ObjectAdUpdateMessage.IMAGE_LOADED:
-                this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS, 1);
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS, 1);
                 break;
             case ObjectAdUpdateMessage.IMAGE_LOADING_FAILED:
-                this.object.model.setValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS, -1);
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS, -1);
                 break;
         }
     }
@@ -93,8 +93,8 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!model) return;
 
-        const imageUrl      = model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_URL) as string;
-        const imageStatus   = model.getValue(RoomObjectModelKey.FURNITURE_BRANDING_IMAGE_STATUS) as number;
+        const imageUrl      = model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL) as string;
+        const imageStatus   = model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS) as number;
 
         if(!imageUrl || imageStatus === 1) return;
 

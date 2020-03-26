@@ -1,9 +1,9 @@
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureBadgeDisplayLogic extends FurnitureLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_BADGE_DISPLAY;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_BADGE_DISPLAY;
 
     public onProcess(): void
     {

@@ -1,9 +1,9 @@
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { AnimationData } from '../data/AnimationData';
 import { AnimationFrame } from '../data/AnimationFrame';
 import { AnimationStateData } from '../data/AnimationStateData';
-import { ObjectVisualizationType } from '../ObjectVisualizationType';
 import { FurnitureAnimatedVisualizationData } from './FurnitureAnimatedVisualizationData';
 import { FurnitureVisualization } from './FurnitureVisualization';
 
@@ -11,7 +11,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 {
     private static FRAME_INCREASE_AMOUNT: number = 1;
 
-    public static TYPE: string                  = ObjectVisualizationType.FURNITURE_ANIMATED;
+    public static TYPE: string                  = RoomObjectVisualizationType.FURNITURE_ANIMATED;
     public static DEFAULT_ANIMATION_ID: number  = 0;
 
     protected _data: FurnitureAnimatedVisualizationData;
@@ -92,7 +92,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
                 this._state = state;
 
-                this._animationChangeTime = this.object.model.getValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME) as number || 0;
+                this._animationChangeTime = this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME) as number || 0;
             }
 
             return true;
@@ -107,7 +107,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         {
             if(this.usesAnimationResetting())
             {
-                const updateTime = this.object.model.getValue(RoomObjectModelKey.FURNITURE_STATE_UPDATE_TIME);
+                const updateTime = this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME);
 
                 if(updateTime > this._animationChangeTime)
                 {

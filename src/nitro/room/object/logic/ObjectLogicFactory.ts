@@ -4,6 +4,7 @@ import { IEventDispatcher } from '../../../../core/events/IEventDispatcher';
 import { IRoomObjectEventHandler } from '../../../../room/object/logic/IRoomObjectEventHandler';
 import { IRoomObjectLogicFactory } from '../../../../room/object/logic/IRoomObjectLogicFactory';
 import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
+import { RoomObjectLogicType } from '../RoomObjectLogicType';
 import { AvatarLogic } from './avatar/AvatarLogic';
 import { FurnitureBadgeDisplayLogic } from './furniture/FurnitureBadgeDisplayLogic';
 import { FurnitureChangeStateWhenStepOnLogic } from './furniture/FurnitureChangeStateWhenStepOnLogic';
@@ -29,12 +30,12 @@ import { FurniturePushableLogic } from './furniture/FurniturePushableLogic';
 import { FurnitureRoomBackgroundColorLogic } from './furniture/FurnitureRoomBackgroundColorLogic';
 import { FurnitureRoomBackgroundLogic } from './furniture/FurnitureRoomBackgroundLogic';
 import { FurnitureRoomBillboardLogic } from './furniture/FurnitureRoomBillboardLogic';
+import { FurnitureRoomDimmerLogic } from './furniture/FurnitureRoomDimmerLogic';
 import { FurnitureScoreLogic } from './furniture/FurnitureScoreLogic';
 import { FurnitureSoundBlockLogic } from './furniture/FurnitureSoundBlockLogic';
 import { FurnitureTrophyLogic } from './furniture/FurnitureTrophyLogic';
 import { FurnitureVoteCounterLogic } from './furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLogic';
-import { ObjectLogicType } from './ObjectLogicType';
 import { PetLogic } from './pet/PetLogic';
 import { RoomLogic } from './room/RoomLogic';
 import { TileCursorLogic } from './room/TileCursorLogic';
@@ -141,105 +142,108 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
 
         switch(type)
         {
-            case ObjectLogicType.ROOM:
+            case RoomObjectLogicType.ROOM:
                 logic = RoomLogic;
                 break;
-            case ObjectLogicType.TILE_CURSOR:
+            case RoomObjectLogicType.TILE_CURSOR:
                 logic = TileCursorLogic;
                 break;
-            case ObjectLogicType.USER:
-            case ObjectLogicType.BOT:
-            case ObjectLogicType.RENTABLE_BOT:
+            case RoomObjectLogicType.USER:
+            case RoomObjectLogicType.BOT:
+            case RoomObjectLogicType.RENTABLE_BOT:
                 logic = AvatarLogic;
                 break;
-            case ObjectLogicType.PET:
+            case RoomObjectLogicType.PET:
                 logic = PetLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BASIC:
+            case RoomObjectLogicType.FURNITURE_BASIC:
                 logic = FurnitureLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BADGE_DISPLAY:
+            case RoomObjectLogicType.FURNITURE_BADGE_DISPLAY:
                 logic = FurnitureBadgeDisplayLogic;
                 break;
-            case ObjectLogicType.FURNITURE_CHANGE_STATE_WHEN_STEP_ON:
+            case RoomObjectLogicType.FURNITURE_CHANGE_STATE_WHEN_STEP_ON:
                 logic = FurnitureChangeStateWhenStepOnLogic;
                 break;
-            case ObjectLogicType.FURNITURE_COUNTER_CLOCK:
+            case RoomObjectLogicType.FURNITURE_COUNTER_CLOCK:
                 logic = FurnitureCounterClockLogic;
                 break;
-            case ObjectLogicType.FURNITURE_CREDIT:
+            case RoomObjectLogicType.FURNITURE_CREDIT:
                 logic = FurnitureCreditLogic;
                 break;
-            case ObjectLogicType.FURNITURE_CUSTOM_STACK_HEIGHT:
+            case RoomObjectLogicType.FURNITURE_CUSTOM_STACK_HEIGHT:
                 logic = FurnitureCustomStackHeightLogic;
                 break;
-            case ObjectLogicType.FURNITURE_DICE:
+            case RoomObjectLogicType.FURNITURE_DICE:
                 logic = FurnitureDiceLogic;
                 break;
-            case ObjectLogicType.FURNITURE_EDITABLE_INTERNAL_LINK:
+            case RoomObjectLogicType.FURNITURE_EDITABLE_INTERNAL_LINK:
                 logic = FurnitureEditableInternalLinkLogic;
                 break;
-            case ObjectLogicType.FURNITURE_FIREWORKS:
+            case RoomObjectLogicType.FURNITURE_FIREWORKS:
                 logic = FurnitureFireworksLogic;
                 break;
-            case ObjectLogicType.FURNITURE_FLOOR_HOLE:
+            case RoomObjectLogicType.FURNITURE_FLOOR_HOLE:
                 logic = FurnitureFloorHoleLogic;
                 break;
-            case ObjectLogicType.FURNITURE_GUILD_CUSTOMIZED:
+            case RoomObjectLogicType.FURNITURE_GUILD_CUSTOMIZED:
                 logic = FurnitureGuildCustomizedLogic;
                 break;
-            case ObjectLogicType.FURNITURE_HIGH_SCORE:
+            case RoomObjectLogicType.FURNITURE_HIGH_SCORE:
                 logic = FurnitureHighScoreLogic;
                 break;
-            case ObjectLogicType.FURNITURE_HOCKEY_SCORE:
+            case RoomObjectLogicType.FURNITURE_HOCKEY_SCORE:
                 logic = FurnitureHockeyScoreLogic;
                 break;
-            case ObjectLogicType.FURNITURE_ES:
+            case RoomObjectLogicType.FURNITURE_ES:
                 logic = FurnitureIceStormLogic;
                 break;
-            case ObjectLogicType.FURNITURE_MULTIHEIGHT:
+            case RoomObjectLogicType.FURNITURE_MULTIHEIGHT:
                 logic = FurnitureMultiHeightLogic;
                 break;
-            case ObjectLogicType.FURNITURE_MULTISTATE:
+            case RoomObjectLogicType.FURNITURE_MULTISTATE:
                 logic = FurnitureMultiStateLogic;
                 break;
-            case ObjectLogicType.FURNITURE_ONE_WAY_DOOR:
+            case RoomObjectLogicType.FURNITURE_ONE_WAY_DOOR:
                 logic = FurnitureOneWayDoorLogic;
                 break;
-            case ObjectLogicType.FURNITURE_PET_CUSTOMIZATION:
+            case RoomObjectLogicType.FURNITURE_PET_CUSTOMIZATION:
                 logic = FurniturePetCustomizationLogic;
                 break;
-            case ObjectLogicType.FURNITURE_PRESENT:
+            case RoomObjectLogicType.FURNITURE_PRESENT:
                 logic = FurniturePresentLogic;
                 break;
-            case ObjectLogicType.FURNITURE_PURCHASABLE_CLOTHING:
+            case RoomObjectLogicType.FURNITURE_PURCHASABLE_CLOTHING:
                 logic = FurniturePurchaseableClothingLogic;
                 break;
-            case ObjectLogicType.FURNITURE_PUSHABLE:
+            case RoomObjectLogicType.FURNITURE_PUSHABLE:
                 logic = FurniturePushableLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BACKGROUND_COLOR:
+            case RoomObjectLogicType.FURNITURE_BACKGROUND_COLOR:
                 logic = FurnitureRoomBackgroundColorLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BG:
+            case RoomObjectLogicType.FURNITURE_BG:
                 logic = FurnitureRoomBackgroundLogic;
                 break;
-            case ObjectLogicType.FURNITURE_BB:
+            case RoomObjectLogicType.FURNITURE_BB:
                 logic = FurnitureRoomBillboardLogic;
                 break;
-            case ObjectLogicType.FURNITURE_SCORE:
+            case RoomObjectLogicType.FURNITURE_ROOMDIMMER:
+                logic = FurnitureRoomDimmerLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_SCORE:
                 logic = FurnitureScoreLogic;
                 break;
-            case ObjectLogicType.FURNITURE_SOUNDBLOCK:
+            case RoomObjectLogicType.FURNITURE_SOUNDBLOCK:
                 logic = FurnitureSoundBlockLogic;
                 break;
-            case ObjectLogicType.FURNITURE_TROPHY:
+            case RoomObjectLogicType.FURNITURE_TROPHY:
                 logic = FurnitureTrophyLogic;
                 break;
-            case ObjectLogicType.FURNITURE_VOTE_COUNTER:
+            case RoomObjectLogicType.FURNITURE_VOTE_COUNTER:
                 logic = FurnitureVoteCounterLogic;
                 break;
-            case ObjectLogicType.FURNITURE_VOTE_MAJORITY:
+            case RoomObjectLogicType.FURNITURE_VOTE_MAJORITY:
                 logic = FurnitureVoteMajorityLogic;
                 break;
             default:
@@ -249,7 +253,7 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
 
         if(!logic)
         {
-            NitroLogger.printMessage(`Unknown Logic: ${ type }`);
+            NitroLogger.log(`Unknown Logic: ${ type }`);
 
             return null;
         }

@@ -1,4 +1,4 @@
-import { IFigurePart } from './interfaces/IFigurePart';
+import { IFigurePart } from './IFigurePart';
 
 export class FigurePart implements IFigurePart
 {

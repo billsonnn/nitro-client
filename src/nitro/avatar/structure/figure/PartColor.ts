@@ -1,5 +1,5 @@
 import { SpriteUtilities } from '../../../../room/utils/SpriteUtilities';
-import { IPartColor } from './interfaces/IPartColor';
+import { IPartColor } from './IPartColor';
 
 export class PartColor implements IPartColor
 {

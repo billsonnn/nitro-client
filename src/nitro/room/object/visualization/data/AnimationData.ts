@@ -167,7 +167,7 @@ export class AnimationData
 
                 if(!offset) continue;
 
-                if(directionalOffset) directionalOffset = new DirectionalOffsetData();
+                if(!directionalOffset) directionalOffset = new DirectionalOffsetData();
 
                 directionalOffset.setDirection(offset.direction, offset.x, offset.y);
             }

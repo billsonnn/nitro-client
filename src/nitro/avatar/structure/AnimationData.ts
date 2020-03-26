@@ -1,49 +1,47 @@
+import { IActionDefinition } from '../actions/IActionDefinition';
 import { AnimationAction } from './animation/AnimationAction';
 
 export class AnimationData
 {
-    private _actions: { [index: string]: AnimationAction };
-
-    private _isReady: boolean;
+    private _actions: Map<string, AnimationAction>;
 
     constructor()
     {
-        this._actions   = {};
-
-        this._isReady   = false;
+        this._actions = new Map();
     }
 
     public parse(data: any): boolean
     {
-        if(!data) return false;
-
-        for(let animation of data.action)
+        if(data.animations && (data.animations.length > 0))
         {
-            const action = new AnimationAction(animation);
+            for(let animation of data.animations)
+            {
+                if(!animation) continue;
 
-            if(!action) continue;
+                const newAnimation = new AnimationAction(animation);
 
-            this._actions[action.id] = action;
+                this._actions.set(newAnimation.id, newAnimation);
+            }
         }
-
-        this._isReady = true;
 
         return true;
     }
 
-    public getAnimation(id: string): AnimationAction
+    public _Str_2244(action: IActionDefinition): AnimationAction
     {
-        if(!id) return null;
-
-        const existing = this._actions[id];
+        const existing = this._actions.get(action.id);
 
         if(!existing) return null;
 
         return existing;
     }
 
-    public get isReady(): boolean
+    public _Str_1408(k: IActionDefinition): number
     {
-        return this._isReady;
+        const animationAction = this._Str_2244(k);
+
+        if(!animationAction) return 0;
+
+        return animationAction.frameCount;
     }
 }

@@ -1,20 +1,16 @@
 import { ActionDefinition } from './ActionDefinition';
-import { IActionDefinition } from './interfaces/IActionDefinition';
-import { IActiveActionData } from './interfaces/IActiveActionData';
+import { IActionDefinition } from './IActionDefinition';
+import { IActiveActionData } from './IActiveActionData';
 
 export class AvatarActionManager
 {
-    private _actions: { [index: string]: IActionDefinition };
+    private _actions: Map<string, IActionDefinition>;
     private _defaultAction: IActionDefinition;
 
-    private _isReady: boolean;
-
-    constructor(data: any)
+    constructor(k: any, data: any)
     {
-        this._actions       = {};
+        this._actions       = new Map();
         this._defaultAction = null;
-
-        this._isReady       = false;
 
         this.parse(data);
     }
@@ -23,34 +19,25 @@ export class AvatarActionManager
     {
         if(!data) return;
 
-        for(let action of data.action)
+        if(!data.actions || (data.actions.length <= 0)) return;
+
+        for(let action of data.actions)
         {
-            const state = action['$'].state;
+            if(!action || !action.state) continue;
 
-            if(state !== '')
-            {
-                const newAction = new ActionDefinition(action);
+            const definition = new ActionDefinition(action);
 
-                if(!newAction) continue;
-
-                this._actions[newAction.state] = newAction;
-            }
+            this._actions.set(definition.state, definition);
         }
-
-        this._isReady = true;
     }
 
-    public getActionById(id: string): IActionDefinition
+    public _Str_1675(id: string): IActionDefinition
     {
         if(!id) return null;
 
-        for(let key in this._actions)
+        for(let action of this._actions.values())
         {
-            const action = this._actions[key];
-
-            if(!action) continue;
-
-            if(action.id !== id) continue;
+            if(!action || (action.id !== id)) continue;
 
             return action;
         }
@@ -58,22 +45,22 @@ export class AvatarActionManager
         return null;
     }
 
-    public getActionByName(name: string): IActionDefinition
+    public _Str_2018(state: string): IActionDefinition
     {
-        return this._actions[name] || null;
+        const existing = this._actions.get(state);
+
+        if(!existing) return null;
+
+        return existing;
     }
 
-    public getDefaultAction(): IActionDefinition
+    public _Str_1027(): IActionDefinition
     {
         if(this._defaultAction) return this._defaultAction;
 
-        for(let key in this._actions)
+        for(let action of this._actions.values())
         {
-            const action = this._actions[key];
-
-            if(!action) continue;
-
-            if(!action.isDefault) continue;
+            if(!action || !action._Str_804) continue;
 
             this._defaultAction = action;
 
@@ -83,68 +70,78 @@ export class AvatarActionManager
         return null;
     }
 
-    public processActions(actions: IActiveActionData[]): IActiveActionData[]
+    public _Str_781(k: IActiveActionData[], _arg_2: string, _arg_3: number): []
+    {
+        let index           = 0;
+        let actionList: []  = [];
+
+        for(let activeAction of k)
+        {
+            if(!activeAction) continue;
+
+            const localAction   = this._actions.get(activeAction.actionType);
+            const actions       = localAction && localAction._Str_805(_arg_2, _arg_3);
+
+            if(actions) actionList = actions;
+        }
+
+        return actionList;
+    }
+
+    public _Str_711(actions: IActiveActionData[]): IActiveActionData[]
     {
         if(!actions) return null;
 
-        const totalActions = actions.length;
+        actions = this._Str_1247(actions);
 
-        if(!totalActions) return null;
+        let validatedActions: IActiveActionData[] = [];
 
-        const preventions = this.getPreventions(actions);
-
-        const validatedActions: IActiveActionData[] = [];
-
-        for(let i = 0; i < totalActions; i++)
+        for(let action of actions)
         {
-            const action = actions[i];
+            if(!action) continue;
 
-            if(!action || !action.definition) continue;
+            const localAction = this._actions.get(action.actionType);
 
-            let actionType = action.actionType;
+            if(!localAction) continue;
 
-            if(action.actionType === 'fx') actionType = actionType + '.' + action.actionParameter;
-
-            if(preventions.indexOf(actionType) >= 0) continue;
+            action.definition = localAction;
 
             validatedActions.push(action);
         }
-
-        if(!validatedActions.length) return null;
 
         validatedActions.sort(this.sortByPrecedence);
 
         return validatedActions;
     }
 
-    private getPreventions(actions: IActiveActionData[]): string[]
+    private _Str_1247(actions: IActiveActionData[]): IActiveActionData[]
     {
-        if(!actions) return [];
+        let preventions: string[]               = [];
+        let activeActions: IActiveActionData[]  = [];
 
-        const totalActions = actions.length;
-
-        if(!totalActions) return [];
-
-        const preventions: string[] = [];
-
-        for(let i = 0; i < totalActions; i++)
+        for(let action of actions)
         {
-            const action = actions[i];
-
             if(!action) continue;
 
-            const localAction = this._actions[action.actionType];
+            const localAction = this._actions.get(action.actionType);
 
-            if(!localAction) continue;
-
-            action.definition = localAction;
-
-            preventions.push(...localAction.getPreventionWithType(action.actionParameter));
+            if(localAction) preventions = preventions.concat(localAction._Str_733(action.actionParameter));
         }
 
-        if(!preventions.length) return [];
+        for(let action of actions)
+        {
+            if(!action) continue;
 
-        return preventions;
+            let actionType = action.actionType;
+
+            if(action.actionType === 'fx') actionType = (actionType + ('.' + action.actionParameter));
+
+            if(preventions.indexOf(actionType) >= 0) continue;
+
+            activeActions.push(action);
+        }
+
+        return activeActions;
     }
 
     private sortByPrecedence(actionOne: IActiveActionData, actionTwo: IActiveActionData): number
@@ -159,10 +156,5 @@ export class AvatarActionManager
         if(precedenceOne > precedenceTwo) return -1;
 
         return 0;
-    }
-
-    public get isReady(): boolean
-    {
-        return this._isReady;
     }
 }

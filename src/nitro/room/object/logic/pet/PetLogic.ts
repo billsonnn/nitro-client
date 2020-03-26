@@ -10,7 +10,7 @@ import { ObjectAvatarPetGestureUpdateMessage } from '../../../messages/ObjectAva
 import { ObjectAvatarPostureUpdateMessage } from '../../../messages/ObjectAvatarPostureUpdateMessage';
 import { ObjectAvatarSleepUpdateMessage } from '../../../messages/ObjectAvatarSleepUpdateMessage';
 import { ObjectAvatarUpdateMessage } from '../../../messages/ObjectAvatarUpdateMessage';
-import { RoomObjectModelKey } from '../../RoomObjectModelKey';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { MovingObjectLogic } from '../MovingObjectLogic';
 
 export class PetLogic extends MovingObjectLogic
@@ -74,14 +74,14 @@ export class PetLogic extends MovingObjectLogic
             this._directions.sort((a, b) => { return a - b });
         }
 
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_X, this._sizeX);
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Y, this._sizeY);
-        model.setValue(RoomObjectModelKey.FURNITURE_SIZE_Z, this._sizeZ);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_X, this._centerX);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_Y, this._centerY);
-        model.setValue(RoomObjectModelKey.FURNITURE_CENTER_Z, this._centerZ);
-        model.setValue(RoomObjectModelKey.FURNITURE_ALLOWED_DIRECTIONS, this._directions);
-        model.setValue(RoomObjectModelKey.FURNITURE_ALPHA_MULTIPLIER, 1);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_X, this._sizeX);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Y, this._sizeY);
+        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, this._sizeZ);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_X, this._centerX);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Y, this._centerY);
+        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Z, this._centerZ);
+        model.setValue(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS, this._directions);
+        model.setValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER, 1);
     }
 
     public update(totalTimeRunning: number): void
@@ -94,7 +94,7 @@ export class PetLogic extends MovingObjectLogic
 
         if((this._gestureEndTimestamp > 0) && (this.time > this._gestureEndTimestamp))
         {
-            model.setValue(RoomObjectModelKey.FIGURE_GESTURE, null);
+            model.setValue(RoomObjectVariable.FIGURE_GESTURE, null);
 
             this._gestureEndTimestamp = 0;
         }
@@ -103,7 +103,7 @@ export class PetLogic extends MovingObjectLogic
         {
             if(this.time > this._talkingEndTimestamp)
             {
-                model.setValue(RoomObjectModelKey.FIGURE_TALK, 0);
+                model.setValue(RoomObjectVariable.FIGURE_TALK, 0);
 
                 this._talkingEndTimestamp = 0;
             }
@@ -111,7 +111,7 @@ export class PetLogic extends MovingObjectLogic
 
         if((this._expressionEndTimestamp > 0) && (this.time > this._expressionEndTimestamp))
         {
-            model.setValue(RoomObjectModelKey.FIGURE_EXPRESSION, 0);
+            model.setValue(RoomObjectVariable.FIGURE_EXPRESSION, 0);
 
             this._expressionEndTimestamp = 0;
         }
@@ -129,7 +129,7 @@ export class PetLogic extends MovingObjectLogic
 
         if(message instanceof ObjectAvatarUpdateMessage)
         {
-            model.setValue(RoomObjectModelKey.HEAD_DIRECTION, message.headDirection);
+            model.setValue(RoomObjectVariable.HEAD_DIRECTION, message.headDirection);
 
             return;
         }
@@ -138,26 +138,26 @@ export class PetLogic extends MovingObjectLogic
         {
             const petFigureData = new PetFigureData(message.figure);
             
-            model.setValue(RoomObjectModelKey.FIGURE, message.figure);
-            model.setValue(RoomObjectModelKey.RACE, message.race);
-            model.setValue(RoomObjectModelKey.PET_PALETTE_INDEX, petFigureData.paletteId);
-            model.setValue(RoomObjectModelKey.PET_COLOR, petFigureData.color);
-            model.setValue(RoomObjectModelKey.PET_TYPE, petFigureData.typeId);
-            model.setValue(RoomObjectModelKey.PET_IS_RIDING, message.isRiding ? 1 : 0);
+            model.setValue(RoomObjectVariable.FIGURE, message.figure);
+            model.setValue(RoomObjectVariable.RACE, message.race);
+            model.setValue(RoomObjectVariable.PET_PALETTE_INDEX, petFigureData.paletteId);
+            model.setValue(RoomObjectVariable.PET_COLOR, petFigureData.color);
+            model.setValue(RoomObjectVariable.PET_TYPE, petFigureData.typeId);
+            model.setValue(RoomObjectVariable.PET_IS_RIDING, message.isRiding ? 1 : 0);
 
             return;
         }
 
         if(message instanceof ObjectAvatarPostureUpdateMessage)
         {
-            model.setValue(RoomObjectModelKey.FIGURE_POSTURE, message.postureType);
+            model.setValue(RoomObjectVariable.FIGURE_POSTURE, message.postureType);
 
             return;
         }
 
         if(message instanceof ObjectAvatarChatUpdateMessage)
         {
-            model.setValue(RoomObjectModelKey.FIGURE_TALK, 1);
+            model.setValue(RoomObjectVariable.FIGURE_TALK, 1);
 
             this._talkingEndTimestamp = this.time + (message.numberOfWords * 1000);
 
@@ -166,14 +166,14 @@ export class PetLogic extends MovingObjectLogic
 
         if(message instanceof ObjectAvatarSleepUpdateMessage)
         {
-            model.setValue(RoomObjectModelKey.FIGURE_SLEEP, message.isSleeping ? 1 : 0);
+            model.setValue(RoomObjectVariable.FIGURE_SLEEP, message.isSleeping ? 1 : 0);
 
             return;
         }
 
         if(message instanceof ObjectAvatarPetGestureUpdateMessage)
         {
-            model.setValue(RoomObjectModelKey.FIGURE_GESTURE, message.gesture);
+            model.setValue(RoomObjectVariable.FIGURE_GESTURE, message.gesture);
 
             this._gestureEndTimestamp = this.time + 3000;
 

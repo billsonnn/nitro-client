@@ -1,7 +1,7 @@
-import { ObjectLogicType } from '../ObjectLogicType';
+import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurniturePresentLogic extends FurnitureLogic
 {
-    public static TYPE: string = ObjectLogicType.FURNITURE_PRESENT;
+    public static TYPE: string = RoomObjectLogicType.FURNITURE_PRESENT;
 }

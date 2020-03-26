@@ -3,7 +3,7 @@ import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
 import { INitroRenderer } from '../core/renderer/INitroRenderer';
 import { IRoomManager } from '../room/IRoomManager';
-import { AvatarManager } from './avatar/AvatarManager';
+import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
@@ -16,7 +16,7 @@ export interface INitroInstance extends INitroManager
     core: INitroCore;
     events: IEventDispatcher;
     communication: INitroCommunicationManager;
-    avatar: AvatarManager;
+    avatar: IAvatarRenderManager;
     roomEngine: IRoomEngine;
     session: ISessionDataManager;
     roomSession: IRoomSessionManager;

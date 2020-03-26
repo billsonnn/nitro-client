@@ -314,11 +314,30 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             const texture = sprite.texture;
 
             if(!texture) continue;
-            
+
             let spriteX = ((x + sprite.offsetX) + this._screenOffsetX);
             let spriteY = ((y + sprite.offsetY) + this._screenOffsetY);
 
-            if(!this.isSpriteVisible(spriteX, spriteY, texture.width, texture.height)) continue;
+            //if(!this.isSpriteVisible(spriteX, spriteY, texture.width, texture.height)) continue;
+
+            if(sprite.flipH)
+            {
+                let checkX = ((x + (-(texture.width + (sprite.offsetX * -1)))) + this._screenOffsetX);
+
+                if(!this.isSpriteVisible(checkX, spriteY, texture.width, texture.height)) continue;
+            }
+
+            else if(sprite.flipV)
+            {
+                let checkY = ((y + (-(texture.height + (sprite.offsetY * -1)))) + this._screenOffsetY);
+
+                if(!this.isSpriteVisible(spriteX, checkY, texture.width, texture.height)) continue;
+            }
+
+            else
+            {
+                if(!this.isSpriteVisible(spriteX, spriteY, texture.width, texture.height)) continue;
+            }
 
             let sortableSprite = sortableCache._Str_2505(spriteCount);
 
@@ -421,24 +440,24 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             if(extendedSprite.filters !== objectSprite.filters) extendedSprite.filters = objectSprite.filters;
 
             if(extendedSprite.texture !== objectSprite.texture) extendedSprite.texture = objectSprite.texture;
-        }
 
-        if(objectSprite.flipH)
-        {
-            if(extendedSprite.scale.x !== -1) extendedSprite.scale.x = -1;
-        }
-        else
-        {
-            if(extendedSprite.scale.x !== 1) extendedSprite.scale.x = 1;
-        }
+            if(objectSprite.flipH)
+            {
+                if(extendedSprite.scale.x !== -1) extendedSprite.scale.x = -1;
+            }
+            else
+            {
+                if(extendedSprite.scale.x !== 1) extendedSprite.scale.x = 1;
+            }
 
-        if(objectSprite.flipV)
-        {
-            if(extendedSprite.scale.y !== -1) extendedSprite.scale.y = -1;
-        }
-        else
-        {
-            if(extendedSprite.scale.y !== 1) extendedSprite.scale.y = 1;
+            if(objectSprite.flipV)
+            {
+                if(extendedSprite.scale.y !== -1) extendedSprite.scale.y = -1;
+            }
+            else
+            {
+                if(extendedSprite.scale.y !== 1) extendedSprite.scale.y = 1;
+            }
         }
         
         if(extendedSprite.x !== sprite.x) extendedSprite.x = sprite.x;
@@ -472,6 +491,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         extendedSprite.setTexture(sprite.texture);
 
+        //extendedSprite.filters = [ Filters.solidColorFilter(extendedSprite.tint) ];
+
         if(sprite.flipH) extendedSprite.scale.x = -1;
 
         if(sprite.flipV) extendedSprite.scale.y = -1;
@@ -490,7 +511,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._activeSpriteCount++;
     }
 
-    private _Str_20677(spriteCount: number, _arg_2:Boolean=false):void
+    private _Str_20677(spriteCount: number, _arg_2: boolean = false):void
     {
         if(!this._display) return;
 
@@ -511,7 +532,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._activeSpriteCount = spriteCount;
     }
 
-    private _Str_21974(k:ExtendedSprite, _arg_2:Boolean):void
+    private _Str_21974(k: ExtendedSprite, _arg_2: boolean):void
     {
         if (k != null)
         {

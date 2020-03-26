@@ -118,8 +118,6 @@ export class RoomDesktop
 
         window.onresize = this.onWindowResizeEvent.bind(this);
 
-        // //displayObject.addListener(WindowMouseEvent.DOUBLE_CLICK, this._Str_9634);
-
         this._canvasIDs.push(canvasId);
     }
 

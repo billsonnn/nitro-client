@@ -150,7 +150,7 @@ export class RoomPlaneParser
             _local_4[_local_6] = [];
             _local_6++;
         }
-        var _local_9: number;
+        var _local_9: number = 0;
         _local_6 = 0;
         while (_local_6 < _local_2)
         {
@@ -186,6 +186,7 @@ export class RoomPlaneParser
                     while (_local_7 < 3)
                     {
                         _local_17 = (_local_7 + 1);
+
                         _local_4[_local_9][(_local_10 + _local_7)] = (((_local_13 * (3 - _local_7)) + (_local_14 * _local_7)) / 3);
                         _local_4[(_local_9 + 3)][(_local_10 + _local_17)] = (((_local_15 * (3 - _local_17)) + (_local_16 * _local_17)) / 3);
                         _local_4[(_local_9 + _local_17)][_local_10] = (((_local_13 * (3 - _local_17)) + (_local_15 * _local_17)) / 3);
@@ -613,13 +614,14 @@ export class RoomPlaneParser
             }
             _local_3++;
         }
+
         return this.initialize(_local_4);
     }
 
     private initialize(k: PIXI.Point): boolean
     {
         var _local_5: number[][];
-        var _local_2: number;
+        var _local_2: number = 0;
         if (k != null)
         {
             _local_2 = this._Str_2754(k.x, k.y);
@@ -1170,24 +1172,24 @@ export class RoomPlaneParser
     private _Str_17862(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
     {
         var _local_12:Vector3d;
-        this._Str_3453(RoomPlaneData._Str_6206, k, _arg_2, _arg_3, [_arg_4]);
-        this._Str_3453(RoomPlaneData._Str_7988, k, _arg_2, _arg_3, [_arg_4]);
+        this._Str_3453(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
+        this._Str_3453(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
         var _local_8: number = (RoomPlaneParser._Str_6429 * this._wallThicknessMultiplier);
         var _local_9: number = (RoomPlaneParser._Str_6100 * this._floorThicknessMultiplier);
         var _local_10:Vector3d = Vector3d.crossProduct(_arg_2, _arg_3);
         var _local_11:Vector3d = Vector3d.product(_local_10, ((1 / _local_10.length) * -(_local_8)));
-        this._Str_3453(RoomPlaneData._Str_6206, Vector3d.sum(k, _arg_3), _arg_2, _local_11, [_local_10, _arg_4]);
+        this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, _arg_3), _arg_2, _local_11, [_local_10, _arg_4]);
         if (_arg_5)
         {
-            this._Str_3453(RoomPlaneData._Str_6206, Vector3d.sum(Vector3d.sum(k, _arg_2), _arg_3), Vector3d.product(_arg_3, (-(_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
+            this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_2), _arg_3), Vector3d.product(_arg_3, (-(_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
         }
         if (_arg_6)
         {
-            this._Str_3453(RoomPlaneData._Str_6206, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
+            this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
             if (_arg_7)
             {
                 _local_12 = Vector3d.product(_arg_2, (_local_8 / _arg_2.length));
-                this._Str_3453(RoomPlaneData._Str_6206, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
+                this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
             }
         }
     }
@@ -1197,7 +1199,7 @@ export class RoomPlaneParser
         var _local_9: number;
         var _local_10:Vector3d;
         var _local_11:Vector3d;
-        var _local_8: RoomPlaneData = this._Str_3453(RoomPlaneData._Str_6072, k, _arg_2, _arg_3);
+        var _local_8: RoomPlaneData = this._Str_3453(RoomPlaneData.PLANE_FLOOR, k, _arg_2, _arg_3);
         if (_local_8 != null)
         {
             _local_9 = (RoomPlaneParser._Str_6100 * this._floorThicknessMultiplier);
@@ -1205,83 +1207,86 @@ export class RoomPlaneParser
             _local_11 = Vector3d.dif(k, _local_10);
             if (_arg_6)
             {
-                this._Str_3453(RoomPlaneData._Str_6072, _local_11, _arg_2, _local_10);
+                this._Str_3453(RoomPlaneData.PLANE_FLOOR, _local_11, _arg_2, _local_10);
             }
             if (_arg_7)
             {
-                this._Str_3453(RoomPlaneData._Str_6072, Vector3d.sum(_local_11, Vector3d.sum(_arg_2, _arg_3)), Vector3d.product(_arg_2, -1), _local_10);
+                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, Vector3d.sum(_arg_2, _arg_3)), Vector3d.product(_arg_2, -1), _local_10);
             }
             if (_arg_4)
             {
-                this._Str_3453(RoomPlaneData._Str_6072, Vector3d.sum(_local_11, _arg_3), Vector3d.product(_arg_3, -1), _local_10);
+                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_3), Vector3d.product(_arg_3, -1), _local_10);
             }
             if (_arg_5)
             {
-                this._Str_3453(RoomPlaneData._Str_6072, Vector3d.sum(_local_11, _arg_2), _arg_3, _local_10);
+                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_2), _arg_3, _local_10);
             }
         }
     }
 
-    public _Str_16659(k: any): boolean
+    public _Str_16659(data: RoomMapData): boolean
     {
-        // var _local_8:XML;
-        // var _local_9:XMLList;
-        // var _local_10: number;
-        // var _local_11:XML;
-        // var _local_12: number;
-        // var _local_13:XML;
-        // var _local_14:XMLList;
-        // var _local_15: number;
-        // var _local_16:XML;
-        // if (k == null)
-        // {
-        //     return false;
-        // }
-        // this.reset();
-        // this._Str_25334();
-        // if (!XMLValidator._Str_2747(k.tileMap[0], ["width", "height", "wallHeight"]))
-        // {
-        //     return false;
-        // }
-        // var _local_2: number = parseInt(k.tileMap.@width);
-        // var _local_3: number = parseInt(k.tileMap.@height);
-        // var _local_4: number = parseFloat(k.tileMap.@wallHeight);
-        // var _local_5: number = parseInt(k.tileMap.@fixedWallsHeight);
-        // this._Str_13735(_local_2, _local_3);
-        // var _local_6:XMLList = k.tileMap.tileRow;
-        // var _local_7: number;
-        // while (_local_7 < _local_6.length())
-        // {
-        //     _local_8 = _local_6[_local_7];
-        //     _local_9 = _local_8.tile;
-        //     _local_10 = 0;
-        //     while (_local_10 < _local_9.length())
-        //     {
-        //         _local_11 = _local_9[_local_10];
-        //         _local_12 = parseFloat(_local_11.@height);
-        //         this._Str_3982(_local_10, _local_7, _local_12);
-        //         _local_10++;
-        //     }
-        //     _local_7++;
-        // }
-        // if (k.holeMap.length() > 0)
-        // {
-        //     _local_13 = k.holeMap[0];
-        //     _local_14 = _local_13.hole;
-        //     _local_15 = 0;
-        //     while (_local_15 < _local_14.length())
-        //     {
-        //         _local_16 = _local_14[_local_15];
-        //         if (XMLValidator._Str_2747(_local_16, ["id", "x", "y", "width", "height"]))
-        //         {
-        //             this._Str_12390(_local_16.@id, _local_16.@x, _local_16.@y, _local_16.@width, _local_16.@height);
-        //         }
-        //         _local_15++;
-        //     }
-        //     this._Str_25711();
-        // }
-        // this.wallHeight = _local_4;
-        // this._Str_12919(_local_5);
+        if(!data) return false;
+
+        this.reset();
+
+        this._Str_25334();
+
+        const width             = data.width;
+        const height            = data.height;
+        const wallHeight        = data.wallHeight;
+        const fixedWallsHeight  = data.fixedWallsHeight;
+
+        this._Str_13735(width, height);
+
+        if(data.tileMap)
+        {
+            let y = 0;
+
+            while(y < data.tileMap.length)
+            {
+                const row = data.tileMap[y];
+
+                if(row)
+                {
+                    let x = 0;
+
+                    while(x < row.length)
+                    {
+                        const column = row[x];
+
+                        if(column) this._Str_3982(x, y, column.height);
+
+                        x++;
+                    }
+                }
+
+                y++;
+            }
+        }
+
+        if(data.holeMap && data.holeMap.length)
+        {
+            let index = 0;
+
+            while(index < data.holeMap.length)
+            {
+                const hole = data.holeMap[index];
+
+                if(!hole) continue;
+
+                this._Str_12390(hole.id, hole.x, hole.y, hole.width, hole.height);
+
+                index++;
+            }
+
+            this._Str_25711();
+        }
+
+        this.wallHeight = wallHeight;
+
+        this._Str_12919(fixedWallsHeight);
+        
         return true;
     }
 
@@ -1445,14 +1450,14 @@ export class RoomPlaneParser
     {
         if (((k < 0) || (k >= this._Str_3828)))
         {
-            return RoomPlaneData._Str_12684;
+            return RoomPlaneData.PLANE_UNDEFINED;
         }
         var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
         if (_local_2 != null)
         {
             return _local_2.type;
         }
-        return RoomPlaneData._Str_12684;
+        return RoomPlaneData.PLANE_UNDEFINED;
     }
 
     public _Str_25447(k: number): number

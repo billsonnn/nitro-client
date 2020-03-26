@@ -1,5 +1,5 @@
 import { FigurePartSet } from './FigurePartSet';
-import { IFigurePartSet } from './interfaces/IFigurePartSet';
+import { IFigurePartSet } from './IFigurePartSet';
 
 export class SetType
 {
