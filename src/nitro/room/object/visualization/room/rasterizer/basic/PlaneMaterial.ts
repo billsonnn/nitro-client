@@ -28,6 +28,8 @@ export class PlaneMaterial
 
             this._planeMaterialItems = null;
         }
+
+        this._isCached = false;
     }
 
     public _Str_3355(): void

@@ -1,7 +1,7 @@
 import { GraphicAssetCollection } from '../core/asset/GraphicAssetCollection';
 import { NitroManager } from '../core/common/NitroManager';
-import { RoomContentLoadedEvent } from '../nitro/room/events/RoomContentLoadedEvent';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
+import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomInstanceContainer } from './IRoomInstanceContainer';
 import { IRoomManager } from './IRoomManager';

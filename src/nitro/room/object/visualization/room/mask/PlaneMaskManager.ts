@@ -85,7 +85,7 @@ export class PlaneMaskManager
 
                             if(visualization)
                             {
-                                const size              = mask.size as number;
+                                const size              = visualization.size as number;
                                 const maskVisualization = newMask._Str_24540(size);
 
                                 if(maskVisualization)

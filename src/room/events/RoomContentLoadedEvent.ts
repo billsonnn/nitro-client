@@ -1,4 +1,4 @@
-import { NitroEvent } from '../../../core/events/NitroEvent';
+import { NitroEvent } from '../../core/events/NitroEvent';
 
 export class RoomContentLoadedEvent extends NitroEvent
 {

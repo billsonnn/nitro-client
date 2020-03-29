@@ -554,27 +554,25 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             return true;
         }
 
-        if(!roomObject.logic) return false;
-
         if(floorType)
         {
             if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_FLOOR_TYPE, floorType);
 
-            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_FLOOR_UPDATE, floorType));
+            roomObject.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_FLOOR_UPDATE, floorType));
         }
 
         if(wallType)
         {
             if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_WALL_TYPE, wallType);
 
-            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_WALL_UPDATE, wallType));
+            roomObject.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_WALL_UPDATE, wallType));
         }
 
         if(landscapeType)
         {
             if(roomInstance && !_arg_5) roomInstance.model.setValue(RoomObjectVariable.ROOM_LANDSCAPE_TYPE, landscapeType);
 
-            roomObject.logic.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_LANDSCAPE_UPDATE, landscapeType));
+            roomObject.processUpdateMessage(new ObjectRoomUpdateMessage(ObjectRoomUpdateMessage.ROOM_LANDSCAPE_UPDATE, landscapeType));
         }
 
         return true;

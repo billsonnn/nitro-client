@@ -2,13 +2,13 @@ import { GraphicAssetCollection } from '../../core/asset/GraphicAssetCollection'
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
+import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { NitroInstance } from '../NitroInstance';
 import { FurnitureData } from '../session/furniture/FurnitureData';
 import { FurnitureType } from '../session/furniture/FurnitureType';
 import { IFurnitureDataListener } from '../session/furniture/IFurnitureDataListener';
 import { ISessionDataManager } from '../session/ISessionDataManager';
-import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
 import { RoomObjectVariable } from './object/RoomObjectVariable';

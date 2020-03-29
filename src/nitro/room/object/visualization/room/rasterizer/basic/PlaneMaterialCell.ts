@@ -77,6 +77,7 @@ export class PlaneMaterialCell
 
         this._extraItemAssets   = null;
         this._extraItemOffsets  = null;
+        this._extraItemCount    = 0;
     }
 
     public _Str_3355(): void
@@ -107,39 +108,36 @@ export class PlaneMaterialCell
 
         const texture = this._texture._Str_4913(normal);
 
-        let bitmap = new PIXI.Graphics();
+        if(!texture) return null;
 
-        bitmap
+        let bitmap = new PIXI.Graphics()
             .beginTextureFill({ texture })
             .drawRect(0, 0, texture.width, texture.height)
             .endFill();
 
-        if(texture && textureOffsetX && textureOffsetY)
+        if((textureOffsetX !== 0) || (textureOffsetY !== 0))
         {
-            const sourceBitmap = new PIXI.Graphics();
-
-            sourceBitmap
+            const sourceBitmap = new PIXI.Graphics()
                 .beginFill()
-                .drawRect(0, 0, (texture.width * 2), (texture.height * 2))
+                .drawRect(0, 0, (bitmap.width * 2), (bitmap.height * 2))
                 .endFill()
                 .beginTextureFill({ texture })
-                .drawRect(texture.width, 0, texture.width, texture.height)
-                .drawRect(0, texture.height, texture.width, texture.height)
-                .drawRect(texture.width, texture.height, texture.width, texture.height)
+                .drawRect(0, 0, bitmap.width, bitmap.height)
+                .drawRect(bitmap.width, 0, bitmap.width, bitmap.height)
+                .drawRect(0, bitmap.height, bitmap.width, bitmap.height)
+                .drawRect(bitmap.width, bitmap.height, bitmap.width, bitmap.height)
                 .endFill();
 
-            bitmap = new PIXI.Graphics();
-
-            bitmap
+            bitmap = new PIXI.Graphics()
                 .beginFill()
-                .drawRect(0, 0, texture.width, texture.height)
+                .drawRect(0, 0, bitmap.width, bitmap.height)
                 .endFill();
 
             while(textureOffsetX < 0) textureOffsetX += texture.width;
 
             while(textureOffsetY < 0) textureOffsetY += texture.height;
 
-            const sourceTexture = NitroInstance.instance.renderer.renderer.generateTexture(sourceBitmap, 1, 1, new PIXI.Rectangle((textureOffsetX % texture.width), (textureOffsetY % texture.height), sourceBitmap.width, sourceBitmap.height));
+            const sourceTexture = NitroInstance.instance.renderer.renderer.generateTexture(sourceBitmap, 1, 1, new PIXI.Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
 
             if(sourceTexture)
             {
@@ -170,7 +168,7 @@ export class PlaneMaterialCell
                         {
                             this._cachedBitmapData
                                 .beginTextureFill({ texture: bitmapTexture })
-                                .drawRect(0, 0, bitmap.width, bitmap.height)
+                                .drawRect(0, 0, bitmapTexture.width, bitmapTexture.height)
                                 .endFill();
                         }
                     }

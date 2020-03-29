@@ -57,7 +57,12 @@ export class AssetManager extends Disposable implements IAssetManager
 
         const collection = new GraphicAssetCollection(data, spritesheet);
 
-        this._collections.set(collection.name, collection);
+        if(collection)
+        {
+            for(let [ name, texture ] of collection.textures.entries()) this.setTexture(name, texture);
+
+            this._collections.set(collection.name, collection);
+        }
     }
 
     public downloadAssets(urls: string[], cb: Function): void

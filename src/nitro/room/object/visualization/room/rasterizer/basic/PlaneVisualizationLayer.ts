@@ -62,36 +62,21 @@ export class PlaneVisualizationLayer
 
     public render(canvas: PIXI.Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number, offsetY: number): PIXI.Graphics
     {
-        const red: number   = (this._color >> 16);
-        const green: number = ((this._color >> 8) & 0xFF);
-        const blue: number  = (this._color & 0xFF);
+        if(!canvas || (canvas.width !== width) || (canvas.height !== height)) canvas = null;
 
-        let hasColor = false;
-        
-        if(((red < 0xFF) || (green < 0xFF)) || (blue < 0xFF)) hasColor = true;
-
-        if((!canvas || (canvas.width !== width)) || (canvas.height !== height)) canvas = null;
-
-        let graphic: PIXI.Graphics = null;
+        let bitmapData: PIXI.Graphics = null;
 
         if(this._material)
         {
-            if(hasColor)
-            {
-                graphic = this._material.render(null, width, height, normal, useTexture, offsetX, (offsetY + this.offset), (this.align === PlaneVisualizationLayer.ALIGN_TOP));
-            }
-            else
-            {
-                graphic = this._material.render(canvas, width, height, normal, useTexture, offsetX, (offsetY + this.offset), (this.align === PlaneVisualizationLayer.ALIGN_TOP));
-            }
+            bitmapData = this._material.render(null, width, height, normal, useTexture, offsetX, (offsetY + this.offset), (this.align === PlaneVisualizationLayer.ALIGN_TOP));
 
-            if(graphic && (graphic !== canvas))
+            if(bitmapData && (bitmapData !== canvas))
             {
                 if(this._bitmapData) this._bitmapData.destroy();
                 
-                this._bitmapData = graphic.clone();
+                this._bitmapData = bitmapData.clone();
 
-                graphic = this._bitmapData;
+                bitmapData = this._bitmapData;
             }
         }
         else
@@ -102,62 +87,51 @@ export class PlaneVisualizationLayer
 
                 if(this._bitmapData) this._bitmapData.destroy();
 
-                const newGraphic = new PIXI.Graphics();
-
-                newGraphic
+                const graphic = new PIXI.Graphics()
                     .beginFill(0xFFFFFFFF)
                     .drawRect(0, 0, width, height)
                     .endFill();
 
-                this._bitmapData = newGraphic;
+                this._bitmapData = graphic;
 
-                graphic = this._bitmapData;
+                bitmapData = this._bitmapData;
             }
             else
             {
-                canvas.clear();
+                canvas
+                    .beginFill(0xFFFFFF)
+                    .drawRect(0, 0, width, height)
+                    .endFill();
 
-                canvas.beginFill(0xFFFFFF);
-                canvas.drawRect(0, 0, canvas.width, canvas.height);
-                canvas.endFill();
-
-                graphic = canvas;
+                bitmapData = canvas;
             }
         }
 
-        if(graphic)
+        if(bitmapData)
         {
-            if(hasColor)
+            const red: number   = (this._color >> 16);
+            const green: number = ((this._color >> 8) & 0xFF);
+            const blue: number  = (this._color & 0xFF);
+
+            if(((red < 0xFF) || (green < 0xFF)) || (blue < 0xFF)) this._bitmapData.tint = this._color;
+
+            if(canvas && (bitmapData !== canvas))
             {
-                const tR    = (red / 0xFF);
-                const tG    = (green / 0xFF);
-                const tB    = (blue / 0xFF);
+                const texture = NitroInstance.instance.renderer.renderer.generateTexture(bitmapData, 1, 1);
 
-                const colorMatrix = new PIXI.filters.ColorMatrixFilter();
-
-                colorMatrix.matrix[0]   = tR;
-                colorMatrix.matrix[6]   = tG;
-                colorMatrix.matrix[12]  = tB;
-
-                this._bitmapData.filters = [ colorMatrix ];
-
-                if(canvas && (this._bitmapData !== canvas))
+                if(texture)
                 {
-                    const texture = NitroInstance.instance.renderer.renderer.generateTexture(this._bitmapData, 1, 1, new PIXI.Rectangle(0, 0, this._bitmapData.width, this._bitmapData.height));
-
-                    if(texture)
-                    {
-                        canvas.beginTextureFill({ texture });
-                        canvas.drawRect(0, 0, this._bitmapData.width, this._bitmapData.height);
-                        canvas.endFill();
-                    }
-                    
-                    graphic = canvas;
+                    canvas
+                        .beginTextureFill({ texture })
+                        .drawRect(0, 0, width, height)
+                        .endFill();
                 }
+                
+                bitmapData = canvas;
             }
         }
     
-        return graphic;
+        return bitmapData;
     }
 
     public _Str_8547():PlaneMaterial

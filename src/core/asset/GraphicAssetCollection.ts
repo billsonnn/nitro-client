@@ -110,4 +110,9 @@ export class GraphicAssetCollection
     {
         return this._data;
     }
+
+    public get textures(): Map<string, PIXI.Texture>
+    {
+        return this._textures;
+    }
 }

@@ -11,7 +11,7 @@
         this._rightSideLoc      = _arg_3;
     }
 
-    public get type():String
+    public get type(): string
     {
         return this._type;
     }

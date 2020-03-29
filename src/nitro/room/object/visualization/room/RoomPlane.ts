@@ -1,16 +1,18 @@
 import * as PIXI from 'pixi.js-legacy';
+import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { NitroInstance } from '../../../../NitroInstance';
 import { PlaneMaskManager } from './mask/PlaneMaskManager';
+import { PlaneDrawingData } from './PlaneDrawingData';
 import { IPlaneRasterizer } from './rasterizer/IPlaneRasterizer';
 import { RoomPlaneBitmapMask } from './RoomPlaneBitmapMask';
 import { RoomPlaneRectangleMask } from './RoomPlaneRectangleMask';
 import { PlaneBitmapData } from './utils/PlaneBitmapData';
 import { Randomizer } from './utils/Randomizer';
 
-export class RoomPlane
+export class RoomPlane implements IRoomPlane
 {
     private static ZERO_POINT: PIXI.Point = new PIXI.Point(0, 0);
     public static TYPE_UNDEFINED: number = 0;
@@ -44,13 +46,13 @@ export class RoomPlane
     private _Str_21079: number;
     private _Str_22024: number;
     private _Str_2708: Map<string, PlaneBitmapData>;
-    private _Str_5545:PlaneBitmapData;
+    private _Str_5545: PlaneBitmapData;
     private _Str_4542: boolean;
     private _Str_4047: RoomPlaneBitmapMask[];
     private _Str_5088: RoomPlaneRectangleMask[];
     private _Str_4891: boolean;
-    private _Str_2730: PIXI.Texture;
-    private _Str_3616: PIXI.Texture;
+    private _Str_2730: PIXI.Graphics;
+    private _Str_3616: PIXI.Graphics;
     private _Str_8341: RoomPlaneBitmapMask[];
     private _Str_14495: RoomPlaneRectangleMask[];
     private _Str_2820:Vector3d;
@@ -60,7 +62,6 @@ export class RoomPlane
     private _Str_1720: number = 0;
     private _height: number = 0;
     private _Str_7367: boolean;
-    private _tempMatrix: PIXI.Matrix;
 
     constructor(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: number, _arg_6: boolean, _arg_7: IVector3D[], _arg_8: number, _arg_9: number=0, _arg_10: number=0, _arg_11: number=0, _arg_12: number=0)
     {
@@ -84,7 +85,6 @@ export class RoomPlane
         this._Str_2943 = new Vector3d();
         this._Str_2943.assign(_arg_4);
         this._normal = Vector3d.crossProduct(this._Str_2920, this._Str_2943);
-        this._tempMatrix = null;
         if (this._normal.length > 0)
         {
             this._normal.multiply((1 / this._normal.length));
@@ -147,11 +147,6 @@ export class RoomPlane
     public get _Str_14801(): boolean
     {
         return this._Str_7367;
-    }
-
-    public get tempMatrix(): PIXI.Matrix
-    {
-        return this._tempMatrix;
     }
 
     public get bitmapData(): PIXI.Texture
@@ -329,7 +324,7 @@ export class RoomPlane
         return true;
     }
 
-    private _Str_11000(k: PIXI.Texture = null):void
+    private _Str_11000(k: PIXI.Graphics = null):void
     {
         if(this._Str_2708 && this._Str_2708.size)
         {
@@ -412,7 +407,7 @@ export class RoomPlane
             {
                 const _local_9 = new PIXI.Graphics();
 
-                _local_9.beginFill((0xFF000000 | this._color))
+                _local_9.beginFill(0xFFFFFF)
                 _local_9.drawRect(0, 0, _local_5, _local_6);
                 _local_9.endFill();
 
@@ -421,7 +416,7 @@ export class RoomPlane
 
             if(_local_3)
             {
-                //this._Str_17859(_local_3.bitmap, k);
+                this._Str_17859(_local_3.bitmap, k);
                 this._Str_17642(_local_4, _local_3);
             }
         }
@@ -447,49 +442,46 @@ export class RoomPlane
         return null;
     }
 
-    // private _Str_23649(k:IRoomGeometry):PlaneDrawingData
-    // {
-    //     var _local_7:PlaneMask;
-    //     var _local_8: string;
-    //     var _local_9: IVector3D;
-    //     var _local_10:IGraphicAsset;
-    //     var _local_11: PIXI.Point;
-    //     if (!this._Str_4542)
-    //     {
-    //         return null;
-    //     }
-    //     var _local_2:RoomPlaneBitmapMask;
-    //     var _local_3: number;
-    //     var _local_4: number;
-    //     var _local_5:PlaneDrawingData = new PlaneDrawingData();
-    //     var _local_6: number;
-    //     while (_local_6 < this._Str_4047.length)
-    //     {
-    //         _local_2 = (this._Str_4047[_local_6] as RoomPlaneBitmapMask);
-    //         if (_local_2 != null)
-    //         {
-    //             _local_7 = this._Str_4795._Str_8361(_local_2.type);
-    //             if (_local_7 != null)
-    //             {
-    //                 _local_8 = _local_7._Str_2125(k.scale);
-    //                 if (_local_8 != null)
-    //                 {
-    //                     _local_9 = k._Str_8614(this._normal);
-    //                     _local_10 = _local_7._Str_21021(k.scale, _local_9);
-    //                     if (_local_10 != null)
-    //                     {
-    //                         _local_3 = (this._Str_2730.width * (1 - (_local_2._Str_5120 / this._Str_2920.length)));
-    //                         _local_4 = (this._Str_2730.height * (1 - (_local_2._Str_4659 / this._Str_2943.length)));
-    //                         _local_11 = new PIXI.Point((_local_3 + _local_10.offsetX), (_local_4 + _local_10.offsetY));
-    //                         _local_5.addMask(_local_8, _local_11, _local_10.flipH, _local_10.flipV);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         _local_6++;
-    //     }
-    //     return _local_5;
-    // }
+    private _Str_23649(k: IRoomGeometry): PlaneDrawingData
+    {
+        if(!this._Str_4542) return null;
+
+        const _local_5 = new PlaneDrawingData();
+
+        let index = 0;
+
+        while(index < this._Str_4047.length)
+        {
+            const mask = this._Str_4047[index];
+
+            if(mask)
+            {
+                const planeMask = this._Str_4795._Str_8361(mask.type);
+
+                if(planeMask)
+                {
+                    const assetName = planeMask._Str_2125(k.scale);
+
+                    if(assetName)
+                    {
+                        const position  = k.getCoordinatePosition(this._normal);
+                        const asset     = planeMask._Str_21021(k.scale, position);
+
+                        if(asset)
+                        {
+                            const _local_3  = (this._Str_2730.width * (1 - (mask._Str_5120 / this._Str_2920.length)));
+                            const _local_4  = (this._Str_2730.height * (1 - (mask._Str_4659 / this._Str_2943.length)));
+                            const _local_11 = new PIXI.Point((_local_3 + asset.offsetX), (_local_4 + asset.offsetY));
+
+                            _local_5.addMask(assetName, _local_11, asset.flipH, asset.flipV);
+                        }
+                    }
+                }
+            }
+        }
+
+        return _local_5;
+    }
 
     private _Str_24802(k: IRoomGeometry): number
     {
@@ -499,84 +491,85 @@ export class RoomPlane
         return Math.round((this._Str_2920.length * Math.abs((_local_2.x - _local_3.x))));
     }
 
-    // public _Str_22136(geometry:IRoomGeometry):Array
-    // {
-    //     var maskData:PlaneDrawingData;
-    //     var data:PlaneDrawingData;
-    //     var layers:Array;
-    //     var layer:PlaneVisualizationLayer;
-    //     var i: number;
-    //     var normal: IVector3D;
-    //     var cm:PlaneMaterialCellMatrix;
-    //     var column:PlaneMaterialCellColumn;
-    //     var assetNames:Array;
-    //     var cell:PlaneMaterialCell;
-    //     var name: string;
-    //     var drawingDatas:Array = [];
-    //     if (this._Str_3816)
-    //     {
-    //         maskData = null;
-    //         try
-    //         {
-    //             maskData = this._Str_23649(geometry);
-    //             layers = this._rasterizer._Str_8988(this._Str_576);
-    //             i = 0;
-    //             while (i < layers.length)
-    //             {
-    //                 layer = (layers[i] as PlaneVisualizationLayer);
-    //                 if (layer != null)
-    //                 {
-    //                     if (((this._Str_13946) && (!(layer._Str_8547() == null))))
-    //                     {
-    //                         normal = geometry._Str_8614(this._normal);
-    //                         cm = layer._Str_8547()._Str_21968(normal);
-    //                         data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()), cm._Str_14945());
-    //                         Randomizer._Str_17384(this._Str_16308);
-    //                         for(let column in cm._Str_23721(this._Str_24802(geometry)))
-    //                         {
-    //                             assetNames = [];
-    //                             for(let cell in column._Str_22299())
-    //                             {
-    //                                 name = cell._Str_2125(normal);
-    //                                 if (name != null)
-    //                                 {
-    //                                     assetNames.push(name);
-    //                                 }
-    //                             }
-    //                             if (assetNames.length > 0)
-    //                             {
-    //                                 if (!column._Str_24523())
-    //                                 {
-    //                                     assetNames.push("");
-    //                                 }
-    //                                 data._Str_22862(assetNames);
-    //                             }
-    //                         }
-    //                         if (data._Str_17636.length > 0)
-    //                         {
-    //                             drawingDatas.push(data);
-    //                         }
-    //                     }
-    //                     else
-    //                     {
-    //                         data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()));
-    //                         drawingDatas.push(data);
-    //                     }
-    //                 }
-    //                 i = (i + 1);
-    //             }
-    //         }
-    //         catch(e:Error)
-    //         {
-    //             Logger.log("Error in getting RoomPlane drawing data.", e);
-    //         }
-    //         if (drawingDatas.length == 0)
-    //         {
-    //             drawingDatas.push(new PlaneDrawingData(maskData, this._color));
-    //         }
-    //     }
-    //     return drawingDatas;
-    // }
+    public _Str_22136(geometry:IRoomGeometry): PlaneDrawingData[]
+    {
+        return null;
+        // var maskData:PlaneDrawingData;
+        // var data:PlaneDrawingData;
+        // var layers:Array;
+        // var layer:PlaneVisualizationLayer;
+        // var i: number;
+        // var normal: IVector3D;
+        // var cm:PlaneMaterialCellMatrix;
+        // var column:PlaneMaterialCellColumn;
+        // var assetNames:Array;
+        // var cell:PlaneMaterialCell;
+        // var name: string;
+        // var drawingDatas:Array = [];
+        // if (this._Str_3816)
+        // {
+        //     maskData = null;
+        //     try
+        //     {
+        //         maskData = this._Str_23649(geometry);
+        //         layers = this._rasterizer._Str_8988(this._Str_576);
+        //         i = 0;
+        //         while (i < layers.length)
+        //         {
+        //             layer = (layers[i] as PlaneVisualizationLayer);
+        //             if (layer != null)
+        //             {
+        //                 if (((this._Str_13946) && (!(layer._Str_8547() == null))))
+        //                 {
+        //                     normal = geometry._Str_8614(this._normal);
+        //                     cm = layer._Str_8547()._Str_21968(normal);
+        //                     data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()), cm._Str_14945());
+        //                     Randomizer._Str_17384(this._Str_16308);
+        //                     for(let column in cm._Str_23721(this._Str_24802(geometry)))
+        //                     {
+        //                         assetNames = [];
+        //                         for(let cell in column._Str_22299())
+        //                         {
+        //                             name = cell._Str_2125(normal);
+        //                             if (name != null)
+        //                             {
+        //                                 assetNames.push(name);
+        //                             }
+        //                         }
+        //                         if (assetNames.length > 0)
+        //                         {
+        //                             if (!column._Str_24523())
+        //                             {
+        //                                 assetNames.push("");
+        //                             }
+        //                             data._Str_22862(assetNames);
+        //                         }
+        //                     }
+        //                     if (data._Str_17636.length > 0)
+        //                     {
+        //                         drawingDatas.push(data);
+        //                     }
+        //                 }
+        //                 else
+        //                 {
+        //                     data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()));
+        //                     drawingDatas.push(data);
+        //                 }
+        //             }
+        //             i = (i + 1);
+        //         }
+        //     }
+        //     catch(e:Error)
+        //     {
+        //         Logger.log("Error in getting RoomPlane drawing data.", e);
+        //     }
+        //     if (drawingDatas.length == 0)
+        //     {
+        //         drawingDatas.push(new PlaneDrawingData(maskData, this._color));
+        //     }
+        // }
+        // return drawingDatas;
+    }
 
     // private _Str_25956(k:PlaneBitmapData):void
     // {
@@ -595,7 +588,7 @@ export class RoomPlane
             if(!this.visible) return false;
         }
 
-        if (geometryChanged)
+        if(geometryChanged)
         {
             this._Str_5545 = null;
 
@@ -792,128 +785,54 @@ export class RoomPlane
 
     private draw(k: PIXI.Graphics, matrix: PIXI.Matrix):void
     {
-        var _local_3: number;
-        var _local_4: number;
-        var _local_5: number;
-        var _local_6: number;
-        var _local_7: number;
-        if (this._Str_1049 != null)
-        {
-            if (((((((matrix.a == 1) && (matrix.d == 1)) && (matrix.c == 0)) && (!(matrix.b == 0))) && (Math.abs(matrix.b) <= 1)) && ((this._type == RoomPlane.TYPE_WALL) || (this._type == RoomPlane.TYPE_LANDSCAPE))))
-            {
-                _local_3 = 0;
-                _local_4 = 0;
-                _local_5 = 0;
-                _local_6 = 0;
-                if (matrix.b > 0)
-                {
-                    matrix.ty++;
-                }
-                _local_7 = 0;
-                while (_local_3 < k.width)
-                {
-                    _local_3++;
-                    _local_5 = (_local_5 + Math.abs(matrix.b));
-                    if (_local_5 >= 1)
-                    {
-                        // this._Str_1049.moveTo((matrix.tx + _local_4), (matrix.ty + _local_7));
-                        // this._Str_1049.beginFill(0xFFFFFF);
-                        // this._Str_1049.drawRect((_local_4 + _local_6), 0, (_local_3 - _local_4), k.height);
-                        // this._Str_1049.endFill();
-
-                        _local_4 = _local_3;
-                        if (matrix.b > 0)
-                        {
-                            _local_7++;
-                        }
-                        else
-                        {
-                            _local_7--;
-                        }
-                        _local_5 = 0;
-                    }
-                }
-                if (_local_5 > 0)
-                {
-                    // this._Str_1049.moveTo((matrix.tx + _local_4), (matrix.ty + _local_7));
-                    // this._Str_1049.beginFill(0xFFFFFF);
-                    // this._Str_1049.drawRect(_local_4, 0, (_local_3 - _local_4), k.height);
-                    // this._Str_1049.endFill();
-                }
-
-
-
-                // this._Str_1049.transform.setFromMatrix(matrix);
-
-                // NitroInstance.instance.renderer.stage.addChild(this._Str_1049);
-                return;
-            }
-
-            const clone = k.clone();
-
-            clone.transform.setFromMatrix(matrix);
-
-            this._Str_1049 = clone;
-        }
+        const clone = k.clone();
+        
+        clone.transform.setFromMatrix(matrix);
+        
+        this._Str_1049 = clone;
     }
 
-    // public _Str_25213():void
-    // {
-    //     if (this._disposed)
-    //     {
-    //         return;
-    //     }
-    //     if (this._Str_4542)
-    //     {
-    //         if (this._Str_4047.length == 0)
-    //         {
-    //             return;
-    //         }
-    //         this._Str_4891 = true;
-    //         this._Str_4047 = [];
-    //     }
-    // }
+    public _Str_25213():void
+    {
+        if(this._disposed || !this._Str_4542 || !this._Str_4047.length) return;
 
-    // public _Str_24569(k: string, _arg_2: number, _arg_3: number): boolean
-    // {
-    //     var _local_4:RoomPlaneBitmapMask;
-    //     var _local_5: number;
-    //     if (this._Str_4542)
-    //     {
-    //         _local_4 = null;
-    //         _local_5 = 0;
-    //         while (_local_5 < this._Str_4047.length)
-    //         {
-    //             _local_4 = (this._Str_4047[_local_5] as RoomPlaneBitmapMask);
-    //             if (_local_4 != null)
-    //             {
-    //                 if ((((_local_4.type == k) && (_local_4._Str_5120 == _arg_2)) && (_local_4._Str_4659 == _arg_3)))
-    //                 {
-    //                     return false;
-    //                 }
-    //             }
-    //             _local_5++;
-    //         }
-    //         _local_4 = new RoomPlaneBitmapMask(k, _arg_2, _arg_3);
-    //         this._Str_4047.push(_local_4);
-    //         this._Str_4891 = true;
-    //         return true;
-    //     }
-    //     return false;
-    // }
+        this._Str_4891 = true;
+        this._Str_4047 = [];
+    }
 
-    // public _Str_25934():void
-    // {
-    //     if (this._Str_4542)
-    //     {
-    //         if (this._Str_5088.length == 0)
-    //         {
-    //             return;
-    //         }
-    //         this._Str_4891 = true;
-    //         this._Str_5088 = [];
-    //     }
-    // }
+    public _Str_24569(k: string, _arg_2: number, _arg_3: number): boolean
+    {
+        if(!this._Str_4542) return false;
+
+        let _local_5 = 0;
+        
+        while (_local_5 < this._Str_4047.length)
+        {
+            const mask = this._Str_4047[_local_5];
+
+            if(mask)
+            {
+                if ((((mask.type === k) && (mask._Str_5120 === _arg_2)) && (mask._Str_4659 === _arg_3))) return false;
+            }
+
+            _local_5++;
+        }
+
+        const mask = new RoomPlaneBitmapMask(k, _arg_2, _arg_3);
+
+        this._Str_4047.push(mask);
+        this._Str_4891 = true;
+
+        return true;
+    }
+
+    public _Str_25934(): void
+    {
+        if(!this._Str_4542 || !this._Str_5088.length) return;
+        
+        this._Str_4891 = true;
+        this._Str_5088 = [];
+    }
 
     public _Str_24758(k: number, _arg_2: number, _arg_3: number, _arg_4: number): boolean
     {
@@ -982,122 +901,145 @@ export class RoomPlane
         if(_local_3) this._Str_4891 = false;
     }
 
-    // private _Str_17859(texture:BitmapData, geometry:IRoomGeometry):void
-    // {
-    //     var normal: IVector3D;
-    //     var posX: number;
-    //     var posY: number;
-    //     var type: string;
-    //     var wd: number;
-    //     var ht: number;
-    //     if ((((!(this._Str_4542)) || (((this._Str_4047.length == 0) && (this._Str_5088.length == 0)) && (!(this._Str_4891)))) || (this._Str_4795 == null)))
-    //     {
-    //         return;
-    //     }
-    //     if (((texture == null) || (geometry == null)))
-    //     {
-    //         return;
-    //     }
-    //     var mask:RoomPlaneBitmapMask;
-    //     var rectMask:RoomPlaneRectangleMask;
-    //     var i: number;
-    //     var j: number;
-    //     this._Str_19336();
-    //     var width: number = texture.width;
-    //     var height: number = texture.height;
-    //     if ((((this._Str_2730 == null) || (!(this._Str_2730.width == width))) || (!(this._Str_2730.height == height))))
-    //     {
-    //         if (this._Str_2730 != null)
-    //         {
-    //             this._Str_2730.dispose();
-    //             this._Str_2730 = null;
-    //         }
-    //         try
-    //         {
-    //             this._Str_2730 = new BitmapData(width, height, true, 0xFFFFFF);
-    //         }
-    //         catch(e:Error)
-    //         {
-    //             _Str_2730 = null;
-    //             return;
-    //         }
-    //         this._Str_4891 = true;
-    //     }
-    //     if (this._Str_4891)
-    //     {
-    //         this._Str_8341 = [];
-    //         this._Str_14495 = [];
-    //         if (this._Str_2730 != null)
-    //         {
-    //             this._Str_2730.fillRect(this._Str_2730.rect, 0xFFFFFF);
-    //         }
-    //         this._Str_11000(texture);
-    //         normal = geometry._Str_8614(this._normal);
-    //         posX = 0;
-    //         posY = 0;
-    //         i = 0;
-    //         while (i < this._Str_4047.length)
-    //         {
-    //             mask = (this._Str_4047[i] as RoomPlaneBitmapMask);
-    //             if (mask != null)
-    //             {
-    //                 posX = (this._Str_2730.width - ((this._Str_2730.width * mask._Str_5120) / this._Str_2920.length));
-    //                 posY = (this._Str_2730.height - ((this._Str_2730.height * mask._Str_4659) / this._Str_2943.length));
-    //                 type = mask.type;
-    //                 this._Str_4795._Str_17859(this._Str_2730, type, geometry.scale, normal, posX, posY);
-    //                 this._Str_8341.push(new RoomPlaneBitmapMask(type, mask._Str_5120, mask._Str_4659));
-    //             }
-    //             i = (i + 1);
-    //         }
-    //         j = 0;
-    //         while (j < this._Str_5088.length)
-    //         {
-    //             rectMask = (this._Str_5088[j] as RoomPlaneRectangleMask);
-    //             if (rectMask != null)
-    //             {
-    //                 posX = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
-    //                 posY = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
-    //                 wd = ((this._Str_2730.width * rectMask._Str_9124) / this._Str_2920.length);
-    //                 ht = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
-    //                 this._Str_2730.fillRect(new Rectangle((posX - wd), (posY - ht), wd, ht), 0xFF000000);
-    //                 this._Str_14495.push(new RoomPlaneRectangleMask(rectMask._Str_9124, rectMask._Str_4659, rectMask._Str_9124, rectMask._Str_12156));
-    //             }
-    //             j = (j + 1);
-    //         }
-    //         this._Str_4891 = false;
-    //     }
-    //     this._Str_24790(texture, this._Str_2730);
-    // }
+    private _Str_17859(texture: PIXI.Graphics, geometry: IRoomGeometry): void
+    {
+        if(!texture || !geometry) return;
 
-    // private _Str_24790(texture:BitmapData, mask:BitmapData):void
-    // {
-    //     if (((texture == null) || (mask == null)))
-    //     {
-    //         return;
-    //     }
-    //     if (((!(this._Str_3616 == null)) && ((!(this._Str_3616.width == texture.width)) || (!(this._Str_3616.height == texture.height)))))
-    //     {
-    //         this._Str_3616.dispose();
-    //         this._Str_3616 = null;
-    //     }
-    //     if (this._Str_3616 == null)
-    //     {
-    //         try
-    //         {
-    //             this._Str_3616 = new BitmapData(texture.width, texture.height, true, 0xFFFFFFFF);
-    //         }
-    //         catch(e:Error)
-    //         {
-    //             if (_Str_3616)
-    //             {
-    //                 _Str_3616.dispose();
-    //             }
-    //             _Str_3616 = null;
-    //             return;
-    //         }
-    //     }
-    //     this._Str_3616.copyChannel(texture, texture.rect, ZERO_POINT, BitmapDataChannel.ALPHA, BitmapDataChannel.RED);
-    //     this._Str_3616.draw(mask, null, null, BlendMode.DARKEN);
-    //     texture.copyChannel(this._Str_3616, this._Str_3616.rect, ZERO_POINT, BitmapDataChannel.RED, BitmapDataChannel.ALPHA);
-    // }
+        console.log(this._Str_4542, this._Str_4047, this._Str_5088, this._Str_4891, this._Str_4795);
+
+        if(((!this._Str_4542) || ((!this._Str_4047.length && !this._Str_5088.length) && !this._Str_4891)) || !this._Str_4795) return;
+
+        let width   = texture.width;
+        let height  = texture.height;
+
+        this._Str_19336();
+
+        if(!this._Str_2730 || (this._Str_2730.width !== width) || (this._Str_2730.height !== height))
+        {
+            if(this._Str_2730)
+            {
+                this._Str_2730.destroy();
+                this._Str_2730 = null;
+            }
+
+            const graphic = new PIXI.Graphics();
+
+            graphic
+                .beginFill(0xFFFFFF)
+                .drawRect(0, 0, width, height)
+                .endFill();
+
+            this._Str_2730 = graphic;
+            this._Str_4891 = true;
+        }
+
+        if(this._Str_4891)
+        {
+            this._Str_8341  = [];
+            this._Str_14495 = [];
+
+            if(this._Str_2730)
+            {
+                const rectangle = this._Str_2730.getLocalBounds();
+
+                this._Str_2730
+                    .clear()
+                    .beginFill(0xFFFFFF)
+                    .drawRect(0, 0, rectangle.width, rectangle.height)
+                    .endFill();
+            }
+
+            this._Str_11000(texture);
+
+            const normal = geometry.getCoordinatePosition(this._normal);
+            
+            let type: string    = null;
+            let posX            = 0;
+            let posY            = 0;
+            let i               = 0;
+
+            while(i < this._Str_4047.length)
+            {
+                const mask = this._Str_4047[i];
+
+                if(mask)
+                {
+                    type = mask.type;
+                    posX = (this._Str_2730.width - ((this._Str_2730.width * mask._Str_5120) / this._Str_2920.length));
+                    posY = (this._Str_2730.height - ((this._Str_2730.height * mask._Str_4659) / this._Str_2943.length));
+
+                    this._Str_4795._Str_17859(this._Str_2730, type, geometry.scale, normal, posX, posY);
+                    this._Str_8341.push(new RoomPlaneBitmapMask(type, mask._Str_5120, mask._Str_4659));
+                }
+
+                i++;
+            }
+
+            i = 0;
+
+            while (i < this._Str_5088.length)
+            {
+                const rectMask = this._Str_5088[i];
+
+                if(rectMask)
+                {
+                    posX    = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
+                    posY    = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
+                    
+                    let wd  = ((this._Str_2730.width * rectMask._Str_9124) / this._Str_2920.length);
+                    let ht  = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
+
+                    this._Str_2730
+                        .clear()
+                        .beginFill(0xFF0000)
+                        .drawRect((posX - wd), (posY - ht), wd, ht)
+                        .endFill();
+                    
+                    this._Str_14495.push(new RoomPlaneRectangleMask(rectMask._Str_9124, rectMask._Str_4659, rectMask._Str_9124, rectMask._Str_12156));
+                }
+
+                i++;
+            }
+
+            this._Str_4891 = false;
+        }
+
+        console.log('do this')
+
+        this._Str_24790(texture, this._Str_2730);
+    }
+
+    private _Str_24790(texture: PIXI.Graphics, mask: PIXI.Graphics):void
+    {
+        if(!texture || !mask) return;
+
+        if(this._Str_3616 && (this._Str_3616.width !== texture.width) || (this._Str_3616.height !== texture.height))
+        {
+            this._Str_3616.destroy();
+
+            this._Str_3616 = null;
+        }
+
+        if(!this._Str_3616)
+        {
+            const graphic = new PIXI.Graphics();
+
+            graphic
+                .beginFill(0xFFFFFF)
+                .drawRect(0, 0, texture.width, texture.height)
+                .endFill();
+
+            this._Str_3616 = graphic;
+        }
+
+        const newMaskTexture = NitroInstance.instance.renderer.renderer.generateTexture(mask, 1, 1);
+
+        if(newMaskTexture)
+        {
+            this._Str_3616
+                .beginTextureFill({ texture: newMaskTexture })
+                .drawRect(0, 0, mask.width, mask.height)
+                .endFill();
+        }
+    }
 }

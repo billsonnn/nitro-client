@@ -140,7 +140,7 @@ export class PlaneMaterialCellColumn
         {
             if(this._cachedBitmapData)
             {
-                if((((this._cachedBitmapData.height === height) && (Vector3d.isEqual(this._cachedBitmapNormal, normal))) && (this._cachedBitmapDataOffsetX === offsetX)) && (this._cachedBitmapDataOffsetY === offsetY))
+                if((this._cachedBitmapData.height === height) && Vector3d.isEqual(this._cachedBitmapNormal, normal) && (this._cachedBitmapDataOffsetX === offsetX) && (this._cachedBitmapDataOffsetY === offsetY))
                 {
                     return this._cachedBitmapData;
                 }
@@ -156,13 +156,10 @@ export class PlaneMaterialCellColumn
             {
                 if(this._cachedBitmapData.height === height)
                 {
-                    this._cachedBitmapData.clear();
-
-                    const rectangle = this._cachedBitmapData.getBounds();
-
-                    this._cachedBitmapData.beginFill(0xFFFFFF);
-                    this._cachedBitmapData.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-                    this._cachedBitmapData.endFill();
+                    this._cachedBitmapData
+                        .beginFill(0xFFFFFF)
+                        .drawRect(0, 0, this._cachedBitmapData.width, height)
+                        .endFill();
                 }
                 else
                 {
@@ -177,11 +174,10 @@ export class PlaneMaterialCellColumn
 
         if(!this._cachedBitmapData)
         {
-            this._cachedBitmapData = new PIXI.Graphics();
-
-            this._cachedBitmapData.beginFill(0xFFFFFF);
-            this._cachedBitmapData.drawRect(0, 0, this._width, height);
-            this._cachedBitmapData.endFill();
+            this._cachedBitmapData = new PIXI.Graphics()
+                .beginFill(0xFFFFFF)
+                .drawRect(0, 0, this._width, height)
+                .endFill();
         }
 
         this._cachedBitmapNormal.assign(normal);
@@ -261,7 +257,7 @@ export class PlaneMaterialCellColumn
                 {
                     if(!_arg_3) _arg_2 -= graphic.height;
 
-                    const texture = NitroInstance.instance.renderer.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, graphic.width, graphic.height));
+                    const texture = NitroInstance.instance.renderer.renderer.generateTexture(graphic, 1, 1);
 
                     if(texture)
                     {
@@ -271,7 +267,7 @@ export class PlaneMaterialCellColumn
                             .endFill();
                     }
 
-                    if(_arg_3) _arg_2 = (_arg_2 + graphic.height);
+                    if(_arg_3) _arg_2 = (_arg_2 + texture.height);
 
                     if(((_arg_3) && (_arg_2 >= this._cachedBitmapData.height)) || ((!(_arg_3)) && (_arg_2 <= 0))) return _arg_2;
                 }

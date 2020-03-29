@@ -191,13 +191,10 @@ export class PlaneMaterialCellMatrix
             {
                 if((this._cachedBitmapData.width === width) && (this._cachedBitmapData.height === height))
                 {
-                    const rectangle = this._cachedBitmapData.getBounds();
-
-                    this._cachedBitmapData.clear();
-
-                    this._cachedBitmapData.beginFill(0xFFFFFF);
-                    this._cachedBitmapData.drawRect(0, 0, this._cachedBitmapData.width, this._cachedBitmapData.height);
-                    this._cachedBitmapData.endFill();
+                    this._cachedBitmapData
+                        .beginFill(0xFFFFFF)
+                        .drawRect(0, 0, width, height)
+                        .endFill();
                 }
                 else
                 {
@@ -217,21 +214,19 @@ export class PlaneMaterialCellMatrix
 
             if(!this._cachedBitmapData)
             {
-                const graphic = new PIXI.Graphics();
-
-                graphic.beginFill(0xFFFFFF);
-                graphic.drawRect(0, 0, width, height);
-                graphic.endFill();
+                const graphic = new PIXI.Graphics()
+                    .beginFill(0xFFFFFF)
+                    .drawRect(0, 0, width, height)
+                    .endFill();
 
                 this._cachedBitmapData = graphic;
             }
             else
             {
-                this._cachedBitmapData.clear();
-
-                this._cachedBitmapData.beginFill(0xFFFFFF);
-                this._cachedBitmapData.drawRect(0, 0, this._cachedBitmapData.width, this._cachedBitmapData.height);
-                this._cachedBitmapData.endFill();
+                this._cachedBitmapData
+                    .beginFill(0xFFFFFF)
+                    .drawRect(0, 0, width, height)
+                    .endFill();
             }
 
             if(canvas)
@@ -248,11 +243,10 @@ export class PlaneMaterialCellMatrix
         {
             this._cachedBitmapHeight = height;
 
-            const graphic = new PIXI.Graphics();
-
-            graphic.beginFill(0xFFFFFF);
-            graphic.drawRect(0, 0, width, height);
-            graphic.endFill();
+            const graphic = new PIXI.Graphics()
+                .beginFill(0xFFFFFF)
+                .drawRect(0, 0, width, height)
+                .endFill();
 
             this._cachedBitmapData = graphic;
         }
@@ -339,9 +333,10 @@ export class PlaneMaterialCellMatrix
 
         if(texture)
         {
-            k.beginTextureFill({ texture });
-            k.drawRect(0, _arg_3, _local_5.width, _local_5.height);
-            k.endFill();
+            k
+                .beginTextureFill({ texture })
+                .drawRect(0, _arg_3, _local_5.width, _local_5.height)
+                .endFill();
         }
     }
 

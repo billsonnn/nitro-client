@@ -36,6 +36,7 @@ import { FurnitureSoundBlockLogic } from './furniture/FurnitureSoundBlockLogic';
 import { FurnitureTrophyLogic } from './furniture/FurnitureTrophyLogic';
 import { FurnitureVoteCounterLogic } from './furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLogic';
+import { FurnitureWindowLogic } from './furniture/FurnitureWindowLogic';
 import { PetLogic } from './pet/PetLogic';
 import { RoomLogic } from './room/RoomLogic';
 import { TileCursorLogic } from './room/TileCursorLogic';
@@ -246,6 +247,8 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
             case RoomObjectLogicType.FURNITURE_VOTE_MAJORITY:
                 logic = FurnitureVoteMajorityLogic;
                 break;
+            case RoomObjectLogicType.FURNITURE_WINDOW:
+                logic = FurnitureWindowLogic;
             default:
                 logic = FurnitureLogic;
                 break;

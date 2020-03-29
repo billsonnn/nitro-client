@@ -154,13 +154,14 @@ export class PlaneVisualization
                 {
                     if(canvas)
                     {
-                        const texture = NitroInstance.instance.renderer.renderer.generateTexture(this._cachedBitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
+                        const texture = NitroInstance.instance.renderer.renderer.generateTexture(this._cachedBitmapData, 1, 1);
 
                         if(texture)
                         {
-                            canvas.beginTextureFill({ texture });
-                            canvas.drawRect(0, 0, texture.width, texture.height);
-                            canvas.endFill();
+                            canvas
+                                .beginTextureFill({ texture })
+                                .drawRect(0, 0, texture.width, texture.height)
+                                .endFill();
 
                             return canvas;
                         }
@@ -191,7 +192,6 @@ export class PlaneVisualization
         else
         {
             this._cachedBitmapData
-                .clear()
                 .beginFill(0xFFFFFF)
                 .drawRect(0, 0, width, height)
                 .endFill();
@@ -216,10 +216,12 @@ export class PlaneVisualization
 
         if(canvas && (canvas !== this._cachedBitmapData))
         {
-            const texture = NitroInstance.instance.renderer.renderer.generateTexture(canvas, 1, 1, new PIXI.Rectangle(0, 0, canvas.width, canvas.height));
+            const texture = NitroInstance.instance.renderer.renderer.generateTexture(canvas, 1, 1);
 
-            this._cachedBitmapData.beginTextureFill({ texture });
-            this._cachedBitmapData.drawRect(0, 0, canvas.width, canvas.height);
+            this._cachedBitmapData
+                .beginTextureFill({ texture })
+                .drawRect(0, 0, canvas.width, canvas.height)
+                .endFill();
 
             return canvas;
         }
