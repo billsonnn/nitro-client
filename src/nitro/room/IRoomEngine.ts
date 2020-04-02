@@ -17,7 +17,7 @@ export interface IRoomEngine
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
     getRoomInstanceRenderingCanvas(roomId: number, canvasId: number): IRoomRenderingCanvas;
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;
-    getRoomInstanceGeometry(roomId: number, canvasId: number): IRoomGeometry;
+    getRoomInstanceGeometry(roomId: number, canvasId?: number): IRoomGeometry;
     getRoomInstanceNumber(roomId: number, key: string): number;
     refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;

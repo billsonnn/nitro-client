@@ -3,7 +3,7 @@ import { IRoomObject } from '../../../room/object/IRoomObject';
 
 export class RoomObjectHSLColorEnableEvent extends RoomObjectEvent
 {
-    public static ROHSLCEE_ROOM_BACKGROUND_COLOR: string = "ROHSLCEE_ROOM_BACKGROUND_COLOR";
+    public static ROOM_BACKGROUND_COLOR: string = "ROHSLCEE_ROOM_BACKGROUND_COLOR";
 
     private _enable: boolean;
     private _hue: number;

@@ -1,17 +1,17 @@
 export class NitroConfiguration
 {
-    public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
-    public static SOCKET_URL                = 'wss://system.nitrots.co';
-    public static ASSET_URL                 = 'https://assets.nitrots.co';
-    public static ASSET_AVATAR_URL          = NitroConfiguration.ASSET_URL + '/figure/%libname%/%libname%.json';
-    //public static SOCKET_URL                = 'wss://nitro-socket.nextgenhabbo.com';
-    //public static ASSET_URL                 = 'https://nitro-assets.nextgenhabbo.com';
     public static FPS                       = 24;
-    public static FURNIDATA_URL             = 'https://nitro-assets.nextgenhabbo.com/gamedata/json/FurnitureData.json';
     public static BACKGROUND_COLOR          = 0x000000;
     public static PACKET_LOG                = false;
     public static WALKING_ENABLED           = true;
     public static ROLLING_OVERRIDES_POSTURE = true;
+
+    public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
+    //public static SOCKET_URL                = 'wss://nitro-socket.nextgenhabbo.com';
+    public static SOCKET_URL                = 'wss://system.nitrots.co';
+    public static ASSET_URL                 = 'https://assets.nitrots.co';
+    public static ASSET_AVATAR_URL          = NitroConfiguration.ASSET_URL + '/figure/%libname%/%libname%.json';
+    public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
 
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor' ];
 

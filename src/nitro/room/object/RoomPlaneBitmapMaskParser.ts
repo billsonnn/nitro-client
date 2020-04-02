@@ -1,4 +1,5 @@
 ﻿import { IVector3D } from '../../../room/utils/IVector3D';
+import { RoomMapMaskData } from './RoomMapMaskData';
 import { RoomPlaneBitmapMaskData } from './RoomPlaneBitmapMaskData';
 
 export class RoomPlaneBitmapMaskParser 
@@ -25,52 +26,24 @@ export class RoomPlaneBitmapMaskParser
         }
     }
 
-    public initialize(k: any): boolean
+    public initialize(k: RoomMapMaskData): boolean
     {
-        // var _local_7:XML;
-        // var _local_8:String;
-        // var _local_9:String;
-        // var _local_10:Vector3d;
-        // var _local_11:String;
-        // var _local_12:XMLList;
-        // var _local_13:XML;
-        // var _local_14:RoomPlaneBitmapMaskData;
-        // if (k == null)
-        // {
-        //     return false;
-        // }
-        // this._masks.reset();
-        // var _local_2:Array = ["id", "type", "category"];
-        // var _local_3:Array = ["x", "y", "z"];
-        // var _local_4:XMLList;
-        // var _local_5:XMLList = k.planeMask;
-        // var _local_6:int;
-        // while (_local_6 < _local_5.length())
-        // {
-        //     _local_7 = _local_5[_local_6];
-        //     if (!XMLValidator._Str_2747(_local_7, _local_2))
-        //     {
-        //         return false;
-        //     }
-        //     _local_8 = _local_7.@id;
-        //     _local_9 = _local_7.@type;
-        //     _local_10 = null;
-        //     _local_11 = _local_7.@category;
-        //     _local_12 = _local_7.location;
-        //     if (_local_12.length() != 1)
-        //     {
-        //         return false;
-        //     }
-        //     _local_13 = _local_12[0];
-        //     if (!XMLValidator._Str_2747(_local_13, _local_3))
-        //     {
-        //         return false;
-        //     }
-        //     _local_10 = new Vector3d(Number(_local_13.@x), Number(_local_13.@y), Number(_local_13.@z));
-        //     _local_14 = new RoomPlaneBitmapMaskData(_local_9, _local_10, _local_11);
-        //     this._masks.add(_local_8, _local_14);
-        //     _local_6++;
-        // }
+        if(!k) return false;
+
+        if(k.masks.length)
+        {
+            for(let mask of k.masks)
+            {
+                if(!mask) continue;
+
+                const location = mask.locations.length ? mask.locations[0] : null;
+
+                if(!location) continue;
+
+                this._masks.set(mask.id, new RoomPlaneBitmapMaskData(mask.type, location, mask.category))
+            }
+        }
+        
         return true;
     }
 
@@ -93,7 +66,7 @@ export class RoomPlaneBitmapMaskParser
         this._masks.set(k, mask);
     }
 
-    public _Str_23574(k: string):Boolean
+    public _Str_23574(k: string): boolean
     {
         const existing = this._masks.get(k);
 
@@ -109,9 +82,9 @@ export class RoomPlaneBitmapMaskParser
         return false;
     }
 
-    public _Str_5598(): any
+    public _Str_5598(): RoomMapMaskData
     {
-        const planeMasks: any[] = [];
+        const data = new RoomMapMaskData();
 
         for(let [ key, mask ] of this._masks.entries())
         {
@@ -132,11 +105,11 @@ export class RoomPlaneBitmapMaskParser
             {
                 newMask.locations.push({ x: _local_6.x, y: _local_6.y, z: _local_6.z });
 
-                planeMasks.push(newMask);
+                data.masks.push(newMask);
             }
         }
 
-        return planeMasks;
+        return data;
     }
 
     public _Str_19038(mask: RoomPlaneBitmapMaskData): IVector3D
@@ -158,5 +131,10 @@ export class RoomPlaneBitmapMaskParser
         if(!mask) return null;
 
         return mask.category;
+    }
+
+    public get masks(): Map<string, RoomPlaneBitmapMaskData>
+    {
+        return this._masks;
     }
 }

@@ -19,7 +19,6 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _flipH: boolean;
     private _flipV: boolean;
     private _direction: number;
-    private _matrix: PIXI.Matrix;
 
     private _alpha: number;
     private _blendMode: number;
@@ -35,32 +34,31 @@ export class RoomObjectSprite implements IRoomObjectSprite
 
     constructor()
     {
-        this._id            = RoomObjectSprite.SPRITE_COUNTER++;
-        this._name          = '';
-        this._type          = '';
-        this._spriteType    = RoomObjectSpriteType.DEFAULT;
-        this._texture       = null;
+        this._id                = RoomObjectSprite.SPRITE_COUNTER++;
+        this._name              = '';
+        this._type              = '';
+        this._spriteType        = RoomObjectSpriteType.DEFAULT;
+        this._texture           = null;
 
-        this._width         = 0;
-        this._height        = 0;
-        this._offsetX       = 0;
-        this._offsetY       = 0;
-        this._flipH         = false;
-        this._flipV         = false;
-        this._direction     = 0;
-        this._matrix        = null;
+        this._width             = 0;
+        this._height            = 0;
+        this._offsetX           = 0;
+        this._offsetY           = 0;
+        this._flipH             = false;
+        this._flipV             = false;
+        this._direction         = 0;
 
-        this._alpha         = 255;
-        this._blendMode     = PIXI.BLEND_MODES.NORMAL;
-        this._color         = 0xFFFFFF;
-        this._relativeDepth = 0;
-        this._Str_8253      = false;
-        this._visible       = true;
-        this._tag           = '';
-        this._filters       = [];
-        this._ignoreMouse   = false;
+        this._alpha             = 255;
+        this._blendMode         = PIXI.BLEND_MODES.NORMAL;
+        this._color             = 0xFFFFFF;
+        this._relativeDepth     = 0;
+        this._Str_8253          = false;
+        this._visible           = true;
+        this._tag               = '';
+        this._filters           = [];
+        this._ignoreMouse       = false;
 
-        this._updateCounter = 0;
+        this._updateCounter     = 0;
     }
 
     public dispose(): void
@@ -208,18 +206,6 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public set direction(direction: number)
     {
         this._direction = direction;
-    }
-
-    public get matrix(): PIXI.Matrix
-    {
-        return this._matrix;
-    }
-
-    public set matrix(matrix: PIXI.Matrix)
-    {
-        this._matrix = matrix;
-
-        this._updateCounter++;
     }
 
     public get alpha(): number

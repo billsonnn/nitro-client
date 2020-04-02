@@ -9,6 +9,9 @@ export interface IFurnitureData
     furniLine: string;
     colors: number[];
     dimensions: IFurnitureDimension;
+    canStandOn: boolean;
+    canSitOn: boolean;
+    canLayOn: boolean;
     offerId: number;
     adUrl: string;
     excludeDynamic: boolean;

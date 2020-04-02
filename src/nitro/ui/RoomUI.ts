@@ -104,7 +104,7 @@ export class RoomUI
                 this.destroyDesktop(roomId);
                 this._isInRoom = false;
                 return;
-            case RoomEngineDimmerStateEvent.REDSE_ROOM_COLOR:
+            case RoomEngineDimmerStateEvent.ROOM_COLOR:
                 return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
                 const colorEvent = event as RoomObjectHSLColorEnabledEvent;

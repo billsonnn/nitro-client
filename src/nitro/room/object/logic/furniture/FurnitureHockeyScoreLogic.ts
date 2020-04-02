@@ -33,7 +33,7 @@ export class FurnitureHockeyScoreLogic extends FurnitureLogic
                         break;
                 }
                 break;
-            case MouseEventType.CLICK:
+            case MouseEventType.MOUSE_CLICK:
                 switch(event._Str_4216)
                 {
                     case 'inc':

@@ -8,6 +8,8 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
     public static MOUSE_MOVE: string    = 'ROE_MOUSE_MOVE';
     public static MOUSE_DOWN: string    = 'ROE_MOUSE_DOWN';
     public static MOUSE_UP: string      = 'ROE_MOUSE_UP';
+    public static MOUSE_ENTER: string   = 'ROE_MOUSE_ENTER';
+    public static MOUSE_LEAVE: string   = 'ROE_MOUSE_LEAVE';
     
     private _eventId: string = "";
     private _altKey: boolean;
@@ -19,15 +21,15 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
     private _spriteOffsetX: number;
     private _spriteOffsetY: number;
 
-    constructor(k: string, _arg_2: IRoomObject, _arg_3: string, _arg_4: boolean = false, _arg_5: boolean = false, _arg_6: boolean = false, _arg_7: boolean = false)
+    constructor(type: string, object: IRoomObject, eventId: string, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false, buttonDown: boolean = false)
     {
-        super(k, _arg_2);
+        super(type, object);
 
-        this._eventId = _arg_3;
-        this._altKey = _arg_4;
-        this._ctrlKey = _arg_5;
-        this._shiftKey = _arg_6;
-        this._buttonDown = _arg_7;
+        this._eventId       = eventId;
+        this._altKey        = altKey;
+        this._ctrlKey       = ctrlKey;
+        this._shiftKey      = shiftKey;
+        this._buttonDown    = buttonDown;
     }
 
     public get _Str_3463(): string

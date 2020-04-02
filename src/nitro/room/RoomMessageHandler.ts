@@ -45,6 +45,7 @@ import { RoomObjectUserType } from './object/RoomObjectUserType';
 import { RoomObjectVariable } from './object/RoomObjectVariable';
 import { RoomPlaneParser } from './object/RoomPlaneParser';
 import { FurnitureQueueTileVisualization } from './object/visualization/furniture/FurnitureQueueTileVisualization';
+import { RoomVariableEnum } from './RoomVariableEnum';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { ObjectRolling } from './utils/ObjectRolling';
 
@@ -265,7 +266,7 @@ export class RoomMessageHandler extends Disposable
         this._planeParser._Str_12919(parser.wallHeight);
         this._planeParser._Str_3982(Math.floor(doorX), Math.floor(doorY), (doorZ + this._planeParser.wallHeight));
 
-        wallGeometry.scale = 64;
+        wallGeometry.scale = parser.scale;
         wallGeometry.initialize(width, height, this._planeParser._Str_7678);
 
         let heightIterator = (parser.height - 1);
@@ -485,11 +486,11 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof FurnitureWallAddEvent) || !event.connection || !this._roomCreator) return;
 
-        const item = event.getParser().item;
+        const data = event.getParser().item;
 
-        if(!item) return;
+        if(!data) return;
 
-        this.addRoomObjectFurnitureWall(this._currentRoomId, item);
+        this.addRoomObjectFurnitureWall(this._currentRoomId, data);
     }
 
     private onFurnitureWallEvent(event: FurnitureWallEvent): void
@@ -506,9 +507,9 @@ export class RoomMessageHandler extends Disposable
 
         while(iterator < totalObjects)
         {
-            const object = parser.items[iterator];
+            const data = parser.items[iterator];
 
-            if(object) this.addRoomObjectFurnitureWall(this._currentRoomId, object);
+            if(data) this.addRoomObjectFurnitureWall(this._currentRoomId, data);
 
             iterator++;
         }
@@ -582,7 +583,7 @@ export class RoomMessageHandler extends Disposable
 
             if(unit.id === this._ownUserId)
             {
-                //this._roomCreator.setRoomSessionOwnUser(this._currentRoomId, unit.unitId);
+                this._roomCreator.setRoomSessionOwnUser(this._currentRoomId, unit.unitId);
                 this._roomCreator.updateRoomObjectUserOwn(this._currentRoomId, unit.unitId);
             }
 
@@ -643,13 +644,21 @@ export class RoomMessageHandler extends Disposable
 
         if(!statuses || !statuses.length) return;
 
+        const roomInstance = this._roomCreator.getRoomInstance(this._currentRoomId);
+
+        if(!roomInstance) return;
+
+        const zScale = roomInstance.model.getValue(RoomVariableEnum.ROOM_Z_SCALE) || 1;
+
         for(let status of statuses)
         {
             if(!status) continue;
 
             let height = status.height;
 
-            const location  = new Vector3d(status.x, status.y, status.z);
+            if(height) height = (height / zScale);
+
+            const location  = new Vector3d(status.x, status.y, (status.z + height));
             const direction = new Vector3d(status.direction);
 
             let goal: IVector3D = null;
@@ -742,7 +751,17 @@ export class RoomMessageHandler extends Disposable
 
         if(!wallGeometry) return;
 
-        const location  = wallGeometry.getLocation(data.width, data.height, data.localX, data.localY, data.direction);
+        let location: IVector3D = null;
+
+        if(!data._Str_22379)
+        {
+            location = wallGeometry.getLocation(data.width, data.height, data.localX, data.localY, data.direction);
+        }
+        else
+        {
+            //location = wallGeometry._Str_24084(data.y, data.z, data.direction);
+        }
+
         const direction = new Vector3d(wallGeometry.getDirection(data.direction));
 
         this._roomCreator.addFurnitureWall(roomId, data.itemId, data.spriteId, location, direction, data.state, data.stuffData, data.secondsToExpiration, data.usagePolicy, data.userId, data.username);

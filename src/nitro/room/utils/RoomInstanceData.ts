@@ -16,6 +16,7 @@ export class RoomInstanceData
 
     private _floorStack: Map<number, FurnitureData>;
     private _wallStack: Map<number, FurnitureData>;
+    private _mouseButtonCursorOwners: string[];
 
     constructor(roomId: number)
     {
@@ -29,6 +30,7 @@ export class RoomInstanceData
 
         this._floorStack                    = new Map();
         this._wallStack                     = new Map();
+        this._mouseButtonCursorOwners       = [];
     }
 
     public dispose(): void
@@ -108,6 +110,39 @@ export class RoomInstanceData
         const keys = this._wallStack.keys();
 
         return this.getPendingFurnitureWall(keys.next().value as number);
+    }
+
+    public _Str_16810(k: string): boolean
+    {
+        const _local_2 = this._mouseButtonCursorOwners.indexOf(k);
+
+        if(_local_2 === -1)
+        {
+            this._mouseButtonCursorOwners.push(k);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public _Str_11959(k: string): boolean
+    {
+        const _local_2 = this._mouseButtonCursorOwners.indexOf(k);
+
+        if(_local_2 > -1)
+        {
+            this._mouseButtonCursorOwners.splice(_local_2, 1);
+
+            return true;
+        }
+        
+        return false;
+    }
+
+    public _Str_22598(): boolean
+    {
+        return this._mouseButtonCursorOwners.length > 0;
     }
 
     public get roomId(): number

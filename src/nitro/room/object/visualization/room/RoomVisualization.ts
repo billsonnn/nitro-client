@@ -8,7 +8,10 @@ import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane'
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
+import { RoomMapMaskData } from '../../RoomMapMaskData';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { RoomPlaneBitmapMaskData } from '../../RoomPlaneBitmapMaskData';
+import { RoomPlaneBitmapMaskParser } from '../../RoomPlaneBitmapMaskParser';
 import { RoomPlaneData } from '../../RoomPlaneData';
 import { RoomPlaneParser } from '../../RoomPlaneParser';
 import { RoomPlane } from './RoomPlane';
@@ -31,6 +34,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     protected _data: RoomVisualizationData;
 
     private _roomPlaneParser: RoomPlaneParser;
+    private _roomPlaneBitmapMaskParser: RoomPlaneBitmapMaskParser;
 
     private _geometryUpdateId: number;
     private _directionX: number;
@@ -48,37 +52,50 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     private _wallType: string;
     private _floorType: string;
     private _landscapeType: string;
+    private _colorBackgroundOnly: boolean;
+    private _color: number;
+    private _redColor: number;
+    private _greenColor: number;
+    private _blueColor: number;
     private _typeVisibility: boolean[];
     private _Str_5928: number;
+    private _maskData: RoomMapMaskData;
     private _isPlaneSet: boolean;
 
     constructor()
     {
         super();
 
-        this._data                  = null;
+        this._data                      = null;
 
-        this._roomPlaneParser       = new RoomPlaneParser();
+        this._roomPlaneParser           = new RoomPlaneParser();
+        this._roomPlaneBitmapMaskParser = new RoomPlaneBitmapMaskParser();
 
-        this._geometryUpdateId      = -1;
-        this._directionX            = 0;
-        this._directionY            = 0;
-        this._directionZ            = 0;
-        this._floorThickness        = 1;
-        this._wallThickness         = 1;
-        this._holeUpdateTime        = NaN;
-        this._Str_2540              = [];
-        this._Str_4864              = [];
-        this._Str_6648              = [];
-        this._scale                 = 0;
-        this._lastUpdateTime        = -1000;
-        this._updateIntervalTime    = 250;
-        this._wallType              = null;
-        this._floorType             = null;
-        this._landscapeType         = null;
-        this._typeVisibility        = [];
-        this._Str_5928              = 0;
-        this._isPlaneSet            = false;
+        this._geometryUpdateId          = -1;
+        this._directionX                = 0;
+        this._directionY                = 0;
+        this._directionZ                = 0;
+        this._floorThickness            = 1;
+        this._wallThickness             = 1;
+        this._holeUpdateTime            = NaN;
+        this._Str_2540                  = [];
+        this._Str_4864                  = [];
+        this._Str_6648                  = [];
+        this._scale                     = 0;
+        this._lastUpdateTime            = -1000;
+        this._updateIntervalTime        = 250;
+        this._wallType                  = null;
+        this._floorType                 = null;
+        this._landscapeType             = null;
+        this._colorBackgroundOnly       = true;
+        this._color                     = 0xFFFFFF;
+        this._redColor                  = 0xFF;
+        this._greenColor                = 0xFF;
+        this._blueColor                 = 0xFF;
+        this._typeVisibility            = [];
+        this._Str_5928                  = 0;
+        this._maskData                  = null;
+        this._isPlaneSet                = false;
 
         this._typeVisibility[RoomPlane.TYPE_UNDEFINED]  = false;
         this._typeVisibility[RoomPlane.TYPE_FLOOR]      = true;
@@ -96,8 +113,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         this._data.setGraphicAssetCollection(this.asset);
 
-        console.log(this._data.maskManager);
-
         return true;
     }
 
@@ -105,11 +120,31 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         super.dispose();
 
-        for(let plane of this._Str_2540)
-        {
-            if(!plane) continue;
+        this.clearPlanes();
 
-            plane.dispose();
+        this._Str_2540  = null;
+        this._Str_4864  = null;
+        this._Str_6648  = null;
+
+        if(this._roomPlaneParser)
+        {
+            this._roomPlaneParser.dispose();
+
+            this._roomPlaneParser = null;
+        }
+
+        if(this._roomPlaneBitmapMaskParser)
+        {
+            this._roomPlaneBitmapMaskParser.dispose();
+
+            this._roomPlaneBitmapMaskParser = null;
+        }
+
+        if(this._data)
+        {
+            this._data._Str_3355();
+
+            this._data = null;
         }
     }
 
@@ -118,10 +153,9 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._floorType         = null;
         this._wallType          = null;
         this._landscapeType     = null;
+        this._maskData          = null;
         this._geometryUpdateId  = -1;
         this._scale             = 0;
-
-        // mask xml
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
@@ -157,22 +191,25 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                 const sprite        = this.getSprite(spriteIndex);
                 const plane         = this._Str_4864[index];
 
-                if(sprite && plane && (plane.type === RoomPlane.TYPE_LANDSCAPE))
+                if(sprite && plane && (plane.type !== RoomPlane.TYPE_LANDSCAPE))
                 {
-                    // if (this._Str_17387)
-                    // {
-                    //     _local_14 = _local_13.color;
-                    //     _local_15 = (((_local_14 & 0xFF) * this._Str_19611) / 0xFF);
-                    //     _local_16 = ((((_local_14 >> 8) & 0xFF) * this._Str_19971) / 0xFF);
-                    //     _local_17 = ((((_local_14 >> 16) & 0xFF) * this._Str_20538) / 0xFF);
-                    //     _local_18 = (_local_14 >> 24);
-                    //     _local_14 = ((((_local_18 << 24) + (_local_17 << 16)) + (_local_16 << 8)) + _local_15);
-                    //     _local_12.color = _local_14;
-                    // }
-                    // else
-                    // {
-                    //     _local_12.color = _local_13.color;
-                    // }
+                    if(this._colorBackgroundOnly)
+                    {
+                        let _local_14 = plane.color;
+
+                        const _local_15 = (((_local_14 & 0xFF) * this._redColor) / 0xFF);
+                        const _local_16 = ((((_local_14 >> 8) & 0xFF) * this._greenColor) / 0xFF);
+                        const _local_17 = ((((_local_14 >> 16) & 0xFF) * this._blueColor) / 0xFF);
+                        const _local_18 = (_local_14 >> 24);
+
+                        _local_14 = ((((_local_18 << 24) + (_local_17 << 16)) + (_local_16 << 8)) + _local_15);
+                        
+                        sprite.color = _local_14;
+                    }
+                    else
+                    {
+                        sprite.color = plane.color;
+                    }
                 }
 
                 index++;
@@ -250,39 +287,42 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this.updateModelCounter === k.updateCounter) return false;
 
-        // const planeMask = k.getValue(RoomObjectModelKey.ROOM_PLANE_MASK_XML);
+        let didUpdate = false;
 
-        // var _local_3:String;
-        // var _local_4:uint;
-        // var _local_5:Boolean;
-        // var _local_2:Boolean;
-        // if (_Str_3603 != k._Str_3273())
-        // {
-        //     _local_3 = k.getString(RoomObjectVariableEnum.ROOM_PLANE_MASK_XML);
-        //     if (_local_3 != this._Str_16710)
-        //     {
-        //         this._Str_15935(_local_3);
-        //         this._Str_16710 = _local_3;
-        //         _local_2 = true;
-        //     }
-        //     _local_4 = k.getNumber(RoomObjectVariableEnum.ROOM_BACKGROUND_COLOR);
-        //     if (_local_4 != this._Str_4479)
-        //     {
-        //         this._Str_4479 = _local_4;
-        //         this._Str_19611 = (this._Str_4479 & 0xFF);
-        //         this._Str_19971 = ((this._Str_4479 >> 8) & 0xFF);
-        //         this._Str_20538 = ((this._Str_4479 >> 16) & 0xFF);
-        //         _local_2 = true;
-        //     }
-        //     _local_5 = Boolean(k.getNumber(RoomObjectVariableEnum.ROOM_COLORIZE_BG_ONLY));
-        //     if (_local_5 != this._Str_17387)
-        //     {
-        //         this._Str_17387 = _local_5;
-        //         _local_2 = true;
-        //     }
-        // }
+        const planeMask = k.getValue(RoomObjectVariable.ROOM_PLANE_MASK_XML) as RoomMapMaskData;
 
-        return false;
+        if(planeMask !== this._maskData)
+        {
+            this._Str_15935(planeMask);
+
+            this._maskData = planeMask;
+
+            didUpdate = true;
+        }
+
+        const backgroundColor = k.getValue(RoomObjectVariable.ROOM_BACKGROUND_COLOR) as number;
+
+        if(backgroundColor !== this._color)
+        {
+            this._color         = backgroundColor;
+            this._redColor      = (this._color & 0xFF);
+            this._greenColor    = ((this._color >> 8) & 0xFF);
+            this._blueColor     = ((this._color >> 16) & 0xFF);
+
+            didUpdate = true;
+        }
+
+        const backgroundOnly = k.getValue(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY) || false;
+
+        if(backgroundOnly !== this._colorBackgroundOnly)
+        {
+
+            this._colorBackgroundOnly = backgroundOnly;
+
+            didUpdate = true;
+        }
+
+        return didUpdate;
     }
 
     private updatePlanes(k: IRoomObjectModel): boolean
@@ -495,8 +535,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                         const _local_22 = this._roomPlaneParser._Str_23431(index, _local_19);
                         const _local_23 = this._roomPlaneParser._Str_22914(index, _local_19);
 
-                        console.log('add it')
-
                         _local_13._Str_24758(_local_20, _local_21, _local_22, _local_23);
                         
                         _local_19++;
@@ -528,16 +566,16 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
             const plane     = this._Str_2540[planeIndex];
             const sprite    = this.getSprite(planeIndex);
 
-            if(plane && sprite && (plane._Str_5424.length < 1) && (plane._Str_4968.length < 1))
+            if(plane && sprite && plane._Str_5424 && plane._Str_4968)
             {
-                if (((plane.type == RoomPlane.TYPE_WALL) && ((plane._Str_5424.length < 1) || (plane._Str_4968.length < 1))))
-                {
-                    //sprite.alpha = AlphaTolerance._Str_9268;
-                }
-                else
-                {
-                   // sprite.alpha = AlphaTolerance._Str_9735;
-                }
+                // if((plane.type === RoomPlane.TYPE_WALL) && ((plane._Str_5424.length < 1) || (plane._Str_4968.length < 1)))
+                // {
+                //     sprite.alpha = (AlphaTolerance._Str_9268);
+                // }
+                // else
+                // {
+                //    sprite.alpha = (AlphaTolerance._Str_9735);
+                // }
                 
                 if(plane.type === RoomPlane.TYPE_WALL)
                 {
@@ -704,11 +742,11 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                     {
                         if(_local_12.visible)
                         {
-                            depth = ((_local_12.relativeDepth + this._Str_24891) + (Math.floor(_local_10) / 1000));
+                            depth = ((_local_12.relativeDepth + this._Str_24891) + (_local_10 / 1000));
 
                             if(_local_12.type !== RoomPlane.TYPE_FLOOR)
                             {
-                                depth = ((_local_12.relativeDepth + this._Str_25403) + (Math.floor(_local_10) / 1000));
+                                depth = ((_local_12.relativeDepth + this._Str_25403) + (_local_10 / 1000));
 
                                 if((_local_12._Str_5424.length < 1) || (_local_12._Str_4968.length < 1))
                                 {
@@ -752,16 +790,120 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         return updated;
     }
 
+    protected _Str_15935(k: RoomMapMaskData):void
+    {
+        if(!k) return;
+
+        this._roomPlaneBitmapMaskParser.initialize(k);
+
+        const _local_4: number[] = [];
+        const _local_5: number[] = [];
+
+        let _local_6    = false;
+        let index       = 0;
+
+        while(index < this._Str_2540.length)
+        {
+            const plane = this._Str_2540[index];
+
+            if(plane)
+            {
+                plane._Str_25213();
+
+                if(plane.type === RoomPlane.TYPE_LANDSCAPE) _local_4.push(index);
+            }
+
+            index++;
+        }
+
+        for(let mask of this._roomPlaneBitmapMaskParser.masks.values())
+        {
+            const _local_10 = this._roomPlaneBitmapMaskParser._Str_21678(mask);
+            const _local_11 = this._roomPlaneBitmapMaskParser._Str_19038(mask);
+            const _local_12 = this._roomPlaneBitmapMaskParser._Str_21644(mask);
+
+            if(_local_11)
+            {
+                let _local_13 = 0;
+
+                while (_local_13 < this._Str_2540.length)
+                {
+                    const _local_3 = this._Str_2540[_local_13];
+
+                    if((_local_3.type === RoomPlane.TYPE_WALL) || (_local_3.type === RoomPlane.TYPE_LANDSCAPE))
+                    {
+                        if(_local_3 && _local_3.location && _local_3.normal)
+                        {
+                            const _local_14 = Vector3d.dif(_local_11, _local_3.location);
+                            const _local_15 = Math.abs(Vector3d.scalarProjection(_local_14, _local_3.normal));
+
+                            if(_local_15 < 0.01)
+                            {
+                                if(_local_3._Str_5424 && _local_3._Str_4968)
+                                {
+                                    const _local_16 = Vector3d.scalarProjection(_local_14, _local_3._Str_5424);
+                                    const _local_17 = Vector3d.scalarProjection(_local_14, _local_3._Str_4968);
+
+                                    if((_local_3.type === RoomPlane.TYPE_WALL) || ((_local_3.type === RoomPlane.TYPE_LANDSCAPE) && (_local_12 === RoomPlaneBitmapMaskData.HOLE)))
+                                    {
+                                        _local_3._Str_24569(_local_10, _local_16, _local_17);
+                                    }
+                                    else
+                                    {
+                                        if (_local_3.type === RoomPlane.TYPE_LANDSCAPE)
+                                        {
+                                            if(!_local_3._Str_14801) _local_6 = true;
+
+                                            _local_3._Str_14801 = true;
+
+                                            _local_5.push(_local_13);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    _local_13++;
+                }
+            }
+        }
+
+        index = 0;
+
+        while(index < _local_4.length)
+        {
+            const planeIndex = _local_4[index];
+
+            if(_local_5.indexOf(planeIndex) < 0)
+            {
+                const plane = this._Str_2540[planeIndex];
+
+                plane._Str_14801    = false;
+                _local_6            = true;
+            }
+
+            index++;
+        }
+
+        if(_local_6)
+        {
+            this._Str_4864 = [];
+            this._Str_6648 = [];
+        }
+    }
+
     private _Str_7421(k: IRoomObjectSprite, _arg_2: RoomPlane, _arg_3: string, _arg_4: number): void
     {
         const offset = _arg_2.offset;
 
-        k.offsetX       = -(offset.x);
-        k.offsetY       = -(offset.y);
-        k.relativeDepth = _arg_4;
-        k.color         = _arg_2.color;
-        k.texture       = this._Str_22446(_arg_2, _arg_3);
-        k.name          = ((_arg_3 + "_") + this._Str_5928);
+        k.offsetX           = -(offset.x);
+        k.offsetY           = -(offset.y);
+        k.relativeDepth     = _arg_4;
+        k.color             = _arg_2.color;
+        k.texture           = this._Str_22446(_arg_2, _arg_3);
+        k.name              = ((_arg_3 + "_") + this._Str_5928);
+        k.ignoreMouse       = false;
     }
 
     private _Str_22446(k: RoomPlane, _arg_2: string): PIXI.Texture

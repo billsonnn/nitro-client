@@ -29,6 +29,8 @@ export class FurnitureLogic extends MovingObjectLogic
 
     private _directions: number[];
 
+    private _mouseOver: boolean;
+
     private _locationOffset: IVector3D;
     private _bouncingStep: number;
     private _storedRotateMessage: RoomObjectUpdateMessage;
@@ -46,6 +48,8 @@ export class FurnitureLogic extends MovingObjectLogic
         this._centerZ               = 0;
 
         this._directions            = [];
+
+        this._mouseOver             = false;
 
         this._locationOffset        = new Vector3d();
         this._bouncingStep          = 0;
@@ -194,10 +198,82 @@ export class FurnitureLogic extends MovingObjectLogic
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
+        const adUrl = this.getAdClickUrl(this.object.model);
+
         switch(event.type)
         {
+            case MouseEventType.MOUSE_MOVE:
+                if(this.eventDispatcher)
+                {
+                    const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_MOVE, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
+
+                    mouseEvent.localX       = event.localX;
+                    mouseEvent.localY       = event.localY;
+                    mouseEvent._Str_4595    = event._Str_4595;
+                    mouseEvent._Str_4534    = event._Str_4534;
+
+                    this.eventDispatcher.dispatchEvent(mouseEvent);
+                }
+                return;
+            case MouseEventType.ROLL_OVER:
+                if(!this._mouseOver)
+                {
+                    if(this.eventDispatcher)
+                    {
+                        const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_ENTER, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
+
+                        mouseEvent.localX       = event.localX;
+                        mouseEvent.localY       = event.localY;
+                        mouseEvent._Str_4595    = event._Str_4595;
+                        mouseEvent._Str_4534    = event._Str_4534;
+
+                        this.eventDispatcher.dispatchEvent(mouseEvent);
+                    }
+
+                    this._mouseOver = true;
+                }
+                return;
+            case MouseEventType.ROLL_OUT:
+                if(this._mouseOver)
+                {
+                    if(this.eventDispatcher)
+                    {
+                        const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_LEAVE, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
+
+                        mouseEvent.localX       = event.localX;
+                        mouseEvent.localY       = event.localY;
+                        mouseEvent._Str_4595    = event._Str_4595;
+                        mouseEvent._Str_4534    = event._Str_4534;
+
+                        this.eventDispatcher.dispatchEvent(mouseEvent);
+                    }
+
+                    this._mouseOver = false;
+                }
+                return;
             case MouseEventType.DOUBLE_CLICK:
                 this.useObject();
+                return;
+            case MouseEventType.MOUSE_CLICK:
+                if(this.eventDispatcher)
+                {
+                    const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.CLICK, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
+
+                    mouseEvent.localX       = event.localX;
+                    mouseEvent.localY       = event.localY;
+                    mouseEvent._Str_4595    = event._Str_4595;
+                    mouseEvent._Str_4534    = event._Str_4534;
+
+                    this.eventDispatcher.dispatchEvent(mouseEvent);
+                }
+                return;
+            case MouseEventType.MOUSE_DOWN:
+                if(this.eventDispatcher)
+                {
+                    const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_DOWN, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
+
+                    this.eventDispatcher.dispatchEvent(mouseEvent);
+                }
                 return;
         }
     }

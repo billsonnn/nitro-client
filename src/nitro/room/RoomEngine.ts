@@ -22,12 +22,14 @@ import { IVector3D } from '../../room/utils/IVector3D';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { NitroInstance } from '../NitroInstance';
+import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { MouseEventType } from '../ui/MouseEventType';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
+import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
 import { IRoomEngineServices } from './IRoomEngineServices';
@@ -54,6 +56,7 @@ import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseOb
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
+import { ObjectRoomFloorHoleUpdateMessage } from './messages/ObjectRoomFloorHoleUpdateMessage';
 import { ObjectRoomMaskUpdateMessage } from './messages/ObjectRoomMaskUpdateMessage';
 import { ObjectRoomPlanePropertyUpdateMessage } from './messages/ObjectRoomPlanePropertyUpdateMessage';
 import { ObjectRoomPlaneVisibilityUpdateMessage } from './messages/ObjectRoomPlaneVisibilityUpdateMessage';
@@ -101,6 +104,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _roomContentLoader: RoomContentLoader;
 
     private _activeRoomId: number;
+    private _lastCanvasId: number;
     private _roomInstanceData: Map<number, RoomInstanceData>;
     private _pendingRoomData: Map<number, RoomData>;
 
@@ -116,6 +120,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _Str_19133: number;
     private _Str_13608: number;
     private _Str_14213: number;
+    private _Str_3688: boolean;
+    private _Str_8325: boolean;
+    private _Str_13525: boolean;
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -132,6 +139,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomContentLoader         = new RoomContentLoader();
 
         this._activeRoomId              = -1;
+        this._lastCanvasId              = -1;
         this._roomInstanceData          = new Map();
         this._pendingRoomData           = new Map();
 
@@ -147,6 +155,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_19133                 = 0;
         this._Str_13608                 = 0;
         this._Str_14213                 = 0;
+        this._Str_3688                  = false;
+        this._Str_8325                  = false;
+        this._Str_13525                 = false;
 
         this._isReady                   = false;
         this._isDisposed                = false;
@@ -392,7 +403,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                     const maskId    = 'door_' + doorIndex;
                     const maskLocation  = new Vector3d(doorX, doorY, doorZ);
 
-                    logic.processUpdateMessage(new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.RORMUM_ADD_MASK, maskId, maskType, maskLocation, ObjectRoomMaskUpdateMessage.HOLE));
+                    logic.processUpdateMessage(new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.ADD_MASK, maskId, maskType, maskLocation, ObjectRoomMaskUpdateMessage.HOLE));
 
                     if((doorDir === 90) || (doorDir === 180))
                     {
@@ -470,6 +481,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return canvas;
     }
 
+    public getActiveRoomInstanceRenderingCanvas(): IRoomRenderingCanvas
+    {
+        return this.getRoomInstanceRenderingCanvas(this._activeRoomId, this._lastCanvasId);
+    }
+
     public initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void
     {
         const canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
@@ -479,7 +495,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         canvas.initialize(width, height);
     }
 
-    public getRoomInstanceGeometry(roomId: number, canvasId: number): IRoomGeometry
+    public getRoomInstanceGeometry(roomId: number, canvasId: number = -1): IRoomGeometry
     {
         const instance = this.getRoomInstance(roomId);
 
@@ -488,6 +504,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         const renderer = instance.renderer as IRoomRenderer;
 
         if(!renderer) return null;
+
+        if(canvasId === -1) canvasId = this._lastCanvasId;
 
         const canvas = renderer.getCanvas(canvasId);
 
@@ -578,6 +596,35 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return true;
     }
 
+    public addRoomInstanceFloorHole(roomId: number, objectId: number): void
+    {
+        if(objectId < 0) return;
+
+        const roomOwnObject = this.getRoomOwnObject(roomId);
+        const roomObject    = this.getRoomObjectFloor(roomId, objectId);
+
+        if(roomOwnObject && roomOwnObject.logic && roomObject && roomObject.model)
+        {
+            const location  = roomObject.getLocation();
+            const sizeX     = roomObject.model.getValue(RoomObjectVariable.FURNITURE_SIZE_X) as number;
+            const sizeY     = roomObject.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Y) as number;
+
+            roomOwnObject.processUpdateMessage(new ObjectRoomFloorHoleUpdateMessage(ObjectRoomFloorHoleUpdateMessage.ADD, objectId, location.x, location.y, sizeX, sizeY));
+        }
+    }
+
+    public removeRoomInstanceFloorHole(roomId: number, objectId: number): void
+    {
+        if(objectId < 0) return;
+
+        const roomOwnObject = this.getRoomOwnObject(roomId);
+
+        if(roomOwnObject)
+        {
+            roomOwnObject.processUpdateMessage(new ObjectRoomFloorHoleUpdateMessage(ObjectRoomFloorHoleUpdateMessage.REMOVE, objectId));
+        }
+    }
+
     public update(time: number): void
     {
         if(!this._roomManager) return;
@@ -589,13 +636,37 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomManager.update(time);
 
         this._Str_22919(time);
+
+        if(this._Str_13525) this.setPointer();
+    }
+
+    private setPointer(): void
+    {
+        this._Str_13525 = false;
+
+        const instanceData = this.getRoomInstanceData(this._activeRoomId);
+
+        if(instanceData && instanceData._Str_22598())
+        {
+            document.body.style.cursor = 'pointer';
+        }
+        else
+        {
+            document.body.style.cursor = 'auto';
+        }
     }
 
     private processPendingFurniture(): void
     {
-        const furniturePerTick: number = 5;
+        if(this._Str_8325)
+        {
+            this._Str_8325 = false;
 
-        const startTime = Date.now();
+            return;
+        }
+
+        const startTime         = NitroInstance.instance.renderer.totalTimeRunning;
+        const furniturePerTick  = 5;
 
         for(let instanceData of this._roomInstanceData.values())
         {
@@ -612,19 +683,40 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
                 if(!(++totalFurnitureAdded % furniturePerTick))
                 {
-                    if((Date.now() - startTime) >= 40) return;
+                    const time = NitroInstance.instance.renderer.totalTimeRunning;
+
+                    if(((time - startTime) >= 40) && !this._Str_3688)
+                    {
+                        this._Str_8325 = true;
+
+                        break;
+                    }
                 }
             }
 
-            while(pendingData = instanceData.getNextPendingFurnitureWall())
+            while(!this._Str_8325 && (pendingData = instanceData.getNextPendingFurnitureWall()))
             {
                 furnitureAdded = this.processPendingFurnitureWall(instanceData.roomId, pendingData.id, pendingData);
 
                 if(!(++totalFurnitureAdded % furniturePerTick))
                 {
-                    if((Date.now() - startTime) >= 40) return;
+                    const time = NitroInstance.instance.renderer.totalTimeRunning;
+
+                    if(((time - startTime) >= 40) && !this._Str_3688)
+                    {
+                        this._Str_8325 = true;
+
+                        break;
+                    }
                 }
             }
+
+            if(furnitureAdded && this._Str_3688)
+            {
+
+            }
+
+            if(this._Str_8325) return;
         }
     }
 
@@ -1625,7 +1717,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             {
                 let eventType: string = null;
 
-                if(type === MouseEventType.CLICK)
+                if(type === MouseEventType.MOUSE_CLICK)
                 {
                     if(this.events)
                     {
@@ -1636,28 +1728,30 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 }
                 else
                 {
-                    if(type === MouseEventType.MOVE) eventType = RoomObjectMouseEvent.MOUSE_MOVE;
+                    if(type === MouseEventType.MOUSE_MOVE) eventType = RoomObjectMouseEvent.MOUSE_MOVE;
 
-                    else if(type === MouseEventType.DOWN) eventType = RoomObjectMouseEvent.MOUSE_DOWN;
+                    else if(type === MouseEventType.MOUSE_DOWN) eventType = RoomObjectMouseEvent.MOUSE_DOWN;
 
-                    else if(type === MouseEventType.UP) eventType = RoomObjectMouseEvent.MOUSE_UP;
+                    else if(type === MouseEventType.MOUSE_UP) eventType = RoomObjectMouseEvent.MOUSE_UP;
                 }
 
                 this._roomObjectEventHandler.handleRoomObjectEvent(new RoomObjectMouseEvent(eventType, this.getRoomObject(this._activeRoomId, RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM), null, altKey), this._activeRoomId);
             }
         }
 
-        //this._Str_6181 = canvasId;
-        this._mouseX = x;
-        this._mouseY = y;
+        this._lastCanvasId  = canvasId;
+        this._mouseX        = x;
+        this._mouseY        = y;
     }
 
     private _Str_25871(canvas: IRoomRenderingCanvas, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean): boolean
     {
+        if(this._Str_3688) return false;
+
         let offsetX = (x - this._mouseX);
         let offsetY = (y - this._mouseY);
 
-        if(type === MouseEventType.DOWN)
+        if(type === MouseEventType.MOUSE_DOWN)
         {
             if(!altKey && !ctrlKey && !shiftKey)
             {
@@ -1669,7 +1763,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         }
         else
         {
-            if(type === MouseEventType.UP)
+            if(type === MouseEventType.MOUSE_UP)
             {
                 if(this._Str_7695)
                 {
@@ -1701,7 +1795,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             }
             else
             {
-                if(type === MouseEventType.MOVE)
+                if(type === MouseEventType.MOUSE_MOVE)
                 {
                     if(this._Str_7695)
                     {
@@ -1729,7 +1823,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 }
                 else
                 {
-                    if((type === MouseEventType.CLICK) || (type === MouseEventType.DOUBLE_CLICK))
+                    if((type === MouseEventType.MOUSE_CLICK) || (type === MouseEventType.DOUBLE_CLICK))
                     {
                         this._Str_7695 = false;
 
@@ -1745,6 +1839,55 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         }
         
         return false;
+    }
+
+    public updateMousePointer(type: string, objectId: number, objectType: string): void
+    {
+        const category = this.getRoomObjectCategoryForType(objectType);
+
+        switch(type)
+        {
+            case RoomObjectFurnitureActionEvent.MOUSE_BUTTON:
+                this.setMouseButton(this._activeRoomId, category, objectId);
+                return;
+            default:
+                this.setMouseDefault(this._activeRoomId, category, objectId);
+                return;
+        }
+    }
+
+    private setMouseButton(roomId: number, category: number, objectId: number): void
+    {
+        const session = this._roomSession.getSession(roomId);
+
+        if(!session) return;
+
+        if(((category !== RoomObjectCategory.FLOOR) && (category !== RoomObjectCategory.WALL)) || ((session.controllerLevel >= RoomControllerLevel.GUEST)))
+        {
+            const instanceData = this.getRoomInstanceData(roomId);
+
+            if(instanceData)
+            {
+                if(instanceData._Str_16810((category + '_' + objectId))) this._Str_13525 = true;
+            }
+        }
+    }
+
+    private setMouseDefault(roomId: number, category: number, objectId: number): void
+    {
+        const session = this._roomSession.getSession(roomId);
+
+        if(!session) return;
+
+        if(((category !== RoomObjectCategory.FLOOR) && (category !== RoomObjectCategory.WALL)) || ((session.controllerLevel >= RoomControllerLevel.GUEST)))
+        {
+            const instanceData = this.getRoomInstanceData(roomId);
+
+            if(instanceData)
+            {
+                if(instanceData._Str_11959((category + '_' + objectId))) this._Str_13525 = true;
+            }
+        }
     }
 
     private processRoomObjectEvent(event: RoomObjectEvent): void
@@ -1804,6 +1947,16 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return this._communication.connection;
     }
 
+    public get sessionData(): ISessionDataManager
+    {
+        return this._sessionData;
+    }
+
+    public get roomSession(): IRoomSessionManager
+    {
+        return this._roomSession;
+    }
+
     public get objectEventHandler(): RoomObjectEventHandler
     {
         return this._roomObjectEventHandler;
@@ -1837,5 +1990,24 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     public get isDisposed(): boolean
     {
         return this._isDisposed;
+    }
+
+    public get _Str_6374(): boolean
+    {
+        return this._Str_3688;
+    }
+
+    public set _Str_6374(flag: boolean)
+    {
+        this._Str_3688 = flag;
+    }
+
+    public get isDecorating(): boolean
+    {
+        if(!this._roomSession) return false;
+
+        const session = this._roomSession.getSession(this._activeRoomId);
+
+        return (session && session.isDecorating) || false;
     }
 }

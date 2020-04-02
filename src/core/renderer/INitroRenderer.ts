@@ -5,7 +5,6 @@ export interface INitroRenderer extends PIXI.Application
 {
     setup(): void;
     setBackgroundColor(color: number): void;
-    pixiRenderer: PIXI.Renderer | PIXI.CanvasRenderer;
     eventDispatcher: IEventDispatcher;
     totalTimeRunning: number;
 }

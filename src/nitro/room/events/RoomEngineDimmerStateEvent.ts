@@ -2,7 +2,7 @@
 
 export class RoomEngineDimmerStateEvent extends RoomEngineEvent 
 {
-    public static REDSE_ROOM_COLOR: string = "REDSE_ROOM_COLOR";
+    public static ROOM_COLOR: string = "REDSE_ROOM_COLOR";
 
     private _state: number;
     private _presetId: number;
@@ -12,7 +12,7 @@ export class RoomEngineDimmerStateEvent extends RoomEngineEvent
 
     constructor(k: number, state: number, presetId: number, effectId: number, color: number, brightness: number)
     {
-        super(RoomEngineDimmerStateEvent.REDSE_ROOM_COLOR, k);
+        super(RoomEngineDimmerStateEvent.ROOM_COLOR, k);
 
         this._state         = state;
         this._presetId      = presetId;

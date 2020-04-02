@@ -60,7 +60,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     {
         if(!event) return false;
 
-        //NitroLogger.printMessage(`Event Dispatched: ${ event.type }`);
+        //NitroLogger.log(`Event Dispatched: ${ event.type }`);
 
         this.processEvent(event);
 

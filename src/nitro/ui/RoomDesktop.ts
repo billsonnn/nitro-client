@@ -110,11 +110,11 @@ export class RoomDesktop
 
         displayObject.interactive = true;
 
-        displayObject.addListener(MouseEventType.CLICK, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.MOVE, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.DOWN, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.UP, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.UP_OUTSIDE, this._Str_9634.bind(this));
+        displayObject.addListener(MouseEventType.MOUSE_CLICK, this._Str_9634.bind(this));
+        displayObject.addListener(MouseEventType.MOUSE_MOVE, this._Str_9634.bind(this));
+        displayObject.addListener(MouseEventType.MOUSE_DOWN, this._Str_9634.bind(this));
+        displayObject.addListener(MouseEventType.MOUSE_UP, this._Str_9634.bind(this));
+        displayObject.addListener(MouseEventType.MOUSE_UP_OUTSIDE, this._Str_9634.bind(this));
 
         window.onresize = this.onWindowResizeEvent.bind(this);
 
@@ -135,7 +135,7 @@ export class RoomDesktop
 
         let eventType = event.type;
 
-        if(eventType === MouseEventType.CLICK)
+        if(eventType === MouseEventType.MOUSE_CLICK)
         {
             if(this._lastClick)
             {
@@ -157,18 +157,18 @@ export class RoomDesktop
 
         switch(eventType)
         {
-            case MouseEventType.CLICK:
+            case MouseEventType.MOUSE_CLICK:
                 break;
             case MouseEventType.DOUBLE_CLICK:
                 break;
-            case MouseEventType.MOVE:
+            case MouseEventType.MOUSE_MOVE:
                 this._didMouseMove = true;
                 break;
-            case MouseEventType.DOWN:
+            case MouseEventType.MOUSE_DOWN:
                 this._didMouseMove = false;
                 break;
-            case MouseEventType.UP:
-            case MouseEventType.UP_OUTSIDE:
+            case MouseEventType.MOUSE_UP:
+            case MouseEventType.MOUSE_UP_OUTSIDE:
                 break;
             default: return;
         }

@@ -80,6 +80,13 @@ export class RoomVisualizationData extends Disposable implements IObjectVisualiz
         this._initialized = true;
     }
 
+    public _Str_3355(): void
+    {
+        if(this._wallRasterizer) this._wallRasterizer._Str_3355();
+
+        if(this._floorRasterizer) this._floorRasterizer._Str_3355();
+    }
+
     public get wallRasterizer(): WallRasterizer
     {
         return this._wallRasterizer;

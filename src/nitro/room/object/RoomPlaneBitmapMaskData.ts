@@ -17,7 +17,7 @@ export class RoomPlaneBitmapMaskData
         this.category   = category;
     }
 
-    public get loc():IVector3D
+    public get loc(): IVector3D
     {
         return this._loc;
     }

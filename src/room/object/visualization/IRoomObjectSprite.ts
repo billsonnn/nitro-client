@@ -24,5 +24,4 @@ export interface IRoomObjectSprite
     filters: PIXI.Filter[];
     ignoreMouse: boolean;
     updateCounter: number;
-    matrix?: PIXI.Matrix;
 }

@@ -21,7 +21,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 
     public getEventTypes(): string[]
     {
-        const types = [ RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR ];
+        const types = [ RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR ];
 
         return this.mergeTypes(super.getEventTypes(), types);
     }
@@ -36,7 +36,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 
                 if(realRoomObject === 1)
                 {
-                    this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR, this.object, false, 0, 0, 0));
+                    this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR, this.object, false, 0, 0, 0));
                 }
             }
 
@@ -83,7 +83,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 
             if(this.eventDispatcher)
             {
-                this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROHSLCEE_ROOM_BACKGROUND_COLOR, this.object, (state === 1), hue, saturation, lightness));
+                this.eventDispatcher.dispatchEvent(new RoomObjectHSLColorEnableEvent(RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR, this.object, (state === 1), hue, saturation, lightness));
             }
 
             this._roomColorUpdated = true;

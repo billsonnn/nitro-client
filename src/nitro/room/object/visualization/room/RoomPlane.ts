@@ -668,7 +668,7 @@ export class RoomPlane implements IRoomPlane
 
                 const graphic = new PIXI.Graphics();
 
-                graphic.beginFill(0xFFFFFF);
+                graphic.beginFill(0xFFFFFF, 0);
                 graphic.drawRect(0, 0, this._Str_1720, this._height);
                 graphic.endFill();
 
@@ -905,8 +905,6 @@ export class RoomPlane implements IRoomPlane
     {
         if(!texture || !geometry) return;
 
-        console.log(this._Str_4542, this._Str_4047, this._Str_5088, this._Str_4891, this._Str_4795);
-
         if(((!this._Str_4542) || ((!this._Str_4047.length && !this._Str_5088.length) && !this._Str_4891)) || !this._Str_4795) return;
 
         let width   = texture.width;
@@ -925,7 +923,7 @@ export class RoomPlane implements IRoomPlane
             const graphic = new PIXI.Graphics();
 
             graphic
-                .beginFill(0xFFFFFF)
+                .beginFill(0xFFFFFF, 0)
                 .drawRect(0, 0, width, height)
                 .endFill();
 
@@ -940,12 +938,9 @@ export class RoomPlane implements IRoomPlane
 
             if(this._Str_2730)
             {
-                const rectangle = this._Str_2730.getLocalBounds();
-
                 this._Str_2730
-                    .clear()
-                    .beginFill(0xFFFFFF)
-                    .drawRect(0, 0, rectangle.width, rectangle.height)
+                    .beginFill(0xFFFFFF, 0)
+                    .drawRect(0, 0, this._Str_2730.width, this._Str_2730.height)
                     .endFill();
             }
 
@@ -983,6 +978,7 @@ export class RoomPlane implements IRoomPlane
 
                 if(rectMask)
                 {
+
                     posX    = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
                     posY    = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
                     
@@ -990,7 +986,6 @@ export class RoomPlane implements IRoomPlane
                     let ht  = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
 
                     this._Str_2730
-                        .clear()
                         .beginFill(0xFF0000)
                         .drawRect((posX - wd), (posY - ht), wd, ht)
                         .endFill();
@@ -1004,8 +999,6 @@ export class RoomPlane implements IRoomPlane
             this._Str_4891 = false;
         }
 
-        console.log('do this')
-
         this._Str_24790(texture, this._Str_2730);
     }
 
@@ -1013,7 +1006,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(!texture || !mask) return;
 
-        if(this._Str_3616 && (this._Str_3616.width !== texture.width) || (this._Str_3616.height !== texture.height))
+        if(this._Str_3616 && ((this._Str_3616.width !== texture.width) || (this._Str_3616.height !== texture.height)))
         {
             this._Str_3616.destroy();
 
@@ -1025,20 +1018,30 @@ export class RoomPlane implements IRoomPlane
             const graphic = new PIXI.Graphics();
 
             graphic
-                .beginFill(0xFFFFFF)
+                .beginFill(0xFFFFFF, 0)
                 .drawRect(0, 0, texture.width, texture.height)
                 .endFill();
 
             this._Str_3616 = graphic;
         }
 
-        const newMaskTexture = NitroInstance.instance.renderer.renderer.generateTexture(mask, 1, 1);
+        const newTexture = NitroInstance.instance.renderer.renderer.generateTexture(texture, 1, 1);
 
-        if(newMaskTexture)
+        if(newTexture)
         {
             this._Str_3616
-                .beginTextureFill({ texture: newMaskTexture })
-                .drawRect(0, 0, mask.width, mask.height)
+                .beginTextureFill({ texture: newTexture })
+                .drawRect(0, 0, newTexture.width, newTexture.height)
+                .endFill();
+        }
+
+        const maskTexture = NitroInstance.instance.renderer.renderer.generateTexture(mask, 1, 1);
+
+        if(maskTexture)
+        {
+            texture
+                .beginTextureFill({ texture: maskTexture })
+                .drawRect(0, 0, this._Str_3616.width, this._Str_3616.height)
                 .endFill();
         }
     }

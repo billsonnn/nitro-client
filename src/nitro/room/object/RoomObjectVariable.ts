@@ -100,4 +100,8 @@ export class RoomObjectVariable
     public static ROOM_COLORIZE_BG_ONLY: string                      = 'room_colorize_bg_only';
     public static ROOM_RANDOM_SEED: string                           = 'room_random_seed';
     public static ROOM_WORLD_TYPE: string                            = 'room_world_type';
+    public static ROOM_SELECTED_X: string                            = 'room_selected_x';
+    public static ROOM_SELECTED_Y: string                            = 'room_selected_y';
+    public static ROOM_SELECTED_Z: string                            = 'room_selected_z';
+    public static ROOM_SELECTED_PLANE: string                        = 'room_selected_plane';
 }

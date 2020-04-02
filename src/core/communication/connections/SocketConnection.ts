@@ -1,4 +1,5 @@
 import { NitroConfiguration } from '../../../NitroConfiguration';
+import { NitroLogger } from '../../common/logger/NitroLogger';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { EvaWireFormat } from '../codec/evawire/EvaWireFormat';
 import { ICodec } from '../codec/ICodec';
@@ -147,7 +148,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(header === -1)
             {
-                if(NitroConfiguration.PACKET_LOG) console.log(`Unknown Composer: ${ composer.constructor.name }`);
+                NitroLogger.log(`Unknown Composer: ${ composer.constructor.name }`);
 
                 continue;
             }

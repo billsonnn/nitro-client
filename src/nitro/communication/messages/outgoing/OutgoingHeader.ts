@@ -54,7 +54,9 @@ export class OutgoingHeader
     public static ITEM_DIMMER_SETTINGS           = 2813;
     public static ITEM_DIMMER_TOGGLE             = 2296;
     public static ITEM_EXCHANGE_REDEEM           = 3115;
+    public static FURNITURE_WALL_MULTISTATE      = 210;
     public static FURNITURE_MULTISTATE           = 99;
+    public static FURNITURE_RANDOMSTATE          = 3617;
     public static ITEM_PAINT                     = 711;
     public static ITEM_SAVE_BACKGROUND           = 3608;
     public static ITEM_STACK_HELPER              = 3839;

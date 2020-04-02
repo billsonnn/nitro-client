@@ -16,7 +16,10 @@ export class FurnitureWallDataParser
     private _height: number;
     private _localX: number;
     private _localY: number;
+    private _y: number;
+    private _z: number;
     private _direction: string;
+    private _Str_19875: boolean;
 
     constructor(wrapper: IMessageDataWrapper)
     {
@@ -37,6 +40,15 @@ export class FurnitureWallDataParser
         this._usagePolicy               = -1;
         this._userId                    = 0;
         this._username                  = null;
+
+        this._width                     = 0;
+        this._height                    = 0;
+        this._localX                    = 0;
+        this._localY                    = 0;
+        this._y                         = 0;
+        this._z                         = 0;
+        this._direction                 = null;
+        this._Str_19875                 = false;
 
         return true;
     }
@@ -60,6 +72,8 @@ export class FurnitureWallDataParser
 
         if(this._location.indexOf(':') === 0)
         {
+            this._Str_19875 = false;
+
             let parts = this._location.split(' ');
 
             if(parts.length >= 3)
@@ -93,6 +107,37 @@ export class FurnitureWallDataParser
                     }
                 }
             }
+        }
+        else
+        {
+            this._Str_19875 = true;
+
+            // _local_12 = _local_4.split(" ");
+            // if (_local_12.length >= 2)
+            // {
+            //     _local_13 = String(_local_12[0]);
+            //     if (((_local_13 == "rightwall") || (_local_13 == "frontwall")))
+            //     {
+            //         _local_13 = "r";
+            //     }
+            //     else
+            //     {
+            //         _local_13 = "l";
+            //     }
+            //     _local_20 = String(_local_12[1]);
+            //     _local_21 = _local_20.split(",");
+            //     if (_local_21.length >= 3)
+            //     {
+            //         _local_22 = 0;
+            //         _local_23 = parseFloat(_local_21[0]);
+            //         _local_24 = parseFloat(_local_21[1]);
+            //         _local_11.y = _local_23;
+            //         _local_11.z = _local_24;
+            //         _local_11.dir = _local_13;
+            //         _local_11.data = _local_5;
+            //         _local_11.state = _local_9;
+            //     }
+            //  }
         }
 
         return true;
@@ -171,5 +216,10 @@ export class FurnitureWallDataParser
     public get direction(): string
     {
         return this._direction
+    }
+
+    public get _Str_22379(): boolean
+    {
+        return this._Str_19875;
     }
 }

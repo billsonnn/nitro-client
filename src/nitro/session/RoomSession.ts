@@ -18,6 +18,8 @@ export class RoomSession extends Disposable implements IRoomSession
     private _controllerLevel: number;
     private _ownUserRoomId: number;
     private _isRoomOwner: boolean;
+    private _isDecorating: boolean;
+    private _isSpectator: boolean;
 
     constructor()
     {
@@ -33,6 +35,8 @@ export class RoomSession extends Disposable implements IRoomSession
         this._controllerLevel   = RoomControllerLevel.NONE;
         this._ownUserRoomId     = -1;
         this._isRoomOwner       = false;
+        this._isDecorating      = false;
+        this._isSpectator       = false;
     }
 
     protected onDispose(): void
@@ -151,5 +155,25 @@ export class RoomSession extends Disposable implements IRoomSession
     public get roomOwner(): boolean
     {
         return this._isRoomOwner;
+    }
+
+    public get isDecorating(): boolean
+    {
+        return this._isDecorating;
+    }
+
+    public set isDecorating(flag: boolean)
+    {
+        this._isDecorating = flag;
+    }
+
+    public get isSpectator(): boolean
+    {
+        return this._isSpectator;
+    }
+
+    public set isSpectator(flag: boolean)
+    {
+        this._isSpectator = flag;
     }
 }

@@ -17,4 +17,6 @@ export interface IRoomSession extends IDisposable
     controllerLevel: number;
     ownerUserRoomId: number
     roomOwner: boolean;
+    isDecorating: boolean;
+    isSpectator: boolean;
 }

@@ -1,6 +1,7 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { GraphicAssetCollection } from '../../../../../../core/asset/GraphicAssetCollection';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
+import { NitroInstance } from '../../../../../NitroInstance';
 import { PlaneMask } from './PlaneMask';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
@@ -151,6 +152,10 @@ export class PlaneMaskManager
 
         if(!asset) return true;
 
+        const texture = asset.texture;
+
+        if(!texture) return true;
+
         const point     = new PIXI.Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
         const matrix    = new PIXI.Matrix();
 
@@ -174,11 +179,20 @@ export class PlaneMaskManager
         matrix.scale(x_scale, y_scale);
         matrix.translate((point.x + width), (point.y + height));
 
-        k.beginTextureFill({
-            texture: asset.texture,
-            matrix: matrix
-        });
-        k.endFill();
+        const graphic = new PIXI.Graphics()
+            .beginTextureFill({ texture })
+            .drawRect(0, 0, texture.width, texture.height)
+            .endFill();
+
+        const maskTexture = NitroInstance.instance.renderer.renderer.generateTexture(graphic, 1, 1);
+
+        if(maskTexture)
+        {
+            k
+                .beginTextureFill({ texture: maskTexture })
+                .drawRect((point.x + width), (point.y + height), texture.width, texture.height)
+                .endFill();
+        }
 
         return true;
     }

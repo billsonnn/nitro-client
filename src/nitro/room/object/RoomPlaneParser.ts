@@ -644,6 +644,7 @@ export class RoomPlaneParser
             this._Str_3982(k.x, k.y, _local_2);
             this._Str_22077(new Vector3d((k.x + 0.5), (k.y + 0.5), _local_2), new Vector3d(-1, 0, 0), new Vector3d(0, -1, 0), false, false, false, false);
         }
+        
         return true;
     }
 

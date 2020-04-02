@@ -27,7 +27,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
     {
         if(this._currentState === FurnitureFloorHoleLogic._Str_9306)
         {
-            this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ROFHO_REMOVE_HOLE, this.object));
+            this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.REMOVE_HOLE, this.object));
         }
 
         super.dispose();
@@ -35,7 +35,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 
     public getEventTypes(): string[]
     {
-        const types = [ RoomObjectFloorHoleEvent.ROFHO_ADD_HOLE, RoomObjectFloorHoleEvent.ROFHO_REMOVE_HOLE ];
+        const types = [ RoomObjectFloorHoleEvent.ADD_HOLE, RoomObjectFloorHoleEvent.REMOVE_HOLE ];
 
         return this.mergeTypes(super.getEventTypes(), types);
     }
@@ -44,7 +44,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
     {
         super.update(time);
 
-        this._Str_25016();
+        //this._Str_25016();
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -68,9 +68,9 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
         {
             if((location.x !== this._currentLocation.x) || (location.y !== this._currentLocation.y))
             {
-                if (this._currentState == FurnitureFloorHoleLogic._Str_9306)
+                if (this._currentState === FurnitureFloorHoleLogic._Str_9306)
                 {
-                    if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ROFHO_ADD_HOLE, this.object));
+                    if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ADD_HOLE, this.object));
                 }
             }
         }
@@ -80,16 +80,19 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 
     private _Str_21445(state: number): void
     {
-        if((state === this._currentState) || !this.eventDispatcher) return;
+        if(state === this._currentState) return;
 
-        if(state === FurnitureFloorHoleLogic._Str_9306)
+        if(this.eventDispatcher)
         {
-            this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ROFHO_ADD_HOLE, this.object));
-        }
+            if(state === FurnitureFloorHoleLogic._Str_9306)
+            {
+                this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ADD_HOLE, this.object));
+            }
 
-        else if(this._currentState === FurnitureFloorHoleLogic._Str_9306)
-        {
-            this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ROFHO_REMOVE_HOLE, this.object));
+            else if(this._currentState === FurnitureFloorHoleLogic._Str_9306)
+            {
+                this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.REMOVE_HOLE, this.object));
+            }
         }
 
         this._currentState = state;

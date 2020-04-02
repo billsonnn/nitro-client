@@ -66,11 +66,6 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
         }, 1);
     }
 
-    public get pixiRenderer(): PIXI.Renderer | PIXI.CanvasRenderer
-    {
-        return this.renderer;
-    }
-
     public get eventDispatcher(): IEventDispatcher
     {
         return this._eventDispatcher;
