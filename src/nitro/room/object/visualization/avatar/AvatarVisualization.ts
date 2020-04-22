@@ -287,7 +287,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
                 if(avatarImage)
                 {
-                    sprite.texture = NitroInstance.instance.renderer.renderer.generateTexture(avatarImage, 1, 1);
+                    sprite.texture = NitroInstance.instance.renderer.generateTexture(avatarImage, 1, 1);
                 }
 
                 if(sprite.texture)

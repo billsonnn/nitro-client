@@ -708,7 +708,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             return;
         }
 
-        const startTime         = NitroInstance.instance.renderer.totalTimeRunning;
+        const startTime         = NitroInstance.instance.time;
         const furniturePerTick  = 5;
 
         for(let instanceData of this._roomInstanceData.values())
@@ -726,7 +726,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
                 if(!(++totalFurnitureAdded % furniturePerTick))
                 {
-                    const time = NitroInstance.instance.renderer.totalTimeRunning;
+                    const time = NitroInstance.instance.time;
 
                     if(((time - startTime) >= 40) && !this._Str_3688)
                     {
@@ -743,7 +743,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
                 if(!(++totalFurnitureAdded % furniturePerTick))
                 {
-                    const time = NitroInstance.instance.renderer.totalTimeRunning;
+                    const time = NitroInstance.instance.time;
 
                     if(((time - startTime) >= 40) && !this._Str_3688)
                     {
@@ -798,7 +798,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             model.setValue(RoomObjectVariable.FURNITURE_TYPE_ID, data.typeId);
             model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
             model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
             model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
@@ -857,7 +857,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
             model.setValue(RoomObjectVariable.OBJECT_ACCURATE_Z_VALUE, 1);
             model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
             model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
@@ -1598,7 +1598,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!object) return false;
 
         object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
 
         return true;
     }
@@ -1610,7 +1610,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!object) return false;
 
         object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.renderer.totalTimeRunning);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
 
         return true;
     }

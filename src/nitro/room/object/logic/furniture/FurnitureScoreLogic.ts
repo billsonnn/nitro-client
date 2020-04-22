@@ -70,7 +70,7 @@ export class FurnitureScoreLogic extends FurnitureMultiStateLogic
             if((difference * 50) > 3000) this._scoreIncreaser = 3000 / difference;
             else this._scoreIncreaser = 50;
 
-            this._scoreTimer = NitroInstance.instance.renderer.totalTimeRunning + 0;
+            this._scoreTimer = NitroInstance.instance.time + 0;
         }
     }
 }

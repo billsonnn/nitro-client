@@ -85,7 +85,7 @@ export class ExtendedSprite extends PIXI.Sprite
 
                 if(!baseTexture.resource)
                 {
-                    canvas = NitroInstance.instance.renderer.renderer.extract.canvas(texture as PIXI.RenderTexture);
+                    canvas = NitroInstance.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
                 }
 
                 if(!ExtendedSprite.generateHitMap(baseTexture, 128, canvas)) return false;

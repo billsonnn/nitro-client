@@ -74,7 +74,7 @@ export class AvatarImageCache
 
     public _Str_1086(k: number = 60000): void
     {
-        const time = NitroInstance.instance.renderer.totalTimeRunning;
+        const time = NitroInstance.instance.time;
 
         if(this._cache)
         {
@@ -593,7 +593,7 @@ export class AvatarImageCache
             container.addChild(sprite);
         }
 
-        const texture = NitroInstance.instance.renderer.renderer.generateTexture(container, 1, 1);
+        const texture = NitroInstance.instance.renderer.generateTexture(container, 1, 1);
 
         return new ImageData(texture, bounds, _local_6, flipH, null);
     }

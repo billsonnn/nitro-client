@@ -691,7 +691,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     {
         if(!this._Str_1163 == null) return;
 
-        var _local_3: number    = NitroInstance.instance.renderer.totalTimeRunning;
+        var _local_3: number    = NitroInstance.instance.time;
         var _local_4: string[]  = [];
 
         for(let k of this._Str_1163) _local_4.push(k._Str_695);

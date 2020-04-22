@@ -1,7 +1,5 @@
-import { INitroManager } from '../core/common/INitroManager';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
-import { INitroRenderer } from '../core/renderer/INitroRenderer';
 import { IRoomManager } from '../room/IRoomManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
@@ -11,8 +9,11 @@ import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomUI } from './ui/RoomUI';
 
-export interface INitroInstance extends INitroManager
+export interface INitroInstance extends PIXI.Application
 {
+    init(): void;
+    dispose(): void;
+    setBackgroundColor(color: number): void;
     core: INitroCore;
     events: IEventDispatcher;
     communication: INitroCommunicationManager;
@@ -23,5 +24,7 @@ export interface INitroInstance extends INitroManager
     roomManager: IRoomManager;
     roomUI: RoomUI;
     navigator: INitroNavigator;
-    renderer: INitroRenderer;
+    time: number;
+    isReady: boolean;
+    isDisposed: boolean;
 }

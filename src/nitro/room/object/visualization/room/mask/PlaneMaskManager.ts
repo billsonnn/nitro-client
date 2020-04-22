@@ -163,7 +163,7 @@ export class PlaneMaskManager
             .drawRect(0, 0, texture.width, texture.height)
             .endFill();
 
-        const maskTexture = NitroInstance.instance.renderer.renderer.generateTexture(graphic, 1, 1);
+        const maskTexture = NitroInstance.instance.renderer.generateTexture(graphic, 1, 1);
 
         if(maskTexture)
         {

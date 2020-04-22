@@ -108,7 +108,7 @@ export class RoomDesktop
             geometry.location = new Vector3d(x, y, z);
         }
 
-        const stage = NitroInstance.instance.renderer.stage;
+        const stage = NitroInstance.instance.stage;
 
         if(!stage) return;
 
@@ -188,6 +188,8 @@ export class RoomDesktop
 
         this._resizeTimer = setTimeout(() =>
         {
+            NitroInstance.instance.resize();
+
             this._roomEngine.initializeRoomInstanceRenderingCanvas(this._session.roomId, this._canvasIDs[0], window.innerWidth, window.innerHeight);
 
             this.setBackground(this.getRoomBackground());

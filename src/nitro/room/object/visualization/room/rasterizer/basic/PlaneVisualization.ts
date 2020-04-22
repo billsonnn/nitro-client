@@ -154,7 +154,7 @@ export class PlaneVisualization
                 {
                     if(canvas)
                     {
-                        const texture = NitroInstance.instance.renderer.renderer.generateTexture(this._cachedBitmapData, 1, 1);
+                        const texture = NitroInstance.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1);
 
                         if(texture)
                         {
@@ -216,7 +216,7 @@ export class PlaneVisualization
 
         if(canvas && (canvas !== this._cachedBitmapData))
         {
-            const texture = NitroInstance.instance.renderer.renderer.generateTexture(canvas, 1, 1);
+            const texture = NitroInstance.instance.renderer.generateTexture(canvas, 1, 1);
 
             this._cachedBitmapData
                 .beginTextureFill({ texture })

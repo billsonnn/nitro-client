@@ -10,7 +10,7 @@ export class AvatarImageBodyPartCache
     {
         this._Str_586 = new Map();
 
-        this._Str_1108(NitroInstance.instance.renderer.totalTimeRunning);
+        this._Str_1108(NitroInstance.instance.time);
     }
 
     public dispose(): void

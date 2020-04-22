@@ -19,7 +19,7 @@ export class RoomEnterEffect
         RoomEnterEffect._Str_11007  = 0;
         RoomEnterEffect._Str_6886   = k;
         RoomEnterEffect._Str_7448   = _arg_2;
-        RoomEnterEffect._Str_12311  = NitroInstance.instance.renderer.totalTimeRunning;
+        RoomEnterEffect._Str_12311  = NitroInstance.instance.time;
         RoomEnterEffect._Str_621    = RoomEnterEffect._Str_11894;
     }
 
@@ -27,7 +27,7 @@ export class RoomEnterEffect
     {
         if((RoomEnterEffect._Str_621 === RoomEnterEffect._Str_14599) || (RoomEnterEffect._Str_621 === RoomEnterEffect._Str_12882)) return;
 
-        const k = (NitroInstance.instance.renderer.totalTimeRunning - RoomEnterEffect._Str_12311);
+        const k = (NitroInstance.instance.time - RoomEnterEffect._Str_12311);
 
         if(k > (RoomEnterEffect._Str_6886 + RoomEnterEffect._Str_7448))
         {

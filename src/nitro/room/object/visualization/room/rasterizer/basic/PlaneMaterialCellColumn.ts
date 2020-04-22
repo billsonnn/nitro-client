@@ -257,7 +257,7 @@ export class PlaneMaterialCellColumn
                 {
                     if(!_arg_3) _arg_2 -= graphic.height;
 
-                    const texture = NitroInstance.instance.renderer.renderer.generateTexture(graphic, 1, 1);
+                    const texture = NitroInstance.instance.renderer.generateTexture(graphic, 1, 1);
 
                     if(texture)
                     {

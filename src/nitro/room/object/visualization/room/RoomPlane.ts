@@ -153,7 +153,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        const texture = NitroInstance.instance.renderer.renderer.generateTexture(this._Str_1049, 1, 1, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
+        const texture = NitroInstance.instance.renderer.generateTexture(this._Str_1049, 1, 1, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
 
         return texture;
     }
@@ -1024,7 +1024,7 @@ export class RoomPlane implements IRoomPlane
             this._Str_3616 = graphic;
         }
 
-        const newTexture = NitroInstance.instance.renderer.renderer.generateTexture(texture, 1, 1);
+        const newTexture = NitroInstance.instance.renderer.generateTexture(texture, 1, 1);
 
         if(newTexture)
         {
@@ -1034,7 +1034,7 @@ export class RoomPlane implements IRoomPlane
                 .endFill();
         }
 
-        const maskTexture = NitroInstance.instance.renderer.renderer.generateTexture(mask, 1, 1);
+        const maskTexture = NitroInstance.instance.renderer.generateTexture(mask, 1, 1);
 
         if(maskTexture)
         {

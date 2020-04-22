@@ -1,7 +1,8 @@
-import { NitroManager } from '../core/common/NitroManager';
+import * as PIXI from 'pixi.js-legacy';
+import { EventDispatcher } from '../core/events/EventDispatcher';
+import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
-import { INitroRenderer } from '../core/renderer/INitroRenderer';
-import { NitroRenderer } from '../core/renderer/NitroRenderer';
+import { NitroConfiguration } from '../NitroConfiguration';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
@@ -19,11 +20,12 @@ import { RoomSessionManager } from './session/RoomSessionManager';
 import { SessionDataManager } from './session/SessionDataManager';
 import { RoomUI } from './ui/RoomUI';
 
-export class NitroInstance extends NitroManager implements INitroInstance
+export class NitroInstance extends PIXI.Application implements INitroInstance
 {
     private static INSTANCE: INitroInstance = null;
 
     private _core: INitroCore;
+    private _events: IEventDispatcher;
     private _communication: INitroCommunicationManager;
     private _avatar: IAvatarRenderManager;
     private _roomEngine: IRoomEngine;
@@ -32,14 +34,34 @@ export class NitroInstance extends NitroManager implements INitroInstance
     private _roomManager: IRoomManager;
     private _roomUI: RoomUI;
     private _navigator: INitroNavigator;
-    
-    private _renderer: INitroRenderer;
 
-    constructor(core: INitroCore)
+    private _isReady: boolean;
+    private _isDisposed: boolean;
+
+    constructor(core: INitroCore, options?: {
+        autoStart?: boolean;
+        width?: number;
+        height?: number;
+        view?: HTMLCanvasElement;
+        transparent?: boolean;
+        autoDensity?: boolean;
+        antialias?: boolean;
+        preserveDrawingBuffer?: boolean;
+        resolution?: number;
+        forceCanvas?: boolean;
+        backgroundColor?: number;
+        clearBeforeRender?: boolean;
+        forceFXAA?: boolean;
+        powerPreference?: string;
+        sharedTicker?: boolean;
+        sharedLoader?: boolean;
+        resizeTo?: Window | HTMLElement;
+    })
     {
-        super();
+        super(options);
 
         this._core          = core;
+        this._events        = new EventDispatcher();
         this._communication = new NitroCommunicationManager(core.communication);
         this._avatar        = new AvatarRenderManager();
         this._roomEngine    = new RoomEngine(this._communication);
@@ -49,18 +71,17 @@ export class NitroInstance extends NitroManager implements INitroInstance
         this._roomUI        = new RoomUI(this._communication, this._roomEngine, this._session, this._roomSession);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
-        this._renderer      = new NitroRenderer({
-            width: window.innerWidth,
-            height: window.innerHeight,
-            antialias: false
-        });
+        this._isReady       = false;
+        this._isDisposed    = false;
 
         if(!NitroInstance.INSTANCE) NitroInstance.INSTANCE = this;
     }
 
-    protected onInit(): void
+    public init(): void
     {
-        this._renderer.setup();
+        if(this._isReady || this._isDisposed) return;
+
+        this.setupRenderer();
 
         if(this._communication) this._communication.init();
         if(this._avatar)        this._avatar.init();
@@ -76,8 +97,10 @@ export class NitroInstance extends NitroManager implements INitroInstance
         }
     }
 
-    protected onDispose(): void
+    public dispose(): void
     {
+        if(this._isDisposed) return;
+
         if(this._navigator)
         {
             this._navigator.dispose();
@@ -134,12 +157,31 @@ export class NitroInstance extends NitroManager implements INitroInstance
             this._communication = null;
         }
 
-        super.onDispose();
+        this._isDisposed = true;
+    }
+
+    private setupRenderer(): void
+    {
+        NitroInstance.instance.resizeTo = window;
+
+        this.resize();
+
+        this.setBackgroundColor(NitroConfiguration.BACKGROUND_COLOR);
+    }
+
+    public setBackgroundColor(color: number): void
+    {
+        this.renderer.backgroundColor = color;
     }
 
     public get core(): INitroCore
     {
         return this._core;
+    }
+
+    public get events(): IEventDispatcher
+    {
+        return this._events;
     }
 
     public get communication(): INitroCommunicationManager
@@ -182,9 +224,19 @@ export class NitroInstance extends NitroManager implements INitroInstance
         return this._navigator;
     }
 
-    public get renderer(): INitroRenderer
+    public get time(): number
     {
-        return this._renderer;
+        return this.ticker.lastTime;
+    }
+
+    public get isReady(): boolean
+    {
+        return this._isReady;
+    }
+
+    public get isDisposed(): boolean
+    {
+        return this._isDisposed;
     }
 
     public static get instance(): INitroInstance

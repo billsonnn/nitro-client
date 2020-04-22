@@ -117,7 +117,7 @@ export class PlaneVisualizationLayer
 
             if(canvas && (bitmapData !== canvas))
             {
-                const texture = NitroInstance.instance.renderer.renderer.generateTexture(bitmapData, 1, 1);
+                const texture = NitroInstance.instance.renderer.generateTexture(bitmapData, 1, 1);
 
                 if(texture)
                 {
