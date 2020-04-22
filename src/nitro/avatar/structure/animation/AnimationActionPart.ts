@@ -18,7 +18,7 @@ export class AnimationActionPart
 
                 let repeats = frame.repeats || 0;
 
-                if(repeats > 0) while(--repeats > 0) this._frames.push(this._frames[(this._frames.length - 1)]);
+                if(repeats > 1) while(--repeats > 0) this._frames.push(this._frames[(this._frames.length - 1)]);
             }
         }
     }

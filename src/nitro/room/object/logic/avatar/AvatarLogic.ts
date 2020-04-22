@@ -2,11 +2,15 @@
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { AvatarAction } from '../../../../avatar/enum/AvatarAction';
+import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectAvatarCarryObjectUpdateMessage } from '../../../messages/ObjectAvatarCarryObjectUpdateMessage';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarDanceUpdateMessage } from '../../../messages/ObjectAvatarDanceUpdateMessage';
+import { ObjectAvatarEffectUpdateMessage } from '../../../messages/ObjectAvatarEffectUpdateMessage';
 import { ObjectAvatarExpressionUpdateMessage } from '../../../messages/ObjectAvatarExpressionUpdateMessage';
 import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarFigureUpdateMessage';
 import { ObjectAvatarFlatControlUpdateMessage } from '../../../messages/ObjectAvatarFlatControlUpdateMessage';
@@ -25,7 +29,16 @@ export class AvatarLogic extends MovingObjectLogic
 {
     private static MAX_HAND_ID: number      = 999999999;
     private static MAX_HAND_USE_ID: number  = 999;
+    private static _Str_13364: number       = 28;
+    private static _Str_8860: number        = 500;
+    private static _Str_15351: number       = 29;
+    private static _Str_13733: number       = 184;
+    private static _Str_13094: number       = 185;
 
+    private _selected: boolean;
+    private _reportedLocation: Vector3d;
+    private _effectChangeTimeStamp: number;
+    private _newEffect: number;
     private _blinkingStartTimestamp: number;
     private _blinkingEndTimestamp: number;
     private _talkingEndTimestamp: number;
@@ -42,7 +55,11 @@ export class AvatarLogic extends MovingObjectLogic
     {
         super();
 
-        this._blinkingStartTimestamp        = this.time + this.randomBlinkStartTimestamp();
+        this._selected                      = false;
+        this._reportedLocation              = null;
+        this._effectChangeTimeStamp         = 0;
+        this._newEffect                     = 0;
+        this._blinkingStartTimestamp        = NitroInstance.instance.renderer.totalTimeRunning + this.randomBlinkStartTimestamp();
         this._blinkingEndTimestamp          = 0;
         this._talkingEndTimestamp           = 0;
         this._talkingPauseStartTimestamp    = 0;
@@ -263,6 +280,11 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
+        if(message instanceof ObjectAvatarEffectUpdateMessage)
+        {
+            this.updateAvatarEffect(message.effect, message.delayMilliseconds, model);
+        }
+
         if(message instanceof ObjectAvatarTypingUpdateMessage)
         {
             model.setValue(RoomObjectVariable.FIGURE_IS_TYPING, message.isTyping ? 1 : 0);
@@ -304,6 +326,52 @@ export class AvatarLogic extends MovingObjectLogic
 
             return;
         }
+    }
+
+    private updateAvatarEffect(effect: number, delay: number,  model: IRoomObjectModel): void
+    {
+        if(effect === AvatarLogic._Str_13364)
+        {
+            this._effectChangeTimeStamp = (NitroInstance.instance.renderer.totalTimeRunning + AvatarLogic._Str_8860);
+            this._newEffect             = AvatarLogic._Str_15351;
+        }
+
+        else if (effect === AvatarLogic._Str_13733)
+        {
+            this._effectChangeTimeStamp = (NitroInstance.instance.renderer.totalTimeRunning + AvatarLogic._Str_8860);
+            this._newEffect             = AvatarLogic._Str_13094;
+        }
+
+        else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
+        {
+            this._effectChangeTimeStamp = (NitroInstance.instance.renderer.totalTimeRunning + AvatarLogic._Str_8860);
+            this._newEffect             = effect;
+
+            effect = AvatarLogic._Str_13364;
+        }
+
+        else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
+        {
+            this._effectChangeTimeStamp = (NitroInstance.instance.renderer.totalTimeRunning + AvatarLogic._Str_8860);
+            this._newEffect             = effect;
+
+            effect = AvatarLogic._Str_13733;
+        }
+
+        else if (delay === 0)
+        {
+            this._effectChangeTimeStamp = 0;
+        }
+
+        else
+        {
+            this._effectChangeTimeStamp = (NitroInstance.instance.renderer.totalTimeRunning + delay);
+            this._newEffect             = effect;
+            
+            return;
+        }
+
+        model.setValue(RoomObjectVariable.FIGURE_EFFECT, effect);
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void

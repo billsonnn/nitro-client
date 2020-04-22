@@ -243,7 +243,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                             if(bitmap.normalMinY !== undefined) normalMinY = bitmap.normalMinY;
                             if(bitmap.normalMaxY !== undefined) normalMaxY = bitmap.normalMaxY;
 
-                            const asset = _arg_2.getGraphic(assetName);
+                            const asset = _arg_2.getAsset(assetName);
 
                             if(asset)
                             {
@@ -437,7 +437,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                     {
                         if(!assetName) continue;
 
-                        const asset = this._assetCollection.getGraphic(assetName);
+                        const asset = this._assetCollection.getAsset(assetName);
 
                         if(!asset) continue;
 

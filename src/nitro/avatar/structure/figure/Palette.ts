@@ -5,26 +5,33 @@ import { PartColor } from './PartColor';
 export class Palette implements IPalette
 {
     private _id: number;
-    private _colors: { [index: string]: IPartColor };
+    private _colors: Map<string, IPartColor>;
 
     constructor(data: any)
     {
         if(!data) throw new Error('invalid_data');
 
         this._id        = parseInt(data['$'].id);
-        this._colors    = {};
+        this._colors    = new Map();
 
+        this._Str_2015(data);
+    }
+
+    public _Str_2015(data: any): void
+    {
         for(let color of data.color)
         {
             const newColor = new PartColor(color);
 
-            this._colors[newColor.id.toString()] = newColor;
+            this._colors.set(color['$'].id.toString(), newColor);
         }
     }
 
-    public getColor(id: number): IPartColor
+    public _Str_751(id: number): IPartColor
     {
-        return this._colors[id.toString()];
+        if((id === undefined) || id < 0) return null;
+        
+        return (this._colors.get(id.toString()) || null);
     }
 
     public get id(): number
@@ -32,7 +39,7 @@ export class Palette implements IPalette
         return this._id;
     }
 
-    public get colors(): { [index: string]: IPartColor }
+    public get colors(): Map<string, IPartColor>
     {
         return this._colors;
     }

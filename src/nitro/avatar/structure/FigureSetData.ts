@@ -1,21 +1,25 @@
 import { IFigurePartSet } from './figure/IFigurePartSet';
 import { IPalette } from './figure/IPalette';
+import { ISetType } from './figure/ISetType';
 import { Palette } from './figure/Palette';
 import { SetType } from './figure/SetType';
+import { IFigureSetData } from './IFigureSetData';
+import { IStructureData } from './IStructureData';
 
-export class FigureSetData
+export class FigureSetData implements IFigureSetData, IStructureData
 {
-    private _palettes: { [index: string]: IPalette };
-    private _setTypes: { [index: string]: SetType };
-
-    private _isReady: boolean;
+    private _palettes: Map<string, Palette>;
+    private _setTypes: Map<string, SetType>;
 
     constructor()
     {
-        this._palettes  = {};
-        this._setTypes  = {};
+        this._palettes  = new Map();
+        this._setTypes  = new Map();
+    }
 
-        this._isReady   = false;
+    public dispose(): void
+    {
+
     }
 
     public parse(data: any): boolean
@@ -28,7 +32,7 @@ export class FigureSetData
 
             if(!newPalette) continue;
 
-            this._palettes[newPalette.id.toString()] = newPalette;
+            this._palettes.set(newPalette.id.toString(), newPalette);
         }
 
         for(let set of data.sets[0].settype)
@@ -37,50 +41,110 @@ export class FigureSetData
 
             if(!newSet) continue;
 
-            this._setTypes[newSet.type] = newSet;
+            this._setTypes.set(newSet.type, newSet);
         }
-
-        this._isReady = true;
 
         return true;
     }
 
-    public getSet(type: string): SetType
+    public _Str_1133(k: any): void
     {
-        if(!type) return null;
+        for(let _local_2 of k.sets.settype)
+        {
+            const setType = this._setTypes.get(_local_2.type);
 
-        const existing = this._setTypes[type];
+            if(setType)
+            {
+                setType._Str_1874(_local_2);
+            }
+            else
+            {
+                this._setTypes.set(_local_2.type, new SetType(_local_2));
+            }
+        }
 
-        if(!existing) return null;
-
-        return existing;
+        this._Str_1017(k);
     }
 
-    public getFigurePartSet(type: string, id: string): IFigurePartSet
+    public _Str_1017(k: any): boolean
     {
-        const setType = this.getSet(type);
+        if(!k) return false;
+
+        for(let _local_2 of k.colors.palette)
+        {
+            const _local_4 = this._palettes.get(_local_2.id);
+
+            if(!_local_4)
+            {
+                this._palettes.set(_local_2.id, new Palette(_local_2));
+            }
+            else
+            {
+                _local_4._Str_2015(_local_2);
+            }
+        }
+
+        for(let _local_3 of k.sets.settype)
+        {
+            const _local_5 = this._setTypes.get(_local_3.type);
+
+            if(!_local_5)
+            {
+                this._setTypes.set(_local_3.type, new SetType(_local_3));
+            }
+            else
+            {
+                _local_5._Str_2015(_local_3);
+            }
+        }
+
+        return false;
+    }
+
+    public _Str_1733(k: string, _arg_2: number): string[]
+    {
+        const types: string[] = [];
+
+        for(let set of this._setTypes.values())
+        {
+            if(!set || !set._Str_895(k, _arg_2)) continue;
+
+            types.push(set.type);
+        }
+
+        return types;
+    }
+
+    public _Str_2264(k: string, _arg_2: string): IFigurePartSet
+    {
+        const setType = this._setTypes.get(k);
 
         if(!setType) return null;
 
-        const partSet = setType.getPartSet(id);
-
-        if(!partSet) return null;
-
-        return partSet;
+        return setType._Str_2264(_arg_2);
     }
 
-    public getPalette(id: string): IPalette
+    public _Str_740(k: string): ISetType
     {
-        return this._palettes[id];
+        return (this._setTypes.get(k) || null);
     }
 
-    public get setTypes(): { [index: string]: SetType }
+    public _Str_783(k: number): IPalette
     {
-        return this._setTypes;
+        return (this._palettes.get(k.toString()) || null);
     }
 
-    public get isReady(): boolean
+    public _Str_938(k: number): IFigurePartSet
     {
-        return this._isReady;
+        for(let set of this._setTypes.values())
+        {
+            const partSet = set._Str_1020(k);
+
+            if(!partSet) continue;
+
+            return partSet;
+        }
+        
+        return null;
     }
 }

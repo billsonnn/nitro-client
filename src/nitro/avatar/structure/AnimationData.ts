@@ -1,7 +1,8 @@
 import { IActionDefinition } from '../actions/IActionDefinition';
 import { AnimationAction } from './animation/AnimationAction';
+import { IFigureSetData } from './IFigureSetData';
 
-export class AnimationData
+export class AnimationData implements IFigureSetData
 {
     private _actions: Map<string, AnimationAction>;
 
@@ -27,6 +28,16 @@ export class AnimationData
         return true;
     }
 
+    public _Str_1017(k: any): boolean
+    {
+        for(let _local_2 of k.action)
+        {
+            this._actions.set(_local_2.id, new AnimationAction(_local_2));
+        }
+
+        return true;
+    }
+
     public _Str_2244(action: IActionDefinition): AnimationAction
     {
         const existing = this._actions.get(action.id);
@@ -42,6 +53,6 @@ export class AnimationData
 
         if(!animationAction) return 0;
 
-        return animationAction.frameCount;
+        return animationAction._Str_2185;
     }
 }

@@ -1,8 +1,11 @@
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { UserPermissionsEvent } from '../communication/messages/incoming/user/access/UserPermissionsEvent';
+import { UserRightsEvent } from '../communication/messages/incoming/user/access/UserRightsEvent';
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { SecurityLevel } from './enum/SecurityLevel';
 import { SessionDataEvent } from './events/SessionDataEvent';
 import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
@@ -18,6 +21,10 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _figure: string;
     private _gender: string;
 
+    private _clubLevel: number;
+    private _rankId: number;
+    private _isAmbassador: boolean;
+
     private _floorItems: Map<number, FurnitureData>;
     private _wallItems: Map<number, FurnitureData>;
     private _furnitureData: FurnitureDataParser;
@@ -32,6 +39,10 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this.resetUserInfo();
 
+        this._clubLevel                 = 0;
+        this._rankId                    = 0;
+        this._isAmbassador              = false;
+
         this._floorItems                = new Map();
         this._wallItems                 = new Map();
         this._furnitureData             = null;
@@ -45,6 +56,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
+        this._communication.registerMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
     }
 
     protected onDispose(): void
@@ -150,6 +162,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.dispatchSessionDataEvent(SessionDataEvent.FIGURE_UPDATED);
     }
 
+    private onUserPermissionsEvent(event: UserPermissionsEvent): void
+    {
+        if(!(event instanceof UserRightsEvent) || !event.connection) return;
+
+        this._clubLevel     = event.getParser().clubLevel;
+        this._rankId        = event.getParser().rank;
+        this._isAmbassador  = event.getParser().isAmbassador;
+    }
+
     private onFurnitureDataReadyEvent(event: Event): void
     {
         this._furnitureData.events.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
@@ -216,6 +237,11 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
+    public hasSecurity(level: number): boolean
+    {
+        return this._rankId >= level;
+    }
+
     public get communication(): INitroCommunicationManager
     {
         return this._communication;
@@ -239,5 +265,10 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public get gender(): string
     {
         return this._gender;
+    }
+
+    public get isModerator(): boolean
+    {
+        return (this._rankId >= SecurityLevel._Str_3569);
     }
 }

@@ -20,9 +20,9 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
         this._color2    = FurnitureGuildCustomizedVisualization.DEFAULT_COLOR_2;
     }
 
-    protected updateModel(): boolean
+    protected updateModel(scale: number): boolean
     {
-        const flag = super.updateModel();
+        const flag = super.updateModel(scale);
 
         if(!flag) return false;
 
@@ -32,9 +32,9 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
         return flag;
     }
 
-    protected getLayerColor(direction: number, layerId: number): number
+    protected getLayerColor(scale: number, layerId: number, colorId: number): number
     {
-        const tag = this.getLayerTag(direction, layerId);
+        const tag = this.getLayerTag(scale, this._direction, layerId);
 
         switch(tag)
         {
@@ -42,6 +42,6 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
             case 'COLOR2': return this._color2;
         }
 
-        return super.getLayerColor(direction, layerId);
+        return super.getLayerColor(scale, layerId, colorId);
     }
 }

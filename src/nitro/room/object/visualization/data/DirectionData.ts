@@ -2,6 +2,8 @@ import { LayerData } from './LayerData';
 
 export class DirectionData
 {
+    public static _Str_9471: number = -1;
+
     private _layers: LayerData[];
 
     constructor(layerCount: number)

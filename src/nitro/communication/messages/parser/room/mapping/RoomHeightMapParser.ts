@@ -40,7 +40,7 @@ export class RoomHeightMapParser implements IMessageParser
 
     public isStackable(x: number, y: number): boolean
     {
-        if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return false;
+        if((x < 0) || (x >= this._width) || (y < 0) || (y >= this._height)) return true;
 
         return RoomHeightMapParser.isHeightStackable(this._heights.get((y * this._width) + x)); 
     }

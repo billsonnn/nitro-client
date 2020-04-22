@@ -8,7 +8,6 @@ export class FigurePart implements IFigurePart
     private _index: number;
     private _colorLayerIndex: number;
     private _paletteMapId: number;
-    private _library: string;
 
     constructor(data: any)
     {
@@ -28,8 +27,11 @@ export class FigurePart implements IFigurePart
 
         if(!isNaN(breed)) this._breed = parseInt(breed);
         else this._breed = -1;
+    }
 
-        this._library = null;
+    public dispose(): void
+    {
+
     }
 
     public get id(): number
@@ -52,23 +54,13 @@ export class FigurePart implements IFigurePart
         return this._index;
     }
 
-    public get colorLayerIndex(): number
+    public get _Str_827(): number
     {
         return this._colorLayerIndex;
     }
 
-    public get paletteMapId(): number
+    public get paletteMap(): number
     {
         return this._paletteMapId;
-    }
-
-    public get library(): string
-    {
-        return this._library;
-    }
-
-    public set library(library: string)
-    {
-        this._library = library;
     }
 }

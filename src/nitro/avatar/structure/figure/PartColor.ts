@@ -1,4 +1,3 @@
-import { SpriteUtilities } from '../../../../room/utils/SpriteUtilities';
 import { IPartColor } from './IPartColor';
 
 export class PartColor implements IPartColor
@@ -7,17 +6,17 @@ export class PartColor implements IPartColor
     private _index: number;
     private _clubLevel: number;
     private _isSelectable: boolean;
-    private _color: number;
+    private _rgb: number;
 
     constructor(data: any)
     {
         if(!data) throw new Error('invalid_data');
 
-        this._id            = parseInt(data['$'].id);
-        this._index         = parseInt(data['$'].index);
-        this._clubLevel     = parseInt(data['$'].club);
-        this._isSelectable  = parseInt(data['$'].colorindex) === 1;
-        this._color         = SpriteUtilities.hex2int(data['_']);
+        this._id                = parseInt(data['$'].id);
+        this._index             = parseInt(data['$'].index);
+        this._clubLevel         = parseInt(data['$'].club);
+        this._isSelectable      = parseInt(data['$'].colorindex) === 1;
+        this._rgb               = parseInt(data['_'], 16);
     }
 
     public get id(): number
@@ -40,8 +39,8 @@ export class PartColor implements IPartColor
         return this._isSelectable;
     }
 
-    public get color(): number
+    public get _Str_915(): number
     {
-        return this._color;
+        return this._rgb;
     }
 }

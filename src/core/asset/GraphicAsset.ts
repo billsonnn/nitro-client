@@ -9,6 +9,7 @@ export class GraphicAsset
     private _height: number;
     private _flipH: boolean;
     private _flipV: boolean;
+    private _rectangle: PIXI.Rectangle;
 
     private _initialized: boolean;
 
@@ -18,6 +19,8 @@ export class GraphicAsset
 
         asset._name      = name;
         asset._source    = source || null
+
+        if(asset._source === null) asset._source = asset._name;
 
         if(texture)
         {
@@ -30,10 +33,11 @@ export class GraphicAsset
             asset._initialized  = true;
         }
 
-        asset._x        = x || 0;
-        asset._y        = y || 0;
-        asset._flipH    = flipH;
-        asset._flipV    = flipV;
+        asset._x            = x || 0;
+        asset._y            = y || 0;
+        asset._flipH        = flipH;
+        asset._flipV        = flipV;
+        asset._rectangle    = null;
 
         return asset;
     }
@@ -109,5 +113,15 @@ export class GraphicAsset
     public get flipV(): boolean
     {
         return this._flipV;
+    }
+
+    public get rectangle(): PIXI.Rectangle
+    {
+        if(!this._rectangle)
+        {
+            this._rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
+        }
+
+        return this._rectangle;
     }
 }

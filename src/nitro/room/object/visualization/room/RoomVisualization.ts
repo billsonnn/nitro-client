@@ -46,7 +46,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     private _Str_2540: RoomPlane[];
     private _Str_4864: RoomPlane[];
     private _Str_6648: number[];
-    private _scale: number;
+    private _roomScale: number;
     private _lastUpdateTime: number;
     private _updateIntervalTime: number;
     private _wallType: string;
@@ -81,7 +81,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._Str_2540                  = [];
         this._Str_4864                  = [];
         this._Str_6648                  = [];
-        this._scale                     = 0;
+        this._roomScale                     = 0;
         this._lastUpdateTime            = -1000;
         this._updateIntervalTime        = 250;
         this._wallType                  = null;
@@ -150,12 +150,14 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
     protected reset(): void
     {
+        super.reset();
+        
         this._floorType         = null;
         this._wallType          = null;
         this._landscapeType     = null;
         this._maskData          = null;
         this._geometryUpdateId  = -1;
-        this._scale             = 0;
+        this._roomScale             = 0;
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
@@ -232,12 +234,12 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         const direction = k.direction;
 
-        if(direction && ((direction.x !== this._directionX) || (direction.y !== this._directionY) || (direction.z !== this._directionZ) || (k.scale !== this._scale)))
+        if(direction && ((direction.x !== this._directionX) || (direction.y !== this._directionY) || (direction.z !== this._directionZ) || (k.scale !== this._roomScale)))
         {
             this._directionX    = direction.x;
             this._directionY    = direction.y;
             this._directionZ    = direction.z;
-            this._scale         = k.scale;
+            this._roomScale         = k.scale;
 
             return true;
         }
@@ -408,8 +410,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                 {
                     const _local_15 = ((_local_8.x + _local_9.x) + 0.5);
                     const _local_16 = ((_local_8.y + _local_10.y) + 0.5);
-                    const _local_17 = (Math.floor(_local_15) - _local_15);
-                    const _local_18 = (Math.floor(_local_16) - _local_16);
+                    const _local_17 = (Math.trunc(_local_15) - _local_15);
+                    const _local_18 = (Math.trunc(_local_16) - _local_16);
 
                     _local_13 = new RoomPlane(this.object.getLocation(), _local_8, _local_9, _local_10, RoomPlane.TYPE_FLOOR, true, _local_11, _local_6, -(_local_17), -(_local_18));
 

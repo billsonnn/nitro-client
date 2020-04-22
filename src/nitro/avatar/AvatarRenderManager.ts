@@ -1,13 +1,17 @@
 import { Parser } from 'xml2js';
+import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { NitroInstance } from '../NitroInstance';
+import { AssetAliasCollection } from './alias/AssetAliasCollection';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
 import { AvatarFigureContainer } from './AvatarFigureContainer';
 import { AvatarImage } from './AvatarImage';
 import { AvatarStructure } from './AvatarStructure';
+import { EffectAssetDownloadManager } from './EffectAssetDownloadManager';
 import { AvatarRenderEvent } from './events/AvatarRenderEvent';
+import { IAvatarEffectListener } from './IAvatarEffectListener';
 import { IAvatarImage } from './IAvatarImage';
 import { IAvatarImageListener } from './IAvatarImageListener';
 import { IAvatarRenderManager } from './IAvatarRenderManager';
@@ -17,17 +21,21 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 {
     private static DEFAULT_FIGURE: string = 'hd-99999-99999';
 
+    private _aliasCollection: AssetAliasCollection;
+
     private _structure: AvatarStructure;
     private _avatarAssetDownloadManager: AvatarAssetDownloadManager;
+    private _effectAssetDownloadManager: EffectAssetDownloadManager;
 
     private _placeHolderFigure: AvatarFigureContainer;
 
-    private _geometryReady: boolean;
-    private _partSetsReady: boolean;
-    private _actionsReady: boolean;
-    private _animationsReady: boolean;
     private _figureMapReady: boolean;
     private _effectMapReady: boolean;
+    private _actionsReady: boolean;
+    private _structureReady: boolean;
+    private _geometryReady: boolean;
+    private _partSetsReady: boolean;
+    private _animationsReady: boolean;
     private _isReady: boolean;
 
     constructor()
@@ -39,12 +47,12 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         this._placeHolderFigure             = null;
 
+        this._figureMapReady                = false;
+        this._effectMapReady                = false;
+        this._actionsReady                  = false;
         this._geometryReady                 = false;
         this._partSetsReady                 = false;
-        this._actionsReady                  = false;
         this._animationsReady               = false;
-        this._figureMapReady                = false;
-        this._effectMapReady                = true;
         this._isReady                       = false;
     }
 
@@ -58,14 +66,46 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         this.loadAnimations();
         this.loadFigureData();
 
+        this._aliasCollection = new AssetAliasCollection(this, NitroInstance.instance.core.asset);
+
+        this._aliasCollection.init();
+
         if(!this._avatarAssetDownloadManager)
         {
             this._avatarAssetDownloadManager = new AvatarAssetDownloadManager(NitroInstance.instance.core.asset, this._structure);
 
             this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady.bind(this));
+
+            this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded.bind(this));
+        }
+
+        if(!this._effectAssetDownloadManager)
+        {
+            this._effectAssetDownloadManager = new EffectAssetDownloadManager(NitroInstance.instance.core.asset, this._structure);
+
+            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady.bind(this));
+
+            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded.bind(this));
         }
 
         this.checkReady();
+    }
+
+    public onDispose(): void
+    {
+        if(this._avatarAssetDownloadManager)
+        {
+            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady.bind(this));
+
+            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded.bind(this));
+        }
+
+        if(this._effectAssetDownloadManager)
+        {
+            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady.bind(this));
+
+            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded.bind(this));
+        }
     }
 
     private loadGeometry(): void
@@ -230,6 +270,29 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         this.checkReady();
     }
 
+    private onAvatarAssetDownloaded(event: NitroEvent): void
+    {
+        if(!event) return;
+
+        this._aliasCollection.reset();
+    }
+
+    private onEffectAssetDownloaderReady(event: NitroEvent): void
+    {
+        if(!event) return;
+
+        this._effectMapReady = true;
+
+        this.checkReady();
+    }
+
+    private onEffectAssetDownloaded(event: NitroEvent): void
+    {
+        if(!event) return;
+
+        this._aliasCollection.reset();
+    }
+
     private checkReady(): void
     {
         if(this._isReady) return;
@@ -241,7 +304,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         if(this.events) this.events.dispatchEvent(new NitroEvent(AvatarRenderEvent.AVATAR_RENDER_READY));
     }
 
-    public createAvatarImage(figure: string, size: string, gender: string, listener: IAvatarImageListener): IAvatarImage
+    public createAvatarImage(figure: string, size: string, gender: string, listener: IAvatarImageListener, effectListener: IAvatarEffectListener): IAvatarImage
     {
         if(!this._structure || !this._avatarAssetDownloadManager) return null;
 
@@ -251,19 +314,24 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         if(this._avatarAssetDownloadManager.isAvatarFigureContainerReady(figureContainer))
         {
-            return new AvatarImage(this._structure, NitroInstance.instance.core.asset, figureContainer, size);
+            return new AvatarImage(this._structure, this._aliasCollection, figureContainer, size, this._effectAssetDownloadManager, effectListener);
         }
 
         if(!this._placeHolderFigure) this._placeHolderFigure = new AvatarFigureContainer(AvatarRenderManager.DEFAULT_FIGURE);
 
         this._avatarAssetDownloadManager.downloadAvatarFigure(figureContainer, listener);
 
-        return new PlaceHolderAvatarImage(this._structure, NitroInstance.instance.core.asset, this._placeHolderFigure, size);
+        return new PlaceHolderAvatarImage(this._structure, this._aliasCollection, this._placeHolderFigure, size, this._effectAssetDownloadManager, effectListener);
     }
 
     private validateAvatarFigure(container: AvatarFigureContainer, gender: string)
     {
         return true;
+    }
+
+    public get assets(): IAssetManager
+    {
+        return NitroInstance.instance.core.asset;
     }
 
     public get isReady(): boolean

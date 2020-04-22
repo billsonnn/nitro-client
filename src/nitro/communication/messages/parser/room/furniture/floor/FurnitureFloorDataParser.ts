@@ -1,5 +1,4 @@
 import { IMessageDataWrapper } from '../../../../../../../core/communication/messages/IMessageDataWrapper';
-import { Direction } from '../../../../../../../room/utils/Direction';
 import { IObjectData } from '../../../../../../room/object/data/IObjectData';
 import { FurnitureDataParser } from '../FurnitureDataParser';
 
@@ -34,7 +33,7 @@ export class FurnitureFloorDataParser
         this._spriteId      = 0;
         this._x             = 0;
         this._y             = 0;
-        this._direction     = Direction.NORTH;
+        this._direction     = 0;
         this._z             = 0;
         this._stackHeight   = 0;
         this._type          = 0;

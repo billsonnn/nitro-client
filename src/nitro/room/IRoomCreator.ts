@@ -42,6 +42,7 @@ export interface IRoomCreator
     updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): void;
     updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay?: number): void;
     updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): void;
+    updateRoomObjectUserPetGesture(roomId: number, objectId: number, gesture: string): void;
     updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter?: string): void;
     updateRoomObjectUserOwn(roomId: number, objectId: number): void;
 }

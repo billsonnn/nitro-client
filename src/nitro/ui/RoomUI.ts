@@ -1,6 +1,7 @@
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
+import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../room/events/RoomObjectHSLColorEnabledEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
@@ -30,7 +31,18 @@ export class RoomUI
         this._isInRoom      = false;
 
         engine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
+        engine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
         engine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
+
+        engine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.REQUEST_MOVE, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
         
         roomSession.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
         roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
@@ -113,6 +125,18 @@ export class RoomUI
                 else desktop.setBackgroundColor(0, 0, 0);
                 return;
         }
+    }
+
+    private onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
+    {
+        if(!this._roomEngine) return;
+
+        const roomId    = this.getRoomId(event.roomId);
+        const desktop   = this.getDesktop(roomId);
+
+        if(!desktop) return;
+
+        desktop.onRoomEngineObjectEvent(event);
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void

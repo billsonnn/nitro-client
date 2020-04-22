@@ -1,3 +1,4 @@
+import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IExpressionAddition } from './IExpressionAddition';
 
@@ -14,19 +15,19 @@ export class ExpressionAddition implements IExpressionAddition
         this._visualization = visualization;
     }
 
-    public update(): void
-    {
-        return;
-    }
-
-    public animate(): void
-    {
-        return;
-    }
-
     public dispose(): void
     {
         this._visualization = null;
+    }
+
+    public update(sprite: IRoomObjectSprite, scale: number): void
+    {
+        return;
+    }
+
+    public animate(sprite: IRoomObjectSprite): boolean
+    {
+        return false;
     }
 
     public get id(): number

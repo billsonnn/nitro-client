@@ -1,11 +1,16 @@
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
+import { IRoomObject } from '../../room/object/IRoomObject';
 import { ColorConverter } from '../../room/utils/ColorConverter';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { NitroInstance } from '../NitroInstance';
+import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
+import { RoomObjectOperationType } from '../room/object/RoomObjectOperationType';
+import { RoomObjectVariable } from '../room/object/RoomObjectVariable';
 import { RoomVariableEnum } from '../room/RoomVariableEnum';
+import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
@@ -14,6 +19,7 @@ import { MouseEventType } from './MouseEventType';
 export class RoomDesktop
 {
     public static _Str_8876: number = -1;
+    
     private static _Str_17829: number = 1000;
     private static _Str_19484: number = 1000;
 
@@ -150,8 +156,8 @@ export class RoomDesktop
             {
                 if(!this._didMouseMove) eventType = MouseEventType.DOUBLE_CLICK;
 
-                this._clickCount = 0;
-                this._lastClick = null;
+                this._clickCount    = 0;
+                this._lastClick     = null;
             }
         }
 
@@ -235,6 +241,45 @@ export class RoomDesktop
         graphic.beginFill(this._roomBackgroundColor);
         graphic.drawRect(0, 0, window.innerWidth, window.innerHeight);
         graphic.endFill();
+    }
+
+    public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
+    {
+        if(!event) return;
+
+        const objectId  = event.objectId;
+        const category  = event.category;
+
+        switch(event.type)
+        {
+            case RoomEngineObjectEvent.REQUEST_MOVE:
+                if(this._Str_21292(event.roomId, objectId, category))
+                {
+                    this._roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_MOVE);
+                }
+                break;
+            case RoomEngineObjectEvent.REQUEST_ROTATE:
+                if(this._Str_21292(event.roomId, objectId, category))
+                {
+                    this._roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                }
+                break;
+        }
+    }
+
+    private _Str_21292(k: number, _arg_2: number, _arg_3: number): boolean
+    {
+        return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionData.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(k, _arg_2, _arg_3)));
+    }
+
+    private isOwnerOfFurniture(roomObject: IRoomObject): boolean
+    {
+        if(!roomObject || !roomObject.model) return false;
+
+        const userId        = this._sessionData.userId;
+        const objectOwnerId = roomObject.model.getValue(RoomObjectVariable.FURNITURE_OWNER_ID) as number;
+
+        return (userId === objectOwnerId);
     }
 
     public get roomEngine(): IRoomEngine

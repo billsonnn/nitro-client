@@ -30,7 +30,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
         this._imageOffset = offsetData;
     }
 
-    protected getLayerXOffset(direction: number, layerId: number): number
+    protected getLayerXOffset(scale: number, direction: number, layerId: number): number
     {
         if(this._imageOffset)
         {
@@ -39,10 +39,10 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
             if(offset !== undefined) return offset + this._offsetX;
         }
 
-        return super.getLayerXOffset(direction, layerId) + this._offsetX;
+        return super.getLayerXOffset(scale, direction, layerId) + this._offsetX;
     }
 
-    protected getLayerYOffset(direction: number, layerId: number): number
+    protected getLayerYOffset(scale: number, direction: number, layerId: number): number
     {
         if(this._imageOffset)
         {
@@ -51,11 +51,11 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
             if(offset !== undefined) return offset + this._offsetY;
         }
 
-        return super.getLayerYOffset(direction, layerId) + this._offsetY;
+        return super.getLayerYOffset(scale, direction, layerId) + this._offsetY;
     }
 
-    protected getLayerZOffset(direction: number, layerId: number): number
+    protected getLayerZOffset(scale: number, direction: number, layerId: number): number
     {
-        return super.getLayerZOffset(direction, layerId) + (this._offsetZ * -1);
+        return super.getLayerZOffset(scale, direction, layerId) + (this._offsetZ * -1);
     }
 }

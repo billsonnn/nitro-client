@@ -23,4 +23,5 @@ export interface IRoomObject extends IDisposable
     realLocation: IVector3D;
     state: number;
     updateCounter: number;
+    isReady: boolean;
 }

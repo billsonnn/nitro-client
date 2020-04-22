@@ -64,14 +64,16 @@ export class ExtendedSprite extends PIXI.Sprite
         {
             if((sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) || !sprite.texture) return false;
 
-            let checkX = point.x;
-            let checkY = point.y;
+            const bounds = sprite.getLocalBounds();
 
-            if(sprite.scale.x === -1) checkX += sprite.width;
+            let x = point.x;
+            let y = point.y;
 
-            if(sprite.scale.y === -1) checkY += sprite.height;
+            if(sprite.scale.x === -1) x *= -1;
 
-            if(((checkX < 0) || (checkY < 0)) || (checkX >= sprite.width) || (checkY >= sprite.height)) return false;
+            if(sprite.scale.y === -1) y *= -1;
+
+            if(!bounds || !bounds.contains(x, y)) return false;
 
             const texture       = sprite.texture;
             const baseTexture   = texture.baseTexture;
@@ -92,8 +94,8 @@ export class ExtendedSprite extends PIXI.Sprite
             //@ts-ignore
             const hitMap        = baseTexture.hitMap;
             const resolution    = baseTexture.resolution;
-            const dx            = Math.round((checkX + texture.frame.x) * resolution);
-            const dy            = Math.round((checkY + texture.frame.y) * resolution);
+            const dx            = Math.round((x + texture.frame.x) * resolution);
+            const dy            = Math.round((y + texture.frame.y) * resolution);
             //@ts-ignore
             const num           = (dx + (dy * baseTexture.hitMapWidth));
             const num32         = ((num / 32) | 0);

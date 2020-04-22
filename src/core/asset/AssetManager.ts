@@ -1,25 +1,25 @@
 import { Disposable } from '../common/disposable/Disposable';
+import { GraphicAsset } from './GraphicAsset';
 import { GraphicAssetCollection } from './GraphicAssetCollection';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
 import { AssetLoader } from './loaders/AssetLoader';
-import { ImageLoader } from './loaders/ImageLoader';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
     private _textures: Map<string, PIXI.Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
 
-    private _pendingCallbacks: Map<string, Function[]>;
+    private _pendingUrls: Map<string, Function[]>;
 
     constructor()
     {
         super();
 
-        this._textures      = new Map();
-        this._collections   = new Map();
+        this._textures          = new Map();
+        this._collections       = new Map();
 
-        this._pendingCallbacks  = new Map();
+        this._pendingUrls       = new Map();
     }
 
     public getTexture(name: string): PIXI.Texture
@@ -40,6 +40,24 @@ export class AssetManager extends Disposable implements IAssetManager
         this._textures.set(name, texture);
     }
 
+    public getAsset(name: string): GraphicAsset
+    {
+        if(!name) return null;
+
+        for(let collection of this._collections.values())
+        {
+            if(!collection) continue;
+
+            const existing = collection.getAsset(name);
+
+            if(!existing) continue;
+
+            return existing;
+        }
+
+        return null;
+    }
+
     public getCollection(name: string): GraphicAssetCollection
     {
         if(!name) return null;
@@ -53,7 +71,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
     public createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection
     {
-        if(!data || !spritesheet) return null;
+        if(!data) return null;
 
         const collection = new GraphicAssetCollection(data, spritesheet);
 
@@ -77,7 +95,7 @@ export class AssetManager extends Disposable implements IAssetManager
         {
             if(!url) continue;
 
-            const existing = this._pendingCallbacks.get(url);
+            const existing = this._pendingUrls.get(url);
 
             if(existing)
             {
@@ -88,82 +106,63 @@ export class AssetManager extends Disposable implements IAssetManager
                 continue;
             }
 
-            this._pendingCallbacks.set(url, [ cb ]);
+            this._pendingUrls.set(url, [ cb ]);
 
             downloadUrls.push(url);
         }
+        
+        if(downloadUrls && downloadUrls.length)
+        {
+            this.downloadAsset(downloadUrls, cb);
 
-        for(let url of downloadUrls) this.downloadAsset(url);
+            return;
+        }
+
+        cb(true);
     }
 
-    private downloadAsset(url: string): void
+    private downloadAsset(urls: string[], cb: Function): void
     {
         const loader = new PIXI.Loader();
 
         loader
             .use(AssetLoader)
-            .add(url)
-            .on('complete', () => this.onChuckDownloaded(loader, url))
+            .add(urls)
+            .on('complete', () => this.onChuckDownloaded(loader, urls, cb))
             .load();
     }
 
-    public downloadImages(urls: string[], cb: Function): void
-    {
-        if(!cb) return;
-
-        if(!urls || !urls.length) return cb(true);
-
-        let downloadUrls: string[] = [];
-
-        for(let url of urls)
-        {
-            if(!url) continue;
-
-            const existing = this._pendingCallbacks.get(url);
-
-            if(existing)
-            {
-                if(existing.indexOf(cb) >= 0) continue;
-
-                existing.push(cb);
-
-                continue;
-            }
-
-            this._pendingCallbacks.set(url, [ cb ]);
-
-            downloadUrls.push(url);
-        }
-
-        for(let url of downloadUrls) this.downloadImage(url);
-    }
-
-    private downloadImage(url: string): void
-    {
-        const loader = new PIXI.Loader();
-
-        loader
-            .use(ImageLoader)
-            .add(url)
-            .on('complete', () => this.onChuckDownloaded(loader, url))
-            .load();
-    }
-
-    private onChuckDownloaded(loader: PIXI.Loader, url: string): void
+    private onChuckDownloaded(loader: PIXI.Loader, urls: string[], cb: Function): void
     {
         if(loader) loader.destroy();
 
-        const callbacks = this._pendingCallbacks.get(url);
-
-        if(!callbacks || !callbacks.length) return;
-
-        for(let callback of callbacks)
+        if(urls && urls.length)
         {
-            if(!callbacks) continue;
+            for(let url of urls)
+            {
+                if(!url) continue;
 
-            callback(true);
+                const pendingCallbacks = this._pendingUrls.get(url);
+
+                if(pendingCallbacks && pendingCallbacks.length)
+                {
+                    for(let callback of pendingCallbacks)
+                    {
+                        if(!callback || (callback === cb)) continue;
+
+                        callback(true);
+                    }
+                }
+                
+                this._pendingUrls.delete(url);
+            }
         }
 
-        this._pendingCallbacks.delete(url);
+        cb(true);
+    }
+
+    public get collections(): Map<string, GraphicAssetCollection>
+    {
+        return this._collections;
     }
 }

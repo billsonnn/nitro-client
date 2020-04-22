@@ -18,6 +18,8 @@ export class RoomObjectVariable
     public static FIGURE_GESTURE: string                             = 'figure_gesture';
     public static FIGURE_POSTURE: string                             = 'figure_posture';
     public static FIGURE_POSTURE_PARAMETER: string                   = 'figure_posture_parameter';
+    public static FIGURE_HIGHLIGHT_ENABLE: string                    = 'figure_highlight_enable';
+    public static FIGURE_HIGHLIGHT: string                           = 'figure_highlight';
     public static STD: string                                        = 'std';
     public static FIGURE_SIGN: string                                = 'figure_sign';
     public static FIGURE_FLAT_CONTROL: string                        = 'figure_flat_control';
@@ -71,6 +73,10 @@ export class RoomObjectVariable
     public static FURNITURE_ROOM_BACKGROUND_COLOR_HUE: string        = 'furniture_room_background_color_hue';
     public static FURNITURE_ROOM_BACKGROUND_COLOR_SATURATION: string = 'furniture_room_background_color_saturation';
     public static FURNITURE_ROOM_BACKGROUND_COLOR_LIGHTNESS: string  = 'furniture_room_background_color_lightness';
+    public static FURNITURE_USES_PLANE_MASK: string                  = 'furniture_uses_plane_mask';
+    public static FURNITURE_PLANE_MASK_TYPE: string                  = 'furniture_plane_mask_type';
+    public static FURNITURE_IS_VARIABLE_HEIGHT: string               = 'furniture_is_variable_height';
+    public static FURNITURE_VOTE_MAJORITY_RESULT: string             = 'furniture_vote_majority_result';
     public static PET_PALETTE_INDEX: string                          = 'pet_palette_index';
     public static PET_COLOR: string                                  = 'pet_color';
     public static PET_HEAD_ONLY: string                              = 'pet_head_only';

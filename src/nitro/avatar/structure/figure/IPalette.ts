@@ -2,7 +2,7 @@ import { IPartColor } from './IPartColor';
 
 export interface IPalette
 {
-    getColor(id: number): IPartColor;
+    _Str_751(id: number): IPartColor;
     id: number;
-    colors: { [index: string]: IPartColor };
+    colors: Map<string, IPartColor>;
 }

@@ -11,14 +11,14 @@ export class FurnitureDiceLogic extends FurnitureLogic
     public static TYPE: string = RoomObjectLogicType.FURNITURE_DICE;
 
     private _noTags: boolean;
-    private _noTagsLastStateActive: boolean;
+    private _noTagsLastStateActivate: boolean;
 
     constructor()
     {
         super();
 
-        this._noTags                = false;
-        this._noTagsLastStateActive = false;
+        this._noTags                    = false;
+        this._noTagsLastStateActivate   = false;
     }
 
     public getEventTypes(): string[]
@@ -39,22 +39,22 @@ export class FurnitureDiceLogic extends FurnitureLogic
             case MouseEventType.DOUBLE_CLICK:
                 if(this._noTags)
                 {
-                    if(!this._noTagsLastStateActive || (this.object.state === 0) || (this.object.state === 100))
+                    if(((!(this._noTagsLastStateActivate)) || (this.object.state === 0)) || (this.object.state === 100))
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
 
-                        this._noTagsLastStateActive = true;
+                        this._noTagsLastStateActivate = true;
                     }
                     else
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_OFF, this.object);
 
-                        this._noTagsLastStateActive = false;
+                        this._noTagsLastStateActivate = false;
                     }
                 }
                 else
                 {
-                    if((event._Str_4216 === 'activate') || (this.object.state === 0) || (this.object.state === 100))
+                    if(((event._Str_4216 === 'activate') || (this.object.state === 0)) || (this.object.state === 100))
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
                     }

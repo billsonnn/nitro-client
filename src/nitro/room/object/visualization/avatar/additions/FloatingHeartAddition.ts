@@ -11,126 +11,158 @@ export class FloatingHeartAddition extends ExpressionAddition
     private static STATE_FLOAT: number              = 2;
     private static STATE_COMPLETE: number           = 3;
 
-    private _sprite: IRoomObjectSprite;
-
-    private _state: number;
+    private _asset: PIXI.Texture;
     private _startTime: number;
     private _delta: number;
     private _offsetY: number;
+    private _scale: number;
+    private _state: number;
 
     constructor(id: number, type: number, visualization: AvatarVisualization)
     {
         super(id, type, visualization);
 
-        this._sprite        = null;
-
-        this._state         = 0;
+        this._asset         = null;
         this._startTime     = NitroInstance.instance.renderer.totalTimeRunning;
         this._delta         = 0;
         this._offsetY       = 0;
+        this._scale         = 0;
+        this._state         = 0;
     }
 
-    public dispose(): void
+    public update(sprite: IRoomObjectSprite, scale: number): void
     {
-        // if(this._sprite)
-        // {
-        //     this.visualization.removeSprite(this._sprite);
+        if(!sprite) return;
 
-        //     this._sprite = null;
-        // }
+        this._scale = scale;
 
-        super.dispose();
+        let additionScale   = 64;
+        let offsetX         = 0;
+
+        if(scale < 48)
+        {
+            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss_small.png');
+
+            if((this.visualization.angle === 90) || (this.visualization.angle === 270))
+            {
+                offsetX = 0;
+            }
+
+            else if((this.visualization.angle === 135) || (this.visualization.angle === 180) || (this.visualization.angle === 225))
+            {
+                offsetX = 6;
+            }
+
+            else offsetX = -6;
+
+            this._offsetY = -38;
+
+            additionScale = 32;
+        }
+        else
+        {
+            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss.png');
+
+            if((this.visualization.angle === 90) || (this.visualization.angle === 270))
+            {
+                offsetX = -3;
+            }
+
+            else if((this.visualization.angle === 135) || (this.visualization.angle === 180) || (this.visualization.angle === 225))
+            {
+                offsetX = 22;
+            }
+
+            else offsetX = -30;
+
+            this._offsetY = -70;
+        }
+
+        if(this.visualization.posture === 'sit')
+        {
+            this._offsetY += (additionScale / 2);
+        }
+
+        else if(this.visualization.posture === 'lay')
+        {
+            this._offsetY += additionScale;
+        }
+
+        if(this._asset)
+        {
+            sprite.texture          = this._asset;
+            sprite.offsetX          = offsetX;
+            sprite.offsetY          = this._offsetY;
+            sprite.relativeDepth    = -0.02;
+            sprite.alpha            = 0;
+
+            let delta = this._delta;
+
+            this.animate(sprite);
+
+            this._delta = delta;
+        }
     }
 
-    private getSpriteAssetName(): string
+    public animate(sprite: IRoomObjectSprite): boolean
     {
-        return `user_blowkiss`;
-    }
+        if(!sprite) return false;
 
-    public update(): void
-    {
-        // const assetName = this.getSpriteAssetName();
+        if(this._asset) sprite.texture = this._asset;
 
-        // let sprite = this.visualization.getSprite(assetName);
+        if(this._state === FloatingHeartAddition.STATE_DELAY)
+        {
+            if((NitroInstance.instance.renderer.totalTimeRunning - this._startTime) < FloatingHeartAddition.DELAY_BEFORE_ANIMATION) return false;
 
-        // if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
+            this._state = FloatingHeartAddition.STATE_FADE_IN;
 
-        // if(!sprite)
-        // {
-        //     sprite              = this.visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
-        //     sprite.name         = assetName;
-        //     sprite.visible      = false;
-        //     sprite.doesntHide   = true;
-        // }
+            sprite.alpha    = 0;
+            sprite.visible  = true;
 
-        // this._sprite = sprite;
+            this._delta = 0;
 
-        // if(!this._sprite) return;
+            return true;
+        }
 
-        // let offsetX = 0;
+        if(this._state === FloatingHeartAddition.STATE_FADE_IN)
+        {
+            this._delta += 0.1;
 
-        // this._offsetY = -70;
-        
-        // this._sprite.x          = offsetX;
-        // this._sprite.y          = this._offsetY;
-        // this._sprite.zIndex     = 100;
-    }
+            sprite.offsetY = this._offsetY;
+            sprite.alpha    = (Math.pow(this._delta, 0.9) * 255);
 
-    public animate(): void
-    {
-        // if(!this._sprite) return;
+            if(this._delta >= 1)
+            {
+                sprite.alpha = 255;
 
-        // const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
+                this._delta = 0;
+                this._state = FloatingHeartAddition.STATE_FLOAT;
+            }
 
-        // if(this._state === FloatingHeartAddition.STATE_DELAY)
-        // {
-        //     if((totalTimeRunning - this._startTime) < FloatingHeartAddition.DELAY_BEFORE_ANIMATION) return;
+            return true;
+        }
 
-        //     this._state = FloatingHeartAddition.STATE_FADE_IN;
-        //     this._delta = 0;
+        if(this._state === FloatingHeartAddition.STATE_FLOAT)
+        {
+            let alpha = Math.pow(this._delta, 0.9);
 
-        //     this._sprite.alpha      = 0;
-        //     this._sprite.visible    = true;
+            this._delta += 0.05;
 
-        //     return;
-        // }
+            let offset = ((this._scale < 48) ? -30 : -40);
 
-        // if(this._state === FloatingHeartAddition.STATE_FADE_IN)
-        // {
-        //     this._delta += 0.1;
+            sprite.offsetY  = (this._offsetY + (((this._delta < 1) ? alpha : 1) * offset));
+            sprite.alpha    = ((1 - alpha) * 255);
 
-        //     this._sprite.y      = this._offsetY;
-        //     this._sprite.alpha  = Math.pow(this._delta, 0.9);
+            if(sprite.alpha <= 0)
+            {
+                sprite.visible = false;
 
-        //     if(this._delta >= 1)
-        //     {
-        //         this._state = FloatingHeartAddition.STATE_FLOAT;
-        //         this._delta = 0;
+                this._state = FloatingHeartAddition.STATE_COMPLETE;
+            }
 
-        //         this._sprite.alpha  = 1;
-        //     }
+            return true;
+        }
 
-        //     return;
-        // }
-
-        // if(this._state === FloatingHeartAddition.STATE_FLOAT)
-        // {
-        //     const alpha = Math.pow(this._delta, 0.9);
-
-        //     this._delta    += 0.05;
-        //     this._offsetY  += ((this._delta < 1) ? alpha : 1) * -35;
-
-        //     this._sprite.y      = this._offsetY;
-        //     this._sprite.alpha  = 1 - alpha;
-
-        //     if(this._sprite.alpha <= 0)
-        //     {
-        //         this._state = FloatingHeartAddition.STATE_COMPLETE;
-
-        //         this._sprite.visible = false;
-        //     }
-
-        //     return;
-        // }
+        return false;
     }
 }

@@ -44,7 +44,6 @@ import { LegacyDataType } from './object/data/type/LegacyDataType';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
 import { RoomObjectVariable } from './object/RoomObjectVariable';
 import { RoomPlaneParser } from './object/RoomPlaneParser';
-import { FurnitureQueueTileVisualization } from './object/visualization/furniture/FurnitureQueueTileVisualization';
 import { RoomVariableEnum } from './RoomVariableEnum';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { ObjectRolling } from './utils/ObjectRolling';
@@ -380,12 +379,12 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof RoomRollingEvent) || !event.connection || !this._roomCreator) return;
 
-        if(event.getParser().rollerId)
-        {
-            this._roomCreator.updateRoomObjectFloor(this._currentRoomId, event.getParser().rollerId, null, null, FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE, null);
-        }
+        const parser = event.getParser();
 
-        const furnitureRolling = event.getParser().itemsRolling;
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.rollerId, null, null, 1, null);
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.rollerId, null, null, 2, null);
+
+        const furnitureRolling = parser.itemsRolling;
 
         if(furnitureRolling && furnitureRolling.length)
         {
@@ -397,7 +396,7 @@ export class RoomMessageHandler extends Disposable
             }
         }
 
-        const unitRollData = event.getParser().unitRolling;
+        const unitRollData = parser.unitRolling;
 
         if(unitRollData)
         {
@@ -692,6 +691,7 @@ export class RoomMessageHandler extends Disposable
                         case 'gst':
                             if(status.actions.length === 1) isPosture = false;
 
+                            this._roomCreator.updateRoomObjectUserPetGesture(this._currentRoomId, status.id, action.value);
                             break;
                         case 'wav':
                         case 'mv':

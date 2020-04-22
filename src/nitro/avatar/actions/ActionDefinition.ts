@@ -19,7 +19,7 @@ export class ActionDefinition implements IActionDefinition
     private _types: Map<number, ActionType>;
     private _params: Map<string, string>;
     private _defaultParameterValue: string;
-    private _canvasOffsets: Map<string, Map<number, []>>;
+    private _canvasOffsets: Map<string, Map<number, number[]>>;
 
     constructor(data: any)
     {
@@ -81,7 +81,7 @@ export class ActionDefinition implements IActionDefinition
         existing.set(_arg_2, _arg_3);
     }
 
-    public _Str_805(k: string, _arg_2: number): []
+    public _Str_805(k: string, _arg_2: number): number[]
     {
         if(!this._canvasOffsets) return null;
 
@@ -138,7 +138,7 @@ export class ActionDefinition implements IActionDefinition
 
         if(!type) return this._preventHeadTurn;
 
-        return type.preventHeadTurn;
+        return type._Str_1891;
     }
 
     public _Str_801(k: string): boolean
@@ -149,7 +149,7 @@ export class ActionDefinition implements IActionDefinition
 
         if(!type) return true;
 
-        return type.isAnimated;
+        return type._Str_801;
     }
 
     public get id(): string

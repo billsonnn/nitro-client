@@ -5,37 +5,49 @@ export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualizat
 {
     public static TYPE: string = RoomObjectVisualizationType.FURNITURE_QUEUE_TILE;
 
-    public static ROLL_ANIMATION_STATE: number = 2;
-    public static ROLL_FINISHED_STATE: number  = 0;
+    private static _Str_4186: number    = 3;
+    private static _Str_18395: number   = 2;
+    private static _Str_15915: number   = 1;
+    private static _Str_16054: number   = 15;
 
-    private static ROLL_COUNTER: number = 15;
-
+    private _stateQueue: number[];
     private _animationCounter: number;
 
     constructor()
     {
         super();
 
-        this._animationCounter = -1;
+        this._stateQueue        = [];
+        this._animationCounter  = -1;
     }
 
-    protected setAnimation(animationId: number, transition: boolean = true): void
+    protected setAnimation(animationId: number): void
     {
-        if(animationId === FurnitureQueueTileVisualization.ROLL_ANIMATION_STATE)
+        if(animationId === FurnitureQueueTileVisualization._Str_18395)
         {
-            this._animationCounter = FurnitureQueueTileVisualization.ROLL_COUNTER;
+            this._stateQueue    = [];
+            this._stateQueue.push(FurnitureQueueTileVisualization._Str_15915);
+
+            this._animationCounter = FurnitureQueueTileVisualization._Str_16054;
         }
-        else this._animationCounter = -1;
 
         return super.setAnimation(animationId);
     }
 
-    protected updateAnimation(): number
+    protected updateAnimation(scale: number): number
     {
-        if(this._animationCounter === 0) this.setAnimation(FurnitureQueueTileVisualization.ROLL_FINISHED_STATE);
-        
-        else if(this._animationCounter > 0) this._animationCounter--;
+        if(this._animationCounter > 0) this._animationCounter--;
 
-        return super.updateAnimation();
+        if(!this._animationCounter)
+        {
+            if(this._stateQueue.length) super.setAnimation(this._stateQueue.shift());
+        }
+        
+        return super.updateAnimation(scale);
+    }
+
+    protected usesAnimationResetting(): boolean
+    {
+        return true;
     }
 }

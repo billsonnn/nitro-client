@@ -19,7 +19,8 @@ export class RoomContentLoader implements IFurnitureDataListener
     private static PLACE_HOLDER: string         = 'place_holder';
     private static PLACE_HOLDER_WALL: string    = 'place_holder_wall';
     private static PLACE_HOLDER_PET: string     = 'place_holder_pet';
-    private static DEFAULT_PLACE_HOLDER: string = RoomContentLoader.PLACE_HOLDER;
+    private static PLACE_HOLDER_DEFAULT: string = RoomContentLoader.PLACE_HOLDER;
+    private static ROOM: string                 = 'room';
     private static TILE_CURSOR: string          = 'tile_cursor';
     private static SELECTION_ARROW: string      = 'selection_arrow';
 
@@ -256,7 +257,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
         
-        return RoomContentLoader.DEFAULT_PLACE_HOLDER;
+        return RoomContentLoader.PLACE_HOLDER_DEFAULT;
     }
 
     public getCategoryForType(type: string): number
@@ -336,9 +337,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             loader.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
             {
-                if(!res.spritesheet) next();
-
-                this.createCollection(assetData, res.spritesheet);
+                if(res.spritesheet) this.createCollection(assetData, res.spritesheet);
 
                 next();
             });
@@ -387,6 +386,8 @@ export class RoomContentLoader implements IFurnitureDataListener
                 return [ this.getAssetUrlWithRoomBase('place_holder_wall') ];
             case RoomContentLoader.PLACE_HOLDER_PET:
                 return [ this.getAssetUrlWithRoomBase('place_holder_pet') ];
+            case RoomContentLoader.ROOM:
+                return [ this.getAssetUrlWithRoomBase('room') ]
             case RoomContentLoader.TILE_CURSOR:
                 return [ this.getAssetUrlWithRoomBase('tile_cursor') ];
             case RoomContentLoader.SELECTION_ARROW:
@@ -402,11 +403,6 @@ export class RoomContentLoader implements IFurnitureDataListener
                 if(category === RoomObjectCategory.UNIT)
                 {
                     return [ this.getAssetUrlWithPetBase(type) ];
-                }
-
-                if(category === RoomObjectCategory.ROOM)
-                {
-                    return [ this.getAssetUrlWithRoomBase(type) ];
                 }
 
                 return null;

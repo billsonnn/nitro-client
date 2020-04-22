@@ -29,8 +29,8 @@ export class FloorPlane extends Plane
 
             const _local_15 = (_local_10.x - visualization.geometry.getScreenPoint(new Vector3d(1, 0, 0)).x);
 
-            _local_13 = (_arg_7 * Math.floor(Math.abs(_local_15)));
-            _local_14 = (_arg_8 * Math.floor(Math.abs(_local_15)));
+            _local_13 = (_arg_7 * Math.trunc(Math.abs(_local_15)));
+            _local_14 = (_arg_8 * Math.trunc(Math.abs(_local_15)));
         }
 
         return visualization.render(k, _arg_2, _arg_3, _arg_5, _arg_6, _local_13, _local_14);

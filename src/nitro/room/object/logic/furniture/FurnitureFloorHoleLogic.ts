@@ -23,6 +23,13 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
         this._currentLocation   = null;
     }
 
+    public getEventTypes(): string[]
+    {
+        const types = [ RoomObjectFloorHoleEvent.ADD_HOLE, RoomObjectFloorHoleEvent.REMOVE_HOLE ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
+    }
+
     public dispose(): void
     {
         if(this._currentState === FurnitureFloorHoleLogic._Str_9306)
@@ -31,13 +38,6 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
         }
 
         super.dispose();
-    }
-
-    public getEventTypes(): string[]
-    {
-        const types = [ RoomObjectFloorHoleEvent.ADD_HOLE, RoomObjectFloorHoleEvent.REMOVE_HOLE ];
-
-        return this.mergeTypes(super.getEventTypes(), types);
     }
 
     public update(time: number): void

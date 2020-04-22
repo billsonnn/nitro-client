@@ -940,7 +940,7 @@ export class RoomPlane implements IRoomPlane
             {
                 this._Str_2730
                     .beginFill(0xFFFFFF, 0)
-                    .drawRect(0, 0, this._Str_2730.width, this._Str_2730.height)
+                    .drawRect(0, 0, width, height)
                     .endFill();
             }
 
@@ -978,7 +978,6 @@ export class RoomPlane implements IRoomPlane
 
                 if(rectMask)
                 {
-
                     posX    = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
                     posY    = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
                     
@@ -1002,7 +1001,7 @@ export class RoomPlane implements IRoomPlane
         this._Str_24790(texture, this._Str_2730);
     }
 
-    private _Str_24790(texture: PIXI.Graphics, mask: PIXI.Graphics):void
+    private _Str_24790(texture: PIXI.Graphics, mask: PIXI.Graphics): void
     {
         if(!texture || !mask) return;
 
@@ -1018,7 +1017,7 @@ export class RoomPlane implements IRoomPlane
             const graphic = new PIXI.Graphics();
 
             graphic
-                .beginFill(0xFFFFFF, 0)
+                .beginFill(0xFFFFFF)
                 .drawRect(0, 0, texture.width, texture.height)
                 .endFill();
 
@@ -1041,8 +1040,44 @@ export class RoomPlane implements IRoomPlane
         {
             texture
                 .beginTextureFill({ texture: maskTexture })
-                .drawRect(0, 0, this._Str_3616.width, this._Str_3616.height)
+                .drawRect(0, 0, newTexture.width, newTexture.height)
                 .endFill();
         }
+
+        // const maskCanvas        = NitroInstance.instance.renderer.renderer.extract.canvas(mask);
+
+        // const textureCanvas     = NitroInstance.instance.renderer.renderer.extract.canvas(texture);
+        // const textureContext    = textureCanvas.getContext('2d');
+        // const textureImageData  = textureContext.getImageData(0, 0, texture.width, texture.height);
+        // const textureData       = textureImageData.data;
+
+        // const canvas            = NitroInstance.instance.renderer.renderer.extract.canvas(this._Str_3616);
+        // const canvasContext     = canvas.getContext('2d');
+        // const canvasImageData   = canvasContext.getImageData(0, 0, this._Str_3616.width, this._Str_3616.height);
+        // const canvasData        = canvasImageData.data;
+
+        // for(let i = 0; i < canvasData.length; i += 4)
+        // {
+        //     canvasData[ i + 0 ] = textureData[ i + 3 ];
+        // }
+
+        // textureContext.globalCompositeOperation = 'darken';
+        // textureContext.drawImage(maskCanvas, 0, 0);
+        // // canvasContext.drawImage(maskCanvas, 0, 0);
+
+        // // for(let i = 0; i < canvasData.length; i += 4)
+        // // {
+        // //     textureData[ i + 3 ] = canvasData[ i + 0 ];
+        // // }
+
+        // textureCanvas.id = 'test';
+
+        // document.body.appendChild(textureCanvas)
+
+        // const renderTexture = PIXI.RenderTexture.from(textureCanvas);
+        
+        // this._Str_3616.copyChannel(texture, texture.rect, _Str_1870, BitmapDataChannel.ALPHA, BitmapDataChannel.RED);
+        // this._Str_3616.draw(mask, null, null, BlendMode.DARKEN);
+        // texture.copyChannel(this._Str_3616, this._Str_3616.rect, _Str_1870, BitmapDataChannel.RED, BitmapDataChannel.ALPHA);
     }
 }

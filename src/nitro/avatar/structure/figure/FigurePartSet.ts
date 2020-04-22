@@ -47,6 +47,19 @@ export class FigurePartSet implements IFigurePartSet
         }
     }
 
+    public dispose(): void
+    {
+        for(let part of this._parts)
+        {
+            let figurePart = part as FigurePart;
+
+            figurePart.dispose();
+        }
+
+        this._parts         = null;
+        this._hiddenLayers  = null;
+    }
+
     private getPartIndex(part: FigurePart): number
     {
         const totalParts = this._parts.length;
@@ -65,6 +78,18 @@ export class FigurePartSet implements IFigurePartSet
         }
 
         return -1;
+    }
+
+    public _Str_989(k: string, _arg_2: number): IFigurePart
+    {
+        for(let part of this._parts)
+        {
+            if((part.type !== k) || (part.id !== _arg_2)) continue;
+
+            return part;
+        }
+
+        return null;
     }
 
     public get id(): number
@@ -92,27 +117,27 @@ export class FigurePartSet implements IFigurePartSet
         return this._isColorable;
     }
 
-    public get isSelectable(): boolean
+    public get _Str_608(): boolean
     {
         return this._isSelectable;
     }
 
-    public get parts(): IFigurePart[]
+    public get _Str_806(): IFigurePart[]
     {
         return this._parts;
     }
 
-    public get hiddenLayers(): string[]
+    public get _Str_790(): string[]
     {
         return this._hiddenLayers;
     }
 
-    public get isPreSelectable(): boolean
+    public get _Str_653(): boolean
     {
         return this._isPreSelectable;
     }
 
-    public get isSellable(): boolean
+    public get _Str_651(): boolean
     {
         return this._isSellable;
     }

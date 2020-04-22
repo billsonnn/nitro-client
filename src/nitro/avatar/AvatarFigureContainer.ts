@@ -92,8 +92,6 @@ export class AvatarFigureContainer implements IAvatarFigureContainer
 
         for(let part of figure.split('.'))
         {
-            if(!part) continue;
-
             const pieces = part.split('-');
 
             if(pieces.length >= 2)

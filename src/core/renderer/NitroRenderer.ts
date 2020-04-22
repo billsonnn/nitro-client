@@ -35,7 +35,6 @@ export class NitroRenderer extends PIXI.Application implements INitroRenderer
     {
         super(options);
 
-        this._resizeTimer       = null;
         this._eventDispatcher   = new EventDispatcher();
     }
 

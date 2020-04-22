@@ -6,18 +6,18 @@ import './app.scss';
 
 window.PIXI = PIXI;
 
-const instance = new NitroInstance(new NitroCore());
-
-instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) =>
-{
-    instance.init();
-});
-
-const element = document.getElementById('nitro-client-wrapper');
+const element = document.getElementById('canvas-injector');
 
 if(element)
 {
-    const view = instance && instance.renderer && instance.renderer.view;
-    
-    if(view) element.append(view);
+    const instance = new NitroInstance(new NitroCore());
+
+    if(instance)
+    {
+        const view = instance.renderer && instance.renderer.view;
+
+        if(view) element.append(view);
+
+        instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
+    }
 }

@@ -1,14 +1,31 @@
+import { IAssetVisualizationData } from '../../../../../core/asset/interfaces';
+import { AnimationSizeData } from '../data/AnimationSizeData';
 import { PetSizeData } from '../data/PetSizeData';
 import { SizeData } from '../data/SizeData';
 import { FurnitureAnimatedVisualizationData } from '../furniture/FurnitureAnimatedVisualizationData';
 
 export class PetVisualizationData extends FurnitureAnimatedVisualizationData
 {
-    protected _size: PetSizeData;
+    private _isAllowedToTurnHead: boolean;
 
-    protected createSizeData(layerCount: number, angle: number): SizeData
+    constructor()
     {
-        return new PetSizeData(layerCount, angle);
+        super();
+
+        this._isAllowedToTurnHead = true;
+    }
+
+    protected createSizeData(scale: number, layerCount: number, angle: number): SizeData
+    {
+        if(scale > 1) return new PetSizeData(layerCount, angle);
+        else return new AnimationSizeData(layerCount, angle);
+    }
+
+    protected processVisualization(visualization: IAssetVisualizationData): boolean
+    {
+        this._isAllowedToTurnHead = true; //check visualization for '@disableheadturn'
+
+        return super.processVisualization(visualization);
     }
 
     protected processVisualElement(sizeData: SizeData, key: string, data: any): boolean
@@ -31,24 +48,80 @@ export class PetVisualizationData extends FurnitureAnimatedVisualizationData
         return true;
     }
 
-    public postureToAnimation(posture: string): number
+    public postureToAnimation(scale: number, posture: string): number
     {
-        if(!this._size) return PetSizeData.DEFAULT_POSTURE;
+        const size = this.getSizeData(scale) as PetSizeData;
 
-        return this._size.postureToAnimation(posture);
+        if(!size) return PetSizeData.DEFAULT;
+
+        return size.postureToAnimation(posture);
     }
 
-    public totalPostures(): number
+    public _Str_18284(scale: number, posture: string): boolean
     {
-        if(!this._size) return 0;
+        const size = this.getSizeData(scale) as PetSizeData;
 
-        return this._size.totalPostures;
+        if(!size) return false;
+
+        return size._Str_18284(posture);
     }
 
-    public totalGestures(): number
+    public gestureToAnimation(scale: number, gesture: string): number
     {
-        if(!this._size) return 0;
+        const size = this.getSizeData(scale) as PetSizeData;
 
-        return this._size.totalPostures;
+        if(!size) return PetSizeData.DEFAULT;
+
+        return size.gestureToAnimation(gesture);
+    }
+
+    public _Str_14207(scale: number, index: number, useDefault: boolean): string
+    {
+        const size = this.getSizeData(scale) as PetSizeData;
+
+        if(!size) return null;
+
+        return size._Str_14207(index, useDefault);
+    }
+
+    public _Str_17844(scale: number, index: number): string
+    {
+        const size = this.getSizeData(scale) as PetSizeData;
+
+        if(!size) return null;
+
+        return size._Str_17844(index);
+    }
+
+    public _Str_17976(scale: number, _arg_2: number): string
+    {
+        const size = this.getSizeData(scale) as PetSizeData;
+
+        if(!size) return null;
+
+        return size._Str_17976(_arg_2);
+    }
+
+    public totalPostures(scale: number): number
+    {
+        const size = this.getSizeData(scale) as PetSizeData;
+
+        if(!size) return 0;
+
+        return size.totalPostures;
+    }
+
+    public totalGestures(scale: number): number
+    {
+        const size = this.getSizeData(scale) as PetSizeData;
+
+        if(!size) return 0;
+
+        return size.totalGestures;
+    }
+
+    public get isAllowedToTurnHead(): boolean
+    {
+        return this._isAllowedToTurnHead;
     }
 }

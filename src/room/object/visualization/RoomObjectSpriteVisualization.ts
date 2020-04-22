@@ -16,6 +16,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
     private _asset: GraphicAssetCollection;
     private _sprites: IRoomObjectSprite[];
 
+    protected _scale: number;
+
     private _updateObjectCounter: number;
     private _updateModelCounter: number;
     private _updateSpriteCounter: number;
@@ -26,6 +28,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         this._object                = null;
         this._asset                 = null;
         this._sprites               = [];
+
+        this._scale                 = -1;
 
         this._updateObjectCounter   = -1;
         this._updateModelCounter    = -1;
@@ -42,6 +46,11 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         return;
     }
 
+    protected reset(): void
+    {
+        this._scale = -1;
+    }
+
     public dispose(): void
     {
         
@@ -52,6 +61,27 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         if((index >= 0) && (index < this._sprites.length)) return this._sprites[index];
 
         return null;
+    }
+
+    public createSprite(): IRoomObjectSprite
+    {
+        return this.createSpriteAtIndex(this._sprites.length);
+    }
+
+    public createSpriteAtIndex(index: number): IRoomObjectSprite
+    {
+        const sprite = new RoomObjectSprite();
+
+        if(index >= this._sprites.length)
+        {
+            this._sprites.push(sprite);
+        }
+        else
+        {
+            this._sprites.splice(index, 0, sprite);
+        }
+
+        return sprite;
     }
 
     protected setSpriteCount(count: number): void
@@ -77,6 +107,11 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
         const rectangle = new PIXI.Rectangle();
 
+        let left    = 0;
+        let top     = 0;
+        let right   = 0;
+        let bottom  = 0;
+
         let iterator = 0;
 
         while(iterator < totalSprites)
@@ -93,20 +128,20 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
                     if(iterator === 0)
                     {
-                        rectangle.left      = point.x;
-                        rectangle.top       = point.y;
-                        rectangle.right     = (point.x + texture.width);
-                        rectangle.bottom    = (point.y + texture.height);
+                        left      = point.x;
+                        top       = point.y;
+                        right     = (point.x + texture.width);
+                        bottom    = (point.y + texture.height);
                     }
                     else
                     {
-                        if(point.x < rectangle.left) rectangle.left = point.x;
+                        if(point.x < rectangle.left) left = point.x;
 
-                        if(point.y < rectangle.top) rectangle.top = point.y;
+                        if(point.y < rectangle.top) top = point.y;
 
-                        if((point.x + sprite.width) > rectangle.right) rectangle.right = (point.x + sprite.width);
+                        if((point.x + sprite.width) > rectangle.right) right = (point.x + sprite.width);
 
-                        if((point.y + sprite.height) > rectangle.bottom) rectangle.bottom = (point.y + sprite.height);
+                        if((point.y + sprite.height) > rectangle.bottom) bottom = (point.y + sprite.height);
                     }
                 }
             }
@@ -114,7 +149,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
             iterator++;
         }
 
-        return rectangle;
+        return new PIXI.Rectangle(left, right, top, bottom);
     }
 
     public get instanceId(): number

@@ -1,25 +1,25 @@
+import { IAssetManager } from '../../../core/asset/IAssetManager';
 import { ActionDefinition } from './ActionDefinition';
-import { IActionDefinition } from './IActionDefinition';
 import { IActiveActionData } from './IActiveActionData';
 
 export class AvatarActionManager
 {
-    private _actions: Map<string, IActionDefinition>;
-    private _defaultAction: IActionDefinition;
+    private _assets: IAssetManager;
+    private _actions: Map<string, ActionDefinition>;
+    private _defaultAction: ActionDefinition;
 
-    constructor(k: any, data: any)
+    constructor(k: IAssetManager, data: any)
     {
+        this._assets        = k;
         this._actions       = new Map();
         this._defaultAction = null;
 
-        this.parse(data);
+        this._Str_1620(data);
     }
 
-    private parse(data: any): void
+    public _Str_1620(data: any): void
     {
         if(!data) return;
-
-        if(!data.actions || (data.actions.length <= 0)) return;
 
         for(let action of data.actions)
         {
@@ -29,9 +29,11 @@ export class AvatarActionManager
 
             this._actions.set(definition.state, definition);
         }
+
+        // parse offsets
     }
 
-    public _Str_1675(id: string): IActionDefinition
+    public _Str_1675(id: string): ActionDefinition
     {
         if(!id) return null;
 
@@ -45,7 +47,7 @@ export class AvatarActionManager
         return null;
     }
 
-    public _Str_2018(state: string): IActionDefinition
+    public _Str_2018(state: string): ActionDefinition
     {
         const existing = this._actions.get(state);
 
@@ -54,7 +56,7 @@ export class AvatarActionManager
         return existing;
     }
 
-    public _Str_1027(): IActionDefinition
+    public _Str_1027(): ActionDefinition
     {
         if(this._defaultAction) return this._defaultAction;
 
@@ -70,16 +72,15 @@ export class AvatarActionManager
         return null;
     }
 
-    public _Str_781(k: IActiveActionData[], _arg_2: string, _arg_3: number): []
+    public _Str_781(k: IActiveActionData[], _arg_2: string, _arg_3: number): number[]
     {
-        let index           = 0;
-        let actionList: []  = [];
+        let actionList: number[] = [];
 
         for(let activeAction of k)
         {
             if(!activeAction) continue;
 
-            const localAction   = this._actions.get(activeAction.actionType);
+            const localAction   = this._actions.get(activeAction._Str_695);
             const actions       = localAction && localAction._Str_805(_arg_2, _arg_3);
 
             if(actions) actionList = actions;
@@ -100,11 +101,11 @@ export class AvatarActionManager
         {
             if(!action) continue;
 
-            const localAction = this._actions.get(action.actionType);
+            const definition = this._actions.get(action._Str_695);
 
-            if(!localAction) continue;
+            if(!definition) continue;
 
-            action.definition = localAction;
+            action._Str_742 = definition;
 
             validatedActions.push(action);
         }
@@ -123,18 +124,18 @@ export class AvatarActionManager
         {
             if(!action) continue;
 
-            const localAction = this._actions.get(action.actionType);
+            const localAction = this._actions.get(action._Str_695);
 
-            if(localAction) preventions = preventions.concat(localAction._Str_733(action.actionParameter));
+            if(localAction) preventions = preventions.concat(localAction._Str_733(action._Str_727));
         }
 
         for(let action of actions)
         {
             if(!action) continue;
 
-            let actionType = action.actionType;
+            let actionType = action._Str_695;
 
-            if(action.actionType === 'fx') actionType = (actionType + ('.' + action.actionParameter));
+            if(action._Str_695 === 'fx') actionType = (actionType + ('.' + action._Str_727));
 
             if(preventions.indexOf(actionType) >= 0) continue;
 
@@ -148,8 +149,8 @@ export class AvatarActionManager
     {
         if(!actionOne || !actionTwo) return 0;
 
-        const precedenceOne = actionOne.definition.precedence;
-        const precedenceTwo = actionTwo.definition.precedence;
+        const precedenceOne = actionOne._Str_742.precedence;
+        const precedenceTwo = actionTwo._Str_742.precedence;
 
         if(precedenceOne < precedenceTwo) return 1;
 

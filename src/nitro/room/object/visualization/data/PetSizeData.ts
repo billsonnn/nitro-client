@@ -3,7 +3,7 @@ import { AnimationSizeData } from './AnimationSizeData';
 
 export class PetSizeData extends AnimationSizeData
 {
-    public static DEFAULT_POSTURE: number = -1;
+    public static DEFAULT: number = -1;
 
     private _posturesToAnimations: Map<string, number>;
     private _gesturesToAnimations: Map<string, number>;
@@ -60,11 +60,75 @@ export class PetSizeData extends AnimationSizeData
 
     public postureToAnimation(posture: string): number
     {
-        const existing = this._posturesToAnimations.get(posture);
+        if(!this._posturesToAnimations.get(posture)) posture = this._defaultPosture;
 
-        if(existing === undefined) return PetSizeData.DEFAULT_POSTURE;
+        return this._posturesToAnimations.get(posture);
+    }
 
-        return existing;
+    public _Str_18284(k: string): boolean
+    {
+        if(k === 'ded') return true;
+
+        return false;
+    }
+
+    public gestureToAnimation(gesture: string): number
+    {
+        if(!this._gesturesToAnimations.get(gesture)) return PetSizeData.DEFAULT;
+
+        return this._gesturesToAnimations.get(gesture);
+    }
+
+    public _Str_14207(k: number, _arg_2: boolean): string
+    {
+        if((k >= 0) && (k < this._posturesToAnimations.size))
+        {
+            const keys = this._posturesToAnimations.keys();
+
+            for(;;)
+            {
+                const key = keys.next();
+
+                if(key.done) return null;
+
+                if(k <= 0) return key.value;
+
+                --k;
+            }
+        }
+
+        return (_arg_2) ? this._defaultPosture : null;
+    }
+
+    public _Str_17844(index: number): string
+    {
+        if((index >= 0) && (index < this._gesturesToAnimations.size))
+        {
+            const keys = this._gesturesToAnimations.keys();
+
+            for(;;)
+            {
+                const key = keys.next();
+
+                if(key.done) return null;
+
+                if(index <= 0) return key.value;
+
+                --index;
+            }
+        }
+        
+        return null;
+    }
+
+    public _Str_17976(k: number): string
+    {
+        for(let _local_2 of this._gesturesToAnimations.keys())
+        {
+            if(this._gesturesToAnimations.get(_local_2) === k) return _local_2;
+        }
+
+        return null;
     }
 
     public get totalPostures(): number

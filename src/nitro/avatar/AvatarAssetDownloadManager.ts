@@ -43,12 +43,12 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._currentDownloads      = [];
         this._isReady               = false;
 
-        this.loadFigureData();
+        this.loadFigureMap();
 
         this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady.bind(this));
     }
 
-    private loadFigureData(): void
+    private loadFigureMap(): void
     {
         const request = new XMLHttpRequest();
 
@@ -205,27 +205,27 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
     private getAvatarFigurePendingLibraries(container: IAvatarFigureContainer): AvatarAssetDownloadLibrary[]
     {
-        const pendingParts: AvatarAssetDownloadLibrary[] = [];
+        const pendingLibraries: AvatarAssetDownloadLibrary[] = [];
 
-        if(!container || !this._structure) return pendingParts;
+        if(!container || !this._structure) return pendingLibraries;
 
         const figureData = this._structure.figureData;
 
-        if(!figureData) return pendingParts;
+        if(!figureData) return pendingLibraries;
 
         const setKeys = container._Str_1016();
 
         for(let key of setKeys)
         {
-            const set = figureData.getSet(key);
+            const set = figureData._Str_740(key);
 
             if(!set) continue;
 
-            const figurePartSet = set.getPartSet(container.getPartSetId(key).toString());
+            const figurePartSet = set._Str_1020(container.getPartSetId(key));
 
             if(!figurePartSet) continue;
 
-            for(let part of figurePartSet.parts)
+            for(let part of figurePartSet._Str_806)
             {
                 if(!part) continue;
 
@@ -238,14 +238,14 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                 {
                     if(!library || library.isLoaded) continue;
 
-                    if(pendingParts.indexOf(library) >= 0) continue;
+                    if(pendingLibraries.indexOf(library) >= 0) continue;
 
-                    pendingParts.push(library);
+                    pendingLibraries.push(library);
                 }
             }
         }
 
-        return pendingParts;
+        return pendingLibraries;
     }
 
     public downloadAvatarFigure(container: IAvatarFigureContainer, listener: IAvatarImageListener): void

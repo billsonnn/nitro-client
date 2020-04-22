@@ -16,5 +16,5 @@ export interface IActionDefinition
     _Str_733(_arg_1: string): string[];
     _Str_715(_arg_1: string): boolean;
     _Str_772(_arg_1: string, _arg_2: number, _arg_3: []): void;
-    _Str_805(_arg_1: string, _arg_2: number): [];
+    _Str_805(_arg_1: string, _arg_2: number): number[];
 }

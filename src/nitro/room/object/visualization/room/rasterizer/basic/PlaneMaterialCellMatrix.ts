@@ -2,6 +2,7 @@
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { NitroInstance } from '../../../../../../NitroInstance';
+import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 import { PlaneMaterialCellColumn } from './PlaneMaterialCellColumn';
 
@@ -58,12 +59,10 @@ export class PlaneMaterialCellMatrix
         }
     }
 
-    // private static _Str_12526(k: number): number
-    // {
-    //     var _local_2:Array = Randomizer._Str_1612(1, 0, (k * 17631));
-    //     return _local_2[0] % k;
-    // }
-
+    private static _Str_12526(k: number): number
+    {
+        return ((Randomizer._Str_1612(1, 0, (k * 17631))[0]) % k);
+    }
 
     public get normalMinX(): number
     {
@@ -690,30 +689,30 @@ export class PlaneMaterialCellMatrix
     //     return _local_3;
     // }
 
-    // public _Str_23721(k: number): PlaneMaterialCellColumn[]
-    // {
-    //     if(this._repeatMode === PlaneMaterialCellMatrix._Str_9127)
-    //     {
-    //         const columns: PlaneMaterialCellColumn[] = [];
+    public _Str_23721(k: number): PlaneMaterialCellColumn[]
+    {
+        if(this._repeatMode === PlaneMaterialCellMatrix._Str_9127)
+        {
+            const columns: PlaneMaterialCellColumn[] = [];
 
-    //         let columnIndex = 0;
+            let columnIndex = 0;
 
-    //         while(columnIndex < k)
-    //         {
-    //             const column = this._columns[PlaneMaterialCellMatrix._Str_12526(this._columns.length)];
+            while(columnIndex < k)
+            {
+                const column = this._columns[PlaneMaterialCellMatrix._Str_12526(this._columns.length)];
 
-    //             if(column)
-    //             {
-    //                 columns.push(column);
+                if(column)
+                {
+                    columns.push(column);
 
-    //                 if(column.width > 1) columnIndex += column.width;
-    //                 else break;
-    //             }
-    //         }
+                    if(column.width > 1) columnIndex += column.width;
+                    else break;
+                }
+            }
 
-    //         return columns;
-    //     }
+            return columns;
+        }
 
-    //     return this._columns;
-    // }
+        return this._columns;
+    }
 }

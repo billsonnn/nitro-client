@@ -120,7 +120,7 @@ export class PlaneMaskManager
             if(!bitmap) continue;
 
             const assetName = bitmap.assetName;
-            const asset     = _arg_3.getGraphic(assetName);
+            const asset     = _arg_3.getAsset(assetName);
 
             if(!asset) continue;
 
@@ -156,28 +156,7 @@ export class PlaneMaskManager
 
         if(!texture) return true;
 
-        const point     = new PIXI.Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
-        const matrix    = new PIXI.Matrix();
-
-        let x_scale = 1;
-        let y_scale = 1;
-        let width   = 0;
-        let height  = 0;
-
-        if(asset.flipH)
-        {
-            x_scale = -1;
-            width   = asset.width;
-        }
-
-        if(asset.flipV)
-        {
-            y_scale = -1;
-            height  = asset.height;
-        }
-
-        matrix.scale(x_scale, y_scale);
-        matrix.translate((point.x + width), (point.y + height));
+        const point = new PIXI.Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
 
         const graphic = new PIXI.Graphics()
             .beginTextureFill({ texture })
@@ -190,7 +169,7 @@ export class PlaneMaskManager
         {
             k
                 .beginTextureFill({ texture: maskTexture })
-                .drawRect((point.x + width), (point.y + height), texture.width, texture.height)
+                .drawRect(point.x, point.y, texture.width, texture.height)
                 .endFill();
         }
 

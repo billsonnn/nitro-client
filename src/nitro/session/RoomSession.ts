@@ -107,6 +107,20 @@ export class RoomSession extends Disposable implements IRoomSession
         this._roomId = roomId;
     }
 
+    public pickupPet(id: number): void
+    {
+        if(!this._connection) return;
+
+        //this._connection.send();
+    }
+
+    public pickupBot(id: number): void
+    {
+        if(!this._connection) return;
+
+        //this._connection.send();
+    }
+
     public get connection(): IConnection
     {
         return this._connection;

@@ -14,4 +14,7 @@ export interface IRoomRenderingCanvas
     displayObject: PIXI.DisplayObject;
     screenOffsetX: number;
     screenOffsetY: number;
+    scale: number;
+    width: number;
+    height: number;
 }

@@ -9,7 +9,7 @@ export class GeometryBodyPart extends Node3D
     private _id: string;
     private _radius: number;
     private _parts: Map<string, GeometryItem>;
-    private _dynamicParts: Map<number, { [index: string]: GeometryItem }>;
+    private _dynamicParts: Map<IAvatarImage, { [index: string]: GeometryItem }>;
 
     constructor(k: any)
     {
@@ -35,7 +35,7 @@ export class GeometryBodyPart extends Node3D
 
     public _Str_1883(k: IAvatarImage): GeometryItem[]
     {
-        const existing              = this._dynamicParts.get(k.id);
+        const existing              = this._dynamicParts.get(k);
         const parts: GeometryItem[] = [];
 
         if(existing)
@@ -66,7 +66,7 @@ export class GeometryBodyPart extends Node3D
 
         if(k)
         {
-            const existing = this._dynamicParts.get(k.id);
+            const existing = this._dynamicParts.get(k);
 
             if(existing)
             {
@@ -86,7 +86,7 @@ export class GeometryBodyPart extends Node3D
 
     public _Str_2004(k: IAvatarImage): boolean
     {
-        this._dynamicParts.delete(k.id);
+        this._dynamicParts.delete(k);
 
         return true;
     }
@@ -95,13 +95,13 @@ export class GeometryBodyPart extends Node3D
     {
         if(this._Str_2030(k.id, _arg_2)) return false;
 
-        let existing = this._dynamicParts.get(_arg_2.id);
+        let existing = this._dynamicParts.get(_arg_2);
 
         if(!existing)
         {
             existing = {};
 
-            this._dynamicParts.set(_arg_2.id, existing);
+            this._dynamicParts.set(_arg_2, existing);
         }
 
         existing[k.id] = new GeometryItem(k, true);
@@ -115,7 +115,7 @@ export class GeometryBodyPart extends Node3D
 
         if(!existingPart)
         {
-            const existingDynamic = this._dynamicParts.get(_arg_2.id);
+            const existingDynamic = this._dynamicParts.get(_arg_2);
 
             if(existingDynamic) existingPart = existingDynamic[k];
         }
@@ -136,7 +136,7 @@ export class GeometryBodyPart extends Node3D
             parts.push([ part._Str_1522(_arg_2), part ]);
         }
 
-        const existingDynamic = this._dynamicParts.get(_arg_4.id);
+        const existingDynamic = this._dynamicParts.get(_arg_4);
 
         if(existingDynamic)
         {

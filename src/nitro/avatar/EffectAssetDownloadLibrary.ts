@@ -4,7 +4,7 @@ import { AvatarRenderEffectLibraryEvent } from './events/AvatarRenderEffectLibra
 
 export class EffectAssetDownloadLibrary extends EventDispatcher
 {
-    public static DOWNLOAD_COMPLETE: string = 'AADL_DOWNLOAD_COMPLETE';
+    public static DOWNLOAD_COMPLETE: string = 'EADL_DOWNLOAD_COMPLETE';
 
     private static NOT_LOADED: number       = 0;
     private static LOADING: number          = 1;
@@ -26,6 +26,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
         this._revision      = revision;
         this._downloadUrl   = assetUrl;
         this._assets        = assets;
+        this._animation     = null;
 
         this._downloadUrl = this._downloadUrl.replace(/%libname%/gi, this._libraryName);
         this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision);
@@ -37,13 +38,32 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
 
     public downloadAsset(): void
     {
-        if(!this._assets || (this._state === EffectAssetDownloadLibrary.LOADED)) return;
+        if(!this._assets || (this._state === EffectAssetDownloadLibrary.LOADING) || (this._state === EffectAssetDownloadLibrary.LOADED)) return;
+
+        const asset = this._assets.getCollection(this._libraryName);
+
+        if(asset)
+        {
+            this._state = EffectAssetDownloadLibrary.LOADED;
+
+            this.dispatchEvent(new AvatarRenderEffectLibraryEvent(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this));
+
+            return;
+        }
 
         this._state = EffectAssetDownloadLibrary.LOADING;
 
         this._assets.downloadAssets([ this._downloadUrl ], () =>
         {
             this._state = EffectAssetDownloadLibrary.LOADED;
+
+            const collection = this._assets.getCollection(this._libraryName);
+
+            if(collection)
+            {
+                //@ts-ignore
+                this._animation = collection.data.animations;
+            }
 
             this.dispatchEvent(new AvatarRenderEffectLibraryEvent(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this));
         });
@@ -52,6 +72,11 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
     public get libraryName(): string
     {
         return this._libraryName;
+    }
+
+    public get animation(): any
+    {
+        return this._animation;
     }
 
     public get isLoaded(): boolean

@@ -7,18 +7,19 @@ export class GraphicAssetCollection
     private _name: string;
     private _data: IAssetData;
     private _textures: Map<string, PIXI.Texture>;
-    private _graphics: Map<string, GraphicAsset>;
+    private _assets: Map<string, GraphicAsset>;
 
     constructor(data: IAssetData, spritesheet: PIXI.Spritesheet)
     {
-        if(!data || !spritesheet) throw new Error('invalid_collection');
+        if(!data) throw new Error('invalid_collection');
 
         this._name      = data.name;
         this._data      = data;
         this._textures  = new Map();
-        this._graphics  = new Map();
+        this._assets    = new Map();
 
-        this.setTextures(spritesheet.textures);
+        if(spritesheet) this.setTextures(spritesheet.textures);
+        
         this.buildAssets(data.assets);
     }
 
@@ -64,7 +65,7 @@ export class GraphicAssetCollection
 
     public addAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean): boolean
     {
-        const existing = this.getGraphic(name);
+        const existing = this.getAsset(name);
 
         if(existing) return true;
 
@@ -72,7 +73,7 @@ export class GraphicAssetCollection
 
         if(!graphic) return false;
 
-        this._graphics.set(name, graphic);
+        this._assets.set(name, graphic);
 
         return true;
     }
@@ -90,11 +91,11 @@ export class GraphicAssetCollection
         return texture;
     }
 
-    public getGraphic(name: string): GraphicAsset
+    public getAsset(name: string): GraphicAsset
     {
         if(!name) return null;
 
-        const existing = this._graphics.get(name);
+        const existing = this._assets.get(name);
 
         if(!existing) return null;
 
@@ -114,5 +115,10 @@ export class GraphicAssetCollection
     public get textures(): Map<string, PIXI.Texture>
     {
         return this._textures;
+    }
+
+    public get assets(): Map<string, GraphicAsset>
+    {
+        return this._assets;
     }
 }

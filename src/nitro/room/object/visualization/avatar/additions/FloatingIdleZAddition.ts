@@ -13,73 +13,100 @@ export class FloatingIdleZAddition implements IAvatarAddition
 
     private _id: number;
     private _visualization: AvatarVisualization;
-    private _sprite: IRoomObjectSprite;
-    private _state: number;
+    private _asset: PIXI.Texture;
     private _startTime: number;
+    private _offsetY: number;
+    private _scale: number;
+    private _state: number;
 
     constructor(id: number, visualization: AvatarVisualization)
     {
         this._id            = id;
         this._visualization = visualization;
-        this._sprite        = null;
-
-        this._state         = 0;
+        this._asset         = null;
         this._startTime     = NitroInstance.instance.renderer.totalTimeRunning;
+        this._offsetY       = 0;
+        this._scale         = 0;
+        this._state         = 0;
     }
 
     public dispose(): void
     {
-        // if(this._sprite)
-        // {
-        //     this._visualization.removeSprite(this._sprite);
-
-        //     this._sprite = null;
-        // }
+        this._visualization = null;
+        this._asset         = null;
     }
 
-    private getSpriteAssetName(left: boolean, state: number): string
+    private getSpriteAssetName(state: number): string
     {
-        return `user_idle_${ left ? 'left' : 'right' }_${ state }`;
+        let side = 'left';
+
+        if((this._visualization.angle === 135) || (this._visualization.angle === 180) || (this._visualization.angle === 225) || (this._visualization.angle === 270)) side = 'right';
+
+        return ('user_idle_' + side + '_' + state + ((this._scale < 48) ? '_small' : '')) + '.png';
     }
 
-    public update(): void
+    public update(sprite: IRoomObjectSprite, scale: number): void
     {
-        // let direction = this._visualization.direction;
+        if(!sprite) return;
 
-        // if(this._visualization.posture === 'lay') direction = direction === Direction.NORTH ? Direction.SOUTH : Direction.EAST;
+        this._scale = scale;
+        this._asset = this._visualization.getAvatarRenderAsset(this.getSpriteAssetName((this._state === FloatingIdleZAddition.STATE_FRAME_A) ? 1 : 2));
 
-        // const isLeft    = direction >= Direction.SOUTH_EAST && direction <= Direction.WEST;
-        // const assetName = this.getSpriteAssetName(isLeft, this._state === FloatingIdleZAddition.STATE_FRAME_A ? 1 : 2);
+        let additionScale   = 64;
+        let offsetX         = 0;
 
-        // let sprite = this._visualization.getSprite(assetName);
+        if(scale < 48)
+        {
+            if((this._visualization.angle === 135) || (this._visualization.angle === 180) || (this._visualization.angle === 225) || (this._visualization.angle === 270))
+            {
+                offsetX = 10;
+            }
+            else
+            {
+                offsetX = -16;
+            }
 
-        // if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
+            this._offsetY = -38;
 
-        // if(!sprite)
-        // {
-        //     sprite              = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
-        //     sprite.name         = assetName;
-        //     sprite.visible      = false;
-        //     sprite.doesntHide   = true;
-        // }
+            additionScale = 32;
+        }
+        else
+        {
+            if((this._visualization.angle === 135) || (this._visualization.angle === 180) || (this._visualization.angle === 225) || (this._visualization.angle === 270))
+            {
+                offsetX = 22;
+            }
+            else
+            {
+                offsetX = -30;
+            }
 
-        // this._sprite = sprite;
+            this._offsetY = -70;
+        }
 
-        // if(!this._sprite) return;
+        if(this._visualization.posture === 'sit')
+        {
+            this._offsetY += (additionScale / 2);
+        }
 
-        // let offsetX = isLeft ? 2 : 53;
-        // let offsetY = -70;
+        else if(this._visualization.posture === 'lay')
+        {
+            this._offsetY += (additionScale - (0.3 * additionScale));
+        }
 
-        // if(this._visualization.posture === 'lay') offsetX -= isLeft ? -53 : 53;
-        
-        // this._sprite.x          = offsetX;
-        // this._sprite.y          = offsetY;
-        // this._sprite.zIndex     = 100;
+        if(this._asset)
+        {
+            sprite.texture          = this._asset;
+            sprite.offsetX          = offsetX;
+            sprite.offsetY          = this._offsetY;
+            sprite.relativeDepth    = -0.02;
+            sprite.alpha            = 0;
+        }
     }
 
-    public animate(): void
+    public animate(sprite: IRoomObjectSprite): boolean
     {
-        if(!this._sprite) return;
+        if(!sprite) return false;
         
         const totalTimeRunning = NitroInstance.instance.renderer.totalTimeRunning;
 
@@ -89,6 +116,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
             {
                 this._state     = FloatingIdleZAddition.STATE_FRAME_A;
                 this._startTime = totalTimeRunning;
+                this._asset     = this._visualization.getAvatarRenderAsset(this.getSpriteAssetName(1));
             }
         }
 
@@ -98,6 +126,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
             {
                 this._state     = FloatingIdleZAddition.STATE_FRAME_B;
                 this._startTime = totalTimeRunning;
+                this._asset     = this._visualization.getAvatarRenderAsset(this.getSpriteAssetName(2));
             }
         }
 
@@ -107,10 +136,22 @@ export class FloatingIdleZAddition implements IAvatarAddition
             {
                 this._state     = FloatingIdleZAddition.STATE_FRAME_A;
                 this._startTime = totalTimeRunning;
+                this._asset     = this._visualization.getAvatarRenderAsset(this.getSpriteAssetName(1));
             }
         }
 
-        if(this._sprite) this._sprite.visible = true;
+        if(this._asset)
+        {
+            sprite.texture  = this._asset;
+            sprite.alpha    = 255;
+            sprite.visible  = true;
+        }
+        else
+        {
+            sprite.visible = false;
+        }
+
+        return false;
     }
 
     public get id(): number

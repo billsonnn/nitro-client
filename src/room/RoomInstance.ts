@@ -227,6 +227,22 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._renderer && this._renderer.update(time);
     }
 
+    public hasUninitializedObjects(): boolean
+    {
+        for(let manager of this._managers.values())
+        {
+            if(!manager) continue;
+
+            for(let object of manager.objects.values())
+            {
+                if(!object) continue;
+
+                if(!object.isReady) return true;
+            }
+        }
+        return false;
+    }
+
     public get id(): number
     {
         return this._id;

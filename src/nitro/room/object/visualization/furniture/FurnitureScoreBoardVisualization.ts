@@ -10,9 +10,9 @@ export class FurnitureScoreBoardVisualization extends FurnitureAnimatedVisualiza
     private static HUNDREDS_SPRITE: string  = 'hundreds_sprite';
     private static THOUSANDS_SPRITE: string = 'thousands_sprite';
 
-    protected getFrameNumber(layerId: number): number
+    protected getFrameNumber(scale: number, layerId: number): number
     {
-        const tag       = this.getLayerTag(this.direction, layerId);
+        const tag       = this.getLayerTag(scale, this.direction, layerId);
         const animation = this.object.state;
 
         switch(tag)
@@ -21,7 +21,7 @@ export class FurnitureScoreBoardVisualization extends FurnitureAnimatedVisualiza
             case FurnitureScoreBoardVisualization.TENS_SPRITE: return Math.floor((animation / 10) % 10);
             case FurnitureScoreBoardVisualization.HUNDREDS_SPRITE: return Math.floor((animation / 100) % 10);
             case FurnitureScoreBoardVisualization.THOUSANDS_SPRITE: return Math.floor((animation / 1000) % 10);
-            default: return super.getFrameNumber(layerId);
+            default: return super.getFrameNumber(scale, layerId);
         }
     }
 }

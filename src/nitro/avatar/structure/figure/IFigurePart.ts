@@ -4,7 +4,6 @@ export interface IFigurePart
     type: string;
     breed: number;
     index: number;
-    colorLayerIndex: number;
-    paletteMapId: number;
-    library: string;
+    _Str_827: number;
+    paletteMap: number;
 }

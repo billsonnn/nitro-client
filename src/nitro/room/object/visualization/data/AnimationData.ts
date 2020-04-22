@@ -8,7 +8,7 @@ export class AnimationData
     private static TRANSITION_TO_ANIMATION_OFFSET: number   = 1000000;
     private static TRANSITION_FROM_ANIMATION_OFFSET: number = 2000000;
 
-    public static DEFAULT_FRAME_NUMBER: number = 0;
+    public static DEFAULT_FRAME_NUMBER: number              = 0;
 
     private _layers: Map<number, AnimationLayerData>;
     private _frameCount: number;
@@ -20,7 +20,7 @@ export class AnimationData
         this._layers            = new Map();
         this._frameCount        = -1;
         this._randomStart       = false;
-        this._immediateChanges  = [];
+        this._immediateChanges  = null;
     }
 
     public static getTransitionToAnimationId(animationId: number): number
@@ -119,7 +119,7 @@ export class AnimationData
                 if(!animationSequence) continue;
 
                 let loopCount        = (animationSequence.loopCount !== undefined) ? animationSequence.loopCount : 1;
-                let isSequenceRandom = ((layer.random !== undefined) && (layer.random !== 0)) ? true : false;
+                let isSequenceRandom = ((animationSequence.random !== undefined) && (animationSequence.random !== 0)) ? true : false;
 
                 const frame = layerData.addFrameSequence(loopCount, isSequenceRandom);
 
@@ -185,12 +185,12 @@ export class AnimationData
         return layer.getFrame(direction, frameCount);
     }
 
-    public getFrameFromSequence(direction: number, layerId: number, _arg_3: number, offset: number, _arg_5: number): AnimationFrame
+    public getFrameFromSequence(direction: number, layerId: number, sequenceId: number, offset: number, frameCount: number): AnimationFrame
     {
         const layer = this._layers.get(layerId);
 
         if(!layer) return null;
         
-        return layer.getFrameFromSequence(direction, _arg_3, offset, _arg_5);
+        return layer.getFrameFromSequence(direction, sequenceId, offset, frameCount);
     }
 }

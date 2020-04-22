@@ -205,8 +205,6 @@ export class SocketConnection extends EventDispatcher implements IConnection
             if(!messages || !messages.length) continue;
 
             if(NitroConfiguration.PACKET_LOG) console.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
-
-            if(!messages || !messages.length) continue;
             
             this.handleMessages(...messages);
         }

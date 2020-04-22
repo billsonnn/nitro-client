@@ -275,8 +275,8 @@ export class SizeData
 
         return directionData.getLayerAlpha(layerId);
     }
-
-    public getLayerColor(colorId: number, layerId: number): number
+    
+    public getLayerColor(layerId: number, colorId: number): number
     {
         const existing = this._colors[colorId] as ColorData;
 

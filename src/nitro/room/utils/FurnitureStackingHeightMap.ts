@@ -1,6 +1,3 @@
-import { AffectedVectors } from '../../../room/utils/AffectedVectors';
-import { IVector3D } from '../../../room/utils/IVector3D';
-import { Vector3d } from '../../../room/utils/Vector3d';
 
 export class FurnitureStackingHeightMap
 {
@@ -19,6 +16,11 @@ export class FurnitureStackingHeightMap
         this._isTile        = new Map();
     }
 
+    public dispose(): void
+    {
+        
+    }
+
     private isValidCoordinate(x: number, y: number): boolean
     {
         return ((x >= 0) && (x < this._width) && (y >= 0) && (y < this._height));
@@ -30,7 +32,7 @@ export class FurnitureStackingHeightMap
 
         const height = this._heights.get((y * this._width) + x);
 
-        if(height === undefined) return -1;
+        if(!height) return 0;
 
         return height;
     }
@@ -70,26 +72,56 @@ export class FurnitureStackingHeightMap
         this._isTile.set((y * this._width) + x, isTile);
     }
 
-    public getValidPlacement(location: IVector3D, direction: IVector3D, sizeX: number, sizeY: number, stackable: boolean = false): IVector3D
+    public _Str_20406(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: boolean, _arg_10: number = -1): boolean
     {
-        const vectors = AffectedVectors.getVectors(sizeX, sizeY, location, direction);
+        var _local_12 = 0;
+        var _local_13 = 0;
 
-        if(!vectors || !vectors.length) return null;
+        if(!this.isValidCoordinate(k, _arg_2) || !this.isValidCoordinate(((k + _arg_3) - 1), ((_arg_2 + _arg_4) - 1))) return false;
 
-        const goalHeight = this.getHeight(location.x, location.y);
+        if(((_arg_5 < 0) || (_arg_5 >= this._width))) _arg_5 = 0;
 
-        for(let vector of vectors)
+        if(((_arg_6 < 0) || (_arg_6 >= this._height))) _arg_6 = 0;
+
+        _arg_7 = Math.min(_arg_7, (this._width - _arg_5));
+        _arg_8 = Math.min(_arg_8, (this._height - _arg_6));
+
+        if(_arg_10 === -1) _arg_10 = this.getHeight(k, _arg_2);
+
+        var _local_11 = _arg_2;
+
+        while (_local_11 < (_arg_2 + _arg_4))
         {
-            if(!vector) continue;
+            _local_12 = k;
 
-            if((!this.isTile(vector.x, vector.y) || !this.isStackable(vector.x, vector.y)) && !stackable) return null;
+            while(_local_12 < (k + _arg_3))
+            {
+                if(((((_local_12 < _arg_5) || (_local_12 >= (_arg_5 + _arg_7))) || (_local_11 < _arg_6)) || (_local_11 >= (_arg_6 + _arg_8))))
+                {
+                    _local_13 = ((_local_11 * this._width) + _local_12);
 
-            const height = this.getHeight(vector.x, vector.y);
+                    const tile = this._isTile.get(_local_13);
+                    
+                    if(_arg_9)
+                    {
+                        if(tile === undefined) return false;
+                    }
+                    else
+                    {
+                        const stackable = this._isStackable.get(_local_13);
+                        const height    = this._heights.get(_local_13);
 
-            if(height !== goalHeight) return null;
+                        if((stackable === undefined) || (tile === undefined) || (height === undefined) || (Math.abs(height - _arg_10) > 0.01)) return false;
+                    }
+                }
+
+                _local_12++;
+            }
+
+            _local_11++;
         }
 
-        return new Vector3d(location.x, location.y, goalHeight);
+        return true;
     }
 
     public get width(): number

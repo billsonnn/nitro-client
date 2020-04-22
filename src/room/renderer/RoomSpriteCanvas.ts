@@ -3,8 +3,10 @@ import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
 import { RoomObjectSpriteType } from '../object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../object/IRoomObject';
+import { IRoomObjectSprite } from '../object/visualization/IRoomObjectSprite';
 import { IRoomObjectSpriteVisualization } from '../object/visualization/IRoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../utils/IRoomGeometry';
+import { RoomEnterEffect } from '../utils/RoomEnterEffect';
 import { RoomGeometry } from '../utils/RoomGeometry';
 import { Vector3d } from '../utils/Vector3d';
 import { RoomObjectCache } from './cache/RoomObjectCache';
@@ -118,8 +120,6 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             display.name = 'canvas';
 
             this._master.addChild(display);
-
-            //this._display.addListener('click', this.click.bind(this));
 
             this._display = display;
         }
@@ -355,7 +355,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if((sprite.spriteType === RoomObjectSpriteType._Str_11629) || (sprite.spriteType === RoomObjectSpriteType._Str_10494))
             {
-
+                sortableSprite.sprite._Str_3582 = 'avatar_' + object.id;
             }
 
             sortableSprite.x    = (spriteX - this._screenOffsetX);
@@ -421,7 +421,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             return true;
         }
 
-        if(extendedSprite.needsUpdate(objectSprite.id, objectSprite.updateCounter))
+        if(extendedSprite.needsUpdate(objectSprite.id, objectSprite.updateCounter) || RoomEnterEffect._Str_19559())
         {
             extendedSprite.tag          = objectSprite.tag;
             extendedSprite.name         = sprite.name;
@@ -438,7 +438,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if(extendedSprite.filters !== objectSprite.filters) extendedSprite.filters = objectSprite.filters;
 
-            if(extendedSprite.texture !== objectSprite.texture) extendedSprite.texture = objectSprite.texture;
+            extendedSprite.setTexture(objectSprite.texture);
 
             if(objectSprite.flipH)
             {
@@ -457,6 +457,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 if(extendedSprite.scale.y !== 1) extendedSprite.scale.y = 1;
             }
+
+            this._Str_21914(extendedSprite, objectSprite);
         }
         
         if(extendedSprite.x !== sprite.x) extendedSprite.x = sprite.x;
@@ -499,6 +501,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(sprite.flipV) extendedSprite.scale.y = -1;
 
+        this._Str_21914(extendedSprite, sprite);
+
         if((index < 0) || (index >= this._spriteCount))
         {
             this._display.addChild(extendedSprite);
@@ -532,6 +536,25 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
         
         this._activeSpriteCount = spriteCount;
+    }
+
+    private _Str_21914(k: ExtendedSprite, _arg_2: IRoomObjectSprite): void
+    {
+        if(((!(RoomEnterEffect._Str_19559())) || !k.texture) || (_arg_2 == null)) return;
+
+        switch (_arg_2.spriteType)
+        {
+            case RoomObjectSpriteType._Str_10494:
+                return;
+            case RoomObjectSpriteType._Str_8616:
+                k.alpha = RoomEnterEffect._Str_16017(0.9);
+                return;
+            case RoomObjectSpriteType._Str_11629:
+                k.alpha = RoomEnterEffect._Str_16017(0.5);
+                return;
+            default:
+                k.alpha = RoomEnterEffect._Str_16017(0.1);
+        }
     }
 
     private _Str_21974(k: ExtendedSprite, _arg_2: boolean):void
@@ -789,5 +812,20 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public set screenOffsetY(y: number)
     {
         this._screenOffsetY = y;
+    }
+
+    public get scale(): number
+    {
+        return this._scale;
+    }
+
+    public get width(): number
+    {
+        return this._width;
+    }
+
+    public get height(): number
+    {
+        return this._height;
     }
 }

@@ -20,6 +20,8 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     protected _type: string;
     protected _direction: number;
     protected _geometryDirection: number;
+    protected _lastDirection: number;
+    protected _lastScale: number;
     protected _colorId: number;
     protected _clickUrl: string;
     protected _liftAmount: number;
@@ -48,8 +50,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._data              = null;
 
         this._type              = null;
-        this._direction         = -1;
-        this._geometryDirection = -1;
+        this._direction         = 0;
+        this._geometryDirection = NaN;
+        this._lastDirection     = -1;
+        this._lastScale         = 0;
+
         this._colorId           = 0;
         this._clickUrl          = null;
         this._liftAmount        = 0;
@@ -74,29 +79,41 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     public initialize(data: IObjectVisualizationData): boolean
     {
+        this.reset();
+
         if(!(data instanceof FurnitureVisualizationData)) return false;
 
         this._type  = data.type;
         this._data  = data;
 
-        this.reset();
-
-        super.initialize(data);
-
         return true;
+    }
+
+    public dispose(): void
+    {
+        super.dispose();
+
+        this._data              = null;
+        this._assetNames        = null;
+        this._skippedAssets     = null;
+        this._tags              = null;
+        this._inks              = null;
+        this._alphas            = null;
+        this._colors            = null;
+        this._ignoreMouse       = null;
+        this._xOffsets          = null;
+        this._yOffsets          = null;
+        this._zOffsets          = null;
     }
 
     protected reset(): void
     {
+        super.reset();
+
         this.setDirection(-1);
-
-        this.resetLayers();
-    }
-
-    protected resetLayers(): void
-    {
+        
+        this._data              = null;
         this._assetNames        = [];
-        this._additionalLayer   = -1;
         this._skippedAssets     = [];
         this._tags              = [];
         this._inks              = [];
@@ -107,66 +124,91 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._yOffsets          = [];
         this._zOffsets          = [];
 
-        this.setLayerCount(((this._data && this._data.layerCount) || 0) + this.getAdditionalLayerCount());
+        this.setSpriteCount(0);
+    }
+
+    protected resetLayers(scale: number, direction: number): void
+    {
+        if((this._lastDirection === direction) && (this._lastScale === scale)) return;
+
+        this._lastScale     = scale;
+        this._lastDirection = direction;
+
+        this._assetNames        = [];
+        this._skippedAssets     = [];
+        this._tags              = [];
+        this._inks              = [];
+        this._alphas            = [];
+        this._colors            = [];
+        this._ignoreMouse       = [];
+        this._xOffsets          = [];
+        this._yOffsets          = [];
+        this._zOffsets          = [];
+
+        this.setLayerCount(((this._data && this._data.getLayerCount(scale)) || 0) + this.getAdditionalLayerCount());
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
     {
         if(!geometry) return;
 
-        let updateSprites = false;
+        let scale           = geometry.scale;
+        let updateSprites   = false;
 
-        if(this.updateObject(geometry.direction.x)) updateSprites = true;
+        if(this.updateObject(scale, geometry.direction.x)) updateSprites = true;
 
-        if(this.updateModel()) updateSprites = true;
+        if(this.updateModel(scale)) updateSprites = true;
 
         let number = 0;
 
         if(skipUpdate)
         {
-            this._animationNumber = this._animationNumber | this.updateAnimation();
+            this._animationNumber = this._animationNumber | this.updateAnimation(scale);
         }
         else
         {
-            number = this.updateAnimation() | this._animationNumber;
+            number = this.updateAnimation(scale) | this._animationNumber;
             this._animationNumber = 0;
         }
 
         if(updateSprites || (number !== 0))
         {
-            this.updateSprites(updateSprites, number);
+            this.updateSprites(scale, updateSprites, number);
+
+            this._scale = geometry.scale;
 
             this.updateSpriteCounter++;
         }
     }
 
-    public dispose(): void
-    {
-        super.dispose();
-
-        this.reset();
-    }
-
-    protected updateObject(direction: number): boolean
+    protected updateObject(scale: number, direction: number): boolean
     {
         if(!this.object) return false;
 
-        if((this.updateObjectCounter === this.object.updateCounter) && (this._geometryDirection === direction)) return false;
+        if((this.updateObjectCounter === this.object.updateCounter) && (scale === this._scale) && (this._geometryDirection === direction)) return false;
 
         let offsetDirection = (this.object.getDirection().x - (direction + 135));
 
         offsetDirection = ((((offsetDirection) % 360) + 360) % 360);
 
-        this.setDirection(offsetDirection);
+        if(this._data)
+        {
+            const validDirection = this._data.getValidDirection(scale, offsetDirection);
+
+            this.setDirection(validDirection);
+        }
 
         this._geometryDirection = direction;
+        this._scale             = scale;
         
         this.updateObjectCounter = this.object.updateCounter;
+
+        this.resetLayers(scale, this._direction);
 
         return true;
     }
 
-    protected updateModel(): boolean
+    protected updateModel(scale: number): boolean
     {
         const model = this.object && this.object.model;
 
@@ -178,7 +220,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._clickUrl      = model.getValue(RoomObjectVariable.FURNITURE_AD_URL);
         this._liftAmount    = model.getValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT);
 
-        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER)
+        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
 
         if(isNaN(alphaMultiplier)) alphaMultiplier = 1;
         
@@ -194,16 +236,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return true;
     }
 
-    protected setDirection(direction: number): void
-    {
-        direction = this._data.getValidDirection(direction);
-
-        this._direction = direction;
-
-        this.resetLayers();
-    }
-
-    protected updateSprites(update: boolean, animation: number): void
+    protected updateSprites(scale: number, update: boolean, animation: number): void
     {
         if(this._layerCount !== this.totalSprites)
         {
@@ -216,7 +249,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
             while(layerId >= 0)
             {
-                this.updateSprite(layerId);
+                this.updateSprite(scale, layerId);
 
                 layerId--;
             }
@@ -226,7 +259,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
             let layerId = 0;
             while(animation > 0)
             {
-                if(animation) this.updateSprite(layerId);
+                if(animation) this.updateSprite(scale, layerId);
 
                 layerId++;
                 animation = (animation >> 1);
@@ -236,9 +269,9 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         this._needsAlphaUpdate = false;
     }
 
-    protected updateSprite(layerId: number): void
+    protected updateSprite(scale: number, layerId: number): void
     {
-        const assetName = this.getSpriteAssetName(layerId);
+        const assetName = this.getSpriteAssetName(scale, layerId);
         const sprite    = this.getSprite(layerId);
 
         if(assetName && sprite)
@@ -248,7 +281,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
             if(assetData && assetData.texture)
             {
                 sprite.visible      = true;
-                sprite.type         = this.type;
+                sprite.type         = this._type;
                 sprite.texture      = assetData.texture;
                 sprite.flipH        = assetData.flipH;
                 sprite.flipV        = assetData.flipV;
@@ -258,21 +291,21 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
                 if(layerId !== this._additionalLayer)
                 {
-                    sprite.tag              = this.getLayerTag(this._direction, layerId);
-                    sprite.alpha            = this.getLayerAlpha(this._direction, layerId);
-                    sprite.color            = this.getLayerColor(this._colorId, layerId);
-                    sprite.offsetX          = (assetData.offsetX + this.getLayerXOffset(this._direction, layerId));
-                    sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(this._direction, layerId));
-                    sprite.ignoreMouse      = this.getLayerIgnoreMouse(this._direction, layerId);
-                    sprite.blendMode        = this.getLayerInk(this._direction, layerId);
+                    sprite.tag              = this.getLayerTag(scale, this._direction, layerId);
+                    sprite.alpha            = this.getLayerAlpha(scale, this._direction, layerId);
+                    sprite.color            = this.getLayerColor(scale, layerId, this._colorId);
+                    sprite.offsetX          = (assetData.offsetX + this.getLayerXOffset(scale, this._direction, layerId));
+                    sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
+                    sprite.ignoreMouse      = this.getLayerIgnoreMouse(scale, this._direction, layerId);
+                    sprite.blendMode        = this.getLayerInk(scale, this._direction, layerId);
 
-                    relativeDepth = this.getLayerZOffset(this._direction, layerId);
+                    relativeDepth = this.getLayerZOffset(scale, this._direction, layerId);
                     relativeDepth = (relativeDepth - (layerId * 0.001));
                 }
                 else
                 {
                     sprite.offsetX      = assetData.offsetX;
-                    sprite.offsetY      = (assetData.offsetY + this.getLayerYOffset(this._direction, layerId));
+                    sprite.offsetY      = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
                     sprite.alpha        = (48 * this._alphaMultiplier);
                     sprite.ignoreMouse  = true;
                     
@@ -281,6 +314,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
                 sprite.relativeDepth    = (relativeDepth * FurnitureVisualization.DEPTH_MULTIPLIER);
                 sprite.name             = assetName;
+                sprite._Str_3582        = this.getLibraryAssetNameForSprite(assetData, sprite);
             }
             else
             {
@@ -291,6 +325,16 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         {
             if(sprite) this.resetSprite(sprite);
         }
+    }
+
+    protected getLibraryAssetNameForSprite(asset: GraphicAsset, sprite: IRoomObjectSprite): string
+    {
+        return asset.source;
+    }
+
+    protected getPostureForAssetFile(scale: number, _arg_2: string): string
+    {
+        return null;
     }
 
     private resetSprite(sprite: IRoomObjectSprite): void
@@ -305,13 +349,13 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         sprite.relativeDepth    = 0;
     }
 
-    protected getSpriteAssetName(layerId: number): string
+    protected getSpriteAssetName(scale: number, layerId: number): string
     {
         let assetName = this._assetNames[layerId];
 
         if(!assetName) assetName = this.cacheSpriteAssetName(layerId);
 
-        return assetName + this.getFrameNumber(layerId);
+        return assetName + this.getFrameNumber(scale, layerId);
     }
 
     protected cacheSpriteAssetName(layerId: number): string
@@ -336,7 +380,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return assetName;
     }
 
-    protected getLayerTag(direction: number, layerId: number): string
+    protected getLayerTag(scale: number, direction: number, layerId: number): string
     {
         const existing = this._tags[layerId];
 
@@ -344,14 +388,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_TAG;
 
-        const tag = this._data.getLayerTag(direction, layerId);
+        const tag = this._data.getLayerTag(scale, direction, layerId);
 
         this._tags[layerId] = tag;
 
         return tag;
     }
 
-    protected getLayerInk(direction: number, layerId: number): number
+    protected getLayerInk(scale: number, direction: number, layerId: number): number
     {
         const existing = this._inks[layerId];
 
@@ -359,14 +403,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_INK;
 
-        const ink = this._data.getLayerInk(direction, layerId);
+        const ink = this._data.getLayerInk(scale, direction, layerId);
 
         this._inks[layerId] = ink;
 
         return ink;
     }
 
-    protected getLayerAlpha(direction: number, layerId: number): number
+    protected getLayerAlpha(scale: number, direction: number, layerId: number): number
     {
         if(!this._needsAlphaUpdate)
         {
@@ -377,7 +421,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_ALPHA;
 
-        let alpha = this._data.getLayerAlpha(direction, layerId);
+        let alpha = this._data.getLayerAlpha(scale, direction, layerId);
 
         if(this._alphaMultiplier !== null) alpha = (alpha * this._alphaMultiplier);
 
@@ -386,7 +430,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return alpha;
     }
 
-    protected getLayerColor(colorId: number, layerId: number): number
+    protected getLayerColor(scale: number, layerId: number, colorId: number): number
     {        
         const existing = this._colors[layerId];
 
@@ -394,14 +438,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return ColorData.DEFAULT_COLOR;
 
-        const color = this._data.getLayerColor(colorId, layerId);
+        const color = this._data.getLayerColor(scale, layerId, colorId);
 
         this._colors[layerId] = color;
 
         return color;
     }
 
-    protected getLayerIgnoreMouse(direction: number, layerId: number): boolean
+    protected getLayerIgnoreMouse(scale: number, direction: number, layerId: number): boolean
     {
         const existing = this._ignoreMouse[layerId];
 
@@ -409,14 +453,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_IGNORE_MOUSE;
 
-        const ignoreMouse = this._data.getLayerIgnoreMouse(direction, layerId);
+        const ignoreMouse = this._data.getLayerIgnoreMouse(scale, direction, layerId);
 
         this._ignoreMouse[layerId] = ignoreMouse;
 
         return ignoreMouse;
     }
 
-    protected getLayerXOffset(direction: number, layerId: number): number
+    protected getLayerXOffset(scale: number, direction: number, layerId: number): number
     {
         const existing = this._xOffsets[layerId];
 
@@ -424,14 +468,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_XOFFSET;
 
-        const xOffset = this._data.getLayerXOffset(direction, layerId);
+        const xOffset = this._data.getLayerXOffset(scale, direction, layerId);
 
         this._xOffsets[layerId] = xOffset;
 
         return xOffset;
     }
 
-    protected getLayerYOffset(direction: number, layerId: number): number
+    protected getLayerYOffset(scale: number, direction: number, layerId: number): number
     {
         if(layerId === this._additionalLayer) return Math.ceil((this._liftAmount * (64 / 2)));
 
@@ -441,14 +485,14 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_YOFFSET;
 
-        const yOffset = this._data.getLayerYOffset(direction, layerId);
+        const yOffset = this._data.getLayerYOffset(scale, direction, layerId);
 
         this._yOffsets[layerId] = yOffset;
 
         return yOffset;
     }
 
-    protected getLayerZOffset(direction: number, layerId: number): number
+    protected getLayerZOffset(scale: number, direction: number, layerId: number): number
     {
         const existing = this._zOffsets[layerId];
 
@@ -456,11 +500,18 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_ZOFFSET;
 
-        const zOffset = this._data.getLayerZOffset(direction, layerId);
+        const zOffset = this._data.getLayerZOffset(scale, direction, layerId);
 
         this._zOffsets[layerId] = zOffset;
 
         return zOffset;
+    }
+
+    protected getValidScale(scale: number): number
+    {
+        if(!this._data) return scale;
+
+        return this._data.getValidScale(scale);
     }
 
     protected setLayerCount(count: number): void
@@ -474,40 +525,32 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return 1;
     }
 
-    protected updateAnimation(): number
+    protected updateAnimation(scale: number): number
     {
         return 0;
     }
 
-    protected getFrameNumber(layerId: number): number
+    protected getFrameNumber(scale: number, layerId: number): number
     {
         return 0;
     }
 
     public getAsset(name: string): GraphicAsset
     {
-        if(!this._data) return null;
+        if(!this.asset) return null;
 
-        return this.asset.getGraphic(name);
+        return this.asset.getAsset(name);
     }
 
-    public get data(): FurnitureVisualizationData
+    protected setDirection(direction: number): void
     {
-        return this._data;
+        if(this._direction === direction) return;
+
+        this._direction = direction;
     }
 
-    public get type(): string
-    {
-        return this._type;
-    }
-
-    public get direction(): number
+    protected get direction(): number
     {
         return this._direction;
-    }
-
-    public get layerCount(): number
-    {
-        return this._data.layerCount;
     }
 }

@@ -18,6 +18,13 @@ export class ActiveActionData implements IActiveActionData
         this._overridingAction  = null;
     }
 
+    public dispose(): void
+    {
+        this._actionType        = null;
+        this._actionParameter   = null;
+        this._definition        = null;
+    }
+
     public get id(): string
     {
         if(!this._definition) return '';
@@ -25,42 +32,42 @@ export class ActiveActionData implements IActiveActionData
         return this._definition.id;
     }
 
-    public get actionType(): string
+    public get _Str_695(): string
     {
         return this._actionType;
     }
 
-    public get actionParameter(): string
+    public get _Str_727(): string
     {
         return this._actionParameter;
     }
 
-    public set actionParameter(parameter: string)
+    public set _Str_727(parameter: string)
     {
         this._actionParameter = parameter;
     }
 
-    public get definition(): IActionDefinition
+    public get _Str_742(): IActionDefinition
     {
         return this._definition;
     }
 
-    public set definition(definition: IActionDefinition)
+    public set _Str_742(definition: IActionDefinition)
     {
         this._definition = definition;
     }
 
-    public get startFrame(): number
+    public get _Str_664(): number
     {
         return this._startFrame;
     }
 
-    public get overridingAction(): string
+    public get _Str_707(): string
     {
         return this._overridingAction;
     }
 
-    public set overridingAction(action: string)
+    public set _Str_707(action: string)
     {
         this._overridingAction = action;
     }

@@ -2,12 +2,18 @@ import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { PetFigureData } from '../../../../avatar/pets/PetFigureData';
+import { PetType } from '../../../../avatar/pets/PetType';
+import { MouseEventType } from '../../../../ui/MouseEventType';
+import { RoomObjectMoveEvent } from '../../../events/RoomObjectMoveEvent';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarFigureUpdateMessage';
 import { ObjectAvatarPetGestureUpdateMessage } from '../../../messages/ObjectAvatarPetGestureUpdateMessage';
 import { ObjectAvatarPostureUpdateMessage } from '../../../messages/ObjectAvatarPostureUpdateMessage';
+import { ObjectAvatarSelectedMessage } from '../../../messages/ObjectAvatarSelectedMessage';
 import { ObjectAvatarSleepUpdateMessage } from '../../../messages/ObjectAvatarSleepUpdateMessage';
 import { ObjectAvatarUpdateMessage } from '../../../messages/ObjectAvatarUpdateMessage';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
@@ -15,13 +21,11 @@ import { MovingObjectLogic } from '../MovingObjectLogic';
 
 export class PetLogic extends MovingObjectLogic
 {
-    private _sizeX: number;
-    private _sizeY: number;
-    private _sizeZ: number;
-    private _centerX: number;
-    private _centerY: number;
-    private _centerZ: number;
-
+    private _selected: boolean;
+    private _reportedLocation: Vector3d;
+    private _postureIndex: number;
+    private _gestureIndex: number;
+    private _headDirectionDelta: number;
     private _directions: number[];
 
     private _talkingEndTimestamp: number;
@@ -32,18 +36,23 @@ export class PetLogic extends MovingObjectLogic
     {
         super();
 
-        this._sizeX                     = 0;
-        this._sizeY                     = 0;
-        this._sizeZ                     = 0;
-        this._centerX                   = 0;
-        this._centerY                   = 0;
-        this._centerZ                   = 0;
-
+        this._selected                  = false;
+        this._reportedLocation          = null;
+        this._postureIndex              = 0;
+        this._gestureIndex              = 0;
+        this._headDirectionDelta        = 0;
         this._directions                = [];
 
         this._talkingEndTimestamp       = 0;
         this._gestureEndTimestamp       = 0;
         this._expressionEndTimestamp    = 0;
+    }
+
+    public getEventTypes(): string[]
+    {
+        const types = [ RoomObjectMouseEvent.CLICK, RoomObjectMoveEvent.POSITION_CHANGED ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
     }
 
     public initialize(asset: IAssetData): void
@@ -54,17 +63,6 @@ export class PetLogic extends MovingObjectLogic
 
         if(!model) return;
 
-        const dimensions = asset.dimensions;
-
-        if(!dimensions) return;
-
-        this._sizeX     = dimensions.x;
-        this._sizeY     = dimensions.y;
-        this._sizeZ     = dimensions.z;
-        this._centerX   = (this._sizeX / 2);
-        this._centerY   = (this._sizeY / 2);
-        this._centerZ   = (this._sizeZ / 2);
-
         const directions = asset.directions;
 
         if(directions && directions.length)
@@ -74,25 +72,47 @@ export class PetLogic extends MovingObjectLogic
             this._directions.sort((a, b) => { return a - b });
         }
 
-        model.setValue(RoomObjectVariable.FURNITURE_SIZE_X, this._sizeX);
-        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Y, this._sizeY);
-        model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, this._sizeZ);
-        model.setValue(RoomObjectVariable.FURNITURE_CENTER_X, this._centerX);
-        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Y, this._centerY);
-        model.setValue(RoomObjectVariable.FURNITURE_CENTER_Z, this._centerZ);
-        model.setValue(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS, this._directions);
-        model.setValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER, 1);
+        model.setValue(RoomObjectVariable.PET_ALLOWED_DIRECTIONS, this._directions);
+    }
+
+    public dispose(): void
+    {
+        if(this._selected && this.object)
+        {
+            if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMoveEvent(RoomObjectMoveEvent.OBJECT_REMOVED, this.object));
+        }
+
+        this._directions        = null;
+        this._reportedLocation  = null;
     }
 
     public update(totalTimeRunning: number): void
     {
         super.update(totalTimeRunning);
 
-        const model = this.object && this.object.model;
+        if(this._selected && this.object)
+        {
+            if(this.eventDispatcher)
+            {
+                const location = this.object.getLocation();
 
-        if(!model) return;
+                if((((this._reportedLocation == null) || (!(this._reportedLocation.x == location.x))) || (!(this._reportedLocation.y == location.y))) || (!(this._reportedLocation.z == location.z)))
+                {
+                    if(!this._reportedLocation) this._reportedLocation = new Vector3d();
 
-        if((this._gestureEndTimestamp > 0) && (this.time > this._gestureEndTimestamp))
+                    this._reportedLocation.assign(location);
+
+                    this.eventDispatcher.dispatchEvent(new RoomObjectMoveEvent(RoomObjectMoveEvent.POSITION_CHANGED, this.object));
+                }
+            }
+        }
+
+        if(this.object && this.object.model) this.updateModel(totalTimeRunning, this.object.model);
+    }
+
+    private updateModel(time: number, model: IRoomObjectModel): void
+    {
+        if((this._gestureEndTimestamp > 0) && (time > this._gestureEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_GESTURE, null);
 
@@ -101,7 +121,7 @@ export class PetLogic extends MovingObjectLogic
 
         if(this._talkingEndTimestamp > 0)
         {
-            if(this.time > this._talkingEndTimestamp)
+            if(time > this._talkingEndTimestamp)
             {
                 model.setValue(RoomObjectVariable.FIGURE_TALK, 0);
 
@@ -109,7 +129,7 @@ export class PetLogic extends MovingObjectLogic
             }
         }
 
-        if((this._expressionEndTimestamp > 0) && (this.time > this._expressionEndTimestamp))
+        if((this._expressionEndTimestamp > 0) && (time > this._expressionEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_EXPRESSION, 0);
 
@@ -179,18 +199,37 @@ export class PetLogic extends MovingObjectLogic
 
             return;
         }
+
+        if(message instanceof ObjectAvatarSelectedMessage)
+        {
+            this._selected          = message.selected;
+            this._reportedLocation  = null;
+
+            return;
+        }
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
+        let eventType: string = null;
+
         switch(event.type)
         {
-            case RoomObjectMouseEvent.MOUSE_MOVE:
-                //document.body.style.cursor = 'pointer';
+            case MouseEventType.MOUSE_CLICK:
+                eventType = RoomObjectMouseEvent.CLICK;
                 break;
-            case RoomObjectMouseEvent.CLICK:
-                //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
+            case MouseEventType.DOUBLE_CLICK:
+                break;
+            case MouseEventType.MOUSE_DOWN:
+                const petType = this.object.model.getValue(RoomObjectVariable.PET_TYPE);
+
+                if(petType == PetType.MONSTERPLANT)
+                {
+                    if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_DOWN, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown));
+                }
                 break;
         }
+
+        if(eventType && this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMouseEvent(eventType, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown));
     }
 }

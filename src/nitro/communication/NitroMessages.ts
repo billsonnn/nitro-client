@@ -64,11 +64,13 @@ import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
 import { ItemPlaceComposer } from './messages/outgoing/room/furniture/ItemPlaceComposer';
+import { FurnitureColorWheelComposer } from './messages/outgoing/room/furniture/logic/FurnitureColorWheelComposer';
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
 import { FurnitureMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureRandomStateComposer';
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
+import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
 import { RoomModel2Composer } from './messages/outgoing/room/mapping/RoomModel2Composer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
@@ -83,6 +85,7 @@ import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSign
 import { RoomUnitSitComposer } from './messages/outgoing/room/unit/RoomUnitSitComposer';
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
+import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
 import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
@@ -221,7 +224,11 @@ export class NitroMessages implements IMessageConfiguration
                 // FLOOR
                 this._composers.set(OutgoingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateComposer);
 
+                // WALL
+                this._composers.set(OutgoingHeader.FURNITURE_WALL_UPDATE, FurnitureWallUpdateComposer);
+
                 // LOGIC
+                this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);
                 this._composers.set(OutgoingHeader.ITEM_DICE_CLICK, FurnitureDiceActivateComposer);
                 this._composers.set(OutgoingHeader.ITEM_DICE_CLOSE, FurnitureDiceDeactivateComposer);
                 this._composers.set(OutgoingHeader.FURNITURE_MULTISTATE, FurnitureMultiStateComposer);
@@ -251,6 +258,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 
         // USER
+        this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
         this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
 
             // INVENTORY

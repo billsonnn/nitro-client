@@ -6,70 +6,93 @@ export class TypingBubbleAddition implements IAvatarAddition
 {
     private _id: number;
     private _visualization: AvatarVisualization;
-    private _sprite: IRoomObjectSprite;
+    private _asset: PIXI.Texture;
+    private _relativeDepth: number;
 
     constructor(id: number, visualization: AvatarVisualization)
     {
         this._id            = id;
         this._visualization = visualization;
-        this._sprite        = null;
+        this._asset         = null;
+        this._relativeDepth = 0;
     }
 
     public dispose(): void
     {
-        // if(this._sprite)
-        // {
-        //     this._visualization.removeSprite(this._sprite);
-
-        //     this._sprite = null;
-        // }
+        this._visualization = null;
+        this._asset         = null;
     }
 
-    private getSpriteAssetName(): string
+    public update(sprite: IRoomObjectSprite, scale: number): void
     {
-        return `user_typing`;
+        if(!sprite) return;
+
+        sprite.visible          = true;
+        sprite.relativeDepth    = this._relativeDepth;
+        sprite.alpha            = 255;
+
+        let additionScale   = 64;
+        let offsetX         = 0;
+        let offsetY         = 0;
+
+        if(scale < 48)
+        {
+            this._asset = this._visualization.getAvatarRenderAsset('user_typing_small.png');
+
+            offsetX = 3;
+            offsetY = -42;
+
+            additionScale = 32;
+        }
+        else
+        {
+            this._asset = this._visualization.getAvatarRenderAsset('user_typing.png');
+
+            offsetX = 14;
+            offsetY = -83;
+        }
+
+        if(this._visualization.posture === 'sit')
+        {
+            offsetY += (additionScale / 2);
+        }
+
+        else if(this._visualization.posture === 'lay')
+        {
+            offsetY += scale;
+        }
+
+        if(this._asset)
+        {
+            sprite.texture          = this._asset;
+            sprite.offsetX          = offsetX;
+            sprite.offsetY          = offsetY;
+            sprite.relativeDepth    = (-0.02 + 0);
+        }
     }
 
-    public update(): void
+    public animate(sprite: IRoomObjectSprite): boolean
     {
-        // const assetName = this.getSpriteAssetName();
+        if(this._asset && sprite)
+        {
+            sprite.texture = this._asset;
+        }
 
-        // let sprite = this._visualization.getSprite(assetName);
-
-        // if(this._sprite && this._sprite !== sprite) this._sprite.visible = false;
-
-        // if(!sprite)
-        // {
-        //     sprite = this._visualization.createAndAddSprite(assetName, NitroConfiguration.ASSET_URL + `/images/additions/${ assetName }.png`);
-
-        //     sprite.name = assetName;
-
-        //     sprite.doesntHide = true;
-        // }
-
-        // this._sprite = sprite;
-
-        // if(!this._sprite) return;
-
-        // let offsetX = 46;
-        // let offsetY = -83;
-
-        // //if(this._visualization.posture === 'lay')
-        
-        // this._sprite.x          = offsetX;
-        // this._sprite.y          = offsetY;
-        // this._sprite.zIndex     = 100;
-
-        // if(!this._sprite.visible) this._sprite.visible = true;
-    }
-
-    public animate(): void
-    {
-       return;
+        return false;
     }
 
     public get id(): number
     {
         return this._id;
+    }
+
+    public get relativeDepth(): number
+    {
+        return this._relativeDepth;
+    }
+
+    public set relativeDepth(depth: number)
+    {
+        this._relativeDepth = depth;
     }
 }

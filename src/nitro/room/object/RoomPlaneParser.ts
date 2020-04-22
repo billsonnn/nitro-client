@@ -117,9 +117,9 @@ export class RoomPlaneParser
         _local_3 = 1;
         while (_local_3 < (_local_6.length - 1))
         {
-            if (((Math.floor(_local_6[_local_3]) <= (Math.floor(_local_6[(_local_3 - 1)]) - 1)) && (Math.floor(_local_6[_local_3]) <= (Math.floor(_local_6[(_local_3 + 1)]) - 1))))
+            if (((Math.trunc(_local_6[_local_3]) <= (Math.trunc(_local_6[(_local_3 - 1)]) - 1)) && (Math.trunc(_local_6[_local_3]) <= (Math.trunc(_local_6[(_local_3 + 1)]) - 1))))
             {
-                return new PIXI.Point(Math.floor(_local_6[_local_3]), _local_3);
+                return new PIXI.Point(~~(_local_6[_local_3]), _local_3);
             }
             _local_3++;
         }

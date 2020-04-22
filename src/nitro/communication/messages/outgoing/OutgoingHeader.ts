@@ -26,6 +26,7 @@ export class OutgoingHeader
     public static EVENT_TRACKER                  = 3457;
     public static FIND_FRIENDS                   = 516;
     public static FURNITURE_FLOOR_UPDATE         = 248;
+    public static FURNITURE_WALL_UPDATE          = 168;
     public static FURNITURE_PICKUP               = 3456;
     public static FURNITURE_PLACE                = 1258;
     public static GAMES_INIT                     = 2914;

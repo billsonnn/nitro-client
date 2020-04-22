@@ -19,7 +19,7 @@ export class ActivePartSet
         }
     }
 
-    public get parts(): string[]
+    public get _Str_806(): string[]
     {
         return this._parts;
     }

@@ -20,11 +20,13 @@ export class FurnitureGuildCustomizedLogic extends FurnitureLogic
 
         if(message instanceof ObjectDataUpdateMessage)
         {
-            if(message.data instanceof StringDataType)
+            const data = message.data;
+
+            if(data instanceof StringDataType)
             {
-                this.updateGroupId(message.data.getValue(FurnitureGuildCustomizedLogic.GROUPID_KEY));
-                this.updateBadge(message.data.getValue(FurnitureGuildCustomizedLogic.BADGE_KEY));
-                this.updateColors(message.data.getValue(FurnitureGuildCustomizedLogic.COLOR1_KEY), message.data.getValue(FurnitureGuildCustomizedLogic.COLOR2_KEY))
+                this.updateGroupId(data.getValue(FurnitureGuildCustomizedLogic.GROUPID_KEY));
+                this.updateBadge(data.getValue(FurnitureGuildCustomizedLogic.BADGE_KEY));
+                this.updateColors(data.getValue(FurnitureGuildCustomizedLogic.COLOR1_KEY), data.getValue(FurnitureGuildCustomizedLogic.COLOR2_KEY))
             }
         }
     }

@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js-legacy';
 
 export class LayerData
 {
+    public static DEFAULT_COUNT: number         = 0;
+    public static DEFAULT_DIRECTION: number     = 0;
     public static DEFAULT_TAG: string           = '';
     public static DEFAULT_INK: number           = PIXI.BLEND_MODES.NORMAL;
     public static DEFAULT_ALPHA: number         = 255;

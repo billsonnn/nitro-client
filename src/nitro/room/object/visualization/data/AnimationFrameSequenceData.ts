@@ -66,9 +66,9 @@ export class AnimationFrameSequenceData
         {
             const frame = this._frames[(this._frames.length - 1)];
 
-            if((((((((frame.id == id) && (!(frame.hasDirectionalOffsets()))) && (frame.x == x)) && (frame.y == y)) && (frame.randomX == randomX)) && (randomX == 0)) && (frame.randomY == randomY)) && (randomY == 0))
+            if((((((((frame.id === id) && (!(frame.hasDirectionalOffsets()))) && (frame.x === x)) && (frame.y === y)) && (frame.randomX === randomX)) && (randomX === 0)) && (frame.randomY === randomY)) && (randomY === 0))
             {
-                repeats = (repeats + frame.repeats);
+                repeats += frame.repeats;
 
                 this._frames.pop();
             }
@@ -94,12 +94,12 @@ export class AnimationFrameSequenceData
 
         if(this._isRandom)
         {
-            frameCount = Math.floor((Math.random() * this._frameIndexes.length));
+            frameCount = Math.round((Math.random() * this._frameIndexes.length));
 
             if(frameCount === this._frameIndexes.length) frameCount--;
         }
 
-        return Math.floor(frameCount);
+        return frameCount;
     }
 
     public getRepeats(frameCount: number): number

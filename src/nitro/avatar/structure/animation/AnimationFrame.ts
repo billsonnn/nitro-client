@@ -14,7 +14,7 @@ export class AnimationFrame
         return this._number;
     }
 
-    public get assetPartDefinition(): string
+    public get _Str_778(): string
     {
         return this._assetPartDefinition;
     }

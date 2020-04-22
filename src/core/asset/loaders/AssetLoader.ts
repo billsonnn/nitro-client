@@ -3,22 +3,40 @@ import { IAssetData } from '../interfaces';
 
 export function AssetLoader(resource: PIXI.LoaderResource, next: Function): void
 {
-    if(!resource || !resource.data || resource.data.type === undefined) return next();
+    if(!resource) return next();
 
-    if(resource.type === PIXI.LoaderResource.TYPE.JSON)
+    if(resource.type === PIXI.LoaderResource.TYPE.IMAGE)
     {
-        const assetData     = resource.data as IAssetData;
-        const loadOptions   = getLoadOptions(resource);
-        const spriteSheet   = getSpritesheetUrl(resource.url, assetData.spritesheet);
+        const split = resource.name.split('/');
+        const name  = split[(split.length - 1)];
 
-        this.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
+        if(name.indexOf('.json_image') === -1) NitroInstance.instance.core.asset.setTexture(name, resource.texture);
+
+        return next();
+    }
+
+    if((resource.type === PIXI.LoaderResource.TYPE.JSON) && resource.data)
+    {
+        const assetData = resource.data as IAssetData;
+
+        if(assetData.assets && Object.keys(assetData.assets).length)
         {
-            if(!res.spritesheet) next();
+            const loadOptions   = getLoadOptions(resource);
+            const spriteSheet   = getSpritesheetUrl(resource.url, assetData.spritesheet);
 
-            NitroInstance.instance.core.asset.createCollection(assetData, res.spritesheet);
+            this.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
+            {
+                if(res.spritesheet) NitroInstance.instance.core.asset.createCollection(assetData, res.spritesheet);
+
+                next();
+            });
+        }
+        else
+        {
+            NitroInstance.instance.core.asset.createCollection(assetData, null);
 
             next();
-        });
+        }
     }
 }
 

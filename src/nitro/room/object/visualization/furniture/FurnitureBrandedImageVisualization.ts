@@ -7,6 +7,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     private static BRANDED_IMAGE: string = 'branded_image';
 
     protected _imageUrl: string;
+    protected _shortUrl: string;
     protected _imageReady: boolean;
     
     protected _offsetX: number;
@@ -18,6 +19,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         super();
 
         this._imageUrl      = null;
+        this._shortUrl      = null;
         this._imageReady    = false;
 
         this._offsetX       = 0;
@@ -25,18 +27,18 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         this._offsetZ       = 0;
     }
 
-    protected updateObject(direction: number): boolean
+    protected updateObject(scale: number, direction: number): boolean
     {
-        if(!super.updateObject(direction)) return false;
+        if(!super.updateObject(scale, direction)) return false;
 
         if(this._imageReady) this.checkAndCreateImageForCurrentState();
 
         return true;
     }
 
-    protected updateModel(): boolean
+    protected updateModel(scale: number): boolean
     {
-        const flag = super.updateModel();
+        const flag = super.updateModel(scale);
         
         if(flag)
         {
@@ -107,7 +109,10 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         if(!imageStatus) return false;
 
-        const texture = NitroInstance.instance.core.asset.getTexture(imageUrl);
+        const urlParts  = imageUrl.split('/');
+        const url       = urlParts[urlParts.length - 1];
+        const texture   = NitroInstance.instance.core.asset.getTexture(url);
+
 
         if(!texture) return false;
         
@@ -120,27 +125,30 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     {
         if(!this._imageUrl) return;
 
-        const texture = NitroInstance.instance.core.asset.getTexture(this._imageUrl);
+        const urlParts  = this._imageUrl.split('/');
+        const url       = urlParts[urlParts.length - 1];
+
+        const texture = NitroInstance.instance.core.asset.getTexture(url);
 
         if(!texture) return;
 
         this.asset.addAsset(this._imageUrl, null, texture, 0, 0, false, false);
     }
 
-    protected getSpriteAssetName(layerId: number): string
+    protected getSpriteAssetName(scale: number, layerId: number): string
     {
-        const tag = this.getLayerTag(this._direction, layerId);
+        const tag = this.getLayerTag(scale, this._direction, layerId);
 
         if(tag === FurnitureBrandedImageVisualization.BRANDED_IMAGE) return this._imageUrl;
 
-        return super.getSpriteAssetName(layerId);
+        return super.getSpriteAssetName(scale, layerId);
     }
 
-    protected getLayerIgnoreMouse(direction: number, layerId: number): boolean
+    protected getLayerIgnoreMouse(scale: number, direction: number, layerId: number): boolean
     {
-        const tag = this.getLayerTag(direction, layerId);
+        const tag = this.getLayerTag(scale, direction, layerId);
 
-        if(tag !== FurnitureBrandedImageVisualization.BRANDED_IMAGE) return super.getLayerIgnoreMouse(direction, layerId);
+        if(tag !== FurnitureBrandedImageVisualization.BRANDED_IMAGE) return super.getLayerIgnoreMouse(scale, direction, layerId);
 
         return true;
     }

@@ -19,6 +19,7 @@ export interface IRoomObjectSprite
     color: number;
     relativeDepth: number;
     _Str_4593: boolean;
+    _Str_3582: string;
     visible: boolean;
     tag: string;
     filters: PIXI.Filter[];

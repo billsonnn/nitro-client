@@ -11,9 +11,11 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): FurnitureData;
     getWallItemData(id: number): FurnitureData;
     getWallItemDataByName(name: string): FurnitureData;
+    hasSecurity(level: number): boolean;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;
     figure: string;
     gender: string;
+    isModerator: boolean;
 }

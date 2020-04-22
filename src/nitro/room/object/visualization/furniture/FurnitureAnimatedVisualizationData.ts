@@ -5,9 +5,7 @@ import { FurnitureVisualizationData } from './FurnitureVisualizationData';
 
 export class FurnitureAnimatedVisualizationData extends FurnitureVisualizationData
 {
-    protected _size: AnimationSizeData;
-
-    protected createSizeData(layerCount: number, angle: number): SizeData
+    protected createSizeData(scale: number, layerCount: number, angle: number): SizeData
     {
         return new AnimationSizeData(layerCount, angle);
     }
@@ -29,52 +27,66 @@ export class FurnitureAnimatedVisualizationData extends FurnitureVisualizationDa
         return true;
     }
 
-    public hasAnimation(animationId: number): boolean
+    public hasAnimation(scale: number, animationId: number): boolean
     {
-        if(!this._size) return false;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.hasAnimation(animationId);
+        return size.hasAnimation(animationId);
     }
 
-    public getAnimationCount(): number
+    public getAnimationCount(scale: number): number
     {
-        if(!this._size) return 0;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.getAnimationCount();
+        return size.getAnimationCount();
     }
 
-    public getAnimationId(animationId: number): number
+    public getAnimationId(scale: number, animationId: number): number
     {
-        if(!this._size) return 0;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.getAnimationId(animationId);
+        return size.getAnimationId(animationId);
     }
 
-    public isImmediateChange(animationId: number, _arg_3: number): boolean
+    public isImmediateChange(scale: number, animationId: number, _arg_3: number): boolean
     {
-        if(!this._size) return false;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.isImmediateChange(animationId, _arg_3);
+        return size.isImmediateChange(animationId, _arg_3);
     }
 
-    public getStartFrame(animationId: number, direction: number): number
+    public getStartFrame(scale: number, animationId: number, direction: number): number
     {
-        if(!this._size) return 0;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.getStartFrame(animationId, direction);
+        return size.getStartFrame(animationId, direction);
     }
 
-    public getFrame(animationId: number, direction: number, layerId: number, frameCount: number): AnimationFrame
+    public getFrame(scale: number, animationId: number, direction: number, layerId: number, frameCount: number): AnimationFrame
     {
-        if(!this._size) return null;
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
         
-        return this._size.getFrame(animationId, direction, layerId, frameCount);
+        return size.getFrame(animationId, direction, layerId, frameCount);
     }
 
-    public getFrameFromSequence(animationId: number, direction: number, layerId: number, sequenceId: number, offset: number, frameCount: number):AnimationFrame
+    public getFrameFromSequence(scale: number, animationId: number, direction: number, layerId: number, sequenceId: number, offset: number, frameCount: number):AnimationFrame
     {
-        if(!this._size) return null;
-        
-        return this._size.getFrameFromSequence(animationId, direction, layerId, sequenceId, offset, frameCount);
+        const size = this.getSizeData(scale) as AnimationSizeData;
+
+        if(!size) return null;
+
+        return size.getFrameFromSequence(animationId, direction, layerId, sequenceId, offset, frameCount);
     }
 }

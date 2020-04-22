@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js-legacy';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { IRoomManager } from '../../room/IRoomManager';
+import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
 import { IRoomObjectVisualizationFactory } from '../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
@@ -19,7 +20,9 @@ export interface IRoomEngine
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;
     getRoomInstanceGeometry(roomId: number, canvasId?: number): IRoomGeometry;
     getRoomInstanceNumber(roomId: number, key: string): number;
+    getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
     refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void;
+    processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
     events: IEventDispatcher;
     objectEventHandler: RoomObjectEventHandler;

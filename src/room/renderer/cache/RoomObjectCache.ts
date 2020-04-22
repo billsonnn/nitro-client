@@ -82,9 +82,9 @@ export class RoomObjectCache
                     data.y          = sprite.y;
                     data.z          = sprite.z;
                     data.name       = sprite.name || '';
-                    //data.flipH      = sprite.sprite.scale.x === -1;
+                    data.flipH      = sprite.sprite.flipH;
                     data.alpha      = sprite.sprite.alpha;
-                    //data.color      = sprite.sprite.tint.toString();
+                    data.color      = sprite.sprite.color.toString();
                     data.blendMode  = sprite.sprite.blendMode.toString();
                     data.width      = sprite.sprite.width;
                     data.height     = sprite.sprite.height;

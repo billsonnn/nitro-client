@@ -25,6 +25,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _color: number;
     private _relativeDepth: number;
     private _Str_8253: boolean;
+    private _Str_11397: string;
     private _visible: boolean;
     private _tag: string;
     private _filters: PIXI.Filter[];
@@ -53,6 +54,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._color             = 0xFFFFFF;
         this._relativeDepth     = 0;
         this._Str_8253          = false;
+        this._Str_11397         = '';
         this._visible           = true;
         this._tag               = '';
         this._filters           = [];
@@ -280,6 +282,16 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._Str_8253 = flag;
 
         this._updateCounter++;
+    }
+
+    public get _Str_3582(): string
+    {
+        return this._Str_11397;
+    }
+
+    public set _Str_3582(value: string)
+    {
+        this._Str_11397 = value;
     }
 
     public get visible(): boolean

@@ -1,8 +1,9 @@
+import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 
 export interface IAvatarAddition
 {
-    id: number;
-    update(): void;
-    animate(): void;
     dispose(): void;
+    update(sprite: IRoomObjectSprite, scale: number): void;
+    animate(sprite: IRoomObjectSprite): boolean;
+    id: number;
 }

@@ -18,10 +18,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     private _state: number;
     private _animationData: AnimationStateData;
+    private _animationScale: number;
     private _animationChangeTime: number;
     private _animatedLayerCount: number;
     private _directionChanged: boolean;
-    private _didSet: boolean;
 
     constructor()
     {
@@ -29,10 +29,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
         this._state                 = -1;
         this._animationData         = new AnimationStateData();
+        this._animationScale        = 0;
         this._animationChangeTime   = 0;
         this._animatedLayerCount    = 0;
         this._directionChanged      = false;
-        this._didSet                = false;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -45,7 +45,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     public dispose():void
     {
         super.dispose();
-
+        
         if(this._animationData)
         {
             this._animationData.dispose();
@@ -59,15 +59,6 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return this._animatedLayerCount;
     }
 
-    protected setDirection(direction: number): void
-    {
-        if(this._direction === direction) return;
-
-        super.setDirection(direction);
-        
-        this._directionChanged = true;
-    }
-
     public get animationId(): number
     {
         return this._animationData.animationId;
@@ -75,14 +66,14 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     protected getAnimationId(animationData: AnimationStateData): number
     {
-        if((this.animationId !== FurnitureAnimatedVisualization.DEFAULT_ANIMATION_ID) && this._data.hasAnimation(this.animationId)) return this.animationId;
+        if((this.animationId !== FurnitureAnimatedVisualization.DEFAULT_ANIMATION_ID) && this._data.hasAnimation(this._animationScale, this.animationId)) return this.animationId;
 
         return FurnitureAnimatedVisualization.DEFAULT_ANIMATION_ID;
     }
 
-    protected updateObject(direction: number): boolean
+    protected updateObject(scale: number, direction: number): boolean
     {
-        if(super.updateObject(direction))
+        if(super.updateObject(scale, direction))
         {
             const state = this.object.state;
 
@@ -101,9 +92,9 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return false;
     }
 
-    protected updateModel(): boolean
+    protected updateModel(scale: number): boolean
     {
-        if(super.updateModel())
+        if(super.updateModel(scale))
         {
             if(this.usesAnimationResetting())
             {
@@ -116,14 +107,6 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                     this.setAnimation(this._state);
                 }
             }
-
-            // const automaticState = this.object.model.getValue(RoomObjectModelKey.FURNITURE_AUTOMATIC_STATE_INDEX) as number;
-
-            // if(!isNaN(automaticState))
-            // {
-            //     const state = this._data.getAnimationId(automaticState);
-            //     this.setAnimation(state);
-            // }
 
             return true;
         }
@@ -144,12 +127,14 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     private getCurrentState(animationData: AnimationStateData): number
     {
-        if(!AnimationData.isTransitionFromAnimation(animationData.animationId) && !AnimationData.isTransitionToAnimation(animationData.animationId)) return animationData.animationId;
+        const animationId = animationData.animationId;
+
+        if(!AnimationData.isTransitionFromAnimation(animationId) && !AnimationData.isTransitionToAnimation(animationId)) return animationId;
 
         return animationData.animationAfterTransitionId;
     }
 
-    protected setAnimation(animationId: number):void
+    protected setAnimation(animationId: number): void
     {
         if(!this._data) return;
         
@@ -166,11 +151,11 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
             if(animationId !== state)
             {
-                if(!this._data.isImmediateChange(animationId, state))
+                if(!this._data.isImmediateChange(this._animationScale, animationId, state))
                 {
                     let transition = AnimationData.getTransitionFromAnimationId(state);
 
-                    if(this._data.hasAnimation(transition))
+                    if(this._data.hasAnimation(this._animationScale, transition))
                     {
                         animationData.animationAfterTransitionId = animationId;
                         animationId = transition;
@@ -179,7 +164,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                     {
                         transition = AnimationData.getTransitionToAnimationId(animationId);
 
-                        if(this._data.hasAnimation(transition))
+                        if(this._data.hasAnimation(this._animationScale, transition))
                         {
                             animationData.animationAfterTransitionId = animationId;
                             animationId = transition;
@@ -193,34 +178,32 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                 {
                     const transition = AnimationData.getTransitionToAnimationId(animationId);
 
-                    if(this._data.hasAnimation(transition))
+                    if(this._data.hasAnimation(this._animationScale, transition))
                     {
                         animationData.animationAfterTransitionId = animationId;
                         animationId = transition;
                     }
                 }
-                else
+                
+                else if(!AnimationData.isTransitionToAnimation(animationData.animationId))
                 {
-                    if(!AnimationData.isTransitionToAnimation(animationData.animationId))
+                    if(this.usesAnimationResetting())
                     {
-                        if(this.usesAnimationResetting())
-                        {
-                            const transition = AnimationData.getTransitionFromAnimationId(state);
+                        const transition = AnimationData.getTransitionFromAnimationId(state);
 
-                            if(this._data.hasAnimation(transition))
+                        if(this._data.hasAnimation(this._animationScale, transition))
+                        {
+                            animationData.animationAfterTransitionId = animationId;
+                            animationId = transition;
+                        }
+                        else
+                        {
+                            const transition = AnimationData.getTransitionToAnimationId(animationId);
+
+                            if(this._data.hasAnimation(this._animationScale, transition))
                             {
                                 animationData.animationAfterTransitionId = animationId;
                                 animationId = transition;
-                            }
-                            else
-                            {
-                                const transition = AnimationData.getTransitionToAnimationId(animationId);
-
-                                if(this._data.hasAnimation(transition))
-                                {
-                                    animationData.animationAfterTransitionId = animationId;
-                                    animationId = transition;
-                                }
                             }
                         }
                     }
@@ -250,30 +233,30 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         this._animationData.setLayerCount(this._animatedLayerCount);
     }
 
-    protected updateAnimation(): number
+    protected updateAnimation(scale: number): number
     {
         if(!this._data) return 0;
 
-        if(!this._didSet)
+        if(scale !== this._animationScale)
         {
-            this._animatedLayerCount = this._data.layerCount;
-            this.resetAllAnimationFrames();
+            this._animationScale        = scale;
+            this._animatedLayerCount    = this._data.getLayerCount(scale);
 
-            this._didSet = true;
+            this.resetAllAnimationFrames();
         }
 
-        const update = this.updateAnimations();
+        const update = this.updateAnimations(scale);
 
         this._directionChanged = false;
 
-        return update;;
+        return update;
     }
 
-    protected updateAnimations(): number
+    protected updateAnimations(scale: number): number
     {
         if(this._animationData.animationOver && !this._directionChanged) return 0;
 
-        const update = this.updateFramesForAnimation(this._animationData);
+        const update = this.updateFramesForAnimation(this._animationData, scale);
 
         if(this._animationData.animationOver)
         {
@@ -287,16 +270,16 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return update;
     }
 
-    protected updateFramesForAnimation(animationData: AnimationStateData): number
+    protected updateFramesForAnimation(animationData: AnimationStateData, scale: number): number
     {
-        if((animationData.animationOver) && (!(this._directionChanged))) return 0;
+        if(animationData.animationOver && !this._directionChanged) return 0;
 
         let animationId = this.getAnimationId(animationData);
         let frameCount  = animationData.frameCounter;
 
-        if(!frameCount) frameCount = this._data.getStartFrame(animationId, this._direction);
+        if(!frameCount) frameCount = this._data.getStartFrame(scale, animationId, this._direction);
 
-        frameCount                  = (frameCount + FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT);
+        frameCount                  += FurnitureAnimatedVisualization.FRAME_INCREASE_AMOUNT;
         animationData.frameCounter  = frameCount;
         animationData.animationOver = true;
 
@@ -332,11 +315,11 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
                     if(sequenceId === AnimationFrame.SEQUENCE_NOT_DEFINED)
                     {
-                        frame = this._data.getFrame(animationId, this._direction, layerId, frameCount);
+                        frame = this._data.getFrame(scale, animationId, this._direction, layerId, frameCount);
                     }
                     else
                     {
-                        frame = this._data.getFrameFromSequence(animationId, this._direction, layerId, sequenceId, (frame.activeSequenceOffset + frame.repeats), frameCount);
+                        frame = this._data.getFrameFromSequence(scale, animationId, this._direction, layerId, sequenceId, (frame.activeSequenceOffset + frame.repeats), frameCount);
                     }
 
                     animationData.setFrame(layerId, frame);
@@ -366,18 +349,18 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return update;
     }
 
-    protected getFrameNumber(layerId: number): number
+    protected getFrameNumber(scale: number, layerId: number): number
     {
         const currentFrame = this._animationData.getFrame(layerId);
 
-        if(!currentFrame) return super.getFrameNumber(layerId);
+        if(!currentFrame) return super.getFrameNumber(scale, layerId);
 
         return currentFrame.id;
     }
 
-    protected getLayerXOffset(direction: number, layerId: number): number
+    protected getLayerXOffset(scale: number, direction: number, layerId: number): number
     {
-        const offset = super.getLayerXOffset(direction, layerId);
+        const offset = super.getLayerXOffset(scale, direction, layerId);
 
         const currentFrame = this._animationData.getFrame(layerId);
 
@@ -386,9 +369,9 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return (offset + currentFrame.x);
     }
 
-    protected getLayerYOffset(direction: number, layerId: number): number
+    protected getLayerYOffset(scale: number, direction: number, layerId: number): number
     {
-        const offset = super.getLayerYOffset(direction, layerId);
+        const offset = super.getLayerYOffset(scale, direction, layerId);
 
         const currentFrame = this._animationData.getFrame(layerId);
 
@@ -400,5 +383,14 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected usesAnimationResetting(): boolean
     {
         return false;
+    }
+
+    protected setDirection(direction: number): void
+    {
+        if(this._direction === direction) return;
+
+        super.setDirection(direction);
+        
+        this._directionChanged  = true;
     }
 }

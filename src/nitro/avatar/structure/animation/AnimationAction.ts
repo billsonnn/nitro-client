@@ -3,7 +3,8 @@ import { AnimationActionPart } from './AnimationActionPart';
 
 export class AnimationAction
 {
-    private static _Str_1934: PIXI.Point = new PIXI.Point(0, 0);
+    public static _Str_1934: PIXI.Point = new PIXI.Point(0, 0);
+
     private _id: string;
     private _actionParts: Map<string, AnimationActionPart>;
     private _bodyPartOffsets: Map<number, Map<number, Map<string, PIXI.Point>>>;
@@ -125,12 +126,12 @@ export class AnimationAction
         return this._id;
     }
 
-    public get actionsParts(): Map<string, AnimationActionPart>
+    public get _Str_806(): Map<string, AnimationActionPart>
     {
         return this._actionParts;
     }
 
-    public get frameCount(): number
+    public get _Str_2185(): number
     {
         return this._frameCount;
     }
