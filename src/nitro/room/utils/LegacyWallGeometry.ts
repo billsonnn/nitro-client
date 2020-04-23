@@ -108,7 +108,7 @@ export class LegacyWallGeometry
 
         if(!heightMap) return 0;
         
-        return heightMap[x];
+        return heightMap[x]
     }
 
     public getLocation(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: string): IVector3D
@@ -310,10 +310,10 @@ export class LegacyWallGeometry
 
     public _Str_24141(k: number, _arg_2: number): number
     {
-        var _local_3: number;
-        _local_3 = this._Str_2754(k, _arg_2);
-        var _local_4: number = (_local_3 + 1);
-        return _local_3 + (((((((((Math.trunc(this._Str_2754((k - 1), (_arg_2 - 1))) == _local_4) || (Math.trunc(this._Str_2754(k, (_arg_2 - 1))) == _local_4)) || (Math.trunc(this._Str_2754((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.trunc(this._Str_2754((k - 1), _arg_2)) == _local_4)) || (Math.trunc(this._Str_2754((k + 1), _arg_2)) == _local_4)) || (Math.trunc(this._Str_2754((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.trunc(this._Str_2754(k, (_arg_2 + 1))) == _local_4)) || (Math.trunc(this._Str_2754((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
+        const _local_3 = this._Str_2754(k, _arg_2);
+        const _local_4 = (_local_3 + 1);
+        
+        return _local_3 + (((((((((Math.floor(this._Str_2754((k - 1), (_arg_2 - 1))) == _local_4) || (Math.floor(this._Str_2754(k, (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k - 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k + 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754(k, (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
     }
 
     public _Str_10375(k: number, _arg_2: number): boolean

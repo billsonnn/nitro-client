@@ -57,7 +57,7 @@ export class AvatarStructure extends EventDispatcher
 
     public dispose(): void
     {
-        if(this.isDisposed) return;
+        if(this.disposed) return;
 
         super.dispose();
 
@@ -343,7 +343,7 @@ export class AvatarStructure extends EventDispatcher
         return AnimationAction._Str_1934;
     }
 
-    public _Str_713(k: string, _arg_2:IAvatarFigureContainer, _arg_3:IActiveActionData, _arg_4: string, _arg_5: number, _arg_6: string[], _arg_7: IAvatarImage, _arg_8: Map<string, string> = null): AvatarImagePartContainer[]
+    public _Str_713(k: string, _arg_2:IAvatarFigureContainer, _arg_3:IActiveActionData, _arg_4: string, _arg_5: number, removes: string[], _arg_7: IAvatarImage, _arg_8: Map<string, string> = null): AvatarImagePartContainer[]
     {
         let _local_10: Animation = null;
         let _local_34: IActionDefinition = null;
@@ -411,7 +411,7 @@ export class AvatarStructure extends EventDispatcher
 
                     if(_local_32)
                     {
-                        _arg_6 = _arg_6.concat(_local_32._Str_790);
+                        removes = removes.concat(_local_32._Str_790);
 
                         for(let _local_33 of _local_32._Str_806)
                         {
@@ -472,7 +472,7 @@ export class AvatarStructure extends EventDispatcher
 
             for(let _local_23 of _local_11)
             {
-                if (_local_23._Str_1669 == _local_12)
+                if (_local_23._Str_1669 === _local_12)
                 {
                     if (_local_40)
                     {
@@ -482,7 +482,7 @@ export class AvatarStructure extends EventDispatcher
                     {
                         _local_38 = true;
 
-                        if(_arg_6.indexOf(_local_12) === -1) _local_22.push(_local_23);
+                        if(removes.indexOf(_local_12) === -1) _local_22.push(_local_23);
                     }
                 }
             }

@@ -6,6 +6,7 @@ export interface IRoomSessionManager extends INitroManager
 {
     getSession(id: number): IRoomSession;
     createSession(roomId: number, password?: string): boolean;
+    startSession(session: IRoomSession): boolean;
     communication: INitroCommunicationManager;
     viewerSession: IRoomSession;
 }

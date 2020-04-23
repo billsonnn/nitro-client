@@ -7,6 +7,9 @@ import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { AvatarAction } from '../../../../avatar/enum/AvatarAction';
 import { NitroInstance } from '../../../../NitroInstance';
+import { MouseEventType } from '../../../../ui/MouseEventType';
+import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
+import { RoomObjectMoveEvent } from '../../../events/RoomObjectMoveEvent';
 import { ObjectAvatarCarryObjectUpdateMessage } from '../../../messages/ObjectAvatarCarryObjectUpdateMessage';
 import { ObjectAvatarChatUpdateMessage } from '../../../messages/ObjectAvatarChatUpdateMessage';
 import { ObjectAvatarDanceUpdateMessage } from '../../../messages/ObjectAvatarDanceUpdateMessage';
@@ -17,6 +20,7 @@ import { ObjectAvatarFlatControlUpdateMessage } from '../../../messages/ObjectAv
 import { ObjectAvatarGestureUpdateMessage } from '../../../messages/ObjectAvatarGestureUpdateMessage';
 import { ObjectAvatarOwnMessage } from '../../../messages/ObjectAvatarOwnMessage';
 import { ObjectAvatarPostureUpdateMessage } from '../../../messages/ObjectAvatarPostureUpdateMessage';
+import { ObjectAvatarSelectedMessage } from '../../../messages/ObjectAvatarSelectedMessage';
 import { ObjectAvatarSignUpdateMessage } from '../../../messages/ObjectAvatarSignUpdateMessage';
 import { ObjectAvatarSleepUpdateMessage } from '../../../messages/ObjectAvatarSleepUpdateMessage';
 import { ObjectAvatarTypingUpdateMessage } from '../../../messages/ObjectAvatarTypingUpdateMessage';
@@ -72,17 +76,56 @@ export class AvatarLogic extends MovingObjectLogic
         this._gestureEndTimestamp           = 0;
     }
 
-    public update(totalTimeRunning: number): void
+    public getEventTypes(): string[]
     {
-        super.update(totalTimeRunning);
+        const types = [ RoomObjectMouseEvent.CLICK, RoomObjectMoveEvent.POSITION_CHANGED, RoomObjectMouseEvent.MOUSE_ENTER, RoomObjectMouseEvent.MOUSE_LEAVE, RoomObjectFurnitureActionEvent.MOUSE_BUTTON, RoomObjectFurnitureActionEvent.MOUSE_ARROW ];
+
+        return this.mergeTypes(super.getEventTypes(), types);
+    }
+
+    public dispose(): void
+    {
+        if(this._selected && this.object)
+        {
+            if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMoveEvent(RoomObjectMoveEvent.OBJECT_REMOVED, this.object));
+        }
+
+        super.dispose();
+
+        this._reportedLocation = null;
+    }
+
+    public update(time: number): void
+    {
+        super.update(time);
+
+        if(this._selected && this.object)
+        {
+            if(this.eventDispatcher)
+            {
+                const location = this.object.getLocation();
+
+                if(((!this._reportedLocation || (this._reportedLocation.x !== location.x)) || (this._reportedLocation.y !== location.y)) || (this._reportedLocation.z !== location.z))
+                {
+                    if(!this._reportedLocation) this._reportedLocation = new Vector3d();
+
+                    this._reportedLocation.assign(location);
+
+                    this.eventDispatcher.dispatchEvent(new RoomObjectMoveEvent(RoomObjectMoveEvent.POSITION_CHANGED, this.object));
+                }
+            }
+        }
 
         const model = this.object && this.object.model;
 
-        if(!model) return;
+        if(model) this.updateModel(this.time, model);
+    }
 
+    private updateModel(time: number, model: IRoomObjectModel): void
+    {
         if(this._talkingEndTimestamp > 0)
         {
-            if(this.time > this._talkingEndTimestamp)
+            if(time > this._talkingEndTimestamp)
             {
                 model.setValue(RoomObjectVariable.FIGURE_TALK, 0);
 
@@ -94,12 +137,12 @@ export class AvatarLogic extends MovingObjectLogic
             {
                 if(!this._talkingPauseEndTimestamp && !this._talkingPauseStartTimestamp)
                 {
-                    this._talkingPauseStartTimestamp    = this.time + this.randomTalkingPauseStartTimestamp();
+                    this._talkingPauseStartTimestamp    = time + this.randomTalkingPauseStartTimestamp();
                     this._talkingPauseEndTimestamp      = this._talkingPauseStartTimestamp + this.randomTalkingPauseEndTimestamp();
                 }
                 else
                 {
-                    if((this._talkingPauseStartTimestamp > 0) && (this.time > this._talkingPauseStartTimestamp))
+                    if((this._talkingPauseStartTimestamp > 0) && (time > this._talkingPauseStartTimestamp))
                     {
                         model.setValue(RoomObjectVariable.FIGURE_TALK, 0);
 
@@ -107,7 +150,7 @@ export class AvatarLogic extends MovingObjectLogic
                     }
                     else
                     {
-                        if((this._talkingPauseEndTimestamp > 0) && (this.time > this._talkingPauseEndTimestamp))
+                        if((this._talkingPauseEndTimestamp > 0) && (time > this._talkingPauseEndTimestamp))
                         {
                             model.setValue(RoomObjectVariable.FIGURE_TALK, 1);
                             
@@ -118,21 +161,21 @@ export class AvatarLogic extends MovingObjectLogic
             }
         }
 
-        if((this._animationEndTimestamp > 0) && (this.time > this._animationEndTimestamp))
+        if((this._animationEndTimestamp > 0) && (time > this._animationEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_EXPRESSION, 0);
 
             this._animationEndTimestamp = 0;
         }
 
-        if((this._gestureEndTimestamp > 0) && (this.time > this._gestureEndTimestamp))
+        if((this._gestureEndTimestamp > 0) && (time > this._gestureEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_GESTURE, 0);
 
             this._gestureEndTimestamp = 0;
         }
 
-        if((this._signEndTimestamp > 0) && (this.time > this._signEndTimestamp))
+        if((this._signEndTimestamp > 0) && (time > this._signEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_SIGN, -1);
 
@@ -141,7 +184,7 @@ export class AvatarLogic extends MovingObjectLogic
 
         if(this._carryObjectEndTimestamp > 0)
         {
-            if(this.time > this._carryObjectEndTimestamp)
+            if(time > this._carryObjectEndTimestamp)
             {
                 model.setValue(RoomObjectVariable.FIGURE_CARRY_OBJECT, 0);
                 model.setValue(RoomObjectVariable.FIGURE_USE_OBJECT, 0);
@@ -154,9 +197,9 @@ export class AvatarLogic extends MovingObjectLogic
 
         if(this._allowUseCarryObject)
         {
-            if((this.time - this._carryObjectStartTimestamp) > 5000)
+            if((time - this._carryObjectStartTimestamp) > 5000)
             {
-                if(((this.time - this._carryObjectStartTimestamp) % 10000) < 1000)
+                if(((time - this._carryObjectStartTimestamp) % 10000) < 1000)
                 {
                     model.setValue(RoomObjectVariable.FIGURE_USE_OBJECT, 1);
                 }
@@ -167,19 +210,26 @@ export class AvatarLogic extends MovingObjectLogic
             }
         }
 
-        if((this._blinkingStartTimestamp > -1) && (this.time > this._blinkingStartTimestamp))
+        if((this._blinkingStartTimestamp > -1) && (time > this._blinkingStartTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_BLINK, 1);
 
-            this._blinkingStartTimestamp    = this.time + this.randomBlinkStartTimestamp();
-            this._blinkingEndTimestamp      = this.time + this.randomBlinkEndTimestamp();
+            this._blinkingStartTimestamp    = time + this.randomBlinkStartTimestamp();
+            this._blinkingEndTimestamp      = time + this.randomBlinkEndTimestamp();
         }
 
-        if((this._blinkingEndTimestamp > 0) && (this.time > this._blinkingEndTimestamp))
+        if((this._blinkingEndTimestamp > 0) && (time > this._blinkingEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_BLINK, 0);
 
             this._blinkingEndTimestamp = 0;
+        }
+
+        if((this._effectChangeTimeStamp > 0) && (time > this._effectChangeTimeStamp))
+        {
+            model.setValue(RoomObjectVariable.FIGURE_EFFECT, this._newEffect);
+
+            this._effectChangeTimeStamp = 0;
         }
     }
 
@@ -192,23 +242,6 @@ export class AvatarLogic extends MovingObjectLogic
         const model = this.object && this.object.model;
 
         if(!model) return;
-
-        if(message instanceof ObjectAvatarUpdateMessage)
-        {
-            model.setValue(RoomObjectVariable.HEAD_DIRECTION, message.headDirection);
-            model.setValue(RoomObjectVariable.FIGURE_CAN_STAND_UP, message.canStandUp);
-            model.setValue(RoomObjectVariable.FIGURE_VERTICAL_OFFSET, message.baseY);
-
-            return;
-        }
-
-        if(message instanceof ObjectAvatarFigureUpdateMessage)
-        {
-            model.setValue(RoomObjectVariable.FIGURE, message.figure);
-            model.setValue(RoomObjectVariable.GENDER, message.gender);
-
-            return;
-        }
 
         if(message instanceof ObjectAvatarPostureUpdateMessage)
         {
@@ -227,18 +260,27 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
+        if(message instanceof ObjectAvatarTypingUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_IS_TYPING, message.isTyping ? 1 : 0);
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.HEAD_DIRECTION, message.headDirection);
+            model.setValue(RoomObjectVariable.FIGURE_CAN_STAND_UP, message.canStandUp);
+            model.setValue(RoomObjectVariable.FIGURE_VERTICAL_OFFSET, message.baseY);
+
+            return;
+        }
+
         if(message instanceof ObjectAvatarGestureUpdateMessage)
         {
             model.setValue(RoomObjectVariable.FIGURE_GESTURE, message.gesture);
 
             this._gestureEndTimestamp = this.time + 3000;
-
-            return;
-        }
-
-        if(message instanceof ObjectAvatarDanceUpdateMessage)
-        {
-            model.setValue(RoomObjectVariable.FIGURE_DANCE, message.danceStyle)
 
             return;
         }
@@ -254,18 +296,9 @@ export class AvatarLogic extends MovingObjectLogic
             return;
         }
 
-        if(message instanceof ObjectAvatarFlatControlUpdateMessage)
+        if(message instanceof ObjectAvatarDanceUpdateMessage)
         {
-            model.setValue(RoomObjectVariable.FIGURE_FLAT_CONTROL, message.level);
-
-            return;
-        }
-
-        if(message instanceof ObjectAvatarSignUpdateMessage)
-        {
-            model.setValue(RoomObjectVariable.FIGURE_SIGN, message.signType);
-
-            this._signEndTimestamp = this.time + 5000;
+            model.setValue(RoomObjectVariable.FIGURE_DANCE, message.danceStyle)
 
             return;
         }
@@ -283,13 +316,6 @@ export class AvatarLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarEffectUpdateMessage)
         {
             this.updateAvatarEffect(message.effect, message.delayMilliseconds, model);
-        }
-
-        if(message instanceof ObjectAvatarTypingUpdateMessage)
-        {
-            model.setValue(RoomObjectVariable.FIGURE_IS_TYPING, message.isTyping ? 1 : 0);
-
-            return;
         }
 
         if(message instanceof ObjectAvatarCarryObjectUpdateMessage)
@@ -316,6 +342,38 @@ export class AvatarLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarUseObjectUpdateMessage)
         {
             model.setValue(RoomObjectVariable.FIGURE_USE_OBJECT, message.itemType);
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarSignUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_SIGN, message.signType);
+
+            this._signEndTimestamp = this.time + 5000;
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarFlatControlUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_FLAT_CONTROL, message.level);
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarFigureUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE, message.figure);
+            model.setValue(RoomObjectVariable.GENDER, message.gender);
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarSelectedMessage)
+        {
+            this._selected          = message.selected;
+            this._reportedLocation  = null;
 
             return;
         }
@@ -376,15 +434,31 @@ export class AvatarLogic extends MovingObjectLogic
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
+        let eventType: string = null;
+
         switch(event.type)
         {
-            case RoomObjectMouseEvent.MOUSE_MOVE:
-                //document.body.style.cursor = 'pointer';
+            case MouseEventType.MOUSE_CLICK:
+                eventType = RoomObjectMouseEvent.CLICK;
                 break;
-            case RoomObjectMouseEvent.CLICK:
-                //Nitro.networkManager.processOutgoing(new UnitLookComposer(this.object.position));
+            case MouseEventType.ROLL_OVER:
+                eventType = RoomObjectMouseEvent.MOUSE_ENTER;
+
+                if(this.object.model) this.object.model.setValue(RoomObjectVariable.FIGURE_HIGHLIGHT, 1);
+
+                if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.MOUSE_BUTTON, this.object));
+                break;
+            case MouseEventType.ROLL_OUT:
+                eventType = RoomObjectMouseEvent.MOUSE_LEAVE;
+
+                if(this.object.model) this.object.model.setValue(RoomObjectVariable.FIGURE_HIGHLIGHT, 0);
+
+                if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.MOUSE_ARROW, this.object));
+                break;
                 break;
         }
+
+        if(eventType && this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMouseEvent(eventType, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown));
     }
 
     private randomTalkingPauseStartTimestamp(): number

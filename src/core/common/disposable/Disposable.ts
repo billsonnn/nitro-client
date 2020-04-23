@@ -2,8 +2,8 @@ import { IDisposable } from './IDisposable';
 
 export class Disposable implements IDisposable
 {
-    private _isDisposed: boolean;
-    private _isDisposing: boolean;
+    protected _isDisposed: boolean;
+    protected _isDisposing: boolean;
 
     constructor()
     {
@@ -28,7 +28,7 @@ export class Disposable implements IDisposable
         return;
     }
 
-    public get isDisposed(): boolean
+    public get disposed(): boolean
     {
         return this._isDisposed;
     }

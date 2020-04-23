@@ -1,5 +1,7 @@
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
+import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { NitroEvent } from '../../core/events/NitroEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { ColorConverter } from '../../room/utils/ColorConverter';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
@@ -14,9 +16,10 @@ import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { IRoomDesktop } from './IRoomDesktop';
 import { MouseEventType } from './MouseEventType';
 
-export class RoomDesktop
+export class RoomDesktop implements IRoomDesktop
 {
     public static _Str_8876: number = -1;
     
@@ -27,8 +30,8 @@ export class RoomDesktop
     private _session: IRoomSession;
     private _connection: IConnection;
     private _roomEngine: IRoomEngine;
-    private _sessionData: ISessionDataManager;
-    private _roomSession: IRoomSessionManager;
+    private _sessionDataManager: ISessionDataManager;
+    private _roomSessionManager: IRoomSessionManager;
     private _canvasIDs: number[];
 
     private _didMouseMove: boolean;
@@ -46,8 +49,8 @@ export class RoomDesktop
         this._session               = roomSession;
         this._connection            = connection;
         this._roomEngine            = null;
-        this._sessionData           = null;
-        this._roomSession           = null;
+        this._sessionDataManager    = null;
+        this._roomSessionManager    = null;
         this._canvasIDs             = [];
 
         this._didMouseMove          = false;
@@ -269,19 +272,72 @@ export class RoomDesktop
         }
     }
 
+    public _Str_2485(k: NitroEvent): void
+    {
+        // var _local_3:IRoomWidgetHandler;
+        // var _local_4:Boolean;
+        // var _local_5:RoomEngineTriggerWidgetEvent;
+        // if (((!(k)) || (!(this._widgetHandlerEventMap))))
+        // {
+        //     return;
+        // }
+        // if (((this._roomCanvasWrapper) && (k.type == _Str_9973.RDMZEE_ENABLED)))
+        // {
+        //     this._Str_19067(this._roomCanvasWrapper.getDisplayObject());
+        // }
+        // var _local_2:Array = this._widgetHandlerEventMap.getValue(k.type);
+        // if (_local_2 != null)
+        // {
+        //     for each (_local_3 in _local_2)
+        //     {
+        //         _local_4 = true;
+        //         if (((k.type == RoomEngineTriggerWidgetEvent.OPEN_WIDGET) || (k.type == RoomEngineTriggerWidgetEvent.CLOSE_WIDGET)))
+        //         {
+        //             _local_5 = (k as RoomEngineTriggerWidgetEvent);
+        //             _local_4 = ((!(_local_5 == null)) && (_local_3.type == _local_5.widget));
+        //         }
+        //         if (k.type == RoomWidgetZoomToggleMessage.RWZTM_ZOOM_TOGGLE)
+        //         {
+        //             this._Str_17253();
+        //         }
+        //         if (_local_4)
+        //         {
+        //             _local_3._Str_2485(k);
+        //         }
+        //     }
+        // }
+    }
+
     private _Str_21292(k: number, _arg_2: number, _arg_3: number): boolean
     {
-        return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionData.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(k, _arg_2, _arg_3)));
+        return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionDataManager.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(k, _arg_2, _arg_3)));
     }
 
     private isOwnerOfFurniture(roomObject: IRoomObject): boolean
     {
         if(!roomObject || !roomObject.model) return false;
 
-        const userId        = this._sessionData.userId;
+        const userId        = this._sessionDataManager.userId;
         const objectOwnerId = roomObject.model.getValue(RoomObjectVariable.FURNITURE_OWNER_ID) as number;
 
         return (userId === objectOwnerId);
+    }
+
+    private _Str_16862(): boolean
+    {
+        if(this._roomSessionManager && this._session)
+        {
+            this._roomSessionManager.startSession(this._session);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public get events(): IEventDispatcher
+    {
+        return this._events;
     }
 
     public get roomEngine(): IRoomEngine
@@ -294,23 +350,30 @@ export class RoomDesktop
         this._roomEngine = engine;
     }
 
-    public get sessionData(): ISessionDataManager
+    public get sessionDataManager(): ISessionDataManager
     {
-        return this._sessionData;
+        return this._sessionDataManager;
     }
 
-    public set sessionData(sessionData: ISessionDataManager)
+    public set sessionDataManager(sessionDataManager: ISessionDataManager)
     {
-        this._sessionData = sessionData;
+        this._sessionDataManager = sessionDataManager;
     }
 
-    public get roomSession(): IRoomSessionManager
+    public get roomSession(): IRoomSession
     {
-        return this._roomSession;
+        return this._session;
     }
 
-    public set roomSession(roomSession: IRoomSessionManager)
+    public get roomSessionManager(): IRoomSessionManager
     {
-        this._roomSession = roomSession;
+        return this._roomSessionManager;
+    }
+
+    public set roomSessionManager(roomSession: IRoomSessionManager)
+    {
+        this._roomSessionManager = roomSession;
+
+        this._Str_16862();
     }
 }

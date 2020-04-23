@@ -111,16 +111,14 @@ export class GeometryBodyPart extends Node3D
 
     public _Str_2030(k: string, _arg_2: IAvatarImage): boolean
     {
-        let existingPart = this._parts.get(k);
+        let existingPart = (this._parts.get(k) || null);
 
-        if(!existingPart)
+        if(!existingPart && (this._dynamicParts.get(_arg_2) !== undefined))
         {
-            const existingDynamic = this._dynamicParts.get(_arg_2);
-
-            if(existingDynamic) existingPart = existingDynamic[k];
+            existingPart = (this._dynamicParts.get(_arg_2)[k] || null);
         }
 
-        return existingPart !== null;
+        return (existingPart !== null);
     }
 
     public _Str_713(k: Matrix4x4, _arg_2: Vector3D, _arg_3: any[], _arg_4: IAvatarImage): string[]

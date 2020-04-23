@@ -1,3 +1,4 @@
+import { NitroManager } from '../../core/common/NitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
@@ -10,7 +11,7 @@ import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomDesktop } from './RoomDesktop';
 
-export class RoomUI
+export class RoomUI extends NitroManager
 {
     private _communication: INitroCommunicationManager;
     private _roomEngine: IRoomEngine;
@@ -22,6 +23,8 @@ export class RoomUI
 
     constructor(communication: INitroCommunicationManager, engine: IRoomEngine, sessionData: ISessionDataManager, roomSession: IRoomSessionManager)
     {
+        super();
+
         this._communication = communication;
         this._roomEngine    = engine;
         this._sessionData   = sessionData;
@@ -79,8 +82,8 @@ export class RoomUI
         desktop = new RoomDesktop(session, this._communication.connection);
 
         desktop.roomEngine  = this._roomEngine;
-        desktop.sessionData = this._sessionData;
-        desktop.roomSession = this._roomSession;
+        desktop.sessionDataManager = this._sessionData;
+        desktop.roomSessionManager = this._roomSession;
 
         this._desktops.set(roomId, desktop);
 
@@ -109,7 +112,7 @@ export class RoomUI
         switch(event.type)
         {
             case RoomEngineEvent.INITIALIZED:
-                desktop._Str_22664(1);
+                desktop._Str_22664(this._Str_17538(event.roomId));
                 this._isInRoom = true;
                 return;
             case RoomEngineEvent.DISPOSED:
@@ -175,5 +178,10 @@ export class RoomUI
     private getRoomId(roomId: number): string
     {
         return 'hard_coded_room_id';
+    }
+
+    public _Str_17538(roomId: number): number
+    {
+        return 1;
     }
 }

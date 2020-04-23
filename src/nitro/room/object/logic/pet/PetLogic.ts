@@ -96,7 +96,7 @@ export class PetLogic extends MovingObjectLogic
             {
                 const location = this.object.getLocation();
 
-                if((((this._reportedLocation == null) || (!(this._reportedLocation.x == location.x))) || (!(this._reportedLocation.y == location.y))) || (!(this._reportedLocation.z == location.z)))
+                if(((!this._reportedLocation || (this._reportedLocation.x !== location.x)) || (this._reportedLocation.y !== location.y)) || (this._reportedLocation.z !== location.z))
                 {
                     if(!this._reportedLocation) this._reportedLocation = new Vector3d();
 

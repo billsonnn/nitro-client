@@ -1707,10 +1707,10 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         var _local_6 = heightMap.getHeight(location.x, location.y);
         var _local_7 = wallGeometry._Str_2754(location.x, location.y);
 
-        // if((Math.abs((_local_5 - _local_6)) < 0.1) && (Math.abs((_local_6 - _local_7)) < 0.1))
-        // {
-        //     _local_5 = wallGeometry._Str_24141(location.x, location.y);
-        // }
+        if((Math.abs((_local_5 - _local_6)) < 0.1) && (Math.abs((_local_6 - _local_7)) < 0.1))
+        {
+            _local_5 = wallGeometry._Str_24141(location.x, location.y);
+        }
 
         return new Vector3d(location.x, location.y, _local_5);
     }

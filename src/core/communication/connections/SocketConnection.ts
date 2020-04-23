@@ -136,7 +136,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     public send(...composers: IMessageComposer[]): boolean
     {
-        if(this.isDisposed || !composers) return false;
+        if(this.disposed || !composers) return false;
         
         composers = [ ...composers ];
         

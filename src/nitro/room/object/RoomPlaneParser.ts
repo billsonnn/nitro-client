@@ -554,6 +554,9 @@ export class RoomPlaneParser
             return RoomPlaneParser._Str_3134;
         }
         var _local_3 = this._tileMatrix[_arg_2];
+
+        if(_local_3[k] === undefined) return 0;
+
         return Math.abs(_local_3[k]);
     }
 

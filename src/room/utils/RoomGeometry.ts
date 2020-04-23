@@ -252,7 +252,7 @@ export class RoomGeometry implements IRoomGeometry
         }
         if (this._displacements != null)
         {
-            _local_3 = Math.trunc(Math.round(k.x)) + '_' + Math.trunc(Math.round(k.y)) + '_' + Math.trunc(Math.round(k.z));
+            _local_3 = ~~(Math.round(k.x)) + '_' + ~~(Math.round(k.y)) + '_' + ~~(Math.round(k.z));
             this._displacements.delete(_local_3);
             _local_4 = new Vector3d();
             _local_4.assign(_arg_2);
@@ -266,7 +266,7 @@ export class RoomGeometry implements IRoomGeometry
         var _local_2: string;
         if (this._displacements != null)
         {
-            _local_2 = Math.trunc(Math.round(k.x)) + '_' + Math.trunc(Math.round(k.y)) + '_' + Math.trunc(Math.round(k.z));
+            _local_2 = ~~(Math.round(k.x)) + '_' + ~~(Math.round(k.y)) + '_' + ~~(Math.round(k.z));
             return this._displacements.get(_local_2);
         }
         return null;
