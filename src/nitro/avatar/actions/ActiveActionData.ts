@@ -29,7 +29,7 @@ export class ActiveActionData implements IActiveActionData
     {
         if(!this._definition) return '';
 
-        return this._definition.id;
+        return this._definition.id + '_' + this._actionParameter;
     }
 
     public get _Str_695(): string

@@ -45,7 +45,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     protected _Str_1710: AvatarFigureContainer;
     protected _Str_2121: IAvatarDataContainer;
     protected _Str_614: ActiveActionData[];
-    protected _Str_671: PIXI.Graphics;
+    protected _Str_671: PIXI.Texture;
 
     private _Str_612: IActiveActionData;
     private _Str_1724: number = 0;
@@ -58,7 +58,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     private _Str_1163: IActiveActionData[];
     private _Str_1566: string;
     private _Str_1306: string;
-    private _Str_864: Map<string, PIXI.Graphics>;
+    private _Str_864: Map<string, PIXI.Texture>;
     protected _Str_1586: boolean = false;
     private _Str_2042: boolean;
     private _Str_1514: number = -1;
@@ -170,14 +170,14 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     {
         _arg_2 = (_arg_2 + this._Str_1005);
 
-        if(_arg_2 < AvatarDirectionAngle._Str_1562)
+        if(_arg_2 < AvatarDirectionAngle.MIN_DIRECTION)
         {
-            _arg_2 = (AvatarDirectionAngle._Str_1257 + (_arg_2 + 1));
+            _arg_2 = (AvatarDirectionAngle.MAX_DIRECTION + (_arg_2 + 1));
         }
 
-        if(_arg_2 > AvatarDirectionAngle._Str_1257)
+        if(_arg_2 > AvatarDirectionAngle.MAX_DIRECTION)
         {
-            _arg_2 = (_arg_2 - (AvatarDirectionAngle._Str_1257 + 1));
+            _arg_2 = (_arg_2 - (AvatarDirectionAngle.MAX_DIRECTION + 1));
         }
 
         if(this._Str_581._Str_1939(k))
@@ -298,16 +298,8 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
     }
 
-    public getImage(setType: string, hightlight: boolean, _arg_3: number = 1): PIXI.Graphics
+    public getImage(setType: string, hightlight: boolean, _arg_3: number = 1): PIXI.Texture
     {
-        // var _local_7:String;
-        // var _local_8:AvatarImageBodyPartContainer;
-        // var _local_9:BitmapData;
-        // var _local_10:Point;
-        // var _local_13:BitmapData;
-        // var _local_14:BitmapData;
-        // var _local_15:Matrix;
-
         if(!this._Str_1535) return this._Str_671;
 
         if(!this._Str_1708) return null;
@@ -339,16 +331,15 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         {
             if(this._Str_671 && !this._Str_1586) this._Str_671.destroy();
 
-            this._Str_671 = new PIXI.Graphics();
-
+            this._Str_671   = null;
             this._Str_1586  = false;
         }
 
         const _local_6 = this._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
 
-        const container = new PIXI.Container();
+        this._Str_671 = null;
 
-        this._Str_671.clear()
+        const container = new PIXI.Container();
 
         var _local_11 = true;
         var _local_12 = (_local_6.length - 1);
@@ -374,17 +365,26 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     _local_10.x += avatarCanvas._Str_1076.x;
                     _local_10.y += avatarCanvas._Str_1076.y;
 
-                    this._Str_671
-                        .beginTextureFill({ texture: _local_9 })
-                        .drawRect(0, 0, _local_9.width, _local_9.height)
-                        .endFill();
+                    const sprite = PIXI.Sprite.from(_local_9);
+
+                    if(sprite)
+                    {
+                        sprite.position.set(_local_10.x, _local_10.y);
+
+                        container.addChild(sprite);
+                    }
                 }
             }
 
             _local_12--;
         }
 
-        this._Str_1535 = false;
+        const texture = NitroInstance.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+
+        if(!texture) return null;
+        
+        this._Str_671   = texture;
+        this._Str_1535  = false;
 
         if (((!(_local_4 == null)) && (_local_11)))
         {
@@ -409,12 +409,12 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_671;
     }
 
-    protected getFullImage(k: string): PIXI.Graphics
+    protected getFullImage(k: string): PIXI.Texture
     {
         return (this._Str_864.get(k) || null);
     }
 
-    protected cacheFullImage(k: string, _arg_2: PIXI.Graphics): void
+    protected cacheFullImage(k: string, _arg_2: PIXI.Texture): void
     {
         let existing = this._Str_864.get(k);
 
@@ -477,14 +477,15 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
     public appendAction(k: string, ..._args: any[]): boolean
     {
-        var _local_3: string;
-        this._Str_2143 = false;
-        if (((!(_args == null)) && (_args.length > 0)))
-        {
-            _local_3 = _args[0];
-        }
+        let _local_3 = '';
 
-        switch (k)
+        this._Str_2143 = false;
+
+        if(_args && (_args.length > 0)) _local_3 = _args[0];
+
+        _local_3 = _local_3.toString();
+
+        switch(k)
         {
             case AvatarAction.POSTURE:
                 switch (_local_3)
@@ -512,8 +513,6 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     case AvatarAction.SNOWWAR_THROW:
                         this._Str_1182(_local_3);
                         break;
-                    default:
-                        this._Str_1591(('appendAction() >> UNKNOWN POSTURE TYPE: ' + _local_3));
                 }
                 break;
             case AvatarAction.GESTURE:
@@ -525,12 +524,10 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     case AvatarAction.GESTURE_SURPRISED:
                         this._Str_1182(_local_3);
                         break;
-                    default:
-                        this._Str_1591(('appendAction() >> UNKNOWN GESTURE TYPE: ' + _local_3));
                 }
                 break;
             case AvatarAction.EFFECT:
-                if (((((((_local_3 == '33') || (_local_3 == '34')) || (_local_3 == '35')) || (_local_3 == '36')) || (_local_3 == '38')) || (_local_3 == '39')))
+                if((((((_local_3 === '33') || (_local_3 === '34')) || (_local_3 === '35')) || (_local_3 === '36')) || (_local_3 === '38')) || (_local_3 === '39'))
                 {
                     this._Str_2042 = true;
                 }
@@ -552,16 +549,11 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             case AvatarAction.CARRY_OBJECT:
             case AvatarAction.USE_OBJECT:
                 const _local_4 = this._Str_581._Str_2018(k);
-                if (_local_4 != null)
-                {
-                    this._Str_1511(('appendAction:' + [_local_3, '->', _local_4._Str_1350(_local_3)]));
-                    _local_3 = _local_4._Str_1350(_local_3);
-                }
+                if(_local_4) _local_3 = _local_4._Str_1350(_local_3);
                 this._Str_1182(k, _local_3);
                 break;
-            default:
-                this._Str_1591(('appendAction() >> UNKNOWN ACTION TYPE: ' + k));
         }
+        
         return true;
     }
 

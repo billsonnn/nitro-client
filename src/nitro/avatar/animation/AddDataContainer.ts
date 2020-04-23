@@ -8,10 +8,10 @@
 
     constructor(k: any)
     {
-        this._id    = k.id;
-        this._align = k.align;
-        this._base  = k.base;
-        this._ink   = k.ink;
+        this._id    = k.id || '';
+        this._align = k.align || '';
+        this._base  = k.base || '';
+        this._ink   = k.ink || 0;
         this._blend = 0;
 
         var _local_2 = k.blend;

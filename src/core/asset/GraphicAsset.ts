@@ -93,16 +93,16 @@ export class GraphicAsset
 
     public get offsetX(): number
     {
-        if(!this._flipH) return this._x;
+        if(!this._flipH) return -(this._x);
 
-        return (this._x * -1);
+        return (-(this._x) * -1);
     }
 
     public get offsetY(): number
     {
-        if(!this._flipV) return this._y;
+        if(!this._flipV) return -(this._y);
 
-        return (this._y * -1);
+        return (-(this._y) * -1);
     }
 
     public get flipH(): boolean
@@ -117,10 +117,7 @@ export class GraphicAsset
 
     public get rectangle(): PIXI.Rectangle
     {
-        if(!this._rectangle)
-        {
-            this._rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
-        }
+        if(!this._rectangle) this._rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
 
         return this._rectangle;
     }

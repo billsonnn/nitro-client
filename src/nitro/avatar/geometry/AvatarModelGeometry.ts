@@ -231,11 +231,7 @@ export class AvatarModelGeometry
 
     public _Str_2250(k: string, _arg_2: number, _arg_3: string): string[]
     {
-        if(!_arg_3)
-        {
-            console.log("[AvatarModelGeometry] ERROR: Geometry ID not found for action: ");
-            return [];
-        }
+        if(!_arg_3) return [];
 
         const geometryParts                         = this._Str_1280(_arg_3);
         const parts                                 = this._Str_1787(geometryParts, k);

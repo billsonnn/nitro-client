@@ -11,7 +11,6 @@ import { AvatarSetType } from '../../../../avatar/enum/AvatarSetType';
 import { IAvatarEffectListener } from '../../../../avatar/IAvatarEffectListener';
 import { IAvatarImage } from '../../../../avatar/IAvatarImage';
 import { IAvatarImageListener } from '../../../../avatar/IAvatarImageListener';
-import { NitroInstance } from '../../../../NitroInstance';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
@@ -285,10 +284,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
                 const avatarImage = this._avatarImage.getImage(AvatarSetType.FULL, highlightEnabled);
 
-                if(avatarImage)
-                {
-                    sprite.texture = NitroInstance.instance.renderer.generateTexture(avatarImage, 1, 1);
-                }
+                if(avatarImage) sprite.texture = avatarImage;
 
                 if(sprite.texture)
                 {
@@ -401,35 +397,37 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                             if(dd > 7) dd -= 8;
                         }
 
-                        const assetName = ((((((this._avatarImage._Str_797() + "_") + spriteData.member) + "_") + direction) + "_") + frameNumber);
+                        const assetName = ((((((this._avatarImage._Str_797() + "_") + spriteData.member) + "_") + dd) + "_") + frameNumber);
 
                         const asset = this._avatarImage.getAsset(assetName);
 
-                        if(!asset) continue;
-
-                        sprite.texture  = asset.texture;
-                        sprite.offsetX  = ((-(asset.offsetX) - (scale / 2)) + offsetX);
-                        sprite.offsetY  = (-(asset.offsetY) + offsetY);
-
-                        if(spriteData._Str_767)
+                        if(asset)
                         {
-                            sprite.offsetY += ((this._verticalOffset * scale) / (2 * AvatarVisualization._Str_12370));
-                        }
-                        else
-                        {
-                            sprite.offsetY += this._postureOffset;
-                        }
+                            sprite.texture  = asset.texture;
+                            sprite.offsetX  = ((asset.offsetX - (scale / 2)) + offsetX);
+                            sprite.offsetY  = (asset.offsetY + offsetY);
+                            sprite.flipH    = asset.flipH;
 
-                        if(this._Str_8935)
-                        {
-                            sprite.relativeDepth = (AvatarVisualization._Str_9235 - ((0.001 * this.totalSprites) * offsetZ));
-                        }
-                        else
-                        {
-                            sprite.relativeDepth = (AvatarVisualization._Str_11358 - ((0.001 * this.totalSprites) * offsetZ));
-                        }
+                            if(spriteData._Str_767)
+                            {
+                                sprite.offsetY += ((this._verticalOffset * scale) / (2 * AvatarVisualization._Str_12370));
+                            }
+                            else
+                            {
+                                sprite.offsetY += this._postureOffset;
+                            }
 
-                        if(spriteData.ink === 33) sprite.blendMode = PIXI.BLEND_MODES.ADD;
+                            if(this._Str_8935)
+                            {
+                                sprite.relativeDepth = (AvatarVisualization._Str_9235 - ((0.001 * this.totalSprites) * offsetZ));
+                            }
+                            else
+                            {
+                                sprite.relativeDepth = (AvatarVisualization._Str_11358 - ((0.001 * this.totalSprites) * offsetZ));
+                            }
+
+                            if(spriteData.ink === 33) sprite.blendMode = PIXI.BLEND_MODES.ADD;
+                        }
                     }
 
                     _local_21++;

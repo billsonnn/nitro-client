@@ -34,6 +34,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _spriteCount: number;
     private _activeSpriteCount: number;
     private _spritePool: ExtendedSprite[];
+    private _skipObjectUpdate: boolean;
+    private _runningSlow: boolean;
 
     private _width: number;
     private _height: number;
@@ -75,6 +77,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._spriteCount                   = 0;
         this._activeSpriteCount             = 0;
         this._spritePool                    = [];
+        this._skipObjectUpdate              = false;
+        this._runningSlow                   = false;
 
         this._width                         = 0;
         this._height                        = 0;
@@ -287,7 +291,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             return 0;
         }
 
-        visualization.update(this._geometry, time, update, false);
+        visualization.update(this._geometry, time, (!sortableCache.isEmpty || update), (this._skipObjectUpdate && this._runningSlow));
 
         if(locationCache.locationChanged) update = true;
 

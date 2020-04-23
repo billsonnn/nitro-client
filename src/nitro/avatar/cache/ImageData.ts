@@ -53,11 +53,6 @@ export class ImageData
 
     public get _Str_1567(): PIXI.Rectangle
     {
-        const rectangle = new PIXI.Rectangle(0, 0, this._rect.width, this._rect.height);
-
-        rectangle.x += -(this._regPoint.x);
-        rectangle.y += -(this._regPoint.y);
-
-        return rectangle;
+        return new PIXI.Rectangle(-(this._regPoint.x), -(this._regPoint.y), this._rect.width, this._rect.height);
     }
 }

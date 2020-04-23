@@ -116,7 +116,7 @@ export class AnimationAction
 
         const offset = frameOffset.get(partId);
 
-        if(!frameOffset) return AnimationAction._Str_1934;
+        if(!offset) return AnimationAction._Str_1934;
 
         return offset;
     }

@@ -294,7 +294,7 @@ export class AvatarStructure extends EventDispatcher
 
                             if(_local_13.base === '') _local_10._Str_1734 = 1;
 
-                            if(_local_4.indexOf(_local_6.id) == -1) _local_4.push(_local_6.id);
+                            if(_local_4.indexOf(_local_6.id) === -1) _local_4.push(_local_6.id);
                         }
                     }
                 }
@@ -329,7 +329,7 @@ export class AvatarStructure extends EventDispatcher
 
     public _Str_755(k: string, _arg_2: string, _arg_3: number): string[]
     {
-        const _local_4 = AvatarDirectionAngle._Str_2204[_arg_3];
+        const _local_4 = AvatarDirectionAngle.DIRECTION_TO_ANGLE[_arg_3];
 
         return this._geometry._Str_2250(k, _local_4, _arg_2);
     }

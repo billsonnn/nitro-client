@@ -20,7 +20,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
         this._ink           = _arg_2.ink;
         this._member        = _arg_2.member;
         this._hasStaticY    = _arg_2.staticY ? true : false;
-        this._hasDirections = false;
+        this._hasDirections = _arg_2.directions ? true : false;
         this._dx            = [];
         this._dy            = [];
         this._dz            = [];
@@ -29,8 +29,6 @@ export class SpriteDataContainer implements ISpriteDataContainer
 
         if(directions && directions.length)
         {
-            this._hasDirections = true;
-
             for(let direction of directions)
             {
                 const id = direction.id;

@@ -16,7 +16,7 @@ export class PartColor implements IPartColor
         this._index             = parseInt(data['$'].index);
         this._clubLevel         = parseInt(data['$'].club);
         this._isSelectable      = parseInt(data['$'].colorindex) === 1;
-        this._rgb               = parseInt(data['_'], 16);
+        this._rgb               = parseInt('0x' + data['_'], 16);
     }
 
     public get id(): number

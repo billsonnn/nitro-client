@@ -205,7 +205,7 @@ export class Animation implements IAnimation
             
             else if (layer.type === AnimationLayerData.FX)
             {
-                if(this._addData)
+                if(this._addData && this._addData.length)
                 {
                     for(let _local_5 of this._addData)
                     {

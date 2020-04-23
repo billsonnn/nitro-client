@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js-legacy';
-import { GraphicAsset } from '../../../core/asset/GraphicAsset';
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
 import { NitroInstance } from '../../NitroInstance';
 import { IActiveActionData } from '../actions/IActiveActionData';
@@ -175,7 +174,7 @@ export class AvatarImageCache
             {
                 let _local_15 = _local_5;
 
-                const _local_16 = this._structure._Str_720(((_local_7._Str_742.state + ".") + _local_7._Str_727));
+                const _local_16 = this._structure._Str_720(((_local_7._Str_742.state + '.') + _local_7._Str_727));
                 const _local_17 = (_arg_2 - _local_7._Str_664);
 
                 if(_local_16)
@@ -253,6 +252,7 @@ export class AvatarImageCache
         if(!_local_13 || _arg_3)
         {
             const _local_19 = this._structure._Str_713(k, this._avatar._Str_784(), _local_8, this._geometryType, _local_5, _local_9, this._avatar, _local_10);
+            
             _local_13 = new AvatarImageDirectionCache(_local_19);
 
             _local_12._Str_2168(_local_5, _local_13);
@@ -307,247 +307,146 @@ export class AvatarImageCache
         return existing;
     }
 
-    private _Str_1834(direction: number, _arg_2: AvatarImagePartContainer[], frameCount: number, _arg_4:IActiveActionData, _arg_5: boolean=false):AvatarImageBodyPartContainer
+    private _Str_1834(direction: number, containers: AvatarImagePartContainer[], frameCount: number, _arg_4: IActiveActionData, renderServerData: boolean = false): AvatarImageBodyPartContainer
     {
-        var _local_8: boolean;
-        var _local_9: number;
-        var _local_17:ImageData;
-        var _local_20: string;
-        var _local_23: number;
-        var _local_24: string;
-        var bitmapAsset: GraphicAsset;
-        var bitmapData: PIXI.Texture;
-        let color: number = 0xFFFFFF;
-        var _local_28: PIXI.Point;
+        if(!containers || !containers.length) return null;
 
-        if(!_arg_2 || !_arg_2.length) return null;
-
-        if (!this._canvas)
+        if(!this._canvas)
         {
             this._canvas = this._structure._Str_1664(this._scale, this._geometryType);
 
             if(!this._canvas) return null;
         }
 
-        var assetDirection    = direction;
-        var _local_7    = AvatarDirectionAngle._Str_1859[direction] || false;
-        var _local_10   = _arg_4._Str_742._Str_778;
-        var _local_11   = _arg_4._Str_742.state;
-        var _local_12   = true;
-        var _local_13   = (_arg_2.length - 1);
+        let isFlipped           = AvatarDirectionAngle.DIRECTION_IS_FLIPPED[direction] || false;
+        let assetPartDefinition = _arg_4._Str_742._Str_778;
+        let isCacheable         = true;
+        let containerIndex      = (containers.length - 1);
 
-        _local_9 = _local_13;
-
-        while (_local_9 >= 0)
+        while(containerIndex >= 0)
         {
-            const partContainer = _arg_2[_local_9];
+            const container = containers[containerIndex];
 
-            if(!((direction == 7) && ((partContainer._Str_1669 == "fc") || (partContainer._Str_1669 == "ey"))))
+            let color = 16777215;
+
+            if(!((direction == 7) && ((container._Str_1669 === 'fc') || (container._Str_1669 === 'ey'))))
             {
-                if (!((partContainer._Str_1669 == "ri") && (partContainer._Str_1502 == null)))
+                if(!((container._Str_1669 === 'ri') && !container._Str_1502))
                 {
-                    const _local_19         = partContainer._Str_1360;
+                    const partId            = container._Str_1502;
+                    const animationFrame    = container._Str_2258(frameCount);
 
-                    _local_20         = partContainer._Str_1669;
-                    const _local_21         = partContainer._Str_1502;
-                    const animationFrame    = partContainer._Str_2258(frameCount);
+                    let partType    = container._Str_1669;
+                    let frameNumber = 0;
 
                     if(animationFrame)
                     {
-                        _local_23 = animationFrame.number;
+                        frameNumber = animationFrame.number;
 
-                        if((animationFrame._Str_778) && (!(animationFrame._Str_778 == "")))
-                        {
-                            _local_10 = animationFrame._Str_778;
-                        }
+                        if((animationFrame._Str_778) && (animationFrame._Str_778 !== '')) assetPartDefinition = animationFrame._Str_778;
                     }
-                    else
-                    {
-                        _local_23 = partContainer._Str_1674(frameCount);
-                    }
+                    else frameNumber = container._Str_1674(frameCount);
 
-                    assetDirection = direction;
-                    _local_8 = false;
+                    let assetDirection  = direction;
+                    let flipH           = false;
 
-                    if (_local_7)
+                    if(isFlipped)
                     {
-                        if (((_local_10 == "wav") && (((_local_20 == AvatarFigurePartType.LEFT_HAND) || (_local_20 == AvatarFigurePartType.LEFT_SLEEVE)) || (_local_20 == AvatarFigurePartType.LEFT_COAT_SLEEVE))))
+                        if(((assetPartDefinition === 'wav') && (((partType === AvatarFigurePartType.LEFT_HAND) || (partType === AvatarFigurePartType.LEFT_SLEEVE)) || (partType === AvatarFigurePartType.LEFT_COAT_SLEEVE))) || ((assetPartDefinition === 'drk') && (((partType === AvatarFigurePartType.RIGHT_HAND) || (partType === AvatarFigurePartType.RIGHT_SLEEVE)) || (partType === AvatarFigurePartType.RIGHT_COAT_SLEEVE))) || ((assetPartDefinition === 'blw') && (partType === AvatarFigurePartType.RIGHT_HAND)) || ((assetPartDefinition === 'sig') && (partType === AvatarFigurePartType.LEFT_HAND)) || ((assetPartDefinition === 'respect') && (partType === AvatarFigurePartType.LEFT_HAND)) || (partType === AvatarFigurePartType.RIGHT_HAND_ITEM) || (partType === AvatarFigurePartType.LEFT_HAND_ITEM) || (partType === AvatarFigurePartType.CHEST_PRINT))
                         {
-                            _local_8 = true;
+                            flipH = true;
                         }
                         else
                         {
-                            if (((_local_10 == "drk") && (((_local_20 == AvatarFigurePartType.RIGHT_HAND) || (_local_20 == AvatarFigurePartType.RIGHT_SLEEVE)) || (_local_20 == AvatarFigurePartType.RIGHT_COAT_SLEEVE))))
-                            {
-                                _local_8 = true;
-                            }
-                            else
-                            {
-                                if (((_local_10 == "blw") && (_local_20 == AvatarFigurePartType.RIGHT_HAND)))
-                                {
-                                    _local_8 = true;
-                                }
-                                else
-                                {
-                                    if (((_local_10 == "sig") && (_local_20 == AvatarFigurePartType.LEFT_HAND)))
-                                    {
-                                        _local_8 = true;
-                                    }
-                                    else
-                                    {
-                                        if (((_local_10 == "respect") && (_local_20 == AvatarFigurePartType.LEFT_HAND)))
-                                        {
-                                            _local_8 = true;
-                                        }
-                                        else
-                                        {
-                                            if (_local_20 == AvatarFigurePartType.RIGHT_HAND_ITEM)
-                                            {
-                                                _local_8 = true;
-                                            }
-                                            else
-                                            {
-                                                if (_local_20 == AvatarFigurePartType.LEFT_HAND_ITEM)
-                                                {
-                                                    _local_8 = true;
-                                                }
-                                                else
-                                                {
-                                                    if (_local_20 == AvatarFigurePartType.CHEST_PRINT)
-                                                    {
-                                                        _local_8 = true;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (direction == 4)
-                                                        {
-                                                            assetDirection = 2;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (direction == 5)
-                                                            {
-                                                                assetDirection = 1;
-                                                            }
-                                                            else
-                                                            {
-                                                                if (direction == 6)
-                                                                {
-                                                                    assetDirection = 0;
-                                                                }
-                                                            }
-                                                        }
-                                                        if (partContainer._Str_1666 !== _local_20)
-                                                        {
-                                                            _local_20 = partContainer._Str_1666;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            if(direction === 4)         assetDirection = 2;
+                            else if(direction === 5)    assetDirection = 1;
+                            else if(direction === 6)    assetDirection = 0;
+
+                            if(container._Str_1666 !== partType) partType = container._Str_1666;
                         }
                     }
 
-                    _local_24 = ((((((((((this._scale + "_") + _local_10) + "_") + _local_20) + "_") + _local_21) + "_") + assetDirection) + "_") + _local_23);
+                    let assetName   = (this._scale + '_' + assetPartDefinition + '_' + partType + '_' + partId + '_' + assetDirection + '_' + frameNumber);
+                    let asset       = this._assets.getAsset(assetName);
 
-                    bitmapAsset = this._assets.getAsset(_local_24);
-
-                    if(!bitmapAsset)
+                    if(!asset)
                     {
-                        _local_24 = (((((((this._scale + "_std_") + _local_20) + "_") + _local_21) + "_") + assetDirection) + "_0");
-
-                        bitmapAsset = this._assets.getAsset(_local_24);
+                        assetName   = (this._scale + '_std_' + partType + '_' + partId + '_' + assetDirection + '_0');
+                        asset       = this._assets.getAsset(assetName);
                     }
 
-                    if (!bitmapAsset)
+                    if(asset)
                     {
-                    }
-                    else
-                    {
-                        bitmapData = bitmapAsset.texture;
+                        const texture = asset.texture;
 
-                        if (bitmapData == null)
+                        if(!texture)
                         {
-                            _local_12 = false;
+                            isCacheable = false;
                         }
                         else
                         {
-                            if(partContainer.isColorable && (partContainer.color !== null)) color = partContainer.color._Str_915;
+                            if(container.isColorable && container.color) color = container.color._Str_915;
 
-                            _local_28 = new PIXI.Point(bitmapAsset.offsetX, bitmapAsset.offsetY);
+                            const offset = new PIXI.Point(asset.x, asset.y);
 
-                            if(_local_8)
+                            if(flipH) offset.x = (offset.x + ((this._scale === AvatarScaleType.LARGE) ? 65 : 31));
+
+                            if(renderServerData)
                             {
-                                _local_28.x = (_local_28.x + ((this._scale === AvatarScaleType.LARGE) ? 65 : 31));
-                            }
+                                const spriteData = new RoomObjectSpriteData();
 
-                            if(_arg_5)
-                            {
-                                const _local_31 = new RoomObjectSpriteData();
+                                spriteData.name      = this._assets._Str_2125(assetName);
+                                spriteData.x         = (-(offset.x) - 33);
+                                spriteData.y         = -(offset.y);
+                                spriteData.z         = (this._serverRenderData.length * -0.0001);
+                                spriteData.width     = asset.rectangle.width;
+                                spriteData.height    = asset.rectangle.height;
+                                spriteData.flipH     = flipH;
 
-                                _local_31.name      = this._assets._Str_2125(_local_24);
-                                _local_31.x         = (-(_local_28.x) - 33);
-                                _local_31.y         = -(_local_28.y);
-                                _local_31.z         = (this._serverRenderData.length * -0.0001);
-                                _local_31.width     = bitmapAsset.rectangle.width;
-                                _local_31.height    = bitmapAsset.rectangle.height;
-                                _local_31.flipH     = _local_8;
+                                if(assetPartDefinition === 'lay') spriteData.x = (spriteData.x + 53);
 
-                                if(_local_10 === "lay") _local_31.x = (_local_31.x + 53);
-
-                                if (_local_7)
+                                if(isFlipped)
                                 {
-                                    _local_31.flipH = (!(_local_31.flipH));
+                                    spriteData.flipH = (!(spriteData.flipH));
 
-                                    if(_local_31.flipH) _local_31.x = (-(_local_31.x) - bitmapData.width);
-                                    else _local_31.x = (_local_31.x + 65);
+                                    if(spriteData.flipH) spriteData.x = (-(spriteData.x) - texture.width);
+                                    else spriteData.x = (spriteData.x + 65);
                                 }
 
-                                if(partContainer.isColorable) _local_31.color = `${ color }`;
+                                if(container.isColorable) spriteData.color = `${ color }`;
 
-                                this._serverRenderData.push(_local_31);
+                                this._serverRenderData.push(spriteData);
                             }
 
-                            this._unionImages.push(new ImageData(bitmapData, bitmapAsset.rectangle, _local_28, _local_8, color));
+                            this._unionImages.push(new ImageData(texture, asset.rectangle, offset, flipH, color));
                         }
                     }
                 }
             }
-            _local_9--;
+
+            containerIndex--;
         }
-        if (this._unionImages.length == 0)
+
+        if(!this._unionImages.length) return null;
+
+        const imageData     = this._Str_1236(this._unionImages, isFlipped);
+        const canvasOffset  = ((this._scale === AvatarScaleType.LARGE) ? (this._canvas.height - 16) : (this._canvas.height - 8));
+        const offset        = new PIXI.Point(-(imageData._Str_1076.x), (canvasOffset - imageData._Str_1076.y));
+
+        if(isFlipped && (assetPartDefinition !== 'lay')) offset.x = (offset.x + ((this._scale === AvatarScaleType.LARGE) ? 67 : 31));
+
+        let imageIndex = (this._unionImages.length - 1);
+
+        while(imageIndex >= 0)
         {
-            return null;
+            const _local_17 = this._unionImages.pop();
+
+            if(_local_17) _local_17.dispose();
+
+            imageIndex--;
         }
-
-
-        var _local_14:ImageData = this._Str_1236(this._unionImages, _local_7);
-        var _local_15: number = ((this._scale == AvatarScaleType.LARGE) ? (this._canvas.height - 16) : (this._canvas.height - 8));
-        var _local_16 = new PIXI.Point(-(_local_14._Str_1076.x), (_local_15 - _local_14._Str_1076.y));
-        if (((_local_7) && (!(_local_10 == "lay"))))
-        {
-            _local_16.x = (_local_16.x + ((this._scale == AvatarScaleType.LARGE) ? 67 : 31));
-        }
-        _local_9 = (this._unionImages.length - 1);
-        while (_local_9 >= 0)
-        {
-            _local_17 = this._unionImages.pop();
-            if (_local_17)
-            {
-                _local_17.dispose();
-            }
-            _local_9--;
-        }
-
-        // const graphic = new PIXI.Graphics()
-        //     .beginTextureFill({ texture: _local_14.bitmap })
-        //     .drawRect(0, 0, _local_14.rect.width, _local_14.rect.height)
-        //     .endFill();
-
-        return new AvatarImageBodyPartContainer(_local_14.bitmap, _local_16, _local_12);
+        
+        return new AvatarImageBodyPartContainer(imageData.bitmap, offset, isCacheable);
     }
 
     private _Str_1652(k: number): string
@@ -555,46 +454,59 @@ export class AvatarImageCache
         var _local_2: string = (k * 0xFF).toString(16);
         if (_local_2.length < 2)
         {
-            _local_2 = ("0" + _local_2);
+            _local_2 = ('0' + _local_2);
         }
         return _local_2;
     }
 
-    private _Str_1236(k: ImageData[], flipH: boolean): ImageData
+    private _Str_1236(k: ImageData[], isFlipped: boolean): ImageData
     {
-        const bounds = new PIXI.Rectangle();
-        
-        for(let _local_4 of k) _local_4 && bounds.enlarge(_local_4._Str_1567);
+        let bounds = new PIXI.Rectangle();
 
-        const _local_6 = new PIXI.Point(-(bounds.left), -(bounds.top));
+        for(let data of k) data && bounds.enlarge(data._Str_1567);
 
-        const container = new PIXI.Container();
+        const point     = new PIXI.Point(-(bounds.left), -(bounds.top));
+        const container = new PIXI.Graphics()
+            .drawRect(0, 0, bounds.width, bounds.height);
 
-        for(let _local_4 of k)
+        for(let data of k)
         {
-            const point = _local_6.clone();
+            if(!data) continue;
 
-            point.x -= _local_4._Str_1076.x;
-            point.y -= _local_4._Str_1076.x;
+            const texture   = data.bitmap;
+            const color     = data.color;
+            const flipH     = (!(isFlipped && data.flipH) && (isFlipped || data.flipH));
+            const regPoint  = point.clone();
 
-            const isFlip = (!(flipH && _local_4.flipH) && (flipH || _local_4.flipH));
+            regPoint.x -= data._Str_1076.x;
+            regPoint.y -= data._Str_1076.y;
 
-            const sprite = PIXI.Sprite.from(_local_4.bitmap);
+            if(isFlipped) regPoint.x = (container.width - (regPoint.x + data.rect.width));
 
-            sprite.tint = _local_4.color;
-            sprite.position.set(_local_4._Str_1076.x, _local_4._Str_1076.y);
+            this._matrix.tx = (regPoint.x - data.rect.x);
+            this._matrix.ty = (regPoint.y - data.rect.y);
 
-            if(isFlip)
+            if(flipH)
             {
-                sprite.scale.x     = -1;
-                sprite.x *= -1;
+                this._matrix.a  = -1;
+                this._matrix.tx = ((data.rect.x + data.rect.width) + regPoint.x);
+                this._matrix.ty = (regPoint.y - data.rect.y);
+            }
+            else
+            {
+                this._matrix.a  = 1;
+                this._matrix.tx = (regPoint.x - data.rect.x);
+                this._matrix.ty = (regPoint.y - data.rect.y);
             }
 
-            container.addChild(sprite);
+            container
+                .beginTextureFill({ texture, matrix: this._matrix, color })
+                .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
+                .endFill();
         }
 
         const texture = NitroInstance.instance.renderer.generateTexture(container, 1, 1);
 
-        return new ImageData(texture, bounds, _local_6, flipH, null);
+        return new ImageData(texture, bounds, point, isFlipped, null);
     }
 }

@@ -14,7 +14,7 @@ export interface IAvatarImage
     _Str_797(): string;
     _Str_754(): ISpriteDataContainer[];
     _Str_607(_arg_1: ISpriteDataContainer): IAnimationLayerData;
-    getImage(setType: string, hightlight: boolean, _arg_3?: number): PIXI.Graphics;
+    getImage(setType: string, hightlight: boolean, _arg_3?: number): PIXI.Texture;
     getAsset(_arg_1: string): GraphicAsset;
     getDirection(): number;
     _Str_784(): IAvatarFigureContainer;

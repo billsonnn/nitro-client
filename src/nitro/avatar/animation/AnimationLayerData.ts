@@ -22,7 +22,7 @@ export class AnimationLayerData implements IAnimationLayerData
     constructor(k: any, _arg_2: string, _arg_3: IActionDefinition)
     {
         this._id                = k.id;
-        this._animationFrame    = parseInt(k.frame);
+        this._animationFrame    = parseInt(k.frame) || 0;
         this._dx                = ((k.dx !== undefined) ? parseInt(k.dx) : 0);
         this._dy                = ((k.dy !== undefined) ? parseInt(k.dy) : 0);
         this._dz                = ((k.dz !== undefined) ? parseInt(k.dz) : 0);
