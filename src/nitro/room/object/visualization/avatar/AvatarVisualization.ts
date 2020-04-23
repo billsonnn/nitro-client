@@ -261,7 +261,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             this._Str_12697--;
             this._Str_14276--;
 
-            if(((((this._Str_14276 <= 0) || didScaleUpdate) || updateModel) || otherUpdate))
+            if((((this._Str_14276 <= 0) || didScaleUpdate) || updateModel) || otherUpdate)
             {
                 this._avatarImage._Str_953(1);
 

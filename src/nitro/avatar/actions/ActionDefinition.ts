@@ -65,7 +65,7 @@ export class ActionDefinition implements IActionDefinition
         }
     }
 
-    public _Str_772(k: string, _arg_2: number, _arg_3: []): void
+    public _Str_772(k: string, _arg_2: number, _arg_3: number[]): void
     {
         if(!this._canvasOffsets) this._canvasOffsets = new Map();
 

@@ -30,7 +30,33 @@ export class AvatarActionManager
             this._actions.set(definition.state, definition);
         }
 
-        // parse offsets
+        if(data.actionOffsets) this._Str_1767(data.actionOffsets);
+    }
+
+    private _Str_1767(offsets: any):void
+    {
+        if(!offsets || !offsets.length) return;
+
+        for(let offset of offsets)
+        {
+            const action = this._actions.get(offset.action);
+
+            if(!action) continue;
+
+            for(let canvasOffset of offset.offsets)
+            {
+                const size      = (canvasOffset.size || '');
+                const direction = canvasOffset.direction;
+
+                if((size === '') || (direction === undefined)) continue;
+
+                const x = (canvasOffset.x || 0);
+                const y = (canvasOffset.y || 0);
+                const z = (canvasOffset.z || 0);
+
+                action._Str_772(size, direction, [ x, y, z ]);
+            }
+        }
     }
 
     public _Str_1675(id: string): ActionDefinition
@@ -74,19 +100,19 @@ export class AvatarActionManager
 
     public _Str_781(k: IActiveActionData[], _arg_2: string, _arg_3: number): number[]
     {
-        let actionList: number[] = [];
+        let canvasOffsets: number[] = [];
 
         for(let activeAction of k)
         {
             if(!activeAction) continue;
 
-            const localAction   = this._actions.get(activeAction._Str_695);
-            const actions       = localAction && localAction._Str_805(_arg_2, _arg_3);
+            const action    = this._actions.get(activeAction._Str_695);
+            const offsets   = action && action._Str_805(_arg_2, _arg_3);
 
-            if(actions) actionList = actions;
+            if(offsets) canvasOffsets = offsets;
         }
 
-        return actionList;
+        return canvasOffsets;
     }
 
     public _Str_711(actions: IActiveActionData[]): IActiveActionData[]
