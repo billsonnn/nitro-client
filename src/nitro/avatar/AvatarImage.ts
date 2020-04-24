@@ -483,7 +483,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(_args && (_args.length > 0)) _local_3 = _args[0];
 
-        if(!_local_3) _local_3 = '';
+        if(_local_3 !== undefined) _local_3 = _local_3.toString();
 
         switch(k)
         {
