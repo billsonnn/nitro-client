@@ -35,7 +35,7 @@ export interface IRoomCreator
     updateRoomObjectFloorExpiration(roomId: number, objectId: number, expires: number): boolean;
     updateRoomObjectWallExpiration(roomId: number, objectId: number, expires: number): boolean;
     rollRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D): void;
-    addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, realDirection: number, type: number, figure: string): boolean;
+    addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, headDirection: number, type: number, figure: string): boolean;
     updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp?: boolean, baseY?: number, direction?: IVector3D, headDirection?: number): void;
     updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): void;
     updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string): void;

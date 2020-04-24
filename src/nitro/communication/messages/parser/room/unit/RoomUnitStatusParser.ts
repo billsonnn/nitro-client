@@ -47,8 +47,8 @@ export class RoomUnitStatusParser implements IMessageParser
         let x               = wrapper.readInt();
         let y               = wrapper.readInt();
         let z               = parseFloat(wrapper.readString());
-        const headDirection = (wrapper.readInt() * 45);
-        const direction     = (wrapper.readInt() * 45);
+        const headDirection = ((wrapper.readInt() % 8) * 45);
+        const direction     = ((wrapper.readInt() % 8) * 45);
         const actions       = wrapper.readString();
 
         let targetX     = 0;

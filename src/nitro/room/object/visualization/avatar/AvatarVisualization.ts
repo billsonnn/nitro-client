@@ -484,18 +484,18 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         let someUpdate      = update;
         let direction       = (object.getDirection().x - geometry.direction.x);
-        let headDirection   = this._headDirection;
-
-        direction = (((direction % 360) + 360) % 360);
-        
-        if((this._posture === 'sit') && this._canStandUp) direction -= ((direction % 90) - 45);
+        let headDirection   = (this._headDirection - geometry.direction.x);
 
         if(this._posture === 'float') headDirection = direction;
-        else headDirection -= geometry.direction.x;
 
-        headDirection = (((headDirection % 360) + 360) % 360);
-
-        if((this._posture === 'sit') && this._canStandUp) headDirection -= ((headDirection % 90) - 45);
+        direction       = (((direction % 360) + 360) % 360);
+        headDirection   = (((headDirection % 360) + 360) % 360);
+        
+        if((this._posture === 'sit') && this._canStandUp)
+        {
+            direction      -= ((direction % 90) - 45);
+            headDirection  -= ((headDirection % 90) - 45);
+        }
 
         if((direction !== this._angle) || _arg_4)
         {
@@ -517,7 +517,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
             if(this._headAngle !== this._angle)
             {
-                headDirection = (headDirection - (135 + 22.5));
+                headDirection = (headDirection - (135 - 22.5));
                 headDirection = ((headDirection + 360) % 360);
 
                 this._avatarImage._Str_880(AvatarSetType.HEAD, headDirection);

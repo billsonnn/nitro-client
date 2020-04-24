@@ -1659,7 +1659,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         object.processUpdateMessage(new ObjectMoveUpdateMessage(location, targetLocation, null, !!targetLocation));
     }
 
-    public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, realDirection: number, type: number, figure: string): boolean
+    public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, headDirection: number, type: number, figure: string): boolean
     {
         const existing = this.getRoomObjectUser(roomId, objectId);
 
@@ -1673,7 +1673,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!object) return false;
 
-        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), null, direction, realDirection, false, 0));
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), null, direction, headDirection, false, 0));
 
         if(figure) object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
 
