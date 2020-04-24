@@ -108,7 +108,7 @@ export class LegacyWallGeometry
 
         if(!heightMap) return 0;
         
-        return heightMap[x]
+        return heightMap[x];
     }
 
     public getLocation(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: string): IVector3D

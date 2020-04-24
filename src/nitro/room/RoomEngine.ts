@@ -133,6 +133,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _Str_3688: boolean;
     private _Str_8325: boolean;
     private _Str_13525: boolean;
+    private _cameraCentered: boolean;
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -168,6 +169,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_3688                  = false;
         this._Str_8325                  = false;
         this._Str_13525                 = false;
+        this._cameraCentered            = false;
 
         this._isReady                   = false;
         this._isDisposed                = false;
@@ -891,31 +893,35 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             camera._Str_10760   = objectId;
             camera._Str_16562   = RoomObjectCategory.UNIT;
 
-            // (getBoolean("room.camera.follow_user")) ? 1000 : 0;
-
-            camera._Str_19465(1000);
+            camera._Str_19465(this._Str_19549)
         }
+    }
+
+    private get _Str_19549(): number
+    {
+        return 1000;
+        //return (getBoolean("room.camera.follow_user")) ? 1000 : 0;
     }
 
     private _Str_22919(time: number):void
     {
-        for(let instanceData of this._roomInstanceData.values())
-        {
-            if(!instanceData) continue;
+        // for(let instanceData of this._roomInstanceData.values())
+        // {
+        //     if(!instanceData) continue;
 
-            const camera = instanceData.roomCamera;
+        //     const camera = instanceData.roomCamera;
 
-            if(!camera) continue;
+        //     if(!camera) continue;
 
-            const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
+        //     const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
 
-            if(!object) continue;
+        //     if(!object) continue;
 
-            // if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
-            // {
-            //     this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
-            // }
-        }
+        //     if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
+        //     {
+        //         this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
+        //     }
+        // }
 
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, 1);
 
@@ -1212,17 +1218,17 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                     _local_8._Str_16377 = _local_7.updateId;
                     _local_8._Str_18975 = _local_14.width;
                     _local_8._Str_15953 = _local_14.height;
-                    // if (!this._sessionData._Str_18110)
-                    // {
-                    //     if (this._Str_11555)
-                    //     {
-                    //         _local_8.update(_arg_4, 8);
-                    //     }
-                    //     else
-                    //     {
-                    //         _local_8.update(_arg_4, 0.5);
-                    //     }
-                    // }
+                    if (true)
+                    {
+                        if (this._Str_11555)
+                        {
+                            _local_8.update(_arg_4, 8);
+                        }
+                        else
+                        {
+                            _local_8.update(_arg_4, 0.5);
+                        }
+                    }
                     if (this._Str_11555)
                     {
                         _local_5.screenOffsetX = -(_local_8.location.x);
@@ -1274,16 +1280,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!screenPoint) return null;
         
-        // rectangle.left      = (rectangle.left * scale);
-        // rectangle.top       = (rectangle.top * scale);
-        // rectangle.width     = (rectangle.width * scale);
-        // rectangle.height    = (rectangle.height * scale);
+        rectangle.x         = (rectangle.x * scale);
+        rectangle.y         = (rectangle.y * scale);
+        rectangle.width     = (rectangle.width * scale);
+        rectangle.height    = (rectangle.height * scale);
 
         screenPoint.x       = (screenPoint.x * scale);
         screenPoint.y       = (screenPoint.y * scale);
-
-        rectangle.x += screenPoint.x;
-        rectangle.y += screenPoint.y;
 
         if(!canvas) return null;
         
@@ -1943,8 +1946,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                                 }
 
                                 camera._Str_25467(new Vector3d(-(canvas.screenOffsetX), -(canvas.screenOffsetX)));
-                                
-                                //camera.reset(); // if camera cenetered
+
+                                if(this._cameraCentered) camera.reset();
                             }
                         }
                     }

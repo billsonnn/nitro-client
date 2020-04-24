@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js-legacy';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
-import { NitroConfiguration } from '../NitroConfiguration';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
@@ -166,7 +165,7 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
 
         this.resize();
 
-        this.setBackgroundColor(NitroConfiguration.BACKGROUND_COLOR);
+        //this.setBackgroundColor(NitroConfiguration.BACKGROUND_COLOR);
     }
 
     public setBackgroundColor(color: number): void

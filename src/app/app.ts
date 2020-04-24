@@ -17,6 +17,7 @@ if(element)
     const instance = new NitroInstance(new NitroCore(), {
         width: window.innerWidth,
         height: window.innerHeight,
+        transparent: true,
         antialias: false
     });
 

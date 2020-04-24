@@ -157,12 +157,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!encoded)
             {
-                if(NitroConfiguration.PACKET_LOG) console.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            if(NitroConfiguration.PACKET_LOG) console.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
             this.write(encoded.toBuffer());
         }
@@ -186,7 +186,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(err)
         {
-            console.log(err);
+            NitroLogger.log(err);
         }
     }
 
@@ -204,7 +204,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            if(NitroConfiguration.PACKET_LOG) console.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+            if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
             
             this.handleMessages(...messages);
         }
@@ -244,7 +244,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(e)
         {
-            console.log('Error parsing message: ' + e);
+            NitroLogger.log('Error parsing message: ' + e);
 
             return null;
         }

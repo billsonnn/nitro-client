@@ -1,4 +1,3 @@
-
 export class FurnitureStackingHeightMap
 {
     private _width: number;

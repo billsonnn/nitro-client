@@ -316,6 +316,8 @@ export class AvatarLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarEffectUpdateMessage)
         {
             this.updateAvatarEffect(message.effect, message.delayMilliseconds, model);
+
+            return;
         }
 
         if(message instanceof ObjectAvatarCarryObjectUpdateMessage)

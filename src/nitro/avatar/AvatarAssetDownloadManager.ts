@@ -1,5 +1,6 @@
 import { Parser } from 'xml2js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
+import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
@@ -79,7 +80,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         catch(e)
         {
-            console.log(e);
+            NitroLogger.log(e);
         }
     }
 

@@ -1431,7 +1431,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                const location = _local_5.getLocation();
 
-               if(location) this._roomEngine.connection.send(new RoomUnitLookComposer(location.x, location.y));
+               if(location) this._roomEngine.connection.send(new RoomUnitLookComposer(~~(location.x), ~~(location.y)));
             }
         }
 
