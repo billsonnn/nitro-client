@@ -21,6 +21,7 @@ export interface IRoomEngineServices
     getRoomObjectCategoryForType(type: string): number;
     getRoomObjectCursor(roomId: number): IRoomObjectController;
     getRoomObjectSelectionArrow(roomId: number): IRoomObjectController;
+    loadRoomObjectBadgeImage(roomId: number, objectId: number, objectCategory: number, badgeId: string, groupBadge?: boolean): void;
     updateMousePointer(type: string, objectId: number, objectType: string): void;
     _Str_17948(): void;
     connection: IConnection;

@@ -240,6 +240,15 @@ export class RoomContentLoader implements IFurnitureDataListener
         return existing;
     }
 
+    public addAssetToCollection(collectionName: string, assetName: string, texture: PIXI.Texture): boolean
+    {
+        const collection = this.getCollection(collectionName);
+
+        if(!collection) return false;
+
+        return collection.addAsset(assetName, assetName, texture, 0, 0, false, false);
+    }
+
     private createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection
     {
         if(!data || !spritesheet) return null;

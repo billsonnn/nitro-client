@@ -1,11 +1,14 @@
 import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { NitroInstance } from '../../../../NitroInstance';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectBadgeAssetEvent } from '../../../events/RoomObjectBadgeAssetEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
+import { ObjectGroupBadgeUpdateMessage } from '../../../messages/ObjectGroupBadgeUpdateMessage';
 import { StringDataType } from '../../data/type/StringDataType';
 import { RoomObjectLogicType } from '../../RoomObjectLogicType';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureBadgeDisplayLogic extends FurnitureLogic
@@ -30,6 +33,21 @@ export class FurnitureBadgeDisplayLogic extends FurnitureLogic
             const data = message.data;
 
             if(data instanceof StringDataType) this.updateBadge(data.getValue(1));
+
+            return;
+        }
+
+        if(message instanceof ObjectGroupBadgeUpdateMessage)
+        {
+            if(message.assetName !== 'loading_icon')
+            {
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BADGE_ASSET_NAME, message.assetName);
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_BADGE_IMAGE_STATUS, 1);
+
+                this.update(NitroInstance.instance.time);
+            }
+
+            return;
         }
     }
 

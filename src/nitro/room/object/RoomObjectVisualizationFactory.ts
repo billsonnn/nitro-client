@@ -23,6 +23,7 @@ import { FurnitureResettingAnimatedVisualization } from './visualization/furnitu
 import { FurnitureRoomBackgroundVisualization } from './visualization/furniture/FurnitureRoomBackgroundVisualization';
 import { FurnitureScoreBoardVisualization } from './visualization/furniture/FurnitureScoreBoardVisualization';
 import { FurnitureSoundBlockVisualization } from './visualization/furniture/FurnitureSoundBlockVisualization';
+import { FurnitureStickieVisualization } from './visualization/furniture/FurnitureStickieVisualization';
 import { FurnitureVisualization } from './visualization/furniture/FurnitureVisualization';
 import { FurnitureVisualizationData } from './visualization/furniture/FurnitureVisualizationData';
 import { FurnitureVoteCounterVisualization } from './visualization/furniture/FurnitureVoteCounterVisualization';
@@ -120,6 +121,9 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
                 break;
             case RoomObjectVisualizationType.FURNITURE_SOUNDBLOCK:
                 visualization = FurnitureSoundBlockVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_STICKIE:
+                visualization = FurnitureStickieVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_VOTE_COUNTER:
                 visualization = FurnitureVoteCounterVisualization;

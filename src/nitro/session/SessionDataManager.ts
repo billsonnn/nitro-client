@@ -5,6 +5,8 @@ import { UserPermissionsEvent } from '../communication/messages/incoming/user/ac
 import { UserRightsEvent } from '../communication/messages/incoming/user/access/UserRightsEvent';
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { NitroInstance } from '../NitroInstance';
+import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
 import { SessionDataEvent } from './events/SessionDataEvent';
 import { FurnitureData } from './furniture/FurnitureData';
@@ -28,8 +30,9 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _floorItems: Map<number, FurnitureData>;
     private _wallItems: Map<number, FurnitureData>;
     private _furnitureData: FurnitureDataParser;
-
     private _pendingFurniDataListeners: IFurnitureDataListener[];
+
+    private _badgeImageManager: BadgeImageManager;
 
     constructor(communication: INitroCommunicationManager)
     {
@@ -46,13 +49,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._floorItems                = new Map();
         this._wallItems                 = new Map();
         this._furnitureData             = null;
-
         this._pendingFurniDataListeners = [];
+
+        this._badgeImageManager         = null;
     }
 
     protected onInit(): void
     {
         this.loadFurnitureData();
+        this.loadBadgeImageManager();
 
         this._communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
@@ -83,6 +88,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.events.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
         this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
+    }
+
+    private loadBadgeImageManager(): void
+    {
+        if(this._badgeImageManager) return;
+
+        this._badgeImageManager = new BadgeImageManager(NitroInstance.instance.core.asset, this.events);
     }
 
     public getAllFurnitureData(listener: IFurnitureDataListener): FurnitureData[]
@@ -235,6 +247,26 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             return item;
         }
+    }
+
+    public getBadgeImage(name: string): PIXI.Texture
+    {
+        return this._badgeImageManager.getBadgeImage(name);
+    }
+
+    public getGroupBadgeImage(name: string): PIXI.Texture
+    {
+        return this._badgeImageManager.getBadgeImage(name, BadgeImageManager.GROUP_BADGE);
+    }
+
+    public loadBadgeImage(name: string): string
+    {
+        return this._badgeImageManager._Str_5831(name);
+    }
+
+    public loadGroupBadgeImage(name: string): string
+    {
+        return this._badgeImageManager._Str_5831(name, BadgeImageManager.GROUP_BADGE);
     }
 
     public hasSecurity(level: number): boolean

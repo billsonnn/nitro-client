@@ -26,6 +26,7 @@ import { Vector3d } from '../../room/utils/Vector3d';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { NitroInstance } from '../NitroInstance';
 import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
+import { BadgeImageReadyEvent } from '../session/events/BadgeImageReadyEvent';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
@@ -58,6 +59,7 @@ import { ObjectAvatarTypingUpdateMessage } from './messages/ObjectAvatarTypingUp
 import { ObjectAvatarUpdateMessage } from './messages/ObjectAvatarUpdateMessage';
 import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseObjectUpdateMessage';
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
+import { ObjectGroupBadgeUpdateMessage } from './messages/ObjectGroupBadgeUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from './messages/ObjectRoomFloorHoleUpdateMessage';
@@ -86,6 +88,7 @@ import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { RoomCamera } from './utils/RoomCamera';
 import { RoomData } from './utils/RoomData';
 import { RoomInstanceData } from './utils/RoomInstanceData';
+import { RoomObjectBadgeImageAssetListener } from './utils/RoomObjectBadgeImageAssetListener';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
 export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener
@@ -106,7 +109,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private _events: IEventDispatcher;
     private _communication: INitroCommunicationManager;
-    private _sessionData: ISessionDataManager;
+    private _sessionDataManager: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
     private _roomManager: IRoomManager;
     private _roomObjectEventHandler: RoomObjectEventHandler;
@@ -134,6 +137,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _Str_8325: boolean;
     private _Str_13525: boolean;
     private _cameraCentered: boolean;
+    private _badgeListeners: Map<string, RoomObjectBadgeImageAssetListener[]>;
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -142,7 +146,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     {
         this._events                    = new EventDispatcher();
         this._communication             = communication;
-        this._sessionData               = null;
+        this._sessionDataManager               = null;
         this._roomSession               = null;
         this._roomManager               = null;
         this._roomObjectEventHandler    = new RoomObjectEventHandler(this);
@@ -170,6 +174,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_8325                  = false;
         this._Str_13525                 = false;
         this._cameraCentered            = false;
+        this._badgeListeners            = new Map();
 
         this._isReady                   = false;
         this._isDisposed                = false;
@@ -179,7 +184,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     {
         if(this._isReady) return;
 
-        this._sessionData   = sessionData;
+        this._sessionDataManager   = sessionData;
         this._roomSession   = roomSession;
         this._roomManager   = roomManager;
 
@@ -194,7 +199,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomMessageHandler.setConnection(this._communication.connection);
 
         this._roomContentLoader.initialize(this._events);
-        this._roomContentLoader.setSessionDataManager(this._sessionData);
+        this._roomContentLoader.setSessionDataManager(this._sessionDataManager);
 
         this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
@@ -1865,6 +1870,76 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_21543(roomId, object);
     }
 
+    public loadRoomObjectBadgeImage(roomId: number, objectId: number, objectCategory: number, badgeId: string, groupBadge: boolean = true): void
+    {
+        const roomObject = this.getRoomObjectFloor(roomId, objectId);
+
+        if(!roomObject || !roomObject.logic) return;
+
+        let badgeName = (groupBadge) ? this._sessionDataManager.loadGroupBadgeImage(badgeId) : this._sessionDataManager.loadBadgeImage(badgeId);
+
+        if(!badgeName)
+        {
+            badgeName = 'loading_icon';
+
+            if(!this._badgeListeners) this._badgeListeners = new Map();
+
+            if(!this._badgeListeners.size)
+            {
+                this._sessionDataManager.events.addEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent.bind(this));
+            }
+
+            let listeners = this._badgeListeners.get(badgeId);
+
+            if(!listeners) listeners = [];
+
+            listeners.push(new RoomObjectBadgeImageAssetListener(roomObject, groupBadge));
+
+            this._badgeListeners.set(badgeId, listeners);
+        }
+        else
+        {
+            this.putBadgeInObjectAssets(roomObject, badgeId, groupBadge);
+        }
+
+        roomObject.logic.processUpdateMessage(new ObjectGroupBadgeUpdateMessage(badgeId, badgeName));
+    }
+
+    private onBadgeImageReadyEvent(k: BadgeImageReadyEvent):void
+    {
+        const listeners = this._badgeListeners && this._badgeListeners.get(k.badgeId);
+
+        if(!listeners) return;
+
+        for(let listener of listeners)
+        {
+            if(!listener) continue;
+
+            this.putBadgeInObjectAssets(listener.object, k.badgeId, listener.groupBadge);
+
+            const badgeName = (listener.groupBadge) ? this._sessionDataManager.loadGroupBadgeImage(k.badgeId) : this._sessionDataManager.loadBadgeImage(k.badgeId);
+
+            if(listener.object && listener.object.logic) listener.object.logic.processUpdateMessage(new ObjectGroupBadgeUpdateMessage(k.badgeId, badgeName));
+        }
+
+        this._badgeListeners.delete(k.badgeId);
+
+        if(!this._badgeListeners.size)
+        {
+            this._sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent.bind(this));
+        }
+    }
+
+    private putBadgeInObjectAssets(object: IRoomObjectController, badgeId: string, groupBadge: boolean = false): void
+    {
+        if(!this._roomContentLoader) return;
+
+        const badgeName = (groupBadge) ? this._sessionDataManager.loadGroupBadgeImage(badgeId) : this._sessionDataManager.loadBadgeImage(badgeId);
+        const badgeImage    = (groupBadge) ? this._sessionDataManager.getGroupBadgeImage(badgeId) : this._sessionDataManager.getBadgeImage(badgeId);
+
+        if(badgeImage) this._roomContentLoader.addAssetToCollection(object.type, badgeName, badgeImage);
+    }
+
     public dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void
     {
         const canvas: IRoomRenderingCanvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, canvasId);
@@ -2193,7 +2268,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public get sessionData(): ISessionDataManager
     {
-        return this._sessionData;
+        return this._sessionDataManager;
     }
 
     public get roomSession(): IRoomSessionManager

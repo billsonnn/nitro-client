@@ -33,6 +33,7 @@ import { FurnitureRoomBillboardLogic } from './furniture/FurnitureRoomBillboardL
 import { FurnitureRoomDimmerLogic } from './furniture/FurnitureRoomDimmerLogic';
 import { FurnitureScoreLogic } from './furniture/FurnitureScoreLogic';
 import { FurnitureSoundBlockLogic } from './furniture/FurnitureSoundBlockLogic';
+import { FurnitureStickieLogic } from './furniture/FurnitureStickieLogic';
 import { FurnitureTrophyLogic } from './furniture/FurnitureTrophyLogic';
 import { FurnitureVoteCounterLogic } from './furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLogic';
@@ -237,6 +238,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_SOUNDBLOCK:
                 logic = FurnitureSoundBlockLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_STICKIE:
+                logic = FurnitureStickieLogic;
                 break;
             case RoomObjectLogicType.FURNITURE_TROPHY:
                 logic = FurnitureTrophyLogic;

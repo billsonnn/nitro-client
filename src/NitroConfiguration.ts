@@ -12,6 +12,8 @@ export class NitroConfiguration
     public static ASSET_AVATAR_URL          = NitroConfiguration.ASSET_URL + '/figure/%libname%/%libname%.json';
     public static ASSET_EFFECT_URL          = NitroConfiguration.ASSET_URL + '/effect/%libname%/%libname%.json';
     public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureDataNGH.json';
+    public static BADGE_URL                 = NitroConfiguration.ASSET_URL + '/badges/%badgename%.gif';
+    public static GROUP_BADGE_URL           = NitroConfiguration.ASSET_URL + '/group-badge/%badgedata%';
 
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor', 'cow', 'LeetPen', 'bbwibb', 'elephants' ];
 
@@ -32,5 +34,6 @@ export class NitroConfiguration
         NitroConfiguration.ASSET_URL + `/images/additions/user_idle_right_1.png`,
         NitroConfiguration.ASSET_URL + `/images/additions/user_idle_right_2.png`,
         NitroConfiguration.ASSET_URL + `/images/additions/user_typing.png`,
+        NitroConfiguration.ASSET_URL + `/images/loading_icon.png`,
     ];
 }

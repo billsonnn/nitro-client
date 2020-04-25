@@ -11,6 +11,10 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): FurnitureData;
     getWallItemData(id: number): FurnitureData;
     getWallItemDataByName(name: string): FurnitureData;
+    getBadgeImage(name: string): PIXI.Texture;
+    loadBadgeImage(name: string): string;
+    getGroupBadgeImage(name: string): PIXI.Texture;
+    loadGroupBadgeImage(name: string): string;
     hasSecurity(level: number): boolean;
     communication: INitroCommunicationManager;
     userId: number;

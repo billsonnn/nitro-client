@@ -26,6 +26,7 @@ import { MouseEventType } from '../ui/MouseEventType';
 import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomEngineObjectPlacedOnUserEvent } from './events/RoomEngineObjectPlacedOnUserEvent';
+import { RoomObjectBadgeAssetEvent } from './events/RoomObjectBadgeAssetEvent';
 import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
 import { RoomObjectFloorHoleEvent } from './events/RoomObjectFloorHoleEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
@@ -151,19 +152,15 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         switch(event.type)
         {
             case RoomObjectStateChangedEvent.STATE_CHANGE:
-                this.onStateChangeEvent(event as RoomObjectStateChangedEvent, roomId);
-                return;
             case RoomObjectStateChangedEvent.STATE_RANDOM:
-                this.onStateChangeRandomEvent(event as RoomObjectStateChangedEvent, roomId);
+                this.onRoomObjectStateChangedEvent(event as RoomObjectStateChangedEvent, roomId);
                 return;
             case RoomObjectDimmerStateUpdateEvent.DIMMER_STATE:
                 this.onRoomObjectDimmerStateUpdateEvent(event as RoomObjectDimmerStateUpdateEvent, roomId);
                 return;
             case RoomObjectMoveEvent.POSITION_CHANGED:
-                this.onRoomObjectPositionChanged(event as RoomObjectMoveEvent, roomId);
-                return;
             case RoomObjectMoveEvent.OBJECT_REMOVED:
-                this.onRoomObjectRemoved(event as RoomObjectMoveEvent, roomId);
+                this.onRoomObjectMoveEvent(event as RoomObjectMoveEvent, roomId);
                 return;
             case RoomObjectFurnitureActionEvent.DICE_ACTIVATE:
             case RoomObjectFurnitureActionEvent.DICE_OFF:
@@ -175,6 +172,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectFloorHoleEvent.ADD_HOLE:
             case RoomObjectFloorHoleEvent.REMOVE_HOLE:
                 this.onRoomObjectFloorHoleEvent(event as RoomObjectFloorHoleEvent, roomId);
+                return;
+            case RoomObjectBadgeAssetEvent.LOAD_BADGE:
+                this.onRoomObjectBadgeAssetEvent(event as RoomObjectBadgeAssetEvent, roomId);
                 return;
             case RoomObjectFurnitureActionEvent.MOUSE_ARROW:
             case RoomObjectFurnitureActionEvent.MOUSE_BUTTON:
@@ -496,18 +496,19 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         return;
     }
 
-    private onStateChangeEvent(event: RoomObjectStateChangedEvent, roomId: number): void
+    private onRoomObjectStateChangedEvent(event: RoomObjectStateChangedEvent, roomId: number): void
     {
         if(!event) return;
 
-        this.updateRoomObjectState(roomId, event.object.id, event.object.type, event.state, false);
-    }
-
-    private onStateChangeRandomEvent(event: RoomObjectStateChangedEvent, roomId: number): void
-    {
-        if(!event) return;
-
-        this.updateRoomObjectState(roomId, event.object.id, event.object.type, event.state, true);
+        switch(event.type)
+        {
+            case RoomObjectStateChangedEvent.STATE_CHANGE:
+                this.updateRoomObjectState(roomId, event.object.id, event.object.type, event.state, false);
+                return;
+            case RoomObjectStateChangedEvent.STATE_RANDOM:
+                this.updateRoomObjectState(roomId, event.object.id, event.object.type, event.state, true);
+                return;
+        }
     }
 
     private onRoomObjectDimmerStateUpdateEvent(event: RoomObjectDimmerStateUpdateEvent, roomId: number): void
@@ -522,29 +523,30 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
-    private onRoomObjectPositionChanged(event: RoomObjectMoveEvent, roomId: number): void
+    private onRoomObjectMoveEvent(event: RoomObjectMoveEvent, roomId: number): void
     {
         if(!event || !this._roomEngine) return;
 
-        const objectId          = event.objectId;
-        const objectType        = event.objectType;
-        const objectCategory    = this._roomEngine.getRoomObjectCategoryForType(objectType);
-        const object            = this._roomEngine.getRoomObject(roomId, objectId, objectCategory);
-        const selectionArrow    = this._roomEngine.getRoomObjectSelectionArrow(roomId);
-
-        if(object && selectionArrow && selectionArrow.logic)
+        switch(event.type)
         {
-            const location = object.getLocation();
+            case RoomObjectMoveEvent.POSITION_CHANGED:
+                const objectId          = event.objectId;
+                const objectType        = event.objectType;
+                const objectCategory    = this._roomEngine.getRoomObjectCategoryForType(objectType);
+                const object            = this._roomEngine.getRoomObject(roomId, objectId, objectCategory);
+                const selectionArrow    = this._roomEngine.getRoomObjectSelectionArrow(roomId);
 
-            selectionArrow.logic.processUpdateMessage(new RoomObjectUpdateMessage(location, null));
+                if(object && selectionArrow && selectionArrow.logic)
+                {
+                    const location = object.getLocation();
+
+                    selectionArrow.logic.processUpdateMessage(new RoomObjectUpdateMessage(location, null));
+                }
+                return;
+            case RoomObjectMoveEvent.OBJECT_REMOVED:
+                this._Str_12227(roomId, 0, false);
+                return;
         }
-    }
-
-    private onRoomObjectRemoved(event: RoomObjectMoveEvent, roomId: number): void
-    {
-        if(!event) return;
-
-        this._Str_12227(roomId, 0, false);
     }
 
     private onFurnitureActionEvent(event: RoomObjectFurnitureActionEvent, roomId: number): void
@@ -567,8 +569,22 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 this._roomEngine.removeRoomInstanceFloorHole(roomId, event.objectId);
                 return;
         }
+    }
 
-        this.useObject(roomId, event.object.id, event.object.type, event.type);
+    private onRoomObjectBadgeAssetEvent(event: RoomObjectBadgeAssetEvent, roomId: number): void
+    {
+        if(!event || !this._roomEngine) return;
+
+        switch(event.type)
+        {
+            case RoomObjectBadgeAssetEvent.LOAD_BADGE:
+                const objectId          = event.objectId;
+                const objectType        = event.objectType;
+                const objectCategory    = this._roomEngine.getRoomObjectCategoryForType(objectType);
+
+                this._roomEngine.loadRoomObjectBadgeImage(roomId, objectId, objectCategory, event.badgeId, event.groupBadge);
+                return;
+        }
     }
 
     private handleMousePointer(event: RoomObjectFurnitureActionEvent, roomId: number): void
