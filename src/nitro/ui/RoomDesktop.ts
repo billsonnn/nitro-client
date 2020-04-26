@@ -8,6 +8,7 @@ import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { NitroInstance } from '../NitroInstance';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomObjectOperationType } from '../room/object/RoomObjectOperationType';
 import { RoomObjectVariable } from '../room/object/RoomObjectVariable';
@@ -16,10 +17,20 @@ import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { FurnitureTrophyWidgetHandler } from './handler/FurnitureTrophyWidgetHandler';
 import { IRoomDesktop } from './IRoomDesktop';
+import { IRoomWidgetFactory } from './IRoomWidgetFactory';
+import { IRoomWidgetHandler } from './IRoomWidgetHandler';
+import { IRoomWidgetHandlerContainer } from './IRoomWidgetHandlerContainer';
 import { MouseEventType } from './MouseEventType';
+import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
+import { IRoomWidget } from './widget/IRoomWidget';
+import { IRoomWidgetMessageListener } from './widget/IRoomWidgetMessageListener';
+import { RoomWidgetFurniToWidgetMessage } from './widget/messages/RoomWidgetFurniToWidgetMessage';
+import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
 
-export class RoomDesktop implements IRoomDesktop
+export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IRoomWidgetHandlerContainer
 {
     public static _Str_8876: number = -1;
     
@@ -32,7 +43,13 @@ export class RoomDesktop implements IRoomDesktop
     private _roomEngine: IRoomEngine;
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
+    private _roomWidgetFactory: IRoomWidgetFactory;
     private _canvasIDs: number[];
+
+    private _widgets: Map<string, IRoomWidget>;
+    private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]>;
+    private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>;
+
 
     private _didMouseMove: boolean;
     private _lastClick: number;
@@ -45,22 +62,27 @@ export class RoomDesktop implements IRoomDesktop
 
     constructor(roomSession: IRoomSession, connection: IConnection)
     {
-        this._events                = new EventDispatcher();
-        this._session               = roomSession;
-        this._connection            = connection;
-        this._roomEngine            = null;
-        this._sessionDataManager    = null;
-        this._roomSessionManager    = null;
-        this._canvasIDs             = [];
+        this._events                    = new EventDispatcher();
+        this._session                   = roomSession;
+        this._connection                = connection;
+        this._roomEngine                = null;
+        this._sessionDataManager        = null;
+        this._roomSessionManager        = null;
+        this._roomWidgetFactory         = null;
+        this._canvasIDs                 = [];
 
-        this._didMouseMove          = false;
-        this._lastClick             = 0;
-        this._clickCount            = 0;
+        this._widgets                   = new Map();
+        this._widgetHandlerMessageMap   = new Map();
+        this._widgetHandlerEventMap     = new Map();
 
-        this._roomBackground        = null;
-        this._roomBackgroundColor   = 0;
+        this._didMouseMove              = false;
+        this._lastClick                 = 0;
+        this._clickCount                = 0;
 
-        this._resizeTimer           = null;
+        this._roomBackground            = null;
+        this._roomBackgroundColor       = 0;
+
+        this._resizeTimer               = null;
     }
 
     public dispose(): void
@@ -128,6 +150,104 @@ export class RoomDesktop implements IRoomDesktop
         window.onresize = this.onWindowResizeEvent.bind(this);
 
         this._canvasIDs.push(canvasId);
+    }
+
+    public createWidget(type: string): void
+    {
+        if(!this._roomWidgetFactory) return;
+
+        const existing = this._widgets.get(type);
+
+        if(existing) return;
+
+        let widgetHandler: IRoomWidgetHandler = null;
+
+        switch(type)
+        {
+            case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
+                widgetHandler = new FurnitureTrophyWidgetHandler();
+        }
+
+        if(widgetHandler)
+        {
+            widgetHandler.container = this;
+
+            const messageTypes = widgetHandler.messageTypes;
+
+            if(messageTypes && messageTypes.length)
+            {
+                for(let name of messageTypes)
+                {
+                    if(!name) continue;
+
+                    let messages = this._widgetHandlerMessageMap.get(name);
+
+                    if(!messages)
+                    {
+                        messages = [];
+
+                        this._widgetHandlerMessageMap.set(name, messages);
+                    }
+
+                    messages.push(widgetHandler);
+                }
+            }
+
+            const eventTypes = widgetHandler.eventTypes;
+
+            eventTypes.push(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, RoomEngineTriggerWidgetEvent.CLOSE_WIDGET);
+
+            if(eventTypes && eventTypes.length)
+            {
+                for(let name of eventTypes)
+                {
+                    if(!name) continue;
+
+                    let events = this._widgetHandlerEventMap.get(name);
+
+                    if(!events)
+                    {
+                        events = [];
+
+                        this._widgetHandlerEventMap.set(name, events);
+                    }
+
+                    events.push(widgetHandler);
+                }
+            }
+        }
+
+        const widget = this._roomWidgetFactory.createWidget(type, widgetHandler);
+
+        if(!widget) return;
+
+        widget.messageListener = this;
+
+        widget.registerUpdateEvents(this._events);
+
+        this._widgets.set(type, widget);
+    }
+
+    public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
+    {
+        if(!message || !message.type) return null;
+
+        const handlers = this._widgetHandlerMessageMap.get(message.type);
+
+        if(!handlers || !handlers.length) return null;
+
+        for(let handler of handlers)
+        {
+            if(!handler) continue;
+
+            const update = handler.processWidgetMessage(message);
+
+            if(!update) continue;
+
+            return update;
+        }
+
+        return null;
     }
 
     public _Str_9634(event: PIXI.interaction.InteractionEvent):void
@@ -269,6 +389,9 @@ export class RoomDesktop implements IRoomDesktop
                     this._roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
                 break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
+                break;
         }
     }
 
@@ -375,5 +498,15 @@ export class RoomDesktop implements IRoomDesktop
         this._roomSessionManager = roomSession;
 
         this._Str_16862();
+    }
+
+    public get roomWidgetFactory(): IRoomWidgetFactory
+    {
+        return this._roomWidgetFactory;
+    }
+
+    public set roomWidgetFactory(widgetFactory: IRoomWidgetFactory)
+    {
+        this._roomWidgetFactory = widgetFactory;
     }
 }

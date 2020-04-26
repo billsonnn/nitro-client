@@ -3,13 +3,17 @@ import { INitroCommunicationManager } from '../communication/INitroCommunication
 import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../room/events/RoomObjectHSLColorEnabledEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { IRoomWidgetFactory } from './IRoomWidgetFactory';
 import { RoomDesktop } from './RoomDesktop';
+import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
+import { RoomWidgetFactory } from './widget/RoomWidgetFactory';
 
 export class RoomUI extends NitroManager
 {
@@ -17,6 +21,7 @@ export class RoomUI extends NitroManager
     private _roomEngine: IRoomEngine;
     private _sessionData: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
+    private _roomWidgetFactory: IRoomWidgetFactory;
     private _desktops: Map<string, RoomDesktop>;
 
     private _isInRoom: boolean;
@@ -29,6 +34,7 @@ export class RoomUI extends NitroManager
         this._roomEngine    = engine;
         this._sessionData   = sessionData;
         this._roomSession   = roomSession;
+        this._roomWidgetFactory = new RoomWidgetFactory(this);
         this._desktops      = new Map();
 
         this._isInRoom      = false;
@@ -46,6 +52,9 @@ export class RoomUI extends NitroManager
         engine.events.addEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
         engine.events.addEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
         engine.events.addEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent.bind(this));
+        engine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_TROPHY, this.onRoomEngineObjectEvent.bind(this));
         
         roomSession.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
         roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
@@ -81,9 +90,10 @@ export class RoomUI extends NitroManager
 
         desktop = new RoomDesktop(session, this._communication.connection);
 
-        desktop.roomEngine  = this._roomEngine;
-        desktop.sessionDataManager = this._sessionData;
-        desktop.roomSessionManager = this._roomSession;
+        desktop.roomEngine          = this._roomEngine;
+        desktop.sessionDataManager  = this._sessionData;
+        desktop.roomSessionManager  = this._roomSession;
+        desktop.roomWidgetFactory   = this._roomWidgetFactory;
 
         this._desktops.set(roomId, desktop);
 
@@ -113,6 +123,9 @@ export class RoomUI extends NitroManager
         {
             case RoomEngineEvent.INITIALIZED:
                 desktop._Str_22664(this._Str_17538(event.roomId));
+
+                desktop.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET);
+
                 this._isInRoom = true;
                 return;
             case RoomEngineEvent.DISPOSED:

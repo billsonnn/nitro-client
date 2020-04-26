@@ -1,3 +1,4 @@
+import { AssetManager } from '../../../../../core/asset/AssetManager';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectAdUpdateMessage } from '../../../messages/ObjectAdUpdateMessage';
@@ -102,10 +103,9 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!asset) return;
 
-        const split = imageUrl.split('/');
-        const name  = split[(split.length - 1)];
-
-        const texture = asset.getTexture(name);
+        const split     = imageUrl.split('/');
+        const name      = AssetManager.removeFileExtension(split[(split.length - 1)]);
+        const texture   = asset.getTexture(AssetManager.removeFileExtension(name));
 
         if(!texture)
         {

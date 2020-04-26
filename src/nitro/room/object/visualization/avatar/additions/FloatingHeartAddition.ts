@@ -41,7 +41,7 @@ export class FloatingHeartAddition extends ExpressionAddition
 
         if(scale < 48)
         {
-            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss_small.png');
+            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss_small');
 
             if((this.visualization.angle === 90) || (this.visualization.angle === 270))
             {
@@ -61,7 +61,7 @@ export class FloatingHeartAddition extends ExpressionAddition
         }
         else
         {
-            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss.png');
+            this._asset = this.visualization.getAvatarRenderAsset('user_blowkiss');
 
             if((this.visualization.angle === 90) || (this.visualization.angle === 270))
             {

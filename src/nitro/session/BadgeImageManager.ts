@@ -50,7 +50,7 @@ export class BadgeImageManager
 
         const badgeName = k;
 
-        if(this._assets.getTexture(badgeName + '.gif')) return badgeName;
+        if(this._assets.getTexture(badgeName)) return badgeName;
 
         this._Str_10735(k, _arg_2, _arg_3);
 
@@ -63,7 +63,7 @@ export class BadgeImageManager
 
         const badgeName = k;
 
-        const existing = this._assets.getTexture(badgeName + '.gif');
+        const existing = this._assets.getTexture(badgeName);
 
         if(existing) return existing.clone();
 
@@ -90,7 +90,7 @@ export class BadgeImageManager
         {
             this._assets.downloadAssets([ url ], () =>
             {
-                const texture = this._assets.getTexture(k + '.gif');
+                const texture = this._assets.getTexture(k);
 
                 if(texture && this._events) this._events.dispatchEvent(new BadgeImageReadyEvent(k, texture.clone()));
             });
@@ -101,7 +101,7 @@ export class BadgeImageManager
 
     private _Str_20965(): PIXI.Texture
     {
-        const existing = this._assets.getTexture('loading_icon.gif');
+        const existing = this._assets.getTexture('loading_icon');
 
         if(!existing) return null;
 

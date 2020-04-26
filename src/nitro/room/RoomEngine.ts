@@ -2047,12 +2047,26 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                             offsetY = 0;
                         }
 
-                        if (((!(offsetX == 0)) || (!(offsetY == 0))))
+                        if(((!(offsetX == 0)) || (!(offsetY == 0))))
                         {
                             this._Str_13608 += offsetX;
                             this._Str_14213 += offsetY;
 
                             this._Str_6482 = true;
+                        }
+                    }
+
+                    if(shiftKey)
+                    {
+                        const geometry = canvas.geometry;
+
+                        if(geometry)
+                        {
+                            const x = geometry.direction.x + offsetX;
+                            const y = geometry.direction.y + offsetY;
+
+                            geometry.direction = new Vector3d(x, y);
+                            geometry.adjustLocation(new Vector3d(offsetX, offsetY), 25);
                         }
                     }
                 }

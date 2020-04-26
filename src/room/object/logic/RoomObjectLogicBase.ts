@@ -114,6 +114,16 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         this._events = events;
     }
 
+    public get widget(): string
+    {
+        return null;
+    }
+
+    public get contextMenu(): string
+    {
+        return null;
+    }
+
     public get time(): number
     {
         return this._time;

@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { AssetManager } from './AssetManager';
 import { GraphicAsset } from './GraphicAsset';
 import { IAsset, IAssetData } from './interfaces';
 
@@ -34,6 +35,8 @@ export class GraphicAssetCollection
             const texture = textures[name];
 
             if(!texture) continue;
+
+            name = AssetManager.removeFileExtension(name);
 
             this._textures.set(name, texture);
         }
@@ -82,7 +85,7 @@ export class GraphicAssetCollection
     {
         if(!name) return null;
 
-        name = this._name + '_' + name + '.png';
+        name = this._name + '_' + name;
 
         const texture = this._textures.get(name);
 

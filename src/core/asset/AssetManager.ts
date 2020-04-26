@@ -22,11 +22,16 @@ export class AssetManager extends Disposable implements IAssetManager
         this._pendingUrls       = new Map();
     }
 
+    public static removeFileExtension(name: string): string
+    {
+        return (name.substring(0, name.lastIndexOf('.')) || name);
+    }
+
     public getTexture(name: string): PIXI.Texture
     {
         if(!name) return null;
 
-        const existing = this._textures.get(name);
+        const existing = this._textures.get(AssetManager.removeFileExtension(name));
 
         if(!existing) return null;
 
@@ -36,6 +41,8 @@ export class AssetManager extends Disposable implements IAssetManager
     public setTexture(name: string, texture: PIXI.Texture): void
     {
         if(!name || !texture) return;
+
+        name = AssetManager.removeFileExtension(name);
 
         this._textures.set(name, texture);
     }

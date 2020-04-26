@@ -9,9 +9,11 @@ import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
+import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from '../../../messages/ObjectHeightUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
+import { ObjectSelectedMessage } from '../../../messages/ObjectSelectedMessage';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { MovingObjectLogic } from '../MovingObjectLogic';
 
@@ -60,6 +62,10 @@ export class FurnitureLogic extends MovingObjectLogic
     public getEventTypes(): string[]
     {
         const types = [ RoomObjectStateChangedEvent.STATE_CHANGE, RoomObjectMouseEvent.CLICK, RoomObjectMouseEvent.MOUSE_DOWN ];
+
+        if(this.widget) types.push(RoomObjectWidgetRequestEvent.OPEN_WIDGET, RoomObjectWidgetRequestEvent.CLOSE_WIDGET);
+
+        if(this.contextMenu) types.push(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, RoomObjectWidgetRequestEvent.CLOSE_FURNI_CONTEXT_MENU);
 
         return this.mergeTypes(super.getEventTypes(), types);
     }
@@ -151,6 +157,8 @@ export class FurnitureLogic extends MovingObjectLogic
             return;
         }
 
+        this._mouseOver = false;
+
         if(message.location && message.direction)
         {
             if(!(message instanceof ObjectMoveUpdateMessage))
@@ -171,6 +179,16 @@ export class FurnitureLogic extends MovingObjectLogic
             }
 
             this._directionInitialized = true;
+        }
+
+        if(message instanceof ObjectSelectedMessage)
+        {
+            if(this.contextMenu && this.eventDispatcher && this.object)
+            {
+                const eventType = (message.selected) ? RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU : RoomObjectWidgetRequestEvent.CLOSE_FURNI_CONTEXT_MENU;
+
+                this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(eventType, this.object));
+            }
         }
 
         super.processUpdateMessage(message);
@@ -266,6 +284,11 @@ export class FurnitureLogic extends MovingObjectLogic
 
                     this.eventDispatcher.dispatchEvent(mouseEvent);
                 }
+
+                if(this.eventDispatcher && this.object && this.contextMenu)
+                {
+                    this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.object));
+                }
                 return;
             case MouseEventType.MOUSE_DOWN:
                 if(this.eventDispatcher)
@@ -315,6 +338,8 @@ export class FurnitureLogic extends MovingObjectLogic
 
         if(this.eventDispatcher)
         {
+            if(this.widget) this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.OPEN_WIDGET, this.object));
+            
             this.eventDispatcher.dispatchEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
         }
     }

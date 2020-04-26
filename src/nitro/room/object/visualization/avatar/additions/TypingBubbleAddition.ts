@@ -37,7 +37,7 @@ export class TypingBubbleAddition implements IAvatarAddition
 
         if(scale < 48)
         {
-            this._asset = this._visualization.getAvatarRenderAsset('user_typing_small.png');
+            this._asset = this._visualization.getAvatarRenderAsset('user_typing_small');
 
             offsetX = 3;
             offsetY = -42;
@@ -46,7 +46,7 @@ export class TypingBubbleAddition implements IAvatarAddition
         }
         else
         {
-            this._asset = this._visualization.getAvatarRenderAsset('user_typing.png');
+            this._asset = this._visualization.getAvatarRenderAsset('user_typing');
 
             offsetX = 14;
             offsetY = -83;

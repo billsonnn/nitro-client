@@ -42,7 +42,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
 
         if((this._visualization.angle === 135) || (this._visualization.angle === 180) || (this._visualization.angle === 225) || (this._visualization.angle === 270)) side = 'right';
 
-        return ('user_idle_' + side + '_' + state + ((this._scale < 48) ? '_small' : '')) + '.png';
+        return ('user_idle_' + side + '_' + state + ((this._scale < 48) ? '_small' : ''));
     }
 
     public update(sprite: IRoomObjectSprite, scale: number): void

@@ -113,7 +113,6 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         const url       = urlParts[urlParts.length - 1];
         const texture   = NitroInstance.instance.core.asset.getTexture(url);
 
-
         if(!texture) return false;
         
         this.imageReady(texture, imageUrl);
@@ -127,8 +126,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         const urlParts  = this._imageUrl.split('/');
         const url       = urlParts[urlParts.length - 1];
-
-        const texture = NitroInstance.instance.core.asset.getTexture(url);
+        const texture   = NitroInstance.instance.core.asset.getTexture(url);
 
         if(!texture) return;
 

@@ -26,6 +26,7 @@ import { MouseEventType } from '../ui/MouseEventType';
 import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomEngineObjectPlacedOnUserEvent } from './events/RoomEngineObjectPlacedOnUserEvent';
+import { RoomEngineTriggerWidgetEvent } from './events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectBadgeAssetEvent } from './events/RoomObjectBadgeAssetEvent';
 import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
 import { RoomObjectFloorHoleEvent } from './events/RoomObjectFloorHoleEvent';
@@ -36,6 +37,7 @@ import { RoomObjectMoveEvent } from './events/RoomObjectMoveEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { RoomObjectTileMouseEvent } from './events/RoomObjectTileMouseEvent';
 import { RoomObjectWallMouseEvent } from './events/RoomObjectWallMouseEvent';
+import { RoomObjectWidgetRequestEvent } from './events/RoomObjectWidgetRequestEvent';
 import { IRoomEngineServices } from './IRoomEngineServices';
 import { ObjectAvatarSelectedMessage } from './messages/ObjectAvatarSelectedMessage';
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
@@ -162,12 +164,48 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectMoveEvent.OBJECT_REMOVED:
                 this.onRoomObjectMoveEvent(event as RoomObjectMoveEvent, roomId);
                 return;
+            case RoomObjectWidgetRequestEvent.OPEN_WIDGET:
+            case RoomObjectWidgetRequestEvent.CLOSE_WIDGET:
+            case RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU:
+            case RoomObjectWidgetRequestEvent.CLOSE_FURNI_CONTEXT_MENU:
+            case RoomObjectWidgetRequestEvent.PLACEHOLDER:
+            case RoomObjectWidgetRequestEvent.CREDITFURNI:
+            case RoomObjectWidgetRequestEvent.STICKIE:
+            case RoomObjectWidgetRequestEvent.PRESENT:
+            case RoomObjectWidgetRequestEvent.TROPHY:
+            case RoomObjectWidgetRequestEvent.TEASER:
+            case RoomObjectWidgetRequestEvent.ECOTRONBOX:
+            case RoomObjectWidgetRequestEvent.DIMMER:
+            case RoomObjectWidgetRequestEvent.WIDGET_REMOVE_DIMMER:
+            case RoomObjectWidgetRequestEvent.CLOTHING_CHANGE:
+            case RoomObjectWidgetRequestEvent.JUKEBOX_PLAYLIST_EDITOR:
+            case RoomObjectWidgetRequestEvent.MANNEQUIN:
+            case RoomObjectWidgetRequestEvent.PET_PRODUCT_MENU:
+            case RoomObjectWidgetRequestEvent.GUILD_FURNI_CONTEXT_MENU:
+            case RoomObjectWidgetRequestEvent.MONSTERPLANT_SEED_PLANT_CONFIRMATION_DIALOG:
+            case RoomObjectWidgetRequestEvent.PURCHASABLE_CLOTHING_CONFIRMATION_DIALOG:
+            case RoomObjectWidgetRequestEvent.BACKGROUND_COLOR:
+            case RoomObjectWidgetRequestEvent.MYSTERYBOX_OPEN_DIALOG:
+            case RoomObjectWidgetRequestEvent.EFFECTBOX_OPEN_DIALOG:
+            case RoomObjectWidgetRequestEvent.MYSTERYTROPHY_OPEN_DIALOG:
+            case RoomObjectWidgetRequestEvent.ACHIEVEMENT_RESOLUTION_OPEN:
+            case RoomObjectWidgetRequestEvent.ACHIEVEMENT_RESOLUTION_ENGRAVING:
+            case RoomObjectWidgetRequestEvent.ACHIEVEMENT_RESOLUTION_FAILED:
+            case RoomObjectWidgetRequestEvent.FRIEND_FURNITURE_CONFIRM:
+            case RoomObjectWidgetRequestEvent.FRIEND_FURNITURE_ENGRAVING:
+            case RoomObjectWidgetRequestEvent.BADGE_DISPLAY_ENGRAVING:
+            case RoomObjectWidgetRequestEvent.HIGH_SCORE_DISPLAY:
+            case RoomObjectWidgetRequestEvent.HIDE_HIGH_SCORE_DISPLAY:
+            case RoomObjectWidgetRequestEvent.INERNAL_LINK:
+            case RoomObjectWidgetRequestEvent.ROOM_LINK:
+                this.onRoomObjectWidgetRequestEvent(event as RoomObjectWidgetRequestEvent, roomId);
+                return;
             case RoomObjectFurnitureActionEvent.DICE_ACTIVATE:
             case RoomObjectFurnitureActionEvent.DICE_OFF:
             case RoomObjectFurnitureActionEvent.USE_HABBOWHEEL:
             case RoomObjectFurnitureActionEvent.STICKIE:
             case RoomObjectFurnitureActionEvent.ENTER_ONEWAYDOOR:
-                this.onFurnitureActionEvent(event as RoomObjectFurnitureActionEvent, roomId);
+                this.onRoomObjectFurnitureActionEvent(event as RoomObjectFurnitureActionEvent, roomId);
                 return;
             case RoomObjectFloorHoleEvent.ADD_HOLE:
             case RoomObjectFloorHoleEvent.REMOVE_HOLE:
@@ -549,7 +587,27 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
-    private onFurnitureActionEvent(event: RoomObjectFurnitureActionEvent, roomId: number): void
+    private onRoomObjectWidgetRequestEvent(event: RoomObjectWidgetRequestEvent, roomId: number): void
+    {
+        if(!event || !this._roomEngine) return;
+
+        const objectId          = event.objectId;
+        const objectType        = event.objectType;
+        const objectCategory    = this._roomEngine.getRoomObjectCategoryForType(objectType);
+        const eventDispatcher   = this._roomEngine.events;
+
+        if(!eventDispatcher) return;
+
+        switch(event.type)
+        {
+            case RoomObjectWidgetRequestEvent.TROPHY:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_TROPHY, roomId, objectId, objectCategory));
+                return;
+
+        }
+    }
+
+    private onRoomObjectFurnitureActionEvent(event: RoomObjectFurnitureActionEvent, roomId: number): void
     {
         if(!event) return;
 
