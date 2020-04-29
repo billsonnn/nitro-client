@@ -2,13 +2,10 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureTrophyLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_TROPHY;
-
     public getEventTypes(): string[]
     {
         const types = [ RoomObjectWidgetRequestEvent.TROPHY ];

@@ -1,0 +1,43 @@
+.nitro-widget {
+    background-color: rgba(19, 19, 19, 1);
+    border-radius: 3px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .3);
+    z-index: 500;
+    pointer-events: all;
+
+    .widget-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding: 15px;
+
+        .header-title {
+            margin: 0;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .header-close {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            pointer-events: all;
+        }
+    }
+
+    .widget-body {
+        padding: 15px;
+
+        .body-description {
+            margin: 0;
+            font-size: 14px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    }
+
+    .widget-footer {
+        padding: 15px;
+    }
+}

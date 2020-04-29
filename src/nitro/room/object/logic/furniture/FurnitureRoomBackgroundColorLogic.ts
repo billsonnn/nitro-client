@@ -2,14 +2,12 @@ import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObject
 import { RoomObjectHSLColorEnableEvent } from '../../../events/RoomObjectHSLColorEnableEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { NumberDataType } from '../../data/type/NumberDataType';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_BACKGROUND_COLOR;
-
+    
     private _roomColorUpdated: boolean;
 
     constructor()

@@ -1,4 +1,5 @@
 ﻿import { IEventDispatcher } from '../../../core/events/IEventDispatcher';
+import { INitroWindowManager } from '../../window/INitroWindowManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidget } from './IRoomWidget';
 import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';
@@ -6,14 +7,16 @@ import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';
 export class ConversionTrackingWidget implements IRoomWidget 
 {
     protected _widgetHandler: IRoomWidgetHandler;
+    protected _windowManager: INitroWindowManager;
 
     private _messageListener: IRoomWidgetMessageListener;
     private _Str_759: IEventDispatcher;
     private _disposed: boolean;
 
-    constructor(handler: IRoomWidgetHandler)
+    constructor(handler: IRoomWidgetHandler, windowManager: INitroWindowManager)
     {
-        this._widgetHandler = handler;
+        this._widgetHandler     = handler;
+        this._windowManager     = windowManager;
 
         this._messageListener   = null;
         this._Str_759           = null;
@@ -61,6 +64,11 @@ export class ConversionTrackingWidget implements IRoomWidget
     public get disposed(): boolean
     {
         return this._disposed;
+    }
+
+    public get windowManager(): INitroWindowManager
+    {
+        return this._windowManager;
     }
 
     public get messageListener(): IRoomWidgetMessageListener

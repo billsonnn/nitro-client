@@ -8,16 +8,17 @@ import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomUI } from './ui/RoomUI';
+import { INitroWindowManager } from './window/INitroWindowManager';
 
 export interface INitroInstance extends PIXI.Application
 {
     init(): void;
     dispose(): void;
-    setBackgroundColor(color: number): void;
     core: INitroCore;
     events: IEventDispatcher;
     communication: INitroCommunicationManager;
     avatar: IAvatarRenderManager;
+    windowManager: INitroWindowManager;
     roomEngine: IRoomEngine;
     session: ISessionDataManager;
     roomSession: IRoomSessionManager;

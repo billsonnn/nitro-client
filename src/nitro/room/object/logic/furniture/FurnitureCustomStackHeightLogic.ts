@@ -1,12 +1,9 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureCustomStackHeightLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_CUSTOM_STACK_HEIGHT;
-
     public initialize(asset: IAssetData)
     {
         super.initialize(asset);

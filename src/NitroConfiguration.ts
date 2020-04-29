@@ -1,7 +1,6 @@
 export class NitroConfiguration
 {
     public static FPS                       = 24;
-    public static BACKGROUND_COLOR          = 0x000000;
     public static PACKET_LOG                = false;
     public static ROLLING_OVERRIDES_POSTURE = true;
 

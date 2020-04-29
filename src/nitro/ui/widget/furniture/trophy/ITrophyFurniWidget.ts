@@ -1,4 +1,6 @@
-export interface ITrophyFurniWidget
+import { IRoomWidget } from '../../IRoomWidget';
+
+export interface ITrophyFurniWidget extends IRoomWidget
 {
     name: string;
     date: string;

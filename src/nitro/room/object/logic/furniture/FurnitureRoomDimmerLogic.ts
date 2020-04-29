@@ -1,14 +1,11 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectDimmerStateUpdateEvent } from '../../../events/RoomObjectDimmerStateUpdateEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureRoomBrandingLogic } from './FurnitureRoomBrandingLogic';
 
 export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_ROOMDIMMER;
-
     private _roomColorUpdated: boolean;
 
     constructor()

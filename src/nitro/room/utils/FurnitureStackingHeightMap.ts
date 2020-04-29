@@ -27,13 +27,7 @@ export class FurnitureStackingHeightMap
 
     public getHeight(x: number, y: number): number
     {
-        if(!this.isValidCoordinate(x, y)) return -1;
-
-        const height = this._heights.get((y * this._width) + x);
-
-        if(!height) return 0;
-
-        return height;
+        return (this.isValidCoordinate(x, y)) ? this._heights.get((y * this._width) + x) : 0;
     }
 
     public setHeight(x: number, y: number, height: number): void

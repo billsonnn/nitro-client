@@ -7,14 +7,11 @@ import { RoomObjectBadgeAssetEvent } from '../../../events/RoomObjectBadgeAssetE
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectGroupBadgeUpdateMessage } from '../../../messages/ObjectGroupBadgeUpdateMessage';
 import { StringDataType } from '../../data/type/StringDataType';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureBadgeDisplayLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_BADGE_DISPLAY;
-
     public getEventTypes(): string[]
     {
         const types = [ RoomObjectBadgeAssetEvent.LOAD_BADGE ];

@@ -3,13 +3,10 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChangedEvent';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureHockeyScoreLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_HOCKEY_SCORE;
-
     public getEventTypes(): string[]
     {
         const types = [ RoomObjectStateChangedEvent.STATE_CHANGE ];

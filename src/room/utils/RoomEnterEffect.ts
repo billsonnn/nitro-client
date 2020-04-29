@@ -14,11 +14,11 @@ export class RoomEnterEffect
     private static _Str_6886: number    = (20 * 1000);
     private static _Str_7448: number    = 2000;
 
-    public static init(k: number, _arg_2: number):void
+    public static init(delay: number, duration: number):void
     {
         RoomEnterEffect._Str_11007  = 0;
-        RoomEnterEffect._Str_6886   = k;
-        RoomEnterEffect._Str_7448   = _arg_2;
+        RoomEnterEffect._Str_6886   = delay;
+        RoomEnterEffect._Str_7448   = duration;
         RoomEnterEffect._Str_12311  = NitroInstance.instance.time;
         RoomEnterEffect._Str_621    = RoomEnterEffect._Str_11894;
     }

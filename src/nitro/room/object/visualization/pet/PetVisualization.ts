@@ -123,7 +123,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         {
             this._alphaMultiplier = alphaMultiplier;
 
-            this._needsAlphaUpdate = true;
+            this._alphaChanged = true;
         }
 
         this._isSleeping = model.getValue(RoomObjectVariable.FIGURE_SLEEP) > 0;
@@ -282,7 +282,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(layerId < (totalSprites - PetVisualization._Str_7490))
         {
-            const validScale = this.getValidScale(scale);
+            const validScale = this.getValidSize(scale);
 
             if(layerId < (totalSprites - (1 + PetVisualization._Str_7490)))
             {

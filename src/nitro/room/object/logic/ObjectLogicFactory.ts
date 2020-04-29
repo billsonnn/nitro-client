@@ -13,6 +13,7 @@ import { FurnitureCreditLogic } from './furniture/FurnitureCreditLogic';
 import { FurnitureCustomStackHeightLogic } from './furniture/FurnitureCustomStackHeightLogic';
 import { FurnitureDiceLogic } from './furniture/FurnitureDiceLogic';
 import { FurnitureEditableInternalLinkLogic } from './furniture/FurnitureEditableInternalLinkLogic';
+import { FurnitureExternalImageLogic } from './furniture/FurnitureExternalImageLogic';
 import { FurnitureFireworksLogic } from './furniture/FurnitureFireworksLogic';
 import { FurnitureFloorHoleLogic } from './furniture/FurnitureFloorHoleLogic';
 import { FurnitureGuildCustomizedLogic } from './furniture/FurnitureGuildCustomizedLogic';
@@ -181,6 +182,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_EDITABLE_INTERNAL_LINK:
                 logic = FurnitureEditableInternalLinkLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_EXTERNAL_IMAGE_WALLITEM:
+                logic = FurnitureExternalImageLogic;
                 break;
             case RoomObjectLogicType.FURNITURE_FIREWORKS:
                 logic = FurnitureFireworksLogic;

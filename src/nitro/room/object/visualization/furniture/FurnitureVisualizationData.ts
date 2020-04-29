@@ -142,7 +142,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
         return true;
     }
 
-    public getValidScale(scale: number): number
+    public getValidSize(scale: number): number
     {
         if(scale === this._lastSizeScale) return this._lastSize;
 

@@ -1,11 +1,8 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureWindowLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_WINDOW;
-
     public initialize(asset: IAssetData): void
     {
         super.initialize(asset);

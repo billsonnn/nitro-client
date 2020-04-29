@@ -18,6 +18,8 @@ import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomSessionManager } from './session/RoomSessionManager';
 import { SessionDataManager } from './session/SessionDataManager';
 import { RoomUI } from './ui/RoomUI';
+import { INitroWindowManager } from './window/INitroWindowManager';
+import { NitroWindowManager } from './window/NitroWindowManager';
 
 export class NitroInstance extends PIXI.Application implements INitroInstance
 {
@@ -27,6 +29,7 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
     private _events: IEventDispatcher;
     private _communication: INitroCommunicationManager;
     private _avatar: IAvatarRenderManager;
+    private _windowManager: INitroWindowManager;
     private _roomEngine: IRoomEngine;
     private _session: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
@@ -63,11 +66,12 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         this._events        = new EventDispatcher();
         this._communication = new NitroCommunicationManager(core.communication);
         this._avatar        = new AvatarRenderManager();
+        this._windowManager = new NitroWindowManager();
         this._roomEngine    = new RoomEngine(this._communication);
         this._session       = new SessionDataManager(this._communication);
         this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
-        this._roomUI        = new RoomUI(this._communication, this._roomEngine, this._session, this._roomSession);
+        this._roomUI        = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._session, this._roomSession);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
         this._isReady       = false;
@@ -84,6 +88,7 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
 
         if(this._communication) this._communication.init();
         if(this._avatar)        this._avatar.init();
+        if(this._windowManager) this._windowManager.init();
         if(this._navigator)     this._navigator.init();
 
         if(this._roomEngine)
@@ -142,6 +147,13 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
             this._roomEngine = null;
         }
 
+        if(this._windowManager)
+        {
+            this._windowManager.dispose();
+
+            this._windowManager = null;
+        }
+
         if(this._avatar)
         {
             this._avatar.dispose();
@@ -164,13 +176,13 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         NitroInstance.instance.resizeTo = window;
 
         this.resize();
-
-        //this.setBackgroundColor(NitroConfiguration.BACKGROUND_COLOR);
     }
 
-    public setBackgroundColor(color: number): void
+    public resize(): void
     {
-        this.renderer.backgroundColor = color;
+        if(this._windowManager) this._windowManager.resize();
+
+        super.resize();
     }
 
     public get core(): INitroCore
@@ -191,6 +203,11 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
     public get avatar(): IAvatarRenderManager
     {
         return this._avatar;
+    }
+
+    public get windowManager(): INitroWindowManager
+    {
+        return this._windowManager;
     }
 
     public get roomEngine(): IRoomEngine

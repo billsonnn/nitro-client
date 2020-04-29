@@ -25,7 +25,12 @@ if(element)
     {
         const view = instance.renderer && instance.renderer.view;
 
-        if(view) element.append(view);
+        if(view)
+        {
+            view.id = 'client';
+
+            element.append(view);
+        }
 
         instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
     }

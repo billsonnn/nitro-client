@@ -27,32 +27,32 @@ export class RoomData
         return this._data;
     }
 
-    public get _Str_5207(): string
+    public get floorType(): string
     {
         return this._floorType;
     }
 
-    public set _Str_5207(k: string)
+    public set floorType(k: string)
     {
         this._floorType = k;
     }
 
-    public get _Str_5259(): string
+    public get wallType(): string
     {
         return this._wallType;
     }
 
-    public set _Str_5259(k: string)
+    public set wallType(k: string)
     {
         this._wallType = k;
     }
 
-    public get _Str_5109(): string
+    public get landscapeType(): string
     {
         return this._landscapeType;
     }
 
-    public set _Str_5109(k: string)
+    public set landscapeType(k: string)
     {
         this._landscapeType = k;
     }

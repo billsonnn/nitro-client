@@ -1,13 +1,10 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { NitroInstance } from '../../../../NitroInstance';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureScoreLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_SCORE;
-
     private _score: number;
     private _scoreIncreaser: number;
     private _scoreTimer: number;

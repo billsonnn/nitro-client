@@ -3,13 +3,10 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureDiceLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_DICE;
-
     private _noTags: boolean;
     private _noTagsLastStateActivate: boolean;
 

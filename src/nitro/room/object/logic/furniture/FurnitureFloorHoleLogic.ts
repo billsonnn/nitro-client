@@ -2,7 +2,6 @@ import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObject
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomObjectFloorHoleEvent } from '../../../events/RoomObjectFloorHoleEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
@@ -12,8 +11,6 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 
     private _currentState: number;
     private _currentLocation: Vector3d;
-
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_FLOOR_HOLE;
 
     constructor()
     {

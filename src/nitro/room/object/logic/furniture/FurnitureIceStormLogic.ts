@@ -1,13 +1,10 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { LegacyDataType } from '../../data/type/LegacyDataType';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_ES;
-
     private _nextState: number;
     private _nextStateTimestamp: number;
 

@@ -17,6 +17,7 @@ import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { INitroWindowManager } from '../window/INitroWindowManager';
 import { FurnitureTrophyWidgetHandler } from './handler/FurnitureTrophyWidgetHandler';
 import { IRoomDesktop } from './IRoomDesktop';
 import { IRoomWidgetFactory } from './IRoomWidgetFactory';
@@ -40,6 +41,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     private _events: EventDispatcher;
     private _session: IRoomSession;
     private _connection: IConnection;
+    private _windowManager: INitroWindowManager;
     private _roomEngine: IRoomEngine;
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
@@ -65,6 +67,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         this._events                    = new EventDispatcher();
         this._session                   = roomSession;
         this._connection                = connection;
+        this._windowManager             = null;
         this._roomEngine                = null;
         this._sessionDataManager        = null;
         this._roomSessionManager        = null;
@@ -92,6 +95,16 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
             clearTimeout(this._resizeTimer);
 
             this._resizeTimer = null;
+        }
+
+        const element = document.getElementById('client') as HTMLCanvasElement;
+
+        if(element)
+        {
+            element.onclick     = null;
+            element.onmousemove = null;
+            element.onmousedown = null;
+            element.onmouseup   = null;
         }
 
         window.onresize = null;
@@ -139,13 +152,15 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         stage.addChild(displayObject);
 
-        displayObject.interactive = true;
+        const element = document.getElementById('client') as HTMLCanvasElement;
 
-        displayObject.addListener(MouseEventType.MOUSE_CLICK, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.MOUSE_MOVE, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.MOUSE_DOWN, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.MOUSE_UP, this._Str_9634.bind(this));
-        displayObject.addListener(MouseEventType.MOUSE_UP_OUTSIDE, this._Str_9634.bind(this));
+        if(element)
+        {
+            element.onclick     = this.onMouseEvent.bind(this);
+            element.onmousemove = this.onMouseEvent.bind(this);
+            element.onmousedown = this.onMouseEvent.bind(this);
+            element.onmouseup   = this.onMouseEvent.bind(this);
+        }
 
         window.onresize = this.onWindowResizeEvent.bind(this);
 
@@ -250,17 +265,12 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return null;
     }
 
-    public _Str_9634(event: PIXI.interaction.InteractionEvent):void
+    public onMouseEvent(event: MouseEvent): void
     {
         if(!event || !this._roomEngine || !this._session) return;
-
-        const displayObject = event.target;
-
-        if(!displayObject) return;
-
-        const mouseEvent    = event.data.originalEvent as MouseEvent;
-        const x             = mouseEvent.clientX;
-        const y             = mouseEvent.clientY;
+        
+        const x = event.clientX;
+        const y = event.clientY;
 
         let eventType = event.type;
 
@@ -297,12 +307,11 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
                 this._didMouseMove = false;
                 break;
             case MouseEventType.MOUSE_UP:
-            case MouseEventType.MOUSE_UP_OUTSIDE:
                 break;
             default: return;
         }
 
-        this._roomEngine.dispatchMouseEvent(this._canvasIDs[0], x, y, eventType, mouseEvent.altKey, mouseEvent.ctrlKey, mouseEvent.shiftKey, false);
+        this._roomEngine.dispatchMouseEvent(this._canvasIDs[0], x, y, eventType, event.altKey, event.ctrlKey, event.shiftKey, false);
     }
 
     private onWindowResizeEvent(event: UIEvent): void
@@ -362,10 +371,11 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     {
         if(!graphic) return;
 
-        graphic.clear();
-        graphic.beginFill(this._roomBackgroundColor);
-        graphic.drawRect(0, 0, window.innerWidth, window.innerHeight);
-        graphic.endFill();
+        graphic
+            .clear()
+            .beginFill(this._roomBackgroundColor)
+            .drawRect(0, 0, window.innerWidth, window.innerHeight)
+            .endFill();
     }
 
     public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
@@ -461,6 +471,16 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     public get events(): IEventDispatcher
     {
         return this._events;
+    }
+
+    public get windowManager(): INitroWindowManager
+    {
+        return this._windowManager;
+    }
+
+    public set windowManager(manager: INitroWindowManager)
+    {
+        this._windowManager = manager;
     }
 
     public get roomEngine(): IRoomEngine

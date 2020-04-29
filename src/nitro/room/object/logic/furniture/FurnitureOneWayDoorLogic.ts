@@ -2,13 +2,10 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
-import { RoomObjectLogicType } from '../../RoomObjectLogicType';
 import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureOneWayDoorLogic extends FurnitureLogic
 {
-    public static TYPE: string = RoomObjectLogicType.FURNITURE_ONE_WAY_DOOR;
-
     public getEventTypes(): string[]
     {
         const types = [ RoomObjectFurnitureActionEvent.ENTER_ONEWAYDOOR ];

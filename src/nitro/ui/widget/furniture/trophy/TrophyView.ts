@@ -1,4 +1,3 @@
-import Mustache from 'mustache';
 import { ITrophyFurniWidget } from './ITrophyFurniWidget';
 import { ITrophyView } from './ITrophyView';
 
@@ -32,12 +31,7 @@ export class TrophyView implements ITrophyView
 
     public render(): boolean
     {
-        if(!this._window)
-        {
-            this._window = document.createElement('div');
-
-            document.body.appendChild(this._window);
-        }
+        if(!this._window) this._window = this._widget.windowManager.createElement();
 
         const view = {
             message: this._widget.message,
@@ -45,7 +39,7 @@ export class TrophyView implements ITrophyView
             name: this._widget.name
         };
 
-        this._window.innerHTML = Mustache.render(this.getTemplate(), view);
+        this._widget.windowManager.renderElement(this._window, this.getTemplate(), view);
 
         return true;
     }
@@ -53,14 +47,16 @@ export class TrophyView implements ITrophyView
     private getTemplate(): string
     {
         return `
-        <div class="trophy">
-            <div class="trophy-header">
+        <div class="nitro-widget nitro-widget-trophy">
+            <div class="widget-header" [dragHandler]>
+                <div class="header-title">Trophy</div>
+                <div class="header-close"><i className="fas fa-times"></i></div>
             </div>
-            <div class="trophy-content">
+            <div class="widget-body">
                 {{ message }}
             </div>
-            <div class="trophy-footer">
-            {{ name }} | {{ date }}
+            <div class="widget-footer">
+                {{ name }} | {{ date }}
             </div>
         </div>`;
     }

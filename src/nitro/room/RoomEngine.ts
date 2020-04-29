@@ -146,7 +146,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     {
         this._events                    = new EventDispatcher();
         this._communication             = communication;
-        this._sessionDataManager               = null;
+        this._sessionDataManager        = null;
         this._roomSession               = null;
         this._roomManager               = null;
         this._roomObjectEventHandler    = new RoomObjectEventHandler(this);
@@ -293,16 +293,16 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             {
                 this._pendingRoomData.delete(roomId);
 
-                floorType       = data._Str_5207;
-                wallType        = data._Str_5259;
-                landscapeType   = data._Str_5109;
+                floorType       = data.floorType;
+                wallType        = data.wallType;
+                landscapeType   = data.landscapeType;
             }
 
             data = new RoomData(roomId, roomMap);
 
-            data._Str_5207  = floorType;
-            data._Str_5259  = wallType;
-            data._Str_5109  = landscapeType;
+            data.floorType  = floorType;
+            data.wallType  = wallType;
+            data.landscapeType  = landscapeType;
 
             this._pendingRoomData.set(roomId, data);
 
@@ -324,11 +324,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         {
             this._pendingRoomData.delete(roomId);
 
-            if(data._Str_5207) floorType = data._Str_5207;
+            if(data.floorType) floorType = data.floorType;
 
-            if(data._Str_5259) wallType = data._Str_5259;
+            if(data.wallType) wallType = data.wallType;
 
-            if(data._Str_5109) landscapeType = data._Str_5109;
+            if(data.landscapeType) landscapeType = data.landscapeType;
         }
 
         const instance = this.setupRoomInstance(roomId, roomMap, floorType, wallType, landscapeType, this.getRoomInstanceModelName(roomId));
@@ -609,11 +609,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 this._pendingRoomData.set(roomId, roomData);
             }
 
-            if(floorType) roomData._Str_5207 = floorType;
+            if(floorType) roomData.floorType = floorType;
 
-            if(wallType) roomData._Str_5259 = wallType;
+            if(wallType) roomData.wallType = wallType;
 
-            if(landscapeType) roomData._Str_5109 = landscapeType;
+            if(landscapeType) roomData.landscapeType = landscapeType;
 
             return true;
         }
@@ -673,7 +673,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public update(time: number): void
     {
-        if(!this._roomManager) return;
+        if(!this._roomManager || document.hidden) return;
 
         RoomEnterEffect._Str_23419();
 
@@ -1942,7 +1942,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void
     {
-        const canvas: IRoomRenderingCanvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, canvasId);
+        const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, canvasId);
 
         if(!canvas) return;
         
@@ -2053,20 +2053,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                             this._Str_14213 += offsetY;
 
                             this._Str_6482 = true;
-                        }
-                    }
-
-                    if(shiftKey)
-                    {
-                        const geometry = canvas.geometry;
-
-                        if(geometry)
-                        {
-                            const x = geometry.direction.x + offsetX;
-                            const y = geometry.direction.y + offsetY;
-
-                            geometry.direction = new Vector3d(x, y);
-                            geometry.adjustLocation(new Vector3d(offsetX, offsetY), 25);
                         }
                     }
                 }

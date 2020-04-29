@@ -1,4 +1,5 @@
 import { IEventDispatcher } from '../../../core/events/IEventDispatcher';
+import { INitroWindowManager } from '../../window/INitroWindowManager';
 import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';
 
 export interface IRoomWidget
@@ -7,6 +8,7 @@ export interface IRoomWidget
     dispose(): void;
     registerUpdateEvents(eventDispatcher: IEventDispatcher): void;
     unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void;
+    windowManager: INitroWindowManager;
     messageListener: IRoomWidgetMessageListener;
     state: number;
 }

@@ -60,7 +60,7 @@ export class FurnitureBadgeDisplayVisualization extends FurnitureAnimatedVisuali
 
         if(this.getLayerTag(scale, direction, layerId) === FurnitureBadgeDisplayVisualization.BADGE)
         {
-            const asset = this.getAsset((scale === 32) ? this._badgeAssetNameSmallScale : this._badgeAssetNameNormalScale);
+            const asset = this.getAsset(((scale === 32) ? this._badgeAssetNameSmallScale : this._badgeAssetNameNormalScale), layerId);
 
             if(asset)
             {
@@ -78,7 +78,7 @@ export class FurnitureBadgeDisplayVisualization extends FurnitureAnimatedVisuali
 
         if(this.getLayerTag(scale, direction, layerId) === FurnitureBadgeDisplayVisualization.BADGE)
         {
-            const asset = this.getAsset((scale === 32) ? this._badgeAssetNameSmallScale : this._badgeAssetNameNormalScale);
+            const asset = this.getAsset(((scale === 32) ? this._badgeAssetNameSmallScale : this._badgeAssetNameNormalScale), layerId);
 
             if(asset)
             {

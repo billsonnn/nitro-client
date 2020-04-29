@@ -24,7 +24,7 @@ export class RoomWidgetFactory implements IRoomWidgetFactory
         switch(type)
         {
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
-                return new TrophyFurniWidget(handler);
+                return new TrophyFurniWidget(handler, this._roomUI.windowManager);
         }
 
         return null;
