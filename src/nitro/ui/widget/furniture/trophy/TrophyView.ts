@@ -36,10 +36,15 @@ export class TrophyView implements ITrophyView
         const view = {
             message: this._widget.message,
             date: this._widget.date,
-            name: this._widget.name
+            name: this._widget.name,
+            color: this._widget.color
         };
 
         this._widget.windowManager.renderElement(this._window, this.getTemplate(), view);
+
+        const closeHandler = this._window.getElementsByClassName('close-handler')[0] as HTMLElement;
+
+        if(closeHandler) closeHandler.onclick = this.disposeWindow.bind(this);
 
         return true;
     }
@@ -47,10 +52,10 @@ export class TrophyView implements ITrophyView
     private getTemplate(): string
     {
         return `
-        <div class="nitro-widget nitro-widget-trophy">
-            <div class="widget-header">
+        <div class="nitro-widget nitro-widget-trophy trophy-color-{{ color }}">
+            <div class="widget-header drag-handler">
                 <div class="header-title">Trophy</div>
-                <div class="header-close" [close]><i className="fas fa-times"></i></div>
+                <div class="header-close close-handler"><i class="fas fa-times"></i></div>
             </div>
             <div class="widget-body">
                 {{ message }}

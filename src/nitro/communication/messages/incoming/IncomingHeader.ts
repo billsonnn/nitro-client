@@ -24,6 +24,7 @@ export class IncomingHeader
     public static DISCOUNT_CONFIG              = 2347;
     public static FIRST_LOGIN_OF_DAY           = 793;
     public static FURNITURE_DATA               = 2547;
+    public static FURNITURE_ITEMDATA           = 2202;
     public static FURNITURE_FLOOR              = 1778;
     public static FURNITURE_FLOOR_ADD          = 1534;
     public static FURNITURE_FLOOR_REMOVE       = 2703;

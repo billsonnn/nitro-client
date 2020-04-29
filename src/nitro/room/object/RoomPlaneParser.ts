@@ -43,86 +43,83 @@ export class RoomPlaneParser
         this._floorHoles = new Map();
     }
 
-    private static _Str_14393(k: number[][]): number
+    private static _Str_14393(matricies: number[][]): number
     {
-        var _local_8: number;
-        var _local_2: number;
-        var _local_3: number;
-        var _local_4: number[];
-        var _local_5: number = k.length;
-        var _local_6: number;
-        if (_local_5 == 0)
+        const length = matricies.length;
+
+        if(!length) return 0;
+
+        let tileHeight = 0;
+
+        let i = 0;
+
+        while(i < length)
         {
-            return 0;
-        }
-        var _local_7: number = 0;
-        _local_3 = 0;
-        while (_local_3 < _local_5)
-        {
-            _local_4 = k[_local_3];
-            _local_2 = 0;
-            while (_local_2 < _local_4.length)
+            const matrix = matricies[i];
+
+            let j = 0;
+
+            while(j < matrix.length)
             {
-                _local_8 = Number(_local_4[_local_2]);
-                if (_local_8 > _local_7)
-                {
-                    _local_7 = _local_8;
-                }
-                _local_2++;
+                const height = matrix[j];
+
+                if(height > tileHeight) tileHeight = height;
+
+                j++;
             }
-            _local_3++;
+
+            i++;
         }
-        return _local_7;
+
+        return tileHeight;
     }
 
-    private static _Str_19173(k: number[][]): PIXI.Point
+    private static _Str_19173(matricies: number[][]): PIXI.Point
     {
-        if (k == null)
-        {
-            return null;
-        }
-        var _local_2: number;
-        var _local_3: number;
-        var _local_4: number[];
-        var _local_5: number = k.length;
-        if (_local_5 == 0)
-        {
-            return null;
-        }
+        if(!matricies) return null;
+
+        let length = matricies.length;
+
+        if(!length) return null;
+
         var _local_6: number[] = [];
-        _local_3 = 0;
-        while (_local_3 < _local_5)
+
+        let i = 0;
+
+        while(i < length)
         {
-            _local_4 = k[_local_3];
-            if (((_local_4 == null) || (_local_4.length == 0)))
+            const matrix = matricies[i];
+
+            if(!matrix || !matrix.length) return null;
+
+            let j = 0;
+
+            while(j < matrix.length)
             {
-                return null;
-            }
-            _local_2 = 0;
-            while (_local_2 < _local_4.length)
-            {
-                if (Number(_local_4[_local_2]) >= 0)
+                if(matrix[j] >= 0)
                 {
-                    _local_6.push(_local_2);
+                    _local_6.push(j);
+
                     break;
                 }
-                _local_2++;
+
+                j++;
             }
-            if (_local_6.length < (_local_3 + 1))
-            {
-                _local_6.push((_local_4.length + 1));
-            }
-            _local_3++;
+
+            if(_local_6.length < (i + 1)) _local_6.push((matrix.length + 1));
+
+            i++;
         }
-        _local_3 = 1;
-        while (_local_3 < (_local_6.length - 1))
+
+        i = 1;
+
+        while(i < (_local_6.length - 1))
         {
-            if (((Math.trunc(_local_6[_local_3]) <= (Math.trunc(_local_6[(_local_3 - 1)]) - 1)) && (Math.trunc(_local_6[_local_3]) <= (Math.trunc(_local_6[(_local_3 + 1)]) - 1))))
-            {
-                return new PIXI.Point(~~(_local_6[_local_3]), _local_3);
-            }
-            _local_3++;
+            if((Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i - 1)]) - 1)) && (Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i + 1)]) - 1))) return new PIXI.Point(Math.trunc(_local_6[i]), i);
+
+            i++;
         }
+
         return null;
     }
 
@@ -1359,72 +1356,57 @@ export class RoomPlaneParser
 
     public _Str_20362(k: number): IVector3D
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return null;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2.loc;
-        }
-        return null;
+        if(((k < 0) || (k >= this._Str_3828))) return null;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return null;
+
+        return planeData.loc;
     }
 
     public _Str_26428(k: number): IVector3D
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return null;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2.normal;
-        }
-        return null;
+        if(((k < 0) || (k >= this._Str_3828))) return null;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return null;
+
+        return planeData.normal;
     }
 
     public _Str_16904(k: number): IVector3D
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return null;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2._Str_5424;
-        }
-        return null;
+        if(((k < 0) || (k >= this._Str_3828))) return null;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return null;
+
+        return planeData._Str_5424;
     }
 
     public _Str_18119(k: number): IVector3D
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return null;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2._Str_4968;
-        }
-        return null;
+        if(((k < 0) || (k >= this._Str_3828))) return null;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return null;
+
+        return planeData._Str_4968;
     }
 
     public _Str_23741(k: number): IVector3D
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return null;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2._Str_25207;
-        }
-        return null;
+        if(((k < 0) || (k >= this._Str_3828))) return null;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return null;
+
+        return planeData._Str_25207;
     }
 
     public _Str_24698(k: number): IVector3D[]
@@ -1452,93 +1434,75 @@ export class RoomPlaneParser
 
     public _Str_13037(k: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return RoomPlaneData.PLANE_UNDEFINED;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2.type;
-        }
-        return RoomPlaneData.PLANE_UNDEFINED;
+        if(((k < 0) || (k >= this._Str_3828))) return RoomPlaneData.PLANE_UNDEFINED;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return RoomPlaneData.PLANE_UNDEFINED;
+
+        return planeData.type;
     }
 
     public _Str_25447(k: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return 0;
-        }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
-        {
-            return _local_2._Str_6845;
-        }
-        return 0;
+        if(((k < 0) || (k >= this._Str_3828))) return 0;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return 0;
+
+        return planeData._Str_6845;
     }
 
     public _Str_23769(k: number, _arg_2: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return -1;
-        }
-        var _local_3: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_3 != null)
-        {
-            return _local_3._Str_25133(_arg_2);
-        }
-        return -1;
+        if(((k < 0) || (k >= this._Str_3828))) return -1;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return -1;
+
+        return planeData._Str_25133(_arg_2);
     }
 
     public _Str_23247(k: number, _arg_2: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return -1;
-        }
-        var _local_3: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_3 != null)
-        {
-            return _local_3._Str_23609(_arg_2);
-        }
-        return -1;
+        if(((k < 0) || (k >= this._Str_3828))) return -1;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return -1;
+
+        return planeData._Str_23609(_arg_2);
     }
 
     public _Str_23431(k: number, _arg_2: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return -1;
-        }
-        var _local_3: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_3 != null)
-        {
-            return _local_3._Str_25097(_arg_2);
-        }
-        return -1;
+        if(((k < 0) || (k >= this._Str_3828))) return -1;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return -1;
+
+        return planeData._Str_25097(_arg_2);
     }
 
     public _Str_22914(k: number, _arg_2: number): number
     {
-        if (((k < 0) || (k >= this._Str_3828)))
-        {
-            return -1;
-        }
-        var _local_3: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_3 != null)
-        {
-            return _local_3._Str_25617(_arg_2);
-        }
-        return -1;
+        if(((k < 0) || (k >= this._Str_3828))) return -1;
+
+        const planeData = this._planes[k];
+
+        if(!planeData) return -1;
+
+        return planeData._Str_25617(_arg_2);
     }
 
     public _Str_12390(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number):void
     {
         this._Str_11339(k);
-        var _local_6:RoomFloorHole = new RoomFloorHole(_arg_2, _arg_3, _arg_4, _arg_5);
-        this._floorHoles.set(k, _local_6);
+        
+        this._floorHoles.set(k, new RoomFloorHole(_arg_2, _arg_3, _arg_4, _arg_5));
     }
 
     public _Str_11339(k: number):void

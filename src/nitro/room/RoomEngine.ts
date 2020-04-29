@@ -61,6 +61,7 @@ import { ObjectAvatarUseObjectUpdateMessage } from './messages/ObjectAvatarUseOb
 import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectGroupBadgeUpdateMessage } from './messages/ObjectGroupBadgeUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
+import { ObjectItemDataUpdateMessage } from './messages/ObjectItemDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from './messages/ObjectRoomFloorHoleUpdateMessage';
 import { ObjectRoomMaskUpdateMessage } from './messages/ObjectRoomMaskUpdateMessage';
@@ -233,8 +234,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         {
             case RoomSessionEvent.STARTED:
                 if(this._roomMessageHandler) this._roomMessageHandler.setRoomId(event.session.roomId);
-
-                this._activeRoomId = event.session.roomId;
                 return;
             case RoomSessionEvent.ENDED:
                 if(this._roomMessageHandler)
@@ -242,10 +241,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                     this._roomMessageHandler.clearRoomId();
                     this.removeRoomInstance(event.session.roomId);
                 }
-
-                this._activeRoomId = -1;
                 return;
         }
+    }
+
+    public setActiveRoomId(roomId: number): void
+    {
+        this._activeRoomId = roomId;
     }
 
     public destroyRoom(roomId: number): void
@@ -717,6 +719,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         const startTime         = NitroInstance.instance.time;
         const furniturePerTick  = 5;
+        const hasTickLimit      = false;
 
         for(let instanceData of this._roomInstanceData.values())
         {
@@ -731,15 +734,18 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             {
                 furnitureAdded = this.processPendingFurnitureFloor(instanceData.roomId, pendingData.id, pendingData);
 
-                if(!(++totalFurnitureAdded % furniturePerTick))
+                if(hasTickLimit)
                 {
-                    const time = NitroInstance.instance.time;
-
-                    if(((time - startTime) >= 40) && !this._Str_3688)
+                    if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        this._Str_8325 = true;
+                        const time = NitroInstance.instance.time;
 
-                        break;
+                        if(((time - startTime) >= 40) && !this._Str_3688)
+                        {
+                            this._Str_8325 = true;
+
+                            break;
+                        }
                     }
                 }
             }
@@ -748,15 +754,18 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             {
                 furnitureAdded = this.processPendingFurnitureWall(instanceData.roomId, pendingData.id, pendingData);
 
-                if(!(++totalFurnitureAdded % furniturePerTick))
+                if(hasTickLimit)
                 {
-                    const time = NitroInstance.instance.time;
-
-                    if(((time - startTime) >= 40) && !this._Str_3688)
+                    if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        this._Str_8325 = true;
+                        const time = NitroInstance.instance.time;
 
-                        break;
+                        if(((time - startTime) >= 40) && !this._Str_3688)
+                        {
+                            this._Str_8325 = true;
+
+                            break;
+                        }
                     }
                 }
             }
@@ -1588,6 +1597,17 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return true;
     }
 
+    public updateRoomObjectWallItemData(roomId: number, objectId: number, data: string): boolean
+    {
+        const object = this.getRoomObjectWall(roomId, objectId);
+
+        if(!object || !object.logic) return false;
+
+        object.logic.processUpdateMessage(new ObjectItemDataUpdateMessage(data));
+        
+        return true;
+    }
+
     public updateRoomObjectFloorHeight(roomId: number, objectId: number, height: number): boolean
     {
         const object = this.getRoomObjectFloor(roomId, objectId);
@@ -1941,7 +1961,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     }
 
     public dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void
-    {
+    {       
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, canvasId);
 
         if(!canvas) return;

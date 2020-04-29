@@ -7,6 +7,8 @@ import { FurnitureFloorAddEvent } from '../communication/messages/incoming/room/
 import { FurnitureFloorEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
 import { FurnitureFloorUpdateEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorUpdateEvent';
+import { FurnitureDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureDataEvent';
+import { FurnitureItemDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStateEvent } from '../communication/messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from '../communication/messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from '../communication/messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -112,6 +114,8 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new FurnitureWallEvent(this.onFurnitureWallEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureWallRemoveEvent(this.onFurnitureWallRemoveEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureWallUpdateEvent(this.onFurnitureWallUpdateEvent.bind(this)));
+        this._connection.addMessageEvent(new FurnitureDataEvent(this.onFurnitureDataEvent.bind(this)));
+        this._connection.addMessageEvent(new FurnitureItemDataEvent(this.onFurnitureItemDataEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureStateEvent(this.onFurnitureStateEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitDanceEvent(this.onRoomUnitDanceEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitEffectEvent(this.onRoomUnitEffectEvent.bind(this)));
@@ -540,13 +544,31 @@ export class RoomMessageHandler extends Disposable
         this._roomCreator.updateRoomObjectWallExpiration(this._currentRoomId, item.itemId, item.secondsToExpiration);
     }
 
+    private onFurnitureDataEvent(event: FurnitureDataEvent): void
+    {
+        if(!(event instanceof FurnitureDataEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.furnitureId, null, null, parser.objectData.state, parser.objectData);
+    }
+
+    private onFurnitureItemDataEvent(event: FurnitureItemDataEvent): void
+    {
+        if(!(event instanceof FurnitureItemDataEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        this._roomCreator.updateRoomObjectWallItemData(this._currentRoomId, parser.furnitureId, parser.data);
+    }
+
     private onFurnitureStateEvent(event: FurnitureStateEvent): void
     {
         if(!(event instanceof FurnitureStateEvent) || !event.connection || !this._roomCreator) return;
 
-        const data = new LegacyDataType();
+        const parser = event.getParser();
 
-        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, event.getParser().itemId, null, null, event.getParser().state, data);
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.itemId, null, null, parser.state, new LegacyDataType());
     }
 
     private onRoomUnitDanceEvent(event: RoomUnitDanceEvent): void

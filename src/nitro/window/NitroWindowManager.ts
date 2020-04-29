@@ -70,18 +70,30 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
 
         element.innerHTML = Mustache.render(template, view);
 
-        this.makeDraggable(element);
+        const child = element.children[0] as HTMLElement;
+
+        if(child)
+        {
+            this.centerElement(child);
+            this.makeDraggable(child);
+        }
     }
 
     private makeDraggable(element: HTMLElement): void
     {
         if(!element) return;
 
-        const header = element.getElementsByClassName('widget-header')[0] as HTMLElement;
+        const header = element.getElementsByClassName('drag-handler')[0] as HTMLElement;
 
         if(header) element = header;
         
         element.onmousedown = this.onMouseEvent.bind(this);
+    }
+
+    public centerElement(element: HTMLElement): void
+    {
+        element.style.top = `calc(50% - ${ (element.clientHeight / 2) }px)`;
+        element.style.left = `calc(50% - ${ (element.clientWidth / 2) }px)`;
     }
 
     private onMouseEvent(event: MouseEvent): void

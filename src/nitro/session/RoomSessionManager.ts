@@ -195,7 +195,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         existing.reset(toRoomId);
 
-        this._sessions.set(this.getRoomId(fromRoomId), existing);
+        this._sessions.set(this.getRoomId(toRoomId), existing);
 
         this.setHandlers(existing);
     }

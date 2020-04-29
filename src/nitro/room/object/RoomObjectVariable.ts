@@ -40,6 +40,7 @@ export class RoomObjectVariable
     public static FURNITURE_CRACKABLE_HITS: string                   = 'furniture_crackable_hits';
     public static FURNITURE_CRACKABLE_TARGET: string                 = 'furniture_crackable_target';
     public static FURNITURE_DATA: string                             = 'furniture_data';
+    public static FURNITURE_ITEMDATA: string                         = 'furniture_itemdata';
     public static FURNITURE_COLOR: string                            = 'furniture_color';
     public static FURNITURE_LIFT_AMOUNT: string                      = 'furniure_lift_amount';
     public static FURNITURE_GUILD_CUSTOMIZED_GUILD_ID: string        = 'furniture_guild_customized_guild_id';

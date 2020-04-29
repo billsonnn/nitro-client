@@ -311,6 +311,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
             default: return;
         }
 
+        this._roomEngine.setActiveRoomId(this._session.roomId);
         this._roomEngine.dispatchMouseEvent(this._canvasIDs[0], x, y, eventType, event.altKey, event.ctrlKey, event.shiftKey, false);
     }
 

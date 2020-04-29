@@ -1,11 +1,13 @@
 @import './bootstrap/bootstrap';
-@import './dependencies/font-awesome.min';
+@import './fontawesome/fontawesome.scss';
+@import './fontawesome/solid.scss';
+@import './fontawesome/brands.scss';
 
 @font-face {
-	font-family: "Ubuntu Condensed";
-	font-style: "normal";
+	font-family: 'Ubuntu Condensed';
+	font-style: 'normal';
 	font-weight: 400;
-    src: url('../assets/fonts/ubuntu_condensed/UbuntuCondensed-Regular.ttf') format('truetype');
+    src: url('../assets/webfonts/UbuntuCondensed-Regular.ttf') format('truetype');
 }
 
 * {
@@ -15,7 +17,7 @@
 
 html,
 body {
-    font-family: "Ubuntu Condensed", sans-serif;
+    font-family: 'Ubuntu Condensed', sans-serif;
     font-size: 16px;
     background-color: rgb(0, 0, 0);
     color: #FFFFFF;

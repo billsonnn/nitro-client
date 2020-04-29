@@ -37,7 +37,7 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
         {
             case RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY:
                 const widgetMessage = message as RoomWidgetFurniToWidgetMessage;
-                const roomObject    = this._container.roomEngine.getRoomObject(widgetMessage.roomId, widgetMessage.id, widgetMessage.category);
+                const roomObject    = this._container.roomEngine.getRoomObject(widgetMessage.roomId, widgetMessage.objectId, widgetMessage.category);
 
                 if(roomObject && roomObject.model)
                 {

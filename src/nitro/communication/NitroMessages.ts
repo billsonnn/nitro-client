@@ -20,6 +20,7 @@ import { FurnitureFloorEvent } from './messages/incoming/room/furniture/floor/Fu
 import { FurnitureFloorRemoveEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
 import { FurnitureFloorUpdateEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorUpdateEvent';
 import { FurnitureDataEvent } from './messages/incoming/room/furniture/FurnitureDataEvent';
+import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -136,6 +137,7 @@ export class NitroMessages implements IMessageConfiguration
 
             // FURNITURE
             this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
+            this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
             this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
 
                 // FLOOR

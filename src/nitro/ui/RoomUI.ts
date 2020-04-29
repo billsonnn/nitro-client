@@ -147,6 +147,8 @@ export class RoomUI extends NitroManager
             case RoomEngineEvent.INITIALIZED:
                 desktop._Str_22664(this._Str_17538(event.roomId));
 
+                this._roomEngine.setActiveRoomId(event.roomId);
+
                 desktop.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET);
 
                 this._isInRoom = true;

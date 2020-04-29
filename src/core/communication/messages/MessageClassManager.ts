@@ -5,8 +5,8 @@ import { MessageEvent } from './MessageEvent';
 
 export class MessageClassManager
 {
-    private _messageIdByEvent: Map<string, number>;
-    private _messageIdByComposer: Map<string, number>;
+    private _messageIdByEvent: Map<Function, number>;
+    private _messageIdByComposer: Map<Function, number>;
     private _messageInstancesById: Map<number, IMessageEvent[]>;
 
     constructor()
@@ -34,22 +34,22 @@ export class MessageClassManager
     {
         if(!header || !handler) return;
 
-        const existing = this._messageIdByEvent.get(handler.name);
+        const existing = this._messageIdByEvent.get(handler);
 
         if(existing) return;
 
-        this._messageIdByEvent.set(handler.name, header);
+        this._messageIdByEvent.set(handler, header);
     }
 
     private registerMessageComposerClass(header: number, handler: Function): void
     {
         if(!header || !handler) return;
 
-        const existing = this._messageIdByComposer.get(handler.name);
+        const existing = this._messageIdByComposer.get(handler);
 
         if(existing) return;
 
-        this._messageIdByComposer.set(handler.name, header);
+        this._messageIdByComposer.set(handler, header);
     }
 
     public registerMessageEvent(event: IMessageEvent): void
@@ -119,7 +119,7 @@ export class MessageClassManager
         if(!event) return -1;
 
         //@ts-ignore
-        const name = event instanceof MessageEvent ? event.constructor.name : event.name;
+        const name = (event instanceof MessageEvent ? event.constructor : event) as Function;
 
         const existing = this._messageIdByEvent.get(name);
 
@@ -132,7 +132,7 @@ export class MessageClassManager
     {
         if(!composer) return -1;
 
-        const existing = this._messageIdByComposer.get(composer.constructor.name);
+        const existing = this._messageIdByComposer.get(composer.constructor);
 
         if(!existing) return -1;
 

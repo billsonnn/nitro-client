@@ -230,7 +230,7 @@ export class SizeData
             }
         }
 
-        if(validDirection >= 0) return ~~validDirection;
+        if(validDirection >= 0) return Math.trunc(validDirection);
 
         return 0;
     }

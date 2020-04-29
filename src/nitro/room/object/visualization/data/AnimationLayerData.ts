@@ -100,7 +100,7 @@ export class AnimationLayerData
             return this.getFrameFromSpecificSequence(direction, sequence, sequenceId, (frameCount - sequenceFrameCount), doesRepeat);
         }
 
-        const sequenceId    = ~~(this._frameSequences.length * Math.random());
+        const sequenceId    = Math.trunc(this._frameSequences.length * Math.random());
         const sequence      = this._frameSequences[sequenceId];
 
         if(sequence.frameCount < 1) return null;
@@ -137,8 +137,8 @@ export class AnimationLayerData
         let repeats     = frame.repeats;
         let isLastFrame = false;
 
-        if(randomX) x = ~~(x + randomX * Math.random());
-        if(randomY) y = ~~(y + randomY * Math.random());
+        if(randomX) x = Math.trunc(x + randomX * Math.random());
+        if(randomY) y = Math.trunc(y + randomY * Math.random());
         
         if(repeats > 1) repeats = sequence.getRepeats(frameIndex);
 

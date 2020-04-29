@@ -12,6 +12,7 @@ import { RoomObjectStateChangedEvent } from '../../../events/RoomObjectStateChan
 import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectHeightUpdateMessage } from '../../../messages/ObjectHeightUpdateMessage';
+import { ObjectItemDataUpdateMessage } from '../../../messages/ObjectItemDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from '../../../messages/ObjectMoveUpdateMessage';
 import { ObjectSelectedMessage } from '../../../messages/ObjectSelectedMessage';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
@@ -157,6 +158,13 @@ export class FurnitureLogic extends MovingObjectLogic
             return;
         }
 
+        if(message instanceof ObjectItemDataUpdateMessage)
+        {
+            this.processItemDataUpdateMessage(message);
+
+            return;
+        }
+
         this._mouseOver = false;
 
         if(message.location && message.direction)
@@ -212,6 +220,13 @@ export class FurnitureLogic extends MovingObjectLogic
         if(!message) return;
         
         this.object.model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, message.height);
+    }
+
+    private processItemDataUpdateMessage(message: ObjectItemDataUpdateMessage): void
+    {
+        if(!message) return;
+
+        this.object.model.setValue(RoomObjectVariable.FURNITURE_ITEMDATA, message.data);
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void

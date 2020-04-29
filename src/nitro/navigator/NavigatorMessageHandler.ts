@@ -1,6 +1,6 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
-import { RoomFowardEvent } from '../communication/messages/incoming/room/access/RoomFowardEvent';
+import { RoomFowardEvent as RoomForwardEvent } from '../communication/messages/incoming/room/access/RoomFowardEvent';
 import { RoomInfoEvent } from '../communication/messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from '../communication/messages/incoming/room/data/RoomInfoOwnerEvent';
 import { RoomInfoComposer } from '../communication/messages/outgoing/room/data/RoomInfoComposer';
@@ -34,14 +34,14 @@ export class NavigatorMessageHandler extends Disposable
 
         this._connection = connection;
 
-        connection.addMessageEvent(new RoomFowardEvent(this.onRoomFowardEvent.bind(this)));
+        connection.addMessageEvent(new RoomForwardEvent(this.onRoomForwardEvent.bind(this)));
         connection.addMessageEvent(new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)));
         connection.addMessageEvent(new RoomInfoEvent(this.onRoomInfoEvent.bind(this)));
     }
 
-    private onRoomFowardEvent(event: RoomFowardEvent): void
+    private onRoomForwardEvent(event: RoomForwardEvent): void
     {
-        if(!(event instanceof RoomFowardEvent)) return;
+        if(!(event instanceof RoomForwardEvent)) return;
 
         this._connection.send(new RoomInfoComposer(event.getParser().roomId, false, true));
     }

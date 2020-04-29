@@ -299,6 +299,16 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this._gender;
     }
 
+    public get clubLevel(): number
+    {
+        return this._clubLevel;
+    }
+
+    public get isAmbassador(): boolean
+    {
+        return this._isAmbassador;
+    }
+
     public get isModerator(): boolean
     {
         return (this._rankId >= SecurityLevel._Str_3569);

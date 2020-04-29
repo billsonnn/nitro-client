@@ -1,16 +1,16 @@
 import { IMessageEvent } from '../../../../../../core/communication/messages/IMessageEvent';
 import { MessageEvent } from '../../../../../../core/communication/messages/MessageEvent';
-import { RoomFowardParser } from '../../../parser/room/access/RoomFowardParser';
+import { RoomFowardParser as RoomForwardParser } from '../../../parser/room/access/RoomFowardParser';
 
 export class RoomFowardEvent extends MessageEvent implements IMessageEvent
 {
     constructor(callBack: Function)
     {
-        super(callBack, RoomFowardParser);
+        super(callBack, RoomForwardParser);
     }
 
-    public getParser(): RoomFowardParser
+    public getParser(): RoomForwardParser
     {
-        return this.parser as RoomFowardParser;
+        return this.parser as RoomForwardParser;
     }
 }

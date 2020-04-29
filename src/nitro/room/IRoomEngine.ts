@@ -15,6 +15,7 @@ export interface IRoomEngine
 {
     initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void;
     dispose(): void;
+    setActiveRoomId(roomId: number): void;
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
     getRoomInstanceRenderingCanvas(roomId: number, canvasId: number): IRoomRenderingCanvas;
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;

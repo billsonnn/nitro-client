@@ -1,4 +1,4 @@
-import * as ByteBuffer from 'bytebuffer';
+import ByteBuffer from 'bytebuffer';
 import { IConnection } from '../../connections/IConnection';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
 import { Byte } from '../Byte';
@@ -60,7 +60,7 @@ export class EvaWireFormat implements ICodec
 
         const wrappers: IMessageDataWrapper[] = [];
 
-        while(connection.dataBuffer.byteLength)
+        while(true)
         {
             if(connection.dataBuffer.byteLength < 4) break;
             

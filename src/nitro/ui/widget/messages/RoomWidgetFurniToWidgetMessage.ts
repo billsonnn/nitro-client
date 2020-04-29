@@ -16,22 +16,22 @@ export class RoomWidgetFurniToWidgetMessage extends RoomWidgetMessage
     public static REQUEST_ACHIEVEMENT_RESOLUTION_FAILED: string    = 'RWFWM_WIDGET_MESSAGE_REQUEST_ACHIEVEMENT_RESOLUTION_FAILED';
     public static REQUEST_BADGE_DISPLAY_ENGRAVING: string          = 'RWFWM_WIDGET_MESSAGE_REQUEST_BADGE_DISPLAY_ENGRAVING';
 
-    private _id: number;
+    private _objectId: number;
     private _category: number;
     private _roomId: number;
 
-    constructor(type: string, id: number, category: number, roomId: number)
+    constructor(type: string, objectId: number, category: number, roomId: number)
     {
         super(type);
 
-        this._id        = id;
+        this._objectId  = objectId;
         this._category  = category;
         this._roomId    = roomId;
     }
 
-    public get id(): number
+    public get objectId(): number
     {
-        return this._id;
+        return this._objectId;
     }
 
     public get category(): number

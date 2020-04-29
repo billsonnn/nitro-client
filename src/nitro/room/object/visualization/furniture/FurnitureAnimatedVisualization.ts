@@ -83,7 +83,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
                 this._state = state;
 
-                this._animationChangeTime = this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME) as number || 0;
+                this._animationChangeTime = (this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME) as number || 0);
             }
 
             return true;

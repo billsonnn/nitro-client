@@ -186,7 +186,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(err)
         {
-            NitroLogger.log(err);
+            console.log(err);
         }
     }
 
@@ -244,7 +244,8 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(e)
         {
-            NitroLogger.log('Error parsing message: ' + e);
+            console.log(e);
+            //NitroLogger.log('Error parsing message: ' + e);
 
             return null;
         }
