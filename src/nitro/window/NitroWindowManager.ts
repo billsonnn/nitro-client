@@ -1,16 +1,23 @@
 import Mustache from 'mustache';
 import { NitroManager } from '../../core/common/NitroManager';
+import { MouseEventType } from '../ui/MouseEventType';
 import { INitroWindowManager } from './INitroWindowManager';
 
 export class NitroWindowManager extends NitroManager implements INitroWindowManager
 {
     private _window: HTMLDivElement;
 
+    private _mouseX: number;
+    private _mouseY: number;
+
     constructor()
     {
         super();
 
-        this._window = null;
+        this._window    = null;
+
+        this._mouseX    = 0;
+        this._mouseY    = 0;
 
         this.setupWindow();
     }
@@ -57,20 +64,59 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
         return element;
     }
 
-    public buildElementFromTemplate(template: string): HTMLDivElement
-    {
-        if(!template) return null;
-
-        const element = this.createElement();
-
-        element.addEventListener('click', () => console.log('test'));
-    }
-
     public renderElement(element: HTMLElement, template: string, view: {}): void
     {
         if(!element || !template) return;
 
         element.innerHTML = Mustache.render(template, view);
+
+        this.makeDraggable(element);
+    }
+
+    private makeDraggable(element: HTMLElement): void
+    {
+        if(!element) return;
+
+        const header = element.getElementsByClassName('widget-header')[0] as HTMLElement;
+
+        if(header) element = header;
+        
+        element.onmousedown = this.onMouseEvent.bind(this);
+    }
+
+    private onMouseEvent(event: MouseEvent): void
+    {
+        if(!event) return;
+
+        const target    = event.target as HTMLDivElement;
+        const parent    = target.parentElement;
+
+        switch(event.type)
+        {
+            case MouseEventType.MOUSE_MOVE:
+                event.preventDefault();
+
+                const offsetX   = (event.clientX - this._mouseX);
+                const offsetY   = (event.clientY - this._mouseY);
+
+                parent.style.left   = ((parent.offsetLeft + offsetX + 'px'));
+                parent.style.top    = ((parent.offsetTop + offsetY + 'px'));
+                break;
+            case MouseEventType.MOUSE_DOWN:
+                target.onmouseup    = this.onMouseEvent.bind(this);
+                target.onmousemove  = this.onMouseEvent.bind(this);
+                break;
+            case MouseEventType.MOUSE_UP:
+                this._mouseX    = 0;
+                this._mouseY    = 0;
+                
+                target.onmouseup    = null;
+                target.onmousemove  = null;
+                return;
+        }
+
+        this._mouseX    = event.clientX;
+        this._mouseY    = event.clientY;
     }
 
     private addElement(element: HTMLElement): void

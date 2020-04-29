@@ -48,9 +48,9 @@ export class TrophyView implements ITrophyView
     {
         return `
         <div class="nitro-widget nitro-widget-trophy">
-            <div class="widget-header" [dragHandler]>
+            <div class="widget-header">
                 <div class="header-title">Trophy</div>
-                <div class="header-close"><i className="fas fa-times"></i></div>
+                <div class="header-close" [close]><i className="fas fa-times"></i></div>
             </div>
             <div class="widget-body">
                 {{ message }}
