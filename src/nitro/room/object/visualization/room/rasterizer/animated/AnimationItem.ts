@@ -1,12 +1,14 @@
-﻿export class AnimationItem 
-{
-    private _x: number = 0;
-    private _y: number = 0;
-    private _speedX: number = 0;
-    private _speedY: number = 0;
-    private _bitmapData: PIXI.Graphics;
+﻿import { GraphicAsset } from '../../../../../../../core/asset/GraphicAsset';
 
-    constructor(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: PIXI.Graphics)
+export class AnimationItem 
+{
+    private _x: number;
+    private _y: number;
+    private _speedX: number;
+    private _speedY: number;
+    private _bitmapData: GraphicAsset;
+
+    constructor(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: GraphicAsset)
     {
         this._x             = k;
         this._y             = _arg_2;
@@ -23,7 +25,7 @@
         if(isNaN(this._speedY)) this._speedY = 0;
     }
 
-    public get bitmapData(): PIXI.Graphics
+    public get bitmapData(): GraphicAsset
     {
         return this._bitmapData;
     }

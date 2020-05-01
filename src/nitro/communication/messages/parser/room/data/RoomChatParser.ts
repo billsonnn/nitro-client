@@ -2,6 +2,18 @@ import { IMessageDataWrapper } from '../../../../../../core/communication/messag
 
 export class RoomChatParser
 {
+    public static _Str_19408: number = 0;
+    public static _Str_12787: number = 1;
+    public static _Str_16907: number = 0;
+    public static _Str_12581: number = 1;
+    public static _Str_16484: number = 2;
+    public static _Str_18404: number = 0;
+    public static _Str_17874: number = 1;
+    public static _Str_16469: number = 2;
+    public static _Str_21099: number = 0;
+    public static _Str_20763: number = 1;
+    public static _Str_22060: number = 2;
+
     private _mode: number;
     private _weight: number;
     private _speed: number;

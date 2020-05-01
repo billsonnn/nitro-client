@@ -480,11 +480,9 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                             _local_13.color = RoomVisualization._Str_18370;
                         }
                     }
+
+                    if(this._data) _local_13.rasterizer = this._data.landscapeRasterizer;
                     
-                    // if (this._Str_594 != null)
-                    // {
-                    //     _local_13.rasterizer = this._Str_594._Str_24979;
-                    // }
                     _local_5 = (_local_5 + _local_9.length);
                 }
                 

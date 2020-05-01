@@ -257,6 +257,7 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_WINDOW:
                 logic = FurnitureWindowLogic;
+                break;
             default:
                 logic = FurnitureLogic;
                 break;

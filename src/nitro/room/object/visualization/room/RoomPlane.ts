@@ -996,8 +996,10 @@ export class RoomPlane implements IRoomPlane
     {
         if(!texture || !mask) return;
 
+        const ugh = NitroInstance.instance.renderer.generateTexture(texture, 1, 1, new PIXI.Rectangle(0, 0, texture.width, texture.height))
+
         const maskCanvas    = NitroInstance.instance.renderer.extract.canvas(mask);
-        const textureCanvas = NitroInstance.instance.renderer.extract.canvas(texture);
+        const textureCanvas = NitroInstance.instance.renderer.extract.canvas(ugh);
         const textureCtx    = textureCanvas.getContext('2d');
 
         textureCtx.drawImage(maskCanvas, 0, 0);

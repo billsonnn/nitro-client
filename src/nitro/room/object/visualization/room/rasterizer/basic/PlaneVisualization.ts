@@ -1,15 +1,17 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { GraphicAssetCollection } from '../../../../../../../core/asset/GraphicAssetCollection';
+import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { NitroInstance } from '../../../../../../NitroInstance';
+import { PlaneVisualizationAnimationLayer } from '../animated/PlaneVisualizationAnimationLayer';
 import { PlaneMaterial } from './PlaneMaterial';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
 
 export class PlaneVisualization 
 {
-    private _layers: PlaneVisualizationLayer[];
+    private _layers: IDisposable[];
     private _geometry: IRoomGeometry;
     private _cachedBitmapData: PIXI.Graphics;
     private _cachedBitmapNormal: Vector3d;
@@ -95,7 +97,9 @@ export class PlaneVisualization
             {
                 if(!layer) continue;
 
-                layer._Str_3355();
+                const planeLayer = layer as PlaneVisualizationLayer;
+
+                planeLayer._Str_3355();
             }
         }
 
@@ -121,11 +125,11 @@ export class PlaneVisualization
     {
         if((k < 0) || (k > this._layers.length)) return false;
 
-        let layer = this._layers[k];
+        let layer = this._layers[k] as IDisposable;
 
         if(layer) layer.dispose();
 
-        layer = null; // new PlaneVisualizationAnimationLayer(_arg_2, _arg_3);
+        layer = new PlaneVisualizationAnimationLayer(_arg_2, _arg_3);
 
         this._layers[k]             = layer;
         this._hasAnimationLayers    = true;
@@ -135,7 +139,7 @@ export class PlaneVisualization
 
     public _Str_8988(): PlaneVisualizationLayer[]
     {
-        return this._layers;
+        return this._layers as PlaneVisualizationLayer[];
     }
 
     public render(canvas: PIXI.Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number = 0, offsetY: number = 0, maxX: number = 0, maxY: number = 0, dimensionX: number = 0, dimensionY: number = 0, timeSinceStartMs: number = 0): PIXI.Graphics
@@ -154,7 +158,7 @@ export class PlaneVisualization
                 {
                     if(canvas)
                     {
-                        const texture = NitroInstance.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1);
+                        const texture = NitroInstance.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
 
                         if(texture)
                         {
@@ -211,12 +215,17 @@ export class PlaneVisualization
                 {
                     layer.render(canvas, width, height, normal, useTexture, offsetX, offsetY);
                 }
+
+                else if(layer instanceof PlaneVisualizationAnimationLayer)
+                {
+                    layer.render(canvas, width, height, normal, offsetX, offsetY, maxX, maxY, dimensionX, dimensionY, timeSinceStartMs);
+                }
             }
         }
 
         if(canvas && (canvas !== this._cachedBitmapData))
         {
-            const texture = NitroInstance.instance.renderer.generateTexture(canvas, 1, 1);
+            const texture = NitroInstance.instance.renderer.generateTexture(canvas, 1, 1, new PIXI.Rectangle(0, 0, canvas.width, canvas.height));
 
             this._cachedBitmapData
                 .beginTextureFill({ texture })

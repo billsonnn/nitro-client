@@ -1,96 +1,77 @@
-﻿import { AnimationItem } from './AnimationItem';
+﻿import { GraphicAssetCollection } from '../../../../../../../core/asset/GraphicAssetCollection';
+import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+import { AnimationItem } from './AnimationItem';
 
-export class PlaneVisualizationAnimationLayer
+export class PlaneVisualizationAnimationLayer implements IDisposable
 {
     private _color: number = 0;
     private _bitmapData: PIXI.Graphics = null;
     private _isDisposed: boolean = false;
     private _items: AnimationItem[];
 
-    // constructor(k:XML, _arg_2:IGraphicAssetCollection)
-    // {
-    //     var _local_3:XMLList;
-    //     var _local_4: number;
-    //     var _local_5:XML;
-    //     var _local_6:String;
-    //     var _local_7:IGraphicAsset;
-    //     var _local_8:BitmapDataAsset;
-    //     var _local_9:BitmapData;
-    //     var _local_10:AnimationItem;
-    //     this._items = [];
-    //     super();
-    //     if (((!(k == null)) && (!(_arg_2 == null))))
-    //     {
-    //         _local_3 = k.item;
-    //         _local_4 = 0;
-    //         while (_local_4 < _local_3.length())
-    //         {
-    //             _local_5 = (_local_3[_local_4] as XML);
-    //             if (_local_5 != null)
-    //             {
-    //                 _local_6 = _local_5.@asset;
-    //                 _local_7 = _arg_2.getAsset(_local_6);
-    //                 if (_local_7 != null)
-    //                 {
-    //                     _local_8 = (_local_7.asset as BitmapDataAsset);
-    //                     if (_local_8 != null)
-    //                     {
-    //                         _local_9 = (_local_8.content as BitmapData);
-    //                         if (_local_9 != null)
-    //                         {
-    //                             _local_10 = new AnimationItem(parseFloat(_local_5.@x), parseFloat(_local_5.@y), parseFloat(_local_5.@speedX), parseFloat(_local_5.@speedY), _local_9);
-    //                             this._items.push(_local_10);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //             _local_4++;
-    //         }
-    //     }
-    // }
+    constructor(k: any, _arg_2: GraphicAssetCollection)
+    {
+        this._color         = 0;
+        this._bitmapData    = null;
+        this._isDisposed    = false;
+        this._items         = [];
 
-    // public get disposed():Boolean
-    // {
-    //     return this._isDisposed;
-    // }
+        if(k && _arg_2)
+        {
+            for(let item of k)
+            {
+                if(!item) continue;
 
-    // public dispose():void
-    // {
-    //     var k: number;
-    //     var _local_2:AnimationItem;
-    //     this._isDisposed = true;
-    //     if (this._bitmapData != null)
-    //     {
-    //         this._bitmapData.dispose();
-    //         this._bitmapData = null;
-    //     }
-    //     if (this._items != null)
-    //     {
-    //         k = 0;
-    //         while (k < this._items.length)
-    //         {
-    //             _local_2 = (this._items[k] as AnimationItem);
-    //             if (_local_2 != null)
-    //             {
-    //                 _local_2.dispose();
-    //             }
-    //             k++;
-    //         }
-    //         this._items = [];
-    //     }
-    // }
+                const assetName = item.asset;
 
-    // public _Str_3355():void
-    // {
-    //     if (this._bitmapData != null)
-    //     {
-    //         this._bitmapData.dispose();
-    //         this._bitmapData = null;
-    //     }
-    // }
+                if(assetName)
+                {
+                    const asset = _arg_2.getAsset(assetName);
 
-    // public render(k: PIXI.Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: number, _arg_10: number, _arg_11: number): PIXI.Graphics
-    // {
+                    if(asset) this._items.push(new AnimationItem(item.x, item.y, item.speedX, item.speedY, asset))
+                }
+            }
+        }
+    }
+
+    public get disposed(): boolean
+    {
+        return this._isDisposed;
+    }
+
+    public dispose():void
+    {
+        this._isDisposed = true;
+
+        if(this._bitmapData)
+        {
+            this._bitmapData.destroy();
+
+            this._bitmapData = null;
+        }
+
+        if(this._items)
+        {
+            for(let item of this._items) item && item.dispose();
+
+            this._items = [];
+        }
+    }
+
+    public _Str_3355():void
+    {
+        if (this._bitmapData)
+        {
+            this._bitmapData.destroy();
+
+            this._bitmapData = null;
+        }
+    }
+
+    public render(k: PIXI.Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: number, _arg_10: number, _arg_11: number): PIXI.Graphics
+    {
+        return null;
     //     var _local_12: number;
     //     var _local_13:AnimationItem;
     //     var _local_14:Point;
@@ -145,5 +126,5 @@ export class PlaneVisualizationAnimationLayer
     //         }
     //     }
     //     return k;
-    // }
+    }
 }

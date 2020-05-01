@@ -416,16 +416,19 @@ export class PlaneRasterizer implements IPlaneRasterizer
                     const types     = extra.types;
                     const offsets   = extra.offsets;
 
-                    if(types.length && offsets.length)
+                    if(types && offsets)
                     {
-                        const type          = types[0];
-                        const offset        = offsets[0];
+                        if(types.length && offsets.length)
+                        {
+                            const type          = types[0];
+                            const offset        = offsets[0];
 
-                        assetNames      = this._Str_25465(type);
-                        offsetPoints    = this._Str_24448(offset);
-                        limit           = offsetPoints.length;
+                            assetNames      = this._Str_25465(type);
+                            offsetPoints    = this._Str_24448(offset);
+                            limit           = offsetPoints.length;
 
-                        if(extra.limitMax) limit = extra.limitMax;
+                            if(extra.limitMax) limit = extra.limitMax;
+                        }
                     }
                 }
 

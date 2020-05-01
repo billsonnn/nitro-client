@@ -9,6 +9,7 @@ export interface IAssetData {
     name: string;
     visualizationType: string;
     logicType: string;
+    maskType: string;
     spritesheet: string;
     dimensions: IAssetDimension;
     directions: number[];
