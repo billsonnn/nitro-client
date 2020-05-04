@@ -675,7 +675,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this.sendWalkUpdate(event.tileX, event.tileY);
     }
 
-    private _Str_24048(k: RoomObjectMouseEvent, _arg_2: number): void
+    private _Str_24048(k: RoomObjectMouseEvent, roomId: number): void
     {
         if(!k || !this._roomEngine) return;
 
@@ -683,11 +683,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(!eventDispatcher) return;
 
-        const selectedData = this.getSelectedRoomObjectData(_arg_2);
+        const selectedData = this.getSelectedRoomObjectData(roomId);
 
         if(!selectedData) return;
 
-        const roomObject = this._roomEngine.getRoomObject(_arg_2, selectedData.id, selectedData.category);
+        const roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
 
         if(!roomObject) return;
 
@@ -695,7 +695,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if((selectedData.category === RoomObjectCategory.FLOOR) || (selectedData.category === RoomObjectCategory.UNIT))
         {
-            const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(_arg_2);
+            const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
 
             if(!(((k instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, (k.tileX), (k.tileY), stackingHeightMap))))
             {
@@ -730,20 +730,20 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 roomObject.setDirection(selectedData.dir);
             }
 
-            //this._roomEngine._Str_6650(_arg_2, selectedData.id, _local_6);
+            this._roomEngine.updateRoomObjectMask(roomId, selectedData.id, _local_6);
         }
 
         if (_local_6)
         {
             this.setFurnitureAlphaMultiplier(roomObject, 0.5);
 
-            //this._roomEngine._Str_7972(false);
+            this._roomEngine._Str_7972(false);
         }
         else
         {
             this.setFurnitureAlphaMultiplier(roomObject, 0);
 
-            //this._roomEngine._Str_7972(true);
+            this._roomEngine._Str_7972(true);
         }
     }
 
@@ -1267,6 +1267,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 _local_9 = false;
                 this.setFurnitureAlphaMultiplier(roomObject, 0.5);
                 this._Str_7975(roomId, roomObject.id, category, roomObject.getLocation(), roomObject.getDirection(), operation);
+                this._roomEngine._Str_7972(false);
                 break;
             case RoomObjectOperationType.OBJECT_MOVE_TO:
                 const selectedData = this.getSelectedRoomObjectData(roomId);

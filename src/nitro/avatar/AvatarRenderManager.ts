@@ -114,7 +114,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarGeometry.json');
+            request.open('GET', NitroConfiguration.AVATAR_GEOMETRY_URL);
 
             request.send();
 
@@ -144,7 +144,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarPartSets.json');
+            request.open('GET', NitroConfiguration.AVATAR_PARTSETS_URL);
 
             request.send();
 
@@ -174,7 +174,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarActions.json');
+            request.open('GET', NitroConfiguration.AVATAR_ACTIONS_URL);
 
             request.send();
 
@@ -204,7 +204,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarAnimations.json');
+            request.open('GET', NitroConfiguration.AVATAR_ANIMATIONS_URL);
 
             request.send();
 
@@ -234,7 +234,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/figuredata.xml');
+            request.open('GET', NitroConfiguration.AVATAR_FIGUREDATA_URL);
 
             request.send();
 
@@ -324,9 +324,54 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         return new PlaceHolderAvatarImage(this._structure, this._aliasCollection, this._placeHolderFigure, size, this._effectAssetDownloadManager, effectListener);
     }
 
-    private validateAvatarFigure(container: AvatarFigureContainer, gender: string)
+    private validateAvatarFigure(container: AvatarFigureContainer, gender: string): boolean
     {
-        return true;
+        let isValid = false;
+
+        const typeIds = this._structure._Str_1733(gender, 2);
+
+        if(typeIds)
+        {
+            const figureData = this._structure.figureData;
+
+            for(let id of typeIds)
+            {
+                if(!container._Str_744(id))
+                {
+                    const figurePartSet = this._structure._Str_2264(id, gender);
+
+                    if(figurePartSet)
+                    {
+                        container._Str_830(id, figurePartSet.id, [0]);
+
+                        isValid = true;
+                    }
+                }
+                else
+                {
+                    const setType = figureData._Str_740(id);
+
+                    if(setType)
+                    {
+                        const figurePartSet = setType._Str_1020(container.getPartSetId(id));
+
+                        if(!figurePartSet)
+                        {
+                            const partSet = this._structure._Str_2264(id, gender);
+
+                            if(partSet)
+                            {
+                                container._Str_830(id, partSet.id, [0]);
+
+                                isValid = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return !(isValid);
     }
 
     public get assets(): IAssetManager

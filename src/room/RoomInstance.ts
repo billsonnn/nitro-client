@@ -10,14 +10,14 @@ import { IRoomRendererBase } from './renderer/IRoomRendererBase';
 
 export class RoomInstance extends Disposable implements IRoomInstance
 {
-    private _id: number;
+    private _id: string;
     private _container: IRoomInstanceContainer;
     private _renderer: IRoomRendererBase;
     private _managers: Map<number, IRoomObjectManager>;
     private _updateCategories: number[];
     private _model: IRoomObjectModel;
 
-    constructor(id: number, container: IRoomInstanceContainer)
+    constructor(id: string, container: IRoomInstanceContainer)
     {
         super();
         
@@ -130,8 +130,6 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(this._renderer) this._renderer.addObject(object);
 
-        object.setRoom(this);
-
         return object;
     }
 
@@ -243,7 +241,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return false;
     }
 
-    public get id(): number
+    public get id(): string
     {
         return this._id;
     }

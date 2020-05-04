@@ -1,5 +1,4 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
-import { IRoomInstance } from '../IRoomInstance';
 import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
 import { IVector3D } from '../utils/IVector3D';
 import { Vector3d } from '../utils/Vector3d';
@@ -17,9 +16,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _id: number;
     private _instanceId: number;
     private _type: string;
-    private _category: number;
     private _model: IRoomObjectModel;
-    private _room: IRoomInstance;
 
     private _state: number;
     private _location: IVector3D;
@@ -41,9 +38,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._id                    = id;
         this._instanceId            = RoomObject.OBJECT_COUNTER++;
         this._type                  = type;
-        this._category              = -1;
         this._model                 = new RoomObjectModel();
-        this._room                  = null;
 
         this._state                 = 0;
         this._location              = new Vector3d();
@@ -81,18 +76,6 @@ export class RoomObject extends Disposable implements IRoomObjectController
     public getDirection(): IVector3D
     {
         return this._direction;
-    }
-
-    public setCategory(category: number): void
-    {
-        this._category = category;
-    }
-
-    public setRoom(room: IRoomInstance): void
-    {
-        if(this._room) return;
-
-        this._room = room;
     }
 
     public setLocation(vector: IVector3D, real: boolean = true): void
@@ -203,19 +186,9 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._type;
     }
 
-    public get category(): number
-    {
-        return this._category;
-    }
-
     public get model(): IRoomObjectModel
     {
         return this._model;
-    }
-
-    public get room(): IRoomInstance
-    {
-        return this._room;
     }
 
     public get visualization(): IRoomObjectVisualization

@@ -21,6 +21,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     private _assets: IAssetManager;
     private _structure: AvatarStructure;
 
+    private _missingMandatoryLibs: string[];
     private _figureMap: Map<string, AvatarAssetDownloadLibrary[]>;
     private _pendingContainers: [ IAvatarFigureContainer, IAvatarImageListener ][];
     private _figureListeners: Map<string, IAvatarImageListener[]>;
@@ -36,6 +37,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._assets                = assets;
         this._structure             = structure;
 
+        this._missingMandatoryLibs  = NitroConfiguration.MANDATORY_AVATAR_LIBRARIES;
         this._figureMap             = new Map();
         this._pendingContainers     = [];
         this._figureListeners       = new Map();
@@ -55,7 +57,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/figuremap.xml');
+            request.open('GET', NitroConfiguration.AVATAR_FIGUREMAP_URL);
 
             request.send();
 
@@ -68,6 +70,8 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                     if(err || !results || !results.map) throw new Error('invalid_figure_map');
 
                     this.processFigureMap(results.map);
+
+                    this.processMissingLibraries();
 
                     this._isReady = true;
 
@@ -97,7 +101,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                 const id        = library['$'].id;
                 const revision  = library['$'].revision;
 
-                const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.ASSET_AVATAR_URL);
+                const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.AVATAR_ASSET_URL);
 
                 downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
 
@@ -189,6 +193,20 @@ export class AvatarAssetDownloadManager extends EventDispatcher
             }
 
             index++;
+        }
+    }
+
+    public processMissingLibraries(): void
+    {
+        const libraries = this._missingMandatoryLibs.slice();
+
+        for(let library of libraries)
+        {
+            if(!library) continue;
+
+            const map = this._figureMap.get(library);
+
+            if(map) for(let avatar of map) avatar && this.downloadLibrary(avatar);
         }
     }
 

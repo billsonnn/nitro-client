@@ -420,20 +420,20 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     private getAssetUrlWithRoomBase(assetName: string): string
     {
-        return NitroConfiguration.ASSET_URL + `/room/${ assetName }/${ assetName }.json`;
+        return (NitroConfiguration.ROOM_ASSET_URL.replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithFurniBase(assetName: string): string
     {
-        return NitroConfiguration.ASSET_URL + `/furniture-ngh/${ assetName }/${ assetName }.json`;
+        return (NitroConfiguration.FURNI_ASSET_URL.replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithPetBase(assetName: string): string
     {
-        return NitroConfiguration.ASSET_URL + `/pet/${ assetName }/${ assetName }.json`;
+        return (NitroConfiguration.PET_ASSET_URL.replace(/%libname%/gi, assetName));
     }
 
-    public setRoomObjectRoomId(object: IRoomObject, roomId: number): void
+    public setRoomObjectRoomId(object: IRoomObject, roomId: string): void
     {
         const model = object && object.model;
 

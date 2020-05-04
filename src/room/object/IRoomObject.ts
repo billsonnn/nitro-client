@@ -1,5 +1,4 @@
 import { IDisposable } from '../../core/common/disposable/IDisposable';
-import { IRoomInstance } from '../IRoomInstance';
 import { IVector3D } from '../utils/IVector3D';
 import { IRoomObjectModel } from './IRoomObjectModel';
 import { IRoomObjectMouseHandler } from './logic/IRoomObjectMouseHandler';
@@ -12,9 +11,7 @@ export interface IRoomObject extends IDisposable
     id: number;
     instanceId: number;
     type: string;
-    category: number;
     model: IRoomObjectModel;
-    room: IRoomInstance;
     visualization: IRoomObjectVisualization;
     mouseHandler: IRoomObjectMouseHandler;
     location: IVector3D;

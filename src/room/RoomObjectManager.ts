@@ -47,8 +47,6 @@ export class RoomObjectManager implements IRoomObjectManager
             return null;
         }
 
-        object.setCategory(this._category);
-
         this._objects.set(id, object);
 
         return object;

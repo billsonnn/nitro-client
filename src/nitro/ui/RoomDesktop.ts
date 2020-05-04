@@ -10,6 +10,7 @@ import { NitroInstance } from '../NitroInstance';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
+import { RoomObjectCategory } from '../room/object/RoomObjectCategory';
 import { RoomObjectOperationType } from '../room/object/RoomObjectOperationType';
 import { RoomObjectVariable } from '../room/object/RoomObjectVariable';
 import { RoomVariableEnum } from '../room/RoomVariableEnum';
@@ -25,6 +26,7 @@ import { IRoomWidgetHandler } from './IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from './IRoomWidgetHandlerContainer';
 import { MouseEventType } from './MouseEventType';
 import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
+import { RoomWidgetRoomObjectUpdateEvent } from './widget/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
 import { IRoomWidget } from './widget/IRoomWidget';
 import { IRoomWidgetMessageListener } from './widget/IRoomWidgetMessageListener';
@@ -33,10 +35,10 @@ import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
 
 export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IRoomWidgetHandlerContainer
 {
-    public static _Str_8876: number = -1;
+    public static STATE_UNDEFINED: number = -1;
     
-    private static _Str_17829: number = 1000;
-    private static _Str_19484: number = 1000;
+    private static RESIZE_UPDATE_TIMEOUT_MS: number = 1000;
+    private static SCALE_UPDATE_TIMEOUT_MS: number = 1000;
 
     private _events: EventDispatcher;
     private _session: IRoomSession;
@@ -51,7 +53,6 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     private _widgets: Map<string, IRoomWidget>;
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]>;
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>;
-
 
     private _didMouseMove: boolean;
     private _lastClick: number;
@@ -386,16 +387,62 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         const objectId  = event.objectId;
         const category  = event.category;
 
+        let updateEvent: RoomWidgetRoomObjectUpdateEvent = null;
+
         switch(event.type)
         {
+            case RoomEngineObjectEvent.SELECTED:
+                if(!this.isFurnitureSelectionDisabled(event)) updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, objectId, category, event.roomId);
+                break;
+            case RoomEngineObjectEvent.DESELECTED:
+                updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, objectId, category, event.roomId);
+                break;
+            case RoomEngineObjectEvent.ADDED:
+                let addedEventType: string = null;
+
+                switch(category)
+                {
+                    case RoomObjectCategory.FLOOR:
+                    case RoomObjectCategory.WALL:
+                        addedEventType = RoomWidgetRoomObjectUpdateEvent.FURNI_ADDED;
+                        break;
+                    case RoomObjectCategory.UNIT:
+                        addedEventType = RoomWidgetRoomObjectUpdateEvent.USER_ADDED;
+                        break;
+                }
+
+                if(addedEventType) updateEvent = new RoomWidgetRoomObjectUpdateEvent(addedEventType, objectId, category, event.roomId);
+                break;
+            case RoomEngineObjectEvent.REMOVED:
+                let removedEventType: string = null;
+
+                switch(category)
+                {
+                    case RoomObjectCategory.FLOOR:
+                    case RoomObjectCategory.WALL:
+                        removedEventType = RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED;
+                        break;
+                    case RoomObjectCategory.UNIT:
+                        removedEventType = RoomWidgetRoomObjectUpdateEvent.USER_REMOVED;
+                        break;
+                }
+                
+                if(removedEventType) updateEvent = new RoomWidgetRoomObjectUpdateEvent(removedEventType, objectId, category, event.roomId);
+                break;
+            case RoomEngineObjectEvent.MOUSE_ENTER:
+                updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, objectId, category, event.roomId);
+                break;
+            case RoomEngineObjectEvent.MOUSE_LEAVE:
+                updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, objectId, category, event.roomId);
+                break;
             case RoomEngineObjectEvent.REQUEST_MOVE:
-                if(this._Str_21292(event.roomId, objectId, category))
+                if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
                     this._roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_MOVE);
                 }
                 break;
             case RoomEngineObjectEvent.REQUEST_ROTATE:
-                if(this._Str_21292(event.roomId, objectId, category))
+                if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
                     this._roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
@@ -404,6 +451,8 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
                 break;
         }
+
+        if(updateEvent) this.events.dispatchEvent(updateEvent);
     }
 
     public _Str_2485(k: NitroEvent): void
@@ -442,7 +491,25 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         // }
     }
 
-    private _Str_21292(k: number, _arg_2: number, _arg_3: number): boolean
+    private isFurnitureSelectionDisabled(k: RoomEngineObjectEvent): boolean
+    {
+        if(!k || !this._roomEngine) return false;
+
+        const roomObject = this._roomEngine.getRoomObject(k.roomId, k.objectId, k.category);
+
+        if(!roomObject) return false;
+
+        const selectionDisabled = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_SELECTION_DISABLED) === 1);
+
+        if(selectionDisabled)
+        {
+            if(this._sessionDataManager.isModerator) return false;
+        }
+
+        return true;
+    }
+
+    private checkFurniManipulationRights(k: number, _arg_2: number, _arg_3: number): boolean
     {
         return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionDataManager.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(k, _arg_2, _arg_3)));
     }

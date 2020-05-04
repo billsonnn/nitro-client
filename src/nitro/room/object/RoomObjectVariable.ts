@@ -48,6 +48,7 @@ export class RoomObjectVariable
     public static FURNITURE_GUILD_CUSTOMIZED_COLOR_1: string         = 'furniture_guild_customized_color_1';
     public static FURNITURE_GUILD_CUSTOMIZED_COLOR_2: string         = 'furniture_guild_customized_color_2';
     public static FURNITURE_STATE_UPDATE_TIME: string                = 'furniture_state_update_time';
+    public static FURNITURE_SELECTION_DISABLED: string               = 'furniture_selection_disabled';
     public static FURNITURE_SIZE_X: string                           = 'furniture_size_x';
     public static FURNITURE_SIZE_Y: string                           = 'furniture_size_y';
     public static FURNITURE_SIZE_Z: string                           = 'furniture_size_z';

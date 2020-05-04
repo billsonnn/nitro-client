@@ -36,7 +36,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
         this._assets                = assets;
         this._structure             = structure;
 
-        this._missingMandatoryLibs  = ['dance.1', 'dance.2', 'dance.3', 'dance.4'];
+        this._missingMandatoryLibs  = NitroConfiguration.MANDATORY_EFFECT_LIBRARIES;
         this._effectMap             = new Map();
         this._effectListeners       = new Map();
         this._incompleteEffects     = new Map();
@@ -56,7 +56,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
         try
         {
-            request.open('GET', NitroConfiguration.ASSET_URL + '/gamedata/effectmap.xml');
+            request.open('GET', NitroConfiguration.AVATAR_EFFECTMAP_URL);
 
             request.send();
 
@@ -100,7 +100,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
                 const id    = effect['$'].id;
                 const lib   = effect['$'].lib;
 
-                const downloadLibrary = new EffectAssetDownloadLibrary(lib, '0', this._assets, NitroConfiguration.ASSET_EFFECT_URL);
+                const downloadLibrary = new EffectAssetDownloadLibrary(lib, '0', this._assets, NitroConfiguration.AVATAR_ASSET_EFFECT_URL);
 
                 downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
 

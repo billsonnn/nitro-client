@@ -5,13 +5,13 @@ import { IRoomObject } from './object/IRoomObject';
 
 export interface IRoomManager extends INitroManager
 {
-    getRoomInstance(roomId: number): IRoomInstance;
-    createRoomInstance(roomId: number): IRoomInstance;
-    removeRoomInstance(roomId: number): boolean;
+    getRoomInstance(roomId: string): IRoomInstance;
+    createRoomInstance(roomId: string): IRoomInstance;
+    removeRoomInstance(roomId: string): boolean;
     addUpdateCategory(category: number): void;
     removeUpdateCategory(category: number): void;
-    createRoomObjectAndInitalize(roomId: number, objectId: number, type: string, category: number): IRoomObject;
+    createRoomObjectAndInitalize(roomId: string, objectId: number, type: string, category: number): IRoomObject;
     setContentLoader(loader: RoomContentLoader): void;
     update(time: number): void;
-    rooms: Map<number, IRoomInstance>
+    rooms: Map<string, IRoomInstance>
 }

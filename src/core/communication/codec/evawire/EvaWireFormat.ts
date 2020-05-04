@@ -60,7 +60,7 @@ export class EvaWireFormat implements ICodec
 
         const wrappers: IMessageDataWrapper[] = [];
 
-        while(true)
+        while(connection.dataBuffer.byteLength)
         {
             if(connection.dataBuffer.byteLength < 4) break;
             

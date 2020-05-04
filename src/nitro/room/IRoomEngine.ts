@@ -22,7 +22,7 @@ export interface IRoomEngine
     getRoomInstanceGeometry(roomId: number, canvasId?: number): IRoomGeometry;
     getRoomInstanceNumber(roomId: number, key: string): number;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
-    refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void;
+    refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
     processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
     events: IEventDispatcher;

@@ -16,7 +16,7 @@ import { RoomObjectManager } from './RoomObjectManager';
 
 export class RoomManager extends NitroManager implements IRoomManager, IRoomInstanceContainer
 {
-    private _rooms: Map<number, IRoomInstance>;
+    private _rooms: Map<string, IRoomInstance>;
     private _contentLoader: RoomContentLoader;
     private _updateCategories: number[];
 
@@ -52,7 +52,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return;
     }
 
-    public getRoomInstance(roomId: number): IRoomInstance
+    public getRoomInstance(roomId: string): IRoomInstance
     {
         const existing = this._rooms.get(roomId);
 
@@ -61,7 +61,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return existing;
     }
 
-    public createRoomInstance(roomId: number): IRoomInstance
+    public createRoomInstance(roomId: string): IRoomInstance
     {
         if(this._rooms.get(roomId)) return null;
 
@@ -80,7 +80,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return instance;
     }
 
-    public removeRoomInstance(roomId: number): boolean
+    public removeRoomInstance(roomId: string): boolean
     {
         const existing = this._rooms.get(roomId);
 
@@ -93,7 +93,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return true;
     }
 
-    public createRoomObjectAndInitalize(roomId: number, objectId: number, type: string, category: number): IRoomObject
+    public createRoomObjectAndInitalize(roomId: string, objectId: number, type: string, category: number): IRoomObject
     {
         const instance = this.getRoomInstance(roomId);
 
@@ -189,7 +189,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         {
             if(!room) continue;
 
-            for(let manager of room.managers.values())
+            for(let [ category, manager ] of room.managers.entries())
             {
                 if(!manager) continue;
 
@@ -222,7 +222,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
                             object.isReady = true;
 
-                            if(this._listener) this._listener.refreshRoomObjectFurnitureData(room.id, object.id, object.category);
+                            if(this._listener) this._listener.refreshRoomObjectFurnitureData(room.id, object.id, category);
                         }
                     }
                     else
@@ -333,7 +333,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return new RoomObjectManager(category);
     }
 
-    public get rooms(): Map<number, IRoomInstance>
+    public get rooms(): Map<string, IRoomInstance>
     {
         return this._rooms;
     }

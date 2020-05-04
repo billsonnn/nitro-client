@@ -186,7 +186,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(err)
         {
-            console.log(err);
+            NitroLogger.log(err);
         }
     }
 

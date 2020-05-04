@@ -1,4 +1,4 @@
 export interface IRoomManagerListener
 {
-    refreshRoomObjectFurnitureData(roomId: number, objectId: number, category: number): void
+    refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void
 }

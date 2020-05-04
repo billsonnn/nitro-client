@@ -1,4 +1,3 @@
-import { IRoomInstance } from '../IRoomInstance';
 import { RoomObjectUpdateMessage } from '../messages/RoomObjectUpdateMessage';
 import { IVector3D } from '../utils/IVector3D';
 import { IRoomObject } from './IRoomObject';
@@ -7,8 +6,6 @@ import { IRoomObjectGraphicVisualization } from './visualization/IRoomObjectGrap
 
 export interface IRoomObjectController extends IRoomObject
 {
-    setCategory(category: number): void;
-    setRoom(room: IRoomInstance): void;
     setLocation(vector: IVector3D, real?: boolean): void;
     setDirection(vector: IVector3D): void;
     setTempLocation(vector: IVector3D, silent?: boolean): void;
