@@ -16,6 +16,7 @@ import { IAvatarImage } from './IAvatarImage';
 import { IAvatarImageListener } from './IAvatarImageListener';
 import { IAvatarRenderManager } from './IAvatarRenderManager';
 import { PlaceHolderAvatarImage } from './PlaceHolderAvatarImage';
+import { AvatarStructureDownload } from './structure/AvatarStructureDownload';
 
 export class AvatarRenderManager extends NitroManager implements IAvatarRenderManager
 {
@@ -170,6 +171,10 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadActions(): void
     {
+        const defaultActions = NitroConfiguration.AVATAR_DEFAULT_ACTIONS;
+
+        if(defaultActions) this._structure._Str_1060(NitroInstance.instance.core.asset, defaultActions);
+
         const request = new XMLHttpRequest();
 
         try
@@ -182,7 +187,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
             {
                 if(!this._structure) return;
 
-                this._structure._Str_1060(null, JSON.parse(request.responseText));
+                this._structure._Str_1620(JSON.parse(request.responseText));
 
                 this._actionsReady = true;
 
@@ -230,35 +235,32 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadFigureData(): void
     {
-        const request = new XMLHttpRequest();
+        const defaultFigureData = NitroConfiguration.AVATAR_DEFAULT_FIGUREDATA;
 
-        try
+        if(defaultFigureData)
         {
-            request.open('GET', NitroConfiguration.AVATAR_FIGUREDATA_URL);
+            const parser = new Parser();
 
-            request.send();
-
-            request.onloadend = e =>
+            parser.parseString(defaultFigureData, (err: Error, results: any) =>
             {
-                if(!this._structure) return;
+                if(err || !results || !results.figuredata) throw new Error('invalid_default_figure_data');
 
-                const parser = new Parser();
-
-                parser.parseString(request.responseText, (err: Error, results: any) =>
-                {
-                    if(err || !results || !results.figuredata) throw new Error('invalid_figure_data');
-
-                    if(this._structure) this._structure._Str_1569(results.figuredata);
-                });
-            }
-
-            request.onerror = e => { throw new Error('invalid_avatar_figure_data'); };
+                if(this._structure) this._structure._Str_1569(results.figuredata);
+            });
         }
 
-        catch(e)
-        {
-            this.logger.error(e);
-        }
+        const structureDownloader = new AvatarStructureDownload(NitroConfiguration.AVATAR_FIGUREDATA_URL, this._structure.figureData);
+
+        structureDownloader.addEventListener(AvatarStructureDownload.AVATAR_STRUCTURE_DONE, this.onAvatarStructureDownloadDone.bind(this));
+    }
+
+    private onAvatarStructureDownloadDone(event: NitroEvent): void
+    {
+        this._structureReady = true;
+
+        this._structure.init();
+
+        this.checkReady();
     }
 
     private onAvatarAssetDownloaderReady(event: NitroEvent): void
@@ -297,7 +299,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     {
         if(this._isReady) return;
 
-        if(!this._geometryReady || !this._partSetsReady || !this._actionsReady || !this._animationsReady || !this._figureMapReady || !this._effectMapReady) return;
+        if(!this._geometryReady || !this._partSetsReady || !this._actionsReady || !this._animationsReady || !this._figureMapReady || !this._effectMapReady || !this._structureReady) return;
 
         this._isReady = true;
 
@@ -321,7 +323,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         this._avatarAssetDownloadManager.downloadAvatarFigure(figureContainer, listener);
 
-        return new PlaceHolderAvatarImage(this._structure, this._aliasCollection, this._placeHolderFigure, size, this._effectAssetDownloadManager, effectListener);
+        return new PlaceHolderAvatarImage(this._structure, this._aliasCollection, this._placeHolderFigure, size, this._effectAssetDownloadManager);
     }
 
     private validateAvatarFigure(container: AvatarFigureContainer, gender: string): boolean

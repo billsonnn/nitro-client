@@ -49,9 +49,9 @@ export class FigureSetData implements IFigureSetData, IStructureData
 
     public _Str_1133(k: any): void
     {
-        for(let _local_2 of k.sets.settype)
+        for(let _local_2 of k.sets[0].settype)
         {
-            const setType = this._setTypes.get(_local_2.type);
+            const setType = this._setTypes.get(_local_2['$'].type);
 
             if(setType)
             {
@@ -59,7 +59,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
             }
             else
             {
-                this._setTypes.set(_local_2.type, new SetType(_local_2));
+                this._setTypes.set(_local_2['$'].type, new SetType(_local_2));
             }
         }
 
@@ -70,13 +70,14 @@ export class FigureSetData implements IFigureSetData, IStructureData
     {
         if(!k) return false;
 
-        for(let _local_2 of k.colors.palette)
+        for(let _local_2 of k.colors[0].palette)
         {
-            const _local_4 = this._palettes.get(_local_2.id);
+            const id        = _local_2['$'].id.toString();
+            const _local_4  = this._palettes.get(id);
 
             if(!_local_4)
             {
-                this._palettes.set(_local_2.id, new Palette(_local_2));
+                this._palettes.set(id, new Palette(_local_2));
             }
             else
             {
@@ -84,13 +85,14 @@ export class FigureSetData implements IFigureSetData, IStructureData
             }
         }
 
-        for(let _local_3 of k.sets.settype)
+        for(let _local_3 of k.sets[0].settype)
         {
-            const _local_5 = this._setTypes.get(_local_3.type);
+            const type      = _local_3['$'].type;
+            const _local_5  = this._setTypes.get(type);
 
             if(!_local_5)
             {
-                this._setTypes.set(_local_3.type, new SetType(_local_3));
+                this._setTypes.set(type, new SetType(_local_3));
             }
             else
             {

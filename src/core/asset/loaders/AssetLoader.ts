@@ -19,24 +19,28 @@ export function AssetLoader(resource: PIXI.LoaderResource, next: Function): void
     {
         const assetData = resource.data as IAssetData;
 
-        if(assetData.assets && Object.keys(assetData.assets).length)
+        if(assetData.type)
         {
-            const loadOptions   = getLoadOptions(resource);
-            const spriteSheet   = getSpritesheetUrl(resource.url, assetData.spritesheet);
-
-            this.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
+            if(assetData.assets && Object.keys(assetData.assets).length)
             {
-                if(res.spritesheet) NitroInstance.instance.core.asset.createCollection(assetData, res.spritesheet);
+                const loadOptions   = getLoadOptions(resource);
+                const spriteSheet   = getSpritesheetUrl(resource.url, assetData.spritesheet);
+
+                this.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
+                {
+                    if(res.spritesheet) NitroInstance.instance.core.asset.createCollection(assetData, res.spritesheet);
+
+                    next();
+                });
+            }
+            else
+            {
+                NitroInstance.instance.core.asset.createCollection(assetData, null);
 
                 next();
-            });
+            }
         }
-        else
-        {
-            NitroInstance.instance.core.asset.createCollection(assetData, null);
-
-            next();
-        }
+        else next();
     }
 }
 

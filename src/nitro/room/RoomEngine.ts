@@ -2248,7 +2248,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(sprite)
         {
-            console.log('enable icon sprite')
             sprite.visible = k;
         }
     }

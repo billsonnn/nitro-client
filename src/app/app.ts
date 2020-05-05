@@ -10,16 +10,16 @@ PIXI.Ticker.shared.maxFPS   = NitroConfiguration.FPS;
 
 window.PIXI = PIXI;
 
+const instance = new NitroInstance(new NitroCore(), {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    transparent: true
+});
+
 const element = document.getElementById('canvas-injector');
 
 if(element)
 {
-    const instance = new NitroInstance(new NitroCore(), {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        transparent: true
-    });
-
     if(instance)
     {
         const view = instance.renderer && instance.renderer.view;
