@@ -1,11 +1,8 @@
-import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { DirectionalOffsetData } from '../data/DirectionalOffsetData';
 import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
 
 export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageVisualization
 {
-    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_BG;
-
     private _imageOffset: DirectionalOffsetData;
 
     protected imageReady(texture: PIXI.Texture, imageUrl: string): void

@@ -1,10 +1,7 @@
-import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureCounterClockVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_COUNTER_CLOCK;
-
     private static SECONDS_SPRITE: string       = 'seconds_sprite';
     private static TEN_SECONDS_SPRITE: string   = 'ten_seconds_sprite';
     private static MINUTES_SPRITE: string       = 'minutes_sprite';
@@ -23,5 +20,10 @@ export class FurnitureCounterClockVisualization extends FurnitureAnimatedVisuali
             case FurnitureCounterClockVisualization.TEN_MINUTES_SPRITE: return Math.floor(((animation / 60) / 10) % 10);
             default: return super.getFrameNumber(scale, layerId);
         }
+    }
+
+    public get animationId(): number
+    {
+        return 0;
     }
 }

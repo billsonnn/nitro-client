@@ -1,10 +1,7 @@
-import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureHabboWheelVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_HABBOWHEEL;
-
     private static ANIMATION_ID_OFFSET_SLOW1: number    = 10;
     private static ANIMATION_ID_OFFSET_SLOW2: number    = 20;
     private static _Str_7627: number                    = 31;

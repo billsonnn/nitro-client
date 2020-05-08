@@ -1,10 +1,7 @@
-import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_QUEUE_TILE;
-
     private static _Str_4186: number    = 3;
     private static _Str_18395: number   = 2;
     private static _Str_15915: number   = 1;

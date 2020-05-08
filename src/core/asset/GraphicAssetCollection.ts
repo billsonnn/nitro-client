@@ -62,15 +62,17 @@ export class GraphicAssetCollection
 
             if(!texture) continue;
 
-            if(!this.addAsset(name, source, texture, (asset.x || 0), (asset.y || 0), asset.flipH || false, false)) return;
+            if(!this.addAsset(name, texture, (asset.x || 0), (asset.y || 0), asset.flipH || false, false, source)) return;
         }
     }
 
-    public addAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean): boolean
+    public addAsset(name: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean, source: string = null): boolean
     {
         const existing = this.getAsset(name);
 
         if(existing) return true;
+
+        source = !source ? name : source;
 
         const graphic = GraphicAsset.createAsset(name, source, texture, x, y, flipH, flipV);
 
@@ -103,6 +105,19 @@ export class GraphicAssetCollection
         if(!existing) return null;
 
         return existing;
+    }
+
+    public removeAsset(name: string): void
+    {
+        if(!name) return;
+
+        const existing = this.getAsset(name);
+
+        if(!existing) return;
+
+        this._assets.delete(name);
+
+        existing.dispose();
     }
 
     public get name(): string

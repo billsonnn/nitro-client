@@ -21,6 +21,7 @@ import { FurnitureHighScoreLogic } from './furniture/FurnitureHighScoreLogic';
 import { FurnitureHockeyScoreLogic } from './furniture/FurnitureHockeyScoreLogic';
 import { FurnitureIceStormLogic } from './furniture/FurnitureIceStormLogic';
 import { FurnitureLogic } from './furniture/FurnitureLogic';
+import { FurnitureMannequinLogic } from './furniture/FurnitureMannequinLogic';
 import { FurnitureMultiHeightLogic } from './furniture/FurnitureMultiHeightLogic';
 import { FurnitureMultiStateLogic } from './furniture/FurnitureMultiStateLogic';
 import { FurnitureOneWayDoorLogic } from './furniture/FurnitureOneWayDoorLogic';
@@ -203,6 +204,9 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_ES:
                 logic = FurnitureIceStormLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_MANNEQUIN:
+                logic = FurnitureMannequinLogic;
                 break;
             case RoomObjectLogicType.FURNITURE_MULTIHEIGHT:
                 logic = FurnitureMultiHeightLogic;

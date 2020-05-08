@@ -17,7 +17,7 @@ export class NitroConfiguration
     public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureDataNGH.json';
     public static BADGE_URL                 = NitroConfiguration.ASSET_URL + '/badges/%badgename%.gif';
     public static GROUP_BADGE_URL           = NitroConfiguration.ASSET_URL + '/group-badge/%badgedata%';
-    public static PET_ASSET_URL             = NitroConfiguration.ASSET_URL + '/pets/%libname%/%libname%.json';
+    public static PET_ASSET_URL             = NitroConfiguration.ASSET_URL + '/pet/%libname%/%libname%.json';
     public static FURNI_ASSET_URL           = NitroConfiguration.ASSET_URL + '/furniture-ngh/%libname%/%libname%.json';
     public static ROOM_ASSET_URL            = NitroConfiguration.ASSET_URL + '/room/%libname%/%libname%.json';
 

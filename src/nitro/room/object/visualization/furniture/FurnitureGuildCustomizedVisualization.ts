@@ -1,11 +1,8 @@
 import { RoomObjectVariable } from '../../RoomObjectVariable';
-import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisualization
 {
-    public static TYPE: string = RoomObjectVisualizationType.FURNITURE_GUILD_CUSTOMIZED;
-
     public static DEFAULT_COLOR_1: number    = 0xEEEEEE;
     public static DEFAULT_COLOR_2: number    = 0x4B4B4B;
 

@@ -12,6 +12,7 @@ export class GraphicAsset
     private _rectangle: PIXI.Rectangle;
 
     private _initialized: boolean;
+    private _disposed: boolean;
 
     public static createAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean = false, flipV: boolean = false)
     {
@@ -39,7 +40,25 @@ export class GraphicAsset
         asset._flipV        = flipV;
         asset._rectangle    = null;
 
+        asset._disposed     = false;
+
         return asset;
+    }
+
+    public dispose(): void
+    {
+        if(this._disposed) return;
+
+        this._disposed  = true;
+        this._name      = null;
+        this._source    = null;
+
+        if(this._texture)
+        {
+            this._texture.destroy();
+
+            this._texture = null;
+        }
     }
 
     private initialize(): void

@@ -1,6 +1,6 @@
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
-export class FurnitureWaterAreaVisualization extends FurnitureAnimatedVisualization
+export class FurniturePlanetSystemVisualization extends FurnitureAnimatedVisualization
 {
     
 }

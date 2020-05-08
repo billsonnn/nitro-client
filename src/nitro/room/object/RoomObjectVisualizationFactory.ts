@@ -13,17 +13,28 @@ import { FurnitureAnimatedVisualizationData } from './visualization/furniture/Fu
 import { FurnitureBadgeDisplayVisualization } from './visualization/furniture/FurnitureBadgeDisplayVisualization';
 import { FurnitureBBVisualization } from './visualization/furniture/FurnitureBBVisualization';
 import { FurnitureBottleVisualization } from './visualization/furniture/FurnitureBottleVisualization';
+import { FurnitureBuilderPlaceholderVisualization } from './visualization/furniture/FurnitureBuilderPlaceholderVisualization';
 import { FurnitureCounterClockVisualization } from './visualization/furniture/FurnitureCounterClockVisualization';
+import { FurnitureCuboidVisualization } from './visualization/furniture/FurnitureCuboidVisualization';
+import { FurnitureExternalImageVisualization } from './visualization/furniture/FurnitureExternalImageVisualization';
 import { FurnitureFireworksVisualization } from './visualization/furniture/FurnitureFireworksVisualization';
+import { FurnitureGiftWrappedFireworksVisualization } from './visualization/furniture/FurnitureGiftWrappedFireworksVisualization';
+import { FurnitureGiftWrappedVisualization } from './visualization/furniture/FurnitureGiftWrappedVisualization';
 import { FurnitureGuildCustomizedVisualization } from './visualization/furniture/FurnitureGuildCustomizedVisualization';
+import { FurnitureGuildIsometricBadgeVisualization } from './visualization/furniture/FurnitureGuildisometricBadgeVisualization';
 import { FurnitureHabboWheelVisualization } from './visualization/furniture/FurnitureHabboWheelVisualization';
+import { FurnitureMannequinVisualization } from './visualization/furniture/FurnitureMannequinVisualization';
+import { FurnitureMannequinVisualizationData } from './visualization/furniture/FurnitureMannequinVisualizationData';
+import { FurniturePartyBeamerVisualization } from './visualization/furniture/FurniturePartyBeamerVisualization';
+import { FurniturePlanetSystemVisualization } from './visualization/furniture/FurniturePlanetSystemVisualization';
 import { FurniturePosterVisualization } from './visualization/furniture/FurniturePosterVisualization';
 import { FurnitureQueueTileVisualization } from './visualization/furniture/FurnitureQueueTileVisualization';
 import { FurnitureResettingAnimatedVisualization } from './visualization/furniture/FurnitureResettingAnimatedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualization/furniture/FurnitureRoomBackgroundVisualization';
 import { FurnitureScoreBoardVisualization } from './visualization/furniture/FurnitureScoreBoardVisualization';
-import { FurnitureSoundBlockVisualization } from './visualization/furniture/FurnitureSoundBlockVisualization';
+import { FurnitureSoundblockVisualization } from './visualization/furniture/FurnitureSoundblockVisualization';
 import { FurnitureStickieVisualization } from './visualization/furniture/FurnitureStickieVisualization';
+import { FurnitureValRandomizerVisualization } from './visualization/furniture/FurnitureValRandomizerVisualization';
 import { FurnitureVisualization } from './visualization/furniture/FurnitureVisualization';
 import { FurnitureVisualizationData } from './visualization/furniture/FurnitureVisualizationData';
 import { FurnitureVoteCounterVisualization } from './visualization/furniture/FurnitureVoteCounterVisualization';
@@ -86,11 +97,11 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
             case RoomObjectVisualizationType.FURNITURE_RESETTING_ANIMATED:
                 visualization = FurnitureResettingAnimatedVisualization;
                 break;
-            case RoomObjectVisualizationType.FURNITURE_BG:
-                visualization = FurnitureRoomBackgroundVisualization;
-                break;
             case RoomObjectVisualizationType.FURNITURE_BADGE_DISPLAY:
                 visualization = FurnitureBadgeDisplayVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_BG:
+                visualization = FurnitureRoomBackgroundVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_BB:
                 visualization = FurnitureBBVisualization;
@@ -98,17 +109,44 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
             case RoomObjectVisualizationType.FURNITURE_BOTTLE:
                 visualization = FurnitureBottleVisualization;
                 break;
+            case RoomObjectVisualizationType.FURNITURE_BUILDER_PLACEHOLDER:
+                visualization = FurnitureBuilderPlaceholderVisualization;
+                break;
             case RoomObjectVisualizationType.FURNITURE_COUNTER_CLOCK:
                 visualization = FurnitureCounterClockVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_CUBOID:
+                visualization = FurnitureCuboidVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_EXTERNAL_IMAGE:
+                visualization = FurnitureExternalImageVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_FIREWORKS:
                 visualization = FurnitureFireworksVisualization;
                 break;
+            case RoomObjectVisualizationType.FURNITURE_GIFT_WRAPPED_FIREWORKS:
+                visualization = FurnitureGiftWrappedFireworksVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_GIFT_WRAPPED:
+                visualization = FurnitureGiftWrappedVisualization;
+                break;
             case RoomObjectVisualizationType.FURNITURE_GUILD_CUSTOMIZED:
                 visualization = FurnitureGuildCustomizedVisualization;
                 break;
+            case RoomObjectVisualizationType.FURNITURE_GUILD_ISOMETRIC_BADGE:
+                visualization = FurnitureGuildIsometricBadgeVisualization;
+                break;
             case RoomObjectVisualizationType.FURNITURE_HABBOWHEEL:
                 visualization = FurnitureHabboWheelVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_MANNEQUIN:
+                visualization = FurnitureMannequinVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_PARTY_BEAMER:
+                visualization = FurniturePartyBeamerVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_PLANET_SYSTEM:
+                visualization = FurniturePlanetSystemVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_POSTER:
                 visualization = FurniturePosterVisualization;
@@ -120,10 +158,13 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
                 visualization = FurnitureScoreBoardVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_SOUNDBLOCK:
-                visualization = FurnitureSoundBlockVisualization;
+                visualization = FurnitureSoundblockVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_STICKIE:
                 visualization = FurnitureStickieVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_VAL_RANDOMIZER:
+                visualization = FurnitureValRandomizerVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_VOTE_COUNTER:
                 visualization = FurnitureVoteCounterVisualization;
@@ -190,7 +231,7 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
                 visualizationData = new FurnitureAnimatedVisualizationData();
                 break;
             case RoomObjectVisualizationType.FURNITURE_MANNEQUIN:
-                //_local_5 = FurnitureMannequinVisualizationData;
+                visualizationData = new FurnitureMannequinVisualizationData();
                 break;
             case RoomObjectVisualizationType.ROOM:
                 visualizationData   = new RoomVisualizationData();
@@ -214,7 +255,7 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
             return null;
         }
 
-        if(visualizationData instanceof AvatarVisualizationData)
+        if((visualizationData instanceof AvatarVisualizationData) || (visualizationData instanceof FurnitureMannequinVisualizationData))
         {
             visualizationData.avatarManager = NitroInstance.instance.avatar;
         }
