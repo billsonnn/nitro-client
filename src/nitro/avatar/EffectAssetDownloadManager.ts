@@ -128,7 +128,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
         if(pendingLibraries && pendingLibraries.length)
         {
-            if(listener && !listener.isDisposed)
+            if(listener && !listener.disposed)
             {
                 let listeners = this._effectListeners.get(id.toString());
 
@@ -150,7 +150,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
         }
         else
         {
-            if(listener && !listener.isDisposed) listener.resetEffect(id);
+            if(listener && !listener.disposed) listener.resetEffect(id);
         }
     }
 
@@ -195,7 +195,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
                 for(let listener of listeners)
                 {
-                    if(!listener || listener.isDisposed) continue;
+                    if(!listener || listener.disposed) continue;
 
                     listener.resetEffect(parseInt(id));
                 }

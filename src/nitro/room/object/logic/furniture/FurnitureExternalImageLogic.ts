@@ -3,20 +3,11 @@ import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouse
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomWidgetEnum } from '../../../../ui/widget/enums/RoomWidgetEnum';
-import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
-import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureExternalImageLogic extends FurnitureMultiStateLogic
 {
-    public getEventTypes(): string[]
-    {
-        const types = [ RoomObjectWidgetRequestEvent.STICKIE, RoomObjectFurnitureActionEvent.STICKIE ];
-
-        return this.mergeTypes(super.getEventTypes(), types);
-    }
-
     public initialize(asset: IAssetData): void
     {
         super.initialize(asset);
@@ -27,7 +18,7 @@ export class FurnitureExternalImageLogic extends FurnitureMultiStateLogic
         {
             const maskType = '';
 
-            this.object.model.setValue(RoomObjectVariable.FURNITURE_USES_PLANE_MASK, 1);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_USES_PLANE_MASK, 0);
             this.object.model.setValue(RoomObjectVariable.FURNITURE_PLANE_MASK_TYPE, maskType);
         }
     }

@@ -242,10 +242,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected updateSprites(scale: number, update: boolean, animation: number): void
     {
-        if(this._layerCount !== this.totalSprites)
-        {
-            this.setSpriteCount(this._layerCount);
-        }
+        if(this._layerCount !== this.totalSprites) this.setSpriteCount(this._layerCount);
 
         if(update)
         {

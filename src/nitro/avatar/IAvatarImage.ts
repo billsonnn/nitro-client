@@ -1,11 +1,12 @@
 import { GraphicAsset } from '../../core/asset/GraphicAsset';
+import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IAnimationLayerData } from './animation/IAnimationLayerData';
 import { IAvatarDataContainer } from './animation/IAvatarDataContainer';
 import { ISpriteDataContainer } from './animation/ISpriteDataContainer';
 import { IAvatarFigureContainer } from './IAvatarFigureContainer';
 import { IPartColor } from './structure/figure/IPartColor';
 
-export interface IAvatarImage
+export interface IAvatarImage extends IDisposable
 {
     _Str_1009(): any;
     setDirection(_arg_1: string, _arg_2: number):void;
@@ -30,5 +31,4 @@ export interface IAvatarImage
     _Str_677: boolean;
     _Str_833(): void;
     _Str_792: string;
-    dispose(): void;
 }

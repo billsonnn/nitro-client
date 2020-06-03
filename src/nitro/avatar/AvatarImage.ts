@@ -38,7 +38,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     protected _Str_1668: number;
     protected _Str_1374: number;
     protected _Str_1708:IActiveActionData;
-    protected _Str_580: boolean;
+    protected _disposed: boolean;
     protected _Str_903: number[];
     protected _assets:AssetAliasCollection;
     protected _Str_586: AvatarImageCache;
@@ -76,6 +76,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         this._Str_614 = [];
         this._Str_1945 = [];
         this._Str_1535 = true;
+        this._disposed = false;
         this._Str_1210 = _arg_5;
         this._Str_581 = k;
         this._assets = _arg_2;
@@ -103,52 +104,49 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     public _Str_1009(): any[]
     {
         this._Str_1972(AvatarSetType.FULL);
+        
         return this._Str_586._Str_1009();
     }
 
-    public dispose():void
+    public dispose(): void
     {
-    //     var k:BitmapData;
-    //     if (!this._Str_580)
-    //     {
-    //         this._Str_581 = null;
-    //         this._assets = null;
-    //         this._Str_1708 = null;
-    //         this._Str_1710 = null;
-    //         this._Str_2121 = null;
-    //         this._Str_614 = null;
-    //         if (this._Str_671)
-    //         {
-    //             this._Str_671.dispose();
-    //         }
-    //         if (this._Str_586)
-    //         {
-    //             this._Str_586.dispose();
-    //             this._Str_586 = null;
-    //         }
-    //         if (this._Str_864)
-    //         {
-    //             for(let k in this._Str_864)
-    //             {
-    //                 k.dispose();
-    //             }
-    //             this._Str_864.dispose();
-    //             this._Str_864 = null;
-    //         }
-    //         this._Str_671 = null;
-    //         this._Str_903 = null;
-    //         this._Str_580 = true;
-    //     }
+        if(this._disposed) return;
+
+        this._Str_581 = null;
+        this._assets = null;
+        this._Str_1708 = null;
+        this._Str_1710 = null;
+        this._Str_2121 = null;
+        this._Str_614 = null;
+
+        if(this._Str_671)
+        {
+            this._Str_671.destroy();
+
+            this._Str_671 = null;
+        }
+
+        if(this._Str_586)
+        {
+            this._Str_586.dispose();
+            this._Str_586 = null;
+        }
+
+        if(this._Str_864)
+        {
+            for(let k of this._Str_864.values()) if(k) k.destroy();
+
+            this._Str_864 = null;
+        }
+
+        this._Str_671 = null;
+        this._Str_903 = null;
+        this._disposed = true;
     }
 
     public get disposed(): boolean
     {
-        return this._Str_580;
-    }
-
-    public get isDisposed(): boolean
-    {
-        return this.disposed;
+        return this._disposed;
     }
 
     public _Str_784(): IAvatarFigureContainer

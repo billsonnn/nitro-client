@@ -31,20 +31,23 @@ export class TrophyView implements ITrophyView
 
     public render(): boolean
     {
-        if(!this._window) this._window = this._widget.windowManager.createElement();
+        if(!this._window)
+        {
+            const view = {
+                message: this._widget.message,
+                date: this._widget.date,
+                name: this._widget.name,
+                color: this._widget.color
+            };
 
-        const view = {
-            message: this._widget.message,
-            date: this._widget.date,
-            name: this._widget.name,
-            color: this._widget.color
-        };
+            this._window = this._widget.windowManager.renderElement(this.getTemplate(), view);
+        }
 
-        this._widget.windowManager.renderElement(this._window, this.getTemplate(), view);
-
-        const closeHandler = this._window.getElementsByClassName('close-handler')[0] as HTMLElement;
+        const closeHandler = (this._window.getElementsByClassName('close-handler')[0] as HTMLElement);
 
         if(closeHandler) closeHandler.onclick = this.disposeWindow.bind(this);
+
+        this._widget.layoutManager.addWidgetWindow(this._widget.widgetHandler.type, this._window);
 
         return true;
     }

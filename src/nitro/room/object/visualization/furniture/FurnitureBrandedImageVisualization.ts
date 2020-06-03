@@ -130,7 +130,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         if(!texture) return;
 
-        this.asset.addAsset(this._imageUrl, texture, 0, 0, false, false);
+        this.asset.addAsset(this._imageUrl, texture, true, 0, 0, false, false);
     }
 
     protected getSpriteAssetName(scale: number, layerId: number): string

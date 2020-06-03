@@ -1,6 +1,6 @@
-export interface IAvatarEffectListener
+import { IDisposable } from '../../core/common/disposable/IDisposable';
+
+export interface IAvatarEffectListener extends IDisposable
 {
-    dispose(): void;
     resetEffect(effect: number): void;
-    isDisposed: boolean;
 }

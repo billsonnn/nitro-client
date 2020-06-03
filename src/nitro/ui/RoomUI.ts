@@ -6,6 +6,7 @@ import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../room/events/RoomObjectHSLColorEnabledEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
+import { RoomSessionChatEvent } from '../session/events/RoomSessionChatEvent';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
@@ -63,6 +64,7 @@ export class RoomUI extends NitroManager
         this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+        this._roomSession.events.addEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
     }
 
     public dispose(): void
@@ -88,6 +90,7 @@ export class RoomUI extends NitroManager
         this._roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+        this._roomSession.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
     }
 
     public getDesktop(roomId: string): RoomDesktop
@@ -113,10 +116,16 @@ export class RoomUI extends NitroManager
 
         desktop = new RoomDesktop(session, this._communication.connection);
 
+        desktop.windowManager       = this._windowManager;
         desktop.roomEngine          = this._roomEngine;
         desktop.sessionDataManager  = this._sessionData;
         desktop.roomSessionManager  = this._roomSession;
         desktop.roomWidgetFactory   = this._roomWidgetFactory;
+
+        desktop.layout = `
+        <div class="room-container">
+            <div class="room-widget-container"></div>
+        </div>`;
 
         this._desktops.set(roomId, desktop);
 
@@ -149,6 +158,13 @@ export class RoomUI extends NitroManager
 
                 this._roomEngine.setActiveRoomId(event.roomId);
 
+                desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET);
+
+                if(!desktop.roomSession.isSpectator)
+                {
+                    desktop.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET);
+                }
+
                 desktop.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET);
 
                 this._isInRoom = true;
@@ -158,6 +174,7 @@ export class RoomUI extends NitroManager
                 this._isInRoom = false;
                 return;
             case RoomEngineDimmerStateEvent.ROOM_COLOR:
+                desktop.processEvent(event);
                 return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
                 const colorEvent = event as RoomObjectHSLColorEnabledEvent;
@@ -198,6 +215,11 @@ export class RoomUI extends NitroManager
                 {
                     this.destroyDesktop(this.getRoomId(event.session.roomId));
                 }
+                return;
+            default:
+                const desktop = this.getDesktop(this.getRoomId(event.session.roomId));
+
+                if(desktop) desktop.processEvent(event);
                 return;
         }
     }

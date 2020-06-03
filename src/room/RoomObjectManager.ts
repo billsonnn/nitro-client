@@ -4,13 +4,11 @@ import { RoomObject } from './object/RoomObject';
 
 export class RoomObjectManager implements IRoomObjectManager
 {
-    private _category: number;
     private _objects: Map<number, IRoomObjectController>;
 
-    constructor(category: number)
+    constructor()
     {
-        this._category  = category;
-        this._objects   = new Map();
+        this._objects = new Map();
     }
 
     public dispose(): void
@@ -73,11 +71,6 @@ export class RoomObjectManager implements IRoomObjectManager
 
             object.dispose();
         }
-    }
-
-    public get category(): number
-    {
-        return this._category;
     }
 
     public get objects(): Map<number, IRoomObjectController>

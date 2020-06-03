@@ -163,7 +163,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
                 for(let listener of listeners)
                 {
-                    if(!listener || listener.isDisposed) continue;
+                    if(!listener || listener.disposed) continue;
 
                     listener.resetFigure(figure);
                 }
@@ -281,7 +281,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         if(pendingLibraries && pendingLibraries.length)
         {
-            if(listener && !listener.isDisposed)
+            if(listener && !listener.disposed)
             {
                 let listeners = this._figureListeners.get(figure);
 
@@ -303,7 +303,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         }
         else
         {
-            if(listener && !listener.isDisposed) listener.resetFigure(figure);
+            if(listener && !listener.disposed) listener.resetFigure(figure);
         }
     }
 

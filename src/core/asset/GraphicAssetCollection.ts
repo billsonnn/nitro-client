@@ -62,25 +62,39 @@ export class GraphicAssetCollection
 
             if(!texture) continue;
 
-            if(!this.addAsset(name, texture, (asset.x || 0), (asset.y || 0), asset.flipH || false, false, source)) return;
+            if(!this.addAsset(name, texture, false, (asset.x || 0), (asset.y || 0), asset.flipH || false, false, source)) return;
         }
     }
 
-    public addAsset(name: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean, flipV: boolean, source: string = null): boolean
+    public addAsset(name: string, texture: PIXI.Texture, override: boolean, x: number, y: number, flipH: boolean, flipV: boolean, source: string = null): boolean
     {
         const existing = this.getAsset(name);
 
-        if(existing) return true;
+        if(!existing)
+        {
+            const graphic = GraphicAsset.createAsset(name, source, texture, x, y, flipH, flipV);
 
-        source = !source ? name : source;
+            if(!graphic) return false;
 
-        const graphic = GraphicAsset.createAsset(name, source, texture, x, y, flipH, flipV);
+            this._assets.set(name, graphic);
 
-        if(!graphic) return false;
+            return true;
+        }
 
-        this._assets.set(name, graphic);
+        if(override)
+        {
+            if(existing.texture && (existing.texture !== texture)) this.removeAsset(name);
 
-        return true;
+            const graphic = GraphicAsset.createAsset(name, source, texture, x, y, flipH, flipV);
+
+            if(!graphic) return false;
+
+            this._assets.set(name, graphic);
+
+            return true;
+        }
+
+        return false;
     }
 
     public getTexture(name: string): PIXI.Texture

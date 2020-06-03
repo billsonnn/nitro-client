@@ -1,9 +1,11 @@
 import { IRoomWidgetFactory } from '../IRoomWidgetFactory';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomUI } from '../RoomUI';
+import { ChatInputWidget } from './chatinput/ChatInputWidget';
 import { RoomWidgetEnum } from './enums/RoomWidgetEnum';
 import { TrophyFurniWidget } from './furniture/trophy/TrophyFurniWidget';
 import { IRoomWidget } from './IRoomWidget';
+import { RoomChatWidget } from './roomchat/RoomChatWidget';
 
 export class RoomWidgetFactory implements IRoomWidgetFactory
 {
@@ -21,10 +23,16 @@ export class RoomWidgetFactory implements IRoomWidgetFactory
 
     public createWidget(type: string, handler: IRoomWidgetHandler): IRoomWidget
     {
+        const desktop = this._roomUI.getDesktop('hard_coded_room_id');
+
         switch(type)
         {
+            case RoomWidgetEnum.CHAT_WIDGET:
+                return new RoomChatWidget(handler, this._roomUI.windowManager, desktop.layoutManager);
+            case RoomWidgetEnum.CHAT_INPUT_WIDGET:
+                return new ChatInputWidget(handler, this._roomUI.windowManager, desktop.layoutManager, this._roomUI, this._roomUI.getDesktop('hard_coded_room_id'));
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
-                return new TrophyFurniWidget(handler, this._roomUI.windowManager);
+                return new TrophyFurniWidget(handler, this._roomUI.windowManager, desktop.layoutManager);
         }
 
         return null;

@@ -47,7 +47,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private _cachedAvatarEffects: Map<string, IAvatarImage>;
     private _shadow: GraphicAsset;
     private _lastUpdate: number;
-    private _isDisposed: boolean;
+    private _disposed: boolean;
 
     private _figure: string;
     private _gender: string;
@@ -96,7 +96,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         this._cachedAvatarEffects   = new Map();
         this._shadow                = null;
         this._lastUpdate            = -1000;
-        this._isDisposed            = false;
+        this._disposed            = false;
 
         this._figure                = null;
         this._gender                = null;
@@ -150,13 +150,14 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
     public dispose(): void
     {
+        if(this._disposed) return;
+
         super.dispose();
 
         if(this._avatarImage) this._avatarImage.dispose();
 
-        this._shadow = null;
-
-        this._isDisposed = true;
+        this._shadow    = null;
+        this._disposed  = true;
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
@@ -1022,8 +1023,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         return this._angle;
     }
 
-    public get isDisposed(): boolean
+    public get disposed(): boolean
     {
-        return this._isDisposed;
+        return this._disposed;
     }
 }

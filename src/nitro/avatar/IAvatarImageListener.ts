@@ -1,6 +1,6 @@
-export interface IAvatarImageListener
+import { IDisposable } from '../../core/common/disposable/IDisposable';
+
+export interface IAvatarImageListener extends IDisposable
 {
-    dispose(): void;
     resetFigure(figure: string): void;
-    isDisposed: boolean;
 }

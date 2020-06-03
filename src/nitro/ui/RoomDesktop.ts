@@ -19,6 +19,9 @@ import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { INitroWindowManager } from '../window/INitroWindowManager';
+import { DesktopLayoutManager } from './DesktopLayoutManager';
+import { ChatInputWidgetHandler } from './handler/ChatInputWidgetHandler';
+import { ChatWidgetHandler } from './handler/ChatWidgetHandler';
 import { FurnitureTrophyWidgetHandler } from './handler/FurnitureTrophyWidgetHandler';
 import { IRoomDesktop } from './IRoomDesktop';
 import { IRoomWidgetFactory } from './IRoomWidgetFactory';
@@ -44,10 +47,12 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     private _session: IRoomSession;
     private _connection: IConnection;
     private _windowManager: INitroWindowManager;
+    private _layoutManager: DesktopLayoutManager;
     private _roomEngine: IRoomEngine;
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomWidgetFactory: IRoomWidgetFactory;
+    private _roomCanvasWrapper: HTMLCanvasElement;
     private _canvasIDs: number[];
 
     private _widgets: Map<string, IRoomWidget>;
@@ -69,10 +74,12 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         this._session                   = roomSession;
         this._connection                = connection;
         this._windowManager             = null;
+        this._layoutManager             = new DesktopLayoutManager();
         this._roomEngine                = null;
         this._sessionDataManager        = null;
         this._roomSessionManager        = null;
         this._roomWidgetFactory         = null;
+        this._roomCanvasWrapper         = null;
         this._canvasIDs                 = [];
 
         this._widgets                   = new Map();
@@ -109,6 +116,13 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         }
 
         window.onresize = null;
+
+        if(this._layoutManager)
+        {
+            this._layoutManager.dispose();
+
+            this._layoutManager = null;
+        }
     }
 
     public _Str_22664(canvasId: number): void
@@ -153,14 +167,14 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         stage.addChild(displayObject);
 
-        const element = document.getElementById('client') as HTMLCanvasElement;
+        this._roomCanvasWrapper = document.getElementById('client') as HTMLCanvasElement;
 
-        if(element)
+        if(this._roomCanvasWrapper)
         {
-            element.onclick     = this.onMouseEvent.bind(this);
-            element.onmousemove = this.onMouseEvent.bind(this);
-            element.onmousedown = this.onMouseEvent.bind(this);
-            element.onmouseup   = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onclick     = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmousemove = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmousedown = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmouseup   = this.onMouseEvent.bind(this);
         }
 
         window.onresize = this.onWindowResizeEvent.bind(this);
@@ -178,10 +192,25 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         let widgetHandler: IRoomWidgetHandler = null;
 
+        let sendSizeUpdate = false;
+
         switch(type)
         {
+            case RoomWidgetEnum.CHAT_WIDGET:
+                sendSizeUpdate = true;
+
+                const handler = new ChatWidgetHandler();
+                handler.connection = this._connection;
+
+                widgetHandler = handler;
+                break;
+            case RoomWidgetEnum.CHAT_INPUT_WIDGET:
+                sendSizeUpdate = true;
+                widgetHandler = new ChatInputWidgetHandler();
+                break;
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
                 widgetHandler = new FurnitureTrophyWidgetHandler();
+                break;
         }
 
         if(widgetHandler)
@@ -242,6 +271,15 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         widget.registerUpdateEvents(this._events);
 
         this._widgets.set(type, widget);
+
+        this._layoutManager.addWidgetWindow(type, widget.mainWindow);
+
+        // if(sendSizeUpdate)
+        // {
+        //     type = RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED;
+
+        //     this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(type, this.))
+        // }
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -450,45 +488,41 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
             case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
                 break;
+            case RoomEngineTriggerWidgetEvent.OPEN_WIDGET:
+            case RoomEngineTriggerWidgetEvent.CLOSE_WIDGET:
+                this.processEvent(event);
+                break;
         }
 
         if(updateEvent) this.events.dispatchEvent(updateEvent);
     }
 
-    public _Str_2485(k: NitroEvent): void
+    public processEvent(event: NitroEvent): void
     {
-        // var _local_3:IRoomWidgetHandler;
-        // var _local_4:Boolean;
-        // var _local_5:RoomEngineTriggerWidgetEvent;
-        // if (((!(k)) || (!(this._widgetHandlerEventMap))))
-        // {
-        //     return;
-        // }
-        // if (((this._roomCanvasWrapper) && (k.type == _Str_9973.RDMZEE_ENABLED)))
-        // {
-        //     this._Str_19067(this._roomCanvasWrapper.getDisplayObject());
-        // }
-        // var _local_2:Array = this._widgetHandlerEventMap.getValue(k.type);
-        // if (_local_2 != null)
-        // {
-        //     for each (_local_3 in _local_2)
-        //     {
-        //         _local_4 = true;
-        //         if (((k.type == RoomEngineTriggerWidgetEvent.OPEN_WIDGET) || (k.type == RoomEngineTriggerWidgetEvent.CLOSE_WIDGET)))
-        //         {
-        //             _local_5 = (k as RoomEngineTriggerWidgetEvent);
-        //             _local_4 = ((!(_local_5 == null)) && (_local_3.type == _local_5.widget));
-        //         }
-        //         if (k.type == RoomWidgetZoomToggleMessage.RWZTM_ZOOM_TOGGLE)
-        //         {
-        //             this._Str_17253();
-        //         }
-        //         if (_local_4)
-        //         {
-        //             _local_3._Str_2485(k);
-        //         }
-        //     }
-        // }
+        if(!event || !this._widgetHandlerEventMap) return;
+
+        const events = this._widgetHandlerEventMap.get(event.type);
+
+        if(!events) return;
+
+        let dispatchEvent = false;
+
+        for(let existing of events)
+        {
+            if(!existing) continue;
+
+            dispatchEvent = true;
+
+            if((event.type === RoomEngineTriggerWidgetEvent.OPEN_WIDGET) || (event.type === RoomEngineTriggerWidgetEvent.CLOSE_WIDGET))
+            {
+                if(event instanceof RoomEngineTriggerWidgetEvent)
+                {
+                    dispatchEvent = (existing.type === event.widget);
+                }
+            }
+
+            if(dispatchEvent) existing.processEvent(event);
+        }
     }
 
     private isFurnitureSelectionDisabled(k: RoomEngineObjectEvent): boolean
@@ -509,9 +543,9 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return true;
     }
 
-    private checkFurniManipulationRights(k: number, _arg_2: number, _arg_3: number): boolean
+    private checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean
     {
-        return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionDataManager.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(k, _arg_2, _arg_3)));
+        return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionDataManager.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(roomId, objectId, category)));
     }
 
     private isOwnerOfFurniture(roomObject: IRoomObject): boolean
@@ -549,6 +583,16 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     public set windowManager(manager: INitroWindowManager)
     {
         this._windowManager = manager;
+    }
+
+    public get layoutManager(): DesktopLayoutManager
+    {
+        return this._layoutManager;
+    }
+
+    public set layout(template: string)
+    {
+        this._layoutManager.setLayout(template, this._windowManager);
     }
 
     public get roomEngine(): IRoomEngine

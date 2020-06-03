@@ -78,12 +78,11 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         if(updateModel)
         {
             const figure = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_FIGURE) || null);
-            const gender = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_GENDER) || null);
 
             if(figure)
             {
                 this._figure   = (figure + '.' + this._placeHolderFigure);
-                this._gender   = gender;
+                this._gender   = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_GENDER) || null);
 
                 this._Str_15978();
             }
@@ -128,7 +127,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
                     _local_3.setDirection(AvatarSetType.FULL, this.direction);
                     
-                    this.asset.addAsset(this._Str_10185(), _local_3.getImage(AvatarSetType.FULL, true), 0, 0, false, false);
+                    this.asset.addAsset(this._Str_10185(), _local_3.getImage(AvatarSetType.FULL, true), true, 0, 0, false, false);
 
                     this._needsUpdate = true;
 
@@ -137,12 +136,9 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
                 _local_2.setDirection(AvatarSetType.FULL, this.direction);
 
-                if(this._dynamicAssetName)
-                {
-                    this.asset.removeAsset(this._dynamicAssetName);
-                }
+                if(this._dynamicAssetName) this.asset.removeAsset(this._dynamicAssetName);
 
-                this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), 0, 0, false, false);
+                this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), true, 0, 0, false, false);
 
                 this._dynamicAssetName  = this._Str_10185();
                 this._needsUpdate       = true;
@@ -159,7 +155,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
     private _Str_10185(): string
     {
-        return (((((('mannequin_' + this._figure) + '_') + this._scale) + '_') + this.direction) + '_') + this.object.id;
+        return (((((('mannequin_' + this._figure) + '_') + this._mannequinScale) + '_') + this.direction) + '_') + this.object.id;
     }
 
     public resetFigure(figure: string): void
@@ -197,7 +193,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         return super.getLayerYOffset(scale, direction, layerId);
     }
 
-    public get isDisposed(): boolean
+    public get disposed(): boolean
     {
         return this._disposed;
     }

@@ -1,3 +1,4 @@
+import { NitroEvent } from '../../../core/events/NitroEvent';
 import { RoomObjectVariable } from '../../room/object/RoomObjectVariable';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
@@ -10,18 +11,20 @@ import { RoomWidgetMessage } from '../widget/messages/RoomWidgetMessage';
 export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 {
     private _container: IRoomWidgetHandlerContainer;
-    private _isDisposed: boolean;
+    private _disposed: boolean;
 
     constructor()
     {
         this._container     = null;
-        this._isDisposed    = false;
+        this._disposed    = false;
     }
 
     public dispose(): void
     {
-        this._container     = null;
-        this._isDisposed    = true;
+        if(this._disposed) return;
+
+        this._container = null;
+        this._disposed  = true;
     }
 
     public update(): void
@@ -57,7 +60,13 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
                 }
                 break;
         }
+        
         return null;
+    }
+
+    public processEvent(event: NitroEvent): void
+    {
+        if(!event || this._disposed) return;
     }
 
     public get type(): string
@@ -87,6 +96,6 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 
     public get disposed(): boolean
     {
-        return this._isDisposed;
+        return this._disposed;
     }
 }

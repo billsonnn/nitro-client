@@ -3,6 +3,7 @@ import { INitroManager } from '../../core/common/INitroManager';
 export interface INitroWindowManager extends INitroManager
 {
     resize(): void;
-    createElement(): HTMLDivElement;
-    renderElement(element: HTMLElement, template: string, view: {}): void;
+    renderElement(template: string, view: {}): HTMLElement;
+    htmlToElement(html: string): HTMLElement;
+    window: HTMLDivElement;
 }

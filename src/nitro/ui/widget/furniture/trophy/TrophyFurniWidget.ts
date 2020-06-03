@@ -1,5 +1,6 @@
 import { IEventDispatcher } from '../../../../../core/events/IEventDispatcher';
 import { INitroWindowManager } from '../../../../window/INitroWindowManager';
+import { DesktopLayoutManager } from '../../../DesktopLayoutManager';
 import { IRoomWidgetHandler } from '../../../IRoomWidgetHandler';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomWidgetTrophyUpdateEvent } from '../../events/RoomWidgetTrophyUpdateEvent';
@@ -20,9 +21,9 @@ export class TrophyFurniWidget extends ConversionTrackingWidget implements ITrop
     private _view: ITrophyView;
     private _viewType: number;
 
-    constructor(handler: IRoomWidgetHandler, windowManager: INitroWindowManager)
+    constructor(handler: IRoomWidgetHandler, windowManager: INitroWindowManager, layoutManager: DesktopLayoutManager)
     {
-        super(handler, windowManager);
+        super(handler, windowManager, layoutManager);
     }
 
     public dispose(): void

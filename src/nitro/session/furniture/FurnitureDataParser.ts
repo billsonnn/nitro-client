@@ -1,9 +1,10 @@
-import { NitroManager } from '../../../core/common/NitroManager';
+import { EventDispatcher } from '../../../core/events/EventDispatcher';
+import { NitroEvent } from '../../../core/events/NitroEvent';
 import { FurnitureData } from './FurnitureData';
 import { FurnitureType } from './FurnitureType';
 import { IFurnitureData } from './IFurnitureData';
 
-export class FurnitureDataParser extends NitroManager
+export class FurnitureDataParser extends EventDispatcher
 {
     public static FURNITURE_DATA_READY: string = 'FDP_FURNITURE_DATA_READY';
     public static FURNITURE_DATA_ERROR: string = 'FDP_FURNITURE_DATA_ERROR';
@@ -48,7 +49,7 @@ export class FurnitureDataParser extends NitroManager
             if(data.wallItems) this.parseWallItems(data.wallItems);
         }
 
-        this.dispatchFurnitureDataEvent(FurnitureDataParser.FURNITURE_DATA_READY);
+        this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_READY));
     }
 
     private onFurnitureDataError(request: XMLHttpRequest): void
@@ -58,7 +59,7 @@ export class FurnitureDataParser extends NitroManager
         request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
         request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
 
-        this.dispatchFurnitureDataEvent(FurnitureDataParser.FURNITURE_DATA_ERROR);
+        this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
 
     private parseFloorItems(data: IFurnitureData[]): void
@@ -83,10 +84,5 @@ export class FurnitureDataParser extends NitroManager
 
             this._wallItems.set(furniture.id, new FurnitureData(FurnitureType.WALL, furniture));
         }
-    }
-
-    private dispatchFurnitureDataEvent(type: string): void
-    {
-        this.events && this.events.dispatchEvent(new Event(type));
     }
 }

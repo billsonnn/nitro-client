@@ -85,7 +85,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureData = new FurnitureDataParser(this._floorItems, this._wallItems);
 
-        this._furnitureData.events.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
         this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
     }
@@ -185,7 +185,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     private onFurnitureDataReadyEvent(event: Event): void
     {
-        this._furnitureData.events.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
         if(this._pendingFurniDataListeners)
         {

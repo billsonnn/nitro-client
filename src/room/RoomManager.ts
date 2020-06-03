@@ -330,7 +330,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
     public createRoomObjectManager(category: number): IRoomObjectManager
     {
-        return new RoomObjectManager(category);
+        return new RoomObjectManager();
     }
 
     public get rooms(): Map<string, IRoomInstance>

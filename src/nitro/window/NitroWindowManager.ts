@@ -36,9 +36,7 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
     {
         if(this._window) return;
 
-        this._window = document.createElement('div');
-
-        this._window.className = 'nitro-widget-container';
+        this._window = (this.htmlToElement(`<div class="nitro-window-container"></div>`) as HTMLDivElement);
 
         document.body.append(this._window);
 
@@ -53,41 +51,27 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
         this._window.style.height   = '100%';
     }
 
-    public createElement(): HTMLDivElement
+    public renderElement(template: string, view: {}): HTMLElement
     {
-        const element = document.createElement('div');
+        if(!template) return;
 
-        if(!element) return null;
+        const element = this.htmlToElement(Mustache.render(template, view));
 
-        this.addElement(element);
+        //this.centerElement(element);
+        this.makeDraggable(element);
 
         return element;
-    }
-
-    public renderElement(element: HTMLElement, template: string, view: {}): void
-    {
-        if(!element || !template) return;
-
-        element.innerHTML = Mustache.render(template, view);
-
-        const child = element.children[0] as HTMLElement;
-
-        if(child)
-        {
-            this.centerElement(child);
-            this.makeDraggable(child);
-        }
     }
 
     private makeDraggable(element: HTMLElement): void
     {
         if(!element) return;
 
-        const header = element.getElementsByClassName('drag-handler')[0] as HTMLElement;
+        const draggableElement = element.getElementsByClassName('drag-handler')[0] as HTMLElement;
 
-        if(header) element = header;
+        if(!draggableElement) return;
         
-        element.onmousedown = this.onMouseEvent.bind(this);
+        draggableElement.onmousedown = this.onMouseEvent.bind(this);
     }
 
     public centerElement(element: HTMLElement): void
@@ -131,15 +115,19 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
         this._mouseY    = event.clientY;
     }
 
-    private addElement(element: HTMLElement): void
+    public htmlToElement(html: string): HTMLElement
     {
-        if(this._window)
-        {
-            this._window.append(element);
+        const element = document.createElement('template');
 
-            return;
-        }
+        html = html.trim();
 
-        document.body.append(element);
+        element.innerHTML = html;
+
+        return (element.content.firstChild as HTMLElement);
+    }
+
+    public get window(): HTMLDivElement
+    {
+        return this._window;
     }
 }

@@ -4,7 +4,7 @@ import { NitroConfiguration } from '../../NitroConfiguration';
 import { BadgeInfo } from './BadgeInfo';
 import { BadgeImageReadyEvent } from './events/BadgeImageReadyEvent';
 
-export class BadgeImageManager 
+export class BadgeImageManager
 {
     public static GROUP_BADGE: string   = 'group_badge';
     public static NORMAL_BADGE: string  = 'normal_badge';
@@ -30,9 +30,9 @@ export class BadgeImageManager
 
     public getBadgeImage(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = true, _arg_4: boolean = false): PIXI.Texture
     {
-        const badge = this._Str_10735(k, _arg_2, _arg_4);
+        let badge = this._Str_10735(k, _arg_2, _arg_4);
 
-        if(!badge) return this._Str_20965();
+        if(!badge && _arg_3) badge = this._Str_20965();
 
         return badge;
     }
@@ -46,9 +46,7 @@ export class BadgeImageManager
 
     public _Str_5831(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): string
     {
-        //const badgeName = ((this._Str_9663 + k) + ((_arg_3) ? '_32' : ''));
-
-        const badgeName = k;
+        const badgeName = this.getBadgeAssetName(k, _arg_3);
 
         if(this._assets.getTexture(badgeName)) return badgeName;
 
@@ -59,9 +57,7 @@ export class BadgeImageManager
 
     private _Str_10735(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): PIXI.Texture
     {
-        //const badgeAsset: string = ((this._Str_9663 + k) + ((_arg_3) ? '_32' : ''));
-
-        const badgeName = k;
+        const badgeName = this.getBadgeAssetName(k, _arg_3);
 
         const existing = this._assets.getTexture(badgeName);
 
@@ -106,5 +102,14 @@ export class BadgeImageManager
         if(!existing) return null;
 
         return existing.clone();
+    }
+
+    private getBadgeAssetName(badgeName: string, zoomedOut: boolean = false): string
+    {
+        if(!badgeName) return null;
+
+        //return ((this._Str_9663 + badgeName) + ((zoomedOut) ? '_32' : ''));
+
+        return badgeName;
     }
 }

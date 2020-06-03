@@ -246,7 +246,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         if(!collection) return false;
 
-        return collection.addAsset(assetName, texture, 0, 0, false, false);
+        return collection.addAsset(assetName, texture, true, 0, 0, false, false);
     }
 
     private createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection

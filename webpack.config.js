@@ -52,8 +52,13 @@ module.exports = {
     },
     devServer: {
         host: '0.0.0.0',
-        port: 3000,
-        disableHostCheck: false
+        port: 80,
+        disableHostCheck: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*',
+        }
     },
     resolve: {
         extensions: [ '.ts', '.tsx', '.js' ]
