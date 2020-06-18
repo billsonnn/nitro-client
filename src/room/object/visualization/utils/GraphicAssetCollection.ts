@@ -104,7 +104,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
             let y           = (-(asset.y) || 0);
             let flipH       = false;
             let flipV       = false;
-            let usesPalette = (asset.usesPalette === 1);
+            let usesPalette = (asset.usesPalette || false);
             let source      = (asset.source || '');
 
             if(asset.flipH && source.length) flipH = true;

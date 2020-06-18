@@ -5,46 +5,46 @@ import { RoomHeightMapParser } from './RoomHeightMapParser';
 export class RoomHeightMapUpdateParser implements IMessageParser
 {
     private _wrapper: IMessageDataWrapper;
-    private _totalHeights: number;
+    private _count: number;
     private _x: number;
     private _y: number;
-    private _height: number;
+    private _value: number;
 
     public flush(): boolean
     {
-        this._wrapper       = null;
-        this._totalHeights  = 0;
-        this._x             = 0;
-        this._y             = 0;
-        this._height        = 0;
+        this._wrapper   = null;
+        this._count     = 0;
+        this._x         = 0;
+        this._y         = 0;
+        this._value     = 0;
 
         return true;
     }
 
-    public getHeight(): number
+    public tileHeight(): number
     {
-        return RoomHeightMapParser.convertHeight(this._height);
+        return RoomHeightMapParser.decodeTileHeight(this._value);
     }
 
-    public isStackable(): boolean
+    public isStackingBlocked(): boolean
     {
-        return RoomHeightMapParser.isHeightStackable(this._height);
+        return RoomHeightMapParser.decodeIsStackingBlocked(this._value);
     }
 
-    public isTile(): boolean
+    public isRoomTile(): boolean
     {
-        return RoomHeightMapParser.isValidHeight(this._height);
+        return RoomHeightMapParser.decodeIsRoomTile(this._value);
     }
 
     public next(): boolean
     {
-        if(!this._totalHeights) return false;
+        if(!this._count) return false;
 
-        this._totalHeights--;
+        this._count--;
 
         this._x         = this._wrapper.readByte();
         this._y         = this._wrapper.readByte();
-        this._height    = this._wrapper.readShort();
+        this._value     = this._wrapper.readShort();
 
         return true;
     }
@@ -53,8 +53,8 @@ export class RoomHeightMapUpdateParser implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._wrapper       = wrapper;
-        this._totalHeights  = wrapper.readByte();
+        this._wrapper   = wrapper;
+        this._count     = wrapper.readByte();
 
         return true;
     }
@@ -71,6 +71,6 @@ export class RoomHeightMapUpdateParser implements IMessageParser
     
     public get height(): number
     {
-        return this._height;
+        return this._value;
     }
 }

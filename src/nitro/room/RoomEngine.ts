@@ -1744,7 +1744,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!heightMap || !wallGeometry) return location;
 
         var _local_5 = location.z;
-        var _local_6 = heightMap.getHeight(location.x, location.y);
+        var _local_6 = heightMap.getTileHeight(location.x, location.y);
         var _local_7 = wallGeometry.getHeight(location.x, location.y);
 
         if((Math.abs((_local_5 - _local_6)) < 0.1) && (Math.abs((_local_6 - _local_7)) < 0.1))

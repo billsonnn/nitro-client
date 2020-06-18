@@ -75,7 +75,7 @@ export class Animation implements IAnimation
 
                 const frames: AnimationLayerData[][] = [];
 
-                this._Str_1031(frames, override.frame, k);
+                this._Str_1031(frames, override.frames, k);
 
                 this._overrideFrames.set(name, frames);
             }

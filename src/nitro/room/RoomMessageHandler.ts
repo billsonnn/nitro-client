@@ -322,9 +322,9 @@ export class RoomMessageHandler extends Disposable
 
             while(x < width)
             {
-                heightMap.setHeight(x, y, parser.getHeight(x, y));
-                heightMap.setStackable(x, y, parser.isStackable(x, y));
-                heightMap.setTile(x, y, parser.isTile(x, y));
+                heightMap.setTileHeight(x, y, parser.getTileHeight(x, y));
+                heightMap.setStackingBlocked(x, y, parser.getStackingBlocked(x, y));
+                heightMap.setIsRoomTile(x, y, parser.isRoomTile(x, y));
 
                 x++;
             }
@@ -349,9 +349,9 @@ export class RoomMessageHandler extends Disposable
 
         while(parser.next())
         {
-            heightMap.setHeight(parser.x, parser.y, parser.getHeight());
-            heightMap.setStackable(parser.x, parser.y, parser.isStackable());
-            heightMap.setTile(parser.x, parser.y, parser.isTile());
+            heightMap.setTileHeight(parser.x, parser.y, parser.tileHeight());
+            heightMap.setStackingBlocked(parser.x, parser.y, parser.isStackingBlocked());
+            heightMap.setIsRoomTile(parser.x, parser.y, parser.isRoomTile());
         }
     }
 

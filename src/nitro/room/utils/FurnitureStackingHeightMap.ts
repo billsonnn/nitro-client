@@ -2,75 +2,70 @@ export class FurnitureStackingHeightMap
 {
     private _width: number;
     private _height: number;
-    private _heights: Map<number, number>;
-    private _isStackable: Map<number, boolean>;
-    private _isTile: Map<number, boolean>;
+    private _heights: number[]
+    private _isNotStackable: boolean[];
+    private _isRoomTile: boolean[];
 
     constructor(width: number, height: number)
     {
-        this._width         = width;
-        this._height        = height;
-        this._heights       = new Map();
-        this._isStackable   = new Map();
-        this._isTile        = new Map();
+        this._width             = width;
+        this._height            = height;
+        this._heights           = [];
+        this._isNotStackable    = [];
+        this._isRoomTile        = [];
+
+        let total = (width * height);
+
+        while(total > 0)
+        {
+            this._heights.push(0);
+            this._isNotStackable.push(false);
+            this._isRoomTile.push(false);
+
+            total--;
+        }
     }
 
     public dispose(): void
     {
-        
+        this._width             = 0;
+        this._height            =0;
+        this._height            = null;
+        this._isNotStackable    = null;
+        this._isRoomTile        = null;
     }
 
-    private isValidCoordinate(x: number, y: number): boolean
+    private validPosition(x: number, y: number): boolean
     {
-        return (((x >= 0) && (x < this._width)) && ((y >= 0) && (y < this._height)));
+        return (((x >= 0) && (x < this._width)) && (y >= 0)) && (y < this._height);
     }
 
-    public getHeight(x: number, y: number): number
+    public getTileHeight(x: number, y: number): number
     {
-        return (this.isValidCoordinate(x, y)) ? this._heights.get((y * this._width) + x) : 0;
+        return ((this.validPosition(x, y)) ? this._heights[((y * this._width) + x)] : 0);
     }
 
-    public setHeight(x: number, y: number, height: number): void
+    public setTileHeight(x: number, y: number, height: number): void
     {
-        if(!this.isValidCoordinate(x, y)) return;
-
-        this._heights.set((y * this._width) + x, height);
+        if(this.validPosition(x, y)) this._heights[((y * this._width) + x)] = height;
     }
 
-    public isStackable(x: number, y: number): boolean
+    public setStackingBlocked(x: number, y: number, isNotStackable: boolean): void
     {
-        if(!this.isValidCoordinate(x, y)) return false;
-
-        return this._isStackable.get((y * this._width) + x);
+        if(this.validPosition(x, y)) this._isNotStackable[((y * this._width) + x)] = isNotStackable;
     }
 
-    public setStackable(x: number, y: number, isStackable: boolean): void
+    public setIsRoomTile(x: number, y: number, isRoomTile: boolean): void
     {
-        if(!this.isValidCoordinate(x, y)) return;
-
-        this._isStackable.set((y * this._width) + x, isStackable);
+        if(this.validPosition(x, y)) this._isRoomTile[((y * this._width) + x)] = isRoomTile;
     }
 
-    public isTile(x: number, y: number): boolean
+    public validateLocation(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: boolean, _arg_10: number = -1): boolean
     {
-        if(!this.isValidCoordinate(x, y)) return false;
+        let _local_12 = 0;
+        let _local_13 = 0;
 
-        return this._isTile.get((y * this._width) + x);
-    }
-
-    public setTile(x: number, y: number, isTile: boolean): void
-    {
-        if(!this.isValidCoordinate(x, y)) return;
-
-        this._isTile.set((y * this._width) + x, isTile);
-    }
-
-    public _Str_20406(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: boolean, _arg_10: number = -1): boolean
-    {
-        var _local_12 = 0;
-        var _local_13 = 0;
-
-        if(!this.isValidCoordinate(k, _arg_2) || !this.isValidCoordinate(((k + _arg_3) - 1), ((_arg_2 + _arg_4) - 1))) return false;
+        if(!this.validPosition(k, _arg_2) || !this.validPosition(((k + _arg_3) - 1), ((_arg_2 + _arg_4) - 1))) return false;
 
         if(((_arg_5 < 0) || (_arg_5 >= this._width))) _arg_5 = 0;
 
@@ -79,11 +74,11 @@ export class FurnitureStackingHeightMap
         _arg_7 = Math.min(_arg_7, (this._width - _arg_5));
         _arg_8 = Math.min(_arg_8, (this._height - _arg_6));
 
-        if(_arg_10 === -1) _arg_10 = this.getHeight(k, _arg_2);
+        if(_arg_10 === -1) _arg_10 = this.getTileHeight(k, _arg_2);
 
-        var _local_11 = _arg_2;
+        let _local_11 = _arg_2;
 
-        while (_local_11 < (_arg_2 + _arg_4))
+        while(_local_11 < (_arg_2 + _arg_4))
         {
             _local_12 = k;
 
@@ -92,19 +87,14 @@ export class FurnitureStackingHeightMap
                 if(((((_local_12 < _arg_5) || (_local_12 >= (_arg_5 + _arg_7))) || (_local_11 < _arg_6)) || (_local_11 >= (_arg_6 + _arg_8))))
                 {
                     _local_13 = ((_local_11 * this._width) + _local_12);
-
-                    const tile = this._isTile.get(_local_13);
                     
                     if(_arg_9)
                     {
-                        if(tile === undefined) return false;
+                        if(!this._isRoomTile[_local_13]) return false;
                     }
                     else
                     {
-                        const stackable = this._isStackable.get(_local_13);
-                        const height    = this._heights.get(_local_13);
-
-                        if((stackable === undefined) || (tile === undefined) || (height === undefined) || (Math.abs(height - _arg_10) > 0.01)) return false;
+                        if(((this._isNotStackable[_local_13]) || (!(this._isRoomTile[_local_13]))) || (Math.abs((this._heights[_local_13] - _arg_10)) > 0.01)) return false;
                     }
                 }
 

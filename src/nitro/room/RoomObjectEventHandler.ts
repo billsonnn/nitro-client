@@ -671,16 +671,16 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this.sendWalkUpdate(event._Str_16836, event._Str_17676);
     }
 
-    private _Str_24048(k: RoomObjectMouseEvent, roomId: number): void
+    private _Str_24048(event: RoomObjectMouseEvent, roomId: number): void
     {
-        if(!k || !this._roomEngine) return;
-
+        if(!event || !this._roomEngine) return;
+        
         const eventDispatcher = this._roomEngine.events;
-
+        
         if(!eventDispatcher) return;
-
+        
         const selectedData = this.getSelectedRoomObjectData(roomId);
-
+        
         if(!selectedData) return;
 
         const roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
@@ -693,7 +693,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
 
-            if(!(((k instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, (k._Str_16836), (k._Str_17676), stackingHeightMap))))
+            if(!(((event instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, (event._Str_16836), (event._Str_17676), stackingHeightMap))))
             {
                 this._Str_18155(roomObject, selectedData, selectedData.loc.x, selectedData.loc.y, stackingHeightMap);
 
@@ -705,14 +705,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             _local_6 = false;
 
-            if(k instanceof RoomObjectWallMouseEvent)
+            if(event instanceof RoomObjectWallMouseEvent)
             {
-                const _local_10 = k.wallLocation;
-                const _local_11 = k.wallWidth;
-                const _local_12 = k.wallHeight;
-                const _local_13 = k.x;
-                const _local_14 = k.y;
-                const _local_15 = k.direction;
+                const _local_10 = event.wallLocation;
+                const _local_11 = event.wallWidth;
+                const _local_12 = event.wallHeight;
+                const _local_13 = event.x;
+                const _local_14 = event.y;
+                const _local_15 = event.direction;
 
                 if(this._Str_22090(roomObject, selectedData, _local_10, _local_11, _local_12, _local_13, _local_14, _local_15))
                 {
@@ -743,41 +743,41 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
-    private _Str_18155(k: IRoomObjectController, _arg_2: SelectedRoomObjectData, _arg_3: number, _arg_4: number, _arg_5: FurnitureStackingHeightMap): boolean
+    private _Str_18155(roomObject: IRoomObjectController, selectedObjectData: SelectedRoomObjectData, x: number, y: number, stackingHeightMap: FurnitureStackingHeightMap): boolean
     {
-        if(!k || !_arg_2) return false;
+        if(!roomObject || !selectedObjectData) return false;
 
         const _local_6 = new Vector3d();
-        _local_6.assign(k.getDirection());
+        _local_6.assign(roomObject.getDirection());
 
-        k.setDirection(_arg_2.dir);
+        roomObject.setDirection(selectedObjectData.dir);
 
-        const _local_7 = new Vector3d(_arg_3, _arg_4, 0);
+        const _local_7 = new Vector3d(x, y, 0);
         const _local_8 = new Vector3d();
 
-        _local_8.assign(k.getDirection());
+        _local_8.assign(roomObject.getDirection());
 
-        let _local_9 = this._Str_21004(k, _local_7, _arg_2.loc, _arg_2.dir, _arg_5);
+        let _local_9 = this._Str_21004(roomObject, _local_7, selectedObjectData.loc, selectedObjectData.dir, stackingHeightMap);
 
         if(!_local_9)
         {
-            _local_8.x = this._Str_17555(k, true);
+            _local_8.x = this._Str_17555(roomObject, true);
 
-            k.setDirection(_local_8);
+            roomObject.setDirection(_local_8);
 
-            _local_9 = this._Str_21004(k, _local_7, _arg_2.loc, _arg_2.dir, _arg_5);
+            _local_9 = this._Str_21004(roomObject, _local_7, selectedObjectData.loc, selectedObjectData.dir, stackingHeightMap);
         }
 
         if(!_local_9)
         {
-            k.setDirection(_local_6);
+            roomObject.setDirection(_local_6);
 
             return false;
         }
 
-        k.setLocation(_local_9);
+        roomObject.setLocation(_local_9);
 
-        if(_local_8) k.setDirection(_local_8);
+        if(_local_8) roomObject.setDirection(_local_8);
 
         return true;
     }
@@ -833,7 +833,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         let _local_11   = sizeX;
         let _local_12   = sizeY;
         let _local_13   = 0;
-        let _local_14   = ((Math.trunc(_local_6.x + 45) % 360) / 90);
+        let _local_14   = Math.floor(((_local_6.x + 45) % 360) / 90);
 
         if((_local_14 === 1) || (_local_14 === 3))
         {
@@ -843,7 +843,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             sizeY = _local_13;
         }
 
-        _local_14 = ((Math.trunc(_arg_4.x + 45) % 360) / 90);
+        _local_14 = Math.floor(((_arg_4.x + 45) % 360) / 90);
 
         if((_local_14 === 1) || (_local_14 === 3))
         {
@@ -856,9 +856,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const stackable = k.model.getValue(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1;
 
-            if(_arg_5._Str_20406(_arg_2.x, _arg_2.y, sizeX, sizeY, _local_9, _local_10, _local_11, _local_12, stackable))
+            if(_arg_5.validateLocation(_arg_2.x, _arg_2.y, sizeX, sizeY, _local_9, _local_10, _local_11, _local_12, stackable))
             {
-                return new Vector3d(_arg_2.x, _arg_2.y, _arg_5.getHeight(_arg_2.x, _arg_2.y));
+                return new Vector3d(_arg_2.x, _arg_2.y, _arg_5.getTileHeight(_arg_2.x, _arg_2.y));
             }
 
             return null;
@@ -1351,7 +1351,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const alwaysStackable = object.model.getValue(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1;
 
-            if(_arg_3._Str_20406(location.x, location.y, sizeX, sizeY, location.x, location.y, _local_8, _local_9, alwaysStackable, location.z)) return true;
+            if(_arg_3.validateLocation(location.x, location.y, sizeX, sizeY, location.x, location.y, _local_8, _local_9, alwaysStackable, location.z)) return true;
 
             return false;
         }

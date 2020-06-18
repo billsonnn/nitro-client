@@ -408,7 +408,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         const objectSprite      = sprite.sprite;
         const extendedSprite    = this.getExtendedSprite(index);
 
-        if(!extendedSprite) return false;
+        if(!objectSprite || !extendedSprite) return false;
 
         if(extendedSprite._Str_4593 !== objectSprite._Str_4593)
         {

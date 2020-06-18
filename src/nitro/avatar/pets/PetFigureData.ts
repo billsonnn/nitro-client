@@ -110,7 +110,7 @@ export class PetFigureData
 
     private getCustomData(k: string): string[]
     {
-        const _local_2: string[] = [];
+        let _local_2: string[] = [];
 
         if(k)
         {
@@ -122,7 +122,8 @@ export class PetFigureData
             {
                 const _local_6  = (3 + _local_4);
                 const _local_7  = parseInt(_local_3[_local_6]);
-                const _local_2  = _local_3.slice(_local_5, (_local_5 + (_local_7 * 3)));
+                
+                _local_2  = _local_3.slice(_local_5, (_local_5 + (_local_7 * 3)));
             }
         }
 

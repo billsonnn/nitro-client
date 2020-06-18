@@ -104,7 +104,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     {
         super.update(geometry, time, update, skipUpdate);
 
-
+        // update experience
     }
 
     protected updateModel(scale: number): boolean

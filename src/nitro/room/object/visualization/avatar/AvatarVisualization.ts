@@ -903,7 +903,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         
         if(sprite)
         {
-            sprite.texture  = null;
+            sprite.texture  = PIXI.Texture.EMPTY;
             sprite.alpha    = 255;
         }
     }
