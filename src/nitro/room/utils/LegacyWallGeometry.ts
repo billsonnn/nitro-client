@@ -87,7 +87,7 @@ export class LegacyWallGeometry
         this._heightMap = [];
     }
 
-    public _Str_3982(x: number, y: number, height: number): boolean
+    public setHeight(x: number, y: number, height: number): boolean
     {
         if((((x < 0) || (x >= this._width)) || (y < 0)) || (y >= this._height)) return false;
 
@@ -100,7 +100,7 @@ export class LegacyWallGeometry
         return true;
     }
 
-    public _Str_2754(x: number, y: number): number
+    public getHeight(x: number, y: number): number
     {
         if((((x < 0) || (x >= this._width)) || (y < 0)) || (y >= this._height)) return 0;
 
@@ -129,7 +129,7 @@ export class LegacyWallGeometry
                     _local_6 = 1;
                     while (_local_6 < this._height)
                     {
-                        if (this._Str_2754(_local_7, _local_6) <= this._floorHeight)
+                        if (this.getHeight(_local_7, _local_6) <= this._floorHeight)
                         {
                             if ((_local_6 - 1) < _arg_2)
                             {
@@ -153,7 +153,7 @@ export class LegacyWallGeometry
                     _local_7 = 1;
                     while (_local_7 < this._width)
                     {
-                        if (this._Str_2754(_local_7, _local_6) <= this._floorHeight)
+                        if (this.getHeight(_local_7, _local_6) <= this._floorHeight)
                         {
                             if ((_local_7 - 1) < k)
                             {
@@ -172,7 +172,7 @@ export class LegacyWallGeometry
         }
         var _local_8: number = k;
         var _local_9: number = _arg_2;
-        var _local_10: number = this._Str_2754(k, _arg_2);
+        var _local_10: number = this.getHeight(k, _arg_2);
         if (_arg_5 == LegacyWallGeometry.R)
         {
             _local_8 = (_local_8 + ((_arg_3 / (this._scale / 2)) - 0.5));
@@ -207,7 +207,7 @@ export class LegacyWallGeometry
         {
             if (((_local_5 >= 0) && (_local_5 < this._height)))
             {
-                if (this._Str_2754(_local_4, _local_5) <= this._floorHeight)
+                if (this.getHeight(_local_4, _local_5) <= this._floorHeight)
                 {
                     _local_8 = (_local_4 - 1);
                     _local_9 = _local_5;
@@ -215,7 +215,7 @@ export class LegacyWallGeometry
                     _arg_3 = LegacyWallGeometry.L;
                     break;
                 }
-                if (this._Str_2754(_local_4, (_local_5 + 1)) <= this._floorHeight)
+                if (this.getHeight(_local_4, (_local_5 + 1)) <= this._floorHeight)
                 {
                     _local_8 = _local_4;
                     _local_9 = _local_5;
@@ -230,7 +230,7 @@ export class LegacyWallGeometry
         _local_10 = ((this.scale / 2) * _local_6);
         var _local_13: number = ((-(_local_7) * this.scale) / 2);
         _local_13 = (_local_13 + ((((-(_arg_2) * 18) / 32) * this.scale) / 2));
-        _local_12 = this._Str_2754(_local_8, _local_9);
+        _local_12 = this.getHeight(_local_8, _local_9);
         _local_11 = (((_local_12 * this.scale) / 2) + _local_13);
         if (_arg_3 == LegacyWallGeometry.R)
         {
@@ -259,7 +259,7 @@ export class LegacyWallGeometry
         {
             _local_3 = Math.floor((k.x - 0.5));
             _local_4 = Math.floor((k.y + 0.5));
-            _local_8 = this._Str_2754(_local_3, _local_4);
+            _local_8 = this.getHeight(_local_3, _local_4);
             _local_5 = ((this._scale / 2) - (((k.y - _local_4) + 0.5) * (this._scale / 2)));
             _local_6 = (((_local_8 - k.z) * (this._scale / 2)) + (((this._scale / 2) - _local_5) / 2));
             _local_7 = LegacyWallGeometry.L;
@@ -270,7 +270,7 @@ export class LegacyWallGeometry
             {
                 _local_3 = Math.floor((k.x + 0.5));
                 _local_4 = Math.floor((k.y - 0.5));
-                _local_8 = this._Str_2754(_local_3, _local_4);
+                _local_8 = this.getHeight(_local_3, _local_4);
                 _local_5 = (((k.x + 0.5) - _local_3) * (this._scale / 2));
                 _local_6 = (((_local_8 - k.z) * (this._scale / 2)) + (_local_5 / 2));
                 _local_7 = LegacyWallGeometry.R;
@@ -310,10 +310,10 @@ export class LegacyWallGeometry
 
     public _Str_24141(k: number, _arg_2: number): number
     {
-        const _local_3 = this._Str_2754(k, _arg_2);
+        const _local_3 = this.getHeight(k, _arg_2);
         const _local_4 = (_local_3 + 1);
         
-        return _local_3 + (((((((((Math.floor(this._Str_2754((k - 1), (_arg_2 - 1))) == _local_4) || (Math.floor(this._Str_2754(k, (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.floor(this._Str_2754((k - 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k + 1), _arg_2)) == _local_4)) || (Math.floor(this._Str_2754((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754(k, (_arg_2 + 1))) == _local_4)) || (Math.floor(this._Str_2754((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
+        return _local_3 + (((((((((Math.trunc(this.getHeight((k - 1), (_arg_2 - 1))) == _local_4) || (Math.trunc(this.getHeight(k, (_arg_2 - 1))) == _local_4)) || (Math.trunc(this.getHeight((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.trunc(this.getHeight((k - 1), _arg_2)) == _local_4)) || (Math.trunc(this.getHeight((k + 1), _arg_2)) == _local_4)) || (Math.trunc(this.getHeight((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.trunc(this.getHeight(k, (_arg_2 + 1))) == _local_4)) || (Math.trunc(this.getHeight((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
     }
 
     public _Str_10375(k: number, _arg_2: number): boolean

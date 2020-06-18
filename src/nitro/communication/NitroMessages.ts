@@ -15,6 +15,7 @@ import { RoomSettingsErrorEvent } from './messages/incoming/room/data/RoomSettin
 import { RoomSettingsEvent } from './messages/incoming/room/data/RoomSettingsEvent';
 import { RoomSettingsSavedEvent } from './messages/incoming/room/data/RoomSettingsSavedEvent';
 import { RoomSettingsUpdatedEvent } from './messages/incoming/room/data/RoomSettingsUpdatedEvent';
+import { ObjectsRollingEvent } from './messages/incoming/room/engine/ObjectsRollingEvent';
 import { FurnitureFloorAddEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorAddEvent';
 import { FurnitureFloorEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
@@ -33,7 +34,7 @@ import { RoomModelEvent } from './messages/incoming/room/mapping/RoomModelEvent'
 import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNameEvent';
 import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
-import { RoomRollingEvent } from './messages/incoming/room/RoomRollingEvent';
+import { PetFigureUpdateEvent } from './messages/incoming/room/pet/PetFigureUpdateEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from './messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from './messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -114,16 +115,15 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.DESKTOP_VIEW, DesktopViewEvent);
 
         // ROOM
-        this._events.set(IncomingHeader.ROOM_ROLLING, RoomRollingEvent);
 
             // ACCESS
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
             this._events.set(IncomingHeader.ROOM_FORWARD, RoomFowardEvent);
 
-            // RIGHTS
-            this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
-            this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
-            this._events.set(IncomingHeader.ROOM_RIGHTS, RoomRightsEvent);
+                // RIGHTS
+                this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
+                this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
+                this._events.set(IncomingHeader.ROOM_RIGHTS, RoomRightsEvent);
 
             // DATA
             this._events.set(IncomingHeader.ROOM_SETTINGS_CHAT, RoomChatSettingsEvent);
@@ -134,6 +134,9 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_SETTINGS, RoomSettingsEvent);
             this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE, RoomSettingsSavedEvent);
             this._events.set(IncomingHeader.ROOM_SETTINGS_UPDATED, RoomSettingsUpdatedEvent);
+
+            // ENGINE
+            this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
 
             // FURNITURE
             this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
@@ -160,6 +163,9 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
             this._events.set(IncomingHeader.ROOM_PAINT, RoomPaintEvent);
             this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
+
+            // PET
+            this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
 
             // UNIT
             this._events.set(IncomingHeader.UNIT_DANCE, RoomUnitDanceEvent);

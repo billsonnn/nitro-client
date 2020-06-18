@@ -1,6 +1,7 @@
+import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
+import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
+import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { Disposable } from '../common/disposable/Disposable';
-import { GraphicAsset } from './GraphicAsset';
-import { GraphicAssetCollection } from './GraphicAssetCollection';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
 import { AssetLoader } from './loaders/AssetLoader';
@@ -9,7 +10,6 @@ export class AssetManager extends Disposable implements IAssetManager
 {
     private _textures: Map<string, PIXI.Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
-
     private _pendingUrls: Map<string, Function[]>;
 
     constructor()
@@ -18,7 +18,6 @@ export class AssetManager extends Disposable implements IAssetManager
 
         this._textures          = new Map();
         this._collections       = new Map();
-
         this._pendingUrls       = new Map();
     }
 
@@ -47,7 +46,7 @@ export class AssetManager extends Disposable implements IAssetManager
         this._textures.set(name, texture);
     }
 
-    public getAsset(name: string): GraphicAsset
+    public getAsset(name: string): IGraphicAsset
     {
         if(!name) return null;
 
@@ -65,7 +64,7 @@ export class AssetManager extends Disposable implements IAssetManager
         return null;
     }
 
-    public getCollection(name: string): GraphicAssetCollection
+    public getCollection(name: string): IGraphicAssetCollection
     {
         if(!name) return null;
 
@@ -76,7 +75,7 @@ export class AssetManager extends Disposable implements IAssetManager
         return existing;
     }
 
-    public createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection
+    public createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): IGraphicAssetCollection
     {
         if(!data) return null;
 

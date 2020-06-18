@@ -1,3 +1,22 @@
 import { RoomUnitChatComposer } from './RoomUnitChatComposer';
+import { IMessageComposer } from 'core/communication/messages/IMessageComposer';
 
-export class RoomUnitChatShoutComposer extends RoomUnitChatComposer {}
+export class RoomUnitChatShoutComposer implements IMessageComposer
+{
+    private _data: any[];
+
+    constructor(message: string, styleId: number)
+    {
+        this._data = [ message, styleId ];
+    }
+
+    public getMessageArray(): any[]
+    {
+        return this._data;
+    }
+
+    public dispose(): void
+    {
+        return;
+    }
+}

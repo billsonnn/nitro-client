@@ -379,7 +379,7 @@ export class AvatarImageCache
                     {
                         const texture = asset.texture;
 
-                        if(!texture)
+                        if(!texture || !texture.valid || !texture.baseTexture)
                         {
                             isCacheable = false;
                         }
@@ -387,7 +387,7 @@ export class AvatarImageCache
                         {
                             if(container.isColorable && container.color) color = container.color._Str_915;
 
-                            const offset = new PIXI.Point(asset.x, asset.y);
+                            const offset = new PIXI.Point(-(asset.x), -(asset.y));
 
                             if(flipH) offset.x = (offset.x + ((this._scale === AvatarScaleType.LARGE) ? 65 : 31));
 

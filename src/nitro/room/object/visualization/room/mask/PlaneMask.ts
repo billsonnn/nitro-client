@@ -1,4 +1,4 @@
-﻿import { GraphicAsset } from '../../../../../../core/asset/GraphicAsset';
+﻿import { IGraphicAsset } from '../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
@@ -93,7 +93,7 @@ export class PlaneMask
         return this._lastMaskVisualization;
     }
 
-    public _Str_21021(k: number, _arg_2: IVector3D): GraphicAsset
+    public _Str_21021(k: number, _arg_2: IVector3D): IGraphicAsset
     {
         const visualization = this._Str_24650(k);
 

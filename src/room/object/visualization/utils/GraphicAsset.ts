@@ -1,8 +1,13 @@
-export class GraphicAsset
+import { IGraphicAsset } from './IGraphicAsset';
+
+export class GraphicAsset implements IGraphicAsset
 {
+    private static GRAPHIC_POOL: GraphicAsset[] = [];
+
     private _name: string;
     private _source: string;
     private _texture: PIXI.Texture;
+    private _usesPalette: boolean;
     private _x: number;
     private _y: number;
     private _width: number;
@@ -10,55 +15,41 @@ export class GraphicAsset
     private _flipH: boolean;
     private _flipV: boolean;
     private _rectangle: PIXI.Rectangle;
-
     private _initialized: boolean;
-    private _disposed: boolean;
 
-    public static createAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean = false, flipV: boolean = false)
+    public static createAsset(name: string, source: string, texture: PIXI.Texture, x: number, y: number, flipH: boolean = false, flipV: boolean = false, usesPalette: boolean = false): GraphicAsset
     {
-        const asset = new GraphicAsset();
+        const graphicAsset = (GraphicAsset.GRAPHIC_POOL.length ? GraphicAsset.GRAPHIC_POOL.pop() : new GraphicAsset());
 
-        asset._name      = name;
-        asset._source    = source || null
-
-        if(asset._source === null) asset._source = asset._name;
+        graphicAsset._name      = name;
+        graphicAsset._source    = source || null
 
         if(texture)
         {
-            asset._texture      = texture;
-            asset._initialized  = false;
+            graphicAsset._texture      = texture;
+            graphicAsset._initialized  = false;
         }
         else
         {
-            asset._texture      = null;
-            asset._initialized  = true;
+            graphicAsset._texture      = null;
+            graphicAsset._initialized  = true;
         }
 
-        asset._x            = x || 0;
-        asset._y            = y || 0;
-        asset._flipH        = flipH;
-        asset._flipV        = flipV;
-        asset._rectangle    = null;
+        graphicAsset._usesPalette  = usesPalette;
+        graphicAsset._x            = x;
+        graphicAsset._y            = y;
+        graphicAsset._flipH        = flipH;
+        graphicAsset._flipV        = flipV;
+        graphicAsset._rectangle    = null;
 
-        asset._disposed     = false;
-
-        return asset;
+        return graphicAsset;
     }
 
-    public dispose(): void
+    public recycle(): void
     {
-        if(this._disposed) return;
+        this._texture = null;
 
-        this._disposed  = true;
-        this._name      = null;
-        this._source    = null;
-
-        if(this._texture)
-        {
-            this._texture.destroy();
-
-            this._texture = null;
-        }
+        GraphicAsset.GRAPHIC_POOL.push(this);
     }
 
     private initialize(): void
@@ -84,6 +75,11 @@ export class GraphicAsset
     public get texture(): PIXI.Texture
     {
         return this._texture;
+    }
+
+    public get usesPalette(): boolean
+    {
+        return this._usesPalette;
     }
 
     public get x(): number
@@ -112,16 +108,16 @@ export class GraphicAsset
 
     public get offsetX(): number
     {
-        if(!this._flipH) return -(this._x);
+        if(!this._flipH) return this._x;
 
-        return (-(this._x) * -1);
+        return (this._x * -1);
     }
 
     public get offsetY(): number
     {
-        if(!this._flipV) return -(this._y);
+        if(!this._flipV) return this._y;
 
-        return (-(this._y) * -1);
+        return (this._y * -1);
     }
 
     public get flipH(): boolean

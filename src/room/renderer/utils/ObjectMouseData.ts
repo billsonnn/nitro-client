@@ -9,22 +9,22 @@
         this._spriteTag = '';
     }
 
-    public get _Str_1577(): string
+    public get objectId(): string
     {
         return this._objectId;
     }
 
-    public set _Str_1577(k: string)
+    public set objectId(k: string)
     {
         this._objectId = k;
     }
 
-    public get _Str_4216(): string
+    public get spriteTag(): string
     {
         return this._spriteTag;
     }
 
-    public set _Str_4216(k: string)
+    public set spriteTag(k: string)
     {
         this._spriteTag = k;
     }

@@ -181,4 +181,5 @@ export class IncomingHeader
     public static WIRED_ACTION                 = 1434;
     public static WIRED_SAVE                   = 1155;
     public static WIRED_TRIGGER                = 383;
+    public static PET_FIGURE_UPDATE            = 1924;
 }

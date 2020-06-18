@@ -10,6 +10,10 @@ export interface IRoomSession extends IDisposable
     setRoomOwner(): void;
     start(): boolean;
     reset(roomId: number): void;
+    sendChatMessage(text: string, styleId: number): void;
+    sendShoutMessage(text: string, styleId: number): void;
+    sendWhisperMessage(recipientName: string, text: string, styleId: number): void;
+    sendChatTypingMessage(isTyping: boolean): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
     connection: IConnection;

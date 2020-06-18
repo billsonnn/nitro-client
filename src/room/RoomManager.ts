@@ -1,4 +1,3 @@
-import { GraphicAssetCollection } from '../core/asset/GraphicAssetCollection';
 import { NitroManager } from '../core/common/NitroManager';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
@@ -11,6 +10,7 @@ import { IRoomObject } from './object/IRoomObject';
 import { IRoomObjectController } from './object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from './object/logic/IRoomObjectLogicFactory';
 import { IRoomObjectVisualizationFactory } from './object/visualization/IRoomObjectVisualizationFactory';
+import { IGraphicAssetCollection } from './object/visualization/utils/IGraphicAssetCollection';
 import { RoomInstance } from './RoomInstance';
 import { RoomObjectManager } from './RoomObjectManager';
 
@@ -102,7 +102,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         let visualization                   = type;
         let logic                           = type;
         let assetName                       = type;
-        let asset: GraphicAssetCollection   = null;
+        let asset: IGraphicAssetCollection  = null;
         let isLoading: boolean              = false;
 
         if(this._contentLoader.isLoaderType(type))

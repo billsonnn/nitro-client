@@ -513,7 +513,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return canvas.displayObject;
     }
 
-    public getRoomInstanceRenderingCanvas(roomId: number, canvasId: number): IRoomRenderingCanvas
+    public getRoomInstanceRenderingCanvas(roomId: number, canvasId: number = -1): IRoomRenderingCanvas
     {
         const instance = this.getRoomInstance(roomId);
 
@@ -533,6 +533,17 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     public getActiveRoomInstanceRenderingCanvas(): IRoomRenderingCanvas
     {
         return this.getRoomInstanceRenderingCanvas(this._activeRoomId, this._lastCanvasId);
+    }
+
+    public getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number = -1): PIXI.Point
+    {
+        if(canvasId === -1) canvasId = this._lastCanvasId;
+
+        const renderingCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!renderingCanvas) return null;
+
+        return new PIXI.Point(renderingCanvas.screenOffsetX, renderingCanvas.screenOffsetY);
     }
 
     public initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void
@@ -1693,7 +1704,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         let objectType = RoomObjectUserType.getTypeString(type);
 
-        if(objectType === RoomObjectUserType.PET) objectType = this.getPetTypeFromString(figure);
+        if(objectType === RoomObjectUserType.PET) objectType = this.getPetType(figure);
 
         const object = this.createRoomObjectUser(roomId, objectId, objectType);
 
@@ -1734,7 +1745,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         var _local_5 = location.z;
         var _local_6 = heightMap.getHeight(location.x, location.y);
-        var _local_7 = wallGeometry._Str_2754(location.x, location.y);
+        var _local_7 = wallGeometry.getHeight(location.x, location.y);
 
         if((Math.abs((_local_5 - _local_6)) < 0.1) && (Math.abs((_local_6 - _local_7)) < 0.1))
         {
@@ -1800,13 +1811,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         object.processUpdateMessage(message);
     }
 
-    public updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string): void
+    public updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string = null, subType: string = null, isRiding: boolean = false): void
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
         if(!object) return;
 
-        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender));
+        object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender, subType, isRiding));
     }
 
     public updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): void
@@ -2495,7 +2506,21 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return (object.model.getValue(RoomObjectVariable.OBJECT_ROOM_ID));
     }
 
-    private getPetTypeFromString(type: string): string
+    public getPetTypeId(figure: string): number
+    {
+        let type = -1;
+
+        if(figure)
+        {
+            const parts = figure.split(' ');
+
+            if(parts.length > 1) type = parseInt(parts[0]);
+        }
+
+        return type;
+    }
+
+    private getPetType(type: string): string
     {
         if(!type) return null;
 
@@ -2506,6 +2531,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             const typeId = parseInt(parts[0]);
 
             if(this._roomContentLoader) return this._roomContentLoader.getPetNameForType(typeId);
+
+            return 'pet';
         }
 
         return null;
@@ -2588,5 +2615,12 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private get _Str_11555(): boolean
     {
         return true;
+    }
+
+    public get selectedAvatarId(): number
+    {
+        if(!this._roomObjectEventHandler) return -1;
+
+        return this._roomObjectEventHandler.selectedAvatarId;
     }
 }

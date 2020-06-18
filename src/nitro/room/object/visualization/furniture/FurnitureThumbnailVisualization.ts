@@ -1,4 +1,4 @@
-import { GraphicAsset } from '../../../../../core/asset/GraphicAsset';
+import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
 import { NitroInstance } from '../../../../NitroInstance';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
@@ -66,8 +66,8 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         }
         else
         {
-            this.asset.removeAsset(this._Str_15493(64));
-            this.asset.removeAsset(this._Str_15493(32));
+            this.asset.disposeAsset(this._Str_15493(64));
+            this.asset.disposeAsset(this._Str_15493(32));
         }
 
         this._Str_16232 = false;
@@ -89,7 +89,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 {
                     const _local_6 = this._Str_25562(k, asset);
                     const _local_7 = this._Str_15493(scale);
-                    this.asset.removeAsset(_local_7);
+                    this.asset.disposeAsset(_local_7);
                     this.asset.addAsset(_local_7, _local_6, true, asset.offsetX, asset.offsetY, false, false);
                 }
 
@@ -100,7 +100,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         }
     }
 
-    private _Str_25562(k: PIXI.Graphics, _arg_2: GraphicAsset): PIXI.Texture
+    private _Str_25562(k: PIXI.Graphics, _arg_2: IGraphicAsset): PIXI.Texture
     {
         let graphic: PIXI.Graphics = null;
         

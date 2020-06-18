@@ -2,7 +2,7 @@ import { RoomWidgetMessage } from './RoomWidgetMessage';
 
 export class RoomWidgetChatSelectAvatarMessage extends RoomWidgetMessage
 {
-    public static SELECT_AVATAR: string = 'RWCSAM_MESSAGE_SELECT_AVATAR';
+    public static MESSAGE_SELECT_AVATAR: string = 'RWCSAM_MESSAGE_SELECT_AVATAR';
 
     private _objectId: number;
     private _userName: string;

@@ -1,4 +1,7 @@
+import * as PIXI from 'pixi.js-legacy';
+import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroManager } from '../../core/common/NitroManager';
+import { IAvatarRenderManager } from '../avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
@@ -12,16 +15,18 @@ import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { INitroWindowManager } from '../window/INitroWindowManager';
+import { IRoomUI } from './IRoomUI';
 import { IRoomWidgetFactory } from './IRoomWidgetFactory';
 import { RoomDesktop } from './RoomDesktop';
 import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
 import { RoomWidgetFactory } from './widget/RoomWidgetFactory';
 
-export class RoomUI extends NitroManager
+export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
 {
     private _communication: INitroCommunicationManager;
     private _windowManager: INitroWindowManager;
     private _roomEngine: IRoomEngine;
+    private _avatarRenderManager: IAvatarRenderManager;
     private _sessionData: ISessionDataManager;
     private _roomSession: IRoomSessionManager;
     private _roomWidgetFactory: IRoomWidgetFactory;
@@ -29,19 +34,22 @@ export class RoomUI extends NitroManager
 
     private _isInRoom: boolean;
 
-    constructor(communication: INitroCommunicationManager, windowManager: INitroWindowManager, engine: IRoomEngine, sessionData: ISessionDataManager, roomSession: IRoomSessionManager)
+    constructor(communication: INitroCommunicationManager, windowManager: INitroWindowManager, engine: IRoomEngine, avatarRenderManager: IAvatarRenderManager, sessionData: ISessionDataManager, roomSession: IRoomSessionManager)
     {
         super();
 
-        this._communication     = communication;
-        this._windowManager     = windowManager;
-        this._roomEngine        = engine;
-        this._sessionData       = sessionData;
-        this._roomSession       = roomSession;
-        this._roomWidgetFactory = new RoomWidgetFactory(this);
-        this._desktops          = new Map();
+        this._communication         = communication;
+        this._windowManager         = windowManager;
+        this._roomEngine            = engine;
+        this._avatarRenderManager   = avatarRenderManager;
+        this._sessionData           = sessionData;
+        this._roomSession           = roomSession;
+        this._roomWidgetFactory     = new RoomWidgetFactory(this);
+        this._desktops              = new Map();
 
-        this._isInRoom          = false;
+        this._isInRoom              = false;
+
+        PIXI.Ticker.shared.add(this.update, this);
 
         this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
         this._roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
@@ -69,6 +77,8 @@ export class RoomUI extends NitroManager
 
     public dispose(): void
     {
+        PIXI.Ticker.shared.remove(this.update, this);
+
         this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
         this._roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
         this._roomEngine.events.removeEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
@@ -118,18 +128,28 @@ export class RoomUI extends NitroManager
 
         desktop.windowManager       = this._windowManager;
         desktop.roomEngine          = this._roomEngine;
+        desktop.avatarRenderManager = this._avatarRenderManager;
         desktop.sessionDataManager  = this._sessionData;
         desktop.roomSessionManager  = this._roomSession;
         desktop.roomWidgetFactory   = this._roomWidgetFactory;
 
-        desktop.layout = `
-        <div class="room-container">
-            <div class="room-widget-container"></div>
-        </div>`;
+        desktop.layout = `<div class="room-container"></div>`;
 
         this._desktops.set(roomId, desktop);
 
         return desktop;
+    }
+
+    public update(time: number): void
+    {
+        if(!this._desktops || !this._desktops.size) return;
+
+        for(let desktop of this._desktops.values())
+        {
+            if(!desktop) continue;
+
+            desktop.update();
+        }
     }
 
     private onRoomEngineEvent(event: RoomEngineEvent): void

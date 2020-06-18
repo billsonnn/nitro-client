@@ -4,16 +4,16 @@ export class ObjectAvatarFigureUpdateMessage extends ObjectStateUpdateMessage
 {
     private _figure: string;
     private _gender: string;
-    private _race: string;
+    private _subType: string;
     private _isRiding: boolean;
 
-    constructor(figure: string, gender: string = null, race: string = null, isRiding: boolean = false)
+    constructor(figure: string, gender: string = null, subType: string = null, isRiding: boolean = false)
     {
         super();
 
         this._figure    = figure;
         this._gender    = gender;
-        this._race      = race;
+        this._subType   = subType;
         this._isRiding  = isRiding;
     }
 
@@ -27,9 +27,9 @@ export class ObjectAvatarFigureUpdateMessage extends ObjectStateUpdateMessage
         return this._gender;
     }
 
-    public get race(): string
+    public get subType(): string
     {
-        return this._race;
+        return this._subType;
     }
 
     public get isRiding(): boolean

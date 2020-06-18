@@ -8,11 +8,12 @@ import { RoomWallData } from './RoomWallData';
 
 export class RoomPlaneParser 
 {
-    private static _Str_6100: number = 0.25;
-    private static _Str_6429: number = 0.25;
-    private static _Str_13826: number = 20;
-    public static _Str_3134: number = -110;
-    public static _Str_5500: number = -100;
+    private static FLOOR_THICKNESS: number              = 0.25;
+    private static WALL_THICKNESS: number               = 0.25;
+    private static MAX_WALL_ADDITIONAL_HEIGHT: number   = 20;
+
+    public static TILE_BLOCKED: number                  = -110;
+    public static TILE_HOLE: number                     = -100;
 
     private _tileMatrix: number[][];
     private _tileMatrixOriginal: number[][];
@@ -43,7 +44,7 @@ export class RoomPlaneParser
         this._floorHoles = new Map();
     }
 
-    private static _Str_14393(matricies: number[][]): number
+    private static getFloorHeight(matricies: number[][]): number
     {
         const length = matricies.length;
 
@@ -74,7 +75,7 @@ export class RoomPlaneParser
         return tileHeight;
     }
 
-    private static _Str_19173(matricies: number[][]): PIXI.Point
+    private static findEntranceTile(matricies: number[][]): PIXI.Point
     {
         if(!matricies) return null;
 
@@ -115,7 +116,7 @@ export class RoomPlaneParser
 
         while(i < (_local_6.length - 1))
         {
-            if((((_local_6[i]) | 0) <= (((_local_6[(i - 1)]) | 0) - 1)) && (((_local_6[i]) | 0) <= (((_local_6[(i + 1)]) | 0) - 1))) return new PIXI.Point(((_local_6[i]) | 0), i);
+            if(((Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i - 1)]) - 1)) && (Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i + 1)]) - 1)))) return new PIXI.Point(Math.trunc((_local_6[i]) | 0), i);
 
             i++;
         }
@@ -123,7 +124,7 @@ export class RoomPlaneParser
         return null;
     }
 
-    private static _Str_21256(k: number[][]): number[][]
+    private static expandFloorTiles(k: number[][]): number[][]
     {
         var _local_2: number;
         var _local_5: number;
@@ -183,7 +184,6 @@ export class RoomPlaneParser
                     while (_local_7 < 3)
                     {
                         _local_17 = (_local_7 + 1);
-
                         _local_4[_local_9][(_local_10 + _local_7)] = (((_local_13 * (3 - _local_7)) + (_local_14 * _local_7)) / 3);
                         _local_4[(_local_9 + 3)][(_local_10 + _local_17)] = (((_local_15 * (3 - _local_17)) + (_local_16 * _local_17)) / 3);
                         _local_4[(_local_9 + _local_17)][_local_10] = (((_local_13 * (3 - _local_17)) + (_local_15 * _local_17)) / 3);
@@ -204,7 +204,7 @@ export class RoomPlaneParser
         return _local_4;
     }
 
-    private static _Str_19834(k: number[][]):void
+    private static addTileTypes(k: number[][]):void
     {
         var _local_4: number;
         var _local_5: number;
@@ -257,7 +257,7 @@ export class RoomPlaneParser
         }
     }
 
-    private static _Str_20168(k: number[][]):void
+    private static unpadHeightMap(k: number[][]):void
     {
         k.shift();
         k.pop();
@@ -269,19 +269,19 @@ export class RoomPlaneParser
         }
     }
 
-    private static _Str_20749(k: number[][]):void
+    private static padHeightMap(k: number[][]):void
     {
         var _local_2: number[] = [];
         var _local_3: number[] = [];
         for(let _local_4 of k)
         {
-            _local_4.push(RoomPlaneParser._Str_3134);
-            _local_4.unshift(RoomPlaneParser._Str_3134);
+            _local_4.push(RoomPlaneParser.TILE_BLOCKED);
+            _local_4.unshift(RoomPlaneParser.TILE_BLOCKED);
         }
         for(let _local_5 of k[0])
         {
-            _local_2.push(RoomPlaneParser._Str_3134);
-            _local_3.push(RoomPlaneParser._Str_3134);
+            _local_2.push(RoomPlaneParser.TILE_BLOCKED);
+            _local_3.push(RoomPlaneParser.TILE_BLOCKED);
         }
         k.push(_local_3);
         k.unshift(_local_2);
@@ -308,22 +308,22 @@ export class RoomPlaneParser
         return this._maxY;
     }
 
-    public get _Str_23886(): number
+    public get tileMapWidth(): number
     {
         return this._width;
     }
 
-    public get _Str_25092(): number
+    public get tileMapHeight(): number
     {
         return this._height;
     }
 
-    public get _Str_3828(): number
+    public get planeCount(): number
     {
         return this._planes.length;
     }
 
-    public get _Str_7678(): number
+    public get floorHeight(): number
     {
         if (this._fixedWallHeight != -1)
         {
@@ -350,12 +350,12 @@ export class RoomPlaneParser
         this._wallHeight = k;
     }
 
-    public get _Str_9955(): number
+    public get wallThicknessMultiplier(): number
     {
         return this._wallThicknessMultiplier;
     }
 
-    public set _Str_9955(k: number)
+    public set wallThicknessMultiplier(k: number)
     {
         if (k < 0)
         {
@@ -364,12 +364,12 @@ export class RoomPlaneParser
         this._wallThicknessMultiplier = k;
     }
 
-    public get _Str_9990(): number
+    public get floorThicknessMultiplier(): number
     {
         return this._floorThicknessMultiplier;
     }
 
-    public set _Str_9990(k: number)
+    public set floorThicknessMultiplier(k: number)
     {
         if (k < 0)
         {
@@ -396,8 +396,6 @@ export class RoomPlaneParser
         this._planes = [];
         this._tileMatrix = [];
         this._tileMatrixOriginal = [];
-        this._tileMatrix = [];
-        this._tileMatrixOriginal = [];
         this._width = 0;
         this._height = 0;
         this._minX = 0;
@@ -408,52 +406,53 @@ export class RoomPlaneParser
         this._floorHoleMatrix = [];
     }
 
-    public _Str_13735(width: number, height: number): boolean
+    public initializeTileMap(width: number, height: number): boolean
     {
-        var _local_4: number[];
-        var _local_5: number[];
-        var _local_6: boolean[];
-        var _local_7: number;
-        if (width < 0)
+        if(width < 0) width = 0;
+
+        if(height < 0) height = 0;
+
+        this._tileMatrix            = [];
+        this._tileMatrixOriginal    = [];
+        this._floorHoleMatrix       = [];
+
+        let y = 0;
+
+        while (y < height)
         {
-            width = 0;
-        }
-        if (height < 0)
-        {
-            height = 0;
-        }
-        this._tileMatrix = [];
-        this._tileMatrixOriginal = [];
-        this._floorHoleMatrix = [];
-        var _local_3: number = 0;
-        while (_local_3 < height)
-        {
-            _local_4 = [];
-            _local_5 = [];
-            _local_6 = [];
-            _local_7 = 0;
-            while (_local_7 < width)
+            let tileMatrix            = [];
+            let tileMatrixOriginal    = [];
+            let floorHoleMatrix       = [];
+
+            let x = 0;
+
+            while (x < width)
             {
-                _local_4[_local_7] = RoomPlaneParser._Str_3134;
-                _local_5[_local_7] = RoomPlaneParser._Str_3134;
-                _local_6[_local_7] = false;
-                _local_7++;
+                tileMatrix[x]           = RoomPlaneParser.TILE_BLOCKED;
+                tileMatrixOriginal[x]   = RoomPlaneParser.TILE_BLOCKED;
+                floorHoleMatrix[x]      = false;
+
+                x++;
             }
-            this._tileMatrix.push(_local_4);
-            this._tileMatrixOriginal.push(_local_5);
-            this._floorHoleMatrix.push(_local_6);
-            _local_3++;
+            
+            this._tileMatrix.push(tileMatrix);
+            this._tileMatrixOriginal.push(tileMatrixOriginal);
+            this._floorHoleMatrix.push(floorHoleMatrix);
+
+            y++;
         }
-        this._width = width;
-        this._height = height;
-        this._minX = this._width;
-        this._maxX = -1;
-        this._minY = this._height;
-        this._maxY = -1;
+
+        this._width     = width;
+        this._height    = height;
+        this._minX      = this._width;
+        this._maxX      = -1;
+        this._minY      = this._height;
+        this._maxY      = -1;
+        
         return true;
     }
 
-    public _Str_3982(k: number, _arg_2: number, _arg_3: number): boolean
+    public setTileHeight(k: number, _arg_2: number, _arg_3: number): boolean
     {
         var _local_4: number[];
         var _local_5: boolean;
@@ -462,8 +461,6 @@ export class RoomPlaneParser
         var _local_8: number;
         if (((((k >= 0) && (k < this._width)) && (_arg_2 >= 0)) && (_arg_2 < this._height)))
         {
-            if(this._tileMatrix[_arg_2] === undefined) this._tileMatrix[_arg_2] = [];
-
             _local_4 = this._tileMatrix[_arg_2];
             
             _local_4[k] = _arg_3;
@@ -494,7 +491,7 @@ export class RoomPlaneParser
                     _local_6 = this._minY;
                     while (_local_6 < this._maxY)
                     {
-                        if (this._Str_4480(k, _local_6) >= 0)
+                        if (this.getTileHeightInternal(k, _local_6) >= 0)
                         {
                             _local_5 = true;
                             break;
@@ -519,7 +516,7 @@ export class RoomPlaneParser
                     _local_8 = this._minX;
                     while (_local_8 < this._maxX)
                     {
-                        if (this._Str_2754(_local_8, _arg_2) >= 0)
+                        if (this.getTileHeight(_local_8, _arg_2) >= 0)
                         {
                             _local_7 = true;
                             break;
@@ -544,12 +541,13 @@ export class RoomPlaneParser
         return false;
     }
 
-    public _Str_2754(k: number, _arg_2: number): number
+    public getTileHeight(k: number, _arg_2: number): number
     {
         if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
-            return RoomPlaneParser._Str_3134;
+            return RoomPlaneParser.TILE_BLOCKED;
         }
+
         var _local_3 = this._tileMatrix[_arg_2];
 
         if(_local_3[k] === undefined) return 0;
@@ -557,31 +555,31 @@ export class RoomPlaneParser
         return Math.abs(_local_3[k]);
     }
 
-    private _Str_25886(k: number, _arg_2: number): number
+    private getTileHeightOriginal(k: number, _arg_2: number): number
     {
         if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
-            return RoomPlaneParser._Str_3134;
+            return RoomPlaneParser.TILE_BLOCKED;
         }
         if (this._floorHoleMatrix[_arg_2][k])
         {
-            return RoomPlaneParser._Str_5500;
+            return RoomPlaneParser.TILE_HOLE;
         }
         var _local_3 = this._tileMatrixOriginal[_arg_2];
         return _local_3[k];
     }
 
-    private _Str_4480(k: number, _arg_2: number): number
+    private getTileHeightInternal(k: number, _arg_2: number): number
     {
         if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
-            return RoomPlaneParser._Str_3134;
+            return RoomPlaneParser.TILE_BLOCKED;
         }
         var _local_3 = this._tileMatrix[_arg_2];
         return _local_3[k];
     }
 
-    public _Str_12919(k: number=-1): boolean
+    public initializeFromTileData(k: number=-1): boolean
     {
         var _local_2: number;
         var _local_3: number;
@@ -598,7 +596,8 @@ export class RoomPlaneParser
             }
             _local_3++;
         }
-        var _local_4: PIXI.Point = RoomPlaneParser._Str_19173(this._tileMatrix);
+        var _local_4: PIXI.Point = RoomPlaneParser.findEntranceTile(this._tileMatrix);
+
         _local_3 = 0;
         while (_local_3 < this._height)
         {
@@ -608,7 +607,7 @@ export class RoomPlaneParser
                 if(this._floorHoleMatrix[_local_3] === undefined) this._floorHoleMatrix[_local_3] = [];
                 if (this._floorHoleMatrix[_local_3][_local_2])
                 {
-                    this._Str_3982(_local_2, _local_3, RoomPlaneParser._Str_5500);
+                    this.setTileHeight(_local_2, _local_3, RoomPlaneParser.TILE_HOLE);
                 }
                 _local_2++;
             }
@@ -624,31 +623,30 @@ export class RoomPlaneParser
         var _local_2: number = 0;
         if (k != null)
         {
-            _local_2 = this._Str_2754(k.x, k.y);
-            this._Str_3982(k.x, k.y, RoomPlaneParser._Str_3134);
+            _local_2 = this.getTileHeight(k.x, k.y);
+            this.setTileHeight(k.x, k.y, RoomPlaneParser.TILE_BLOCKED);
         }
-        this._floorHeight = RoomPlaneParser._Str_14393(this._tileMatrix);
-        this._Str_23133();
+        this._floorHeight = RoomPlaneParser.getFloorHeight(this._tileMatrix);
+        this.createWallPlanes();
         var _local_3: number[][] = [];
-        for(let _local_4 of this._tileMatrix)
-        {
-            _local_3.push(_local_4);
-        }
-        RoomPlaneParser._Str_20749(_local_3);
-        RoomPlaneParser._Str_19834(_local_3);
-        RoomPlaneParser._Str_20168(_local_3);
-        _local_5 = RoomPlaneParser._Str_21256(_local_3);
-        this._Str_25564(_local_5);
+
+        for(let _local_4 of this._tileMatrix) _local_3.push(_local_4.concat());
+
+        RoomPlaneParser.padHeightMap(_local_3);
+        RoomPlaneParser.addTileTypes(_local_3);
+        RoomPlaneParser.unpadHeightMap(_local_3);
+        _local_5 = RoomPlaneParser.expandFloorTiles(_local_3);
+        this.extractPlanes(_local_5);
         if (k != null)
         {
-            this._Str_3982(k.x, k.y, _local_2);
-            this._Str_22077(new Vector3d((k.x + 0.5), (k.y + 0.5), _local_2), new Vector3d(-1, 0, 0), new Vector3d(0, -1, 0), false, false, false, false);
+            this.setTileHeight(k.x, k.y, _local_2);
+            this.addFloor(new Vector3d((k.x + 0.5), (k.y + 0.5), _local_2), new Vector3d(-1, 0, 0), new Vector3d(0, -1, 0), false, false, false, false);
         }
         
         return true;
     }
 
-    private _Str_19326(k: PIXI.Point, _arg_2: boolean): RoomWallData
+    private generateWallData(k: PIXI.Point, _arg_2: boolean): RoomWallData
     {
         var _local_8: boolean;
         var _local_9: boolean;
@@ -656,7 +654,7 @@ export class RoomPlaneParser
         var _local_11: PIXI.Point;
         var _local_12: number;
         var _local_3: RoomWallData = new RoomWallData();
-        var _local_4: Function[] = [this._Str_24038.bind(this), this._Str_24221.bind(this), this._Str_25705.bind(this), this._Str_22333.bind(this)];
+        var _local_4: Function[] = [this.extractTopWall.bind(this), this.extractRightWall.bind(this), this.extractBottomWall.bind(this), this.extractLeftWall.bind(this)];
         var _local_5: number = 0;
         var _local_6: PIXI.Point = new PIXI.Point(k.x, k.y);
         var _local_7: number = 0;
@@ -700,7 +698,7 @@ export class RoomPlaneParser
         return _local_3;
     }
 
-    private _Str_25300(k: RoomWallData):void
+    private hidePeninsulaWallChains(k: RoomWallData): void
     {
         var _local_4: number;
         var _local_5: number;
@@ -748,7 +746,7 @@ export class RoomPlaneParser
         }
     }
 
-    private _Str_25293(k: RoomWallData):void
+    private updateWallsNextToHoles(k: RoomWallData): void
     {
         var _local_4: PIXI.Point;
         var _local_5: number;
@@ -772,7 +770,7 @@ export class RoomPlaneParser
                 _local_10 = 0;
                 while (_local_10 < _local_6)
                 {
-                    if (this._Str_4480(((_local_4.x + (_local_10 * _local_7.x)) - _local_8.x), ((_local_4.y + (_local_10 * _local_7.y)) - _local_8.y)) == RoomPlaneParser._Str_5500)
+                    if (this.getTileHeightInternal(((_local_4.x + (_local_10 * _local_7.x)) - _local_8.x), ((_local_4.y + (_local_10 * _local_7.y)) - _local_8.y)) == RoomPlaneParser.TILE_HOLE)
                     {
                         if (((_local_10 > 0) && (_local_9 == 0)))
                         {
@@ -800,7 +798,7 @@ export class RoomPlaneParser
         }
     }
 
-    private _Str_20164(k: PIXI.Point, _arg_2: PIXI.Point, _arg_3: RoomWallData): number
+    private resolveOriginalWallIndex(k: PIXI.Point, _arg_2: PIXI.Point, _arg_3: RoomWallData): number
     {
         var _local_10: PIXI.Point;
         var _local_11: PIXI.Point;
@@ -850,7 +848,7 @@ export class RoomPlaneParser
         return -1;
     }
 
-    private _Str_24096(k: RoomWallData, _arg_2: RoomWallData):void
+    private hideOriginallyHiddenWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
         var _local_5: PIXI.Point;
         var _local_6: PIXI.Point;
@@ -869,7 +867,7 @@ export class RoomPlaneParser
                 _local_8 = k._Str_13743(_local_4);
                 _local_6.x = (_local_6.x + (_local_7.x * _local_8));
                 _local_6.y = (_local_6.y + (_local_7.y * _local_8));
-                _local_9 = this._Str_20164(_local_5, _local_6, _arg_2);
+                _local_9 = this.resolveOriginalWallIndex(_local_5, _local_6, _arg_2);
                 if (_local_9 >= 0)
                 {
                     if (_arg_2._Str_10019(_local_9))
@@ -886,14 +884,14 @@ export class RoomPlaneParser
         }
     }
 
-    private _Str_25611(k: RoomWallData, _arg_2: RoomWallData):void
+    private checkWallHiding(k: RoomWallData, _arg_2: RoomWallData):void
     {
-        this._Str_25300(_arg_2);
-        this._Str_25293(k);
-        this._Str_24096(k, _arg_2);
+        this.hidePeninsulaWallChains(_arg_2);
+        this.updateWallsNextToHoles(k);
+        this.hideOriginallyHiddenWalls(k, _arg_2);
     }
 
-    private _Str_24673(k: RoomWallData, _arg_2: RoomWallData):void
+    private addWalls(k: RoomWallData, _arg_2: RoomWallData):void
     {
         var _local_5: number;
         var _local_6: number;
@@ -933,7 +931,7 @@ export class RoomPlaneParser
                 _local_14 = 0;
                 while (_local_14 < _local_10)
                 {
-                    _local_27 = this._Str_4480(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
+                    _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
                     if (((_local_27 >= 0) && ((_local_27 < _local_13) || (_local_13 < 0))))
                     {
                         _local_13 = _local_27;
@@ -944,11 +942,11 @@ export class RoomPlaneParser
                 _local_16 = new Vector3d(_local_8.x, _local_8.y, _local_15);
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_12, 0.5));
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_11, -0.5));
-                _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser._Str_13826, this._Str_7678)) - _local_13);
+                _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
                 _local_18 = Vector3d.product(_local_11, -(_local_10));
                 _local_19 = new Vector3d(0, 0, _local_17);
                 _local_16 = Vector3d.dif(_local_16, _local_18);
-                _local_20 = this._Str_20164(_local_8, k._Str_19138(_local_7), _arg_2);
+                _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
                 if (_local_20 >= 0)
                 {
                     _local_5 = _arg_2.getDirection(((_local_20 + 1) % _local_4));
@@ -976,13 +974,13 @@ export class RoomPlaneParser
                 _local_24 = k._Str_10019(((_local_7 + 1) % _local_3));
                 _local_25 = k._Str_25455(_local_7);
                 _local_26 = k._Str_24163(_local_7);
-                this._Str_17862(_local_16, _local_18, _local_19, _local_21, ((!(_local_23)) || (_local_25)), ((!(_local_22)) || (_local_26)), (!(_local_24)));
+                this.addWall(_local_16, _local_18, _local_19, _local_21, ((!(_local_23)) || (_local_25)), ((!(_local_22)) || (_local_26)), (!(_local_24)));
             }
             _local_7++;
         }
     }
 
-    private _Str_23133(): boolean
+    private createWallPlanes(): boolean
     {
         var _local_13: number;
         var _local_14: number;
@@ -995,7 +993,7 @@ export class RoomPlaneParser
         var _local_3: number;
         var _local_4: number[];
         var _local_5: number = k.length;
-        var _local_6: number;
+        var _local_6: number = 0;
         if (_local_5 == 0)
         {
             return false;
@@ -1018,13 +1016,13 @@ export class RoomPlaneParser
             }
             _local_2++;
         }
-        var _local_7: number = Math.min(RoomPlaneParser._Str_13826, ((this._fixedWallHeight != -1) ? this._fixedWallHeight : RoomPlaneParser._Str_14393(k)));
+        var _local_7: number = Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, ((this._fixedWallHeight != -1) ? this._fixedWallHeight : RoomPlaneParser.getFloorHeight(k)));
         var _local_8: number = this.minX;
         var _local_9: number = this.minY;
         _local_9 = this.minY;
         while (_local_9 <= this.maxY)
         {
-            if (this._Str_4480(_local_8, _local_9) > RoomPlaneParser._Str_5500)
+            if (this.getTileHeightInternal(_local_8, _local_9) > RoomPlaneParser.TILE_HOLE)
             {
                 _local_9--;
                 break;
@@ -1036,24 +1034,24 @@ export class RoomPlaneParser
             return false;
         }
         var _local_10: PIXI.Point = new PIXI.Point(_local_8, _local_9);
-        var _local_11: RoomWallData = this._Str_19326(_local_10, true);
-        var _local_12: RoomWallData = this._Str_19326(_local_10, false);
+        var _local_11: RoomWallData = this.generateWallData(_local_10, true);
+        var _local_12: RoomWallData = this.generateWallData(_local_10, false);
         if (_local_11 != null)
         {
             _local_13 = _local_11.count;
             _local_14 = _local_12.count;
-            this._Str_25611(_local_11, _local_12);
-            this._Str_24673(_local_11, _local_12);
+            this.checkWallHiding(_local_11, _local_12);
+            this.addWalls(_local_11, _local_12);
         }
         _local_3 = 0;
-        while (_local_3 < this._Str_25092)
+        while (_local_3 < this.tileMapHeight)
         {
             _local_2 = 0;
-            while (_local_2 < this._Str_23886)
+            while (_local_2 < this.tileMapWidth)
             {
-                if (this._Str_4480(_local_2, _local_3) < 0)
+                if (this.getTileHeightInternal(_local_2, _local_3) < 0)
                 {
-                    this._Str_3982(_local_2, _local_3, -(_local_7 + this.wallHeight));
+                    this.setTileHeight(_local_2, _local_3, -(_local_7 + this.wallHeight));
                 }
                 _local_2++;
             }
@@ -1062,25 +1060,25 @@ export class RoomPlaneParser
         return true;
     }
 
-    private _Str_24038(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractTopWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
     {
         if (k == null)
         {
             return null;
         }
         var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser._Str_5500;
+        var _local_4: number = RoomPlaneParser.TILE_HOLE;
         if (!_arg_2)
         {
-            _local_4 = RoomPlaneParser._Str_3134;
+            _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
         while (_local_3 < 1000)
         {
-            if (this._Str_4480((k.x + _local_3), k.y) > _local_4)
+            if (this.getTileHeightInternal((k.x + _local_3), k.y) > _local_4)
             {
                 return new PIXI.Point(((k.x + _local_3) - 1), k.y);
             }
-            if (this._Str_4480((k.x + _local_3), (k.y + 1)) <= _local_4)
+            if (this.getTileHeightInternal((k.x + _local_3), (k.y + 1)) <= _local_4)
             {
                 return new PIXI.Point((k.x + _local_3), (k.y + 1));
             }
@@ -1089,25 +1087,25 @@ export class RoomPlaneParser
         return null;
     }
 
-    private _Str_24221(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractRightWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
     {
         if (k == null)
         {
             return null;
         }
         var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser._Str_5500;
+        var _local_4: number = RoomPlaneParser.TILE_HOLE;
         if (!_arg_2)
         {
-            _local_4 = RoomPlaneParser._Str_3134;
+            _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
         while (_local_3 < 1000)
         {
-            if (this._Str_4480(k.x, (k.y + _local_3)) > _local_4)
+            if (this.getTileHeightInternal(k.x, (k.y + _local_3)) > _local_4)
             {
                 return new PIXI.Point(k.x, (k.y + (_local_3 - 1)));
             }
-            if (this._Str_4480((k.x - 1), (k.y + _local_3)) <= _local_4)
+            if (this.getTileHeightInternal((k.x - 1), (k.y + _local_3)) <= _local_4)
             {
                 return new PIXI.Point((k.x - 1), (k.y + _local_3));
             }
@@ -1116,25 +1114,25 @@ export class RoomPlaneParser
         return null;
     }
 
-    private _Str_25705(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractBottomWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
     {
         if (k == null)
         {
             return null;
         }
         var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser._Str_5500;
+        var _local_4: number = RoomPlaneParser.TILE_HOLE;
         if (!_arg_2)
         {
-            _local_4 = RoomPlaneParser._Str_3134;
+            _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
         while (_local_3 < 1000)
         {
-            if (this._Str_4480((k.x - _local_3), k.y) > _local_4)
+            if (this.getTileHeightInternal((k.x - _local_3), k.y) > _local_4)
             {
                 return new PIXI.Point((k.x - (_local_3 - 1)), k.y);
             }
-            if (this._Str_4480((k.x - _local_3), (k.y - 1)) <= _local_4)
+            if (this.getTileHeightInternal((k.x - _local_3), (k.y - 1)) <= _local_4)
             {
                 return new PIXI.Point((k.x - _local_3), (k.y - 1));
             }
@@ -1143,25 +1141,25 @@ export class RoomPlaneParser
         return null;
     }
 
-    private _Str_22333(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractLeftWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
     {
         if (k == null)
         {
             return null;
         }
         var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser._Str_5500;
+        var _local_4: number = RoomPlaneParser.TILE_HOLE;
         if (!_arg_2)
         {
-            _local_4 = RoomPlaneParser._Str_3134;
+            _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
         while (_local_3 < 1000)
         {
-            if (this._Str_4480(k.x, (k.y - _local_3)) > _local_4)
+            if (this.getTileHeightInternal(k.x, (k.y - _local_3)) > _local_4)
             {
                 return new PIXI.Point(k.x, (k.y - (_local_3 - 1)));
             }
-            if (this._Str_4480((k.x + 1), (k.y - _local_3)) <= _local_4)
+            if (this.getTileHeightInternal((k.x + 1), (k.y - _local_3)) <= _local_4)
             {
                 return new PIXI.Point((k.x + 1), (k.y - _local_3));
             }
@@ -1170,75 +1168,75 @@ export class RoomPlaneParser
         return null;
     }
 
-    private _Str_17862(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
+    private addWall(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
     {
         var _local_12:Vector3d;
-        this._Str_3453(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
-        this._Str_3453(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
-        var _local_8: number = (RoomPlaneParser._Str_6429 * this._wallThicknessMultiplier);
-        var _local_9: number = (RoomPlaneParser._Str_6100 * this._floorThicknessMultiplier);
+        this.addPlane(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
+        this.addPlane(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
+        var _local_8: number = (RoomPlaneParser.WALL_THICKNESS * this._wallThicknessMultiplier);
+        var _local_9: number = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
         var _local_10:Vector3d = Vector3d.crossProduct(_arg_2, _arg_3);
         var _local_11:Vector3d = Vector3d.product(_local_10, ((1 / _local_10.length) * -(_local_8)));
-        this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, _arg_3), _arg_2, _local_11, [_local_10, _arg_4]);
+        this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, _arg_3), _arg_2, _local_11, [_local_10, _arg_4]);
         if (_arg_5)
         {
-            this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_2), _arg_3), Vector3d.product(_arg_3, (-(_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
+            this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_2), _arg_3), Vector3d.product(_arg_3, (-(_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
         }
         if (_arg_6)
         {
-            this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
+            this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
             if (_arg_7)
             {
                 _local_12 = Vector3d.product(_arg_2, (_local_8 / _arg_2.length));
-                this._Str_3453(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
+                this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
             }
         }
     }
 
-    private _Str_22077(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
+    private addFloor(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
     {
         var _local_9: number;
         var _local_10:Vector3d;
         var _local_11:Vector3d;
-        var _local_8: RoomPlaneData = this._Str_3453(RoomPlaneData.PLANE_FLOOR, k, _arg_2, _arg_3);
+        var _local_8: RoomPlaneData = this.addPlane(RoomPlaneData.PLANE_FLOOR, k, _arg_2, _arg_3);
         if (_local_8 != null)
         {
-            _local_9 = (RoomPlaneParser._Str_6100 * this._floorThicknessMultiplier);
+            _local_9 = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
             _local_10 = new Vector3d(0, 0, _local_9);
             _local_11 = Vector3d.dif(k, _local_10);
             if (_arg_6)
             {
-                this._Str_3453(RoomPlaneData.PLANE_FLOOR, _local_11, _arg_2, _local_10);
+                this.addPlane(RoomPlaneData.PLANE_FLOOR, _local_11, _arg_2, _local_10);
             }
             if (_arg_7)
             {
-                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, Vector3d.sum(_arg_2, _arg_3)), Vector3d.product(_arg_2, -1), _local_10);
+                this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, Vector3d.sum(_arg_2, _arg_3)), Vector3d.product(_arg_2, -1), _local_10);
             }
             if (_arg_4)
             {
-                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_3), Vector3d.product(_arg_3, -1), _local_10);
+                this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_3), Vector3d.product(_arg_3, -1), _local_10);
             }
             if (_arg_5)
             {
-                this._Str_3453(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_2), _arg_3, _local_10);
+                this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_2), _arg_3, _local_10);
             }
         }
     }
 
-    public _Str_16659(data: RoomMapData): boolean
+    public initializeFromMapData(data: RoomMapData): boolean
     {
         if(!data) return false;
 
         this.reset();
 
-        this._Str_25334();
+        this.resetFloorHoles();
 
         const width             = data.width;
         const height            = data.height;
         const wallHeight        = data.wallHeight;
         const fixedWallsHeight  = data.fixedWallsHeight;
 
-        this._Str_13735(width, height);
+        this.initializeTileMap(width, height);
 
         if(data.tileMap)
         {
@@ -1256,7 +1254,7 @@ export class RoomPlaneParser
                     {
                         const column = row[x];
 
-                        if(column) this._Str_3982(x, y, column.height);
+                        if(column) this.setTileHeight(x, y, column.height);
 
                         x++;
                     }
@@ -1276,22 +1274,22 @@ export class RoomPlaneParser
 
                 if(!hole) continue;
 
-                this._Str_12390(hole.id, hole.x, hole.y, hole.width, hole.height);
+                this.addFloorHole(hole.id, hole.x, hole.y, hole.width, hole.height);
 
                 index++;
             }
 
-            this._Str_25711();
+            this.initializeHoleMap();
         }
 
         this.wallHeight = wallHeight;
 
-        this._Str_12919(fixedWallsHeight);
+        this.initializeFromTileData(fixedWallsHeight);
         
         return true;
     }
 
-    private _Str_3453(k: number, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: IVector3D[] = null): RoomPlaneData
+    private addPlane(k: number, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: IVector3D[] = null): RoomPlaneData
     {
         if (((_arg_3.length == 0) || (_arg_4.length == 0)))
         {
@@ -1302,7 +1300,7 @@ export class RoomPlaneParser
         return _local_6;
     }
 
-    public _Str_5598(): RoomMapData
+    public getMapData(): RoomMapData
     {
         const data = new RoomMapData();
 
@@ -1354,9 +1352,9 @@ export class RoomPlaneParser
         return data;
     }
 
-    public _Str_20362(k: number): IVector3D
+    public getPlaneLocation(k: number): IVector3D
     {
-        if(((k < 0) || (k >= this._Str_3828))) return null;
+        if(((k < 0) || (k >= this.planeCount))) return null;
 
         const planeData = this._planes[k];
 
@@ -1365,9 +1363,9 @@ export class RoomPlaneParser
         return planeData.loc;
     }
 
-    public _Str_26428(k: number): IVector3D
+    public getPlaneNormal(k: number): IVector3D
     {
-        if(((k < 0) || (k >= this._Str_3828))) return null;
+        if(((k < 0) || (k >= this.planeCount))) return null;
 
         const planeData = this._planes[k];
 
@@ -1376,9 +1374,9 @@ export class RoomPlaneParser
         return planeData.normal;
     }
 
-    public _Str_16904(k: number): IVector3D
+    public getPlaneLeftSide(k: number): IVector3D
     {
-        if(((k < 0) || (k >= this._Str_3828))) return null;
+        if(((k < 0) || (k >= this.planeCount))) return null;
 
         const planeData = this._planes[k];
 
@@ -1387,9 +1385,9 @@ export class RoomPlaneParser
         return planeData._Str_5424;
     }
 
-    public _Str_18119(k: number): IVector3D
+    public getPlaneRightSide(k: number): IVector3D
     {
-        if(((k < 0) || (k >= this._Str_3828))) return null;
+        if(((k < 0) || (k >= this.planeCount))) return null;
 
         const planeData = this._planes[k];
 
@@ -1398,9 +1396,9 @@ export class RoomPlaneParser
         return planeData._Str_4968;
     }
 
-    public _Str_23741(k: number): IVector3D
+    public getPlaneNormalDirection(k: number): IVector3D
     {
-        if(((k < 0) || (k >= this._Str_3828))) return null;
+        if(((k < 0) || (k >= this.planeCount))) return null;
 
         const planeData = this._planes[k];
 
@@ -1409,11 +1407,11 @@ export class RoomPlaneParser
         return planeData._Str_25207;
     }
 
-    public _Str_24698(k: number): IVector3D[]
+    public getPlaneSecondaryNormals(k: number): IVector3D[]
     {
         var _local_3: IVector3D[];
         var _local_4: number;
-        if (((k < 0) || (k >= this._Str_3828)))
+        if (((k < 0) || (k >= this.planeCount)))
         {
             return null;
         }
@@ -1432,9 +1430,9 @@ export class RoomPlaneParser
         return null;
     }
 
-    public _Str_13037(k: number): number
+    public getPlaneType(k: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return RoomPlaneData.PLANE_UNDEFINED;
+        if(((k < 0) || (k >= this.planeCount))) return RoomPlaneData.PLANE_UNDEFINED;
 
         const planeData = this._planes[k];
 
@@ -1443,9 +1441,9 @@ export class RoomPlaneParser
         return planeData.type;
     }
 
-    public _Str_25447(k: number): number
+    public getPlaneMaskCount(k: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return 0;
+        if(((k < 0) || (k >= this.planeCount))) return 0;
 
         const planeData = this._planes[k];
 
@@ -1454,9 +1452,9 @@ export class RoomPlaneParser
         return planeData._Str_6845;
     }
 
-    public _Str_23769(k: number, _arg_2: number): number
+    public getPlaneMaskLeftSideLoc(k: number, _arg_2: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return -1;
+        if(((k < 0) || (k >= this.planeCount))) return -1;
 
         const planeData = this._planes[k];
 
@@ -1465,9 +1463,9 @@ export class RoomPlaneParser
         return planeData._Str_25133(_arg_2);
     }
 
-    public _Str_23247(k: number, _arg_2: number): number
+    public getPlaneMaskRightSideLoc(k: number, _arg_2: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return -1;
+        if(((k < 0) || (k >= this.planeCount))) return -1;
 
         const planeData = this._planes[k];
 
@@ -1476,9 +1474,9 @@ export class RoomPlaneParser
         return planeData._Str_23609(_arg_2);
     }
 
-    public _Str_23431(k: number, _arg_2: number): number
+    public getPlaneMaskLeftSideLength(k: number, _arg_2: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return -1;
+        if(((k < 0) || (k >= this.planeCount))) return -1;
 
         const planeData = this._planes[k];
 
@@ -1487,9 +1485,9 @@ export class RoomPlaneParser
         return planeData._Str_25097(_arg_2);
     }
 
-    public _Str_22914(k: number, _arg_2: number): number
+    public getPlaneMaskRightSideLength(k: number, _arg_2: number): number
     {
-        if(((k < 0) || (k >= this._Str_3828))) return -1;
+        if(((k < 0) || (k >= this.planeCount))) return -1;
 
         const planeData = this._planes[k];
 
@@ -1498,24 +1496,24 @@ export class RoomPlaneParser
         return planeData._Str_25617(_arg_2);
     }
 
-    public _Str_12390(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number):void
+    public addFloorHole(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number):void
     {
-        this._Str_11339(k);
+        this.removeFloorHole(k);
         
         this._floorHoles.set(k, new RoomFloorHole(_arg_2, _arg_3, _arg_4, _arg_5));
     }
 
-    public _Str_11339(k: number):void
+    public removeFloorHole(k: number):void
     {
         this._floorHoles.delete(k);
     }
 
-    public _Str_25334():void
+    public resetFloorHoles():void
     {
         this._floorHoles.clear();
     }
 
-    private _Str_25711():void
+    private initializeHoleMap():void
     {
         var k: number;
         var _local_2: number;
@@ -1566,7 +1564,7 @@ export class RoomPlaneParser
         }
     }
 
-    private _Str_25564(k: number[][]):void
+    private extractPlanes(k: number[][]):void
     {
         var _local_2: number;
         var _local_7: number;
@@ -1657,7 +1655,7 @@ export class RoomPlaneParser
                     _local_19 = ((_local_6 / 4) - 0.5);
                     _local_20 = ((_local_9 - _local_7) / 4);
                     _local_21 = ((_local_10 - _local_6) / 4);
-                    this._Str_22077(new Vector3d((_local_18 + _local_20), (_local_19 + _local_21), (_local_8 / 4)), new Vector3d(-(_local_20), 0, 0), new Vector3d(0, -(_local_21), 0), _local_13, _local_11, _local_14, _local_12);
+                    this.addFloor(new Vector3d((_local_18 + _local_20), (_local_19 + _local_21), (_local_8 / 4)), new Vector3d(-(_local_20), 0, 0), new Vector3d(0, -(_local_21), 0), _local_13, _local_11, _local_14, _local_12);
                 }
                 _local_7++;
             }

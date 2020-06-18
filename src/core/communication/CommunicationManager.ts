@@ -1,10 +1,11 @@
 import { Disposable } from '../common/disposable/Disposable';
+import { IUpdateReceiver } from '../common/IUpdateReceiver';
 import { IConnection } from './connections/IConnection';
 import { IConnectionStateListener } from './connections/IConnectionStateListener';
 import { SocketConnection } from './connections/SocketConnection';
 import { ICommunicationManager } from './ICommunicationManager';
 
-export class CommunicationManager extends Disposable implements ICommunicationManager
+export class CommunicationManager extends Disposable implements ICommunicationManager, IUpdateReceiver
 {
     private _connections: IConnection[]
 
@@ -13,18 +14,17 @@ export class CommunicationManager extends Disposable implements ICommunicationMa
         super();
 
         this._connections = [];
+
+        //PIXI.Ticker.shared.add(this.update, this);
     }
 
     protected onDispose(): void
     {
+        //PIXI.Ticker.shared.remove(this.update, this);
+
         if(!this._connections || !this._connections.length) return;
         
-        for(let connection of this._connections.values())
-        {
-            if(!connection) continue;
-
-            connection.dispose();
-        }
+        for(let connection of this._connections.values()) connection && connection.dispose();
     }
 
     public createConnection(stateListener: IConnectionStateListener = null): IConnection
@@ -36,5 +36,22 @@ export class CommunicationManager extends Disposable implements ICommunicationMa
         this._connections.push(connection);
 
         return connection;
+    }
+
+    public update(time: number): void
+    {
+        let index = 0;
+
+        while(index < this._connections.length)
+        {
+            const connection = this._connections[index];
+
+            connection.processReceivedData();
+
+            if(this.disposed) return;
+
+            if(connection.disposed) this._connections.splice(index, 1);
+            else index++;
+        }
     }
 }

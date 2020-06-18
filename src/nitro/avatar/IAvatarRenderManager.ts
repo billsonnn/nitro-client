@@ -6,7 +6,7 @@ import { IAvatarImageListener } from './IAvatarImageListener';
 
 export interface IAvatarRenderManager extends INitroManager
 {
-    createAvatarImage(figure: string, size: string, gender: string, listener: IAvatarImageListener, effectListener: IAvatarEffectListener): IAvatarImage;
+    createAvatarImage(figure: string, size: string, gender: string, listener?: IAvatarImageListener, effectListener?: IAvatarEffectListener): IAvatarImage;
     assets: IAssetManager;
     isReady: boolean;
 }

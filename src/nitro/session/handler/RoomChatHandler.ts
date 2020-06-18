@@ -19,7 +19,7 @@ export class RoomChatHandler extends BaseHandler
 
     private onRoomUnitChatEvent(event: RoomUnitChatEvent): void
     {
-        if(!(event instanceof RoomUnitChatEvent) || !this.listener) return;
+        if(!this.listener) return;
 
         const session = this.listener.getSession(this.roomId);
 

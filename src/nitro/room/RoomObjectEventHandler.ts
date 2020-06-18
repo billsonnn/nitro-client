@@ -381,7 +381,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                                 this._Str_3571(roomId, event.objectId, category, RoomObjectOperationType.OBJECT_PICKUP);
                             }
 
-                            didWalk = false;
+                            didWalk = true;
                         }
                     }
 
@@ -390,10 +390,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         if(didWalk)
                         {
                             this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
-                        }
-                        else
-                        {
-                            this._Str_11142(RoomObjectCategory.MINIMUM, MouseEventType.MOUSE_CLICK, event._Str_3463);
                         }
                     }
                 }
@@ -672,7 +668,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(!session || session.isSpectator) return;
 
-        this.sendWalkUpdate(event.tileX, event.tileY);
+        this.sendWalkUpdate(event._Str_16836, event._Str_17676);
     }
 
     private _Str_24048(k: RoomObjectMouseEvent, roomId: number): void
@@ -697,7 +693,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
 
-            if(!(((k instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, (k.tileX), (k.tileY), stackingHeightMap))))
+            if(!(((k instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, (k._Str_16836), (k._Str_17676), stackingHeightMap))))
             {
                 this._Str_18155(roomObject, selectedData, selectedData.loc.x, selectedData.loc.y, stackingHeightMap);
 
@@ -1071,48 +1067,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     {
         if(this._whereYouClickIsWhereYouGo)
         {
-            return new ObjectTileCursorUpdateMessage(new Vector3d(k.tileX, k.tileY, k.tileZ), 0, true, k._Str_3463);
+            return new ObjectTileCursorUpdateMessage(new Vector3d(k._Str_16836, k._Str_17676, k._Str_21459), 0, true, k._Str_3463);
         }
-        // var _local_4:int;
-        // var _local_5:int;
-        // var _local_6:int;
-        // var _local_7:IRoomInstance;
-        // var _local_8:TileObjectMap;
-        // var _local_9:IRoomObject;
-        // var _local_10:FurniStackingHeightMap;
-        // var _local_11:Number;
-        // var _local_12:Number;
-        // if (this._whereYouClickIsWhereYouGo)
-        // {
-        //     return new RoomObjectTileCursorUpdateMessage(new Vector3d(k._Str_16836, k._Str_17676, k._Str_21459), 0, true, k._Str_3463);
-        // }
-        // var _local_3:IRoomObjectController = this._roomEngine._Str_9577(_arg_2);
-        // if (((!(_local_3 == null)) && (!(_local_3._Str_2377() == null))))
-        // {
-        //     _local_4 = k._Str_16836;
-        //     _local_5 = k._Str_17676;
-        //     _local_6 = k._Str_21459;
-        //     _local_7 = this._roomEngine._Str_2881(_arg_2);
-        //     if (_local_7 != null)
-        //     {
-        //         _local_8 = this._roomEngine._Str_15934(_arg_2);
-        //         if (_local_8)
-        //         {
-        //             _local_9 = _local_8._Str_19056(_local_4, _local_5);
-        //             _local_10 = this._roomEngine.getFurniStackingHeightMap(_arg_2);
-        //             if (_local_10)
-        //             {
-        //                 if ((((_local_9) && (_local_9.model)) && (_local_9.model.getNumber(RoomObjectVariableEnum.FURNITURE_IS_VARIABLE_HEIGHT) > 0)))
-        //                 {
-        //                     _local_11 = _local_10._Str_2754(_local_4, _local_5);
-        //                     _local_12 = this._roomEngine._Str_5364(_arg_2)._Str_2754(_local_4, _local_5);
-        //                     return new RoomObjectTileCursorUpdateMessage(new Vector3d(_local_4, _local_5, _local_6), (_local_11 - _local_12), true, k._Str_3463);
-        //                 }
-        //                 return new RoomObjectTileCursorUpdateMessage(new Vector3d(_local_4, _local_5, _local_6), 0, true, k._Str_3463);
-        //             }
-        //         }
-        //     }
-        // }
+        
         return null;
     }
 
@@ -1246,7 +1203,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                     {
                         const userData = session.userData.getUserDataByIndex(objectId);
 
-                        session.pickupPet(userData.id);
+                        session.pickupPet(userData.webID);
                     }
                 }
                 break;
@@ -1259,7 +1216,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                     {
                         const userData = session.userData.getUserDataByIndex(objectId);
 
-                        session.pickupBot(userData.id);
+                        session.pickupBot(userData.webID);
                     }
                 }
                 break;
@@ -1614,5 +1571,10 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     public get engine(): IRoomEngineServices
     {
         return this._roomEngine;
+    }
+
+    public get selectedAvatarId(): number
+    {
+        return this._selectedAvatarId;
     }
 }

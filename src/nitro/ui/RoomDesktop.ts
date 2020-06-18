@@ -6,6 +6,7 @@ import { IRoomObject } from '../../room/object/IRoomObject';
 import { ColorConverter } from '../../room/utils/ColorConverter';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
+import { IAvatarRenderManager } from '../avatar/IAvatarRenderManager';
 import { NitroInstance } from '../NitroInstance';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
@@ -49,6 +50,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     private _windowManager: INitroWindowManager;
     private _layoutManager: DesktopLayoutManager;
     private _roomEngine: IRoomEngine;
+    private _avatarRenderManager: IAvatarRenderManager;
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomWidgetFactory: IRoomWidgetFactory;
@@ -76,6 +78,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         this._windowManager             = null;
         this._layoutManager             = new DesktopLayoutManager();
         this._roomEngine                = null;
+        this._avatarRenderManager       = null;
         this._sessionDataManager        = null;
         this._roomSessionManager        = null;
         this._roomWidgetFactory         = null;
@@ -167,7 +170,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         stage.addChild(displayObject);
 
-        this._roomCanvasWrapper = document.getElementById('client') as HTMLCanvasElement;
+        this._roomCanvasWrapper = document.getElementById('client-wrapper') as HTMLCanvasElement;
 
         if(this._roomCanvasWrapper)
         {
@@ -180,6 +183,11 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         window.onresize = this.onWindowResizeEvent.bind(this);
 
         this._canvasIDs.push(canvasId);
+    }
+
+    public update(): void
+    {
+        
     }
 
     public createWidget(type: string): void
@@ -362,7 +370,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         {
             NitroInstance.instance.resize();
 
-            this._roomEngine.initializeRoomInstanceRenderingCanvas(this._session.roomId, this._canvasIDs[0], window.innerWidth, window.innerHeight);
+            this._roomEngine.initializeRoomInstanceRenderingCanvas(this._session.roomId, this._canvasIDs[0], NitroInstance.instance.renderer.view.width, NitroInstance.instance.renderer.view.height);
 
             this.setBackground(this.getRoomBackground());
         }, 1);
@@ -570,6 +578,13 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return false;
     }
 
+    public getFirstCanvasId(): number
+    {
+        if(this._canvasIDs && (this._canvasIDs.length > 0)) return this._canvasIDs[0];
+
+        return 0;
+    }
+
     public get events(): IEventDispatcher
     {
         return this._events;
@@ -603,6 +618,16 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     public set roomEngine(engine: IRoomEngine)
     {
         this._roomEngine = engine;
+    }
+
+    public get avatarRenderManager(): IAvatarRenderManager
+    {
+        return this._avatarRenderManager;
+    }
+
+    public set avatarRenderManager(avatarRenderManager: IAvatarRenderManager)
+    {
+        this._avatarRenderManager = avatarRenderManager;
     }
 
     public get sessionDataManager(): ISessionDataManager

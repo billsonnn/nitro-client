@@ -8,7 +8,6 @@ import { UserInfoEvent } from '../communication/messages/incoming/user/data/User
 import { NitroInstance } from '../NitroInstance';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
-import { SessionDataEvent } from './events/SessionDataEvent';
 import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
@@ -138,21 +137,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._pendingFurniDataListeners.splice(index, 1);
     }
 
-    private dispatchSessionDataEvent(type: string): void
-    {
-        if(!this.events) return;
-
-        this.events.dispatchEvent(new SessionDataEvent(type, this));
-    }
-
     private onUserFigureEvent(event: UserFigureEvent): void
     {
         if(!(event instanceof UserFigureEvent) || !event.connection) return;
 
         this._figure    = event.getParser().figure;
         this._gender    = event.getParser().gender;
-
-        this.dispatchSessionDataEvent(SessionDataEvent.FIGURE_UPDATED);
     }
 
     private onUserInfoEvent(event: UserInfoEvent): void
@@ -169,9 +159,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._name      = userInfo.username;
         this._figure    = userInfo.figure;
         this._gender    = userInfo.gender;
-
-        this.dispatchSessionDataEvent(SessionDataEvent.UPDATED);
-        this.dispatchSessionDataEvent(SessionDataEvent.FIGURE_UPDATED);
     }
 
     private onUserPermissionsEvent(event: UserPermissionsEvent): void

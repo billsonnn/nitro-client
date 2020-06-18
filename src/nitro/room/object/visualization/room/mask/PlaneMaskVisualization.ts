@@ -1,4 +1,4 @@
-﻿import { GraphicAsset } from '../../../../../../core/asset/GraphicAsset';
+﻿import { IGraphicAsset } from '../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMaskBitmap } from './PlaneMaskBitmap';
 
@@ -26,12 +26,12 @@ export class PlaneMaskVisualization
         this._bitmaps = null;
     }
 
-    public _Str_16790(k: GraphicAsset, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1): void
+    public _Str_16790(k: IGraphicAsset, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1): void
     {
         this._bitmaps.push(new PlaneMaskBitmap(k, _arg_2, _arg_3, _arg_4, _arg_5));
     }
 
-    public getAsset(k: IVector3D): GraphicAsset
+    public getAsset(k: IVector3D): IGraphicAsset
     {
         if(!k) return null;
 

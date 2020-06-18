@@ -9,6 +9,7 @@ export interface IConnection extends IEventDispatcher
     dispose(): void;
     authenticated(): void;
     send(...composers: IMessageComposer[]): void;
+    processReceivedData(): void;
     registerMessages(configuration: IMessageConfiguration): void;
     addMessageEvent(event: IMessageEvent): void;
     removeMessageEvent(event: IMessageEvent): void;

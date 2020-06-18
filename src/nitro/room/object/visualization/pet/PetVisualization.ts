@@ -1,4 +1,5 @@
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
+import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
@@ -35,6 +36,8 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     private _headSprites: boolean[];
     private _saddleSprites: boolean[];
     private _animationOver: boolean;
+    private _paletteIndex: number;
+    private _paletteName: string;
     private _customLayerIds: number[];
     private _customPartIds: number[];
     private _customPaletteIds: number[];
@@ -59,6 +62,8 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         this._headSprites                   = [];
         this._saddleSprites                 = [];
         this._animationOver                 = false;
+        this._paletteIndex                  = -1;
+        this._paletteName                   = '';
         this._customLayerIds                = [];
         this._customPartIds                 = [];
         this._customPaletteIds              = [];
@@ -139,12 +144,19 @@ export class PetVisualization extends FurnitureAnimatedVisualization
             this._headDirection = this.object.getDirection().x;
         }
 
-        const customLayerIds    = model.getValue(RoomObjectVariable.PET_CUSTOM_LAYER_IDS) as number[];
-        const customPartIds     = model.getValue(RoomObjectVariable.PET_CUSTOM_PARTS_IDS) as number[]
-        const customPaletteIds  = model.getValue(RoomObjectVariable.PET_CUSTOM_PALETTE_IDS) as number[];
-        const isRiding          = model.getValue(RoomObjectVariable.PET_IS_RIDING) as number;
-        const headOnly          = model.getValue(RoomObjectVariable.PET_HEAD_ONLY) as number;
-        const color             = model.getValue(RoomObjectVariable.PET_COLOR);
+        const customPaletteIndex    = model.getValue(RoomObjectVariable.PET_PALETTE_INDEX) as number;
+        const customLayerIds        = model.getValue(RoomObjectVariable.PET_CUSTOM_LAYER_IDS) as number[];
+        const customPartIds         = model.getValue(RoomObjectVariable.PET_CUSTOM_PARTS_IDS) as number[]
+        const customPaletteIds      = model.getValue(RoomObjectVariable.PET_CUSTOM_PALETTE_IDS) as number[];
+        const isRiding              = model.getValue(RoomObjectVariable.PET_IS_RIDING) as number;
+        const headOnly              = model.getValue(RoomObjectVariable.PET_HEAD_ONLY) as number;
+        const color                 = model.getValue(RoomObjectVariable.PET_COLOR);
+
+        if(customPaletteIndex !== this._paletteIndex)
+        {
+            this._paletteIndex  = customPaletteIndex;
+            this._paletteName   = this._paletteIndex.toString();
+        }
 
         this._customLayerIds    = (customLayerIds) ? customLayerIds : [];
         this._customPartIds     = (customPartIds) ? customPartIds : [];
@@ -442,6 +454,30 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         }
 
         return this._saddleSprites[layerId];
+    }
+
+    public getAsset(name: string, layerId: number = -1): IGraphicAsset
+    {
+        if(!this.asset) return null;
+
+        let layerIndex  = this._customLayerIds.indexOf(layerId);
+        let paletteName = this._paletteName;
+        let partId      = -1;
+        let paletteId   = -1;
+
+        if(layerIndex > -1)
+        {
+            partId      = this._customPartIds[layerIndex];
+            paletteId   = this._customPaletteIds[layerIndex];
+            paletteName = ((paletteId > -1) ? paletteId.toString() : this._paletteName);
+        }
+
+        if(!(isNaN(partId)) && (partId > -1))
+        {
+            name = (name + "_" + partId);
+        }
+
+        return this.asset.getAssetWithPalette(name, paletteName);
     }
 
     protected getAdditionalLayerCount(): number

@@ -14,6 +14,7 @@ export interface INitroInstance extends PIXI.Application
 {
     init(): void;
     dispose(): void;
+    resize(): void;
     core: INitroCore;
     events: IEventDispatcher;
     communication: INitroCommunicationManager;

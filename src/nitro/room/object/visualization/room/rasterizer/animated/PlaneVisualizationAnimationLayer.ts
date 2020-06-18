@@ -1,5 +1,5 @@
-﻿import { GraphicAssetCollection } from '../../../../../../../core/asset/GraphicAssetCollection';
-import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+﻿import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { AnimationItem } from './AnimationItem';
 
@@ -10,7 +10,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
     private _isDisposed: boolean = false;
     private _items: AnimationItem[];
 
-    constructor(k: any, _arg_2: GraphicAssetCollection)
+    constructor(k: any, _arg_2: IGraphicAssetCollection)
     {
         this._color         = 0;
         this._bitmapData    = null;

@@ -31,27 +31,27 @@ export class UserDataManager extends Disposable
         this._connection = connection;
     }
 
-    public getUserData(id: number): RoomUserData
+    public getUserData(webID: number): RoomUserData
     {
-        return this.getDataByType(UserDataManager.USER_TYPE, id);
+        return this.getDataByType(UserDataManager.USER_TYPE, webID);
     }
 
-    public getDataByType(type: number, id: number): RoomUserData
+    public getDataByType(type: number, webID: number): RoomUserData
     {
         const existing = this._userDataByType.get(type);
 
         if(!existing) return null;
 
-        const userData = existing.get(id);
+        const userData = existing.get(webID);
 
         if(!userData) return null;
 
         return userData;
     }
 
-    public getUserDataByIndex(unitId: number): RoomUserData
+    public getUserDataByIndex(roomIndex: number): RoomUserData
     {
-        const existing = this._userDataByRoomIndex.get(unitId);
+        const existing = this._userDataByRoomIndex.get(roomIndex);
 
         if(!existing) return null;
 
@@ -62,7 +62,7 @@ export class UserDataManager extends Disposable
     {
         if(!data) return;
 
-        this.removeUserData(data.unitId);
+        this.removeUserData(data.roomIndex);
 
         let existingType = this._userDataByType.get(data.type);
 
@@ -73,41 +73,43 @@ export class UserDataManager extends Disposable
             this._userDataByType.set(data.type, existingType);
         }
 
-        existingType.set(data.id, data);
+        existingType.set(data.webID, data);
 
-        this._userDataByRoomIndex.set(data.unitId, data);
+        this._userDataByRoomIndex.set(data.roomIndex, data);
     }
 
-    public removeUserData(unitId: number): void
+    public removeUserData(roomIndex: number): void
     {
-        const existing = this.getUserDataByIndex(unitId);
+        const existing = this.getUserDataByIndex(roomIndex);
 
         if(!existing) return;
 
-        this._userDataByRoomIndex.delete(unitId);
+        this._userDataByRoomIndex.delete(roomIndex);
 
         const existingType = this._userDataByType.get(existing.type);
 
-        if(existingType) existingType.delete(existing.id);
+        if(existingType) existingType.delete(existing.webID);
     }
 
-    public updateFigure(unitId: number, figure: string, gender: string): void
+    public updateFigure(roomIndex: number, figure: string, sex: string, hasSaddle: boolean, isRiding: boolean): void
     {
-        const userData = this.getUserDataByIndex(unitId);
+        const userData = this.getUserDataByIndex(roomIndex);
 
         if(!userData) return;
 
-        userData.figure = figure;
-        userData.gender = gender;
+        userData.figure     = figure;
+        userData.sex        = sex;
+        userData.hasSaddle  = hasSaddle;
+        userData.isRiding   = isRiding;
     }
 
-    public updateMotto(unitId: number, motto: string): void
+    public updateMotto(roomIndex: number, custom: string): void
     {
-        const userData = this.getUserDataByIndex(unitId);
+        const userData = this.getUserDataByIndex(roomIndex);
 
         if(!userData) return;
 
-        userData.motto = motto;
+        userData.custom = custom;
     }
 
     public get connection(): IConnection

@@ -18,7 +18,7 @@ export class RoomHeightMapParser implements IMessageParser
 
     public static convertHeight(height: number): number
     {
-        return (height < 0) ? -1 : ((height & 16383) / 0x0100);
+        return ((height < 0) ? -1 : ((height & 16383) / 0x0100));
     }
 
     public static isHeightStackable(height: number): boolean

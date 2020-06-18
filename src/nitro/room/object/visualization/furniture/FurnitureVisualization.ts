@@ -1,7 +1,7 @@
-import { GraphicAsset } from '../../../../../core/asset/GraphicAsset';
 import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
+import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { RoomObjectVisualizationType } from '../../RoomObjectVisualizationType';
@@ -329,7 +329,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         }
     }
 
-    protected getLibraryAssetNameForSprite(asset: GraphicAsset, sprite: IRoomObjectSprite): string
+    protected getLibraryAssetNameForSprite(asset: IGraphicAsset, sprite: IRoomObjectSprite): string
     {
         return asset.source;
     }
@@ -560,7 +560,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         return 0;
     }
 
-    public getAsset(name: string, layerId: number = -1): GraphicAsset
+    public getAsset(name: string, layerId: number = -1): IGraphicAsset
     {
         if(!this.asset) return null;
 

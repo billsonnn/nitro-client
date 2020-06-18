@@ -71,7 +71,7 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         this._session       = new SessionDataManager(this._communication);
         this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
-        this._roomUI        = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._session, this._roomSession);
+        this._roomUI        = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._roomSession);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
         this._isReady       = false;
@@ -180,9 +180,10 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
 
     public resize(): void
     {
-        if(this._windowManager) this._windowManager.resize();
-
-        super.resize();
+        this.renderer.view.width    = window.innerWidth;
+        this.renderer.view.height   = window.innerHeight;
+        this.renderer.transparent   = true;
+        this.renderer.backgroundColor = 0xFFFFFF;
     }
 
     public get core(): INitroCore

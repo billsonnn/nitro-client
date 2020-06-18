@@ -1,6 +1,6 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
-import { GraphicAssetCollection } from '../../../../../../../core/asset/GraphicAssetCollection';
 import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
@@ -121,7 +121,7 @@ export class PlaneVisualization
         return true;
     }
 
-    public _Str_23489(k: number, _arg_2: any, _arg_3: GraphicAssetCollection): boolean
+    public _Str_23489(k: number, _arg_2: any, _arg_3: IGraphicAssetCollection): boolean
     {
         if((k < 0) || (k > this._layers.length)) return false;
 

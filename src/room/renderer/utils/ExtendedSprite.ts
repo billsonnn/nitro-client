@@ -62,7 +62,12 @@ export class ExtendedSprite extends PIXI.Sprite
 
         if(sprite instanceof PIXI.Sprite)
         {
-            if((sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) || !sprite.texture) return false;
+            if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
+
+            const texture       = sprite.texture;
+            const baseTexture   = texture.baseTexture;
+
+            if(!texture || !baseTexture || !baseTexture.valid) return false;
 
             const bounds = sprite.getLocalBounds();
 
@@ -74,9 +79,6 @@ export class ExtendedSprite extends PIXI.Sprite
             if(sprite.scale.y === -1) y *= -1;
 
             if(!bounds || !bounds.contains(x, y)) return false;
-
-            const texture       = sprite.texture;
-            const baseTexture   = texture.baseTexture;
 
             //@ts-ignore
             if(!baseTexture.hitMap)

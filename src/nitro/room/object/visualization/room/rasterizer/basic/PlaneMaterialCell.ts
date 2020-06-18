@@ -1,5 +1,5 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
-import { GraphicAsset } from '../../../../../../../core/asset/GraphicAsset';
+import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { NitroInstance } from '../../../../../../NitroInstance';
 import { PlaneTexture } from './PlaneTexture';
@@ -9,10 +9,10 @@ export class PlaneMaterialCell
     private _cachedBitmapData: PIXI.Graphics;
     private _texture: PlaneTexture;
     private _extraItemOffsets: PIXI.Point[];
-    private _extraItemAssets: GraphicAsset[];
+    private _extraItemAssets: IGraphicAsset[];
     private _extraItemCount: number = 0;
 
-    constructor(k: PlaneTexture, _arg_2: GraphicAsset[] = null, _arg_3: PIXI.Point[] = null, _arg_4: number = 0)
+    constructor(k: PlaneTexture, _arg_2: IGraphicAsset[] = null, _arg_3: PIXI.Point[] = null, _arg_4: number = 0)
     {
         this._cachedBitmapData  = null;
         this._texture           = k;

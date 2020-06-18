@@ -30,7 +30,7 @@ export class RoomWidgetFactory implements IRoomWidgetFactory
             case RoomWidgetEnum.CHAT_WIDGET:
                 return new RoomChatWidget(handler, this._roomUI.windowManager, desktop.layoutManager);
             case RoomWidgetEnum.CHAT_INPUT_WIDGET:
-                return new ChatInputWidget(handler, this._roomUI.windowManager, desktop.layoutManager, this._roomUI, this._roomUI.getDesktop('hard_coded_room_id'));
+                return new ChatInputWidget(handler, this._roomUI.windowManager, desktop.layoutManager, this._roomUI, desktop);
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
                 return new TrophyFurniWidget(handler, this._roomUI.windowManager, desktop.layoutManager);
         }

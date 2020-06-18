@@ -39,16 +39,6 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
         this._window = (this.htmlToElement(`<div class="nitro-window-container"></div>`) as HTMLDivElement);
 
         document.body.append(this._window);
-
-        this.resize();
-    }
-
-    public resize(): void
-    {
-        if(!this._window) return;
-
-        this._window.style.width    = '100%';
-        this._window.style.height   = '100%';
     }
 
     public renderElement(template: string, view: {}): HTMLElement

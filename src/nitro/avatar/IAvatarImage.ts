@@ -1,5 +1,5 @@
-import { GraphicAsset } from '../../core/asset/GraphicAsset';
 import { IDisposable } from '../../core/common/disposable/IDisposable';
+import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IAnimationLayerData } from './animation/IAnimationLayerData';
 import { IAvatarDataContainer } from './animation/IAvatarDataContainer';
 import { ISpriteDataContainer } from './animation/ISpriteDataContainer';
@@ -9,14 +9,15 @@ import { IPartColor } from './structure/figure/IPartColor';
 export interface IAvatarImage extends IDisposable
 {
     _Str_1009(): any;
-    setDirection(_arg_1: string, _arg_2: number):void;
-    _Str_880(_arg_1: string, _arg_2: number):void;
-    _Str_953(_arg_1?: number):void;
+    setDirection(_arg_1: string, _arg_2: number): void;
+    _Str_880(_arg_1: string, _arg_2: number): void;
+    _Str_953(_arg_1?: number): void;
     _Str_797(): string;
     _Str_754(): ISpriteDataContainer[];
     _Str_607(_arg_1: ISpriteDataContainer): IAnimationLayerData;
     getImage(setType: string, hightlight: boolean, _arg_3?: number): PIXI.Texture;
-    getAsset(_arg_1: string): GraphicAsset;
+    getCroppedImage(setType: string, scale: number): PIXI.Texture;
+    getAsset(_arg_1: string): IGraphicAsset;
     getDirection(): number;
     _Str_784(): IAvatarFigureContainer;
     _Str_867(_arg_1: string): IPartColor;

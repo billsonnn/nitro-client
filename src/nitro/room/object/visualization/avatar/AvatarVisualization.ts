@@ -1,10 +1,10 @@
-import { GraphicAsset } from '../../../../../core/asset/GraphicAsset';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../../../../../room/object/IRoomObject';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
+import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { AvatarAction } from '../../../../avatar/enum/AvatarAction';
 import { AvatarSetType } from '../../../../avatar/enum/AvatarSetType';
@@ -45,7 +45,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private _avatarImage: IAvatarImage;
     private _cachedAvatars: Map<string, IAvatarImage>;
     private _cachedAvatarEffects: Map<string, IAvatarImage>;
-    private _shadow: GraphicAsset;
+    private _shadow: IGraphicAsset;
     private _lastUpdate: number;
     private _disposed: boolean;
 

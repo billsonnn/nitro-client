@@ -374,13 +374,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(!this.object || this._isPlaneSet) return;
 
-        if(!isNaN(this._floorThickness)) this._roomPlaneParser._Str_9990 = this._floorThickness;
+        if(!isNaN(this._floorThickness)) this._roomPlaneParser.floorThicknessMultiplier = this._floorThickness;
 
-        if(!isNaN(this._wallThickness)) this._roomPlaneParser._Str_9955 = this._wallThickness;
+        if(!isNaN(this._wallThickness)) this._roomPlaneParser.wallThicknessMultiplier = this._wallThickness;
 
         const mapData = this.object.model.getValue(RoomObjectVariable.ROOM_MAP_DATA);
 
-        if(!this._roomPlaneParser._Str_16659(mapData)) return;
+        if(!this._roomPlaneParser.initializeFromMapData(mapData)) return;
 
         const _local_3 = this._Str_23949();
         const _local_4 = this._Str_23063();
@@ -389,13 +389,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         let _local_6    = this.object.model.getValue(RoomObjectVariable.ROOM_RANDOM_SEED) as number;
         let index       = 0;
 
-        while(index < this._roomPlaneParser._Str_3828)
+        while(index < this._roomPlaneParser.planeCount)
         {
-            const _local_8  = this._roomPlaneParser._Str_20362(index);
-            const _local_9  = this._roomPlaneParser._Str_16904(index);
-            const _local_10 = this._roomPlaneParser._Str_18119(index);
-            const _local_11 = this._roomPlaneParser._Str_24698(index);
-            const planeType = this._roomPlaneParser._Str_13037(index);
+            const _local_8  = this._roomPlaneParser.getPlaneLocation(index);
+            const _local_9  = this._roomPlaneParser.getPlaneLeftSide(index);
+            const _local_10 = this._roomPlaneParser.getPlaneRightSide(index);
+            const _local_11 = this._roomPlaneParser.getPlaneSecondaryNormals(index);
+            const planeType = this._roomPlaneParser.getPlaneType(index);
 
             let _local_13 = null;
             
@@ -528,12 +528,12 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
                     let _local_19 = 0;
                     
-                    while (_local_19 < this._roomPlaneParser._Str_25447(index))
+                    while (_local_19 < this._roomPlaneParser.getPlaneMaskCount(index))
                     {
-                        const _local_20 = this._roomPlaneParser._Str_23769(index, _local_19);
-                        const _local_21 = this._roomPlaneParser._Str_23247(index, _local_19);
-                        const _local_22 = this._roomPlaneParser._Str_23431(index, _local_19);
-                        const _local_23 = this._roomPlaneParser._Str_22914(index, _local_19);
+                        const _local_20 = this._roomPlaneParser.getPlaneMaskLeftSideLoc(index, _local_19);
+                        const _local_21 = this._roomPlaneParser.getPlaneMaskRightSideLoc(index, _local_19);
+                        const _local_22 = this._roomPlaneParser.getPlaneMaskLeftSideLength(index, _local_19);
+                        const _local_23 = this._roomPlaneParser.getPlaneMaskRightSideLength(index, _local_19);
 
                         _local_13._Str_24758(_local_20, _local_21, _local_22, _local_23);
                         
@@ -604,13 +604,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         let length  = 0;
         let index   = 0;
 
-        while(index < this._roomPlaneParser._Str_3828)
+        while(index < this._roomPlaneParser.planeCount)
         {
-            const type = this._roomPlaneParser._Str_13037(index);
+            const type = this._roomPlaneParser.getPlaneType(index);
 
             if(type === RoomPlaneData.PLANE_LANDSCAPE)
             {
-                const vector = this._roomPlaneParser._Str_16904(index);
+                const vector = this._roomPlaneParser.getPlaneLeftSide(index);
 
                 length += vector.length;
             }
@@ -626,13 +626,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         let length  = 0;
         let index   = 0;
 
-        while(index < this._roomPlaneParser._Str_3828)
+        while(index < this._roomPlaneParser.planeCount)
         {
-            const type = this._roomPlaneParser._Str_13037(index);
+            const type = this._roomPlaneParser.getPlaneType(index);
 
             if(type === RoomPlaneData.PLANE_LANDSCAPE)
             {
-                const vector = this._roomPlaneParser._Str_18119(index);
+                const vector = this._roomPlaneParser.getPlaneRightSide(index);
 
                 if(vector.length > length) length = vector.length;
             }

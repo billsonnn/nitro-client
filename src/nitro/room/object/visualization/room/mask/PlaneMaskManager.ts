@@ -1,5 +1,5 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
-import { GraphicAssetCollection } from '../../../../../../core/asset/GraphicAssetCollection';
+import { IGraphicAssetCollection } from '../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { NitroInstance } from '../../../../../NitroInstance';
 import { PlaneMask } from './PlaneMask';
@@ -7,7 +7,7 @@ import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
 export class PlaneMaskManager 
 {
-    private _assetCollection: GraphicAssetCollection;
+    private _assetCollection: IGraphicAssetCollection;
     private _masks: Map<string, PlaneMask>;
     private _data: any;
 
@@ -46,7 +46,7 @@ export class PlaneMaskManager
         this._data = k;
     }
 
-    public _Str_6703(k: GraphicAssetCollection): void
+    public _Str_6703(k: IGraphicAssetCollection): void
     {
         if(!this.data) return;
         
@@ -55,7 +55,7 @@ export class PlaneMaskManager
         this._Str_22834(this.data, k);
     }
 
-    private _Str_22834(k: any, _arg_2: GraphicAssetCollection):void
+    private _Str_22834(k: any, _arg_2: IGraphicAssetCollection):void
     {
         if(!k || !_arg_2) return;
 
@@ -109,7 +109,7 @@ export class PlaneMaskManager
         }
     }
 
-    private _Str_25815(k: any, _arg_2: PlaneMaskVisualization, _arg_3: GraphicAssetCollection): string
+    private _Str_25815(k: any, _arg_2: PlaneMaskVisualization, _arg_3: IGraphicAssetCollection): string
     {
         if(!k || !k.length) return null;
 

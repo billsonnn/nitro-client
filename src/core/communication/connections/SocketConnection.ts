@@ -177,7 +177,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._socket.send(buffer);
     }
 
-    private processReceivedData(): void
+    public processReceivedData(): void
     {
         try
         {

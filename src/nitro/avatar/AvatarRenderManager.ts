@@ -306,7 +306,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         if(this.events) this.events.dispatchEvent(new NitroEvent(AvatarRenderEvent.AVATAR_RENDER_READY));
     }
 
-    public createAvatarImage(figure: string, size: string, gender: string, listener: IAvatarImageListener, effectListener: IAvatarEffectListener): IAvatarImage
+    public createAvatarImage(figure: string, size: string, gender: string, listener: IAvatarImageListener = null, effectListener: IAvatarEffectListener = null): IAvatarImage
     {
         if(!this._structure || !this._avatarAssetDownloadManager) return null;
 

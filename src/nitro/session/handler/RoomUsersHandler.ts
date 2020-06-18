@@ -2,6 +2,7 @@ import { IConnection } from '../../../core/communication/connections/IConnection
 import { RoomUnitEvent } from '../../communication/messages/incoming/room/unit/RoomUnitEvent';
 import { RoomUnitInfoEvent } from '../../communication/messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitRemoveEvent } from '../../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
+import { RoomSessionUserDataUpdateEvent } from '../events/RoomSessionUserDataUpdateEvent';
 import { IRoomHandlerListener } from '../IRoomHandlerListener';
 import { RoomUserData } from '../RoomUserData';
 import { BaseHandler } from './BaseHandler';
@@ -25,30 +26,48 @@ export class RoomUsersHandler extends BaseHandler
 
         if(!session) return;
 
-        const units = event.getParser().units;
+        const users = event.getParser().users;
 
-        const unitsToAdd: RoomUserData[] = [];
+        const usersToAdd: RoomUserData[] = [];
 
-        if(units && units.length)
+        if(users && users.length)
         {
-            for(let unit of units)
+            for(let user of users)
             {
-                if(!unit) continue;
+                if(!user) continue;
 
-                const userData = new RoomUserData(unit.unitId);
+                const userData = new RoomUserData(user.roomIndex);
 
-                userData.id     = unit.id;
-                userData.name   = unit.username;
-                userData.type   = unit.type;
-                userData.gender = unit.gender;
-                userData.figure = unit.figure;
-                userData.motto  = unit.motto;
+                userData.name                   = user.name;
+                userData.custom                 = user.custom;
+                userData.activityPoints         = user.activityPoints;
+                userData.figure                 = user.figure;
+                userData.type                   = user.userType;
+                userData.webID                  = user.webID;
+                userData.groupID                = user.groupID;
+                userData.groupName              = user.groupName;
+                userData.groupStatus            = user.groupStatus;
+                userData.sex                    = user.sex;
+                userData.ownerId                = user.ownerId;
+                userData.ownerName              = user.ownerName;
+                userData.rarityLevel            = user.rarityLevel;
+                userData.hasSaddle              = user.hasSaddle;
+                userData.isRiding               = user.isRiding;
+                userData.canBreed               = user.canBreed;
+                userData.canHarvest             = user.canHarvest;
+                userData.canRevive              = user.canRevive;
+                userData.hasBreedingPermission  = user.hasBreedingPermission;
+                userData.petLevel               = user.petLevel;
+                userData.botSkills              = user.botSkills;
+                userData.isModerator            = user.isModerator;
 
-                if(!session.userData.getUserData(userData.id)) unitsToAdd.push(userData);
+                if(!session.userData.getUserData(user.roomIndex)) usersToAdd.push(userData);
 
                 session.userData.updateUserData(userData);
             }
         }
+
+        this.listener.events.dispatchEvent(new RoomSessionUserDataUpdateEvent(session, usersToAdd));
     }
 
     private onRoomUnitInfoEvent(event: RoomUnitInfoEvent): void
@@ -63,7 +82,7 @@ export class RoomUsersHandler extends BaseHandler
 
         if(!parser) return;
 
-        session.userData.updateFigure(parser.unitId, parser.figure, parser.gender);
+        session.userData.updateFigure(parser.unitId, parser.figure, parser.gender, false, false);
         session.userData.updateMotto(parser.unitId, parser.motto);
     }
 

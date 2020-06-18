@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js-legacy';
-import { GraphicAsset } from './GraphicAsset';
-import { GraphicAssetCollection } from './GraphicAssetCollection';
+import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
+import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
+import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IAssetData } from './interfaces';
 
 export interface IAssetManager
@@ -8,9 +9,9 @@ export interface IAssetManager
     dispose(): void;
     getTexture(name: string): PIXI.Texture;
     setTexture(name: string, texture: PIXI.Texture): void;
-    getAsset(name: string): GraphicAsset;
-    getCollection(name: string): GraphicAssetCollection;
-    createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection;
+    getAsset(name: string): IGraphicAsset;
+    getCollection(name: string): IGraphicAssetCollection;
+    createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): IGraphicAssetCollection;
     downloadAssets(urls: string[], cb: Function): void;
     collections: Map<string, GraphicAssetCollection>;
 }

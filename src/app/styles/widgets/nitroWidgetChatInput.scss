@@ -7,6 +7,9 @@
     bottom: 0;
     height: 100px;
     z-index: 400;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
 
     .chat-input {
         width: 500px;

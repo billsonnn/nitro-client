@@ -1,6 +1,11 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { RoomEnterComposer } from '../communication/messages/outgoing/room/access/RoomEnterComposer';
+import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
+import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
+import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
+import { RoomUnitTypingStartComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
+import { RoomUnitTypingStopComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
 import { RoomControllerLevel } from './enum/RoomControllerLevel';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
@@ -105,6 +110,27 @@ export class RoomSession extends Disposable implements IRoomSession
         if(roomId === this._roomId) return;
 
         this._roomId = roomId;
+    }
+
+    public sendChatMessage(text: string, styleId: number): void
+    {
+        this._connection.send(new RoomUnitChatComposer(text, styleId));
+    }
+
+    public sendShoutMessage(text: string, styleId: number): void
+    {
+        this._connection.send(new RoomUnitChatShoutComposer(text, styleId));
+    }
+
+    public sendWhisperMessage(recipientName: string, text: string, styleId: number): void
+    {
+        this._connection.send(new RoomUnitChatWhisperComposer(recipientName, text, styleId));
+    }
+
+    public sendChatTypingMessage(isTyping: boolean): void
+    {
+        if(isTyping) this._connection.send(new RoomUnitTypingStartComposer());
+        else this._connection.send(new RoomUnitTypingStopComposer());
     }
 
     public pickupPet(id: number): void

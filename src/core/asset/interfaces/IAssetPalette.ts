@@ -4,4 +4,5 @@ export interface IAssetPalette
     source: string;
     color1: string;
     color2: string;
+    rgb: [ number, number, number ][];
 }

@@ -8,6 +8,7 @@ import { RoomUI } from '../../RoomUI';
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { ChatInputView } from './ChatInputView';
+import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 
 export class ChatInputWidget extends ConversionTrackingWidget
 {
@@ -23,9 +24,13 @@ export class ChatInputWidget extends ConversionTrackingWidget
     {
         super(handler, windowManager, layoutManager);
 
-        this._roomUI        = roomUI;
-        this._roomDesktop   = roomDesktop;
-        this._view          = new ChatInputView(this);
+        this._roomUI            = roomUI;
+        this._roomDesktop       = roomDesktop;
+        this._view              = new ChatInputView(this);
+
+        this._selectedUsername  = '';
+        this._floodBlocked      = false;
+        this._releaseTimer      = null;
 
         (handler as ChatInputWidgetHandler).widget = this;
     }
@@ -70,8 +75,25 @@ export class ChatInputWidget extends ConversionTrackingWidget
         }
     }
 
+    public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
+    {
+        if(this._floodBlocked) return;
+
+        if(this.messageListener) this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
+    }
+
     public get mainWindow(): HTMLElement
     {
         return this._view.window;
+    }
+
+    public get selectedUsername(): string
+    {
+        return this._selectedUsername;
+    }
+
+    public get floodBlocked(): boolean
+    {
+        return this._floodBlocked;
     }
 }

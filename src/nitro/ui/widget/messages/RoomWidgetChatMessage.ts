@@ -2,7 +2,10 @@ import { RoomWidgetMessage } from './RoomWidgetMessage';
 
 export class RoomWidgetChatMessage extends RoomWidgetMessage
 {
-    public static MESSAGE_CHAT: string = 'RWCM_MESSAGE_CHAT';
+    public static MESSAGE_CHAT: string  = 'RWCM_MESSAGE_CHAT';
+    public static CHAT_DEFAULT: number  = 0;
+    public static CHAT_WHISPER: number  = 1;
+    public static CHAT_SHOUT: number    = 2;
 
     private _chatType: number;
     private _text: string;

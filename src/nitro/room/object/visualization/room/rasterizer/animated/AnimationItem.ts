@@ -1,4 +1,4 @@
-﻿import { GraphicAsset } from '../../../../../../../core/asset/GraphicAsset';
+﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 
 export class AnimationItem 
 {
@@ -6,9 +6,9 @@ export class AnimationItem
     private _y: number;
     private _speedX: number;
     private _speedY: number;
-    private _bitmapData: GraphicAsset;
+    private _bitmapData: IGraphicAsset;
 
-    constructor(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: GraphicAsset)
+    constructor(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: IGraphicAsset)
     {
         this._x             = k;
         this._y             = _arg_2;
@@ -25,7 +25,7 @@ export class AnimationItem
         if(isNaN(this._speedY)) this._speedY = 0;
     }
 
-    public get bitmapData(): GraphicAsset
+    public get bitmapData(): IGraphicAsset
     {
         return this._bitmapData;
     }

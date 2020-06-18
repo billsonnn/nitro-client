@@ -86,7 +86,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
         if(!(roomMap instanceof RoomMapData)) return;
         
-        if(!this._planeParser._Str_16659(roomMap)) return;
+        if(!this._planeParser.initializeFromMapData(roomMap)) return;
 
         this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, roomMap);
         this.object.model.setValue(RoomObjectVariable.ROOM_BACKGROUND_COLOR, 0xFFFFFF);
@@ -107,12 +107,12 @@ export class RoomLogic extends RoomObjectLogicBase
 
             if(model)
             {
-                const mapData = this._planeParser._Str_5598();
+                const mapData = this._planeParser.getMapData();
 
                 model.setValue(RoomObjectVariable.ROOM_MAP_DATA, mapData);
                 model.setValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME, time);
 
-                this._planeParser._Str_16659(mapData);
+                this._planeParser.initializeFromMapData(mapData);
             }
 
             this._needsMapUpdate = false;
@@ -292,11 +292,11 @@ export class RoomLogic extends RoomObjectLogicBase
         switch (message.type)
         {
             case ObjectRoomFloorHoleUpdateMessage.ADD:
-                this._planeParser._Str_12390(message.id, message.x, message.y, message.width, message.height);
+                this._planeParser.addFloorHole(message.id, message.x, message.y, message.width, message.height);
                 this._needsMapUpdate = true;
                 return;
             case ObjectRoomFloorHoleUpdateMessage.REMOVE:
-                this._planeParser._Str_11339(message.id);
+                this._planeParser.removeFloorHole(message.id);
                 this._needsMapUpdate = true;
                 return;
         }
@@ -329,7 +329,7 @@ export class RoomLogic extends RoomObjectLogicBase
             planeId = parseInt(tag.substr(tag.indexOf('@') + 1));
         }
 
-        if((planeId < 1) || (planeId > this._planeParser._Str_3828))
+        if((planeId < 1) || (planeId > this._planeParser.planeCount))
         {
             if(event.type === MouseEventType.ROLL_OUT)
             {
@@ -343,11 +343,11 @@ export class RoomLogic extends RoomObjectLogicBase
 
         let _local_7: PIXI.Point = null;
 
-        const _local_8  = this._planeParser._Str_20362(planeId);
-        const _local_9  = this._planeParser._Str_16904(planeId);
-        const _local_10 = this._planeParser._Str_18119(planeId);
-        const _local_11 = this._planeParser._Str_23741(planeId);
-        const _local_12 = this._planeParser._Str_13037(planeId);
+        const _local_8  = this._planeParser.getPlaneLocation(planeId);
+        const _local_9  = this._planeParser.getPlaneLeftSide(planeId);
+        const _local_10 = this._planeParser.getPlaneRightSide(planeId);
+        const _local_11 = this._planeParser.getPlaneNormalDirection(planeId);
+        const _local_12 = this._planeParser.getPlaneType(planeId);
 
         if (((((_local_8 == null) || (_local_9 == null)) || (_local_10 == null)) || (_local_11 == null))) return;
 
@@ -374,13 +374,9 @@ export class RoomLogic extends RoomObjectLogicBase
         _local_18.add(Vector3d.product(_local_10, (_local_7.y / _local_14)));
         _local_18.add(_local_8);
 
-        const _local_19 = Math.round(_local_18.x);
-        const _local_20 = Math.round(_local_18.y);
-        const _local_21 = Math.round(_local_18.z);
-
-        // const _local_19 = _local_18.x;
-        // const _local_20 = _local_18.y;
-        // const _local_21 = _local_18.z;
+        const _local_19 = _local_18.x;
+        const _local_20 = _local_18.y;
+        const _local_21 = _local_18.z;
 
         if(((((_local_7.x >= 0) && (_local_7.x < _local_13)) && (_local_7.y >= 0)) && (_local_7.y < _local_14)))
         {

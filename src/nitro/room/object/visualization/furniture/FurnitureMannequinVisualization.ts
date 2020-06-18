@@ -136,7 +136,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
                 _local_2.setDirection(AvatarSetType.FULL, this.direction);
 
-                if(this._dynamicAssetName) this.asset.removeAsset(this._dynamicAssetName);
+                if(this._dynamicAssetName) this.asset.disposeAsset(this._dynamicAssetName);
 
                 this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), true, 0, 0, false, false);
 

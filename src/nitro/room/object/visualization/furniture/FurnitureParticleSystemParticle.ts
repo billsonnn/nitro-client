@@ -1,4 +1,4 @@
-﻿import { GraphicAsset } from '../../../../../core/asset/GraphicAsset';
+﻿import { GraphicAsset } from '../../../../../room/object/visualization/utils/GraphicAsset';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 
 export class FurnitureParticleSystemParticle 

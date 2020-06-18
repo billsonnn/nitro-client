@@ -1,9 +1,10 @@
-import { GraphicAssetCollection } from '../../core/asset/GraphicAssetCollection';
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
+import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
+import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { NitroInstance } from '../NitroInstance';
 import { FurnitureData } from '../session/furniture/FurnitureData';
 import { FurnitureType } from '../session/furniture/FurnitureType';
@@ -27,7 +28,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _stateEvents: IEventDispatcher;
     private _sessionDataManager: ISessionDataManager;
     private _waitingForSessionDataManager: boolean;
-    private _collections: Map<string, GraphicAssetCollection>;
+    private _collections: Map<string, IGraphicAssetCollection>;
 
     private _events: Map<string, IEventDispatcher>;
     private _activeObjects: { [index: string]: number };
@@ -217,7 +218,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         return name.substr(0, index);
     }
 
-    public getCollection(name: string): GraphicAssetCollection
+    public getCollection(name: string): IGraphicAssetCollection
     {
         if(!name) return null;
 

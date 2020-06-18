@@ -8,11 +8,11 @@ import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
 
 export interface IRoomDesktop 
 {
+    processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent;
+    processEvent(event: NitroEvent): void;
+    //_Str_11511(_arg_1:String):IRoomWidget;
     events: IEventDispatcher;
     windowManager: INitroWindowManager;
     layoutManager: DesktopLayoutManager;
     roomSession: IRoomSession;
-    processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent;
-    processEvent(event: NitroEvent): void;
-    //_Str_11511(_arg_1:String):IRoomWidget;
 }

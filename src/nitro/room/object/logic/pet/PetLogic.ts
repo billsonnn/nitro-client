@@ -159,11 +159,14 @@ export class PetLogic extends MovingObjectLogic
             const petFigureData = new PetFigureData(message.figure);
             
             model.setValue(RoomObjectVariable.FIGURE, message.figure);
-            model.setValue(RoomObjectVariable.RACE, message.race);
+            model.setValue(RoomObjectVariable.RACE, message.subType);
             model.setValue(RoomObjectVariable.PET_PALETTE_INDEX, petFigureData.paletteId);
             model.setValue(RoomObjectVariable.PET_COLOR, petFigureData.color);
             model.setValue(RoomObjectVariable.PET_TYPE, petFigureData.typeId);
-            model.setValue(RoomObjectVariable.PET_IS_RIDING, message.isRiding ? 1 : 0);
+            model.setValue(RoomObjectVariable.PET_CUSTOM_LAYER_IDS, petFigureData.customLayerIds);
+            model.setValue(RoomObjectVariable.PET_CUSTOM_PARTS_IDS, petFigureData.customPartIds);
+            model.setValue(RoomObjectVariable.PET_CUSTOM_PALETTE_IDS, petFigureData.customPaletteIds);
+            model.setValue(RoomObjectVariable.PET_IS_RIDING, (message.isRiding ? 1 : 0));
 
             return;
         }

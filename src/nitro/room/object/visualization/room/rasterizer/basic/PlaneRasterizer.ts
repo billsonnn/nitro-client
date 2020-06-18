@@ -1,5 +1,5 @@
-﻿import { GraphicAsset } from '../../../../../../../core/asset/GraphicAsset';
-import { GraphicAssetCollection } from '../../../../../../../core/asset/GraphicAssetCollection';
+﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
+import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Rasterizer } from '../../../../../../../room/utils/Rasterizer';
@@ -20,7 +20,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 {
     protected static DEFAULT: string = 'default';
 
-    private _assetCollection: GraphicAssetCollection;
+    private _assetCollection: IGraphicAssetCollection;
     private _materials: Map<string, PlaneMaterial>;
     private _textures: Map<string, PlaneTexture>;
     private _planes: Map<string, Plane>;
@@ -42,7 +42,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         return this._data;
     }
 
-    protected get _Str_2697(): GraphicAssetCollection
+    protected get _Str_2697(): IGraphicAssetCollection
     {
         return this._assetCollection;
     }
@@ -180,7 +180,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         return false;
     }
 
-    public _Str_6703(k: GraphicAssetCollection): void
+    public _Str_6703(k: IGraphicAssetCollection): void
     {
         if(!this._data) return;
 
@@ -209,7 +209,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
     {
     }
 
-    private _Str_24250(k: any, _arg_2: GraphicAssetCollection): void
+    private _Str_24250(k: any, _arg_2: IGraphicAssetCollection): void
     {
         if(!k || !_arg_2) return;
 
@@ -407,7 +407,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
                 let assetNames: string[]        = null;
                 let offsetPoints: PIXI.Point[]  = null;
-                let graphics: GraphicAsset[]    = null;
+                let graphics: IGraphicAsset[]   = null;
                 let limit: number               = 0;
 
                 if(cell.extras && cell.extras.length)

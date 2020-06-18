@@ -22,7 +22,7 @@ export class FurnitureStackingHeightMap
 
     private isValidCoordinate(x: number, y: number): boolean
     {
-        return ((x >= 0) && (x < this._width) && (y >= 0) && (y < this._height));
+        return (((x >= 0) && (x < this._width)) && ((y >= 0) && (y < this._height)));
     }
 
     public getHeight(x: number, y: number): number

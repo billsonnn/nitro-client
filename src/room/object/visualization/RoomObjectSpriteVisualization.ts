@@ -1,11 +1,11 @@
 import * as PIXI from 'pixi.js-legacy';
-import { GraphicAssetCollection } from '../../../core/asset/GraphicAssetCollection';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 import { IRoomObjectSpriteVisualization } from './IRoomObjectSpriteVisualization';
 import { IObjectVisualizationData } from './IRoomObjectVisualizationData';
 import { RoomObjectSprite } from './RoomObjectSprite';
+import { IGraphicAssetCollection } from './utils/IGraphicAssetCollection';
 
 export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualization
 {
@@ -13,7 +13,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
     private _id: number;
     private _object: IRoomObjectController;
-    private _asset: GraphicAssetCollection;
+    private _asset: IGraphicAssetCollection;
     private _sprites: IRoomObjectSprite[];
 
     protected _scale: number;
@@ -167,14 +167,18 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         this._object = object;
     }
 
-    public get asset(): GraphicAssetCollection
+    public get asset(): IGraphicAssetCollection
     {
         return this._asset;
     }
 
-    public set asset(asset: GraphicAssetCollection)
+    public set asset(asset: IGraphicAssetCollection)
     {
+        if(this._asset) this._asset.removeReference();
+
         this._asset = asset;
+
+        if(this._asset) this._asset.addReference();
     }
 
     public get sprites(): IRoomObjectSprite[]

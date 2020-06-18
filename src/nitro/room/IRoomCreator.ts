@@ -39,11 +39,12 @@ export interface IRoomCreator
     addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, headDirection: number, type: number, figure: string): boolean;
     updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp?: boolean, baseY?: number, direction?: IVector3D, headDirection?: number): void;
     updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): void;
-    updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string): void;
+    updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender?: string, subType?: string, isRiding?: boolean): void;
     updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): void;
     updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay?: number): void;
     updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): void;
     updateRoomObjectUserPetGesture(roomId: number, objectId: number, gesture: string): void;
     updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter?: string): void;
     updateRoomObjectUserOwn(roomId: number, objectId: number): void;
+    getPetTypeId(figure: string): number;
 }

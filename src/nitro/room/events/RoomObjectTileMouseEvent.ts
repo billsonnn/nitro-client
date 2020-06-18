@@ -33,16 +33,16 @@ export class RoomObjectTileMouseEvent extends RoomObjectMouseEvent
 
     public get _Str_16836(): number
     {
-        return this._tileX + 0.499;
+        return Math.trunc(this._tileX + 0.499);
     }
 
     public get _Str_17676(): number
     {
-        return this._tileY + 0.499;
+        return Math.trunc(this._tileY + 0.499);
     }
 
     public get _Str_21459(): number
     {
-        return this._tileZ + 0.499;
+        return Math.trunc(this._tileZ + 0.499);
     }
 }

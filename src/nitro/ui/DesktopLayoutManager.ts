@@ -39,23 +39,16 @@ export class DesktopLayoutManager
     {
         if(!window) return false;
 
-        const container = this.getWidgetContainer(type, window);
-
-        if(!container) return false;
-
-        if(type === RoomWidgetEnum.CHAT_INPUT_WIDGET)
+        if(this._container)
         {
-            container.append(window);
+            this._container.append(window);
 
             return true;
         }
+        
+        window.remove();
 
-        window.style.top = '0px';
-        window.style.left = '0px';
-
-        container.append(window);
-
-        return true;
+        return false;
     }
 
     private getWidgetContainer(type: string, window: HTMLElement): HTMLElement

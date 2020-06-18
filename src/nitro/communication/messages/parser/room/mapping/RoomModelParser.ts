@@ -1,5 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
+import { RoomPlaneParser } from '../../../../../room/object/RoomPlaneParser';
 
 export class RoomModelParser implements IMessageParser
 {
@@ -32,16 +33,21 @@ export class RoomModelParser implements IMessageParser
         this._model         = wrapper.readString();
 
         const model     = this._model.split('\r');
-        const modelRows = model.length;
+        let modelRows = model.length;
+
+        let width   = 0;
+        let height  = 0;
 
         let iterator = 0;
 
         while(iterator < modelRows)
         {
-            const row   = model[iterator] || '';
-            const width = row.length || 0;
+            const row = model[iterator];
 
-            if(width > this._width) this._width = width;
+            if(row.length > width)
+            {
+                width = row.length;
+            }
 
             iterator++;
         }
@@ -55,9 +61,9 @@ export class RoomModelParser implements IMessageParser
 
             let subIterator = 0;
 
-            while(subIterator < this._width)
+            while(subIterator < width)
             {
-                heightMap.push(-110);
+                heightMap.push(RoomPlaneParser.TILE_BLOCKED);
 
                 subIterator++;
             }
@@ -67,7 +73,8 @@ export class RoomModelParser implements IMessageParser
             iterator++;
         }
 
-        this._height = modelRows;
+        this._width     = width;
+        this._height    = modelRows;
 
         iterator = 0;
 
@@ -83,7 +90,7 @@ export class RoomModelParser implements IMessageParser
                 while(subIterator < text.length)
                 {
                     const char  = text.charAt(subIterator);
-                    let height  = -110;
+                    let height  = RoomPlaneParser.TILE_BLOCKED;
 
                     if((char !== 'x') && (char !== 'X')) height = parseInt(char, 36);
 

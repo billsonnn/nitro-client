@@ -1,5 +1,5 @@
 import { ConvolutionFilter } from '@pixi/filter-convolution';
-import { GraphicAsset } from '../../core/asset/GraphicAsset';
+import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { NitroInstance } from '../NitroInstance';
 import { ActiveActionData } from './actions/ActiveActionData';
 import { IActionDefinition } from './actions/IActionDefinition';
@@ -70,7 +70,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     private _Str_1210:EffectAssetDownloadManager;
     private _Str_1153: IAvatarEffectListener;
 
-    constructor(k: AvatarStructure, _arg_2: AssetAliasCollection, _arg_3: AvatarFigureContainer, _arg_4: string, _arg_5: EffectAssetDownloadManager, _arg_6: IAvatarEffectListener)
+    constructor(k: AvatarStructure, _arg_2: AssetAliasCollection, _arg_3: AvatarFigureContainer, _arg_4: string, _arg_5: EffectAssetDownloadManager, _arg_6: IAvatarEffectListener = null)
     {
         this._Str_903 = [];
         this._Str_614 = [];
@@ -407,6 +407,25 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_671;
     }
 
+    public getCroppedImage(setType: string, scale: number = 1): PIXI.Texture
+    {
+        if(!this._Str_1708) return null;
+
+        if(!this._Str_2143) this._Str_962();
+
+        const avatarCanvas = this._Str_581._Str_1664(this._Str_842, this._Str_1708._Str_742._Str_868);
+
+        if(!avatarCanvas) return null;
+
+        const graphic = new PIXI.Graphics();
+
+        graphic.drawRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+
+        const setIds = this._Str_581._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
+
+        return null;
+    }
+
     protected getFullImage(k: string): PIXI.Texture
     {
         return (this._Str_864.get(k) || null);
@@ -437,7 +456,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return new ConvolutionFilter(_local_4, 3, 3);
     }
 
-    public getAsset(k: string): GraphicAsset
+    public getAsset(k: string): IGraphicAsset
     {
         return this._assets.getAsset(k);
     }

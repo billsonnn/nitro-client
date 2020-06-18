@@ -1,7 +1,7 @@
-import { GraphicAssetCollection } from '../../../../../core/asset/GraphicAssetCollection';
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
+import { IGraphicAssetCollection } from '../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { PlaneMaskManager } from './mask/PlaneMaskManager';
 import { LandscapeRasterizer } from './rasterizer/animated/LandscapeRasterizer';
 import { FloorRasterizer } from './rasterizer/basic/FloorRasterizer';
@@ -84,7 +84,7 @@ export class RoomVisualizationData extends Disposable implements IObjectVisualiz
         super.onDispose();
     }
 
-    public setGraphicAssetCollection(collection: GraphicAssetCollection): void
+    public setGraphicAssetCollection(collection: IGraphicAssetCollection): void
     {
         if(this._initialized) return;
 

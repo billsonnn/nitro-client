@@ -49,12 +49,66 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
         switch(message.type)
         {
             case RoomWidgetChatTypingMessage.TYPING_STATUS:
-                widgetMessage = message;
+                let typingMessage = (message as RoomWidgetChatTypingMessage);
+
+                this._container.roomSession.sendChatTypingMessage(typingMessage.isTyping);
                 break;
             case RoomWidgetChatMessage.MESSAGE_CHAT:
-                widgetMessage = message;
+                let chatMessage = (message as RoomWidgetChatMessage);
+
+                if(chatMessage.text === '') return null;
+
+                let text    = chatMessage.text;
+                let parts   = chatMessage.text.split(' ');
+
+                if(parts.length > 0)
+                {
+                    let firstPart   = parts[0];
+                    let secondPart  = '';
+
+                    if(parts.length > 1) secondPart = parts[1];
+
+                    if((firstPart.charAt(0) === ':') && (secondPart === 'x'))
+                    {
+                        const selectedAvatarId = this._container.roomEngine.selectedAvatarId;
+
+                        if(selectedAvatarId > -1)
+                        {
+                            const userData = this._container.roomSession.userData.getUserDataByIndex(selectedAvatarId);
+
+                            if(userData)
+                            {
+                                secondPart = userData.name;
+                                text = chatMessage.text.replace(' x', (' ' + userData.name));
+                            }
+                        }
+                    }
+
+                    switch(secondPart.toLowerCase())
+                    {
+
+                    }
+                }
+
+                let styleId = chatMessage.styleId;
+
+                if(this._container && this._container.roomSession)
+                {
+                    switch(chatMessage.chatType)
+                    {
+                        case RoomWidgetChatMessage.CHAT_DEFAULT:
+                            this._container.roomSession.sendChatMessage(text, styleId);
+                            break;
+                        case RoomWidgetChatMessage.CHAT_SHOUT:
+                            this._container.roomSession.sendShoutMessage(text, styleId);
+                            break;
+                        case RoomWidgetChatMessage.CHAT_WHISPER:
+                            this._container.roomSession.sendWhisperMessage(chatMessage.recipientName, text, styleId);
+                            break;
+                    }
+                }
                 break;
-            case RoomWidgetChatSelectAvatarMessage.SELECT_AVATAR:
+            case RoomWidgetChatSelectAvatarMessage.MESSAGE_SELECT_AVATAR:
                 widgetMessage = message;
                 break;
         }
@@ -74,7 +128,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
     public get messageTypes(): string[]
     {
-        return [ RoomWidgetChatTypingMessage.TYPING_STATUS, RoomWidgetChatMessage.MESSAGE_CHAT, RoomWidgetChatSelectAvatarMessage.SELECT_AVATAR ];
+        return [ RoomWidgetChatTypingMessage.TYPING_STATUS, RoomWidgetChatMessage.MESSAGE_CHAT, RoomWidgetChatSelectAvatarMessage.MESSAGE_SELECT_AVATAR ];
     }
 
     public get eventTypes(): string[]

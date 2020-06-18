@@ -4,7 +4,6 @@ import { NitroInstance } from '../nitro/NitroInstance';
 import { NitroConfiguration } from '../NitroConfiguration';
 import './app.scss';
 
-PIXI.settings.ROUND_PIXELS  = true;
 PIXI.settings.SCALE_MODE    = PIXI.SCALE_MODES.NEAREST;
 PIXI.Ticker.shared.maxFPS   = NitroConfiguration.FPS;
 
@@ -16,21 +15,17 @@ const instance = new NitroInstance(new NitroCore(), {
     transparent: true
 });
 
-const element = document.getElementById('canvas-injector');
-
-if(element)
+if(instance)
 {
-    if(instance)
+    const view = instance.renderer && instance.renderer.view;
+
+    if(view)
     {
-        const view = instance.renderer && instance.renderer.view;
+        view.id         = 'client-wrapper';
+        view.className  = 'client-canvas';
 
-        if(view)
-        {
-            view.id = 'client';
-
-            element.append(view);
-        }
-
-        instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
+        document.body.append(view);
     }
+
+    instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
 }

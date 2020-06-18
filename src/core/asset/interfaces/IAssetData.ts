@@ -15,6 +15,6 @@ export interface IAssetData {
     directions: number[];
     assets: { [index: string]: IAsset };
     aliases: { [index: string]: IAssetAlias };
-    palettes: IAssetPalette[];
+    palettes: { [index: string]: IAssetPalette };
     visualization: IAssetVisualizationData;
 }

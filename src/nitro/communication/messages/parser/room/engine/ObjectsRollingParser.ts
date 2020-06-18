@@ -1,9 +1,9 @@
-import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
-import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
-import { Vector3d } from '../../../../../room/utils/Vector3d';
-import { ObjectRolling } from '../../../../room/utils/ObjectRolling';
+import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
+import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
+import { Vector3d } from '../../../../../../room/utils/Vector3d';
+import { ObjectRolling } from '../../../../../room/utils/ObjectRolling';
 
-export class RoomRollingParser implements IMessageParser
+export class ObjectsRollingParser implements IMessageParser
 {
     private _rollerId: number;
     private _itemsRolling: ObjectRolling[];

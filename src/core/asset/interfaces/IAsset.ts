@@ -4,5 +4,6 @@ export interface IAsset
     x: number;
     y: number;
     flipH?: boolean;
+    usesPalette?: number;
     texture: PIXI.Texture;
 }

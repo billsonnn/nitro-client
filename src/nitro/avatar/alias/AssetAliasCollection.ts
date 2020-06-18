@@ -1,5 +1,5 @@
-﻿import { GraphicAsset } from '../../../core/asset/GraphicAsset';
-import { IAssetManager } from '../../../core/asset/IAssetManager';
+﻿import { IAssetManager } from '../../../core/asset/IAssetManager';
+import { IGraphicAsset } from '../../../room/object/visualization/utils/IGraphicAsset';
 import { AvatarRenderManager } from '../AvatarRenderManager';
 import { AssetAlias } from './AssetAlias';
 
@@ -75,7 +75,7 @@ export class AssetAliasCollection
         return _local_2;
     }
 
-    public getAsset(name: string): GraphicAsset
+    public getAsset(name: string): IGraphicAsset
     {
         if(!this._assets) return null;
         
