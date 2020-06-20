@@ -137,7 +137,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 if(!child) continue;
 
-                this._master.removeChild(child);
+                if(child.parent) child.parent.removeChild(child);
 
                 child.destroy();
             }
@@ -572,6 +572,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             }
             else
             {
+                if(k.parent) k.parent.removeChild(k);
+
                 k.destroy();
             }
         }

@@ -1,4 +1,3 @@
-import { ConvolutionFilter } from '@pixi/filter-convolution';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { NitroInstance } from '../NitroInstance';
 import { ActiveActionData } from './actions/ActiveActionData';
@@ -447,13 +446,14 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         this._Str_864.set(k, existing);
     }
 
-    private _Str_1901(): ConvolutionFilter
+    private _Str_1901(): any
     {
         var k = 8;
         var _local_2 = (k / -100);
         var _local_3 = ((_local_2 * -8) + 1);
         var _local_4 = [_local_2, _local_2, _local_2, _local_2, _local_3, _local_2, _local_2, _local_2, _local_2];
-        return new ConvolutionFilter(_local_4, 3, 3);
+        //return new ConvolutionFilter(_local_4, 3, 3);
+        return null;
     }
 
     public getAsset(k: string): IGraphicAsset

@@ -326,10 +326,11 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._pendingContentTypes.push(type);
         this._events.set(type, events);
 
+        loader.onComplete.add(() => this.onAssetDownloaded(loader, type));
+
         loader
             .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next))
             .add(assetUrls)
-            .on('complete', () => this.onAssetDownloaded(loader, type))
             .load();
 
         return true;

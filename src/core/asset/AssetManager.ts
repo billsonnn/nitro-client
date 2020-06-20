@@ -131,10 +131,11 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         const loader = new PIXI.Loader();
 
+        loader.onComplete.add(() => this.onChuckDownloaded(loader, urls, cb));
+
         loader
             .use(AssetLoader)
             .add(urls)
-            .on('complete', () => this.onChuckDownloaded(loader, urls, cb))
             .load();
     }
 

@@ -38,11 +38,13 @@ export class ExtendedSprite extends PIXI.Sprite
 
     public setTexture(texture: PIXI.Texture): void
     {
+        if(!texture) texture = PIXI.Texture.EMPTY;
+        
         if(texture === this.texture) return;
 
         this.texture = texture;
 
-        if(!texture)
+        if(texture === PIXI.Texture.EMPTY)
         {
             this._pairedSpriteId            = -1;
             this._pairedSpriteUpdateCounter = -1;
