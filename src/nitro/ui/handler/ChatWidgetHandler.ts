@@ -1,5 +1,7 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { NitroEvent } from '../../../core/events/NitroEvent';
+import { PointMath } from '../../../room/utils/PointMath';
+import { Vector3d } from '../../../room/utils/Vector3d';
 import { AvatarFigurePartType } from '../../avatar/enum/AvatarFigurePartType';
 import { AvatarScaleType } from '../../avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../avatar/enum/AvatarSetType';
@@ -12,6 +14,7 @@ import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../widget/enums/RoomWidgetEnum';
 import { SystemChatStyleEnum } from '../widget/enums/SystemChatStyleEnum';
 import { RoomWidgetChatUpdateEvent } from '../widget/events/RoomWidgetChatUpdateEvent';
+import { RoomWidgetRoomViewUpdateEvent } from '../widget/events/RoomWidgetRoomViewUpdateEvent';
 import { RoomWidgetUpdateEvent } from '../widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../widget/messages/RoomWidgetMessage';
 import { RoomChatWidget } from '../widget/roomchat/RoomChatWidget';
@@ -25,20 +28,26 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
     private _avatarColorCache: Map<string, number>;
     private _avatarImageCache: Map<string, PIXI.Texture>;
+    private _primaryCanvasScale: number;
+    private _primaryCanvasOriginPos: PIXI.Point;
+    private _tempScreenPosVector: Vector3d;
 
     private _disposed: boolean;
 
     constructor()
     {
-        this._container         = null;
-        this._widget            = null;
+        this._container                 = null;
+        this._widget                    = null;
 
-        this._connection        = null;
+        this._connection                = null;
 
-        this._avatarColorCache  = new Map();
-        this._avatarImageCache  = new Map();
+        this._avatarColorCache          = new Map();
+        this._avatarImageCache          = new Map();
+        this._primaryCanvasScale        = 0;
+        this._primaryCanvasOriginPos    = null;
+        this._tempScreenPosVector       = new Vector3d();
 
-        this._disposed          = false;
+        this._disposed                  = false;
     }
 
     public dispose(): void
@@ -53,6 +62,71 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     public update(): void
     {
 
+    }
+
+    private _Str_20006(): void
+    {
+        if(!this._container || !this._container.roomSession || !this._container.roomEngine || !this._container.events) return;
+
+        const canvasId  = this._container.getFirstCanvasId();
+        const roomId    = this._container.roomSession.roomId;
+        const geometry  = this._container.roomEngine.getRoomInstanceGeometry(roomId, canvasId);
+
+        if(!geometry) return;
+
+        let scale = 1;
+
+        if(this._primaryCanvasScale > 0) scale = (geometry.scale / this._primaryCanvasScale);
+
+        if(!this._primaryCanvasOriginPos)
+        {
+            this._tempScreenPosVector.x     = 0;
+            this._tempScreenPosVector.y     = 0;
+            this._tempScreenPosVector.z     = 0;
+            this._primaryCanvasOriginPos    = geometry.getScreenPoint(this._tempScreenPosVector);
+            this._primaryCanvasScale        = (geometry.scale - 10);
+        }
+
+        let eventType: string               = '';
+        let _local_6: RoomWidgetUpdateEvent = null;
+
+        this._tempScreenPosVector.x = 0;
+        this._tempScreenPosVector.y = 0;
+        this._tempScreenPosVector.z = 0;
+
+        const _local_7 = geometry.getScreenPoint(this._tempScreenPosVector);
+
+        if(_local_7)
+        {
+            const _local_8 = this._container.roomEngine.getRoomInstanceRenderingCanvasOffset(roomId, canvasId);
+
+            if(_local_8) _local_7.set((_local_7.x + _local_8.x), (_local_7.y + _local_8.y));
+
+            if(((!(_local_7.x == this._primaryCanvasOriginPos.x)) || (!(_local_7.y == this._primaryCanvasOriginPos.y))))
+            {
+                const _local_9 = PointMath._Str_15193(_local_7, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
+
+                if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
+                {
+                    eventType = RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED;
+                    _local_6 = new RoomWidgetRoomViewUpdateEvent(eventType, null, _local_9);
+
+                    this._container.events.dispatchEvent(_local_6);
+                }
+
+                this._primaryCanvasOriginPos = _local_7;
+            }
+        }
+
+        if(geometry.scale !== this._primaryCanvasScale)
+        {
+            eventType = RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED;
+            _local_6 = new RoomWidgetRoomViewUpdateEvent(eventType, null, null, geometry.scale);
+
+            this._container.events.dispatchEvent(_local_6);
+
+            this._primaryCanvasScale = geometry.scale;
+        }
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -84,6 +158,8 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
                     if(roomGeometry)
                     {
+                        this._Str_20006();
+                        
                         let x   = 0;
                         let y   = 0;
 
@@ -104,7 +180,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                             }
                         }
 
-                        const userData = this._container.roomSession.userData.getUserDataByIndex(chatEvent.objectId);
+                        const userData = this._container.roomSession.userDataManager.getUserDataByIndex(chatEvent.objectId);
 
                         let username    = '';
                         let avatarColor = 0;

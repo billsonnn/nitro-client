@@ -177,7 +177,7 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._state;
     }
 
-    public get userData(): UserDataManager
+    public get userDataManager(): UserDataManager
     {
         return this._userData;
     }

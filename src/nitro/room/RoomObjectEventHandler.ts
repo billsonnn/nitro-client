@@ -1175,7 +1175,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                             if(_local_10)
                             {
-                                const _local_11 = _local_10.userData.getUserDataByIndex(objectId);
+                                const _local_11 = _local_10.userDataManager.getUserDataByIndex(objectId);
 
                                 if(_local_11)
                                 {
@@ -1201,7 +1201,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                     if(session)
                     {
-                        const userData = session.userData.getUserDataByIndex(objectId);
+                        const userData = session.userDataManager.getUserDataByIndex(objectId);
 
                         session.pickupPet(userData.webID);
                     }
@@ -1214,7 +1214,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                     if(session)
                     {
-                        const userData = session.userData.getUserDataByIndex(objectId);
+                        const userData = session.userDataManager.getUserDataByIndex(objectId);
 
                         session.pickupBot(userData.webID);
                     }

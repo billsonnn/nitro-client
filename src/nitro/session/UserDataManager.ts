@@ -33,10 +33,10 @@ export class UserDataManager extends Disposable
 
     public getUserData(webID: number): RoomUserData
     {
-        return this.getDataByType(UserDataManager.USER_TYPE, webID);
+        return this.getDataByType(webID, UserDataManager.USER_TYPE);
     }
 
-    public getDataByType(type: number, webID: number): RoomUserData
+    public getDataByType(webID: number, type: number): RoomUserData
     {
         const existing = this._userDataByType.get(type);
 

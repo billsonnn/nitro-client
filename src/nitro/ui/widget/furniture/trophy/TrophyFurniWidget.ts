@@ -11,7 +11,7 @@ import { TrophyView } from './TrophyView';
 export class TrophyFurniWidget extends ConversionTrackingWidget implements ITrophyFurniWidget
 {
     public static VIEW_NIKO_SILVER: number  = 10;
-    public static VIEW_NIKO_GOLD:number     = 20;
+    public static VIEW_NIKO_GOLD: number     = 20;
 
     private _name: string;
     private _date: string;

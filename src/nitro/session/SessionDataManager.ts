@@ -261,6 +261,24 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this._rankId >= level;
     }
 
+    public giveRespect(userId: number): void
+    {
+        // if (((k >= 0) && (this._Str_3437 > 0)))
+        // {
+        //     this.send(new _Str_10714(k));
+        //     this._Str_3437 = (this._Str_3437 - 1);
+        // }
+    }
+
+    public givePetRespect(petId: number): void
+    {
+        // if (((k >= 0) && (this._Str_3973 > 0)))
+        // {
+        //     this.send(new _Str_8184(k));
+        //     this._Str_3973 = (this._Str_3973 - 1);
+        // }
+    }
+
     public get communication(): INitroCommunicationManager
     {
         return this._communication;

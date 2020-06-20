@@ -61,9 +61,9 @@ export class RoomUsersHandler extends BaseHandler
                 userData.botSkills              = user.botSkills;
                 userData.isModerator            = user.isModerator;
 
-                if(!session.userData.getUserData(user.roomIndex)) usersToAdd.push(userData);
+                if(!session.userDataManager.getUserData(user.roomIndex)) usersToAdd.push(userData);
 
-                session.userData.updateUserData(userData);
+                session.userDataManager.updateUserData(userData);
             }
         }
 
@@ -82,8 +82,8 @@ export class RoomUsersHandler extends BaseHandler
 
         if(!parser) return;
 
-        session.userData.updateFigure(parser.unitId, parser.figure, parser.gender, false, false);
-        session.userData.updateMotto(parser.unitId, parser.motto);
+        session.userDataManager.updateFigure(parser.unitId, parser.figure, parser.gender, false, false);
+        session.userDataManager.updateMotto(parser.unitId, parser.motto);
     }
 
     private onRoomUnitRemoveEvent(event: RoomUnitRemoveEvent): void
@@ -94,6 +94,6 @@ export class RoomUsersHandler extends BaseHandler
 
         if(!session) return;
 
-        session.userData.removeUserData(event.getParser().unitId);
+        session.userDataManager.removeUserData(event.getParser().unitId);
     }
 }

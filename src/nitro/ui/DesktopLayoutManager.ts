@@ -62,4 +62,11 @@ export class DesktopLayoutManager
         
         return ((this._container.getElementsByClassName('room-widget-container')[0] as HTMLElement) || null);
     }
+    
+    public getRectangle(): PIXI.Rectangle
+    {
+        const bounds = this._container.getBoundingClientRect();
+
+        return new PIXI.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
 }

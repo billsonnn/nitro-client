@@ -31,6 +31,7 @@ import { IRoomWidgetHandlerContainer } from './IRoomWidgetHandlerContainer';
 import { MouseEventType } from './MouseEventType';
 import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
 import { RoomWidgetRoomObjectUpdateEvent } from './widget/events/RoomWidgetRoomObjectUpdateEvent';
+import { RoomWidgetRoomViewUpdateEvent } from './widget/events/RoomWidgetRoomViewUpdateEvent';
 import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
 import { IRoomWidget } from './widget/IRoomWidget';
 import { IRoomWidgetMessageListener } from './widget/IRoomWidgetMessageListener';
@@ -282,12 +283,12 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         this._layoutManager.addWidgetWindow(type, widget.mainWindow);
 
-        // if(sendSizeUpdate)
-        // {
-        //     type = RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED;
+        if(sendSizeUpdate)
+        {
+            type = RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED;
 
-        //     this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(type, this.))
-        // }
+            this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(type, this.getRoomViewRect()))
+        }
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -585,9 +586,19 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return 0;
     }
 
+    public getRoomViewRect(): PIXI.Rectangle
+    {
+        return this._layoutManager.getRectangle();
+    }
+
     public get events(): IEventDispatcher
     {
         return this._events;
+    }
+
+    public get connection(): IConnection
+    {
+        return this._connection;
     }
 
     public get windowManager(): INitroWindowManager

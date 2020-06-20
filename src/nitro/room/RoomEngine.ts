@@ -1710,7 +1710,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!object) return false;
 
-        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), null, direction, headDirection, false, 0));
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.fixedUserLocation(roomId, location), null, direction, headDirection, false, 0));
 
         if(figure) object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
 
@@ -1731,10 +1731,10 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(isNaN(headDirection)) headDirection = object.model.getValue(RoomObjectVariable.HEAD_DIRECTION) as number;
 
-        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.getLocationWithOffset(roomId, location), this.getLocationWithOffset(roomId, targetLocation), direction, headDirection, canStandUp, baseY));
+        object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.fixedUserLocation(roomId, location), this.fixedUserLocation(roomId, targetLocation), direction, headDirection, canStandUp, baseY));
     }
 
-    private getLocationWithOffset(roomId: number, location: IVector3D): IVector3D
+    private fixedUserLocation(roomId: number, location: IVector3D): IVector3D
     {
         if(!location) return null;
         
@@ -2177,6 +2177,35 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         const roomId = this.getRoomIdFromString(roomIdString);
 
         this._roomObjectEventHandler.handleRoomObjectEvent(event, roomId);
+    }
+
+    public getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId: number = -1): PIXI.Point
+    {
+        if(canvasId == -1) canvasId = this._lastCanvasId;
+
+        const geometry = this.getRoomInstanceGeometry(roomId, canvasId);
+
+        if(!geometry)  return null;
+        
+        const roomObject = this.getRoomObject(roomId, objectId, objectType);
+
+        if(!roomObject) return null;
+        
+        const screenPoint = geometry.getScreenPoint(roomObject.getLocation());
+
+        if(!screenPoint) return null;
+        
+        const renderingCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!renderingCanvas) return null;
+        
+        screenPoint.x = (screenPoint.x * renderingCanvas.scale);
+        screenPoint.y = (screenPoint.y * renderingCanvas.scale);
+
+        screenPoint.x += ((renderingCanvas.width / 2) + renderingCanvas.screenOffsetX);
+        screenPoint.y += ((renderingCanvas.height / 2) + renderingCanvas.screenOffsetY);
+        
+        return screenPoint;
     }
 
     // public _Str_16645(k: number, _arg_2: number, _arg_3: boolean, _arg_4: string = null, _arg_5: IObjectData = null, _arg_6: number = -1, _arg_7: number = -1, _arg_8: string = null):void

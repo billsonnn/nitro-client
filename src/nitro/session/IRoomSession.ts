@@ -19,7 +19,7 @@ export interface IRoomSession extends IDisposable
     connection: IConnection;
     roomId: number;
     state: string;
-    userData: UserDataManager;
+    userDataManager: UserDataManager;
     controllerLevel: number;
     ownerUserRoomId: number
     roomOwner: boolean;

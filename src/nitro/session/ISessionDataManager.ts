@@ -16,6 +16,8 @@ export interface ISessionDataManager extends INitroManager
     getGroupBadgeImage(name: string): PIXI.Texture;
     loadGroupBadgeImage(name: string): string;
     hasSecurity(level: number): boolean;
+    giveRespect(userId: number): void;
+    givePetRespect(petId: number): void;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;

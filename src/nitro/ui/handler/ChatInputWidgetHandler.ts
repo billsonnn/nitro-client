@@ -74,7 +74,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
                         if(selectedAvatarId > -1)
                         {
-                            const userData = this._container.roomSession.userData.getUserDataByIndex(selectedAvatarId);
+                            const userData = this._container.roomSession.userDataManager.getUserDataByIndex(selectedAvatarId);
 
                             if(userData)
                             {

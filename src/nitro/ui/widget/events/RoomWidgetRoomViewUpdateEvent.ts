@@ -10,7 +10,7 @@ export class RoomWidgetRoomViewUpdateEvent extends RoomWidgetUpdateEvent
     private _positionDelta: PIXI.Point;
     private _scale: number;
 
-    constructor(type: string, view: PIXI.Rectangle, position: PIXI.Point, scale: number)
+    constructor(type: string, view: PIXI.Rectangle = null, position: PIXI.Point = null, scale: number = 0)
     {
         super(type);
 
