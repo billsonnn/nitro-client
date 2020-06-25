@@ -5,7 +5,7 @@ import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { FurnitureData } from '../session/furniture/FurnitureData';
 import { FurnitureType } from '../session/furniture/FurnitureType';
 import { IFurnitureDataListener } from '../session/furniture/IFurnitureDataListener';
@@ -24,6 +24,8 @@ export class RoomContentLoader implements IFurnitureDataListener
     private static ROOM: string                 = 'room';
     private static TILE_CURSOR: string          = 'tile_cursor';
     private static SELECTION_ARROW: string      = 'selection_arrow';
+
+    public static MANDATORY_LIBRARIES: string[] = [ RoomContentLoader.PLACE_HOLDER, RoomContentLoader.PLACE_HOLDER_WALL, RoomContentLoader.PLACE_HOLDER_PET, RoomContentLoader.ROOM, RoomContentLoader.TILE_CURSOR ];
 
     private _stateEvents: IEventDispatcher;
     private _sessionDataManager: ISessionDataManager;
@@ -137,27 +139,25 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if(!this._activeObjects[className]) this._activeObjects[className] = 1;
             }
-            else
+
+            else if(furniture.type === FurnitureType.WALL)
             {
-                if(furniture.type === FurnitureType.WALL)
+                if(name === 'post.it')
                 {
-                    if(name === 'post.it')
-                    {
-                        name        = 'post_it';
-                        className   = 'post_it';
-                    }
-
-                    if(name === 'post.it.vd')
-                    {
-                        name        = 'post_it_vd';
-                        className   = 'post_id_vd';
-                    }
-
-                    this._wallItemTypes.set(id, name);
-                    this._wallItemTypeIds.set(name, id);
-
-                    if(!this._wallItems[className]) this._wallItems[className] = 1;
+                    name        = 'post_it';
+                    className   = 'post_it';
                 }
+
+                if(name === 'post.it.vd')
+                {
+                    name        = 'post_it_vd';
+                    className   = 'post_id_vd';
+                }
+
+                this._wallItemTypes.set(id, name);
+                this._wallItemTypeIds.set(name, id);
+
+                if(!this._wallItems[className]) this._wallItems[className] = 1;
             }
         }
     }
@@ -226,7 +226,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         if(!existing)
         {
-            const globalCollection = NitroInstance.instance.core.asset.getCollection(name);
+            const globalCollection = Nitro.instance.core.asset.getCollection(name);
 
             if(globalCollection)
             {
@@ -319,72 +319,96 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         if((this._pendingContentTypes.indexOf(type) >= 0) || this.getOrRemoveEventDispatcher(type)) return false;
 
-        const loader = new PIXI.Loader();
-
-        if(!loader) return false;
-
         this._pendingContentTypes.push(type);
         this._events.set(type, events);
 
-        loader.onComplete.add(() => this.onAssetDownloaded(loader, type));
+        let totalToDownload = assetUrls.length;
+        let totalDownloaded = 0;
 
-        loader
-            .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next))
-            .add(assetUrls)
-            .load();
+        const onDownloaded = (loader: PIXI.Loader) =>
+        {
+            totalDownloaded++;
+
+            if(loader) loader.destroy();
+
+            if(totalDownloaded === totalToDownload)
+            {
+                const events = this._events.get(type);
+
+                if(!events) return;
+
+                events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
+            }
+        }
+
+        for(let url of assetUrls)
+        {
+            if(!url) continue;
+
+            const loader = new PIXI.Loader();
+
+            loader
+                .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
+                .add(assetUrls)
+                .load();
+        }
 
         return true;
     }
     
-    private assetLoader(loader: PIXI.Loader, resource: PIXI.LoaderResource, next: Function): void
+    private assetLoader(loader: PIXI.Loader, resource: PIXI.LoaderResource, next: Function, onDownloaded: Function): void
     {
-        if(!resource || !resource.data || resource.data.type === undefined) return next();
+        if(!resource || resource.error) return next();
 
         if(resource.type === PIXI.LoaderResource.TYPE.JSON)
         {
-            const assetData     = resource.data as IAssetData;
-            const loadOptions   = this.assetLoaderOptions(resource);
-            const spriteSheet   = this.assetLoaderSpritesheetUrl(resource.url, assetData.spritesheet);
+            const assetData = (resource.data as IAssetData);
 
-            loader.add(spriteSheet, spriteSheet, loadOptions, (res: any) =>
+            if(!assetData.type) return;
+            
+            if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                if(res.spritesheet) this.createCollection(assetData, res.spritesheet);
+                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
 
-                next();
-            });
+                if(!imageUrl) return;
+
+                const baseTexture = PIXI.BaseTexture.from(imageUrl);
+
+                if(baseTexture.valid)
+                {
+                    const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+
+                    spritesheet.parse(textures =>
+                    {
+                        this.createCollection(assetData, spritesheet);
+
+                        onDownloaded(loader);
+                    });
+                }
+                else
+                {
+                    baseTexture.once('loaded', () =>
+                    {
+                        const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+
+                        spritesheet.parse(textures =>
+                        {
+                            this.createCollection(assetData, spritesheet);
+
+                            onDownloaded(loader);
+                        });
+                    });
+                }
+
+                return;
+            }
+                
+            this.createCollection(assetData, null);
+
+            onDownloaded(loader);
+
+            return;
         }
-    }
-    
-    private assetLoaderOptions(resource: PIXI.LoaderResource): PIXI.ILoaderOptions
-    {
-        return {
-            crossOrigin: resource.crossOrigin,
-            loadType: PIXI.LoaderResource.LOAD_TYPE.XHR,
-            metadata: resource.metadata,
-            //@ts-ignore
-            parentResource: resource
-        };
-    }
-
-    private onAssetDownloaded(loader: PIXI.Loader, type: string): void
-    {
-        if(loader) loader.destroy();
-
-        if(!type) return;
-
-        const events = this._events.get(type);
-
-        if(!events) return;
-
-        events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
-    }
-    
-    private assetLoaderSpritesheetUrl(resourceUrl: string, spritesheetFilename: string): string
-    {
-        const lastDashPosition  = resourceUrl.lastIndexOf('/');
-        const spritesheetUrl    = resourceUrl.substring(0, lastDashPosition + 1) + spritesheetFilename;
-
-        return spritesheetUrl;
     }
 
     private getAssetUrls(type: string): string[]

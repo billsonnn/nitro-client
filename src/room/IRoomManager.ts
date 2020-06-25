@@ -1,10 +1,12 @@
-import { INitroManager } from '../core/common/INitroManager';
+import { IDisposable } from '../core/common/disposable/IDisposable';
+import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { IRoomInstance } from './IRoomInstance';
 import { IRoomObject } from './object/IRoomObject';
 
-export interface IRoomManager extends INitroManager
+export interface IRoomManager extends IDisposable
 {
+    init(): boolean;
     getRoomInstance(roomId: string): IRoomInstance;
     createRoomInstance(roomId: string): IRoomInstance;
     removeRoomInstance(roomId: string): boolean;
@@ -13,5 +15,6 @@ export interface IRoomManager extends INitroManager
     createRoomObjectAndInitalize(roomId: string, objectId: number, type: string, category: number): IRoomObject;
     setContentLoader(loader: RoomContentLoader): void;
     update(time: number): void;
-    rooms: Map<string, IRoomInstance>
+    rooms: Map<string, IRoomInstance>;
+    events: IEventDispatcher;
 }

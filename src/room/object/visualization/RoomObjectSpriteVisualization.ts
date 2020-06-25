@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { Nitro } from '../../../nitro/Nitro';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
@@ -101,6 +102,79 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         }
     }
 
+    public get image(): PIXI.Texture
+    {
+        return this.getImage(0, -1);
+    }
+
+    public getImage(bgColor: number, originalId: number): PIXI.Texture
+    {
+        const boundingRectangle = this.getBoundingRectangle();
+
+        if((boundingRectangle.width * boundingRectangle.height) === 0) return null;
+
+        let spriteCount                     = this.totalSprites;
+        let spriteList: IRoomObjectSprite[] = [];
+
+        let index = 0;
+
+        while(index < spriteCount)
+        {
+            const objectSprite = this.getSprite(index);
+
+            if(objectSprite && objectSprite.visible)
+            {
+                if(objectSprite.texture) spriteList.push(objectSprite);
+            }
+
+            index++;
+        }
+
+        spriteList.sort((a, b) =>
+        {
+            return b.relativeDepth - a.relativeDepth;
+        });
+
+        const container = new PIXI.Container();
+
+        index = 0;
+
+        while(index < spriteList.length)
+        {
+            const objectSprite  = spriteList[index];
+            const texture       = objectSprite.texture;
+
+            if(texture)
+            {
+                const sprite = PIXI.Sprite.from(texture);
+
+                sprite.x    = objectSprite.offsetX;
+                sprite.y    = objectSprite.offsetY;
+                sprite.tint = objectSprite.color;
+
+                if(objectSprite.flipH)
+                {
+                    sprite.scale.x = -1;
+                }
+
+                if(objectSprite.flipV)
+                {
+                    sprite.scale.y = -1;
+                }
+
+                container.addChild(sprite);
+            }
+
+            index++;
+        }
+
+        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
+
+        if(!texture) return null;
+
+        return texture;
+    }
+
     public getBoundingRectangle(): PIXI.Rectangle
     {
         const totalSprites = this.totalSprites;
@@ -130,8 +204,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
                     {
                         left      = point.x;
                         top       = point.y;
-                        right     = (point.x + texture.width);
-                        bottom    = (point.y + texture.height);
+                        right     = (point.x + sprite.width);
+                        bottom    = (point.y + sprite.height);
                     }
                     else
                     {

@@ -5,7 +5,7 @@ import { UserPermissionsEvent } from '../communication/messages/incoming/user/ac
 import { UserRightsEvent } from '../communication/messages/incoming/user/access/UserRightsEvent';
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
 import { FurnitureData } from './furniture/FurnitureData';
@@ -93,7 +93,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         if(this._badgeImageManager) return;
 
-        this._badgeImageManager = new BadgeImageManager(NitroInstance.instance.core.asset, this.events);
+        this._badgeImageManager = new BadgeImageManager(Nitro.instance.core.asset, this.events);
     }
 
     public getAllFurnitureData(listener: IFurnitureDataListener): FurnitureData[]

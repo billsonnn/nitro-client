@@ -1,7 +1,7 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
-import { NitroInstance } from '../../../../../../NitroInstance';
+import { Nitro } from '../../../../../../Nitro';
 import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 import { PlaneMaterialCellColumn } from './PlaneMaterialCellColumn';
@@ -328,7 +328,7 @@ export class PlaneMaterialCellMatrix
             _local_5 = new PIXI.Rectangle(0, (this._cachedBitmapData.height - this._cachedBitmapHeight), this._cachedBitmapData.width, this._cachedBitmapHeight);
         }
 
-        const texture = NitroInstance.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1, _local_5);
+        const texture = Nitro.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1, _local_5);
 
         if(texture)
         {
@@ -385,7 +385,7 @@ export class PlaneMaterialCellMatrix
                     _local_8 = (k.height - _local_6.height);
                 }
 
-                const texture = NitroInstance.instance.renderer.generateTexture(_local_6, 1, 1, new PIXI.Rectangle(0, 0, _local_6.width, _local_6.height));
+                const texture = Nitro.instance.renderer.generateTexture(_local_6, 1, 1, new PIXI.Rectangle(0, 0, _local_6.width, _local_6.height));
 
                 if(texture)
                 {

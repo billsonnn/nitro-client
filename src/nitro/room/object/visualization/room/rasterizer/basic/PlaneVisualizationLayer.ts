@@ -1,6 +1,6 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
-import { NitroInstance } from '../../../../../../NitroInstance';
+import { Nitro } from '../../../../../../Nitro';
 import { PlaneMaterial } from './PlaneMaterial';
 
 export class PlaneVisualizationLayer 
@@ -117,7 +117,7 @@ export class PlaneVisualizationLayer
 
             if(canvas && (bitmapData !== canvas))
             {
-                const texture = NitroInstance.instance.renderer.generateTexture(bitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
+                const texture = Nitro.instance.renderer.generateTexture(bitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
 
                 if(texture)
                 {

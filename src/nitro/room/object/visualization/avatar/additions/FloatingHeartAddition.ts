@@ -1,5 +1,5 @@
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
-import { NitroInstance } from '../../../../../NitroInstance';
+import { Nitro } from '../../../../../Nitro';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { ExpressionAddition } from './ExpressionAddition';
 
@@ -23,7 +23,7 @@ export class FloatingHeartAddition extends ExpressionAddition
         super(id, type, visualization);
 
         this._asset         = null;
-        this._startTime     = NitroInstance.instance.time;
+        this._startTime     = Nitro.instance.time;
         this._delta         = 0;
         this._offsetY       = 0;
         this._scale         = 0;
@@ -112,7 +112,7 @@ export class FloatingHeartAddition extends ExpressionAddition
 
         if(this._state === FloatingHeartAddition.STATE_DELAY)
         {
-            if((NitroInstance.instance.time - this._startTime) < FloatingHeartAddition.DELAY_BEFORE_ANIMATION) return false;
+            if((Nitro.instance.time - this._startTime) < FloatingHeartAddition.DELAY_BEFORE_ANIMATION) return false;
 
             this._state = FloatingHeartAddition.STATE_FADE_IN;
 

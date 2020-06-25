@@ -1,5 +1,5 @@
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
-import { NitroInstance } from '../../../../../NitroInstance';
+import { Nitro } from '../../../../../Nitro';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
 
@@ -24,7 +24,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
         this._id            = id;
         this._visualization = visualization;
         this._asset         = null;
-        this._startTime     = NitroInstance.instance.time;
+        this._startTime     = Nitro.instance.time;
         this._offsetY       = 0;
         this._scale         = 0;
         this._state         = 0;
@@ -108,7 +108,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
     {
         if(!sprite) return false;
         
-        const totalTimeRunning = NitroInstance.instance.time;
+        const totalTimeRunning = Nitro.instance.time;
 
         if(this._state === FloatingIdleZAddition.STATE_DELAY)
         {

@@ -3,6 +3,7 @@ import { NitroEvent } from '../../../core/events/NitroEvent';
 export class RoomEngineEvent extends NitroEvent
 {
     public static INITIALIZED: string           = 'REE_INITIALIZED';
+    public static ENGINE_INITIALIZED: string    = 'REE_ENGINE_INITIALIZED';
     public static OBJECTS_INITIALIZED: string   = 'REE_OBJECTS_INITIALIZED';
     public static DISPOSED: string              = 'REE_DISPOSED';
 

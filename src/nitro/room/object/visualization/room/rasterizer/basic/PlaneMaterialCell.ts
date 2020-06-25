@@ -1,7 +1,7 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
-import { NitroInstance } from '../../../../../../NitroInstance';
+import { Nitro } from '../../../../../../Nitro';
 import { PlaneTexture } from './PlaneTexture';
 
 export class PlaneMaterialCell 
@@ -137,7 +137,7 @@ export class PlaneMaterialCell
 
             while(textureOffsetY < 0) textureOffsetY += texture.height;
 
-            const sourceTexture = NitroInstance.instance.renderer.generateTexture(sourceBitmap, 1, 1, new PIXI.Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
+            const sourceTexture = Nitro.instance.renderer.generateTexture(sourceBitmap, 1, 1, new PIXI.Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
 
             if(sourceTexture)
             {
@@ -162,7 +162,7 @@ export class PlaneMaterialCell
                     }
                     else
                     {
-                        const bitmapTexture = NitroInstance.instance.renderer.generateTexture(bitmap, 1, 1, new PIXI.Rectangle(0, 0, bitmap.width, bitmap.height));
+                        const bitmapTexture = Nitro.instance.renderer.generateTexture(bitmap, 1, 1, new PIXI.Rectangle(0, 0, bitmap.width, bitmap.height));
 
                         if(bitmapTexture)
                         {

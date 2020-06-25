@@ -1,5 +1,5 @@
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { ActiveActionData } from './actions/ActiveActionData';
 import { IActionDefinition } from './actions/IActionDefinition';
 import { IActiveActionData } from './actions/IActiveActionData';
@@ -44,7 +44,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     protected _Str_1710: AvatarFigureContainer;
     protected _Str_2121: IAvatarDataContainer;
     protected _Str_614: ActiveActionData[];
-    protected _Str_671: PIXI.Texture;
+    protected _Str_671: PIXI.RenderTexture;
 
     private _Str_612: IActiveActionData;
     private _Str_1724: number = 0;
@@ -57,7 +57,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     private _Str_1163: IActiveActionData[];
     private _Str_1566: string;
     private _Str_1306: string;
-    private _Str_864: Map<string, PIXI.Texture>;
+    private _Str_864: Map<string, PIXI.RenderTexture>;
     protected _Str_1586: boolean = false;
     private _Str_2042: boolean;
     private _Str_1514: number = -1;
@@ -295,7 +295,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
     }
 
-    public getImage(setType: string, hightlight: boolean, _arg_3: number = 1): PIXI.Texture
+    public getImage(setType: string, hightlight: boolean, scale: number = 1): PIXI.RenderTexture
     {
         if(!this._Str_1535) return this._Str_671;
 
@@ -311,7 +311,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             {
                 this._Str_1535 = false;
 
-                if(hightlight) return this.getFullImage(_local_4).clone();
+                if(hightlight) return (this.getFullImage(_local_4).clone() as PIXI.RenderTexture);
 
                 this._Str_671   = this.getFullImage(_local_4);
                 this._Str_1586  = true;
@@ -376,7 +376,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             _local_12--;
         }
 
-        const texture = NitroInstance.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
 
         if(!texture) return null;
         
@@ -385,28 +385,33 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if (((!(_local_4 == null)) && (_local_11)))
         {
-            this.cacheFullImage(_local_4, this._Str_671.clone());
+            this.cacheFullImage(_local_4, (this._Str_671.clone() as PIXI.RenderTexture));
         }
 
-        // if (_arg_3 !== 1)
-        // {
+        if(scale !== 1)
+        {
+            const matrix = new PIXI.Matrix();
 
-        //     _local_14 = new BitmapData((this._Str_671.width * _arg_3), (this._Str_671.height * _arg_3), true, 0);
-        //     _local_15 = new Matrix();
-        //     _local_15.scale(_arg_3, _arg_3);
-        //     _local_14.draw(this._Str_671, _local_15, null, null, null, true);
-        //     _local_14.applyFilter(_local_14, _local_14.rect, new Point(), this._Str_1901());
-        //     this._Str_671 = _local_14;
-        // }
+            matrix.scale(scale, scale);
 
-        // if (((this._Str_671) && (hightlight)))
-        // {
-        //     return this._Str_671.clone();
-        // }
+            const graphic = new PIXI.Graphics();
+
+            graphic
+                .beginTextureFill({ texture: this._Str_671, matrix })
+                .drawRect(0,0, (this._Str_671.width * scale), (this._Str_671.height * scale))
+                .endFill();
+
+            const texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
+
+            if(texture) this._Str_671 = texture;
+        }
+
+        if(this._Str_671 && hightlight) return (this._Str_671.clone() as PIXI.RenderTexture);
+        
         return this._Str_671;
     }
 
-    public getCroppedImage(setType: string, scale: number = 1): PIXI.Texture
+    public getCroppedImage(setType: string, scale: number = 1): PIXI.RenderTexture
     {
         if(!this._Str_1708) return null;
 
@@ -416,21 +421,74 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(!avatarCanvas) return null;
 
-        const graphic = new PIXI.Graphics();
+        const _local_6 = this._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
 
-        graphic.drawRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+        const container = new PIXI.Container();
 
-        const setIds = this._Str_581._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
+        let _local_12 = (_local_6.length - 1);
 
-        return null;
+        while(_local_12 >= 0)
+        {
+            const _local_7 = _local_6[_local_12];
+            const _local_8 = this._Str_586._Str_1629(_local_7, this._Str_1724);
+
+            if(_local_8)
+            {
+                const _local_9 = _local_8.image;
+
+                let _local_10 = _local_8._Str_1076.clone();
+
+                _local_10.x += avatarCanvas.offset.x;
+                _local_10.y += avatarCanvas.offset.y;
+
+                if(_local_9 && _local_10)
+                {
+                    _local_10.x += avatarCanvas._Str_1076.x;
+                    _local_10.y += avatarCanvas._Str_1076.y;
+
+                    const sprite = PIXI.Sprite.from(_local_9);
+
+                    if(sprite)
+                    {
+                        sprite.position.set(_local_10.x, _local_10.y);
+
+                        container.addChild(sprite);
+                    }
+                }
+            }
+
+            _local_12--;
+        }
+
+        let texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
+
+        if(!texture) return null;
+
+        if(scale !== 1)
+        {
+            const matrix = new PIXI.Matrix;
+
+            matrix.scale(scale, scale);
+
+            const graphic = new PIXI.Graphics();
+
+            graphic
+                .beginTextureFill({ texture, matrix })
+                .drawRect(0, 0, (texture.width * scale), (texture.height * scale))
+                .endFill();
+
+            texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
+        }
+        
+        return texture;
     }
 
-    protected getFullImage(k: string): PIXI.Texture
+    protected getFullImage(k: string): PIXI.RenderTexture
     {
         return (this._Str_864.get(k) || null);
     }
 
-    protected cacheFullImage(k: string, _arg_2: PIXI.Texture): void
+    protected cacheFullImage(k: string, _arg_2: PIXI.RenderTexture): void
     {
         let existing = this._Str_864.get(k);
 
@@ -700,7 +758,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     {
         if(!this._Str_1163 == null) return;
 
-        var _local_3: number    = NitroInstance.instance.time;
+        var _local_3: number    = Nitro.instance.time;
         var _local_4: string[]  = [];
 
         for(let k of this._Str_1163) _local_4.push(k._Str_695);

@@ -1,4 +1,3 @@
-import { Parser } from 'xml2js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
@@ -63,20 +62,18 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             request.onloadend = e =>
             {
-                const parser = new Parser();
-
-                parser.parseString(request.responseText, (err: Error, results: any) =>
+                if(request.responseText)
                 {
-                    if(err || !results || !results.map) throw new Error('invalid_figure_map');
+                    const data = JSON.parse(request.responseText);
 
-                    this.processFigureMap(results.map);
+                    this.processFigureMap(data.libraries);
 
                     this.processMissingLibraries();
 
                     this._isReady = true;
 
                     this.dispatchEvent(new NitroEvent(AvatarAssetDownloadManager.DOWNLOADER_READY));
-                });
+                }
             }
 
             request.onerror = e => { throw new Error('invalid_avatar_figure_map'); };
@@ -91,35 +88,31 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     private processFigureMap(data: any): void
     {
         if(!data) return;
-        
-        if(data.lib)
+
+        for(let library of data)
         {
-            for(let library of data.lib)
+            if(!library) continue;
+
+            const id        = (library.id as string);
+            const revision  = (library.revision as number);
+
+            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.AVATAR_ASSET_URL);
+
+            downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
+
+            for(let part of library.parts)
             {
-                if(!library) continue;
+                const id            = (part.id as string);
+                const type          = (part.type as string);
+                const partString    = (type + ':' + id);
 
-                const id        = library['$'].id;
-                const revision  = library['$'].revision;
+                let existing = this._figureMap.get(partString);
 
-                const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.AVATAR_ASSET_URL);
+                if(!existing) existing = [];
+                
+                existing.push(downloadLibrary);
 
-                downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
-
-                if(library.part)
-                {
-                    for(let part of library.part)
-                    {
-                        const partString = ((part['$'].type) + ':' + (part['$'].id));
-
-                        let existing = this._figureMap.get(partString);
-
-                        if(!existing) existing = [];
-                        
-                        existing.push(downloadLibrary);
-
-                        this._figureMap.set(partString, existing);
-                    }
-                }
+                this._figureMap.set(partString, existing);
             }
         }
     }

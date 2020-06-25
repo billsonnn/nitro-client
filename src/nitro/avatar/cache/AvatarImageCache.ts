@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js-legacy';
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
-import { NitroInstance } from '../../NitroInstance';
+import { Nitro } from '../../Nitro';
 import { IActiveActionData } from '../actions/IActiveActionData';
 import { AssetAliasCollection } from '../alias/AssetAliasCollection';
 import { AnimationLayerData } from '../animation/AnimationLayerData';
@@ -73,7 +73,7 @@ export class AvatarImageCache
 
     public _Str_1086(k: number = 60000): void
     {
-        const time = NitroInstance.instance.time;
+        const time = Nitro.instance.time;
 
         if(this._cache)
         {
@@ -505,7 +505,7 @@ export class AvatarImageCache
                 .endFill();
         }
 
-        const texture = NitroInstance.instance.renderer.generateTexture(container, 1, 1);
+        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, container.width, container.height));
 
         return new ImageData(texture, bounds, point, isFlipped, null);
     }

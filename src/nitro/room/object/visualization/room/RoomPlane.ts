@@ -3,7 +3,7 @@ import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane'
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { PlaneMaskManager } from './mask/PlaneMaskManager';
 import { PlaneDrawingData } from './PlaneDrawingData';
 import { IPlaneRasterizer } from './rasterizer/IPlaneRasterizer';
@@ -151,7 +151,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        const texture = NitroInstance.instance.renderer.generateTexture(this._Str_1049, 1, 1, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
+        const texture = Nitro.instance.renderer.generateTexture(this._Str_1049, 1, 1, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
 
         return texture;
     }
@@ -996,8 +996,8 @@ export class RoomPlane implements IRoomPlane
     {
         if(!texture || !mask) return;
 
-        const maskCanvas    = NitroInstance.instance.renderer.extract.canvas(mask);
-        const textureCanvas = NitroInstance.instance.renderer.extract.canvas(texture);
+        const maskCanvas    = Nitro.instance.renderer.extract.canvas(mask);
+        const textureCanvas = Nitro.instance.renderer.extract.canvas(texture);
         const textureCtx    = textureCanvas.getContext('2d');
 
         textureCtx.drawImage(maskCanvas, 0, 0);

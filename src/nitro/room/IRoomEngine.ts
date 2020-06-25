@@ -16,6 +16,7 @@ export interface IRoomEngine
     initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void;
     dispose(): void;
     setActiveRoomId(roomId: number): void;
+    onRoomEngineInitalized(flag: boolean): void;
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
     getRoomInstanceRenderingCanvas(roomId: number, canvasId?: number): IRoomRenderingCanvas;
     getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId?: number): PIXI.Point;
@@ -34,7 +35,7 @@ export interface IRoomEngine
     visualizationFactory: IRoomObjectVisualizationFactory;
     logicFactory: IRoomObjectLogicFactory;
     activeRoomId: number;
-    isReady: boolean;
-    isDisposed: boolean;
+    ready: boolean;
+    disposed: boolean;
     selectedAvatarId: number;
 }

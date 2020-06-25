@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
-import { NitroInstance } from '../../../nitro/NitroInstance';
+import { Nitro } from '../../../nitro/Nitro';
 
 export class ExtendedSprite extends PIXI.Sprite
 {
@@ -42,13 +42,13 @@ export class ExtendedSprite extends PIXI.Sprite
         
         if(texture === this.texture) return;
 
-        this.texture = texture;
-
         if(texture === PIXI.Texture.EMPTY)
         {
             this._pairedSpriteId            = -1;
             this._pairedSpriteUpdateCounter = -1;
         }
+
+        this.texture = texture;
     }
 
     public containsPoint(point: PIXI.Point): boolean
@@ -89,7 +89,7 @@ export class ExtendedSprite extends PIXI.Sprite
 
                 if(!baseTexture.resource)
                 {
-                    canvas = NitroInstance.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
+                    canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
                 }
 
                 if(!ExtendedSprite.generateHitMap(baseTexture, 128, canvas)) return false;

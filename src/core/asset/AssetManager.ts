@@ -4,7 +4,6 @@ import { IGraphicAssetCollection } from '../../room/object/visualization/utils/I
 import { Disposable } from '../common/disposable/Disposable';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
-import { AssetLoader } from './loaders/AssetLoader';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
@@ -89,83 +88,112 @@ export class AssetManager extends Disposable implements IAssetManager
         }
     }
 
-    public downloadAssets(urls: string[], cb: Function): void
+    public downloadAsset(assetUrl: string, cb: Function): boolean
     {
-        if(!cb) return;
+        return this.downloadAssets([ assetUrl ], cb);
+    }
 
-        if(!urls || !urls.length) return cb(true);
+    public downloadAssets(assetUrls: string[], cb: Function): boolean
+    {
+        if(!assetUrls || !assetUrls.length)
+        {
+            cb(true);
 
-        let downloadUrls: string[] = [];
+            return true;
+        }
 
-        for(let url of urls)
+        let totalToDownload = assetUrls.length;
+        let totalDownloaded = 0;
+
+        const onDownloaded = (loader: PIXI.Loader) =>
+        {
+            totalDownloaded++;
+
+            if(loader) loader.destroy();
+
+            if(totalDownloaded === totalToDownload) cb(true);
+        }
+
+        for(let url of assetUrls)
         {
             if(!url) continue;
 
-            const existing = this._pendingUrls.get(url);
+            const loader = new PIXI.Loader();
 
-            if(existing)
-            {
-                if(existing.indexOf(cb) >= 0) continue;
-
-                existing.push(cb);
-
-                continue;
-            }
-
-            this._pendingUrls.set(url, [ cb ]);
-
-            downloadUrls.push(url);
+            loader
+                .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
+                .add(url)
+                .load();
         }
-        
-        if(downloadUrls && downloadUrls.length)
+
+        return true;
+    }
+    
+    private assetLoader(loader: PIXI.Loader, resource: PIXI.LoaderResource, next: Function, onDownloaded: Function): void
+    {
+        if(!resource || resource.error) return next();
+
+        if(resource.type === PIXI.LoaderResource.TYPE.JSON)
         {
-            this.downloadAsset(downloadUrls, cb);
+            const assetData = (resource.data as IAssetData);
+
+            if(!assetData.type) return;
+            
+            if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
+            {
+                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
+
+                if(!imageUrl) return;
+
+                const baseTexture = PIXI.BaseTexture.from(imageUrl);
+
+                if(baseTexture.valid)
+                {
+                    const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+
+                    spritesheet.parse(textures =>
+                    {
+                        this.createCollection(assetData, spritesheet);
+
+                        onDownloaded(loader);
+                    });
+                }
+                else
+                {
+                    baseTexture.once('loaded', () =>
+                    {
+                        const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+
+                        spritesheet.parse(textures =>
+                        {
+                            this.createCollection(assetData, spritesheet);
+
+                            onDownloaded(loader);
+                        });
+                    });
+                }
+
+                return;
+            }
+                
+            this.createCollection(assetData, null);
+
+            onDownloaded(loader);
 
             return;
         }
 
-        cb(true);
-    }
-
-    private downloadAsset(urls: string[], cb: Function): void
-    {
-        const loader = new PIXI.Loader();
-
-        loader.onComplete.add(() => this.onChuckDownloaded(loader, urls, cb));
-
-        loader
-            .use(AssetLoader)
-            .add(urls)
-            .load();
-    }
-
-    private onChuckDownloaded(loader: PIXI.Loader, urls: string[], cb: Function): void
-    {
-        if(loader) loader.destroy();
-
-        if(urls && urls.length)
+        if(resource.type === PIXI.LoaderResource.TYPE.IMAGE)
         {
-            for(let url of urls)
-            {
-                if(!url) continue;
+            const split = resource.name.split('/');
+            const name  = split[(split.length - 1)];
 
-                const pendingCallbacks = this._pendingUrls.get(url);
+            this.setTexture(name, resource.texture);
 
-                if(pendingCallbacks && pendingCallbacks.length)
-                {
-                    for(let callback of pendingCallbacks)
-                    {
-                        if(!callback || (callback === cb)) continue;
+            onDownloaded(loader);
 
-                        callback(true);
-                    }
-                }
-                
-                this._pendingUrls.delete(url);
-            }
+            return;
         }
-
-        cb(true);
     }
 
     public get collections(): Map<string, GraphicAssetCollection>

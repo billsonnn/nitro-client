@@ -1,4 +1,4 @@
-import { NitroInstance } from '../../../../nitro/NitroInstance';
+import { Nitro } from '../../../../nitro/Nitro';
 
 export class GraphicAssetPalette
 {
@@ -24,7 +24,7 @@ export class GraphicAssetPalette
     public applyPalette(texture: PIXI.Texture): PIXI.Texture
     {
         const sprite            = PIXI.Sprite.from(texture);
-        const textureCanvas     = NitroInstance.instance.renderer.extract.canvas(sprite);
+        const textureCanvas     = Nitro.instance.renderer.extract.canvas(sprite);
         const textureCtx        = textureCanvas.getContext('2d');
         const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
         const data              = textureImageData.data;

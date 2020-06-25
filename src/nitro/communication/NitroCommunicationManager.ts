@@ -7,7 +7,7 @@ import { IMessageConfiguration } from '../../core/communication/messages/IMessag
 import { IMessageEvent } from '../../core/communication/messages/IMessageEvent';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { NitroCommunicationDemo } from './demo/NitroCommunicationDemo';
 import { NitroCommunicationDemoEvent } from './demo/NitroCommunicationDemoEvent';
 import { INitroCommunicationManager } from './INitroCommunicationManager';
@@ -36,7 +36,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
     {
         if(this._connection) return;
 
-        NitroInstance.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent.bind(this));
+        Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent.bind(this));
         
         this._connection = this._communication.createConnection(this);
 

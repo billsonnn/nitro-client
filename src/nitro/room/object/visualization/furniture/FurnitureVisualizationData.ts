@@ -36,7 +36,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
 
         this._type = asset.name;
 
-        if(!this.processVisualization(asset.visualization))
+        if(!this.defineVisualizations(asset.visualizations))
         {
             this.reset();
 
@@ -80,39 +80,41 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
         return new SizeData(layerCount, angle);
     }
 
-    protected processVisualization(visualization: IAssetVisualizationData): boolean
+    protected defineVisualizations(visualizations: IAssetVisualizationData[]): boolean
     {
-        if(!visualization) return false;
+        if(!visualizations) return false;
 
-        let scale = 64;
-
-        const layerCount    = visualization.layerCount;
-        const angle         = visualization.angle;
-
-        if(scale < 1) scale = 1;
-
-        if(this._sizeDatas.get(scale)) return false;
-
-        const sizeData = this.createSizeData(scale, layerCount, angle);
-
-        if(!sizeData) return false;
-
-        for(let key in visualization)
+        for(let visualization of visualizations)
         {
-            //@ts-ignore
-            const data = visualization[key];
+            let layerCount    = visualization.layerCount;
+            let angle         = visualization.angle;
+            let size          = visualization.size;
             
-            if(!this.processVisualElement(sizeData, key, data))
+            if(size < 1) size = 1;
+
+            if(this._sizeDatas.get(size)) return false;
+
+            const sizeData = this.createSizeData(size, layerCount, angle);
+
+            if(!sizeData) return false;
+
+            for(let key in visualization)
             {
-                sizeData.dispose();
+                //@ts-ignore
+                const data = visualization[key];
+                
+                if(!this.processVisualElement(sizeData, key, data))
+                {
+                    sizeData.dispose();
 
-                return false;
+                    return false;
+                }
             }
+
+            this._sizeDatas.set(size, sizeData);
+
+            this._sizes.push(size);
         }
-
-        this._sizeDatas.set(scale, sizeData);
-
-        this._sizes.push(scale);
 
         this._sizes.sort();
 
@@ -133,9 +135,6 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
                 break;
             case 'colors':
                 if(!sizeData.processColors(data)) return false;
-                break;
-            case 'iconColors':
-                if(!sizeData.processIconColors(data)) return false;
                 break;
         }
 
@@ -163,7 +162,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
         if(size <= 0) return 0;
 
         let index       = 0;
-        let iterator   = 1;
+        let iterator    = 1;
 
         while(iterator < this._sizes.length)
         {
@@ -248,15 +247,6 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
         if(!size) return ColorData.DEFAULT_COLOR;
 
         return size.getLayerColor(layerId, colorId);
-    }
-
-    public getLayerIconColor(scale: number, colorId: number, layerId: number): number
-    {
-        const size = this.getSizeData(scale);
-
-        if(!size) return ColorData.DEFAULT_COLOR;
-
-        return size.getLayerIconColor(colorId, layerId);
     }
 
     public getLayerIgnoreMouse(scale: number, direction: number, layerId: number): boolean

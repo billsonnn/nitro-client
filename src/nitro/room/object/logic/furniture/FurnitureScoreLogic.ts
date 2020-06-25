@@ -1,5 +1,5 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
@@ -67,7 +67,7 @@ export class FurnitureScoreLogic extends FurnitureMultiStateLogic
             if((difference * 50) > 3000) this._scoreIncreaser = 3000 / difference;
             else this._scoreIncreaser = 50;
 
-            this._scoreTimer = NitroInstance.instance.time + 0;
+            this._scoreTimer = Nitro.instance.time + 0;
         }
     }
 }

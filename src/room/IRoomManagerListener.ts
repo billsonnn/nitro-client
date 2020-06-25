@@ -1,4 +1,5 @@
 export interface IRoomManagerListener
 {
-    refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void
+    onRoomEngineInitalized(flag: boolean): void;
+    refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
 }

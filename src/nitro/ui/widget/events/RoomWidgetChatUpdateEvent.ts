@@ -24,7 +24,7 @@ export class RoomWidgetChatUpdateEvent extends RoomWidgetUpdateEvent
     private _links: string[];
     private _userX: number;
     private _userY: number;
-    private _userImage: PIXI.Texture;
+    private _userImage: HTMLImageElement;
     private _userColor: number;
     private _roomId: number;
     private _userCategory: number;
@@ -32,7 +32,7 @@ export class RoomWidgetChatUpdateEvent extends RoomWidgetUpdateEvent
     private _petType: number;
     private _styleId: number;
 
-    constructor(k: string, userId: number, text: string, userName: string, userCategory: number, userType: number, petType: number, userX: number, userY: number, userImage: PIXI.Texture, userColor: number, roomId: number, chatType: number = 0, styleId: number = 0, links: string[] = null)
+    constructor(k: string, userId: number, text: string, userName: string, userCategory: number, userType: number, petType: number, userX: number, userY: number, userImage: HTMLImageElement, userColor: number, roomId: number, chatType: number = 0, styleId: number = 0, links: string[] = null)
     {
         super(k);
         this._userId = userId;
@@ -101,7 +101,7 @@ export class RoomWidgetChatUpdateEvent extends RoomWidgetUpdateEvent
         return this._userY;
     }
 
-    public get userImage(): PIXI.Texture
+    public get userImage(): HTMLImageElement
     {
         return this._userImage;
     }

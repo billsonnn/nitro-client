@@ -119,4 +119,5 @@ export class RoomObjectVariable
     public static ROOM_SELECTED_Y: string                            = 'room_selected_y';
     public static ROOM_SELECTED_Z: string                            = 'room_selected_z';
     public static ROOM_SELECTED_PLANE: string                        = 'room_selected_plane';
+    public static IMAGE_QUERY_SCALE: string                          = 'image_query_scale';
 }

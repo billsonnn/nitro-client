@@ -3,7 +3,7 @@ import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { AssetAliasCollection } from './alias/AssetAliasCollection';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
 import { AvatarFigureContainer } from './AvatarFigureContainer';
@@ -67,13 +67,13 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         this.loadAnimations();
         this.loadFigureData();
 
-        this._aliasCollection = new AssetAliasCollection(this, NitroInstance.instance.core.asset);
+        this._aliasCollection = new AssetAliasCollection(this, Nitro.instance.core.asset);
 
         this._aliasCollection.init();
 
         if(!this._avatarAssetDownloadManager)
         {
-            this._avatarAssetDownloadManager = new AvatarAssetDownloadManager(NitroInstance.instance.core.asset, this._structure);
+            this._avatarAssetDownloadManager = new AvatarAssetDownloadManager(Nitro.instance.core.asset, this._structure);
 
             this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady.bind(this));
 
@@ -82,7 +82,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         if(!this._effectAssetDownloadManager)
         {
-            this._effectAssetDownloadManager = new EffectAssetDownloadManager(NitroInstance.instance.core.asset, this._structure);
+            this._effectAssetDownloadManager = new EffectAssetDownloadManager(Nitro.instance.core.asset, this._structure);
 
             this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady.bind(this));
 
@@ -173,7 +173,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     {
         const defaultActions = NitroConfiguration.AVATAR_DEFAULT_ACTIONS;
 
-        if(defaultActions) this._structure._Str_1060(NitroInstance.instance.core.asset, defaultActions);
+        if(defaultActions) this._structure._Str_1060(Nitro.instance.core.asset, defaultActions);
 
         const request = new XMLHttpRequest();
 
@@ -378,7 +378,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     public get assets(): IAssetManager
     {
-        return NitroInstance.instance.core.asset;
+        return Nitro.instance.core.asset;
     }
 
     public get isReady(): boolean

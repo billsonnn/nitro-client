@@ -1,4 +1,6 @@
-import { NitroManager } from '../core/common/NitroManager';
+import { NitroLogger } from '../core/common/logger/NitroLogger';
+import { EventDispatcher } from '../core/events/EventDispatcher';
+import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
 import { IRoomInstance } from './IRoomInstance';
@@ -14,8 +16,17 @@ import { IGraphicAssetCollection } from './object/visualization/utils/IGraphicAs
 import { RoomInstance } from './RoomInstance';
 import { RoomObjectManager } from './RoomObjectManager';
 
-export class RoomManager extends NitroManager implements IRoomManager, IRoomInstanceContainer
+export class RoomManager implements IRoomManager, IRoomInstanceContainer
 {
+    public static _Str_9994: number     = -1;
+    public static _Str_16337: number    = 0;
+    public static _Str_16443: number    = 1;
+    public static _Str_13904: number    = 2;
+    public static _Str_9846: number     = 3;
+    private static _Str_18280: number   = 40;
+
+    private _state: number;
+    private _events: IEventDispatcher;
     private _rooms: Map<string, IRoomInstance>;
     private _contentLoader: RoomContentLoader;
     private _updateCategories: number[];
@@ -24,13 +35,16 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
     private _visualizationFactory: IRoomObjectVisualizationFactory;
     private _logicFactory: IRoomObjectLogicFactory;
 
+    private _initialLoadList: string[];
     private _pendingContentTypes: string[];
     private _skipContentProcessing: boolean;
 
+    private _disposed: boolean;
+
     constructor(listener: IRoomManagerListener, visualizationFactory: IRoomObjectVisualizationFactory, logicFactory: IRoomObjectLogicFactory)
     {
-        super();
-
+        this._state                 = RoomManager._Str_16443;
+        this._events                = new EventDispatcher();
         this._rooms                 = new Map();
         this._contentLoader         = null;
         this._updateCategories      = [];
@@ -39,17 +53,50 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         this._visualizationFactory  = visualizationFactory;
         this._logicFactory          = logicFactory;
 
+        this._initialLoadList       = [];
         this._pendingContentTypes   = [];
         this._skipContentProcessing = false;
+
+        this._disposed              = false;
 
         this.events.addEventListener(RoomContentLoadedEvent.RCLE_SUCCESS, this.onRoomContentLoadedEvent.bind(this));
     }
 
-    protected onDispose(): void
+    public init(): boolean
     {
-        super.onDispose();
+        if(this._state >= RoomManager._Str_13904 || !this._contentLoader) return false;
+
+        const mandatoryLibraries = RoomContentLoader.MANDATORY_LIBRARIES;
         
-        return;
+        for(let library of mandatoryLibraries)
+        {
+            if(!library) continue;
+
+            if(this._initialLoadList.indexOf(library) === -1)
+            {
+                this._contentLoader.downloadAsset(library, this.events);
+
+                this._initialLoadList.push(library);
+            }
+        }
+
+        this._state = RoomManager._Str_13904;
+
+        return true;
+    }
+
+    public dispose(): void
+    {
+        if(this._disposed) return;
+
+        if(this._events)
+        {
+            this._events.dispose();
+
+            this._events = null;
+        }
+
+        this._disposed = true;
     }
 
     public getRoomInstance(roomId: string): IRoomInstance
@@ -294,12 +341,41 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             if(!collection)
             {
-                this.logger.log(`Invalid Collection: ${ type }`);
+                NitroLogger.log(`Invalid Collection: ${ type }`);
 
                 continue;
             }
 
             this.reinitializeRoomObjectsByType(type);
+
+            if(this._initialLoadList.length > 0) this.removeFromInitialLoad(type);
+        }
+    }
+
+    private removeFromInitialLoad(type: string): void
+    {
+        if(!type || this._state === RoomManager._Str_9994) return;
+
+        if(!this._contentLoader) this._state = RoomManager._Str_9994;
+
+        if(this._contentLoader.getCollection(type))
+        {
+            const i = this._initialLoadList.indexOf(type);
+
+            if(i >= 0) this._initialLoadList.splice(i, 1);
+
+            if(!this._initialLoadList.length)
+            {
+                this._state = RoomManager._Str_9846;
+
+                if(this._listener) this._listener.onRoomEngineInitalized(true);
+            }
+        }
+        else
+        {
+            this._state = RoomManager._Str_9994;
+
+            if(this._listener) this._listener.onRoomEngineInitalized(false);
         }
     }
 
@@ -320,12 +396,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(!this._rooms.size) return;
 
-        for(let room of this._rooms.values())
-        {
-            if(!room) continue;
-
-            room.update(time);
-        }
+        for(let room of this._rooms.values()) room && room.update(time);
     }
 
     public createRoomObjectManager(category: number): IRoomObjectManager
@@ -333,8 +404,18 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         return new RoomObjectManager();
     }
 
+    public get events(): IEventDispatcher
+    {
+        return this._events;
+    }
+
     public get rooms(): Map<string, IRoomInstance>
     {
         return this._rooms;
+    }
+
+    public get disposed(): boolean
+    {
+        return this._disposed;
     }
 }

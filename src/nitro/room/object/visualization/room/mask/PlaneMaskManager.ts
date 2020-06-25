@@ -1,7 +1,7 @@
 ﻿import * as PIXI from 'pixi.js-legacy';
 import { IGraphicAssetCollection } from '../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
-import { NitroInstance } from '../../../../../NitroInstance';
+import { Nitro } from '../../../../../Nitro';
 import { PlaneMask } from './PlaneMask';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
@@ -163,7 +163,7 @@ export class PlaneMaskManager
             .drawRect(0, 0, texture.width, texture.height)
             .endFill();
 
-        const maskTexture = NitroInstance.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, texture.width, texture.height));
+        const maskTexture = Nitro.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, texture.width, texture.height));
 
         if(maskTexture)
         {

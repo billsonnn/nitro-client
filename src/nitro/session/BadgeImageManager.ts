@@ -84,7 +84,7 @@ export class BadgeImageManager
 
         if(url)
         {
-            this._assets.downloadAssets([ url ], () =>
+            this._assets.downloadAsset(url, () =>
             {
                 const texture = this._assets.getTexture(k);
 

@@ -4,7 +4,7 @@ import { IRoomObjectGraphicVisualization } from '../../../room/object/visualizat
 import { IObjectVisualizationData } from '../../../room/object/visualization/IRoomObjectVisualizationData';
 import { IRoomObjectVisualizationFactory } from '../../../room/object/visualization/IRoomObjectVisualizationFactory';
 import { RoomObjectSpriteVisualization } from '../../../room/object/visualization/RoomObjectSpriteVisualization';
-import { NitroInstance } from '../../NitroInstance';
+import { Nitro } from '../../Nitro';
 import { RoomObjectVisualizationType } from './RoomObjectVisualizationType';
 import { AvatarVisualization } from './visualization/avatar/AvatarVisualization';
 import { AvatarVisualizationData } from './visualization/avatar/AvatarVisualizationData';
@@ -257,7 +257,7 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
 
         if((visualizationData instanceof AvatarVisualizationData) || (visualizationData instanceof FurnitureMannequinVisualizationData))
         {
-            visualizationData.avatarManager = NitroInstance.instance.avatar;
+            visualizationData.avatarManager = Nitro.instance.avatar;
         }
 
         if(RoomObjectVisualizationFactory.CACHING_ENABLED) this._visualizationDatas.set(type, visualizationData);

@@ -8,7 +8,9 @@ export interface IRoomObjectVisualization
     dispose(): void;
     update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void;
     getBoundingRectangle(): PIXI.Rectangle;
+    getImage(bgColor: number, originalId: number): PIXI.Texture;
     instanceId: number;
     object: IRoomObject;
+    image: PIXI.Texture;
     updateSpriteCounter: number;
 }

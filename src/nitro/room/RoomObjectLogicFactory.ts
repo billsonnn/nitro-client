@@ -1,50 +1,50 @@
-import { NitroLogger } from '../../../../core/common/logger/NitroLogger';
-import { EventDispatcher } from '../../../../core/events/EventDispatcher';
-import { IEventDispatcher } from '../../../../core/events/IEventDispatcher';
-import { IRoomObjectEventHandler } from '../../../../room/object/logic/IRoomObjectEventHandler';
-import { IRoomObjectLogicFactory } from '../../../../room/object/logic/IRoomObjectLogicFactory';
-import { RoomObjectLogicBase } from '../../../../room/object/logic/RoomObjectLogicBase';
-import { RoomObjectLogicType } from '../RoomObjectLogicType';
-import { AvatarLogic } from './avatar/AvatarLogic';
-import { FurnitureBadgeDisplayLogic } from './furniture/FurnitureBadgeDisplayLogic';
-import { FurnitureChangeStateWhenStepOnLogic } from './furniture/FurnitureChangeStateWhenStepOnLogic';
-import { FurnitureCounterClockLogic } from './furniture/FurnitureCounterClockLogic';
-import { FurnitureCreditLogic } from './furniture/FurnitureCreditLogic';
-import { FurnitureCustomStackHeightLogic } from './furniture/FurnitureCustomStackHeightLogic';
-import { FurnitureDiceLogic } from './furniture/FurnitureDiceLogic';
-import { FurnitureEditableInternalLinkLogic } from './furniture/FurnitureEditableInternalLinkLogic';
-import { FurnitureExternalImageLogic } from './furniture/FurnitureExternalImageLogic';
-import { FurnitureFireworksLogic } from './furniture/FurnitureFireworksLogic';
-import { FurnitureFloorHoleLogic } from './furniture/FurnitureFloorHoleLogic';
-import { FurnitureGuildCustomizedLogic } from './furniture/FurnitureGuildCustomizedLogic';
-import { FurnitureHighScoreLogic } from './furniture/FurnitureHighScoreLogic';
-import { FurnitureHockeyScoreLogic } from './furniture/FurnitureHockeyScoreLogic';
-import { FurnitureIceStormLogic } from './furniture/FurnitureIceStormLogic';
-import { FurnitureLogic } from './furniture/FurnitureLogic';
-import { FurnitureMannequinLogic } from './furniture/FurnitureMannequinLogic';
-import { FurnitureMultiHeightLogic } from './furniture/FurnitureMultiHeightLogic';
-import { FurnitureMultiStateLogic } from './furniture/FurnitureMultiStateLogic';
-import { FurnitureOneWayDoorLogic } from './furniture/FurnitureOneWayDoorLogic';
-import { FurniturePetCustomizationLogic } from './furniture/FurniturePetCustomizationLogic';
-import { FurniturePresentLogic } from './furniture/FurniturePresentLogic';
-import { FurniturePurchaseableClothingLogic } from './furniture/FurniturePurchaseableClothingLogic';
-import { FurniturePushableLogic } from './furniture/FurniturePushableLogic';
-import { FurnitureRoomBackgroundColorLogic } from './furniture/FurnitureRoomBackgroundColorLogic';
-import { FurnitureRoomBackgroundLogic } from './furniture/FurnitureRoomBackgroundLogic';
-import { FurnitureRoomBillboardLogic } from './furniture/FurnitureRoomBillboardLogic';
-import { FurnitureRoomDimmerLogic } from './furniture/FurnitureRoomDimmerLogic';
-import { FurnitureScoreLogic } from './furniture/FurnitureScoreLogic';
-import { FurnitureSoundBlockLogic } from './furniture/FurnitureSoundBlockLogic';
-import { FurnitureStickieLogic } from './furniture/FurnitureStickieLogic';
-import { FurnitureTrophyLogic } from './furniture/FurnitureTrophyLogic';
-import { FurnitureVoteCounterLogic } from './furniture/FurnitureVoteCounterLogic';
-import { FurnitureVoteMajorityLogic } from './furniture/FurnitureVoteMajorityLogic';
-import { FurnitureWindowLogic } from './furniture/FurnitureWindowLogic';
-import { PetLogic } from './pet/PetLogic';
-import { RoomLogic } from './room/RoomLogic';
-import { TileCursorLogic } from './room/TileCursorLogic';
+import { NitroLogger } from '../../core/common/logger/NitroLogger';
+import { EventDispatcher } from '../../core/events/EventDispatcher';
+import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { IRoomObjectEventHandler } from '../../room/object/logic/IRoomObjectEventHandler';
+import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
+import { RoomObjectLogicBase } from '../../room/object/logic/RoomObjectLogicBase';
+import { AvatarLogic } from './object/logic/avatar/AvatarLogic';
+import { FurnitureBadgeDisplayLogic } from './object/logic/furniture/FurnitureBadgeDisplayLogic';
+import { FurnitureChangeStateWhenStepOnLogic } from './object/logic/furniture/FurnitureChangeStateWhenStepOnLogic';
+import { FurnitureCounterClockLogic } from './object/logic/furniture/FurnitureCounterClockLogic';
+import { FurnitureCreditLogic } from './object/logic/furniture/FurnitureCreditLogic';
+import { FurnitureCustomStackHeightLogic } from './object/logic/furniture/FurnitureCustomStackHeightLogic';
+import { FurnitureDiceLogic } from './object/logic/furniture/FurnitureDiceLogic';
+import { FurnitureEditableInternalLinkLogic } from './object/logic/furniture/FurnitureEditableInternalLinkLogic';
+import { FurnitureExternalImageLogic } from './object/logic/furniture/FurnitureExternalImageLogic';
+import { FurnitureFireworksLogic } from './object/logic/furniture/FurnitureFireworksLogic';
+import { FurnitureFloorHoleLogic } from './object/logic/furniture/FurnitureFloorHoleLogic';
+import { FurnitureGuildCustomizedLogic } from './object/logic/furniture/FurnitureGuildCustomizedLogic';
+import { FurnitureHighScoreLogic } from './object/logic/furniture/FurnitureHighScoreLogic';
+import { FurnitureHockeyScoreLogic } from './object/logic/furniture/FurnitureHockeyScoreLogic';
+import { FurnitureIceStormLogic } from './object/logic/furniture/FurnitureIceStormLogic';
+import { FurnitureLogic } from './object/logic/furniture/FurnitureLogic';
+import { FurnitureMannequinLogic } from './object/logic/furniture/FurnitureMannequinLogic';
+import { FurnitureMultiHeightLogic } from './object/logic/furniture/FurnitureMultiHeightLogic';
+import { FurnitureMultiStateLogic } from './object/logic/furniture/FurnitureMultiStateLogic';
+import { FurnitureOneWayDoorLogic } from './object/logic/furniture/FurnitureOneWayDoorLogic';
+import { FurniturePetCustomizationLogic } from './object/logic/furniture/FurniturePetCustomizationLogic';
+import { FurniturePresentLogic } from './object/logic/furniture/FurniturePresentLogic';
+import { FurniturePurchaseableClothingLogic } from './object/logic/furniture/FurniturePurchaseableClothingLogic';
+import { FurniturePushableLogic } from './object/logic/furniture/FurniturePushableLogic';
+import { FurnitureRoomBackgroundColorLogic } from './object/logic/furniture/FurnitureRoomBackgroundColorLogic';
+import { FurnitureRoomBackgroundLogic } from './object/logic/furniture/FurnitureRoomBackgroundLogic';
+import { FurnitureRoomBillboardLogic } from './object/logic/furniture/FurnitureRoomBillboardLogic';
+import { FurnitureRoomDimmerLogic } from './object/logic/furniture/FurnitureRoomDimmerLogic';
+import { FurnitureScoreLogic } from './object/logic/furniture/FurnitureScoreLogic';
+import { FurnitureSoundBlockLogic } from './object/logic/furniture/FurnitureSoundBlockLogic';
+import { FurnitureStickieLogic } from './object/logic/furniture/FurnitureStickieLogic';
+import { FurnitureTrophyLogic } from './object/logic/furniture/FurnitureTrophyLogic';
+import { FurnitureVoteCounterLogic } from './object/logic/furniture/FurnitureVoteCounterLogic';
+import { FurnitureVoteMajorityLogic } from './object/logic/furniture/FurnitureVoteMajorityLogic';
+import { FurnitureWindowLogic } from './object/logic/furniture/FurnitureWindowLogic';
+import { PetLogic } from './object/logic/pet/PetLogic';
+import { RoomLogic } from './object/logic/room/RoomLogic';
+import { TileCursorLogic } from './object/logic/room/TileCursorLogic';
+import { RoomObjectLogicType } from './object/RoomObjectLogicType';
 
-export class ObjectLogicFactory implements IRoomObjectLogicFactory
+export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 {
     private _events: IEventDispatcher;
 
@@ -67,7 +67,7 @@ export class ObjectLogicFactory implements IRoomObjectLogicFactory
 
         if(!logic) return null;
 
-        const instance = new logic() as IRoomObjectEventHandler;
+        const instance = (new logic() as IRoomObjectEventHandler);
 
         if(!instance) return null;
 

@@ -7,7 +7,7 @@ import { ColorConverter } from '../../room/utils/ColorConverter';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { IAvatarRenderManager } from '../avatar/IAvatarRenderManager';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
@@ -165,7 +165,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
             geometry.location = new Vector3d(x, y, z);
         }
 
-        const stage = NitroInstance.instance.stage;
+        const stage = Nitro.instance.stage;
 
         if(!stage) return;
 
@@ -188,7 +188,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
     public update(): void
     {
-        
+        for(let widget of this._widgets.values()) widget && widget.widgetHandler && widget.widgetHandler.update();
     }
 
     public createWidget(type: string): void
@@ -369,9 +369,11 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         this._resizeTimer = setTimeout(() =>
         {
-            NitroInstance.instance.resize();
+            Nitro.instance.resize();
 
-            this._roomEngine.initializeRoomInstanceRenderingCanvas(this._session.roomId, this._canvasIDs[0], NitroInstance.instance.renderer.view.width, NitroInstance.instance.renderer.view.height);
+            this._roomEngine.initializeRoomInstanceRenderingCanvas(this._session.roomId, this._canvasIDs[0], Nitro.instance.renderer.view.width, Nitro.instance.renderer.view.height);
+
+            this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()))
 
             this.setBackground(this.getRoomBackground());
         }, 1);

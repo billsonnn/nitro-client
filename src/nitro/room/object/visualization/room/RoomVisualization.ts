@@ -239,7 +239,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
             this._directionX    = direction.x;
             this._directionY    = direction.y;
             this._directionZ    = direction.z;
-            this._roomScale         = k.scale;
+            this._roomScale     = k.scale;
 
             return true;
         }

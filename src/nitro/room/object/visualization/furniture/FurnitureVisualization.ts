@@ -179,7 +179,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         {
             this.updateSprites(scale, updateSprites, number);
 
-            this._scale = geometry.scale;
+            this._scale = scale;
 
             this.updateSpriteCounter++;
         }
@@ -387,7 +387,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(layerCode === '') return null;
 
-        const assetName = (this._type + ((isntIcon) ? ('_' + size + '_' + layerCode + '_' + this._direction + '_') : ('_icon_' + layerId)));
+        const assetName = (this._type + ((isntIcon) ? ('_' + size + '_' + layerCode + '_' + this._direction + '_') : ('_icon_' + layerCode)));
 
         if(cache)
         {

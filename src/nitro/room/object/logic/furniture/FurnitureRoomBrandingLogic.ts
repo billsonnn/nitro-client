@@ -1,6 +1,6 @@
 import { AssetManager } from '../../../../../core/asset/AssetManager';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { ObjectAdUpdateMessage } from '../../../messages/ObjectAdUpdateMessage';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { MapDataType } from '../../data/type/MapDataType';
@@ -99,7 +99,7 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!imageUrl || imageStatus === 1) return;
 
-        const asset = NitroInstance.instance.core && NitroInstance.instance.core.asset;
+        const asset = Nitro.instance.core && Nitro.instance.core.asset;
 
         if(!asset) return;
 
@@ -109,7 +109,7 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!texture)
         {
-            asset.downloadAssets([ imageUrl ], () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
+            asset.downloadAsset(imageUrl, () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
 
             return;
         }

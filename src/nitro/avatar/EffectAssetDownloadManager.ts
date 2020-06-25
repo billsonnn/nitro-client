@@ -1,4 +1,3 @@
-import { Parser } from 'xml2js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
@@ -62,20 +61,18 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
             request.onloadend = e =>
             {
-                const parser = new Parser();
-
-                parser.parseString(request.responseText, (err: Error, results: any) =>
+                if(request.responseText)
                 {
-                    if(err || !results || !results.map) throw new Error('invalid_effect_map');
+                    const data = JSON.parse(request.responseText);
 
-                    this.processEffectMap(results.map);
+                    this.processEffectMap(data.effects);
 
                     this.processMissingLibraries();
 
                     this._isReady = true;
 
                     this.dispatchEvent(new NitroEvent(EffectAssetDownloadManager.DOWNLOADER_READY));
-                });
+                }
             }
 
             request.onerror = e => { throw new Error('invalid_avatar_effect_map'); };
@@ -90,28 +87,26 @@ export class EffectAssetDownloadManager extends EventDispatcher
     private processEffectMap(data: any): void
     {
         if(!data) return;
-        
-        if(data.effect)
+
+        for(let effect of data)
         {
-            for(let effect of data.effect)
-            {
-                if(!effect) continue;
+            if(!effect) continue;
 
-                const id    = effect['$'].id;
-                const lib   = effect['$'].lib;
+            const id        = (effect.id as string);
+            const lib       = (effect.lib as string);
+            const revision  = (effect.revision as number);
 
-                const downloadLibrary = new EffectAssetDownloadLibrary(lib, '0', this._assets, NitroConfiguration.AVATAR_ASSET_EFFECT_URL);
+            const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, NitroConfiguration.AVATAR_ASSET_EFFECT_URL);
 
-                downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
+            downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
 
-                let existing = this._effectMap.get(id);
+            let existing = this._effectMap.get(id);
 
-                if(!existing) existing = [];
+            if(!existing) existing = [];
 
-                existing.push(downloadLibrary);
+            existing.push(downloadLibrary);
 
-                this._effectMap.set(id, existing);
-            }
+            this._effectMap.set(id, existing);
         }
     }
 

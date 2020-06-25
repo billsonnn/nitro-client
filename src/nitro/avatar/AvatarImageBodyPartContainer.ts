@@ -29,10 +29,10 @@ export class AvatarImageBodyPartContainer
 
     private _Str_1225(): void
     {
-        this._regPoint.x    = Number(this._regPoint.x);
-        this._regPoint.y    = Number(this._regPoint.y);
-        this._offset.x      = Number(this._offset.x);
-        this._offset.y      = Number(this._offset.y);
+        this._regPoint.x    = this._regPoint.x;
+        this._regPoint.y    = this._regPoint.y;
+        this._offset.x      = this._offset.x;
+        this._offset.y      = this._offset.y;
     }
 
     public _Str_1387(k: PIXI.Point): void

@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js-legacy';
 import { AssetManager } from '../../../../core/asset/AssetManager';
 import { IAsset, IAssetData, IAssetPalette } from '../../../../core/asset/interfaces';
-import { NitroInstance } from '../../../../nitro/NitroInstance';
+import { Nitro } from '../../../../nitro/Nitro';
 import { GraphicAsset } from './GraphicAsset';
 import { GraphicAssetPalette } from './GraphicAssetPalette';
 import { IGraphicAsset } from './IGraphicAsset';
@@ -64,7 +64,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     public addReference(): void
     {
         this._referenceCount++;
-        this._referenceTimestamp = NitroInstance.instance.time;
+        this._referenceTimestamp = Nitro.instance.time;
     }
 
     public removeReference(): void
@@ -74,7 +74,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         if(this._referenceCount >= 0)
         {
             this._referenceCount        = 0;
-            this._referenceTimestamp    = NitroInstance.instance.time;
+            this._referenceTimestamp    = Nitro.instance.time;
 
             this.disposePaletteAssets(false);
         }

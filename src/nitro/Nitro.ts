@@ -2,13 +2,15 @@ import * as PIXI from 'pixi.js-legacy';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
+import { NitroCore } from '../core/NitroCore';
+import { NitroConfiguration } from '../NitroConfiguration';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
-import { INitroInstance } from './INitroInstance';
+import { INitro } from './INitro';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { NitroNavigator } from './navigator/NitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
@@ -21,9 +23,9 @@ import { RoomUI } from './ui/RoomUI';
 import { INitroWindowManager } from './window/INitroWindowManager';
 import { NitroWindowManager } from './window/NitroWindowManager';
 
-export class NitroInstance extends PIXI.Application implements INitroInstance
+export class Nitro extends PIXI.Application implements INitro
 {
-    private static INSTANCE: INitroInstance = null;
+    private static INSTANCE: INitro = null;
 
     private _core: INitroCore;
     private _events: IEventDispatcher;
@@ -53,7 +55,6 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         forceCanvas?: boolean;
         backgroundColor?: number;
         clearBeforeRender?: boolean;
-        forceFXAA?: boolean;
         powerPreference?: string;
         sharedTicker?: boolean;
         sharedLoader?: boolean;
@@ -77,7 +78,53 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         this._isReady       = false;
         this._isDisposed    = false;
 
-        if(!NitroInstance.INSTANCE) NitroInstance.INSTANCE = this;
+        if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
+    }
+
+    public static bootstrap(options: any): void
+    {
+        options = {
+            configurationUrl: (options.configurationUrl || ''),
+            sso: (options.sso || null),
+            canvasParent: (options.canvasParent || document.body)
+        };
+
+        if(Nitro.INSTANCE)
+        {
+            Nitro.INSTANCE.dispose();
+
+            Nitro.INSTANCE = null;
+        }
+
+        PIXI.settings.SCALE_MODE    = PIXI.SCALE_MODES.NEAREST;
+        PIXI.Ticker.shared.maxFPS   = NitroConfiguration.FPS;
+        
+        const instance = new this(new NitroCore(), {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            transparent: true
+        });
+
+        instance.communication.demo.setSSO(options.sso);
+        
+        const view = instance.renderer && instance.renderer.view;
+
+        if(view)
+        {
+            view.id         = 'client-wrapper';
+            view.className  = 'client-canvas';
+
+            options.canvasParent.append(view);
+        }
+    }
+
+    public static boot(): void
+    {
+        const instance = Nitro.INSTANCE;
+
+        if(!instance) return;
+
+        instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
     }
 
     public init(): void
@@ -168,12 +215,14 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
             this._communication = null;
         }
 
+        super.destroy();
+
         this._isDisposed = true;
     }
 
     private setupRenderer(): void
     {
-        NitroInstance.instance.resizeTo = window;
+        Nitro.instance.resizeTo = window;
 
         this.resize();
     }
@@ -256,7 +305,7 @@ export class NitroInstance extends PIXI.Application implements INitroInstance
         return this._isDisposed;
     }
 
-    public static get instance(): INitroInstance
+    public static get instance(): INitro
     {
         return this.INSTANCE || null;
     }

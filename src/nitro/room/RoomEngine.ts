@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js-legacy';
+import { IDisposable } from '../../core/common/disposable/IDisposable';
+import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
@@ -20,11 +22,14 @@ import { RoomRendererFactory } from '../../room/renderer/RoomRendererFactory';
 import { RoomInstance } from '../../room/RoomInstance';
 import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../room/utils/IVector3D';
+import { NumberBank } from '../../room/utils/NumberBank';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
+import { PetCustomPart } from '../avatar/pets/PetCustomPart';
+import { PetFigureData } from '../avatar/pets/PetFigureData';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
-import { NitroInstance } from '../NitroInstance';
+import { Nitro } from '../Nitro';
 import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { BadgeImageReadyEvent } from '../session/events/BadgeImageReadyEvent';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
@@ -34,6 +39,8 @@ import { MouseEventType } from '../ui/MouseEventType';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
+import { IGetImageListener } from './IGetImageListener';
+import { ImageResult } from './ImageResult';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
 import { IRoomEngineServices } from './IRoomEngineServices';
@@ -72,7 +79,6 @@ import { ObjectStateUpdateMessage } from './messages/ObjectStateUpdateMessage';
 import { IObjectData } from './object/data/IObjectData';
 import { ObjectDataFactory } from './object/data/ObjectDataFactory';
 import { LegacyDataType } from './object/data/type/LegacyDataType';
-import { ObjectLogicFactory } from './object/logic/ObjectLogicFactory';
 import { RoomLogic } from './object/logic/room/RoomLogic';
 import { RoomMapData } from './object/RoomMapData';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
@@ -82,6 +88,7 @@ import { RoomObjectVisualizationFactory } from './object/RoomObjectVisualization
 import { RoomContentLoader } from './RoomContentLoader';
 import { RoomMessageHandler } from './RoomMessageHandler';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
+import { RoomObjectLogicFactory } from './RoomObjectLogicFactory';
 import { RoomVariableEnum } from './RoomVariableEnum';
 import { FurnitureData } from './utils/FurnitureData';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
@@ -92,7 +99,7 @@ import { RoomInstanceData } from './utils/RoomInstanceData';
 import { RoomObjectBadgeImageAssetListener } from './utils/RoomObjectBadgeImageAssetListener';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
-export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener
+export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener, IUpdateReceiver, IDisposable
 {
     public static ROOM_OBJECT_ID: number        = -1;
     public static ROOM_OBJECT_TYPE: string      = 'room';
@@ -138,11 +145,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _Str_3688: boolean;
     private _Str_8325: boolean;
     private _Str_13525: boolean;
+    private _Str_7206: NumberBank;
+    private _imageListeners: Map<string, IGetImageListener>;
     private _cameraCentered: boolean;
     private _badgeListeners: Map<string, RoomObjectBadgeImageAssetListener[]>;
 
-    private _isReady: boolean;
-    private _isDisposed: boolean;
+    private _ready: boolean;
+    private _disposed: boolean;
 
     constructor(communication: INitroCommunicationManager)
     {
@@ -162,7 +171,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         this._roomRendererFactory       = new RoomRendererFactory();
         this._visualizationFactory      = new RoomObjectVisualizationFactory();
-        this._logicFactory              = new ObjectLogicFactory();
+        this._logicFactory              = new RoomObjectLogicFactory();
 
         this._mouseX                    = 0;
         this._mouseY                    = 0;
@@ -175,20 +184,24 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_3688                  = false;
         this._Str_8325                  = false;
         this._Str_13525                 = false;
+        this._Str_7206                  = null;
+        this._imageListeners            = new Map();
         this._cameraCentered            = false;
         this._badgeListeners            = new Map();
 
-        this._isReady                   = false;
-        this._isDisposed                = false;
+        this._ready                   = false;
+        this._disposed                = false;
     }
 
     public initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void
     {
-        if(this._isReady) return;
+        if(this._ready) return;
 
-        this._sessionDataManager   = sessionData;
-        this._roomSession   = roomSession;
-        this._roomManager   = roomManager;
+        this._Str_7206 = new NumberBank(1000);
+
+        this._sessionDataManager    = sessionData;
+        this._roomSession           = roomSession;
+        this._roomManager           = roomManager;
 
         this._logicFactory.registerEventFunction(this.processRoomObjectEvent.bind(this));
 
@@ -207,13 +220,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
         PIXI.Ticker.shared.add(this.update, this);
-
-        this._isReady = true;
     }
 
     public dispose(): void
     {
-        if(!this._isReady || this._isDisposed) return;
+        if(!this._ready || this._disposed) return;
 
         PIXI.Ticker.shared.remove(this.update, this);
 
@@ -224,7 +235,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-        this._isDisposed = true;
+        this._disposed = true;
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -288,7 +299,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         let wallType        = '201';
         let landscapeType   = '1';
 
-        if(!this._isReady)
+        if(!this._ready)
         {
             let data = this._pendingRoomData.get(roomId);
 
@@ -345,7 +356,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private setupRoomInstance(roomId: number, roomMap: RoomMapData, floorType: string, wallType: string, landscapeType: string, worldType: string): IRoomInstance
     {
-        if(!this._isReady) return;
+        if(!this._ready) return;
 
         const instance = this._roomManager.createRoomInstance(this.getRoomId(roomId));
 
@@ -501,7 +512,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
             if(displayObject)
             {
-                const overlay = new PIXI.Sprite();
+                const overlay = PIXI.Sprite.from(PIXI.Texture.EMPTY)
 
                 overlay.name        = RoomEngine.OVERLAY;
                 overlay.interactive = false;
@@ -522,6 +533,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         const renderer = instance.renderer as IRoomRenderer;
 
         if(!renderer) return null;
+
+        if(canvasId === -1) canvasId = this._lastCanvasId;
 
         const canvas = renderer.getCanvas(canvasId);
 
@@ -691,7 +704,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         RoomEnterEffect._Str_23419();
 
-        time = PIXI.Ticker.shared.lastTime;
+        time = Nitro.instance.time;
 
         this.processPendingFurniture();
 
@@ -729,7 +742,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             return;
         }
 
-        const startTime         = NitroInstance.instance.time;
+        const startTime         = Nitro.instance.time;
         const furniturePerTick  = 5;
         const hasTickLimit      = false;
 
@@ -750,7 +763,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 {
                     if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        const time = NitroInstance.instance.time;
+                        const time = Nitro.instance.time;
 
                         if(((time - startTime) >= 40) && !this._Str_3688)
                         {
@@ -770,7 +783,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 {
                     if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        const time = NitroInstance.instance.time;
+                        const time = Nitro.instance.time;
 
                         if(((time - startTime) >= 40) && !this._Str_3688)
                         {
@@ -790,6 +803,22 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             }
 
             if(this._Str_8325) return;
+        }
+    }
+
+    public onRoomEngineInitalized(flag: boolean): void
+    {
+        if(!flag) return;
+
+        this._ready = true;
+
+        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.ENGINE_INITIALIZED, 0));
+
+        for(let roomData of this._pendingRoomData.values())
+        {
+            if(!roomData) continue;
+
+            this.createRoomInstance(roomData.roomId, roomData.data)
         }
     }
 
@@ -826,7 +855,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             model.setValue(RoomObjectVariable.FURNITURE_TYPE_ID, data.typeId);
             model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
             model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, Nitro.instance.time);
             model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
@@ -885,7 +914,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             model.setValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT, (data.realRoomObject ? 1 : 0));
             model.setValue(RoomObjectVariable.OBJECT_ACCURATE_Z_VALUE, 1);
             model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, data.expiryTime);
-            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
+            model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, Nitro.instance.time);
             model.setValue(RoomObjectVariable.FURNITURE_USAGE_POLICY, data.usagePolicy);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_ID, data.ownerId);
             model.setValue(RoomObjectVariable.FURNITURE_OWNER_NAME, data.ownerName);
@@ -931,23 +960,23 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private _Str_22919(time: number):void
     {
-        // for(let instanceData of this._roomInstanceData.values())
-        // {
-        //     if(!instanceData) continue;
+        for(let instanceData of this._roomInstanceData.values())
+        {
+            if(!instanceData) continue;
 
-        //     const camera = instanceData.roomCamera;
+            const camera = instanceData.roomCamera;
 
-        //     if(!camera) continue;
+            if(!camera) continue;
 
-        //     const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
+            const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
 
-        //     if(!object) continue;
+            if(!object) continue;
 
-        //     if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
-        //     {
-        //         this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
-        //     }
-        // }
+            if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
+            {
+                this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
+            }
+        }
 
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, 1);
 
@@ -966,314 +995,284 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private _Str_25242(k: number, _arg_2: number, _arg_3:IVector3D, _arg_4: number):void
     {
-        var _local_10: number;
-        var _local_11: PIXI.Rectangle;
-        var _local_12: number;
-        var _local_13: number;
-        var _local_14: PIXI.Rectangle;
-        var _local_15: Vector3d;
-        var _local_16: number;
-        var _local_17: number;
-        var _local_18: number;
-        var _local_19: number;
-        var _local_20: number;
-        var _local_21: number;
-        var _local_22: number;
-        var _local_23: PIXI.Point;
-        var _local_24: number;
-        var _local_25: number;
-        var _local_26: PIXI.Matrix;
-        var _local_27: number;
-        var _local_28: number;
-        var _local_29: number;
-        var _local_30: number;
-        var _local_31: number;
-        var _local_32: number;
-        var _local_33: PIXI.Point;
-        var _local_34: boolean;
-        var _local_35: boolean;
-        var _local_36: boolean;
-        var _local_37: boolean;
-        var _local_38: number;
-        var _local_39: number;
-        var _local_40: number;
-        var _local_41: number;
-        var _local_42: number;
-        var _local_43: number;
-        var _local_44: number;
-        var _local_45: PIXI.Point;
-        var _local_46: Vector3d;
-        var _local_5 = this.getRoomInstanceRenderingCanvas(k, _arg_2);
-        var _local_6 = this.getRoomInstanceData(k);
-        if ((((_local_5 == null) || (_local_6 == null)) || (!(_local_5.scale == 1))))
-        {
-            return;
-        }
-        var _local_7:RoomGeometry = _local_5.geometry as RoomGeometry;
-        var _local_8:RoomCamera = _local_6.roomCamera;
-        var _local_9:IRoomInstance = this.getRoomInstance(k);
-        if ((((!(_local_7 == null)) && (!(_local_8 == null))) && (!(_local_9 == null))))
-        {
-            _local_10 = (Math.floor(_arg_3.z) + 1);
-            _local_11 = this._Str_25261(k, _arg_2);
-            if (_local_11 != null)
-            {
-                _local_12 = Math.round(_local_11.width);
-                _local_13 = Math.round(_local_11.height);
-                _local_14 = this.getCanvasBoundingRectangle(_arg_2);
-                if (((!(_local_14 == null)) && ((((_local_14.right < 0) || (_local_14.bottom < 0)) || (_local_14.left >= _local_12)) || (_local_14.top >= _local_13))))
-                {
-                    _local_8.reset();
-                }
-                if (((((((!(_local_8._Str_7609 == _local_12)) || (!(_local_8._Str_7902 == _local_13))) || (!(_local_8.scale == _local_7.scale))) || (!(_local_8._Str_16377 == _local_7.updateId))) || (!(Vector3d.isEqual(_arg_3, _local_8._Str_16185)))) || (_local_8._Str_12536)))
-                {
-                    _local_8._Str_16185 = _arg_3;
-                    _local_15 = new Vector3d();
-                    _local_15.assign(_arg_3);
-                    _local_15.x = Math.round(_local_15.x);
-                    _local_15.y = Math.round(_local_15.y);
-                    _local_16 = (_local_9.model.getValue(RoomVariableEnum.ROOM_MIN_X) - 0.5);
-                    _local_17 = (_local_9.model.getValue(RoomVariableEnum.ROOM_MIN_Y) - 0.5);
-                    _local_18 = (_local_9.model.getValue(RoomVariableEnum.ROOM_MAX_X) + 0.5);
-                    _local_19 = (_local_9.model.getValue(RoomVariableEnum.ROOM_MAX_Y) + 0.5);
-                    _local_20 = Math.round(((_local_16 + _local_18) / 2));
-                    _local_21 = Math.round(((_local_17 + _local_19) / 2));
-                    _local_22 = 2;
-                    _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
-                    _local_24 = (_local_7.scale / Math.sqrt(2));
-                    _local_25 = (_local_24 / 2);
-                    _local_26 = new PIXI.Matrix();
-                    _local_26.rotate(((-(_local_7.direction.x + 90) / 180) * Math.PI));
-                    _local_23 = _local_26.apply(_local_23);
-                    _local_23.y = (_local_23.y * (_local_25 / _local_24));
-                    _local_27 = (((_local_11.width / 2) / _local_24) - 1);
-                    _local_28 = (((_local_11.height / 2) / _local_25) - 1);
-                    _local_29 = 0;
-                    _local_30 = 0;
-                    _local_31 = 0;
-                    _local_32 = 0;
-                    _local_33 = _local_7.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
-                    if (!_local_33)
-                    {
-                        return;
-                    }
-                    _local_33.x = (_local_33.x + Math.round((_local_11.width / 2)));
-                    _local_33.y = (_local_33.y + Math.round((_local_11.height / 2)));
-                    if (_local_14 != null)
-                    {
-                        _local_14.x += -(_local_5.screenOffsetX);
-                        _local_14.y += -(_local_5.screenOffsetY);
-                        if (((_local_14.width > 1) && (_local_14.height > 1)))
-                        {
-                            _local_29 = (((_local_14.left - _local_33.x) - (_local_7.scale * 0.25)) / _local_24);
-                            _local_31 = (((_local_14.right - _local_33.x) + (_local_7.scale * 0.25)) / _local_24);
-                            _local_30 = (((_local_14.top - _local_33.y) - (_local_7.scale * 0.5)) / _local_25);
-                            _local_32 = (((_local_14.bottom - _local_33.y) + (_local_7.scale * 0.5)) / _local_25);
-                        }
-                        else
-                        {
-                            _local_7.adjustLocation(new Vector3d(-30, -30), 25);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        _local_7.adjustLocation(new Vector3d(0, 0), 25);
-                        return;
-                    }
-                    _local_34 = false;
-                    _local_35 = false;
-                    _local_36 = false;
-                    _local_37 = false;
-                    _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
-                    if (_local_38 < _local_11.width)
-                    {
-                        _local_10 = 2;
-                        _local_23.x = ((_local_31 + _local_29) / 2);
-                        _local_36 = true;
-                    }
-                    else
-                    {
-                        if (_local_23.x > (_local_31 - _local_27))
-                        {
-                            _local_23.x = (_local_31 - _local_27);
-                            _local_34 = true;
-                        }
-                        if (_local_23.x < (_local_29 + _local_27))
-                        {
-                            _local_23.x = (_local_29 + _local_27);
-                            _local_34 = true;
-                        }
-                    }
-                    _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
-                    if (_local_39 < _local_11.height)
-                    {
-                        _local_10 = 2;
-                        _local_23.y = ((_local_32 + _local_30) / 2);
-                        _local_37 = true;
-                    }
-                    else
-                    {
-                        if (_local_23.y > (_local_32 - _local_28))
-                        {
-                            _local_23.y = (_local_32 - _local_28);
-                            _local_35 = true;
-                        }
-                        if (_local_23.y < (_local_30 + _local_28))
-                        {
-                            _local_23.y = (_local_30 + _local_28);
-                            _local_35 = true;
-                        }
-                        if (_local_35)
-                        {
-                            _local_23.y = (_local_23.y / (_local_25 / _local_24));
-                        }
-                    }
-                    _local_26.invert();
-                    _local_23 = _local_26.apply(_local_23);
-                    _local_23.x = (_local_23.x + _local_20);
-                    _local_23.y = (_local_23.y + _local_21);
-                    _local_40 = 0.35;
-                    _local_41 = 0.2;
-                    _local_42 = 0.2;
-                    _local_43 = 10;
-                    _local_44 = 10;
-                    if ((_local_42 * _local_12) > 100)
-                    {
-                        _local_42 = (100 / _local_12);
-                    }
-                    if ((_local_40 * _local_13) > 150)
-                    {
-                        _local_40 = (150 / _local_13);
-                    }
-                    if ((_local_41 * _local_13) > 150)
-                    {
-                        _local_41 = (150 / _local_13);
-                    }
-                    if ((((_local_8._Str_10235) && (_local_8._Str_7609 == _local_12)) && (_local_8._Str_7902 == _local_13)))
-                    {
-                        _local_42 = 0;
-                    }
-                    if ((((_local_8._Str_10446) && (_local_8._Str_7609 == _local_12)) && (_local_8._Str_7902 == _local_13)))
-                    {
-                        _local_40 = 0;
-                        _local_41 = 0;
-                    }
-                    _local_11.right = (_local_11.right * (1 - (_local_42 * 2)));
-                    _local_11.bottom = (_local_11.bottom * (1 - (_local_40 + _local_41)));
-                    if (_local_11.right < _local_43)
-                    {
-                        _local_11.right = _local_43;
-                    }
-                    if (_local_11.bottom < _local_44)
-                    {
-                        _local_11.bottom = _local_44;
-                    }
-                    if ((_local_40 + _local_41) > 0)
-                    {
-                        _local_11.x += (-(_local_11.width) / 2);
-                        _local_11.y += (-(_local_11.height) * (_local_41 / (_local_40 + _local_41)));
-                    }
-                    else
-                    {
-                        _local_11.x += (-(_local_11.width) / 2);
-                        _local_11.y += (-(_local_11.height) / 2);
+        const renderingCanvas   = this.getRoomInstanceRenderingCanvas(k, _arg_2);
+        const instanceData      = this.getRoomInstanceData(k);
 
-                    }
-                    _local_33 = _local_7.getScreenPoint(_local_15);
-                    if (!_local_33)
-                    {
-                        return;
-                    }
-                    if (_local_33 != null)
-                    {
-                        _local_33.x = (_local_33.x + _local_5.screenOffsetX);
-                        _local_33.y = (_local_33.y + _local_5.screenOffsetY);
-                        _local_15.z = _local_10;
-                        _local_15.x = (Math.round((_local_23.x * 2)) / 2);
-                        _local_15.y = (Math.round((_local_23.y * 2)) / 2);
-                        if (_local_8.location == null)
-                        {
-                            _local_7.location = _local_15;
-                            if (this._Str_11555)
-                            {
-                                _local_8._Str_20685(new Vector3d(0, 0, 0));
-                            }
-                            else
-                            {
-                                _local_8._Str_20685(_local_15);
-                            }
-                        }
-                        _local_45 = _local_7.getScreenPoint(_local_15);
-                        _local_46 = new Vector3d(0, 0, 0);
-                        if (_local_45 != null)
-                        {
-                            _local_46.x = _local_45.x;
-                            _local_46.y = _local_45.y;
-                        }
-                        if (((((((((_local_33.x < _local_11.left) || (_local_33.x > _local_11.right)) && (!(_local_8._Str_8564))) || (((_local_33.y < _local_11.top) || (_local_33.y > _local_11.bottom)) && (!(_local_8._Str_8690)))) || (((_local_36) && (!(_local_8._Str_8564))) && (!(_local_8._Str_7609 == _local_12)))) || (((_local_37) && (!(_local_8._Str_8690))) && (!(_local_8._Str_7902 == _local_13)))) || ((!(_local_8._Str_18975 == _local_14.width)) || (!(_local_8._Str_15953 == _local_14.height)))) || ((!(_local_8._Str_7609 == _local_12)) || (!(_local_8._Str_7902 == _local_13)))))
-                        {
-                            _local_8._Str_10235 = _local_34;
-                            _local_8._Str_10446 = _local_35;
-                            if (this._Str_11555)
-                            {
-                                _local_8.target = _local_46;
-                            }
-                            else
-                            {
-                                _local_8.target = _local_15;
-                            }
-                        }
-                        else
-                        {
-                            if (!_local_34)
-                            {
-                                _local_8._Str_10235 = false;
-                            }
-                            if (!_local_35)
-                            {
-                                _local_8._Str_10446 = false;
-                            }
-                        }
-                    }
-                    _local_8._Str_8564 = _local_36;
-                    _local_8._Str_8690 = _local_37;
-                    _local_8._Str_7609 = _local_12;
-                    _local_8._Str_7902 = _local_13;
-                    _local_8.scale = _local_7.scale;
-                    _local_8._Str_16377 = _local_7.updateId;
-                    _local_8._Str_18975 = _local_14.width;
-                    _local_8._Str_15953 = _local_14.height;
-                    if (true)
-                    {
-                        if (this._Str_11555)
-                        {
-                            _local_8.update(_arg_4, 8);
-                        }
-                        else
-                        {
-                            _local_8.update(_arg_4, 0.5);
-                        }
-                    }
-                    if (this._Str_11555)
-                    {
-                        _local_5.screenOffsetX = -(_local_8.location.x);
-                        _local_5.screenOffsetY = -(_local_8.location.y);
-                    }
-                    else
-                    {
-                        _local_7.adjustLocation(_local_8.location, 25);
-                    }
-                }
-                else
-                {
-                    _local_8._Str_10235 = false;
-                    _local_8._Str_10446 = false;
-                    _local_8._Str_8564 = false;
-                    _local_8._Str_8690 = false;
-                }
-            }
+        if(!renderingCanvas || !instanceData || (renderingCanvas.scale !== 1)) return;
+
+        const roomGeometry  = (renderingCanvas.geometry as RoomGeometry);
+        const roomCamera    = instanceData.roomCamera;
+        const roomInstance  = this.getRoomInstance(k);
+
+        if(!roomGeometry || !roomCamera || !roomInstance) return;
+        
+        let canvasRectangle = this._Str_25261(k, _arg_2);
+
+        if(!canvasRectangle) return;
+
+        let _local_10   = (Math.floor(_arg_3.z) + 1);
+        let width       = Math.round(canvasRectangle.width);
+        let height      = Math.round(canvasRectangle.height);
+        let bounds      = this.getCanvasBoundingRectangle(_arg_2);
+
+        if(bounds && ((bounds.right < 0) || (bounds.bottom < 0) || (bounds.left >= width) || (bounds.top >= height)))
+        {
+            roomCamera.reset();
         }
+
+        // if (((((((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height))) || (!(roomCamera.scale == roomGeometry.scale))) || (!(roomCamera._Str_16377 == roomGeometry.updateId))) || (!(Vector3d.isEqual(_arg_3, roomCamera._Str_16185)))) || (roomCamera._Str_12536)))
+        // {
+        //     roomCamera._Str_16185 = _arg_3;
+            
+        //     const _local_15 = new Vector3d();
+            
+        //     _local_15.assign(_arg_3);
+
+        //     _local_15.x = Math.round(_local_15.x);
+        //     _local_15.y = Math.round(_local_15.y);
+
+        //     const _local_16 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_X) - 0.5);
+        //     const _local_17 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_Y) - 0.5);
+        //     const _local_18 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_X) + 0.5);
+        //     const _local_19 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_Y) + 0.5);
+        //     const _local_20 = Math.round(((_local_16 + _local_18) / 2));
+        //     const _local_21 = Math.round(((_local_17 + _local_19) / 2));
+        //     const _local_22 = 2;
+        //     let _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
+        //     const _local_24 = (roomGeometry.scale / Math.sqrt(2));
+        //     const _local_25 = (_local_24 / 2);
+        //     const _local_26 = new PIXI.Matrix();
+        //     _local_26.rotate(((-(roomGeometry.direction.x + 90) / 180) * Math.PI));
+        //     _local_23 = _local_26.apply(_local_23);
+        //     _local_23.y = (_local_23.y * (_local_25 / _local_24));
+        //     const _local_27 = (((canvasRectangle.width / 2) / _local_24) - 1);
+        //     const _local_28 = (((canvasRectangle.height / 2) / _local_25) - 1);
+            
+        //     let _local_29 = 0;
+        //     let _local_30 = 0;
+        //     let _local_31 = 0;
+        //     let _local_32 = 0;
+        //     let _local_33 = roomGeometry.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
+
+        //     if(!_local_33) return;
+            
+        //     _local_33.x = (_local_33.x + Math.round((canvasRectangle.width / 2)));
+        //     _local_33.y = (_local_33.y + Math.round((canvasRectangle.height / 2)));
+
+        //     if (bounds != null)
+        //     {
+        //         bounds.x += -(renderingCanvas.screenOffsetX);
+        //         bounds.y += -(renderingCanvas.screenOffsetY);
+
+        //         if(((bounds.width > 1) && (bounds.height > 1)))
+        //         {
+        //             _local_29 = (((bounds.left - _local_33.x) - (roomGeometry.scale * 0.25)) / _local_24);
+        //             _local_31 = (((bounds.right - _local_33.x) + (roomGeometry.scale * 0.25)) / _local_24);
+        //             _local_30 = (((bounds.top - _local_33.y) - (roomGeometry.scale * 0.5)) / _local_25);
+        //             _local_32 = (((bounds.bottom - _local_33.y) + (roomGeometry.scale * 0.5)) / _local_25);
+        //         }
+        //         else
+        //         {
+        //             roomGeometry.adjustLocation(new Vector3d(-30, -30), 25);
+
+        //             return;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         roomGeometry.adjustLocation(new Vector3d(0, 0), 25);
+                
+        //         return;
+        //     }
+
+        //     let _local_34 = false;
+        //     let _local_35 = false;
+        //     let _local_36 = false;
+        //     let _local_37 = false;
+        //     let _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
+
+        //     if (_local_38 < canvasRectangle.width)
+        //     {
+        //         _local_10 = 2;
+        //         _local_23.x = ((_local_31 + _local_29) / 2);
+        //         _local_36 = true;
+        //     }
+        //     else
+        //     {
+        //         if (_local_23.x > (_local_31 - _local_27))
+        //         {
+        //             _local_23.x = (_local_31 - _local_27);
+        //             _local_34 = true;
+        //         }
+        //         if (_local_23.x < (_local_29 + _local_27))
+        //         {
+        //             _local_23.x = (_local_29 + _local_27);
+        //             _local_34 = true;
+        //         }
+        //     }
+        //     let _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
+        //     if (_local_39 < canvasRectangle.height)
+        //     {
+        //         _local_10 = 2;
+        //         _local_23.y = ((_local_32 + _local_30) / 2);
+        //         _local_37 = true;
+        //     }
+        //     else
+        //     {
+        //         if (_local_23.y > (_local_32 - _local_28))
+        //         {
+        //             _local_23.y = (_local_32 - _local_28);
+        //             _local_35 = true;
+        //         }
+        //         if (_local_23.y < (_local_30 + _local_28))
+        //         {
+        //             _local_23.y = (_local_30 + _local_28);
+        //             _local_35 = true;
+        //         }
+        //         if (_local_35)
+        //         {
+        //             _local_23.y = (_local_23.y / (_local_25 / _local_24));
+        //         }
+        //     }
+        //     _local_26.invert();
+        //     _local_23 = _local_26.apply(_local_23);
+        //     _local_23.x = (_local_23.x + _local_20);
+        //     _local_23.y = (_local_23.y + _local_21);
+        //     let _local_40 = 0.35;
+        //     let _local_41 = 0.2;
+        //     let _local_42 = 0.2;
+        //     let _local_43 = 10;
+        //     let _local_44 = 10;
+        //     if ((_local_42 * width) > 100)
+        //     {
+        //         _local_42 = (100 / width);
+        //     }
+        //     if ((_local_40 * height) > 150)
+        //     {
+        //         _local_40 = (150 / height);
+        //     }
+        //     if ((_local_41 * height) > 150)
+        //     {
+        //         _local_41 = (150 / height);
+        //     }
+        //     if ((((roomCamera._Str_10235) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+        //     {
+        //         _local_42 = 0;
+        //     }
+        //     if ((((roomCamera._Str_10446) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+        //     {
+        //         _local_40 = 0;
+        //         _local_41 = 0;
+        //     }
+        //     canvasRectangle.right = (canvasRectangle.right * (1 - (_local_42 * 2)));
+        //     canvasRectangle.bottom = (canvasRectangle.bottom * (1 - (_local_40 + _local_41)));
+        //     if (canvasRectangle.right < _local_43)
+        //     {
+        //         canvasRectangle.right = _local_43;
+        //     }
+        //     if (canvasRectangle.bottom < _local_44)
+        //     {
+        //         canvasRectangle.bottom = _local_44;
+        //     }
+        //     if ((_local_40 + _local_41) > 0)
+        //     {
+        //         canvasRectangle.x += (-(canvasRectangle.width) / 2);
+        //         canvasRectangle.y += (-(canvasRectangle.height) * (_local_41 / (_local_40 + _local_41)));
+        //     }
+        //     else
+        //     {
+        //         canvasRectangle.x += (-(canvasRectangle.width) / 2);
+        //         canvasRectangle.y += (-(canvasRectangle.height) / 2)
+        //     }
+        //     _local_33 = roomGeometry.getScreenPoint(_local_15);
+        //     if (_local_33 != null)
+        //     {
+        //         _local_33.x = (_local_33.x + renderingCanvas.screenOffsetX);
+        //         _local_33.y = (_local_33.y + renderingCanvas.screenOffsetY);
+        //         _local_15.z = _local_10;
+        //         _local_15.x = (Math.round((_local_23.x * 2)) / 2);
+        //         _local_15.y = (Math.round((_local_23.y * 2)) / 2);
+        //         if (roomCamera.location == null)
+        //         {
+        //             roomGeometry.location = _local_15;
+        //             if (this._Str_11555)
+        //             {
+        //                 roomCamera._Str_20685(new Vector3d(0, 0, 0));
+        //             }
+        //             else
+        //             {
+        //                 roomCamera._Str_20685(_local_15);
+        //             }
+        //         }
+        //         let _local_45 = roomGeometry.getScreenPoint(_local_15);
+        //         let _local_46 = new Vector3d(0, 0, 0);
+        //         if (_local_45 != null)
+        //         {
+        //             _local_46.x = _local_45.x;
+        //             _local_46.y = _local_45.y;
+        //         }
+        //         if (((((((((_local_33.x < canvasRectangle.left) || (_local_33.x > canvasRectangle.right)) && (!(roomCamera._Str_8564))) || (((_local_33.y < canvasRectangle.top) || (_local_33.y > canvasRectangle.bottom)) && (!(roomCamera._Str_8690)))) || (((_local_36) && (!(roomCamera._Str_8564))) && (!(roomCamera._Str_7609 == width)))) || (((_local_37) && (!(roomCamera._Str_8690))) && (!(roomCamera._Str_7902 == height)))) || ((!(roomCamera._Str_18975 == bounds.width)) || (!(roomCamera._Str_15953 == bounds.height)))) || ((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height)))))
+        //         {
+        //             roomCamera._Str_10235 = _local_34;
+        //             roomCamera._Str_10446 = _local_35;
+        //             if (this._Str_11555)
+        //             {
+        //                 roomCamera.target = _local_46;
+        //             }
+        //             else
+        //             {
+        //                 roomCamera.target = _local_15;
+        //             }
+        //         }
+        //         else
+        //         {
+        //             if (!_local_34)
+        //             {
+        //                 roomCamera._Str_10235 = false;
+        //             }
+        //             if (!_local_35)
+        //             {
+        //                 roomCamera._Str_10446 = false;
+        //             }
+        //         }
+        //     }
+        //     console.log('hello')
+        //     roomCamera._Str_8564 = _local_36;
+        //     roomCamera._Str_8690 = _local_37;
+        //     roomCamera._Str_7609 = width;
+        //     roomCamera._Str_7902 = height;
+        //     roomCamera.scale = roomGeometry.scale;
+        //     roomCamera._Str_16377 = roomGeometry.updateId;
+        //     roomCamera._Str_18975 = bounds.width;
+        //     roomCamera._Str_15953 = bounds.height;
+        //     if(true) //!this._sessionDataManager._Str_18110
+        //     {
+        //         if (this._Str_11555)
+        //         {
+        //             roomCamera.update(_arg_4, 8);
+        //         }
+        //         else
+        //         {
+        //             roomCamera.update(_arg_4, 0.5);
+        //         }
+        //     }
+        //     if (this._Str_11555)
+        //     {
+        //         renderingCanvas.screenOffsetX = -(roomCamera.location.x);
+        //         renderingCanvas.screenOffsetY = -(roomCamera.location.y);
+        //     }
+        //     else
+        //     {
+        //         roomGeometry.adjustLocation(roomCamera.location, 25);
+        //     }
+        // }
+        // else
+        // {
+        //     roomCamera._Str_10235 = false;
+        //     roomCamera._Str_10446 = false;
+        //     roomCamera._Str_8564 = false;
+        //     roomCamera._Str_8690 = false;
+        // }
     }
 
     private _Str_25261(roomId: number, canvasId: number): PIXI.Rectangle
@@ -1313,6 +1312,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         screenPoint.x       = (screenPoint.x * scale);
         screenPoint.y       = (screenPoint.y * scale);
+
+        rectangle.x += screenPoint.x;
+        rectangle.y += screenPoint.y;
 
         if(!canvas) return null;
         
@@ -1638,7 +1640,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!object) return false;
 
         object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, Nitro.instance.time);
 
         return true;
     }
@@ -1650,7 +1652,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!object) return false;
 
         object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME, expires);
-        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, NitroInstance.instance.time);
+        object.model.setValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP, Nitro.instance.time);
 
         return true;
     }
@@ -1979,6 +1981,17 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, canvasId);
 
         if(!canvas) return;
+
+        const overlay   = this.getRenderingCanvasOverlay(canvas);
+        const sprite    = this._Str_16498(overlay, RoomEngine.OBJECT_ICON_SPRITE);
+
+        if(sprite)
+        {
+            const rectangle = sprite.getLocalBounds();
+
+            sprite.x = (x - (rectangle.width / 2));
+            sprite.y = (y - (rectangle.height / 2));
+        }
         
         if(!this._Str_25871(canvas, x, y, type, altKey, ctrlKey, shiftKey))
         {
@@ -2208,74 +2221,270 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return screenPoint;
     }
 
-    // public _Str_16645(k: number, _arg_2: number, _arg_3: boolean, _arg_4: string = null, _arg_5: IObjectData = null, _arg_6: number = -1, _arg_7: number = -1, _arg_8: string = null):void
-    // {
-    //     var _local_11:String;
-    //     var _local_12:int;
-    //     var _local_13:PetFigureData;
-    //     var _local_14:Sprite;
-    //     var _local_15:Sprite;
-    //     var _local_9:ImageResult;
-    //     if (_arg_3)
-    //     {
-    //         _local_9 = this._Str_8562(this._activeRoomId, k, _arg_2, new Vector3d(), 1, null);
-    //     }
-    //     else
-    //     {
-    //         if (this._roomContentLoader != null)
-    //         {
-    //             _local_11 = null;
-    //             _local_12 = 0;
-    //             if (_arg_2 == RoomObjectCategoryEnum.CONST_10)
-    //             {
-    //                 _local_11 = this._roomContentLoader._Str_9963(k);
-    //                 _local_12 = this._roomContentLoader._Str_14037(k);
-    //             }
-    //             else
-    //             {
-    //                 if (_arg_2 == RoomObjectCategoryEnum.CONST_20)
-    //                 {
-    //                     _local_11 = this._roomContentLoader._Str_5211(k, _arg_4);
-    //                     _local_12 = this._roomContentLoader._Str_8870(k);
-    //                 }
-    //             }
-    //             if (_arg_2 == RoomObjectCategoryEnum.CONST_100)
-    //             {
-    //                 _local_11 = RoomObjectUserTypes._Str_4290(k);
-    //                 if (_local_11 == "pet")
-    //                 {
-    //                     _local_11 = this._Str_7863(_arg_4);
-    //                     _local_13 = new PetFigureData(_arg_4);
-    //                     _local_9 = this._Str_2641(_local_13.typeId, _local_13.paletteId, _local_13.color, new Vector3d(180), 64, null, true, 0, _local_13._Str_3542, _arg_8);
-    //                 }
-    //                 else
-    //                 {
-    //                     _local_9 = this.getGenericRoomObjectImage(_local_11, _arg_4, new Vector3d(180), 1, null, 0, null, _arg_5, _arg_6, _arg_7, _arg_8);
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 _local_9 = this.getGenericRoomObjectImage(_local_11, String(_local_12), new Vector3d(), 1, null, 0, _arg_4, _arg_5, _arg_6, _arg_7, _arg_8);
-    //             }
-    //         }
-    //     }
-    //     if (((_local_9 == null) || (_local_9.data == null)))
-    //     {
-    //         return;
-    //     }
-    //     var _local_10:IRoomRenderingCanvas = this._Str_7682();
-    //     if (_local_10 != null)
-    //     {
-    //         _local_14 = this._Str_12606(_local_10);
-    //         this._Str_21215(_local_14, OBJECT_ICON_SPRITE);
-    //         _local_15 = this._Str_24651(_local_14, OBJECT_ICON_SPRITE, _local_9.data);
-    //         if (_local_15 != null)
-    //         {
-    //             _local_15.x = (this._Str_13514 - (_local_9.data.width / 2));
-    //             _local_15.y = (this._Str_15157 - (_local_9.data.height / 2));
-    //         }
-    //     }
-    // }
+    private _Str_24651(k: PIXI.Sprite, _arg_2: string, _arg_3: PIXI.Texture): PIXI.Sprite
+    {
+        if(!k || !_arg_3) return;
+
+        let _local_4 = this._Str_16498(k, _arg_2);
+
+        if(_local_4) return null;
+
+        _local_4 = PIXI.Sprite.from(_arg_3);
+        _local_4.name = _arg_2;
+
+        k.addChild(_local_4);
+
+        return _local_4;
+    }
+
+    public _Str_16645(objectId: number, category: number, _arg_3: boolean, _arg_4: string = null, _arg_5: IObjectData = null, _arg_6: number = -1, _arg_7: number = -1, _arg_8: string = null): void
+    {
+        let type: string            = null;
+        let colorIndex              = 0;
+        let _local_9: ImageResult   = null;
+
+        if(_arg_3)
+        {
+            _local_9 = this._Str_8562(this._activeRoomId, objectId, category, new Vector3d(), 1, null);
+        }
+        else
+        {
+            if(this._roomContentLoader)
+            {
+                if(category === RoomObjectCategory.FLOOR)
+                {
+                    type        = this._roomContentLoader.getFurnitureFloorNameForTypeId(objectId);
+                    colorIndex  = this._roomContentLoader.getFurnitureFloorColorIndex(objectId);
+                }
+
+                else if(category === RoomObjectCategory.WALL)
+                {
+                    type        = this._roomContentLoader.getFurnitureWallNameForTypeId(objectId, _arg_4);
+                    colorIndex  = this._roomContentLoader.getFurnitureWallColorIndex(objectId);
+                }
+
+                else if(category === RoomObjectCategory.UNIT)
+                {
+                    type = RoomObjectUserType.getTypeString(objectId);
+
+                    if(type === "pet")
+                    {
+                        type = this.getPetType(_arg_4);
+
+                        const _local_13 = new PetFigureData(_arg_4);
+
+                        _local_9 = this._Str_2641(_local_13.typeId, _local_13.paletteId, _local_13.color, new Vector3d(180), 64, null, true, 0, _local_13.customParts, _arg_8);
+                    }
+                    else
+                    {
+                        _local_9 = this.getGenericRoomObjectImage(type, _arg_4, new Vector3d(180), 1, null, 0, null, _arg_5, _arg_6, _arg_7, _arg_8);
+                    }
+                }
+                
+                else
+                {
+                    _local_9 = this.getGenericRoomObjectImage(type, colorIndex.toString(), new Vector3d(), 1, null, 0, _arg_4, _arg_5, _arg_6, _arg_7, _arg_8);
+                }
+            }
+        }
+
+        if(!_local_9 || !_local_9.data) return;
+
+        const _local_10 = this.getActiveRoomInstanceRenderingCanvas();
+
+        if(!_local_10) return;
+        
+        const _local_14 = this.getRenderingCanvasOverlay(_local_10);
+
+        this._Str_21215(_local_14, RoomEngine.OBJECT_ICON_SPRITE);
+
+        const _local_15 = this._Str_24651(_local_14, RoomEngine.OBJECT_ICON_SPRITE, _local_9.data);
+
+        if(_local_15)
+        {
+            _local_15.x = (this._mouseX - (_local_9.data.width / 2));
+            _local_15.y = (this._mouseY - (_local_9.data.height / 2));
+        }
+    }
+
+    public _Str_8562(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7: number = 0): ImageResult
+    {
+        let extras: string      = null;
+        let objectId: string    = null;
+        let color: string       = '';
+        let data: IObjectData   = null;
+        let objectType: number  = -1;
+
+        const roomId        = this.getRoomId(k);
+        const roomInstance  = this._roomManager.getRoomInstance(roomId);
+
+        if(roomInstance)
+        {
+            const roomObject = roomInstance.getRoomObject(_arg_2, category);
+
+            if(roomObject && roomObject.model)
+            {
+                objectId    = roomObject.type;
+                objectType   = roomObject.id;
+
+                switch(category)
+                {
+                    case RoomObjectCategory.FLOOR:
+                    case RoomObjectCategory.WALL:
+                        color = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_COLOR).toString());
+                        extras = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_EXTRAS) as string);
+
+                        const dataFormat = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT) as number);
+
+                        if(dataFormat !== LegacyDataType.FORMAT_KEY)
+                        {
+                            data = ObjectDataFactory.getData(dataFormat);
+
+                            data.initializeFromRoomObjectModel(roomObject.model);
+                        }
+
+                        break;
+                    case RoomObjectCategory.UNIT:
+                        color = roomObject.model.getValue(RoomObjectVariable.FIGURE);
+                        break;
+                }
+            }
+        }
+
+        return this.getGenericRoomObjectImage(objectId, color, _arg_4, _arg_5, _arg_6, _arg_7, extras, data, -1, -1, null, objectType);
+    }
+
+    public _Str_2641(k: number, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7: boolean = true, _arg_8: number = 0, _arg_9: PetCustomPart[] = null, _arg_10: string = null):ImageResult
+    {
+        let _local_11: string = null;
+        let _local_12 = ((((k + " ") + _arg_2) + " ") + _arg_3.toString(16));
+
+        if(!_arg_7) _local_12 = (_local_12 + (" " + "head"));
+
+        if(_arg_9)
+        {
+            _local_12 = (_local_12 + (" " + _arg_9.length));
+
+            for(let _local_13 of _arg_9)
+            {
+                _local_12 = (_local_12 + (((((" " + _local_13.layerId) + " ") + _local_13.partId) + " ") + _local_13.paletteId));
+            }
+        }
+
+        if(this._roomContentLoader) _local_11 = this._roomContentLoader.getPetNameForType(k);
+
+        return this.getGenericRoomObjectImage(_local_11, _local_12, _arg_4, _arg_5, _arg_6, _arg_8, null, null, -1, -1, _arg_10);
+    }
+
+    public getGenericRoomObjectImage(type: string, value: string, direction: IVector3D, scale: number, _arg_5: IGetImageListener, _arg_6: number = 0, extras: string = null, objectData: IObjectData = null, state: number = -1, frameCount: number = -1, _arg_11: string = null, _arg_12: number = -1): ImageResult
+    {
+        const imageResult = new ImageResult();
+
+        imageResult.id = -1;
+
+        if(!this._ready || !type) return imageResult;
+
+        let roomInstance = this._roomManager.getRoomInstance(RoomEngine.TEMPORARY_ROOM);
+
+        if(!roomInstance)
+        {
+            roomInstance = this._roomManager.createRoomInstance(RoomEngine.TEMPORARY_ROOM);
+
+            if(!roomInstance) return imageResult;
+        }
+
+        let objectId        = this._Str_7206._Str_19709();
+        let objectCategory  = this.getRoomObjectCategoryForType(type);
+
+        if(objectId < 0) return imageResult;
+
+        objectId++;
+
+        const roomObject = (roomInstance.createRoomObjectAndInitalize(objectId, type, objectCategory) as IRoomObjectController);
+
+        if(!roomObject || !roomObject.model || !roomObject.logic) return imageResult;
+
+        const model = roomObject.model;
+
+        switch(objectCategory)
+        {
+            case RoomObjectCategory.FLOOR:
+            case RoomObjectCategory.WALL:
+                model.setValue(RoomObjectVariable.FURNITURE_COLOR, parseInt(value));
+                break;
+            case RoomObjectCategory.UNIT:
+                if((type === RoomObjectUserType.USER) || (type === RoomObjectUserType.BOT) || (type === RoomObjectUserType.RENTABLE_BOT) || (type === RoomObjectUserType.PET))
+                {
+                    model.setValue(RoomObjectVariable.FIGURE, value);
+                }
+                break;
+            case RoomObjectCategory.ROOM:
+                break;
+        }
+
+        roomObject.setDirection(direction);
+
+        const visualization = roomObject.visualization;
+
+        if(!visualization)
+        {
+            roomInstance.removeRoomObject(objectId, objectCategory);
+
+            return imageResult;
+        }
+        
+        if((state > -1) || objectData)
+        {
+            if(objectData && (objectData.getLegacyString() !== ''))
+            {
+                roomObject.logic.processUpdateMessage(new ObjectDataUpdateMessage(parseInt(objectData.getLegacyString()), objectData));
+            }
+            else
+            {
+                roomObject.logic.processUpdateMessage(new ObjectDataUpdateMessage(state, objectData));
+            }
+        }
+
+        let geometry = new RoomGeometry(scale, new Vector3d(-135, 30, 0), new Vector3d(11, 11, 5));
+
+        visualization.update(geometry, 0, true, false);
+
+        if(frameCount > 0)
+        {
+            let i = 0;
+
+            while (i < frameCount)
+            {
+                visualization.update(geometry, 0, true, false);
+
+                i++;
+            }
+        }
+
+        const texture = visualization.getImage(_arg_6, _arg_12);
+
+        imageResult.data    = texture;
+        imageResult.id      = objectId;
+
+        if(!this.isRoomContentTypeLoaded(type) && _arg_5)
+        {
+            this._imageListeners.set(objectId.toString(), _arg_5);
+
+            model.setValue(RoomObjectVariable.IMAGE_QUERY_SCALE, scale);
+        }
+        else
+        {
+            roomInstance.removeRoomObject(objectId, objectCategory);
+
+            this._Str_7206._Str_15187((objectId - 1));
+
+            imageResult.id = 0;
+        }
+
+        geometry.dispose();
+
+        return imageResult;
+    }
 
     public _Str_7972(k: boolean): void
     {
@@ -2283,7 +2492,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!canvas) return;
 
-        const overlay   = this._Str_12606(canvas);
+        const overlay   = this.getRenderingCanvasOverlay(canvas);
         const sprite    = this._Str_16498(overlay, RoomEngine.OBJECT_ICON_SPRITE);
 
         if(sprite)
@@ -2298,12 +2507,12 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!canvas) return;
 
-        const sprite = this._Str_12606(canvas);
+        const sprite = this.getRenderingCanvasOverlay(canvas);
 
         this._Str_21215(sprite, RoomEngine.OBJECT_ICON_SPRITE);
     }
 
-    private _Str_12606(k: IRoomRenderingCanvas): PIXI.Sprite
+    private getRenderingCanvasOverlay(k: IRoomRenderingCanvas): PIXI.Sprite
     {
         if(!k) return null;
 
@@ -2334,10 +2543,10 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 {
                     k.removeChildAt(index);
 
-                    const firstChild = child.getChildAt(0) as PIXI.Sprite;
-
-                    if(firstChild)
+                    if(child.children.length)
                     {
+                        const firstChild = child.getChildAt(0) as PIXI.Sprite;
+                        
                         firstChild.parent.removeChild(firstChild);
 
                         firstChild.destroy();
@@ -2373,128 +2582,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         return null;
     }
-
-    // public getGenericRoomObjectImage(k: string, _arg_2: string, _arg_3: IVector3D, _arg_4: number, _arg_5:IGetImageListener, _arg_6: number = 0, _arg_7: string = null, _arg_8: IObjectData = null, _arg_9: number = -1, _arg_10: number = -1, _arg_11: string = null, _arg_12: number = -1):ImageResult
-    // {
-    //     var _local_22:PetFigureData;
-    //     var _local_23:RoomObjectDataUpdateMessage;
-    //     var _local_24:int;
-    //     var _local_13:ImageResult = new ImageResult();
-    //     _local_13.id = -1;
-    //     if (((!(this._Str_5254)) || (k == null)))
-    //     {
-    //         return _local_13;
-    //     }
-
-    //     let _local_14 = this._roomManager.getRoomInstance(RoomEngine.TEMPORARY_ROOM);
-
-    //     if(!local_14)
-    //     {
-    //         _local_14 = this._roomManager.createRoomInstance(RoomEngine.TEMPORARY_ROOM);
-
-    //         if(!_local_14) return null;
-    //     }
-    //     var _local_15:int = this._Str_7206._Str_19709();
-    //     var _local_16:int = this._Str_3321(k);
-    //     if (_local_15 < 0)
-    //     {
-    //         return _local_13;
-    //     }
-    //     _local_15 = (_local_15 + 1);
-    //     var _local_17:IRoomObjectController = (_local_14._Str_5865(_local_15, k, _local_16) as IRoomObjectController);
-    //     if ((((_local_17 == null) || (_local_17.getModelController() == null)) || (_local_17._Str_2377() == null)))
-    //     {
-    //         return _local_13;
-    //     }
-    //     var _local_18:IRoomObjectModelController = _local_17.getModelController();
-    //     switch (_local_16)
-    //     {
-    //         case RoomObjectCategoryEnum.CONST_10:
-    //         case RoomObjectCategoryEnum.CONST_20:
-    //             _local_18.setNumber(RoomObjectVariableEnum.FURNITURE_COLOR, int(_arg_2));
-    //             _local_18.setString(RoomObjectVariableEnum.FURNITURE_EXTRAS, _arg_7);
-    //             break;
-    //         case RoomObjectCategoryEnum.CONST_100:
-    //             if (((((k == RoomObjectUserTypes.USER) || (k == RoomObjectUserTypes.BOT)) || (k == RoomObjectUserTypes.RENTABLE_BOT)) || (k == RoomObjectUserTypes.PET)))
-    //             {
-    //                 _local_18.setString(RoomObjectVariableEnum.FIGURE, _arg_2);
-    //             }
-    //             else
-    //             {
-    //                 _local_22 = new PetFigureData(_arg_2);
-    //                 _local_18.setNumber(RoomObjectVariableEnum.PET_PALETTE_INDEX, _local_22.paletteId);
-    //                 _local_18.setNumber(RoomObjectVariableEnum.PET_COLOR, _local_22.color);
-    //                 if (_local_22._Str_22434)
-    //                 {
-    //                     _local_18.setNumber(RoomObjectVariableEnum.PET_HEAD_ONLY, 1);
-    //                 }
-    //                 if (_local_22._Str_22424)
-    //                 {
-    //                     _local_18.setNumberArray(RoomObjectVariableEnum.PET_CUSTOM_LAYER_IDS, _local_22._Str_19294);
-    //                     _local_18.setNumberArray(RoomObjectVariableEnum.PET_CUSTOM_PARTS_IDS, _local_22._Str_19132);
-    //                     _local_18.setNumberArray(RoomObjectVariableEnum.PET_CUSTOM_PALETTE_IDS, _local_22._Str_21151);
-    //                 }
-    //                 if (_arg_11 != null)
-    //                 {
-    //                     _local_18.setString(RoomObjectVariableEnum.FIGURE_POSTURE, _arg_11);
-    //                 }
-    //             }
-    //             break;
-    //         case RoomObjectCategoryEnum.CONST_0:
-    //             this._Str_25704(_local_17, _arg_2);
-    //             break;
-    //     }
-    //     _local_17.setDirection(_arg_3);
-    //     var _local_19:IRoomObjectSpriteVisualization;
-    //     _local_19 = (_local_17._Str_5222() as IRoomObjectSpriteVisualization);
-    //     if (_local_19 == null)
-    //     {
-    //         _local_14._Str_3915(_local_15, _local_16);
-    //         return _local_13;
-    //     }
-    //     if (((_arg_9 > -1) || (_arg_8)))
-    //     {
-    //         if (((!(_arg_8 == null)) && (!(_arg_8.getLegacyString() == ""))))
-    //         {
-    //             _local_23 = new RoomObjectDataUpdateMessage(int(_arg_8.getLegacyString()), _arg_8);
-    //         }
-    //         else
-    //         {
-    //             _local_23 = new RoomObjectDataUpdateMessage(_arg_9, _arg_8);
-    //         }
-    //         if (_local_17._Str_2377() != null)
-    //         {
-    //             _local_17._Str_2377().processUpdateMessage(_local_23);
-    //         }
-    //     }
-    //     var _local_20:RoomGeometry = new RoomGeometry(_arg_4, new Vector3d(-135, 30, 0), new Vector3d(11, 11, 5));
-    //     _local_19.update(_local_20, 0, true, false);
-    //     if (_arg_10 > 0)
-    //     {
-    //         _local_24 = 0;
-    //         while (_local_24 < _arg_10)
-    //         {
-    //             _local_19.update(_local_20, 0, true, false);
-    //             _local_24++;
-    //         }
-    //     }
-    //     var _local_21:BitmapData = _local_19.getImage(_arg_6, _arg_12);
-    //     _local_13.data = _local_21;
-    //     _local_13.id = _local_15;
-    //     if (((!(this._Str_24725(k))) && (!(_arg_5 == null))))
-    //     {
-    //         this._Str_10576.add(String(_local_15), _arg_5);
-    //         _local_18.setNumber(RoomObjectVariableEnum.IMAGE_QUERY_SCALE, _arg_4, true);
-    //     }
-    //     else
-    //     {
-    //         _local_14._Str_3915(_local_15, _local_16);
-    //         this._Str_7206._Str_15187((_local_15 - 1));
-    //         _local_13.id = 0;
-    //     }
-    //     _local_20.dispose();
-    //     return _local_13;
-    // }
 
     protected _Str_21543(k: number, _arg_2: IRoomObject):void
     {
@@ -2567,6 +2654,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return null;
     }
 
+    public isRoomContentTypeLoaded(name: string): boolean
+    {
+        if(!this._roomContentLoader) return false;
+
+        return (this._roomContentLoader.getCollection(name) !== null);
+    }
+
     public get events(): IEventDispatcher
     {
         return this._events;
@@ -2612,14 +2706,14 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return this._activeRoomId;
     }
 
-    public get isReady(): boolean
+    public get ready(): boolean
     {
-        return this._isReady;
+        return this._ready;
     }
 
-    public get isDisposed(): boolean
+    public get disposed(): boolean
     {
-        return this._isDisposed;
+        return this._disposed;
     }
 
     public get _Str_6374(): boolean

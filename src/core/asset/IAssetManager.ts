@@ -13,5 +13,6 @@ export interface IAssetManager
     getCollection(name: string): IGraphicAssetCollection;
     createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): IGraphicAssetCollection;
     downloadAssets(urls: string[], cb: Function): void;
+    downloadAsset(url: string, cb: Function): void;
     collections: Map<string, GraphicAssetCollection>;
 }

@@ -6,6 +6,7 @@ import { AvatarFigurePartType } from '../../avatar/enum/AvatarFigurePartType';
 import { AvatarScaleType } from '../../avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../avatar/enum/AvatarSetType';
 import { IAvatarImageListener } from '../../avatar/IAvatarImageListener';
+import { Nitro } from '../../Nitro';
 import { RoomObjectCategory } from '../../room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../room/object/RoomObjectType';
 import { RoomSessionChatEvent } from '../../session/events/RoomSessionChatEvent';
@@ -27,7 +28,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     private _connection: IConnection;
 
     private _avatarColorCache: Map<string, number>;
-    private _avatarImageCache: Map<string, PIXI.Texture>;
+    private _avatarImageCache: Map<string, HTMLImageElement>;
     private _primaryCanvasScale: number;
     private _primaryCanvasOriginPos: PIXI.Point;
     private _tempScreenPosVector: Vector3d;
@@ -61,7 +62,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
     public update(): void
     {
-
+        this._Str_20006();
     }
 
     private _Str_20006(): void
@@ -184,7 +185,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
                         let username    = '';
                         let avatarColor = 0;
-                        let texture     = null;
+                        let image: HTMLImageElement     = null;
                         let chatType    = chatEvent.chatType;
                         let styleId     = chatEvent.style;
                         let userType    = 0;
@@ -201,7 +202,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                                 case RoomObjectType.PET:
                                     break;
                                 case RoomObjectType.USER:
-                                    texture = this.getUserImage(figure);
+                                    image = this.getUserImage(figure);
                                     break;
                                 case RoomObjectType.RENTABLE_BOT:
                                 case RoomObjectType.BOT:
@@ -244,7 +245,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                             }
                         }
 
-                        if(this._container && this._container.events) this._container.events.dispatchEvent(new RoomWidgetChatUpdateEvent(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, userData.roomIndex, text, username, RoomObjectCategory.UNIT, userType, 0, x, y, texture, avatarColor, chatEvent.session.roomId, chatType, styleId, []));
+                        if(this._container && this._container.events) this._container.events.dispatchEvent(new RoomWidgetChatUpdateEvent(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, userData.roomIndex, text, username, RoomObjectCategory.UNIT, userType, 0, x, y, image, avatarColor, chatEvent.session.roomId, chatType, styleId, []));
 
                     }
                 }
@@ -253,7 +254,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         }
     }
 
-    public getUserImage(figure: string): PIXI.Texture
+    public getUserImage(figure: string): HTMLImageElement
     {
         let existing = this._avatarImageCache.get(figure);
 
@@ -263,7 +264,14 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(avatarImage)
             {
-                existing = avatarImage.getCroppedImage(AvatarSetType.HEAD, 0.5);
+                const texture = avatarImage.getCroppedImage(AvatarSetType.HEAD, 0.5);
+
+                if(texture)
+                {
+                    const image = Nitro.instance.renderer.extract.image(texture);
+
+                    if(image) existing = image;
+                }
 
                 const color = avatarImage._Str_867(AvatarFigurePartType.CHEST);
 

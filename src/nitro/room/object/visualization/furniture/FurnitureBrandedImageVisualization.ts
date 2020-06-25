@@ -1,4 +1,4 @@
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureVisualization } from './FurnitureVisualization';
 
@@ -111,7 +111,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         const urlParts  = imageUrl.split('/');
         const url       = urlParts[urlParts.length - 1];
-        const texture   = NitroInstance.instance.core.asset.getTexture(url);
+        const texture   = Nitro.instance.core.asset.getTexture(url);
 
         if(!texture) return false;
         
@@ -126,7 +126,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         const urlParts  = this._imageUrl.split('/');
         const url       = urlParts[urlParts.length - 1];
-        const texture   = NitroInstance.instance.core.asset.getTexture(url);
+        const texture   = Nitro.instance.core.asset.getTexture(url);
 
         if(!texture) return;
 

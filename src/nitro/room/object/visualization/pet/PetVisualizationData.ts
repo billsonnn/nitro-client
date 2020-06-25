@@ -21,11 +21,11 @@ export class PetVisualizationData extends FurnitureAnimatedVisualizationData
         else return new AnimationSizeData(layerCount, angle);
     }
 
-    protected processVisualization(visualization: IAssetVisualizationData): boolean
+    protected defineVisualizations(visualizations: IAssetVisualizationData[]): boolean
     {
         this._isAllowedToTurnHead = true; //check visualization for '@disableheadturn'
 
-        return super.processVisualization(visualization);
+        return super.defineVisualizations(visualizations);
     }
 
     protected processVisualElement(sizeData: SizeData, key: string, data: any): boolean

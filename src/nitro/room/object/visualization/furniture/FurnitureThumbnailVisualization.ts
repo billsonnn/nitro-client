@@ -1,5 +1,5 @@
 import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualization
@@ -136,9 +136,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 matrix.ty = 0;
         }
 
-        console.log(matrix);
-
-        const texture = NitroInstance.instance.renderer.generateTexture(k, 1, 1, new PIXI.Rectangle(0, 0, k.width, k.height));
+        const texture = Nitro.instance.renderer.generateTexture(k, 1, 1, new PIXI.Rectangle(0, 0, k.width, k.height));
 
         if(!texture) return null;
         
@@ -190,7 +188,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 .endFill();
         //}
 
-        const graphicTexture = NitroInstance.instance.renderer.generateTexture(graphic, 1, 1);
+        const graphicTexture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
 
         if(!graphicTexture) return null;
 

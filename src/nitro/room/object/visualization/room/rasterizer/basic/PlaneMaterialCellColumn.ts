@@ -1,6 +1,6 @@
 ﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
-import { NitroInstance } from '../../../../../../NitroInstance';
+import { Nitro } from '../../../../../../Nitro';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 
 export class PlaneMaterialCellColumn 
@@ -257,7 +257,7 @@ export class PlaneMaterialCellColumn
                 {
                     if(!_arg_3) _arg_2 -= graphic.height;
 
-                    const texture = NitroInstance.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, graphic.width, graphic.height));
+                    const texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, graphic.width, graphic.height));
 
                     if(texture)
                     {

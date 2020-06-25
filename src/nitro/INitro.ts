@@ -10,7 +10,7 @@ import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomUI } from './ui/RoomUI';
 import { INitroWindowManager } from './window/INitroWindowManager';
 
-export interface INitroInstance extends PIXI.Application
+export interface INitro extends PIXI.Application
 {
     init(): void;
     dispose(): void;

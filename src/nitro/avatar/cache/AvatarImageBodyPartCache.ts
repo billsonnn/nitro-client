@@ -1,4 +1,4 @@
-﻿import { NitroInstance } from '../../NitroInstance';
+﻿import { Nitro } from '../../Nitro';
 import { AvatarImageDirectionCache } from './AvatarImageDirectionCache';
 
 export class AvatarImageBodyPartCache 
@@ -10,7 +10,7 @@ export class AvatarImageBodyPartCache
     {
         this._Str_586 = new Map();
 
-        this._Str_1108(NitroInstance.instance.time);
+        this._Str_1108(Nitro.instance.time);
     }
 
     public dispose(): void

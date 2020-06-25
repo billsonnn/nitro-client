@@ -14,7 +14,6 @@ export class SizeData
     private _defaultDirection: DirectionData;
     private _directions: Map<number, DirectionData>;
     private _colors: ColorData[];
-    private _iconColors: ColorData[];
     private _lastDirectionData: DirectionData;
     private _lastDirection: number;
 
@@ -26,7 +25,6 @@ export class SizeData
         this._defaultDirection  = new DirectionData(this._layerCount);
         this._directions        = new Map();
         this._colors            = [];
-        this._iconColors        = [];
         this._lastDirectionData = null;
         this._lastDirection     = -1;
     }
@@ -49,13 +47,6 @@ export class SizeData
             color.dispose();
         }
 
-        for(let color of this._iconColors)
-        {
-            if(!color) continue;
-
-            color.dispose();
-        }
-
         this.reset();
     }
 
@@ -63,7 +54,6 @@ export class SizeData
     {
         this._defaultDirection  = null;
         this._colors            = [];
-        this._iconColors        = [];
         this._lastDirectionData = null;
         this._lastDirection     = -1;
 
@@ -135,40 +125,6 @@ export class SizeData
             }
 
             this._colors[colorNumber] = colorData;
-        }
-
-        return true;
-    }
-
-    public processIconColors(iconColors: { [index: string]: IAssetColor }): boolean
-    {
-        if(!iconColors) return false;
-
-        for(let key in iconColors)
-        {
-            const color = iconColors[key];
-
-            if(!color) continue;
-
-            const colorNumber = parseInt(key);
-
-            if(this._iconColors[colorNumber]) return false;
-
-            const colorData = new ColorData(this._layerCount);
-
-            for(let layer in color.layers)
-            {
-                const colorLayer = color.layers[layer];
-
-                if(!colorLayer) continue;
-
-                const layerId   = parseInt(layer);
-                const colorId   = colorLayer.color;
-
-                colorData.setColorLayer(layerId, colorId);
-            }
-
-            this._iconColors[colorNumber] = colorData;
         }
 
         return true;
@@ -279,15 +235,6 @@ export class SizeData
     public getLayerColor(layerId: number, colorId: number): number
     {
         const existing = this._colors[colorId] as ColorData;
-
-        if(!existing) return ColorData.DEFAULT_COLOR;
-
-        return existing.getLayerColor(layerId);
-    }
-
-    public getLayerIconColor(colorId: number, layerId: number): number
-    {
-        const existing = this._iconColors[colorId] as ColorData;
 
         if(!existing) return ColorData.DEFAULT_COLOR;
 

@@ -545,9 +545,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     private _Str_21914(k: ExtendedSprite, _arg_2: IRoomObjectSprite): void
     {
-        if(((!(RoomEnterEffect._Str_19559())) || !k.texture || !k.texture.valid) || (_arg_2 == null)) return;
+        if(!RoomEnterEffect._Str_19559() || !_arg_2) return;
 
-        switch (_arg_2.spriteType)
+        switch(_arg_2.spriteType)
         {
             case RoomObjectSpriteType._Str_10494:
                 return;
@@ -562,7 +562,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
     }
 
-    private _Str_21974(k: ExtendedSprite, _arg_2: boolean):void
+    private _Str_21974(k: ExtendedSprite, _arg_2: boolean): void
     {
         if (k != null)
         {

@@ -107,7 +107,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
     private addSession(roomSession: IRoomSession): boolean
     {
-        if(!this._roomEngine.isReady)
+        if(!this._roomEngine.ready)
         {
             this._pendingSession = roomSession;
 

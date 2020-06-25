@@ -2,7 +2,7 @@ import { NitroLogger } from '../../../core/common/logger/NitroLogger';
 import { NitroManager } from '../../../core/common/NitroManager';
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { SocketConnectionEvent } from '../../../core/communication/events/SocketConnectionEvent';
-import { NitroInstance } from '../../NitroInstance';
+import { Nitro } from '../../Nitro';
 import { INitroCommunicationManager } from '../INitroCommunicationManager';
 import { ClientPingEvent } from '../messages/incoming/client/ClientPingEvent';
 import { AuthenticatedEvent } from '../messages/incoming/security/AuthenticatedEvent';
@@ -44,8 +44,6 @@ export class NitroCommunicationDemo extends NitroManager
 
         this._communication.registerMessageEvent(new ClientPingEvent(this.onClientPingEvent.bind(this)));
         this._communication.registerMessageEvent(new AuthenticatedEvent(this.onAuthenticatedEvent.bind(this)));
-
-        this.setSSO();
     }
 
     protected onDispose(): void
@@ -104,6 +102,11 @@ export class NitroCommunicationDemo extends NitroManager
     {
         if(!connection || !this._sso)
         {
+            if(!this._sso)
+            {
+                NitroLogger.log(`Login without an SSO ticket is not supported`);
+            }
+
             this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, connection);
 
             return;
@@ -132,21 +135,10 @@ export class NitroCommunicationDemo extends NitroManager
         event.connection.send(new UserInfoComposer());
     }
 
-    private setSSO(): void
+    public setSSO(sso: string): void
     {
-        this._sso = null;
+        if(!sso || (sso === '') || this._sso) return;
 
-        const params = new URLSearchParams(window.location.search);
-
-        const sso = params.get('sso');
-
-        if(!sso)
-        {
-            NitroLogger.log(`Login without an SSO ticket is not supported`);
-
-            return;
-        }
-        
         this._sso = sso;
     }
 
@@ -166,6 +158,6 @@ export class NitroCommunicationDemo extends NitroManager
 
     private dispatchCommunicationDemoEvent(type: string, connection: IConnection): void
     {
-        NitroInstance.instance.events.dispatchEvent(new NitroCommunicationDemoEvent(type, connection));
+        Nitro.instance.events.dispatchEvent(new NitroCommunicationDemoEvent(type, connection));
     }
 } 

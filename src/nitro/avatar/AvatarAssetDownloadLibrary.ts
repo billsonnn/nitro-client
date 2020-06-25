@@ -12,11 +12,11 @@ export class AvatarAssetDownloadLibrary extends EventDispatcher
 
     private _state: number;
     private _libraryName: string;
-    private _revision: string;
+    private _revision: number;
     private _downloadUrl: string;
     private _assets: IAssetManager;
 
-    constructor(id: string, revision: string, assets: IAssetManager, assetUrl: string)
+    constructor(id: string, revision: number, assets: IAssetManager, assetUrl: string)
     {
         super();
 
@@ -27,7 +27,7 @@ export class AvatarAssetDownloadLibrary extends EventDispatcher
         this._assets        = assets;
 
         this._downloadUrl = this._downloadUrl.replace(/%libname%/gi, this._libraryName);
-        this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision);
+        this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision.toString());
 
         const asset = this._assets.getCollection(this._libraryName);
 
@@ -51,7 +51,7 @@ export class AvatarAssetDownloadLibrary extends EventDispatcher
 
         this._state = AvatarAssetDownloadLibrary.LOADING;
 
-        this._assets.downloadAssets([ this._downloadUrl ], () =>
+        this._assets.downloadAsset(this._downloadUrl, () =>
         {
             this._state = AvatarAssetDownloadLibrary.LOADED;
 

@@ -6,7 +6,7 @@ import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { AvatarAction } from '../../../../avatar/enum/AvatarAction';
-import { NitroInstance } from '../../../../NitroInstance';
+import { Nitro } from '../../../../Nitro';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
 import { RoomObjectMoveEvent } from '../../../events/RoomObjectMoveEvent';
@@ -63,7 +63,7 @@ export class AvatarLogic extends MovingObjectLogic
         this._reportedLocation              = null;
         this._effectChangeTimeStamp         = 0;
         this._newEffect                     = 0;
-        this._blinkingStartTimestamp        = NitroInstance.instance.time + this.randomBlinkStartTimestamp();
+        this._blinkingStartTimestamp        = Nitro.instance.time + this.randomBlinkStartTimestamp();
         this._blinkingEndTimestamp          = 0;
         this._talkingEndTimestamp           = 0;
         this._talkingPauseStartTimestamp    = 0;
@@ -392,19 +392,19 @@ export class AvatarLogic extends MovingObjectLogic
     {
         if(effect === AvatarLogic._Str_13364)
         {
-            this._effectChangeTimeStamp = (NitroInstance.instance.time + AvatarLogic._Str_8860);
+            this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = AvatarLogic._Str_15351;
         }
 
         else if (effect === AvatarLogic._Str_13733)
         {
-            this._effectChangeTimeStamp = (NitroInstance.instance.time + AvatarLogic._Str_8860);
+            this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = AvatarLogic._Str_13094;
         }
 
         else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
         {
-            this._effectChangeTimeStamp = (NitroInstance.instance.time + AvatarLogic._Str_8860);
+            this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
 
             effect = AvatarLogic._Str_13364;
@@ -412,7 +412,7 @@ export class AvatarLogic extends MovingObjectLogic
 
         else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
         {
-            this._effectChangeTimeStamp = (NitroInstance.instance.time + AvatarLogic._Str_8860);
+            this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
 
             effect = AvatarLogic._Str_13733;
@@ -425,7 +425,7 @@ export class AvatarLogic extends MovingObjectLogic
 
         else
         {
-            this._effectChangeTimeStamp = (NitroInstance.instance.time + delay);
+            this._effectChangeTimeStamp = (Nitro.instance.time + delay);
             this._newEffect             = effect;
             
             return;
