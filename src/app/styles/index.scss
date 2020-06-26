@@ -3,11 +3,13 @@
 @import './fontawesome/solid.scss';
 @import './fontawesome/brands.scss';
 
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap');
+
 @font-face {
-	font-family: 'Ubuntu Condensed';
+	font-family: 'Volter';
 	font-style: 'normal';
 	font-weight: 400;
-    src: url('../assets/webfonts/UbuntuCondensed-Regular.ttf') format('truetype');
+    src: url('../assets/webfonts/Volter.ttf') format('truetype');
 }
 
 * {
@@ -17,8 +19,8 @@
 
 html,
 body {
-    font-family: 'Ubuntu Condensed', sans-serif;
-    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
     background-color: rgb(0, 0, 0);
     color: #FFFFFF;
     margin: 0;

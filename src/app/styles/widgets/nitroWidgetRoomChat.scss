@@ -67,11 +67,14 @@
                 }
 
                 &.chat-type-1 { // whisper
+                    .chat-right {
+                        font-weight: 300;
+                        font-style: italic;
+                    }
                 }
 
                 &.chat-type-2 { // shout
                     .chat-right {
-                        font-size: 16px;
                         font-weight: 500;
                     }
                 }
