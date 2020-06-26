@@ -98,24 +98,26 @@ export class Nitro extends PIXI.Application implements INitro
 
         PIXI.settings.SCALE_MODE    = PIXI.SCALE_MODES.NEAREST;
         PIXI.Ticker.shared.maxFPS   = NitroConfiguration.FPS;
+
+        const canvas = document.createElement('canvas');
+
+        canvas.id           = 'client-wrapper';
+        canvas.className    = 'client-canvas';
+        canvas.width        = window.innerWidth;
+        canvas.height       = window.innerHeight;
         
         const instance = new this(new NitroCore(), {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            transparent: true
+            width: (window.innerWidth * window.devicePixelRatio),
+            height: (window.innerHeight * window.devicePixelRatio),
+            transparent: true,
+            view: canvas
         });
 
         instance.communication.demo.setSSO(options.sso);
         
         const view = instance.renderer && instance.renderer.view;
 
-        if(view)
-        {
-            view.id         = 'client-wrapper';
-            view.className  = 'client-canvas';
-
-            options.canvasParent.append(view);
-        }
+        if(view) options.canvasParent.append(view);
     }
 
     public static boot(): void
@@ -229,10 +231,10 @@ export class Nitro extends PIXI.Application implements INitro
 
     public resize(): void
     {
-        this.renderer.view.width    = window.innerWidth;
-        this.renderer.view.height   = window.innerHeight;
-        this.renderer.transparent   = true;
-        this.renderer.backgroundColor = 0xFFFFFF;
+        //this.renderer.view.width        = window.innerWidth;
+        //this.renderer.view.height       = window.innerHeight;
+        this.renderer.transparent       = true;
+        this.renderer.backgroundColor   = 0xFFFFFF;
     }
 
     public get core(): INitroCore

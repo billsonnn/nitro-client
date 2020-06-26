@@ -6,8 +6,6 @@ import { RoomChatWidget } from './RoomChatWidget';
 
 export class RoomChatItem 
 {
-    public static _Str_15992: number = 18;
-
     private _widget: RoomChatWidget;
     private _windowManager: INitroWindowManager;
     private _window: HTMLElement;
@@ -108,12 +106,12 @@ export class RoomChatItem
         return this._timeStamp;
     }
 
-    public get _Str_7368(): number
+    public get senderX(): number
     {
         return this._senderX;
     }
 
-    public set _Str_7368(k: number)
+    public set senderX(k: number)
     {
         this._senderX = k;
     }
@@ -125,7 +123,7 @@ export class RoomChatItem
 
     public get height(): number
     {
-        return RoomChatItem._Str_15992;
+        return this._height;
     }
 
     public get message(): string
@@ -152,14 +150,14 @@ export class RoomChatItem
     {
         this._x = k;
 
-        //if(this._window) this._window.style.left = `${ k }px`;
+        if(this._window) this._window.style.left = (k + 'px');
     }
 
     public set y(k: number)
     {
         this._y = k;
 
-        //if(this._window) this._window.style.top = `${ ((k - this._topOffset) + this._originalBackgroundYOffset) }px`;
+        if(this._window) this._window.style.top = (k + 'px');
     }
 
     public hidePointer(): void
@@ -213,7 +211,8 @@ export class RoomChatItem
         const view = {
             username: this._senderName,
             message: this._message,
-            styleId: this._chatStyle
+            styleId: this._chatStyle,
+            chatType: this._chatType
         };
 
         this._window = this._widget.windowManager.renderElement(this.getTemplate(), view);
@@ -224,6 +223,8 @@ export class RoomChatItem
     public refreshRender(): void
     {
         this._Str_23110(this._window);
+
+        let yOffset = 0;
         
         const chatLeft = (this._window.getElementsByClassName('chat-left')[0] as HTMLElement);
 
@@ -231,9 +232,11 @@ export class RoomChatItem
         {
             const imageArea = (this._window.getElementsByClassName('user-image')[0] as HTMLElement);
 
-            if(imageArea) imageArea.appendChild(this._senderImage.cloneNode());
+            if(imageArea && this._senderImage) imageArea.appendChild(this._senderImage.cloneNode());
 
-            chatLeft.style.backgroundColor = ('#' +this._senderColor.toString(16));
+            const color = (+this._senderColor || 16777215);
+
+            chatLeft.style.backgroundColor = ('#' + color.toString(16));
         }
 
         const pointerChatPiece = (this._window.getElementsByClassName('chat-pointer')[0] as HTMLElement);
@@ -241,6 +244,8 @@ export class RoomChatItem
         if(pointerChatPiece)
         {
             pointerChatPiece.style.left = (this.width / 2) + 'px';
+
+            yOffset = pointerChatPiece.offsetHeight;
         }
 
         const bounds = this._window.getBoundingClientRect();
@@ -248,7 +253,7 @@ export class RoomChatItem
         this._x         = bounds.x;
         this._y         = bounds.y;
         this._width     = this._window.offsetWidth;
-        this._height    = this._window.offsetHeight;
+        this._height    = (this._window.offsetHeight - yOffset);
 
         this._window.style.visibility = 'visible';
     }
@@ -290,7 +295,7 @@ export class RoomChatItem
     private getTemplate(): string
     {
         return `
-        <div class="chat-item chat-style-{{ styleId }}">
+        <div class="chat-item chat-style-{{ styleId }} chat-type-{{ chatType }}">
             <div class="chat-left">
                 <div class="user-image"></div>
                 <div class="user-pointer"></div>

@@ -450,7 +450,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
                     if(sprite)
                     {
-                        sprite.position.set(_local_10.x, _local_10.y);
+                        sprite.scale.set(scale);
 
                         container.addChild(sprite);
                     }
@@ -463,22 +463,6 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         let texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
 
         if(!texture) return null;
-
-        if(scale !== 1)
-        {
-            const matrix = new PIXI.Matrix;
-
-            matrix.scale(scale, scale);
-
-            const graphic = new PIXI.Graphics();
-
-            graphic
-                .beginTextureFill({ texture, matrix })
-                .drawRect(0, 0, (texture.width * scale), (texture.height * scale))
-                .endFill();
-
-            texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
-        }
         
         return texture;
     }

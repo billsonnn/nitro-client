@@ -1,6 +1,7 @@
 import { IUpdateReceiver } from '../../../../core/common/IUpdateReceiver';
 import { IEventDispatcher } from '../../../../core/events/IEventDispatcher';
 import { RoomEnterEffect } from '../../../../room/utils/RoomEnterEffect';
+import { Nitro } from '../../../Nitro';
 import { INitroWindowManager } from '../../../window/INitroWindowManager';
 import { DesktopLayoutManager } from '../../DesktopLayoutManager';
 import { ChatWidgetHandler } from '../../handler/ChatWidgetHandler';
@@ -12,23 +13,37 @@ import { RoomChatItem } from './RoomChatItem';
 
 export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateReceiver
 {
+    private static CHAT_COUNTER: number     = 0;
+    private static MAX_CHAT_HISTORY: number = 250;
+    private static UPDATE_INTERVAL: number  = 4000;
+
+    private _timeoutTime: number;
+
     private _chats: RoomChatItem[];
     private _tempChats: RoomChatItem[];
-    private _widgetId: number;
-    private _chatItemId: number;
+    private _oldChats: RoomChatItem[];
 
     private _containerWindow: HTMLElement;
     private _contentListWindow: HTMLElement;
     private _activeContentWindow: HTMLElement;
 
+    private _originalScale: number;
+    private _scaleFactor: number;
+    private _cameraOffset: PIXI.Point;
+
     constructor(k: IRoomWidgetHandler, windowManager: INitroWindowManager, layoutManager: DesktopLayoutManager)
     {
         super(k, windowManager, layoutManager);
 
+        this._timeoutTime       = 0;
+
         this._chats             = [];
         this._tempChats         = [];
-        this._widgetId          = 0;
-        this._chatItemId        = 0;
+        this._oldChats          = [];
+
+        this._originalScale     = 1;
+        this._scaleFactor       = 0;
+        this._cameraOffset      = new PIXI.Point();
 
         this._containerWindow = document.createElement('div');
         this._containerWindow.className = 'nitro-widget nitro-widget-room-chat';
@@ -40,6 +55,7 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
 
         this._activeContentWindow = document.createElement('div');
         this._activeContentWindow.className = 'room-chat-list-container';
+        this._activeContentWindow
 
         this._contentListWindow.appendChild(this._activeContentWindow);
 
@@ -65,9 +81,22 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
         super.dispose();
     }
 
-    public update(k: number): void
+    public update(time: number): void
     {
-        
+        if(Nitro.instance.time > this._timeoutTime)
+        {
+            if(this._timeoutTime > 0)
+            {
+                this.moveAllChatsUp();
+            }
+
+            this.resetTimeout();
+        }
+    }
+
+    private resetTimeout(): void
+    {
+        this._timeoutTime = (Nitro.instance.time + RoomChatWidget.UPDATE_INTERVAL);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -105,12 +134,38 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
 
     private onRoomViewUpdate(k: RoomWidgetRoomViewUpdateEvent): void
     {
+        if(k.scale > 0)
+        {
+            if(!this._originalScale) this._originalScale = k.scale;
+            else this._scaleFactor = (k.scale / this._originalScale);
+        }
 
+        if(k.positionDelta)
+        {
+            this._cameraOffset.x = (this._cameraOffset.x + (k.positionDelta.x / this._scaleFactor));
+            this._cameraOffset.y = (this._cameraOffset.y + (k.positionDelta.y / this._scaleFactor));
+        }
+
+        if(k.roomViewRectangle)
+        {
+            const rectangle = k.roomViewRectangle;
+
+            this._containerWindow.style.width       = (rectangle.width + 'px');
+            this._containerWindow.style.height      = '270px';
+
+            this._contentListWindow.style.width     = (this._containerWindow.offsetWidth + 'px');
+            this._contentListWindow.style.height    = '270px';
+
+            this._activeContentWindow.style.width   = (this._containerWindow.offsetWidth + 'px');
+            this._activeContentWindow.style.height  = '270px';
+        }
+
+        this.resetAllChatLocations();
     }
 
     private getFreeItemId(): string
     {
-        return ("chat_" + this._widgetId + "_item_" + this._chatItemId);
+        return ("chat_item_" + RoomChatWidget.CHAT_COUNTER);
     }
 
     private addChat(chat: RoomChatItem): void
@@ -124,14 +179,124 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
             chat.refreshRender();
         }
 
-        const x         = chat.x;
-        const y         = chat.y;
-        const width     = chat.width;
-        const height    = chat.height;
+        if(this._scaleFactor !== 1) chat.senderX = (chat.senderX / this._scaleFactor);
+
+        chat.senderX = (chat.senderX - this._cameraOffset.x);
+        chat.y = ((this._activeContentWindow.offsetHeight) - (chat.height / 2));
+
+        this.resetChatItemLocation(chat);
+        this.makeRoomForChat(chat);
+        this.resetTimeout();
 
         this._chats.push(chat);
 
-        this.setChatItemRenderable(chat);
+        RoomChatWidget.CHAT_COUNTER++;
+    }
+
+    private resetAllChatLocations(): void
+    {
+        let i = (this._chats.length - 1);
+
+        while(i >= 0)
+        {
+            const chat = this._chats[i];
+
+            if(chat)
+            {
+                this.resetChatItemLocation(chat);
+            }
+
+            i--;
+        }
+    }
+
+    private moveChatUp(chat: RoomChatItem, nextHeight: number = 0): void
+    {
+        if(!chat) return;
+
+        if(nextHeight) chat.y = ((chat.y - nextHeight) - 1);
+        else chat.y = ((chat.y - chat.height) - 1);
+
+        if(chat.y < (-(chat.height))) this.hideChat(chat);
+    }
+
+    private hideChat(chat: RoomChatItem): void
+    {
+        if(!chat) return;
+
+        const index = this._chats.indexOf(chat);
+
+        if(index === -1) return;
+
+        this._chats.splice(index, 1);
+
+        if(chat.view.parentElement) chat.view.parentElement.removeChild(chat.view);
+
+        this._oldChats.push(chat);
+
+        const toDelete = (RoomChatWidget.MAX_CHAT_HISTORY - this._oldChats.length);
+
+        if(toDelete > 0) this._oldChats.splice(0, toDelete);
+    }
+
+    private moveAllChatsUp(): void
+    {
+        let i = (this._chats.length - 1);
+
+        while(i >= 0)
+        {
+            const chat = this._chats[i];
+
+            let nextHeight = 0;
+
+            if(this._chats[i - 1]) nextHeight = this._chats[i - 1].height;
+
+            chat && this.moveChatUp(chat, nextHeight);
+
+            i--;
+        }
+    }
+
+    private makeRoomForChat(chat: RoomChatItem): void
+    {
+        let i = 0;
+
+        while(i < this._chats.length)
+        {
+            const existing = this._chats[i];
+
+            if(chat)
+            {
+                if(this.doOverlap(chat.x, chat.y, (chat.x + chat.width), (chat.y - chat.height), existing.x, existing.y, (existing.x + existing.width), (existing.y - existing.height)))
+                {
+                    this._tempChats.push(existing);
+
+                    this.checkOverlappingChats(existing, chat);
+                }
+            }
+
+            i++;
+        }
+
+        i = 0;
+
+        while(i < this._tempChats.length)
+        {
+            const chat = this._tempChats[i];
+
+            if(chat)
+            {
+                let nextHeight = 0;
+
+                if(this._tempChats[i + 1]) nextHeight = this._tempChats[i + 1].height;
+
+                this.moveChatUp(chat, nextHeight);
+            }
+
+            i++;
+        }
+
+        this._tempChats = [];
     }
 
     private checkOverlappingChats(chat1: RoomChatItem, chat2: RoomChatItem): void
@@ -146,25 +311,18 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
         const width2     = chat2.width;
         const height2    = chat2.height;
 
-        let totalChats = (this._chats.length - 1);
-
-        let i = 0;
-        
-        while(i <= totalChats)
+        for(let existingChat of this._chats)
         {
-            const existing = this._chats[i];
+            if(!existingChat) continue;
 
-            if(!existing) continue;
-
-            if(this.doOverlap(x1, y1 - height2, x1 + width1, y1 - height2 - height1, existing.x, existing.y, existing.x + existing.width, existing.y - existing.height) && y1 > existing.y)
+            if(this.doOverlap(x1, (y1 - height2), (x1 + width1), (y1 - height2 - height1), existingChat.x, existingChat.y, (existingChat.x + existingChat.width), (existingChat.y - existingChat.height)) && y1 > existingChat.y)
             {
-                if(this._tempChats.indexOf(existing) !== -1) continue;
+                if(this._tempChats.indexOf(existingChat) !== -1) continue;
                 
-                this._tempChats.push(existing);
-                this.checkOverlappingChats(existing, chat2);
-            }
+                this._tempChats.push(existingChat);
 
-            i++;
+                this.checkOverlappingChats(existingChat, chat2);
+            }
         }
     }
 
@@ -177,29 +335,13 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
         return true;
     }
 
-    private setChatItemRenderable(item: RoomChatItem): void
+    private resetChatItemLocation(chat: RoomChatItem): void
     {
-        if(!item) return;
+        let x = ((chat.senderX + this._cameraOffset.x) * this._scaleFactor);
 
-        console.log(item.view);
-        
-        // if (k.y < -(32))
-        // {
-        //     if(k.view)
-        //     {
-        //         if(this._activeContentWindow) this._activeContentWindow.removeChild(k.view);
+        x = (x - (chat.width / 2));
+        x = (x + (this._activeContentWindow.offsetWidth / 2));
 
-        //         k._Str_5574();
-        //     }
-        // }
-        // else
-        // {
-            if(!item.view)
-            {
-                item.render();
-
-                if(item.view && this._activeContentWindow) this._activeContentWindow.appendChild(item.view);
-            }
-        //}
+        chat.x = x;
     }
 }
