@@ -1,8 +1,8 @@
-import * as PIXI from 'pixi.js-legacy';
 import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroManager } from '../../core/common/NitroManager';
 import { IAvatarRenderManager } from '../avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { Nitro } from '../Nitro';
 import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
@@ -49,7 +49,7 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
 
         this._isInRoom              = false;
 
-        PIXI.Ticker.shared.add(this.update, this);
+        Nitro.instance.ticker.add(this.update, this);
 
         this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
         this._roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
@@ -77,7 +77,7 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
 
     public dispose(): void
     {
-        PIXI.Ticker.shared.remove(this.update, this);
+        Nitro.instance.ticker.remove(this.update, this);
 
         this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
         this._roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
@@ -179,12 +179,15 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
                 this._roomEngine.setActiveRoomId(event.roomId);
 
                 desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET);
+                desktop.createWidget(RoomWidgetEnum.INFOSTAND);
+                desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET);
 
                 if(!desktop.roomSession.isSpectator)
                 {
                     desktop.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET);
+                    desktop.createWidget(RoomWidgetEnum.AVATAR_INFO);
                 }
-
+                
                 desktop.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET);
 
                 this._isInRoom = true;

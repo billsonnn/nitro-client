@@ -2,8 +2,11 @@ import { IFurnitureDimension } from './IFurnitureDimension';
 
 export interface IFurnitureData
 {
+    type: string;
     id: number;
+    fullName: string;
     className: string;
+    colorId: number;
     name: string;
     description: string;
     furniLine: string;

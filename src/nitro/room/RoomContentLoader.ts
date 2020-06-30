@@ -6,8 +6,8 @@ import { IRoomObject } from '../../room/object/IRoomObject';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { Nitro } from '../Nitro';
-import { FurnitureData } from '../session/furniture/FurnitureData';
 import { FurnitureType } from '../session/furniture/FurnitureType';
+import { IFurnitureData } from '../session/furniture/IFurnitureData';
 import { IFurnitureDataListener } from '../session/furniture/IFurnitureDataListener';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
@@ -113,7 +113,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         this.processFurnitureData(furnitureData);
     }
 
-    private processFurnitureData(furnitureData: FurnitureData[]): void
+    private processFurnitureData(furnitureData: IFurnitureData[]): void
     {
         if(!furnitureData) return;
 
@@ -128,7 +128,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             if(furniture.colorId) name = (name + '*' + furniture.colorId);
 
-            const adUrl = furniture.data.adUrl;
+            const adUrl = furniture.adUrl;
 
             if(adUrl && adUrl.length > 0) this._objectTypeAdUrls.set(name, adUrl);
 

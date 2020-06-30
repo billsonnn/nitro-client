@@ -23,6 +23,7 @@ export interface IRoomEngine
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;
     getRoomInstanceGeometry(roomId: number, canvasId?: number): IRoomGeometry;
     getRoomInstanceNumber(roomId: number, key: string): number;
+    getTotalObjectsForManager(roomId: number, category: number): number;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): PIXI.Point;
@@ -38,4 +39,5 @@ export interface IRoomEngine
     ready: boolean;
     disposed: boolean;
     selectedAvatarId: number;
+    isDecorating: boolean;
 }

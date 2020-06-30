@@ -219,14 +219,14 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-        PIXI.Ticker.shared.add(this.update, this);
+        Nitro.instance.ticker.add(this.update, this);
     }
 
     public dispose(): void
     {
         if(!this._ready || this._disposed) return;
 
-        PIXI.Ticker.shared.remove(this.update, this);
+        Nitro.instance.ticker.remove(this.update, this);
 
         if(this._roomObjectEventHandler) this._roomObjectEventHandler.dispose();
 
@@ -958,7 +958,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         //return (getBoolean("room.camera.follow_user")) ? 1000 : 0;
     }
 
-    private _Str_22919(time: number):void
+    private _Str_22919(time: number): void
     {
         for(let instanceData of this._roomInstanceData.values())
         {
@@ -974,7 +974,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
             if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
             {
-                this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
+                //this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
             }
         }
 
@@ -993,7 +993,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         }
     }
 
-    private _Str_25242(k: number, _arg_2: number, _arg_3:IVector3D, _arg_4: number):void
+    private _Str_25242(k: number, _arg_2: number, _arg_3:IVector3D, _arg_4: number): void
     {
         const renderingCanvas   = this.getRoomInstanceRenderingCanvas(k, _arg_2);
         const instanceData      = this.getRoomInstanceData(k);
@@ -1447,15 +1447,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return instanceData.legacyGeometry;
     }
 
-    private createRoomObject(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
-    {
-        const instance = this.getRoomInstance(roomId);
-
-        if(!instance) return null;
-
-        return instance.createRoomObject(objectId, type, category)  as IRoomObjectController;
-    }
-
     private createRoomObjectAndInitialize(roomId: number, objectId: number, type: string, category: number): IRoomObjectController
     {
         const instance = this.getRoomInstance(roomId);
@@ -1463,6 +1454,15 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!instance) return null;
 
         return instance.createRoomObjectAndInitalize(objectId, type, category) as IRoomObjectController;
+    }
+
+    public getTotalObjectsForManager(roomId: number, category: number): number
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return 0;
+
+        return instance.getTotalObjectsForManager(category);
     }
 
     public getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController
@@ -1941,7 +1941,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         roomObject.logic.processUpdateMessage(new ObjectGroupBadgeUpdateMessage(badgeId, badgeName));
     }
 
-    private onBadgeImageReadyEvent(k: BadgeImageReadyEvent):void
+    private onBadgeImageReadyEvent(k: BadgeImageReadyEvent): void
     {
         const listeners = this._badgeListeners && this._badgeListeners.get(k.badgeId);
 
@@ -2583,7 +2583,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return null;
     }
 
-    protected _Str_21543(k: number, _arg_2: IRoomObject):void
+    protected _Str_21543(k: number, _arg_2: IRoomObject): void
     {
         const tileObjectMap = this.getRoomInstanceData(k).tileObjectMap;
 

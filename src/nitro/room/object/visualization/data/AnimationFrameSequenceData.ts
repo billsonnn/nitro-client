@@ -58,7 +58,7 @@ export class AnimationFrameSequenceData
         }
     }
 
-    public addFrame(id: number, x: number, y: number, randomX: number, randomY: number, directionalOffset: DirectionalOffsetData):void
+    public addFrame(id: number, x: number, y: number, randomX: number, randomY: number, directionalOffset: DirectionalOffsetData): void
     {
         let repeats: number = 1;
 

@@ -24,7 +24,7 @@ export class AvatarImageActionCache
         this._Str_1233 = k;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(!this._disposed)
         {
@@ -63,7 +63,7 @@ export class AvatarImageActionCache
         return this._Str_1233;
     }
 
-    public setDirection(k: number):void
+    public setDirection(k: number): void
     {
         this._Str_1188 = k;
     }
@@ -90,7 +90,7 @@ export class AvatarImageActionCache
         else this._Str_586.set(k.id, _arg_2);
     }
 
-    private _Str_587(k: string):void
+    private _Str_587(k: string): void
     {
     }
 }

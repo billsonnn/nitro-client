@@ -365,8 +365,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
                     if(sprite)
                     {
-                        sprite.alpha    = AlphaTolerance._Str_9268;
-                        sprite.visible  = true;
+                        sprite.alphaTolerance   = AlphaTolerance._Str_9268;
+                        sprite.visible          = true;
 
                         const layerData = this._avatarImage._Str_607(spriteData);
 

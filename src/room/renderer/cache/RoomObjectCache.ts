@@ -15,7 +15,7 @@ export class RoomObjectCache
         this._roomObjectVariableAccurateZ   = accurateZ;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this._data)
         {

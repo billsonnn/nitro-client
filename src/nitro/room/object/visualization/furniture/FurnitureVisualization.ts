@@ -1,3 +1,4 @@
+import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { IRoomObjectSprite } from '../../../../../room/object/visualization/IRoomObjectSprite';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
@@ -298,18 +299,18 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                     sprite.color            = this.getLayerColor(scale, layerId, this._selectedColor);
                     sprite.offsetX          = (assetData.offsetX + this.getLayerXOffset(scale, this._direction, layerId));
                     sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
-                    sprite.ignoreMouse      = this.getLayerIgnoreMouse(scale, this._direction, layerId);
                     sprite.blendMode        = this.getLayerInk(scale, this._direction, layerId);
+                    sprite.alphaTolerance   = (this.getLayerIgnoreMouse(scale, this._direction, layerId) ? AlphaTolerance._Str_9268 : AlphaTolerance._Str_9735);
 
                     relativeDepth = this.getLayerZOffset(scale, this._direction, layerId);
                     relativeDepth = (relativeDepth - (layerId * 0.001));
                 }
                 else
                 {
-                    sprite.offsetX      = assetData.offsetX;
-                    sprite.offsetY      = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
-                    sprite.alpha        = (48 * this._alphaMultiplier);
-                    sprite.ignoreMouse  = true;
+                    sprite.offsetX          = assetData.offsetX;
+                    sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
+                    sprite.alpha            = (48 * this._alphaMultiplier);
+                    sprite.alphaTolerance   = AlphaTolerance._Str_9268;
                     
                     relativeDepth = 1;
                 }

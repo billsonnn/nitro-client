@@ -428,10 +428,10 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(extendedSprite.needsUpdate(objectSprite.id, objectSprite.updateCounter) || RoomEnterEffect._Str_19559())
         {
-            extendedSprite.tag          = objectSprite.tag;
-            extendedSprite.name         = sprite.name;
-            extendedSprite._Str_4593    = objectSprite._Str_4593;
-            extendedSprite.ignoreMouse  = objectSprite.ignoreMouse;
+            extendedSprite.tag              = objectSprite.tag;
+            extendedSprite.alphaTolerance   = objectSprite.alphaTolerance;
+            extendedSprite.name             = sprite.name;
+            extendedSprite._Str_4593        = objectSprite._Str_4593;
 
             const alpha = (objectSprite.alpha / 255);
 
@@ -487,18 +487,18 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(!extendedSprite) extendedSprite = new ExtendedSprite();
 
-        extendedSprite.tag          = sprite.tag;
-        extendedSprite.alpha        = (sprite.alpha / 255);
-        extendedSprite.tint         = sprite.color;
-        extendedSprite.x            = sortableSprite.x;
-        extendedSprite.y            = sortableSprite.y;
-        extendedSprite.offsetX      = sprite.offsetX;
-        extendedSprite.offsetY      = sprite.offsetY;
-        extendedSprite.name         = sprite.name;
-        extendedSprite._Str_4593    = sprite._Str_4593;
-        extendedSprite.blendMode    = sprite.blendMode;
-        extendedSprite.filters      = sprite.filters;
-        extendedSprite.ignoreMouse  = sprite.ignoreMouse;
+        extendedSprite.tag              = sprite.tag;
+        extendedSprite.alphaTolerance   = sprite.alphaTolerance;
+        extendedSprite.alpha            = (sprite.alpha / 255);
+        extendedSprite.tint             = sprite.color;
+        extendedSprite.x                = sortableSprite.x;
+        extendedSprite.y                = sortableSprite.y;
+        extendedSprite.offsetX          = sprite.offsetX;
+        extendedSprite.offsetY          = sprite.offsetY;
+        extendedSprite.name             = sprite.name;
+        extendedSprite._Str_4593        = sprite._Str_4593;
+        extendedSprite.blendMode        = sprite.blendMode;
+        extendedSprite.filters          = sprite.filters;
 
         extendedSprite.setTexture(sprite.texture);
 
@@ -522,7 +522,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._activeSpriteCount++;
     }
 
-    private _Str_20677(spriteCount: number, _arg_2: boolean = false):void
+    private _Str_20677(spriteCount: number, _arg_2: boolean = false): void
     {
         if(!this._display) return;
 

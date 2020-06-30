@@ -204,7 +204,7 @@ export class RoomPlaneParser
         return _local_4;
     }
 
-    private static addTileTypes(k: number[][]):void
+    private static addTileTypes(k: number[][]): void
     {
         var _local_4: number;
         var _local_5: number;
@@ -257,7 +257,7 @@ export class RoomPlaneParser
         }
     }
 
-    private static unpadHeightMap(k: number[][]):void
+    private static unpadHeightMap(k: number[][]): void
     {
         k.shift();
         k.pop();
@@ -269,7 +269,7 @@ export class RoomPlaneParser
         }
     }
 
-    private static padHeightMap(k: number[][]):void
+    private static padHeightMap(k: number[][]): void
     {
         var _local_2: number[] = [];
         var _local_3: number[] = [];
@@ -378,7 +378,7 @@ export class RoomPlaneParser
         this._floorThicknessMultiplier = k;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._planes = null;
         this._tileMatrix = null;
@@ -391,7 +391,7 @@ export class RoomPlaneParser
         }
     }
 
-    public reset():void
+    public reset(): void
     {
         this._planes = [];
         this._tileMatrix = [];
@@ -884,14 +884,14 @@ export class RoomPlaneParser
         }
     }
 
-    private checkWallHiding(k: RoomWallData, _arg_2: RoomWallData):void
+    private checkWallHiding(k: RoomWallData, _arg_2: RoomWallData): void
     {
         this.hidePeninsulaWallChains(_arg_2);
         this.updateWallsNextToHoles(k);
         this.hideOriginallyHiddenWalls(k, _arg_2);
     }
 
-    private addWalls(k: RoomWallData, _arg_2: RoomWallData):void
+    private addWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
         var _local_5: number;
         var _local_6: number;
@@ -1168,7 +1168,7 @@ export class RoomPlaneParser
         return null;
     }
 
-    private addWall(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
+    private addWall(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): void
     {
         var _local_12:Vector3d;
         this.addPlane(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
@@ -1193,7 +1193,7 @@ export class RoomPlaneParser
         }
     }
 
-    private addFloor(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean):void
+    private addFloor(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): void
     {
         var _local_9: number;
         var _local_10:Vector3d;
@@ -1496,24 +1496,24 @@ export class RoomPlaneParser
         return planeData._Str_25617(_arg_2);
     }
 
-    public addFloorHole(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number):void
+    public addFloorHole(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number): void
     {
         this.removeFloorHole(k);
         
         this._floorHoles.set(k, new RoomFloorHole(_arg_2, _arg_3, _arg_4, _arg_5));
     }
 
-    public removeFloorHole(k: number):void
+    public removeFloorHole(k: number): void
     {
         this._floorHoles.delete(k);
     }
 
-    public resetFloorHoles():void
+    public resetFloorHoles(): void
     {
         this._floorHoles.clear();
     }
 
-    private initializeHoleMap():void
+    private initializeHoleMap(): void
     {
         var k: number;
         var _local_2: number;
@@ -1564,7 +1564,7 @@ export class RoomPlaneParser
         }
     }
 
-    private extractPlanes(k: number[][]):void
+    private extractPlanes(k: number[][]): void
     {
         var _local_2: number;
         var _local_7: number;

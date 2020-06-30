@@ -4,7 +4,10 @@ import { RoomUserData } from './RoomUserData';
 
 export class UserDataManager extends Disposable
 {
-    private static USER_TYPE: number    = 1;
+    private static TYPE_USER: number            = 1;
+    private static TYPE_PET: number             = 2;
+    private static TYPE_BOT: number             = 3;
+    private static TYPE_RENTABLE_BOT: number    = 4;
 
     private _connection: IConnection;
 
@@ -33,7 +36,22 @@ export class UserDataManager extends Disposable
 
     public getUserData(webID: number): RoomUserData
     {
-        return this.getDataByType(webID, UserDataManager.USER_TYPE);
+        return this.getDataByType(webID, UserDataManager.TYPE_USER);
+    }
+
+    public getPetData(webID: number): RoomUserData
+    {
+        return this.getDataByType(webID, UserDataManager.TYPE_PET);
+    }
+
+    public getBotData(webID: number): RoomUserData
+    {
+        return this.getDataByType(webID, UserDataManager.TYPE_BOT);
+    }
+
+    public getRentableBotData(webID: number): RoomUserData
+    {
+        return this.getDataByType(webID, UserDataManager.TYPE_RENTABLE_BOT);
     }
 
     public getDataByType(webID: number, type: number): RoomUserData

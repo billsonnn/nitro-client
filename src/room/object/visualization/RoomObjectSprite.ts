@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { AlphaTolerance } from '../enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../enum/RoomObjectSpriteType';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 
@@ -28,8 +29,8 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _Str_11397: string;
     private _visible: boolean;
     private _tag: string;
+    private _alphaTolerance: number;
     private _filters: PIXI.Filter[];
-    private _ignoreMouse: boolean;
 
     private _updateCounter: number;
 
@@ -57,8 +58,8 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._Str_11397         = '';
         this._visible           = true;
         this._tag               = '';
+        this._alphaTolerance    = AlphaTolerance._Str_9735;
         this._filters           = [];
-        this._ignoreMouse       = false;
 
         this._updateCounter     = 0;
     }
@@ -322,6 +323,20 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._updateCounter++;
     }
 
+    public get alphaTolerance(): number
+    {
+        return this._alphaTolerance;
+    }
+
+    public set alphaTolerance(tolerance: number)
+    {
+        if(this._alphaTolerance === tolerance) return;
+
+        this._alphaTolerance = tolerance;
+
+        this._updateCounter++;
+    }
+
     public get filters(): PIXI.Filter[]
     {
         return this._filters;
@@ -330,20 +345,6 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public set filters(filters: PIXI.Filter[])
     {
         this._filters = filters;
-    }
-
-    public get ignoreMouse(): boolean
-    {
-        return this._ignoreMouse;
-    }
-
-    public set ignoreMouse(ignore: boolean)
-    {
-        if(this._ignoreMouse === ignore) return;
-
-        this._ignoreMouse = ignore;
-
-        this._updateCounter++;
     }
 
     public get updateCounter(): number

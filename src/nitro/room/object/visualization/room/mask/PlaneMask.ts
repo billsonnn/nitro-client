@@ -109,7 +109,7 @@ export class PlaneMask
         return this._assetNames.get(k) || null;
     }
 
-    public _Str_24425(k: number, _arg_2: string):void
+    public _Str_24425(k: number, _arg_2: string): void
     {
         if(!this._assetNames) return;
 

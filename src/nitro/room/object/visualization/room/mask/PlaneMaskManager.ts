@@ -55,7 +55,7 @@ export class PlaneMaskManager
         this._Str_22834(this.data, k);
     }
 
-    private _Str_22834(k: any, _arg_2: IGraphicAssetCollection):void
+    private _Str_22834(k: any, _arg_2: IGraphicAssetCollection): void
     {
         if(!k || !_arg_2) return;
 

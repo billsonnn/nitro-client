@@ -137,7 +137,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         this._materials.clear();
     }
 
-    private _Str_21447():void
+    private _Str_21447(): void
     {
         for(let texture of this._textures.values())
         {
@@ -189,7 +189,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         this._Str_22054();
     }
 
-    private _Str_22054():void
+    private _Str_22054(): void
     {
         if(!this._data) return;
 
@@ -274,7 +274,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         }
     }
 
-    private _Str_22388(k: any):void
+    private _Str_22388(k: any): void
     {
         if(!k || !k.length) return;
 
@@ -530,7 +530,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         return geometry;
     }
 
-    protected _Str_9137(k: Plane, _arg_2: any):void
+    protected _Str_9137(k: Plane, _arg_2: any): void
     {
         if(!k || !_arg_2) return;
 

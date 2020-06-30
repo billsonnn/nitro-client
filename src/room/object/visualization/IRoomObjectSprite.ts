@@ -22,7 +22,7 @@ export interface IRoomObjectSprite
     _Str_3582: string;
     visible: boolean;
     tag: string;
+    alphaTolerance: number;
     filters: PIXI.Filter[];
-    ignoreMouse: boolean;
     updateCounter: number;
 }

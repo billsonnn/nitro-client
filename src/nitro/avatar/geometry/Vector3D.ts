@@ -48,21 +48,21 @@
         return _local_2;
     }
 
-    public subtract(k: Vector3D):void
+    public subtract(k: Vector3D): void
     {
         this._x = (this._x - k.x);
         this._y = (this._y - k.y);
         this._z = (this._z - k.z);
     }
 
-    public add(k: Vector3D):void
+    public add(k: Vector3D): void
     {
         this._x = (this._x + k.x);
         this._y = (this._y + k.y);
         this._z = (this._z + k.z);
     }
 
-    public normalize():void
+    public normalize(): void
     {
         const k = (1 / this.length());
 

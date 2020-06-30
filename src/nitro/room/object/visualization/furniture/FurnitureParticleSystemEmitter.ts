@@ -45,7 +45,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     super.dispose();
     // }
 
-    // public setup(k: number, _arg_2: number, _arg_3: number, _arg_4:Vector3d, _arg_5: number, _arg_6: number, _arg_7: string, _arg_8: number, _arg_9: number, _arg_10: number):void
+    // public setup(k: number, _arg_2: number, _arg_3: number, _arg_4:Vector3d, _arg_5: number, _arg_6: number, _arg_7: string, _arg_8: number, _arg_9: number, _arg_10: number): void
     // {
     //     this._maxNumberOfParticles = k;
     //     this._particlesPerFrame = _arg_2;
@@ -61,7 +61,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     this.reset();
     // }
 
-    // public reset():void
+    // public reset(): void
     // {
     //     var k:FurnitureParticleSystemParticle;
     //     for(let k of this._particles) k.dispose();
@@ -71,7 +71,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     this.init(0, 0, 0, this._direction, this._force, this._timeStep, this._fuseTime, true);
     // }
 
-    // public _Str_17988(k:FurnitureParticleSystemEmitter, _arg_2: number):void
+    // public _Str_17988(k:FurnitureParticleSystemEmitter, _arg_2: number): void
     // {
     //     super.copy(k, _arg_2);
     //     this._force = k._force;
@@ -86,7 +86,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     this._hasIgnited = k._hasIgnited;
     // }
 
-    // public _Str_24892(k: number, _arg_2: boolean, _arg_3:Array, _arg_4: boolean):void
+    // public _Str_24892(k: number, _arg_2: boolean, _arg_3:Array, _arg_4: boolean): void
     // {
     //     var _local_5:Dictionary = new Dictionary();
     //     _local_5["lifeTime"] = k;
@@ -96,7 +96,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     this._particleConfigurations.push(_local_5);
     // }
 
-    // protected ignite():void
+    // protected ignite(): void
     // {
     //     this._hasIgnited = true;
     //     if ((this._emittedParticles < this._maxNumberOfParticles))
@@ -108,7 +108,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     }
     // }
 
-    // private _Str_19068(k:FurnitureParticleSystemParticle, _arg_2:Vector3D=null):void
+    // private _Str_19068(k:FurnitureParticleSystemParticle, _arg_2:Vector3D=null): void
     // {
     //     var _local_4:FurnitureParticleSystemParticle;
     //     var _local_5:Dictionary;
@@ -171,7 +171,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     return this._particleConfigurations[k];
     // }
 
-    // public update():void
+    // public update(): void
     // {
     //     super.update();
     //     this._Str_25039();
@@ -186,7 +186,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     }
     // }
 
-    // public _Str_25400():void
+    // public _Str_25400(): void
     // {
     //     var _local_2:FurnitureParticleSystemParticle;
     //     var _local_3: number;
@@ -232,11 +232,11 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     }
     // }
 
-    // private _Str_23140():void
+    // private _Str_23140(): void
     // {
     // }
 
-    // private _Str_25039():void
+    // private _Str_25039(): void
     // {
     //     var k:FurnitureParticleSystemParticle;
     //     for(let k in this._particles)

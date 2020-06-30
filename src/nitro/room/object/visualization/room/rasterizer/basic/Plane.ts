@@ -37,7 +37,7 @@ export class Plane
         this._lastSize                  = -1;
     }
 
-    public _Str_3355():void
+    public _Str_3355(): void
     {
         for(let visualization of this._planeVisualizations.values())
         {

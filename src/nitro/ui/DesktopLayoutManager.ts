@@ -4,17 +4,34 @@ import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
 export class DesktopLayoutManager
 {
     private _container: HTMLElement;
+    private _widgetContainer: HTMLElement;
+    private _windowManager: INitroWindowManager;
 
     constructor()
     {
-        this._container = null;
+        this._container         = null;
+        this._widgetContainer   = null;
     }
 
     public dispose(): void
     {
+        if(this._widgetContainer)
+        {
+            this._widgetContainer.remove();
+
+            this._widgetContainer = null;
+        }
+
         if(this._container)
         {
-            this._container.remove();
+            if(this._windowManager)
+            {
+                this._windowManager.removeDesktop(this._windowManager.roomId);
+            }
+            else
+            {
+                if(this._container.parentElement) this._container.parentElement.removeChild(this._container);
+            }
 
             this._container = null;
         }
@@ -30,18 +47,21 @@ export class DesktopLayoutManager
 
         const element = windowManager.htmlToElement(layout);
 
-        container.append(element);
+        windowManager.addDesktop(windowManager.roomId, element);
 
-        this._container = element;
+        this._container     = element;
+        this._windowManager = windowManager;
     }
 
     public addWidgetWindow(type: string, window: HTMLElement): boolean
     {
         if(!window) return false;
 
-        if(this._container)
+        const container = this.getWidgetContainer(type);
+
+        if(container)
         {
-            this._container.append(window);
+            container.appendChild(window);
 
             return true;
         }
@@ -51,16 +71,26 @@ export class DesktopLayoutManager
         return false;
     }
 
-    private getWidgetContainer(type: string, window: HTMLElement): HTMLElement
+    private getWidgetContainer(type: string): HTMLElement
     {
-        if(!window) return null;
+        if(!this._container) return null;
 
         if(type === RoomWidgetEnum.CHAT_INPUT_WIDGET)
         {
             return this._container;
         }
-        
-        return ((this._container.getElementsByClassName('room-widget-container')[0] as HTMLElement) || null);
+
+        if(this._widgetContainer) return this._widgetContainer;
+
+        const widgetContainer = document.createElement('div');
+
+        widgetContainer.className = 'ntiro-widget-container';
+
+        this._widgetContainer = widgetContainer;
+
+        this._container.appendChild(this._widgetContainer);
+
+        return this._widgetContainer;
     }
     
     public getRectangle(): PIXI.Rectangle

@@ -13,7 +13,7 @@ export class PlaneTexture
         this._bitmaps = [];
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this._bitmaps)
         {

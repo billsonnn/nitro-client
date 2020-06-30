@@ -195,13 +195,13 @@ export class RoomCamera
         }
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._targetLoc = null;
         this._currentLoc = null;
     }
 
-    public _Str_20685(k:IVector3D):void
+    public _Str_20685(k:IVector3D): void
     {
         if (this._currentLoc != null)
         {
@@ -211,7 +211,7 @@ export class RoomCamera
         this._currentLoc.assign(k);
     }
 
-    public _Str_25467(k:IVector3D):void
+    public _Str_25467(k:IVector3D): void
     {
         if (this._currentLoc == null)
         {
@@ -220,7 +220,7 @@ export class RoomCamera
         this._currentLoc.assign(k);
     }
 
-    public update(k: number, _arg_2: number):void
+    public update(k: number, _arg_2: number): void
     {
         var _local_3:Vector3d;
         var _local_4: number;
@@ -276,12 +276,12 @@ export class RoomCamera
         }
     }
 
-    public reset():void
+    public reset(): void
     {
         this._geometryUpdateId = -1;
     }
 
-    public _Str_19465(k: number):void
+    public _Str_19465(k: number): void
     {
         this._followDuration = k;
     }

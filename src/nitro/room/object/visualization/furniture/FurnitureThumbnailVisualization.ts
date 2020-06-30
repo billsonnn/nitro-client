@@ -74,7 +74,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         this._Str_21698 = this.direction;
     }
 
-    private _Str_20857(k: PIXI.Graphics, scale: number):void
+    private _Str_20857(k: PIXI.Graphics, scale: number): void
     {
         let layerId = 0;
 

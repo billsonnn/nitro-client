@@ -18,7 +18,7 @@ export class AvatarImageBodyPartContainer
         this._Str_1225();
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this._image) this._image.destroy();
 

@@ -33,7 +33,7 @@ export class AvatarActionManager
         if(data.actionOffsets) this._Str_1767(data.actionOffsets);
     }
 
-    private _Str_1767(offsets: any):void
+    private _Str_1767(offsets: any): void
     {
         if(!offsets || !offsets.length) return;
 

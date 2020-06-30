@@ -12,7 +12,7 @@ export class AvatarImageDirectionCache
         this._images    = new Map();
     }
 
-    public dispose():void
+    public dispose(): void
     {
         for(let image of this._images.values()) image && image.dispose();
 

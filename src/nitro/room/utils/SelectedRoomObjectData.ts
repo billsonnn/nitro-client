@@ -89,7 +89,7 @@ export class SelectedRoomObjectData implements ISelectedRoomObjectData
         return this._posture;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._loc = null;
         this._dir = null;

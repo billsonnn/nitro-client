@@ -2,10 +2,13 @@ import Mustache from 'mustache';
 import { NitroManager } from '../../core/common/NitroManager';
 import { MouseEventType } from '../ui/MouseEventType';
 import { INitroWindowManager } from './INitroWindowManager';
+import { WindowTemplates } from './WindowTemplates';
 
 export class NitroWindowManager extends NitroManager implements INitroWindowManager
 {
     private _window: HTMLDivElement;
+    private _desktops: Map<string, HTMLElement>;
+    private _templates: WindowTemplates;
 
     private _mouseX: number;
     private _mouseY: number;
@@ -15,6 +18,8 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
         super();
 
         this._window    = null;
+        this._desktops  = new Map();
+        this._templates = new WindowTemplates();
 
         this._mouseX    = 0;
         this._mouseY    = 0;
@@ -24,6 +29,10 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
 
     public onDispose(): void
     {
+        for(let desktop of this._desktops.values()) desktop && desktop.remove();
+
+        this._desktops = null;
+
         if(this._window)
         {
             this._window.remove();
@@ -38,7 +47,52 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
 
         this._window = (this.htmlToElement(`<div class="nitro-window-container"></div>`) as HTMLDivElement);
 
-        document.body.append(this._window);
+        document.body.appendChild(this._window);
+    }
+
+    public getDesktop(roomId: string = null): HTMLElement
+    {
+        if(!roomId) roomId = this.roomId;
+        
+        const existing = this._desktops.get(roomId);
+
+        if(!existing) return null;
+
+        return existing;
+    }
+
+    public addDesktop(roomId: string, desktop: HTMLElement): void
+    {
+        let existing = this._desktops.get(roomId);
+
+        if(existing)
+        {
+            existing.remove();
+        }
+
+        existing = desktop;
+
+        this._desktops.set(roomId, desktop);
+
+        this._window.appendChild(desktop);
+    }
+
+    public removeDesktop(roomId: string): void
+    {
+        const existing = this._desktops.get(roomId);
+
+        if(!existing) return;
+
+        this._desktops.delete(roomId);
+
+        if(existing.parentElement) existing.parentElement.removeChild(existing);
+    }
+
+    public getTemplate(name: string): string
+    {
+        if(!name || !this._templates) return null;
+
+        return this._templates.getTemplate(name);
     }
 
     public renderElement(template: string, view: {}): HTMLElement
@@ -119,5 +173,10 @@ export class NitroWindowManager extends NitroManager implements INitroWindowMana
     public get window(): HTMLDivElement
     {
         return this._window;
+    }
+
+    public get roomId(): string
+    {
+        return 'hard_coded_room_id';
     }
 }

@@ -1,0 +1,10 @@
+.nitro-widget-avatar-info-view {
+    display: flex;
+    position: absolute;
+    pointer-events: all;
+
+    .avatar-info-name {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+}

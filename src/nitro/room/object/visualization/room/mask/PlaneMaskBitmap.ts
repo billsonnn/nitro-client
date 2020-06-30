@@ -45,7 +45,7 @@ export class PlaneMaskBitmap
         return this._normalMaxY;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._asset = null;
     }

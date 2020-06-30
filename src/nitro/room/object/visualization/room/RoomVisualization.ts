@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { IPlaneVisualization } from '../../../../../room/object/visualization/IPlaneVisualization';
@@ -346,7 +347,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         return true;
     }
 
-    private clearPlanes():void
+    private clearPlanes(): void
     {
         if(this._Str_2540)
         {
@@ -568,14 +569,14 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
             if(plane && sprite && plane._Str_5424 && plane._Str_4968)
             {
-                // if((plane.type === RoomPlane.TYPE_WALL) && ((plane._Str_5424.length < 1) || (plane._Str_4968.length < 1)))
-                // {
-                //     sprite.alpha = (AlphaTolerance._Str_9268);
-                // }
-                // else
-                // {
-                //    sprite.alpha = (AlphaTolerance._Str_9735);
-                // }
+                if((plane.type === RoomPlane.TYPE_WALL) && ((plane._Str_5424.length < 1) || (plane._Str_4968.length < 1)))
+                {
+                    sprite.alphaTolerance = AlphaTolerance._Str_9268;
+                }
+                else
+                {
+                   sprite.alphaTolerance = AlphaTolerance._Str_9735;
+                }
                 
                 if(plane.type === RoomPlane.TYPE_WALL)
                 {
@@ -790,7 +791,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         return updated;
     }
 
-    protected _Str_15935(k: RoomMapMaskData):void
+    protected _Str_15935(k: RoomMapMaskData): void
     {
         if(!k) return;
 
@@ -903,7 +904,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         k.color             = _arg_2.color;
         k.texture           = this._Str_22446(_arg_2, _arg_3);
         k.name              = ((_arg_3 + "_") + this._Str_5928);
-        k.ignoreMouse       = false;
     }
 
     private _Str_22446(k: RoomPlane, _arg_2: string): PIXI.Texture

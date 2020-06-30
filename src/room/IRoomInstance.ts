@@ -9,6 +9,7 @@ export interface IRoomInstance extends IDisposable
 {
     setRenderer(renderer: IRoomRendererBase): void;
     getManager(category: number): IRoomObjectManager;
+    getTotalObjectsForManager(category: number): number;
     getRoomObject(id: number, category: number): IRoomObject;
     createRoomObject(id: number, type: string, category: number): IRoomObject;
     createRoomObjectAndInitalize(objectId: number, type: string, category: number): IRoomObject;

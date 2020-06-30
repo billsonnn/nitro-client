@@ -111,7 +111,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         return cachedImage;
     }
 
-    private _Str_15978(k: boolean = false):void
+    private _Str_15978(k: boolean = false): void
     {
         if(!this._Str_13016() || k)
         {

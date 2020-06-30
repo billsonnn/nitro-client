@@ -1,0 +1,14 @@
+.nitro-widget-infostand {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    top: 0;
+    height: 100px;
+    z-index: 400;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    pointer-events: none;
+}

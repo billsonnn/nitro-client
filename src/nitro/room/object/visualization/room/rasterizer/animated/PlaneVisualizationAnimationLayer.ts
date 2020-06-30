@@ -40,7 +40,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
         return this._isDisposed;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._isDisposed = true;
 
@@ -59,7 +59,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
         }
     }
 
-    public _Str_3355():void
+    public _Str_3355(): void
     {
         if (this._bitmapData)
         {

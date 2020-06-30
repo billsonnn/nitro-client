@@ -39,7 +39,7 @@ export class UserMessageData
         this._roomIndex = k;
     }
 
-    public _Str_4710():void
+    public _Str_4710(): void
     {
         this._isReadOnly = true;
     }

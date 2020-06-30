@@ -219,13 +219,13 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_581._Str_1881(k.animation.id, this._Str_1724, k.id);
     }
 
-    public _Str_953(k: number=1):void
+    public _Str_953(k: number=1): void
     {
         this._Str_1724 += k;
         this._Str_1535 = true;
     }
 
-    public _Str_833():void
+    public _Str_833(): void
     {
         this._Str_1724 = 0;
         this._Str_1535 = true;
@@ -273,7 +273,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_1945;
     }
 
-    public _Str_1972(k: string):void
+    public _Str_1972(k: string): void
     {
         var _local_4: string;
         if (this._Str_1708 == null)
@@ -508,7 +508,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_1668;
     }
 
-    public _Str_913():void
+    public _Str_913(): void
     {
         this._Str_614 = [];
         this._Str_2143 = false;
@@ -516,7 +516,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         this._Str_2042 = false;
     }
 
-    public _Str_962():void
+    public _Str_962(): void
     {
         var k:ActiveActionData;
 
@@ -616,7 +616,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return true;
     }
 
-    protected _Str_1182(k: string, _arg_2: string=''):void
+    protected _Str_1182(k: string, _arg_2: string=''): void
     {
         var _local_3:ActiveActionData;
         if(!this._Str_614) this._Str_614 = [];
@@ -738,7 +738,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return k;
     }
 
-    private _Str_1679():void
+    private _Str_1679(): void
     {
         if(!this._Str_1163 == null) return;
 
@@ -837,11 +837,11 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_2121;
     }
 
-    private _Str_1591(k: string):void
+    private _Str_1591(k: string): void
     {
     }
 
-    private _Str_1511(k: string):void
+    private _Str_1511(k: string): void
     {
     }
 
@@ -850,7 +850,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return false;
     }
 
-    public _Str_998():void
+    public _Str_998(): void
     {
         this._Str_1566 = '';
     }
@@ -865,7 +865,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._Str_1708._Str_695;
     }
 
-    public resetEffect(effect: number):void
+    public resetEffect(effect: number): void
     {
         if(effect === this._Str_1514)
         {

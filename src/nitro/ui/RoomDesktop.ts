@@ -21,9 +21,12 @@ import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { INitroWindowManager } from '../window/INitroWindowManager';
 import { DesktopLayoutManager } from './DesktopLayoutManager';
+import { AvatarInfoWidgetHandler } from './handler/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './handler/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './handler/ChatWidgetHandler';
 import { FurnitureTrophyWidgetHandler } from './handler/FurnitureTrophyWidgetHandler';
+import { InfoStandWidgetHandler } from './handler/InfoStandWidgetHandler';
+import { ObjectLocationRequestHandler } from './handler/ObjectLocationRequestHandler';
 import { IRoomDesktop } from './IRoomDesktop';
 import { IRoomWidgetFactory } from './IRoomWidgetFactory';
 import { IRoomWidgetHandler } from './IRoomWidgetHandler';
@@ -121,12 +124,32 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         window.onresize = null;
 
+        if(this._widgets)
+        {
+            for(let widget of this._widgets.values()) widget && widget.dispose();
+
+            this._widgets = null;
+        }
+
         if(this._layoutManager)
         {
             this._layoutManager.dispose();
 
             this._layoutManager = null;
         }
+
+        this._widgetHandlerMessageMap   = null;
+        this._widgetHandlerEventMap     = null;
+        this._connection                = null;
+        this._avatarRenderManager       = null;
+        this._canvasIDs                 = null;
+        this._events                    = null;
+        this._roomEngine                = null;
+        this._roomSessionManager        = null;
+        this._roomWidgetFactory         = null;
+        this._session                   = null;
+        this._sessionDataManager        = null;
+        this._windowManager             = null;
     }
 
     public _Str_22664(canvasId: number): void
@@ -216,6 +239,15 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
             case RoomWidgetEnum.CHAT_INPUT_WIDGET:
                 sendSizeUpdate = true;
                 widgetHandler = new ChatInputWidgetHandler();
+                break;
+            case RoomWidgetEnum.AVATAR_INFO:
+                widgetHandler = new AvatarInfoWidgetHandler();
+                break;
+            case RoomWidgetEnum.INFOSTAND:
+                widgetHandler = new InfoStandWidgetHandler();
+                break;
+            case RoomWidgetEnum.LOCATION_WIDGET:
+                widgetHandler = new ObjectLocationRequestHandler();
                 break;
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
                 widgetHandler = new FurnitureTrophyWidgetHandler();
@@ -398,7 +430,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return this._roomBackground;
     }
 
-    public setBackgroundColor(hue: number, saturation: number, lightness: number):void
+    public setBackgroundColor(hue: number, saturation: number, lightness: number): void
     {
         this._roomBackgroundColor = ColorConverter._Str_13949(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
 

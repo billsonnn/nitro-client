@@ -1,16 +1,16 @@
 import { INitroManager } from '../../core/common/INitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
-import { FurnitureData } from './furniture/FurnitureData';
+import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
 
 export interface ISessionDataManager extends INitroManager
 {
-    getAllFurnitureData(listener: IFurnitureDataListener): FurnitureData[];
+    getAllFurnitureData(listener: IFurnitureDataListener): IFurnitureData[];
     removePendingFurniDataListener(listener: IFurnitureDataListener): void;
-    getFloorItemData(id: number): FurnitureData;
-    getFloorItemDataByName(name: string): FurnitureData;
-    getWallItemData(id: number): FurnitureData;
-    getWallItemDataByName(name: string): FurnitureData;
+    getFloorItemData(id: number): IFurnitureData;
+    getFloorItemDataByName(name: string): IFurnitureData;
+    getWallItemData(id: number): IFurnitureData;
+    getWallItemDataByName(name: string): IFurnitureData;
     getBadgeImage(name: string): PIXI.Texture;
     loadBadgeImage(name: string): string;
     getGroupBadgeImage(name: string): PIXI.Texture;

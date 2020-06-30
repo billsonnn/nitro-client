@@ -44,7 +44,7 @@ export class RoomWallData
         this._count             = 0;
     }
 
-    public _Str_17862(k: PIXI.Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean):void
+    public _Str_17862(k: PIXI.Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): void
     {
         if (((this._addDuplicates) || (this._Str_22484(k, _arg_2, _arg_3, _arg_4, _arg_5))))
         {
@@ -125,12 +125,12 @@ export class RoomWallData
         return this._manuallyRightCut[k];
     }
 
-    public _Str_15901(k: number, _arg_2: boolean):void
+    public _Str_15901(k: number, _arg_2: boolean): void
     {
         this._hideWalls[k] = _arg_2;
     }
 
-    public _Str_24531(k: number, _arg_2: number):void
+    public _Str_24531(k: number, _arg_2: number): void
     {
         if (_arg_2 < this._lengths[k])
         {
@@ -139,7 +139,7 @@ export class RoomWallData
         }
     }
 
-    public _Str_23976(k: number, _arg_2: number):void
+    public _Str_23976(k: number, _arg_2: number): void
     {
         var _local_3: IVector3D;
         if (((_arg_2 > 0) && (_arg_2 < this._lengths[k])))
@@ -153,7 +153,7 @@ export class RoomWallData
         }
     }
 
-    private _Str_23674():void
+    private _Str_23674(): void
     {
         var k: number;
         var _local_2: PIXI.Point;

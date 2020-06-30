@@ -67,7 +67,7 @@ export class AnimationStateData
         this._animationAfterTransitionId = k;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this.recycleFrames();
 
@@ -76,14 +76,14 @@ export class AnimationStateData
         this._animationPlayed   = null;
     }
 
-    public setLayerCount(k: number):void
+    public setLayerCount(k: number): void
     {
         this._layerCount = k;
 
         this.resetAnimationFrames();
     }
 
-    public resetAnimationFrames(k: boolean = true):void
+    public resetAnimationFrames(k: boolean = true): void
     {
         if(k || (!this._frames))
         {
@@ -124,7 +124,7 @@ export class AnimationStateData
         }
     }
 
-    private recycleFrames():void
+    private recycleFrames(): void
     {
         if(!this._frames || !this._frames.length) return;
 
@@ -161,7 +161,7 @@ export class AnimationStateData
         return this._animationPlayed[layerId];
     }
 
-    public setAnimationPlayed(layerId: number, flag: boolean):void
+    public setAnimationPlayed(layerId: number, flag: boolean): void
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return;
         
@@ -175,7 +175,7 @@ export class AnimationStateData
         return this._lastFramePlayed[layerId];
     }
 
-    public setLastFramePlayed(layerId: number, flag: boolean):void
+    public setLastFramePlayed(layerId: number, flag: boolean): void
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return;
         

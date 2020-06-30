@@ -63,6 +63,8 @@ export class Nitro extends PIXI.Application implements INitro
     {
         super(options);
 
+        if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
+
         this._core          = core;
         this._events        = new EventDispatcher();
         this._communication = new NitroCommunicationManager(core.communication);
@@ -77,8 +79,6 @@ export class Nitro extends PIXI.Application implements INitro
 
         this._isReady       = false;
         this._isDisposed    = false;
-
-        if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
     }
 
     public static bootstrap(options: any): void
@@ -97,7 +97,6 @@ export class Nitro extends PIXI.Application implements INitro
         }
 
         PIXI.settings.SCALE_MODE    = PIXI.SCALE_MODES.NEAREST;
-        PIXI.Ticker.shared.maxFPS   = NitroConfiguration.FPS;
 
         const canvas = document.createElement('canvas');
 
@@ -107,11 +106,13 @@ export class Nitro extends PIXI.Application implements INitro
         canvas.height       = window.innerHeight;
         
         const instance = new this(new NitroCore(), {
-            width: (window.innerWidth * window.devicePixelRatio),
-            height: (window.innerHeight * window.devicePixelRatio),
+            width: (window.innerWidth),
+            height: (window.innerHeight),
             transparent: true,
             view: canvas
         });
+
+        instance.ticker.maxFPS = NitroConfiguration.FPS;
 
         instance.communication.demo.setSSO(options.sso);
         

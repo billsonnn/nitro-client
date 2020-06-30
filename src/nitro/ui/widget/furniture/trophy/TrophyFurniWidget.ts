@@ -52,6 +52,8 @@ export class TrophyFurniWidget extends ConversionTrackingWidget implements ITrop
         if(!eventDispatcher) return;
 
         eventDispatcher.removeEventListener(RoomWidgetTrophyUpdateEvent.TROPHY_DATA, this.onRoomWidgetTrophyUpdateEvent.bind(this));
+
+        super.unregisterUpdateEvents(eventDispatcher);
     }
 
     private onRoomWidgetTrophyUpdateEvent(event: RoomWidgetTrophyUpdateEvent): void

@@ -315,7 +315,7 @@ export class RoomPlane implements IRoomPlane
         return true;
     }
 
-    private _Str_11000(k: PIXI.Graphics = null):void
+    private _Str_11000(k: PIXI.Graphics = null): void
     {
         if(this._Str_2708 && this._Str_2708.size)
         {
@@ -562,7 +562,7 @@ export class RoomPlane implements IRoomPlane
         // return drawingDatas;
     }
 
-    // private _Str_25956(k:PlaneBitmapData):void
+    // private _Str_25956(k:PlaneBitmapData): void
     // {
     // }
 
@@ -694,7 +694,7 @@ export class RoomPlane implements IRoomPlane
         return false;
     }
 
-    private _Str_18702(k: IRoomGeometry):void
+    private _Str_18702(k: IRoomGeometry): void
     {
         this._Str_2820.assign(k.getScreenPosition(this._location));
         this._Str_2745.assign(k.getScreenPosition(Vector3d.sum(this._location, this._Str_2943)));
@@ -774,7 +774,7 @@ export class RoomPlane implements IRoomPlane
         this.draw(_arg_2, _local_11);
     }
 
-    private draw(k: PIXI.Graphics, matrix: PIXI.Matrix):void
+    private draw(k: PIXI.Graphics, matrix: PIXI.Matrix): void
     {
         const clone = k.clone();
         
@@ -783,7 +783,7 @@ export class RoomPlane implements IRoomPlane
         this._Str_1049 = clone;
     }
 
-    public _Str_25213():void
+    public _Str_25213(): void
     {
         if(this._disposed || !this._Str_4542 || !this._Str_4047.length) return;
 

@@ -19,7 +19,7 @@ export class FurnitureParticleSystemParticle
     private _alphaMultiplier: number = 1;
     private _frames: any;
 
-    public init(k: number, _arg_2: number, _arg_3: number, _arg_4: Vector3d, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: boolean=false, _arg_9: any=null, _arg_10: boolean=false):void
+    public init(k: number, _arg_2: number, _arg_3: number, _arg_4: Vector3d, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: boolean=false, _arg_9: any=null, _arg_10: boolean=false): void
     {
         this._x = k;
         this._y = _arg_2;
@@ -39,12 +39,12 @@ export class FurnitureParticleSystemParticle
         this._fadeTime = (0.5 + (Math.random() * 0.5));
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._direction = null;
     }
 
-    public update():void
+    public update(): void
     {
         this._age++;
         if (this._age == this._lifeTime)
@@ -69,7 +69,7 @@ export class FurnitureParticleSystemParticle
         return null;
     }
 
-    protected ignite():void
+    protected ignite(): void
     {
     }
 
@@ -176,7 +176,7 @@ export class FurnitureParticleSystemParticle
         return [ this._x, this._y, this._z ].toString();
     }
 
-    public copy(k:FurnitureParticleSystemParticle, _arg_2: number):void
+    public copy(k:FurnitureParticleSystemParticle, _arg_2: number): void
     {
         this._x = (k._x * _arg_2);
         this._y = (k._y * _arg_2);

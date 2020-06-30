@@ -26,7 +26,7 @@ export class RoomObjectLocationCacheItem
         this._objectUpdateId                = -1;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._screenLocation = null;
     }

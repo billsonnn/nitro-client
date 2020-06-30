@@ -21,7 +21,7 @@ export class FurnitureStickieLogic extends FurnitureLogic
         this.updateColor();
     }
 
-    protected updateColor():void
+    protected updateColor(): void
     {
         if(!this.object) return;
 

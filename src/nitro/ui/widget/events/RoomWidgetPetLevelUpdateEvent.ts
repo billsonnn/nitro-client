@@ -4,20 +4,20 @@ export class RoomWidgetPetLevelUpdateEvent extends RoomWidgetUpdateEvent
 {
     public static RWPLUE_PET_LEVEL_UPDATE: string = 'RWPLUE_PET_LEVEL_UPDATE';
 
-    private _Str_2388: number;
+    private _petId: number;
     private _level: number;
 
-    constructor(k: number, _arg_2: number)
+    constructor(petId: number, level: number)
     {
         super(RoomWidgetPetLevelUpdateEvent.RWPLUE_PET_LEVEL_UPDATE);
         
-        this._Str_2388 = k;
-        this._level = _arg_2;
+        this._petId = petId;
+        this._level = level;
     }
 
-    public get _Str_2508(): number
+    public get petId(): number
     {
-        return this._Str_2388;
+        return this._petId;
     }
 
     public get level(): number

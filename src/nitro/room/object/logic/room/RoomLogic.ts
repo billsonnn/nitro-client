@@ -215,7 +215,7 @@ export class RoomLogic extends RoomObjectLogicBase
         }
     }
 
-    private onObjectRoomUpdateMessage(message: ObjectRoomUpdateMessage, model: IRoomObjectModel):void
+    private onObjectRoomUpdateMessage(message: ObjectRoomUpdateMessage, model: IRoomObjectModel): void
     {
         switch (message.type)
         {

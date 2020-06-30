@@ -77,4 +77,9 @@ export class RoomObjectManager implements IRoomObjectManager
     {
         return this._objects;
     }
+
+    public get totalObjects(): number
+    {
+        return this._objects.size;
+    }
 }

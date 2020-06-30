@@ -6,8 +6,8 @@ export class ExtendedSprite extends PIXI.Sprite
     private _offsetX: number;
     private _offsetY: number;
     private _tag: string;
+    private _alphaTolerance: number;
     private _Str_8253: boolean;
-    private _ignoreMouse: boolean;
 
     private _pairedSpriteId: number;
     private _pairedSpriteUpdateCounter: number;
@@ -19,8 +19,8 @@ export class ExtendedSprite extends PIXI.Sprite
         this._offsetX                   = 0;
         this._offsetY                   = 0;
         this._tag                       = '';
+        this._alphaTolerance            = 128;
         this._Str_8253                  = false;
-        this._ignoreMouse               = true;
 
         this._pairedSpriteId            = -1;
         this._pairedSpriteUpdateCounter = -1;
@@ -52,9 +52,7 @@ export class ExtendedSprite extends PIXI.Sprite
     }
 
     public containsPoint(point: PIXI.Point): boolean
-    {
-        if(this._ignoreMouse) return false;
-        
+    {        
         return ExtendedSprite.containsPoint(this, point);
     }
 
@@ -62,53 +60,44 @@ export class ExtendedSprite extends PIXI.Sprite
     {
         if(!sprite || !point) return false;
 
-        if(sprite instanceof PIXI.Sprite)
+        if(!(sprite instanceof PIXI.Sprite)) return false;
+
+        if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
+
+        const texture       = sprite.texture;
+        const baseTexture   = texture.baseTexture;
+
+        if(!texture || !baseTexture || !baseTexture.valid) return false;
+
+        const x = (point.x * sprite.scale.x);
+        const y = (point.y * sprite.scale.y);
+
+        if(!sprite.getLocalBounds().contains(x, y)) return false;
+
+        //@ts-ignore
+        if(!baseTexture.hitMap || (baseTexture.hitMapLastThreshold === undefined) || (baseTexture.hitMapLastThreshold !== sprite.alphaTolerance))
         {
-            if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
+            let canvas: HTMLCanvasElement = null;
 
-            const texture       = sprite.texture;
-            const baseTexture   = texture.baseTexture;
-
-            if(!texture || !baseTexture || !baseTexture.valid) return false;
-
-            const bounds = sprite.getLocalBounds();
-
-            let x = point.x;
-            let y = point.y;
-
-            if(sprite.scale.x === -1) x *= -1;
-
-            if(sprite.scale.y === -1) y *= -1;
-
-            if(!bounds || !bounds.contains(x, y)) return false;
-
-            //@ts-ignore
-            if(!baseTexture.hitMap)
+            if(!baseTexture.resource)
             {
-                let canvas: HTMLCanvasElement = null;
-
-                if(!baseTexture.resource)
-                {
-                    canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
-                }
-
-                if(!ExtendedSprite.generateHitMap(baseTexture, 128, canvas)) return false;
+                canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
             }
 
-            //@ts-ignore
-            const hitMap        = baseTexture.hitMap;
-            const resolution    = baseTexture.resolution;
-            const dx            = Math.round((x + texture.frame.x) * resolution);
-            const dy            = Math.round((y + texture.frame.y) * resolution);
-            //@ts-ignore
-            const num           = (dx + (dy * baseTexture.hitMapWidth));
-            const num32         = ((num / 32) | 0);
-            const numRest       = (num - (num32 * 32));
-
-            return ((hitMap[num32] & (1 << numRest)) !== 0);
+            if(!ExtendedSprite.generateHitMap(baseTexture, sprite.alphaTolerance, canvas)) return false;
         }
 
-        return false;
+        //@ts-ignore
+        const hitMap        = baseTexture.hitMap;
+        const resolution    = baseTexture.resolution;
+        const dx            = Math.round((x + texture.frame.x) * resolution);
+        const dy            = Math.round((y + texture.frame.y) * resolution);
+        //@ts-ignore
+        const num           = (dx + (dy * baseTexture.hitMapWidth));
+        const num32         = ((num / 32) | 0);
+        const numRest       = (num - (num32 * 32));
+
+        return ((hitMap[num32] & (1 << numRest)) !== 0);
     }
     
     private static generateHitMap(baseTexture: PIXI.BaseTexture, threshold: number, tempCanvas: HTMLCanvasElement = null): boolean
@@ -167,9 +156,11 @@ export class ExtendedSprite extends PIXI.Sprite
         }
 
         //@ts-ignore
-        baseTexture.hitMap      = hitMap;
+        baseTexture.hitMap              = hitMap;
         //@ts-ignore
-        baseTexture.hitMapWidth = width;
+        baseTexture.hitMapWidth         = width;
+        //@ts-ignore
+        baseTexture.hitMapLastThreshold = threshold;
 
         return true;
     }
@@ -204,6 +195,16 @@ export class ExtendedSprite extends PIXI.Sprite
         this._tag = tag;
     }
 
+    public get alphaTolerance(): number
+    {
+        return this._alphaTolerance;
+    }
+
+    public set alphaTolerance(tolerance: number)
+    {
+        this._alphaTolerance = tolerance;
+    }
+
     public get _Str_4593(): boolean
     {
         return this._Str_8253;
@@ -212,15 +213,5 @@ export class ExtendedSprite extends PIXI.Sprite
     public set _Str_4593(flag: boolean)
     {
         this._Str_8253 = flag;
-    }
-
-    public get ignoreMouse(): boolean
-    {
-        return this._ignoreMouse;
-    }
-
-    public set ignoreMouse(flag: boolean)
-    {
-        this._ignoreMouse = flag;
     }
 }

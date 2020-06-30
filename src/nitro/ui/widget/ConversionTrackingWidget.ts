@@ -26,12 +26,12 @@ export class ConversionTrackingWidget implements IRoomWidget
         this._disposed          = false;
     }
 
-    public initialize(k: number = 0):void
+    public initialize(k: number = 0): void
     {
 
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this.disposed) return;
 
@@ -50,13 +50,14 @@ export class ConversionTrackingWidget implements IRoomWidget
         this._disposed  = true;
     }
 
-    public registerUpdateEvents(eventDispatcher: IEventDispatcher):void
+    public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         this._Str_759 = eventDispatcher;
     }
 
-    public unregisterUpdateEvents(eventDispatcher: IEventDispatcher):void
+    public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
+        this._Str_759 = null;
     }
 
     public get disposed(): boolean

@@ -25,7 +25,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
         return true;
     }
 
-    protected initializePlanes():void
+    protected initializePlanes(): void
     {
         if(!this.data) return;
 

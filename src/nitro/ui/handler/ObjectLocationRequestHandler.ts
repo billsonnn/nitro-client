@@ -73,22 +73,6 @@ export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 
                 return new RoomWidgetUserLocationUpdateEvent(k._Str_1577, objectBounds, objectLocation);
             }
-            case RoomWidgetGetObjectLocationMessage.RWGOI_MESSAGE_GET_GAME_OBJECT_LOCATION: {
-                const objectBounds      = this._container.roomEngine.getRoomObjectBoundingRectangle(session.roomId, k._Str_1577, RoomObjectCategory.UNIT, this._container.getFirstCanvasId());
-                const objectLocation    = this._container.roomEngine.getRoomObjectScreenLocation(session.roomId, k._Str_1577, RoomObjectCategory.UNIT, this._container.getFirstCanvasId());
-                const rectangle         = this._container.getRoomViewRect();
-
-                if(objectBounds && objectLocation && rectangle)
-                {
-                    objectBounds.x += rectangle.x;
-                    objectBounds.y += rectangle.y;
-
-                    objectLocation.x += rectangle.x;
-                    objectLocation.y += rectangle.y;
-                }
-
-                return new RoomWidgetUserLocationUpdateEvent(k._Str_1577, objectBounds, objectLocation);
-            }
         }
         
         return null;

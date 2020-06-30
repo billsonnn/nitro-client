@@ -300,7 +300,7 @@ export class PlaneMaterialCellColumn
         }
     }
 
-    // private _Str_18476(k:IVector3D):void
+    // private _Str_18476(k:IVector3D): void
     // {
     //     if (((this._cells.length == 0) || (this._cachedBitmapData == null)))
     //     {
@@ -362,7 +362,7 @@ export class PlaneMaterialCellColumn
     //     }
     // }
 
-    // private _Str_17295(k:IVector3D):void
+    // private _Str_17295(k:IVector3D): void
     // {
     //     var _local_13: number;
     //     var _local_14: number;
@@ -444,7 +444,7 @@ export class PlaneMaterialCellColumn
     //     this._Str_4757(_local_5, _local_12, false, k);
     // }
 
-    // private _Str_18019(k:IVector3D):void
+    // private _Str_18019(k:IVector3D): void
     // {
     //     var _local_4:Array;
     //     if (((this._cells.length == 0) || (this._cachedBitmapData == null)))
@@ -465,7 +465,7 @@ export class PlaneMaterialCellColumn
     //     }
     // }
 
-    // private _Str_16099(k: IVector3D):void
+    // private _Str_16099(k: IVector3D): void
     // {
     //     if(!this._cells.length || !this._cachedBitmapData) return;
 

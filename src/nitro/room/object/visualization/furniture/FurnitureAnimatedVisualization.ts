@@ -42,7 +42,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         return super.initialize(data);
     }
 
-    public dispose():void
+    public dispose(): void
     {
         super.dispose();
         

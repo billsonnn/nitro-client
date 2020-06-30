@@ -14,7 +14,7 @@ export class WallRasterizer extends PlaneRasterizer
         if(walls && walls.length) this._Str_24495(walls);
     }
 
-    private _Str_24495(k: any):void
+    private _Str_24495(k: any): void
     {
         if(!k) return;
 

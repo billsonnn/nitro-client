@@ -145,7 +145,7 @@ export class RoomPlaneData
         return _local_2;
     }
 
-    public addMask(k: number, _arg_2: number, _arg_3: number, _arg_4: number):void
+    public addMask(k: number, _arg_2: number, _arg_3: number, _arg_4: number): void
     {
         var _local_5:RoomPlaneMaskData = new RoomPlaneMaskData(k, _arg_2, _arg_3, _arg_4);
         this._masks.push(_local_5);

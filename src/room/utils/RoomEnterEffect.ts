@@ -14,7 +14,7 @@ export class RoomEnterEffect
     private static _Str_6886: number    = (20 * 1000);
     private static _Str_7448: number    = 2000;
 
-    public static init(delay: number, duration: number):void
+    public static init(delay: number, duration: number): void
     {
         RoomEnterEffect._Str_11007  = 0;
         RoomEnterEffect._Str_6886   = delay;

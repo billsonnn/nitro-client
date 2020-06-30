@@ -177,14 +177,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
     public getBoundingRectangle(): PIXI.Rectangle
     {
-        const totalSprites = this.totalSprites;
-
-        const rectangle = new PIXI.Rectangle();
-
-        let left    = 0;
-        let top     = 0;
-        let right   = 0;
-        let bottom  = 0;
+        const totalSprites  = this.totalSprites;
+        const rectangle     = new PIXI.Rectangle();
 
         let iterator = 0;
 
@@ -198,32 +192,14 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
                 if(texture)
                 {
-                    const point = new PIXI.Point(sprite.offsetX, sprite.offsetY);
-
-                    if(iterator === 0)
-                    {
-                        left      = point.x;
-                        top       = point.y;
-                        right     = (point.x + sprite.width);
-                        bottom    = (point.y + sprite.height);
-                    }
-                    else
-                    {
-                        if(point.x < rectangle.left) left = point.x;
-
-                        if(point.y < rectangle.top) top = point.y;
-
-                        if((point.x + sprite.width) > rectangle.right) right = (point.x + sprite.width);
-
-                        if((point.y + sprite.height) > rectangle.bottom) bottom = (point.y + sprite.height);
-                    }
+                    rectangle.enlarge(new PIXI.Rectangle(sprite.offsetX, sprite.offsetY, texture.width, texture.height));
                 }
             }
 
             iterator++;
         }
 
-        return new PIXI.Rectangle(left, right, top, bottom);
+        return rectangle;
     }
 
     public get instanceId(): number

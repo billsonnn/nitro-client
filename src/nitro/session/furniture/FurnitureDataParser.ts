@@ -9,10 +9,10 @@ export class FurnitureDataParser extends EventDispatcher
     public static FURNITURE_DATA_READY: string = 'FDP_FURNITURE_DATA_READY';
     public static FURNITURE_DATA_ERROR: string = 'FDP_FURNITURE_DATA_ERROR';
 
-    private _floorItems: Map<number, FurnitureData>;
-    private _wallItems: Map<number, FurnitureData>;
+    private _floorItems: Map<number, IFurnitureData>;
+    private _wallItems: Map<number, IFurnitureData>;
 
-    constructor(floorItems: Map<number, FurnitureData>, wallItems: Map<number, FurnitureData>)
+    constructor(floorItems: Map<number, IFurnitureData>, wallItems: Map<number, IFurnitureData>)
     {
         super();
 
@@ -62,7 +62,7 @@ export class FurnitureDataParser extends EventDispatcher
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
 
-    private parseFloorItems(data: IFurnitureData[]): void
+    private parseFloorItems(data: any): void
     {
         if(!data || !data.length) return;
 
@@ -70,11 +70,11 @@ export class FurnitureDataParser extends EventDispatcher
         {
             if(!furniture) continue;
 
-            this._floorItems.set(furniture.id, new FurnitureData(FurnitureType.FLOOR, furniture));
+            this._floorItems.set(furniture.id, new FurnitureData(FurnitureType.FLOOR, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams));
         }
     }
 
-    private parseWallItems(data: IFurnitureData[]): void
+    private parseWallItems(data: any): void
     {
         if(!data || !data.length) return;
 
@@ -82,7 +82,7 @@ export class FurnitureDataParser extends EventDispatcher
         {
             if(!furniture) continue;
 
-            this._wallItems.set(furniture.id, new FurnitureData(FurnitureType.WALL, furniture));
+            this._wallItems.set(furniture.id, new FurnitureData(FurnitureType.WALL, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams));
         }
     }
 }

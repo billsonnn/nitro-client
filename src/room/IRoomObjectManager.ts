@@ -8,4 +8,5 @@ export interface IRoomObjectManager
     removeObject(id: number): void;
     removeAllObjects(): void;
     objects: Map<number, IRoomObjectController>;
+    totalObjects: number;
 }

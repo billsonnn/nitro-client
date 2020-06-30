@@ -49,7 +49,7 @@ export class PlaneVisualization
         return this._hasAnimationLayers;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this._layers && this._layers.length)
         {
@@ -75,7 +75,7 @@ export class PlaneVisualization
         if(this._cachedBitmapNormal) this._cachedBitmapNormal = null;
     }
 
-    public _Str_3355():void
+    public _Str_3355(): void
     {
         if(!this._isCached) return;
 

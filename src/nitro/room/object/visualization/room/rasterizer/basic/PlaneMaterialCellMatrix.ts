@@ -106,7 +106,7 @@ export class PlaneMaterialCellMatrix
         if(this._cachedBitmapNormal) this._cachedBitmapNormal = null;
     }
 
-    public _Str_3355():void
+    public _Str_3355(): void
     {
         if(!this._isCached) return;
 

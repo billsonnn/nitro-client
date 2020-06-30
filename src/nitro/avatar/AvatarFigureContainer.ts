@@ -39,7 +39,7 @@ export class AvatarFigureContainer implements IAvatarFigureContainer
         return existing.get('colorids');
     }
 
-    public _Str_830(k: string, _arg_2: number, _arg_3: number[]):void
+    public _Str_830(k: string, _arg_2: number, _arg_3: number[]): void
     {
         const set: Map<string, any> = new Map();
 

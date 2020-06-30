@@ -8,8 +8,8 @@ import { UserInfoEvent } from '../communication/messages/incoming/user/data/User
 import { Nitro } from '../Nitro';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
-import { FurnitureData } from './furniture/FurnitureData';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
+import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
 import { ISessionDataManager } from './ISessionDataManager';
 
@@ -26,8 +26,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _rankId: number;
     private _isAmbassador: boolean;
 
-    private _floorItems: Map<number, FurnitureData>;
-    private _wallItems: Map<number, FurnitureData>;
+    private _floorItems: Map<number, IFurnitureData>;
+    private _wallItems: Map<number, IFurnitureData>;
     private _furnitureData: FurnitureDataParser;
     private _pendingFurniDataListeners: IFurnitureDataListener[];
 
@@ -96,7 +96,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._badgeImageManager = new BadgeImageManager(Nitro.instance.core.asset, this.events);
     }
 
-    public getAllFurnitureData(listener: IFurnitureDataListener): FurnitureData[]
+    public getAllFurnitureData(listener: IFurnitureDataListener): IFurnitureData[]
     {
         if(!this._floorItems || !this._floorItems.size)
         {
@@ -105,7 +105,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
             return;
         }
 
-        const furnitureData: FurnitureData[] = [];
+        const furnitureData: IFurnitureData[] = [];
 
         for(let data of this._floorItems.values())
         {
@@ -194,7 +194,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData = null;
     }
 
-    public getFloorItemData(id: number): FurnitureData
+    public getFloorItemData(id: number): IFurnitureData
     {
         const existing = this._floorItems.get(id);
 
@@ -203,7 +203,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return existing;
     }
 
-    public getFloorItemDataByName(name: string): FurnitureData
+    public getFloorItemDataByName(name: string): IFurnitureData
     {
         if(!name || !this._floorItems || !this._floorItems.size) return null;
 
@@ -215,7 +215,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
-    public getWallItemData(id: number): FurnitureData
+    public getWallItemData(id: number): IFurnitureData
     {
         const existing = this._wallItems.get(id);
 
@@ -224,7 +224,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return existing;
     }
 
-    public getWallItemDataByName(name: string): FurnitureData
+    public getWallItemDataByName(name: string): IFurnitureData
     {
         if(!name || !this._wallItems || !this._wallItems.size) return null;
 

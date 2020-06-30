@@ -75,7 +75,7 @@ export class AvatarStructure extends EventDispatcher
         this._geometry = new AvatarModelGeometry(k);
     }
 
-    public _Str_1060(k: IAssetManager, _arg_2: any):void
+    public _Str_1060(k: IAssetManager, _arg_2: any): void
     {
         if(!_arg_2) return;
 

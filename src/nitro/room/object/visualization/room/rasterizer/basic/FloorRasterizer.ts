@@ -14,7 +14,7 @@ export class FloorRasterizer extends PlaneRasterizer
         if(floors && floors.length) this._Str_24495(floors);
     }
 
-    private _Str_24495(k: any):void
+    private _Str_24495(k: any): void
     {
         if(!k) return;
 

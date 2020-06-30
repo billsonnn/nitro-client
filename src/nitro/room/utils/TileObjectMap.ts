@@ -37,7 +37,7 @@ export class TileObjectMap
         this._tileObjectMap.clear();
     }
 
-    public populate(k: IRoomObject[]):void
+    public populate(k: IRoomObject[]): void
     {
         this.clear();
 
@@ -63,7 +63,7 @@ export class TileObjectMap
         return null;
     }
 
-    public _Str_23932(k: number, _arg_2: number, _arg_3:IRoomObject):void
+    public _Str_23932(k: number, _arg_2: number, _arg_3:IRoomObject): void
     {
         if (!_arg_3.isReady)
         {
@@ -80,7 +80,7 @@ export class TileObjectMap
         }
     }
 
-    public _Str_21192(k: IRoomObject):void
+    public _Str_21192(k: IRoomObject): void
     {
         if(!k || !k.model || !k.isReady) return;
 

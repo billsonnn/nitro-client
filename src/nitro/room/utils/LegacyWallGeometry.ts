@@ -38,13 +38,13 @@ export class LegacyWallGeometry
         this._scale = k;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this.reset();
         this._isDisposed = true;
     }
 
-    public initialize(width: number, height: number, floorHeight: number):void
+    public initialize(width: number, height: number, floorHeight: number): void
     {
         if((width <= this._width) && (height <= this._height))
         {
@@ -82,7 +82,7 @@ export class LegacyWallGeometry
         this._floorHeight   = floorHeight;
     }
 
-    private reset():void
+    private reset(): void
     {
         this._heightMap = [];
     }

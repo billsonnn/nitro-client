@@ -1020,7 +1020,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(!furniData) return null;
 
-        if(!furniData.data.canStandOn && !furniData.data.canSitOn && !furniData.data.canLayOn) return null;
+        if(!furniData.canStandOn && !furniData.canSitOn && !furniData.canLayOn) return null;
 
         const model = k.model;
 
@@ -1043,7 +1043,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(!renderingCanvas) return null;
 
         const scale     = renderingCanvas.geometry.scale;
-        const _local_13 = furniData.data.canSitOn ? 0.5 : 0;
+        const _local_13 = furniData.canSitOn ? 0.5 : 0;
         const _local_14 = ((((scale / 2) + _arg_2._Str_4595) + _arg_2.localX) / (scale / 4));
         const _local_15 = (((_arg_2._Str_4534 + _arg_2.localY) + (((sizeZ - _local_13) * scale) / 2)) / (scale / 4));
         const _local_16 = ((_local_14 + (2 * _local_15)) / 4);
@@ -1056,7 +1056,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if((_local_18 < location.x) || (_local_18 >= (location.x + sizeX))) _local_20 = true;
         else if((_local_19 < location.y) || (_local_19 >= (location.y + sizeY))) _local_20 = true;
         
-        const _local_21 = furniData.data.canSitOn ? (sizeZ - 0.5) : sizeZ;
+        const _local_21 = furniData.canSitOn ? (sizeZ - 0.5) : sizeZ;
         
         if(!_local_20) return new Vector3d(_local_18, _local_19, _local_21);
 
@@ -1419,7 +1419,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
-    private _Str_16209(k: number):void
+    private _Str_16209(k: number): void
     {
         if(this._selectedObjectId === -1) return;
 
@@ -1477,7 +1477,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
-    private _Str_13199(k: number):void
+    private _Str_13199(k: number): void
     {
         if(!this._roomEngine) return;
 

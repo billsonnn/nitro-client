@@ -14,14 +14,10 @@ export class CommunicationManager extends Disposable implements ICommunicationMa
         super();
 
         this._connections = [];
-
-        //PIXI.Ticker.shared.add(this.update, this);
     }
 
     protected onDispose(): void
     {
-        //PIXI.Ticker.shared.remove(this.update, this);
-
         if(!this._connections || !this._connections.length) return;
         
         for(let connection of this._connections.values()) connection && connection.dispose();

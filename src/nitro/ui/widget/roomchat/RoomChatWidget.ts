@@ -59,7 +59,7 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
 
         this._contentListWindow.appendChild(this._activeContentWindow);
 
-        PIXI.Ticker.shared.add(this.update, this);
+        Nitro.instance.ticker.add(this.update, this);
     }
 
     public get mainWindow(): HTMLElement
@@ -76,7 +76,7 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
     {
         if(this.disposed) return;
 
-        PIXI.Ticker.shared.remove(this.update, this);
+        Nitro.instance.ticker.remove(this.update, this);
         
         super.dispose();
     }

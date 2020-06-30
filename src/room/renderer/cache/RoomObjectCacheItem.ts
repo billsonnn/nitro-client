@@ -23,7 +23,7 @@ export class RoomObjectCacheItem
         return this._sprites;
     }
 
-    public dispose():void
+    public dispose(): void
     {
         if(this._location)
         {

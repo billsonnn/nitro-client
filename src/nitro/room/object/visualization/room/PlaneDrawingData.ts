@@ -32,7 +32,7 @@ export class PlaneDrawingData implements IPlaneDrawingData
         this._alignBottom   = _arg_3;
     }
 
-    public addMask(k: string, _arg_2: PIXI.Point, _arg_3: boolean, _arg_4: boolean):void
+    public addMask(k: string, _arg_2: PIXI.Point, _arg_3: boolean, _arg_4: boolean): void
     {
         this._maskAssetNames.push(k);
         this._maskAssetLocations.push(_arg_2);
