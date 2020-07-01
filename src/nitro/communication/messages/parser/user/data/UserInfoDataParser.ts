@@ -91,4 +91,9 @@ export class UserInfoDataParser
     {
         return this._motto;
     }
+
+    public get realName(): string
+    {
+        return this._realName;
+    }
 }

@@ -1,5 +1,6 @@
 import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { RoomModerationParser } from '../communication/messages/parser/room/data/RoomModerationParser';
 import { UserDataManager } from './UserDataManager';
 
 export interface IRoomSession extends IDisposable
@@ -17,12 +18,17 @@ export interface IRoomSession extends IDisposable
     pickupPet(id: number): void;
     pickupBot(id: number): void;
     connection: IConnection;
+    userDataManager: UserDataManager;
     roomId: number;
     state: string;
-    userDataManager: UserDataManager;
+    tradeMode: number;
+    doorMode: number;
+    allowPets: boolean;
     controllerLevel: number;
-    ownerUserRoomId: number
-    roomOwner: boolean;
+    ownerUserRoomId: number;
+    isGuildRoom: boolean;
+    isRoomOwner: boolean;
     isDecorating: boolean;
     isSpectator: boolean;
+    moderationSettings: RoomModerationParser;
 }

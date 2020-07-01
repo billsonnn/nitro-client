@@ -20,6 +20,7 @@ export interface IRoomObjectSprite
     relativeDepth: number;
     _Str_4593: boolean;
     _Str_3582: string;
+    clickHandling: boolean;
     visible: boolean;
     tag: string;
     alphaTolerance: number;

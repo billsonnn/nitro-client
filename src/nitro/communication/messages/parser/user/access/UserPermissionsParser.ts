@@ -4,13 +4,13 @@ import { IMessageParser } from '../../../../../../core/communication/messages/IM
 export class UserPermissionsParser implements IMessageParser
 {
     private _clubLevel: number;
-    private _rank: number;
+    private _securityLevel: number;
     private _isAmbassador: boolean;
 
     public flush(): boolean
     {
         this._clubLevel     = 0;
-        this._rank          = 0;
+        this._securityLevel = 0;
         this._isAmbassador  = false;
 
         return true;
@@ -21,7 +21,7 @@ export class UserPermissionsParser implements IMessageParser
         if(!wrapper) return false;
 
         this._clubLevel     = wrapper.readInt();
-        this._rank          = wrapper.readInt();
+        this._securityLevel = wrapper.readInt();
         this._isAmbassador  = wrapper.readBoolean();
 
         return true;
@@ -32,9 +32,9 @@ export class UserPermissionsParser implements IMessageParser
         return this._clubLevel;
     }
 
-    public get rank(): number
+    public get securityLevel(): number
     {
-        return this._rank;
+        return this._securityLevel;
     }
 
     public get isAmbassador(): boolean

@@ -2,6 +2,7 @@ export class IncomingHeader
 {
     public static ACHIEVEMENT_LIST             = 305;
     public static AUTHENTICATED                = 2491;
+    public static AVAILABILITY_STATUS          = 2033;
     public static BUILDERS_CLUB_EXPIRED        = 1452;
     public static CAMERA_PRICE                 = 3878;
     public static CAMERA_THUMBNAIL_SAVED       = 3595;
@@ -24,11 +25,11 @@ export class IncomingHeader
     public static DISCOUNT_CONFIG              = 2347;
     public static FIRST_LOGIN_OF_DAY           = 793;
     public static FURNITURE_DATA               = 2547;
-    public static FURNITURE_ITEMDATA           = 2202;
     public static FURNITURE_FLOOR              = 1778;
     public static FURNITURE_FLOOR_ADD          = 1534;
     public static FURNITURE_FLOOR_REMOVE       = 2703;
     public static FURNITURE_FLOOR_UPDATE       = 3776;
+    public static FURNITURE_ITEMDATA           = 2202;
     public static FURNITURE_STATE              = 2376;
     public static GAME_CENTER_ACHIEVEMENTS     = 2265;
     public static GAME_CENTER_GAME_LIST        = 222;
@@ -80,6 +81,7 @@ export class IncomingHeader
     public static NAVIGATOR_SETTINGS           = 518;
     public static NAVIGATOR_TABS               = 3052;
     public static NOTIFICATION_LIST            = 1992;
+    public static PET_FIGURE_UPDATE            = 1924;
     public static PET_INFO                     = 2901;
     public static RECYCLER_PRIZES              = 3164;
     public static ROOM_BAN_LIST                = 1869;
@@ -92,6 +94,7 @@ export class IncomingHeader
     public static ROOM_ENTER_ERROR             = 899;
     public static ROOM_FORWARD                 = 160;
     public static ROOM_HEIGHT_MAP              = 2753;
+    public static ROOM_HEIGHT_MAP_UPDATE       = 558;
     public static ROOM_INFO                    = 687;
     public static ROOM_INFO_OWNER              = 749;
     public static ROOM_MODEL                   = 1301;
@@ -100,7 +103,6 @@ export class IncomingHeader
     public static ROOM_MODEL_NAME              = 2031;
     public static ROOM_MUTE                    = 2533;
     public static ROOM_MUTE_USER               = 826;
-    public static ROOM_RIGHTS_OWNER            = 339;
     public static ROOM_PAINT                   = 2454;
     public static ROOM_PROMOTION               = 2274;
     public static ROOM_QUEUE_STATUS            = 2208;
@@ -109,6 +111,7 @@ export class IncomingHeader
     public static ROOM_RIGHTS_LIST             = 1284;
     public static ROOM_RIGHTS_LIST_ADD         = 2088;
     public static ROOM_RIGHTS_LIST_REMOVE      = 1327;
+    public static ROOM_RIGHTS_OWNER            = 339;
     public static ROOM_ROLLING                 = 3207;
     public static ROOM_SCORE                   = 482;
     public static ROOM_SETTINGS                = 1498;
@@ -117,7 +120,6 @@ export class IncomingHeader
     public static ROOM_SETTINGS_SAVE_ERROR     = 1555;
     public static ROOM_SETTINGS_UPDATED        = 3297;
     public static ROOM_SPECTATOR               = 1033;
-    public static ROOM_HEIGHT_MAP_UPDATE       = 558;
     public static ROOM_THICKNESS               = 3547;
     public static SECURITY_DEBUG               = 3284;
     public static SECURITY_MACHINE             = 1488;
@@ -131,13 +133,13 @@ export class IncomingHeader
     public static TRADE_ERROR                  = 217;
     public static TRADE_UPDATE                 = 2024;
     public static UNIT                         = 374;
-    public static UNIT_EXPRESSION              = 1631;
     public static UNIT_CHANGE_NAME             = 2182;
     public static UNIT_CHAT                    = 1446;
     public static UNIT_CHAT_SHOUT              = 1036;
     public static UNIT_CHAT_WHISPER            = 2704;
     public static UNIT_DANCE                   = 2233;
     public static UNIT_EFFECT                  = 1167;
+    public static UNIT_EXPRESSION              = 1631;
     public static UNIT_HAND_ITEM               = 1474;
     public static UNIT_IDLE                    = 1797;
     public static UNIT_INFO                    = 3920;
@@ -173,13 +175,11 @@ export class IncomingHeader
     public static USER_PETS                    = 3522;
     public static USER_PROFILE                 = 3898;
     public static USER_RESPECT                 = 2815;
-    public static USER_RIGHTS                  = 2033;
     public static USER_SANCTION_STATUS         = 3679;
     public static USER_SETTINGS                = 513;
     public static USER_SUBSCRIPTION            = 954;
-    public static WIRED_CONDITION              = 1108;
     public static WIRED_ACTION                 = 1434;
+    public static WIRED_CONDITION              = 1108;
     public static WIRED_SAVE                   = 1155;
     public static WIRED_TRIGGER                = 383;
-    public static PET_FIGURE_UPDATE            = 1924;
 }

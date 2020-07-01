@@ -15,6 +15,7 @@ export interface ISessionDataManager extends INitroManager
     loadBadgeImage(name: string): string;
     getGroupBadgeImage(name: string): PIXI.Texture;
     loadGroupBadgeImage(name: string): string;
+    isUserIgnored(userName: string): boolean;
     hasSecurity(level: number): boolean;
     giveRespect(userId: number): void;
     givePetRespect(petId: number): void;
@@ -23,5 +24,12 @@ export interface ISessionDataManager extends INitroManager
     userName: string;
     figure: string;
     gender: string;
+    realName: string;
+    clubLevel: number;
+    securityLevel: number;
+    isAmbassador: boolean;
+    isSystemOpen: boolean;
+    isSystemShutdown: boolean;
+    isAuthenticHabbo: boolean;
     isModerator: boolean;
 }

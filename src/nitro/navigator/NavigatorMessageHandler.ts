@@ -72,7 +72,7 @@ export class NavigatorMessageHandler extends Disposable
             {
                 if(parser.data.ownerName !== this._navigator.session.userName)
                 {
-                    switch(parser.data.state)
+                    switch(parser.data.doorMode)
                     {
                         case RoomDataParser.DOORBELL_STATE:
                             console.log('DOORBELL');

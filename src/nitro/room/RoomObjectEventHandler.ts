@@ -74,7 +74,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         this._selectedAvatarId          = -1;
         this._selectedObjectId          = -1;
-        this._selectedObjectCategory    = -1;
+        this._selectedObjectCategory    = -2;
         this._whereYouClickIsWhereYouGo = true;
         this._objectPlacementSource     = null;
     }
@@ -109,7 +109,10 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
         else
         {
-            if(event._Str_3463) this._Str_11142(category, event.type, event._Str_3463);
+            if(event._Str_3463)
+            {
+                this._Str_11142(category, event.type, event._Str_3463);
+            }
         }
 
         if(object.mouseHandler) object.mouseHandler.mouseEvent(event, geometry);
@@ -118,10 +121,10 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     private _Str_18648(k: number, _arg_2: string): string
     {
         const existing = this._eventIds.get(k);
-
+        
         if(!existing) return null;
 
-        return existing.get(_arg_2);
+        return (existing.get(_arg_2) || null);
     }
 
     private _Str_11142(k: number, _arg_2: string, _arg_3: string): void
@@ -292,17 +295,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         this._Str_3571(roomId, selectedData.id, selectedData.category, RoomObjectOperationType.OBJECT_MOVE_TO);
                     }
 
-                    if(event._Str_3463 !== null)
-                    {
-                        this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
-                    }
+                    if(!event._Str_3463) this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
 
                     this._Str_19253(roomId, event.objectId, category);
                 }
 
                 didMove = true;
 
-                if(event.objectId === -1) this._Str_17481(roomId, event.objectId, category);
+                if(event.objectId !== -1) this._Str_17481(roomId, event.objectId, category);
 
                 break;
             case RoomObjectOperationType.OBJECT_PLACE:
@@ -405,10 +405,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             {
                 this._Str_16209(roomId);
 
-                if(this._roomEngine.events)
-                {
-                    this._roomEngine.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.DESELECTED, roomId, -1, RoomObjectCategory.MINIMUM));
-                }
+                if(this._roomEngine.events) this._roomEngine.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.DESELECTED, roomId, -1, RoomObjectCategory.MINIMUM));
 
                 this._Str_12227(roomId, 0, false);
             }
@@ -1397,7 +1394,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 {
                     this._Str_12227(roomId, 0, false);
 
-                    if (objectId != this._selectedObjectId)
+                    if(objectId !== this._selectedObjectId)
                     {
                         this._Str_16209(roomId);
 

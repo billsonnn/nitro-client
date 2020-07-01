@@ -71,7 +71,7 @@ export class AvatarInfoData
         return this._isOwnUser;
     }
 
-    public get _Str_4330(): boolean
+    public get allowNameChange(): boolean
     {
         return this._allowNameChange;
     }
@@ -156,7 +156,7 @@ export class AvatarInfoData
         this._isOwnUser = k;
     }
 
-    public set _Str_4330(k: boolean)
+    public set allowNameChange(k: boolean)
     {
         this._allowNameChange = k;
     }
@@ -193,23 +193,23 @@ export class AvatarInfoData
 
     public populate(k: RoomWidgetUpdateInfostandUserEvent): void
     {
-        this._amIAnyRoomController = k._Str_3529;
+        this._amIAnyRoomController = k.isModerator;
         this._myRoomControllerLevel = k.roomControllerLevel;
-        this._amIOwner = k._Str_3246;
+        this._amIOwner = k.isRoomOwner;
         this._canBeAskedAsFriend = k.canBeAskedForAFriend;
         this._canBeKicked = k._Str_5990;
         this._canBeBanned = k._Str_6701;
         this._canBeMuted = k._Str_6394;
-        this._canTrade = k._Str_5751;
+        this._canTrade = k.canTrade;
         this._canTradeReason = k._Str_6622;
-        this._isIgnored = k._Str_3655;
+        this._isIgnored = k.isIgnored;
         this._respectLeft = k._Str_3577;
         this._isOwnUser = (k.type === RoomWidgetUpdateInfostandUserEvent.OWN_USER);
         this._allowNameChange = k._Str_4330;
-        this._isGuildRoom = k._Str_3672;
-        this._targetRoomControllerLevel = k._Str_5599;
-        this._carryItemType = k._Str_3249;
+        this._isGuildRoom = k.isGuildRoom;
+        this._targetRoomControllerLevel = k.flatControl;
+        this._carryItemType = k.carryId;
         this._isFriend = k.isFriend;
-        this._isAmbassador = k._Str_18096;
+        this._isAmbassador = k.isAmbassador;
     }
 }

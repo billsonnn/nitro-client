@@ -14,7 +14,7 @@ export class InfoStandUserData
     private _type: string;
     private _petRespectLeft: number = 0;
 
-    public InfoStandUserData()
+    constructor()
     {
         this._badges = [];
     }
@@ -136,15 +136,15 @@ export class InfoStandUserData
 
     public _Str_5479(k: RoomWidgetUpdateInfostandUserEvent): void
     {
-        this.userId = k._Str_2394;
+        this.userId = k.webID;
         this.userName = k.name;
         this.badges = k.badges;
         this.groupId = k.groupId;
         this.groupName = k.groupName;
         this._Str_5235 = k._Str_5235;
         this._Str_3577 = k._Str_3577;
-        this._Str_3249 = k._Str_3249;
-        this._Str_3313 = k._Str_3313;
+        this._Str_3249 = k.carryId;
+        this._Str_3313 = k.roomIndex;
         this.type = k.type;
     }
 }

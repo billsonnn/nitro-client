@@ -1,4 +1,5 @@
 import { IMessageConfiguration } from '../../core/communication/messages/IMessageConfiguration';
+import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
@@ -51,7 +52,6 @@ import { RoomUnitStatusEvent } from './messages/incoming/room/unit/RoomUnitStatu
 import { AuthenticatedEvent } from './messages/incoming/security/AuthenticatedEvent';
 import { UserPerksEvent } from './messages/incoming/user/access/UserPerksEvent';
 import { UserPermissionsEvent } from './messages/incoming/user/access/UserPermissionsEvent';
-import { UserRightsEvent } from './messages/incoming/user/access/UserRightsEvent';
 import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
@@ -108,6 +108,9 @@ export class NitroMessages implements IMessageConfiguration
     
     private registerEvents(): void
     {
+        // AVAILABILITY
+        this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
+
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
 
@@ -192,7 +195,6 @@ export class NitroMessages implements IMessageConfiguration
             // ACCESS
             this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);
             this._events.set(IncomingHeader.USER_PERMISSIONS, UserPermissionsEvent);
-            this._events.set(IncomingHeader.USER_RIGHTS, UserRightsEvent);
 
             // DATA
             this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);

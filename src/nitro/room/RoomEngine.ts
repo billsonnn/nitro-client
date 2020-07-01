@@ -209,6 +209,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._roomManager.addUpdateCategory(RoomObjectCategory.FLOOR);
         this._roomManager.addUpdateCategory(RoomObjectCategory.WALL);
         this._roomManager.addUpdateCategory(RoomObjectCategory.UNIT);
+        this._roomManager.addUpdateCategory(RoomObjectCategory.CURSOR);
         this._roomManager.addUpdateCategory(RoomObjectCategory.ROOM);
 
         this._roomMessageHandler.setConnection(this._communication.connection);

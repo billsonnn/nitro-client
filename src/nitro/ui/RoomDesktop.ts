@@ -570,20 +570,23 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
     private isFurnitureSelectionDisabled(k: RoomEngineObjectEvent): boolean
     {
-        if(!k || !this._roomEngine) return false;
+        let result = false;
 
         const roomObject = this._roomEngine.getRoomObject(k.roomId, k.objectId, k.category);
 
-        if(!roomObject) return false;
-
-        const selectionDisabled = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_SELECTION_DISABLED) === 1);
-
-        if(selectionDisabled)
+        if(roomObject)
         {
-            if(this._sessionDataManager.isModerator) return false;
+            const selectionDisabled = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_SELECTION_DISABLED) === 1);
+
+            if(selectionDisabled)
+            {
+                result = true;
+
+                if(this._sessionDataManager.isModerator) result = false;
+            }
         }
 
-        return true;
+        return result;
     }
 
     private checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean

@@ -6,7 +6,9 @@ import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/ro
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
 import { RoomUnitTypingStartComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
 import { RoomUnitTypingStopComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
+import { RoomModerationParser } from '../communication/messages/parser/room/data/RoomModerationParser';
 import { RoomControllerLevel } from './enum/RoomControllerLevel';
+import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
@@ -14,34 +16,43 @@ import { UserDataManager } from './UserDataManager';
 export class RoomSession extends Disposable implements IRoomSession
 {
     private _connection: IConnection;
+    private _userData: UserDataManager;
 
     private _roomId: number;
     private _password: string;
     private _state: string;
-
-    private _userData: UserDataManager;
+    private _tradeMode: number;
+    private _doorMode: number;
+    private _allowPets: boolean;
     private _controllerLevel: number;
     private _ownUserRoomId: number;
+    private _isGuildRoom: boolean;
     private _isRoomOwner: boolean;
     private _isDecorating: boolean;
     private _isSpectator: boolean;
+
+    private _moderationSettings: RoomModerationParser;
 
     constructor()
     {
         super();
 
-        this._connection        = null;
+        this._connection            = null;
+        this._userData              = new UserDataManager();
 
-        this._roomId            = 0;
-        this._password          = null;
-        this._state             = RoomSessionEvent.CREATED;
+        this._roomId                = 0;
+        this._password              = null;
+        this._state                 = RoomSessionEvent.CREATED;
+        this._tradeMode             = RoomTradingLevelEnum._Str_12752;
+        this._doorMode              = 0;
+        this._controllerLevel       = RoomControllerLevel.NONE;
+        this._ownUserRoomId         = -1;
+        this._isGuildRoom           = false;
+        this._isRoomOwner           = false;
+        this._isDecorating          = false;
+        this._isSpectator           = false;
 
-        this._userData          = new UserDataManager();
-        this._controllerLevel   = RoomControllerLevel.NONE;
-        this._ownUserRoomId     = -1;
-        this._isRoomOwner       = false;
-        this._isDecorating      = false;
-        this._isSpectator       = false;
+        this._moderationSettings    = null;
     }
 
     protected onDispose(): void
@@ -152,6 +163,11 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._connection;
     }
 
+    public get userDataManager(): UserDataManager
+    {
+        return this._userData;
+    }
+
     public get roomId(): number
     {
         return this._roomId;
@@ -177,9 +193,34 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._state;
     }
 
-    public get userDataManager(): UserDataManager
+    public get tradeMode(): number
     {
-        return this._userData;
+        return this._tradeMode;
+    }
+
+    public set tradeMode(mode: number)
+    {
+        this._tradeMode = mode;
+    }
+
+    public get doorMode(): number
+    {
+        return this._doorMode;
+    }
+
+    public set doorMode(mode: number)
+    {
+        this._doorMode = mode;
+    }
+
+    public get allowPets(): boolean
+    {
+        return this._allowPets;
+    }
+
+    public set allowPets(flag: boolean)
+    {
+        this._allowPets = flag;
     }
 
     public get controllerLevel(): number
@@ -192,7 +233,17 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._ownUserRoomId;
     }
 
-    public get roomOwner(): boolean
+    public get isGuildRoom(): boolean
+    {
+        return this._isGuildRoom;
+    }
+
+    public set isGuildRoom(flag: boolean)
+    {
+        this._isGuildRoom = flag;
+    }
+
+    public get isRoomOwner(): boolean
     {
         return this._isRoomOwner;
     }
@@ -215,5 +266,15 @@ export class RoomSession extends Disposable implements IRoomSession
     public set isSpectator(flag: boolean)
     {
         this._isSpectator = flag;
+    }
+
+    public get moderationSettings(): RoomModerationParser
+    {
+        return this._moderationSettings;
+    }
+
+    public set moderationSettings(parser: RoomModerationParser)
+    {
+        this._moderationSettings = parser;
     }
 }

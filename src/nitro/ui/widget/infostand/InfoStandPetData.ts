@@ -31,7 +31,6 @@ export class InfoStandPetData
     private _remainingWellBeingSeconds: number;
     private _remainingGrowingSeconds: number;
 
-
     public get name(): string
     {
         return this._name;

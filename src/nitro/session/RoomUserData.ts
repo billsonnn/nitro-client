@@ -104,12 +104,12 @@ export class RoomUserData
         this._webID = k;
     }
 
-    public get groupID(): string
+    public get guildId(): string
     {
         return this._groupID;
     }
 
-    public set groupID(k: string)
+    public set guildId(k: string)
     {
         this._groupID = k;
     }

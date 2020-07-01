@@ -79,12 +79,12 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._activityPoints;
     }
 
-    public set _Str_2394(k: number)
+    public set webID(k: number)
     {
         this._Str_4900 = k;
     }
 
-    public get _Str_2394(): number
+    public get webID(): number
     {
         return this._Str_4900;
     }
@@ -99,12 +99,12 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._xp;
     }
 
-    public set _Str_2908(k: number)
+    public set userType(k: number)
     {
         this._Str_3021 = k;
     }
 
-    public get _Str_2908(): number
+    public get userType(): number
     {
         return this._Str_3021;
     }
@@ -179,32 +179,32 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._Str_3437;
     }
 
-    public set _Str_3655(k: boolean)
+    public set isIgnored(k: boolean)
     {
         this._Str_6028 = k;
     }
 
-    public get _Str_3655(): boolean
+    public get isIgnored(): boolean
     {
         return this._Str_6028;
     }
 
-    public set _Str_3246(k: boolean)
+    public set isRoomOwner(k: boolean)
     {
         this._Str_4026 = k;
     }
 
-    public get _Str_3246(): boolean
+    public get isRoomOwner(): boolean
     {
         return this._Str_4026;
     }
 
-    public set _Str_3672(k: boolean)
+    public set isGuildRoom(k: boolean)
     {
         this._Str_6139 = k;
     }
 
-    public get _Str_3672(): boolean
+    public get isGuildRoom(): boolean
     {
         return this._Str_6139;
     }
@@ -219,22 +219,22 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._roomControllerLevel;
     }
 
-    public set _Str_3529(k: boolean)
+    public set isModerator(k: boolean)
     {
         this._Str_4028 = k;
     }
 
-    public get _Str_3529(): boolean
+    public get isModerator(): boolean
     {
         return this._Str_4028;
     }
 
-    public set _Str_5751(k: boolean)
+    public set canTrade(k: boolean)
     {
         this._Str_8973 = k;
     }
 
-    public get _Str_5751(): boolean
+    public get canTrade(): boolean
     {
         return this._Str_8973;
     }
@@ -279,42 +279,42 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         this._Str_8831 = k;
     }
 
-    public set _Str_5599(k: number)
+    public set flatControl(k: number)
     {
         this._Str_8858 = k;
     }
 
-    public get _Str_5599(): number
+    public get flatControl(): number
     {
         return this._Str_8858;
     }
 
-    public set _Str_3249(k: number)
+    public set carryId(k: number)
     {
         this._Str_5228 = k;
     }
 
-    public get _Str_3249(): number
+    public get carryId(): number
     {
         return this._Str_5228;
     }
 
-    public set _Str_3313(k: number)
+    public set roomIndex(k: number)
     {
         this._Str_5131 = k;
     }
 
-    public get _Str_3313(): number
+    public get roomIndex(): number
     {
         return this._Str_5131;
     }
 
-    public set _Str_4780(k: boolean)
+    public set isSpectator(k: boolean)
     {
         this._Str_8522 = k;
     }
 
-    public get _Str_4780(): boolean
+    public get isSpectator(): boolean
     {
         return this._Str_8522;
     }
@@ -349,12 +349,12 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         this._isFriend = k;
     }
 
-    public get _Str_18096(): boolean
+    public get isAmbassador(): boolean
     {
         return this._Str_4890;
     }
 
-    public set _Str_18096(k: boolean)
+    public set isAmbassador(k: boolean)
     {
         this._Str_4890 = k;
     }

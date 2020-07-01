@@ -12,8 +12,10 @@ import { ContextInfoView } from '../contextmenu/ContextInfoView';
 import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
+import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateEvent } from '../events/RoomWidgetUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
 import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
@@ -21,11 +23,14 @@ import { AvatarContextInfoButtonView } from './AvatarContextInfoButtonView';
 import { AvatarInfoData } from './AvatarInfoData';
 import { AvatarMenuView } from './AvatarMenuView';
 import { OwnAvatarMenuView } from './OwnAvatarMenuView';
+import { PetInfoData } from './PetInfoData';
 import { UserNameView } from './UserNameView';
 
 export class AvatarInfoWidget extends ConversionTrackingWidget implements IContextMenuParentWidget, IUpdateReceiver 
 {
     private _view: AvatarContextInfoButtonView;
+    private _userInfoData: AvatarInfoData;
+    private _petInfoData: PetInfoData;
     private _lastRollOverId: number = -1;
     private _cachedNameView: AvatarContextInfoButtonView;
     private _cachedOwnAvatarMenuView: OwnAvatarMenuView;
@@ -38,6 +43,8 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         super(widgetHandler, windowManager, layoutManager);
 
         this._view                      = null;
+        this._userInfoData              = new AvatarInfoData();
+        this._petInfoData               = new PetInfoData();
         this._lastRollOverId            = -1;
         this._cachedNameView            = null;
         this._cachedOwnAvatarMenuView   = null;
@@ -85,7 +92,13 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
     {
         if(!eventDispatcher) return;
 
+        eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
 
@@ -96,7 +109,13 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
     {
         if(!eventDispatcher) return;
 
+        eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
 
@@ -107,12 +126,39 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
     {
         switch (event.type)
         {
+            case RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO:
+                console.log(event);
+                break;
             case RoomObjectNameEvent.RWONE_TYPE:
                 const nameEvent = (event as RoomObjectNameEvent);
 
                 if(nameEvent.category === RoomObjectCategory.UNIT)
                 {
                     this._Str_12674(nameEvent.userId, nameEvent.userName, nameEvent.userType, nameEvent.roomIndex, false, null);
+                }
+                break;
+            case RoomWidgetUpdateInfostandUserEvent.OWN_USER:
+            case RoomWidgetUpdateInfostandUserEvent.PEER:
+                const infostandEvent = (event as RoomWidgetUpdateInfostandUserEvent);
+
+                this._userInfoData.populate(infostandEvent);
+
+                const userData = (infostandEvent.isSpectator ? null : this._userInfoData);
+                this._Str_12674(infostandEvent.webID, infostandEvent.name, infostandEvent.userType, infostandEvent.roomIndex, this._userInfoData.allowNameChange, userData);
+                break;
+            case RoomWidgetRoomObjectUpdateEvent.USER_REMOVED:
+                const removedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
+
+                if(this._view && (this._view.roomIndex === removedEvent.id)) this.removeView(this._view, false);
+
+                for(let view of this._avatarNameBubbles.values())
+                {
+                    if (view.objectId == removedEvent.id)
+                    {
+                        this.removeView(view, false);
+
+                        break;
+                    }
                 }
                 break;
             case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER:
@@ -138,6 +184,11 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                         }
                     }
                 }
+                break;
+            case RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED:
+                const deselectedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
+
+                if(this._view) this.removeView(this._view, false);
                 break;
         }
         
@@ -225,6 +276,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                     }
                     else
                     {
+                        console.log('create own view');
                         if(!this._cachedOwnAvatarMenuView) this._cachedOwnAvatarMenuView = new OwnAvatarMenuView(this);
 
                         this._view = this._cachedOwnAvatarMenuView;
@@ -234,6 +286,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                 }
                 else
                 {
+                    console.log('create standard view')
                     if(!this._cachedAvatarMenuView) this._cachedAvatarMenuView = new AvatarMenuView(this);
 
                     this._view = this._cachedAvatarMenuView;

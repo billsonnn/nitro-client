@@ -44,7 +44,7 @@ export class RoomUsersHandler extends BaseHandler
                 userData.figure                 = user.figure;
                 userData.type                   = user.userType;
                 userData.webID                  = user.webID;
-                userData.groupID                = user.groupID;
+                userData.guildId                = user.groupID;
                 userData.groupName              = user.groupName;
                 userData.groupStatus            = user.groupStatus;
                 userData.sex                    = user.sex;

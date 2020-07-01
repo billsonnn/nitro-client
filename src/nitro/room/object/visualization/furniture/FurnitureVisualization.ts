@@ -318,6 +318,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 sprite.relativeDepth    = (relativeDepth * FurnitureVisualization.DEPTH_MULTIPLIER);
                 sprite.name             = assetName;
                 sprite._Str_3582        = this.getLibraryAssetNameForSprite(assetData, sprite);
+                sprite.clickHandling    = false;
             }
             else
             {
@@ -472,7 +473,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_IGNORE_MOUSE;
 
-        const ignoreMouse = this._data.getLayerIgnoreMouse(scale, direction, layerId);
+        const ignoreMouse = !(this._data.getLayerIgnoreMouse(scale, direction, layerId));
 
         this._spriteMouseCaptures[layerId] = ignoreMouse;
 

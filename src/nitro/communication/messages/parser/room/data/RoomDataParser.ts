@@ -19,7 +19,7 @@ export class RoomDataParser
     private _showOwner: boolean;
     private _ownerId: number;
     private _ownerName: string;
-    private _state: number;
+    private _doorMode: number;
     private _userCount: number;
     private _maxUserCount: number;
     private _description: string;
@@ -57,7 +57,7 @@ export class RoomDataParser
         this._roomName              = null;
         this._ownerId               = 0;
         this._ownerName             = null;
-        this._state                 = 0;
+        this._doorMode                 = 0;
         this._userCount             = 0;
         this._maxUserCount          = 0;
         this._description           = null;
@@ -88,7 +88,7 @@ export class RoomDataParser
         this._roomName      = wrapper.readString();
         this._ownerId       = wrapper.readInt();
         this._ownerName     = wrapper.readString();
-        this._state         = wrapper.readInt();
+        this._doorMode      = wrapper.readInt();
         this._userCount     = wrapper.readInt();
         this._maxUserCount  = wrapper.readInt();
         this._description   = wrapper.readString();
@@ -182,9 +182,9 @@ export class RoomDataParser
         return this._ownerName;
     }
 
-    public get state(): number
+    public get doorMode(): number
     {
-        return this._state;
+        return this._doorMode;
     }
 
     public get userCount(): number
@@ -210,5 +210,35 @@ export class RoomDataParser
     public get ranking(): number
     {
         return this._ranking;
+    }
+
+    public get categoryId(): number
+    {
+        return this._categoryId;
+    }
+
+    public get totalStarts(): number
+    {
+        return this._totalStars;
+    }
+
+    public get guildId(): number
+    {
+        return this._groupId;
+    }
+
+    public get guildName(): string
+    {
+        return this._groupName;
+    }
+
+    public get groupBadge(): string
+    {
+        return this._groupBadge;
+    }
+
+    public get allowPets(): boolean
+    {
+        return this._allowPets;
     }
 }

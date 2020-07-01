@@ -8,6 +8,7 @@ export class ExtendedSprite extends PIXI.Sprite
     private _tag: string;
     private _alphaTolerance: number;
     private _Str_8253: boolean;
+    private _clickHandling: boolean;
 
     private _pairedSpriteId: number;
     private _pairedSpriteUpdateCounter: number;
@@ -21,6 +22,7 @@ export class ExtendedSprite extends PIXI.Sprite
         this._tag                       = '';
         this._alphaTolerance            = 128;
         this._Str_8253                  = false;
+        this._clickHandling             = false;
 
         this._pairedSpriteId            = -1;
         this._pairedSpriteUpdateCounter = -1;
@@ -58,7 +60,7 @@ export class ExtendedSprite extends PIXI.Sprite
 
     public static containsPoint(sprite: ExtendedSprite, point: PIXI.Point): boolean
     {
-        if(!sprite || !point) return false;
+        if(!sprite || !point || (sprite.alphaTolerance > 255)) return false;
 
         if(!(sprite instanceof PIXI.Sprite)) return false;
 
@@ -213,5 +215,15 @@ export class ExtendedSprite extends PIXI.Sprite
     public set _Str_4593(flag: boolean)
     {
         this._Str_8253 = flag;
+    }
+
+    public get clickHandling(): boolean
+    {
+        return this._clickHandling;
+    }
+
+    public set clickHandling(flag: boolean)
+    {
+        this._clickHandling = flag;
     }
 }
