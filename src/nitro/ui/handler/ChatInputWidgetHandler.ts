@@ -1,4 +1,5 @@
 import { NitroEvent } from '../../../core/events/NitroEvent';
+import { RoomZoomEvent } from '../../room/events/RoomZoomEvent';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
 import { ChatInputWidget } from '../widget/chatinput/ChatInputWidget';
@@ -84,9 +85,11 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         }
                     }
 
-                    switch(secondPart.toLowerCase())
+                    switch(firstPart.toLowerCase())
                     {
-
+                        case ':zoom':
+                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart)));
+                            return null;
                     }
                 }
 

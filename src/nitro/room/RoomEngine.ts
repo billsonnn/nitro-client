@@ -525,6 +525,18 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return canvas.displayObject;
     }
 
+    public setRoomRenderingCanvasScale(roomId: number, canvasId: number, scale: number): void
+    {
+        const roomCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(roomCanvas)
+        {
+            roomCanvas.setScale(scale);
+
+            this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.ROOM_ZOOMED, roomId));
+        }
+    }
+
     public getRoomInstanceRenderingCanvas(roomId: number, canvasId: number = -1): IRoomRenderingCanvas
     {
         const instance = this.getRoomInstance(roomId);

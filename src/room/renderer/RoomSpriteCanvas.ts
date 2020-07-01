@@ -198,6 +198,18 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._height    = height;
     }
 
+    public setScale(scale: number): void
+    {
+        if(!this._master || !this._display) return;
+
+        const point         = new PIXI.Point((this._width / 2), (this._height / 2));
+        const localPoint    = this._display.toLocal(point);
+
+        this._scale         = scale;
+        this._screenOffsetX = (point.x - (localPoint.x * this._scale));
+        this._screenOffsetY = (point.y - (localPoint.y * this._scale));
+    }
+
     public render(time: number, update: boolean = false): void
     {
         if(time === -1) time = (this._renderTimestamp + 1);
@@ -840,11 +852,11 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public get width(): number
     {
-        return this._width;
+        return (this._width * this._scale);
     }
 
     public get height(): number
     {
-        return this._height;
+        return (this._height * this._scale);
     }
 }

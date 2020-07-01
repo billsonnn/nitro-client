@@ -1,3 +1,4 @@
+import { ILoaderOptions } from 'pixi.js-legacy';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
@@ -120,9 +121,13 @@ export class AssetManager extends Disposable implements IAssetManager
 
             const loader = new PIXI.Loader();
 
+            const options: ILoaderOptions = {
+                crossOrigin: false
+            }
+
             loader
                 .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
-                .add(url)
+                .add(url, options)
                 .load();
         }
 

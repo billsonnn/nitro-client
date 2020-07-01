@@ -18,6 +18,7 @@ export interface IRoomEngine
     setActiveRoomId(roomId: number): void;
     onRoomEngineInitalized(flag: boolean): void;
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
+    setRoomRenderingCanvasScale(roomId: number, canvasId: number, scale: number): void;
     getRoomInstanceRenderingCanvas(roomId: number, canvasId?: number): IRoomRenderingCanvas;
     getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId?: number): PIXI.Point;
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;

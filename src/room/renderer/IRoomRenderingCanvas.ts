@@ -6,6 +6,7 @@ export interface IRoomRenderingCanvas
 {
     dispose(): void;
     initialize(width: number, height: number): void;
+    setScale(scale: number): void;
     render(time: number, update?: boolean): void;
     update(): void;
     setMouseListener(listener: IRoomCanvasMouseListener): void;

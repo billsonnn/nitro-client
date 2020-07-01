@@ -1,3 +1,4 @@
+import { ILoaderOptions } from 'pixi.js-legacy';
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
@@ -347,9 +348,13 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             const loader = new PIXI.Loader();
 
+            const options: ILoaderOptions = {
+                crossOrigin: false
+            }
+
             loader
                 .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
-                .add(assetUrls)
+                .add(assetUrls, options)
                 .load();
         }
 
