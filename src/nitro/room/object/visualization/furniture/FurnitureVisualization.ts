@@ -300,7 +300,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                     sprite.offsetX          = (assetData.offsetX + this.getLayerXOffset(scale, this._direction, layerId));
                     sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
                     sprite.blendMode        = this.getLayerInk(scale, this._direction, layerId);
-                    sprite.alphaTolerance   = (this.getLayerIgnoreMouse(scale, this._direction, layerId) ? AlphaTolerance._Str_9735 : AlphaTolerance._Str_9268);
+                    sprite.alphaTolerance   = (this.getLayerIgnoreMouse(scale, this._direction, layerId) ? AlphaTolerance._Str_9268 : AlphaTolerance._Str_9735);
 
                     relativeDepth = this.getLayerZOffset(scale, this._direction, layerId);
                     relativeDepth = (relativeDepth - (layerId * 0.001));
@@ -473,7 +473,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(!this._data) return LayerData.DEFAULT_IGNORE_MOUSE;
 
-        const ignoreMouse = !(this._data.getLayerIgnoreMouse(scale, direction, layerId));
+        const ignoreMouse = this._data.getLayerIgnoreMouse(scale, direction, layerId);
 
         this._spriteMouseCaptures[layerId] = ignoreMouse;
 

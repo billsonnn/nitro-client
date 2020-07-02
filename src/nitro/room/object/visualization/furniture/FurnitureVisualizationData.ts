@@ -253,7 +253,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         const size = this.getSizeData(scale);
 
-        if(size) return LayerData.DEFAULT_IGNORE_MOUSE;
+        if(!size) return LayerData.DEFAULT_IGNORE_MOUSE;
 
         return size.getLayerIgnoreMouse(direction, layerId);
     }
