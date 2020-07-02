@@ -1,7 +1,15 @@
 @import './nitroWidgetContainer';
 @import './nitroWidget';
-@import './nitroWidgetAvatarInfoView';
+
+// CHAT
 @import './nitroWidgetChatInput';
-@import './nitroWidgetInfostand';
 @import './nitroWidgetRoomChat';
+
+// CONTEXT MENUS
+@import './nitroWidgetContextMenu';
+
+// INFOSTANDS
+@import './nitroWidgetInfostand';
+
+// FURNITURE
 @import './nitroWidgetTrophy';

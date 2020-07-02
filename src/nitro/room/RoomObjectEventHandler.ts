@@ -295,7 +295,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         this._Str_3571(roomId, selectedData.id, selectedData.category, RoomObjectOperationType.OBJECT_MOVE_TO);
                     }
 
-                    if(!event._Str_3463) this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
+                    if(!event.eventId) this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event.eventId);
 
                     this._Str_19253(roomId, event.objectId, category);
                 }
@@ -320,9 +320,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                             this._Str_19271(roomId, (event instanceof RoomObjectTileMouseEvent), (event instanceof RoomObjectWallMouseEvent));
                             break;
                         default:
-                            if(event._Str_3463)
+                            if(event.eventId)
                             {
-                                this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
+                                this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event.eventId);
                             }
 
                             this._Str_19253(roomId, event.objectId, category);
@@ -385,11 +385,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         }
                     }
 
-                    if(event._Str_3463)
+                    if(event.eventId)
                     {
                         if(didWalk)
                         {
-                            this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event._Str_3463);
+                            this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event.eventId);
                         }
                     }
                 }
@@ -401,7 +401,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             const _local_15 = this._Str_18648(RoomObjectCategory.MINIMUM, MouseEventType.MOUSE_CLICK);
             const _local_16 = this._Str_18648(RoomObjectCategory.UNIT, MouseEventType.MOUSE_CLICK);
 
-            if((_local_15 !== event._Str_3463) && (_local_16 !== event._Str_3463) && !didMove)
+            if((_local_15 !== event.eventId) && (_local_16 !== event.eventId) && !didMove)
             {
                 this._Str_16209(roomId);
 
@@ -447,7 +447,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                 else
                 {
-                    newEvent = new ObjectTileCursorUpdateMessage(null, 0, false, event._Str_3463)
+                    newEvent = new ObjectTileCursorUpdateMessage(null, 0, false, event.eventId)
                 }
 
                 roomCursor.processUpdateMessage(newEvent);
@@ -971,27 +971,27 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this._roomEngine.connection.send(new RoomUnitWalkComposer(x, y));
     }
 
-    private _Str_25124(k: number, _arg_2: number, _arg_3: RoomObjectMouseEvent): ObjectTileCursorUpdateMessage
+    private _Str_25124(category: number, roomId: number, event: RoomObjectMouseEvent): ObjectTileCursorUpdateMessage
     {        
-        if(k !== RoomObjectCategory.FLOOR) return null;
+        if(category !== RoomObjectCategory.FLOOR) return null;
 
-        const roomObject = this._roomEngine.getRoomObject(_arg_2, _arg_3.objectId, RoomObjectCategory.FLOOR);
+        const roomObject = this._roomEngine.getRoomObject(roomId, event.objectId, RoomObjectCategory.FLOOR);
 
         if(!roomObject) return null;
 
-        const location = this._Str_21925(roomObject, _arg_3);
+        const location = this._Str_21925(roomObject, event);
 
         if(!location) return null;
         
-        const _local_6 = this._roomEngine.getFurnitureStackingHeightMap(_arg_2);
+        const furnitureHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
             
-        if(!_local_6) return null;
+        if(!furnitureHeightMap) return null;
         
-        const _local_7 = location.x;
-        const _local_8 = location.y;
-        const _local_9 = location.z;
+        const x = location.x;
+        const y = location.y;
+        const z = location.z;
             
-        return new ObjectTileCursorUpdateMessage(new Vector3d(_local_7, _local_8, roomObject.getLocation().z), _local_9, true, _arg_3._Str_3463);
+        return new ObjectTileCursorUpdateMessage(new Vector3d(x, y, roomObject.getLocation().z), z, true, event.eventId);
     }
 
     private _Str_23423(k: number, _arg_2: RoomObjectMouseEvent): boolean
@@ -1041,8 +1041,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         const scale     = renderingCanvas.geometry.scale;
         const _local_13 = furniData.canSitOn ? 0.5 : 0;
-        const _local_14 = ((((scale / 2) + _arg_2._Str_4595) + _arg_2.localX) / (scale / 4));
-        const _local_15 = (((_arg_2._Str_4534 + _arg_2.localY) + (((sizeZ - _local_13) * scale) / 2)) / (scale / 4));
+        const _local_14 = ((((scale / 2) + _arg_2.spriteOffsetX) + _arg_2.localX) / (scale / 4));
+        const _local_15 = (((_arg_2.spriteOffsetY + _arg_2.localY) + (((sizeZ - _local_13) * scale) / 2)) / (scale / 4));
         const _local_16 = ((_local_14 + (2 * _local_15)) / 4);
         const _local_17 = ((_local_14 - (2 * _local_15)) / 4);
         const _local_18 = Math.floor((location.x + _local_16));
@@ -1064,7 +1064,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     {
         if(this._whereYouClickIsWhereYouGo)
         {
-            return new ObjectTileCursorUpdateMessage(new Vector3d(k._Str_16836, k._Str_17676, k._Str_21459), 0, true, k._Str_3463);
+            return new ObjectTileCursorUpdateMessage(new Vector3d(k._Str_16836, k._Str_17676, k._Str_21459), 0, true, k.eventId);
         }
         
         return null;

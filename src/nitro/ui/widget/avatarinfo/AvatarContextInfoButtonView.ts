@@ -1,4 +1,5 @@
 ﻿import { RoomObjectType } from '../../../room/object/RoomObjectType';
+import { WindowTemplates } from '../../../window/WindowTemplates';
 import { ButtonMenuView } from '../contextmenu/ButtonMenuView';
 import { ContextInfoView } from '../contextmenu/ContextInfoView';
 import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
@@ -34,18 +35,13 @@ export class AvatarContextInfoButtonView extends ButtonMenuView
 
         if(!this._window)
         {
-            const view = {};
+            const view = {
+                username: this._userName
+            };
 
-            this._window = this._parent.windowManager.renderElement(this.getAvatarInfoWidgetView(), view);
+            this._window = this._parent.windowManager.renderElement(this.getTemplate(), view);
 
             if(!this._window) return;
-        }
-
-        const nameElement = (this._window.getElementsByClassName('avatar-info-name')[0] as HTMLElement);
-
-        if(nameElement)
-        {
-            nameElement.innerText = this._userName;
         }
 
         this.activeView = this._window;
@@ -67,9 +63,9 @@ export class AvatarContextInfoButtonView extends ButtonMenuView
         return height;
     }
 
-    private getAvatarInfoWidgetView(): string
+    protected getTemplate(): string
     {
-        return this._parent.windowManager.getTemplate('avatar_info_view');
+        return this._parent.windowManager.getTemplate(WindowTemplates.CONTEXT_MENU);
     }
 
     public get userId(): number

@@ -240,10 +240,10 @@ export class FurnitureLogic extends MovingObjectLogic
                 {
                     const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_MOVE, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
 
-                    mouseEvent.localX       = event.localX;
-                    mouseEvent.localY       = event.localY;
-                    mouseEvent._Str_4595    = event._Str_4595;
-                    mouseEvent._Str_4534    = event._Str_4534;
+                    mouseEvent.localX           = event.localX;
+                    mouseEvent.localY           = event.localY;
+                    mouseEvent.spriteOffsetX    = event.spriteOffsetX;
+                    mouseEvent.spriteOffsetY    = event.spriteOffsetY;
 
                     this.eventDispatcher.dispatchEvent(mouseEvent);
                 }
@@ -255,10 +255,10 @@ export class FurnitureLogic extends MovingObjectLogic
                     {
                         const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_ENTER, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
 
-                        mouseEvent.localX       = event.localX;
-                        mouseEvent.localY       = event.localY;
-                        mouseEvent._Str_4595    = event._Str_4595;
-                        mouseEvent._Str_4534    = event._Str_4534;
+                        mouseEvent.localX           = event.localX;
+                        mouseEvent.localY           = event.localY;
+                        mouseEvent.spriteOffsetX    = event.spriteOffsetX;
+                        mouseEvent.spriteOffsetY    = event.spriteOffsetY;
 
                         this.eventDispatcher.dispatchEvent(mouseEvent);
                     }
@@ -273,10 +273,10 @@ export class FurnitureLogic extends MovingObjectLogic
                     {
                         const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_LEAVE, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
 
-                        mouseEvent.localX       = event.localX;
-                        mouseEvent.localY       = event.localY;
-                        mouseEvent._Str_4595    = event._Str_4595;
-                        mouseEvent._Str_4534    = event._Str_4534;
+                        mouseEvent.localX           = event.localX;
+                        mouseEvent.localY           = event.localY;
+                        mouseEvent.spriteOffsetX    = event.spriteOffsetX;
+                        mouseEvent.spriteOffsetY    = event.spriteOffsetY;
 
                         this.eventDispatcher.dispatchEvent(mouseEvent);
                     }
@@ -292,10 +292,10 @@ export class FurnitureLogic extends MovingObjectLogic
                 {
                     const mouseEvent = new RoomObjectMouseEvent(RoomObjectMouseEvent.CLICK, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown);
 
-                    mouseEvent.localX       = event.localX;
-                    mouseEvent.localY       = event.localY;
-                    mouseEvent._Str_4595    = event._Str_4595;
-                    mouseEvent._Str_4534    = event._Str_4534;
+                    mouseEvent.localX           = event.localX;
+                    mouseEvent.localY           = event.localY;
+                    mouseEvent.spriteOffsetX    = event.spriteOffsetX;
+                    mouseEvent.spriteOffsetY    = event.spriteOffsetY;
 
                     this.eventDispatcher.dispatchEvent(mouseEvent);
                 }

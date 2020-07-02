@@ -1,7 +1,9 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
+import { RoomUnitDanceEvent } from '../../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
 import { RoomUnitEvent } from '../../communication/messages/incoming/room/unit/RoomUnitEvent';
 import { RoomUnitInfoEvent } from '../../communication/messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitRemoveEvent } from '../../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
+import { RoomSessionDanceEvent } from '../events/RoomSessionDanceEvent';
 import { RoomSessionUserDataUpdateEvent } from '../events/RoomSessionUserDataUpdateEvent';
 import { IRoomHandlerListener } from '../IRoomHandlerListener';
 import { RoomUserData } from '../RoomUserData';
@@ -16,6 +18,7 @@ export class RoomUsersHandler extends BaseHandler
         connection.addMessageEvent(new RoomUnitEvent(this.onRoomUnitEvent.bind(this)));
         connection.addMessageEvent(new RoomUnitInfoEvent(this.onRoomUnitInfoEvent.bind(this)));
         connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
+        connection.addMessageEvent(new RoomUnitDanceEvent(this.onRoomUnitDanceEvent.bind(this)));
     }
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
@@ -95,5 +98,20 @@ export class RoomUsersHandler extends BaseHandler
         if(!session) return;
 
         session.userDataManager.removeUserData(event.getParser().unitId);
+    }
+
+    private onRoomUnitDanceEvent(event: RoomUnitDanceEvent): void
+    {
+        if(!(event instanceof RoomUnitDanceEvent) || !this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        this.listener.events.dispatchEvent(new RoomSessionDanceEvent(session, parser.unitId, parser.danceId));
     }
 }

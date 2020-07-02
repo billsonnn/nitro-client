@@ -5,24 +5,24 @@ export class RoomSessionDanceEvent extends RoomSessionEvent
 {
     public static RSDE_DANCE: string = 'RSDE_DANCE';
 
-    private _userId: number;
-    private _danceStyle: number;
+    private _roomIndex: number;
+    private _danceId: number;
 
-    constructor(k: IRoomSession, _arg_2: number, _arg_3: number)
+    constructor(session: IRoomSession, roomIndex: number, danceId: number)
     {
-        super(RoomSessionDanceEvent.RSDE_DANCE, k);
+        super(RoomSessionDanceEvent.RSDE_DANCE, session);
 
-        this._userId = _arg_2;
-        this._danceStyle = _arg_3;
+        this._roomIndex = roomIndex;
+        this._danceId   = danceId;
     }
 
-    public get userId(): number
+    public get roomIndex(): number
     {
-        return this._userId;
+        return this._roomIndex;
     }
 
-    public get _Str_8263(): number
+    public get danceId(): number
     {
-        return this._danceStyle;
+        return this._danceId;
     }
 }

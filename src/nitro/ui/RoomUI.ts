@@ -11,6 +11,7 @@ import { RoomObjectHSLColorEnabledEvent } from '../room/events/RoomObjectHSLColo
 import { RoomZoomEvent } from '../room/events/RoomZoomEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomSessionChatEvent } from '../session/events/RoomSessionChatEvent';
+import { RoomSessionDanceEvent } from '../session/events/RoomSessionDanceEvent';
 import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
@@ -75,6 +76,7 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
         this._roomSession.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.addEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
+        this._roomSession.events.addEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent.bind(this));
     }
 
     public dispose(): void
@@ -104,6 +106,7 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
         this._roomSession.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
         this._roomSession.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
+        this._roomSession.events.removeEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent.bind(this));
     }
 
     public getDesktop(roomId: string): RoomDesktop

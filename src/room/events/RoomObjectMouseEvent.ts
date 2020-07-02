@@ -32,7 +32,7 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
         this._buttonDown    = buttonDown;
     }
 
-    public get _Str_3463(): string
+    public get eventId(): string
     {
         return this._eventId;
     }
@@ -62,24 +62,14 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
         return this._localX;
     }
 
-    public get localY(): number
-    {
-        return this._localY;
-    }
-
-    public get _Str_4595(): number
-    {
-        return this._spriteOffsetX;
-    }
-
-    public get _Str_4534(): number
-    {
-        return this._spriteOffsetY;
-    }
-
     public set localX(k: number)
     {
         this._localX = k;
+    }
+
+    public get localY(): number
+    {
+        return this._localY;
     }
 
     public set localY(k: number)
@@ -87,12 +77,22 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
         this._localY = k;
     }
 
-    public set _Str_4595(k: number)
+    public get spriteOffsetX(): number
+    {
+        return this._spriteOffsetX;
+    }
+
+    public set spriteOffsetX(k: number)
     {
         this._spriteOffsetX = k;
     }
 
-    public set _Str_4534(k: number)
+    public get spriteOffsetY(): number
+    {
+        return this._spriteOffsetY;
+    }
+
+    public set spriteOffsetY(k: number)
     {
         this._spriteOffsetY = k;
     }

@@ -1,4 +1,5 @@
-﻿import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
+﻿import { WindowTemplates } from '../../../window/WindowTemplates';
+import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
 import { AvatarContextInfoButtonView } from './AvatarContextInfoButtonView';
 import { AvatarInfoData } from './AvatarInfoData';
 
@@ -27,5 +28,28 @@ export class AvatarMenuView extends AvatarContextInfoButtonView
         this._avatarData = null;
 
         super.dispose();
+    }
+
+    protected updateWindow():void
+    {
+        if(!this._parent || !this._parent.windowManager) return;
+
+        if(!this._window)
+        {
+            const view = {
+                username: this._userName
+            };
+
+            this._window = this._parent.windowManager.renderElement(this.getTemplate(), view);
+
+            if(!this._window) return;
+        }
+
+        this.activeView = this._window;
+    }
+
+    protected getTemplate(): string
+    {
+        return this._parent.windowManager.getTemplate(WindowTemplates.CONTEXT_MENU_AVATAR_VIEW);
     }
 }

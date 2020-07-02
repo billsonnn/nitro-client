@@ -6,6 +6,7 @@ import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/ro
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
 import { RoomUnitTypingStartComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
 import { RoomUnitTypingStopComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
+import { RoomUnitDanceComposer } from '../communication/messages/outgoing/room/unit/RoomUnitDanceComposer';
 import { RoomModerationParser } from '../communication/messages/parser/room/data/RoomModerationParser';
 import { RoomControllerLevel } from './enum/RoomControllerLevel';
 import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
@@ -142,6 +143,11 @@ export class RoomSession extends Disposable implements IRoomSession
     {
         if(isTyping) this._connection.send(new RoomUnitTypingStartComposer());
         else this._connection.send(new RoomUnitTypingStopComposer());
+    }
+
+    public sendDanceMessage(danceId: number): void
+    {
+        this._connection.send(new RoomUnitDanceComposer(danceId));
     }
 
     public pickupPet(id: number): void

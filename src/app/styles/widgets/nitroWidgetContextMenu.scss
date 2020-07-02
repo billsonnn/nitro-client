@@ -1,0 +1,60 @@
+.nitro-widget-context-menu {
+    position: absolute;
+    pointer-events: all;
+    min-width: 115px;
+    padding: 3px 0;
+
+    .widget-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        .header-title {
+            font-size: 14px;
+            text-align: center;
+            text-transform: none;
+        }
+    }
+
+    .widget-body {
+        width: 100%;
+        padding: 0;
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+    
+            .button-item {
+                width: 100%;
+
+                .item-name {
+                    padding: 3px 10px;
+                    font-weight: 300;
+                    font-size: 12px;
+                    text-align: center;
+                }
+    
+                &:hover {
+                    background-color: #1F1F1F;
+                    cursor: pointer;
+    
+                    .item-name {
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+
+    &.avatar-menu,
+    &.own-avatar-menu {
+
+        .widget-header {
+            padding: 0 0 3px 0;
+        }
+
+    }
+}

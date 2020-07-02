@@ -1,19 +1,19 @@
 export class RoomSpriteMouseEvent 
 {
-    private _type: string = "";
-    private _eventId: string = "";
-    private _canvasId: string = "";
-    private _spriteTag: string = "";
-    private _screenX: number = 0;
-    private _screenY: number = 0;
-    private _localX: number = 0;
-    private _localY: number = 0;
-    private _ctrlKey: boolean = false;
-    private _altKey: boolean = false;
-    private _shiftKey: boolean = false;
-    private _buttonDown: boolean = false;
-    private _spriteOffsetX: number = 0;
-    private _spriteOffsetY: number = 0;
+    private _type: string;
+    private _eventId: string;
+    private _canvasId: string;
+    private _spriteTag: string;
+    private _screenX: number;
+    private _screenY: number;
+    private _localX: number;
+    private _localY: number;
+    private _ctrlKey: boolean;
+    private _altKey: boolean;
+    private _shiftKey: boolean;
+    private _buttonDown: boolean;
+    private _spriteOffsetX: number;
+    private _spriteOffsetY: number;
 
     constructor(type: string, eventId: string, canvasId: string, spriteTag: string, screenX: number, screenY: number, localX: number = 0, localY: number = 0, ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false, buttonDown: boolean = false)
     {
@@ -93,22 +93,22 @@ export class RoomSpriteMouseEvent
         return this._buttonDown;
     }
 
-    public get _Str_4595(): number
+    public get spriteOffsetX(): number
     {
         return this._spriteOffsetX;
     }
 
-    public set _Str_4595(k: number)
+    public set spriteOffsetX(k: number)
     {
         this._spriteOffsetX = k;
     }
 
-    public get _Str_4534(): number
+    public get spriteOffsetY(): number
     {
         return this._spriteOffsetY;
     }
 
-    public set _Str_4534(k: number)
+    public set spriteOffsetY(k: number)
     {
         this._spriteOffsetY = k;
     }

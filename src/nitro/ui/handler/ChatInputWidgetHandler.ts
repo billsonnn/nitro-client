@@ -79,8 +79,8 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
                             if(userData)
                             {
-                                secondPart = userData.name;
-                                text = chatMessage.text.replace(' x', (' ' + userData.name));
+                                secondPart  = userData.name;
+                                text        = chatMessage.text.replace(' x', (' ' + userData.name));
                             }
                         }
                     }

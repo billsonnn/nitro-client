@@ -695,8 +695,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                         {
                             mouseEvent = this._Str_11609(x, y, (x - extendedSprite.x), (y - extendedSprite.y), type, tag, altKey, ctrlKey, shiftKey, buttonDown);
                             
-                            mouseEvent._Str_4595 = extendedSprite.offsetX;
-                            mouseEvent._Str_4534 = extendedSprite.offsetY;
+                            mouseEvent.spriteOffsetX = extendedSprite.offsetX;
+                            mouseEvent.spriteOffsetY = extendedSprite.offsetY;
                         }
 
                         if(!mouseData)

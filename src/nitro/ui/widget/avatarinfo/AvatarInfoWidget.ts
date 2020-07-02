@@ -4,6 +4,7 @@ import { RoomEnterEffect } from '../../../../room/utils/RoomEnterEffect';
 import { Nitro } from '../../../Nitro';
 import { RoomObjectCategory } from '../../../room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../../room/object/RoomObjectType';
+import { HabboClubLevelEnum } from '../../../session/HabboClubLevelEnum';
 import { INitroWindowManager } from '../../../window/INitroWindowManager';
 import { DesktopLayoutManager } from '../../DesktopLayoutManager';
 import { AvatarInfoWidgetHandler } from '../../handler/AvatarInfoWidgetHandler';
@@ -13,6 +14,7 @@ import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidge
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
+import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateEvent } from '../events/RoomWidgetUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
@@ -37,6 +39,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
     private _cachedAvatarMenuView: AvatarMenuView;
     private _avatarNameBubbles: Map<string, UserNameView>;
     private _recycleViews: boolean;
+    private _isDancing: boolean;
 
     constructor(widgetHandler: IRoomWidgetHandler, windowManager: INitroWindowManager, layoutManager: DesktopLayoutManager)
     {
@@ -51,6 +54,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         this._cachedAvatarMenuView      = null;
         this._avatarNameBubbles         = new Map();
         this._recycleViews              = false;
+        this._isDancing                 = false;
 
         this.handler.widget = this;
     }
@@ -97,6 +101,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
@@ -114,6 +119,7 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
@@ -161,6 +167,14 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                     }
                 }
                 break;
+            case RoomWidgetFurniInfostandUpdateEvent.FURNI:
+                if(this._view) this.removeView(this._view, false);
+                break;
+            case RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED:
+                const deselectedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
+
+                if(this._view) this.removeView(this._view, false);
+                break;
             case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER:
                 const rollOverEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
@@ -184,11 +198,6 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                         }
                     }
                 }
-                break;
-            case RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED:
-                const deselectedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
-
-                if(this._view) this.removeView(this._view, false);
                 break;
         }
         
@@ -358,5 +367,26 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
     public get isDecorting(): boolean
     {
         return this.handler.roomSession.isDecorating;
+    }
+
+    public get _Str_6454(): boolean
+    {
+        return true;
+        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964);
+    }
+
+    public get _Str_7303(): boolean
+    {
+        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2575);
+    }
+
+    public get isDancing(): boolean
+    {
+        return this._isDancing;
+    }
+
+    public set isDancing(flag: boolean)
+    {
+        this._isDancing = flag;
     }
 }
