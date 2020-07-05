@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
+﻿import { RoomWidgetUserInfostandUpdateEvent } from '../events/RoomWidgetUserInfostandUpdateEvent';
 
 export class AvatarInfoData 
 {
@@ -191,7 +191,7 @@ export class AvatarInfoData
         return this._isAmbassador;
     }
 
-    public populate(k: RoomWidgetUpdateInfostandUserEvent): void
+    public populate(k: RoomWidgetUserInfostandUpdateEvent): void
     {
         this._amIAnyRoomController = k.isModerator;
         this._myRoomControllerLevel = k.roomControllerLevel;
@@ -204,7 +204,7 @@ export class AvatarInfoData
         this._canTradeReason = k._Str_6622;
         this._isIgnored = k.isIgnored;
         this._respectLeft = k._Str_3577;
-        this._isOwnUser = (k.type === RoomWidgetUpdateInfostandUserEvent.OWN_USER);
+        this._isOwnUser = (k.type === RoomWidgetUserInfostandUpdateEvent.OWN_USER);
         this._allowNameChange = k._Str_4330;
         this._isGuildRoom = k.isGuildRoom;
         this._targetRoomControllerLevel = k.flatControl;

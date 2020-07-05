@@ -148,19 +148,16 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
             {
                 const sprite = PIXI.Sprite.from(texture);
 
-                sprite.x    = objectSprite.offsetX;
-                sprite.y    = objectSprite.offsetY;
-                sprite.tint = objectSprite.color;
+                sprite.alpha            = (objectSprite.alpha / 255);
+                sprite.tint             = objectSprite.color;
+                sprite.x                = objectSprite.offsetX;
+                sprite.y                = objectSprite.offsetY;
+                sprite.blendMode        = objectSprite.blendMode;
+                sprite.filters          = objectSprite.filters;
 
-                if(objectSprite.flipH)
-                {
-                    sprite.scale.x = -1;
-                }
+                if(objectSprite.flipH) sprite.scale.x = -1;
 
-                if(objectSprite.flipV)
-                {
-                    sprite.scale.y = -1;
-                }
+                if(objectSprite.flipV) sprite.scale.y = -1;
 
                 container.addChild(sprite);
             }

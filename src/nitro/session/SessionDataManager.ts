@@ -186,7 +186,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     private onUserPermissionsEvent(event: UserPermissionsEvent): void
     {
-        if(!(event instanceof AvailabilityStatusMessageEvent) || !event.connection) return;
+        if(!(event instanceof UserPermissionsEvent) || !event.connection) return;
 
         this._clubLevel     = event.getParser().clubLevel;
         this._securityLevel = event.getParser().securityLevel;

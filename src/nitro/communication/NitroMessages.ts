@@ -82,9 +82,11 @@ import { RoomUnitTypingStartComposer } from './messages/outgoing/room/unit/chat/
 import { RoomUnitTypingStopComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
 import { RoomUnitActionComposer } from './messages/outgoing/room/unit/RoomUnitActionComposer';
 import { RoomUnitDanceComposer } from './messages/outgoing/room/unit/RoomUnitDanceComposer';
+import { RoomUnitDropHandItemComposer } from './messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
+import { RoomUnitGiveHandItemComposer } from './messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
 import { RoomUnitLookComposer } from './messages/outgoing/room/unit/RoomUnitLookComposer';
+import { RoomUnitPostureComposer } from './messages/outgoing/room/unit/RoomUnitPostureComposer';
 import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSignComposer';
-import { RoomUnitSitComposer } from './messages/outgoing/room/unit/RoomUnitSitComposer';
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
@@ -252,9 +254,11 @@ export class NitroMessages implements IMessageConfiguration
             // UNIT
             this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);
             this._composers.set(OutgoingHeader.UNIT_DANCE, RoomUnitDanceComposer);
+            this._composers.set(OutgoingHeader.UNIT_DROP_HAND_ITEM, RoomUnitDropHandItemComposer);
+            this._composers.set(OutgoingHeader.UNIT_GIVE_HANDITEM, RoomUnitGiveHandItemComposer);
             this._composers.set(OutgoingHeader.UNIT_LOOK, RoomUnitLookComposer);
             this._composers.set(OutgoingHeader.UNIT_SIGN, RoomUnitSignComposer);
-            this._composers.set(OutgoingHeader.UNIT_SIT, RoomUnitSitComposer);
+            this._composers.set(OutgoingHeader.UNIT_POSTURE, RoomUnitPostureComposer);
             this._composers.set(OutgoingHeader.UNIT_WALK, RoomUnitWalkComposer);
 
                 // CHAT

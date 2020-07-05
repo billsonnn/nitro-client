@@ -139,7 +139,7 @@ export class OutgoingHeader
     public static UNIT_GIVE_HANDITEM             = 2941;
     public static UNIT_LOOK                      = 3301;
     public static UNIT_SIGN                      = 1975;
-    public static UNIT_SIT                       = 2235;
+    public static UNIT_POSTURE                       = 2235;
     public static UNIT_TYPING                    = 1597;
     public static UNIT_TYPING_STOP               = 1474;
     public static UNIT_WALK                      = 3320;

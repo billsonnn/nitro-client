@@ -603,7 +603,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const canStandUp = (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) > 0);
+        const canStandUp = (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) as boolean);
 
         if(canStandUp !== this._canStandUp)
         {

@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { INitroLogger } from './INitroLogger';
 
 export class NitroLogger implements INitroLogger
@@ -40,7 +39,7 @@ export class NitroLogger implements INitroLogger
 
     public static log(message: string, name: string = 'Nitro'): void
     {
-        console.log(`[Nitro] ${ moment().format('M/D/YY h:mm:ss A') } [${ name }] ${ message } ${ this.getTimestamp() }`);
+        console.log(`[Nitro] ${ new Date().toDateString() } [${ name }] ${ message } ${ this.getTimestamp() }`);
     }
 
     public static getTimestamp(): string

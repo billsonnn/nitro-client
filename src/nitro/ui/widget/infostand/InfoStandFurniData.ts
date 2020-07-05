@@ -7,7 +7,7 @@ export class InfoStandFurniData
     private _category: number = 0;
     private _name: string = "";
     private _description: string = "";
-    private _image: PIXI.Texture;
+    private _image: HTMLElement;
     private _purchaseOfferId: number = -1;
     private _extraParam: string = "";
     private _stuffData: IObjectData = null;
@@ -37,17 +37,17 @@ export class InfoStandFurniData
         this._description = k;
     }
 
-    public set image(k: PIXI.Texture)
+    public set image(k: HTMLElement)
     {
         this._image = k;
     }
 
-    public set _Str_3473(k: number)
+    public set purchaseOfferId(k: number)
     {
         this._purchaseOfferId = k;
     }
 
-    public set _Str_2415(k: string)
+    public set extraParam(k: string)
     {
         this._extraParam = k;
     }
@@ -62,7 +62,7 @@ export class InfoStandFurniData
         this._groupId = k;
     }
 
-    public set _Str_2481(k: number)
+    public set ownerId(k: number)
     {
         this._ownerId = k;
     }
@@ -92,17 +92,17 @@ export class InfoStandFurniData
         return this._description;
     }
 
-    public get image(): PIXI.Texture
+    public get image(): HTMLElement
     {
         return this._image;
     }
 
-    public get _Str_3473(): number
+    public get purchaseOfferId(): number
     {
         return this._purchaseOfferId;
     }
 
-    public get _Str_2415(): string
+    public get extraParam(): string
     {
         return this._extraParam;
     }
@@ -117,7 +117,7 @@ export class InfoStandFurniData
         return this._groupId;
     }
 
-    public get _Str_2481(): number
+    public get ownerId(): number
     {
         return this._ownerId;
     }
@@ -127,12 +127,12 @@ export class InfoStandFurniData
         return this._ownerName;
     }
 
-    public get _Str_3693(): number
+    public get rentOfferId(): number
     {
         return this._rentOfferId;
     }
 
-    public set _Str_3693(k: number)
+    public set rentOfferId(k: number)
     {
         this._rentOfferId = k;
     }
@@ -142,20 +142,20 @@ export class InfoStandFurniData
         return this._availableForBuildersClub;
     }
 
-    public _Str_5479(k: RoomWidgetFurniInfostandUpdateEvent): void
+    public populate(k: RoomWidgetFurniInfostandUpdateEvent): void
     {
-        this.id = k.id;
-        this.category = k.category;
-        this.name = k.name;
-        this.description = k.description;
-        this.image = k.image;
-        this._Str_3473 = k._Str_3473;
-        this._Str_2415 = k._Str_2415;
-        this.stuffData = k.stuffData;
-        this.groupId = k.groupId;
-        this.ownerName = k.ownerName;
-        this._Str_2481 = k.ownerId;
-        this._Str_3693 = k._Str_3693;
-        this._availableForBuildersClub = k._Str_6098;
+        this.id                         = k.id;
+        this.category                   = k.category;
+        this.name                       = k.name;
+        this.description                = k.description;
+        this.image                      = k.image;
+        this.purchaseOfferId            = k.purchaseOfferId;
+        this.extraParam                 = k.extraParam;
+        this.stuffData                  = k.stuffData;
+        this.groupId                    = k.groupId;
+        this.ownerName                  = k.ownerName;
+        this.ownerId                    = k.ownerId;
+        this.rentOfferId                = k.rentOfferId;
+        this._availableForBuildersClub  = k.availableForBuildersClub;
     }
 }

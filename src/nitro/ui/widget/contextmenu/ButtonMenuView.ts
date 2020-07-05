@@ -4,7 +4,7 @@ import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 export class ButtonMenuView extends ContextInfoView
 {
-    private _buttonContainer: HTMLElement;
+    protected _buttonContainer: HTMLElement;
 
     constructor(parent: IContextMenuParentWidget)
     {

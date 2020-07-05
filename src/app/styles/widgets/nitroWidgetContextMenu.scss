@@ -1,14 +1,12 @@
 .nitro-widget-context-menu {
     position: absolute;
     pointer-events: all;
-    min-width: 115px;
-    padding: 3px 0;
 
     .widget-header {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
+        padding: 5px 15px;
 
         .header-title {
             font-size: 14px;
@@ -19,7 +17,7 @@
 
     .widget-body {
         width: 100%;
-        padding: 0;
+        padding: 5px 0;
 
         .button-container {
             display: flex;
@@ -29,6 +27,7 @@
     
             .button-item {
                 width: 100%;
+                padding: 0 10px;
 
                 .item-name {
                     padding: 3px 10px;
@@ -40,10 +39,6 @@
                 &:hover {
                     background-color: #1F1F1F;
                     cursor: pointer;
-    
-                    .item-name {
-                        font-weight: 400;
-                    }
                 }
             }
         }
@@ -51,10 +46,10 @@
 
     &.avatar-menu,
     &.own-avatar-menu {
+        min-width: 130px;
 
         .widget-header {
-            padding: 0 0 3px 0;
+            padding: 5px 15px 0 15px;
         }
-
     }
 }

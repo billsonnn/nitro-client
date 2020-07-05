@@ -6,10 +6,7 @@
   "dependencies": {
     "@pixi/canvas-renderer": "^5.3.0",
     "bytebuffer": "^5.0.1",
-    "i": "^0.3.6",
-    "moment": "^2.27.0",
     "mustache": "^4.0.1",
-    "npm": "^6.14.5",
     "pixi.js-legacy": "^5.3.0",
     "xml2js": "^0.4.23"
   },

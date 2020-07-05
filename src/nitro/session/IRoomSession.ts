@@ -7,7 +7,7 @@ export interface IRoomSession extends IDisposable
 {
     setConnection(connection: IConnection): void;
     setControllerLevel(level: number): void;
-    setOwnUserRoomId(userId: number): void;
+    setOwnRoomIndex(roomIndex: number): void;
     setRoomOwner(): void;
     start(): boolean;
     reset(roomId: number): void;
@@ -16,6 +16,8 @@ export interface IRoomSession extends IDisposable
     sendWhisperMessage(recipientName: string, text: string, styleId: number): void;
     sendChatTypingMessage(isTyping: boolean): void;
     sendDanceMessage(danceId: number): void;
+    sendExpressionMessage(expression: number): void;
+    sendPostureMessage(posture: number): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
     connection: IConnection;
@@ -26,7 +28,7 @@ export interface IRoomSession extends IDisposable
     doorMode: number;
     allowPets: boolean;
     controllerLevel: number;
-    ownerUserRoomId: number;
+    ownRoomIndex: number;
     isGuildRoom: boolean;
     isRoomOwner: boolean;
     isDecorating: boolean;

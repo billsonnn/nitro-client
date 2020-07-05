@@ -6,7 +6,9 @@ import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/ro
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
 import { RoomUnitTypingStartComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
 import { RoomUnitTypingStopComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
+import { RoomUnitActionComposer } from '../communication/messages/outgoing/room/unit/RoomUnitActionComposer';
 import { RoomUnitDanceComposer } from '../communication/messages/outgoing/room/unit/RoomUnitDanceComposer';
+import { RoomUnitPostureComposer } from '../communication/messages/outgoing/room/unit/RoomUnitPostureComposer';
 import { RoomModerationParser } from '../communication/messages/parser/room/data/RoomModerationParser';
 import { RoomControllerLevel } from './enum/RoomControllerLevel';
 import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
@@ -26,7 +28,7 @@ export class RoomSession extends Disposable implements IRoomSession
     private _doorMode: number;
     private _allowPets: boolean;
     private _controllerLevel: number;
-    private _ownUserRoomId: number;
+    private _ownRoomIndex: number;
     private _isGuildRoom: boolean;
     private _isRoomOwner: boolean;
     private _isDecorating: boolean;
@@ -47,7 +49,7 @@ export class RoomSession extends Disposable implements IRoomSession
         this._tradeMode             = RoomTradingLevelEnum._Str_12752;
         this._doorMode              = 0;
         this._controllerLevel       = RoomControllerLevel.NONE;
-        this._ownUserRoomId         = -1;
+        this._ownRoomIndex          = -1;
         this._isGuildRoom           = false;
         this._isRoomOwner           = false;
         this._isDecorating          = false;
@@ -89,9 +91,9 @@ export class RoomSession extends Disposable implements IRoomSession
         this._controllerLevel = RoomControllerLevel.NONE;
     }
 
-    public setOwnUserRoomId(userId: number): void
+    public setOwnRoomIndex(roomIndex: number): void
     {
-        this._ownUserRoomId = userId;
+        this._ownRoomIndex = roomIndex;
     }
 
     public setRoomOwner(): void
@@ -148,6 +150,16 @@ export class RoomSession extends Disposable implements IRoomSession
     public sendDanceMessage(danceId: number): void
     {
         this._connection.send(new RoomUnitDanceComposer(danceId));
+    }
+
+    public sendExpressionMessage(expression: number): void
+    {
+        this._connection.send(new RoomUnitActionComposer(expression));
+    }
+
+    public sendPostureMessage(posture: number): void
+    {
+        this._connection.send(new RoomUnitPostureComposer(posture));
     }
 
     public pickupPet(id: number): void
@@ -234,9 +246,9 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._controllerLevel;
     }
 
-    public get ownerUserRoomId(): number
+    public get ownRoomIndex(): number
     {
-        return this._ownUserRoomId;
+        return this._ownRoomIndex;
     }
 
     public get isGuildRoom(): boolean

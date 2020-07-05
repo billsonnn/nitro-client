@@ -7,8 +7,11 @@ import { IRoomObjectVisualizationFactory } from '../../room/object/visualization
 import { IRoomRendererFactory } from '../../room/renderer/IRoomRendererFactory';
 import { IRoomRenderingCanvas } from '../../room/renderer/IRoomRenderingCanvas';
 import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
+import { IVector3D } from '../../room/utils/IVector3D';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { IGetImageListener } from './IGetImageListener';
+import { ImageResult } from './ImageResult';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
 
 export interface IRoomEngine
@@ -26,8 +29,10 @@ export interface IRoomEngine
     getRoomInstanceNumber(roomId: number, key: string): number;
     getTotalObjectsForManager(roomId: number, category: number): number;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
+    getRoomObjectByIndex(roomId: number, index: number, category: number): IRoomObjectController;
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): PIXI.Point;
+    getRoomObjectImage(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7?: number): ImageResult;
     refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
     processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;

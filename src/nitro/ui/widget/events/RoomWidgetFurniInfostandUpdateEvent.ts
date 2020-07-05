@@ -9,27 +9,27 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _category: number = 0;
     private _name: string = "";
     private _description: string = "";
-    private _image: PIXI.Texture = null;
-    private _Str_4167: boolean = false;
-    private _Str_21073: boolean = false;
-    private _Str_7750: boolean = false;
+    private _image: HTMLImageElement = null;
+    private _isWallItem: boolean = false;
+    private _isStickie: boolean = false;
+    private _isRoomOwner: boolean = false;
     private _roomControllerLevel: number = 0;
-    private _Str_10043: boolean = false;
+    private _isAnyRoomController: boolean = false;
     private _expiration: number = -1;
-    private _Str_25890: number = -1;
-    private _Str_6693: number = -1;
-    private _Str_3194: string = "";
-    private _Str_4514: boolean = false;
+    private _purchaseCatalogPageId: number = -1;
+    private _purchaseOfferId: number = -1;
+    private _extraParam: string = "";
+    private _isOwner: boolean = false;
     private _stuffData: IObjectData = null;
     private _groupId: number = 0;
     private _ownerId: number = 0;
     private _ownerName: string = "";
-    private _Str_5135: number = 0;
-    private _Str_26155: number = -1;
-    private _Str_6586: number = -1;
-    private _Str_9981: boolean;
-    private _Str_11465: boolean;
-    private _Str_6871: boolean;
+    private _usagePolicy: number = 0;
+    private _rentCatalogPageId: number = -1;
+    private _rentOfferId: number = -1;
+    private _purchaseCouldBeUsedForBuyout: boolean = false;
+    private _rentCouldBeUsedForBuyout: boolean = false;
+    private _availableForBuildersClub: boolean = false;
 
     constructor(k: string)
     {
@@ -76,44 +76,44 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._description;
     }
 
-    public set image(k: PIXI.Texture)
+    public set image(k: HTMLImageElement)
     {
         this._image = k;
     }
 
-    public get image(): PIXI.Texture
+    public get image(): HTMLImageElement
     {
         return this._image;
     }
 
-    public set _Str_2770(k: boolean)
+    public set isWallItem(k: boolean)
     {
-        this._Str_4167 = k;
+        this._isWallItem = k;
     }
 
-    public get _Str_2770(): boolean
+    public get isWallItem(): boolean
     {
-        return this._Str_4167;
+        return this._isWallItem;
     }
 
-    public set _Str_17541(k: boolean)
+    public set isStickie(k: boolean)
     {
-        this._Str_21073 = k;
+        this._isStickie = k;
     }
 
-    public get _Str_17541(): boolean
+    public get isStickie(): boolean
     {
-        return this._Str_21073;
+        return this._isStickie;
     }
 
-    public set _Str_2781(k: boolean)
+    public set isRoomOwner(k: boolean)
     {
-        this._Str_7750 = k;
+        this._isRoomOwner = k;
     }
 
-    public get _Str_2781(): boolean
+    public get isRoomOwner(): boolean
     {
-        return this._Str_7750;
+        return this._isRoomOwner;
     }
 
     public set roomControllerLevel(k: number)
@@ -126,14 +126,14 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._roomControllerLevel;
     }
 
-    public set _Str_2799(k: boolean)
+    public set isAnyRoomOwner(k: boolean)
     {
-        this._Str_10043 = k;
+        this._isAnyRoomController = k;
     }
 
-    public get _Str_2799(): boolean
+    public get isAnyRoomOwner(): boolean
     {
-        return this._Str_10043;
+        return this._isAnyRoomController;
     }
 
     public set expiration(k: number)
@@ -146,34 +146,34 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._expiration;
     }
 
-    public set _Str_3473(k: number)
+    public set purchaseOfferId(k: number)
     {
-        this._Str_6693 = k;
+        this._purchaseOfferId = k;
     }
 
-    public get _Str_3473(): number
+    public get purchaseOfferId(): number
     {
-        return this._Str_6693;
+        return this._purchaseOfferId;
     }
 
-    public set _Str_2415(k: string)
+    public set extraParam(k: string)
     {
-        this._Str_3194 = k;
+        this._extraParam = k;
     }
 
-    public get _Str_2415(): string
+    public get extraParam(): string
     {
-        return this._Str_3194;
+        return this._extraParam;
     }
 
-    public set _Str_3233(k: boolean)
+    public set isOwner(k: boolean)
     {
-        this._Str_4514 = k;
+        this._isOwner = k;
     }
 
-    public get _Str_3233(): boolean
+    public get isOwner(): boolean
     {
-        return this._Str_4514;
+        return this._isOwner;
     }
 
     public set stuffData(k: IObjectData)
@@ -216,53 +216,53 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._ownerName;
     }
 
-    public set _Str_4172(k: number)
+    public set usagePolicy(k: number)
     {
-        this._Str_5135 = k;
+        this._usagePolicy = k;
     }
 
-    public get _Str_4172(): number
+    public get usagePolicy(): number
     {
-        return this._Str_5135;
+        return this._usagePolicy;
     }
 
-    public set _Str_3693(k: number)
+    public set rentOfferId(k: number)
     {
-        this._Str_6586 = k;
+        this._rentOfferId = k;
     }
 
-    public get _Str_3693(): number
+    public get rentOfferId(): number
     {
-        return this._Str_6586;
+        return this._rentOfferId;
     }
 
-    public get _Str_7629(): boolean
+    public get purchaseCouldBeUsedForBuyout(): boolean
     {
-        return this._Str_9981;
+        return this._purchaseCouldBeUsedForBuyout;
     }
 
-    public set _Str_7629(k: boolean)
+    public set purchaseCouldBeUsedForBuyout(k: boolean)
     {
-        this._Str_9981 = k;
+        this._purchaseCouldBeUsedForBuyout = k;
     }
 
-    public get _Str_8116(): boolean
+    public get rentCouldBeUsedForBuyout(): boolean
     {
-        return this._Str_11465;
+        return this._rentCouldBeUsedForBuyout;
     }
 
-    public set _Str_8116(k: boolean)
+    public set rentCouldBeUsedForBuyout(k: boolean)
     {
-        this._Str_11465 = k;
+        this._rentCouldBeUsedForBuyout = k;
     }
 
-    public get _Str_6098(): boolean
+    public get availableForBuildersClub(): boolean
     {
-        return this._Str_6871;
+        return this._availableForBuildersClub;
     }
 
-    public set _Str_6098(k: boolean)
+    public set availableForBuildersClub(k: boolean)
     {
-        this._Str_6871 = k;
+        this._availableForBuildersClub = k;
     }
 }

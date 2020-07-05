@@ -1,9 +1,12 @@
 ﻿import { IUpdateReceiver } from '../../../../core/common/IUpdateReceiver';
 import { IEventDispatcher } from '../../../../core/events/IEventDispatcher';
+import { IRoomObject } from '../../../../room/object/IRoomObject';
 import { RoomEnterEffect } from '../../../../room/utils/RoomEnterEffect';
+import { AvatarAction } from '../../../avatar/enum/AvatarAction';
 import { Nitro } from '../../../Nitro';
 import { RoomObjectCategory } from '../../../room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../../room/object/RoomObjectType';
+import { RoomObjectVariable } from '../../../room/object/RoomObjectVariable';
 import { HabboClubLevelEnum } from '../../../session/HabboClubLevelEnum';
 import { INitroWindowManager } from '../../../window/INitroWindowManager';
 import { DesktopLayoutManager } from '../../DesktopLayoutManager';
@@ -17,7 +20,7 @@ import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateEvent } from '../events/RoomWidgetUpdateEvent';
-import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
+import { RoomWidgetUserInfostandUpdateEvent } from '../events/RoomWidgetUserInfostandUpdateEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
 import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
@@ -30,6 +33,12 @@ import { UserNameView } from './UserNameView';
 
 export class AvatarInfoWidget extends ConversionTrackingWidget implements IContextMenuParentWidget, IUpdateReceiver 
 {
+    private static _Str_17951: number = 77;
+    private static _Str_18968: number = 29;
+    private static _Str_16970: number = 30;
+    private static _Str_18857: number = 185;
+    private static _Str_18641: number = 5000;
+
     private _view: AvatarContextInfoButtonView;
     private _userInfoData: AvatarInfoData;
     private _petInfoData: PetInfoData;
@@ -98,8 +107,8 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
 
         eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
@@ -116,8 +125,8 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
 
         eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
@@ -133,7 +142,6 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         switch (event.type)
         {
             case RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO:
-                console.log(event);
                 break;
             case RoomObjectNameEvent.RWONE_TYPE:
                 const nameEvent = (event as RoomObjectNameEvent);
@@ -143,9 +151,9 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                     this._Str_12674(nameEvent.userId, nameEvent.userName, nameEvent.userType, nameEvent.roomIndex, false, null);
                 }
                 break;
-            case RoomWidgetUpdateInfostandUserEvent.OWN_USER:
-            case RoomWidgetUpdateInfostandUserEvent.PEER:
-                const infostandEvent = (event as RoomWidgetUpdateInfostandUserEvent);
+            case RoomWidgetUserInfostandUpdateEvent.OWN_USER:
+            case RoomWidgetUserInfostandUpdateEvent.PEER:
+                const infostandEvent = (event as RoomWidgetUserInfostandUpdateEvent);
 
                 this._userInfoData.populate(infostandEvent);
 
@@ -285,7 +293,6 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                     }
                     else
                     {
-                        console.log('create own view');
                         if(!this._cachedOwnAvatarMenuView) this._cachedOwnAvatarMenuView = new OwnAvatarMenuView(this);
 
                         this._view = this._cachedOwnAvatarMenuView;
@@ -295,7 +302,6 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
                 }
                 else
                 {
-                    console.log('create standard view')
                     if(!this._cachedAvatarMenuView) this._cachedAvatarMenuView = new AvatarMenuView(this);
 
                     this._view = this._cachedAvatarMenuView;
@@ -359,6 +365,107 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
         }
     }
 
+    private getOwnRoomObject(): IRoomObject
+    {
+        const userId        = this.handler.container.sessionDataManager.userId;
+        const roomId        = this.handler.roomEngine.activeRoomId;
+        const category      = RoomObjectCategory.UNIT;
+        const totalObjects  = this.handler.roomEngine.getTotalObjectsForManager(roomId, category);
+
+        let i = 0;
+
+        while(i < totalObjects)
+        {
+            const roomObject = this.handler.roomEngine.getRoomObjectByIndex(roomId, i, category);
+
+            if(roomObject)
+            {
+                const userData = this.handler.roomSession.userDataManager.getUserDataByIndex(roomObject.id);
+
+                if(userData)
+                {
+                    if(userData.webID === userId) return roomObject;
+                }
+            }
+
+            i++;
+        }
+
+        return null;
+    }
+
+    public get getOwnPosture(): string
+    {
+        const roomObject = this.getOwnRoomObject();
+
+        if(roomObject)
+        {
+            const model = roomObject.model;
+
+            if(model)
+            {
+                return (model.getValue(RoomObjectVariable.FIGURE_POSTURE) as string);
+            }
+        }
+
+        return AvatarAction.POSTURE_STAND;
+    }
+
+    public get getCanStandUp(): boolean
+    {
+        const roomObject = this.getOwnRoomObject();
+
+        if(roomObject)
+        {
+            const model = roomObject.model;
+
+            if(model)
+            {
+                return (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) as boolean);
+            }
+        }
+
+        return false;
+    }
+
+    public get _Str_12708(): boolean
+    {
+        const roomObject = this.getOwnRoomObject();
+
+        if(roomObject)
+        {
+            const model = roomObject.model;
+
+            if(model)
+            {
+                const effectId = (model.getValue(RoomObjectVariable.FIGURE_EFFECT) as number);
+
+                return ((effectId === AvatarInfoWidget._Str_18968) || (effectId === AvatarInfoWidget._Str_16970) || (effectId === AvatarInfoWidget._Str_18857));
+            }
+        }
+
+        return false;
+    }
+
+    public get _Str_25831(): boolean
+    {
+        const roomObject = this.getOwnRoomObject();
+
+        if(roomObject)
+        {
+            const model = roomObject.model;
+
+            if(model)
+            {
+                const effectId = (model.getValue(RoomObjectVariable.FIGURE_EFFECT) as number);
+
+                return (effectId === AvatarInfoWidget._Str_17951);
+            }
+        }
+
+        return false;
+    }
+
     public get handler(): AvatarInfoWidgetHandler
     {
         return (this.widgetHandler as AvatarInfoWidgetHandler);
@@ -371,7 +478,6 @@ export class AvatarInfoWidget extends ConversionTrackingWidget implements IConte
 
     public get _Str_6454(): boolean
     {
-        return true;
         return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964);
     }
 

@@ -16,6 +16,8 @@ import { RoomWidgetEnum } from '../widget/enums/RoomWidgetEnum';
 import { RoomWidgetAvatarInfoEvent } from '../widget/events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetUpdateEvent } from '../widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../widget/events/RoomWidgetUserDataUpdateEvent';
+import { RoomWidgetAvatarExpressionMessage } from '../widget/messages/RoomWidgetAvatarExpressionMessage';
+import { RoomWidgetChangePostureMessage } from '../widget/messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../widget/messages/RoomWidgetDanceMessage';
 import { RoomWidgetMessage } from '../widget/messages/RoomWidgetMessage';
 import { RoomWidgetRoomObjectMessage } from '../widget/messages/RoomWidgetRoomObjectMessage';
@@ -65,7 +67,26 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE:
                 const danceMessage = (message as RoomWidgetDanceMessage);
 
-                this._container.roomSession.sendDanceMessage(danceMessage.style);
+                if(this._container && this._container.roomSession)
+                {
+                    this._container.roomSession.sendDanceMessage(danceMessage.style);
+                }
+                break;
+            case RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION:
+                const expressionMessage = (message as RoomWidgetAvatarExpressionMessage);
+
+                if(this._container && this._container.roomSession)
+                {
+                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677)
+                }
+                break;
+            case RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE:
+                const postureMessage = (message as RoomWidgetChangePostureMessage);
+
+                if(this._container && this._container.roomSession)
+                {
+                    this._container.roomSession.sendPostureMessage(postureMessage.posture);
+                }
                 break;
         }
 
@@ -127,7 +148,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
         while(i < totalObjects)
         {
-            const object    = this._container.roomEngine.getRoomObject(roomId, i, RoomObjectCategory.UNIT);
+            const object    = this._container.roomEngine.getRoomObjectByIndex(roomId, i, RoomObjectCategory.UNIT);
             const userData  = this._container.roomSession.userDataManager.getUserDataByIndex(object.id);
 
             if(userData && (userData.type === RoomObjectType.PET) && (userData.webID === k)) return userData;
@@ -147,7 +168,9 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
     {
         return [
             RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO,
-            RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE
+            RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE,
+            RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION,
+            RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE
         ];
     }
 

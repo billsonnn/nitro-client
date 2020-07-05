@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetUpdateEvent } from './RoomWidgetUpdateEvent';
 
-export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
+export class RoomWidgetUserInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {
     public static OWN_USER: string = "RWUIUE_OWN_USER";
     public static BOT: string = "RWUIUE_BOT";

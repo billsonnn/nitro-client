@@ -25,6 +25,20 @@ export class RoomObjectManager implements IRoomObjectManager
         return object;
     }
 
+    public getObjectByIndex(index: number): IRoomObjectController
+    {
+        let current = 0;
+
+        for(let object of this._objects.values())
+        {
+            if(index === current) return object;
+
+            current++;
+        }
+
+        return null;
+    }
+
     public createObject(id: number, type: string): IRoomObjectController
     {
         const object: RoomObject = new RoomObject(id, type);

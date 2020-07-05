@@ -9,7 +9,7 @@
 
     .widget-header {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
         padding: 15px;
 
@@ -30,13 +30,6 @@
 
     .widget-body {
         padding: 15px;
-
-        .body-description {
-            margin: 0;
-            font-size: 14px;
-            text-align: center;
-            text-transform: uppercase;
-        }
     }
 
     .widget-footer {

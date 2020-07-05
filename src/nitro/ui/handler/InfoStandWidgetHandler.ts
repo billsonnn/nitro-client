@@ -1,4 +1,11 @@
 import { NitroEvent } from '../../../core/events/NitroEvent';
+import { Vector3d } from '../../../room/utils/Vector3d';
+import { AvatarScaleType } from '../../avatar/enum/AvatarScaleType';
+import { AvatarSetType } from '../../avatar/enum/AvatarSetType';
+import { RoomUnitDropHandItemComposer } from '../../communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
+import { RoomUnitGiveHandItemComposer } from '../../communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
+import { Nitro } from '../../Nitro';
+import { ObjectDataFactory } from '../../room/object/data/ObjectDataFactory';
 import { RoomObjectCategory } from '../../room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../room/object/RoomObjectType';
 import { RoomObjectVariable } from '../../room/object/RoomObjectVariable';
@@ -10,9 +17,11 @@ import { RoomUserData } from '../../session/RoomUserData';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../widget/enums/RoomWidgetEnum';
+import { RoomWidgetEnumItemExtradataParameter } from '../widget/enums/RoomWidgetEnumItemExtradataParameter';
 import { RoomObjectNameEvent } from '../widget/events/RoomObjectNameEvent';
+import { RoomWidgetFurniInfostandUpdateEvent } from '../widget/events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetUpdateEvent } from '../widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetUpdateInfostandUserEvent } from '../widget/events/RoomWidgetUpdateInfostandUserEvent';
+import { RoomWidgetUserInfostandUpdateEvent } from '../widget/events/RoomWidgetUserInfostandUpdateEvent';
 import { InfoStandWidget } from '../widget/infostand/InfoStandWidget';
 import { RoomWidgetFurniActionMessage } from '../widget/messages/RoomWidgetFurniActionMessage';
 import { RoomWidgetMessage } from '../widget/messages/RoomWidgetMessage';
@@ -25,13 +34,16 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _container: IRoomWidgetHandlerContainer;
     private _widget: InfoStandWidget;
+    private _avatarImageCache: Map<string, HTMLImageElement>;
+    private _furniImageCache: Map<string, HTMLImageElement>;
 
     private _disposed: boolean;
 
     constructor()
     {
-        this._container = null;
-        this._widget    = null;
+        this._container         = null;
+        this._widget            = null;
+        this._avatarImageCache  = new Map();
 
         this._disposed  = false;
     }
@@ -39,9 +51,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     public dispose(): void
     {
         if(this.disposed) return;
+
+        this._avatarImageCache = null;
+        this.container = null;
         
         this._disposed  = true;
-        this.container  = null;
     }
 
     public update(): void
@@ -101,6 +115,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 return this.processObjectInfoMessage((message as RoomWidgetRoomObjectMessage));
             case RoomWidgetRoomObjectMessage.GET_OBJECT_NAME:
                 return this.processObjectNameMessage((message as RoomWidgetRoomObjectMessage));
+            case RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM:
+                this._container.connection.send(new RoomUnitDropHandItemComposer());
+                return;
+            case RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM:
+                this._container.connection.send(new RoomUnitGiveHandItemComposer(userId));
+                return;
         }
 
         return null;
@@ -118,7 +138,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         {
             case RoomObjectCategory.FLOOR:
             case RoomObjectCategory.WALL:
-                //this._Str_23142(message, roomId);
+                this._Str_23142(message, roomId);
                 break;
             case RoomObjectCategory.UNIT:
                 if(!this._container.roomSession || !this._container.sessionDataManager || !this._container.events || !this._container.roomEngine) return null;
@@ -213,16 +233,172 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         return null;
     }
 
+    private _Str_23142(k: RoomWidgetRoomObjectMessage, _arg_2: number): void
+    {
+        if(!this._container || !this._container.events || !this._container.roomEngine) return;
+
+        if(k.id < 0) return;
+
+        const infostandEvent = new RoomWidgetFurniInfostandUpdateEvent(RoomWidgetFurniInfostandUpdateEvent.FURNI);
+
+        infostandEvent.id       = k.id;
+        infostandEvent.category = k.category;
+
+        const roomObject = this._container.roomEngine.getRoomObject(_arg_2, k.id, k.category);
+
+        if(!roomObject) return;
+
+        const model = roomObject.model;
+
+        if(model.getValue(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM) as string)
+        {
+            infostandEvent.extraParam = (model.getValue(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM) as string);
+        }
+
+        const dataFormat    = (model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT) as number);
+        const objectData    = ObjectDataFactory.getData(dataFormat);
+
+        objectData.initializeFromRoomObjectModel(model);
+
+        infostandEvent.stuffData = objectData;
+
+        const objectType = roomObject.type;
+
+        if(objectType.indexOf('poster') === 0)
+        {
+            let _local_13 = parseInt(objectType.replace('poster', ''));
+
+            infostandEvent.name         = (('${poster_' + _local_13) + '_name}');
+            infostandEvent.description  = (('${poster_' + _local_13) + '_desc}');
+        }
+        else
+        {
+            const _local_14 = (model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+
+            let furnitureData: IFurnitureData = null;
+
+            if (k.category === RoomObjectCategory.FLOOR)
+            {
+                furnitureData = this._container.sessionDataManager.getFloorItemData(_local_14);
+            }
+
+            else if (k.category == RoomObjectCategory.WALL)
+            {
+                furnitureData = this._container.sessionDataManager.getWallItemData(_local_14);
+            }
+
+            if(furnitureData)
+            {
+                infostandEvent.name         = furnitureData.name;
+                infostandEvent.description  = furnitureData.description;
+                infostandEvent.purchaseOfferId    = furnitureData.offerId;
+                //infostandEvent.purchaseCouldBeUsedForBuyout    = furnitureData._Str_7629;
+                //infostandEvent.rentOfferId    = furnitureData._Str_3693;
+                //infostandEvent.rentCouldBeUsedForBuyout    = furnitureData._Str_8116;
+                //infostandEvent._Str_6098    = furnitureData._Str_6098;
+
+                // if (((!(this._container._Str_10421 == null)) && (k.category == RoomObjectCategory.FLOOR)))
+                // {
+                //     this._container._Str_10421._Str_15677(roomObject.getId(), furnitureData._Str_2772);
+                // }
+            }
+        }
+
+        if (objectType.indexOf('post_it') > -1)
+        {
+            infostandEvent.isStickie = true;
+        }
+
+        const expiryTime        = (model.getValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME) as number);
+        const expiryTimestamp   = (model.getValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP) as number);
+
+        infostandEvent.expiration = ((expiryTime < 0) ? expiryTime : Math.max(0, (expiryTime - ((Nitro.instance.time - expiryTimestamp) / 1000))));
+
+        let roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 64, null);
+        
+        if(!roomObjectImage.data || (roomObjectImage.data.width > 140) || (roomObjectImage.data.height > 200))
+        {
+            roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 1, null);
+        }
+
+        if(roomObjectImage && roomObjectImage.data)
+        {
+            const sprite    = PIXI.Sprite.from(roomObjectImage.data);
+            const image     = Nitro.instance.renderer.extract.image(sprite);
+
+            if(image) infostandEvent.image = image;
+        }
+        
+        infostandEvent.isWallItem           = (k.category === RoomObjectCategory.WALL);
+        infostandEvent.isRoomOwner          = this._container.roomSession.isRoomOwner;
+        infostandEvent.roomControllerLevel  = this._container.roomSession.controllerLevel;
+        infostandEvent.isAnyRoomOwner       = this._container.sessionDataManager.isModerator;
+        infostandEvent.ownerId              = (model.getValue(RoomObjectVariable.FURNITURE_OWNER_ID) as number);
+        infostandEvent.ownerName            = (model.getValue(RoomObjectVariable.FURNITURE_OWNER_NAME) as string);
+        infostandEvent.usagePolicy          = (model.getValue(RoomObjectVariable.FURNITURE_USAGE_POLICY) as number);
+
+        const guildId = parseInt(model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_GUILD_ID));
+
+        if(guildId !== 0)
+        {
+            infostandEvent.groupId = guildId;
+            //this.container.connection.send(new _Str_2863(guildId, false));
+        }
+
+        if(this._container.isOwnerOfFurniture(roomObject))
+        {
+            infostandEvent.isOwner = true;
+        }
+
+        this._container.events.dispatchEvent(infostandEvent);
+
+        // if (((!(infostandEvent._Str_2415 == null)) && (infostandEvent._Str_2415.length > 0)))
+        // {
+        //     _local_16 = -1;
+        //     _local_17 = '';
+        //     _local_18 = '';
+        //     _local_19 = '';
+        //     if (infostandEvent._Str_2415 == RoomWidgetEnumItemExtradataParameter.JUKEBOX)
+        //     {
+        //         _local_20 = this._musicController._Str_6500();
+        //         if (_local_20 != null)
+        //         {
+        //             _local_16 = _local_20._Str_13794;
+        //             _local_19 = RoomWidgetSongUpdateEvent.PLAYING_CHANGED;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         if (infostandEvent._Str_2415.indexOf(RoomWidgetEnumItemExtradataParameter.SONGDISK) == 0)
+        //         {
+        //             _local_21 = infostandEvent._Str_2415.substr(RoomWidgetEnumItemExtradataParameter.SONGDISK.length);
+        //             _local_16 = parseInt(_local_21);
+        //             _local_19 = RoomWidgetSongUpdateEvent.DATA_RECEIVED;
+        //         }
+        //     }
+        //     if (_local_16 != -1)
+        //     {
+        //         _local_22 = this._musicController._Str_3255(_local_16);
+        //         if (_local_22 != null)
+        //         {
+        //             _local_17 = _local_22.name;
+        //             _local_18 = _local_22.creator;
+        //         }
+        //         this._container.events.dispatchEvent(new RoomWidgetSongUpdateEvent(_local_19, _local_16, _local_17, _local_18));
+        //     }
+        // }
+    }
+
     private _Str_22722(roomId: number, roomIndex: number, category: number, _arg_4: RoomUserData): void
     {
-        let eventType = RoomWidgetUpdateInfostandUserEvent.OWN_USER;
+        let eventType = RoomWidgetUserInfostandUpdateEvent.OWN_USER;
 
         if(_arg_4.webID !== this._container.sessionDataManager.userId)
         {
-            eventType = RoomWidgetUpdateInfostandUserEvent.PEER;
+            eventType = RoomWidgetUserInfostandUpdateEvent.PEER;
         }
 
-        const event = new RoomWidgetUpdateInfostandUserEvent(eventType);
+        const event = new RoomWidgetUserInfostandUpdateEvent(eventType);
 
         event.isSpectator   = this._container.roomSession.isSpectator;
         event.name          = _arg_4.name;
@@ -244,7 +420,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             event.carryId = (roomObject.model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) as number);
         }
 
-        if(eventType == RoomWidgetUpdateInfostandUserEvent.OWN_USER)
+        if(eventType == RoomWidgetUserInfostandUpdateEvent.OWN_USER)
         {
             event.realName = this._container.sessionDataManager.realName;
             //event._Str_4330 = this._container.sessionDataManager._Str_11198;
@@ -256,7 +432,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         event.isModerator           = this._container.sessionDataManager.isModerator;
         event.isAmbassador          = this._container.sessionDataManager.isAmbassador;
 
-        if(eventType === RoomWidgetUpdateInfostandUserEvent.PEER)
+        if(eventType === RoomWidgetUserInfostandUpdateEvent.PEER)
         {
             //event.canBeAskedForAFriend = this._container.friendList.canBeAskedForAFriend(_arg_4._Str_2394);
             // _local_9 = this._container.friendList.getFriend(_arg_4._Str_2394);
@@ -275,7 +451,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 // event._Str_6394 = this._Str_23100(event);
                 // event._Str_5990 = this._Str_22729(event);
                 // event._Str_6701 = this._Str_23573(event);
-                // Logger.log(((((((("Set moderation levels to " + event.name) + "Muted: ") + event._Str_6394) + ", Kicked: ") + event._Str_5990) + ", Banned: ") + event._Str_6701));
+                // Logger.log(((((((('Set moderation levels to ' + event.name) + 'Muted: ') + event._Str_6394) + ', Kicked: ') + event._Str_5990) + ', Banned: ') + event._Str_6701));
             }
 
             event.isIgnored = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
@@ -307,11 +483,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 }
             }
 
-            event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_18400;
+            event._Str_6622 = RoomWidgetUserInfostandUpdateEvent._Str_18400;
 
-            if(isShuttingDown) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_14161;
+            if(isShuttingDown) event._Str_6622 = RoomWidgetUserInfostandUpdateEvent._Str_14161;
             
-            if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
+            if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUserInfostandUpdateEvent._Str_13798;
 
             // const _local_12 = this._container.sessionDataManager.userId;
             // _local_13 = this._container.sessionDataManager._Str_18437(_local_12);
@@ -330,6 +506,36 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         //this._container.connection.send(new _Str_8049(_arg_4._Str_2394));
     }
 
+    public getUserImage(figure: string): HTMLImageElement
+    {
+        let existing = this._avatarImageCache.get(figure);
+
+        if(!existing)
+        {
+            const avatarImage = this._container.avatarRenderManager.createAvatarImage(figure, AvatarScaleType.LARGE, null, null);
+
+            if(avatarImage)
+            {
+                avatarImage.setDirection(AvatarSetType.FULL, 4);
+                
+                const texture = avatarImage.getCroppedImage(AvatarSetType.FULL, 1);
+
+                if(texture)
+                {
+                    const image = Nitro.instance.renderer.extract.image(texture);
+
+                    if(image) existing = image;
+                }
+
+                avatarImage.dispose();
+            }
+
+            if(existing) this._avatarImageCache.set(figure, existing);
+        }
+
+        return existing;
+    }
+
     public get type(): string
     {
         return RoomWidgetEnum.INFOSTAND;
@@ -341,6 +547,8 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         types.push(RoomWidgetRoomObjectMessage.GET_OBJECT_INFO);
         types.push(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME);
+        types.push(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM);
+        types.push(RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM);
 
         return types;
     }

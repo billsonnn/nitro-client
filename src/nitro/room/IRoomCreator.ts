@@ -21,6 +21,7 @@ export interface IRoomCreator
     setFurnitureStackingHeightMap(roomId: number, heightMap: FurnitureStackingHeightMap): void;
     getLegacyWallGeometry(roomId: number): LegacyWallGeometry;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
+    getRoomObjectByIndex(roomId: number, index: number, category: number): IRoomObjectController;
     getRoomObjectCursor(roomId: number): IRoomObjectController;
     getRoomObjectUser(roomId: number, objectId: number): IRoomObjectController;
     removeRoomObjectUser(roomId: number, objectId: number): void;

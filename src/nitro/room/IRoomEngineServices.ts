@@ -19,6 +19,7 @@ export interface IRoomEngineServices
     getLegacyWallGeometry(roomId: number): LegacyWallGeometry;
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
+    getRoomObjectByIndex(roomId: number, index: number, category: number): IRoomObjectController;
     getRoomObjectCategoryForType(type: string): number;
     getRoomObjectCursor(roomId: number): IRoomObjectController;
     getRoomObjectSelectionArrow(roomId: number): IRoomObjectController;

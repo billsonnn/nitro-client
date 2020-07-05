@@ -1,4 +1,5 @@
-﻿import { RoomControllerLevel } from '../../../session/enum/RoomControllerLevel';
+﻿import { AvatarAction } from '../../../avatar/enum/AvatarAction';
+import { RoomControllerLevel } from '../../../session/enum/RoomControllerLevel';
 import { WindowTemplates } from '../../../window/WindowTemplates';
 import { MouseEventType } from '../../MouseEventType';
 import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
@@ -39,6 +40,8 @@ export class OwnAvatarMenuView extends AvatarContextInfoButtonView
     {
         view._avatarData = avatarData;
 
+        if(view.widget.isDancing && view.widget._Str_6454) view._mode = OwnAvatarMenuView.MODE_CLUB_DANCES;
+
         AvatarContextInfoButtonView.extendedSetup(view, userId, userName, userType, roomIndex, false);
     }
     
@@ -73,16 +76,19 @@ export class OwnAvatarMenuView extends AvatarContextInfoButtonView
     {
         super.buildButtons();
 
+        const isRidingHorse = this.widget._Str_25831;
+
         switch(this._mode)
         {
             case OwnAvatarMenuView.MODE_NORMAL:
                 this.addButton('decorate', (this._Str_22241() && (this._avatarData.roomControllerLevel >= RoomControllerLevel.GUEST) || (this._avatarData._Str_3246)));
                 this.addButton('change_looks');
-                this.addButton('dance_menu', this.widget._Str_6454);
-                this.addButton('dance', (!this.widget.isDancing && !this.widget._Str_6454));
-                this.addButton('dance_stop', (this.widget.isDancing && !this.widget._Str_6454));
-                this.addButton('drop_hand_item', ((this._avatarData._Str_8826 > 0) && (this._avatarData._Str_8826 < 999999)));
+                this.addButton('dance_menu', (this.widget._Str_6454 && !isRidingHorse));
+                this.addButton('dance', (!this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse));
+                this.addButton('dance_stop', (this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse));
+                this.addButton('expressions');
                 this.addButton('signs');
+                this.addButton('drop_hand_item', ((this._avatarData._Str_8826 > 0) && (this._avatarData._Str_8826 < 999999)));
                 break;
             case OwnAvatarMenuView.MODE_CLUB_DANCES:
                 this.addButton('dance_stop', this.widget.isDancing);
@@ -90,6 +96,18 @@ export class OwnAvatarMenuView extends AvatarContextInfoButtonView
                 this.addButton('dance_2');
                 this.addButton('dance_3');
                 this.addButton('dance_4');
+                this.addButton('back');
+                break;
+            case OwnAvatarMenuView.MODE_EXPRESSIONS:
+                this.addButton('sit', (this.widget.getOwnPosture === AvatarAction.POSTURE_STAND));
+                this.addButton('stand', this.widget.getCanStandUp);
+                this.addButton('wave', !this.widget._Str_12708);
+                this.addButton('laugh', (!this.widget._Str_12708 && this.widget._Str_7303));
+                this.addButton('blow', (!this.widget._Str_12708 && this.widget._Str_7303));
+                this.addButton('idle');
+                this.addButton('back');
+                break;
+            case OwnAvatarMenuView.MODE_SIGNS:
                 this.addButton('back');
                 break;
         }
@@ -174,9 +192,12 @@ export class OwnAvatarMenuView extends AvatarContextInfoButtonView
                             //this.widget._Str_13909 = false;
                             this.setMode(OwnAvatarMenuView.MODE_NORMAL);
                             break;
-                        case 'handitem':
+                        case 'drop_hand_item':
                             message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM, this.userId);
                             break;
+                        default:
+                            super.handleMouseEvent(event);
+                            return;
                     }
                 }
             }

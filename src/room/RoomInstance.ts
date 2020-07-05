@@ -114,13 +114,26 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return manager.totalObjects;
     }
 
-    public getRoomObject(id: number, category: number): IRoomObjectController
+    public getRoomObject(id: number, category: number): IRoomObject
     {
         const manager = this.getManager(category);
 
         if(!manager) return null;
 
         const object = manager.getObject(id);
+
+        if(!object) return null;
+
+        return object;
+    }
+
+    public getRoomObjectByIndex(index: number, category: number): IRoomObject
+    {
+        const manager = this.getManager(category);
+
+        if(!manager) return null;
+
+        const object = manager.getObjectByIndex(index);
 
         if(!object) return null;
 

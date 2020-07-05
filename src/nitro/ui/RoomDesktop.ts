@@ -589,12 +589,12 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         return result;
     }
 
-    private checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean
+    public checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean
     {
         return ((this._session.controllerLevel >= RoomControllerLevel.GUEST) || (this._sessionDataManager.isModerator)) || (this.isOwnerOfFurniture(this._roomEngine.getRoomObject(roomId, objectId, category)));
     }
 
-    private isOwnerOfFurniture(roomObject: IRoomObject): boolean
+    public isOwnerOfFurniture(roomObject: IRoomObject): boolean
     {
         if(!roomObject || !roomObject.model) return false;
 

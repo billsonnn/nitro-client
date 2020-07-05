@@ -421,36 +421,39 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(!avatarCanvas) return null;
 
-        const _local_6 = this._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
+        const setTypes = this._Str_755(setType, this._Str_1708._Str_742._Str_868, this._Str_1668);
 
         const container = new PIXI.Container();
 
-        let _local_12 = (_local_6.length - 1);
+        let _local_12 = (setTypes.length - 1);
 
         while(_local_12 >= 0)
         {
-            const _local_7 = _local_6[_local_12];
-            const _local_8 = this._Str_586._Str_1629(_local_7, this._Str_1724);
+            const set       = setTypes[_local_12];
+            const bodyPart  = this._Str_586._Str_1629(set, this._Str_1724);
 
-            if(_local_8)
+            if(bodyPart)
             {
-                const _local_9 = _local_8.image;
+                const texture = bodyPart.image;
 
-                let _local_10 = _local_8._Str_1076.clone();
+                const offset = bodyPart._Str_1076.clone();
 
-                _local_10.x += avatarCanvas.offset.x;
-                _local_10.y += avatarCanvas.offset.y;
+                offset.x += avatarCanvas.offset.x;
+                offset.y += avatarCanvas.offset.y;
 
-                if(_local_9 && _local_10)
+                if(texture && offset)
                 {
-                    _local_10.x += avatarCanvas._Str_1076.x;
-                    _local_10.y += avatarCanvas._Str_1076.y;
+                    offset.x += avatarCanvas._Str_1076.x;
+                    offset.y += avatarCanvas._Str_1076.y;
 
-                    const sprite = PIXI.Sprite.from(_local_9);
+                    const sprite = PIXI.Sprite.from(texture);
 
                     if(sprite)
                     {
                         sprite.scale.set(scale);
+
+                        sprite.x = offset.x;
+                        sprite.y = offset.y;
 
                         container.addChild(sprite);
                     }

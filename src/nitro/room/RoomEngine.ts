@@ -951,7 +951,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(session)
         {
-            session.setOwnUserRoomId(objectId);
+            session.setOwnRoomIndex(objectId);
         }
 
         const camera = this.getRoomCamera(roomId);
@@ -1485,6 +1485,15 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!instance) return null;
 
         return instance.getRoomObject(objectId, category) as IRoomObjectController;
+    }
+
+    public getRoomObjectByIndex(roomId: number, index: number, category: number): IRoomObjectController
+    {
+        const instance = this.getRoomInstance(roomId);
+
+        if(!instance) return null;
+
+        return instance.getRoomObjectByIndex(index, category) as IRoomObjectController;
     }
 
     public getRoomObjectCategoryForType(type: string): number
@@ -2258,7 +2267,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(_arg_3)
         {
-            _local_9 = this._Str_8562(this._activeRoomId, objectId, category, new Vector3d(), 1, null);
+            _local_9 = this.getRoomObjectImage(this._activeRoomId, objectId, category, new Vector3d(), 1, null);
         }
         else
         {
@@ -2320,7 +2329,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         }
     }
 
-    public _Str_8562(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7: number = 0): ImageResult
+    public getRoomObjectImage(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7: number = 0): ImageResult
     {
         let extras: string      = null;
         let objectId: string    = null;
