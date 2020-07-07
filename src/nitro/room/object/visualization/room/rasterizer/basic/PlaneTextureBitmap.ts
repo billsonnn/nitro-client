@@ -1,6 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-
-export class PlaneTextureBitmap 
+﻿export class PlaneTextureBitmap 
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;

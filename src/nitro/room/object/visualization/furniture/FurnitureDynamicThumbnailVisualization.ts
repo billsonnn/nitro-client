@@ -25,9 +25,15 @@ export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVi
                 {
                     const image = new Image();
 
-                    image.crossOrigin   = 'anonymous';
-                    image.onload        = this._Str_25282.bind(this);
                     image.src           = thumbnailUrl;
+                    image.crossOrigin   = '*';
+
+                    image.onload = () =>
+                    {
+                        const texture = PIXI.Texture.from(image);
+
+                        this._Str_6645(texture);
+                    }
                 }
                 else
                 {
@@ -42,31 +48,5 @@ export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVi
     protected getThumbnailURL(): string
     {
         throw (new Error('This method must be overridden!'));
-    }
-
-    private _Str_25282(event: Event): void
-    {
-        if(!event || !event.target || (!(event.target instanceof Image)))
-        {
-            this._Str_6645(null);
-
-            return;
-        }
-
-        const texture = PIXI.RenderTexture.from(event.target as HTMLImageElement);
-
-        if(texture)
-        {
-            const graphic = new PIXI.Graphics()
-                .beginTextureFill({ texture })
-                .drawRect(0, 0, texture.width, texture.height)
-                .endFill();
-                
-            this._Str_6645(graphic);
-
-            return;
-        }
-
-        this._Str_6645(null);
     }
 }

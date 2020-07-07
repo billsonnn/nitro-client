@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';

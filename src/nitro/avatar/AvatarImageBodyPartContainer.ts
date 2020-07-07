@@ -1,6 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-
-export class AvatarImageBodyPartContainer 
+﻿export class AvatarImageBodyPartContainer 
 {
     private _image: PIXI.Texture;
     private _regPoint: PIXI.Point;

@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
 import { RoomObjectSpriteType } from '../object/enum/RoomObjectSpriteType';

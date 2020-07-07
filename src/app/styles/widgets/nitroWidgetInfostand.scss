@@ -3,80 +3,75 @@
     bottom: 50px;
     right: 50px;
 
-    .nitro-widget-infostand {
-        min-height: 200px;
-        min-width: 200px;
-        max-width: 200px;
-        // justify-content: center;
-        // align-items: center;
-        // width: 100%;
-        // top: 0;
-        // height: 100px;
-        // z-index: 400;
-        // background-color: transparent;
-        // border-radius: 0;
-        // box-shadow: none;
-        // pointer-events: none;
+    .container-view {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
 
-        .widget-header {
+        .nitro-widget-infostand {
+            min-height: 200px;
+            min-width: 200px;
+            max-width: 200px;
 
-            .header-title {
-                max-width: 140px;
-                font-size: 12px;
-                text-align: left;
-                text-transform: none;
+            .widget-header {
+
+                .header-title {
+                    max-width: 140px;
+                    font-size: 12px;
+                    text-align: left;
+                    text-transform: none;
+                }
             }
-        }
-
-        .widget-body {
-
-            .image-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .body-description {
-                font-size: 12px;
-                text-align: center;
-            }
-        }
-    
-        &.infostand-user-view {
 
             .widget-body {
 
                 .image-container {
-                    min-width: 70px;
-                    max-width: 70px;
-                    min-height: 100px;
-                    max-height: 130px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
-        }
-    
-        &.infostand-furni-view {
-            
-            .widget-body {
+        
+            &.infostand-user-view {
 
-                .furni-description {
-                    margin: 0;
-                    padding: 10px 0;
-                    font-size: 12px;
-                    text-align: center;
-                    text-transform: uppercase;
-                }
+                .widget-body {
 
-                .profile-link {
-                    display: flex;
-                    align-items: center;
-
-                    .furni-owner {
-                        padding-left: 5px;
-                        font-size: 12px;
+                    .image-container {
+                        min-width: 70px;
+                        max-width: 70px;
+                        min-height: 100px;
+                        max-height: 130px;
                     }
                 }
             }
+        
+            &.infostand-furni-view {
+                
+                .widget-body {
+
+                    .furni-description {
+                        margin: 0;
+                        padding: 10px 0;
+                        font-size: 12px;
+                        text-align: center;
+                        text-transform: uppercase;
+                    }
+
+                    .profile-link {
+                        display: flex;
+                        align-items: center;
+
+                        .furni-owner {
+                            padding-left: 5px;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .nitro-widget-infostand-buttons {
+            padding-top: 20px;
         }
     }
 }

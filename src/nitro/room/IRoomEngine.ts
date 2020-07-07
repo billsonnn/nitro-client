@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { IRoomManager } from '../../room/IRoomManager';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
@@ -33,6 +32,7 @@ export interface IRoomEngine
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): PIXI.Point;
     getRoomObjectImage(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7?: number): ImageResult;
+    useRoomObject(objectId: number, category: number): boolean;
     refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
     processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;

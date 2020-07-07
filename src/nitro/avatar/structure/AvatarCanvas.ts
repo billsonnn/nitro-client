@@ -1,5 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-import { AvatarScaleType } from '../enum/AvatarScaleType';
+﻿import { AvatarScaleType } from '../enum/AvatarScaleType';
 
 export class AvatarCanvas 
 {

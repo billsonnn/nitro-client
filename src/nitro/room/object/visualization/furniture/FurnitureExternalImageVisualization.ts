@@ -9,10 +9,9 @@ export class FurnitureExternalImageVisualization extends FurnitureDynamicThumbna
     constructor()
     {
         super();
+        
         this._url           = null;
         this._typePrefix    = null;
-
-        this._Str_20445 = true;
     }
 
     protected getThumbnailURL(): string
@@ -38,8 +37,6 @@ export class FurnitureExternalImageVisualization extends FurnitureDynamicThumbna
         this._url = url;
 
         return this._url;
-
-        //{"t":1589596086, "u":"4894588", "s":15867, "w":"https://ngh-camera.storage.googleapis.com/3c1b6238-0cae-42ac-bf85-da10beca2796.png"}
     }
 
     private _Str_18056(url: string): string

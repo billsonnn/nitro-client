@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { Nitro } from '../../../nitro/Nitro';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IRoomObjectController } from '../IRoomObjectController';

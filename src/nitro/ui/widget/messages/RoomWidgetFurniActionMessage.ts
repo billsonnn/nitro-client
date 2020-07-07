@@ -15,14 +15,14 @@ export class RoomWidgetFurniActionMessage extends RoomWidgetMessage
     private _offerId: number;
     private _objectData: string;
 
-    constructor(k: string, _arg_2: number, _arg_3: number, _arg_4: number =- 1, _arg_5: string = null)
+    constructor(type: string, id: number, category: number, offerId: number =- 1, objectData: string = null)
     {
-        super(k);
+        super(type);
 
-        this._furniId       = _arg_2;
-        this._furniCategory = _arg_3;
-        this._offerId       = _arg_4;
-        this._objectData    = _arg_5;
+        this._furniId       = id;
+        this._furniCategory = category;
+        this._offerId       = offerId;
+        this._objectData    = objectData;
     }
 
     public get furniId(): number

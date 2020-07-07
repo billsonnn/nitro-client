@@ -1,5 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-import { IVector3D } from '../../../room/utils/IVector3D';
+﻿import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 import { RoomFloorHole } from './RoomFloorHole';
 import { RoomMapData } from './RoomMapData';

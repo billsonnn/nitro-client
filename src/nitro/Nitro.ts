@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js-legacy';
+
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
@@ -96,7 +96,7 @@ export class Nitro extends PIXI.Application implements INitro
             Nitro.INSTANCE = null;
         }
 
-        PIXI.settings.SCALE_MODE    = PIXI.SCALE_MODES.NEAREST;
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
         const canvas = document.createElement('canvas');
 
@@ -112,7 +112,7 @@ export class Nitro extends PIXI.Application implements INitro
             view: canvas
         });
 
-        instance.ticker.maxFPS = NitroConfiguration.FPS;
+        instance.ticker.maxFPS  = NitroConfiguration.FPS;
 
         instance.communication.demo.setSSO(options.sso);
         

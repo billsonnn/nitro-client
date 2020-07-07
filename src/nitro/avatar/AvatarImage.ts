@@ -452,8 +452,8 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     {
                         sprite.scale.set(scale);
 
-                        sprite.x = offset.x;
-                        sprite.y = offset.y;
+                        sprite.x = (offset.x * scale);
+                        sprite.y = (offset.y * scale);
 
                         container.addChild(sprite);
                     }

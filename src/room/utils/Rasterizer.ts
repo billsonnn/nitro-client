@@ -1,6 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-
-export class Rasterizer 
+﻿export class Rasterizer 
 {
     // public static line(k:BitmapData, _arg_2: PIXI.Point, _arg_3: PIXI.Point, _arg_4: number): void
     // {

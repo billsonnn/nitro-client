@@ -1,6 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-
-export class ImageData 
+﻿export class ImageData 
 {
     private _bitmap: PIXI.Texture;
     private _rect: PIXI.Rectangle;

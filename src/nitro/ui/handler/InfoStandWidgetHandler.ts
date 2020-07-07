@@ -7,6 +7,7 @@ import { RoomUnitGiveHandItemComposer } from '../../communication/messages/outgo
 import { Nitro } from '../../Nitro';
 import { ObjectDataFactory } from '../../room/object/data/ObjectDataFactory';
 import { RoomObjectCategory } from '../../room/object/RoomObjectCategory';
+import { RoomObjectOperationType } from '../../room/object/RoomObjectOperationType';
 import { RoomObjectType } from '../../room/object/RoomObjectType';
 import { RoomObjectVariable } from '../../room/object/RoomObjectVariable';
 import { RoomControllerLevel } from '../../session/enum/RoomControllerLevel';
@@ -120,6 +121,18 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 return;
             case RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM:
                 this._container.connection.send(new RoomUnitGiveHandItemComposer(userId));
+                return;
+            case RoomWidgetFurniActionMessage.RWFAM_MOVE:
+                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_MOVE);
+                return;
+            case RoomWidgetFurniActionMessage.RWFUAM_ROTATE:
+                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                return;
+            case RoomWidgetFurniActionMessage.RWFAM_PICKUP:
+                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_PICKUP);
+                return;
+            case RoomWidgetFurniActionMessage.RWFAM_USE:
+                this._container.roomEngine.useRoomObject(objectId, objectCategory);
                 return;
         }
 
@@ -549,6 +562,10 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         types.push(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME);
         types.push(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM);
         types.push(RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM);
+        types.push(RoomWidgetFurniActionMessage.RWFAM_MOVE);
+        types.push(RoomWidgetFurniActionMessage.RWFUAM_ROTATE);
+        types.push(RoomWidgetFurniActionMessage.RWFAM_PICKUP);
+        types.push(RoomWidgetFurniActionMessage.RWFAM_USE);
 
         return types;
     }

@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
 import { Nitro } from '../../Nitro';
 import { IActiveActionData } from '../actions/IActiveActionData';

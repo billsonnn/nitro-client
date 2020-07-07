@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
@@ -1896,6 +1895,25 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         if(!object) return;
 
         object.processUpdateMessage(new ObjectAvatarOwnMessage());
+    }
+
+    public useRoomObject(objectId: number, category: number): boolean
+    {
+        const roomObject = this.getRoomObject(this._activeRoomId, objectId, category);
+
+        if(roomObject)
+        {
+            const eventHandler = roomObject.logic;
+
+            if(eventHandler)
+            {
+                eventHandler.useObject();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void

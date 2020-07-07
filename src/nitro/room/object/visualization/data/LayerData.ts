@@ -1,5 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
-
 export class LayerData
 {
     public static DEFAULT_COUNT: number         = 0;

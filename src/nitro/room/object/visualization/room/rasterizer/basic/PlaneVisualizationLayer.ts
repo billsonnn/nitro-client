@@ -1,5 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Nitro } from '../../../../../../Nitro';
 import { PlaneMaterial } from './PlaneMaterial';
 

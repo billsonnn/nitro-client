@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { IVector3D } from './IVector3D';
 
 export interface IRoomGeometry

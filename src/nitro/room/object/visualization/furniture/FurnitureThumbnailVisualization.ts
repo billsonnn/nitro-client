@@ -6,30 +6,19 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
 {
     protected static THUMBNAIL: string = 'THUMBNAIL';
 
-    private _Str_17030: string;
     private _Str_22237: string;
-    private _Str_21351: boolean;
-    private _Str_20721: PIXI.Graphics;
-    private _Str_10040: PIXI.Graphics;
+    private _Str_10040: PIXI.Texture;
     private _Str_21698: number;
     private _Str_16232: boolean;
 
     constructor()
     {
         super();
-
-        this._Str_17030 = null;
+        
         this._Str_22237 = null;
-        this._Str_21351 = false;
-        this._Str_20721 = null;
         this._Str_10040 = null;
         this._Str_21698 = -1;
         this._Str_16232 = false;
-    }
-
-    public set _Str_20445(k: boolean)
-    {
-        this._Str_21351 = k;
     }
 
     public get _Str_23660(): boolean
@@ -37,10 +26,9 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         return !(this._Str_10040 == null);
     }
 
-    public _Str_6645(k: PIXI.Graphics, _arg_2: PIXI.Graphics = null): void
+    public _Str_6645(k: PIXI.Texture): void
     {
         this._Str_10040 = k;
-        this._Str_20721 = ((_arg_2 != null) ? _arg_2 : k);
         this._Str_16232 = true;
     }
 
@@ -62,19 +50,17 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         if(this._Str_10040)
         {
             this._Str_20857(this._Str_10040, 64);
-            this._Str_20857(this._Str_20721, 32);
         }
         else
         {
             this.asset.disposeAsset(this._Str_15493(64));
-            this.asset.disposeAsset(this._Str_15493(32));
         }
 
         this._Str_16232 = false;
         this._Str_21698 = this.direction;
     }
 
-    private _Str_20857(k: PIXI.Graphics, scale: number): void
+    private _Str_20857(k: PIXI.Texture, scale: number): void
     {
         let layerId = 0;
 
@@ -89,6 +75,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 {
                     const _local_6 = this._Str_25562(k, asset);
                     const _local_7 = this._Str_15493(scale);
+
                     this.asset.disposeAsset(_local_7);
                     this.asset.addAsset(_local_7, _local_6, true, asset.offsetX, asset.offsetY, false, false);
                 }
@@ -100,13 +87,13 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         }
     }
 
-    private _Str_25562(k: PIXI.Graphics, _arg_2: IGraphicAsset): PIXI.Texture
+    private _Str_25562(texture: PIXI.Texture, asset: IGraphicAsset): PIXI.Texture
     {
         let graphic: PIXI.Graphics = null;
         
         const _local_3  = 1.1;
         const matrix    = new PIXI.Matrix();
-        const _local_5  = (_arg_2.width / k.width);
+        const _local_5  = (asset.width / texture.width);
 
         switch(this.direction)
         {
@@ -116,7 +103,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 matrix.c = 0;
                 matrix.d = (_local_5 * _local_3);
                 matrix.tx = 0;
-                matrix.ty = ((0.5 * _local_5) * k.width);
+                matrix.ty = ((0.5 * _local_5) * texture.width);
                 break;
             case 0:
             case 4:
@@ -136,63 +123,11 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 matrix.ty = 0;
         }
 
-        const texture = Nitro.instance.renderer.generateTexture(k, 1, 1, new PIXI.Rectangle(0, 0, k.width, k.height));
+        const sprite = PIXI.Sprite.from(texture);
 
-        if(!texture) return null;
-        
-        // if(this._Str_21351)
-        // {
-        //     graphic = new PIXI.Graphics()
-        //         .drawRect(0, 0, (_arg_2.width + 2), (_arg_2.height + 2));
+        sprite.transform.setFromMatrix(matrix);
 
-        //     graphic
-        //         .beginTextureFill({ texture, matrix })
-        //         .drawRect(0, 0, texture.width, texture.height)
-        //         .endFill();
-            
-        //     matrix.tx = (matrix.tx + 1);
-        //     matrix.ty--;
-
-        //     graphic
-        //         .beginTextureFill({ texture, matrix })
-        //         .drawRect(0, 0, texture.width, texture.height)
-        //         .endFill();
-                
-        //     matrix.ty = (matrix.ty + 2);
-
-        //     graphic
-        //         .beginTextureFill({ texture, matrix })
-        //         .drawRect(0, 0, texture.width, texture.height)
-        //         .endFill();
-                
-        //     matrix.tx = (matrix.tx + 1);
-        //     matrix.ty--;
-
-        //     graphic
-        //         .beginTextureFill({ texture, matrix })
-        //         .drawRect(0, 0, texture.width, texture.height)
-        //         .endFill();
-
-        //     matrix.tx--;
-
-        //     graphic
-        //         .beginTextureFill({ texture, matrix })
-        //         .drawRect(0, 0, texture.width, texture.height)
-        //         .endFill();
-        // }
-        // else
-        // {
-            graphic = new PIXI.Graphics()
-                .beginTextureFill({ texture, matrix })
-                .drawRect(0, 0, _arg_2.width, _arg_2.height)
-                .endFill();
-        //}
-
-        const graphicTexture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
-
-        if(!graphicTexture) return null;
-
-        return graphicTexture;
+        return Nitro.instance.renderer.generateTexture(sprite, 1, 1, new PIXI.Rectangle(0, 0, asset.width, asset.height));
     }
 
     protected getSpriteAssetName(scale: number, layerId: number): string
@@ -204,13 +139,9 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
 
     protected _Str_15493(scale: number): string
     {
-        if(!this._Str_17030)
-        {
-            this._Str_17030 = this._Str_12961(this.object.id, 32);
-            this._Str_22237 = this._Str_12961(this.object.id, 64);
-        }
+        this._Str_22237 = this._Str_12961(this.object.id, 64);
 
-        return (scale === 32) ? this._Str_17030 : this._Str_22237;
+        return this._Str_22237;
     }
 
     protected _Str_12961(k: number, _arg_2: number): string

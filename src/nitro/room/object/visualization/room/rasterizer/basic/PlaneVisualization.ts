@@ -1,5 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+﻿import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
 import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';

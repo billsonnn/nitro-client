@@ -1,5 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
-
 export interface IRoomObjectSprite
 {
     id: number;

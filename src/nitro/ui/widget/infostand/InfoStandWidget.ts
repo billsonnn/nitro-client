@@ -189,9 +189,8 @@ export class InfoStandWidget extends ConversionTrackingWidget
         
         const element = (this.mainContainer.getElementsByClassName(name)[0] as HTMLElement);
 
-        if(!element) return;
+        if(element && element.parentElement) element.parentElement.style.display = 'flex';
 
-        element.style.display = 'inherit';
     }
 
     private getTemplate(): string
@@ -217,5 +216,20 @@ export class InfoStandWidget extends ConversionTrackingWidget
         }
 
         return this._mainContainer;
+    }
+
+    public get userData(): InfoStandUserData
+    {
+        return this._userData;
+    }
+
+    public get furniData(): InfoStandFurniData
+    {
+        return this._furniData;
+    }
+
+    public get petData(): InfoStandPetData
+    {
+        return this._petData;
     }
 }

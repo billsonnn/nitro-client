@@ -1,6 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-
-export class PlaneBitmapData 
+﻿export class PlaneBitmapData 
 {
     private _bitmap: PIXI.Graphics;
     private _timeStamp: number;

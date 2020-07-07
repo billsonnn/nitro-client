@@ -1,5 +1,4 @@
-﻿import * as PIXI from 'pixi.js-legacy';
-import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
+﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Nitro } from '../../../../../../Nitro';
 import { PlaneTexture } from './PlaneTexture';

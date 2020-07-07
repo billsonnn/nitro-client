@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { IRoomGeometry } from '../utils/IRoomGeometry';
 import { IRoomCanvasMouseListener } from './IRoomCanvasMouseListener';
 

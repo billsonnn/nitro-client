@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js-legacy';
 import { AssetManager } from '../../../../core/asset/AssetManager';
 import { IAsset, IAssetData, IAssetPalette } from '../../../../core/asset/interfaces';
 import { Nitro } from '../../../../nitro/Nitro';

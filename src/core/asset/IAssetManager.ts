@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js-legacy';
+
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
