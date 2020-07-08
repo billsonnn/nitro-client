@@ -33,7 +33,7 @@ export class OwnAvatarMenuView extends AvatarContextInfoButtonView
         this._avatarData    = null;
         this._mode          = OwnAvatarMenuView.MODE_NORMAL;
 
-        this._Str_3403      = false;
+        this._fadeAfterDelay      = false;
     }
 
     public static setup(view: OwnAvatarMenuView, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void

@@ -19,12 +19,12 @@ export class AvatarContextInfoButtonView extends ButtonMenuView
 
     public static extendedSetup(view: AvatarContextInfoButtonView, userId: number, userName: string, userType: number, roomIndex: number, _arg_6: boolean = false, _arg_7: boolean = false):void
     {
-        view._userId       = userId;
-        view._userName     = userName;
-        view._roomIndex    = roomIndex;
-        view._userType     = userType;
-        view._Str_3947     = _arg_6;
-        view._Str_3403     = _arg_7;
+        view._userId            = userId;
+        view._userName          = userName;
+        view._roomIndex         = roomIndex;
+        view._userType          = userType;
+        view._Str_3947          = _arg_6;
+        view._fadeAfterDelay    = _arg_7;
 
         ContextInfoView.render(view);
     }

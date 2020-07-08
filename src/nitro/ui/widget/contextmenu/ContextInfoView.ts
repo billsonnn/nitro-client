@@ -4,69 +4,70 @@ import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 export class ContextInfoView implements IDisposable
 {
-    private static _Str_18514: number   = 25;
-    private static _Str_14408: number   = 3;
+    private static LOCATION_STACK_SIZE: number  = 25;
+    private static BUBBLE_DROP_SPEED: number    = 3;
+    private static SPACE_AROUND_EDGES: number   = 5;
 
-    protected static _Str_3452: boolean = false;
-
-    protected _parent: IContextMenuParentWidget;
-    protected _stack: FixedSizeStack;
-    protected _Str_3403: boolean;
-    protected _Str_14625: boolean;
-    protected _Str_22193: number;
-    protected _opacity: number;
-    protected _Str_5321: number;
-    protected _Str_18538: number;
-
-    protected _fadeStartDelay: number;
-    protected _isFading: boolean;
-    protected _fadeTimer: any;
+    protected static _isMinimized: boolean = false;
 
     protected _window: HTMLElement;
     protected _activeView: HTMLElement;
+    protected _parent: IContextMenuParentWidget;
+
+    protected _stack: FixedSizeStack;
+    protected _opacity: number;
+    protected _currentDeltaY: number;
+
+    protected _firstFadeStarted: boolean;
+    protected _fadeAfterDelay: boolean;
+    protected _fadeLength: number;
+    protected _fadeTime: number;
+    protected _fadeStartDelay: number;
+    protected _fadingOut: boolean;
+    protected _fadeStartTimer: any;
     
-    private _Str_16285: boolean;
+    private _forcedPositionUpdate: boolean;
     private _disposed: boolean;
 
     constructor(parent: IContextMenuParentWidget)
     {
-        this._parent            = parent;
-        this._stack             = new FixedSizeStack(ContextInfoView._Str_18514);
-        this._Str_3403          = true;
-        this._Str_14625         = false;
-        this._Str_22193         = 500;
-        this._opacity           = 0;
-        this._Str_5321          = 0;
-        this._Str_18538         = -1000000;
+        this._window                = null;
+        this._activeView            = null;
+        this._parent                = parent;
 
-        this._fadeStartDelay    = 3000;
-        this._isFading          = false;
-        this._fadeTimer         = null;
+        this._stack                 = new FixedSizeStack(ContextInfoView.LOCATION_STACK_SIZE);
+        this._opacity               = 0;
+        this._currentDeltaY         = -1000000;
 
-        this._window            = null;
-        this._activeView        = null;
+        this._firstFadeStarted      = false;
+        this._fadeAfterDelay        = true;
+        this._fadeLength            = 500;
+        this._fadeTime              = 0;
+        this._fadeStartDelay        = 3000;
+        this._fadingOut             = false;
+        this._fadeStartTimer        = null;
 
-        this._Str_16285         = false;
-        this._disposed          = false;
+        this._forcedPositionUpdate  = false;
+        this._disposed              = false;
     }
 
     public static render(view: ContextInfoView): void
     {
-        view._Str_14625 = false;
-        view._Str_22193 = 75;
-        view._isFading = false;
-        view._opacity = 1;
+        view._firstFadeStarted  = false;
+        view._fadeLength        = 75;
+        view._fadingOut         = false;
+        view._opacity           = 1;
 
-        if(view._Str_3403)
+        if(view._fadeAfterDelay)
         {
-            if(view._fadeTimer)
+            if(view._fadeStartTimer)
             {
-                clearTimeout(view._fadeTimer);
+                clearTimeout(view._fadeStartTimer);
 
-                view._fadeTimer = null;
+                view._fadeStartTimer = null;
             }
 
-            view._fadeTimer = setTimeout(view.onTimerComplete.bind(view), view._fadeStartDelay);
+            view._fadeStartTimer = setTimeout(view.onTimerComplete.bind(view), view._fadeStartDelay);
         }
 
         view.updateWindow();
@@ -86,11 +87,11 @@ export class ContextInfoView implements IDisposable
             this._window = null;
         }
 
-        if(this._fadeTimer)
+        if(this._fadeStartTimer)
         {
-            clearTimeout(this._fadeTimer);
+            clearTimeout(this._fadeStartTimer);
 
-            this._fadeTimer = null;
+            this._fadeStartTimer = null;
         }
 
         this._disposed = true;
@@ -102,10 +103,10 @@ export class ContextInfoView implements IDisposable
 
         if(!this._activeView) this.updateWindow();
 
-        if(this._isFading)
+        if(this._fadingOut)
         {
-            this._Str_5321  = (this._Str_5321 + time);
-            this._opacity   = ((1 - (this._Str_5321 / this._Str_22193)) * this.maximumOpacity);
+            this._fadeTime  = (this._fadeTime + time);
+            this._opacity   = ((1 - (this._fadeTime / this._fadeLength)) * this.maximumOpacity);
         }
         else
         {
@@ -121,23 +122,34 @@ export class ContextInfoView implements IDisposable
 
         const offset = this.getOffset(rectangle);
 
-        let _local_5 = (point.y - rectangle.top);
+        const _local_5 = (point.y - rectangle.top);
 
         this._stack._Str_22775(_local_5);
 
-        let _local_6 = this._stack._Str_25797();
+        let deltaY = this._stack._Str_25797();
 
-        if(_local_6 < (this._Str_18538 - ContextInfoView._Str_14408))
+        if(deltaY < (this._currentDeltaY - ContextInfoView.BUBBLE_DROP_SPEED))
         {
-            _local_6 = (this._Str_18538 - ContextInfoView._Str_14408);
+            deltaY = (this._currentDeltaY - ContextInfoView.BUBBLE_DROP_SPEED);
         }
 
-        let _local_7 = (point.y - _local_6);
+        let _local_7 = (point.y - deltaY);
 
-        this._Str_18538 = _local_6;
+        this._currentDeltaY = deltaY;
 
-        this._activeView.style.left = (Math.round(point.x - (this._activeView.offsetWidth / 2)) + 'px');
-        this._activeView.style.top  = ((Math.round(_local_7 + offset)) + 'px');
+        let left    = (Math.round(point.x - (this._activeView.offsetWidth / 2)));
+        let top     = ((Math.round(_local_7 + offset)));
+
+        if(top <= 0) top = ContextInfoView.SPACE_AROUND_EDGES;
+
+        if(top >= (window.innerHeight - this._activeView.offsetHeight)) top = ((window.innerHeight - this._activeView.offsetHeight) - ContextInfoView.SPACE_AROUND_EDGES);
+
+        if(left >= (window.innerWidth - this._activeView.offsetWidth)) left = ((window.innerWidth - this._activeView.offsetWidth) - ContextInfoView.SPACE_AROUND_EDGES);
+
+        if(left < 0) left = 0 + ContextInfoView.BUBBLE_DROP_SPEED;
+
+        this._activeView.style.left = (left + 'px');
+        this._activeView.style.top  = (top + 'px');
 
         this._activeView.style.opacity = this._opacity.toString();
 
@@ -156,22 +168,22 @@ export class ContextInfoView implements IDisposable
         this._activeView.style.visibility = 'visible';
     }
 
-    public hide(k: boolean): void
+    public hide(flag: boolean): void
     {
         if(this._activeView)
         {
-            if(!this._Str_14625 && k)
+            if(!this._firstFadeStarted && flag)
             {
-                this._Str_14625 = true;
+                this._firstFadeStarted = true;
 
-                if(this._fadeTimer)
+                if(this._fadeStartTimer)
                 {
-                    clearTimeout(this._fadeTimer);
+                    clearTimeout(this._fadeStartTimer);
 
-                    this._fadeTimer = null;
+                    this._fadeStartTimer = null;
                 }
 
-                this._fadeTimer = setTimeout(this.onTimerComplete.bind(this), this._fadeStartDelay);
+                this._fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this._fadeStartDelay);
             }
             else
             {
@@ -184,7 +196,7 @@ export class ContextInfoView implements IDisposable
 
     private onTimerComplete(): void
     {
-        this._isFading = true;
+        this._fadingOut = true;
         
         this.hide(true);
     }

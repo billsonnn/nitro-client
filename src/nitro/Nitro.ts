@@ -115,10 +115,6 @@ export class Nitro extends PIXI.Application implements INitro
         instance.ticker.maxFPS  = NitroConfiguration.FPS;
 
         instance.communication.demo.setSSO(options.sso);
-        
-        const view = instance.renderer && instance.renderer.view;
-
-        if(view) options.canvasParent.append(view);
     }
 
     public static boot(): void

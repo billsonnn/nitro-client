@@ -194,7 +194,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         stage.addChild(displayObject);
 
-        this._roomCanvasWrapper = document.getElementById('client-wrapper') as HTMLCanvasElement;
+        this._roomCanvasWrapper = Nitro.instance.renderer.view;
 
         if(this._roomCanvasWrapper)
         {
