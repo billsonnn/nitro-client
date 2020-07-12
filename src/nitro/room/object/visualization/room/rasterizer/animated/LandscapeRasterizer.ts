@@ -202,12 +202,9 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
         if(canvas)
         {
-            const rectangle = canvas.getBounds();
-
             canvas
-                .clear()
                 .beginFill(0xFFFFFF)
-                .drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
+                .drawRect(0, 0, width, height)
                 .endFill();
         }
 

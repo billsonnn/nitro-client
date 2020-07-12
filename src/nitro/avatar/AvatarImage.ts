@@ -383,6 +383,20 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         this._Str_671   = texture;
         this._Str_1535  = false;
 
+        if(this._Str_2121)
+        {
+            if(this._Str_2121._Str_832)
+            {
+                let avatarImage = this._Str_1894(this._Str_671);
+
+                this.applyPalette(avatarImage, this._Str_2121.reds);
+
+                if(this._Str_671) this._Str_671.destroy();
+
+                this._Str_671 = avatarImage;
+            }
+        }
+
         if (((!(_local_4 == null)) && (_local_11)))
         {
             this.cacheFullImage(_local_4, (this._Str_671.clone() as PIXI.RenderTexture));
@@ -398,7 +412,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
             graphic
                 .beginTextureFill({ texture: this._Str_671, matrix })
-                .drawRect(0,0, (this._Str_671.width * scale), (this._Str_671.height * scale))
+                .drawRect(0, 0, (this._Str_671.width * scale), (this._Str_671.height * scale))
                 .endFill();
 
             const texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
@@ -409,6 +423,89 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         if(this._Str_671 && hightlight) return (this._Str_671.clone() as PIXI.RenderTexture);
         
         return this._Str_671;
+    }
+
+    private _Str_1894(k: PIXI.Texture, _arg_2: string = 'CHANNELS_EQUAL'): PIXI.RenderTexture
+    {
+        let _local_3 = 0.33;
+        let _local_4 = 0.33;
+        let _local_5 = 0.33;
+        let _local_6 = 1;
+
+        switch (_arg_2)
+        {
+            case "CHANNELS_UNIQUE":
+                _local_3 = 0.3;
+                _local_4 = 0.59;
+                _local_5 = 0.11;
+                break;
+            case "CHANNELS_RED":
+                _local_3 = 1;
+                _local_4 = 0;
+                _local_5 = 0;
+                break;
+            case "CHANNELS_GREEN":
+                _local_3 = 0;
+                _local_4 = 1;
+                _local_5 = 0;
+                break;
+            case "CHANNELS_BLUE":
+                _local_3 = 0;
+                _local_4 = 0;
+                _local_5 = 1;
+                break;
+            case "CHANNELS_DESATURATED":
+                _local_3 = 0.3086;
+                _local_4 = 0.6094;
+                _local_5 = 0.082;
+                break;
+        }
+
+        const colorFilter = new PIXI.filters.ColorMatrixFilter();
+
+        colorFilter.matrix = [_local_3, _local_4, _local_5, 0, 0, _local_3, _local_4, _local_5, 0, 0, _local_3, _local_4, _local_5, 0, 0, 0, 0, 0, 1, 0];
+
+        const sprite = PIXI.Sprite.from(k);
+
+        if(sprite)
+        {
+            sprite.filters = [ colorFilter ];
+
+            return Nitro.instance.renderer.generateTexture(sprite, 1, 1, new PIXI.Rectangle(0, 0, k.width, k.height));
+        }
+
+        return null;
+    }
+
+    private applyPalette(texture: PIXI.Texture, reds: number[] = null, greens: number[] = null, blues: [] = null, alphas: number[] = null): PIXI.Texture
+    {
+        const sprite            = PIXI.Sprite.from(texture);
+        const textureCanvas     = Nitro.instance.renderer.extract.canvas(sprite);
+        const textureCtx        = textureCanvas.getContext('2d');
+        const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
+        const data              = textureImageData.data;
+
+        for(let i = 0; i < data.length; i += 4)
+        {
+            var r = i;
+			var g = i + 1;
+			var b = i + 2;
+            var a = i + 3;
+            
+			var red = (reds) ? reds[data[r]] : data[r] << 16;
+			var green = (greens) ? greens[data[g]] : data[g] << 8;
+			var blue = (blues) ? blues[data[b]] : data[b];
+            var alpha = (alphas) ? alphas[data[a]] : (data[a] << 24) >>> 0;
+            
+			data[r] = ((red >> 16 & 0xFF) + (green >> 16 & 0xFF) + (blue >> 16 & 0xFF) + (alpha >> 16 & 0xFF)) % 256;
+			data[g] = ((red >> 8 & 0xFF) + (green >> 8 & 0xFF) + (blue >> 8 & 0xFF) + (alpha >> 8 & 0xFF)) % 256;
+			data[b] = ((red & 0xFF) + (green & 0xFF) + (blue & 0xFF) + (alpha & 0xFF)) % 256;
+            data[a] = ((red >> 24 & 0xFF) + (green >> 24 & 0xFF) + (blue >> 24 & 0xFF) + (alpha >> 24 & 0xFF)) % 256;
+        }
+
+        textureCtx.putImageData(textureImageData, 0, 0);
+
+        return PIXI.Texture.from(textureCanvas);
     }
 
     public getCroppedImage(setType: string, scale: number = 1): PIXI.RenderTexture
@@ -436,34 +533,28 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             {
                 const texture = bodyPart.image;
 
-                const offset = bodyPart._Str_1076.clone();
-
-                offset.x += avatarCanvas.offset.x;
-                offset.y += avatarCanvas.offset.y;
-
-                if(texture && offset)
+                if(!texture)
                 {
-                    offset.x += avatarCanvas._Str_1076.x;
-                    offset.y += avatarCanvas._Str_1076.y;
+                    container.destroy();
 
-                    const sprite = PIXI.Sprite.from(texture);
-
-                    if(sprite)
-                    {
-                        sprite.scale.set(scale);
-
-                        sprite.x = (offset.x * scale);
-                        sprite.y = (offset.y * scale);
-
-                        container.addChild(sprite);
-                    }
+                    return null;
                 }
+
+                const offset = bodyPart._Str_1076;
+                const sprite = PIXI.Sprite.from(texture);
+
+                //sprite.scale.set(scale);
+
+                sprite.x = offset.x;
+                sprite.y = offset.y;
+
+                container.addChild(sprite);
             }
 
             _local_12--;
         }
 
-        let texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
+        let texture = Nitro.instance.renderer.generateTexture(container, PIXI.SCALE_MODES.NEAREST, scale);
 
         if(!texture) return null;
         

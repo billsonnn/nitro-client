@@ -801,6 +801,44 @@ export class RoomMessageHandler extends Disposable
         this._roomCreator.addFurnitureWall(roomId, data.itemId, data.spriteId, location, direction, data.state, data.stuffData, data.secondsToExpiration, data.usagePolicy, data.userId, data.username);
     }
 
+    // public _SafeStr_10580(event:_SafeStr_2242):void
+    // {
+    //     var arrayIndex:int;
+    //     var discoColours:Array;
+    //     var discoTimer:Timer;
+    //     var eventParser:_SafeStr_4576 = (event.parser as _SafeStr_4576);
+    //     switch (eventParser._SafeStr_7025)
+    //     {
+    //         case 0:
+    //             _SafeStr_4588.init(250, 5000);
+    //             _SafeStr_4588._SafeStr_6766();
+    //             return;
+    //         case 1:
+    //             _SafeStr_4231.init(250, 5000);
+    //             _SafeStr_4231._SafeStr_6766();
+    //             return;
+    //         case 2:
+    //             this._SafeStr_10592.roomSessionManager.events.dispatchEvent(new _SafeStr_2821(this._SafeStr_10593, -1, true));
+    //             return;
+    //         case 3:
+    //             arrayIndex = 0;
+    //             discoColours = [29371, 16731195, 16764980, 0x99FF00, 29371, 16731195, 16764980, 0x99FF00, 0];
+    //             discoTimer = new Timer(1000, (discoColours.length + 1));
+    //             discoTimer.addEventListener(TimerEvent.TIMER, function (k:TimerEvent):void
+    //             {
+    //                 if (arrayIndex == discoColours.length)
+    //                 {
+    //                     _SafeStr_10592._SafeStr_21164(_SafeStr_10593, discoColours[arrayIndex++], 176, true);
+    //                 } else
+    //                 {
+    //                     _SafeStr_10592._SafeStr_21164(_SafeStr_10593, discoColours[arrayIndex++], 176, false);
+    //                 };
+    //             });
+    //             discoTimer.start();
+    //             return;
+    //     };
+    // }
+
     public get currentRoomId(): number
     {
         return this._currentRoomId;

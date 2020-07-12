@@ -162,6 +162,11 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new RoomUnitPostureComposer(posture));
     }
 
+    public sendDoorbellApprovalMessage(userName: string, flag: boolean): void
+    {
+        // send doorbell
+    }
+
     public pickupPet(id: number): void
     {
         if(!this._connection) return;

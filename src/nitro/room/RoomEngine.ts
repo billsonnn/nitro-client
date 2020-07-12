@@ -2261,6 +2261,13 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return screenPoint;
     }
 
+    public selectRoomObject(roomId: number, objectId: number, objectCategory: number): void
+    {
+        if(!this._roomObjectEventHandler) return;
+
+        this._roomObjectEventHandler._Str_17481(roomId, objectId, objectCategory);
+    }
+
     private _Str_24651(k: PIXI.Sprite, _arg_2: string, _arg_3: PIXI.Texture): PIXI.Sprite
     {
         if(!k || !_arg_3) return;

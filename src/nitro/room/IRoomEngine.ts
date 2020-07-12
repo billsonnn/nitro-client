@@ -32,6 +32,7 @@ export interface IRoomEngine
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): PIXI.Point;
     getRoomObjectImage(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7?: number): ImageResult;
+    selectRoomObject(roomId: number, objectId: number, objectCategory: number): void;
     useRoomObject(objectId: number, category: number): boolean;
     refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
     processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;

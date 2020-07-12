@@ -303,7 +303,10 @@ export class RoomPlane implements IRoomPlane
         {
             this._Str_2708.delete(k);
 
-            if(_arg_2 && (_arg_2.bitmap !== existing.bitmap)) existing.bitmap.destroy();
+            // if(_arg_2 && (_arg_2.bitmap !== existing.bitmap))
+            // {
+            //     existing.bitmap && existing.bitmap.destroy();
+            // }
 
             existing.dispose();
         }
@@ -322,7 +325,7 @@ export class RoomPlane implements IRoomPlane
             {
                 if(!bitmap) continue;
 
-                if(bitmap.bitmap) bitmap.bitmap.destroy();
+                //if(bitmap.bitmap) bitmap.bitmap.clear();
 
                 bitmap.dispose();
             }

@@ -76,7 +76,7 @@ export function MainView(): JSX.Element
                 setLoadingOptions({ message: 'Connection Closed', percentage: 0, hideProgress: true });
 				break;
         }
-    }, [ setIsConnecting, setIsConnected, setIsHandshaking, setIsHandshaked, setIsAuthenticated, setIsError, setIsClosed ]);
+    }, [ ]);
 
     useMainEvent(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, handler);
     useMainEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, handler);

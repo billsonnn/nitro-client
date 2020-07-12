@@ -82,7 +82,19 @@ export class ExtendedSprite extends PIXI.Sprite
 
             if(!baseTexture.resource)
             {
-                canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
+                //@ts-ignore
+                if(!texture.getLocalBounds)
+                {
+                    const tempSprite = PIXI.Sprite.from(texture);
+
+                    canvas = Nitro.instance.renderer.extract.canvas(tempSprite);
+
+                    tempSprite.destroy();
+                }
+                else
+                {
+                    canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
+                }
             }
 
             if(!ExtendedSprite.generateHitMap(baseTexture, sprite.alphaTolerance, canvas)) return false;

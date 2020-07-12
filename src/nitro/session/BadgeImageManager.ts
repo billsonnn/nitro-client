@@ -99,6 +99,8 @@ export class BadgeImageManager
     {
         const existing = this._assets.getTexture('loading_icon');
 
+        console.log(existing);
+
         if(!existing) return null;
 
         return existing.clone();

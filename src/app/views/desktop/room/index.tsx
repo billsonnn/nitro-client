@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Nitro } from '../../../../nitro/Nitro';
 
 export function RoomView(): JSX.Element
 {
     const [ clientRef ] = React.useState(React.createRef<HTMLDivElement>());
 
-    useEffect(() =>
+    React.useEffect(() =>
     {
         Nitro.instance && clientRef && clientRef.current.append(Nitro.instance.renderer.view);
     }, [ clientRef ]);

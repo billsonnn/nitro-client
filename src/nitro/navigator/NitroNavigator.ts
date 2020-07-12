@@ -31,7 +31,7 @@ export class NitroNavigator extends NitroManager implements INitroNavigator
     {
         if(!this._roomSession) return;
 
-        this._roomSession.createSession(roomId, password);
+        //this._roomSession.createSession(roomId, password);
     }
 
     public get communication(): INitroCommunicationManager

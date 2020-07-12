@@ -20,19 +20,23 @@ export class AvatarDataContainer implements IAvatarDataContainer
     constructor(k: any)
     {
         this._ink = parseInt(k.ink);
-        var _local_2 = k.foreground;
-        _local_2 = _local_2.replace("#", "");
-        var _local_3 = k.background;
-        _local_3 = _local_3.replace("#", "");
-        this._foreGround = parseInt(_local_2, 16);
-        this._backGround = parseInt(_local_3, 16);
-        this._rgb = parseInt(_local_2, 16);
-        this._r = ((this._rgb >> 16) & 0xFF);
-        this._g = ((this._rgb >> 8) & 0xFF);
-        this._b = ((this._rgb >> 0) & 0xFF);
-        this._redMultiplier = ((this._r / 0xFF) * 1);
-        this._greenMultiplier = ((this._g / 0xFF) * 1);
-        this._blueMultiplier = ((this._b / 0xFF) * 1);
+
+        let foreground = (k.foreground as string);
+        let background = (k.background as string);
+
+        foreground = foreground.replace('#', '');
+        background = background.replace('#', '');
+
+        this._foreGround        = parseInt(foreground, 16);
+        this._backGround        = parseInt(background, 16);
+        this._rgb               = parseInt(foreground, 16);
+        this._r                 = ((this._rgb >> 16) & 0xFF);
+        this._g                 = ((this._rgb >> 8) & 0xFF);
+        this._b                 = ((this._rgb >> 0) & 0xFF);
+        this._redMultiplier     = ((this._r / 0xFF) * 1);
+        this._greenMultiplier   = ((this._g / 0xFF) * 1);
+        this._blueMultiplier    = ((this._b / 0xFF) * 1);
+
         if (this._ink == 37)
         {
             this._alphaMultiplier = 0.5;
@@ -58,22 +62,22 @@ export class AvatarDataContainer implements IAvatarDataContainer
 
     public get reds(): number[]
     {
-        return this._colorMap.get("reds");
+        return this._colorMap.get('reds');
     }
 
     public get greens(): number[]
     {
-        return this._colorMap.get("greens");
+        return this._colorMap.get('greens');
     }
 
     public get blues(): number[]
     {
-        return this._colorMap.get("blues");
+        return this._colorMap.get('blues');
     }
 
     public get alphas(): number[]
     {
-        return this._colorMap.get("alphas");
+        return this._colorMap.get('alphas');
     }
 
     public get _Str_832(): boolean
@@ -121,10 +125,10 @@ export class AvatarDataContainer implements IAvatarDataContainer
             _local_18.push(((((_local_20 << 24) | (_local_21 << 16)) | (_local_22 << 8)) | _local_23));
             _local_24++;
         }
-        _local_15.set("alphas", _local_16);
-        _local_15.set("reds", _local_16);
-        _local_15.set("greens", _local_17);
-        _local_15.set("blues", _local_18);
+        _local_15.set('alphas', _local_16);
+        _local_15.set('reds', _local_16);
+        _local_15.set('greens', _local_17);
+        _local_15.set('blues', _local_18);
         return _local_15;
     }
 }

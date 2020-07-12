@@ -112,7 +112,7 @@ export class PlaneVisualizationLayer
             const green: number = ((this._color >> 8) & 0xFF);
             const blue: number  = (this._color & 0xFF);
 
-            if(((red < 0xFF) || (green < 0xFF)) || (blue < 0xFF)) this._bitmapData.tint = this._color;
+            if(((red < 0xFF) || (green < 0xFF)) || (blue < 0xFF)) bitmapData.tint = this._color;
 
             if(canvas && (bitmapData !== canvas))
             {

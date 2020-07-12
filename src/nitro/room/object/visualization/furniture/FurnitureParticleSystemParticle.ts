@@ -10,7 +10,7 @@ export class FurnitureParticleSystemParticle
     private _lastY: number;
     private _lastZ: number;
     private _hasMoved: boolean = false;
-    private _direction: Vector3d;
+    protected _direction: Vector3d;
     private _age: number = 0;
     private _lifeTime: number;
     private _isEmitter: boolean = false;

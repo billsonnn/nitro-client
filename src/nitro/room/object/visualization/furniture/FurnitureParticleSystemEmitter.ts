@@ -2,27 +2,26 @@
 
 export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParticle 
 {
-    // public static CONE: string = "cone";
-    // public static PLANE: string = "plane";
-    // public static SPHERE: string = "sphere";
+    public static CONE: string = "cone";
+    public static PLANE: string = "plane";
+    public static SPHERE: string = "sphere";
 
-    // private _name: string;
-    // private _roomObjectSpriteId: number = -1;
-    // private _force: number;
-    // private _direction: Vector3d;
-    // private _timeStep: number = 0.1;
-    // private _gravity: number;
-    // private _airFriction: number;
-    // private _explosionShape: string;
-    // private _particleConfigurations:Array;
-    // private _particles: FurnitureParticleSystemParticle[];
-    // private _maxNumberOfParticles: number;
-    // private _particlesPerFrame: number;
-    // private _emittedParticles: number;
-    // private _fuseTime: number = 10;
-    // private _energy: number = 1;
-    // private _hasIgnited: boolean = false;
-    // private _burstPulse: number = 1;
+    private _name: string;
+    private _roomObjectSpriteId: number = -1;
+    private _force: number;
+    private _timeStep: number = 0.1;
+    private _gravity: number;
+    private _airFriction: number;
+    private _explosionShape: string;
+    private _particleConfigurations: { [index: string]: any }[];
+    private _particles: FurnitureParticleSystemParticle[];
+    private _maxNumberOfParticles: number;
+    private _particlesPerFrame: number;
+    private _emittedParticles: number;
+    private _fuseTime: number = 10;
+    private _energy: number = 1;
+    private _hasIgnited: boolean = false;
+    private _burstPulse: number = 1;
 
     // constructor(k: string="", _arg_2: number=-1)
     // {
@@ -45,7 +44,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     super.dispose();
     // }
 
-    // public setup(k: number, _arg_2: number, _arg_3: number, _arg_4:Vector3d, _arg_5: number, _arg_6: number, _arg_7: string, _arg_8: number, _arg_9: number, _arg_10: number): void
+    // public setup(k: number, _arg_2: number, _arg_3: number, _arg_4: Vector3d, _arg_5: number, _arg_6: number, _arg_7: string, _arg_8: number, _arg_9: number, _arg_10: number): void
     // {
     //     this._maxNumberOfParticles = k;
     //     this._particlesPerFrame = _arg_2;
@@ -88,7 +87,12 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     // public _Str_24892(k: number, _arg_2: boolean, _arg_3:Array, _arg_4: boolean): void
     // {
-    //     var _local_5:Dictionary = new Dictionary();
+    //     const configuration = {
+    //         lifeTime: k,
+    //         isEmitter: _arg_2,
+    //         frames: 
+    //     }
+    //     let _local_5 = [];
     //     _local_5["lifeTime"] = k;
     //     _local_5["isEmitter"] = _arg_2;
     //     _local_5["frames"] = _arg_3;
@@ -167,7 +171,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     // private _Str_23904():Dictionary
     // {
-    //     var k: number = int(Math.floor((Math.random() * this._particleConfigurations.length)));
+    //     var k: number = Math.trunc(Math.floor((Math.random() * this._particleConfigurations.length)));
     //     return this._particleConfigurations[k];
     // }
 
@@ -192,7 +196,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     var _local_3: number;
     //     var _local_4: number;
     //     var _local_5: number;
-    //     if (((_Str_16034) || (this._emittedParticles < this._maxNumberOfParticles)))
+    //     if (((this._Str_16034) || (this._emittedParticles < this._maxNumberOfParticles)))
     //     {
     //         _local_3 = this.x;
     //         _local_4 = this.y;
@@ -204,8 +208,9 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //         this._Str_12459 = _local_4;
     //         this._Str_11680 = _local_5;
     //     }
-    //     var k:Array = [];
-    //     for(let _local_2 in this._particles)
+    //     var k: FurnitureParticleSystemParticle[] = [];
+
+    //     for(let _local_2 of this._particles)
     //     {
     //         _local_2.update();
     //         _local_3 = _local_2.x;
@@ -222,7 +227,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //             k.push(_local_2);
     //         }
     //     }
-    //     for(let _local_2 in k)
+    //     for(let _local_2 of k)
     //     {
     //         if (_local_2.isEmitter)
     //         {
@@ -244,7 +249,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     //     }
     // }
 
-    // public get particles():Array
+    // public get particles(): FurnitureParticleSystemParticle[]
     // {
     //     return this._particles;
     // }

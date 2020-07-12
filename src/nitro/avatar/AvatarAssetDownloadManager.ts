@@ -154,11 +154,14 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
                 const listeners = this._figureListeners.get(figure);
 
-                for(let listener of listeners)
+                if(listeners)
                 {
-                    if(!listener || listener.disposed) continue;
+                    for(let listener of listeners)
+                    {
+                        if(!listener || listener.disposed) continue;
 
-                    listener.resetFigure(figure);
+                        listener.resetFigure(figure);
+                    }
                 }
 
                 this._figureListeners.delete(figure);

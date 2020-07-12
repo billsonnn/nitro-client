@@ -464,9 +464,8 @@ export class AvatarImageCache
 
         for(let data of k) data && bounds.enlarge(data._Str_1567);
 
-        const point     = new PIXI.Point(-(bounds.left), -(bounds.top));
-        const container = new PIXI.Graphics()
-            .drawRect(0, 0, bounds.width, bounds.height);
+        const point     = new PIXI.Point(-(bounds.x), -(bounds.y));
+        const container = new PIXI.Graphics();
 
         for(let data of k)
         {
@@ -480,10 +479,10 @@ export class AvatarImageCache
             regPoint.x -= data._Str_1076.x;
             regPoint.y -= data._Str_1076.y;
 
-            if(isFlipped) regPoint.x = (container.width - (regPoint.x + data.rect.width));
-
-            this._matrix.tx = (regPoint.x - data.rect.x);
-            this._matrix.ty = (regPoint.y - data.rect.y);
+            if(isFlipped)
+            {
+                regPoint.x = (bounds.width - (regPoint.x + data.rect.width));
+            }
 
             if(flipH)
             {
@@ -494,17 +493,17 @@ export class AvatarImageCache
             else
             {
                 this._matrix.a  = 1;
-                this._matrix.tx = (regPoint.x - data.rect.x);
-                this._matrix.ty = (regPoint.y - data.rect.y);
+                this._matrix.tx = (regPoint.x);
+                this._matrix.ty = (regPoint.y);
             }
 
             container
-                .beginTextureFill({ texture, matrix: this._matrix, color })
-                .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
-                .endFill();
+                    .beginTextureFill({ texture, matrix: this._matrix, color })
+                    .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
+                    .endFill();
         }
 
-        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, container.width, container.height));
+        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, bounds.width, container.height));
 
         return new ImageData(texture, bounds, point, isFlipped, null);
     }

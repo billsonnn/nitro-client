@@ -1,4 +1,7 @@
 import { NitroEvent } from '../../../core/events/NitroEvent';
+import { RoomGeometry } from '../../../room/utils/RoomGeometry';
+import { Vector3d } from '../../../room/utils/Vector3d';
+import { Nitro } from '../../Nitro';
 import { RoomZoomEvent } from '../../room/events/RoomZoomEvent';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
@@ -12,9 +15,15 @@ import { RoomWidgetMessage } from '../widget/messages/RoomWidgetMessage';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
+    private static TIME_BETWEEN_SPIN: number = 10;
+
     private _container: IRoomWidgetHandlerContainer;
     private _mouseToggle: boolean;
     private _widget: ChatInputWidget;
+
+    private _isSpinning: boolean;
+    private _lastSpin: number;
+    private _isOpposite: boolean;
 
     private _disposed: boolean;
 
@@ -23,6 +32,10 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
         this._container     = null;
         this._mouseToggle   = true;
         this._widget        = null;
+
+        this._isSpinning    = false;
+        this._lastSpin      = -1;
+        this._isOpposite    = false;
 
         this._disposed      = false;
     }
@@ -38,7 +51,55 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
     public update(): void
     {
+        if(this._isSpinning)
+        {
+            if(this._lastSpin)
+            {
+                if((Nitro.instance.time - this._lastSpin) >= ChatInputWidgetHandler.TIME_BETWEEN_SPIN)
+                {
+                    this._lastSpin = Nitro.instance.time;
 
+                    const geometry = (this._container.roomEngine.getRoomInstanceGeometry(this._container.roomEngine.activeRoomId) as RoomGeometry);
+
+                    if(geometry)
+                    {
+                        const currentLocation   = geometry.location;
+                        const currentDirection  = geometry.direction;
+
+                        let nextDirectionX = currentDirection.x;
+                        let nextLocationX  = 1;
+
+                        nextDirectionX++;
+
+                        if(nextDirectionX === 361)
+                        {
+                            nextDirectionX = -360;
+                        }
+
+                        if(nextDirectionX < 0) nextLocationX = -1;
+
+                        let nextDirectionY  = currentDirection.y;
+                        let nextLocationY   = 0;
+
+                        // nextDirectionY++;
+
+                        // if(nextDirectionY === 361)
+                        // {
+                        //     nextDirectionY = -360;
+                        // }
+
+                        // if(nextDirectionY < 0) nextLocationY = -1;
+
+                        geometry.direction = new Vector3d(nextDirectionX, nextDirectionY, currentDirection.z);
+
+                        geometry.adjustLocation(new Vector3d(nextLocationX, nextLocationY), 0);
+
+                        //if(Math.abs(geometry.direction.x) === Math.abs(360)) this._isOpposite = !this._isOpposite;
+                        //geometry.adjustLocation(new Vector3d(1), 0);
+                    }
+                }
+            }
+        }
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -89,6 +150,9 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                     {
                         case ':zoom':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart)));
+                            return null;
+                        case ':spinroom':
+                            this._isSpinning = !this._isSpinning;
                             return null;
                     }
                 }

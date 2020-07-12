@@ -5,6 +5,7 @@ export class NitroConfiguration
     //public static SOCKET_URL                = 'wss://system.nitrots.co';
     public static ASSET_URL                 = 'https://assets.nitrots.co';
 
+    public static EXTERNAL_TEXTS_URL        = NitroConfiguration.ASSET_URL + '/gamedata/json/ExternalTexts.json';
     public static AVATAR_GEOMETRY_URL       = NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarGeometry.json';
     public static AVATAR_PARTSETS_URL       = NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarPartSets.json';
     public static AVATAR_ACTIONS_URL        = NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarActions.json';
@@ -25,6 +26,8 @@ export class NitroConfiguration
     public static PACKET_LOG                = false;
     public static EVENT_DISPATCHER_LOG      = false;
     public static ROLLING_OVERRIDES_POSTURE = true;
+    public static CLIENT_KEEPS_ALIVE        = true;
+    public static PONG_INTERVAL_MS          = 30000;
 
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor', 'cow', 'LeetPen', 'bbwibb', 'elephants' ];
 

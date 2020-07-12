@@ -18,6 +18,7 @@ export interface IRoomSession extends IDisposable
     sendDanceMessage(danceId: number): void;
     sendExpressionMessage(expression: number): void;
     sendPostureMessage(posture: number): void;
+    sendDoorbellApprovalMessage(userName: string, flag: boolean): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
     connection: IConnection;

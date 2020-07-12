@@ -1,6 +1,5 @@
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
 import { AvatarSetType } from '../../../../avatar/enum/AvatarSetType';
-import { IAvatarImage } from '../../../../avatar/IAvatarImage';
 import { IAvatarImageListener } from '../../../../avatar/IAvatarImageListener';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { FurnitureMannequinVisualizationData } from './FurnitureMannequinVisualizationData';
@@ -9,7 +8,6 @@ import { FurnitureVisualization } from './FurnitureVisualization';
 export class FurnitureMannequinVisualization extends FurnitureVisualization implements IAvatarImageListener
 {
     private static AVATAR_IMAGE_SPRITE_TAG: string = 'avatar_image';
-    private static _Str_5674: Map<number, IAvatarImage>;
 
     protected _data: FurnitureMannequinVisualizationData;
 
@@ -51,6 +49,13 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
         this._disposed = true;
 
+        if(this._dynamicAssetName && this.asset)
+        {
+            this.asset.disposeAsset(this._dynamicAssetName);
+
+            this._dynamicAssetName = null;
+        }
+
         super.dispose();
     }
 
@@ -64,7 +69,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
             {
                 this._mannequinScale = scale;
 
-                this._Str_15978();
+                this.updateAvatar();
             }
         }
 
@@ -84,7 +89,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
                 this._figure   = (figure + '.' + this._placeHolderFigure);
                 this._gender   = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_GENDER) || null);
 
-                this._Str_15978();
+                this.updateAvatar();
             }
         }
 
@@ -95,50 +100,19 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         return updateModel;
     }
 
-    private _Str_23643(k: number): IAvatarImage
+    private updateAvatar(forceUpdate: boolean = false): void
     {
-        if(!FurnitureMannequinVisualization._Str_5674) FurnitureMannequinVisualization._Str_5674 = new Map();
-
-        let cachedImage = FurnitureMannequinVisualization._Str_5674.get(k);
-
-        if(!cachedImage)
-        {
-            cachedImage = this._data.createAvatarImage(this._placeHolderFigure, k, null, null);
-
-            FurnitureMannequinVisualization._Str_5674.set(k, cachedImage);
-        }
-
-        return cachedImage;
-    }
-
-    private _Str_15978(k: boolean = false): void
-    {
-        if(!this._Str_13016() || k)
+        if(!this.avatarExists() || forceUpdate)
         {
             const _local_2 = this._data.createAvatarImage(this._figure, this._mannequinScale, this._gender, this);
 
             if(_local_2)
             {
-                if(_local_2.isPlaceholder())
-                {
-                    _local_2.dispose();
-
-                    const _local_3 = this._Str_23643(this._mannequinScale);
-
-                    _local_3.setDirection(AvatarSetType.FULL, this.direction);
-                    
-                    this.asset.addAsset(this._Str_10185(), _local_3.getImage(AvatarSetType.FULL, true), true, 0, 0, false, false);
-
-                    this._needsUpdate = true;
-
-                    return;
-                }
-
-                _local_2.setDirection(AvatarSetType.FULL, this.direction);
+               _local_2.setDirection(AvatarSetType.FULL, this.direction);
 
                 if(this._dynamicAssetName) this.asset.disposeAsset(this._dynamicAssetName);
 
-                this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), true, 0, 0, false, false);
+                this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), true);
 
                 this._dynamicAssetName  = this._Str_10185();
                 this._needsUpdate       = true;
@@ -148,7 +122,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         }
     }
 
-    private _Str_13016(): boolean
+    private avatarExists(): boolean
     {
         return (this._figure && (this.getAsset(this._Str_10185()) !== null));
     }
@@ -160,14 +134,14 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
     public resetFigure(figure: string): void
     {
-        if(figure === this._figure) this._Str_15978(true);
+        if(figure === this._figure) this.updateAvatar(true);
     }
 
     protected getSpriteAssetName(scale: number, layerId: number): string
     {
         const tag = this.getLayerTag(scale, this.direction, layerId);
 
-        if(this._figure && (tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this._Str_13016())
+        if(this._figure && (tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this.avatarExists())
         {
             return this._Str_10185();
         }
@@ -179,7 +153,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
     {
         const tag = this.getLayerTag(scale, direction, layerId);
 
-        if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this._Str_13016()) return (-(this.getSprite(layerId).width) / 2);
+        if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this.avatarExists()) return (-(this.getSprite(layerId).width) / 2);
         
         return super.getLayerXOffset(scale, direction, layerId);
     }
@@ -188,7 +162,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
     {
         const tag = this.getLayerTag(scale, direction, layerId);
 
-        if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this._Str_13016()) return -(this.getSprite(layerId).height);
+        if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this.avatarExists()) return -(this.getSprite(layerId).height);
         
         return super.getLayerYOffset(scale, direction, layerId);
     }
