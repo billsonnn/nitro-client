@@ -429,7 +429,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                 
                 else if (planeType === RoomPlaneData.PLANE_WALL)
                 {
-                    _local_13 = new RoomPlane(this.object.getLocation(), _local_8, _local_9, _local_10, RoomPlane.TYPE_WALL, true, _local_11, _local_6);
+                    /*_local_13 = new RoomPlane(this.object.getLocation(), _local_8, _local_9, _local_10, RoomPlane.TYPE_WALL, true, _local_11, _local_6);
 
                     if((_local_9.length < 1) || (_local_10.length < 1))
                     {
@@ -459,7 +459,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                         }
                     }
 
-                    if(this._data) _local_13.rasterizer = this._data.wallRasterizer;
+                    if(this._data) _local_13.rasterizer = this._data.wallRasterizer;*/
                 }
                 
                 else if(planeType === RoomPlaneData.PLANE_LANDSCAPE)

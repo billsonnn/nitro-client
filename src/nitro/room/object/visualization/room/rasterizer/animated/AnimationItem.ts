@@ -46,7 +46,7 @@ export class AnimationItem
 
         const _local_8 = ((_local_6 % 1) * k);
         const _local_9 = ((_local_7 % 1) * _arg_2);
-
+        
         return new PIXI.Point(_local_8, _local_9);
     }
 }

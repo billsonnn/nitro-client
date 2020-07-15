@@ -79,9 +79,9 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
                     if(totalBasicLayers)
                     {
-                        while(layerId < basicLayers.length)
+                        for(let i = 0; i < basicLayers.length; i++)
                         {
-                            const layer = basicLayers[layerId];
+                            const layer = basicLayers[i];
 
                             if(layer)
                             {
@@ -104,21 +104,18 @@ export class LandscapeRasterizer extends PlaneRasterizer
                                 }
 
                                 planeVisualization._Str_21464(layerId, material, color, align, offset);
+                                layerId++;
                             }
-
-                            layerId++;
                         }
                     }
-
-                    layerId = 0;
 
                     if(totalAnimatedLayers)
                     {
                         const animationItems: {}[] = [];
 
-                        while(layerId < animatedLayers.length)
+                        for(let i = 0; i < animatedLayers.length; i++)
                         {
-                            const layer = animatedLayers[layerId];
+                            const layer = animatedLayers[i];
 
                             if(layer)
                             {
@@ -134,8 +131,8 @@ export class LandscapeRasterizer extends PlaneRasterizer
                                             const assetId   = item.assetId;
                                             const x         = this._Str_21504(item.x || '', item.randomX || '');
                                             const y         = this._Str_21504(item.y || '', item.randomY || '');
-                                            const speedX    = item.speedX ? item.speedX : 0;
-                                            const speedY    = item.speedY ? item.speedY : 0;
+                                            const speedX    = item.speedX ? item.speedX / 24 : 0;
+                                            const speedY    = item.speedY ? item.speedY / 24 : 0;
 
                                             animationItems.push({
                                                 asset: assetId,
@@ -148,11 +145,10 @@ export class LandscapeRasterizer extends PlaneRasterizer
                                     }
                                 }
                             }
-
-                            layerId++;
                         }
 
                         planeVisualization._Str_23489(layerId, animationItems, this._Str_2697);
+                        layerId++;
                     }
                 }
             }

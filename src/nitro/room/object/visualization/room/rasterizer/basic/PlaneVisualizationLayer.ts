@@ -121,7 +121,7 @@ export class PlaneVisualizationLayer
                 if(texture)
                 {
                     canvas
-                        .beginTextureFill({ texture })
+                        .beginTextureFill({ texture: texture })
                         .drawRect(0, 0, width, height)
                         .endFill();
                 }

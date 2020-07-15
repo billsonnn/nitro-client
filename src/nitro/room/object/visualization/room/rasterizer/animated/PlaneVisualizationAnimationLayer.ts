@@ -111,34 +111,68 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
 
                     if (_local_13.bitmapData != null)
                     {
-                        if (((((_local_14.x > -(_local_13.bitmapData.width)) && (_local_14.x < k.width)) && (_local_14.y > -(_local_13.bitmapData.height))) && (_local_14.y < k.height)))
+                        //console.log(_local_14);
+
+                        if(_local_14.x > 0 && (_local_14.x + _local_13.bitmapData.width < k.width)) {
+                            k
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
+                            .endFill();
+                        }
+                        else if(_local_14.x > 0) {
+                            let difference = k.width - _local_14.x;
+                            k
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(_local_14.x, _local_14.y, difference, _local_13.bitmapData.height)
+                            .endFill();
+                        }
+                        else {
+                            //if(_local_14.x > -_local_13.bitmapData.width) 
+                            let difference = _local_13.bitmapData.width + _local_14.x;
+                            k
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(0, _local_14.y, difference, _local_13.bitmapData.height)
+                            .endFill();
+                        }
+
+                        /*if (((((_local_14.x > -(_local_13.bitmapData.width)) && (_local_14.x < k.width)) && (_local_14.y > -(_local_13.bitmapData.height))) && (_local_14.y < k.height)))
                         {
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
+                                .beginFill(0x00FF00)
+                                .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
                                 .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
                                 .endFill();
                         }
+                        
                         if ((((((_local_14.x - _arg_7) > -(_local_13.bitmapData.width)) && ((_local_14.x - _arg_7) < k.width)) && (_local_14.y > -(_local_13.bitmapData.height))) && (_local_14.y < k.height)))
                         {
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
+                                //.beginFill(0xFF0000)
+                                .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, (_local_14.x - _arg_7), _local_14.y) })
                                 .drawRect((_local_14.x - _arg_7), _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
                                 .endFill();
                         }
                         if (((((_local_14.x > -(_local_13.bitmapData.width)) && (_local_14.x < k.width)) && ((_local_14.y - _arg_8) > -(_local_13.bitmapData.height))) && ((_local_14.y - _arg_8) < k.height)))
                         {
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
+                                .beginFill(0xFF0000)
+                                .drawRect(_local_14.x, (_local_14.y - _arg_8), _local_13.bitmapData.width, _local_13.bitmapData.height)
+                                //.beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, (_local_14.y - _arg_8)) })
                                 .drawRect(_local_14.x, (_local_14.y - _arg_8), _local_13.bitmapData.width, _local_13.bitmapData.height)
                                 .endFill();
                         }
-                        if ((((((_local_14.x - _arg_7) > -(_local_13.bitmapData.width)) && ((_local_14.x - _arg_7) < k.width)) && ((_local_14.y - _arg_8) > -(_local_13.bitmapData.height))) && ((_local_14.y - _arg_8) < k.height)))
+*/
+
+                        /*if ((((((_local_14.x - _arg_7) > -(_local_13.bitmapData.width)) && ((_local_14.x - _arg_7) < k.width)) && ((_local_14.y - _arg_8) > -(_local_13.bitmapData.height))) && ((_local_14.y - _arg_8) < k.height)))
                         {
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
+                                .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, (_local_14.x - _arg_7), (_local_14.y - _arg_8)) })
                                 .drawRect((_local_14.x - _arg_7), (_local_14.y - _arg_8), _local_13.bitmapData.width, _local_13.bitmapData.height)
                                 .endFill();
-                        }
+                        }*/
                     }
                 }
                 _local_12++;
