@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { NitroConfiguration } from '../../../../../../../NitroConfiguration';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneBitmapData } from '../../utils/PlaneBitmapData';
 import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterial } from '../basic/PlaneMaterial';
@@ -134,8 +135,8 @@ export class LandscapeRasterizer extends PlaneRasterizer
                                             const assetId   = item.assetId;
                                             const x         = this._Str_21504(item.x || '', item.randomX || '');
                                             const y         = this._Str_21504(item.y || '', item.randomY || '');
-                                            const speedX    = item.speedX ? item.speedX : 0;
-                                            const speedY    = item.speedY ? item.speedY : 0;
+                                            const speedX    = item.speedX ? item.speedX / NitroConfiguration.FPS : 0;
+                                            const speedY    = item.speedY ? item.speedY / NitroConfiguration.FPS : 0;
 
                                             animationItems.push({
                                                 asset: assetId,
@@ -202,10 +203,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
         if(canvas)
         {
-            canvas
-                .beginFill(0xFFFFFF)
-                .drawRect(0, 0, width, height)
-                .endFill();
+            canvas.clear();
         }
 
         let graphic = plane.render(canvas, width, height, scale, normal, useTexture, offsetX, offsetY, maxX, maxY, timeSinceStartMs);

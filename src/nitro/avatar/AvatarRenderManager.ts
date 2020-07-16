@@ -3,6 +3,7 @@ import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { NitroConfiguration } from '../../NitroConfiguration';
+import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { Nitro } from '../Nitro';
 import { AssetAliasCollection } from './alias/AssetAliasCollection';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
@@ -326,6 +327,13 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         return new PlaceHolderAvatarImage(this._structure, this._aliasCollection, this._placeHolderFigure, size, this._effectAssetDownloadManager);
     }
 
+    public downloadAvatarFigure(container: AvatarFigureContainer, listener: IAvatarImageListener): void
+    {
+        if(!this._avatarAssetDownloadManager) return;
+
+        this._avatarAssetDownloadManager.downloadAvatarFigure(container, listener);
+    }
+
     private validateAvatarFigure(container: AvatarFigureContainer, gender: string): boolean
     {
         let isValid = false;
@@ -376,6 +384,11 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         return !(isValid);
     }
 
+    public getAssetByName(name: string): IGraphicAsset
+    {
+        return this._aliasCollection.getAsset(name);
+    }
+
     public get assets(): IAssetManager
     {
         return Nitro.instance.core.asset;
@@ -384,5 +397,15 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     public get isReady(): boolean
     {
         return this._isReady;
+    }
+
+    public get structure(): AvatarStructure
+    {
+        return this._structure;
+    }
+
+    public get downloadManager(): AvatarAssetDownloadManager
+    {
+        return this._avatarAssetDownloadManager;
     }
 }

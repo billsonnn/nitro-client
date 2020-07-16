@@ -23,6 +23,8 @@ import { RoomUI } from './ui/RoomUI';
 import { INitroWindowManager } from './window/INitroWindowManager';
 import { NitroWindowManager } from './window/NitroWindowManager';
 
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 export class Nitro extends PIXI.Application implements INitro
 {
     private static INSTANCE: INitro = null;
@@ -95,8 +97,6 @@ export class Nitro extends PIXI.Application implements INitro
 
             Nitro.INSTANCE = null;
         }
-
-        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
         const canvas = document.createElement('canvas');
 

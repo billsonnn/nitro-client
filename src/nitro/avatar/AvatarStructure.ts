@@ -638,6 +638,11 @@ export class AvatarStructure extends EventDispatcher
         return this._figureData;
     }
 
+    public get partData(): PartSetsData
+    {
+        return this._partSetsData;
+    }
+
     public get animationManager(): AnimationManager
     {
         return this._animationManager;

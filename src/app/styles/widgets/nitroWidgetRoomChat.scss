@@ -19,17 +19,23 @@
             .chat-item {
                 display: flex;
                 position: absolute;
-                border-radius: 5px;
-                background: rgb(30, 30, 30);
                 pointer-events: all;
-                box-shadow: 0 0 3px 2px rgba(0,0,0,.2);
-                padding: 5px 8px;
+                transition: top 0.5s ease 0s;
+                min-height: 24px;
+                background-image: url('../assets/images/chatstyles/0/mid.png');
+                background-repeat: repeat-x;
 
                 .chat-left {
-                    width: 18px;
-                    border-radius: 3px;
+                    position: absolute;
+                    width: 29px;
+                    height: 24px;
+                    background-image: url('../assets/images/chatstyles/0/start.png');
+                    background-repeat: repeat-x;
 
                     .user-image {
+                        position: relative;
+                        left: -3px;
+                        top: -2px;
 
                         img {
                             position: absolute;
@@ -38,15 +44,24 @@
                             right: 0;
                         }
                     }
-
-                    .user-pointer {
-                        display: none;
-                    }
                 }
 
                 .chat-right {
-                    padding-left: 5px;
-                    font-size: 12px;
+                    padding: 2px 6px;
+                    padding-left: 10px;
+                    color: rgb(0, 0, 0);
+
+                    &:after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: 0;
+                        right: -7px;
+                        width: 7px;
+                        height: 24px;
+                        background-image: url('../assets/images/chatstyles/0/end.png');
+                        background-repeat: repeat-x;
+                    }
                 }
 
                 .chat-pointer {
@@ -57,6 +72,62 @@
                     border-left: 8px solid transparent;
                     border-right: 8px solid transparent;
                     margin-left: 20%;
+                }
+
+                &:not(.chat-style-0) {
+
+                    .chat-left {
+                        background-color: transparent !important;
+                    }
+                }
+
+                &.chat-style-0,
+                &.chat-style-2,
+                &.chat-style-6 {
+
+                    .chat-left {
+                        left: -24px;
+                    }
+                }
+
+                &.chat-style-6 {
+                    background-image: url('../assets/images/chatstyles/6/mid.png');
+                    background-repeat: repeat-x;
+
+                    .chat-left {
+                        background-image: url('../assets/images/chatstyles/6/start.png');
+                        background-repeat: repeat-x;
+
+                        &:after {
+                            background-image: url('../assets/images/chatstyles/6/end.png');
+                            background-repeat: repeat-x;
+                        }
+                    }
+                }
+
+                // Bot Style
+                &.chat-style-2 {
+                    background-image: url('../assets/images/chatstyles/2/mid.png');
+                    background-repeat: repeat-x;
+
+                    .chat-left {
+                        background-image: url('../assets/images/chatstyles/2/start.png');
+                        background-repeat: repeat-x;
+                        left: -27px;
+
+                        .user-image {
+                            display: none; 
+                        }
+                    }
+
+                    .chat-right {
+                        color: rgb(255, 255, 255);
+
+                        &:after {
+                            background-image: url('../assets/images/chatstyles/2/end.png');
+                            background-repeat: repeat-x;
+                        }
+                    }
                 }
 
                 &.chat-type-0 { // normal

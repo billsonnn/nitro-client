@@ -531,14 +531,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 avatarImage.setDirection(AvatarSetType.FULL, 4);
                 
-                const texture = avatarImage.getCroppedImage(AvatarSetType.FULL, 1);
+                const image = avatarImage.getCroppedImage(AvatarSetType.FULL, 1);
 
-                if(texture)
-                {
-                    const image = Nitro.instance.renderer.extract.image(texture);
-
-                    if(image) existing = image;
-                }
+                if(image) existing = image;
 
                 avatarImage.dispose();
             }

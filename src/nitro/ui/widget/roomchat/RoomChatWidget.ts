@@ -217,7 +217,7 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
         if(nextHeight) chat.y = ((chat.y - nextHeight) - 1);
         else chat.y = ((chat.y - chat.height) - 1);
 
-        if(chat.y < (-(chat.height))) this.hideChat(chat);
+        if(chat.y < (-(chat.height * 2))) this.hideChat(chat);
     }
 
     private hideChat(chat: RoomChatItem): void

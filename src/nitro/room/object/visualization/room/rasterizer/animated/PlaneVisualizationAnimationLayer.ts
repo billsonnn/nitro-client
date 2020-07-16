@@ -109,41 +109,39 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                     _local_14.x = (_local_14.x - _arg_5);
                     _local_14.y = (_local_14.y - _arg_6);
 
-                    if (_local_13.bitmapData != null)
+                    if(_local_13.bitmapData)
                     {
-                        if (((((_local_14.x > -(_local_13.bitmapData.width)) && (_local_14.x < k.width)) && (_local_14.y > -(_local_13.bitmapData.height))) && (_local_14.y < k.height)))
-                        {
+                        if(_local_14.x > 0 && (_local_14.x + _local_13.bitmapData.width < k.width)) {
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
-                                .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
-                                .endFill();
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
+                            .endFill();
                         }
-                        if ((((((_local_14.x - _arg_7) > -(_local_13.bitmapData.width)) && ((_local_14.x - _arg_7) < k.width)) && (_local_14.y > -(_local_13.bitmapData.height))) && (_local_14.y < k.height)))
-                        {
+                        else if(_local_14.x > 0) {
+                            let difference = k.width - _local_14.x;
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
-                                .drawRect((_local_14.x - _arg_7), _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
-                                .endFill();
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(_local_14.x, _local_14.y, difference, _local_13.bitmapData.height)
+                            .endFill();
                         }
-                        if (((((_local_14.x > -(_local_13.bitmapData.width)) && (_local_14.x < k.width)) && ((_local_14.y - _arg_8) > -(_local_13.bitmapData.height))) && ((_local_14.y - _arg_8) < k.height)))
-                        {
+                        else {
+                            //if(_local_14.x > -_local_13.bitmapData.width) 
+                            let difference = _local_13.bitmapData.width + _local_14.x;
                             k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
-                                .drawRect(_local_14.x, (_local_14.y - _arg_8), _local_13.bitmapData.width, _local_13.bitmapData.height)
-                                .endFill();
-                        }
-                        if ((((((_local_14.x - _arg_7) > -(_local_13.bitmapData.width)) && ((_local_14.x - _arg_7) < k.width)) && ((_local_14.y - _arg_8) > -(_local_13.bitmapData.height))) && ((_local_14.y - _arg_8) < k.height)))
-                        {
-                            k
-                                .beginTextureFill({ texture: _local_13.bitmapData.texture })
-                                .drawRect((_local_14.x - _arg_7), (_local_14.y - _arg_8), _local_13.bitmapData.width, _local_13.bitmapData.height)
-                                .endFill();
+                            .beginFill(0x00FF00)
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .drawRect(0, _local_14.y, difference, _local_13.bitmapData.height)
+                            .endFill();
                         }
                     }
                 }
+
                 _local_12++;
             }
         }
+        
         return k;
     }
 }

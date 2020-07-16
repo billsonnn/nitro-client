@@ -27,6 +27,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     private _incompleteFigures: Map<string, AvatarAssetDownloadLibrary[]>;
     private _pendingDownloadQueue: AvatarAssetDownloadLibrary[];
     private _currentDownloads: AvatarAssetDownloadLibrary[];
+    private _libraryNames: string[];
     private _isReady: boolean;
 
     constructor(assets: IAssetManager, structure: AvatarStructure)
@@ -43,6 +44,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._incompleteFigures     = new Map();
         this._pendingDownloadQueue  = [];
         this._currentDownloads      = [];
+        this._libraryNames          = [];
         this._isReady               = false;
 
         this.loadFigureMap();
@@ -95,6 +97,10 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             const id        = (library.id as string);
             const revision  = (library.revision as number);
+
+            if(this._libraryNames.indexOf(id) >= 0) continue;
+
+            this._libraryNames.push(id);
 
             const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.AVATAR_ASSET_URL);
 

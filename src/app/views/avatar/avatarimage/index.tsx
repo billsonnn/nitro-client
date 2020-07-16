@@ -6,16 +6,17 @@ import { Nitro } from '../../../../nitro/Nitro';
 
 export interface AvatarImageProps
 {
-    figure: string;
+    figure?: string;
     gender?: string;
     setType?: string;
     direction?: number;
     scale?: number;
+    cropped?: boolean;
 }
 
 export function AvatarImage(props: AvatarImageProps): JSX.Element
 {
-    const [ imageRef ] = React.useState(React.createRef<HTMLDivElement>());
+    const [ imageRef ] = React.useState(React.createRef<HTMLImageElement>());
 
     const resetFigure = () =>
     {
@@ -24,6 +25,7 @@ export function AvatarImage(props: AvatarImageProps): JSX.Element
         const setType   = (props.setType || AvatarSetType.FULL);
         const direction = (props.direction || 0);
         const scale     = (props.scale || 1);
+        const cropped   = (props.cropped === undefined ? true : props.cropped);
 
         const avatarListener: IAvatarImageListener = {
             resetFigure: resetFigure,
@@ -37,17 +39,27 @@ export function AvatarImage(props: AvatarImageProps): JSX.Element
         {
             avatarImage.setDirection(setType,direction);
 
-            const texture = avatarImage.getCroppedImage(setType, scale);
+            let image: HTMLImageElement = null;
 
-            if(texture)
+            if(cropped)
             {
-                const image = Nitro.instance.renderer.extract.image(texture);
+                image = avatarImage.getCroppedImage(setType, 1);
+            }
+            else
+            {
+                const texture = avatarImage.getImage(setType, false, 1);
 
-                if(image)
+                image = Nitro.instance.renderer.extract.image(texture);
+            }
+
+            if(image)
+            {
+                image.onload = () =>
                 {
-                    imageRef.current.innerHTML = '';
-                    imageRef.current.appendChild(image);
-                }
+                    imageRef.current.height = (image.height * scale);
+                };
+
+                imageRef.current.src = image.src;
             }
         }
     };
@@ -63,6 +75,6 @@ export function AvatarImage(props: AvatarImageProps): JSX.Element
     }, [ props ]);
 
     return (
-        <div className="avatar-image" ref={ imageRef }></div>
+        <img ref={ imageRef } />
     );
 }

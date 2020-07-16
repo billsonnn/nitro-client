@@ -145,7 +145,7 @@ export class AvatarImageCache
         this._canvas        = null;
     }
 
-    public _Str_1629(k: string, _arg_2: number, _arg_3: boolean=false): AvatarImageBodyPartContainer
+    public _Str_1629(k: string, _arg_2: number, _arg_3: boolean = false): AvatarImageBodyPartContainer
     {
         let _local_4 = this._Str_1050(k);
 

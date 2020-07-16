@@ -1,5 +1,335 @@
 .avatareditor-view {
+    display: flex;
+    flex-direction: row;;
     position: absolute;
     top: 20px;
     left: 120px;
+    pointer-events: all;
+
+    .component-body {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+
+        .body-left {
+            display: flex;
+            flex-direction: column;
+
+            .view-categories {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                margin-bottom: 10px;
+
+                .btn {
+                    margin-right: 5px;
+
+                    &:last-child {
+                        margin-right: 0px;
+                    }
+                }
+            }
+
+            .left-content {
+                padding: 15px;
+
+                .view-categories {
+                }
+                
+                .view-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    min-width: 425px;
+                    
+                    .set-container {
+                        width: 400px;
+                        height: 180px;
+                        overflow: scroll;
+
+                        .container-items {
+                            display: flex;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                            justify-content: space-between;
+                            margin-top: -5px;
+
+                            .item-detail {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                position: relative;
+                                margin: 5px 5px 0 0;
+                                width: calc(1 / 7 * 100% - (1 - 1 / 7) * 5px);
+                                height: 50px;
+                                box-sizing: border-box;
+                                background: $destiny;
+                                background-repeat: no-repeat;
+                                background-origin: content-box;
+                                border-radius: 3px;
+                                overflow: hidden;
+
+                                &:nth-child(7n) {
+                                    margin-right: 0;
+                                }
+
+                                &.hc {
+
+                                   &::after {
+                                        content: "";
+                                        position: absolute;
+                                        left: 0;
+                                        right: 4px;
+                                        top: 4px;
+                                        bottom: 0;
+                                        background: url('../assets/images/avatareditor/hc-icon.png') no-repeat top right;
+                                        pointer-events: none;
+                                    }
+                                }
+
+                                &.loading {
+                                    background-image: url('../assets/images/avatareditor/loading-icon.png');
+                                    background-position: center;
+                                    z-index: 1;
+
+                                    &::after {
+                                        display: none;
+                                    }
+                                }
+
+                                &:hover {
+                                    border: 2px solid white;
+                                }
+
+                                img {
+
+                                }
+                            }
+
+                            &::after {
+                                content: "";
+                                flex: auto;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .body-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+
+            .avatar-preview {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    z-index: 2;
+                }
+
+                .preview-shadow {
+                    width: 120px;
+                    height: 45.5px;
+                    margin-top: -47px;
+                    border-radius: 100%;
+                    background-color: rgba(0, 0, 0, 0.48);
+                    z-index: 1;
+                }
+
+                .preview-directions {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: row;
+
+                    i.icon {
+                        margin: 5px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background: url('../assets/images/avatareditor/spotlight.png') no-repeat top;
+                z-index: 3;
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+i {
+
+    &.icon {
+
+        &.arrow-left-icon {
+            background-image: url('../assets/images/avatareditor/arrow-left-icon.png');
+            width: 28px;
+            height: 21px;
+        }
+
+        &.arrow-right-icon {
+            background-image: url('../assets/images/avatareditor/arrow-right-icon.png');
+            width: 28px;
+            height: 21px;
+        }
+
+        &.ca-icon {
+            background-image: url('../assets/images/avatareditor/ca-icon.png');
+            width: 30px;
+            height: 24px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/ca-selected-icon.png');
+            }
+        }
+
+        &.cc-icon {
+            background-image: url('../assets/images/avatareditor/cc-icon.png');
+            width: 31px;
+            height: 29px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/cc-selected-icon.png');
+            }
+        }
+
+        &.ch-icon {
+            background-image: url('../assets/images/avatareditor/ch-icon.png');
+            width: 29px;
+            height: 24px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/ch-selected-icon.png');
+            }
+        }
+
+        &.cp-icon {
+            background-image: url('../assets/images/avatareditor/cp-icon.png');
+            width: 25px;
+            height: 25px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/cp-selected-icon.png');
+            }
+        }
+
+        &.ea-icon {
+            background-image: url('../assets/images/avatareditor/ea-icon.png');
+            width: 35px;
+            height: 16px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/ea-selected-icon.png');
+            }
+        }
+
+        &.fa-icon {
+            background-image: url('../assets/images/avatareditor/fa-icon.png');
+            width: 27px;
+            height: 20px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/fa-selected-icon.png');
+            }
+        }
+
+        &.female-icon {
+            background-image: url('../assets/images/avatareditor/female-icon.png');
+            width: 18px;
+            height: 27px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/female-selected-icon.png');
+            }
+        }
+
+        &.ha-icon {
+            background-image: url('../assets/images/avatareditor/ha-icon.png');
+            width: 25px;
+            height: 22px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/ha-selected-icon.png');
+            }
+        }
+
+        &.he-icon {
+            background-image: url('../assets/images/avatareditor/he-icon.png');
+            width: 31px;
+            height: 27px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/he-selected-icon.png');
+            }
+        }
+
+        &.hr-icon {
+            background-image: url('../assets/images/avatareditor/hr-icon.png');
+            width: 29px;
+            height: 25px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/hr-selected-icon.png');
+            }
+        }
+
+        &.lg-icon {
+            background-image: url('../assets/images/avatareditor/lg-icon.png');
+            width: 19px;
+            height: 20px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/lg-selected-icon.png');
+            }
+        }
+
+        &.loading-icon {
+            background-image: url('../assets/images/avatareditor/loading-icon.png');
+            width: 21px;
+            height: 25px;
+        }
+
+        &.male-icon {
+            background-image: url('../assets/images/avatareditor/male-icon.png');
+            width: 21px;
+            height: 21px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/male-selected-icon.png');
+            }
+        }
+
+        &.sh-icon {
+            background-image: url('../assets/images/avatareditor/sh-icon.png');
+            width: 37px;
+            height: 10px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/sh-selected-icon.png');
+            }
+        }
+
+        &.wa-icon {
+            background-image: url('../assets/images/avatareditor/wa-icon.png');
+            width: 36px;
+            height: 18px;
+
+            &.selected {
+                background-image: url('../assets/images/avatareditor/wa-selected-icon.png');
+            }
+        }
+    }
 }

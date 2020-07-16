@@ -187,8 +187,6 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!connection) return;
 
-        console.log('ponged');
-
         connection.send(new ClientPongComposer());
     }
 

@@ -16,7 +16,7 @@ export interface IAvatarImage extends IDisposable
     _Str_754(): ISpriteDataContainer[];
     _Str_607(_arg_1: ISpriteDataContainer): IAnimationLayerData;
     getImage(setType: string, hightlight: boolean, scale?: number, cache?: boolean): PIXI.RenderTexture;
-    getCroppedImage(setType: string, scale: number): PIXI.RenderTexture;
+    getCroppedImage(setType: string, scale: number): HTMLImageElement;
     getAsset(_arg_1: string): IGraphicAsset;
     getDirection(): number;
     _Str_784(): IAvatarFigureContainer;

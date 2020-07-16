@@ -508,7 +508,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return PIXI.Texture.from(textureCanvas);
     }
 
-    public getCroppedImage(setType: string, scale: number = 1): PIXI.RenderTexture
+    public getCroppedImage(setType: string, scale: number = 1): HTMLImageElement
     {
         if(!this._Str_1708) return null;
 
@@ -543,8 +543,6 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 const offset = bodyPart._Str_1076;
                 const sprite = PIXI.Sprite.from(texture);
 
-                //sprite.scale.set(scale);
-
                 sprite.x = offset.x;
                 sprite.y = offset.y;
 
@@ -554,11 +552,11 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             _local_12--;
         }
 
-        let texture = Nitro.instance.renderer.generateTexture(container, PIXI.SCALE_MODES.NEAREST, scale);
+        const image = Nitro.instance.renderer.extract.image(container);
 
-        if(!texture) return null;
+        if(!image) return null;
         
-        return texture;
+        return image;
     }
 
     protected getFullImage(k: string): PIXI.RenderTexture

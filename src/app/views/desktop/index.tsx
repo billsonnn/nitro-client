@@ -33,7 +33,7 @@ export function DesktopView(): JSX.Element
             { navigatorShowing && <Navigator /> }
             { inventoryShowing && <Inventory /> }
             { catalogShowing && <Catalog /> }
-            <AvatarEditor figure={ sessionData.userFigure } />
+            <AvatarEditor figure={ sessionData.userFigure } gender={ sessionData.userGender } />
             { roomStatus ? <RoomView /> : <HotelView sessionData={ sessionData } /> }
         </div>
     );

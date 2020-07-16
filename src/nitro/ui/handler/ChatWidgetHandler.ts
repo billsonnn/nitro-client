@@ -6,7 +6,6 @@ import { AvatarFigurePartType } from '../../avatar/enum/AvatarFigurePartType';
 import { AvatarScaleType } from '../../avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../avatar/enum/AvatarSetType';
 import { IAvatarImageListener } from '../../avatar/IAvatarImageListener';
-import { Nitro } from '../../Nitro';
 import { RoomObjectCategory } from '../../room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../room/object/RoomObjectType';
 import { RoomSessionChatEvent } from '../../session/events/RoomSessionChatEvent';
@@ -264,14 +263,11 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(avatarImage)
             {
-                const texture = avatarImage.getCroppedImage(AvatarSetType.HEAD, 0.5);
+                const image = avatarImage.getCroppedImage(AvatarSetType.HEAD, 1);
 
-                if(texture)
-                {
-                    const image = Nitro.instance.renderer.extract.image(texture);
+                if(image) existing = image;
 
-                    if(image) existing = image;
-                }
+                existing.height = (image.height / 2);
 
                 const color = avatarImage._Str_867(AvatarFigurePartType.CHEST);
 

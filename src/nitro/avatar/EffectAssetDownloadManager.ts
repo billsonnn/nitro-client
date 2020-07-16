@@ -26,6 +26,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
     private _incompleteEffects: Map<string, EffectAssetDownloadLibrary[]>;
     private _pendingDownloadQueue: EffectAssetDownloadLibrary[];
     private _currentDownloads: EffectAssetDownloadLibrary[];
+    private _libraryNames: string[];
     private _isReady: boolean;
 
     constructor(assets: IAssetManager, structure: AvatarStructure)
@@ -42,6 +43,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
         this._initDownloadBuffer    = [];
         this._pendingDownloadQueue  = [];
         this._currentDownloads      = [];
+        this._libraryNames          = [];
         this._isReady               = false;
 
         this.loadEffectMap();
@@ -95,6 +97,10 @@ export class EffectAssetDownloadManager extends EventDispatcher
             const id        = (effect.id as string);
             const lib       = (effect.lib as string);
             const revision  = (effect.revision as number);
+
+            if(this._libraryNames.indexOf(lib) >= 0) continue;
+
+            this._libraryNames.push(lib);
 
             const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, NitroConfiguration.AVATAR_ASSET_EFFECT_URL);
 
