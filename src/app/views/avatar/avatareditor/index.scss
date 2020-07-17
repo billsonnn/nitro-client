@@ -82,10 +82,11 @@
                                    &::after {
                                         content: "";
                                         position: absolute;
-                                        left: 0;
+                                        display: block;
+                                        width: 9px;
+                                        height: 10px;
                                         right: 4px;
                                         top: 4px;
-                                        bottom: 0;
                                         background: url('../assets/images/avatareditor/hc-icon.png') no-repeat top right;
                                         pointer-events: none;
                                     }
@@ -102,7 +103,9 @@
                                 }
 
                                 &:hover {
-                                    border: 2px solid white;
+                                    -webkit-box-shadow: inset 0px 0px 0px 2px #fff;
+                                    -moz-box-shadow: inset 0px 0px 0px 2px #fff;
+                                    box-shadow: inset 0px 0px 0px 2px #fff;
                                 }
 
                                 img {
