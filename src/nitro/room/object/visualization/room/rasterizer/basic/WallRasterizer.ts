@@ -48,9 +48,7 @@ export class WallRasterizer extends PlaneRasterizer
 
             canvas.clear();
 
-            canvas.beginFill(0xFFFFFF);
             canvas.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-            canvas.endFill();
         }
 
         let graphic = plane.render(canvas, width, height, scale, normal, useTexture);

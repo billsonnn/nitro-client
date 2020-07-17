@@ -87,7 +87,7 @@ export class PlaneVisualizationLayer
                 if(this._bitmapData) this._bitmapData.destroy();
 
                 const graphic = new PIXI.Graphics()
-                    .beginFill(0xFFFFFFFF)
+                    .beginFill(0xFFFFFF)
                     .drawRect(0, 0, width, height)
                     .endFill();
 

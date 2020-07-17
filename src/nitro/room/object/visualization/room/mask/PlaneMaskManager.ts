@@ -1,6 +1,5 @@
 ﻿import { IGraphicAssetCollection } from '../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
-import { Nitro } from '../../../../../Nitro';
 import { PlaneMask } from './PlaneMask';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
@@ -157,20 +156,47 @@ export class PlaneMaskManager
 
         const point = new PIXI.Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
 
-        const graphic = new PIXI.Graphics()
-            .beginTextureFill({ texture })
-            .drawRect(0, 0, texture.width, texture.height)
+        const matrix = new PIXI.Matrix();
+
+        let a = 1;
+        let b = 1;
+        let c = 0;
+        let d = 0;
+
+        if(asset.flipH)
+        {
+            a = -1;
+            c = texture.width;
+        }
+
+        if(asset.flipV)
+        {
+            b = -1;
+            d = texture.height;
+        }
+
+        matrix.scale(a, b);
+        matrix.translate((point.x + c), (point.y + d));
+
+        k
+            .beginTextureFill({ texture, matrix })
+            .drawRect(matrix.tx, matrix.ty, texture.width, texture.height)
             .endFill();
 
-        const maskTexture = Nitro.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, texture.width, texture.height));
+        // const graphic = new PIXI.Graphics()
+        //     .beginTextureFill({ texture })
+        //     .drawRect(0, 0, texture.width, texture.height)
+        //     .endFill();
 
-        if(maskTexture)
-        {
-            k
-                .beginTextureFill({ texture: maskTexture })
-                .drawRect(point.x, point.y, texture.width, texture.height)
-                .endFill();
-        }
+        // const maskTexture = Nitro.instance.renderer.generateTexture(graphic, 1, 1, new PIXI.Rectangle(0, 0, texture.width, texture.height));
+
+        // if(maskTexture)
+        // {
+        //     k
+        //         .beginTextureFill({ texture: maskTexture })
+        //         .drawRect(point.x, point.y, texture.width, texture.height)
+        //         .endFill();
+        // }
 
         return true;
     }

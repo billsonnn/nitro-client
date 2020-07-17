@@ -465,6 +465,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
                 else if(planeType === RoomPlaneData.PLANE_LANDSCAPE)
                 {
                     _local_13 = new RoomPlane(this.object.getLocation(), _local_8, _local_9, _local_10, RoomPlane.TYPE_LANDSCAPE, true, _local_11, _local_6, _local_5, 0, _local_3, _local_4);
+                    
                     if (_local_14.y > 0)
                     {
                         _local_13.color = RoomVisualization._Str_17403;

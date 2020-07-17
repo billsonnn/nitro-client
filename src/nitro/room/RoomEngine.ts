@@ -1697,12 +1697,12 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 const location  = roomObject.getLocation();
 
                 if(_arg_3) maskUpdate = new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.ADD_MASK, maskName, maskType, location);
-                else maskUpdate = new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.ADD_MASK, maskName);
+                else maskUpdate = new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage._Str_10260, maskName);
             }
         }
         else
         {
-            maskUpdate = new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage.ADD_MASK, maskName);
+            maskUpdate = new ObjectRoomMaskUpdateMessage(ObjectRoomMaskUpdateMessage._Str_10260, maskName);
         }
 
         const roomOwnObject = this.getRoomOwnObject(roomId);

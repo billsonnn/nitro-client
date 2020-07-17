@@ -117,7 +117,7 @@ export class PlaneMaterialCell
         if((textureOffsetX !== 0) || (textureOffsetY !== 0))
         {
             const sourceBitmap = new PIXI.Graphics()
-                .beginFill()
+                .beginFill(0)
                 .drawRect(0, 0, (bitmap.width * 2), (bitmap.height * 2))
                 .endFill()
                 .beginTextureFill({ texture })
@@ -128,7 +128,7 @@ export class PlaneMaterialCell
                 .endFill();
 
             bitmap = new PIXI.Graphics()
-                .beginFill()
+                .beginFill(0)
                 .drawRect(0, 0, bitmap.width, bitmap.height)
                 .endFill();
 
