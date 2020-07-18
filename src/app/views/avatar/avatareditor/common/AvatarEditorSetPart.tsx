@@ -7,6 +7,7 @@ export interface AvatarEditorSetPartProps
 {
     partSet: IFigurePartSet;
     isLoaded: boolean;
+    onClick: () => void;
 }
 
 export function AvatarEditorSetPart(props: AvatarEditorSetPartProps): JSX.Element
@@ -82,6 +83,6 @@ export function AvatarEditorSetPart(props: AvatarEditorSetPartProps): JSX.Elemen
     }, [ props.partSet, props.isLoaded ]);
 
     return (
-        <div className={"item-detail hc" + (!props.isLoaded ? ' loading' : '')} ref={ detailRef } />
+        <div className={"item-detail hc" + (!props.isLoaded ? ' loading' : '')} ref={ detailRef } onClick={props.onClick} />
     );
 }

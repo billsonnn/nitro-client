@@ -56,10 +56,14 @@ export function AvatarImage(props: AvatarImageProps): JSX.Element
             {
                 image.onload = () =>
                 {
-                    imageRef.current.height = (image.height * scale);
+                    if(imageRef && imageRef.current) {
+                        imageRef.current.height = (image.height * scale);
+                    }
                 };
 
-                imageRef.current.src = image.src;
+                if(imageRef && imageRef.current) {
+                    imageRef.current.src = image.src;
+                }
             }
         }
     };

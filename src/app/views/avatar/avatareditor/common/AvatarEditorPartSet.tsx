@@ -4,12 +4,14 @@ import { IAvatarImageListener } from '../../../../../nitro/avatar/IAvatarImageLi
 import { IFigurePartSet } from '../../../../../nitro/avatar/structure/figure/IFigurePartSet';
 import { Nitro } from '../../../../../nitro/Nitro';
 import { AvatarEditorSetPart } from './AvatarEditorSetPart';
+import { FigureBuilderSet } from '..';
 
 export interface AvatarEditorPartSetProps
 {
     set: IFigurePartSet;
     figureContainer: AvatarFigureContainer;
     loaded: boolean;
+    setPartSetHandler: (partset: string, update: FigureBuilderSet) => void;
 }
 
 export function AvatarEditorPartSet(props: AvatarEditorPartSetProps): JSX.Element
@@ -36,7 +38,12 @@ export function AvatarEditorPartSet(props: AvatarEditorPartSetProps): JSX.Elemen
 
     }, [ props.set, props.loaded ]);
 
+    function clickMe() {
+        props.setPartSetHandler(props.set.type, {id: props.set.id.toString(), color1: null, color2: null});
+        //alert("click " + props.set.id);
+    }
+
     return (
-        <AvatarEditorSetPart partSet={ props.set } isLoaded={ isLoaded } />
+        <AvatarEditorSetPart partSet={ props.set } isLoaded={ isLoaded } onClick={clickMe} />
     );
 }

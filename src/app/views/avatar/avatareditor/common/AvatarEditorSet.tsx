@@ -3,11 +3,13 @@ import { AvatarFigureContainer } from '../../../../../nitro/avatar/AvatarFigureC
 import { IFigurePartSet } from '../../../../../nitro/avatar/structure/figure/IFigurePartSet';
 import { Nitro } from '../../../../../nitro/Nitro';
 import { AvatarEditorPartSet } from './AvatarEditorPartSet';
+import { FigureBuilderSet } from '..';
 
 export interface AvatarEditorSetProps
 {
     setName: string;
     gender: string;
+    setPartSetHandler: (partset: string, update: FigureBuilderSet) => void;
 }
 
 export function AvatarEditorSet(props: AvatarEditorSetProps): JSX.Element
@@ -85,7 +87,7 @@ export function AvatarEditorSet(props: AvatarEditorSetProps): JSX.Element
         <div className="set-container">
             <div className="container-items">
                 {partSets.map((value, index) => {
-                    return <AvatarEditorPartSet key={ value.set.id } set={ value.set } figureContainer={ value.figureContainer } loaded={ value.loaded } />
+                    return <AvatarEditorPartSet key={ value.set.id } set={ value.set } figureContainer={ value.figureContainer } loaded={ value.loaded } setPartSetHandler={props.setPartSetHandler} />
                 })}
             </div>
         </div>
