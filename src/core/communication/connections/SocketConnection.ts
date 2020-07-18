@@ -292,7 +292,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         catch(e)
         {
-            NitroLogger.log('Error parsing message: ' + e);
+            NitroLogger.log(`Error parsing message: ${ e }`, events[0].constructor.name);
 
             return null;
         }

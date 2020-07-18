@@ -86,6 +86,11 @@ export class RoomObjectVariable
     public static FURNITURE_MANNEQUIN_NAME: string                   = 'furniture_mannequin_name';
     public static FURNITURE_MANNEQUIN_GENDER: string                 = 'furniture_mannequin_gender';
     public static FURNITURE_MANNEQUIN_FIGURE: string                 = 'furniture_mannequin_figure';
+    public static FURNITURE_HIGHSCORE_SCORE_TYPE: string             = 'furniture_highscore_score_type';
+    public static FURNITURE_HIGHSCORE_CLEAR_TYPE: string             = 'furniture_highscore_clear_type';
+    public static FURNITURE_HIGHSCORE_DATA_ENTRY_COUNT: string       = 'furniture_highscore_data_entry_count';
+    public static FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_USERS_: string = 'furniture_highscore_data_entry_base_users_';
+    public static FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_SCORE_: string = 'furniture_highscore_data_entry_base_score_';
     public static PET_PALETTE_INDEX: string                          = 'pet_palette_index';
     public static PET_COLOR: string                                  = 'pet_color';
     public static PET_HEAD_ONLY: string                              = 'pet_head_only';

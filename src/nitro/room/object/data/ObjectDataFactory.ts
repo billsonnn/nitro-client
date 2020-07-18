@@ -1,6 +1,7 @@
 import { IObjectData } from './IObjectData';
 import { CrackableDataType } from './type/CrackableDataType';
 import { EmptyDataType } from './type/EmptyDataType';
+import { HighScoreDataType } from './type/HighScoreDataType';
 import { LegacyDataType } from './type/LegacyDataType';
 import { MapDataType } from './type/MapDataType';
 import { NumberDataType } from './type/NumberDataType';
@@ -20,6 +21,9 @@ export class ObjectDataFactory
                 break;
             case EmptyDataType.FORMAT_KEY:
                 objectData = new EmptyDataType();
+                break;
+            case HighScoreDataType.FORMAT_KEY:
+                objectData = new HighScoreDataType();
                 break;
             case LegacyDataType.FORMAT_KEY:
                 objectData = new LegacyDataType();
