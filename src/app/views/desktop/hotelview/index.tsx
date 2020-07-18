@@ -19,7 +19,7 @@ export function HotelView(props: { sessionData: SessionData }): JSX.Element
     return (
         <div className="hotel-view">
             <div className="hotel-image" />
-            <AvatarImage figure={ figure } direction={ 2 } />
+            <AvatarImage figure={ figure } direction={ 2 } cropped={ false } />
         </div>
     );
 }

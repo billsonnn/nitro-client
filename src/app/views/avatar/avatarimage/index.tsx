@@ -79,6 +79,6 @@ export function AvatarImage(props: AvatarImageProps): JSX.Element
     }, [ props ]);
 
     return (
-        <img ref={ imageRef } />
+        <img className="avatar-image" ref={ imageRef } />
     );
 }

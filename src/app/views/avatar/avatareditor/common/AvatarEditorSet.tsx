@@ -1,9 +1,9 @@
 import React from 'react';
+import { FigureBuilderSet } from '..';
 import { AvatarFigureContainer } from '../../../../../nitro/avatar/AvatarFigureContainer';
 import { IFigurePartSet } from '../../../../../nitro/avatar/structure/figure/IFigurePartSet';
 import { Nitro } from '../../../../../nitro/Nitro';
 import { AvatarEditorPartSet } from './AvatarEditorPartSet';
-import { FigureBuilderSet } from '..';
 
 export interface AvatarEditorSetProps
 {
@@ -83,9 +83,16 @@ export function AvatarEditorSet(props: AvatarEditorSetProps): JSX.Element
         return 0;
     }
 
+    const onClearClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+    {
+        props.setPartSetHandler(props.setName, {id: '-1', color1: null, color2: null});
+
+    }
+
     return (
         <div className="set-container">
             <div className="container-items">
+                <div className="item-detail clear" onClick={ onClearClick } />
                 {partSets.map((value, index) => {
                     return <AvatarEditorPartSet key={ value.set.id } set={ value.set } figureContainer={ value.figureContainer } loaded={ value.loaded } setPartSetHandler={props.setPartSetHandler} />
                 })}
