@@ -186,7 +186,7 @@ export class AvatarStructure extends EventDispatcher
         return this._actionManager._Str_2018(k);
     }
 
-    public _Str_1939(k: string):Boolean
+    public _Str_1939(k: string): boolean
     {
         return this._geometry._Str_1939(k);
     }

@@ -1,6 +1,8 @@
 
+import { NitroLogger } from '../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
+import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
 import { NitroConfiguration } from '../NitroConfiguration';
@@ -8,9 +10,13 @@ import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
+import { INitroCatalog } from './catalog/INitroCatalog';
+import { NitroCatalog } from './catalog/NitroCatalog';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
 import { INitro } from './INitro';
+import { INitroInventory } from './inventory/INitroInventory';
+import { NitroInventory } from './inventory/NitroInventory';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { NitroNavigator } from './navigator/NitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
@@ -27,6 +33,8 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 export class Nitro extends PIXI.Application implements INitro
 {
+    public static READY: string = 'NE_READY';
+
     private static INSTANCE: INitro = null;
 
     private _core: INitroCore;
@@ -39,6 +47,8 @@ export class Nitro extends PIXI.Application implements INitro
     private _roomSession: IRoomSessionManager;
     private _roomManager: IRoomManager;
     private _roomUI: RoomUI;
+    private _catalog: INitroCatalog;
+    private _inventory: INitroInventory;
     private _navigator: INitroNavigator;
 
     private _isReady: boolean;
@@ -77,6 +87,8 @@ export class Nitro extends PIXI.Application implements INitro
         this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
         this._roomUI        = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._roomSession);
+        this._catalog       = new NitroCatalog(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._roomSession);
+        this._inventory     = new NitroInventory(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._catalog);
         this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
 
         this._isReady       = false;
@@ -117,24 +129,17 @@ export class Nitro extends PIXI.Application implements INitro
         instance.communication.demo.setSSO(options.sso);
     }
 
-    public static boot(): void
-    {
-        const instance = Nitro.INSTANCE;
-
-        if(!instance) return;
-
-        instance.core.asset.downloadAssets(NitroConfiguration.PRELOAD_ASSETS, (status: boolean) => instance.init());
-    }
-
     public init(): void
     {
         if(this._isReady || this._isDisposed) return;
 
         this.setupRenderer();
 
-        if(this._communication) this._communication.init();
+        //if(this._communication) this._communication.init();
         if(this._avatar)        this._avatar.init();
         if(this._windowManager) this._windowManager.init();
+        if(this._catalog)       this._catalog.init();
+        if(this._inventory)     this._inventory.init();
         if(this._navigator)     this._navigator.init();
 
         if(this._roomEngine)
@@ -145,6 +150,15 @@ export class Nitro extends PIXI.Application implements INitro
             if(this._roomManager) this._roomManager.init();
             if(this._roomSession) this._roomSession.init();
         }
+
+        if(!this._communication.connection)
+        {
+            NitroLogger.log('No connetion found');
+        }
+
+        if(this._events) this._events.dispatchEvent(new NitroEvent(Nitro.READY));
+
+        this._isReady = true;
     }
 
     public dispose(): void
@@ -156,6 +170,20 @@ export class Nitro extends PIXI.Application implements INitro
             this._navigator.dispose();
 
             this._navigator = null;
+        }
+
+        if(this._inventory)
+        {
+            this._inventory.dispose();
+
+            this._inventory = null;
+        }
+
+        if(this._catalog)
+        {
+            this._catalog.dispose();
+
+            this._catalog = null;
         }
 
         if(this._roomUI)
@@ -216,7 +244,8 @@ export class Nitro extends PIXI.Application implements INitro
 
         super.destroy();
 
-        this._isDisposed = true;
+        this._isDisposed    = true;
+        this._isReady       = false;
     }
 
     private setupRenderer(): void
@@ -282,6 +311,16 @@ export class Nitro extends PIXI.Application implements INitro
     public get roomUI(): RoomUI
     {
         return this._roomUI;
+    }
+
+    public get catalog(): INitroCatalog
+    {
+        return this._catalog;
+    }
+
+    public get inventory(): INitroInventory
+    {
+        return this._inventory;
     }
 
     public get navigator(): INitroNavigator

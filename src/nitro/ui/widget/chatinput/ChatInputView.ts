@@ -89,6 +89,7 @@ export class ChatInputView
         return `
         <div class="nitro-widget nitro-widget-chat-input">
             <div class="widget-body">
+                <button class="btn btn-destiny">Styles</button>
                 <input type="text" class="chat-input" />
             </div>
         </div>`;

@@ -1,4 +1,8 @@
 import React from 'react';
+import { NitroEvent } from '../../../../core/events/NitroEvent';
+import { AvatarRenderEvent } from '../../../../nitro/avatar/events/AvatarRenderEvent';
+import { Nitro } from '../../../../nitro/Nitro';
+import { useAvatarEvent } from '../../../hooks/nitro/useAvatarEvent';
 import { AvatarEditorBodyView } from './body';
 import { AvatarEditorHeadView } from './head';
 import { AvatarEditorLegView } from './legs';
@@ -21,9 +25,14 @@ export interface FigureBuilderSet
 export class FigureBuilder {
     private _parts: Map<string,FigureBuilderSet>;
 
-    constructor(figureString: string) {
+    constructor(figureString: string = null) {
         this._parts = new Map();
 
+        if(figureString && figureString !== '') this.setFigure(figureString);
+    }
+
+    public setFigure(figureString: string): void
+    {
         let splits = figureString.split(".");
 
         for(let index in splits) {
@@ -87,11 +96,12 @@ export class FigureBuilder {
 
 export function AvatarEditor(props: AvatarEditorProps): JSX.Element
 {
-    const [ figure, setFigure ]     = React.useState('');
-    const [ gender, setGender ]     = React.useState('M');
-    const [ setType, setSetType ]   = React.useState('hd');
+    const [ figure, setFigure ]                         = React.useState('');
+    const [ gender, setGender ]                         = React.useState('M');
+    const [ setType, setSetType ]                       = React.useState('hd');
+    const [ avatarRenderReady, setAvatarRenderReady ]   = React.useState(false);
 
-    const figureBuilder = new FigureBuilder(figure);
+    const figureBuilder = new FigureBuilder();
 
     const setGenderHandler = (gender: string) =>
     {
@@ -102,9 +112,15 @@ export function AvatarEditor(props: AvatarEditorProps): JSX.Element
     
     const setPartSetHandler = (partset: string, update: FigureBuilderSet) =>
     {
+        figureBuilder.setFigure(figure);
         figureBuilder.update(partset, update);
         setFigure(figureBuilder.getFigure());
     };
+
+    const onAvatarRenderEvent = (event: NitroEvent) =>
+    {
+        if(event.type === AvatarRenderEvent.AVATAR_RENDER_READY) setAvatarRenderReady(true);
+    }
 
     const categories = [
         {
@@ -129,9 +145,25 @@ export function AvatarEditor(props: AvatarEditorProps): JSX.Element
         }
     ];
 
+    React.useEffect(() =>
+    {
+        if((props.figure !== '') && (props.figure !== figure))
+        {
+            figureBuilder.setFigure(props.figure);
+            setFigure(figureBuilder.getFigure());
+        }
+    }, [ props.figure ]);
+
+    React.useEffect(() =>
+    {
+        if(Nitro.instance.avatar.isReady) setAvatarRenderReady(true);
+    }, []);
+
+    useAvatarEvent(AvatarRenderEvent.AVATAR_RENDER_READY, onAvatarRenderEvent);
+
     return (
         <div className="nitro-component avatareditor-view">
-            <div className="component-body">
+            { avatarRenderReady && <div className="component-body">
                 <div className="body-left">
                     <div className="component-header">
                         <div className="header-title">Change Looks</div>
@@ -150,7 +182,7 @@ export function AvatarEditor(props: AvatarEditorProps): JSX.Element
                 <div className="body-right">
                     <AvatarEditorPreview figure={ figure } gender={ gender } />
                 </div>
-            </div>
+            </div> }
         </div>
     );
 }

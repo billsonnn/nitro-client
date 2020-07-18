@@ -1,5 +1,7 @@
 import React from 'react';
 import { AvatarDirectionAngle } from '../../../../../nitro/avatar/enum/AvatarDirectionAngle';
+import { UserFigureComposer } from '../../../../../nitro/communication/messages/outgoing/user/data/UserFigureComposer';
+import { Nitro } from '../../../../../nitro/Nitro';
 import { AvatarImage } from '../../avatarimage';
 
 export interface AvatarEditorPreviewProps
@@ -29,6 +31,11 @@ export function AvatarEditorPreview(props: AvatarEditorPreviewProps): JSX.Elemen
         setDirection(newDirection);
     };
 
+    const saveFigure = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    {
+        Nitro.instance.communication.connection.send(new UserFigureComposer(props.gender, props.figure));
+    }
+
     return (
         <div className="avatar-preview">
             <AvatarImage figure={ props.figure } gender={ props.gender } direction={ direction } scale={ 2 } cropped={ false } />
@@ -37,6 +44,7 @@ export function AvatarEditorPreview(props: AvatarEditorPreviewProps): JSX.Elemen
                 <i className="icon arrow-left-icon" onClick={ () => trySetDirection(direction + 1) } />
                 <i className="icon arrow-right-icon" onClick={ () => trySetDirection(direction - 1) } />
             </div>
+            <button className="btn btn-destiny" onClick={ event => saveFigure(event) }>Save</button>
         </div>
     );
 }

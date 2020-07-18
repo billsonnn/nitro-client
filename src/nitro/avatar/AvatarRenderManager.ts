@@ -10,6 +10,9 @@ import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
 import { AvatarFigureContainer } from './AvatarFigureContainer';
 import { AvatarImage } from './AvatarImage';
 import { AvatarStructure } from './AvatarStructure';
+import * as HabboAvatarAnimations from './data/HabboAvatarAnimations.json';
+import * as HabboAvatarGeometry from './data/HabboAvatarGeometry.json';
+import * as HabboAvatarPartSets from './data/HabboAvatarPartSets.json';
 import { EffectAssetDownloadManager } from './EffectAssetDownloadManager';
 import { AvatarRenderEvent } from './events/AvatarRenderEvent';
 import { IAvatarEffectListener } from './IAvatarEffectListener';
@@ -112,62 +115,24 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadGeometry(): void
     {
-        const request = new XMLHttpRequest();
+        if(!this._structure) return;
 
-        try
-        {
-            request.open('GET', NitroConfiguration.AVATAR_GEOMETRY_URL);
+        this._structure._Str_1825(HabboAvatarGeometry.geometry);
 
-            request.send();
+        this._geometryReady = true;
 
-            request.onloadend = e =>
-            {
-                if(!this._structure) return;
-
-                this._structure._Str_1825(JSON.parse(request.responseText).geometry);
-
-                this._geometryReady = true;
-
-                this.checkReady();
-            }
-
-            request.onerror = e => { throw new Error('invalid_avatar_geometry'); };
-        }
-
-        catch(e)
-        {
-            this.logger.error(e);
-        }
+        this.checkReady();
     }
 
     private loadPartSets(): void
     {
-        const request = new XMLHttpRequest();
+        if(!this._structure) return;
 
-        try
-        {
-            request.open('GET', NitroConfiguration.AVATAR_PARTSETS_URL);
+        this._structure._Str_1296(HabboAvatarPartSets.partSets);
 
-            request.send();
+        this._partSetsReady = true;
 
-            request.onloadend = e =>
-            {
-                if(!this._structure) return;
-
-                this._structure._Str_1296(JSON.parse(request.responseText).partSets);
-
-                this._partSetsReady = true;
-
-                this.checkReady();
-            }
-
-            request.onerror = e => { throw new Error('invalid_avatar_part_sets'); };
-        }
-
-        catch(e)
-        {
-            this.logger.error(e);
-        }
+        this.checkReady();
     }
 
     private loadActions(): void
@@ -206,32 +171,13 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadAnimations(): void
     {
-        const request = new XMLHttpRequest();
+        if(!this._structure) return;
 
-        try
-        {
-            request.open('GET', NitroConfiguration.AVATAR_ANIMATIONS_URL);
+        this._structure._Str_2229(HabboAvatarAnimations.animations);
 
-            request.send();
+        this._animationsReady = true;
 
-            request.onloadend = e =>
-            {
-                if(!this._structure) return;
-
-                this._structure._Str_2229(JSON.parse(request.responseText));
-
-                this._animationsReady = true;
-
-                this.checkReady();
-            }
-
-            request.onerror = e => { throw new Error('invalid_avatar_animations'); };
-        }
-
-        catch(e)
-        {
-            this.logger.error(e);
-        }
+        this.checkReady();
     }
 
     private loadFigureData(): void

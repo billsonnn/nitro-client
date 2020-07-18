@@ -22,6 +22,11 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private _messages: MessageClassManager;
     private _codec: ICodec;
     private _dataBuffer: ArrayBuffer;
+    private _isReady: boolean;
+
+    private _pendingClientMessages: IMessageComposer[];
+    private _pendingServerMessages: IMessageDataWrapper[];
+
 
     private _isAuthenticated: boolean;
 
@@ -35,6 +40,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._messages              = new MessageClassManager();
         this._codec                 = new EvaWireFormat();
         this._dataBuffer            = null;
+        this._isReady               = false;
+
+        this._pendingClientMessages = [];
+        this._pendingServerMessages = [];
 
         this._isAuthenticated       = false;
     }
@@ -60,6 +69,20 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._messages              = null;
         this._codec                 = null;
         this._dataBuffer            = null;
+    }
+
+    public onReady(): void
+    {
+        if(this._isReady) return;
+        
+        this._isReady = true;
+
+        if(this._pendingServerMessages && this._pendingServerMessages.length) this.processWrappers(...this._pendingServerMessages);
+
+        if(this._pendingClientMessages && this._pendingClientMessages.length) this.send(...this._pendingClientMessages);
+
+        this._pendingServerMessages = [];
+        this._pendingClientMessages = [];
     }
 
     private createSocket(socketUrl: string): void
@@ -139,6 +162,15 @@ export class SocketConnection extends EventDispatcher implements IConnection
         if(this.disposed || !composers) return false;
         
         composers = [ ...composers ];
+
+        if(this._isAuthenticated && !this._isReady)
+        {
+            if(!this._pendingClientMessages) this._pendingClientMessages = [];
+
+            this._pendingClientMessages.push(...composers);
+
+            return false;
+        }
         
         for(let composer of composers)
         {
@@ -194,6 +226,22 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         const wrappers = this.splitReceivedMessages();
 
+        if(!wrappers || !wrappers.length) return;
+
+        if(this._isAuthenticated && !this._isReady)
+        {
+            if(!this._pendingServerMessages) this._pendingServerMessages = [];
+
+            this._pendingServerMessages.push(...wrappers);
+
+            return;
+        }
+
+        this.processWrappers(...wrappers);
+    }
+
+    private processWrappers(...wrappers: IMessageDataWrapper[]): void
+    {
         if(!wrappers || !wrappers.length) return;
 
         for(let wrapper of wrappers)

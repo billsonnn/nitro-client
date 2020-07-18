@@ -89,6 +89,7 @@ import { RoomUnitPostureComposer } from './messages/outgoing/room/unit/RoomUnitP
 import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSignComposer';
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
+import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
 import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
@@ -272,6 +273,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 
         // USER
+        this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
         this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
 

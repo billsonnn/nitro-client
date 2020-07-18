@@ -13,9 +13,9 @@ export class AnimationData implements IFigureSetData
 
     public parse(data: any): boolean
     {
-        if(data.animations && (data.animations.length > 0))
+        if(data && (data.length > 0))
         {
-            for(let animation of data.animations)
+            for(let animation of data)
             {
                 if(!animation) continue;
 
