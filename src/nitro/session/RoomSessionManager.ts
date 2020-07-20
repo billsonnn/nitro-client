@@ -1,5 +1,6 @@
 import { NitroManager } from '../../core/common/NitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { BaseHandler } from './handler/BaseHandler';
@@ -45,10 +46,14 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         this.createHandlers();
 
         this.processPendingSession();
+
+        this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
     }
 
     protected onDispose(): void
     {
+        this._roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
+
         super.onDispose();
     }
 
@@ -79,9 +84,14 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         }
     }
 
+    public onRoomEngineEvent(event: RoomEngineEvent): void
+    {
+        this.processPendingSession();
+    }
+
     private processPendingSession(): void
     {
-        if(!this._pendingSession) return;
+        if(!this._pendingSession || !this._roomEngine.ready) return;
 
         this.addSession(this._pendingSession);
 
