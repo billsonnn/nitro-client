@@ -253,7 +253,7 @@ export class RoomChatItem
         this._x         = bounds.x;
         this._y         = bounds.y;
         this._width     = this._window.offsetWidth;
-        this._height    = (this._window.offsetHeight - yOffset);
+        this._height    = this._window.offsetHeight; // (this._window.offsetHeight - yOffset);
 
         this._window.style.visibility = 'visible';
     }
