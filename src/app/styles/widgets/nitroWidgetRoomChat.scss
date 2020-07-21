@@ -91,9 +91,29 @@
                         position: relative;
                         border-left: 5px solid transparent;
                         border-right: 5px solid transparent;
-                        border-top: 4px solid #dbdbdb;
+                        border-top: 4px solid #c5c5c5;
                         top: -3px;
                         left: -5px;
+                    }
+                }
+
+                &.chat-type-0 { // normal
+                    .chat-right {
+                        font-weight: 300;
+                        font-size: 13px;
+                    }
+                }
+
+                &.chat-type-1 { // whisper
+                    .chat-right {
+                        font-weight: 300;
+                        font-style: italic;
+                    }
+                }
+
+                &.chat-type-2 { // shout
+                    .chat-right {
+                        font-weight: 500;
                     }
                 }
 
@@ -696,6 +716,97 @@
                         }
                     }
                 }
+
+                &.chat-style-22 {
+                    background: #ffffff;
+                    background-image: url('../assets/images/chatstyles/22-mid-top.png'), url('../assets/images/chatstyles/22-mid-bottom.png');
+                    background-position: 0 0, 0 100%;
+                    background-repeat: repeat-x, repeat-x;
+                    padding-right: 9px;
+                    -webkit-box-shadow: none;
+                    -moz-box-shadow: none;
+                    box-shadow: none;
+                    border-color: #7b2e00;
+                    color: #330101;
+
+                    .chat-left {
+                        background: transparent !important;
+                        border: none;
+
+                        &:before {
+                            content: "";
+                            position: absolute;
+                            width: 19px;
+                            height: 100%;
+                            height: calc(100% - 14px);
+                            background-image: url('../assets/images/chatstyles/22-left-mid.png');
+                            background-position: 0 0;
+                            background-repeat: repeat-y;
+                            display: block;
+                            top: 7px;
+                            left: -7px;
+                        }
+
+                        &:after {
+                            content: "";
+                            position: absolute;
+                            width: 24px;
+                            height: 100%;
+                            height: auto;
+                            background-image: url('../assets/images/chatstyles/22-left-top.png'), url('../assets/images/chatstyles/22-left-bottom.png');
+                            background-position: 0 0, 0 100%;
+                            background-repeat: no-repeat, no-repeat;
+                            display: block;
+                            top: -6px;
+                            bottom: -3px;
+                            left: -12px;
+                            z-index: -1;
+                        }
+                    }
+
+                    &:before {
+                        display: none;
+                    }
+
+                    .chat-pointer {
+                        border-top-color: #7b2e00;
+
+                        &:before {
+                            border-top-color: #ff5603;
+                        }
+                    }
+                }
+
+                &.chat-style-23 {
+                    background: #caeaec;
+
+                    .chat-left {
+                        background: #f9cb13 !important;
+                        border-color: #369097;
+                        -webkit-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.1);
+                        -moz-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.1);
+                        box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.1);
+
+                        &:after {
+                            content: "";
+                            position: absolute;
+                            width: 18px;
+                            height: 100%;
+                            background-image: url('../assets/images/chatstyles/23-left-top.png');
+                            background-position: 0 0;
+                            background-repeat: no-repeat;
+                            display: block;
+                            top: -6px;
+                            left: -7px;
+                            z-index: -1;
+                        }
+                    }
+
+                    .chat-pointer:before {
+                        border-top-color: #b5d2d4;
+                    }
+                }
+                
 
             }
 
