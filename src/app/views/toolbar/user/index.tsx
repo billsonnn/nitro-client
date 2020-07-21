@@ -1,23 +1,18 @@
 import React from 'react';
 import { AvatarSetType } from '../../../../nitro/avatar/enum/AvatarSetType';
 import { SessionData } from '../../../hooks/session/useSessionData';
-import { AvatarImage } from '../../avatar/avatarimage';
+import { AvatarImage, AvatarImageOptions } from '../../avatar/avatarimage';
 
 export function ToolbarUserView(props: { sessionData: SessionData }): JSX.Element
 {
-    const [ figure, setFigure ] = React.useState('');
-
-    React.useEffect(() =>
-    {
-        const sessionData = props.sessionData;
-
-        if(sessionData)
-        {
-            setFigure(sessionData.userFigure);
-        }
-    }, [ props ]);
+    const avatarOptions: AvatarImageOptions = {
+        figure: props.sessionData.userFigure,
+        gender: props.sessionData.userGender,
+        setType: AvatarSetType.HEAD,
+        direction: 2
+    };
 
     return (
-        <AvatarImage figure={ figure } setType={ AvatarSetType.HEAD } direction={ 2 } />
+        <AvatarImage options={ avatarOptions } />
     );
 }

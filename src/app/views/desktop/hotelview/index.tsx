@@ -1,25 +1,20 @@
 import React from 'react';
 import { SessionData } from '../../../hooks/session/useSessionData';
-import { AvatarImage } from '../../avatar/avatarimage';
+import { AvatarImage, AvatarImageOptions } from '../../avatar/avatarimage';
 
 export function HotelView(props: { sessionData: SessionData }): JSX.Element
 {
-    const [ figure, setFigure ] = React.useState('');
-
-    React.useEffect(() =>
-    {
-        const sessionData = props.sessionData;
-
-        if(sessionData)
-        {
-            setFigure(sessionData.userFigure);
-        }
-    }, [ props ]);
+    const avatarOptions: AvatarImageOptions = {
+        figure: props.sessionData.userFigure,
+        gender: props.sessionData.userGender,
+        direction: 2,
+        cropped: false
+    }
 
     return (
         <div className="hotel-view">
             <div className="hotel-image" />
-            <AvatarImage figure={ figure } direction={ 2 } cropped={ false } />
+            <AvatarImage options={ avatarOptions } />
         </div>
     );
 }

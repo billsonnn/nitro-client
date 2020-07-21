@@ -2,7 +2,7 @@ import React from 'react';
 import { AvatarDirectionAngle } from '../../../../../nitro/avatar/enum/AvatarDirectionAngle';
 import { UserFigureComposer } from '../../../../../nitro/communication/messages/outgoing/user/data/UserFigureComposer';
 import { Nitro } from '../../../../../nitro/Nitro';
-import { AvatarImage } from '../../avatarimage';
+import { AvatarImage, AvatarImageOptions } from '../../avatarimage';
 
 export interface AvatarEditorPreviewProps
 {
@@ -36,9 +36,17 @@ export function AvatarEditorPreview(props: AvatarEditorPreviewProps): JSX.Elemen
         Nitro.instance.communication.connection.send(new UserFigureComposer(props.gender, props.figure));
     }
 
+    const avatarOptions: AvatarImageOptions = {
+        figure: props.figure,
+        gender: props.gender,
+        direction: direction,
+        scale: 2,
+        cropped: false
+    };
+
     return (
         <div className="avatar-preview">
-            <AvatarImage figure={ props.figure } gender={ props.gender } direction={ direction } scale={ 2 } cropped={ false } />
+            <AvatarImage options={ avatarOptions } />
             <div className="preview-shadow" />
             <div className="preview-directions">
                 <i className="icon arrow-left-icon" onClick={ () => trySetDirection(direction + 1) } />

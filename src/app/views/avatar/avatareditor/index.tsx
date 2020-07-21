@@ -72,8 +72,6 @@ export class FigureBuilder {
                 this._parts.set(settype, update);
             }
         }
-
-        console.log(this._parts);
     }
 
     public getFigure():string

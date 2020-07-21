@@ -9,16 +9,12 @@ export function useCommunicationMessageEvent(event: IMessageEvent): void
     React.useEffect(() =>
     {
         handlerRef.current = event;
-    }, [ event ]);
 
-
-    React.useEffect(() =>
-    {
         Nitro.instance.communication.registerMessageEvent(handlerRef.current);
 
         return () =>
         {
             Nitro.instance.communication.removeMessageEvent(handlerRef.current);
         }
-    }, [ event ]);
+    }, [ ]);
 }

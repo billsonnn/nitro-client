@@ -13,23 +13,7 @@ export interface ToolbarViewProps
 
 export function ToolbarView(props: ToolbarViewProps): JSX.Element
 {
-    const [ isExpanded, setIsExpanded ]     = React.useState(true);
-    const [ roomStatus, setRoomStatus ]     = React.useState(props.roomStatus);
-    const [ sessionData, setSessionData ]   = React.useState(props.sessionData);
-
-    React.useEffect(() =>
-    {
-        const roomStatus = (props.roomStatus || false);
-
-        setRoomStatus(roomStatus);
-    }, [ props.roomStatus ])
-
-    React.useEffect(() =>
-    {
-        const sessionData = (props.sessionData || null);
-        
-        setSessionData(sessionData);
-    }, [ props.sessionData ]);
+    const [ isExpanded, setIsExpanded ] = React.useState(true);
 
     return (
         <div className="nitro-component toolbar-view">
@@ -39,7 +23,7 @@ export function ToolbarView(props: ToolbarViewProps): JSX.Element
             { isExpanded && <div className="component-body">
                 <div className="toolbar-items">
                     <div className="toolbar-item">
-                        <i className={"icon " + ( roomStatus ? "icon-habbo" : "icon-house ")} />
+                        <i className={"icon " + ( props.roomStatus ? "icon-habbo" : "icon-house ")} />
                     </div>
                     <div className="toolbar-item" onClick={ () => props.navigatorToggler() }>
                         <i className="icon icon-rooms" />
@@ -53,7 +37,7 @@ export function ToolbarView(props: ToolbarViewProps): JSX.Element
                 </div>
             </div> }
             <div className="component-footer">
-                <ToolbarUserView sessionData={ sessionData } />
+                <ToolbarUserView sessionData={ props.sessionData } />
             </div>
         </div>
     );

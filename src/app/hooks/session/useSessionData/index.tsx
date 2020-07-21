@@ -13,9 +13,9 @@ export interface SessionData
 
 export function useSessionData(): SessionData
 {
-    const [ sessionData, setSessionData ]   = React.useState<SessionData>({ userId: 0, userName: '', userFigure: '', userGender: '' });
+    const [ sessionData, setSessionData ] = React.useState<SessionData>({ userId: 0, userName: '', userFigure: '', userGender: '' });
 
-    const figureHandler = React.useCallback((event: UserFigureEvent) =>
+    const figureHandler = (event: UserFigureEvent) =>
     {
         const parser = event.getParser();
 
@@ -28,9 +28,9 @@ export function useSessionData(): SessionData
                 userGender: parser.gender
             });
         }
-    }, [ ]);
+    };
 
-    const userInfoHandler = React.useCallback((event: UserInfoEvent) =>
+    const userInfoHandler = (event: UserInfoEvent) =>
     {
         const parser = event.getParser();
 
@@ -43,7 +43,7 @@ export function useSessionData(): SessionData
                 userGender: parser.userInfo.gender
             });
         }
-    }, [ ]);
+    };
 
     useCommunicationMessageEvent(new UserFigureEvent(figureHandler));
     useCommunicationMessageEvent(new UserInfoEvent(userInfoHandler));

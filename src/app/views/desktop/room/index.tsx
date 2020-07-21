@@ -8,7 +8,7 @@ export function RoomView(): JSX.Element
     React.useEffect(() =>
     {
         Nitro.instance && clientRef && clientRef.current.append(Nitro.instance.renderer.view);
-    }, [ clientRef ]);
+    }, [ ]);
 
     return (
         <div className="room-view" ref={ clientRef }></div>
