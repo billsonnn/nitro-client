@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/app/app.tsx',
+    entry: './src/nitro/Nitro.ts',
     module: {
         rules: [
             {
@@ -48,7 +48,8 @@ module.exports = {
     },
     externals: {
         'react': 'React',
-        'react-dom': 'ReactDOM'
+        'react-dom': 'ReactDOM',
+        'pixi.js-legacy': 'PIXI'
     },
     devServer: {
         host: '0.0.0.0',
@@ -64,7 +65,13 @@ module.exports = {
         extensions: [ '.ts', '.tsx', '.js' ]
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        } 
     }
 };

@@ -214,14 +214,9 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
     {
         if(!chat) return;
 
-        chat.y -= nextHeight ? nextHeight : 19;
+        chat.y = ((chat.y - nextHeight) - 1);
 
-        /*
-        if(nextHeight) chat.y = ((chat.y - nextHeight) - 1);
-        else chat.y = ((chat.y - chat.height) - 1);
-        */
-
-        if(chat.y < -200) this.hideChat(chat);
+        if(chat.y < (-(chat.height * 2))) this.hideChat(chat);
     }
 
     private hideChat(chat: RoomChatItem): void
@@ -251,11 +246,11 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
         {
             const chat = this._chats[i];
 
-            let nextHeight = 0;
+            let nextHeight = chat.height;
 
-            if(this._chats[i - 1]) nextHeight = this._chats[i - 1].height;
+            if(this._chats[i - 2]) nextHeight = this._chats[i - 2].height;
 
-            chat && this.moveChatUp(chat, null);
+            chat && this.moveChatUp(chat, nextHeight);
 
             i--;
         }
@@ -263,39 +258,15 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
 
     private makeRoomForChat(chat: RoomChatItem): void
     {
-        this._tempChats = [];
-        let i = (this._chats.length - 1);
+        if(!chat) return;
 
-        let lastChat = chat;
-
-        for(let i = this._chats.length - 1; i >= 0; i--)
-        {
-            const tchat = this._chats[i];
-            if((lastChat.x >= tchat.x && lastChat.x <= (tchat.x + tchat.width)) || tchat.x >= lastChat.x && tchat.x <= (lastChat.x + lastChat.width) || (chat.x >= tchat.x && chat.x <= (tchat.x + tchat.width)) || tchat.x >= chat.x && tchat.x <= (chat.x + chat.width))
-            {
-                this._tempChats.push(tchat);
-                lastChat = tchat;
-            }
-        }
-
-        i = (this._tempChats.length);
-
-        while(i >= 0)
-        {
-            const tchat = this._tempChats[i];
-            tchat && this.moveChatUp(tchat, chat.height);
-            i--;
-        }
-
-        this._tempChats = [];
-
-        /*let i = 0;
+        let i = 0;
 
         while(i < this._chats.length)
         {
             const existing = this._chats[i];
 
-            if(chat)
+            if(existing)
             {
                 if(this.doOverlap(chat.x, chat.y, (chat.x + chat.width), (chat.y - chat.height), existing.x, existing.y, (existing.x + existing.width), (existing.y - existing.height)))
                 {
@@ -312,21 +283,21 @@ export class RoomChatWidget extends ConversionTrackingWidget implements IUpdateR
 
         while(i < this._tempChats.length)
         {
-            const tchat = this._tempChats[i];
+            const existing = this._tempChats[i];
 
-            if(tchat)
+            if(existing)
             {
-                let nextHeight = 0;
+                //let nextHeight = 0;
 
-                if(this._tempChats[i + 1]) nextHeight = this._tempChats[i + 1].height;
+                //if(this._tempChats[i + 1]) nextHeight = this._tempChats[i + 1].height;
 
-                this.moveChatUp(tchat, nextHeight);
+                this.moveChatUp(existing, chat.height);
             }
 
             i++;
         }
 
-        this._tempChats = [];*/
+        this._tempChats = [];
     }
 
     private checkOverlappingChats(chat1: RoomChatItem, chat2: RoomChatItem): void

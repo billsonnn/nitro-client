@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRoomStatus } from '../../hooks/room/useRoomStatus';
 import { useSessionData } from '../../hooks/session/useSessionData';
-import { AvatarEditor } from '../avatar/avatareditor';
 import { Catalog } from '../catalog';
 import { Inventory } from '../inventory';
 import { Navigator } from '../navigator';
@@ -33,7 +32,7 @@ export function DesktopView(): JSX.Element
             { navigatorShowing && <Navigator /> }
             { inventoryShowing && <Inventory /> }
             { catalogShowing && <Catalog /> }
-            <AvatarEditor figure={ sessionData.userFigure } gender={ sessionData.userGender } />
+            
             { roomStatus ? <RoomView /> : <HotelView sessionData={ sessionData } /> }
         </div>
     );

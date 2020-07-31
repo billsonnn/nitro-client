@@ -23,8 +23,8 @@ export interface INitro extends PIXI.Application
     avatar: IAvatarRenderManager;
     windowManager: INitroWindowManager;
     roomEngine: IRoomEngine;
-    session: ISessionDataManager;
-    roomSession: IRoomSessionManager;
+    sessionDataManager: ISessionDataManager;
+    roomSessionManager: IRoomSessionManager;
     roomManager: IRoomManager;
     roomUI: RoomUI;
     catalog: INitroCatalog;

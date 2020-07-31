@@ -1,4 +1,4 @@
-import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { INitroManager } from '../../core/common/INitroManager';
 import { IRoomManager } from '../../room/IRoomManager';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
@@ -13,10 +13,8 @@ import { IGetImageListener } from './IGetImageListener';
 import { ImageResult } from './ImageResult';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
 
-export interface IRoomEngine
+export interface IRoomEngine extends INitroManager
 {
-    initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void;
-    dispose(): void;
     setActiveRoomId(roomId: number): void;
     onRoomEngineInitalized(flag: boolean): void;
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
@@ -37,7 +35,9 @@ export interface IRoomEngine
     refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void;
     processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
-    events: IEventDispatcher;
+    sessionDataManager: ISessionDataManager;
+    roomSessionManager: IRoomSessionManager;
+    roomManager: IRoomManager;
     objectEventHandler: RoomObjectEventHandler;
     roomRendererFactory: IRoomRendererFactory;
     visualizationFactory: IRoomObjectVisualizationFactory;

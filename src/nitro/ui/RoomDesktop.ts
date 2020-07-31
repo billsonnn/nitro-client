@@ -32,6 +32,7 @@ import { IRoomWidgetFactory } from './IRoomWidgetFactory';
 import { IRoomWidgetHandler } from './IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from './IRoomWidgetHandlerContainer';
 import { MouseEventType } from './MouseEventType';
+import { TouchEventType } from './TouchEventType';
 import { RoomWidgetEnum } from './widget/enums/RoomWidgetEnum';
 import { RoomWidgetRoomObjectUpdateEvent } from './widget/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widget/events/RoomWidgetRoomViewUpdateEvent';
@@ -68,6 +69,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
     private _didMouseMove: boolean;
     private _lastClick: number;
     private _clickCount: number;
+    private _willTouchClick: boolean;
 
     private _roomBackground: PIXI.Graphics;
     private _roomBackgroundColor: number;
@@ -96,6 +98,7 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         this._didMouseMove              = false;
         this._lastClick                 = 0;
         this._clickCount                = 0;
+        this._willTouchClick            = false;
 
         this._roomBackground            = null;
         this._roomBackgroundColor       = 0;
@@ -198,10 +201,15 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
 
         if(this._roomCanvasWrapper)
         {
-            this._roomCanvasWrapper.onclick     = this.onMouseEvent.bind(this);
-            this._roomCanvasWrapper.onmousemove = this.onMouseEvent.bind(this);
-            this._roomCanvasWrapper.onmousedown = this.onMouseEvent.bind(this);
-            this._roomCanvasWrapper.onmouseup   = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onclick         = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmousemove     = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmousedown     = this.onMouseEvent.bind(this);
+            this._roomCanvasWrapper.onmouseup       = this.onMouseEvent.bind(this);
+
+            this._roomCanvasWrapper.ontouchstart    = this.onTouchEvent.bind(this);
+            this._roomCanvasWrapper.ontouchmove     = this.onTouchEvent.bind(this);
+            this._roomCanvasWrapper.ontouchend      = this.onTouchEvent.bind(this);
+            this._roomCanvasWrapper.ontouchcancel   = this.onTouchEvent.bind(this);
         }
 
         window.onresize = this.onWindowResizeEvent.bind(this);
@@ -353,6 +361,82 @@ export class RoomDesktop implements IRoomDesktop, IRoomWidgetMessageListener, IR
         const y = event.clientY;
 
         let eventType = event.type;
+
+        if(eventType === MouseEventType.MOUSE_CLICK)
+        {
+            if(this._lastClick)
+            {
+                this._clickCount = 1;
+                    
+                if(this._lastClick >= Date.now() - 300) this._clickCount++;
+            }
+
+            this._lastClick = Date.now();
+
+            if(this._clickCount === 2)
+            {
+                if(!this._didMouseMove) eventType = MouseEventType.DOUBLE_CLICK;
+
+                this._clickCount    = 0;
+                this._lastClick     = null;
+            }
+        }
+
+        switch(eventType)
+        {
+            case MouseEventType.MOUSE_CLICK:
+                break;
+            case MouseEventType.DOUBLE_CLICK:
+                break;
+            case MouseEventType.MOUSE_MOVE:
+                this._didMouseMove = true;
+                break;
+            case MouseEventType.MOUSE_DOWN:
+                this._didMouseMove = false;
+                break;
+            case MouseEventType.MOUSE_UP:
+                break;
+            default: return;
+        }
+
+        this._roomEngine.setActiveRoomId(this._session.roomId);
+        this._roomEngine.dispatchMouseEvent(this._canvasIDs[0], x, y, eventType, event.altKey, event.ctrlKey, event.shiftKey, false);
+    }
+
+    public onTouchEvent(event: TouchEvent): void
+    {
+        if(!event || !this._roomEngine || !this._session) return;
+
+        let x = 0;
+        let y = 0;
+
+        let eventType = event.type;
+
+        switch(event.type)
+        {
+            case TouchEventType.TOUCH_START:
+                x = event.touches[0].clientX;
+                y = event.touches[0].clientY; 
+                this._willTouchClick = true;
+                eventType = MouseEventType.MOUSE_DOWN;
+                break;
+            case TouchEventType.TOUCH_MOVE:
+                x = event.touches[0].clientX;
+                y = event.touches[0].clientY; 
+                this._willTouchClick = false;
+                eventType = MouseEventType.MOUSE_MOVE;
+                break;
+            case TouchEventType.TOUCH_END:
+                x = event.changedTouches[0].clientX;
+                y = event.changedTouches[0].clientY;
+                
+                if(this._willTouchClick)
+                {
+                    eventType = MouseEventType.MOUSE_CLICK;
+                    this._willTouchClick = false;
+                }
+                break;
+        }
 
         if(eventType === MouseEventType.MOUSE_CLICK)
         {

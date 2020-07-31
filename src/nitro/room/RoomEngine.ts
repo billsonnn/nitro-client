@@ -1,9 +1,8 @@
 import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
+import { NitroManager } from '../../core/common/NitroManager';
 import { IConnection } from '../../core/communication/connections/IConnection';
-import { EventDispatcher } from '../../core/events/EventDispatcher';
-import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomInstance } from '../../room/IRoomInstance';
@@ -98,7 +97,7 @@ import { RoomInstanceData } from './utils/RoomInstanceData';
 import { RoomObjectBadgeImageAssetListener } from './utils/RoomObjectBadgeImageAssetListener';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
-export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener, IUpdateReceiver, IDisposable
+export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener, IUpdateReceiver, IDisposable
 {
     public static ROOM_OBJECT_ID: number        = -1;
     public static ROOM_OBJECT_TYPE: string      = 'room';
@@ -115,14 +114,14 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private static DRAG_THRESHOLD: number       = 15;
     private static TEMPORARY_ROOM: string       = 'temporary_room';
 
-    private _events: IEventDispatcher;
     private _communication: INitroCommunicationManager;
     private _sessionDataManager: ISessionDataManager;
-    private _roomSession: IRoomSessionManager;
+    private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
     private _roomObjectEventHandler: RoomObjectEventHandler;
     private _roomMessageHandler: RoomMessageHandler;
     private _roomContentLoader: RoomContentLoader;
+    private _ready: boolean;
 
     private _activeRoomId: number;
     private _lastCanvasId: number;
@@ -144,24 +143,23 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
     private _Str_3688: boolean;
     private _Str_8325: boolean;
     private _Str_13525: boolean;
-    private _Str_7206: NumberBank;
+    private _numberBank: NumberBank;
     private _imageListeners: Map<string, IGetImageListener>;
     private _cameraCentered: boolean;
     private _badgeListeners: Map<string, RoomObjectBadgeImageAssetListener[]>;
 
-    private _ready: boolean;
-    private _disposed: boolean;
-
     constructor(communication: INitroCommunicationManager)
     {
-        this._events                    = new EventDispatcher();
+        super();
+
         this._communication             = communication;
         this._sessionDataManager        = null;
-        this._roomSession               = null;
+        this._roomSessionManager        = null;
         this._roomManager               = null;
         this._roomObjectEventHandler    = new RoomObjectEventHandler(this);
         this._roomMessageHandler        = new RoomMessageHandler(this);
         this._roomContentLoader         = new RoomContentLoader();
+        this._ready                     = false;
 
         this._activeRoomId              = -1;
         this._lastCanvasId              = -1;
@@ -183,48 +181,47 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         this._Str_3688                  = false;
         this._Str_8325                  = false;
         this._Str_13525                 = false;
-        this._Str_7206                  = null;
+        this._numberBank                = null;
         this._imageListeners            = new Map();
         this._cameraCentered            = false;
         this._badgeListeners            = new Map();
-
-        this._ready                   = false;
-        this._disposed                = false;
     }
 
-    public initialize(sessionData: ISessionDataManager, roomSession: IRoomSessionManager, roomManager: IRoomManager): void
+    public onInit(): void
     {
         if(this._ready) return;
 
-        this._Str_7206 = new NumberBank(1000);
-
-        this._sessionDataManager    = sessionData;
-        this._roomSession           = roomSession;
-        this._roomManager           = roomManager;
+        this._numberBank = new NumberBank(1000);
 
         this._logicFactory.registerEventFunction(this.processRoomObjectEvent.bind(this));
 
-        this._roomManager.setContentLoader(this._roomContentLoader);
-        this._roomManager.addUpdateCategory(RoomObjectCategory.FLOOR);
-        this._roomManager.addUpdateCategory(RoomObjectCategory.WALL);
-        this._roomManager.addUpdateCategory(RoomObjectCategory.UNIT);
-        this._roomManager.addUpdateCategory(RoomObjectCategory.CURSOR);
-        this._roomManager.addUpdateCategory(RoomObjectCategory.ROOM);
+        if(this._roomManager)
+        {
+            this._roomManager.setContentLoader(this._roomContentLoader);
+            this._roomManager.addUpdateCategory(RoomObjectCategory.FLOOR);
+            this._roomManager.addUpdateCategory(RoomObjectCategory.WALL);
+            this._roomManager.addUpdateCategory(RoomObjectCategory.UNIT);
+            this._roomManager.addUpdateCategory(RoomObjectCategory.CURSOR);
+            this._roomManager.addUpdateCategory(RoomObjectCategory.ROOM);
+        }
 
         this._roomMessageHandler.setConnection(this._communication.connection);
 
-        this._roomContentLoader.initialize(this._events);
+        this._roomContentLoader.initialize(this.events);
         this._roomContentLoader.setSessionDataManager(this._sessionDataManager);
 
-        this._roomSession.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-        this._roomSession.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+        if(this._roomSessionManager)
+        {
+            this._roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
+            this._roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+        }
 
         Nitro.instance.ticker.add(this.update, this);
     }
 
-    public dispose(): void
+    public onDispose(): void
     {
-        if(!this._ready || this._disposed) return;
+        if(!this._ready) return;
 
         Nitro.instance.ticker.remove(this.update, this);
 
@@ -232,10 +229,11 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(this._roomMessageHandler) this._roomMessageHandler.dispose();
         
-        this._roomSession.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-        this._roomSession.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
-
-        this._disposed = true;
+        if(this._roomSessionManager)
+        {
+            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
+            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+        }
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -290,7 +288,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             existing.dispose();
         }
 
-        this._events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.DISPOSED, roomId));
+        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.DISPOSED, roomId));
     }
 
     public createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance
@@ -349,14 +347,14 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
         if(!instance) return;
 
-        this._events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
+        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
 
         return instance;
     }
 
     private setupRoomInstance(roomId: number, roomMap: RoomMapData, floorType: string, wallType: string, landscapeType: string, worldType: string): IRoomInstance
     {
-        if(!this._ready) return;
+        if(!this._ready || !this._roomManager) return;
 
         const instance = this._roomManager.createRoomInstance(this.getRoomId(roomId));
 
@@ -712,7 +710,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public update(time: number): void
     {
-        if(!this._roomManager || document.hidden) return;
+        if(!this._roomManager) return;
 
         RoomEnterEffect._Str_23419();
 
@@ -807,7 +805,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 }
             }
 
-            if(furnitureAdded && this._Str_3688)
+            if(furnitureAdded && this._Str_3688 && this._roomManager)
             {
                 const roomInstance = this._roomManager.getRoomInstance(this.getRoomId(instanceData.roomId)) as RoomInstance;
 
@@ -946,7 +944,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public setRoomSessionOwnUser(roomId: number, objectId: number): void
     {
-        const session = this._roomSession.getSession(roomId);
+        if(!this._roomSessionManager) return;
+
+        const session = this._roomSessionManager.getSession(roomId);
 
         if(session)
         {
@@ -1940,7 +1940,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
                 object.processUpdateMessage(new ObjectDataUpdateMessage(object.state, data));
             }
 
-            if(this._events) this._events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.CONTENT_UPDATED, id, objectId, category));
+            this.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.CONTENT_UPDATED, id, objectId, category));
         }
 
         if(roomId !== RoomEngine.TEMPORARY_ROOM) this._Str_21543(id, object);
@@ -1948,6 +1948,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public loadRoomObjectBadgeImage(roomId: number, objectId: number, objectCategory: number, badgeId: string, groupBadge: boolean = true): void
     {
+        if(!this._sessionDataManager) return;
+
         const roomObject = this.getRoomObjectFloor(roomId, objectId);
 
         if(!roomObject || !roomObject.logic) return;
@@ -1983,6 +1985,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private onBadgeImageReadyEvent(k: BadgeImageReadyEvent): void
     {
+        if(!this._sessionDataManager) return;
+
         const listeners = this._badgeListeners && this._badgeListeners.get(k.badgeId);
 
         if(!listeners) return;
@@ -2008,7 +2012,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private putBadgeInObjectAssets(object: IRoomObjectController, badgeId: string, groupBadge: boolean = false): void
     {
-        if(!this._roomContentLoader) return;
+        if(!this._roomContentLoader || !this._sessionDataManager) return;
 
         const badgeName = (groupBadge) ? this._sessionDataManager.loadGroupBadgeImage(badgeId) : this._sessionDataManager.loadBadgeImage(badgeId);
         const badgeImage    = (groupBadge) ? this._sessionDataManager.getGroupBadgeImage(badgeId) : this._sessionDataManager.getBadgeImage(badgeId);
@@ -2180,7 +2184,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private setMouseButton(roomId: number, category: number, objectId: number): void
     {
-        const session = this._roomSession.getSession(roomId);
+        if(!this._roomSessionManager) return;
+
+        const session = this._roomSessionManager.getSession(roomId);
 
         if(!session) return;
 
@@ -2197,7 +2203,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     private setMouseDefault(roomId: number, category: number, objectId: number): void
     {
-        const session = this._roomSession.getSession(roomId);
+        if(!this._roomSessionManager) return;
+
+        const session = this._roomSessionManager.getSession(roomId);
 
         if(!session) return;
 
@@ -2356,6 +2364,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public getRoomObjectImage(k: number, _arg_2: number, category: number, _arg_4: IVector3D, _arg_5: number, _arg_6: IGetImageListener, _arg_7: number = 0): ImageResult
     {
+        if(!this._roomManager) return null;
+
         let extras: string      = null;
         let objectId: string    = null;
         let color: string       = '';
@@ -2425,6 +2435,8 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public getGenericRoomObjectImage(type: string, value: string, direction: IVector3D, scale: number, _arg_5: IGetImageListener, _arg_6: number = 0, extras: string = null, objectData: IObjectData = null, state: number = -1, frameCount: number = -1, _arg_11: string = null, _arg_12: number = -1): ImageResult
     {
+        if(!this._roomManager) return null;
+        
         const imageResult = new ImageResult();
 
         imageResult.id = -1;
@@ -2440,7 +2452,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
             if(!roomInstance) return imageResult;
         }
 
-        let objectId        = this._Str_7206._Str_19709();
+        let objectId        = this._numberBank._Str_19709();
         let objectCategory  = this.getRoomObjectCategoryForType(type);
 
         if(objectId < 0) return imageResult;
@@ -2523,7 +2535,7 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         {
             roomInstance.removeRoomObject(objectId, objectCategory);
 
-            this._Str_7206._Str_15187((objectId - 1));
+            this._numberBank._Str_15187((objectId - 1));
 
             imageResult.id = 0;
         }
@@ -2639,11 +2651,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public _Str_17652(k: string): void
     {
-        if(!this._events) return;
-
         const roomId = this.getRoomIdFromString(k);
 
-        this._events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.OBJECTS_INITIALIZED, roomId));
+        this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.OBJECTS_INITIALIZED, roomId));
     }
 
     public getRoomId(id: number): string
@@ -2708,24 +2718,39 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return (this._roomContentLoader.getCollection(name) !== null);
     }
 
-    public get events(): IEventDispatcher
-    {
-        return this._events;
-    }
-
     public get connection(): IConnection
     {
         return this._communication.connection;
     }
 
-    public get sessionData(): ISessionDataManager
+    public get sessionDataManager(): ISessionDataManager
     {
         return this._sessionDataManager;
     }
 
-    public get roomSession(): IRoomSessionManager
+    public set sessionDataManager(manager: ISessionDataManager)
     {
-        return this._roomSession;
+        this._sessionDataManager = manager;
+    }
+
+    public get roomSessionManager(): IRoomSessionManager
+    {
+        return this._roomSessionManager;
+    }
+
+    public set roomSessionManager(manager: IRoomSessionManager)
+    {
+        this._roomSessionManager = manager;
+    }
+
+    public get roomManager(): IRoomManager
+    {
+        return this._roomManager;
+    }
+
+    public set roomManager(manager: IRoomManager)
+    {
+        this._roomManager = manager;
     }
 
     public get objectEventHandler(): RoomObjectEventHandler
@@ -2758,11 +2783,6 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
         return this._ready;
     }
 
-    public get disposed(): boolean
-    {
-        return this._disposed;
-    }
-
     public get _Str_6374(): boolean
     {
         return this._Str_3688;
@@ -2775,9 +2795,9 @@ export class RoomEngine implements IRoomEngine, IRoomCreator, IRoomEngineService
 
     public get isDecorating(): boolean
     {
-        if(!this._roomSession) return false;
+        if(!this._roomSessionManager) return false;
 
-        const session = this._roomSession.getSession(this._activeRoomId);
+        const session = this._roomSessionManager.getSession(this._activeRoomId);
 
         return (session && session.isDecorating) || false;
     }

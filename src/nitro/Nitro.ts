@@ -1,4 +1,3 @@
-
 import { NitroLogger } from '../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
@@ -34,6 +33,7 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 export class Nitro extends PIXI.Application implements INitro
 {
     public static READY: string = 'NE_READY';
+    public static CONFIGURATION = NitroConfiguration;
 
     private static INSTANCE: INitro = null;
 
@@ -43,8 +43,8 @@ export class Nitro extends PIXI.Application implements INitro
     private _avatar: IAvatarRenderManager;
     private _windowManager: INitroWindowManager;
     private _roomEngine: IRoomEngine;
-    private _session: ISessionDataManager;
-    private _roomSession: IRoomSessionManager;
+    private _sessionDataManager: ISessionDataManager;
+    private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
     private _roomUI: RoomUI;
     private _catalog: INitroCatalog;
@@ -77,19 +77,19 @@ export class Nitro extends PIXI.Application implements INitro
 
         if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
 
-        this._core          = core;
-        this._events        = new EventDispatcher();
-        this._communication = new NitroCommunicationManager(core.communication);
-        this._avatar        = new AvatarRenderManager();
-        this._windowManager = new NitroWindowManager();
-        this._roomEngine    = new RoomEngine(this._communication);
-        this._session       = new SessionDataManager(this._communication);
-        this._roomSession   = new RoomSessionManager(this._communication, this._roomEngine);
-        this._roomManager   = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
-        this._roomUI        = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._roomSession);
-        this._catalog       = new NitroCatalog(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._roomSession);
-        this._inventory     = new NitroInventory(this._communication, this._windowManager, this._roomEngine, this._avatar, this._session, this._catalog);
-        this._navigator     = new NitroNavigator(this._communication, this._session, this._roomSession);
+        this._core                  = core;
+        this._events                = new EventDispatcher();
+        this._communication         = new NitroCommunicationManager(core.communication);
+        this._avatar                = new AvatarRenderManager();
+        this._windowManager         = new NitroWindowManager();
+        this._roomEngine            = new RoomEngine(this._communication);
+        this._sessionDataManager    = new SessionDataManager(this._communication);
+        this._roomSessionManager    = new RoomSessionManager(this._communication, this._roomEngine);
+        this._roomManager           = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
+        this._roomUI                = new RoomUI(this._communication, this._windowManager, this._roomEngine, this._avatar, this._sessionDataManager, this._roomSessionManager);
+        this._catalog               = new NitroCatalog(this._communication, this._windowManager, this._roomEngine, this._avatar, this._sessionDataManager, this._roomSessionManager);
+        this._inventory             = new NitroInventory(this._communication, this._windowManager, this._roomEngine, this._avatar, this._sessionDataManager, this._catalog);
+        this._navigator             = new NitroNavigator(this._communication, this._sessionDataManager, this._roomSessionManager);
 
         this._isReady       = false;
         this._isDisposed    = false;
@@ -144,16 +144,20 @@ export class Nitro extends PIXI.Application implements INitro
 
         if(this._roomEngine)
         {
-            this._roomEngine.initialize(this._session, this._roomSession, this._roomManager);
+            this._roomEngine.sessionDataManager = this._sessionDataManager;
+            this._roomEngine.roomSessionManager = this._roomSessionManager;
+            this._roomEngine.roomManager        = this._roomManager;
 
-            if(this._session) this._session.init();
+            this._roomEngine.init();
+
+            if(this._sessionDataManager) this._sessionDataManager.init();
             if(this._roomManager) this._roomManager.init();
-            if(this._roomSession) this._roomSession.init();
+            if(this._roomSessionManager) this._roomSessionManager.init();
         }
 
         if(!this._communication.connection)
         {
-            NitroLogger.log('No connetion found');
+            NitroLogger.log('No connection found');
         }
 
         if(this._events) this._events.dispatchEvent(new NitroEvent(Nitro.READY));
@@ -200,18 +204,18 @@ export class Nitro extends PIXI.Application implements INitro
             this._roomManager = null;
         }
         
-        if(this._roomSession)
+        if(this._roomSessionManager)
         {
-            this._roomSession.dispose();
+            this._roomSessionManager.dispose();
 
-            this._roomSession = null;
+            this._roomSessionManager = null;
         }
 
-        if(this._session)
+        if(this._sessionDataManager)
         {
-            this._session.dispose();
+            this._sessionDataManager.dispose();
 
-            this._session = null;
+            this._sessionDataManager = null;
         }
 
         if(this._roomEngine)
@@ -293,14 +297,14 @@ export class Nitro extends PIXI.Application implements INitro
         return this._roomEngine;
     }
 
-    public get session(): ISessionDataManager
+    public get sessionDataManager(): ISessionDataManager
     {
-        return this._session;
+        return this._sessionDataManager;
     }
 
-    public get roomSession(): IRoomSessionManager
+    public get roomSessionManager(): IRoomSessionManager
     {
-        return this._roomSession;
+        return this._roomSessionManager;
     }
 
     public get roomManager(): IRoomManager

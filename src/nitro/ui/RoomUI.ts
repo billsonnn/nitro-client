@@ -3,7 +3,6 @@ import { NitroManager } from '../../core/common/NitroManager';
 import { IAvatarRenderManager } from '../avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { Nitro } from '../Nitro';
-import { RoomEngineDimmerStateEvent } from '../room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../room/events/RoomEngineTriggerWidgetEvent';
@@ -206,8 +205,6 @@ export class RoomUI extends NitroManager implements IRoomUI, IUpdateReceiver
                 const zoomEvent = (event as RoomZoomEvent);
 
                 this._roomEngine.setRoomRenderingCanvasScale(this._roomEngine.activeRoomId, this._Str_17538(this._roomEngine.activeRoomId), ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1))));
-            case RoomEngineDimmerStateEvent.ROOM_COLOR:
-                desktop.processEvent(event);
                 return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
                 const colorEvent = event as RoomObjectHSLColorEnabledEvent;
