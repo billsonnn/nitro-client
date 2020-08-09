@@ -1,0 +1,11 @@
+{
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.preferences.quoteStyle": "single",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+    },
+    "emmet.showExpandedAbbreviation": "never",
+    "git.ignoreLimitWarning": true
+}
