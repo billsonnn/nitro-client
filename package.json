@@ -1,45 +1,38 @@
 {
-  "name": "nitro-html5-client",
-  "version": "0.0.1",
-  "description": "Nitro HTML5",
-  "main": "index.js",
+  "name": "nitro-client",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "hmr": "ng serve --configuration hmr"
+  },
+  "private": true,
   "dependencies": {
-    "@pixi/canvas-renderer": "^5.3.0",
+    "@angular/animations": "~10.0.4",
+    "@angular/common": "~10.0.4",
+    "@angular/compiler": "~10.0.4",
+    "@angular/core": "~10.0.4",
+    "@angular/forms": "~10.0.4",
+    "@angular/platform-browser": "~10.0.4",
+    "@angular/platform-browser-dynamic": "~10.0.4",
+    "@angular/router": "~10.0.4",
     "bytebuffer": "^5.0.1",
-    "mustache": "^4.0.1",
     "pixi.js-legacy": "^5.3.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "xml2js": "^0.4.23"
+    "rxjs": "~6.5.5",
+    "stream": "0.0.2",
+    "timers": "^0.1.1",
+    "tslib": "^2.0.0",
+    "xml2js": "^0.4.23",
+    "zone.js": "~0.10.3"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.1000.3",
+    "@angular/cli": "~10.0.3",
+    "@angular/compiler-cli": "~10.0.4",
     "@types/bytebuffer": "^5.0.41",
-    "@types/mustache": "^4.0.1",
-    "@types/react": "^16.9.41",
-    "@types/react-dom": "^16.9.8",
-    "@types/xml2js": "^0.4.5",
-    "css-loader": "^3.6.0",
-    "dts-bundle-generator": "^5.1.0",
-    "file-loader": "^6.0.0",
-    "node-sass": "^4.14.1",
-    "react-hot-loader": "^4.12.21",
-    "sass-loader": "^9.0.1",
-    "source-map-loader": "^1.0.1",
-    "style-loader": "^1.2.1",
-    "ts-loader": "^7.0.5",
-    "typescript": "^3.9.5",
-    "url-loader": "^4.1.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-obfuscator": "^1.7.0"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "start:dev": "webpack-dev-server --hot",
-    "build": "webpack -p"
-  },
-  "author": "Billsonnn",
-  "license": "ISC",
-  "keywords": []
+    "@types/node": "^12.11.1",
+    "ts-node": "~8.3.0",
+    "typescript": "~3.9.5"
+  }
 }
