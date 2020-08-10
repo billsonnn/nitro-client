@@ -7,10 +7,10 @@ import { NavigatorCategoriesEvent } from './messages/incoming/navigator/Navigato
 import { NavigatorCollapsedEvent } from './messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
 import { NavigatorLiftedEvent } from './messages/incoming/navigator/NavigatorLiftedEvent';
+import { NavigatorMetadataEvent } from './messages/incoming/navigator/NavigatorMetadataEvent';
 import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
+import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
-import { NavigatorTabsEvent } from './messages/incoming/navigator/NavigatorTabsEvent';
-import { NavigatorSearchEvent } from './messages/incoming/navigator/search/NavigatorSearchEvent';
 import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
@@ -147,7 +147,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NAVIGATOR_SEARCH, NavigatorSearchEvent);
         this._events.set(IncomingHeader.NAVIGATOR_SEARCHES, NavigatorSearchesEvent);
         this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsEvent);
-        this._events.set(IncomingHeader.NAVIGATOR_TABS, NavigatorTabsEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_METADATA, NavigatorMetadataEvent);
 
         // ROOM
 

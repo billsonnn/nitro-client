@@ -79,7 +79,7 @@ export class IncomingHeader
     public static NAVIGATOR_SEARCH             = 2690;
     public static NAVIGATOR_SEARCHES           = 3984;
     public static NAVIGATOR_SETTINGS           = 518;
-    public static NAVIGATOR_TABS               = 3052;
+    public static NAVIGATOR_METADATA           = 3052;
     public static NOTIFICATION_LIST            = 1992;
     public static PET_FIGURE_UPDATE            = 1924;
     public static PET_INFO                     = 2901;

@@ -1,6 +1,6 @@
-import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
-import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { NavigatorSearchResultSet } from './NavigatorSearchResultSet';
+import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
+import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
+import { NavigatorSearchResultSet } from './utils/NavigatorSearchResultSet';
 
 export class NavigatorSearchParser implements IMessageParser
 {
