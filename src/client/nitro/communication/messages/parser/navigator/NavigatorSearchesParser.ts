@@ -1,7 +1,7 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
 
-export class NavigatorSearchParser implements IMessageParser
+export class NavigatorSearchesParser implements IMessageParser
 {
     public flush(): boolean
     {

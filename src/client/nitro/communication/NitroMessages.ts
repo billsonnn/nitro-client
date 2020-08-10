@@ -4,8 +4,13 @@ import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { NavigatorCategoriesEvent } from './messages/incoming/navigator/NavigatorCategoriesEvent';
-import { NavigatorMetadataEvent } from './messages/incoming/navigator/NavigatorMetadataEvent';
-import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
+import { NavigatorCollapsedEvent } from './messages/incoming/navigator/NavigatorCollapsedEvent';
+import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
+import { NavigatorLiftedEvent } from './messages/incoming/navigator/NavigatorLiftedEvent';
+import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
+import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
+import { NavigatorTabsEvent } from './messages/incoming/navigator/NavigatorTabsEvent';
+import { NavigatorSearchEvent } from './messages/incoming/navigator/search/NavigatorSearchEvent';
 import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
@@ -64,6 +69,14 @@ import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscr
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
+import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
+import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
+import { NavigatorSearchCloseComposer } from './messages/outgoing/navigator/NavigatorSearchCloseComposer';
+import { NavigatorSearchComposer } from './messages/outgoing/navigator/NavigatorSearchComposer';
+import { NavigatorSearchOpenComposer } from './messages/outgoing/navigator/NavigatorSearchOpenComposer';
+import { NavigatorSearchSaveComposer } from './messages/outgoing/navigator/NavigatorSearchSaveComposer';
+import { NavigatorSettingsComposer } from './messages/outgoing/navigator/NavigatorSettingsComposer';
+import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
@@ -128,8 +141,13 @@ export class NitroMessages implements IMessageConfiguration
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);
-        this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorMetadataEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_COLLAPSED, NavigatorCollapsedEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_EVENT_CATEGORIES, NavigatorEventCategoriesEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_LIFTED, NavigatorLiftedEvent);
         this._events.set(IncomingHeader.NAVIGATOR_SEARCH, NavigatorSearchEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_SEARCHES, NavigatorSearchesEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_TABS, NavigatorTabsEvent);
 
         // ROOM
 
@@ -233,6 +251,16 @@ export class NitroMessages implements IMessageConfiguration
 
         // DESKTOP
         this._composers.set(OutgoingHeader.DESKTOP_VIEW, DesktopViewComposer);
+
+        // NAVIGATOR
+        this._composers.set(OutgoingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_INIT, NavigatorInitComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SEARCH_CLOSE, NavigatorSearchCloseComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SEARCH, NavigatorSearchComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SEARCH_OPEN, NavigatorSearchOpenComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SEARCH_SAVE, NavigatorSearchSaveComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS_SAVE, NavigatorSettingsSaveComposer);
 
         // ROOM
 

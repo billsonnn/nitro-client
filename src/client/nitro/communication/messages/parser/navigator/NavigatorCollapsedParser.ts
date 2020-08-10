@@ -1,10 +1,9 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../core/communication/messages/IMessageParser';
-import { NavigatorCategoryDataParser } from './NavigatorCategoryDataParser';
 
-export class NavigatorCategoriesParser implements IMessageParser
+export class NavigatorCollapsedParser implements IMessageParser
 {
-    private _categories: NavigatorCategoryDataParser[];
+    private _categories: string[];
 
     public flush(): boolean
     {
@@ -21,7 +20,7 @@ export class NavigatorCategoriesParser implements IMessageParser
 
         while(totalCategories > 0)
         {
-            this._categories.push(new NavigatorCategoryDataParser(wrapper));
+            this._categories.push(wrapper.readString());
 
             totalCategories--;
         }
@@ -29,7 +28,7 @@ export class NavigatorCategoriesParser implements IMessageParser
         return true;
     }
 
-    public get categories(): NavigatorCategoryDataParser[]
+    public get categories(): string[]
     {
         return this._categories;
     }

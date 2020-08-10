@@ -80,7 +80,6 @@ export class OutgoingHeader
     public static MOD_TOOL_USER_INFO             = 3295;
     public static NAVIGATOR_CATEGORIES           = 3027;
     public static NAVIGATOR_INIT                 = 2110;
-    public static NAVIGATOR_PROMOTED_ROOMS       = 2908;
     public static NAVIGATOR_SEARCH               = 249;
     public static NAVIGATOR_SEARCH_CLOSE         = 1834;
     public static NAVIGATOR_SEARCH_OPEN          = 637;
