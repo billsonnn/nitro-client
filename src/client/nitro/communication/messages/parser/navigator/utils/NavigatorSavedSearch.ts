@@ -33,6 +33,8 @@ export class NavigatorSavedSearch
         this._code          = wrapper.readString();
         this._filter        = wrapper.readString();
         this._localization  = wrapper.readString();
+
+        return true;
     }
 
     public get id(): number

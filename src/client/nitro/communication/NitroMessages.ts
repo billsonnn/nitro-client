@@ -1,5 +1,15 @@
 import { IMessageConfiguration } from '../../core/communication/messages/IMessageConfiguration';
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
+import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
+import { CatalogModeEvent } from './messages/incoming/catalog/CatalogModeEvent';
+import { CatalogPageEvent } from './messages/incoming/catalog/CatalogPageEvent';
+import { CatalogPagesEvent } from './messages/incoming/catalog/CatalogPagesEvent';
+import { CatalogPurchaseEvent } from './messages/incoming/catalog/CatalogPurchaseEvent';
+import { CatalogPurchaseFailedEvent } from './messages/incoming/catalog/CatalogPurchaseFailedEvent';
+import { CatalogPurchaseUnavailableEvent } from './messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogSearchEvent } from './messages/incoming/catalog/CatalogSearchEvent';
+import { CatalogSoldOutEvent } from './messages/incoming/catalog/CatalogSoldOutEvent';
+import { CatalogUpdatedEvent } from './messages/incoming/catalog/CatalogUpdatedEvent';
 import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
@@ -66,6 +76,10 @@ import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
+import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
+import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
@@ -132,6 +146,18 @@ export class NitroMessages implements IMessageConfiguration
     {
         // AVAILABILITY
         this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
+
+        // CATALOG
+        this._events.set(IncomingHeader.CATALOG_CLUB, CatalogClubEvent);
+        this._events.set(IncomingHeader.CATALOG_MODE, CatalogModeEvent);
+        this._events.set(IncomingHeader.CATALOG_PAGE, CatalogPageEvent);
+        this._events.set(IncomingHeader.CATALOG_PAGES, CatalogPagesEvent);
+        this._events.set(IncomingHeader.CATALOG_PURCHASE, CatalogPurchaseEvent);
+        this._events.set(IncomingHeader.CATALOG_PURCHASE_FAILED, CatalogPurchaseFailedEvent);
+        this._events.set(IncomingHeader.CATALOG_PURCHASE_UNAVAILABLE, CatalogPurchaseUnavailableEvent);
+        this._events.set(IncomingHeader.CATALOG_SEARCH, CatalogSearchEvent);
+        this._events.set(IncomingHeader.CATALOG_SOLD_OUT, CatalogSoldOutEvent);
+        this._events.set(IncomingHeader.CATALOG_UPDATED, CatalogUpdatedEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
@@ -245,6 +271,12 @@ export class NitroMessages implements IMessageConfiguration
 
     private registerComposers(): void
     {
+        // CATALOG
+        this._composers.set(OutgoingHeader.CATALOG_MODE, CatalogModeComposer);
+        this._composers.set(OutgoingHeader.CATALOG_PAGE, CatalogPageComposer);
+        this._composers.set(OutgoingHeader.CATALOG_PURCHASE, CatalogPurchaseComposer);
+        this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
+
         // CLIENT
         this._composers.set(OutgoingHeader.CLIENT_PONG, ClientPongComposer);
         this._composers.set(OutgoingHeader.RELEASE_VERSION, ClientReleaseVersionComposer);
