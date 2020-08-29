@@ -276,4 +276,9 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 
         return logic;
     }
+
+    public get events(): IEventDispatcher
+    {
+        return this._events;
+    }
 }

@@ -6,10 +6,9 @@ import { IRoomObjectGraphicVisualization } from './visualization/IRoomObjectGrap
 
 export interface IRoomObjectController extends IRoomObject
 {
-    setLocation(vector: IVector3D, real?: boolean): void;
+    setLocation(vector: IVector3D): void;
     setDirection(vector: IVector3D): void;
-    setTempLocation(vector: IVector3D, silent?: boolean): void;
-    setState(state: number, silent?: boolean): void;
+    setState(state: number): boolean;
     setVisualization(visualization: IRoomObjectGraphicVisualization): void;
     setLogic(logic: IRoomObjectEventHandler): void;
     processUpdateMessage(message: RoomObjectUpdateMessage): void;

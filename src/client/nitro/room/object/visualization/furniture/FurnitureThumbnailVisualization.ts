@@ -1,5 +1,5 @@
 import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
-import { Nitro } from '../../../../Nitro';
+import { TextureUtils } from '../../../../../room/utils/TextureUtils';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 
 export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualization
@@ -127,7 +127,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
 
         sprite.transform.setFromMatrix(matrix);
 
-        return Nitro.instance.renderer.generateTexture(sprite, 1, 1, new PIXI.Rectangle(0, 0, asset.width, asset.height));
+        return TextureUtils.generateTexture(sprite, new PIXI.Rectangle(0, 0, asset.width, asset.height));
     }
 
     protected getSpriteAssetName(scale: number, layerId: number): string

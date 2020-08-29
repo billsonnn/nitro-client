@@ -12,14 +12,14 @@
         z-index: 3;
         position: absolute;
         visibility: hidden;
-        transform: scale(0) matrix(0.8, 0, .3, 1, 1, 1);
-        transition: all 0.22s ease-in-out;
+        //transform: scale(0) matrix(0.8, 0, .3, 1, 1, 1);
+        //transition: all 0.22s ease-in-out;
         bottom: -175px;
         left: -75px;
 
         &.active {
             visibility: visible;
-            transform: scale(1) matrix(1, 0, 0, 1, 0, 0);
+            //transform: scale(1) matrix(1, 0, 0, 1, 0, 0);
             bottom: 25px;
             left: -155px;
 

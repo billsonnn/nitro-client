@@ -469,7 +469,21 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof FurnitureFloorRemoveEvent) || !event.connection || !this._roomCreator) return;
 
-        this._roomCreator.removeRoomObjectFloor(this._currentRoomId, event.getParser().itemId);
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(parser.delay > 0)
+        {
+            setTimeout(() =>
+            {
+                this._roomCreator.removeRoomObjectFloor(this._currentRoomId, parser.itemId, (parser.isExpired) ? -1 : parser.userId, true);
+            }, parser.delay)
+        }
+        else
+        {
+            this._roomCreator.removeRoomObjectFloor(this._currentRoomId, parser.itemId, (parser.isExpired) ? -1 : parser.userId, true);
+        }
     }
 
     private onFurnitureFloorUpdateEvent(event: FurnitureFloorUpdateEvent): void
@@ -525,7 +539,11 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof FurnitureWallRemoveEvent) || !event.connection || !this._roomCreator) return;
 
-        this._roomCreator.removeRoomObjectWall(this._currentRoomId, event.getParser().itemId);
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._roomCreator.removeRoomObjectWall(this._currentRoomId, parser.itemId, parser.userId);
     }
 
     private onFurnitureWallUpdateEvent(event: FurnitureWallUpdateEvent): void

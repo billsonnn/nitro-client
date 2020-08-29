@@ -7,7 +7,7 @@ export class CatalogPageData
     private _pageId: number;
     private _pageName: string;
     private _localization: string;
-    private _childern: CatalogPageData[];
+    private _children: CatalogPageData[];
     private _offerIds: number[];
 
     constructor(wrapper: IMessageDataWrapper)
@@ -25,7 +25,7 @@ export class CatalogPageData
         this._pageId        = -1;
         this._pageName      = null;
         this._localization  = null;
-        this._childern      = [];
+        this._children      = [];
         this._offerIds      = [];
 
         return true;
@@ -54,7 +54,7 @@ export class CatalogPageData
 
         while(totalChildren > 0)
         {
-            this._childern.push(new CatalogPageData(wrapper));
+            this._children.push(new CatalogPageData(wrapper));
 
             totalChildren--;
         }
@@ -79,7 +79,7 @@ export class CatalogPageData
 
     public get pageName(): string
     {
-        return this.pageName;
+        return this._pageName;
     }
 
     public get localization(): string
@@ -89,7 +89,7 @@ export class CatalogPageData
 
     public get children(): CatalogPageData[]
     {
-        return this._childern;
+        return this._children;
     }
 
     public get offerIds(): number[]

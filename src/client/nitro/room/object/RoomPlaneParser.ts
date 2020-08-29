@@ -23,9 +23,9 @@ export class RoomPlaneParser
     private _minY: number = 0;
     private _maxY: number = 0;
     private _planes: RoomPlaneData[];
-    private _wallHeight: number = 0;
-    private _wallThicknessMultiplier: number = 1;
-    private _floorThicknessMultiplier: number = 1;
+    private _wallHeight: number;
+    private _wallThicknessMultiplier: number;
+    private _floorThicknessMultiplier: number;
     private _fixedWallHeight: number = -1;
     private _floorHeight: number = 0;
     private _floorHoles: Map<number, RoomFloorHole>;

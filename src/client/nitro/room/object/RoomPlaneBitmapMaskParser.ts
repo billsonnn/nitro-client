@@ -65,6 +65,7 @@ export class RoomPlaneBitmapMaskParser
     {
         const mask = new RoomPlaneBitmapMaskData(_arg_2, _arg_3, _arg_4);
 
+        this._masks.delete(k);
         this._masks.set(k, mask);
     }
 
@@ -92,20 +93,24 @@ export class RoomPlaneBitmapMaskParser
         {
             if(!mask) continue;
 
-            const _local_3  = this._Str_21678(mask);
-            const _local_4  = this._Str_21644(mask);
-            const _local_6  = this._Str_19038(mask);
+            const type      = this._Str_21678(mask);
+            const category  = this._Str_21644(mask);
+            const location  = this._Str_19038(mask);
 
-            const newMask: any = {
-                id: key,
-                type: _local_3,
-                category: _local_4,
-                locations: []
-            };
-
-            if(_local_6)
+            if(type && category && location)
             {
-                newMask.locations.push({ x: _local_6.x, y: _local_6.y, z: _local_6.z });
+                const newMask: any = {
+                    id: key,
+                    type: type,
+                    category: category,
+                    locations: [
+                        {
+                            x: location.x,
+                            y: location.y,
+                            z: location.z
+                        }
+                    ]
+                };
 
                 data.masks.push(newMask);
             }

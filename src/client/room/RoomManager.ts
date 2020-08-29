@@ -254,7 +254,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
                             object.isReady = true;
 
-                            if(this._listener) this._listener.refreshRoomObjectFurnitureData(room.id, object.id, category);
+                            if(this._listener) this._listener.objectInitialized(room.id, object.id, category);
                         }
                     }
                     else
@@ -326,12 +326,19 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
             if(!collection)
             {
+                if(this._listener)
+                {
+                    this._listener.initalizeTemporaryObjectsByType(type, false);
+                }
+
                 NitroLogger.log(`Invalid Collection: ${ type }`);
 
                 continue;
             }
 
             this.reinitializeRoomObjectsByType(type);
+
+            if(this._listener) this._listener.initalizeTemporaryObjectsByType(type, true);
 
             if(this._initialLoadList.length > 0) this.removeFromInitialLoad(type);
         }

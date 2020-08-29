@@ -1,7 +1,5 @@
-import { NitroLogger } from '../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
-import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
 import { NitroConfiguration } from '../NitroConfiguration';
@@ -9,13 +7,9 @@ import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
-import { INitroCatalog } from './catalog/INitroCatalog';
-import { NitroCatalog } from './catalog/NitroCatalog';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
 import { INitro } from './INitro';
-import { INitroInventory } from './inventory/INitroInventory';
-import { NitroInventory } from './inventory/NitroInventory';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { NitroNavigator } from './navigator/NitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
@@ -42,8 +36,6 @@ export class Nitro extends PIXI.Application implements INitro
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
-    private _catalog: INitroCatalog;
-    private _inventory: INitroInventory;
     private _navigator: INitroNavigator;
 
     private _isReady: boolean;
@@ -80,8 +72,6 @@ export class Nitro extends PIXI.Application implements INitro
         this._sessionDataManager    = new SessionDataManager(this._communication);
         this._roomSessionManager    = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager           = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
-        this._catalog               = new NitroCatalog(this._communication, this._roomEngine, this._avatar, this._sessionDataManager, this._roomSessionManager);
-        this._inventory             = new NitroInventory(this._communication, this._roomEngine, this._avatar, this._sessionDataManager, this._catalog);
         this._navigator             = new NitroNavigator(this._communication, this._sessionDataManager, this._roomSessionManager);
 
         this._isReady       = false;
@@ -131,8 +121,6 @@ export class Nitro extends PIXI.Application implements INitro
 
         //if(this._communication) this._communication.init();
         if(this._avatar)        this._avatar.init();
-        if(this._catalog)       this._catalog.init();
-        if(this._inventory)     this._inventory.init();
         if(this._navigator)     this._navigator.init();
 
         if(this._roomEngine)
@@ -150,10 +138,8 @@ export class Nitro extends PIXI.Application implements INitro
 
         if(!this._communication.connection)
         {
-            NitroLogger.log('No connection found');
+            throw new Error('No connection found');
         }
-
-        if(this._events) this._events.dispatchEvent(new NitroEvent(Nitro.READY));
 
         this._isReady = true;
     }
@@ -167,20 +153,6 @@ export class Nitro extends PIXI.Application implements INitro
             this._navigator.dispose();
 
             this._navigator = null;
-        }
-
-        if(this._inventory)
-        {
-            this._inventory.dispose();
-
-            this._inventory = null;
-        }
-
-        if(this._catalog)
-        {
-            this._catalog.dispose();
-
-            this._catalog = null;
         }
 
         if(this._roomManager)
@@ -284,16 +256,6 @@ export class Nitro extends PIXI.Application implements INitro
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
-    }
-
-    public get catalog(): INitroCatalog
-    {
-        return this._catalog;
-    }
-
-    public get inventory(): INitroInventory
-    {
-        return this._inventory;
     }
 
     public get navigator(): INitroNavigator

@@ -16,8 +16,6 @@ export interface IRoomObject extends IDisposable
     mouseHandler: IRoomObjectMouseHandler;
     location: IVector3D;
     direction: IVector3D;
-    tempLocation: IVector3D;
-    realLocation: IVector3D;
     state: number;
     updateCounter: number;
     isReady: boolean;

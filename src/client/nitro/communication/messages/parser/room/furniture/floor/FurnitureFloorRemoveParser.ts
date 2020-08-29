@@ -10,10 +10,10 @@ export class FurnitureFloorRemoveParser implements IMessageParser
 
     public flush(): boolean
     {
-        this._itemId            = 0;
-        this._isExpired    = true;
-        this._userId            = 0;
-        this._delay           = 0;
+        this._itemId    = 0;
+        this._isExpired = true;
+        this._userId    = 0;
+        this._delay     = 0;
 
         return true;
     }

@@ -20,6 +20,10 @@
                     justify-content: center;
                     cursor: pointer;
 
+                    .icon {
+                        position: relative;
+                    }
+
                     &:active {
                         -webkit-transform: translate(0, 1px);
                         transform: translate(0, 1px);
@@ -39,4 +43,15 @@
             }
         }
     }
+}
+
+.toolbar-icon-animation {
+    position: absolute;
+    object-fit: cover;
+    height: auto;
+    width: auto;
+    max-width: 120px;
+    max-height: 150px;
+    z-index: 500;
+    filter: drop-shadow(2px 1px 0 rgba($white, 1)) drop-shadow(-2px 1px 0 rgba($white, 1)) drop-shadow(0 -2px 0 rgba($white, 1));
 }

@@ -2,8 +2,8 @@
 import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
-import { Nitro } from '../../../../../../Nitro';
 import { PlaneVisualizationAnimationLayer } from '../animated/PlaneVisualizationAnimationLayer';
 import { PlaneMaterial } from './PlaneMaterial';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
@@ -157,7 +157,7 @@ export class PlaneVisualization
                 {
                     if(canvas)
                     {
-                        const texture = Nitro.instance.renderer.generateTexture(this._cachedBitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
+                        const texture = TextureUtils.generateTexture(this._cachedBitmapData, new PIXI.Rectangle(0, 0, width, height));
 
                         if(texture)
                         {
@@ -224,7 +224,7 @@ export class PlaneVisualization
 
         if(canvas && (canvas !== this._cachedBitmapData))
         {
-            const texture = Nitro.instance.renderer.generateTexture(canvas, 1, 1, new PIXI.Rectangle(0, 0, canvas.width, canvas.height));
+            const texture = TextureUtils.generateTexture(canvas, new PIXI.Rectangle(0, 0, canvas.width, canvas.height));
 
             this._cachedBitmapData
                 .beginTextureFill({ texture })

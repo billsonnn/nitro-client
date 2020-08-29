@@ -1,9 +1,11 @@
+import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { bounceIn } from 'ng-animate';
 import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEvent';
 
 @Component({
     template: `
-    <div #chatItem class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}">
+    <div [@animation]="animation" #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}">
         <div class="chat-left" [ngStyle]="{ 'background-color': senderColorString }">
             <div #chatItemUserImage class="user-image"></div>
             <div class="user-pointer"></div>
@@ -12,15 +14,25 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
             <b>{{ senderName }}:</b> {{ message }}
         </div>
         <div class="chat-pointer"></div>
-    </div>`
+    </div>`,
+    animations: [
+        trigger('animation', [
+            transition('* => *',
+                useAnimation(bounceIn,
+                {
+                    params: { timing: 0.8, delay: 0 }
+                })
+            )
+        ])
+    ]
 })
 export class RoomChatItemComponent
 {
     @Input()
     public id: string;
 
-    @ViewChild('chatItem')
-    public chatItemReference: ElementRef<HTMLDivElement>;
+    @ViewChild('chatContainer')
+    public chatContainer: ElementRef<HTMLDivElement>;
 
     @ViewChild('chatItemUserImage')
     public chatItemUserImageReference: ElementRef<HTMLDivElement>;
@@ -42,6 +54,8 @@ export class RoomChatItemComponent
     public senderCategory: number;
     public x: number;
     public y: number;
+
+    public animation: any;
 
     public update(k: RoomWidgetChatUpdateEvent): void
     {
@@ -70,7 +84,7 @@ export class RoomChatItemComponent
 
     public makeVisible(): void
     {
-        (this.chatElement && (this.chatElement.style.visibility = 'visible'));
+        (this.chatContainerElement && (this.chatContainerElement.style.visibility = 'visible'));
     }
 
     private insertSenderImage(): void
@@ -97,11 +111,11 @@ export class RoomChatItemComponent
 
     public setX(x: number): void
     {
-        if(!this.chatElement) return;
+        if(!this.chatContainerElement) return;
 
         this.x = x;
 
-        this.chatElement.style.left = (x + 'px');
+        this.chatContainerElement.style.left = (x + 'px');
     }
 
     public getY(): number
@@ -111,28 +125,28 @@ export class RoomChatItemComponent
 
     public setY(y: number): void
     {
-        if(!this.chatElement) return;
+        if(!this.chatContainerElement) return;
 
         y = y - 1;
 
         this.y = y;
 
-        this.chatElement.style.top = (y + 'px');
+        this.chatContainerElement.style.top = (y + 'px');
     }
 
     public get width(): number
     {
-        return ((this.chatElement && this.chatElement.offsetWidth) || 0);
+        return ((this.chatContainerElement && this.chatContainerElement.offsetWidth) || 0);
     }
 
     public get height(): number
     {
-        return ((this.chatElement && this.chatElement.offsetHeight) || 0);
+        return ((this.chatContainerElement && this.chatContainerElement.offsetHeight) || 0);
     }
 
-    public get chatElement(): HTMLDivElement
+    public get chatContainerElement(): HTMLDivElement
     {
-        return ((this.chatItemReference && this.chatItemReference.nativeElement) || null);
+        return ((this.chatContainer && this.chatContainer.nativeElement) || null);
     }
 
     public get chatUserImageElement(): HTMLDivElement

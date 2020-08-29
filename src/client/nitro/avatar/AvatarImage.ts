@@ -1,4 +1,6 @@
+import { ConvolutionFilter } from '@pixi/filter-convolution';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
+import { TextureUtils } from '../../room/utils/TextureUtils';
 import { Nitro } from '../Nitro';
 import { ActiveActionData } from './actions/ActiveActionData';
 import { IActionDefinition } from './actions/IActionDefinition';
@@ -376,7 +378,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             _local_12--;
         }
 
-        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1, new PIXI.Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        const texture = TextureUtils.generateTexture(container, new PIXI.Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
 
         if(!texture) return null;
         
@@ -415,7 +417,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 .drawRect(0, 0, (this._Str_671.width * scale), (this._Str_671.height * scale))
                 .endFill();
 
-            const texture = Nitro.instance.renderer.generateTexture(graphic, 1, 1);
+            const texture = TextureUtils.generateTexture(graphic);
 
             if(texture) this._Str_671 = texture;
         }
@@ -423,6 +425,15 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         if(this._Str_671 && hightlight) return (this._Str_671.clone() as PIXI.RenderTexture);
         
         return this._Str_671;
+    }
+
+    private _Str_1901(): ConvolutionFilter
+    {
+        var k = 8;
+        var _local_2 = (k / -100);
+        var _local_3 = ((_local_2 * -8) + 1);
+        var _local_4 = [_local_2, _local_2, _local_2, _local_2, _local_3, _local_2, _local_2, _local_2, _local_2];
+        return new ConvolutionFilter(_local_4, 3, 3);
     }
 
     private _Str_1894(k: PIXI.Texture, _arg_2: string = 'CHANNELS_EQUAL'): PIXI.RenderTexture
@@ -471,7 +482,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         {
             sprite.filters = [ colorFilter ];
 
-            return Nitro.instance.renderer.generateTexture(sprite, 1, 1, new PIXI.Rectangle(0, 0, k.width, k.height));
+            return TextureUtils.generateTexture(sprite, new PIXI.Rectangle(0, 0, k.width, k.height));
         }
 
         return null;
@@ -578,16 +589,6 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
 
         this._Str_864.set(k, existing);
-    }
-
-    private _Str_1901(): any
-    {
-        var k = 8;
-        var _local_2 = (k / -100);
-        var _local_3 = ((_local_2 * -8) + 1);
-        var _local_4 = [_local_2, _local_2, _local_2, _local_2, _local_3, _local_2, _local_2, _local_2, _local_2];
-        //return new ConvolutionFilter(_local_4, 3, 3);
-        return null;
     }
 
     public getAsset(k: string): IGraphicAsset

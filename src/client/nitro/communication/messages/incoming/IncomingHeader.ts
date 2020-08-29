@@ -161,9 +161,10 @@ export class IncomingHeader
     public static USER_FAVORITE_ROOM_COUNT     = 151;
     public static USER_FIGURE                  = 2429;
     public static USER_FURNITURE               = 994;
-    public static USER_FURNITURE_ADD           = 2103;
+    public static USER_FURNITURE_ADD           = 104;
     public static USER_FURNITURE_REFRESH       = 3151;
     public static USER_FURNITURE_REMOVE        = 159;
+    public static USER_FURNITURE_POSTIT_PLACED  = 1501;
     public static USER_HOME_ROOM               = 2875;
     public static USER_IGNORED                 = 126;
     public static USER_INFO                    = 2725;

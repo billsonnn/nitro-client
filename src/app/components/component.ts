@@ -11,6 +11,8 @@ import { RoomSessionEvent } from '../../client/nitro/session/events/RoomSessionE
 import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { IRoomSession } from '../../client/nitro/session/IRoomSession';
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { SettingsService } from '../core/settings/service';
+import { AlertService } from '../shared/services/alert/service';
 import { RoomComponent } from './room/component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
@@ -22,8 +24,9 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
     template: `
 	<div class="nitro-main-component">
 		<nitro-toolbar-component [isInRoom]="isInRoom"></nitro-toolbar-component>
+		<nitro-purse-component></nitro-purse-component>
 		<nitro-catalog-component></nitro-catalog-component>
-		<nitro-inventory-component></nitro-inventory-component>
+		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
 		<nitro-navigator-component></nitro-navigator-component>
 		<nitro-hotelview-component *ngIf="!isInRoom"></nitro-hotelview-component>
 		<ng-template #desktopContainer></ng-template>
@@ -39,6 +42,8 @@ export class MainComponent implements OnInit, OnDestroy
 	public isInRoom: boolean = false;
 
 	constructor(
+		private alertService: AlertService,
+		private settingsService: SettingsService,
 		private ngZone: NgZone,
 		private componentFactoryResolver: ComponentFactoryResolver) {}
 
@@ -240,7 +245,7 @@ export class MainComponent implements OnInit, OnDestroy
 			case RoomZoomEvent.ROOM_ZOOM:
                 const zoomEvent = (event as RoomZoomEvent);
 
-				Nitro.instance.roomEngine.setRoomRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1))));
+				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1))));
 				return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
 				const colorEvent = (event as RoomObjectHSLColorEnabledEvent);
@@ -294,4 +299,9 @@ export class MainComponent implements OnInit, OnDestroy
 	{
 		return 1;
 	}
+
+	public get inventoryVisible(): boolean
+    {
+        return this.settingsService.inventoryVisible;
+    }
 }

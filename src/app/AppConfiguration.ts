@@ -1,6 +1,10 @@
 export class AppConfiguration
 {
-    public static DISABLED_CHAT_STYLES: number[] = [];
+    public static DISABLED_CHAT_STYLES: number[]        = [];
+    public static DISPLAYED_CURRENCY_TYPES: number[]    = [ 50 ];
+    public static CATALOG_IMAGE_URL: string             = 'https://swf.nextgenhabbo.com/c_images/catalogue/%name%.gif';
+    public static CATALOG_ICON_URL: string              = 'https://swf.nextgenhabbo.com/c_images/catalogue/icon_%name%.png';
+    public static FURNITURE_ICON_URL: string            = 'https://swf.nextgenhabbo.com/dcr/hof_furni/icons/%name%_icon.png';
 
     public static CHAT_STYLES = [
         {

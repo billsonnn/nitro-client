@@ -5,13 +5,15 @@ import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angula
 })
 export class BringToTopDirective implements AfterViewInit, OnDestroy
 {
-    private static LAST_Z_INDEX: number = 425;
+    private static TOP_TARGETS: HTMLElement[] = [];
+    private static Z_INDEX_START: number = 400;
+    private static Z_INDEX_INCREASE: number = 1;
   
     private target: HTMLElement = null;
   
     constructor(
         private elementRef: ElementRef,
-        private zone: NgZone) {}
+        private ngZone: NgZone) {}
   
     public ngAfterViewInit(): void
     {
@@ -21,24 +23,43 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
 
         this.target = element;
 
-        this.setupEvents();
-
+        this.addTarget();
+        this.registerEvents();
         this.bringToTop();
     }
   
     public ngOnDestroy(): void
     {
-        this.zone.runOutsideAngular(() =>
-        {
-            if(!this.target) return;
-
-            this.target.removeEventListener('mousedown', this.bringToTop.bind(this));
-        });
+        this.unregisterEvents();
+        this.removeTarget();
+        this.bringToTop();
     }
 
-    private setupEvents(): void
+    private addTarget(): void
     {
-        this.zone.runOutsideAngular(() =>
+        if(!this.target) return;
+
+        const index = BringToTopDirective.TOP_TARGETS.indexOf(this.target);
+
+        if(index >= 0) return;
+
+        BringToTopDirective.TOP_TARGETS.push(this.target);
+    }
+
+    private removeTarget(): void
+    {
+        if(!this.target) return;
+
+        const index = BringToTopDirective.TOP_TARGETS.indexOf(this.target);
+
+        if(index === -1) return;
+
+        BringToTopDirective.TOP_TARGETS.splice(index, 1);
+    }
+
+    private registerEvents(): void
+    {
+        this.ngZone.runOutsideAngular(() =>
         {
             if(!this.target) return;
 
@@ -46,25 +67,51 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         });
     }
 
+    private unregisterEvents(): void
+    {
+        this.ngZone.runOutsideAngular(() =>
+        {
+            if(!this.target) return;
+
+            this.target.removeEventListener('mousedown', this.bringToTop.bind(this));
+        });
+    }
+
     private bringToTop(event: MouseEvent = null): void
     {
-        if(!this.target) return;
+        this.moveTarget();
 
-        let zIndex = parseInt(this.target.style.zIndex);
+        let zIndex = BringToTopDirective.Z_INDEX_START;
 
-        if(BringToTopDirective.LAST_Z_INDEX === null)
+        for(let target of BringToTopDirective.TOP_TARGETS)
         {
-            BringToTopDirective.LAST_Z_INDEX = zIndex;
-        }
-        else
-        {
-            if(zIndex === BringToTopDirective.LAST_Z_INDEX) return;
-            
-            zIndex = (BringToTopDirective.LAST_Z_INDEX + 1);
+            if(!target) continue;
 
-            this.target.style.zIndex = (zIndex.toString());
+            zIndex = (zIndex + BringToTopDirective.Z_INDEX_INCREASE);
 
-            BringToTopDirective.LAST_Z_INDEX = zIndex;
+            target.style.zIndex = (zIndex.toString());
         }
+    }
+
+    private moveTarget(): void
+    {
+        const index = BringToTopDirective.TOP_TARGETS.indexOf(this.target);
+
+        if(index === -1) return;
+
+        const deleted = BringToTopDirective.TOP_TARGETS.splice(index, 1);
+
+        BringToTopDirective.TOP_TARGETS.push(...deleted);
+    }
+
+    private isTopTarget(): boolean
+    {
+        if(!this.target) return false;
+
+        const index = BringToTopDirective.TOP_TARGETS.indexOf(this.target);
+
+        if((index === -1) || (index < (BringToTopDirective.TOP_TARGETS.length - 1))) return false;
+
+        return true;
     }
 }

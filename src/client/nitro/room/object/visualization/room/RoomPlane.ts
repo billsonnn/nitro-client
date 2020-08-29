@@ -1,6 +1,7 @@
 import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
+import { TextureUtils } from '../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { Nitro } from '../../../../Nitro';
 import { PlaneMaskManager } from './mask/PlaneMaskManager';
@@ -150,7 +151,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        const texture = Nitro.instance.renderer.generateTexture(this._Str_1049, 1, 1, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
+        const texture = TextureUtils.generateTexture(this._Str_1049, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
 
         return texture;
     }
@@ -303,11 +304,6 @@ export class RoomPlane implements IRoomPlane
         {
             this._Str_2708.delete(k);
 
-            // if(_arg_2 && (_arg_2.bitmap !== existing.bitmap))
-            // {
-            //     existing.bitmap && existing.bitmap.destroy();
-            // }
-
             existing.dispose();
         }
 
@@ -324,8 +320,6 @@ export class RoomPlane implements IRoomPlane
             for(let bitmap of this._Str_2708.values())
             {
                 if(!bitmap) continue;
-
-                //if(bitmap.bitmap) bitmap.bitmap.clear();
 
                 bitmap.dispose();
             }

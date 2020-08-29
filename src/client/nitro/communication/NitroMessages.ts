@@ -12,7 +12,14 @@ import { CatalogSoldOutEvent } from './messages/incoming/catalog/CatalogSoldOutE
 import { CatalogUpdatedEvent } from './messages/incoming/catalog/CatalogUpdatedEvent';
 import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
+import { GenericAlertEvent } from './messages/incoming/generic/GenericAlertEvent';
+import { GenericAlertLinkEvent } from './messages/incoming/generic/GenericAlertLinkEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { FurnitureListAddOrUpdateEvent } from './messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
+import { FurnitureListEvent } from './messages/incoming/inventory/furni/FurnitureListEvent';
+import { FurnitureListInvalidateEvent } from './messages/incoming/inventory/furni/FurnitureListInvalidateEvent';
+import { FurnitureListRemovedEvent } from './messages/incoming/inventory/furni/FurnitureListRemovedEvent';
+import { FurniturePostItPlacedEvent } from './messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
 import { NavigatorCategoriesEvent } from './messages/incoming/navigator/NavigatorCategoriesEvent';
 import { NavigatorCollapsedEvent } from './messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
@@ -164,6 +171,17 @@ export class NitroMessages implements IMessageConfiguration
 
         // DESKTOP
         this._events.set(IncomingHeader.DESKTOP_VIEW, DesktopViewEvent);
+
+        // GENERIC
+        this._events.set(IncomingHeader.GENERIC_ALERT, GenericAlertEvent);
+        this._events.set(IncomingHeader.GENERIC_ALERT_LINK, GenericAlertLinkEvent);
+
+        // INVENTORY
+        this._events.set(IncomingHeader.USER_FURNITURE_ADD, FurnitureListAddOrUpdateEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE, FurnitureListEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_REFRESH, FurnitureListInvalidateEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_REMOVE, FurnitureListRemovedEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_POSTIT_PLACED, FurniturePostItPlacedEvent);
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);

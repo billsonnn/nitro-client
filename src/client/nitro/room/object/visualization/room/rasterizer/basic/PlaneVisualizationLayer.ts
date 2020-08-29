@@ -1,5 +1,5 @@
 ﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
-import { Nitro } from '../../../../../../Nitro';
+import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { PlaneMaterial } from './PlaneMaterial';
 
 export class PlaneVisualizationLayer 
@@ -112,7 +112,7 @@ export class PlaneVisualizationLayer
 
             if(canvas && (bitmapData !== canvas))
             {
-                const texture = Nitro.instance.renderer.generateTexture(bitmapData, 1, 1, new PIXI.Rectangle(0, 0, width, height));
+                const texture = TextureUtils.generateTexture(bitmapData, new PIXI.Rectangle(0, 0, width, height));
 
                 canvas
                     .beginTextureFill({ texture })

@@ -1,4 +1,5 @@
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
+import { TextureUtils } from '../../../room/utils/TextureUtils';
 import { Nitro } from '../../Nitro';
 import { IActiveActionData } from '../actions/IActiveActionData';
 import { AssetAliasCollection } from '../alias/AssetAliasCollection';
@@ -501,7 +502,7 @@ export class AvatarImageCache
                     .endFill();
         }
 
-        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
+        const texture = TextureUtils.generateTexture(container);
 
         return new ImageData(texture, container.getLocalBounds(), point, isFlipped, null);
     }

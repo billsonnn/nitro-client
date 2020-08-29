@@ -33,6 +33,7 @@ export class RoomObjectVariable
     public static HEAD_DIRECTION: string                             = 'head_direction';
     public static FURNITURE_AUTOMATIC_STATE_INDEX: string            = 'furniture_automatic_state_index';
     public static FURNITURE_ALWAYS_STACKABLE: string                 = 'furniture_always_stackable';
+    public static FURNITURE_DISABLE_PICKING_ANIMATION: string        = 'furniture_disable_picking_animation';
     public static FURNITURE_DATA_FORMAT: string                      = 'furniture_data_format';
     public static FURNITURE_UNIQUE_SERIAL_NUMBER: string             = 'furniture_unique_serial_number';
     public static FURNITURE_UNIQUE_EDITION_SIZE: string              = 'furniture_unique_edition_size';

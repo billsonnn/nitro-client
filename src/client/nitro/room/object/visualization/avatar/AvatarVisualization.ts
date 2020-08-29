@@ -1,3 +1,4 @@
+import { GlowFilter } from '@pixi/filter-glow';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../../../../../room/object/IRoomObject';
@@ -66,6 +67,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private _blink: boolean;
     private _gesture: number;
     private _sign: number;
+    private _highlightEnabled: boolean;
+    private _highlight: boolean;
     private _dance: number;
     private _effect: number;
     private _carryObject: number;
@@ -115,6 +118,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         this._blink                 = false;
         this._gesture               = 0;
         this._sign                  = -1;
+        this._highlightEnabled      = false;
+        this._highlight             = false;
         this._dance                 = 0;
         this._effect                = 0;
         this._carryObject           = 0;
@@ -281,11 +286,28 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
             if(sprite)
             {
-                const highlightEnabled = (this.object.model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) === 1);
+                const highlightEnabled = ((this.object.model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) === 1) && (this.object.model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT) === 1));
 
                 const avatarImage = this._avatarImage.getImage(AvatarSetType.FULL, highlightEnabled);
 
-                if(avatarImage) sprite.texture = avatarImage;
+                if(avatarImage)
+                {
+                    sprite.texture = avatarImage;
+
+                    if(highlightEnabled)
+                    {
+                        sprite.filters  = [
+                            new GlowFilter({
+                                color: 0xFFFFFF,
+                                distance: 6
+                            })
+                        ];
+                    }
+                    else
+                    {
+                        sprite.filters = [];
+                    }
+                }
 
                 if(sprite.texture)
                 {
@@ -753,6 +775,27 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             this._sign = sign;
 
             needsUpdate = true;
+        }
+
+        const highlightEnabled = (model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) > 0);
+
+        if(highlightEnabled !== this._highlightEnabled)
+        {
+            this._highlightEnabled = highlightEnabled;
+
+            needsUpdate = true;
+        }
+
+        if(this._highlightEnabled)
+        {
+            const highlight = (model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT) > 0);
+
+            if(highlight !== this._highlight)
+            {
+                this._highlight = highlight;
+
+                needsUpdate = true;
+            }
         }
 
         const ownUser = model.getValue(RoomObjectVariable.OWN_USER) > 0;

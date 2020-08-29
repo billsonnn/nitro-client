@@ -4,7 +4,9 @@
 // `background-color`.
 
 .badge {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: $badge-padding-y $badge-padding-x;
   @include font-size($badge-font-size);
   font-weight: $badge-font-weight;
@@ -14,6 +16,10 @@
   vertical-align: baseline;
   @include border-radius($badge-border-radius);
   @include transition($badge-transition);
+
+  .icon {
+    margin-right: 2px;
+  }
 
   @at-root a#{&} {
     @include hover-focus() {

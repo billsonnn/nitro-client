@@ -5,7 +5,8 @@ export interface IRoomRenderingCanvas
 {
     dispose(): void;
     initialize(width: number, height: number): void;
-    setScale(scale: number): void;
+    setMask(flag: boolean): void;
+    setScale(scale: number, point?: PIXI.Point, offsetPoint?: PIXI.Point): void
     render(time: number, update?: boolean): void;
     update(): void;
     setMouseListener(listener: IRoomCanvasMouseListener): void;
@@ -17,4 +18,5 @@ export interface IRoomRenderingCanvas
     scale: number;
     width: number;
     height: number;
+    canvasUpdated: boolean;
 }

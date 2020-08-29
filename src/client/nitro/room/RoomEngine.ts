@@ -3,6 +3,7 @@ import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { NitroManager } from '../../core/common/NitroManager';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomInstance } from '../../room/IRoomInstance';
@@ -24,6 +25,7 @@ import { NumberBank } from '../../room/utils/NumberBank';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { RoomGeometry } from '../../room/utils/RoomGeometry';
 import { Vector3d } from '../../room/utils/Vector3d';
+import { FurniId } from '../../utils/FurniId';
 import { PetCustomPart } from '../avatar/pets/PetCustomPart';
 import { PetFigureData } from '../avatar/pets/PetFigureData';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
@@ -34,9 +36,11 @@ import { RoomSessionEvent } from '../session/events/RoomSessionEvent';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { MouseEventType } from '../ui/MouseEventType';
+import { RoomEngineAnimateIconEvent } from './events/RoomEngineAnimateIconEvent';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
+import { RoomToObjectOwnAvatarMoveEvent } from './events/RoomToObjectOwnAvatarMoveEvent';
 import { IGetImageListener } from './IGetImageListener';
 import { ImageResult } from './ImageResult';
 import { IRoomCreator } from './IRoomCreator';
@@ -143,7 +147,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _Str_8325: boolean;
     private _Str_13525: boolean;
     private _numberBank: NumberBank;
-    private _imageListeners: Map<string, IGetImageListener>;
+    private _imageListeners: Map<string, IGetImageListener[]>;
     private _cameraCentered: boolean;
     private _badgeListeners: Map<string, RoomObjectBadgeImageAssetListener[]>;
 
@@ -520,13 +524,20 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return canvas.displayObject;
     }
 
-    public setRoomRenderingCanvasScale(roomId: number, canvasId: number, scale: number): void
+    public setRoomInstanceRenderingCanvasMask(roomId: number, canvasId: number, flag: boolean): void
+    {
+        const roomCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(roomCanvas) roomCanvas.setMask(flag);
+    }
+
+    public setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point: PIXI.Point = null, offsetPoint: PIXI.Point = null): void
     {
         const roomCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
         if(roomCanvas)
         {
-            roomCanvas.setScale(scale);
+            roomCanvas.setScale(scale, point, offsetPoint);
 
             this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.ROOM_ZOOMED, roomId));
         }
@@ -565,6 +576,31 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!renderingCanvas) return null;
 
         return new PIXI.Point(renderingCanvas.screenOffsetX, renderingCanvas.screenOffsetY);
+    }
+
+    public setRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number, point: PIXI.Point): boolean
+    {
+        const renderingCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!renderingCanvas || !point) return false;
+
+        renderingCanvas.screenOffsetX   = point.x;
+        renderingCanvas.screenOffsetY   = point.y;
+
+        return true;
+    }
+
+    public getRoomInstanceRenderingCanvasScale(roomId: number = -1000, canvasId: number = -1): number
+    {
+        if(roomId === -1000) roomId = this._activeRoomId;
+
+        if(canvasId === -1) canvasId = this._lastCanvasId;
+
+        const canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!canvas) return 1;
+
+        return canvas.scale;
     }
 
     public initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void
@@ -706,6 +742,24 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
+    public disableUpdate(flag: boolean): void
+    {
+        if(flag)
+        {
+            Nitro.instance.ticker.remove(this.update, this);
+        }
+        else
+        {
+            Nitro.instance.ticker.remove(this.update, this);
+            Nitro.instance.ticker.add(this.update, this);
+        }
+    }
+
+    public runUpdate(): void
+    {
+        this.update(1);
+    }
+
     public update(time: number): void
     {
         if(!this._roomManager) return;
@@ -806,7 +860,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             {
                 const roomInstance = this._roomManager.getRoomInstance(this.getRoomId(instanceData.roomId)) as RoomInstance;
 
-                if(!roomInstance.hasUninitializedObjects()) this._Str_17652(instanceData.roomId.toString());
+                if(!roomInstance.hasUninitializedObjects()) this.objectsInitialized(instanceData.roomId.toString());
             }
 
             if(this._Str_8325) return;
@@ -881,7 +935,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(selectedRoomObjectData && (Math.abs(selectedRoomObjectData.id) === id) && (selectedRoomObjectData.category === RoomObjectCategory.FLOOR))
         {
-
+            this.selectRoomObject(roomId, id, RoomObjectCategory.FLOOR);
         }
 
         if(object.isReady && data.synchronized) this._Str_21543(roomId, object);
@@ -931,9 +985,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(this.events) this.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.ADDED, roomId, id, RoomObjectCategory.WALL));
 
-        if(object.isReady && data.synchronized)
+        const selectedRoomObjectData = this.getSelectedRoomObjectData(roomId);
+
+        if(selectedRoomObjectData && (Math.abs(selectedRoomObjectData.id) === id) && (selectedRoomObjectData.category === RoomObjectCategory.WALL))
         {
-            
+            this.selectRoomObject(roomId, id, RoomObjectCategory.WALL);
         }
 
         return true;
@@ -969,23 +1025,23 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     private _Str_22919(time: number): void
     {
-        for(let instanceData of this._roomInstanceData.values())
-        {
-            if(!instanceData) continue;
+        // for(let instanceData of this._roomInstanceData.values())
+        // {
+        //     if(!instanceData) continue;
 
-            const camera = instanceData.roomCamera;
+        //     const camera = instanceData.roomCamera;
 
-            if(!camera) continue;
+        //     if(!camera) continue;
 
-            const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
+        //     const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
 
-            if(!object) continue;
+        //     if(!object) continue;
 
-            if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
-            {
-                //this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
-            }
-        }
+        //     if((instanceData.roomId !== this._activeRoomId) || !this._Str_7695)
+        //     {
+        //         this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
+        //     }
+        // }
 
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, 1);
 
@@ -1029,259 +1085,260 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             roomCamera.reset();
         }
 
-        // if (((((((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height))) || (!(roomCamera.scale == roomGeometry.scale))) || (!(roomCamera._Str_16377 == roomGeometry.updateId))) || (!(Vector3d.isEqual(_arg_3, roomCamera._Str_16185)))) || (roomCamera._Str_12536)))
-        // {
-        //     roomCamera._Str_16185 = _arg_3;
+        if (((((((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height))) || (!(roomCamera.scale == roomGeometry.scale))) || (!(roomCamera._Str_16377 == roomGeometry.updateId))) || (!(Vector3d.isEqual(_arg_3, roomCamera._Str_16185)))) || (roomCamera._Str_12536)))
+        {
+            roomCamera._Str_16185 = _arg_3;
             
-        //     const _local_15 = new Vector3d();
+            const _local_15 = new Vector3d();
             
-        //     _local_15.assign(_arg_3);
+            _local_15.assign(_arg_3);
 
-        //     _local_15.x = Math.round(_local_15.x);
-        //     _local_15.y = Math.round(_local_15.y);
+            _local_15.x = Math.round(_local_15.x);
+            _local_15.y = Math.round(_local_15.y);
 
-        //     const _local_16 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_X) - 0.5);
-        //     const _local_17 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_Y) - 0.5);
-        //     const _local_18 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_X) + 0.5);
-        //     const _local_19 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_Y) + 0.5);
-        //     const _local_20 = Math.round(((_local_16 + _local_18) / 2));
-        //     const _local_21 = Math.round(((_local_17 + _local_19) / 2));
-        //     const _local_22 = 2;
-        //     let _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
-        //     const _local_24 = (roomGeometry.scale / Math.sqrt(2));
-        //     const _local_25 = (_local_24 / 2);
-        //     const _local_26 = new PIXI.Matrix();
-        //     _local_26.rotate(((-(roomGeometry.direction.x + 90) / 180) * Math.PI));
-        //     _local_23 = _local_26.apply(_local_23);
-        //     _local_23.y = (_local_23.y * (_local_25 / _local_24));
-        //     const _local_27 = (((canvasRectangle.width / 2) / _local_24) - 1);
-        //     const _local_28 = (((canvasRectangle.height / 2) / _local_25) - 1);
+            const _local_16 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_X) - 0.5);
+            const _local_17 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MIN_Y) - 0.5);
+            const _local_18 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_X) + 0.5);
+            const _local_19 = (roomInstance.model.getValue(RoomVariableEnum.ROOM_MAX_Y) + 0.5);
+            const _local_20 = Math.round(((_local_16 + _local_18) / 2));
+            const _local_21 = Math.round(((_local_17 + _local_19) / 2));
+            const _local_22 = 2;
+            let _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
+            const _local_24 = (roomGeometry.scale / Math.sqrt(2));
+            const _local_25 = (_local_24 / 2);
+            const _local_26 = new PIXI.Matrix();
+            _local_26.rotate(((-(roomGeometry.direction.x + 90) / 180) * Math.PI));
+            _local_23 = _local_26.apply(_local_23);
+            _local_23.y = (_local_23.y * (_local_25 / _local_24));
+            const _local_27 = (((canvasRectangle.width / 2) / _local_24) - 1);
+            const _local_28 = (((canvasRectangle.height / 2) / _local_25) - 1);
             
-        //     let _local_29 = 0;
-        //     let _local_30 = 0;
-        //     let _local_31 = 0;
-        //     let _local_32 = 0;
-        //     let _local_33 = roomGeometry.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
+            let _local_29 = 0;
+            let _local_30 = 0;
+            let _local_31 = 0;
+            let _local_32 = 0;
+            let _local_33 = roomGeometry.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
 
-        //     if(!_local_33) return;
+            if(!_local_33) return;
             
-        //     _local_33.x = (_local_33.x + Math.round((canvasRectangle.width / 2)));
-        //     _local_33.y = (_local_33.y + Math.round((canvasRectangle.height / 2)));
+            _local_33.x = (_local_33.x + Math.round((canvasRectangle.width / 2)));
+            _local_33.y = (_local_33.y + Math.round((canvasRectangle.height / 2)));
 
-        //     if (bounds != null)
-        //     {
-        //         bounds.x += -(renderingCanvas.screenOffsetX);
-        //         bounds.y += -(renderingCanvas.screenOffsetY);
+            if (bounds != null)
+            {
+                bounds.x += -(renderingCanvas.screenOffsetX);
+                bounds.y += -(renderingCanvas.screenOffsetY);
 
-        //         if(((bounds.width > 1) && (bounds.height > 1)))
-        //         {
-        //             _local_29 = (((bounds.left - _local_33.x) - (roomGeometry.scale * 0.25)) / _local_24);
-        //             _local_31 = (((bounds.right - _local_33.x) + (roomGeometry.scale * 0.25)) / _local_24);
-        //             _local_30 = (((bounds.top - _local_33.y) - (roomGeometry.scale * 0.5)) / _local_25);
-        //             _local_32 = (((bounds.bottom - _local_33.y) + (roomGeometry.scale * 0.5)) / _local_25);
-        //         }
-        //         else
-        //         {
-        //             roomGeometry.adjustLocation(new Vector3d(-30, -30), 25);
+                if(((bounds.width > 1) && (bounds.height > 1)))
+                {
+                    _local_29 = (((bounds.left - _local_33.x) - (roomGeometry.scale * 0.25)) / _local_24);
+                    _local_31 = (((bounds.right - _local_33.x) + (roomGeometry.scale * 0.25)) / _local_24);
+                    _local_30 = (((bounds.top - _local_33.y) - (roomGeometry.scale * 0.5)) / _local_25);
+                    _local_32 = (((bounds.bottom - _local_33.y) + (roomGeometry.scale * 0.5)) / _local_25);
+                }
+                else
+                {
+                    roomGeometry.adjustLocation(new Vector3d(-30, -30), 25);
 
-        //             return;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         roomGeometry.adjustLocation(new Vector3d(0, 0), 25);
+                    return;
+                }
+            }
+            else
+            {
+                roomGeometry.adjustLocation(new Vector3d(0, 0), 25);
                 
-        //         return;
-        //     }
+                return;
+            }
 
-        //     let _local_34 = false;
-        //     let _local_35 = false;
-        //     let _local_36 = false;
-        //     let _local_37 = false;
-        //     let _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
+            let _local_34 = false;
+            let _local_35 = false;
+            let _local_36 = false;
+            let _local_37 = false;
+            let _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
 
-        //     if (_local_38 < canvasRectangle.width)
-        //     {
-        //         _local_10 = 2;
-        //         _local_23.x = ((_local_31 + _local_29) / 2);
-        //         _local_36 = true;
-        //     }
-        //     else
-        //     {
-        //         if (_local_23.x > (_local_31 - _local_27))
-        //         {
-        //             _local_23.x = (_local_31 - _local_27);
-        //             _local_34 = true;
-        //         }
-        //         if (_local_23.x < (_local_29 + _local_27))
-        //         {
-        //             _local_23.x = (_local_29 + _local_27);
-        //             _local_34 = true;
-        //         }
-        //     }
-        //     let _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
-        //     if (_local_39 < canvasRectangle.height)
-        //     {
-        //         _local_10 = 2;
-        //         _local_23.y = ((_local_32 + _local_30) / 2);
-        //         _local_37 = true;
-        //     }
-        //     else
-        //     {
-        //         if (_local_23.y > (_local_32 - _local_28))
-        //         {
-        //             _local_23.y = (_local_32 - _local_28);
-        //             _local_35 = true;
-        //         }
-        //         if (_local_23.y < (_local_30 + _local_28))
-        //         {
-        //             _local_23.y = (_local_30 + _local_28);
-        //             _local_35 = true;
-        //         }
-        //         if (_local_35)
-        //         {
-        //             _local_23.y = (_local_23.y / (_local_25 / _local_24));
-        //         }
-        //     }
-        //     _local_26.invert();
-        //     _local_23 = _local_26.apply(_local_23);
-        //     _local_23.x = (_local_23.x + _local_20);
-        //     _local_23.y = (_local_23.y + _local_21);
-        //     let _local_40 = 0.35;
-        //     let _local_41 = 0.2;
-        //     let _local_42 = 0.2;
-        //     let _local_43 = 10;
-        //     let _local_44 = 10;
-        //     if ((_local_42 * width) > 100)
-        //     {
-        //         _local_42 = (100 / width);
-        //     }
-        //     if ((_local_40 * height) > 150)
-        //     {
-        //         _local_40 = (150 / height);
-        //     }
-        //     if ((_local_41 * height) > 150)
-        //     {
-        //         _local_41 = (150 / height);
-        //     }
-        //     if ((((roomCamera._Str_10235) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
-        //     {
-        //         _local_42 = 0;
-        //     }
-        //     if ((((roomCamera._Str_10446) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
-        //     {
-        //         _local_40 = 0;
-        //         _local_41 = 0;
-        //     }
-        //     canvasRectangle.right = (canvasRectangle.right * (1 - (_local_42 * 2)));
-        //     canvasRectangle.bottom = (canvasRectangle.bottom * (1 - (_local_40 + _local_41)));
-        //     if (canvasRectangle.right < _local_43)
-        //     {
-        //         canvasRectangle.right = _local_43;
-        //     }
-        //     if (canvasRectangle.bottom < _local_44)
-        //     {
-        //         canvasRectangle.bottom = _local_44;
-        //     }
-        //     if ((_local_40 + _local_41) > 0)
-        //     {
-        //         canvasRectangle.x += (-(canvasRectangle.width) / 2);
-        //         canvasRectangle.y += (-(canvasRectangle.height) * (_local_41 / (_local_40 + _local_41)));
-        //     }
-        //     else
-        //     {
-        //         canvasRectangle.x += (-(canvasRectangle.width) / 2);
-        //         canvasRectangle.y += (-(canvasRectangle.height) / 2)
-        //     }
-        //     _local_33 = roomGeometry.getScreenPoint(_local_15);
-        //     if (_local_33 != null)
-        //     {
-        //         _local_33.x = (_local_33.x + renderingCanvas.screenOffsetX);
-        //         _local_33.y = (_local_33.y + renderingCanvas.screenOffsetY);
-        //         _local_15.z = _local_10;
-        //         _local_15.x = (Math.round((_local_23.x * 2)) / 2);
-        //         _local_15.y = (Math.round((_local_23.y * 2)) / 2);
-        //         if (roomCamera.location == null)
-        //         {
-        //             roomGeometry.location = _local_15;
-        //             if (this._Str_11555)
-        //             {
-        //                 roomCamera._Str_20685(new Vector3d(0, 0, 0));
-        //             }
-        //             else
-        //             {
-        //                 roomCamera._Str_20685(_local_15);
-        //             }
-        //         }
-        //         let _local_45 = roomGeometry.getScreenPoint(_local_15);
-        //         let _local_46 = new Vector3d(0, 0, 0);
-        //         if (_local_45 != null)
-        //         {
-        //             _local_46.x = _local_45.x;
-        //             _local_46.y = _local_45.y;
-        //         }
-        //         if (((((((((_local_33.x < canvasRectangle.left) || (_local_33.x > canvasRectangle.right)) && (!(roomCamera._Str_8564))) || (((_local_33.y < canvasRectangle.top) || (_local_33.y > canvasRectangle.bottom)) && (!(roomCamera._Str_8690)))) || (((_local_36) && (!(roomCamera._Str_8564))) && (!(roomCamera._Str_7609 == width)))) || (((_local_37) && (!(roomCamera._Str_8690))) && (!(roomCamera._Str_7902 == height)))) || ((!(roomCamera._Str_18975 == bounds.width)) || (!(roomCamera._Str_15953 == bounds.height)))) || ((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height)))))
-        //         {
-        //             roomCamera._Str_10235 = _local_34;
-        //             roomCamera._Str_10446 = _local_35;
-        //             if (this._Str_11555)
-        //             {
-        //                 roomCamera.target = _local_46;
-        //             }
-        //             else
-        //             {
-        //                 roomCamera.target = _local_15;
-        //             }
-        //         }
-        //         else
-        //         {
-        //             if (!_local_34)
-        //             {
-        //                 roomCamera._Str_10235 = false;
-        //             }
-        //             if (!_local_35)
-        //             {
-        //                 roomCamera._Str_10446 = false;
-        //             }
-        //         }
-        //     }
-        //     console.log('hello')
-        //     roomCamera._Str_8564 = _local_36;
-        //     roomCamera._Str_8690 = _local_37;
-        //     roomCamera._Str_7609 = width;
-        //     roomCamera._Str_7902 = height;
-        //     roomCamera.scale = roomGeometry.scale;
-        //     roomCamera._Str_16377 = roomGeometry.updateId;
-        //     roomCamera._Str_18975 = bounds.width;
-        //     roomCamera._Str_15953 = bounds.height;
-        //     if(true) //!this._sessionDataManager._Str_18110
-        //     {
-        //         if (this._Str_11555)
-        //         {
-        //             roomCamera.update(_arg_4, 8);
-        //         }
-        //         else
-        //         {
-        //             roomCamera.update(_arg_4, 0.5);
-        //         }
-        //     }
-        //     if (this._Str_11555)
-        //     {
-        //         renderingCanvas.screenOffsetX = -(roomCamera.location.x);
-        //         renderingCanvas.screenOffsetY = -(roomCamera.location.y);
-        //     }
-        //     else
-        //     {
-        //         roomGeometry.adjustLocation(roomCamera.location, 25);
-        //     }
-        // }
-        // else
-        // {
-        //     roomCamera._Str_10235 = false;
-        //     roomCamera._Str_10446 = false;
-        //     roomCamera._Str_8564 = false;
-        //     roomCamera._Str_8690 = false;
-        // }
+            if (_local_38 < canvasRectangle.width)
+            {
+                _local_10 = 2;
+                _local_23.x = ((_local_31 + _local_29) / 2);
+                _local_36 = true;
+            }
+            else
+            {
+                if (_local_23.x > (_local_31 - _local_27))
+                {
+                    _local_23.x = (_local_31 - _local_27);
+                    _local_34 = true;
+                }
+                if (_local_23.x < (_local_29 + _local_27))
+                {
+                    _local_23.x = (_local_29 + _local_27);
+                    _local_34 = true;
+                }
+            }
+            let _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
+            if (_local_39 < canvasRectangle.height)
+            {
+                _local_10 = 2;
+                _local_23.y = ((_local_32 + _local_30) / 2);
+                _local_37 = true;
+            }
+            else
+            {
+                if (_local_23.y > (_local_32 - _local_28))
+                {
+                    _local_23.y = (_local_32 - _local_28);
+                    _local_35 = true;
+                }
+                if (_local_23.y < (_local_30 + _local_28))
+                {
+                    _local_23.y = (_local_30 + _local_28);
+                    _local_35 = true;
+                }
+                if (_local_35)
+                {
+                    _local_23.y = (_local_23.y / (_local_25 / _local_24));
+                }
+            }
+            _local_26.invert();
+            _local_23 = _local_26.apply(_local_23);
+            _local_23.x = (_local_23.x + _local_20);
+            _local_23.y = (_local_23.y + _local_21);
+            let _local_40 = 0.35;
+            let _local_41 = 0.2;
+            let _local_42 = 0.2;
+            let _local_43 = 10;
+            let _local_44 = 10;
+            if ((_local_42 * width) > 100)
+            {
+                _local_42 = (100 / width);
+            }
+            if ((_local_40 * height) > 150)
+            {
+                _local_40 = (150 / height);
+            }
+            if ((_local_41 * height) > 150)
+            {
+                _local_41 = (150 / height);
+            }
+            if ((((roomCamera._Str_10235) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+            {
+                _local_42 = 0;
+            }
+            if ((((roomCamera._Str_10446) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+            {
+                _local_40 = 0;
+                _local_41 = 0;
+            }
+
+            canvasRectangle.width = (canvasRectangle.width * (1 - (_local_42 * 2)));
+            canvasRectangle.height = (canvasRectangle.height * (1 - (_local_40 + _local_41)));
+
+            if (canvasRectangle.width < _local_43)
+            {
+                canvasRectangle.width = _local_43;
+            }
+            if (canvasRectangle.width < _local_44)
+            {
+                canvasRectangle.height = _local_44;
+            }
+            if ((_local_40 + _local_41) > 0)
+            {
+                canvasRectangle.x += (-(canvasRectangle.width) / 2);
+                canvasRectangle.y += (-(canvasRectangle.height) * (_local_41 / (_local_40 + _local_41)));
+            }
+            else
+            {
+                canvasRectangle.x += (-(canvasRectangle.width) / 2);
+                canvasRectangle.y += (-(canvasRectangle.height) / 2)
+            }
+            _local_33 = roomGeometry.getScreenPoint(_local_15);
+            if (_local_33 != null)
+            {
+                _local_33.x = (_local_33.x + renderingCanvas.screenOffsetX);
+                _local_33.y = (_local_33.y + renderingCanvas.screenOffsetY);
+                _local_15.z = _local_10;
+                _local_15.x = (Math.round((_local_23.x * 2)) / 2);
+                _local_15.y = (Math.round((_local_23.y * 2)) / 2);
+                if (roomCamera.location == null)
+                {
+                    roomGeometry.location = _local_15;
+                    if (this._Str_11555)
+                    {
+                        roomCamera._Str_20685(new Vector3d(0, 0, 0));
+                    }
+                    else
+                    {
+                        roomCamera._Str_20685(_local_15);
+                    }
+                }
+                let _local_45 = roomGeometry.getScreenPoint(_local_15);
+                let _local_46 = new Vector3d(0, 0, 0);
+                if (_local_45 != null)
+                {
+                    _local_46.x = _local_45.x;
+                    _local_46.y = _local_45.y;
+                }
+                if (((((((((_local_33.x < canvasRectangle.left) || (_local_33.x > canvasRectangle.right)) && (!(roomCamera._Str_8564))) || (((_local_33.y < canvasRectangle.top) || (_local_33.y > canvasRectangle.bottom)) && (!(roomCamera._Str_8690)))) || (((_local_36) && (!(roomCamera._Str_8564))) && (!(roomCamera._Str_7609 == width)))) || (((_local_37) && (!(roomCamera._Str_8690))) && (!(roomCamera._Str_7902 == height)))) || ((!(roomCamera._Str_18975 == bounds.width)) || (!(roomCamera._Str_15953 == bounds.height)))) || ((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height)))))
+                {
+                    roomCamera._Str_10235 = _local_34;
+                    roomCamera._Str_10446 = _local_35;
+                    if (this._Str_11555)
+                    {
+                        roomCamera.target = _local_46;
+                    }
+                    else
+                    {
+                        roomCamera.target = _local_15;
+                    }
+                }
+                else
+                {
+                    if (!_local_34)
+                    {
+                        roomCamera._Str_10235 = false;
+                    }
+                    if (!_local_35)
+                    {
+                        roomCamera._Str_10446 = false;
+                    }
+                }
+            }
+            roomCamera._Str_8564 = _local_36;
+            roomCamera._Str_8690 = _local_37;
+            roomCamera._Str_7609 = width;
+            roomCamera._Str_7902 = height;
+            roomCamera.scale = roomGeometry.scale;
+            roomCamera._Str_16377 = roomGeometry.updateId;
+            roomCamera._Str_18975 = bounds.width;
+            roomCamera._Str_15953 = bounds.height;
+            if(true) //!this._sessionDataManager._Str_18110
+            {
+                if (this._Str_11555)
+                {
+                    roomCamera.update(_arg_4, 8);
+                }
+                else
+                {
+                    roomCamera.update(_arg_4, 0.5);
+                }
+            }
+            if (this._Str_11555)
+            {
+                renderingCanvas.screenOffsetX = -(roomCamera.location.x);
+                renderingCanvas.screenOffsetY = -(roomCamera.location.y);
+            }
+            else
+            {
+                roomGeometry.adjustLocation(roomCamera.location, 25);
+            }
+        }
+        else
+        {
+            roomCamera._Str_10235 = false;
+            roomCamera._Str_10446 = false;
+            roomCamera._Str_8564 = false;
+            roomCamera._Str_8690 = false;
+        }
     }
 
     private _Str_25261(roomId: number, canvasId: number): PIXI.Rectangle
@@ -1534,14 +1591,56 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return this.getRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
     }
 
-    public removeRoomObjectFloor(roomId: number, objectId: number): void
-    {
-        return this.removeRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
-    }
-
     public createRoomObjectFloor(roomId: number, id: number, type: string): IRoomObjectController
     {
         return this.createRoomObjectAndInitialize(roomId, id, type, RoomObjectCategory.FLOOR);
+    }
+
+    public removeRoomObjectFloor(roomId: number, objectId: number, userId: number = -1, _arg_4: boolean = false): void
+    {
+        const roomInstanceData = this.getRoomInstanceData(roomId);
+
+        if(roomInstanceData) roomInstanceData.removePendingFunitureFloor(objectId);
+
+        if(this._sessionDataManager && (userId === this._sessionDataManager.userId) && !FurniId.isBuilderClubId(objectId))
+        {
+            const roomObject = this.getRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
+
+            if(roomObject)
+            {
+                const screenLocation = this.getRoomObjectScreenLocation(roomId, objectId, RoomObjectCategory.FLOOR, this._lastCanvasId);
+
+                if(screenLocation)
+                {
+                    const disabledPickingAnimation = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION) === 1);
+
+                    if(!disabledPickingAnimation)
+                    {
+                        const typeId        = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+                        const extras        = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_EXTRAS) as string);
+                        const dataKey       = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT) as number);
+                        const objectData    = ObjectDataFactory.getData(dataKey);
+                        const icon          = this.getFurnitureFloorIcon(typeId, null, extras, objectData).data;
+
+                        if(icon)
+                        {
+                            const sprite    = PIXI.Sprite.from(icon);
+                            const image     = Nitro.instance.renderer.extract.image(sprite);
+
+                            if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
+                        }
+                    }
+                }
+            }
+        }
+
+        this.removeRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
+        this.setMouseDefault(roomId, RoomObjectCategory.FLOOR, objectId);
+
+        // if (_arg_4)
+        // {
+        //     this._Str_17722(k, "RoomEngine.disposeObjectFurniture()");
+        // }
     }
 
     public getRoomObjectWall(roomId: number, objectId: number): IRoomObjectController
@@ -1549,9 +1648,36 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return this.getRoomObject(roomId, objectId, RoomObjectCategory.WALL);
     }
 
-    public removeRoomObjectWall(roomId: number, objectId: number): void
+    public removeRoomObjectWall(roomId: number, objectId: number, userId: number = -1): void
     {
-        return this.removeRoomObject(roomId, objectId, RoomObjectCategory.WALL);
+        if(this._sessionDataManager && (userId === this._sessionDataManager.userId) && !FurniId.isBuilderClubId(objectId))
+        {
+            const roomObject = this.getRoomObject(roomId, objectId, RoomObjectCategory.WALL);
+
+            if(roomObject && (roomObject.type.indexOf('post_it') === -1) && (roomObject.type.indexOf('external_image_wallitem') === -1))
+            {
+                const screenLocation = this.getRoomObjectScreenLocation(roomId, objectId, RoomObjectCategory.WALL, this._lastCanvasId);
+
+                if(screenLocation)
+                {
+                    const typeId        = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+                    const objectData    = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_DATA) as string);
+                    const icon          = this.getFurnitureWallIcon(typeId, null, objectData).data;
+                        
+                    if(icon)
+                    {
+                        const sprite    = PIXI.Sprite.from(icon);
+                        const image     = Nitro.instance.renderer.extract.image(sprite);
+
+                        if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
+                    }
+                }
+            }
+        }
+
+        this.removeRoomObject(roomId, objectId, RoomObjectCategory.WALL);
+        this.updateRoomObjectMask(roomId, objectId, false);
+        this.setMouseDefault(roomId, RoomObjectCategory.WALL, objectId);
     }
 
     public createRoomObjectWall(roomId: number, id: number, type: string): IRoomObjectController
@@ -1570,22 +1696,24 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(this.events) this.events.dispatchEvent(new RoomEngineObjectEvent(RoomEngineObjectEvent.REMOVED, roomId, objectId, category));
     }
 
-    public addFurnitureFloor(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, objectData: IObjectData, extra: number = NaN, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', synchronized: boolean = true, realRoomObject: boolean = true, sizeZ: number = -1): void
+    public addFurnitureFloor(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, objectData: IObjectData, extra: number = NaN, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', synchronized: boolean = true, realRoomObject: boolean = true, sizeZ: number = -1): boolean
     {
         const instanceData = this.getRoomInstanceData(roomId);
 
-        if(!instanceData) return null;
+        if(!instanceData) return false;
 
         const furnitureData = new FurnitureData(id, typeId, null, location, direction, state, objectData, extra, expires, usagePolicy, ownerId, ownerName, synchronized, realRoomObject, sizeZ);
 
         instanceData.addPendingFurnitureFloor(furnitureData);
+
+        return true;
     }
 
-    public addFurnitureWall(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, extra: string, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', realRoomObject: boolean = true): void
+    public addFurnitureWall(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, extra: string, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', realRoomObject: boolean = true): boolean
     {
         const instanceData = this.getRoomInstanceData(roomId);
 
-        if(!instanceData) return null;
+        if(!instanceData) return false;
 
         const objectData = new LegacyDataType();
 
@@ -1594,6 +1722,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         const furnitureData = new FurnitureData(id, typeId, null, location, direction, state, objectData, NaN, expires, usagePolicy, ownerId, ownerName, true, realRoomObject);
 
         instanceData.addPendingFurnitureWall(furnitureData);
+
+        return true;
     }
 
     public updateRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra: number = NaN): boolean
@@ -1677,10 +1807,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     public updateRoomObjectMask(roomId: number, objectId: number, _arg_3: boolean = true): void
     {
-        const object = this.getRoomObjectWall(roomId, objectId);
-
-        if(!object) return;
-
         const maskName      = RoomObjectCategory.WALL + '_' + objectId;
         const roomObject    = this.getRoomObjectWall(roomId, objectId);
 
@@ -1716,6 +1842,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         object.processUpdateMessage(new ObjectMoveUpdateMessage(location, targetLocation, null, !!targetLocation));
     }
 
+    public updateRoomObjectWallLocation(roomId: number, objectId: number, location: IVector3D): boolean
+    {
+        const roomObject = this.getRoomObjectWall(roomId, objectId);
+
+        if(!roomObject) return false;
+
+        if(roomObject.logic) roomObject.logic.processUpdateMessage(new ObjectMoveUpdateMessage(location, null, null));
+
+        this.updateRoomObjectMask(roomId, objectId);
+        
+        return true;
+    }
+
     public addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, headDirection: number, type: number, figure: string): boolean
     {
         const existing = this.getRoomObjectUser(roomId, objectId);
@@ -1730,6 +1869,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!object) return false;
 
+        if(NitroConfiguration.FIGURE_HIGHLIGHT_ENABLED) object.model.setValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE, 1);
+
         object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.fixedUserLocation(roomId, location), null, direction, headDirection, false, 0));
 
         if(figure) object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure));
@@ -1739,11 +1880,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return true;
     }
 
-    public updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp: boolean = false, baseY: number = 0, direction: IVector3D = null, headDirection: number = NaN): void
+    public updateRoomObjectUserLocation(roomId: number, objectId: number, location: IVector3D, targetLocation: IVector3D, canStandUp: boolean = false, baseY: number = 0, direction: IVector3D = null, headDirection: number = NaN): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         if(!location) location = object.getLocation();
 
@@ -1752,6 +1893,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(isNaN(headDirection)) headDirection = object.model.getValue(RoomObjectVariable.HEAD_DIRECTION) as number;
 
         object.processUpdateMessage(new ObjectAvatarUpdateMessage(this.fixedUserLocation(roomId, location), this.fixedUserLocation(roomId, targetLocation), direction, headDirection, canStandUp, baseY));
+
+        const roomSession = ((this._roomSessionManager && this._roomSessionManager.getSession(roomId)) || null);
+
+        if(roomSession && (roomSession.ownRoomIndex))
+        {
+            this._logicFactory.events.dispatchEvent(new RoomToObjectOwnAvatarMoveEvent(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, targetLocation));
+        }
+
+        return true;
     }
 
     private fixedUserLocation(roomId: number, location: IVector3D): IVector3D
@@ -1775,11 +1925,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return new Vector3d(location.x, location.y, _local_5);
     }
 
-    public updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): void
+    public updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter: string = null): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         let message: ObjectStateUpdateMessage = null;
         
@@ -1826,63 +1976,77 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 break;
         }
 
-        if(!message) return;
+        if(!message) return false;
 
         object.processUpdateMessage(message);
+
+        return true;
     }
 
-    public updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string = null, subType: string = null, isRiding: boolean = false): void
+    public updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender: string = null, subType: string = null, isRiding: boolean = false): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarFigureUpdateMessage(figure, gender, subType, isRiding));
+
+        return true;
     }
 
-    public updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): void
+    public updateRoomObjectUserFlatControl(roomId: number, objectId: number, level: string): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarFlatControlUpdateMessage(parseInt(level)));
+
+        return true;
     }
 
-    public updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): void
+    public updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay: number = 0): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarEffectUpdateMessage(effectId, delay));
+
+        return true;
     }
 
-    public updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): void
+    public updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarGestureUpdateMessage(gestureId));
+
+        return true;
     }
 
-    public updateRoomObjectUserPetGesture(roomId: number, objectId: number, gesture: string): void
+    public updateRoomObjectUserPetGesture(roomId: number, objectId: number, gesture: string): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarPetGestureUpdateMessage(gesture));
+
+        return true;
     }
 
-    public updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter: string = null): void
+    public updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter: string = null): boolean
     {
         const object = this.getRoomObjectUser(roomId, objectId);
 
-        if(!object) return;
+        if(!object) return false;
 
         object.processUpdateMessage(new ObjectAvatarPostureUpdateMessage(type, parameter));
+
+        return true;
     }
 
     public updateRoomObjectUserOwn(roomId: number, objectId: number): void
@@ -1913,7 +2077,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return false;
     }
 
-    public refreshRoomObjectFurnitureData(roomId: string, objectId: number, category: number): void
+    public objectInitialized(roomId: string, objectId: number, category: number): void
     {
         const id = this.getRoomIdFromString(roomId);
 
@@ -1941,6 +2105,27 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
 
         if(roomId !== RoomEngine.TEMPORARY_ROOM) this._Str_21543(id, object);
+    }
+
+    public changeObjectState(roomId: number, objectId: number, category: number): void
+    {
+        const roomObject = this.getRoomObject(roomId, objectId, category);
+
+        if(!roomObject || !roomObject.model) return;
+
+        let stateIndex = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX) as number);
+
+        if(stateIndex === null) stateIndex = 1;
+        else stateIndex = (stateIndex + 1);
+
+        roomObject.model.setValue(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX, stateIndex);
+
+        const objectDataKey = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT) as number);
+        const objectData    = ObjectDataFactory.getData(objectDataKey);
+
+        objectData.initializeFromRoomObjectModel(roomObject.model);
+        
+        if(roomObject.logic) roomObject.logic.processUpdateMessage(new ObjectDataUpdateMessage(stateIndex, objectData));
     }
 
     public loadRoomObjectBadgeImage(roomId: number, objectId: number, objectCategory: number, badgeId: string, groupBadge: boolean = true): void
@@ -2200,18 +2385,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._roomSessionManager) return;
 
-        const session = this._roomSessionManager.getSession(roomId);
+        const instanceData = this.getRoomInstanceData(roomId);
 
-        if(!session) return;
-
-        if(((category !== RoomObjectCategory.FLOOR) && (category !== RoomObjectCategory.WALL)) || ((session.controllerLevel >= RoomControllerLevel.GUEST)))
+        if(instanceData)
         {
-            const instanceData = this.getRoomInstanceData(roomId);
-
-            if(instanceData)
-            {
-                if(instanceData._Str_11959((category + '_' + objectId))) this._Str_13525 = true;
-            }
+            if(instanceData._Str_11959((category + '_' + objectId))) this._Str_13525 = true;
         }
     }
 
@@ -2406,14 +2584,92 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return this.getGenericRoomObjectImage(type, color, direction, scale, listener, bgColor, extras, data, -1, -1, null, id);
     }
 
+    public getFurnitureFloorIconUrl(typeId: number): string
+    {
+        let type: string    = null;
+        let color: string   = '';
+
+        if(this._roomContentLoader)
+        {
+            type    = this._roomContentLoader.getFurnitureFloorNameForTypeId(typeId);
+            color   = (this._roomContentLoader.getFurnitureFloorColorIndex(typeId).toString());
+
+            return this._roomContentLoader.getAssetIconUrl(type, color);
+        }
+
+        return null;
+    }
+
+    public getFurnitureFloorIcon(typeId: number, listener: IGetImageListener, extras: string = null, objectData: IObjectData = null): ImageResult
+    {
+        return this.getFurnitureFloorImage(typeId, new Vector3d(), 1, listener, 0, extras, -1, -1, objectData);
+    }
+
+    public getFurnitureWallIconUrl(typeId: number, extra: string = null): string
+    {
+        let type: string    = null;
+        let color: string   = '';
+
+        if(this._roomContentLoader)
+        {
+            type    = this._roomContentLoader.getFurnitureWallNameForTypeId(typeId, extra);
+            color   = (this._roomContentLoader.getFurnitureWallColorIndex(typeId).toString());
+
+            return this._roomContentLoader.getAssetIconUrl(type, color);
+        }
+
+        return null;
+    }
+
+    public getFurnitureWallIcon(typeId: number, listener: IGetImageListener, _arg_3: string = null): ImageResult
+    {
+        return this.getFurnitureWallImage(typeId, new Vector3d(), 1, listener, 0, _arg_3);
+    }
+
+    public getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor: number = 0, extras: string = null, state: number = -1, frameCount: number = -1, objectData: IObjectData = null): ImageResult
+    {
+        let type: string    = null;
+        let color: string   = '';
+
+        if(this._roomContentLoader)
+        {
+            type    = this._roomContentLoader.getFurnitureFloorNameForTypeId(typeId);
+            color   = (this._roomContentLoader.getFurnitureFloorColorIndex(typeId).toString());
+        }
+
+        if((scale === 1) && listener)
+        {
+            return this.getGenericRoomObjectThumbnail(type, color, listener, extras, objectData);
+        }
+
+        return this.getGenericRoomObjectImage(type, color, direction, scale, listener, bgColor, extras, objectData, state, frameCount);
+    }
+
+    public getFurnitureWallImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor: number = 0, extras: string = null, state: number =-1, frameCount: number = -1): ImageResult
+    {
+        let type: string    = null;
+        let color: string   = '';
+
+        if(this._roomContentLoader)
+        {
+            type    = this._roomContentLoader.getFurnitureWallNameForTypeId(typeId);
+            color   = this._roomContentLoader.getFurnitureWallColorIndex(typeId).toString();
+        }
+
+        if((scale === 1) && listener)
+        {
+            return this.getGenericRoomObjectThumbnail(type, color, listener, extras, null);
+        }
+
+        return this.getGenericRoomObjectImage(type, color, direction, scale, listener, bgColor, extras, null, state, frameCount);
+    }
+
     public getRoomObjectPetImage(typeId: number, paletteId: number, color: number, direction: IVector3D, scale: number, listener: IGetImageListener, _arg_7: boolean = true, bgColor: number = 0, customParts: PetCustomPart[] = null, posture: string = null): ImageResult
     {
         let type: string = null;
         let value = ((((typeId + " ") + paletteId) + " ") + color.toString(16));
 
         if(!_arg_7) value = (value + (" " + "head"));
-
-        console.log(value);
 
         if(customParts)
         {
@@ -2542,7 +2798,16 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!this.isRoomContentTypeLoaded(type) && listener)
         {
-            this._imageListeners.set(objectId.toString(), listener);
+            let imageListeners = this._imageListeners.get(objectId.toString());
+
+            if(!imageListeners)
+            {
+                imageListeners = [];
+
+                this._imageListeners.set(objectId.toString(), imageListeners);
+            }
+
+            imageListeners.push(listener);
 
             model.setValue(RoomObjectVariable.IMAGE_QUERY_SCALE, scale);
         }
@@ -2558,6 +2823,138 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         geometry.dispose();
 
         return imageResult;
+    }
+
+    public getGenericRoomObjectThumbnail(type: string, param: string, listener: IGetImageListener, extraData: string = null, stuffData: IObjectData = null): ImageResult
+    {
+        if(!this._roomManager) return null;
+        
+        const imageResult = new ImageResult();
+
+        imageResult.id = -1;
+
+        if(!this._ready || !type) return imageResult;
+
+        let roomInstance = this._roomManager.getRoomInstance(RoomEngine.TEMPORARY_ROOM);
+
+        if(!roomInstance)
+        {
+            roomInstance = this._roomManager.createRoomInstance(RoomEngine.TEMPORARY_ROOM);
+
+            if(!roomInstance) return imageResult;
+        }
+
+        let objectId        = this._numberBank._Str_19709();
+        let objectCategory  = this.getRoomObjectCategoryForType(type);
+
+        if(objectId < 0) return imageResult;
+
+        objectId++;
+
+        imageResult.id      = objectId;
+        imageResult.data    = null;
+
+        const assetName = [ type, param ].join('_');
+
+        const asset = Nitro.instance.core.asset.getTexture(assetName);
+
+        if(!asset && listener)
+        {
+            let imageListeners = this._imageListeners.get(assetName);
+
+            if(!imageListeners)
+            {
+                imageListeners = [];
+
+                this._imageListeners.set(assetName, imageListeners);
+            }
+
+            imageListeners.push(listener);
+        }
+        else
+        {
+            if(asset)
+            {
+                imageResult.data = asset.clone();
+            }
+
+            this._numberBank._Str_15187((objectId - 1));
+
+            imageResult.id = 0;
+        }
+
+        return imageResult;
+    }
+
+    public initalizeTemporaryObjectsByType(type: string, _arg_2: boolean): void
+    {
+        const roomInstance = this._roomManager.getRoomInstance(RoomEngine.TEMPORARY_ROOM);
+
+        if(!roomInstance || !this._roomContentLoader) return;
+
+        const objectCategory    = this._roomContentLoader.getCategoryForType(type);
+        const objectManager     = roomInstance.getManager(objectCategory);
+
+        let geometry: RoomGeometry  = null;
+        let scale                   = 0;
+
+        if(objectManager && objectManager.objects.size)
+        {
+            for(let roomObject of objectManager.objects.values())
+            {
+                if(roomObject && roomObject.model && (roomObject.type === type))
+                {
+                    const objectId      = roomObject.id;
+                    const visualization = roomObject.visualization;
+
+                    let texture: PIXI.Texture = null;
+
+                    if(visualization)
+                    {
+                        const imageScale = (roomObject.model.getValue(RoomObjectVariable.IMAGE_QUERY_SCALE) as number);
+
+                        if(geometry && (scale !== imageScale))
+                        {
+                            geometry.dispose();
+
+                            geometry = null;
+                        }
+
+                        if(!geometry)
+                        {
+                            scale = imageScale;
+
+                            geometry = new RoomGeometry(imageScale, new Vector3d(-135, 30, 0), new Vector3d(11, 11, 5));
+                        }
+
+                        visualization.update(geometry, 0, true, false);
+
+                        texture = visualization.image;
+                    }
+
+                    roomInstance.removeRoomObject(objectId, objectCategory);
+
+                    this._numberBank._Str_15187((objectId - 1));
+
+                    const imageListeners = this._imageListeners.get(objectId.toString());
+
+                    if(imageListeners)
+                    {
+                        this._imageListeners.delete(objectId.toString());
+
+                        for(let imageListener of imageListeners)
+                        {
+                            if(!imageListener) continue;
+
+                            if(texture) imageListener.imageReady(objectId, texture);
+                            else imageListener.imageFailed(objectId);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(geometry) geometry.dispose();
     }
 
     public _Str_7972(k: boolean): void
@@ -2664,7 +3061,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(tileObjectMap) tileObjectMap._Str_21192(_arg_2);
     }
 
-    public _Str_17652(k: string): void
+    public objectsInitialized(k: string): void
     {
         const roomId = this.getRoomIdFromString(k);
 

@@ -4,9 +4,9 @@ export class CatalogPurchaseComposer implements IMessageComposer
 {
     private _data: any[];
 
-    constructor(pageId: number, itemId: number, extraData: string, amount: number)
+    constructor(pageId: number, offerId: number, extraData: string, amount: number)
     {
-        this._data = [ pageId, itemId, extraData, amount ];
+        this._data = [ pageId, offerId, extraData, amount ];
     }
 
     public getMessageArray(): any[]

@@ -20,6 +20,7 @@ export class NitroConfiguration
     public static GROUP_BADGE_URL           = NitroConfiguration.ASSET_URL + '/group-badge/%badgedata%';
     public static PET_ASSET_URL             = NitroConfiguration.ASSET_URL + '/pet/%libname%/%libname%.json';
     public static FURNI_ASSET_URL           = NitroConfiguration.ASSET_URL + '/furniture/%libname%/%libname%.json';
+    public static FURNI_ASSET_ICON_URL      = NitroConfiguration.ASSET_URL + '/icons/%libname%%param%_icon.png';
     public static ROOM_ASSET_URL            = NitroConfiguration.ASSET_URL + '/room/%libname%/%libname%.json';
 
     public static FPS                       = 24;
@@ -28,6 +29,7 @@ export class NitroConfiguration
     public static ROLLING_OVERRIDES_POSTURE = true;
     public static CLIENT_KEEPS_ALIVE        = true;
     public static PONG_INTERVAL_MS          = 30000;
+    public static FIGURE_HIGHLIGHT_ENABLED  = true;
 
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor', 'cow', 'LeetPen', 'bbwibb', 'elephants' ];
 

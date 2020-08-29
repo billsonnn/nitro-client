@@ -90,7 +90,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
 
             if(locationOffset) vector.add(locationOffset);
 
-            this.object.setLocation(vector, false);
+            this.object.setLocation(vector);
 
             if(difference === this._updateInterval)
             {

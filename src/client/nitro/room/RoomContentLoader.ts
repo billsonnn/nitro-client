@@ -416,7 +416,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         }
     }
 
-    private getAssetUrls(type: string): string[]
+    private getAssetUrls(type: string, param: string = null, icon: boolean = false): string[]
     {
         switch(type)
         {
@@ -437,6 +437,17 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
                 {
+                    if(icon)
+                    {
+                        let assetUrl = this.getAssetUrlWithFurniIconBase(type);
+
+                        const active = (param && (param !== '') && (this._activeObjectTypeIds.get((type + '*' + param)) !== null))
+
+                        assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
+
+                        return [ assetUrl ];
+                    }
+
                     return [ this.getAssetUrlWithFurniBase(type) ];
                 }
 
@@ -449,6 +460,32 @@ export class RoomContentLoader implements IFurnitureDataListener
         }
     }
 
+    public getAssetIconUrl(type: string, colorIndex: string): string
+    {
+        let assetName: string   = null;
+        let assetUrls: string[] = [];
+
+        if(type &&( type.indexOf(',') >= 0))
+        {
+            assetName = type;
+
+            type = assetName.split(',')[0];
+        }
+
+        if(assetName)
+        {
+            assetUrls = this.getAssetUrls(assetName, colorIndex, true);
+        }
+        else
+        {
+            assetUrls = this.getAssetUrls(type, colorIndex, true);
+        }
+
+        if(assetUrls.length) return assetUrls[0];
+
+        return null;
+    }
+
     private getAssetUrlWithRoomBase(assetName: string): string
     {
         return (NitroConfiguration.ROOM_ASSET_URL.replace(/%libname%/gi, assetName));
@@ -457,6 +494,11 @@ export class RoomContentLoader implements IFurnitureDataListener
     public getAssetUrlWithFurniBase(assetName: string): string
     {
         return (NitroConfiguration.FURNI_ASSET_URL.replace(/%libname%/gi, assetName));
+    }
+
+    public getAssetUrlWithFurniIconBase(assetName: string): string
+    {
+        return (NitroConfiguration.FURNI_ASSET_ICON_URL.replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithPetBase(assetName: string): string

@@ -77,6 +77,17 @@ export class RoomInstanceData
         this._floorStack.set(data.id, data);
     }
 
+    public removePendingFunitureFloor(id: number): FurnitureData
+    {
+        const existing = this._floorStack.get(id);
+
+        if(!existing) return null;
+
+        this._floorStack.delete(id);
+
+        return existing;
+    }
+
     public getPendingFurnitureFloor(id: number): FurnitureData
     {
         const existing = this._floorStack.get(id);
@@ -102,6 +113,17 @@ export class RoomInstanceData
         if(!data) return;
 
         this._wallStack.set(data.id, data);
+    }
+
+    public removePendingFurnitureWall(id: number): FurnitureData
+    {
+        const existing = this._wallStack.get(id);
+
+        if(!existing) return null;
+
+        this._wallStack.delete(id);
+
+        return existing;
     }
 
     public getPendingFurnitureWall(id: number): FurnitureData

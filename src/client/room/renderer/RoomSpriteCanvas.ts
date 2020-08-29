@@ -55,6 +55,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _noSpriteVisibilityChecking: boolean;
     private _usesExclusionRectangles: boolean;
     private _usesMask: boolean;
+    private _canvasUpdated: boolean;
 
     private _objectCache: RoomObjectCache;
 
@@ -98,6 +99,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._noSpriteVisibilityChecking    = false;
         this._usesExclusionRectangles       = false;
         this._usesMask                      = true;
+        this._canvasUpdated                 = false;
 
         this._objectCache                   = new RoomObjectCache(this._container.roomObjectVariableAccurateZ);
 
@@ -197,20 +199,52 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._height    = height;
     }
 
-    public setScale(scale: number): void
+    public setMask(flag: boolean): void
+    {
+        if(flag && !this._usesMask)
+        {
+            this._usesMask = true;
+
+            if(this._mask && (this._mask.parent !== this._master))
+            {
+                this._master.addChild(this._mask);
+
+                this._display.mask = this._mask;
+            }
+        }
+
+        else if(!flag && this._usesMask)
+        {
+            this._usesMask = false;
+
+            if(this._mask && (this._mask.parent === this._master))
+            {
+                this._master.removeChild(this._mask);
+
+                this._display.mask = null;
+            }
+        }
+    }
+
+    public setScale(scale: number, point: PIXI.Point = null, offsetPoint: PIXI.Point = null): void
     {
         if(!this._master || !this._display) return;
 
-        const point         = new PIXI.Point((this._width / 2), (this._height / 2));
-        const localPoint    = this._display.toLocal(point);
+        if(!point) point = new PIXI.Point((this._width / 2), (this._height / 2));
+
+        if(!offsetPoint) offsetPoint = point;
+
+        point = this._display.toLocal(point);
 
         this._scale         = scale;
-        this._screenOffsetX = (point.x - (localPoint.x * this._scale));
-        this._screenOffsetY = (point.y - (localPoint.y * this._scale));
+        this._screenOffsetX = (offsetPoint.x - (point.x * this._scale));
+        this._screenOffsetY = (offsetPoint.y - (point.y * this._scale));
     }
 
     public render(time: number, update: boolean = false): void
     {
+        this._canvasUpdated = false;
+
         if(time === -1) time = (this._renderTimestamp + 1);
 
         if(!this._container || !this._geometry) return;
@@ -265,6 +299,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
 
         this._Str_20677(spriteCount);
+
+        if(update) this._canvasUpdated = true;
+
         this._renderTimestamp   = time;
         this._renderedWidth     = this._width;
         this._renderedHeight    = this._height;
@@ -384,6 +421,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
 
         sortableCache._Str_20276(spriteCount);
+
+        this._canvasUpdated = true;
 
         return spriteCount;
     }
@@ -858,5 +897,10 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public get height(): number
     {
         return (this._height * this._scale);
+    }
+
+    public get canvasUpdated(): boolean
+    {
+        return this._canvasUpdated;
     }
 }

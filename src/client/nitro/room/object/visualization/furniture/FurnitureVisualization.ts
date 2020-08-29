@@ -173,6 +173,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         else
         {
             number = this.updateAnimation(scale) | this._animationNumber;
+
             this._animationNumber = 0;
         }
 

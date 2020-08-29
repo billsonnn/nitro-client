@@ -182,13 +182,29 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         {
             const sprite = this.getSprite(iterator);
 
-            if(sprite && sprite.visible)
+            if(sprite && sprite.texture && sprite.visible)
             {
-                const texture = sprite.texture;
+                let offsetX = ((sprite.flipH) ? (sprite.offsetX * -1) : sprite.offsetX);
+                let offsetY = ((sprite.flipV) ? (sprite.offsetY * -1) : sprite.offsetY);
+                
+                const point = new PIXI.Point(offsetX, offsetY);
 
-                if(texture)
+                if(iterator === 0)
                 {
-                    rectangle.enlarge(new PIXI.Rectangle(sprite.offsetX, sprite.offsetY, texture.width, texture.height));
+                    rectangle.x         = point.x;
+                    rectangle.y         = point.y;
+                    rectangle.width     = sprite.width;
+                    rectangle.height    = sprite.height;
+                }
+                else
+                {
+                    if(point.x < rectangle.x) rectangle.x = point.x;
+
+                    if(point.y < rectangle.y) rectangle.y = point.y;
+
+                    if(sprite.width > rectangle.width) rectangle.width = sprite.width;
+
+                    if(sprite.height > rectangle.height) rectangle.height = sprite.height;
                 }
             }
 

@@ -5,6 +5,7 @@ import { MainComponent } from './component';
 import { HotelViewModule } from './hotelview';
 import { InventoryModule } from './inventory';
 import { NavigatorModule } from './navigator';
+import { PurseModule } from './purse';
 import { RoomModule } from './room';
 import { ToolbarModule } from './toolbar';
 
@@ -15,6 +16,7 @@ import { ToolbarModule } from './toolbar';
         HotelViewModule,
         InventoryModule,
         NavigatorModule,
+        PurseModule,
         RoomModule,
         ToolbarModule
     ],
