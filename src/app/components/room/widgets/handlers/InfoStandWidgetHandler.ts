@@ -356,8 +356,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObjectImage && roomObjectImage.data)
         {
-            const sprite    = PIXI.Sprite.from(roomObjectImage.data);
-            const image     = Nitro.instance.renderer.extract.image(sprite);
+            const image = Nitro.instance.renderer.extract.image(roomObjectImage.data);
 
             if(image) infostandEvent.image = image;
         }
@@ -636,6 +635,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         types.push(RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM);
         types.push(RoomWidgetFurniActionMessage.RWFAM_MOVE);
         types.push(RoomWidgetFurniActionMessage.RWFUAM_ROTATE);
+        types.push(RoomWidgetFurniActionMessage.RWFAM_EJECT);
         types.push(RoomWidgetFurniActionMessage.RWFAM_PICKUP);
         types.push(RoomWidgetFurniActionMessage.RWFAM_USE);
 

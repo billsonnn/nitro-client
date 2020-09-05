@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { CameraControlsComponent } from './cameracontrols/component';
 import { ToolbarComponent } from './component';
 
 @NgModule({
@@ -7,12 +8,14 @@ import { ToolbarComponent } from './component';
         SharedModule
     ],
     exports: [
-        ToolbarComponent
+        ToolbarComponent,
+        CameraControlsComponent
     ],
     providers: [
     ],
     declarations: [
-        ToolbarComponent
+        ToolbarComponent,
+        CameraControlsComponent
     ]
 })
 export class ToolbarModule {}

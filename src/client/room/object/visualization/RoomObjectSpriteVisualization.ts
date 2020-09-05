@@ -1,5 +1,5 @@
-import { Nitro } from '../../../nitro/Nitro';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
+import { TextureUtils } from '../../utils/TextureUtils';
 import { IRoomObjectController } from '../IRoomObjectController';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
 import { IRoomObjectSpriteVisualization } from './IRoomObjectSpriteVisualization';
@@ -101,12 +101,12 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         }
     }
 
-    public get image(): PIXI.Texture
+    public get image(): PIXI.RenderTexture
     {
         return this.getImage(0, -1);
     }
 
-    public getImage(bgColor: number, originalId: number): PIXI.Texture
+    public getImage(bgColor: number, originalId: number): PIXI.RenderTexture
     {
         const boundingRectangle = this.getBoundingRectangle();
 
@@ -121,10 +121,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         {
             const objectSprite = this.getSprite(index);
 
-            if(objectSprite && objectSprite.visible)
-            {
-                if(objectSprite.texture) spriteList.push(objectSprite);
-            }
+            if(objectSprite && objectSprite.visible && objectSprite.texture) spriteList.push(objectSprite);
 
             index++;
         }
@@ -164,7 +161,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
             index++;
         }
 
-        const texture = Nitro.instance.renderer.generateTexture(container, 1, 1);
+        const texture = TextureUtils.generateTexture(container);
 
         if(!texture) return null;
 
@@ -184,8 +181,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
             if(sprite && sprite.texture && sprite.visible)
             {
-                let offsetX = ((sprite.flipH) ? (sprite.offsetX * -1) : sprite.offsetX);
-                let offsetY = ((sprite.flipV) ? (sprite.offsetY * -1) : sprite.offsetY);
+                let offsetX = ((sprite.flipH) ? -(sprite.offsetX) : sprite.offsetX);
+                let offsetY = ((sprite.flipV) ? -(sprite.offsetY) : sprite.offsetY);
                 
                 const point = new PIXI.Point(offsetX, offsetY);
 
@@ -202,9 +199,9 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
                     if(point.y < rectangle.y) rectangle.y = point.y;
 
-                    if(sprite.width > rectangle.width) rectangle.width = sprite.width;
+                    if((point.x + sprite.width) > rectangle.right) rectangle.width = ((point.x + sprite.width) - rectangle.x);
 
-                    if(sprite.height > rectangle.height) rectangle.height = sprite.height;
+                    if((point.y + sprite.height) > rectangle.bottom) rectangle.height = ((point.y + sprite.height) - rectangle.y);
                 }
             }
 

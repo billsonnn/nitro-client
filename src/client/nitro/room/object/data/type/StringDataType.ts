@@ -1,6 +1,7 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { IObjectData } from '../IObjectData';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
 
@@ -52,6 +53,29 @@ export class StringDataType extends ObjectDataBase
         if(!this._data || !this._data.length) return '';
 
         return this._data[StringDataType.STATE];
+    }
+
+    public compare(data: IObjectData): boolean
+    {
+        if(!(data instanceof StringDataType)) return false;
+
+        let i = 0;
+
+        while(i < this._data.length)
+        {
+            if(i === 0)
+            {
+
+            }
+            else
+            {
+                if(this._data[i] !== data.getValue(i)) return false;
+            }
+
+            i++;
+        }
+
+        return true;
     }
 
     public getValue(index: number): string

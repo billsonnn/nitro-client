@@ -32,7 +32,7 @@ export class FurnitureBottleVisualization extends FurnitureAnimatedVisualization
             }
         }
 
-        if((animationId > 0) && (animationId <= 7))
+        if((animationId >= 0) && (animationId <= 7))
         {
             if(this._running)
             {

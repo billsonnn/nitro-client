@@ -47,6 +47,11 @@ export class LegacyDataType extends ObjectDataBase implements IObjectData
         return this._data;
     }
 
+    public compare(data: IObjectData): boolean
+    {
+        return (this._data === data.getLegacyString());
+    }
+
     public setString(data: string): void
     {
         this._data = data;

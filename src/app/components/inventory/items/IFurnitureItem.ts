@@ -9,9 +9,9 @@ export interface IFurnitureItem
     _Str_2794: number;
     category: number;
     _Str_16260: boolean;
-    _Str_8386: boolean;
-    _Str_13551: boolean;
+    isTradable: boolean;
+    isGroupable: boolean;
     sellable: boolean;
     locked: boolean;
-    _Str_2770: boolean;
+    isWallItem: boolean;
 }

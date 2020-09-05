@@ -55,7 +55,7 @@ export class RoomPreviewer
             this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized.bind(this));
         }
 
-        this.createRoomForPreviews();
+        this.createRoomForPreview();
     }
 
     public dispose(): void
@@ -70,7 +70,7 @@ export class RoomPreviewer
         }
     }
 
-    private createRoomForPreviews(): void
+    private createRoomForPreview(): void
     {
         if(this.isRoomEngineReady)
         {
@@ -303,8 +303,6 @@ export class RoomPreviewer
 
     private updatePreviewObjectBoundingRectangle(point: PIXI.Point): void
     {
-        let bounds: PIXI.Rectangle = null;
-
         const objectBounds = this._roomEngine.getRoomObjectBoundingRectangle(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory, RoomPreviewer.PREVIEW_CANVAS_ID);
 
         if(objectBounds && point)
@@ -321,7 +319,15 @@ export class RoomPreviewer
             }
             else
             {
-                bounds = this._currentPreviewRectangle.fit(objectBounds);
+                const bounds = new PIXI.Rectangle();
+
+                if(this._currentPreviewRectangle.x < objectBounds.x) bounds.x = objectBounds.x;
+
+                if(this._currentPreviewRectangle.y < objectBounds.y) bounds.y = objectBounds.y;
+
+                if(this._currentPreviewRectangle.width < objectBounds.width) bounds.width = objectBounds.width;
+
+                if(this._currentPreviewRectangle.height < objectBounds.height) bounds.height = objectBounds.height;
 
                 if(((((bounds.width - this._currentPreviewRectangle.width) > ((this._currentPreviewCanvasWidth - this._currentPreviewRectangle.width) >> 1)) || ((bounds.height - this._currentPreviewRectangle.height) > ((this._currentPreviewCanvasHeight - this._currentPreviewRectangle.height) >> 1))) || (this._currentPreviewRectangle.width < 1)) || (this._currentPreviewRectangle.height < 1)) this._currentPreviewRectangle = bounds;
             }
@@ -353,7 +359,10 @@ export class RoomPreviewer
                         point.x = (point.x >> 1);
                         point.y = (point.y >> 1);
 
-                        this._currentPreviewRectangle = new PIXI.Rectangle((this._currentPreviewRectangle.left >> 2), (this._currentPreviewRectangle.top >> 2), (this._currentPreviewRectangle.right >> 2), (this._currentPreviewRectangle.bottom >> 2));
+                        this._currentPreviewRectangle.x         = (this._currentPreviewRectangle.x >> 2);
+                        this._currentPreviewRectangle.y         = (this._currentPreviewRectangle.y >> 2);
+                        this._currentPreviewRectangle.width     = (this._currentPreviewRectangle.width >> 2);
+                        this._currentPreviewRectangle.height    = (this._currentPreviewRectangle.height >> 2);
                     }
                 }
                 else
@@ -368,7 +377,10 @@ export class RoomPreviewer
                         point.x = (point.x >> 1);
                         point.y = (point.y >> 1);
 
-                        this._currentPreviewRectangle = new PIXI.Rectangle((this._currentPreviewRectangle.left >> 2), (this._currentPreviewRectangle.top >> 2), (this._currentPreviewRectangle.right >> 2), (this._currentPreviewRectangle.bottom >> 2));
+                        this._currentPreviewRectangle.x         = (this._currentPreviewRectangle.x >> 2);
+                        this._currentPreviewRectangle.y         = (this._currentPreviewRectangle.y >> 2);
+                        this._currentPreviewRectangle.width     = (this._currentPreviewRectangle.width >> 2);
+                        this._currentPreviewRectangle.height    = (this._currentPreviewRectangle.height >> 2);
                     }
                 }
             }
@@ -525,9 +537,10 @@ export class RoomPreviewer
 
                 if(this._currentPreviewRectangle)
                 {
-                    offset = this.validatePreviewSize(offset);
-
                     const _local_3 = this._currentPreviewScale;
+
+                    offset = this.validatePreviewSize(offset);
+                    
                     const _local_4 = this.getCanvasOffset(offset);
 
                     if(_local_4)
@@ -622,7 +635,7 @@ export class RoomPreviewer
         return null;
     }
 
-    public getRoomObjectCurrentImage(): PIXI.Texture
+    public getRoomObjectCurrentImage(): PIXI.RenderTexture
     {
         if(this.isRoomEngineReady)
         {

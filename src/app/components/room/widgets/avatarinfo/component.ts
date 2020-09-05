@@ -321,7 +321,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         this.ngZone.run(() => this.contextsContainer.remove(componentIndex));
     }
 
-    public toggleUpdateReceiver():void
+    public toggleUpdateReceiver(): void
     {
         if(this.view || (this.cachedNameBubbles.size > 0))
         {

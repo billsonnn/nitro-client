@@ -29,6 +29,7 @@ export class OutgoingHeader
     public static FURNITURE_WALL_UPDATE          = 168;
     public static FURNITURE_PICKUP               = 3456;
     public static FURNITURE_PLACE                = 1258;
+    public static FURNITURE_POSTIT_PLACE         = 2248;
     public static GAMES_INIT                     = 2914;
     public static GAMES_LIST                     = 741;
     public static GIFT_CONFIG                    = 418;

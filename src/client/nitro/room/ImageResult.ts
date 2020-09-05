@@ -1,5 +1,17 @@
-﻿export class ImageResult 
+﻿import { TextureUtils } from '../../room/utils/TextureUtils';
+
+export class ImageResult 
 {
-    public id: number           = 0;
-    public data: PIXI.Texture   = null;
+    public id: number               = 0;
+    public data: PIXI.RenderTexture = null;
+    public image: HTMLImageElement  = null;
+
+    public getImage(): HTMLImageElement
+    {
+        if(this.image) return this.image;
+        
+        if(!this.data) return null;
+
+        return TextureUtils.generateImage(this.data);
+    }
 }

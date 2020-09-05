@@ -43,15 +43,11 @@ export class RoomObjectManager implements IRoomObjectManager
     {
         const object: RoomObject = new RoomObject(id, type);
 
-        if(!object) return null;
-
         return this.addObject(id, object);
     }
 
     private addObject(id: number, object: IRoomObjectController): IRoomObjectController
     {
-        if(!object) return null;
-
         if(this._objects.get(id))
         {
             object.dispose();

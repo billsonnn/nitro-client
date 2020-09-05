@@ -1,6 +1,7 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { IObjectData } from '../IObjectData';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
 
@@ -57,6 +58,11 @@ export class MapDataType extends ObjectDataBase
         if(state === undefined || state === null) return '';
 
         return state;
+    }
+
+    public compare(data: IObjectData): boolean
+    {
+        return false;
     }
 
     public getValue(key: string): string

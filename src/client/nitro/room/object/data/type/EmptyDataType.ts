@@ -31,4 +31,9 @@ export class EmptyDataType extends ObjectDataBase implements IObjectData
     {
         return this._state;
     }
+
+    public compare(data: IObjectData): boolean
+    {
+        return super.compare(data);
+    }
 }

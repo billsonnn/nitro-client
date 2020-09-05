@@ -11,6 +11,7 @@ import { FurnitureType } from '../session/furniture/FurnitureType';
 import { IFurnitureData } from '../session/furniture/IFurnitureData';
 import { IFurnitureDataListener } from '../session/furniture/IFurnitureDataListener';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { IRoomContentListener } from './IRoomContentListener';
 import { RoomObjectCategory } from './object/RoomObjectCategory';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
 import { RoomObjectVariable } from './object/RoomObjectVariable';
@@ -31,7 +32,9 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _stateEvents: IEventDispatcher;
     private _sessionDataManager: ISessionDataManager;
     private _waitingForSessionDataManager: boolean;
+    private _iconListener: IRoomContentListener;
     private _collections: Map<string, IGraphicAssetCollection>;
+    private _images: Map<string, HTMLImageElement>;
 
     private _events: Map<string, IEventDispatcher>;
     private _activeObjects: { [index: string]: number };
@@ -50,7 +53,9 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._stateEvents                   = null;
         this._sessionDataManager            = null;
         this._waitingForSessionDataManager  = false;
+        this._iconListener                  = null;
         this._collections                   = new Map();
+        this._images                        = new Map();
 
         this._events                        = new Map();
         this._activeObjects                 = {};
@@ -242,6 +247,21 @@ export class RoomContentLoader implements IFurnitureDataListener
         return existing;
     }
 
+    public getImage(name: string): HTMLImageElement
+    {
+        if(!name) return null;
+
+        const existing = this._images.get(name);
+
+        if(!existing) return null;
+
+        const image = new Image();
+
+        image.src = existing.src;
+
+        return image;
+    }
+
     public addAssetToCollection(collectionName: string, assetName: string, texture: PIXI.Texture): boolean
     {
         const collection = this.getCollection(collectionName);
@@ -310,6 +330,52 @@ export class RoomContentLoader implements IFurnitureDataListener
         if(type === RoomObjectVisualizationType.USER) return false;
 
         return true;
+    }
+
+    public downloadImage(id: number, type: string, param: string, events: IEventDispatcher = null): boolean
+    {
+        let typeName: string    = null;
+        let assetUrls: string[] = [];
+
+        if(type && (type.indexOf(',') >= 0))
+        {
+            typeName    = type;
+            type        = typeName.split(',')[0];
+        }
+
+        if(typeName)
+        {
+            assetUrls = this.getAssetUrls(typeName, param, true);
+        }
+        else
+        {
+            assetUrls = this.getAssetUrls(type, param, true);
+        }
+
+        if(assetUrls && assetUrls.length)
+        {
+            const url = assetUrls[0];
+
+            const image = new Image();
+            
+            image.src = url;
+
+            image.onload = () =>
+            {
+                this._images.set(([ type, param ].join('_')), image);
+                
+                this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), true);
+            }
+
+            image.onerror = () =>
+            {
+                this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), false);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public downloadAsset(type: string, events: IEventDispatcher): boolean
@@ -441,7 +507,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                     {
                         let assetUrl = this.getAssetUrlWithFurniIconBase(type);
 
-                        const active = (param && (param !== '') && (this._activeObjectTypeIds.get((type + '*' + param)) !== null))
+                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((type + '*' + param)) !== null))
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
 
@@ -522,5 +588,10 @@ export class RoomContentLoader implements IFurnitureDataListener
         if(remove) this._events.delete(type);
 
         return existing;
+    }
+
+    public setIconListener(listener: IRoomContentListener): void
+    {
+        this._iconListener = listener;
     }
 }

@@ -104,8 +104,7 @@ export class ConfirmPurchaseToastComponent extends Toast implements AfterViewIni
 
             if(image && image.data)
             {
-                const sprite    = PIXI.Sprite.from(image.data);
-                const base64    = Nitro.instance.renderer.extract.base64(sprite);
+                const base64 = Nitro.instance.renderer.extract.base64(image.data);
 
                 if(base64)
                 {

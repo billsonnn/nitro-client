@@ -29,7 +29,7 @@
         this._users = k;
     }
 
-    public addUsername(k: string):void
+    public addUsername(k: string): void
     {
         this._users.push(k);
     }

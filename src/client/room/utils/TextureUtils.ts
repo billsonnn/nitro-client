@@ -12,6 +12,13 @@ export class TextureUtils
         return TextureUtils.getRenderer().generateTexture(displayObject, scaleMode, resolution, region);
     }
 
+    public static generateImage(target: PIXI.DisplayObject | PIXI.RenderTexture): HTMLImageElement
+    {
+        if(!target) return null;
+        
+        return TextureUtils.getRenderer().extract.image(target);
+    }
+
     public static getRenderer(): PIXI.Renderer | PIXI.CanvasRenderer
     {
         if(!TextureUtils._renderer) return Nitro.instance.renderer;

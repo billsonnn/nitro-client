@@ -17,21 +17,21 @@ export class SelectedRoomObjectData implements ISelectedRoomObjectData
     private _animFrame: number = -1;
     private _posture: string = null;
 
-    constructor(k: number, _arg_2: number, _arg_3: string, _arg_4: IVector3D, _arg_5: IVector3D, _arg_6: number = 0, _arg_7: string = null, _arg_8: IObjectData = null, _arg_9: number = -1, _arg_10: number = -1, _arg_11: string = null)
+    constructor(id: number, category: number, operation: string, location: IVector3D, direction: IVector3D, typeId: number = 0, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null)
     {
-        this._id = k;
-        this._category = _arg_2;
-        this._operation = _arg_3;
+        this._id = id;
+        this._category = category;
+        this._operation = operation;
         this._loc = new Vector3d();
-        this._loc.assign(_arg_4);
+        this._loc.assign(location);
         this._dir = new Vector3d();
-        this._dir.assign(_arg_5);
-        this._typeId = _arg_6;
-        this._instanceData = _arg_7;
-        this._stuffData = _arg_8;
-        this._state = _arg_9;
-        this._animFrame = _arg_10;
-        this._posture = _arg_11;
+        this._dir.assign(direction);
+        this._typeId = typeId;
+        this._instanceData = instanceData;
+        this._stuffData = stuffData;
+        this._state = state;
+        this._animFrame = frameNumber;
+        this._posture = posture;
     }
 
     public get id(): number

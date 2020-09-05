@@ -6,6 +6,7 @@ export class FurnitureFloorDataParser
 {
     private _itemId: number;
     private _spriteId: number;
+    private _spriteName: string;
     private _x: number;
     private _y: number;
     private _direction: number;
@@ -31,6 +32,7 @@ export class FurnitureFloorDataParser
     {
         this._itemId        = 0;
         this._spriteId      = 0;
+        this._spriteName    = null;
         this._x             = 0;
         this._y             = 0;
         this._direction     = 0;
@@ -66,7 +68,7 @@ export class FurnitureFloorDataParser
         this._userId        = wrapper.readInt();
         this._username      = null;
 
-        if(this._spriteId < 0) wrapper.readString();
+        if(this._spriteId < 0) this._spriteName = wrapper.readString();
 
         return true;
     }
@@ -144,5 +146,15 @@ export class FurnitureFloorDataParser
     public set username(username: string)
     {
         this._username = username;
+    }
+
+    public get spriteName(): string
+    {
+        return this._spriteName;
+    }
+
+    public set spriteName(type: string)
+    {
+        this._spriteName = type;
     }
 }

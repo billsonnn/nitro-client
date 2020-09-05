@@ -6,6 +6,7 @@ import { AvatarSetType } from '../../../../../client/nitro/avatar/enum/AvatarSet
 import { IAvatarImageListener } from '../../../../../client/nitro/avatar/IAvatarImageListener';
 import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
@@ -48,7 +49,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         this._avatarColorCache          = new Map();
         this._avatarImageCache          = new Map();
         this._petImageCache             = new Map();
-        this._primaryCanvasScale        = 0;
+        this._primaryCanvasScale        = 1;
         this._primaryCanvasOriginPos    = null;
         this._tempScreenPosVector       = new Vector3d();
 
@@ -69,6 +70,18 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         this._Str_20006();
     }
 
+    private onRoomEngineEvent(event: RoomEngineEvent): void
+    {
+        switch(event.type)
+        {
+            case RoomEngineEvent.ROOM_ZOOMED:
+                const scale = this._container.roomEngine.getRoomInstanceRenderingCanvasScale(event.roomId);
+
+                this._primaryCanvasScale = scale;
+                return;
+        }
+    }
+
     private _Str_20006(): void
     {
         if(!this._container || !this._container.roomSession || !this._container.roomEngine || !this._container.events) return;
@@ -79,17 +92,12 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(!geometry) return;
 
-        let scale = 1;
-
-        if(this._primaryCanvasScale > 0) scale = (geometry.scale / this._primaryCanvasScale);
-
         if(!this._primaryCanvasOriginPos)
         {
             this._tempScreenPosVector.x     = 0;
             this._tempScreenPosVector.y     = 0;
             this._tempScreenPosVector.z     = 0;
             this._primaryCanvasOriginPos    = geometry.getScreenPoint(this._tempScreenPosVector);
-            this._primaryCanvasScale        = (geometry.scale - 10);
         }
 
         let eventType: string               = '';
@@ -99,17 +107,17 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         this._tempScreenPosVector.y = 0;
         this._tempScreenPosVector.z = 0;
 
-        const _local_7 = geometry.getScreenPoint(this._tempScreenPosVector);
+        const screenPoint = geometry.getScreenPoint(this._tempScreenPosVector);
 
-        if(_local_7)
+        if(screenPoint)
         {
-            const _local_8 = this._container.roomEngine.getRoomInstanceRenderingCanvasOffset(roomId, canvasId);
+            const offset = this._container.roomEngine.getRoomInstanceRenderingCanvasOffset(roomId, canvasId);
 
-            if(_local_8) _local_7.set((_local_7.x + _local_8.x), (_local_7.y + _local_8.y));
+            if(offset) screenPoint.set((screenPoint.x + offset.x), (screenPoint.y + offset.y));
 
-            if(((!(_local_7.x == this._primaryCanvasOriginPos.x)) || (!(_local_7.y == this._primaryCanvasOriginPos.y))))
+            if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
-                const _local_9 = PointMath._Str_15193(_local_7, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
+                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, 1));
 
                 if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
                 {
@@ -119,7 +127,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                     this._container.events.dispatchEvent(_local_6);
                 }
 
-                this._primaryCanvasOriginPos = _local_7;
+                this._primaryCanvasOriginPos = screenPoint;
             }
         }
 
@@ -305,9 +313,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(image)
         {
-            const sprite = PIXI.Sprite.from(image.data);
-
-            existing = Nitro.instance.renderer.extract.image(sprite);
+            existing = Nitro.instance.renderer.extract.image(image.data);
 
             this._petImageCache.set((figure + posture), existing);
         }
@@ -342,6 +348,18 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
+        if(container)
+        {
+            container.roomEngine.events.addEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
+        }
+        else
+        {
+            if(this._container)
+            {
+                container.roomEngine.events.removeEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
+            }
+        }
+
         this._container = container;
     }
 

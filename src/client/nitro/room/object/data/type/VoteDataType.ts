@@ -1,6 +1,7 @@
 import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { IObjectData } from '../IObjectData';
 import { ObjectDataBase } from '../ObjectDataBase';
 import { ObjectDataKey } from '../ObjectDataKey';
 
@@ -46,6 +47,11 @@ export class VoteDataType extends ObjectDataBase
     public getLegacyString(): string
     {
         return this._state;
+    }
+
+    public compare(data: IObjectData): boolean
+    {
+        return true;
     }
     
     public setString(state: string)

@@ -294,7 +294,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         const planeMask = k.getValue(RoomObjectVariable.ROOM_PLANE_MASK_XML) as RoomMapMaskData;
 
         if(planeMask !== this._maskData)
-        {            
+        {
             this._Str_15935(planeMask);
 
             this._maskData = planeMask;

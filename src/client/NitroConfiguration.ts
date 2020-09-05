@@ -20,7 +20,7 @@ export class NitroConfiguration
     public static GROUP_BADGE_URL           = NitroConfiguration.ASSET_URL + '/group-badge/%badgedata%';
     public static PET_ASSET_URL             = NitroConfiguration.ASSET_URL + '/pet/%libname%/%libname%.json';
     public static FURNI_ASSET_URL           = NitroConfiguration.ASSET_URL + '/furniture/%libname%/%libname%.json';
-    public static FURNI_ASSET_ICON_URL      = NitroConfiguration.ASSET_URL + '/icons/%libname%%param%_icon.png';
+    public static FURNI_ASSET_ICON_URL      = 'https://swf.nextgenhabbo.com/dcr/hof_furni/icons/%libname%%param%_icon.png';
     public static ROOM_ASSET_URL            = NitroConfiguration.ASSET_URL + '/room/%libname%/%libname%.json';
 
     public static FPS                       = 24;

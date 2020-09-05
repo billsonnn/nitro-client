@@ -62,7 +62,13 @@ export class Nitro extends PIXI.Application implements INitro
     {
         super(options);
 
-        if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
+        if(!Nitro.INSTANCE)
+        {
+            Nitro.INSTANCE = this;
+
+            //@ts-ignore
+            window.NitroInstance = Nitro.INSTANCE;
+        }
 
         this._core                  = core;
         this._events                = new EventDispatcher();
@@ -104,7 +110,7 @@ export class Nitro extends PIXI.Application implements INitro
             width: (window.innerWidth),
             height: (window.innerHeight),
             transparent: true,
-            backgroundColor: 0x000000,
+            autoDensity: true,
             view: canvas
         });
 
@@ -206,16 +212,6 @@ export class Nitro extends PIXI.Application implements INitro
     private setupRenderer(): void
     {
         Nitro.instance.resizeTo = window;
-
-        this.resize();
-    }
-
-    public resize(): void
-    {
-        //this.renderer.view.width        = window.innerWidth;
-        //this.renderer.view.height       = window.innerHeight;
-        this.renderer.transparent       = true;
-        this.renderer.backgroundColor   = 0xFFFFFF;
     }
 
     public get core(): INitroCore

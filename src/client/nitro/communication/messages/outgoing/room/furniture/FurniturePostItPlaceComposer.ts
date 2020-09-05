@@ -1,12 +1,12 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class ItemPlaceComposer implements IMessageComposer
+export class FurniturePostItPlaceComposer implements IMessageComposer
 {
     private _data: any[];
 
-    constructor(itemId: number, x: number, y: number, direction: number)
+    constructor(itemId: number, wallLocation: string)
     {
-        this._data = [ itemId, x, y, direction ];
+        this._data = [ itemId, wallLocation ];
     }
 
     public getMessageArray(): any[]

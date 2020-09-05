@@ -12,4 +12,5 @@ export interface IObjectData
     initializeFromRoomObjectModel(model: IRoomObjectModel): void;
     writeRoomObjectModel(model: IRoomObjectModel): void;
     getLegacyString(): string;
+    compare(data: IObjectData): boolean;
 }

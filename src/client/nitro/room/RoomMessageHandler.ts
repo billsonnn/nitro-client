@@ -792,7 +792,14 @@ export class RoomMessageHandler extends Disposable
         const location  = new Vector3d(data.x, data.y, data.z);
         const direction = new Vector3d(data.direction);
 
-        this._roomCreator.addFurnitureFloor(roomId, data.itemId, data.spriteId, location, direction, data.state, data.data, NaN, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
+        if(data.spriteName)
+        {
+            this._roomCreator.addFurnitureFloorByTypeName(roomId, data.itemId, data.spriteName, location, direction, data.state, data.data, NaN, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
+        }
+        else
+        {
+            this._roomCreator.addFurnitureFloor(roomId, data.itemId, data.spriteId, location, direction, data.state, data.data, NaN, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
+        }
     }
 
     private addRoomObjectFurnitureWall(roomId: number, data: FurnitureWallDataParser): void
@@ -819,7 +826,7 @@ export class RoomMessageHandler extends Disposable
         this._roomCreator.addFurnitureWall(roomId, data.itemId, data.spriteId, location, direction, data.state, data.stuffData, data.secondsToExpiration, data.usagePolicy, data.userId, data.username);
     }
 
-    // public _SafeStr_10580(event:_SafeStr_2242):void
+    // public _SafeStr_10580(event:_SafeStr_2242): void
     // {
     //     var arrayIndex:int;
     //     var discoColours:Array;
@@ -842,7 +849,7 @@ export class RoomMessageHandler extends Disposable
     //             arrayIndex = 0;
     //             discoColours = [29371, 16731195, 16764980, 0x99FF00, 29371, 16731195, 16764980, 0x99FF00, 0];
     //             discoTimer = new Timer(1000, (discoColours.length + 1));
-    //             discoTimer.addEventListener(TimerEvent.TIMER, function (k:TimerEvent):void
+    //             discoTimer.addEventListener(TimerEvent.TIMER, function (k:TimerEvent): void
     //             {
     //                 if (arrayIndex == discoColours.length)
     //                 {

@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js-legacy';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
 import { RoomObjectSpriteType } from '../object/enum/RoomObjectSpriteType';
@@ -27,7 +28,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     private _master: PIXI.Container;
     private _display: PIXI.Container;
-    private _mask: PIXI.Graphics;
+    private _mask: PIXI.Sprite;
 
     private _sortableSprites: SortableSprite[];
     private _spriteCount: number;
@@ -158,13 +159,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(this._usesMask)
         {
-            if(this._mask)
+            if(!this._mask)
             {
-                this._mask.clear();
-            }
-            else
-            {
-                this._mask = new PIXI.Graphics();
+                this._mask = new PIXI.Sprite(Texture.WHITE);
 
                 this._mask.name = 'mask';
 
@@ -176,15 +173,17 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                 }
             }
 
-            this._mask.beginFill(0);
-            this._mask.drawRect(0, 0, width, height);
+            this._mask.width    = width;
+            this._mask.height   = height;
+
+            console.log(this._mask.width, this._mask.height)
         }
 
         if(this._master)
         {
             if(this._master.hitArea)
             {
-                const hitArea = this._master.hitArea as PIXI.Rectangle;
+                const hitArea = (this._master.hitArea as PIXI.Rectangle);
 
                 hitArea.width   = width;
                 hitArea.height  = height;
@@ -636,7 +635,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         if(!this._mouseCheckCount)
         {
-            //this._Str_19207(this._mouseLocation.x, this._mouseLocation.y, MouseEventType.MOVE);
+            //this._Str_19207(this._mouseLocation.x, this._mouseLocation.y, MouseEventType.MOUSE_MOVE);
         }
 
         this._mouseCheckCount = 0;

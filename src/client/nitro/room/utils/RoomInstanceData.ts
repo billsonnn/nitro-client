@@ -74,6 +74,7 @@ export class RoomInstanceData
     {
         if(!data) return;
 
+        this._floorStack.delete(data.id);
         this._floorStack.set(data.id, data);
     }
 
@@ -112,6 +113,7 @@ export class RoomInstanceData
     {
         if(!data) return;
 
+        this._wallStack.delete(data.id);
         this._wallStack.set(data.id, data);
     }
 

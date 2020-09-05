@@ -57,6 +57,11 @@ export class CrackableDataType extends ObjectDataBase implements IObjectData
         return this._state;
     }
 
+    public compare(data: IObjectData): boolean
+    {
+        return true;
+    }
+
     public get hits(): number
     {
         return this._hits;

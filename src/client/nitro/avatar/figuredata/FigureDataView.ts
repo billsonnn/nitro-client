@@ -18,7 +18,7 @@ export class FigureDataView implements IAvatarImageListener
         this._isDisposed    = false;
     }
 
-    public update(k: string, effectId: number = 0, direction: number = 4):void
+    public update(k: string, effectId: number = 0, direction: number = 4): void
     {
         // this._figureString = k;
 
@@ -39,7 +39,7 @@ export class FigureDataView implements IAvatarImageListener
         // }
     }
 
-    public resetFigure(k: string):void
+    public resetFigure(k: string): void
     {
         // if(k !== this._figureString) return;
 
@@ -82,7 +82,7 @@ export class FigureDataView implements IAvatarImageListener
     //     }
     // }
 
-    public dispose():void
+    public dispose(): void
     {
         this._isDisposed = true;
     }

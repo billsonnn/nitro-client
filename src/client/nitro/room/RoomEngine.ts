@@ -43,6 +43,7 @@ import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActi
 import { RoomToObjectOwnAvatarMoveEvent } from './events/RoomToObjectOwnAvatarMoveEvent';
 import { IGetImageListener } from './IGetImageListener';
 import { ImageResult } from './ImageResult';
+import { IRoomContentListener } from './IRoomContentListener';
 import { IRoomCreator } from './IRoomCreator';
 import { IRoomEngine } from './IRoomEngine';
 import { IRoomEngineServices } from './IRoomEngineServices';
@@ -101,7 +102,7 @@ import { RoomInstanceData } from './utils/RoomInstanceData';
 import { RoomObjectBadgeImageAssetListener } from './utils/RoomObjectBadgeImageAssetListener';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
 
-export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener, IUpdateReceiver, IDisposable
+export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreator, IRoomEngineServices, IRoomManagerListener, IRoomContentListener, IUpdateReceiver, IDisposable
 {
     public static ROOM_OBJECT_ID: number        = -1;
     public static ROOM_OBJECT_TYPE: string      = 'room';
@@ -148,6 +149,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _Str_13525: boolean;
     private _numberBank: NumberBank;
     private _imageListeners: Map<string, IGetImageListener[]>;
+    private _contentListeners: Map<string, IGetImageListener[]>;
     private _cameraCentered: boolean;
     private _badgeListeners: Map<string, RoomObjectBadgeImageAssetListener[]>;
 
@@ -185,6 +187,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._Str_13525                 = false;
         this._numberBank                = null;
         this._imageListeners            = new Map();
+        this._contentListeners          = new Map();
         this._cameraCentered            = false;
         this._badgeListeners            = new Map();
     }
@@ -211,6 +214,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this._roomContentLoader.initialize(this.events);
         this._roomContentLoader.setSessionDataManager(this._sessionDataManager);
+        this._roomContentLoader.setIconListener(this);
 
         if(this._roomSessionManager)
         {
@@ -631,13 +635,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return canvas.geometry;
     }
 
-    public getRoomInstanceNumber(roomId: number, key: string): number
+    public getRoomInstanceVariable<T>(roomId: number, key: string): T
     {
         const instance = this.getRoomInstance(roomId);
 
         if(!instance) return null;
 
-        return (instance.model && instance.model.getValue(key)) || NaN;
+        return ((instance.model && instance.model.getValue(key)) || null);
     }
 
     public updateRoomInstancePlaneVisibility(roomId: number, wallVisible: boolean, floorVisible: boolean = true): boolean
@@ -933,7 +937,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         const selectedRoomObjectData = this.getSelectedRoomObjectData(roomId);
 
-        if(selectedRoomObjectData && (Math.abs(selectedRoomObjectData.id) === id) && (selectedRoomObjectData.category === RoomObjectCategory.FLOOR))
+        if(selectedRoomObjectData && (selectedRoomObjectData.id === id) && (selectedRoomObjectData.category === RoomObjectCategory.FLOOR))
         {
             this.selectRoomObject(roomId, id, RoomObjectCategory.FLOOR);
         }
@@ -1624,8 +1628,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
                         if(icon)
                         {
-                            const sprite    = PIXI.Sprite.from(icon);
-                            const image     = Nitro.instance.renderer.extract.image(sprite);
+                            const image = Nitro.instance.renderer.extract.image(icon);
 
                             if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
                         }
@@ -1666,8 +1669,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                         
                     if(icon)
                     {
-                        const sprite    = PIXI.Sprite.from(icon);
-                        const image     = Nitro.instance.renderer.extract.image(sprite);
+                        const image = Nitro.instance.renderer.extract.image(icon);
 
                         if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
                     }
@@ -1703,6 +1705,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!instanceData) return false;
 
         const furnitureData = new FurnitureData(id, typeId, null, location, direction, state, objectData, extra, expires, usagePolicy, ownerId, ownerName, synchronized, realRoomObject, sizeZ);
+
+        instanceData.addPendingFurnitureFloor(furnitureData);
+
+        return true;
+    }
+
+    public addFurnitureFloorByTypeName(roomId: number, id: number, typeName: string, location: IVector3D, direction: IVector3D, state: number, objectData: IObjectData, extra: number = NaN, expires: number = -1, usagePolicy: number = 0, ownerId: number = 0, ownerName: string = '', synchronized: boolean = true, realRoomObject: boolean = true, sizeZ: number = -1): boolean
+    {
+        const instanceData = this.getRoomInstanceData(roomId);
+
+        if(!instanceData) return false;
+
+        const furnitureData = new FurnitureData(id, 0, typeName, location, direction, state, objectData, extra, expires, usagePolicy, ownerId, ownerName, synchronized, realRoomObject, sizeZ);
 
         instanceData.addPendingFurnitureFloor(furnitureData);
 
@@ -2397,7 +2412,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._roomObjectEventHandler) return false;
 
-        this._roomObjectEventHandler._Str_3571(this._activeRoomId, objectId, category, operation);
+        this._roomObjectEventHandler.processRoomObjectOperation(this._activeRoomId, objectId, category, operation);
     }
 
     private processRoomObjectEvent(event: RoomObjectEvent): void
@@ -2411,6 +2426,17 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         const roomId = this.getRoomIdFromString(roomIdString);
 
         this._roomObjectEventHandler.handleRoomObjectEvent(event, roomId);
+    }
+
+    public _Str_5346(placementSource: string, id: number, category: number, typeId: number, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
+    {
+        const roomInstance = this.getRoomInstance(this._activeRoomId);
+
+        if(!roomInstance || (roomInstance.model.getValue(RoomVariableEnum.ROOM_IS_PUBLIC) !== 0)) return false;
+
+        if(!this._roomObjectEventHandler) return false;
+        
+        return this._roomObjectEventHandler._Str_5346(placementSource, this._activeRoomId, id, category, typeId, instanceData, stuffData, state, frameNumber, posture);
     }
 
     public getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId: number = -1): PIXI.Point
@@ -2449,6 +2475,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomObjectEventHandler._Str_17481(roomId, objectId, objectCategory);
     }
 
+    public _Str_8675(): void
+    {
+        if(!this._roomObjectEventHandler) return;
+
+        this._roomObjectEventHandler._Str_8675(this._activeRoomId);
+    }
+
     private _Str_24651(k: PIXI.Sprite, _arg_2: string, _arg_3: PIXI.Texture): PIXI.Sprite
     {
         if(!k || !_arg_3) return;
@@ -2465,15 +2498,41 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return _local_4;
     }
 
-    public _Str_16645(objectId: number, category: number, _arg_3: boolean, _arg_4: string = null, _arg_5: IObjectData = null, _arg_6: number = -1, _arg_7: number = -1, _arg_8: string = null): void
+    public onRoomContentLoaded(id: number, assetName: string, success: boolean): void
     {
-        let type: string            = null;
-        let colorIndex              = 0;
-        let _local_9: ImageResult   = null;
+        if(!this._roomContentLoader || (id === -1)) return;
+
+        this._numberBank._Str_15187((id - 1));
+
+        const listeners = this._contentListeners.get(assetName);
+
+        if(listeners)
+        {
+            this._contentListeners.delete(assetName);
+
+            const image = this._roomContentLoader.getImage(assetName);
+
+            if(image)
+            {
+                for(let listener of listeners)
+                {
+                    if(!listener) continue;
+
+                    listener.imageReady(id, null, image);
+                }
+            }
+        }
+    }
+
+    public _Str_16645(objectId: number, category: number, _arg_3: boolean, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): void
+    {
+        let type: string                = null;
+        let colorIndex                  = 0;
+        let imageResult: ImageResult    = null;
 
         if(_arg_3)
         {
-            _local_9 = this.getRoomObjectImage(this._activeRoomId, objectId, category, new Vector3d(), 1, null);
+            imageResult = this.getRoomObjectImage(this._activeRoomId, objectId, category, new Vector3d(), 1, null);
         }
         else
         {
@@ -2487,51 +2546,50 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
                 else if(category === RoomObjectCategory.WALL)
                 {
-                    type        = this._roomContentLoader.getFurnitureWallNameForTypeId(objectId, _arg_4);
+                    type        = this._roomContentLoader.getFurnitureWallNameForTypeId(objectId, instanceData);
                     colorIndex  = this._roomContentLoader.getFurnitureWallColorIndex(objectId);
                 }
 
-                else if(category === RoomObjectCategory.UNIT)
+                if(category === RoomObjectCategory.UNIT)
                 {
                     type = RoomObjectUserType.getTypeString(objectId);
 
                     if(type === "pet")
                     {
-                        type = this.getPetType(_arg_4);
+                        type = this.getPetType(instanceData);
 
-                        const _local_13 = new PetFigureData(_arg_4);
+                        const petFigureData = new PetFigureData(instanceData);
 
-                        _local_9 = this.getRoomObjectPetImage(_local_13.typeId, _local_13.paletteId, _local_13.color, new Vector3d(180), 64, null, true, 0, _local_13.customParts, _arg_8);
+                        imageResult = this.getRoomObjectPetImage(petFigureData.typeId, petFigureData.paletteId, petFigureData.color, new Vector3d(180), 64, null, true, 0, petFigureData.customParts, posture);
                     }
                     else
                     {
-                        _local_9 = this.getGenericRoomObjectImage(type, _arg_4, new Vector3d(180), 1, null, 0, null, _arg_5, _arg_6, _arg_7, _arg_8);
+                        imageResult = this.getGenericRoomObjectImage(type, instanceData, new Vector3d(180), 1, null, 0, null, stuffData, state, frameNumber, posture);
                     }
                 }
-                
                 else
                 {
-                    _local_9 = this.getGenericRoomObjectImage(type, colorIndex.toString(), new Vector3d(), 1, null, 0, _arg_4, _arg_5, _arg_6, _arg_7, _arg_8);
+                    imageResult = this.getGenericRoomObjectImage(type, colorIndex.toString(), new Vector3d(), 1, null, 0, instanceData, stuffData, state, frameNumber, posture);
                 }
             }
         }
 
-        if(!_local_9 || !_local_9.data) return;
+        if(!imageResult || !imageResult.data) return;
 
-        const _local_10 = this.getActiveRoomInstanceRenderingCanvas();
+        const canvas = this.getActiveRoomInstanceRenderingCanvas();
 
-        if(!_local_10) return;
+        if(!canvas) return;
         
-        const _local_14 = this.getRenderingCanvasOverlay(_local_10);
+        const overlay = this.getRenderingCanvasOverlay(canvas);
 
-        this._Str_21215(_local_14, RoomEngine.OBJECT_ICON_SPRITE);
+        this._Str_21215(overlay, RoomEngine.OBJECT_ICON_SPRITE);
 
-        const _local_15 = this._Str_24651(_local_14, RoomEngine.OBJECT_ICON_SPRITE, _local_9.data);
+        const _local_15 = this._Str_24651(overlay, RoomEngine.OBJECT_ICON_SPRITE, imageResult.data);
 
         if(_local_15)
         {
-            _local_15.x = (this._mouseX - (_local_9.data.width / 2));
-            _local_15.y = (this._mouseY - (_local_9.data.height / 2));
+            _local_15.x = (this._mouseX - (imageResult.data.width / 2));
+            _local_15.y = (this._mouseY - (imageResult.data.height / 2));
         }
     }
 
@@ -2621,9 +2679,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return null;
     }
 
-    public getFurnitureWallIcon(typeId: number, listener: IGetImageListener, _arg_3: string = null): ImageResult
+    public getFurnitureWallIcon(typeId: number, listener: IGetImageListener, extras: string = null): ImageResult
     {
-        return this.getFurnitureWallImage(typeId, new Vector3d(), 1, listener, 0, _arg_3);
+        return this.getFurnitureWallImage(typeId, new Vector3d(), 1, listener, 0, extras);
     }
 
     public getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor: number = 0, extras: string = null, state: number = -1, frameCount: number = -1, objectData: IObjectData = null): ImageResult
@@ -2853,29 +2911,32 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         imageResult.id      = objectId;
         imageResult.data    = null;
+        imageResult.image   = null;
 
         const assetName = [ type, param ].join('_');
 
-        const asset = Nitro.instance.core.asset.getTexture(assetName);
+        const asset = this._roomContentLoader.getImage(assetName);
 
         if(!asset && listener)
         {
-            let imageListeners = this._imageListeners.get(assetName);
+            let contentListeners = this._contentListeners.get(assetName);
 
-            if(!imageListeners)
+            if(!contentListeners)
             {
-                imageListeners = [];
+                contentListeners = [];
 
-                this._imageListeners.set(assetName, imageListeners);
+                this._contentListeners.set(assetName, contentListeners);
+
+                this._roomContentLoader.downloadImage(objectId, type, param, null);
             }
 
-            imageListeners.push(listener);
+            contentListeners.push(listener);
         }
         else
         {
             if(asset)
             {
-                imageResult.data = asset.clone();
+                imageResult.image = asset;
             }
 
             this._numberBank._Str_15187((objectId - 1));

@@ -45,6 +45,11 @@ export class ObjectDataBase implements IObjectData
         return '';
     }
 
+    public compare(data: IObjectData): boolean
+    {
+        return false;
+    }
+
     public get state(): number
     {
         const state = parseInt(this.getLegacyString());

@@ -28,6 +28,7 @@ import { NavigatorMetadataEvent } from './messages/incoming/navigator/NavigatorM
 import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
+import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
 import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
@@ -90,6 +91,8 @@ import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearch
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
+import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
+import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchCloseComposer } from './messages/outgoing/navigator/NavigatorSearchCloseComposer';
@@ -103,7 +106,8 @@ import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComp
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
-import { ItemPlaceComposer } from './messages/outgoing/room/furniture/ItemPlaceComposer';
+import { FurniturePlaceComposer } from './messages/outgoing/room/furniture/FurniturePlaceComposer';
+import { FurniturePostItPlaceComposer } from './messages/outgoing/room/furniture/FurniturePostItPlaceComposer';
 import { FurnitureColorWheelComposer } from './messages/outgoing/room/furniture/logic/FurnitureColorWheelComposer';
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
@@ -192,6 +196,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NAVIGATOR_SEARCHES, NavigatorSearchesEvent);
         this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsEvent);
         this._events.set(IncomingHeader.NAVIGATOR_METADATA, NavigatorMetadataEvent);
+
+        // NOTIFICATIONS
+        this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
 
         // ROOM
 
@@ -312,6 +319,12 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS_SAVE, NavigatorSettingsSaveComposer);
 
+        // INVENTORY
+
+            // FURNI
+            this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
+            this._composers.set(OutgoingHeader.USER_FURNITURE2, FurnitureList2Composer);
+
         // ROOM
 
             // ACCESS
@@ -322,7 +335,8 @@ export class NitroMessages implements IMessageConfiguration
 
             // FURNITURE
             this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
-            this._composers.set(OutgoingHeader.FURNITURE_PLACE, ItemPlaceComposer);
+            this._composers.set(OutgoingHeader.FURNITURE_PLACE, FurniturePlaceComposer);
+            this._composers.set(OutgoingHeader.FURNITURE_POSTIT_PLACE, FurniturePostItPlaceComposer);
 
                 // FLOOR
                 this._composers.set(OutgoingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateComposer);

@@ -36,7 +36,7 @@ export class FigureData implements IAvatarImageListener
         this._direction = FigureDataView._Str_9887;
     }
 
-    public loadAvatarData(figureString: string, gender: string):void
+    public loadAvatarData(figureString: string, gender: string): void
     {
         this._data      = new Map();
         this._colors    = new Map();
@@ -46,7 +46,7 @@ export class FigureData implements IAvatarImageListener
         this._Str_2491();
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._view = null;
         this._data = null;
@@ -59,7 +59,7 @@ export class FigureData implements IAvatarImageListener
         return this._isDisposed;
     }
 
-    private _Str_958(figure: string):void
+    private _Str_958(figure: string): void
     {
         if(!figure) return;
 
@@ -276,7 +276,7 @@ export class FigureData implements IAvatarImageListener
         return this._gender;
     }
 
-    public resetFigure(k: string):void
+    public resetFigure(k: string): void
     {
         this._Str_2491();
     }

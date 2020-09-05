@@ -22,6 +22,7 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
                 <div class="header-title">Nitro</div>
             </div>
             <div class="card-body">
+                <div nitro-toolbar-cameracontrols-component></div>
                 <ul #navigationList class="list-group">
                     <li class="list-group-item" *ngIf="isInRoom" ><i class="icon icon-habbo"></i></li>
                     <li class="list-group-item" *ngIf="!isInRoom"><i class="icon icon-house"></i></li>

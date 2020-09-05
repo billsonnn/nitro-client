@@ -92,7 +92,7 @@ export class FurnitureListItemParser
         this._flatId                = wrapper.readInt();
         this._isWallItem            = (this._furniType === FurnitureListItemParser.WALL_ITEM);
 
-        if (this._furniType === FurnitureListItemParser.WALL_ITEM)
+        if(this._furniType === FurnitureListItemParser.FLOOR_ITEM)
         {
             this._slotId    = wrapper.readString();
             this._Str_3182  = wrapper.readInt();

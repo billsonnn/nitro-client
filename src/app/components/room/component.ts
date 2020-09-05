@@ -152,10 +152,10 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         if(geometry)
         {
-            let minX = (this.roomEngine.getRoomInstanceNumber(this.roomSession.roomId, RoomVariableEnum.ROOM_MIN_X) || 0);
-            let maxX = (this.roomEngine.getRoomInstanceNumber(this.roomSession.roomId, RoomVariableEnum.ROOM_MAX_X) || 0);
-            let minY = (this.roomEngine.getRoomInstanceNumber(this.roomSession.roomId, RoomVariableEnum.ROOM_MIN_Y) || 0);
-            let maxY = (this.roomEngine.getRoomInstanceNumber(this.roomSession.roomId, RoomVariableEnum.ROOM_MAX_Y) || 0);
+            let minX = (this.roomEngine.getRoomInstanceVariable<number>(this.roomSession.roomId, RoomVariableEnum.ROOM_MIN_X) || 0);
+            let maxX = (this.roomEngine.getRoomInstanceVariable<number>(this.roomSession.roomId, RoomVariableEnum.ROOM_MAX_X) || 0);
+            let minY = (this.roomEngine.getRoomInstanceVariable<number>(this.roomSession.roomId, RoomVariableEnum.ROOM_MIN_Y) || 0);
+            let maxY = (this.roomEngine.getRoomInstanceVariable<number>(this.roomSession.roomId, RoomVariableEnum.ROOM_MAX_Y) || 0);
 
             let x = ((minX + maxX) / 2);
             let y = ((minY + maxY) / 2);
@@ -215,8 +215,6 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         this.resizeTimer = setTimeout(() =>
         {
-            Nitro.instance.resize();
-
             this.roomEngine.initializeRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0], Nitro.instance.renderer.view.width, Nitro.instance.renderer.view.height);
 
             this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
