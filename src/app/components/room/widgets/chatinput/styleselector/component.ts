@@ -12,7 +12,7 @@ import { AppConfiguration } from '../../../../../AppConfiguration';
             <div class="card">
                 <div class="card-body">
                     <div class="container-items">
-                        <div *ngFor="let styleId of styleIds" class="item-detail">
+                        <div *ngFor="let styleId of styleIds" class="item-detail" [ngClass]="{ 'selected': (lastSelectedId === styleId)}">
                             <div class="nitro-room-chat-item-component chat-style-{{ styleId }}" (click)="selectStyle(styleId)">
                                 <div class="chat-left"></div>
                                 <div class="chat-right"></div>
@@ -119,6 +119,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public selectStyle(styleId: number): void
     {
+        this.lastSelectedId = styleId;
         this.styleSelected.emit(styleId);
 
         this.hideSelector();
