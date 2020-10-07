@@ -11,26 +11,23 @@
     .component-styles-container {
         z-index: 3;
         position: absolute;
-        visibility: hidden;
-        //transform: scale(0) matrix(0.8, 0, .3, 1, 1, 1);
-        //transition: all 0.22s ease-in-out;
-        bottom: -175px;
-        left: -75px;
+        transition: transform 0.22s ease-in-out;
+        transform: translate(-81px, -50%) scale(0);
+        top: -4px;
+
+        .nitro-room-chat-item-component {
+            visibility: visible;
+        }
 
         &.active {
             visibility: visible;
-            //transform: scale(1) matrix(1, 0, 0, 1, 0, 0);
-            bottom: 25px;
-            left: -155px;
-
-            .nitro-room-chat-item-component {
-                visibility: visible;
-            }
+		    transform: translate(-160px, -100%) scale(1);
         }
 
         .card {
             width: 180px;
             background: rgba(19, 19, 19, 0.95);
+            border-radius: 11px;
 
             .card-body {
                 padding: 5px;

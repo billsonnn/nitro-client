@@ -1,11 +1,9 @@
-import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { bounceIn } from 'ng-animate';
 import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEvent';
 
 @Component({
     template: `
-    <div [@animation]="animation" #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}">
+    <div #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}">
         <div class="chat-left" [ngStyle]="{ 'background-color': senderColorString }">
             <div #chatItemUserImage class="user-image"></div>
             <div class="user-pointer"></div>
@@ -14,17 +12,7 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
             <b>{{ senderName }}:</b> {{ message }}
         </div>
         <div class="chat-pointer"></div>
-    </div>`,
-    animations: [
-        trigger('animation', [
-            transition('* => *',
-                useAnimation(bounceIn,
-                {
-                    params: { timing: 0.8, delay: 0 }
-                })
-            )
-        ])
-    ]
+    </div>`
 })
 export class RoomChatItemComponent
 {

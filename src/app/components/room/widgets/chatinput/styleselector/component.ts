@@ -1,6 +1,4 @@
-import { transition, trigger, useAnimation } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { bounceIn } from 'ng-animate';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
 import { AppConfiguration } from '../../../../../AppConfiguration';
@@ -8,7 +6,7 @@ import { AppConfiguration } from '../../../../../AppConfiguration';
 @Component({
 	selector: 'nitro-room-chatinput-styleselector-component',
     template: `
-    <div [@animation]="animation" class="nitro-room-chatinput-styleselector-component">
+    <div class="nitro-room-chatinput-styleselector-component">
         <i class="icon chatstyles-icon" (click)="toggleSelector()"></i>
         <div #styleSelectorContainer class="component-styles-container" [ngClass]="{ 'active': showStyles }">
             <div class="card">
@@ -24,17 +22,7 @@ import { AppConfiguration } from '../../../../../AppConfiguration';
                 </div>
             </div>
         </div>
-    </div>`,
-    animations: [
-        trigger('animation', [
-            transition('* => *',
-                useAnimation(bounceIn,
-                {
-                    params: { timing: 0.8, delay: 0 }
-                })
-            )
-        ])
-    ]
+    </div>`
 })
 export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 {
