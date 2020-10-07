@@ -87,9 +87,9 @@ export class IncomingHeader
     public static ROOM_BAN_LIST                = 1869;
     public static ROOM_BAN_REMOVE              = 3429;
     public static ROOM_CREATED                 = 1304;
-    public static ROOM_DOORBELL_ADD            = 2309;
-    public static ROOM_DOORBELL_CLOSE          = 3783;
-    public static ROOM_DOORBELL_DENIED         = 878;
+    public static ROOM_DOORBELL                = 2309;
+    public static ROOM_DOORBELL_ACCEPTED       = 3783;
+    public static ROOM_DOORBELL_REJECTED       = 878;
     public static ROOM_ENTER                   = 758;
     public static ROOM_ENTER_ERROR             = 899;
     public static ROOM_FORWARD                 = 160;
@@ -184,4 +184,5 @@ export class IncomingHeader
     public static WIRED_SAVE                   = 1155;
     public static WIRED_TRIGGER                = 383;
     public static UNSEEN_ITEMS                 = 2103;
+    public static FURNITURE_ALIASES            = 1723;
 }

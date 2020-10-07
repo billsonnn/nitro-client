@@ -286,7 +286,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
             if(sprite)
             {
-                const highlightEnabled = ((this.object.model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) === 1) && (this.object.model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT) === 1));
+                const highlightEnabled = ((this.object.model.getValue<number>(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) === 1) && (this.object.model.getValue<number>(RoomObjectVariable.FIGURE_HIGHLIGHT) === 1));
 
                 const avatarImage = this._avatarImage.getImage(AvatarSetType.FULL, highlightEnabled);
 
@@ -562,7 +562,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         let needsUpdate = false;
 
-        const talk = (model.getValue(RoomObjectVariable.FIGURE_TALK) > 0);
+        const talk = (model.getValue<number>(RoomObjectVariable.FIGURE_TALK) > 0);
 
         if(talk !== this._talk)
         {
@@ -571,7 +571,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const expression = model.getValue(RoomObjectVariable.FIGURE_EXPRESSION);
+        const expression = model.getValue<number>(RoomObjectVariable.FIGURE_EXPRESSION);
 
         if(expression !== this._expression)
         {
@@ -580,7 +580,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const sleep = (model.getValue(RoomObjectVariable.FIGURE_SLEEP) > 0);
+        const sleep = (model.getValue<number>(RoomObjectVariable.FIGURE_SLEEP) > 0);
 
         if(sleep !== this._sleep)
         {
@@ -589,7 +589,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const blink = (model.getValue(RoomObjectVariable.FIGURE_BLINK) > 0);
+        const blink = (model.getValue<number>(RoomObjectVariable.FIGURE_BLINK) > 0);
 
         if(blink !== this._blink)
         {
@@ -598,7 +598,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const gesture = model.getValue(RoomObjectVariable.FIGURE_GESTURE) || 0;
+        const gesture = (model.getValue<number>(RoomObjectVariable.FIGURE_GESTURE) || 0);
 
         if(gesture !== this._gesture)
         {
@@ -607,7 +607,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const posture = model.getValue(RoomObjectVariable.FIGURE_POSTURE);
+        const posture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
 
         if(posture !== this._posture)
         {
@@ -616,7 +616,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const postureParameter = model.getValue(RoomObjectVariable.FIGURE_POSTURE_PARAMETER);
+        const postureParameter = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE_PARAMETER);
 
         if(postureParameter !== this._postureParameter)
         {
@@ -625,7 +625,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const canStandUp = (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) as boolean);
+        const canStandUp = model.getValue<boolean>(RoomObjectVariable.FIGURE_CAN_STAND_UP);
 
         if(canStandUp !== this._canStandUp)
         {
@@ -634,7 +634,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const verticalOffset = (model.getValue(RoomObjectVariable.FIGURE_VERTICAL_OFFSET) * AvatarVisualization.OFFSET_MULTIPLIER);
+        const verticalOffset = (model.getValue<number>(RoomObjectVariable.FIGURE_VERTICAL_OFFSET) * AvatarVisualization.OFFSET_MULTIPLIER);
 
         if(verticalOffset !== this._verticalOffset)
         {
@@ -643,7 +643,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const dance = model.getValue(RoomObjectVariable.FIGURE_DANCE) || 0;
+        const dance = (model.getValue<number>(RoomObjectVariable.FIGURE_DANCE) || 0);
 
         if(dance !== this._dance)
         {
@@ -652,7 +652,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const effect = model.getValue(RoomObjectVariable.FIGURE_EFFECT) || 0;
+        const effect = (model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) || 0);
 
         if(effect !== this._effect)
         {
@@ -661,7 +661,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const carryObject = model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) || 0;
+        const carryObject = (model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT) || 0);
 
         if(carryObject !== this._carryObject)
         {
@@ -670,7 +670,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const useObject = model.getValue(RoomObjectVariable.FIGURE_USE_OBJECT) || 0;
+        const useObject = (model.getValue<number>(RoomObjectVariable.FIGURE_USE_OBJECT) || 0);
 
         if(useObject !== this._useObject)
         {
@@ -679,7 +679,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const headDirection = model.getValue(RoomObjectVariable.HEAD_DIRECTION);
+        const headDirection = model.getValue<number>(RoomObjectVariable.HEAD_DIRECTION);
 
         if(headDirection !== this._headDirection)
         {
@@ -720,7 +720,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             if(idleAddition) this.removeAddition(AvatarVisualization.FLOATING_IDLE_Z_ID);
         }
 
-        const isTyping = model.getValue(RoomObjectVariable.FIGURE_IS_TYPING) > 0;
+        const isTyping = (model.getValue<number>(RoomObjectVariable.FIGURE_IS_TYPING) > 0);
 
         let typingAddition = this.getAddition(AvatarVisualization.TYPING_BUBBLE_ID);
 
@@ -755,7 +755,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         this.updateScale(scale);
 
-        const gender = model.getValue(RoomObjectVariable.GENDER);
+        const gender = model.getValue<string>(RoomObjectVariable.GENDER);
 
         if(gender !== this._gender)
         {
@@ -764,9 +764,9 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        if(this.updateFigure(model.getValue(RoomObjectVariable.FIGURE))) needsUpdate = true;
+        if(this.updateFigure(model.getValue<string>(RoomObjectVariable.FIGURE))) needsUpdate = true;
 
-        let sign = model.getValue(RoomObjectVariable.FIGURE_SIGN);
+        let sign = model.getValue<number>(RoomObjectVariable.FIGURE_SIGN);
 
         if(sign === null) sign = -1;
 
@@ -777,7 +777,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             needsUpdate = true;
         }
 
-        const highlightEnabled = (model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) > 0);
+        const highlightEnabled = (model.getValue<number>(RoomObjectVariable.FIGURE_HIGHLIGHT_ENABLE) > 0);
 
         if(highlightEnabled !== this._highlightEnabled)
         {
@@ -788,7 +788,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         if(this._highlightEnabled)
         {
-            const highlight = (model.getValue(RoomObjectVariable.FIGURE_HIGHLIGHT) > 0);
+            const highlight = (model.getValue<number>(RoomObjectVariable.FIGURE_HIGHLIGHT) > 0);
 
             if(highlight !== this._highlight)
             {
@@ -798,7 +798,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             }
         }
 
-        const ownUser = model.getValue(RoomObjectVariable.OWN_USER) > 0;
+        const ownUser = (model.getValue<number>(RoomObjectVariable.OWN_USER) > 0);
 
         if(ownUser !== this._ownUser)
         {

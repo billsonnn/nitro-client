@@ -29,6 +29,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _clickHandling: boolean;
     private _visible: boolean;
     private _tag: string;
+    private _posture: string;
     private _alphaTolerance: number;
     private _filters: PIXI.Filter[];
 
@@ -59,6 +60,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._clickHandling     = false;
         this._visible           = true;
         this._tag               = '';
+        this._posture           = null;
         this._alphaTolerance    = AlphaTolerance._Str_9735;
         this._filters           = [];
 
@@ -330,6 +332,20 @@ export class RoomObjectSprite implements IRoomObjectSprite
         if(this._tag === tag) return;
 
         this._tag = tag;
+
+        this._updateCounter++;
+    }
+
+    public get posture(): string
+    {
+        return this._posture;
+    }
+
+    public set posture(posture: string)
+    {
+        if(this._posture === posture) return;
+
+        this._posture = posture;
 
         this._updateCounter++;
     }

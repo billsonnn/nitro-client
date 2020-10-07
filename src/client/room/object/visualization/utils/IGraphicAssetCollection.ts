@@ -1,4 +1,5 @@
 import { IAssetData } from '../../../../core/asset/interfaces';
+import { GraphicAssetPalette } from './GraphicAssetPalette';
 import { IGraphicAsset } from './IGraphicAsset';
 
 export interface IGraphicAssetCollection
@@ -11,6 +12,7 @@ export interface IGraphicAssetCollection
     getAssetWithPalette(name: string, paletteName: string): IGraphicAsset;
     getPaletteNames(): string[];
     getPaletteColors(paletteName: string): number[];
+    getPalette(name: string): GraphicAssetPalette;
     addAsset(name: string, texture: PIXI.Texture, override: boolean, x?: number, y?: number, flipH?: boolean, flipV?: boolean): boolean;
     disposeAsset(name: string): void;
     referenceCount: number;

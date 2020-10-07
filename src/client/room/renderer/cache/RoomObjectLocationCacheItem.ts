@@ -60,7 +60,7 @@ export class RoomObjectLocationCacheItem
 
             if(!screenLocation) return null;
 
-            const accurateZ = object.model.getValue(this._roomObjectVariableAccurateZ);
+            const accurateZ = object.model.getValue<number>(this._roomObjectVariableAccurateZ);
 
             if((isNaN(accurateZ) || accurateZ === 0))
             {

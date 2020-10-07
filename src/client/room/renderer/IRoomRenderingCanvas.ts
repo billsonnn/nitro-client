@@ -1,5 +1,7 @@
+import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { IRoomGeometry } from '../utils/IRoomGeometry';
 import { IRoomCanvasMouseListener } from './IRoomCanvasMouseListener';
+import { SortableSprite } from './utils/SortableSprite';
 
 export interface IRoomRenderingCanvas
 {
@@ -10,7 +12,12 @@ export interface IRoomRenderingCanvas
     render(time: number, update?: boolean): void;
     update(): void;
     setMouseListener(listener: IRoomCanvasMouseListener): void;
+    _Str_20787(): void;
+    _Str_22174(): void;
+    _Str_14588(): SortableSprite[];
     _Str_21232(k: number, _arg_2: number, _arg_3: string, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): boolean;
+    getSortableSpriteList(): RoomObjectSpriteData[];
+    id: number;
     geometry: IRoomGeometry;
     displayObject: PIXI.DisplayObject;
     screenOffsetX: number;

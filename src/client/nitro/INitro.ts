@@ -3,6 +3,7 @@ import { INitroCore } from '../core/INitroCore';
 import { IRoomManager } from '../room/IRoomManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
+import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
@@ -12,9 +13,9 @@ export interface INitro extends PIXI.Application
 {
     init(): void;
     dispose(): void;
-    resize(): void;
     core: INitroCore;
     events: IEventDispatcher;
+    localization: INitroLocalizationManager;
     communication: INitroCommunicationManager;
     avatar: IAvatarRenderManager;
     roomEngine: IRoomEngine;

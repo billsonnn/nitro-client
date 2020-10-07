@@ -1,5 +1,6 @@
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomRenderingCanvas } from '../../room/renderer/IRoomRenderingCanvas';
 import { IVector3D } from '../../room/utils/IVector3D';
@@ -9,14 +10,18 @@ import { IObjectData } from './object/data/IObjectData';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
 import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { SelectedRoomObjectData } from './utils/SelectedRoomObjectData';
+import { TileObjectMap } from './utils/TileObjectMap';
 
 export interface IRoomEngineServices
 {
+    getRoomInstance(roomId: number): IRoomInstance;
     getActiveRoomInstanceRenderingCanvas(): IRoomRenderingCanvas;
     addRoomInstanceFloorHole(roomId: number, objectId: number): void;
     removeRoomInstanceFloorHole(roomId: number, objectId: number): void;
     getSelectedRoomObjectData(roomId: number): SelectedRoomObjectData;
     setSelectedRoomObjectData(roomId: number, data: SelectedRoomObjectData): void;
+    getPlacedRoomObjectData(roomId: number): SelectedRoomObjectData;
+    setPlacedRoomObjectData(roomId: number, data: SelectedRoomObjectData): void;
     getLegacyWallGeometry(roomId: number): LegacyWallGeometry;
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;
     getRoomObject(roomId: number, objectId: number, category: number): IRoomObjectController;
@@ -37,6 +42,7 @@ export interface IRoomEngineServices
     _Str_7972(k: boolean): void;
     updateMousePointer(type: string, objectId: number, objectType: string): void;
     _Str_17948(): void;
+    getRoomTileObjectMap(k: number): TileObjectMap;
     connection: IConnection;
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;

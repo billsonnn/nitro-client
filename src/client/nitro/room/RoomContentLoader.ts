@@ -1,4 +1,4 @@
-import { ILoaderOptions } from 'pixi.js-legacy';
+import { ILoaderOptions } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
@@ -45,6 +45,8 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _wallItemTypes: Map<number, string>;
     private _wallItemTypeIds: Map<string, number>;
     private _pets: { [index: string]: number };
+    private _objectAliases: Map<string, string>;
+    private _objectOriginalNames: Map<string, string>;
 
     private _pendingContentTypes: string[];
 
@@ -66,6 +68,8 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._wallItemTypes                 = new Map();
         this._wallItemTypeIds               = new Map();
         this._pets                          = {};
+        this._objectAliases                 = new Map();
+        this._objectOriginalNames           = new Map();
 
         this._pendingContentTypes           = [];
     }
@@ -482,6 +486,30 @@ export class RoomContentLoader implements IFurnitureDataListener
         }
     }
 
+    public _Str_12966(name: string, originalName: string): void
+    {
+        this._objectAliases.set(name, originalName);
+        this._objectOriginalNames.set(originalName, name);
+    }
+
+    private getAssetAliasName(name: string): string
+    {
+        const existing = this._objectAliases.get(name);
+
+        if(!existing) return name;
+
+        return existing;
+    }
+
+    private getAssetOriginalName(name: string): string
+    {
+        const existing = this._objectOriginalNames.get(name);
+
+        if(!existing) return name;
+
+        return existing;
+    }
+
     private getAssetUrls(type: string, param: string = null, icon: boolean = false): string[]
     {
         switch(type)
@@ -505,9 +533,11 @@ export class RoomContentLoader implements IFurnitureDataListener
                 {
                     if(icon)
                     {
-                        let assetUrl = this.getAssetUrlWithFurniIconBase(type);
+                        const name = this.getAssetAliasName(type);
 
-                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((type + '*' + param)) !== null))
+                        let assetUrl = this.getAssetUrlWithFurniIconBase(name);
+
+                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null))
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
 

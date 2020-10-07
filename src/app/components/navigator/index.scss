@@ -1,13 +1,11 @@
 .nitro-navigator-component {
     position: absolute;
-    top: 20px;
-    left: 120px;
-
-    .card {
-        width: 500px;
-        max-width: 500px;
-
-        .card-body {
-        }
-    }
+    width: $navigator-width;
+    max-width: $navigator-width;
+    height: $navigator-height;
+    max-height: $navigator-height;
+    left: calc(50vw - #{($navigator-width / 2)});
+    top: calc(50vh - #{($navigator-height / 2)});
 }
+
+@import './search';

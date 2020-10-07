@@ -22,7 +22,7 @@ export class GraphicAsset implements IGraphicAsset
         const graphicAsset = (GraphicAsset.GRAPHIC_POOL.length ? GraphicAsset.GRAPHIC_POOL.pop() : new GraphicAsset());
 
         graphicAsset._name      = name;
-        graphicAsset._source    = source || null
+        graphicAsset._source    = source || null;
 
         if(texture)
         {
@@ -110,14 +110,14 @@ export class GraphicAsset implements IGraphicAsset
     {
         if(!this._flipH) return this._x;
 
-        return (this._x * -1);
+        return (-(this._x));
     }
 
     public get offsetY(): number
     {
         if(!this._flipV) return this._y;
 
-        return (this._y * -1);
+        return (-(this._y));
     }
 
     public get flipH(): boolean

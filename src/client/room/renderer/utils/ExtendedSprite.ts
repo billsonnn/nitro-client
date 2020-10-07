@@ -76,7 +76,7 @@ export class ExtendedSprite extends PIXI.Sprite
         if(!sprite.getLocalBounds().contains(x, y)) return false;
 
         //@ts-ignore
-        if(!baseTexture.hitMap || (baseTexture.hitMapLastThreshold === undefined) || (baseTexture.hitMapLastThreshold !== sprite.alphaTolerance))
+        if(!baseTexture.hitMap || (baseTexture.hitMapLastThreshold !== sprite.alphaTolerance))
         {
             let canvas: HTMLCanvasElement = null;
 

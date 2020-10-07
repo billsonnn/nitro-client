@@ -1,6 +1,19 @@
 .nitro-main-component {
 }
 
+$gutters-x: 20px;
+$gutters-y: 20px;
+
+$navigator-width: 500px;
+$navigator-height: 500px;
+$navigator-gutter-x: 120px;
+$navigator-gutter-y: $gutters-y;
+
+$inventory-width: 500px;
+$inventory-height: 500px;
+$inventory-gutter-x: 120px;
+$inventory-gutter-y: $gutters-y;
+
 @import './catalog';
 @import './hotelview';
 @import './inventory';

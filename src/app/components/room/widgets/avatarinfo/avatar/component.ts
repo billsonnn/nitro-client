@@ -20,7 +20,7 @@ import { RoomAvatarInfoComponent } from '../component';
                 <ng-container *ngFor="let entry of menu">
                     <ul *ngIf="(mode === entry.mode)" class="list-group">
                         <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.name }}</li>
+                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ ('widget.memenu.' + item.name) | translate }}</li>
                         </ng-container>
                     </ul>
                 </ng-container>
@@ -64,7 +64,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
         
         if(roomObject)
         {
-            const carryId = (roomObject.model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) as number);
+            const carryId = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
 
             if((carryId > 0) && (carryId < 999999)) giveHandItem = true;
         }

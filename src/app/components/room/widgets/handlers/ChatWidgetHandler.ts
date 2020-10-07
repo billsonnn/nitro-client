@@ -213,7 +213,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                             switch(userType)
                             {
                                 case RoomObjectType.PET:
-                                    image   = this.getPetImage(figure, 2, true, 64, roomObject.model.getValue(RoomObjectVariable.FIGURE_POSTURE));
+                                    image   = this.getPetImage(figure, 2, true, 64, roomObject.model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE));
                                     petType = new PetFigureData(figure).typeId;
                                     break;
                                 case RoomObjectType.USER:

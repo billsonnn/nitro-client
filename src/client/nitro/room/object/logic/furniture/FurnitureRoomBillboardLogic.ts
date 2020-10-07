@@ -6,6 +6,6 @@ export class FurnitureRoomBillboardLogic extends FurnitureRoomBrandingLogic
 {
     protected getAdClickUrl(model: IRoomObjectModel): string
     {
-        return model.getValue(RoomObjectVariable.FURNITURE_BRANDING_URL);
+        return model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_URL);
     }
 }

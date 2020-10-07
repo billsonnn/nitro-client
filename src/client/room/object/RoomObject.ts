@@ -18,9 +18,9 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _type: string;
     private _model: IRoomObjectModel;
 
-    private _state: number;
     private _location: IVector3D;
     private _direction: IVector3D;
+    private _states: number[];
 
     private _visualization: IRoomObjectVisualization;
     private _logic: IRoomObjectEventHandler;
@@ -29,7 +29,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     private _updateCounter: number;
     private _isReady: boolean;
 
-    constructor(id: number, type: string)
+    constructor(id: number, stateCount: number, type: string)
     {
         super();
         
@@ -38,9 +38,9 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._type                  = type;
         this._model                 = new RoomObjectModel();
 
-        this._state                 = 0;
         this._location              = new Vector3d();
         this._direction             = new Vector3d();
+        this._states                = [];
 
         this._visualization         = null;
         this._logic                 = null;
@@ -48,6 +48,15 @@ export class RoomObject extends Disposable implements IRoomObjectController
         
         this._updateCounter         = 0;
         this._isReady               = false;
+
+        let i = (stateCount - 1);
+
+        while(i >= 0)
+        {
+            this._states[i] = 0;
+
+            i--;
+        }
     }
 
     protected onDispose(): void
@@ -67,11 +76,6 @@ export class RoomObject extends Disposable implements IRoomObjectController
         return this._location;
     }
 
-    public getDirection(): IVector3D
-    {
-        return this._direction;
-    }
-
     public setLocation(vector: IVector3D): void
     {
         if(!vector) return;
@@ -83,6 +87,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._location.z    = vector.z;
 
         this._updateCounter++;
+    }
+
+    public getDirection(): IVector3D
+    {
+        return this._direction;
     }
 
     public setDirection(vector: IVector3D): void
@@ -98,15 +107,31 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._updateCounter++;
     }
 
-    public setState(state: number, silent: boolean = false): boolean
+    public getState(index: number = 0): number
     {
-        if(this._state === state) return false;
-        
-        this._state = state;
+        if((index >= 0) && (index < this._states.length))
+        {
+            return this._states[index];
+        }
 
-        this._updateCounter++;
+        return -1;
+    }
 
-        return true;
+    public setState(state: number, index: number = 0): boolean
+    {
+        if((index >= 0) && (index < this._states.length))
+        {
+            if(this._states[index] !== state)
+            {
+                this._states[index] = state;
+
+                this._updateCounter++;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public setVisualization(visualization: IRoomObjectVisualization): void
@@ -198,11 +223,6 @@ export class RoomObject extends Disposable implements IRoomObjectController
     public get direction(): IVector3D
     {
         return this._direction;
-    }
-
-    public get state(): number
-    {
-        return this._state;
     }
 
     public get updateCounter(): number

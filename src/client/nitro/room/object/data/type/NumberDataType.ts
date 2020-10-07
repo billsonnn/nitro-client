@@ -37,7 +37,7 @@ export class NumberDataType extends ObjectDataBase
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._data = model.getValue(RoomObjectVariable.FURNITURE_DATA);
+        this._data = model.getValue<number[]>(RoomObjectVariable.FURNITURE_DATA);
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void

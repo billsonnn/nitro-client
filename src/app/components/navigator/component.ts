@@ -1,145 +1,87 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { NavigatorCategoriesEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorCategoriesEvent';
-import { NavigatorCollapsedEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorCollapsedEvent';
-import { NavigatorEventCategoriesEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorEventCategoriesEvent';
-import { NavigatorLiftedEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorLiftedEvent';
-import { NavigatorMetadataEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorMetadataEvent';
-import { NavigatorSearchesEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchesEvent';
-import { NavigatorSearchEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchEvent';
-import { NavigatorSettingsEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSettingsEvent';
+import { Component, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { NavigatorSearchResultList } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { SettingsService } from '../../core/settings/service';
+import { NavigatorService } from './service';
 
 @Component({
 	selector: 'nitro-navigator-component',
     template: `
-    <ng-container *ngIf="visible">
-        <div [bringToTop] [draggable] dragHandle=".card-header" class="nitro-navigator-component">
-            <div class="card">
-                <div class="card-header">
-                    <div class="header-title">Navigator</div>
-                    <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <ng-container *ngFor="let context of topLevelContexts">
-                            <button type="button" class="btn btn-primary" [ngClass]="{ 'btn-active': (currentContext === context) }" (click)="setCurrentContext(context)">{{ context.code }}</button>
-                        </ng-container>
-                    </div>
+    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-navigator-component">
+        <div *ngIf="isLoading" class="card-loading-overlay"></div>
+        <div class="card-header-container">
+            <div class="card-header-overlay"></div>
+            <div class="card-header">
+                <div class="header-title">{{ (isLoading ? 'navigator.title.is.busy' : 'navigator.title') | translate }}</div>
+                <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="card-header-tabs">
+                <div class="nav nav-tabs w-100 px-4">
+                    <div *ngFor="let context of topLevelContexts" class="nav-item nav-link" [ngClass]="{ 'active': (topLevelContext === context) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</div>
                 </div>
             </div>
         </div>
-    </ng-container>`
+        <div class="card-body flex-column">
+            <div nitro-navigator-search-component></div>
+            <div class="d-flex flex-column" *ngIf="lastSearchResults.length">
+                <div *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
+            </div>
+        </div>
+    </div>`
 })
-export class NavigatorComponent implements OnInit, OnDestroy
+export class NavigatorComponent implements OnChanges
 {
-    public topLevelContexts: NavigatorTopLevelContext[] = [];
-    public currentContext: NavigatorTopLevelContext     = null;
-    public isLoaded: boolean                            = false;
+    @Input()
+    public visible: boolean = false;
 
     constructor(
         private settingsService: SettingsService,
+        private navigatorService: NavigatorService,
         private ngZone: NgZone) {}
 
-    public ngOnInit(): void
+    public ngOnChanges(changes: SimpleChanges): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        const prev = changes.visible.previousValue;
+        const next = changes.visible.currentValue;
+
+        if(next && (next !== prev)) this.prepareNavigator();
+    }
+
+    private prepareNavigator(): void
+    {
+        if(!this.navigatorService.isLoaded)
         {
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-
-            Nitro.instance.communication.registerMessageEvent(new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorCollapsedEvent(this.onNavigatorCollapsedEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorEventCategoriesEvent(this.onNavigatorEventCategoriesEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorLiftedEvent(this.onNavigatorLiftedEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorMetadataEvent(this.onNavigatorMetadataEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorSearchesEvent(this.onNavigatorSearchesEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorSearchEvent(this.onNavigatorSearchEvent.bind(this)));
-            Nitro.instance.communication.registerMessageEvent(new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this)));
-
-            //Nitro.instance.communication.connection.send(new NavigatorInitComposer());
-        });
-    }
-
-    public ngOnDestroy(): void
-    {
-        this.ngZone.runOutsideAngular(() =>
+            this.navigatorService.loadNavigator();
+        }
+        else
         {
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-        });
-    }
-
-    private onRoomSessionEvent(event: RoomSessionEvent): void
-	{
-		if(!event) return;
-
-		switch(event.type)
-		{
-			case RoomSessionEvent.CREATED:
-				this.ngZone.run(() => this.hide());
-				return;
-		}
-    }
-    
-    private onNavigatorCategoriesEvent(event: NavigatorCategoriesEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorCollapsedEvent(event: NavigatorCollapsedEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorEventCategoriesEvent(event: NavigatorEventCategoriesEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorLiftedEvent(event: NavigatorLiftedEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorMetadataEvent(event: NavigatorMetadataEvent): void
-    {
-        if(!event) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this.ngZone.run(() =>
-        {
-            this.topLevelContexts = parser.topLevelContexts;
-
-            this.isLoaded = true;
-
-            if(this.topLevelContexts.length > 0) this.setCurrentContext(this.topLevelContexts[0]);
-        });
-    }
-
-    private onNavigatorSearchesEvent(event: NavigatorSearchesEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorSearchEvent(event: NavigatorSearchEvent): void
-    {
-        console.log(event);
-    }
-
-    private onNavigatorSettingsEvent(event: NavigatorSettingsEvent): void
-    {
-        console.log(event);
+            this.navigatorService.search();
+        }
     }
 
     public setCurrentContext(context: NavigatorTopLevelContext): void
     {
-        if(!context || (this.currentContext === context)) return;
+        this.navigatorService.setCurrentContext(context);
+    }
 
-        this.currentContext = context;
+    public get topLevelContext(): NavigatorTopLevelContext
+    {
+        return ((this.navigatorService && this.navigatorService.topLevelContext) || null);
+    }
+
+    public get topLevelContexts(): NavigatorTopLevelContext[]
+    {
+        return ((this.navigatorService && this.navigatorService.topLevelContexts) || null);
+    }
+
+    public get lastSearchResults(): NavigatorSearchResultList[]
+    {
+        return this.navigatorService.lastSearchResults;
+    }
+
+    public get isLoading(): boolean
+    {
+        return (this.navigatorService && (this.navigatorService.isLoading || this.navigatorService.isSearching));
     }
 
     public hide(): void
@@ -147,8 +89,13 @@ export class NavigatorComponent implements OnInit, OnDestroy
         this.settingsService.hideNavigator();
     }
 
-    public get visible(): boolean
+    public get width(): number
     {
-        return this.settingsService.navigatorVisible;
+        return this.navigatorService.width;
+    }
+
+    public get height(): number
+    {
+        return this.navigatorService.height;
     }
 }

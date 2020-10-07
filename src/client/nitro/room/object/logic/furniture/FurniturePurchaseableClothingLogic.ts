@@ -1,6 +1,6 @@
-import { FurnitureLogic } from './FurnitureLogic';
+import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
-export class FurniturePurchaseableClothingLogic extends FurnitureLogic
+export class FurniturePurchaseableClothingLogic extends FurnitureMultiStateLogic
 {
     
 }

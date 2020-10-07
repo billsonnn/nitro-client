@@ -60,11 +60,11 @@ export class HighScoreDataType extends ObjectDataBase implements IObjectData
 
     public initializeFromRoomObjectModel(model: IRoomObjectModel): void
     {
-        this._scoreType = (model.getValue(RoomObjectVariable.FURNITURE_HIGHSCORE_SCORE_TYPE) as number);
-        this._clearType = (model.getValue(RoomObjectVariable.FURNITURE_HIGHSCORE_CLEAR_TYPE) as number);
+        this._scoreType = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_SCORE_TYPE);
+        this._clearType = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_CLEAR_TYPE);
         this._entries   = [];
 
-        let totalEntries = (model.getValue(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_COUNT) as number);
+        let totalEntries = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_COUNT);
 
         let i = 0;
 
@@ -72,8 +72,8 @@ export class HighScoreDataType extends ObjectDataBase implements IObjectData
         {
             const data = new HighScoreData();
 
-            data.score  = (model.getValue(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_SCORE_ + i));
-            data.users  = (model.getValue(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_USERS_ + i));
+            data.score  = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_SCORE_ + i);
+            data.users  = model.getValue<string[]>(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_BASE_USERS_ + i);
 
             this._entries.push(data);
 

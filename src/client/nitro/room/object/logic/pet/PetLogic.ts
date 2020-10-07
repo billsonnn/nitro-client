@@ -224,7 +224,7 @@ export class PetLogic extends MovingObjectLogic
             case MouseEventType.DOUBLE_CLICK:
                 break;
             case MouseEventType.MOUSE_DOWN:
-                const petType = this.object.model.getValue(RoomObjectVariable.PET_TYPE);
+                const petType = this.object.model.getValue<number>(RoomObjectVariable.PET_TYPE);
 
                 if(petType == PetType.MONSTERPLANT)
                 {

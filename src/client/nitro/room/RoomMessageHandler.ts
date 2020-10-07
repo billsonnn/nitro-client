@@ -9,6 +9,7 @@ import { FurnitureFloorAddEvent } from '../communication/messages/incoming/room/
 import { FurnitureFloorEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
 import { FurnitureFloorUpdateEvent } from '../communication/messages/incoming/room/furniture/floor/FurnitureFloorUpdateEvent';
+import { FurnitureAliasesEvent } from '../communication/messages/incoming/room/furniture/FurnitureAliasesEvent';
 import { FurnitureDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStateEvent } from '../communication/messages/incoming/room/furniture/FurnitureStateEvent';
@@ -38,7 +39,7 @@ import { RoomUnitInfoEvent } from '../communication/messages/incoming/room/unit/
 import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
-import { RoomModel2Composer } from '../communication/messages/outgoing/room/mapping/RoomModel2Composer';
+import { FurnitureAliasesComposer } from '../communication/messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
 import { FurnitureWallDataParser } from '../communication/messages/parser/room/furniture/wall/FurnitureWallDataParser';
@@ -108,6 +109,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomThicknessEvent(this.onRoomThicknessEvent.bind(this)));
         this._connection.addMessageEvent(new RoomDoorEvent(this.onRoomDoorEvent.bind(this)));
         this._connection.addMessageEvent(new ObjectsRollingEvent(this.onRoomRollingEvent.bind(this)));
+        this._connection.addMessageEvent(new FurnitureAliasesEvent(this.onFurnitureAliasesEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorAddEvent(this.onFurnitureFloorAddEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorEvent(this.onFurnitureFloorEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureFloorRemoveEvent(this.onFurnitureFloorRemoveEvent.bind(this)));
@@ -175,14 +177,14 @@ export class RoomMessageHandler extends Disposable
 
         if(this._initialConnection)
         {
-            event.connection.send(new RoomModelComposer());
+            event.connection.send(new FurnitureAliasesComposer());
 
             this._initialConnection = false;
 
             return;
         }
 
-        event.connection.send(new RoomModel2Composer());
+        event.connection.send(new RoomModelComposer());
     }
 
     private onRoomPaintEvent(event: RoomPaintEvent): void
@@ -353,6 +355,8 @@ export class RoomMessageHandler extends Disposable
             heightMap.setStackingBlocked(parser.x, parser.y, parser.isStackingBlocked());
             heightMap.setIsRoomTile(parser.x, parser.y, parser.isRoomTile());
         }
+
+        this._roomCreator._Str_17722(this._currentRoomId, "RoomMessageHandler.onRoomHeightMapUpdateEvent()");
     }
 
     private onRoomThicknessEvent(event: RoomThicknessEvent): void
@@ -430,6 +434,15 @@ export class RoomMessageHandler extends Disposable
                 this._roomCreator.updateRoomObjectUserPosture(this._currentRoomId, unitRollData.id, posture);
             }
         }
+    }
+
+    private onFurnitureAliasesEvent(event: FurnitureAliasesEvent): void
+    {
+        if(!(event instanceof FurnitureAliasesEvent) || !event.connection || !this._roomCreator) return;
+
+        const alises = event.getParser().aliases;
+
+        this._connection.send(new RoomModelComposer());
     }
 
     private onFurnitureFloorAddEvent(event: FurnitureFloorAddEvent): void
@@ -688,7 +701,7 @@ export class RoomMessageHandler extends Disposable
 
         if(!roomInstance) return;
 
-        const zScale = roomInstance.model.getValue(RoomVariableEnum.ROOM_Z_SCALE) || 1;
+        const zScale = (roomInstance.model.getValue<number>(RoomVariableEnum.ROOM_Z_SCALE) || 1);
 
         for(let status of statuses)
         {

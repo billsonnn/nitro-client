@@ -35,13 +35,13 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         const state = parseInt(objectData.getValue(FurnitureRoomBrandingLogic.STATE));
 
-        if(!isNaN(state) && (this.object.state !== state)) this.object.setState(state);
+        if(!isNaN(state) && (this.object.getState(0) !== state)) this.object.setState(state, 0);
 
         const imageUrl = objectData.getValue(FurnitureRoomBrandingLogic.IMAGEURL_KEY);
 
         if(imageUrl)
         {
-            const existingUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
+            const existingUrl = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
 
             if(!existingUrl || (existingUrl !== imageUrl))
             {
@@ -56,7 +56,7 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(clickUrl)
         {
-            const existingUrl = this.object.model.getValue(RoomObjectVariable.FURNITURE_BRANDING_URL);
+            const existingUrl = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_URL);
 
             if(!existingUrl || existingUrl !== clickUrl)
             {
@@ -94,8 +94,8 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!model) return;
 
-        const imageUrl      = model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL) as string;
-        const imageStatus   = model.getValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS) as number;
+        const imageUrl      = model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
+        const imageStatus   = model.getValue<number>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS);
 
         if(!imageUrl || imageStatus === 1) return;
 

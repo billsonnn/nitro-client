@@ -1,26 +1,27 @@
 ﻿import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
 import { INitroCommunicationManager } from '../../../client/nitro/communication/INitroCommunicationManager';
 import { UnseenItemsEvent } from '../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
+import { HabboInventory } from './HabboInventory';
 import { IUnseenItemTracker } from './IUnseenItemTracker';
-import { InventoryService } from './services/inventory.service';
 
 export class UnseenItemTracker implements IUnseenItemTracker
 {
     private _communication: INitroCommunicationManager;
-    private _inventory: InventoryService;
-    private _unseenItems: number[][];
     private _events: IEventDispatcher;
+    private _inventory: HabboInventory;
+    private _unseenItems: number[][];
 
-    constructor(k: INitroCommunicationManager, inventory: InventoryService)
+    constructor(k: INitroCommunicationManager, events: IEventDispatcher, inventory: HabboInventory)
     {
         this._communication = k;
+        this._events        = events;
         this._inventory     = inventory;
         this._unseenItems   = [];
 
         this._communication.registerMessageEvent(new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this)));
     }
 
-    public dispose():void
+    public dispose(): void
     {
         this._communication = null;
         this._unseenItems   = null;
@@ -116,10 +117,10 @@ export class UnseenItemTracker implements IUnseenItemTracker
             this._Str_18112(category, itemIds);
         }
 
-        if(this._inventory) this._inventory.refreshUnseen();
+        //if(this._inventory) this._inventory.refreshUnseen();
     }
 
-    private _Str_18112(category: number, itemIds: number[]):void
+    private _Str_18112(category: number, itemIds: number[]): void
     {
         if(!itemIds) return;
 
@@ -138,12 +139,12 @@ export class UnseenItemTracker implements IUnseenItemTracker
         }
     }
 
-    private _Str_20981(k: number):void
+    private _Str_20981(k: number): void
     {
         //this._communication.connection.send(new _Str_10536(k));
     }
 
-    private _Str_23994(k: number, _arg_2: number[]):void
+    private _Str_23994(k: number, _arg_2: number[]): void
     {
         //this._communication.connection.send(new _Str_11812(k, _arg_2));
     }

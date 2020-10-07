@@ -1,1 +1,4 @@
-export class NitroEvent extends Event {}
+export class NitroEvent extends Event
+{
+    public static COMPLETE: string  = 'NITRO_COMPLETE';
+}

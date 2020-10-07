@@ -22,10 +22,10 @@ import { RoomInfoStandComponent } from '../component';
             </div>
         </div>
         <div class="button-container btn-group">
-            <button *ngIf="canMove" type="button" class="btn btn-primary" (click)="processButtonAction('move')">move</button>
-            <button *ngIf="canRotate" type="button" class="btn btn-primary" (click)="processButtonAction('rotate')">rotate</button>
-            <button *ngIf="(pickupMode !== 0)" type="button" class="btn btn-primary" (click)="processButtonAction('pickup')">pickup ({{ pickupMode }})</button>
-            <button *ngIf="canUse" type="button" class="btn btn-primary" (click)="processButtonAction('use')">use</button>
+            <button *ngIf="canMove" type="button" class="btn btn-primary" (click)="processButtonAction('move')">{{ 'infostand.button.move' | translate }}</button>
+            <button *ngIf="canRotate" type="button" class="btn btn-primary" (click)="processButtonAction('rotate')">{{ 'infostand.button.rotate' | translate }}</button>
+            <button *ngIf="(pickupMode !== 0)" type="button" class="btn btn-primary" (click)="processButtonAction('pickup')">{{ (pickupMode === 1 ? 'infostand.button.eject' : 'infostand.button.pickup') | translate }}</button>
+            <button *ngIf="canUse" type="button" class="btn btn-primary" (click)="processButtonAction('use')">{{ 'infostand.button.use' | translate }}</button>
         </div>
     </div>`
 })

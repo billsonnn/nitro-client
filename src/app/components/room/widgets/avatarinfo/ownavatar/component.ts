@@ -23,7 +23,7 @@ import { RoomAvatarInfoComponent } from '../component';
                 <ng-container *ngFor="let entry of menu">
                     <ul *ngIf="(mode === entry.mode)" class="list-group">
                         <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.name }}</li>
+                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
                         </ng-container>
                     </ul>
                 </ng-container>
@@ -47,7 +47,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
 
-    public menu: { mode: number, items: { name: string, visible: boolean }[] }[] = [];
+    public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
 
     public static setup(view: RoomAvatarInfoOwnAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
@@ -70,34 +70,42 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'decorate',
+                        localization: 'widget.avatar.decorate',
                         visible: (this.widget._Str_6454 && (this.avatarData.roomControllerLevel >= RoomControllerLevel.GUEST) || this.avatarData._Str_3246)
                     },
                     {
                         name: 'change_looks',
+                        localization: 'widget.memenu.myclothes',
                         visible: true
                     },
                     {
                         name: 'dance_menu',
+                        localization: 'widget.memenu.dance',
                         visible: (this.widget._Str_6454 && !isRidingHorse)
                     },
                     {
                         name: 'dance',
+                        localization: 'widget.memenu.dance',
                         visible: (!this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse)
                     },
                     {
                         name: 'dance_stop',
+                        localization: 'widget.memenu.dance.stop',
                         visible: (this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse)
                     },
                     {
                         name: 'expressions',
+                        localization: 'infostand.link.expressions',
                         visible: true
                     },
                     {
                         name: 'signs',
-                        visible: true
+                        localization: 'infostand.show.signs',
+                        visible: (this.widget._Str_6454)
                     },
                     {
                         name: 'drop_hand_item',
+                        localization: 'avatar.widget.drop_hand_item',
                         visible: ((this.avatarData._Str_8826 > 0) && (this.avatarData._Str_8826 < 999999))
                     }
                 ]
@@ -107,26 +115,32 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'dance_stop',
-                        visible: this.widget.isDancing
+                        localization: 'widget.memenu.dance.stop',
+                        visible: (this.widget.isDancing)
                     },
                     {
                         name: 'dance_1',
+                        localization: 'widget.memenu.dance1',
                         visible: true
                     },
                     {
                         name: 'dance_2',
+                        localization: 'widget.memenu.dance2',
                         visible: true
                     },
                     {
                         name: 'dance_3',
+                        localization: 'widget.memenu.dance3',
                         visible: true
                     },
                     {
                         name: 'dance_4',
+                        localization: 'widget.memenu.dance4',
                         visible: true
                     },
                     {
                         name: 'back',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]
@@ -136,30 +150,132 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'sit',
+                        localization: 'widget.memenu.sit',
                         visible: (this.widget.getOwnPosture === AvatarAction.POSTURE_STAND)
                     },
                     {
                         name: 'stand',
+                        localization: 'widget.memenu.stand',
                         visible: this.widget.getCanStandUp
                     },
                     {
                         name: 'wave',
+                        localization: 'widget.memenu.wave',
                         visible: (!this.widget._Str_12708)
                     },
                     {
                         name: 'laugh',
+                        localization: 'widget.memenu.laugh',
                         visible: (!this.widget._Str_12708 && this.widget._Str_7303)
                     },
                     {
                         name: 'blow',
+                        localization: 'widget.memenu.blow',
                         visible: (!this.widget._Str_12708 && this.widget._Str_7303)
                     },
                     {
                         name: 'idle',
+                        localization: 'widget.memenu.idle',
                         visible: true
                     },
                     {
                         name: 'back',
+                        localization: 'generic.back',
+                        visible: true
+                    }
+                ]
+            },
+            {
+                mode: RoomAvatarInfoOwnAvatarComponent.MODE_SIGNS,
+                items: [
+                    {
+                        name: 'sign_1',
+                        localization: '1',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_2',
+                        localization: '2',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_3',
+                        localization: '3',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_4',
+                        localization: '4',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_5',
+                        localization: '5',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_6',
+                        localization: '6',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_7',
+                        localization: '8',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_8',
+                        localization: '8',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_9',
+                        localization: '9',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_10',
+                        localization: '10',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_11',
+                        localization: 'heart',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_12',
+                        localization: 'skull',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_0',
+                        localization: '0',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_13',
+                        localization: '13',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_15',
+                        localization: '15',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_14',
+                        localization: '14',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_17',
+                        localization: '17',
+                        visible: true
+                    },
+                    {
+                        name: 'sign_16',
+                        localization: '16',
                         visible: true
                     }
                 ]
@@ -174,66 +290,75 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
 
         if(name)
         {
-            switch(name)
+            if(name.startsWith('sign_'))
             {
-                case 'decorate':
-                    break;
-                case 'change_looks':
-                    break;
-                case 'expressions':
-                    hideMenu = false;
-                    this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_EXPRESSIONS);
-                    break;
-                case 'sit':
-                    message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_2016);
-                    break;
-                case 'stand':
-                    message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_1553);
-                    break;
-                case 'wave':
-                    message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6268);
-                    break;
-                case 'blow':
-                    message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_5579);
-                    break;
-                case 'laugh':
-                    message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_7336);
-                    break;
-                case 'idle':
-                    message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6989);
-                    break;
-                case 'dance_menu':
-                    hideMenu = false;
-                    this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES);
-                    break;
-                case 'dance':
-                    message = new RoomWidgetDanceMessage(1);
-                    break;
-                case 'dance_stop':
-                    message = new RoomWidgetDanceMessage(0);
-                    break;
-                case 'dance_1':
-                case 'dance_2':
-                case 'dance_3':
-                case 'dance_4':
-                    message = new RoomWidgetDanceMessage(parseInt(name.charAt((name.length - 1))));
-                    break;
-                case 'signs':
-                    hideMenu = false;
-                    this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_SIGNS);
-                    break;
-                case 'back':
-                    hideMenu = false;
-                    this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_NORMAL);
-                    break;
-                case 'more':
-                    hideMenu = false;
-                    //this.widget._Str_13909 = false;
-                    this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_NORMAL);
-                    break;
-                case 'drop_hand_item':
-                    message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM, this.userId);
-                    break;
+                const sign = parseInt(name.split('_')[1]);
+
+                this.widget.useSign(sign);
+            }
+            else
+            {
+                switch(name)
+                {
+                    case 'decorate':
+                        break;
+                    case 'change_looks':
+                        break;
+                    case 'expressions':
+                        hideMenu = false;
+                        this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_EXPRESSIONS);
+                        break;
+                    case 'sit':
+                        message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_2016);
+                        break;
+                    case 'stand':
+                        message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_1553);
+                        break;
+                    case 'wave':
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6268);
+                        break;
+                    case 'blow':
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_5579);
+                        break;
+                    case 'laugh':
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_7336);
+                        break;
+                    case 'idle':
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6989);
+                        break;
+                    case 'dance_menu':
+                        hideMenu = false;
+                        this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES);
+                        break;
+                    case 'dance':
+                        message = new RoomWidgetDanceMessage(1);
+                        break;
+                    case 'dance_stop':
+                        message = new RoomWidgetDanceMessage(0);
+                        break;
+                    case 'dance_1':
+                    case 'dance_2':
+                    case 'dance_3':
+                    case 'dance_4':
+                        message = new RoomWidgetDanceMessage(parseInt(name.charAt((name.length - 1))));
+                        break;
+                    case 'signs':
+                        hideMenu = false;
+                        this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_SIGNS);
+                        break;
+                    case 'back':
+                        hideMenu = false;
+                        this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_NORMAL);
+                        break;
+                    case 'more':
+                        hideMenu = false;
+                        //this.widget._Str_13909 = false;
+                        this.setMode(RoomAvatarInfoOwnAvatarComponent.MODE_NORMAL);
+                        break;
+                    case 'drop_hand_item':
+                        message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM, this.userId);
+                        break;
+                }
             }
 
             if(message) this.parent.messageListener.processWidgetMessage(message);

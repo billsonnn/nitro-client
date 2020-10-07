@@ -75,7 +75,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         if(super.updateObject(scale, direction))
         {
-            const state = this.object.state;
+            const state = this.object.getState(0);
 
             if(state !== this._state)
             {
@@ -83,7 +83,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
                 this._state = state;
 
-                this._animationChangeTime = (this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME) as number || 0);
+                this._animationChangeTime = (this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME) || 0);
             }
 
             return true;
@@ -98,7 +98,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         {
             if(this.usesAnimationResetting())
             {
-                const updateTime = this.object.model.getValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME);
+                const updateTime = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME);
 
                 if(updateTime > this._animationChangeTime)
                 {
@@ -106,6 +106,15 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
                     this.setAnimation(this._state);
                 }
+            }
+
+            const state = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX);
+
+            if(state !== null)
+            {
+                const animationId = this._data.getAnimationId(this._animationScale, state);
+
+                this.setAnimation(animationId);
             }
 
             return true;
@@ -143,6 +152,8 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     protected setSubAnimation(animationData: AnimationStateData, animationId: number, _arg_3: boolean = true): boolean
     {
+        let currentAnimation = animationData.animationId;
+
         if(_arg_3)
         {
             if(this.isPlayingTransition(animationData, animationId)) return false;
@@ -211,7 +222,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
             }
         }
 
-        if(animationData.animationId !== animationId)
+        if(currentAnimation !== animationId)
         {
             animationData.animationId = animationId;
 

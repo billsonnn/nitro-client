@@ -14,6 +14,7 @@ export class RoomInstanceData
     private _tileObjectMap: TileObjectMap;
     private _roomCamera: RoomCamera;
     private _selectedObject: SelectedRoomObjectData;
+    private _placedObject: SelectedRoomObjectData;
     private _furnitureStackingHeightMap: FurnitureStackingHeightMap;
 
     private _floorStack: Map<number, FurnitureData>;
@@ -29,6 +30,7 @@ export class RoomInstanceData
         this._tileObjectMap                 = null;
         this._roomCamera                    = new RoomCamera();
         this._selectedObject                = null;
+        this._placedObject                  = null;
         this._furnitureStackingHeightMap    = null;
 
         this._floorStack                    = new Map();
@@ -54,6 +56,16 @@ export class RoomInstanceData
         }
 
         this._selectedObject = data;
+    }
+
+    public setPlacedObject(data: SelectedRoomObjectData): void
+    {
+        if(this._placedObject)
+        {
+            this._placedObject.dispose();
+        }
+
+        this._placedObject = data;
     }
 
     public setFurnitureStackingHeightMap(heightMap: FurnitureStackingHeightMap): void
@@ -209,6 +221,11 @@ export class RoomInstanceData
     public get selectedObject(): SelectedRoomObjectData
     {
         return this._selectedObject;
+    }
+
+    public get placedObject(): SelectedRoomObjectData
+    {
+        return this._placedObject;
     }
 
     public get furnitureStackingHeightMap(): FurnitureStackingHeightMap

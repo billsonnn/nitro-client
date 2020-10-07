@@ -16,7 +16,7 @@ export class TileCursorVisualization extends FurnitureAnimatedVisualization
     {
         if(layerId === 1)
         {
-            this._tileHeight = this.object.model.getValue(RoomObjectVariable.TILE_CURSOR_HEIGHT) as number;
+            this._tileHeight = this.object.model.getValue<number>(RoomObjectVariable.TILE_CURSOR_HEIGHT);
 
             return -(this._tileHeight) * 32; // 32 = scale / 2
         }

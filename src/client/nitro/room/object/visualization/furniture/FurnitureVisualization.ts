@@ -222,11 +222,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        this._selectedColor = model.getValue(RoomObjectVariable.FURNITURE_COLOR);
-        this._clickUrl      = model.getValue(RoomObjectVariable.FURNITURE_AD_URL);
-        this._furnitureLift = model.getValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT);
+        this._selectedColor = model.getValue<number>(RoomObjectVariable.FURNITURE_COLOR);
+        this._clickUrl      = model.getValue<string>(RoomObjectVariable.FURNITURE_AD_URL);
+        this._furnitureLift = model.getValue<number>(RoomObjectVariable.FURNITURE_LIFT_AMOUNT);
 
-        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
+        let alphaMultiplier = model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
 
         if(isNaN(alphaMultiplier)) alphaMultiplier = 1;
         
@@ -319,6 +319,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                 sprite.relativeDepth    = (relativeDepth * FurnitureVisualization.DEPTH_MULTIPLIER);
                 sprite.name             = assetName;
                 sprite._Str_3582        = this.getLibraryAssetNameForSprite(assetData, sprite);
+                sprite.posture          = this.getPostureForAsset(scale, assetData.source);
                 sprite.clickHandling    = false;
             }
             else
@@ -561,6 +562,11 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     protected getFrameNumber(scale: number, layerId: number): number
     {
         return 0;
+    }
+
+    protected getPostureForAsset(scale: number, name: string): string
+    {
+        return null;
     }
 
     public getAsset(name: string, layerId: number = -1): IGraphicAsset

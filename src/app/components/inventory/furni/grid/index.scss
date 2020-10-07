@@ -1,6 +1,6 @@
 .nitro-inventory-furni-grid-component {
     position: relative;
-    background: rgba($destiny-light, 1);
+    background: rgba($light, 1);
     height: 100%;
     width: 100%;
     padding: $card-spacer-x $card-spacer-x;
@@ -25,8 +25,10 @@
             height: 40px;
             box-sizing: border-box;
             background: $destiny;
+            background-position: center;
             background-repeat: no-repeat;
             background-origin: content-box;
+            background-image: url('../../../../../assets/images/icons/loading-icon.png');
             border-radius: 3px;
             overflow: hidden;
 
@@ -40,6 +42,18 @@
                 -moz-box-shadow: inset 0px 0px 0px 2px #fff;
                 box-shadow: inset 0px 0px 0px 2px #fff;
             }
+
+            &.unseen {
+                background-color: rgba($green, 1);
+            }
+        
+            .badge {
+                position: absolute;
+                padding: 2px;
+                font-size: 11px;
+                top: 3px;
+                left: 3px;
+            }
         }
 
         &::after {
@@ -48,5 +62,3 @@
         }
     }
 }
-
-@import './griditem';

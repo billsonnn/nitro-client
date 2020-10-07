@@ -2,9 +2,9 @@ import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObject
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { StringDataType } from '../../data/type/StringDataType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
-import { FurnitureLogic } from './FurnitureLogic';
+import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
-export class FurnitureGuildCustomizedLogic extends FurnitureLogic
+export class FurnitureGuildCustomizedLogic extends FurnitureMultiStateLogic
 {
     public static GROUPID_KEY: number   = 1;
     public static BADGE_KEY: number     = 2;

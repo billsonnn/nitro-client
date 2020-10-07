@@ -22,15 +22,15 @@ export class FurnitureBadgeDisplayVisualization extends FurnitureAnimatedVisuali
     {
         let updateModel = super.updateModel(scale);
 
-        const imageStatus = this.object.model.getValue(RoomObjectVariable.FURNITURE_BADGE_IMAGE_STATUS) || 0;
+        const imageStatus = (this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_BADGE_IMAGE_STATUS) || 0);
 
         if(imageStatus && this._badgeAssetNameNormalScale === '')
         {
-            this._badgeAssetNameNormalScale = this.object.model.getValue(RoomObjectVariable.FURNITURE_BADGE_ASSET_NAME);
+            this._badgeAssetNameNormalScale = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_BADGE_ASSET_NAME);
 
             if(this._badgeAssetNameSmallScale === '') this._badgeAssetNameSmallScale = this._badgeAssetNameNormalScale + '_32';
 
-            const visibleInState = this.object.model.getValue(RoomObjectVariable.FURNITURE_BADGE_VISIBLE_IN_STATE);
+            const visibleInState = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_BADGE_VISIBLE_IN_STATE);
 
             if(!isNaN) this._badgeVisibleInState = visibleInState;
 
@@ -44,7 +44,7 @@ export class FurnitureBadgeDisplayVisualization extends FurnitureAnimatedVisuali
     {
         const tag = this.getLayerTag(scale, this.direction, layerId);
 
-        if((tag !== FurnitureBadgeDisplayVisualization.BADGE) || ((this._badgeVisibleInState !== -1) && (this.object.state !== this._badgeVisibleInState))) return super.getSpriteAssetName(scale, layerId);
+        if((tag !== FurnitureBadgeDisplayVisualization.BADGE) || ((this._badgeVisibleInState !== -1) && (this.object.getState(0) !== this._badgeVisibleInState))) return super.getSpriteAssetName(scale, layerId);
 
         if(scale === 32) return this._badgeAssetNameSmallScale;
 

@@ -2,6 +2,7 @@ import { AfterViewChecked, Component, NgZone, OnDestroy, OnInit } from '@angular
 import { NitroEvent } from '../client/core/events/NitroEvent';
 import { AvatarRenderEvent } from '../client/nitro/avatar/events/AvatarRenderEvent';
 import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/NitroCommunicationDemoEvent';
+import { NitroLocalizationEvent } from '../client/nitro/localization/NitroLocalizationEvent';
 import { Nitro } from '../client/nitro/Nitro';
 import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
 
@@ -15,12 +16,13 @@ import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
 {
-    public message: string          = 'Starting';
-    public percentage: number       = 0;
-    public hideProgress: boolean    = false;
+    public message: string              = 'Starting';
+    public percentage: number           = 0;
+    public hideProgress: boolean        = false;
+    public isLocalizationReady: boolean = false;
     public isRoomEngineReady: boolean   = false;
     public isAvatarRenderReady: boolean = false;
-    public isError: boolean         = false;
+    public isError: boolean             = false;
 
     constructor(
         private ngZone: NgZone) {}
@@ -48,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroEvent.bind(this));
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ERROR, this.onNitroEvent.bind(this));
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_CLOSED, this.onNitroEvent.bind(this));
+            Nitro.instance.localization.events.addEventListener(NitroLocalizationEvent.LOADED, this.onNitroEvent.bind(this));
             Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onNitroEvent.bind(this));
             Nitro.instance.avatar.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent.bind(this));
 
@@ -68,6 +71,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroEvent.bind(this));
             Nitro.instance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_ERROR, this.onNitroEvent.bind(this));
             Nitro.instance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_CLOSED, this.onNitroEvent.bind(this));
+            Nitro.instance.localization.events.removeEventListener(NitroLocalizationEvent.LOADED, this.onNitroEvent.bind(this));
             Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onNitroEvent.bind(this));
             Nitro.instance.avatar.events.removeEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent.bind(this));
         });
@@ -83,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 this.ngZone.run(() =>
                 {
                     this.message        = 'Handshaking';
-                    this.percentage     = 25;
+                    this.percentage     = (this.percentage + 20);
                     this.hideProgress   = false;
                 });
 				break;
@@ -100,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 this.ngZone.run(() =>
                 {
                     this.message        = 'Preparing Nitro';
-                    this.percentage     = 50;
+                    this.percentage     = (this.percentage + 20);
                     this.hideProgress   = false;
                 });
                 
@@ -124,12 +128,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                     this.hideProgress   = true;
                 });
                 break;
+            case NitroLocalizationEvent.LOADED:
+                this.ngZone.run(() =>
+                {
+                    this.isLocalizationReady    = true;
+                    this.percentage             = (this.percentage + 20);
+                    this.hideProgress           = false;
+                });
+                break;
             case RoomEngineEvent.ENGINE_INITIALIZED:
                 this.ngZone.run(() =>
                 {
                     this.isRoomEngineReady      = true;
-                    this.message                = (!this.isAvatarRenderReady) ? 'Waiting for AvatarRender' : 'Ready';
-                    this.percentage             = (!this.isAvatarRenderReady) ? 75 : 100;
+                    this.percentage             = (this.percentage + 20);
                     this.hideProgress           = false;
                 });
 
@@ -139,8 +150,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 this.ngZone.run(() =>
                 {
                     this.isAvatarRenderReady    = true;
-                    this.message                = (!this.isRoomEngineReady) ? 'Waiting for RoomEngine' : 'Ready';
-                    this.percentage             = (!this.isRoomEngineReady) ? 75 : 100;
+                    this.percentage             = (this.percentage + 20);
                     this.hideProgress           = false;
                 });
                 break;
@@ -149,6 +159,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
 
     public get isReady(): boolean
     {
-        return ((this.isRoomEngineReady && this.isAvatarRenderReady) || false);
+        return ((this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady) || false);
     }
 }

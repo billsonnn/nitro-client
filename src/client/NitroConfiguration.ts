@@ -29,7 +29,7 @@ export class NitroConfiguration
     public static ROLLING_OVERRIDES_POSTURE = true;
     public static CLIENT_KEEPS_ALIVE        = true;
     public static PONG_INTERVAL_MS          = 30000;
-    public static FIGURE_HIGHLIGHT_ENABLED  = true;
+    public static FIGURE_HIGHLIGHT_ENABLED  = false;
 
     public static PET_TYPES                 = [ 'dog', 'cat', 'croco', 'terrier', 'bear', 'pig', 'lion', 'rhino', 'spider', 'turtle', 'chicken', 'frog', 'dragon', 'monster', 'monkey', 'horse', 'monsterplant', 'bunnyeaster', 'bunnyevil', 'bunnydepressed', 'bunnylove', 'pigeongood', 'pigeonevil', 'demonmonkey', 'bearbaby', 'terrierbaby', 'gnome', 'gnome', 'kittenbaby', 'puppybaby', 'pigletbaby', 'haloompa', 'fools', 'pterosaur', 'velociraptor', 'cow', 'LeetPen', 'bbwibb', 'elephants' ];
 

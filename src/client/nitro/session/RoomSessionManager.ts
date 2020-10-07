@@ -6,6 +6,7 @@ import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { BaseHandler } from './handler/BaseHandler';
 import { RoomChatHandler } from './handler/RoomChatHandler';
 import { RoomDataHandler } from './handler/RoomDataHandler';
+import { RoomDimmerPresetsHandler } from './handler/RoomDimmerPresetsHandler';
 import { RoomPermissionsHandler } from './handler/RoomPermissionsHandler';
 import { RoomSessionHandler } from './handler/RoomSessionHandler';
 import { RoomUsersHandler } from './handler/RoomUsersHandler';
@@ -66,6 +67,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         this._handlers.push(
             new RoomChatHandler(connection, this),
             new RoomDataHandler(connection, this),
+            new RoomDimmerPresetsHandler(connection, this),
             new RoomPermissionsHandler(connection, this),
             new RoomSessionHandler(connection, this),
             new RoomUsersHandler(connection, this)
@@ -130,7 +132,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         if(this._sessions.get(this.getRoomId(roomSession.roomId)))
         {
-            this.removeSession(roomSession.roomId);
+            this.removeSession(roomSession.roomId, false);
         }
 
         roomSession.setConnection(this._communication.connection);
@@ -166,7 +168,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         return true;
     }
 
-    private removeSession(id: number): void
+    private removeSession(id: number, openLandingView: boolean = true): void
     {
         const session = this.getSession(id);
 
@@ -174,7 +176,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this._sessions.delete(this.getRoomId(id));
 
-        this.events.dispatchEvent(new RoomSessionEvent(RoomSessionEvent.ENDED, session));
+        this.events.dispatchEvent(new RoomSessionEvent(RoomSessionEvent.ENDED, session, openLandingView));
 
         session.dispose();
     }

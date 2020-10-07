@@ -26,8 +26,8 @@ export class PlaneMaterialCellMatrix
     private _cachedBitmapData: PIXI.Graphics;
     private _cachedBitmapNormal: Vector3d = null;
     private _cachedBitmapHeight: number = 0;
-    private _isCached:Boolean = false;
-    private _isStatic:Boolean = true;
+    private _isCached: boolean = false;
+    private _isStatic: boolean = true;
     private _normalMinX: number = -1;
     private _normalMaxX: number = 1;
     private _normalMinY: number = -1;
@@ -83,12 +83,12 @@ export class PlaneMaterialCellMatrix
         return this._normalMaxY;
     }
 
-    public _Str_14945():Boolean
+    public _Str_14945(): boolean
     {
         return this._align === PlaneMaterialCellMatrix._Str_3606;
     }
 
-    public get isStatic():Boolean
+    public get isStatic(): boolean
     {
         return this._isStatic;
     }
@@ -136,7 +136,7 @@ export class PlaneMaterialCellMatrix
         this._isCached = false;
     }
 
-    public _Str_22372(k: number, _arg_2: number, _arg_3: PlaneMaterialCell[], _arg_4: number=1):Boolean
+    public _Str_22372(k: number, _arg_2: number, _arg_3: PlaneMaterialCell[], _arg_4: number=1): boolean
     {
         if((k < 0) || (k >= this._columns.length)) return false;
 

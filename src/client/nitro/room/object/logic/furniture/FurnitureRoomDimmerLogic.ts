@@ -1,10 +1,11 @@
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectDimmerStateUpdateEvent } from '../../../events/RoomObjectDimmerStateUpdateEvent';
+import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
-import { FurnitureRoomBrandingLogic } from './FurnitureRoomBrandingLogic';
+import { FurnitureLogic } from './FurnitureLogic';
 
-export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
+export class FurnitureRoomDimmerLogic extends FurnitureLogic
 {
     private _roomColorUpdated: boolean;
 
@@ -17,7 +18,11 @@ export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
 
     public getEventTypes(): string[]
     {
-        const types = [ RoomObjectDimmerStateUpdateEvent.DIMMER_STATE ];
+        const types = [
+            RoomObjectWidgetRequestEvent.DIMMER,
+            RoomObjectWidgetRequestEvent.WIDGET_REMOVE_DIMMER,
+            RoomObjectDimmerStateUpdateEvent.DIMMER_STATE
+        ];
 
         return this.mergeTypes(super.getEventTypes(), types);
     }
@@ -28,11 +33,12 @@ export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
         {
             if(this.eventDispatcher && this.object)
             {
-                const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
+                const realRoomObject = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
                 if(realRoomObject === 1)
                 {
                     this.eventDispatcher.dispatchEvent(new RoomObjectDimmerStateUpdateEvent(this.object, 0, 1, 1, 0xFFFFFF, 0xFF));
+                    this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.WIDGET_REMOVE_DIMMER, this.object));
                 }
 
                 this._roomColorUpdated = false;
@@ -50,7 +56,7 @@ export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
             {
                 const extra = message.data.getLegacyString();
 
-                const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
+                const realRoomObject = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
                 if(realRoomObject === 1) this.processDimmerData(extra);
 
@@ -107,6 +113,28 @@ export class FurnitureRoomDimmerLogic extends FurnitureRoomBrandingLogic
 
     public useObject(): void
     {
-        // widget
+        this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.DIMMER, this.object));
+    }
+
+    public update(time: number): void
+    {
+        super.update(time);
+
+        if(this.object && this.object.model)
+        {
+            const realRoomObject = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
+
+            if(realRoomObject === 1)
+            {
+                const data = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
+
+                if(data && data.length > 0)
+                {
+                    this.object.model.setValue(RoomObjectVariable.FURNITURE_DATA, '');
+
+                    this.processDimmerData(data);
+                }
+            }
+        }
     }
 }

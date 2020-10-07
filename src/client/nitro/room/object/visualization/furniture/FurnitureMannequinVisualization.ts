@@ -82,12 +82,12 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
         if(updateModel)
         {
-            const figure = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_FIGURE) || null);
+            const figure = (this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_MANNEQUIN_FIGURE) || null);
 
             if(figure)
             {
                 this._figure   = (figure + '.' + this._placeHolderFigure);
-                this._gender   = (this.object.model.getValue(RoomObjectVariable.FURNITURE_MANNEQUIN_GENDER) || null);
+                this._gender   = (this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_MANNEQUIN_GENDER) || null);
 
                 this.updateAvatar();
             }

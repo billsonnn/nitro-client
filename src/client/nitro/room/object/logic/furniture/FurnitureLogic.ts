@@ -127,7 +127,7 @@ export class FurnitureLogic extends MovingObjectLogic
 
     protected getAdClickUrl(model: IRoomObjectModel): string
     {
-        return model.getValue(RoomObjectVariable.FURNITURE_AD_URL);
+        return model.getValue<string>(RoomObjectVariable.FURNITURE_AD_URL);
     }
 
     public update(time: number): void
@@ -206,7 +206,7 @@ export class FurnitureLogic extends MovingObjectLogic
     {
         if(!message) return;
 
-        this.object.setState(message.state);
+        this.object.setState(message.state, 0);
         
         if(message.data) message.data.writeRoomObjectModel(this.object.model);
 

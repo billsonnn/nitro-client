@@ -1,5 +1,5 @@
 ﻿import { GraphicAsset } from '../../../../../room/object/visualization/utils/GraphicAsset';
-import { Vector3d } from '../../../../../room/utils/Vector3d';
+import { Vector3D } from '../../../../avatar/geometry/Vector3D';
 
 export class FurnitureParticleSystemParticle 
 {
@@ -10,22 +10,26 @@ export class FurnitureParticleSystemParticle
     private _lastY: number;
     private _lastZ: number;
     private _hasMoved: boolean = false;
-    protected _direction: Vector3d;
+    protected _direction: Vector3D;
     private _age: number = 0;
     private _lifeTime: number;
     private _isEmitter: boolean = false;
     private _fade: boolean = false;
     private _fadeTime: number;
     private _alphaMultiplier: number = 1;
-    private _frames: any;
+    private _frames: GraphicAsset[];
 
-    public init(k: number, _arg_2: number, _arg_3: number, _arg_4: Vector3d, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: boolean=false, _arg_9: any=null, _arg_10: boolean=false): void
+    public init(k: number, _arg_2: number, _arg_3: number, _arg_4: Vector3D, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: boolean = false, _arg_9: GraphicAsset[] = null, _arg_10: boolean = false): void
     {
         this._x = k;
         this._y = _arg_2;
         this._z = _arg_3;
-        this._direction = new Vector3d(_arg_4.x, _arg_4.y, _arg_4.z);
-        this._direction.multiply(_arg_5);
+        this._direction = new Vector3D(_arg_4.x, _arg_4.y, _arg_4.z);
+
+        this._direction.x *= _arg_5;
+        this._direction.y *= _arg_5;
+        this._direction.z *= _arg_5;
+
         this._lastX = (this._x - (this._direction.x * _arg_6));
         this._lastY = (this._y - (this._direction.y * _arg_6));
         this._lastZ = (this._z - (this._direction.z * _arg_6));
@@ -83,7 +87,7 @@ export class FurnitureParticleSystemParticle
         return this._alphaMultiplier;
     }
 
-    public get direction(): Vector3d
+    public get direction(): Vector3D
     {
         return this._direction;
     }

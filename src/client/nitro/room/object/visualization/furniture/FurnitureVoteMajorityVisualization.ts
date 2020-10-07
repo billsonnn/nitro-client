@@ -11,7 +11,7 @@ export class FurnitureVoteMajorityVisualization extends FurnitureAnimatedVisuali
 
     protected getFrameNumber(scale: number, layerId: number): number
     {
-        const result    = this.object.model.getValue(RoomObjectVariable.FURNITURE_VOTE_MAJORITY_RESULT) as number;
+        const result    = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_VOTE_MAJORITY_RESULT);
         const tag       = this.getLayerTag(scale, this.direction, layerId);
 
         switch(tag)
@@ -25,9 +25,9 @@ export class FurnitureVoteMajorityVisualization extends FurnitureAnimatedVisuali
 
     protected getLayerAlpha(scale: number, direction: number, layerId: number): number
     {
-        const result = this.object.model.getValue(RoomObjectVariable.FURNITURE_VOTE_MAJORITY_RESULT) as number;
+        const result = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_VOTE_MAJORITY_RESULT);
 
-        if(((!(FurnitureVoteMajorityVisualization._Str_16109.indexOf(this.object.state) === -1)) || (result === FurnitureVoteMajorityVisualization._Str_17618)))
+        if(((!(FurnitureVoteMajorityVisualization._Str_16109.indexOf(this.object.getState(0)) === -1)) || (result === FurnitureVoteMajorityVisualization._Str_17618)))
         {
             const tag = this.getLayerTag(scale, direction, layerId);
 

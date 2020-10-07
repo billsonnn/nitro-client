@@ -43,8 +43,11 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         {
             document.body.addEventListener('keydown', this.onKeyDownEvent.bind(this));
 
-            this.inputView.addEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
-            this.inputView.addEventListener('input', this.onInputChangeEvent.bind(this));
+            if(this.inputView)
+            {
+                this.inputView.addEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
+                this.inputView.addEventListener('input', this.onInputChangeEvent.bind(this));
+            }
         });
     }
 
@@ -54,8 +57,11 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         {
             document.body.removeEventListener('keydown', this.onKeyDownEvent.bind(this));
 
-            this.inputView.removeEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
-            this.inputView.removeEventListener('input', this.onInputChangeEvent.bind(this));
+            if(this.inputView)
+            {
+                this.inputView.removeEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
+                this.inputView.removeEventListener('input', this.onInputChangeEvent.bind(this));
+            }
         });
     }
 

@@ -4,6 +4,7 @@ import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { Nitro } from '../../../../Nitro';
 import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectBadgeAssetEvent } from '../../../events/RoomObjectBadgeAssetEvent';
+import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { ObjectGroupBadgeUpdateMessage } from '../../../messages/ObjectGroupBadgeUpdateMessage';
 import { StringDataType } from '../../data/type/StringDataType';
@@ -56,16 +57,16 @@ export class FurnitureBadgeDisplayLogic extends FurnitureLogic
         {
             case MouseEventType.DOUBLE_CLICK:
                 this.useObject();
-
+                return;
+            default:
+                super.mouseEvent(event, geometry);
                 return;
         }
-
-        super.mouseEvent(event, geometry);
     }
 
     public useObject(): void
     {
-        if(!this.object) return;
+        (this.object && this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.BADGE_DISPLAY_ENGRAVING, this.object)));
     }
 
     protected updateBadge(badgeId: string): void

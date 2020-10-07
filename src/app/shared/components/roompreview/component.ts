@@ -38,6 +38,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	{
 		if(!this.roomPreviewer)
 		{
+			console.log('created');
 			this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewComponent.PREVIEW_COUNTER);
 		}
 	}
@@ -45,7 +46,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	public ngOnDestroy(): void
 	{
 		this.stop();
-	}
+	}nn
 
 	public ngAfterViewInit(): void
 	{
@@ -100,7 +101,6 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 			
 			if(this.renderingCanvas.canvasUpdated)
 			{
-				console.log((this.displayObject as PIXI.Container).width, (this.displayObject as PIXI.Container).height);
 				const imageUrl = Nitro.instance.renderer.extract.base64(this.displayObject);
 
 				this.previewImageElement.src = imageUrl;

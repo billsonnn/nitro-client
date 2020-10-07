@@ -289,7 +289,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectVariable.FIGURE_EXPRESSION, message.expressionType);
 
-            this._animationEndTimestamp = AvatarAction.getExpressionTimeout(model.getValue(RoomObjectVariable.FIGURE_EXPRESSION));
+            this._animationEndTimestamp = AvatarAction.getExpressionTimeout(model.getValue<number>(RoomObjectVariable.FIGURE_EXPRESSION));
 
             if(this._animationEndTimestamp > -1) this._animationEndTimestamp += this.time;
 
@@ -402,7 +402,7 @@ export class AvatarLogic extends MovingObjectLogic
             this._newEffect             = AvatarLogic._Str_13094;
         }
 
-        else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
+        else if (model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
@@ -410,7 +410,7 @@ export class AvatarLogic extends MovingObjectLogic
             effect = AvatarLogic._Str_13364;
         }
 
-        else if (model.getValue(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
+        else if (model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
@@ -456,7 +456,6 @@ export class AvatarLogic extends MovingObjectLogic
                 if(this.object.model) this.object.model.setValue(RoomObjectVariable.FIGURE_HIGHLIGHT, 0);
 
                 if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.MOUSE_ARROW, this.object));
-                break;
                 break;
         }
 

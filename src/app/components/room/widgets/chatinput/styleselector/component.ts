@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { bounceIn } from 'ng-animate';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
@@ -50,10 +50,9 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public animation: any;
 
-    constructor()
-    {
-        this.onOutsideClick = this.onOutsideClick.bind(this);
-    }
+    constructor(
+        private changeDetector: ChangeDetectorRef,
+        private ngZone: NgZone) {}
 
     public ngOnInit(): void
     {
@@ -92,26 +91,30 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public ngOnDestroy(): void
     {
-        document.body.removeEventListener('click', this.onOutsideClick);
+        this.hideSelector();
     }
 
     private onOutsideClick(event: MouseEvent): void
     {
-        if(event.target !== this.styleSelectorContainer.nativeElement) this.hideSelector();
+        if(!this.showStyles) return;
+        
+        if(event.target === this.styleSelectorContainer.nativeElement) return;
+        
+        this.hideSelector();
     }
 
     private showSelector(): void
     {
-        setTimeout(() => document.body.addEventListener('click', this.onOutsideClick), 0);
-        
         this.showStyles = true;
+
+        //this.ngZone.runOutsideAngular(() => document.body.addEventListener('click', this.onOutsideClick.bind(this)));
     }
 
     private hideSelector(): void
     {
-        document.body.removeEventListener('click', this.onOutsideClick);
-
         this.showStyles = false;
+        
+        //this.ngZone.runOutsideAngular(() => document.body.removeEventListener('click', this.onOutsideClick.bind(this)));
     }
 
     public toggleSelector(): void

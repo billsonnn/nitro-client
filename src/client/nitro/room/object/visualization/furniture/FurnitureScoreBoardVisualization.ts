@@ -10,7 +10,7 @@ export class FurnitureScoreBoardVisualization extends FurnitureAnimatedVisualiza
     protected getFrameNumber(scale: number, layerId: number): number
     {
         const tag       = this.getLayerTag(scale, this.direction, layerId);
-        const animation = this.object.state;
+        const animation = this.object.getState(0);
 
         switch(tag)
         {

@@ -5,6 +5,7 @@ import { GenericAlertEvent } from '../../../../client/nitro/communication/messag
 import { GenericAlertLinkEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericAlertLinkEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { AlertToastComponent } from '../../components/alerts/alert/component';
+import { ConfirmToastComponent } from '../../components/alerts/confirm/component';
 
 @Injectable()
 export class AlertService implements OnDestroy
@@ -75,6 +76,20 @@ export class AlertService implements OnDestroy
         });
     }
 
+    public confirm(template: string): void
+    {
+        this.ngZone.run(() =>
+        {
+            const config = this.confirmConfig();
+
+            if(!config) return;
+
+            config.positionClass = 'toast-hotel-alert';
+
+            this.createToast(ConfirmToastComponent, template, this.getTitle(), config);
+        });
+    }
+
     public clearToast(toastId: number): void
     {
         this.toastrService.clear(toastId);
@@ -96,6 +111,21 @@ export class AlertService implements OnDestroy
     }
 
     public alertConfig(): GlobalConfig
+    {
+        //@ts-ignore
+        const options: GlobalConfig = {};
+
+        options.toastClass      = '';
+        options.positionClass   = 'toast-center-center';
+        options.enableHtml      = true;
+        options.disableTimeOut  = true;
+        options.closeButton     = true;
+        options.tapToDismiss    = false;
+
+        return Object.assign({}, options);
+    }
+
+    public confirmConfig(): GlobalConfig
     {
         //@ts-ignore
         const options: GlobalConfig = {};

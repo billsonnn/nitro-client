@@ -113,7 +113,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             {
                 if(selectedData.category === RoomObjectCategory.FLOOR)
                 {
-                    const allowedDirections = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS) as number[]);
+                    const allowedDirections = roomObject.model.getValue<number[]>(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS);
 
                     if(allowedDirections && allowedDirections.length)
                     {
@@ -408,8 +408,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 else
                 {
                     this._Str_17481(roomId, event.objectId, category);
-
-                    let _local_14 = false;
 
                     if(category === RoomObjectCategory.UNIT)
                     {
@@ -984,8 +982,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             }
         }
 
-        let sizeX = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_X) as number;
-        let sizeY = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Y) as number;
+        let sizeX = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
+        let sizeY = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Y);
 
         if(sizeX < 1) sizeX = 1;
 
@@ -1017,7 +1015,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(_arg_5 && _arg_2)
         {
-            const stackable = k.model.getValue(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1;
+            const stackable = (k.model.getValue<number>(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1);
 
             if(_arg_5.validateLocation(_arg_2.x, _arg_2.y, sizeX, sizeY, _local_9, _local_10, _local_11, _local_12, stackable))
             {
@@ -1034,9 +1032,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     {
         if((((((k == null) || (k.model == null)) || (_arg_2 == null)) || (_arg_3 == null)) || (_arg_4 == null)) || (_arg_7 == null)) return null;
 
-        const _local_8 = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_X) as number;
-        const _local_9 = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Z) as number;
-        const _local_10 = k.model.getValue(RoomObjectVariable.FURNITURE_CENTER_Z) as number;
+        const _local_8 = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
+        const _local_9 = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Z);
+        const _local_10 = k.model.getValue<number>(RoomObjectVariable.FURNITURE_CENTER_Z);
 
         if((((_arg_5 < (_local_8 / 2)) || (_arg_5 > (_arg_3.length - (_local_8 / 2)))) || (_arg_6 < _local_10)) || (_arg_6 > (_arg_4.length - (_local_9 - _local_10))))
         {
@@ -1192,9 +1190,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         const location  = k.getLocation();
         const direction = k.getDirection();
 
-        let sizeX = model.getValue(RoomObjectVariable.FURNITURE_SIZE_X);
-        let sizeY = model.getValue(RoomObjectVariable.FURNITURE_SIZE_Y);
-        let sizeZ = model.getValue(RoomObjectVariable.FURNITURE_SIZE_Z);
+        let sizeX = model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
+        let sizeY = model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Y);
+        let sizeZ = model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Z);
 
         if((direction.x === 90) || (direction.x === 270)) [ sizeX, sizeY ] = [ sizeY, sizeX ];
 
@@ -1226,13 +1224,47 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         return null;
     }
 
-    private _Str_23824(k:RoomObjectTileMouseEvent, _arg_2: number): ObjectTileCursorUpdateMessage
+    private _Str_23824(k: RoomObjectTileMouseEvent, roomId: number): ObjectTileCursorUpdateMessage
     {
         if(this._whereYouClickIsWhereYouGo)
         {
             return new ObjectTileCursorUpdateMessage(new Vector3d(k._Str_16836, k._Str_17676, k._Str_21459), 0, true, k.eventId);
         }
-        
+
+        const roomObject = this._roomEngine.getRoomObjectCursor(roomId);
+
+        if(roomObject && roomObject.visualization)
+        {
+            const _local_4 = k._Str_16836;
+            const _local_5 = k._Str_17676;
+            const _local_6 = k._Str_21459;
+            const _local_7 = this._roomEngine.getRoomInstance(roomId);
+
+            if(_local_7)
+            {
+                const _local_8 = this._roomEngine.getRoomTileObjectMap(roomId);
+
+                if (_local_8)
+                {
+                    const _local_9  = _local_8._Str_19056(_local_4, _local_5);
+                    const _local_10 = this._roomEngine.getFurnitureStackingHeightMap(roomId);
+
+                    if(_local_10)
+                    {
+                        if(_local_9 && _local_9.model && (_local_9.model.getValue<number>(RoomObjectVariable.FURNITURE_IS_VARIABLE_HEIGHT) > 0))
+                        {
+                            const _local_11 = _local_10.getTileHeight(_local_4, _local_5);
+                            const _local_12 = this._roomEngine.getLegacyWallGeometry(roomId).getHeight(_local_4, _local_5);
+
+                            return new ObjectTileCursorUpdateMessage(new Vector3d(_local_4, _local_5, _local_6), (_local_11 - _local_12), true, k.eventId);
+                        }
+
+                        return new ObjectTileCursorUpdateMessage(new Vector3d(_local_4, _local_5, _local_6), 0, true, k.eventId);
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
@@ -1299,7 +1331,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         }
                     }
 
-                    else if(roomObject.model.getValue(RoomObjectVariable.FURNITURE_IS_STICKIE) !== null)
+                    else if(roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_IS_STICKIE) !== null)
                     {
                         this._roomEngine.connection.send(new FurniturePostItPlaceComposer(objectId, wallLocation));
                     }
@@ -1311,6 +1343,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 }
             }
         }
+
+        this._roomEngine.setPlacedRoomObjectData(roomId, new SelectedRoomObjectData(selectedData.id, selectedData.category, null, null, null));
 
         this._Str_13199(roomId);
 
@@ -1468,11 +1502,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(k.type === RoomObjectUserType.MONSTER_PLANT)
         {
-            allowedDirections = k.model.getValue(RoomObjectVariable.PET_ALLOWED_DIRECTIONS);
+            allowedDirections = k.model.getValue<number[]>(RoomObjectVariable.PET_ALLOWED_DIRECTIONS);
         }
         else
         {
-            allowedDirections = k.model.getValue(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS);
+            allowedDirections = k.model.getValue<number[]>(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS);
         }
 
         let direction = k.getDirection().x;
@@ -1517,8 +1551,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if((direction.x % 180) === (goalDirection.x % 180)) return true;
 
-        let sizeX = object.model.getValue(RoomObjectVariable.FURNITURE_SIZE_X) as number;
-        let sizeY = object.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Y) as number;
+        let sizeX = object.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
+        let sizeY = object.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Y);
 
         let _local_8    = sizeX;
         let _local_9    = sizeY;
@@ -1537,7 +1571,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(stackingHeightMap && location)
         {
-            const alwaysStackable = object.model.getValue(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1;
+            const alwaysStackable = (object.model.getValue<number>(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1);
 
             if(stackingHeightMap.validateLocation(location.x, location.y, sizeX, sizeY, location.x, location.y, _local_8, _local_9, alwaysStackable, location.z)) return true;
 
@@ -1734,6 +1768,13 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     private _Str_25211(event: RoomObjectMouseEvent): boolean
     {
         return (this._roomEngine.isDecorating) && (!(event.ctrlKey || event.shiftKey));
+    }
+
+    public cancelRoomObjectPlacement(roomId: number): boolean
+    {
+        this._Str_13199(roomId);
+
+        return true;
     }
 
     private setSelectedRoomObjectData(roomId: number, id: number, category: number, location: IVector3D, direction: IVector3D, operation: string, typeId: number = 0, instanceData: string = null, stuffData: IObjectData  =null, state: number = -1, frameNumber: number = -1, posture: string = null): void

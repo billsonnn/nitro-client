@@ -6,6 +6,7 @@ import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { Nitro } from '../../../../Nitro';
 import { PlaneMaskManager } from './mask/PlaneMaskManager';
 import { PlaneDrawingData } from './PlaneDrawingData';
+import { PlaneVisualizationLayer } from './rasterizer/basic/PlaneVisualizationLayer';
 import { IPlaneRasterizer } from './rasterizer/IPlaneRasterizer';
 import { RoomPlaneBitmapMask } from './RoomPlaneBitmapMask';
 import { RoomPlaneRectangleMask } from './RoomPlaneRectangleMask';
@@ -480,82 +481,67 @@ export class RoomPlane implements IRoomPlane
 
     public _Str_22136(geometry:IRoomGeometry): PlaneDrawingData[]
     {
-        return null;
-        // var maskData:PlaneDrawingData;
-        // var data:PlaneDrawingData;
-        // var layers:Array;
-        // var layer:PlaneVisualizationLayer;
-        // var i: number;
-        // var normal: IVector3D;
-        // var cm:PlaneMaterialCellMatrix;
-        // var column:PlaneMaterialCellColumn;
-        // var assetNames:Array;
-        // var cell:PlaneMaterialCell;
-        // var name: string;
-        // var drawingDatas:Array = [];
-        // if (this._Str_3816)
-        // {
-        //     maskData = null;
-        //     try
-        //     {
-        //         maskData = this._Str_23649(geometry);
-        //         layers = this._rasterizer._Str_8988(this._Str_576);
-        //         i = 0;
-        //         while (i < layers.length)
-        //         {
-        //             layer = (layers[i] as PlaneVisualizationLayer);
-        //             if (layer != null)
-        //             {
-        //                 if (((this._Str_13946) && (!(layer._Str_8547() == null))))
-        //                 {
-        //                     normal = geometry._Str_8614(this._normal);
-        //                     cm = layer._Str_8547()._Str_21968(normal);
-        //                     data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()), cm._Str_14945());
-        //                     Randomizer._Str_17384(this._Str_16308);
-        //                     for(let column in cm._Str_23721(this._Str_24802(geometry)))
-        //                     {
-        //                         assetNames = [];
-        //                         for(let cell in column._Str_22299())
-        //                         {
-        //                             name = cell._Str_2125(normal);
-        //                             if (name != null)
-        //                             {
-        //                                 assetNames.push(name);
-        //                             }
-        //                         }
-        //                         if (assetNames.length > 0)
-        //                         {
-        //                             if (!column._Str_24523())
-        //                             {
-        //                                 assetNames.push("");
-        //                             }
-        //                             data._Str_22862(assetNames);
-        //                         }
-        //                     }
-        //                     if (data._Str_17636.length > 0)
-        //                     {
-        //                         drawingDatas.push(data);
-        //                     }
-        //                 }
-        //                 else
-        //                 {
-        //                     data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()));
-        //                     drawingDatas.push(data);
-        //                 }
-        //             }
-        //             i = (i + 1);
-        //         }
-        //     }
-        //     catch(e:Error)
-        //     {
-        //         Logger.log("Error in getting RoomPlane drawing data.", e);
-        //     }
-        //     if (drawingDatas.length == 0)
-        //     {
-        //         drawingDatas.push(new PlaneDrawingData(maskData, this._color));
-        //     }
-        // }
-        // return drawingDatas;
+        var drawingDatas: PlaneDrawingData[] = [];
+
+        if(this._Str_3816)
+        {
+            const maskData  = this._Str_23649(geometry);
+            const layers    = this._rasterizer._Str_8988(this._Str_576);
+
+            let i = 0;
+
+            while(i < layers.length)
+            {
+                const layer = (layers[i] as PlaneVisualizationLayer);
+
+                if(layer)
+                {
+                    if(this._Str_13946 && layer._Str_8547())
+                    {
+                        const normal    = geometry.getCoordinatePosition(this._normal);
+                        const cm        = layer._Str_8547()._Str_21968(normal);
+                        //const data      = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()), cm._Str_14945());
+                        const data      = new PlaneDrawingData(maskData, this._color, cm._Str_14945());
+
+                        Randomizer._Str_17384(this._Str_16308);
+
+                        for(let column of cm._Str_23721(this._Str_24802(geometry)))
+                        {
+                            let assetNames: string[] = [];
+
+                            for(let cell of column._Str_22299())
+                            {
+                                const name = cell._Str_2125(normal);
+                                
+                                if(name) assetNames.push(name);
+                            }
+
+                            if(assetNames.length > 0)
+                            {
+                                if(!column._Str_24523()) assetNames.push('');
+
+                                data._Str_22862(assetNames);
+                            }
+                        }
+
+                        if(data._Str_17636.length > 0) drawingDatas.push(data);
+                    }
+                    else
+                    {
+                        //data = new PlaneDrawingData(maskData, blend(this._color, layer._Str_751()));
+                        const data = new PlaneDrawingData(maskData, this._color);
+
+                        drawingDatas.push(data);
+                    }
+                }
+
+                i++;
+            }
+
+            if(!drawingDatas.length) drawingDatas.push(new PlaneDrawingData(maskData, this._color));
+        }
+
+        return drawingDatas;
     }
 
     // private _Str_25956(k:PlaneBitmapData): void

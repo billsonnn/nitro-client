@@ -36,7 +36,7 @@ export class FurnitureDiceLogic extends FurnitureLogic
             case MouseEventType.DOUBLE_CLICK:
                 if(this._noTags)
                 {
-                    if(((!(this._noTagsLastStateActivate)) || (this.object.state === 0)) || (this.object.state === 100))
+                    if(((!(this._noTagsLastStateActivate)) || (this.object.getState(0) === 0)) || (this.object.getState(0) === 100))
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
 
@@ -51,7 +51,7 @@ export class FurnitureDiceLogic extends FurnitureLogic
                 }
                 else
                 {
-                    if(((event._Str_4216 === 'activate') || (this.object.state === 0)) || (this.object.state === 100))
+                    if(((event._Str_4216 === 'activate') || (this.object.getState(0) === 0)) || (this.object.getState(0) === 100))
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
                     }

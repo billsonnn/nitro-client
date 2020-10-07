@@ -28,8 +28,8 @@ export class ObjectDataBase implements IObjectData
 
     public initializeFromRoomObjectModel(model: IRoomObjectModel): void
     {
-        this._uniqueNumber  = parseInt(model.getValue(RoomObjectVariable.FURNITURE_UNIQUE_SERIAL_NUMBER));
-        this._uniqueSeries  = parseInt(model.getValue(RoomObjectVariable.FURNITURE_UNIQUE_EDITION_SIZE));
+        this._uniqueNumber  = model.getValue<number>(RoomObjectVariable.FURNITURE_UNIQUE_SERIAL_NUMBER);
+        this._uniqueSeries  = model.getValue<number>(RoomObjectVariable.FURNITURE_UNIQUE_EDITION_SIZE);
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void

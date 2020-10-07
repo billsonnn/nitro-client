@@ -20,7 +20,6 @@ import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../core/settings/service';
-import { RoomPreviewComponent } from '../../shared/components/roompreview/component';
 import { CatalogLayout } from './layouts/component';
 import { CatalogLayoutDefaultComponent } from './layouts/default/component';
 import { CatalogLayoutFrontPageFeaturedComponent } from './layouts/frontpagefeatured/component';
@@ -108,7 +107,7 @@ export class CatalogComponent implements OnInit, OnDestroy
 
             if(!this.roomPreviewer)
             {
-                this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewComponent.PREVIEW_COUNTER);
+                this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
             }
         });
 
@@ -286,12 +285,12 @@ export class CatalogComponent implements OnInit, OnDestroy
                 {
                     if(product.productType === 's')
                     {
-                        this.roomPreviewer.addFurnitureIntoRoom(product.furniClassId, new Vector3d(90, 0, 0));
+                        this.roomPreviewer.addFurnitureIntoRoom(product.furniClassId, new Vector3d(90));
                     }
     
                     else if(product.productType === 'i')
                     {
-                        this.roomPreviewer.addWallItemIntoRoom(product.furniClassId, new Vector3d(90, 0, 0), null);
+                        this.roomPreviewer.addWallItemIntoRoom(product.furniClassId, new Vector3d(90), null);
                     }
                 }
             }

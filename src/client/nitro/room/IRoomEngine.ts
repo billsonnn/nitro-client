@@ -35,6 +35,7 @@ export interface IRoomEngine extends INitroManager
     updateRoomInstancePlaneVisibility(roomId: number, wallVisible: boolean, floorVisible?: boolean): boolean;
     updateRoomInstancePlaneThickness(roomId: number, wallThickness: number, floorThickness: number): boolean;
     updateRoomInstancePlaneType(roomId: number, floorType?: string, wallType?: string, landscapeType?: string, _arg_5?: boolean): boolean;
+    _Str_17804(k: number, _arg_2: number, _arg_3: number, _arg_4: boolean): boolean;
     getRoomInstanceGeometry(roomId: number, canvasId?: number): IRoomGeometry;
     getRoomInstanceVariable<T>(roomId: number, key: string): T;
     getTotalObjectsForManager(roomId: number, category: number): number;
@@ -60,10 +61,13 @@ export interface IRoomEngine extends INitroManager
     updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay?: number): boolean;
     updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): boolean;
     updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter?: string): boolean;
+    getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number, objectData?: IObjectData): ImageResult
+    getFurnitureWallImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number): ImageResult
     getRoomObjectImage(roomId: number, objectId: number, category: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number): ImageResult;
     getRoomObjectPetImage(typeId: number, paletteId: number, color: number, direction: IVector3D, scale: number, listener: IGetImageListener, _arg_7?: boolean, bgColor?: number, customParts?: PetCustomPart[], posture?: string): ImageResult;
     selectRoomObject(roomId: number, objectId: number, objectCategory: number): void;
     _Str_8675(): void;
+    cancelRoomObjectPlacement(): void;
     getFurnitureFloorName(typeId: number): string;
     useRoomObject(objectId: number, category: number): boolean;
     objectInitialized(roomId: string, objectId: number, category: number): void;

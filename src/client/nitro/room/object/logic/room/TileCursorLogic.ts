@@ -26,7 +26,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
 
         this.object.model.setValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER, 1);
 
-        this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE);
+        this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE, 0);
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -43,13 +43,13 @@ export class TileCursorLogic extends RoomObjectLogicBase
         {
             if(this._isHidden)
             {
-                this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE);
+                this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE, 0);
             }
             else
             {
                 if(!message.visible)
                 {
-                    this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE);
+                    this.object.setState(TileCursorLogic.CURSOR_HIDDEN_STATE, 0);
                 }
                 else
                 {

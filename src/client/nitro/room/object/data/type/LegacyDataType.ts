@@ -31,7 +31,7 @@ export class LegacyDataType extends ObjectDataBase implements IObjectData
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._data = model.getValue(RoomObjectVariable.FURNITURE_DATA);
+        this._data = model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void

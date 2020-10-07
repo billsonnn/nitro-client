@@ -89,8 +89,8 @@ export class TileObjectMap
 
         if(!location || !direction) return;
 
-        let sizeX = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_X);
-        let sizeY = k.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Y);
+        let sizeX = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
+        let sizeY = k.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Y);
 
         if(sizeX < 1) sizeX = 1;
         if(sizeY < 1) sizeY = 1;

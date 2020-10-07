@@ -23,8 +23,8 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
 
         if(!flag) return false;
 
-        this._color1 = this.object.model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_1) as number;
-        this._color2 = this.object.model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_2) as number;
+        this._color1 = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_1);
+        this._color2 = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_COLOR_2);
 
         return flag;
     }

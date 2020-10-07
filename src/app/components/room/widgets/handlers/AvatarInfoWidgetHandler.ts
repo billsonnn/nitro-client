@@ -134,7 +134,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
     {
         if(!k) return null;
 
-        const typeId        = (k.model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+        const typeId        = k.model.getValue<number>(RoomObjectVariable.FURNITURE_TYPE_ID);
         const furnitureData = this._container.sessionDataManager.getFloorItemData(typeId);
 
         return furnitureData;

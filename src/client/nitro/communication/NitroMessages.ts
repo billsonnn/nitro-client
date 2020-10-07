@@ -1,4 +1,5 @@
 import { IMessageConfiguration } from '../../core/communication/messages/IMessageConfiguration';
+import { RoomSessionDimmerPresetsEvent } from '../session/events/RoomSessionDimmerPresetsEvent';
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
 import { CatalogModeEvent } from './messages/incoming/catalog/CatalogModeEvent';
@@ -29,6 +30,9 @@ import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorS
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
 import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
+import { RoomDoorbellAcceptedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
+import { RoomDoorbellEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellEvent';
+import { RoomDoorbellRejectedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellRejectedEvent';
 import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
@@ -47,6 +51,7 @@ import { FurnitureFloorAddEvent } from './messages/incoming/room/furniture/floor
 import { FurnitureFloorEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
 import { FurnitureFloorUpdateEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorUpdateEvent';
+import { FurnitureAliasesEvent } from './messages/incoming/room/furniture/FurnitureAliasesEvent';
 import { FurnitureDataEvent } from './messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
@@ -105,6 +110,7 @@ import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
+import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from './messages/outgoing/room/furniture/FurniturePlaceComposer';
 import { FurniturePostItPlaceComposer } from './messages/outgoing/room/furniture/FurniturePostItPlaceComposer';
@@ -115,7 +121,6 @@ import { FurnitureMultiStateComposer } from './messages/outgoing/room/furniture/
 import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureRandomStateComposer';
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
 import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
-import { RoomModel2Composer } from './messages/outgoing/room/mapping/RoomModel2Composer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
@@ -206,6 +211,11 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
             this._events.set(IncomingHeader.ROOM_FORWARD, RoomFowardEvent);
 
+                // DOORBELL
+                this._events.set(IncomingHeader.ROOM_DOORBELL, RoomDoorbellEvent);
+                this._events.set(IncomingHeader.ROOM_DOORBELL_ACCEPTED, RoomDoorbellAcceptedEvent);
+                this._events.set(IncomingHeader.ROOM_DOORBELL_REJECTED, RoomDoorbellRejectedEvent);
+
                 // RIGHTS
                 this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
                 this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
@@ -225,9 +235,11 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
 
             // FURNITURE
+            this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
             this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
             this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
             this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
+            this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
 
                 // FLOOR
                 this._events.set(IncomingHeader.FURNITURE_FLOOR_ADD, FurnitureFloorAddEvent);
@@ -334,6 +346,7 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
 
             // FURNITURE
+            this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
             this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
             this._composers.set(OutgoingHeader.FURNITURE_PLACE, FurniturePlaceComposer);
             this._composers.set(OutgoingHeader.FURNITURE_POSTIT_PLACE, FurniturePostItPlaceComposer);
@@ -354,7 +367,6 @@ export class NitroMessages implements IMessageConfiguration
 
             // MAPPING
             this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
-            this._composers.set(OutgoingHeader.ROOM_MODEL2, RoomModel2Composer);
 
             // UNIT
             this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);

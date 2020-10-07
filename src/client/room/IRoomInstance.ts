@@ -11,8 +11,9 @@ export interface IRoomInstance extends IDisposable
     getManager(category: number): IRoomObjectManager;
     getTotalObjectsForManager(category: number): number;
     getRoomObject(id: number, category: number): IRoomObject;
+    getRoomObjectsForCategory(category: number): IRoomObject[];
     getRoomObjectByIndex(index: number, category: number): IRoomObject;
-    createRoomObject(id: number, type: string, category: number): IRoomObject;
+    createRoomObject(id: number, stateCount: number, type: string, category: number): IRoomObject;
     createRoomObjectAndInitalize(objectId: number, type: string, category: number): IRoomObject;
     removeRoomObject(id: number, category: number): void;
     removeAllManagers(): void;

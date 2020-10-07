@@ -53,6 +53,6 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
 
     protected getLayerZOffset(scale: number, direction: number, layerId: number): number
     {
-        return super.getLayerZOffset(scale, direction, layerId) + (this._offsetZ * -1);
+        return super.getLayerZOffset(scale, direction, layerId) + (-(this._offsetZ));
     }
 }

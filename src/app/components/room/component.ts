@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, NgZone, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Texture } from 'pixi.js-legacy';
+import { Texture } from 'pixi.js';
 import { IConnection } from '../../../client/core/communication/connections/IConnection';
 import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
 import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
@@ -34,6 +34,7 @@ import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomVi
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
+import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 
@@ -91,7 +92,9 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 	public clickCount: number       		    = 0;
 
     public roomBackground: PIXI.Sprite          = null;
+    public roomColorizer: PIXI.Sprite           = null;
     public roomBackgroundColor: number          = 0;
+    public roomColor: number                    = 0;
 
     constructor(
         private ngZone: NgZone,
@@ -140,8 +143,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
     {
         if(!this.roomSession || (this.canvasIds.indexOf(canvasId) >= 0)) return;
 
-        const width     = window.innerWidth;
-        const height    = window.innerHeight;
+        const width     = (Nitro.instance.renderer.width / window.devicePixelRatio);
+        const height    = (Nitro.instance.renderer.height / window.devicePixelRatio);
         const scale     = RoomGeometry.SCALE_ZOOMED_IN;
 
         const displayObject = this.roomEngine.getRoomInstanceDisplay(this.roomSession.roomId, canvasId, width, height, scale);
@@ -215,7 +218,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         this.resizeTimer = setTimeout(() =>
         {
-            this.roomEngine.initializeRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0], Nitro.instance.renderer.view.width, Nitro.instance.renderer.view.height);
+            this.roomEngine.initializeRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0], (Nitro.instance.renderer.view.width / window.devicePixelRatio), (Nitro.instance.renderer.view.height / window.devicePixelRatio));
 
             this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
@@ -267,10 +270,12 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
             case MouseEventType.MOUSE_UP:
                 break;
             default: return;
-		}
+        }
+        
+        let ctrlKey = (event.ctrlKey || event.metaKey);
 
         this.roomEngine.setActiveRoomId(this.roomSession.roomId);
-        this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, eventType, event.altKey, event.ctrlKey, event.shiftKey, false);
+        this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, eventType, event.altKey, ctrlKey, event.shiftKey, false);
     }
 
     public createWidget(type: string, component: Type<IRoomWidget>): void
@@ -305,6 +310,9 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
                 break;
             case RoomWidgetEnum.LOCATION_WIDGET:
                 widgetHandler = new ObjectLocationRequestHandler();
+                break;
+            case RoomWidgetEnum.ROOM_DIMMER:
+                widgetHandler = new FurnitureDimmerWidgetHandler();
                 break;
             // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
             //     widgetHandler = new FurnitureTrophyWidgetHandler();
@@ -515,7 +523,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         if(roomObject)
         {
-            const selectionDisabled = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_SELECTION_DISABLED) === 1);
+            const selectionDisabled = (roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_SELECTION_DISABLED) === 1);
 
             if(selectionDisabled)
             {
@@ -538,9 +546,70 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         if(!roomObject || !roomObject.model) return false;
 
         const userId        = this.sessionDataManager.userId;
-        const objectOwnerId = roomObject.model.getValue(RoomObjectVariable.FURNITURE_OWNER_ID) as number;
+        const objectOwnerId = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_OWNER_ID);
 
         return (userId === objectOwnerId);
+    }
+
+    public _Str_2485(k: NitroEvent):void
+    {
+        if(!k || !this.widgetHandlerEventMap) return;
+
+        const events = this.widgetHandlerEventMap.get(k.type);
+
+        if(events && events.length)
+        {
+            let _local_4 = true;
+
+            for(let event of events)
+            {
+                if((k.type === RoomEngineTriggerWidgetEvent.OPEN_WIDGET) || (RoomEngineTriggerWidgetEvent.CLOSE_WIDGET))
+                {
+                    if(k instanceof RoomEngineTriggerWidgetEvent)
+                    {
+                        _local_4 = (event.type === k.widget);
+                    }
+                }
+
+                if(_local_4) event.processEvent(k);
+            }
+        }
+    }
+
+    public setRoomColorizer(k: number, _arg_2: number): void
+    {
+        const colorizer = this.getRoomColorizer();
+
+        if(!colorizer) return;
+
+        let color = ColorConverter._Str_22130(k);
+        
+        color = ((color & 0xFFFF00) + _arg_2);
+
+        k = ColorConverter._Str_13949(color);
+
+        this.roomColor = k;
+
+        this.setColor(colorizer);
+    }
+
+    private getRoomColorizer(): PIXI.Sprite
+    {
+        if(this.roomColorizer) return this.roomColorizer;
+
+        const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0]);
+
+        if(!canvas) return null;
+
+        const displayObject = canvas.displayObject as PIXI.Container;
+
+        const background = new PIXI.Sprite(Texture.WHITE);
+
+        displayObject.addChildAt(background, 1);
+
+        this.roomColorizer = background;
+
+        return this.roomColorizer;
     }
 
     private getRoomBackground(): PIXI.Sprite
@@ -587,8 +656,17 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         if(!sprite) return;
 
         sprite.tint     = this.roomBackgroundColor;
-        sprite.width    = window.innerWidth;
-        sprite.height   = window.innerHeight;
+        sprite.width    = (Nitro.instance.renderer.width / window.devicePixelRatio);
+        sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
+    }
+
+    private setColor(sprite: PIXI.Sprite): void
+    {
+        if(!sprite) return;
+
+        sprite.tint     = this.roomColor;
+        sprite.width    = (Nitro.instance.renderer.width / window.devicePixelRatio);
+        sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
     }
 
     public getFirstCanvasId(): number

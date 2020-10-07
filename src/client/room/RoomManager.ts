@@ -157,7 +157,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
             logic           = asset.data.logicType;
         }
 
-        const object = instance.createRoomObject(objectId, type, category) as IRoomObjectController;
+        const object = (instance.createRoomObject(objectId, 1, type, category) as IRoomObjectController);
 
         if(!object) return null;
 
@@ -225,7 +225,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
             {
                 if(!manager) continue;
 
-                for(let object of manager.objects.values())
+                for(let object of manager.objects.getValues())
                 {
                     if(!object || object.type !== type) continue;
 

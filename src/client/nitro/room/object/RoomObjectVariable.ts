@@ -40,6 +40,7 @@ export class RoomObjectVariable
     public static FURNITURE_CRACKABLE_STATE: string                  = 'furniture_crackable_state';
     public static FURNITURE_CRACKABLE_HITS: string                   = 'furniture_crackable_hits';
     public static FURNITURE_CRACKABLE_TARGET: string                 = 'furniture_crackable_target';
+    public static FURNITURE_CREDIT_VALUE: string                     = 'furniture_credit_value';
     public static FURNITURE_DATA: string                             = 'furniture_data';
     public static FURNITURE_ITEMDATA: string                         = 'furniture_itemdata';
     public static FURNITURE_COLOR: string                            = 'furniture_color';

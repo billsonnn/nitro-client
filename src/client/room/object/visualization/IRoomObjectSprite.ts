@@ -21,6 +21,7 @@ export interface IRoomObjectSprite
     clickHandling: boolean;
     visible: boolean;
     tag: string;
+    posture: string;
     alphaTolerance: number;
     filters: PIXI.Filter[];
     updateCounter: number;

@@ -385,6 +385,11 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         return null;
     }
 
+    public useSign(sign: number): void
+    {
+        this.widgetHandler.container.roomSession.sendSignMessage(sign);
+    }
+
     public get getOwnPosture(): string
     {
         const roomObject = this.getOwnRoomObject();
@@ -395,7 +400,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
             if(model)
             {
-                return (model.getValue(RoomObjectVariable.FIGURE_POSTURE) as string);
+                return model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
             }
         }
 
@@ -412,7 +417,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
             if(model)
             {
-                return (model.getValue(RoomObjectVariable.FIGURE_CAN_STAND_UP) as boolean);
+                return model.getValue<boolean>(RoomObjectVariable.FIGURE_CAN_STAND_UP);
             }
         }
 
@@ -429,7 +434,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
             if(model)
             {
-                const effectId = (model.getValue(RoomObjectVariable.FIGURE_EFFECT) as number);
+                const effectId = model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT);
 
                 return ((effectId === RoomAvatarInfoComponent._Str_18968) || (effectId === RoomAvatarInfoComponent._Str_16970) || (effectId === RoomAvatarInfoComponent._Str_18857));
             }
@@ -448,7 +453,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
             if(model)
             {
-                const effectId = (model.getValue(RoomObjectVariable.FIGURE_EFFECT) as number);
+                const effectId = model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT);
 
                 return (effectId === RoomAvatarInfoComponent._Str_17951);
             }

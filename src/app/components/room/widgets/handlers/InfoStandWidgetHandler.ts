@@ -228,7 +228,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 {
                     let furniData: IFurnitureData = null;
 
-                    const typeId = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+                    const typeId = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_TYPE_ID);
 
                     if(k.category === RoomObjectCategory.FLOOR)
                     {
@@ -283,12 +283,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         const model = roomObject.model;
 
-        if(model.getValue(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM) as string)
+        if(model.getValue<string>(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM))
         {
-            infostandEvent.extraParam = (model.getValue(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM) as string);
+            infostandEvent.extraParam = model.getValue<string>(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM);
         }
 
-        const dataFormat    = (model.getValue(RoomObjectVariable.FURNITURE_DATA_FORMAT) as number);
+        const dataFormat    = model.getValue<number>(RoomObjectVariable.FURNITURE_DATA_FORMAT);
         const objectData    = ObjectDataFactory.getData(dataFormat);
 
         objectData.initializeFromRoomObjectModel(model);
@@ -306,7 +306,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         }
         else
         {
-            const _local_14 = (model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID) as number);
+            const _local_14 = model.getValue<number>(RoomObjectVariable.FURNITURE_TYPE_ID);
 
             let furnitureData: IFurnitureData = null;
 
@@ -342,8 +342,8 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             infostandEvent.isStickie = true;
         }
 
-        const expiryTime        = (model.getValue(RoomObjectVariable.FURNITURE_EXPIRY_TIME) as number);
-        const expiryTimestamp   = (model.getValue(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP) as number);
+        const expiryTime        = model.getValue<number>(RoomObjectVariable.FURNITURE_EXPIRY_TIME);
+        const expiryTimestamp   = model.getValue<number>(RoomObjectVariable.FURNITURE_EXPIRTY_TIMESTAMP);
 
         infostandEvent.expiration = ((expiryTime < 0) ? expiryTime : Math.max(0, (expiryTime - ((Nitro.instance.time - expiryTimestamp) / 1000))));
 
@@ -365,11 +365,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         infostandEvent.isRoomOwner          = this._container.roomSession.isRoomOwner;
         infostandEvent.roomControllerLevel  = this._container.roomSession.controllerLevel;
         infostandEvent.isAnyRoomOwner       = this._container.sessionDataManager.isModerator;
-        infostandEvent.ownerId              = (model.getValue(RoomObjectVariable.FURNITURE_OWNER_ID) as number);
-        infostandEvent.ownerName            = (model.getValue(RoomObjectVariable.FURNITURE_OWNER_NAME) as string);
-        infostandEvent.usagePolicy          = (model.getValue(RoomObjectVariable.FURNITURE_USAGE_POLICY) as number);
+        infostandEvent.ownerId              = model.getValue<number>(RoomObjectVariable.FURNITURE_OWNER_ID);
+        infostandEvent.ownerName            = model.getValue<string>(RoomObjectVariable.FURNITURE_OWNER_NAME);
+        infostandEvent.usagePolicy          = model.getValue<number>(RoomObjectVariable.FURNITURE_USAGE_POLICY);
 
-        const guildId = parseInt(model.getValue(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_GUILD_ID));
+        const guildId = model.getValue<number>(RoomObjectVariable.FURNITURE_GUILD_CUSTOMIZED_GUILD_ID);
 
         if(guildId !== 0)
         {
@@ -449,7 +449,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObject)
         {
-            event.carryId = (roomObject.model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) as number);
+            event.carryId = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
         }
 
         if(eventType == RoomWidgetUserInfostandUpdateEvent.OWN_USER)
@@ -476,7 +476,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(roomObject)
             {
-                let flatControl = (roomObject.model.getValue(RoomObjectVariable.FIGURE_FLAT_CONTROL) as number);
+                let flatControl = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_FLAT_CONTROL);
 
                 if(flatControl !== null) event.flatControl = flatControl;
 
@@ -552,7 +552,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObject)
         {
-            event.carryId = (roomObject.model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) as number);
+            event.carryId = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
         }
 
         event.isRoomOwner           = this._container.roomSession.isRoomOwner;
@@ -582,7 +582,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObject)
         {
-            event._Str_3249 = (roomObject.model.getValue(RoomObjectVariable.FIGURE_CARRY_OBJECT) as number);
+            event._Str_3249 = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
         }
 
         event._Str_3246             = this._container.roomSession.isRoomOwner;

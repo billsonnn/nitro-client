@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, NgZone, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
@@ -43,14 +43,17 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
 
     constructor(
         private ngZone: NgZone,
-        private componentFactoryResolver: ComponentFactoryResolver)
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private changeDetector: ChangeDetectorRef)
     {
         super();
     }
 
     public ngAfterViewInit(): void
     {
-        setTimeout(() => this.setupInfostands(), 0);
+        this.setupInfostands();
+
+        this.changeDetector.detectChanges();
     }
 
     private setupInfostands(): void

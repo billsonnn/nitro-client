@@ -699,7 +699,6 @@ export class RoomPlaneParser
 
     private hidePeninsulaWallChains(k: RoomWallData): void
     {
-        var _local_4: number;
         var _local_5: number;
         var _local_6: number;
         var _local_7: boolean;
@@ -708,7 +707,8 @@ export class RoomPlaneParser
         var _local_3: number = k.count;
         while (_local_2 < _local_3)
         {
-            _local_4 = _local_2;
+            const _local_4 = _local_2;
+            
             _local_5 = _local_2;
             _local_6 = 0;
             _local_7 = false;

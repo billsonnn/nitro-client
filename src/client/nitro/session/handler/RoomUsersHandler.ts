@@ -1,10 +1,12 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
+import { RoomDoorbellEvent } from '../../communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
 import { RoomUnitDanceEvent } from '../../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
 import { RoomUnitEvent } from '../../communication/messages/incoming/room/unit/RoomUnitEvent';
 import { RoomUnitInfoEvent } from '../../communication/messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitRemoveEvent } from '../../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { UserCurrentBadgesEvent } from '../../communication/messages/incoming/user/data/UserCurrentBadgesEvent';
 import { RoomSessionDanceEvent } from '../events/RoomSessionDanceEvent';
+import { RoomSessionDoorbellEvent } from '../events/RoomSessionDoorbellEvent';
 import { RoomSessionUserBadgesEvent } from '../events/RoomSessionUserBadgesEvent';
 import { RoomSessionUserDataUpdateEvent } from '../events/RoomSessionUserDataUpdateEvent';
 import { IRoomHandlerListener } from '../IRoomHandlerListener';
@@ -22,6 +24,7 @@ export class RoomUsersHandler extends BaseHandler
         connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
         connection.addMessageEvent(new RoomUnitDanceEvent(this.onRoomUnitDanceEvent.bind(this)));
         connection.addMessageEvent(new UserCurrentBadgesEvent(this.onUserCurrentBadgesEvent.bind(this)));
+        connection.addMessageEvent(new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)));
     }
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
@@ -133,5 +136,24 @@ export class RoomUsersHandler extends BaseHandler
         session.userDataManager.setUserBadges(parser.userId, parser.badges);
 
         this.listener.events.dispatchEvent(new RoomSessionUserBadgesEvent(session, parser.userId, parser.badges));
+    }
+
+    private onRoomDoorbellEvent(event: RoomDoorbellEvent): void
+    {
+        if(!(event instanceof RoomDoorbellEvent) || !this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const username = parser.userName;
+
+        if(!username || !username.length) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        this.listener.events.dispatchEvent(new RoomSessionDoorbellEvent(RoomSessionDoorbellEvent.DOORBELL, session, username));
     }
 }

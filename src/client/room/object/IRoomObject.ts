@@ -8,6 +8,7 @@ export interface IRoomObject extends IDisposable
 {
     getLocation(): IVector3D;
     getDirection(): IVector3D;
+    getState(index?: number): number;
     id: number;
     instanceId: number;
     type: string;
@@ -16,7 +17,6 @@ export interface IRoomObject extends IDisposable
     mouseHandler: IRoomObjectMouseHandler;
     location: IVector3D;
     direction: IVector3D;
-    state: number;
     updateCounter: number;
     isReady: boolean;
 }

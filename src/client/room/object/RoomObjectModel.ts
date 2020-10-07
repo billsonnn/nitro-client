@@ -18,18 +18,18 @@ export class RoomObjectModel implements IRoomObjectModel
         this._updateCounter = 0;
     }
 
-    public getValue(key: string): any
+    public getValue<T>(key: string): T
     {
         const existing = this._map.get(key);
 
         if(existing === undefined) return null;
 
-        return existing;
+        return (existing as T);
     }
 
-    public setValue(key: string, value: any): void
+    public setValue<T>(key: string, value: T): void
     {
-        this._map.set(key, value);
+        this._map.set(key, (value as T));
 
         this._updateCounter++;
     }

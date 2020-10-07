@@ -8,6 +8,7 @@ import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane'
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
+import { RoomMapData } from '../../RoomMapData';
 import { RoomMapMaskData } from '../../RoomMapMaskData';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { RoomPlaneBitmapMaskData } from '../../RoomPlaneBitmapMaskData';
@@ -251,8 +252,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this.updateModelCounter === k.updateCounter) return false;
 
-        const floorThickness    = (k.getValue(RoomObjectVariable.ROOM_FLOOR_THICKNESS) as number);
-        const wallThickness     = (k.getValue(RoomObjectVariable.ROOM_WALL_THICKNESS) as number);
+        const floorThickness    = k.getValue<number>(RoomObjectVariable.ROOM_FLOOR_THICKNESS);
+        const wallThickness     = k.getValue<number>(RoomObjectVariable.ROOM_WALL_THICKNESS);
 
         if(((floorThickness !== null) && (wallThickness !== null)) && ((floorThickness !== this._floorThickness) || (wallThickness !== this._wallThickness)))
         {            
@@ -271,7 +272,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this.updateModelCounter === k.updateCounter) return false;
 
-        const holeUpdate = k.getValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME);
+        const holeUpdate = k.getValue<number>(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME);
 
         if((holeUpdate !== null) && (holeUpdate !== this._holeUpdateTime))
         {
@@ -291,7 +292,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         let didUpdate = false;
 
-        const planeMask = k.getValue(RoomObjectVariable.ROOM_PLANE_MASK_XML) as RoomMapMaskData;
+        const planeMask = k.getValue<RoomMapMaskData>(RoomObjectVariable.ROOM_PLANE_MASK_XML);
 
         if(planeMask !== this._maskData)
         {
@@ -302,7 +303,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
             didUpdate = true;
         }
 
-        const backgroundColor = k.getValue(RoomObjectVariable.ROOM_BACKGROUND_COLOR) as number;
+        const backgroundColor = k.getValue<number>(RoomObjectVariable.ROOM_BACKGROUND_COLOR);
 
         if(backgroundColor !== this._color)
         {
@@ -314,7 +315,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
             didUpdate = true;
         }
 
-        const backgroundOnly = k.getValue(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY) || false;
+        const backgroundOnly = (k.getValue<boolean>(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY) || false);
 
         if(backgroundOnly !== this._colorBackgroundOnly)
         {
@@ -330,15 +331,15 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        const floorType     = (model.getValue(RoomObjectVariable.ROOM_FLOOR_TYPE) as string);
-        const wallType      = (model.getValue(RoomObjectVariable.ROOM_WALL_TYPE) as string);
-        const landscapeType = (model.getValue(RoomObjectVariable.ROOM_LANDSCAPE_TYPE) as string);
+        const floorType     = model.getValue<string>(RoomObjectVariable.ROOM_FLOOR_TYPE);
+        const wallType      = model.getValue<string>(RoomObjectVariable.ROOM_WALL_TYPE);
+        const landscapeType = model.getValue<string>(RoomObjectVariable.ROOM_LANDSCAPE_TYPE);
 
         this.updatePlaneTypes(floorType, wallType, landscapeType);
 
-        const floorVisibility       = (model.getValue(RoomObjectVariable.ROOM_FLOOR_VISIBILITY) === 1);
-        const wallVisibility        = (model.getValue(RoomObjectVariable.ROOM_WALL_VISIBILITY) === 1);
-        const landscapeVisibility   = (model.getValue(RoomObjectVariable.ROOM_LANDSCAPE_VISIBILITY) === 1);
+        const floorVisibility       = (model.getValue<number>(RoomObjectVariable.ROOM_FLOOR_VISIBILITY) === 1);
+        const wallVisibility        = (model.getValue<number>(RoomObjectVariable.ROOM_WALL_VISIBILITY) === 1);
+        const landscapeVisibility   = (model.getValue<number>(RoomObjectVariable.ROOM_LANDSCAPE_VISIBILITY) === 1);
 
         this.updatePlaneVisibility(floorVisibility, wallVisibility, landscapeVisibility)
 
@@ -376,7 +377,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         if(!isNaN(this._floorThickness)) this._roomPlaneParser.floorThicknessMultiplier = this._floorThickness;
         if(!isNaN(this._wallThickness)) this._roomPlaneParser.wallThicknessMultiplier = this._wallThickness;
 
-        const mapData = this.object.model.getValue(RoomObjectVariable.ROOM_MAP_DATA);
+        const mapData = this.object.model.getValue<RoomMapData>(RoomObjectVariable.ROOM_MAP_DATA);
 
         if(!this._roomPlaneParser.initializeFromMapData(mapData)) return;
 
@@ -384,7 +385,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         const _local_4 = this._Str_23063();
 
         let _local_5    = 0;
-        let _local_6    = this.object.model.getValue(RoomObjectVariable.ROOM_RANDOM_SEED) as number;
+        let _local_6    = this.object.model.getValue<number>(RoomObjectVariable.ROOM_RANDOM_SEED);
         let index       = 0;
 
         while(index < this._roomPlaneParser.planeCount)

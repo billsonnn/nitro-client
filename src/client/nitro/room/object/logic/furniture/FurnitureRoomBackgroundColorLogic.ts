@@ -1,5 +1,9 @@
+import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
+import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { MouseEventType } from '../../../../ui/MouseEventType';
 import { RoomObjectHSLColorEnableEvent } from '../../../events/RoomObjectHSLColorEnableEvent';
+import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { NumberDataType } from '../../data/type/NumberDataType';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
@@ -19,7 +23,10 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 
     public getEventTypes(): string[]
     {
-        const types = [ RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR ];
+        const types = [
+            RoomObjectWidgetRequestEvent.BACKGROUND_COLOR,
+            RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR
+        ];
 
         return this.mergeTypes(super.getEventTypes(), types);
     }
@@ -30,7 +37,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
         {
             if(this.eventDispatcher && this.object)
             {
-                const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
+                const realRoomObject = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
                 if(realRoomObject === 1)
                 {
@@ -52,7 +59,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
         {
             message.data.writeRoomObjectModel(this.object.model);
 
-            const realRoomObject = this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
+            const realRoomObject = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT);
 
             if(realRoomObject === 1) this.processColorUpdate();
         }
@@ -77,7 +84,7 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
             this.object.model.setValue(RoomObjectVariable.FURNITURE_ROOM_BACKGROUND_COLOR_SATURATION, saturation);
             this.object.model.setValue(RoomObjectVariable.FURNITURE_ROOM_BACKGROUND_COLOR_LIGHTNESS, lightness);
 
-            this.object.setState(state);
+            this.object.setState(state, 0);
 
             if(this.eventDispatcher)
             {
@@ -85,6 +92,20 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
             }
 
             this._roomColorUpdated = true;
+        }
+    }
+
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
+    {
+        if(!event || !geometry || !this.object) return;
+
+        switch(event.type)
+        {
+            case MouseEventType.DOUBLE_CLICK:
+                (this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.STICKIE, this.object)));
+                return;
+            default:
+                super.mouseEvent(event, geometry);
         }
     }
 }

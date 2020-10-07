@@ -1,5 +1,6 @@
-import { Texture } from 'pixi.js-legacy';
+import { Texture } from 'pixi.js';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
+import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
 import { RoomObjectSpriteType } from '../object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../object/IRoomObject';
@@ -175,8 +176,6 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             this._mask.width    = width;
             this._mask.height   = height;
-
-            console.log(this._mask.width, this._mask.height)
         }
 
         if(this._master)
@@ -256,7 +255,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             this._display.x = this._screenOffsetX;
             this._display.y = this._screenOffsetY;
-            
+
             this._display.scale.set(this._scale);
 
             update = true;
@@ -304,6 +303,28 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._renderTimestamp   = time;
         this._renderedWidth     = this._width;
         this._renderedHeight    = this._height;
+    }
+
+    public _Str_20787(): void
+    {
+        this._noSpriteVisibilityChecking = true;
+
+        this.render(-1, true);
+    }
+
+    public _Str_22174(): void
+    {
+        this._noSpriteVisibilityChecking = false;
+    }
+
+    public getSortableSpriteList(): RoomObjectSpriteData[]
+    {
+        return this._objectCache.getSortableSpriteList();
+    }
+
+    public _Str_14588(): SortableSprite[]
+    {
+        return this._objectCache.getPlaneSortableSprites();
     }
 
     public removeFromCache(identifier: string): void
@@ -374,14 +395,14 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if(sprite.flipH)
             {
-                let checkX = ((x + (-(texture.width + (sprite.offsetX * -1)))) + this._screenOffsetX);
+                let checkX = ((x + (-(texture.width + (-(sprite.offsetX))))) + this._screenOffsetX);
 
                 if(!this.isSpriteVisible(checkX, spriteY, texture.width, texture.height)) continue;
             }
 
             else if(sprite.flipV)
             {
-                let checkY = ((y + (-(texture.height + (sprite.offsetY * -1)))) + this._screenOffsetY);
+                let checkY = ((y + (-(texture.height + (-(sprite.offsetY))))) + this._screenOffsetY);
 
                 if(!this.isSpriteVisible(spriteX, checkY, texture.width, texture.height)) continue;
             }
@@ -851,6 +872,11 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
 
         if(this._eventCache) this._eventCache.clear();
+    }
+
+    public get id(): number
+    {
+        return this._id;
     }
 
     public get geometry(): IRoomGeometry

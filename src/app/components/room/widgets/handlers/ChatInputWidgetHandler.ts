@@ -1,7 +1,9 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
+import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
+import { AvatarExpressionEnum } from '../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
@@ -85,6 +87,43 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
                     switch(firstPart.toLowerCase())
                     {
+                        case ":d":
+                        case ";d":
+                            if (this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
+                            {
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_7336._Str_6677);
+                            }
+                            break;
+                        case "o/":
+                        case "_o/":
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6268._Str_6677);
+                            return null;
+                        case ":kiss":
+                            if (this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            {
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_5579._Str_6677);
+                                return null;
+                            }
+                            break;
+                        case ":jump":
+                            if (this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            {
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_16682._Str_6677);
+                                return null;
+                            }
+                            break;
+                        case ":idle":
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6989._Str_6677);
+                            return null;
+                        case "_b":
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6325._Str_6677);
+                            return null;
+                        case ":sign":
+                            this._container.roomSession.sendSignMessage(parseInt(secondPart));
+                            return null;
+                        case ":iddqd":
+                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, -1));
+                            return null;
                         case ':zoom':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart)));
                             return null;

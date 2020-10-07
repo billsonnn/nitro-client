@@ -106,11 +106,11 @@ export class OutgoingHeader
     public static ROOM_INFO                      = 2230;
     public static ROOM_KICK                      = 1320;
     public static ROOM_LIKE                      = 3582;
-    public static ROOM_MODEL                     = 3898;
+    public static FURNITURE_ALIASES              = 3898;
     public static ROOM_MODEL_BLOCKED_TILES       = 1687;
     public static ROOM_MODEL_DOOR                = 3559;
     public static ROOM_MODEL_SAVE                = 875;
-    public static ROOM_MODEL2                    = 2300;
+    public static ROOM_MODEL                    = 2300;
     public static ROOM_MUTE                      = 3637;
     public static ROOM_MUTE_USER                 = 3485;
     public static ROOM_RIGHTS_GIVE               = 808;

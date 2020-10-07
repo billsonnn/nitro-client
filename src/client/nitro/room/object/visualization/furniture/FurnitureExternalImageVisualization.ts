@@ -20,7 +20,7 @@ export class FurnitureExternalImageVisualization extends FurnitureDynamicThumbna
 
         if(this._url) return this._url;
 
-        const jsonString = this.object.model.getValue(RoomObjectVariable.FURNITURE_DATA);
+        const jsonString = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
 
         if(!jsonString || jsonString === '') return null;
 

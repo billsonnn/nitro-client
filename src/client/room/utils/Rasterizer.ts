@@ -1,4 +1,6 @@
-﻿export class Rasterizer 
+﻿import { TextureUtils } from './TextureUtils';
+
+export class Rasterizer 
 {
     // public static line(k:BitmapData, _arg_2: PIXI.Point, _arg_3: PIXI.Point, _arg_4: number): void
     // {
@@ -77,7 +79,7 @@
             .drawRect(0, 0, k.width, k.height)
             .endFill();
 
-        return graphic.generateCanvasTexture(1, 1);
+        return TextureUtils.generateTexture(graphic);
     }
 
     public static _Str_20706(k: PIXI.Texture): PIXI.Texture
@@ -99,7 +101,7 @@
             .drawRect(0, 0, k.width, k.height)
             .endFill();
 
-        return graphic.generateCanvasTexture(1, 1);
+        return TextureUtils.generateTexture(graphic);
     }
 
     public static _Str_20356(k: PIXI.Texture): PIXI.Texture
@@ -121,6 +123,6 @@
             .drawRect(0, 0, k.width, k.height)
             .endFill();
 
-        return graphic.generateCanvasTexture(1, 1);
+        return TextureUtils.generateTexture(graphic);
     }
 }

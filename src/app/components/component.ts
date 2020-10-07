@@ -1,6 +1,8 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { NitroEvent } from '../../client/core/events/NitroEvent';
 import { Nitro } from '../../client/nitro/Nitro';
+import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBackgroundColorEvent';
+import { RoomEngineDimmerStateEvent } from '../../client/nitro/room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../../client/nitro/room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../../client/nitro/room/events/RoomObjectHSLColorEnabledEvent';
@@ -27,8 +29,8 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 		<nitro-purse-component></nitro-purse-component>
 		<nitro-catalog-component></nitro-catalog-component>
 		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
-		<nitro-navigator-component></nitro-navigator-component>
-		<nitro-hotelview-component *ngIf="!isInRoom"></nitro-hotelview-component>
+		<nitro-navigator-component [visible]="navigatorVisible"></nitro-navigator-component>
+		<nitro-hotelview-component *ngIf="hotelViewVisible"></nitro-hotelview-component>
 		<ng-template #desktopContainer></ng-template>
     </div>`
 })
@@ -40,6 +42,7 @@ export class MainComponent implements OnInit, OnDestroy
 	public desktops: Map<string, ComponentRef<RoomComponent>> = new Map();
 
 	public isInRoom: boolean = false;
+	public hotelViewVisible: boolean = true;
 
 	constructor(
 		private alertService: AlertService,
@@ -59,6 +62,8 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
 
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
@@ -96,6 +101,8 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
+				Nitro.instance.roomEngine.events.removeEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
+				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
 
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
@@ -204,6 +211,7 @@ export class MainComponent implements OnInit, OnDestroy
 		desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
 		desktop.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
 		desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
+		desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
 
 		if(!desktop.roomSession.isSpectator)
 		{
@@ -236,7 +244,11 @@ export class MainComponent implements OnInit, OnDestroy
 
                 Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
                 
-				this.ngZone.run(() => this.isInRoom = true);
+				this.ngZone.run(() =>
+				{
+					this.hotelViewVisible = false;
+					this.isInRoom = true;
+				});
 				return;
 			case RoomEngineEvent.DISPOSED:
 				this.destroyDesktop(roomId);
@@ -247,10 +259,25 @@ export class MainComponent implements OnInit, OnDestroy
 
 				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1))));
 				return;
+			case RoomBackgroundColorEvent.ROOM_COLOR:
+				const colorEvent = (event as RoomBackgroundColorEvent);
+
+				if(colorEvent._Str_11464)
+				{
+					desktop.setRoomColorizer(0x000000, 0xFF);
+				}
+				else
+				{
+					desktop.setRoomColorizer(colorEvent.color, colorEvent._Str_5123);
+				}
+				return;
+			case RoomEngineDimmerStateEvent.ROOM_COLOR:
+				desktop._Str_2485(event);
+				return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
-				const colorEvent = (event as RoomObjectHSLColorEnabledEvent);
+				const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
 				
-				if(colorEvent.enable) desktop.setBackgroundColor(colorEvent.hue, colorEvent.saturation, colorEvent.lightness);
+				if(hslColorEvent.enable) desktop.setBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
                 else desktop.setBackgroundColor(0, 0, 0);
                 return;
 		}
@@ -280,7 +307,15 @@ export class MainComponent implements OnInit, OnDestroy
 			case RoomSessionEvent.ROOM_DATA:
 				return;
 			case RoomSessionEvent.ENDED:
-				if(event.session) this.destroyDesktop(this.getRoomId(event.session.roomId));
+				if(event.session)
+				{
+					this.destroyDesktop(this.getRoomId(event.session.roomId));
+
+					if(event.openLandingView)
+					{
+						this.ngZone.run(() => (this.hotelViewVisible = true));
+					}
+				}
 				return;
 			default:
 				const desktop = this.getDesktop(this.getRoomId(event.session.roomId));
@@ -298,6 +333,11 @@ export class MainComponent implements OnInit, OnDestroy
 	public getCanvasId(roomId: number): number
 	{
 		return 1;
+	}
+
+	public get navigatorVisible(): boolean
+	{
+		return this.settingsService.navigatorVisible;
 	}
 
 	public get inventoryVisible(): boolean

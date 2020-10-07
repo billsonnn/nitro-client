@@ -70,7 +70,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     {
         this._referenceCount--;
 
-        if(this._referenceCount >= 0)
+        if(this._referenceCount <= 0)
         {
             this._referenceCount        = 0;
             this._referenceTimestamp    = Nitro.instance.time;

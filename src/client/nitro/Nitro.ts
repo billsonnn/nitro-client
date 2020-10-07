@@ -10,6 +10,8 @@ import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
 import { INitro } from './INitro';
+import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
+import { NitroLocalizationManager } from './localization/NitroLocalizationManager';
 import { INitroNavigator } from './navigator/INitroNavigator';
 import { NitroNavigator } from './navigator/NitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
@@ -30,6 +32,7 @@ export class Nitro extends PIXI.Application implements INitro
 
     private _core: INitroCore;
     private _events: IEventDispatcher;
+    private _localization: INitroLocalizationManager;
     private _communication: INitroCommunicationManager;
     private _avatar: IAvatarRenderManager;
     private _roomEngine: IRoomEngine;
@@ -72,6 +75,7 @@ export class Nitro extends PIXI.Application implements INitro
 
         this._core                  = core;
         this._events                = new EventDispatcher();
+        this._localization          = new NitroLocalizationManager();
         this._communication         = new NitroCommunicationManager(core.communication);
         this._avatar                = new AvatarRenderManager();
         this._roomEngine            = new RoomEngine(this._communication);
@@ -103,14 +107,11 @@ export class Nitro extends PIXI.Application implements INitro
 
         canvas.id           = 'client-wrapper';
         canvas.className    = 'client-canvas';
-        canvas.width        = window.innerWidth;
-        canvas.height       = window.innerHeight;
         
         const instance = new this(new NitroCore(), {
-            width: (window.innerWidth),
-            height: (window.innerHeight),
             transparent: true,
             autoDensity: true,
+            resolution: window.devicePixelRatio,
             view: canvas
         });
 
@@ -125,7 +126,7 @@ export class Nitro extends PIXI.Application implements INitro
 
         this.setupRenderer();
 
-        //if(this._communication) this._communication.init();
+        if(this._localization) this._localization.init();
         if(this._avatar)        this._avatar.init();
         if(this._navigator)     this._navigator.init();
 
@@ -222,6 +223,11 @@ export class Nitro extends PIXI.Application implements INitro
     public get events(): IEventDispatcher
     {
         return this._events;
+    }
+
+    public get localization(): INitroLocalizationManager
+    {
+        return this._localization;
     }
 
     public get communication(): INitroCommunicationManager

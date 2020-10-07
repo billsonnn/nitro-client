@@ -37,9 +37,9 @@ export class CrackableDataType extends ObjectDataBase implements IObjectData
     {
         super.initializeFromRoomObjectModel(model);
 
-        this._state     = model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_STATE);
-        this._hits      = parseInt(model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_HITS));
-        this._target    = parseInt(model.getValue(RoomObjectVariable.FURNITURE_CRACKABLE_TARGET));
+        this._state     = model.getValue<string>(RoomObjectVariable.FURNITURE_CRACKABLE_STATE);
+        this._hits      = model.getValue<number>(RoomObjectVariable.FURNITURE_CRACKABLE_HITS);
+        this._target    = model.getValue<number>(RoomObjectVariable.FURNITURE_CRACKABLE_TARGET);
     }
 
     public writeRoomObjectModel(model: IRoomObjectModel): void

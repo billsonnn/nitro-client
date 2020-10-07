@@ -44,8 +44,8 @@ export class AdvancedMap<T, U> implements IDisposable
         for(let key of this._dictionary.keys()) this._dictionary.delete(key);
 
         this._length    = 0;
-        this._array     = null;
-        this._keys      = null;
+        this._array     = [];
+        this._keys      = [];
     }
 
     public unshift(key: T, value: U): boolean

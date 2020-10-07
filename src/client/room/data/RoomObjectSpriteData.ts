@@ -1,6 +1,6 @@
 ﻿export class RoomObjectSpriteData 
 {
-    public _Str_1577: number;
+    public objectId: number;
     public x: number;
     public y: number;
     public z: number;
@@ -13,6 +13,6 @@
     public alpha: number;
     public width: number;
     public height: number;
-    public _Str_1723: string;
+    public type: string;
     public posture: string;
 }

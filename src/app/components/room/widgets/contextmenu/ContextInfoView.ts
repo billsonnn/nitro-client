@@ -1,5 +1,6 @@
 import { ComponentRef, Directive, ElementRef } from '@angular/core';
-import { FixedSizeStack } from '../../../../../client/utils/FixedSizeStack';
+import { Nitro } from '../../../../../client/nitro/Nitro';
+import { FixedSizeStack } from '../../../../../client/nitro/utils/FixedSizeStack';
 import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 @Directive()
@@ -97,9 +98,9 @@ export class ContextInfoView
 
         if(top <= 0) top = ContextInfoView.SPACE_AROUND_EDGES;
 
-        if(top >= (window.innerHeight - this.activeViewElement.offsetHeight)) top = ((window.innerHeight - this.activeViewElement.offsetHeight) - ContextInfoView.SPACE_AROUND_EDGES);
+        if(top >= ((Nitro.instance.renderer.height / window.devicePixelRatio) - this.activeViewElement.offsetHeight)) top = (((Nitro.instance.renderer.height / window.devicePixelRatio) - this.activeViewElement.offsetHeight) - ContextInfoView.SPACE_AROUND_EDGES);
 
-        if(left >= (window.innerWidth - this.activeViewElement.offsetWidth)) left = ((window.innerWidth - this.activeViewElement.offsetWidth) - ContextInfoView.SPACE_AROUND_EDGES);
+        if(left >= ((Nitro.instance.renderer.width / window.devicePixelRatio) - this.activeViewElement.offsetWidth)) left = (((Nitro.instance.renderer.width / window.devicePixelRatio) - this.activeViewElement.offsetWidth) - ContextInfoView.SPACE_AROUND_EDGES);
 
         if(left < 0) left = 0 + ContextInfoView.BUBBLE_DROP_SPEED;
 

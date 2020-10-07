@@ -20,7 +20,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     private static HAIR: string                         = 'hair';
     private static _Str_7490: number                    = 1;
     private static _Str_13277: number                   = 1000;
-    private static PET_EXPERIENCE_BUBBLE_PNG: string    = "pet_experience_bubble_png";
+    private static PET_EXPERIENCE_BUBBLE_PNG: string    = 'pet_experience_bubble_png';
     private static _Str_16082: number                   = 0;
     private static _Str_17658: number                   = 1;
     private static _Str_16677: number                   = 2;
@@ -115,12 +115,12 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        let posture = model.getValue(RoomObjectVariable.FIGURE_POSTURE) as string;
-        let gesture = model.getValue(RoomObjectVariable.FIGURE_GESTURE) as string;
+        let posture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
+        let gesture = model.getValue<string>(RoomObjectVariable.FIGURE_GESTURE);
 
         this.setPostureAndGesture(posture, gesture);
 
-        let alphaMultiplier = model.getValue(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER) || null;
+        let alphaMultiplier = (model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER) || null);
 
         if(alphaMultiplier === null || isNaN(alphaMultiplier)) alphaMultiplier = 1;
         
@@ -131,9 +131,9 @@ export class PetVisualization extends FurnitureAnimatedVisualization
             this._alphaChanged = true;
         }
 
-        this._isSleeping = model.getValue(RoomObjectVariable.FIGURE_SLEEP) > 0;
+        this._isSleeping = (model.getValue<number>(RoomObjectVariable.FIGURE_SLEEP) > 0);
 
-        const headDirection = model.getValue(RoomObjectVariable.HEAD_DIRECTION);
+        const headDirection = model.getValue<number>(RoomObjectVariable.HEAD_DIRECTION);
 
         if(!isNaN(headDirection) && this._data.isAllowedToTurnHead)
         {
@@ -144,13 +144,13 @@ export class PetVisualization extends FurnitureAnimatedVisualization
             this._headDirection = this.object.getDirection().x;
         }
 
-        const customPaletteIndex    = model.getValue(RoomObjectVariable.PET_PALETTE_INDEX) as number;
-        const customLayerIds        = model.getValue(RoomObjectVariable.PET_CUSTOM_LAYER_IDS) as number[];
-        const customPartIds         = model.getValue(RoomObjectVariable.PET_CUSTOM_PARTS_IDS) as number[]
-        const customPaletteIds      = model.getValue(RoomObjectVariable.PET_CUSTOM_PALETTE_IDS) as number[];
-        const isRiding              = model.getValue(RoomObjectVariable.PET_IS_RIDING) as number;
-        const headOnly              = model.getValue(RoomObjectVariable.PET_HEAD_ONLY) as number;
-        const color                 = model.getValue(RoomObjectVariable.PET_COLOR);
+        const customPaletteIndex    = model.getValue<number>(RoomObjectVariable.PET_PALETTE_INDEX);
+        const customLayerIds        = model.getValue<number[]>(RoomObjectVariable.PET_CUSTOM_LAYER_IDS);
+        const customPartIds         = model.getValue<number[]>(RoomObjectVariable.PET_CUSTOM_PARTS_IDS);
+        const customPaletteIds      = model.getValue<number[]>(RoomObjectVariable.PET_CUSTOM_PALETTE_IDS);
+        const isRiding              = model.getValue<number>(RoomObjectVariable.PET_IS_RIDING);
+        const headOnly              = model.getValue<number>(RoomObjectVariable.PET_HEAD_ONLY);
+        const color                 = model.getValue<number>(RoomObjectVariable.PET_COLOR);
 
         if(customPaletteIndex !== this._paletteIndex)
         {
@@ -474,7 +474,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(!(isNaN(partId)) && (partId > -1))
         {
-            name = (name + "_" + partId);
+            name = (name + '_' + partId);
         }
 
         return this.asset.getAssetWithPalette(name, paletteName);
@@ -490,5 +490,39 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         super.setLayerCount(count);
 
         this._headSprites = [];
+    }
+
+    protected getPostureForAsset(scale: number, name: string): string
+    {
+        let parts   = name.split('_');
+        let length  = parts.length;
+        let i       = 0;
+
+        while(i < parts.length)
+        {
+            if((parts[i] === '64') || (parts[i] === '32'))
+            {
+                length = (i + 3);
+
+                break;
+            }
+
+            i++;
+        }
+
+        let posture: string = null;
+
+        if(length < parts.length)
+        {
+            let part = parts[length];
+
+            part = part.split('@')[0];
+
+            posture = this._data._Str_14207(scale, (parseInt(part) / 100), false);
+
+            if(!posture) posture = this._data._Str_17976(scale, (parseInt(part) / 100));
+        }
+
+        return posture;
     }
 }

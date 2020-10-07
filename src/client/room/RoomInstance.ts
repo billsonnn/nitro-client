@@ -60,9 +60,9 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
                 const objects = manager.objects;
 
-                if(!objects.size) continue;
+                if(!objects.length) continue;
 
-                for(let object of objects.values())
+                for(let object of objects.getValues())
                 {
                     if(!object) continue;
 
@@ -127,6 +127,13 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return object;
     }
 
+    public getRoomObjectsForCategory(category: number): IRoomObject[]
+    {
+        const manager = this.getManager(category);
+
+        return (manager ? manager.objects.getValues() : []);
+    }
+
     public getRoomObjectByIndex(index: number, category: number): IRoomObject
     {
         const manager = this.getManager(category);
@@ -140,13 +147,13 @@ export class RoomInstance extends Disposable implements IRoomInstance
         return object;
     }
 
-    public createRoomObject(id: number, type: string, category: number): IRoomObjectController
+    public createRoomObject(id: number, stateCount: number, type: string, category: number): IRoomObjectController
     {
         const manager = this.getManagerOrCreate(category);
 
         if(!manager) return null;
 
-        const object = manager.createObject(id, type);
+        const object = manager.createObject(id, stateCount, type);
 
         if(!object) return null;
 
@@ -187,9 +194,9 @@ export class RoomInstance extends Disposable implements IRoomInstance
             {
                 const objects = manager.objects;
 
-                if(objects.size)
+                if(objects.length)
                 {
-                    for(let object of objects.values())
+                    for(let object of objects.getValues())
                     {
                         if(!object) continue;
 
@@ -232,9 +239,9 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
             const objects = manager.objects;
 
-            if(!objects.size) continue;
+            if(!objects.length) continue;
 
-            for(let object of objects.values())
+            for(let object of objects.getValues())
             {
                 if(!object) continue;
 
@@ -253,13 +260,14 @@ export class RoomInstance extends Disposable implements IRoomInstance
         {
             if(!manager) continue;
 
-            for(let object of manager.objects.values())
+            for(let object of manager.objects.getValues())
             {
                 if(!object) continue;
 
                 if(!object.isReady) return true;
             }
         }
+
         return false;
     }
 

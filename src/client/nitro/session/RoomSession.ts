@@ -9,6 +9,7 @@ import { RoomUnitTypingStopComposer } from '../communication/messages/outgoing/r
 import { RoomUnitActionComposer } from '../communication/messages/outgoing/room/unit/RoomUnitActionComposer';
 import { RoomUnitDanceComposer } from '../communication/messages/outgoing/room/unit/RoomUnitDanceComposer';
 import { RoomUnitPostureComposer } from '../communication/messages/outgoing/room/unit/RoomUnitPostureComposer';
+import { RoomUnitSignComposer } from '../communication/messages/outgoing/room/unit/RoomUnitSignComposer';
 import { UserMottoComposer } from '../communication/messages/outgoing/user/data/UserMottoComposer';
 import { RoomModerationParser } from '../communication/messages/parser/room/data/RoomModerationParser';
 import { RoomControllerLevel } from './enum/RoomControllerLevel';
@@ -161,6 +162,13 @@ export class RoomSession extends Disposable implements IRoomSession
     public sendExpressionMessage(expression: number): void
     {
         this._connection.send(new RoomUnitActionComposer(expression));
+    }
+
+    public sendSignMessage(sign: number): void
+    {
+        if((sign < 0) || (sign >= 17)) return;
+
+        this._connection.send(new RoomUnitSignComposer(sign));
     }
 
     public sendPostureMessage(posture: number): void

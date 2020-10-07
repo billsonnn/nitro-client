@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { AlertToastComponent } from './components/alerts/alert/component';
 import { ConfirmToastComponent } from './components/alerts/confirm/component';
@@ -12,6 +13,7 @@ import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
+import { TranslatePipe } from './pipes/translate';
 import { AlertService } from './services/alert/service';
 
 @NgModule({
@@ -21,18 +23,21 @@ import { AlertService } from './services/alert/service';
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
-		ToastrModule.forRoot()
+		ToastrModule.forRoot(),
+		NgbDropdownModule
 	],
 	exports: [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+		NgbDropdownModule,
 		AvatarImageComponent,
 		BadgeComponent,
 		LoadingComponent,
 		RoomPreviewComponent,
 		DraggableDirective,
-		BringToTopDirective
+		BringToTopDirective,
+		TranslatePipe
 	],
 	providers: [
 		AlertService
@@ -45,7 +50,8 @@ import { AlertService } from './services/alert/service';
 		LoadingComponent,
 		RoomPreviewComponent,
 		DraggableDirective,
-		BringToTopDirective
+		BringToTopDirective,
+		TranslatePipe
 	],
 	entryComponents: [ ConfirmToastComponent, AlertToastComponent ]
 })

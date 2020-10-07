@@ -41,7 +41,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
     {
         super.update(time);
 
-        //this._Str_25016();
+        this._Str_25016();
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -52,7 +52,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 
         if(message instanceof ObjectDataUpdateMessage)
         {
-            this._Str_21445(this.object.state);
+            this._Str_21445(this.object.getState(0));
         }
 
         const location = this.object.getLocation();
@@ -103,7 +103,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
 
         if(!model) return;
 
-        const stateIndex = model.getValue(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX);
+        const stateIndex = model.getValue<number>(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX);
 
         if(!isNaN(stateIndex)) this._Str_21445((stateIndex % 2));
     }

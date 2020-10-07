@@ -1,3 +1,4 @@
+import { RoomObjectSpriteData } from '../../data/RoomObjectSpriteData';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { TextureUtils } from '../../utils/TextureUtils';
 import { IRoomObjectController } from '../IRoomObjectController';
@@ -60,6 +61,11 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
     {
         if((index >= 0) && (index < this._sprites.length)) return this._sprites[index];
 
+        return null;
+    }
+
+    public getSpriteList(): RoomObjectSpriteData[]
+    {
         return null;
     }
 
@@ -181,9 +187,9 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
             if(sprite && sprite.texture && sprite.visible)
             {
-                let offsetX = ((sprite.flipH) ? -(sprite.offsetX) : sprite.offsetX);
-                let offsetY = ((sprite.flipV) ? -(sprite.offsetY) : sprite.offsetY);
-                
+                let offsetX = ((sprite.flipH) ? (-(sprite.width) + sprite.offsetX) : sprite.offsetX);
+                let offsetY = ((sprite.flipV) ? (-(sprite.height) + sprite.offsetY) : sprite.offsetY);
+
                 const point = new PIXI.Point(offsetX, offsetY);
 
                 if(iterator === 0)

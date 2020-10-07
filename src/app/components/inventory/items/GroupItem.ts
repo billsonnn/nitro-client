@@ -4,8 +4,7 @@ import { ImageResult } from '../../../../client/nitro/room/ImageResult';
 import { IRoomEngine } from '../../../../client/nitro/room/IRoomEngine';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 import { FurniCategory } from '../enum/FurniCategory';
-import { InventoryFurniGridItemComponent } from '../furni/grid/griditem/component';
-import { InventoryFurniService } from '../services/inventory.furni.service';
+import { IInventoryModel } from '../IInventoryModel';
 import { FurnitureItem } from './FurnitureItem';
 
 export class GroupItem implements IGetImageListener
@@ -17,8 +16,7 @@ export class GroupItem implements IGetImageListener
     private _Str_18094: number = 1;
     private _Str_18535: number = 0.2;
 
-    private _inventoryService: InventoryFurniService;
-    private _view: InventoryFurniGridItemComponent;
+    private _model: IInventoryModel;
     private _type: number;
     private _category: number;
     private _roomEngine: IRoomEngine;
@@ -29,12 +27,12 @@ export class GroupItem implements IGetImageListener
     private _name: string;
     private _description: string;
     private _unseeen: boolean;
+    private _unlocked: boolean;
     private _items: AdvancedMap<number, FurnitureItem>;
 
-    constructor(inventoryService: InventoryFurniService, type: number, category: number, roomEngine: IRoomEngine, stuffData: IObjectData, extra: number)
+    constructor(model: IInventoryModel, type: number, category: number, roomEngine: IRoomEngine, stuffData: IObjectData, extra: number)
     {
-        this._inventoryService  = inventoryService;
-        this._view              = null;
+        this._model             = model;
         this._type              = type;
         this._category          = category;
         this._roomEngine        = roomEngine;
@@ -45,6 +43,7 @@ export class GroupItem implements IGetImageListener
         this._name              = null;
         this._description       = null;
         this._unseeen           = false;
+        this._unlocked          = true;
         this._items             = new AdvancedMap();
     }
 
@@ -138,8 +137,74 @@ export class GroupItem implements IGetImageListener
         return this._items.length;
     }
 
+    public getUnlockedCount(): number
+    {
+        if(this.category === FurniCategory._Str_12351) return this.getTotalCount();
+
+        let count = 0;
+
+        let i = 0;
+
+        while(i < this._items.length)
+        {
+            const item = this._items.getWithIndex(i);
+
+            if(item.unlocked) count++;
+
+            i++;
+        }
+
+        return count;
+    }
+
+    public getLastItem(): FurnitureItem
+    {
+        if(!this._items.length) return null;
+
+        const item = this._items.getWithIndex((this._items.length - 1));
+
+        return item;
+    }
+
     private setName(): void
     {
+        const k = this.getLastItem();
+
+        if(!k)
+        {
+            this._name = '';
+
+            return;
+        }
+
+        let key = '';
+        
+        // switch (this._category)
+        // {
+        //     case FurniCategory._Str_5186:
+        //         key = (("poster_" + k.stuffData.getLegacyString()) + "_name");
+        //         break;
+        //     case FurniCategory._Str_9125:
+        //         key = this._Str_2307._Str_2476._Str_2774._Str_3255(k._Str_2794);
+        //         if (_local_3 != null)
+        //         {
+        //             return _local_3.name;
+        //         }
+        //         this._Str_3255(k);
+        //         return "";
+        //     default:
+        //         if (this._Str_2770)
+        //         {
+        //             _local_2 = ("wallItem.name." + k.type);
+        //         }
+        //         else
+        //         {
+        //             _local_2 = ("roomItem.name." + k.type);
+        //         }
+        // }
+
+        //return this._Str_2307.controller.localization.getLocalization(_local_2);
+
         this._name = '';
     }
 
@@ -154,8 +219,9 @@ export class GroupItem implements IGetImageListener
 
         let imageResult: ImageResult = null;
 
-        if(this._isWallItem)
+        if(this.isWallItem)
         {
+            console.log('tru')
             imageResult = this._roomEngine.getFurnitureWallIcon(this._type, this, this._stuffData.getLegacyString());
         }
         else
@@ -182,7 +248,7 @@ export class GroupItem implements IGetImageListener
         
         this._iconUrl = url;
 
-        if(this._view) this._view.markForCheck();
+        //if(this._view) this._view.markForCheck();
     }
 
     public imageReady(id: number, texture: PIXI.Texture, image: HTMLImageElement = null): void
@@ -244,28 +310,34 @@ export class GroupItem implements IGetImageListener
         this._unseeen = flag;
     }
 
+    public get unlocked(): boolean
+    {
+        return this._unlocked;
+    }
+
+    public set unlocked(flag: boolean)
+    {
+        this._unlocked = flag;
+    }
+
     public get isWallItem(): boolean
     {
-        return false;
+        const item = this.getItemByIndex(0);
+
+        console.log(item);
+
+        return (item ? item.isWallItem : false);
     }
 
     public get isGroupable(): boolean
     {
-        return true;
+        const item = this.getItemByIndex(0);
+
+        return (item ? item.isGroupable : false);
     }
 
     public get items(): AdvancedMap<number, FurnitureItem>
     {
         return this._items;
-    }
-
-    public get view(): InventoryFurniGridItemComponent
-    {
-        return this._view;
-    }
-
-    public set view(view: InventoryFurniGridItemComponent)
-    {
-        this._view = view;
     }
 }

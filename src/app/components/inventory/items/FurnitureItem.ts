@@ -27,6 +27,7 @@ export class FurnitureItem implements IFurnitureItem
     private _slotId: string;
     private _isRented: boolean;
     private _flatId: number;
+    private _unlocked: boolean;
 
     constructor(parser: FurnitureListItemParser)
     {
@@ -51,6 +52,7 @@ export class FurnitureItem implements IFurnitureItem
         this._flatId                = parser.flatId;
         this._isRented              = parser.rentable;
         this._isWallItem            = parser.isWallItem;
+        this._unlocked              = true;
     }
 
     public get rentable(): boolean
@@ -186,6 +188,16 @@ export class FurnitureItem implements IFurnitureItem
     public get _Str_10616(): number
     {
         return this._expirationTimeStamp;
+    }
+
+    public get unlocked(): boolean
+    {
+        return this._unlocked;
+    }
+
+    public set unlocked(flag: boolean)
+    {
+        this._unlocked = flag;
     }
 
     public update(parser: FurnitureListItemParser): void

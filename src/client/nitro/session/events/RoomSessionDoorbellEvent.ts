@@ -3,17 +3,17 @@ import { RoomSessionEvent } from './RoomSessionEvent';
 
 export class RoomSessionDoorbellEvent extends RoomSessionEvent
 {
-    public static RSDE_DOORBELL: string = 'RSDE_DOORBELL';
-    public static REJECTED: string = 'RSDE_REJECTED';
-    public static RSDE_ACCEPTED: string = 'RSDE_ACCEPTED';
+    public static DOORBELL: string  = 'RSDE_DOORBELL';
+    public static RSDE_REJECTED: string  = 'RSDE_REJECTED';
+    public static RSDE_ACCEPTED: string  = 'RSDE_ACCEPTED';
 
     private _userName: string = '';
 
-    constructor(k: string, _arg_2: IRoomSession, _arg_3: string)
+    constructor(type: string, session: IRoomSession, userName: string)
     {
-        super(k, _arg_2);
+        super(type, session);
 
-        this._userName = _arg_3;
+        this._userName = userName;
     }
 
     public get userName(): string

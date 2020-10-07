@@ -16,8 +16,9 @@ import { RoomPlaneParser } from '../object/RoomPlaneParser';
 
 export class RoomPreviewer 
 {
-    public static SCALE_NORMAL: number  = 64;
-    public static SCALE_SMALL: number   = 32;
+    public static SCALE_NORMAL: number      = 64;
+    public static SCALE_SMALL: number       = 32;
+    public static PREVIEW_COUNTER: number   = 0;
     
     private static PREVIEW_CANVAS_ID: number                = 1;
     private static PREVIEW_OBJECT_ID: number                = 1;
@@ -319,15 +320,7 @@ export class RoomPreviewer
             }
             else
             {
-                const bounds = new PIXI.Rectangle();
-
-                if(this._currentPreviewRectangle.x < objectBounds.x) bounds.x = objectBounds.x;
-
-                if(this._currentPreviewRectangle.y < objectBounds.y) bounds.y = objectBounds.y;
-
-                if(this._currentPreviewRectangle.width < objectBounds.width) bounds.width = objectBounds.width;
-
-                if(this._currentPreviewRectangle.height < objectBounds.height) bounds.height = objectBounds.height;
+                const bounds = this._currentPreviewRectangle.clone().enlarge(objectBounds);
 
                 if(((((bounds.width - this._currentPreviewRectangle.width) > ((this._currentPreviewCanvasWidth - this._currentPreviewRectangle.width) >> 1)) || ((bounds.height - this._currentPreviewRectangle.height) > ((this._currentPreviewCanvasHeight - this._currentPreviewRectangle.height) >> 1))) || (this._currentPreviewRectangle.width < 1)) || (this._currentPreviewRectangle.height < 1)) this._currentPreviewRectangle = bounds;
             }
@@ -384,33 +377,31 @@ export class RoomPreviewer
                     }
                 }
             }
-            else
+
+            else if ((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
             {
-                if ((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
+                if(RoomPreviewer.ZOOM_ENABLED)
                 {
-                    if(RoomPreviewer.ZOOM_ENABLED)
+                    if((this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) !== 1) && !this._currentPreviewNeedsZoomOut)
                     {
-                        if(((!(this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) == 1)) && (!(this._currentPreviewNeedsZoomOut))))
-                        {
-                            this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1, null, null);
+                        this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1, null, null);
 
-                            this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
+                        this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
 
-                            point.x = (point.x << 1);
-                            point.y = (point.y << 1);
-                        }
+                        point.x = (point.x << 1);
+                        point.y = (point.y << 1);
                     }
-                    else
+                }
+                else
+                {
+                    if(!geometry.isZoomedIn() && !this._currentPreviewNeedsZoomOut)
                     {
-                        if(!geometry.isZoomedIn() && !this._currentPreviewNeedsZoomOut)
-                        {
-                            geometry.performZoomIn();
+                        geometry.performZoomIn();
 
-                            this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
+                        this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
 
-                            point.x = (point.x << 1);
-                            point.y = (point.y << 1);
-                        }
+                        point.x = (point.x << 1);
+                        point.y = (point.y << 1);
                     }
                 }
             }
@@ -583,15 +574,15 @@ export class RoomPreviewer
     {
         if((event.roomId === this._previewRoomId) && (event.objectId === RoomPreviewer.PREVIEW_OBJECT_ID) && (event.category === this._currentPreviewObjectCategory))
         {
-            this._currentPreviewRectangle  = null;
-            this._currentPreviewNeedsZoomOut = false;
+            this._currentPreviewRectangle       = null;
+            this._currentPreviewNeedsZoomOut    = false;
 
             const roomObject = this._roomEngine.getRoomObject(event.roomId, event.objectId, event.category);
 
             if(roomObject && roomObject.model && (event.category === RoomObjectCategory.WALL))
             {
-                const sizeZ = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_SIZE_Z) as number);
-                const centerZ = (roomObject.model.getValue(RoomObjectVariable.FURNITURE_CENTER_Z) as number);
+                const sizeZ = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Z);
+                const centerZ = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_CENTER_Z);
 
                 if((sizeZ !== null) || (centerZ !== null))
                 {

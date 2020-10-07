@@ -1,4 +1,4 @@
-import { ILoaderOptions } from 'pixi.js-legacy';
+import { ILoaderOptions } from 'pixi.js';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
