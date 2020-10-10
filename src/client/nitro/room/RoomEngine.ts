@@ -1048,23 +1048,23 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     private _Str_22919(time: number): void
     {
-        // for(let instanceData of this._roomInstanceDatas.values())
-        // {
-        //     if(!instanceData) continue;
+        for(let instanceData of this._roomInstanceDatas.values())
+        {
+            if(!instanceData) continue;
 
-        //     const camera = instanceData.roomCamera;
+            const camera = instanceData.roomCamera;
 
-        //     if(!camera) continue;
+            if(!camera) continue;
 
-        //     const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
+            const object = this.getRoomObject(instanceData.roomId, camera._Str_10760, camera._Str_16562);
 
-        //     if(!object) continue;
+            if(!object) continue;
 
-        //     if((instanceData.roomId !== this._activeRoomId) || !this._activeRoomIsDragged)
-        //     {
-        //         this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
-        //     }
-        // }
+            if((instanceData.roomId !== this._activeRoomId) || !this._activeRoomIsDragged)
+            {
+                this._Str_25242(instanceData.roomId, 1, object.getLocation(), time);
+            }
+        }
 
         const canvas = this.getRoomInstanceRenderingCanvas(this._activeRoomId, 1);
 
@@ -1112,12 +1112,12 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             roomCamera._Str_16185 = _arg_3;
             
-            const _local_15 = new Vector3d();
+            const focusObjectLocation = new Vector3d();
             
-            _local_15.assign(_arg_3);
+            focusObjectLocation.assign(_arg_3);
 
-            _local_15.x = Math.round(_local_15.x);
-            _local_15.y = Math.round(_local_15.y);
+            focusObjectLocation.x = Math.round(focusObjectLocation.x);
+            focusObjectLocation.y = Math.round(focusObjectLocation.y);
 
             const _local_16 = (roomInstance.model.getValue<number>(RoomVariableEnum.ROOM_MIN_X) - 0.5);
             const _local_17 = (roomInstance.model.getValue<number>(RoomVariableEnum.ROOM_MIN_Y) - 0.5);
@@ -1126,7 +1126,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             const _local_20 = Math.round(((_local_16 + _local_18) / 2));
             const _local_21 = Math.round(((_local_17 + _local_19) / 2));
             const _local_22 = 2;
-            let _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
+            let _local_23 = new PIXI.Point((focusObjectLocation.x - _local_20), (focusObjectLocation.y - _local_21));
             const _local_24 = (roomGeometry.scale / Math.sqrt(2));
             const _local_25 = (_local_24 / 2);
             const _local_26 = new PIXI.Matrix();
@@ -1140,12 +1140,12 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             let _local_30 = 0;
             let _local_31 = 0;
             let _local_32 = 0;
-            let _local_33 = roomGeometry.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
+            let focusObjectScreenPoint = roomGeometry.getScreenPoint(new Vector3d(_local_20, _local_21, _local_22));
 
-            if(!_local_33) return;
+            if(!focusObjectScreenPoint) return;
             
-            _local_33.x = (_local_33.x + Math.round((canvasRectangle.width / 2)));
-            _local_33.y = (_local_33.y + Math.round((canvasRectangle.height / 2)));
+            focusObjectScreenPoint.x = (focusObjectScreenPoint.x + Math.round((canvasRectangle.width / 2)));
+            focusObjectScreenPoint.y = (focusObjectScreenPoint.y + Math.round((canvasRectangle.height / 2)));
 
             if(bounds != null)
             {
@@ -1154,10 +1154,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
                 if(((bounds.width > 1) && (bounds.height > 1)))
                 {
-                    _local_29 = (((bounds.left - _local_33.x) - (roomGeometry.scale * 0.25)) / _local_24);
-                    _local_31 = (((bounds.right - _local_33.x) + (roomGeometry.scale * 0.25)) / _local_24);
-                    _local_30 = (((bounds.top - _local_33.y) - (roomGeometry.scale * 0.5)) / _local_25);
-                    _local_32 = (((bounds.bottom - _local_33.y) + (roomGeometry.scale * 0.5)) / _local_25);
+                    _local_29 = (((bounds.left - focusObjectScreenPoint.x) - (roomGeometry.scale * 0.25)) / _local_24);
+                    _local_31 = (((bounds.right - focusObjectScreenPoint.x) + (roomGeometry.scale * 0.25)) / _local_24);
+                    _local_30 = (((bounds.top - focusObjectScreenPoint.y) - (roomGeometry.scale * 0.5)) / _local_25);
+                    _local_32 = (((bounds.bottom - focusObjectScreenPoint.y) + (roomGeometry.scale * 0.5)) / _local_25);
                 }
                 else
                 {
@@ -1277,35 +1277,35 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 canvasRectangle.y += (-(canvasRectangle.height) / 2)
             }
 
-            _local_33 = roomGeometry.getScreenPoint(_local_15);
+            focusObjectScreenPoint = roomGeometry.getScreenPoint(focusObjectLocation);
             
-            if (_local_33 != null)
+            if (focusObjectScreenPoint != null)
             {
-                _local_33.x = (_local_33.x + renderingCanvas.screenOffsetX);
-                _local_33.y = (_local_33.y + renderingCanvas.screenOffsetY);
-                _local_15.z = _local_10;
-                _local_15.x = (Math.round((_local_23.x * 2)) / 2);
-                _local_15.y = (Math.round((_local_23.y * 2)) / 2);
+                focusObjectScreenPoint.x = (focusObjectScreenPoint.x + renderingCanvas.screenOffsetX);
+                focusObjectScreenPoint.y = (focusObjectScreenPoint.y + renderingCanvas.screenOffsetY);
+                focusObjectLocation.z = _local_10;
+                focusObjectLocation.x = (Math.round((_local_23.x * 2)) / 2);
+                focusObjectLocation.y = (Math.round((_local_23.y * 2)) / 2);
                 if (roomCamera.location == null)
                 {
-                    roomGeometry.location = _local_15;
+                    roomGeometry.location = focusObjectLocation;
                     if (this._Str_11555)
                     {
                         roomCamera._Str_20685(new Vector3d(0, 0, 0));
                     }
                     else
                     {
-                        roomCamera._Str_20685(_local_15);
+                        roomCamera._Str_20685(focusObjectLocation);
                     }
                 }
-                let _local_45 = roomGeometry.getScreenPoint(_local_15);
+                let _local_45 = roomGeometry.getScreenPoint(focusObjectLocation);
                 let _local_46 = new Vector3d(0, 0, 0);
                 if (_local_45 != null)
                 {
                     _local_46.x = _local_45.x;
                     _local_46.y = _local_45.y;
                 }
-                if (((((((((_local_33.x < canvasRectangle.left) || (_local_33.x > canvasRectangle.right)) && (!(roomCamera._Str_8564))) || (((_local_33.y < canvasRectangle.top) || (_local_33.y > canvasRectangle.bottom)) && (!(roomCamera._Str_8690)))) || (((_local_36) && (!(roomCamera._Str_8564))) && (!(roomCamera._Str_7609 == width)))) || (((_local_37) && (!(roomCamera._Str_8690))) && (!(roomCamera._Str_7902 == height)))) || ((!(roomCamera._Str_18975 == bounds.width)) || (!(roomCamera._Str_15953 == bounds.height)))) || ((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height)))))
+                if (((((((((focusObjectScreenPoint.x < canvasRectangle.left) || (focusObjectScreenPoint.x > canvasRectangle.right)) && (!(roomCamera._Str_8564))) || (((focusObjectScreenPoint.y < canvasRectangle.top) || (focusObjectScreenPoint.y > canvasRectangle.bottom)) && (!(roomCamera._Str_8690)))) || (((_local_36) && (!(roomCamera._Str_8564))) && (!(roomCamera._Str_7609 == width)))) || (((_local_37) && (!(roomCamera._Str_8690))) && (!(roomCamera._Str_7902 == height)))) || ((!(roomCamera._Str_18975 == bounds.width)) || (!(roomCamera._Str_15953 == bounds.height)))) || ((!(roomCamera._Str_7609 == width)) || (!(roomCamera._Str_7902 == height)))))
                 {
                     roomCamera._Str_10235 = _local_34;
                     roomCamera._Str_10446 = _local_35;
@@ -1315,19 +1315,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     }
                     else
                     {
-                        roomCamera.target = _local_15;
+                        roomCamera.target = focusObjectLocation;
                     }
                 }
                 else
                 {
-                    if (!_local_34)
-                    {
-                        roomCamera._Str_10235 = false;
-                    }
-                    if (!_local_35)
-                    {
-                        roomCamera._Str_10446 = false;
-                    }
                 }
             }
             roomCamera._Str_8564 = _local_36;
@@ -1342,7 +1334,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             {
                 if (this._Str_11555)
                 {
-                    roomCamera.update(_arg_4, 8);
+                    roomCamera.update(_arg_4, 0.5);
                 }
                 else
                 {
@@ -2362,7 +2354,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                                     camera._Str_8690 = false;
                                 }
 
-                                camera._Str_25467(new Vector3d(-(canvas.screenOffsetX), -(canvas.screenOffsetX)));
+                                camera._Str_25467(new Vector3d(-(canvas.screenOffsetX), -(canvas.screenOffsetY)));
 
                                 if(this._roomDraggingAlwaysCenters) camera.reset();
                             }

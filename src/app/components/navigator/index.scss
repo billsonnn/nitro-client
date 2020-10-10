@@ -6,6 +6,27 @@
     max-height: $navigator-height;
     left: calc(50vw - #{($navigator-width / 2)});
     top: calc(50vh - #{($navigator-height / 2)});
+
+    @media (pointer:none), (pointer:coarse) {
+        position: fixed;
+        left: 0;
+        top: 100px;
+        right: 0;
+        width: auto;
+        max-width: 100%;
+        max-height: unset;
+        height: auto;
+        bottom: 0;
+
+        .card-body {
+            overflow-y: auto;
+        }
+    }
+
+    @media (pointer:none), (pointer:coarse) and (orientation:landscape) {
+        left: 80px;
+        top: 0;
+    }
 }
 
 @import './search';

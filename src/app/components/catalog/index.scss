@@ -102,6 +102,43 @@
         font-size: 16px;
         color: rgb($white, 1);
     }
+
+    @media (pointer:none), (pointer:coarse) {
+        left: 0;
+        top: 100px;
+        bottom: 0;
+        right: 0;
+        width: auto;
+        max-width: 100%;
+        max-height: unset;
+        height: auto;
+
+        .card-body {
+            overflow-y: auto;
+        }
+
+        div[nitro-room-preview-component] {
+            position: relative;
+            overflow: hidden;
+            .nitro-room-preview-component {
+                position: absolute;
+                top: 50%;
+                right: 50%;
+                transform: translate(50%,-50%);
+                width: auto;
+                height: auto;
+            }
+        }
+
+        .nitro-catalog-offer-grid-component .grid-items .item-detail {
+            width: calc((100% / 3) - 5px);
+        }
+    }
+
+    @media (pointer:none), (pointer:coarse) and (orientation:landscape) {
+        left: 80px;
+        top: 0;
+    }
 }
 
 @import './confirmpurchase';

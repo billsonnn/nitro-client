@@ -17,6 +17,16 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
+
+    .nitro-room-component {
+        overflow: hidden;
+    }
+
+    @media (pointer:none), (pointer:coarse) {
+        .room-view canvas {
+            image-rendering: auto;
+        }
+    }
 }
 
 @import '../assets/icons';

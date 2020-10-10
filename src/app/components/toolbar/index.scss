@@ -43,6 +43,52 @@
             }
         }
     }
+
+    @media (pointer:none), (pointer:coarse) and (orientation:portrait) {
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        .card {
+            width: 100%;
+            max-width: 100%;
+            flex-direction: row;
+
+            .list-group {
+                flex-direction: row;
+                justify-content: space-between;
+
+                .list-group-item {
+                    padding: unset;
+                }
+            }
+        }
+    }
+
+    @media (pointer:none), (pointer:coarse) and (orientation:landscape) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: auto;
+
+        .card {
+            width: 80px;
+            max-width: 100%;
+            flex-direction: column;
+            height: 100%;
+
+            .list-group {
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+
+                .list-group-item {
+                    padding: unset;
+                }
+            }
+        }
+    }
 }
 
 .toolbar-icon-animation {

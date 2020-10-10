@@ -90,7 +90,9 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
     public resizeTimer: any 				    = null;
     public didMouseMove: boolean			    = false;
     public lastClick: number        		    = 0;
-	public clickCount: number       		    = 0;
+    public clickCount: number       		    = 0;
+    public lastMouseMove:number                 = 0;
+    public isMouseMove: boolean                 = false;
 
     public roomBackground: PIXI.Sprite          = null;
     public roomColorizer: PIXI.Sprite           = null;
@@ -184,6 +186,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         {
             this.roomCanvasWrapper = Nitro.instance.renderer.view;
 
+            this.roomCanvasWrapper.ontouchstart    = this.onTouchStartEvent.bind(this);
             this.roomCanvasWrapper.onclick         = this.onMouseEvent.bind(this);
             this.roomCanvasWrapper.onmousemove     = this.onMouseEvent.bind(this);
             this.roomCanvasWrapper.onmousedown     = this.onMouseEvent.bind(this);
@@ -225,7 +228,74 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
             this.setBackground(this.getRoomBackground());
         }, 1);
-	}
+    }
+    
+    private onTouchStartEvent(event: TouchEvent): void
+    {
+        if(!event || !this.roomSession) return;
+
+        let touch = event.changedTouches[0];
+        let x = touch.clientX;
+        let y = touch.clientY;
+        let canvasId = this.canvasIds[0];
+        let altKey = event.altKey;
+        let ctrlKey = (event.ctrlKey || event.metaKey);
+
+        this.roomEngine.setActiveRoomId(this.roomSession.roomId);
+
+        if(event.touches.length >= 2) {
+            this.didMouseMove = false;
+            
+            this.roomCanvasWrapper.ontouchmove = function(evt: TouchEvent) {
+                this.didMouseMove = true;
+                this.roomEngine.dispatchMouseEvent(canvasId, evt.changedTouches[0].clientX, evt.changedTouches[0].clientY, MouseEventType.MOUSE_MOVE, altKey, ctrlKey, event.shiftKey, false);
+            }.bind(this);
+
+            this.roomCanvasWrapper.ontouchend = function(evt: TouchEvent) {
+                this.roomEngine.dispatchMouseEvent(canvasId, evt.changedTouches[0].clientX, evt.changedTouches[0].clientY, MouseEventType.MOUSE_UP, altKey, ctrlKey, event.shiftKey, false);
+                this.roomCanvasWrapper.ontouchmove = null;
+                this.roomCanvasWrapper.ontouchend = null;
+            }.bind(this);
+
+            this.roomCanvasWrapper.ontouchcancel = function(evt: TouchEvent) { 
+                this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_UP, altKey, ctrlKey, event.shiftKey, false);
+                this.roomCanvasWrapper.ontouchmove = null;
+                this.roomCanvasWrapper.ontouchend = null;
+            }.bind(this);
+
+            this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_DOWN, altKey, ctrlKey, event.shiftKey, false);
+        }
+        else if(event.touches.length == 1) {
+            this.roomCanvasWrapper.ontouchend = function(evt: TouchEvent) {
+                this.didMouseMove = false;
+                let eventType = MouseEventType.MOUSE_CLICK;
+                if(this.lastClick)
+                {
+                    this.clickCount = 1;
+                        
+                    if(this.lastClick >= Date.now() - 300) this.clickCount++;
+                }
+
+                this.lastClick = Date.now();
+
+                if(this.clickCount === 2)
+                {
+                    if(!this.didMouseMove) eventType = MouseEventType.DOUBLE_CLICK;
+
+                    this.clickCount    = 0;
+                    this.lastClick     = null;
+                }
+
+                this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_MOVE, altKey, ctrlKey, event.shiftKey, false);
+                this.roomEngine.dispatchMouseEvent(canvasId, x, y, eventType, altKey, ctrlKey, event.shiftKey, false);
+                this.roomCanvasWrapper.ontouchend = null;
+            }.bind(this);
+
+            this.roomCanvasWrapper.ontouchcancel = function() { 
+                this.roomCanvasWrapper.ontouchend = null;
+            }.bind(this);
+        }
+    }
 	
 	private onMouseEvent(event: MouseEvent): void
     {
