@@ -112,6 +112,8 @@ export class Nitro extends PIXI.Application implements INitro
             transparent: true,
             autoDensity: true,
             resolution: window.devicePixelRatio,
+            width: window.innerWidth,
+            height: window.innerHeight,
             view: canvas
         });
 

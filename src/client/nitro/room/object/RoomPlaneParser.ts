@@ -763,8 +763,8 @@ export class RoomPlaneParser
                 _local_4 = k._Str_10778(_local_3);
                 _local_5 = k.getDirection(_local_3);
                 _local_6 = k._Str_13743(_local_3);
-                _local_7 = RoomWallData._Str_5077[_local_5];
-                _local_8 = RoomWallData._Str_5543[_local_5];
+                _local_7 = RoomWallData.WALL_DIRECTION_VECTORS[_local_5];
+                _local_8 = RoomWallData.WALL_NORMAL_VECTORS[_local_5];
                 _local_9 = 0;
                 _local_10 = 0;
                 while (_local_10 < _local_6)
@@ -862,7 +862,7 @@ export class RoomPlaneParser
             {
                 _local_5 = k._Str_10778(_local_4);
                 _local_6 = new PIXI.Point(_local_5.x, _local_5.y);
-                _local_7 = RoomWallData._Str_5077[k.getDirection(_local_4)];
+                _local_7 = RoomWallData.WALL_DIRECTION_VECTORS[k.getDirection(_local_4)];
                 _local_8 = k._Str_13743(_local_4);
                 _local_6.x = (_local_6.x + (_local_7.x * _local_8));
                 _local_6.y = (_local_6.y + (_local_7.y * _local_8));
@@ -924,8 +924,8 @@ export class RoomPlaneParser
                 _local_8 = k._Str_10778(_local_7);
                 _local_9 = k.getDirection(_local_7);
                 _local_10 = k._Str_13743(_local_7);
-                _local_11 = RoomWallData._Str_5077[_local_9];
-                _local_12 = RoomWallData._Str_5543[_local_9];
+                _local_11 = RoomWallData.WALL_DIRECTION_VECTORS[_local_9];
+                _local_12 = RoomWallData.WALL_NORMAL_VECTORS[_local_9];
                 _local_13 = -1;
                 _local_14 = 0;
                 while (_local_14 < _local_10)
@@ -959,13 +959,13 @@ export class RoomPlaneParser
                 _local_21 = null;
                 if ((((_local_5 - _local_9) + 4) % 4) == 3)
                 {
-                    _local_21 = RoomWallData._Str_5543[_local_5];
+                    _local_21 = RoomWallData.WALL_NORMAL_VECTORS[_local_5];
                 }
                 else
                 {
                     if ((((_local_9 - _local_6) + 4) % 4) == 3)
                     {
-                        _local_21 = RoomWallData._Str_5543[_local_6];
+                        _local_21 = RoomWallData.WALL_NORMAL_VECTORS[_local_6];
                     }
                 }
                 _local_22 = k._Str_17084(_local_7);

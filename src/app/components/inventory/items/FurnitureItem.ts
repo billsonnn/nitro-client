@@ -1,4 +1,4 @@
-﻿import { FurnitureListItemParser } from '../../../../client/nitro/communication/messages/parser/inventory/furniture/utils/FurnitureListItemParser';
+﻿import { IFurnitureItemData } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/IFurnitureItemData';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 import { IFurnitureItem } from './IFurnitureItem';
@@ -27,10 +27,10 @@ export class FurnitureItem implements IFurnitureItem
     private _slotId: string;
     private _isRented: boolean;
     private _flatId: number;
-    private _unlocked: boolean;
 
-    constructor(parser: FurnitureListItemParser)
+    constructor(parser: IFurnitureItemData)
     {
+        this._locked                = false;
         this._id                    = parser.itemId;
         this._type                  = parser.spriteId;
         this._ref                   = parser.ref;
@@ -52,7 +52,6 @@ export class FurnitureItem implements IFurnitureItem
         this._flatId                = parser.flatId;
         this._isRented              = parser.rentable;
         this._isWallItem            = parser.isWallItem;
-        this._unlocked              = true;
     }
 
     public get rentable(): boolean
@@ -190,17 +189,7 @@ export class FurnitureItem implements IFurnitureItem
         return this._expirationTimeStamp;
     }
 
-    public get unlocked(): boolean
-    {
-        return this._unlocked;
-    }
-
-    public set unlocked(flag: boolean)
-    {
-        this._unlocked = flag;
-    }
-
-    public update(parser: FurnitureListItemParser): void
+    public update(parser: IFurnitureItemData): void
     {
         this._type                  = parser.spriteId;
         this._ref                   = parser.ref;

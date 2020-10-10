@@ -28,6 +28,7 @@ import { RoomWidgetMessage } from '../../../client/nitro/ui/widget/messages/Room
 import { IRoomObject } from '../../../client/room/object/IRoomObject';
 import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
+import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
@@ -512,7 +513,14 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
                 break;
         }
 
-        if(updateEvent) this.events.dispatchEvent(updateEvent);
+        if(updateEvent)
+        {
+            let dispatchEvent = true;
+
+            if(updateEvent instanceof RoomWidgetRoomObjectUpdateEvent) dispatchEvent = (!RoomId.isRoomPreviewerId(updateEvent.roomId));
+
+            if(dispatchEvent) this.events.dispatchEvent(updateEvent);
+        }
     }
 
     private isFurnitureSelectionDisabled(k: RoomEngineObjectEvent): boolean

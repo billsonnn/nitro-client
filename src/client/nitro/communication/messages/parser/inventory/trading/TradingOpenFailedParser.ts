@@ -1,7 +1,7 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
-export class TradingOpenFailedEventParser implements IMessageParser
+export class TradingOpenFailedParser implements IMessageParser
 {
     public static _Str_18150: number = 7;
     public static _Str_18383: number = 8;

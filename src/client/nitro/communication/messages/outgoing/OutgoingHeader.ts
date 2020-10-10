@@ -124,6 +124,7 @@ export class OutgoingHeader
     public static SECURITY_TICKET                = 2419;
     public static TRADE                          = 1481;
     public static TRADE_ACCEPT                   = 3863;
+    public static TRADE_UNACCEPT                 = 1444;
     public static TRADE_CANCEL                   = 2341;
     public static TRADE_CLOSE                    = 2551;
     public static TRADE_CONFIRM                  = 2760;

@@ -134,4 +134,9 @@ export class FurnitureData implements IFurnitureData
     {
         return this._customParams;
     }
+
+    public get isExternalImage(): boolean
+    {
+        return (this._className.indexOf('external_image') !== -1);
+    }
 }

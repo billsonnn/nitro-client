@@ -124,6 +124,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM:
                 this._container.connection.send(new RoomUnitGiveHandItemComposer(userId));
                 return;
+            case RoomWidgetUserActionMessage.RWUAM_START_TRADING:
+                if(userData) this._widget.inventoryTrading.startTrade(userData.webID, userData.name);
+                return;
             case RoomWidgetFurniActionMessage.RWFAM_MOVE:
                 this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_MOVE);
                 return;
@@ -492,7 +495,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;
 
-            if(isShuttingDown)
+            if(!isShuttingDown)
             {
                 event.canTrade = false;
             }
@@ -627,17 +630,18 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     public get messageTypes(): string[]
     {
-        let types: string[] = [];
-
-        types.push(RoomWidgetRoomObjectMessage.GET_OBJECT_INFO);
-        types.push(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME);
-        types.push(RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM);
-        types.push(RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM);
-        types.push(RoomWidgetFurniActionMessage.RWFAM_MOVE);
-        types.push(RoomWidgetFurniActionMessage.RWFUAM_ROTATE);
-        types.push(RoomWidgetFurniActionMessage.RWFAM_EJECT);
-        types.push(RoomWidgetFurniActionMessage.RWFAM_PICKUP);
-        types.push(RoomWidgetFurniActionMessage.RWFAM_USE);
+        let types: string[] = [
+            RoomWidgetRoomObjectMessage.GET_OBJECT_INFO,
+            RoomWidgetRoomObjectMessage.GET_OBJECT_NAME,
+            RoomWidgetUserActionMessage.RWUAM_DROP_CARRY_ITEM,
+            RoomWidgetUserActionMessage.RWUAM_PASS_CARRY_ITEM,
+            RoomWidgetUserActionMessage.RWUAM_START_TRADING,
+            RoomWidgetFurniActionMessage.RWFAM_MOVE,
+            RoomWidgetFurniActionMessage.RWFUAM_ROTATE,
+            RoomWidgetFurniActionMessage.RWFAM_EJECT,
+            RoomWidgetFurniActionMessage.RWFAM_PICKUP,
+            RoomWidgetFurniActionMessage.RWFAM_USE
+        ];
 
         return types;
     }

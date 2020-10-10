@@ -1,9 +1,10 @@
 import { IMessageDataWrapper } from '../../../../../../../core/communication/messages/IMessageDataWrapper';
 import { Nitro } from '../../../../../../Nitro';
 import { IObjectData } from '../../../../../../room/object/data/IObjectData';
+import { IFurnitureItemData } from '../../../../incoming/inventory/furni/IFurnitureItemData';
 import { FurnitureDataParser } from '../../../room/furniture/FurnitureDataParser';
 
-export class FurnitureListItemParser
+export class FurnitureListItemParser implements IFurnitureItemData
 {
     private static WALL_ITEM: string = 'I';
     private static FLOOR_ITEM: string = 'S';

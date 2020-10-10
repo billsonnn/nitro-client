@@ -29,7 +29,7 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
                     <li class="list-group-item" (click)="toggleNavigator()"><i class="icon icon-rooms"></i></li>
                     <li class="list-group-item" (click)="toggleInventory()"><i class="icon icon-inventory"></i></li>
                     <li class="list-group-item" (click)="toggleCatalog()"><i class="icon icon-catalog"></i></li>
-                    <li class="list-group-item avatar-image"><nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2" [scale]="0.5"></nitro-avatar-image></li>
+                    <li class="list-group-item avatar-image"><nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></nitro-avatar-image></li>
                 </ul>
             </div>
         </div>

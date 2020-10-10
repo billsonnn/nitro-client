@@ -528,18 +528,18 @@ export class RoomPreviewer
 
                 if(this._currentPreviewRectangle)
                 {
-                    const _local_3 = this._currentPreviewScale;
+                    const scale = this._currentPreviewScale;
 
                     offset = this.validatePreviewSize(offset);
                     
-                    const _local_4 = this.getCanvasOffset(offset);
+                    const canvasOffset = this.getCanvasOffset(offset);
 
-                    if(_local_4)
+                    if(canvasOffset)
                     {
-                        this._roomEngine.setRoomInstanceRenderingCanvasOffset(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, _local_4);
+                        this._roomEngine.setRoomInstanceRenderingCanvasOffset(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, canvasOffset);
                     }
 
-                    if(this._currentPreviewScale !== _local_3) this._currentPreviewRectangle = null;
+                    if(this._currentPreviewScale !== scale) this._currentPreviewRectangle = null;
                 }
             }
         }
@@ -581,8 +581,8 @@ export class RoomPreviewer
 
             if(roomObject && roomObject.model && (event.category === RoomObjectCategory.WALL))
             {
-                const sizeZ = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Z);
-                const centerZ = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_CENTER_Z);
+                const sizeZ     = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Z);
+                const centerZ   = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_CENTER_Z);
 
                 if((sizeZ !== null) || (centerZ !== null))
                 {

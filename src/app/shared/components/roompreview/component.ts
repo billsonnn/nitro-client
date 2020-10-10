@@ -7,13 +7,11 @@ import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRend
 	selector: '[nitro-room-preview-component]',
 	template: `
 	<div class="nitro-room-preview-component">
-		<img #previewImage [src]="imageUrl" />
+		<img #previewImage />
 	</div>`
 })
 export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 {
-	public static PREVIEW_COUNTER: number = 0;
-	
 	@ViewChild('previewImage')
 	public previewImage: ElementRef<HTMLImageElement>;
 
@@ -32,26 +30,28 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	public isRunning: boolean = false;
 
 	constructor(
+		private _elementRef: ElementRef<HTMLDivElement>,
 		private ngZone: NgZone) {}
 
 	public ngOnInit(): void
 	{
-		if(!this.roomPreviewer)
-		{
-			console.log('created');
-			this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewComponent.PREVIEW_COUNTER);
-		}
+		console.log(this.width, this.height);
+		if(this.width === 1) this.width 	= this._elementRef.nativeElement.offsetWidth;
+		if(this.height === 1) this.height	= this._elementRef.nativeElement.offsetHeight;
+		
+		if(!this.roomPreviewer) this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
 	}
 
 	public ngOnDestroy(): void
 	{
 		this.stop();
-	}nn
+	}
 
 	public ngAfterViewInit(): void
 	{
 		if(this.roomPreviewer)
 		{
+			console.log(this.width, this.height);
 			this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
 			this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
 		}
@@ -65,10 +65,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
 		this.ngZone.runOutsideAngular(() =>
 		{
-			if(this.previewImageElement)
-			{
-				this.previewImageElement.addEventListener('click', this.onClick.bind(this));
-			}
+			this.previewImageElement.addEventListener('click', this.onClick.bind(this));
 
 			Nitro.instance.ticker.add(this.update, this);
 		});
@@ -82,11 +79,8 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
 		this.ngZone.runOutsideAngular(() =>
 		{
-			if(this.previewImageElement)
-			{
-				this.previewImageElement.removeEventListener('click', this.onClick.bind(this));
-			}
-			
+			this.previewImageElement.removeEventListener('click', this.onClick.bind(this));
+
 			Nitro.instance.ticker.remove(this.update, this);
 		});
 
@@ -110,9 +104,9 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
 	public onClick(event: MouseEvent): void
 	{
-		if(!event) return;
+		if(!event || !this.isRunning || !this.roomPreviewer) return;
 
-		if(this.roomPreviewer) this.roomPreviewer.changeRoomObjectState();
+		this.roomPreviewer.changeRoomObjectState();
 	}
 
 	public get previewImageElement(): HTMLImageElement

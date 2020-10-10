@@ -2,9 +2,9 @@
 import { Nitro } from '../../../../../Nitro';
 import { IObjectData } from '../../../../../room/object/data/IObjectData';
 import { FurnitureDataParser } from '../../../parser/room/furniture/FurnitureDataParser';
+import { IFurnitureItemData } from '../furni/IFurnitureItemData';
 
-//implements _Str_7108
-export class _Str_6342 
+export class TradingListItem implements IFurnitureItemData 
 {
     private _Str_5390: number;
     private _isWallItem: boolean;

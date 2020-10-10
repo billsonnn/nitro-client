@@ -45,7 +45,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         super();
         
-        this._communication             = communication;
+        this._communication                 = communication;
 
         this.resetUserInfo();
 
@@ -104,7 +104,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         this.destroyFurnitureData();
 
-        this._furnitureData = new FurnitureDataParser(this._floorItems, this._wallItems);
+        this._furnitureData = new FurnitureDataParser(this._floorItems, this._wallItems, Nitro.instance.localization);
 
         this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
@@ -394,6 +394,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     public get isModerator(): boolean
     {
-        return (this._securityLevel >= SecurityLevel._Str_3569);
+        return (this._securityLevel >= SecurityLevel.MODERATOR);
     }
 }

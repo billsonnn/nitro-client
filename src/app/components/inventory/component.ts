@@ -1,8 +1,8 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SettingsService } from '../../core/settings/service';
-import { InventoryCategory } from './enum/InventoryCategory';
-import { HabboInventory } from './HabboInventory';
-import { IInventoryModel } from './IInventoryModel';
+import { InventoryFurnitureService } from './furniture/service';
+import { InventoryService } from './service';
+import { InventoryTradingService } from './trading/service';
 
 @Component({
 	selector: 'nitro-inventory-component',
@@ -17,153 +17,62 @@ import { IInventoryModel } from './IInventoryModel';
             </div>
             <div class="card-header-tabs">
                 <div class="nav nav-tabs w-100 px-4">
-                    <div *ngFor="let type of getInventoryTypes()" class="nav-item nav-link" (click)="showInventory(type)">{{ type }}</div>
+                    <div class="nav-item nav-link" [ngClass]="{ 'active': furnitureVisible || tradingVisible }" (click)="showFurniture()">{{ 'inventory.furni' | translate }}</div>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <ng-container #inventoriesContainer></ng-container>
+            <div nitro-inventory-furniture-component [visible]="furnitureVisible"></div>
+            <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
         </div>
     </div>`
 })
-export class InventoryComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked
+export class InventoryComponent implements OnChanges
 {
     @Input()
     public visible: boolean = false;
 
-    @ViewChild('inventoriesContainer', { read: ViewContainerRef })
-    public inventoriesContainer: ViewContainerRef;
-
-    private _inventoryManager: HabboInventory = null;
-    private _selectedInventory: IInventoryModel = null;
-    private _needsShowing: boolean = false;
-
     constructor(
-        private settingsService: SettingsService,
-        private componentFactoryResolver: ComponentFactoryResolver,
-        private changeDetector: ChangeDetectorRef,
-        private ngZone: NgZone) {}
-
-    public ngOnInit()
-    {
-        this._inventoryManager = new HabboInventory(this);
-
-        this._inventoryManager.init();
-    }
-
-    public ngOnDestroy()
-    {
-        if(this._inventoryManager)
-        {
-            this._inventoryManager.dispose();
-
-            this._inventoryManager = null;
-        }
-    }
+        private _inventoryService: InventoryService,
+        private _inventoryFurnitureService: InventoryFurnitureService,
+        private _inventoryTradingService: InventoryTradingService,
+        private _settingsService: SettingsService) {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
-        const previous  = (changes.visible.previousValue as boolean);
-        const next      = (changes.visible.currentValue as boolean);
+        const prev = changes.visible.previousValue;
+        const next = changes.visible.currentValue;
 
-        if((next === previous) || (previous === undefined)) return;
-
-        if(next) this.show();
-        else this.hide();
-    }
-
-    public ngAfterViewChecked(): void
-    {
-        if(this._needsShowing)
+        if(next && (prev !== next))
         {
-            if(this._selectedInventory) this._selectedInventory.show();
-
-            this._needsShowing = false;
-
-            this.changeDetector.detectChanges();
+            this.showFurniture();
         }
     }
 
-    public createComponent<T>(component: Type<T>): ComponentRef<T>
+    private hideInventories(): void
     {
-        if(!component) return null;
-
-        const factory = this.componentFactoryResolver.resolveComponentFactory(component);
-
-        if(!factory) return null;
-
-        let componentRef: ComponentRef<T> = null;
-
-        if(!NgZone.isInAngularZone())
-        {
-            this.ngZone.run(() =>
-            {
-                componentRef = this.inventoriesContainer.createComponent(factory);
-            });
-        }
-        else
-        {
-            componentRef = this.inventoriesContainer.createComponent(factory);
-        }
-
-        if(!componentRef) return null;
-
-        return componentRef;
+        this._inventoryService.furnitureVisible = false;
     }
 
-    public removeComponent<T>(component: ComponentRef<T>): void
+    public showFurniture(): void
     {
-        if(!component) return;
-
-        const index = this.inventoriesContainer.indexOf(component.hostView);
-
-        if(index === -1) return;
-
-        this.inventoriesContainer.remove(index);
+        this.hideInventories();
+        
+        this._inventoryService.furnitureVisible = true;
     }
 
-    private show(): void
+    public hide(): void
     {
-        if(!this._selectedInventory) this.selectInventory(InventoryCategory.FURNI);
-
-        this.showInventory();
+        this._settingsService.hideInventory();
     }
 
-    private hide(): void
+    public get furnitureVisible(): boolean
     {
-        this.hideInventory();
-        this.settingsService.hideInventory();
+        return this._inventoryService.furnitureVisible;
     }
 
-    private selectInventory(type: string): void
+    public get tradingVisible(): boolean
     {
-        if(!type) return;
-
-        const model = this._inventoryManager.getModel(type);
-
-        if(!model) return;
-
-        this.hideInventory();
-
-        this._selectedInventory = model;
-    }
-
-    private showInventory(): void
-    {
-        if(!this._selectedInventory) return;
-
-        this._needsShowing = true;
-    }
-
-    private hideInventory(): void
-    {
-        if(!this._selectedInventory) return;
-
-        this._selectedInventory.hide();
-    }
-
-    public getInventoryTypes(): string[]
-    {
-        return this._inventoryManager.inventories.getKeys();
+        return this._inventoryService.tradingVisible;
     }
 }

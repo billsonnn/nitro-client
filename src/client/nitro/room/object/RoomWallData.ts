@@ -3,14 +3,14 @@ import { Vector3d } from '../../../room/utils/Vector3d';
 
 export class RoomWallData 
 {
-    public static _Str_5077: Vector3d[] = [
+    public static WALL_DIRECTION_VECTORS: Vector3d[] = [
         new Vector3d(1, 0, 0),
         new Vector3d(0, 1, 0),
         new Vector3d(-1, 0, 0),
         new Vector3d(0, -1, 0)
     ];
 
-    public static _Str_5543: Vector3d[] = [
+    public static WALL_NORMAL_VECTORS: Vector3d[] = [
         new Vector3d(0, 1, 0),
         new Vector3d(-1, 0, 0),
         new Vector3d(0, -1, 0),
@@ -62,7 +62,8 @@ export class RoomWallData
 
     private _Str_22484(k: PIXI.Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): boolean
     {
-        var _local_6: number;
+        let _local_6 = 0;
+        
         while (_local_6 < this._count)
         {
             if (((((((this._corners[_local_6].x == k.x) && (this._corners[_local_6].y == k.y)) && (this._directions[_local_6] == _arg_2)) && (this._lengths[_local_6] == _arg_3)) && (this._borders[_local_6] == _arg_4)) && (this._leftTurns[_local_6] == _arg_5)))
@@ -146,7 +147,7 @@ export class RoomWallData
         {
             const corner = this._corners[k];
 
-            _local_3 = RoomWallData._Str_5077[this.getDirection(k)];
+            _local_3 = RoomWallData.WALL_DIRECTION_VECTORS[this.getDirection(k)];
             this._corners[k] = new PIXI.Point((corner.x + (_arg_2 * _local_3.x)), (corner.y + (_arg_2 * _local_3.y)));
             this._lengths[k] = (this._lengths[k] - _arg_2);
             this._manuallyLeftCut[k] = true;
@@ -168,7 +169,7 @@ export class RoomWallData
             {
                 _local_2 = this._Str_10778(k);
                 _local_3 = new PIXI.Point(_local_2.x, _local_2.y);
-                _local_4 = RoomWallData._Str_5077[this.getDirection(k)];
+                _local_4 = RoomWallData.WALL_DIRECTION_VECTORS[this.getDirection(k)];
                 _local_5 = this._Str_13743(k);
                 _local_3.x = (_local_3.x + (_local_4.x * _local_5));
                 _local_3.y = (_local_3.y + (_local_4.y * _local_5));

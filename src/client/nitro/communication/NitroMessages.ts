@@ -21,6 +21,16 @@ import { FurnitureListEvent } from './messages/incoming/inventory/furni/Furnitur
 import { FurnitureListInvalidateEvent } from './messages/incoming/inventory/furni/FurnitureListInvalidateEvent';
 import { FurnitureListRemovedEvent } from './messages/incoming/inventory/furni/FurnitureListRemovedEvent';
 import { FurniturePostItPlacedEvent } from './messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
+import { TradingAcceptEvent } from './messages/incoming/inventory/trading/TradingAcceptEvent';
+import { TradingCloseEvent } from './messages/incoming/inventory/trading/TradingCloseEvent';
+import { TradingCompletedEvent } from './messages/incoming/inventory/trading/TradingCompletedEvent';
+import { TradingConfirmationEvent } from './messages/incoming/inventory/trading/TradingConfirmationEvent';
+import { TradingListItemEvent } from './messages/incoming/inventory/trading/TradingListItemEvent';
+import { TradingNotOpenEvent } from './messages/incoming/inventory/trading/TradingNotOpenEvent';
+import { TradingOpenEvent } from './messages/incoming/inventory/trading/TradingOpenEvent';
+import { TradingOpenFailedEvent } from './messages/incoming/inventory/trading/TradingOpenFailedEvent';
+import { TradingOtherNotAllowedEvent } from './messages/incoming/inventory/trading/TradingOtherNotAllowedEvent';
+import { TradingYouAreNotAllowedEvent } from './messages/incoming/inventory/trading/TradingYouAreNotAllowedEvent';
 import { NavigatorCategoriesEvent } from './messages/incoming/navigator/NavigatorCategoriesEvent';
 import { NavigatorCollapsedEvent } from './messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
@@ -98,6 +108,15 @@ import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientR
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
+import { TradingAcceptComposer } from './messages/outgoing/inventory/trading/TradingAcceptComposer';
+import { TradingCancelComposer } from './messages/outgoing/inventory/trading/TradingCancelComposer';
+import { TradingCloseComposer } from './messages/outgoing/inventory/trading/TradingCloseComposer';
+import { TradingConfirmationComposer } from './messages/outgoing/inventory/trading/TradingConfirmationComposer';
+import { TradingListAddItemComposer } from './messages/outgoing/inventory/trading/TradingListAddItemComposer';
+import { TradingListAddItemsComposer } from './messages/outgoing/inventory/trading/TradingListAddItemsComposer';
+import { TradingListItemRemoveComposer } from './messages/outgoing/inventory/trading/TradingListRemoveItemComposer';
+import { TradingOpenComposer } from './messages/outgoing/inventory/trading/TradingOpenComposer';
+import { TradingUnacceptComposer } from './messages/outgoing/inventory/trading/TradingUnacceptComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchCloseComposer } from './messages/outgoing/navigator/NavigatorSearchCloseComposer';
@@ -186,11 +205,25 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GENERIC_ALERT_LINK, GenericAlertLinkEvent);
 
         // INVENTORY
-        this._events.set(IncomingHeader.USER_FURNITURE_ADD, FurnitureListAddOrUpdateEvent);
-        this._events.set(IncomingHeader.USER_FURNITURE, FurnitureListEvent);
-        this._events.set(IncomingHeader.USER_FURNITURE_REFRESH, FurnitureListInvalidateEvent);
-        this._events.set(IncomingHeader.USER_FURNITURE_REMOVE, FurnitureListRemovedEvent);
-        this._events.set(IncomingHeader.USER_FURNITURE_POSTIT_PLACED, FurniturePostItPlacedEvent);
+
+            // FURNITURE
+            this._events.set(IncomingHeader.USER_FURNITURE_ADD, FurnitureListAddOrUpdateEvent);
+            this._events.set(IncomingHeader.USER_FURNITURE, FurnitureListEvent);
+            this._events.set(IncomingHeader.USER_FURNITURE_REFRESH, FurnitureListInvalidateEvent);
+            this._events.set(IncomingHeader.USER_FURNITURE_REMOVE, FurnitureListRemovedEvent);
+            this._events.set(IncomingHeader.USER_FURNITURE_POSTIT_PLACED, FurniturePostItPlacedEvent);
+
+            // TRADING
+            this._events.set(IncomingHeader.TRADE_ACCEPTED, TradingAcceptEvent);
+            this._events.set(IncomingHeader.TRADE_CLOSED, TradingCloseEvent);
+            this._events.set(IncomingHeader.TRADE_COMPLETED, TradingCompletedEvent);
+            this._events.set(IncomingHeader.TRADE_CONFIRMATION, TradingConfirmationEvent);
+            this._events.set(IncomingHeader.TRADE_LIST_ITEM, TradingListItemEvent);
+            this._events.set(IncomingHeader.TRADE_NOT_OPEN, TradingNotOpenEvent);
+            this._events.set(IncomingHeader.TRADE_OPEN_FAILED, TradingOpenFailedEvent);
+            this._events.set(IncomingHeader.TRADE_OPEN, TradingOpenEvent);
+            this._events.set(IncomingHeader.TRADE_OTHER_NOT_ALLOWED, TradingOtherNotAllowedEvent);
+            this._events.set(IncomingHeader.TRADE_YOU_NOT_ALLOWED, TradingYouAreNotAllowedEvent);
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);
@@ -336,6 +369,17 @@ export class NitroMessages implements IMessageConfiguration
             // FURNI
             this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
             this._composers.set(OutgoingHeader.USER_FURNITURE2, FurnitureList2Composer);
+
+            // TRADING
+            this._composers.set(OutgoingHeader.TRADE_ACCEPT, TradingAcceptComposer);
+            this._composers.set(OutgoingHeader.TRADE_CANCEL, TradingCancelComposer);
+            this._composers.set(OutgoingHeader.TRADE_CLOSE, TradingCloseComposer);
+            this._composers.set(OutgoingHeader.TRADE_CONFIRM, TradingConfirmationComposer);
+            this._composers.set(OutgoingHeader.TRADE_ITEM, TradingListAddItemComposer);
+            this._composers.set(OutgoingHeader.TRADE_ITEMS, TradingListAddItemsComposer);
+            this._composers.set(OutgoingHeader.TRADE_ITEM_REMOVE, TradingListItemRemoveComposer);
+            this._composers.set(OutgoingHeader.TRADE, TradingOpenComposer);
+            this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
 
         // ROOM
 

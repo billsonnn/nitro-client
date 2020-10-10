@@ -69,4 +69,9 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
     {
         return (this._definitions.getValue(key) || key);
     }
+
+    public setValue(key: string, value: string): void
+    {
+        this._definitions.add(key, value);
+    }
 }

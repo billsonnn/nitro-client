@@ -1253,15 +1253,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 _local_41 = 0;
             }
 
-            canvasRectangle.width   = (canvasRectangle.width * (1 - (_local_42 * 2)));
-            canvasRectangle.height  = (canvasRectangle.height * (1 - (_local_40 + _local_41)));
+            canvasRectangle.width   = (canvasRectangle.right * (1 - (_local_42 * 2)));
+            canvasRectangle.height  = (canvasRectangle.bottom * (1 - (_local_40 + _local_41)));
 
-            if (canvasRectangle.width < _local_43)
+            if(canvasRectangle.right < _local_43)
             {
                 canvasRectangle.width = _local_43;
             }
 
-            if (canvasRectangle.height < _local_44)
+            if (canvasRectangle.bottom < _local_44)
             {
                 canvasRectangle.height = _local_44;
             }
@@ -1276,7 +1276,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 canvasRectangle.x += (-(canvasRectangle.width) / 2);
                 canvasRectangle.y += (-(canvasRectangle.height) / 2)
             }
+
             _local_33 = roomGeometry.getScreenPoint(_local_15);
+            
             if (_local_33 != null)
             {
                 _local_33.x = (_local_33.x + renderingCanvas.screenOffsetX);

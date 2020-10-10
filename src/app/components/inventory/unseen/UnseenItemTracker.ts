@@ -1,30 +1,45 @@
-﻿import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
-import { INitroCommunicationManager } from '../../../client/nitro/communication/INitroCommunicationManager';
-import { UnseenItemsEvent } from '../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
-import { HabboInventory } from './HabboInventory';
+﻿import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { INitroCommunicationManager } from '../../../../client/nitro/communication/INitroCommunicationManager';
+import { UnseenItemsEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
 import { IUnseenItemTracker } from './IUnseenItemTracker';
 
 export class UnseenItemTracker implements IUnseenItemTracker
 {
     private _communication: INitroCommunicationManager;
-    private _events: IEventDispatcher;
-    private _inventory: HabboInventory;
     private _unseenItems: number[][];
 
-    constructor(k: INitroCommunicationManager, events: IEventDispatcher, inventory: HabboInventory)
+    private _messages: IMessageEvent[];
+
+    constructor(k: INitroCommunicationManager)
     {
         this._communication = k;
-        this._events        = events;
-        this._inventory     = inventory;
         this._unseenItems   = [];
+
+        this.registerMessages();
 
         this._communication.registerMessageEvent(new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this)));
     }
 
     public dispose(): void
     {
+        this.unregisterMessages();
+        
         this._communication = null;
         this._unseenItems   = null;
+    }
+
+    private registerMessages(): void
+    {
+        this._messages = [
+            new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this))
+        ];
+
+        for(let message of this._messages) this._communication.registerMessageEvent(message);
+    }
+
+    private unregisterMessages(): void
+    {
+        for(let message of this._messages) this._communication.removeMessageEvent(message);
     }
 
     public _Str_8813(k: number): boolean

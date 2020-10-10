@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { InventoryComponent } from './component';
-import { InventoryFurniComponent } from './furni/FurniView';
+import { InventoryFurnitureComponent } from './furniture/component';
+import { InventoryFurnitureService } from './furniture/service';
+import { InventoryService } from './service';
+import { InventoryTradingComponent } from './trading/component';
+import { InventoryTradingService } from './trading/service';
 
 @NgModule({
 	imports: [
@@ -9,11 +13,18 @@ import { InventoryFurniComponent } from './furni/FurniView';
     ],
     exports: [
         InventoryComponent,
-        InventoryFurniComponent
+        InventoryFurnitureComponent,
+        InventoryTradingComponent
+    ],
+    providers: [
+        InventoryService,
+        InventoryFurnitureService,
+        InventoryTradingService
     ],
     declarations: [
         InventoryComponent,
-        InventoryFurniComponent
+        InventoryFurnitureComponent,
+        InventoryTradingComponent
     ]
 })
 export class InventoryModule {}

@@ -1,22 +1,21 @@
 ﻿import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+import { Nitro } from '../../../../client/nitro/Nitro';
 import { IGetImageListener } from '../../../../client/nitro/room/IGetImageListener';
 import { ImageResult } from '../../../../client/nitro/room/ImageResult';
 import { IRoomEngine } from '../../../../client/nitro/room/IRoomEngine';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
-import { FurniCategory } from '../enum/FurniCategory';
-import { IInventoryModel } from '../IInventoryModel';
+import { FurniCategory } from './FurniCategory';
 import { FurnitureItem } from './FurnitureItem';
 
 export class GroupItem implements IGetImageListener
 {
-    private static INVENTORY_THUMB_XML: string = "inventory_thumb_xml";
+    private static INVENTORY_THUMB_XML: string = 'inventory_thumb_xml';
     private static _Str_4072: number = 0xCCCCCC;
     private static _Str_4169: number = 10275685;
 
     private _Str_18094: number = 1;
     private _Str_18535: number = 0.2;
 
-    private _model: IInventoryModel;
     private _type: number;
     private _category: number;
     private _roomEngine: IRoomEngine;
@@ -26,13 +25,13 @@ export class GroupItem implements IGetImageListener
     private _iconUrl: string;
     private _name: string;
     private _description: string;
-    private _unseeen: boolean;
-    private _unlocked: boolean;
+    private _locked: boolean;
+    private _selected: boolean;
+    private _hasUnseenItems: boolean;
     private _items: AdvancedMap<number, FurnitureItem>;
 
-    constructor(model: IInventoryModel, type: number, category: number, roomEngine: IRoomEngine, stuffData: IObjectData, extra: number)
+    constructor(type: number, category: number, roomEngine: IRoomEngine, stuffData: IObjectData, extra: number)
     {
-        this._model             = model;
         this._type              = type;
         this._category          = category;
         this._roomEngine        = roomEngine;
@@ -42,14 +41,17 @@ export class GroupItem implements IGetImageListener
         this._iconUrl           = null;
         this._name              = null;
         this._description       = null;
-        this._unseeen           = false;
-        this._unlocked          = true;
+        this._locked            = false;
+        this._selected          = false;
+        this._hasUnseenItems    = false;
         this._items             = new AdvancedMap();
     }
 
-    public init(): void
+    public prepareGroup(): void
     {
         this.setIcon();
+        this.setName();
+        this.setDescription();
     }
 
     public dispose(): void
@@ -80,9 +82,7 @@ export class GroupItem implements IGetImageListener
             existing.locked = false;
         }
 
-        if(!this._name || !this._name.length) this.setName();
-
-        if(!this._description || !this._description.length) this.setDescription();
+        if(this._items.length === 1) this.prepareGroup();
     }
 
     public pop(): FurnitureItem
@@ -149,7 +149,7 @@ export class GroupItem implements IGetImageListener
         {
             const item = this._items.getWithIndex(i);
 
-            if(item.unlocked) count++;
+            if(!item.locked) count++;
 
             i++;
         }
@@ -179,33 +179,26 @@ export class GroupItem implements IGetImageListener
 
         let key = '';
         
-        // switch (this._category)
-        // {
-        //     case FurniCategory._Str_5186:
-        //         key = (("poster_" + k.stuffData.getLegacyString()) + "_name");
-        //         break;
-        //     case FurniCategory._Str_9125:
-        //         key = this._Str_2307._Str_2476._Str_2774._Str_3255(k._Str_2794);
-        //         if (_local_3 != null)
-        //         {
-        //             return _local_3.name;
-        //         }
-        //         this._Str_3255(k);
-        //         return "";
-        //     default:
-        //         if (this._Str_2770)
-        //         {
-        //             _local_2 = ("wallItem.name." + k.type);
-        //         }
-        //         else
-        //         {
-        //             _local_2 = ("roomItem.name." + k.type);
-        //         }
-        // }
+        switch (this._category)
+        {
+            case FurniCategory._Str_5186:
+                key = (('poster_' + k.stuffData.getLegacyString()) + '_name');
+                break;
+            case FurniCategory._Str_9125:
+                this._name = 'SONG_NAME';
+                return;
+            default:
+                if(this.isWallItem)
+                {
+                    key = ('wallItem.name.' + k.type);
+                }
+                else
+                {
+                    key = ('roomItem.name.' + k.type);
+                }
+        }
 
-        //return this._Str_2307.controller.localization.getLocalization(_local_2);
-
-        this._name = '';
+        this._name = Nitro.instance.localization.getValue(key);
     }
 
     private setDescription(): void
@@ -221,7 +214,6 @@ export class GroupItem implements IGetImageListener
 
         if(this.isWallItem)
         {
-            console.log('tru')
             imageResult = this._roomEngine.getFurnitureWallIcon(this._type, this, this._stuffData.getLegacyString());
         }
         else
@@ -247,15 +239,15 @@ export class GroupItem implements IGetImageListener
         if(!url) return;
         
         this._iconUrl = url;
-
-        //if(this._view) this._view.markForCheck();
     }
 
     public imageReady(id: number, texture: PIXI.Texture, image: HTMLImageElement = null): void
     {
-        if(id === -1) return;
+        if((id === -1) || !image) return;
 
-        if(!image) return;
+        const url = image.src;
+
+        if((this._iconUrl && this._iconUrl.length) && (url === this._iconUrl)) return;
 
         this.setIconUrl(image.src);
     }
@@ -300,31 +292,39 @@ export class GroupItem implements IGetImageListener
         return this._description;
     }
 
-    public get unseen(): boolean
+    public get hasUnseenItems(): boolean
     {
-        return this._unseeen;
+        return this._hasUnseenItems;
     }
 
-    public set unseen(flag: boolean)
+    public set hasUnseenItems(flag: boolean)
     {
-        this._unseeen = flag;
+        this._hasUnseenItems = flag;
     }
 
-    public get unlocked(): boolean
+    public get locked(): boolean
     {
-        return this._unlocked;
+        return this._locked;
     }
 
-    public set unlocked(flag: boolean)
+    public set locked(flag: boolean)
     {
-        this._unlocked = flag;
+        this._locked = flag;
+    }
+
+    public get selected(): boolean
+    {
+        return this._selected;
+    }
+
+    public set selected(flag: boolean)
+    {
+        this._selected = flag;
     }
 
     public get isWallItem(): boolean
     {
         const item = this.getItemByIndex(0);
-
-        console.log(item);
 
         return (item ? item.isWallItem : false);
     }

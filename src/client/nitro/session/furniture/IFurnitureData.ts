@@ -20,4 +20,5 @@ export interface IFurnitureData
     excludeDynamic: boolean;
     specialType: number;
     customParams: string;
+    isExternalImage: boolean;
 }

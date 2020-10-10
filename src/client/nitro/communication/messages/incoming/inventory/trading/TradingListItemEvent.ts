@@ -1,13 +1,13 @@
 ﻿import { IMessageEvent } from '../../../../../../core/communication/messages/IMessageEvent';
 import { MessageEvent } from '../../../../../../core/communication/messages/MessageEvent';
-import { _Str_9219 } from '../../../parser/inventory/trading/_Str_9219';
-import { _Str_6342 } from './_Str_6342';
+import { TradingListItemParser } from '../../../parser/inventory/trading/TradingListItemParser';
+import { TradingListItem } from './TradingListItem';
 
-export class _Str_6742 extends MessageEvent implements IMessageEvent
+export class TradingListItemEvent extends MessageEvent implements IMessageEvent
 {
     constructor(callBack: Function)
     {
-        super(callBack, _Str_9219);
+        super(callBack, TradingListItemParser);
     }
 
     public get _Str_15162(): number
@@ -40,18 +40,18 @@ export class _Str_6742 extends MessageEvent implements IMessageEvent
         return this.getParser()._Str_9138;
     }
 
-    public get _Str_17841(): _Str_6342[]
+    public get _Str_17841(): TradingListItem[]
     {
         return this.getParser()._Str_17841;
     }
 
-    public get _Str_17465(): _Str_6342[]
+    public get _Str_17465(): TradingListItem[]
     {
         return this.getParser()._Str_17465;
     }
 
-    public getParser(): _Str_9219
+    public getParser(): TradingListItemParser
     {
-        return this.parser as _Str_9219;
+        return this.parser as TradingListItemParser;
     }
 }

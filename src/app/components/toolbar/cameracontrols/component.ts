@@ -44,6 +44,8 @@ export class CameraControlsComponent
             const adjustedDirection = Vector3d.sum(geometry.direction, adjustment);
 
             this.setDirection(adjustedDirection);
+
+            geometry.setDepthVector(new Vector3d(geometry.location.x, 0.5, 0))
         });
     }
 
@@ -63,12 +65,12 @@ export class CameraControlsComponent
 
     public rotateLeft(): void
     {
-        this.adjustDirection(-1, 0);
+        this.adjustDirection(-45, 0);
     }
 
     public rotateRight(): void
     {
-        this.adjustDirection(1, 0);
+        this.adjustDirection(45, 0);
     }
 
     public tiltUp(): void
