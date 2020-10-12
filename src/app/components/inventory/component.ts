@@ -7,7 +7,7 @@ import { InventoryTradingService } from './trading/service';
 @Component({
 	selector: 'nitro-inventory-component',
     template: `
-    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component">
+    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component" [ngStyle]="{ 'opacity': (isObjectMoverRequested ? 0 : 1) }">
         <div *ngIf="isLoading" class="card-loading-overlay"></div>
         <div class="card-header-container">
             <div class="card-header-overlay"></div>
@@ -74,5 +74,10 @@ export class InventoryComponent implements OnChanges
     public get tradingVisible(): boolean
     {
         return this._inventoryService.tradingVisible;
+    }
+
+    public get isObjectMoverRequested(): boolean
+    {
+        return this._inventoryFurnitureService.isObjectMoverRequested;
     }
 }

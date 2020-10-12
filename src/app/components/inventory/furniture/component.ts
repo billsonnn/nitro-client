@@ -19,27 +19,15 @@ import { InventoryFurnitureService } from './service';
             </div>
             <div class="row" *ngIf="groupItems.length">
                 <div class="col-7">
-                    <div class="grid-container">
-                        <div class="grid-items">
-                            <div class="item-detail" *ngFor="let groupItem of groupItems" [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (selectedGroup === groupItem) }" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }" (click)="selectGroup(groupItem)">
-                                <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
-                                <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
-                                <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
-                            </div>
-                        </div>
-                    </div>
+                    <div nitro-furniture-grid-component [list]="groupItems" [selected]="selectedGroup" (selectedChange)="selectGroup($event)"></div>
                 </div>
-                <div class="col-5">
-                    <div class="room-previewer" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
-                    <div class="furni-container" *ngIf="selectedGroup">
-                        <div class="furni-name">{{ selectedGroup.name }}</div>
-                        <div class="furni-buttons w-100">
-                            <ng-container *ngIf="!tradeRunning">
-                                <button type="button" class="btn btn-light w-100" (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
-                            </ng-container>
-                            <ng-container *ngIf="tradeRunning">
-                                <button type="button" class="btn btn-light w-100" (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{ ('inventory.trading.offer') | translate }}</button>
-                            </ng-container>
+                <div class="d-flex flex-column col-5">
+                    <div nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
+                    <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup">
+                        <div class="d-flex justify-content-center align-items-center h6 text-center wh-100">{{ selectedGroup.name }}</div>
+                        <div class="btn-group-vertical w-100">
+                            <button *ngIf="!tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                            <button *ngIf="tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{ ('inventory.trading.offer') | translate }}</button>
                         </div>
                     </div>
                 </div>
@@ -49,8 +37,6 @@ import { InventoryFurnitureService } from './service';
 })
 export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 {
-    private static RESULTS_PER_PAGE = 5;
-
     @Input()
     public visible: boolean = false;
 
@@ -100,7 +86,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         }
         else
         {
-            this.selectFirstGroup();
+            this.selectExistingGroupOrDefault();
         }
     }
 
@@ -112,7 +98,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
             if(index > -1)
             {
-                this.selectedGroup.selected = true;
+                this.selectGroup(this.selectedGroup);
 
                 return;
             }
@@ -205,15 +191,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         {
             this._ngZone.runOutsideAngular(() => this.roomPreviewer && this.roomPreviewer.reset(false));
         }
-    }
-
-    public getIconUrl(groupItem: GroupItem): string
-    {
-        const imageUrl = ((groupItem && groupItem.iconUrl) || null);
-
-        if(imageUrl && (imageUrl !== '')) return `url('${ imageUrl }')`;
-
-        return null;
     }
 
     public attemptItemPlacement(): void

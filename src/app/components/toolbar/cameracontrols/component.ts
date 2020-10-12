@@ -1,6 +1,5 @@
 import { Component, NgZone } from '@angular/core';
 import { Nitro } from '../../../../client/nitro/Nitro';
-import { IVector3D } from '../../../../client/room/utils/IVector3D';
 import { RoomGeometry } from '../../../../client/room/utils/RoomGeometry';
 import { Vector3d } from '../../../../client/room/utils/Vector3d';
 
@@ -27,6 +26,8 @@ import { Vector3d } from '../../../../client/room/utils/Vector3d';
 })
 export class CameraControlsComponent
 {
+    private static VALID_DIRECTIONS_X = [ 0, -45, -90, -135, -180, -225, -270, -315 ];
+
     public visible = false;
 
     constructor(
@@ -40,37 +41,34 @@ export class CameraControlsComponent
 
             if(!geometry) return;
 
-            const adjustment        = new Vector3d(x, y, 0);
+            const adjustment        = new Vector3d(x, y);
             const adjustedDirection = Vector3d.sum(geometry.direction, adjustment);
 
-            this.setDirection(adjustedDirection);
+            let index = CameraControlsComponent.VALID_DIRECTIONS_X.indexOf(adjustedDirection.x);
 
-            geometry.setDepthVector(new Vector3d(geometry.location.x, 0.5, 0))
-        });
-    }
+            if(x > 0)
+            {
+                if(index === -1) adjustedDirection.x = CameraControlsComponent.VALID_DIRECTIONS_X[0];
+            }
 
-    private setDirection(direction: IVector3D): void
-    {
-        if(!direction) return;
+            else if(x < 0)
+            {
+                if(index === -1) adjustedDirection.x = CameraControlsComponent.VALID_DIRECTIONS_X[(CameraControlsComponent.VALID_DIRECTIONS_X.length - 1)];
+            }
 
-        this.ngZone.runOutsideAngular(() =>
-        {
-            const geometry  = this.getGeometry();
-
-            if(!geometry) return;
-
-            geometry.direction = direction;
+            geometry.direction = adjustedDirection;
+            geometry.setDepthVector(new Vector3d(adjustedDirection.x, 0.5, 0));
         });
     }
 
     public rotateLeft(): void
     {
-        this.adjustDirection(-45, 0);
+        this.adjustDirection(45, 0);
     }
 
     public rotateRight(): void
     {
-        this.adjustDirection(45, 0);
+        this.adjustDirection(-45, 0);
     }
 
     public tiltUp(): void

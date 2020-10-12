@@ -20,6 +20,7 @@ import { ISessionDataManager } from '../../../client/nitro/session/ISessionDataM
 import { IRoomWidgetHandler } from '../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { MouseEventType } from '../../../client/nitro/ui/MouseEventType';
+import { TouchEventType } from '../../../client/nitro/ui/TouchEventType';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { IRoomWidget } from '../../../client/nitro/ui/widget/IRoomWidget';
@@ -186,11 +187,14 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         {
             this.roomCanvasWrapper = Nitro.instance.renderer.view;
 
-            this.roomCanvasWrapper.ontouchstart    = this.onTouchStartEvent.bind(this);
-            this.roomCanvasWrapper.onclick         = this.onMouseEvent.bind(this);
-            this.roomCanvasWrapper.onmousemove     = this.onMouseEvent.bind(this);
-            this.roomCanvasWrapper.onmousedown     = this.onMouseEvent.bind(this);
-            this.roomCanvasWrapper.onmouseup       = this.onMouseEvent.bind(this);
+            this.roomCanvasWrapper.onclick          = this.onMouseEvent.bind(this);
+            this.roomCanvasWrapper.onmousemove      = this.onMouseEvent.bind(this);
+            this.roomCanvasWrapper.onmousedown      = this.onMouseEvent.bind(this);
+            this.roomCanvasWrapper.onmouseup        = this.onMouseEvent.bind(this);
+            this.roomCanvasWrapper.ontouchstart     = this.onTouchEvent.bind(this);
+            this.roomCanvasWrapper.ontouchmove      = this.onTouchEvent.bind(this);
+            this.roomCanvasWrapper.ontouchcancel    = this.onTouchEvent.bind(this);
+            this.roomCanvasWrapper.ontouchend       = this.onTouchEvent.bind(this);
     
             window.onresize = this.onWindowResizeEvent.bind(this);
 
@@ -228,73 +232,6 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
             this.setBackground(this.getRoomBackground());
         }, 1);
-    }
-    
-    private onTouchStartEvent(event: TouchEvent): void
-    {
-        if(!event || !this.roomSession) return;
-
-        let touch = event.changedTouches[0];
-        let x = touch.clientX;
-        let y = touch.clientY;
-        let canvasId = this.canvasIds[0];
-        let altKey = event.altKey;
-        let ctrlKey = (event.ctrlKey || event.metaKey);
-
-        this.roomEngine.setActiveRoomId(this.roomSession.roomId);
-
-        if(event.touches.length >= 2) {
-            this.didMouseMove = false;
-            
-            this.roomCanvasWrapper.ontouchmove = function(evt: TouchEvent) {
-                this.didMouseMove = true;
-                this.roomEngine.dispatchMouseEvent(canvasId, evt.changedTouches[0].clientX, evt.changedTouches[0].clientY, MouseEventType.MOUSE_MOVE, altKey, ctrlKey, event.shiftKey, false);
-            }.bind(this);
-
-            this.roomCanvasWrapper.ontouchend = function(evt: TouchEvent) {
-                this.roomEngine.dispatchMouseEvent(canvasId, evt.changedTouches[0].clientX, evt.changedTouches[0].clientY, MouseEventType.MOUSE_UP, altKey, ctrlKey, event.shiftKey, false);
-                this.roomCanvasWrapper.ontouchmove = null;
-                this.roomCanvasWrapper.ontouchend = null;
-            }.bind(this);
-
-            this.roomCanvasWrapper.ontouchcancel = function(evt: TouchEvent) { 
-                this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_UP, altKey, ctrlKey, event.shiftKey, false);
-                this.roomCanvasWrapper.ontouchmove = null;
-                this.roomCanvasWrapper.ontouchend = null;
-            }.bind(this);
-
-            this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_DOWN, altKey, ctrlKey, event.shiftKey, false);
-        }
-        else if(event.touches.length == 1) {
-            this.roomCanvasWrapper.ontouchend = function(evt: TouchEvent) {
-                this.didMouseMove = false;
-                let eventType = MouseEventType.MOUSE_CLICK;
-                if(this.lastClick)
-                {
-                    this.clickCount = 1;
-                        
-                    if(this.lastClick >= Date.now() - 300) this.clickCount++;
-                }
-
-                this.lastClick = Date.now();
-
-                if(this.clickCount === 2)
-                {
-                    if(!this.didMouseMove) eventType = MouseEventType.DOUBLE_CLICK;
-
-                    this.clickCount    = 0;
-                    this.lastClick     = null;
-                }
-
-                this.roomEngine.dispatchMouseEvent(canvasId, x, y, MouseEventType.MOUSE_MOVE, altKey, ctrlKey, event.shiftKey, false);
-                this.roomEngine.dispatchMouseEvent(canvasId, x, y, eventType, altKey, ctrlKey, event.shiftKey, false);
-                this.roomCanvasWrapper.ontouchend = null;
-            }.bind(this);
-
-            this.roomCanvasWrapper.ontouchcancel = function() { 
-                this.roomCanvasWrapper.ontouchend = null;
-            }.bind(this);
-        }
     }
 	
 	private onMouseEvent(event: MouseEvent): void
@@ -342,11 +279,81 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
                 break;
             default: return;
         }
-        
-        let ctrlKey = (event.ctrlKey || event.metaKey);
 
         this.roomEngine.setActiveRoomId(this.roomSession.roomId);
-        this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, eventType, event.altKey, ctrlKey, event.shiftKey, false);
+        this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, eventType, event.altKey, (event.ctrlKey || event.metaKey), event.shiftKey, false);
+    }
+
+    private onTouchEvent(event: TouchEvent): void
+    {
+        if(!event || !this.roomSession) return;
+
+        const touch = event.changedTouches[0];
+        const x     = touch.clientX;
+        const y     = touch.clientY;
+
+        let eventType       = event.type;
+        let sendMouseMove   = false;
+
+        if(event.touches.length >= 2)
+        {
+            this.didMouseMove = false;
+
+            switch(eventType)
+            {
+                case TouchEventType.TOUCH_START:
+                    eventType = MouseEventType.MOUSE_DOWN;
+                    break;
+                case TouchEventType.TOUCH_MOVE:
+                    this.didMouseMove = true;
+
+                    eventType = MouseEventType.MOUSE_MOVE;
+                    break;
+                case TouchEventType.TOUCH_END:
+                    eventType = MouseEventType.MOUSE_UP;
+                    break;
+                case TouchEventType.TOUCH_CANCEL:
+                    eventType = MouseEventType.MOUSE_UP;
+                    break;
+            }
+        }
+
+        else if(event.touches.length === 1)
+        {
+            switch(eventType)
+            {
+                case TouchEventType.TOUCH_END:
+                    this.didMouseMove = false;
+
+                    eventType       = MouseEventType.MOUSE_CLICK;
+                    sendMouseMove   = true;
+                    break;
+            }
+        }
+
+        if(eventType === MouseEventType.MOUSE_CLICK)
+        {
+            if(this.lastClick)
+            {
+                this.clickCount = 1;
+                    
+                if(this.lastClick >= Date.now() - 300) this.clickCount++;
+            }
+
+            this.lastClick = Date.now();
+
+            if(this.clickCount === 2)
+            {
+                if(!this.didMouseMove) eventType = MouseEventType.DOUBLE_CLICK;
+
+                this.clickCount    = 0;
+                this.lastClick     = null;
+            }
+        }
+
+        this.roomEngine.setActiveRoomId(this.roomSession.roomId);
+        if(sendMouseMove) this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, MouseEventType.MOUSE_MOVE, event.altKey, (event.ctrlKey || event.metaKey), event.shiftKey, false);
+        this.roomEngine.dispatchMouseEvent(this.canvasIds[0], x, y, eventType, event.altKey, (event.ctrlKey || event.metaKey), event.shiftKey, false);
     }
 
     public createWidget(type: string, component: Type<IRoomWidget>): void

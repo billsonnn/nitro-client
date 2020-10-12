@@ -9,6 +9,7 @@ import { AlertToastComponent } from './components/alerts/alert/component';
 import { ConfirmToastComponent } from './components/alerts/confirm/component';
 import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
+import { FurnitureGridComponent } from './components/furnituregrid/component';
 import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
@@ -33,6 +34,7 @@ import { AlertService } from './services/alert/service';
 		NgbDropdownModule,
 		AvatarImageComponent,
 		BadgeComponent,
+		FurnitureGridComponent,
 		LoadingComponent,
 		RoomPreviewComponent,
 		DraggableDirective,
@@ -47,6 +49,7 @@ import { AlertService } from './services/alert/service';
 		ConfirmToastComponent,
 		AvatarImageComponent,
 		BadgeComponent,
+		FurnitureGridComponent,
 		LoadingComponent,
 		RoomPreviewComponent,
 		DraggableDirective,

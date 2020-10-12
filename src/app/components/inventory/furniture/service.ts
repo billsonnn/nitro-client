@@ -485,8 +485,6 @@ export class InventoryFurnitureService implements OnDestroy
 
         const item = groupItem.getLastItem();
 
-        console.log(item);
-
         if(!item) return false;
 
         if((item.category === FurniCategory._Str_3683) || (item.category === FurniCategory._Str_3639) || (item.category === FurniCategory._Str_3432))
@@ -523,7 +521,8 @@ export class InventoryFurnitureService implements OnDestroy
         if(isMoving)
         {
             this._itemIdInFurniPlacing      = item.ref;
-            this._isObjectMoverRequested    = true;
+
+            this.setObjectMoverRequested(true);
         }
     }
 
@@ -533,7 +532,8 @@ export class InventoryFurnitureService implements OnDestroy
         {
             Nitro.instance.roomEngine.cancelRoomObjectPlacement();
 
-            this._isObjectMoverRequested    = false;
+            this.setObjectMoverRequested(false);
+
             this._itemIdInFurniPlacing      = -1;
         }
     }
@@ -593,6 +593,13 @@ export class InventoryFurnitureService implements OnDestroy
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
     }
 
+    private setObjectMoverRequested(flag: boolean)
+    {
+        if(this._isObjectMoverRequested === flag) return;
+        
+        this._ngZone.run(() => (this._isObjectMoverRequested = flag));
+    }
+
     public get isInitalized(): boolean
     {
         return this._isInitialized;
@@ -611,5 +618,10 @@ export class InventoryFurnitureService implements OnDestroy
     public set controller(controller: InventoryFurnitureComponent)
     {
         this._controller = controller;
+    }
+
+    public get isObjectMoverRequested(): boolean
+    {
+        return this._isObjectMoverRequested;
     }
 }

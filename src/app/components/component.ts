@@ -13,6 +13,7 @@ import { RoomSessionEvent } from '../../client/nitro/session/events/RoomSessionE
 import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { IRoomSession } from '../../client/nitro/session/IRoomSession';
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomId } from '../../client/room/utils/RoomId';
 import { SettingsService } from '../core/settings/service';
 import { AlertService } from '../shared/services/alert/service';
 import { RoomComponent } from './room/component';
@@ -242,7 +243,7 @@ export class MainComponent implements OnInit, OnDestroy
 			case RoomEngineEvent.INITIALIZED:
 				desktop.prepareCanvas(this.getCanvasId(event.roomId));
 
-                Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
+				if(Nitro.instance.roomEngine && !RoomId.isRoomPreviewerId(event.roomId)) Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
                 
 				this.ngZone.run(() =>
 				{

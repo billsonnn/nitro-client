@@ -5,10 +5,7 @@ import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRend
 
 @Component({
 	selector: '[nitro-room-preview-component]',
-	template: `
-	<div class="nitro-room-preview-component">
-		<img #previewImage />
-	</div>`
+	template: `<img class="room-preview-image" #previewImage />`
 })
 export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 {
@@ -35,7 +32,6 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
 	public ngOnInit(): void
 	{
-		console.log(this.width, this.height);
 		if(this.width === 1) this.width 	= this._elementRef.nativeElement.offsetWidth;
 		if(this.height === 1) this.height	= this._elementRef.nativeElement.offsetHeight;
 		
@@ -51,7 +47,6 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	{
 		if(this.roomPreviewer)
 		{
-			console.log(this.width, this.height);
 			this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
 			this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
 		}
