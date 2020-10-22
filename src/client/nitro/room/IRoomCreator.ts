@@ -32,7 +32,7 @@ export interface IRoomCreator
     removeRoomObjectFloor(roomId: number, objectId: number, userId?: number, _arg_4?: boolean): void;
     removeRoomObjectWall(roomId: number, objectId: number, userId?: number): void;
     updateRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra?: number): boolean;
-    updateRoomObjectWall(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, extra: string): boolean;
+    updateRoomObjectWall(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, extra?: string): boolean;
     updateRoomObjectWallItemData(roomId: number, objectId: number, data: string): boolean;
     updateRoomObjectFloorHeight(roomId: number, objectId: number, height: number): boolean;
     updateRoomObjectFloorExpiration(roomId: number, objectId: number, expires: number): boolean;

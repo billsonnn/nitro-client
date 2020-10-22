@@ -101,7 +101,14 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	{
 		if(!event || !this.isRunning || !this.roomPreviewer) return;
 
-		this.roomPreviewer.changeRoomObjectState();
+		if(event.shiftKey)
+		{
+			this.roomPreviewer.changeRoomObjectDirection();
+		}
+		else
+		{
+			this.roomPreviewer.changeRoomObjectState();
+		}
 	}
 
 	public get previewImageElement(): HTMLImageElement

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
 import { AppConfiguration } from '../../../../../AppConfiguration';
@@ -8,7 +8,7 @@ import { AppConfiguration } from '../../../../../AppConfiguration';
     template: `
     <div class="nitro-room-chatinput-styleselector-component">
         <i class="icon chatstyles-icon" (click)="toggleSelector()"></i>
-        <div #styleSelectorContainer class="component-styles-container" [ngClass]="{ 'active': showStyles }">
+        <div class="component-styles-container" [ngClass]="{ 'active': showStyles }">
             <div class="card">
                 <div class="card-body">
                     <div class="container-items">
@@ -26,9 +26,6 @@ import { AppConfiguration } from '../../../../../AppConfiguration';
 })
 export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 {
-    @ViewChild('styleSelectorContainer')
-    public styleSelectorContainer: ElementRef<HTMLDivElement>;
-
     @Output()
     public styleSelected = new EventEmitter<number>();
 
@@ -79,15 +76,6 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public ngOnDestroy(): void
     {
-        this.hideSelector();
-    }
-
-    private onOutsideClick(event: MouseEvent): void
-    {
-        if(!this.showStyles) return;
-        
-        if(event.target === this.styleSelectorContainer.nativeElement) return;
-        
         this.hideSelector();
     }
 

@@ -67,9 +67,9 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "nitro-ui:build",
-            "host": "127.0.0.1",
-            "port": 80,
-            "disableHostCheck": false,
+            "host": "localhost",
+            "port": 8080,
+            "disableHostCheck": true,
             "allowedHosts": [ "client.nitrots.co" ]
           },
           "configurations": {

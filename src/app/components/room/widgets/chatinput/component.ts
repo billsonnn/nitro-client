@@ -67,7 +67,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
-        if(this.floodBlocked) return;
+        if(this.floodBlocked || !this.messageListener) return;
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
     }
@@ -205,7 +205,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     private sendTypingMessage(): void
     {
-        if(this.floodBlocked) return;
+        if(this.floodBlocked || !this.messageListener) return;
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatTypingMessage(this.isTyping));
     }
@@ -218,7 +218,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         if(this.chatInputView && this.chatInputView.nativeElement && (this.chatInputView.nativeElement === activeElement)) return false;
 
-        if(!(activeElement instanceof HTMLInputElement)) return false;
+        if((!(activeElement instanceof HTMLInputElement) && !(activeElement instanceof HTMLTextAreaElement))) return false;
 
         return true;
     }

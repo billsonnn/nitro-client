@@ -46,6 +46,7 @@ $teal:          #20c997 !default;
 $cyan:          #17a2b8 !default;
 $destiny:       #131313 !default;
 $destiny-light: #222222 !default;
+$destiny-lighter: #242424 !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -63,6 +64,7 @@ $colors: map-merge(
     "cyan":           $cyan,
     "destiny":        $destiny,
     "destiny-light":  $destiny-light,
+    "destiny-lighter": $destiny-lighter,
     "white":          $white,
     "gray":           $gray-600,
     "gray-dark":      $gray-800
@@ -77,6 +79,7 @@ $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $destiny-light !default;
+$lighter:       $destiny-lighter !default;
 $dark:          $gray-800 !default;
 
 $theme-colors: () !default;
@@ -90,7 +93,8 @@ $theme-colors: map-merge(
     "warning":    $warning,
     "danger":     $danger,
     "light":      $light,
-    "dark":       $dark,
+    "lighter":    $lighter,
+    "dark":       $dark
   ),
   $theme-colors
 );

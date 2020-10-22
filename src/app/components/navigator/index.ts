@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { NavigatorComponent } from './component';
+import { NavigatorRoomCreatorComponent } from './roomcreator/component';
 import { NavigatorSearchComponent } from './search/component';
 import { NavigatorSearchResultComponent } from './search/result/component';
 import { NavigatorSearchResultItemComponent } from './search/result/item/component';
@@ -14,7 +15,8 @@ import { NavigatorService } from './service';
         NavigatorComponent,
         NavigatorSearchComponent,
         NavigatorSearchResultComponent,
-        NavigatorSearchResultItemComponent
+        NavigatorSearchResultItemComponent,
+        NavigatorRoomCreatorComponent
     ],
     providers: [
         NavigatorService
@@ -23,7 +25,8 @@ import { NavigatorService } from './service';
         NavigatorComponent,
         NavigatorSearchComponent,
         NavigatorSearchResultComponent,
-        NavigatorSearchResultItemComponent
+        NavigatorSearchResultItemComponent,
+        NavigatorRoomCreatorComponent
     ]
 })
 export class NavigatorModule {}

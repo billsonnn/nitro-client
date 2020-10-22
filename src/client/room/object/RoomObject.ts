@@ -180,6 +180,11 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._pendingLogicMessages.push(message);
     }
 
+    public tearDown(): void
+    {
+        if(this._logic) this._logic.tearDown();
+    }
+
     public get id(): number
     {
         return this._id;

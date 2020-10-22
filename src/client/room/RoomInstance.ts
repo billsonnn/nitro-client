@@ -179,6 +179,8 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(!object) return;
 
+        object.tearDown();
+
         if(this._renderer) this._renderer.removeObject(object);
 
         manager.removeObject(id);

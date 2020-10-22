@@ -8,11 +8,18 @@ import { NavigatorMetadataEvent } from '../../../client/nitro/communication/mess
 import { NavigatorSearchesEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from '../../../client/nitro/communication/messages/incoming/navigator/NavigatorSettingsEvent';
+import { RoomForwardEvent } from '../../../client/nitro/communication/messages/incoming/room/access/RoomForwardEvent';
+import { RoomInfoEvent } from '../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { RoomInfoOwnerEvent } from '../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
+import { UserInfoEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { NavigatorCategoriesComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSearchComposer';
+import { NavigatorSettingsComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSettingsComposer';
+import { RoomInfoComposer } from '../../../client/nitro/communication/messages/outgoing/room/data/RoomInfoComposer';
 import { NavigatorSearchResultList } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
+import { RoomDataParser } from '../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { SettingsService } from '../../core/settings/service';
@@ -52,6 +59,7 @@ export class NavigatorService implements OnDestroy
     private _lastSearchResults: NavigatorSearchResultList[];
     private _lastSearch: string;
 
+    private _isCreatorMode: boolean;
     private _isSearching: boolean;
     private _isLoaded: boolean;
     private _isLoading: boolean;
@@ -60,8 +68,8 @@ export class NavigatorService implements OnDestroy
     private _height: number;
 
     constructor(
-        private settingsService: SettingsService,
-        private ngZone: NgZone)
+        private _settingsService: SettingsService,
+        private _ngZone: NgZone)
     {
         this._topLevelContexts  = [];
         this._topLevelContext   = null;
@@ -69,6 +77,7 @@ export class NavigatorService implements OnDestroy
         this._lastSearchResults = [];
         this._lastSearch        = null;
 
+        this._isCreatorMode     = false;
         this._isSearching       = false;
         this._isLoaded          = false;
         this._isLoading         = false;
@@ -86,11 +95,15 @@ export class NavigatorService implements OnDestroy
 
     private registerMessages(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 
             this._messages = [
+                new UserInfoEvent(this.onUserInfoEvent.bind(this)),
+                new RoomForwardEvent(this.onRoomForwardEvent.bind(this)),
+                new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
+                new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
                 new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)),
                 new NavigatorCollapsedEvent(this.onNavigatorCollapsedEvent.bind(this)),
                 new NavigatorEventCategoriesEvent(this.onNavigatorEventCategoriesEvent.bind(this)),
@@ -98,7 +111,7 @@ export class NavigatorService implements OnDestroy
                 new NavigatorMetadataEvent(this.onNavigatorMetadataEvent.bind(this)),
                 new NavigatorSearchesEvent(this.onNavigatorSearchesEvent.bind(this)),
                 new NavigatorSearchEvent(this.onNavigatorSearchEvent.bind(this)),
-                new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this))
+                new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this)),
             ];
 
             for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -107,7 +120,7 @@ export class NavigatorService implements OnDestroy
 
     public unregisterMessages(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 
@@ -124,8 +137,81 @@ export class NavigatorService implements OnDestroy
         switch(event.type)
 		{
 			case RoomSessionEvent.CREATED:
-				this.ngZone.run(() => this.settingsService.hideNavigator());
+				this._ngZone.run(() => this._settingsService.hideNavigator());
 				return;
+        }
+    }
+
+    private onUserInfoEvent(event: UserInfoEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        Nitro.instance.communication.connection.send(new NavigatorCategoriesComposer());
+        Nitro.instance.communication.connection.send(new NavigatorSettingsComposer());
+    }
+
+    private onRoomForwardEvent(event: RoomForwardEvent): void
+    {
+        if(!(event instanceof RoomForwardEvent)) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, false, true));
+    }
+
+    private onRoomInfoOwnerEvent(event: RoomInfoOwnerEvent): void
+    {
+        if(!(event instanceof RoomInfoOwnerEvent)) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, true, false));
+    }
+
+    private onRoomInfoEvent(event: RoomInfoEvent): void
+    {
+        if(!(event instanceof RoomInfoEvent)) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(parser.roomEnter)
+        {
+            // if an ad needs to display, do it here
+            // refresh the room info window / display it
+        }
+        else
+        {
+            if(parser.roomForward)
+            {
+                if(parser.data.ownerName !== Nitro.instance.sessionDataManager.userName)
+                {
+                    switch(parser.data.doorMode)
+                    {
+                        case RoomDataParser.DOORBELL_STATE:
+                            console.log('DOORBELL');
+                            return;
+                        case RoomDataParser.PASSWORD_STATE:
+                            console.log('PASSWORD');
+                            return;
+                    }
+                }
+
+                this.createSession(parser.data.id);
+            }
+            else
+            {
+                // update room data with new data
+            }
         }
     }
 
@@ -157,7 +243,7 @@ export class NavigatorService implements OnDestroy
 
         if(!parser) return;
 
-        this.ngZone.run(() =>
+        this._ngZone.run(() =>
         {
             this._topLevelContexts  = parser.topLevelContexts;
             this._isLoaded          = true;
@@ -184,20 +270,30 @@ export class NavigatorService implements OnDestroy
 
         if(!resultSet) return;
 
-        this.ngZone.run(() =>
+        this._ngZone.run(() =>
         {
             this.setCurrentContextByCode(resultSet.code);
 
             this._lastSearchResults = resultSet.results;
             this._isSearching       = false;
-
-            console.log(this._lastSearchResults);
         });
     }
 
     private onNavigatorSettingsEvent(event: NavigatorSettingsEvent): void
     {
         console.log(event);
+    }
+
+    public goToRoom(roomId: number): void
+    {
+        Nitro.instance.communication.connection.send(new RoomInfoComposer(roomId, false, true));
+
+        console.log('need hiding');
+    }
+
+    private createSession(roomId: number, password: string = null): void
+    {
+        Nitro.instance.roomSessionManager.createSession(roomId, password);
     }
 
     public getContextByCode(code: string): NavigatorTopLevelContext
@@ -268,7 +364,14 @@ export class NavigatorService implements OnDestroy
 
         this._isSearching = true;
 
-        this.ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorSearchComposer(code, query)));
+        this._ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorSearchComposer(code, query)));
+    }
+
+    public setCreatorMode(flag: boolean = true): void
+    {
+        if(this._isCreatorMode === flag) return;
+
+        this._isCreatorMode = flag;
     }
 
     public loadNavigator(): void
@@ -277,11 +380,7 @@ export class NavigatorService implements OnDestroy
 
         this._isLoading = true;
 
-        this.ngZone.runOutsideAngular(() =>
-        {
-            Nitro.instance.communication.connection.send(new NavigatorInitComposer());
-            Nitro.instance.communication.connection.send(new NavigatorCategoriesComposer());
-        });
+        this._ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorInitComposer()));
     }
 
     public get topLevelContexts(): NavigatorTopLevelContext[]
@@ -302,6 +401,11 @@ export class NavigatorService implements OnDestroy
     public get lastSearchResults(): NavigatorSearchResultList[]
     {
         return this._lastSearchResults;
+    }
+
+    public get isCreatorMode(): boolean
+    {
+        return this._isCreatorMode;
     }
 
     public get isSearching(): boolean

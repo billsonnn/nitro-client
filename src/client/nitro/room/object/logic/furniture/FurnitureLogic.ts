@@ -210,8 +210,7 @@ export class FurnitureLogic extends MovingObjectLogic
         
         if(message.data) message.data.writeRoomObjectModel(this.object.model);
 
-        if(!isNaN(message.extra)) this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra);
-
+        this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra);
         this.object.model.setValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME, this.lastUpdateTime);
     }
 
@@ -357,5 +356,15 @@ export class FurnitureLogic extends MovingObjectLogic
             
             this.eventDispatcher.dispatchEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
         }
+    }
+
+    public tearDown(): void
+    {
+        if(this.widget && (this.object.model.getValue(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT) === 1))
+        {
+            this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.CLOSE_WIDGET, this.object));
+        }
+        
+        super.tearDown();
     }
 }

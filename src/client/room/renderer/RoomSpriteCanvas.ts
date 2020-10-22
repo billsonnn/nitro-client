@@ -115,7 +115,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         if(!this._master)
         {
-            this._master = new PIXI.Container();
+            this._master = new PIXI.Sprite();
 
             this._master.interactiveChildren = false;
         }
@@ -256,6 +256,11 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             this._display.x = this._screenOffsetX;
             this._display.y = this._screenOffsetY;
 
+            update = true;
+        }
+
+        if(this._display.scale.x !== this._scale)
+        {
             this._display.scale.set(this._scale);
 
             update = true;

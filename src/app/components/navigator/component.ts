@@ -17,15 +17,19 @@ import { NavigatorService } from './service';
             </div>
             <div class="card-header-tabs">
                 <div class="nav nav-tabs w-100 px-4">
-                    <div *ngFor="let context of topLevelContexts" class="nav-item nav-link" [ngClass]="{ 'active': (topLevelContext === context) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</div>
+                    <div *ngFor="let context of topLevelContexts" class="nav-item nav-link" [ngClass]="{ 'active': ((topLevelContext === context) && !isCreatorMode) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</div>
+                    <div *ngIf="!isLoading" class="nav-item nav-link" [ngClass]="{ 'active': isCreatorMode }" (click)="setCreatorMode(true)"><i class="fas fa-plus"></i></div>
                 </div>
             </div>
         </div>
-        <div class="card-body flex-column">
-            <div nitro-navigator-search-component></div>
-            <div class="d-flex flex-column" *ngIf="lastSearchResults.length">
-                <div *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
-            </div>
+        <div class="card-body">
+            <ng-container *ngIf="!isCreatorMode">
+                <div nitro-navigator-search-component></div>
+                <div class="results-container">
+                    <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
+                </div>
+            </ng-container>
+            <div *ngIf="isCreatorMode" nitro-navigator-room-creator-component></div>
         </div>
     </div>`
 })
@@ -45,6 +49,8 @@ export class NavigatorComponent implements OnChanges
         const next = changes.visible.currentValue;
 
         if(next && (next !== prev)) this.prepareNavigator();
+
+        else if(!next && (next !== prev)) this.hideNavigator();
     }
 
     private prepareNavigator(): void
@@ -59,9 +65,21 @@ export class NavigatorComponent implements OnChanges
         }
     }
 
+    private hideNavigator(): void
+    {
+        this.setCreatorMode(false);
+    }
+
     public setCurrentContext(context: NavigatorTopLevelContext): void
     {
+        this.setCreatorMode(false);
+
         this.navigatorService.setCurrentContext(context);
+    }
+
+    public setCreatorMode(flag: boolean = true): void
+    {
+        this.navigatorService.setCreatorMode(flag);
     }
 
     public get topLevelContext(): NavigatorTopLevelContext
@@ -97,5 +115,10 @@ export class NavigatorComponent implements OnChanges
     public get height(): number
     {
         return this.navigatorService.height;
+    }
+
+    public get isCreatorMode(): boolean
+    {
+        return this.navigatorService.isCreatorMode;
     }
 }

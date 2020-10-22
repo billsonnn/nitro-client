@@ -12,10 +12,12 @@ import { InventoryTradingService } from './service';
                     <div class="badge badge-secondary">{{ ('inventory.trading.you') | translate }}</div>
                     <div class="grid-container">
                         <div class="grid-items">
-                            <div class="item-detail" *ngFor="let groupItem of ownUserItems" (click)="selectGroup(groupItem)">
-                            <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
-                            <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
-                            <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
+                            <div class="item-detail" *ngFor="let num of indexs; let i = index;" (click)="selectGroup(ownUserItems[i])">
+                                <div class="detail-image" [ngStyle]="{ 'background-image': (ownUserItems[i] ? getIconUrl(ownUserItems[i]): null )}"></div>
+                                <ng-container *ngIf="ownUserItems[i]">
+                                    <div class="badge badge-secondary" *ngIf="!ownUserItems[i].stuffData.uniqueNumber">x{{ ownUserItems[i].getUnlockedCount() }}</div>
+                                    <div class="badge badge-secondary" *ngIf="ownUserItems[i].stuffData.uniqueNumber">{{ ownUserItems[i].stuffData.uniqueNumber }}</div>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
@@ -26,18 +28,20 @@ import { InventoryTradingService } from './service';
                 </div>
                 <div class="col-6">
                     <div class="badge badge-secondary">{{ otherUserName }}</div>
-                    <ul>
-                        <li>{{ otherUserNumItems }} items</li>
-                        <li>{{ otherUserNumCredits }} credits</li>
-                    </ul>
-                    <div class="d-flex flex-grow-1 grid-container">
+                    <div class="grid-container">
                         <div class="grid-items">
-                            <div class="item-detail" *ngFor="let groupItem of otherUserItems" (click)="selectGroup(groupItem)">
-                                <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
-                                <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
-                                <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
+                            <div class="item-detail" *ngFor="let num of indexs; let i = index;" (click)="selectGroup(otherUserItems[i])">
+                                <div class="detail-image" [ngStyle]="{ 'background-image': (otherUserItems[i] ? getIconUrl(otherUserItems[i]): null )}"></div>
+                                <ng-container *ngIf="otherUserItems[i]">
+                                    <div class="badge badge-secondary" *ngIf="!otherUserItems[i].stuffData.uniqueNumber">x{{ otherUserItems[i].getUnlockedCount() }}</div>
+                                    <div class="badge badge-secondary" *ngIf="otherUserItems[i].stuffData.uniqueNumber">{{ otherUserItems[i].stuffData.uniqueNumber }}</div>
+                                </ng-container>
                             </div>
                         </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span>{{ otherUserNumItems }} items</span>
+                        <span>{{ otherUserNumCredits }} credits</span>
                     </div>
                 </div>
             </div>
@@ -48,6 +52,8 @@ export class InventoryTradingComponent implements OnInit, OnDestroy
 {
     @Input()
     public visible: boolean = false;
+
+    public indexs: number[] = [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ];
 
     constructor(
         private _inventoryTradingService: InventoryTradingService,

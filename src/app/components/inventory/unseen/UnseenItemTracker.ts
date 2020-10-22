@@ -1,19 +1,22 @@
 ﻿import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { INitroCommunicationManager } from '../../../../client/nitro/communication/INitroCommunicationManager';
 import { UnseenItemsEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
+import { InventoryService } from '../service';
 import { IUnseenItemTracker } from './IUnseenItemTracker';
 
 export class UnseenItemTracker implements IUnseenItemTracker
 {
     private _communication: INitroCommunicationManager;
+    private _inventoryService: InventoryService;
     private _unseenItems: number[][];
 
     private _messages: IMessageEvent[];
 
-    constructor(k: INitroCommunicationManager)
+    constructor(k: INitroCommunicationManager, inventoryService: InventoryService)
     {
-        this._communication = k;
-        this._unseenItems   = [];
+        this._communication     = k;
+        this._inventoryService  = inventoryService;
+        this._unseenItems       = [];
 
         this.registerMessages();
 
@@ -132,7 +135,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
             this._Str_18112(category, itemIds);
         }
 
-        //if(this._inventory) this._inventory.refreshUnseen();
+        this._inventoryService.updateUnseenCount();
     }
 
     private _Str_18112(category: number, itemIds: number[]): void

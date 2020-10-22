@@ -1,10 +1,12 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomObjectVariable } from '../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
 import { Vector3d } from '../../../../client/room/utils/Vector3d';
 import { FurniCategory } from '../items/FurniCategory';
 import { GroupItem } from '../items/GroupItem';
+import { InventoryService } from '../service';
 import { InventoryTradingService } from '../trading/service';
 import { InventoryFurnitureService } from './service';
 
@@ -12,23 +14,21 @@ import { InventoryFurnitureService } from './service';
 	selector: '[nitro-inventory-furniture-component]',
     template: `
     <div *ngIf="visible" class="nitro-inventory-furni-component">
-        <div class="container">
-            <div class="row" *ngIf="!groupItems.length">
-                {{ ('inventory.empty.title') | translate }}
-                {{ ('inventory.empty.desc') | translate }}
+        <div class="row" *ngIf="!groupItems.length">
+            {{ ('inventory.empty.title') | translate }}
+            {{ ('inventory.empty.desc') | translate }}
+        </div>
+        <div class="row" *ngIf="groupItems.length">
+            <div class="col-7">
+                <div nitro-furniture-grid-component [list]="groupItems" [selected]="selectedGroup" (selectedChange)="selectGroup($event)"></div>
             </div>
-            <div class="row" *ngIf="groupItems.length">
-                <div class="col-7">
-                    <div nitro-furniture-grid-component [list]="groupItems" [selected]="selectedGroup" (selectedChange)="selectGroup($event)"></div>
-                </div>
-                <div class="d-flex flex-column col-5">
-                    <div nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
-                    <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup">
-                        <div class="d-flex justify-content-center align-items-center h6 text-center wh-100">{{ selectedGroup.name }}</div>
-                        <div class="btn-group-vertical w-100">
-                            <button *ngIf="!tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
-                            <button *ngIf="tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{ ('inventory.trading.offer') | translate }}</button>
-                        </div>
+            <div class="d-flex flex-column col-5">
+                <div nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
+                <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup">
+                    <div class="d-flex justify-content-center align-items-center h6 text-center wh-100">{{ selectedGroup.name }}</div>
+                    <div class="btn-group-vertical w-100">
+                        <button *ngIf="!tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                        <button *ngIf="tradeRunning" type="button" class="btn btn-light w-100" (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{ ('inventory.trading.offer') | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -43,21 +43,24 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     public roomPreviewer: RoomPreviewer = null;
     public selectedGroup: GroupItem = null;
 
+    private _furnitureEventSubscription: Subscription;
+
     constructor(
+        private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
         private _inventoryTradingService: InventoryTradingService,
         private _ngZone: NgZone) {}
 
     public ngOnInit(): void
     {
-        this._inventoryFurnitureService.controller = this;
-
         if(!this.roomPreviewer)
         {
             this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
         }
 
         if(this._inventoryFurnitureService.isInitalized) this.selectExistingGroupOrDefault();
+
+        this._furnitureEventSubscription = this._inventoryFurnitureService.events.subscribe(this.onInventoryFurnitureServiceEvent.bind(this));
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -75,7 +78,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
             this.roomPreviewer.dispose();
         }
 
-        this._inventoryFurnitureService.controller = null;
+        if(this._furnitureEventSubscription) this._furnitureEventSubscription.unsubscribe();
     }
 
     private prepareInventory(): void
@@ -205,6 +208,21 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         if(!this.selectedGroup || !this.tradeRunning) return;
 
         this._inventoryTradingService.offerGroupItem(this.selectedGroup);
+    }
+
+    private onInventoryFurnitureServiceEvent(type: string): void
+    {
+        if(!type) return;
+
+        switch(type)
+        {
+            case InventoryFurnitureService.SELECT_FIRST_GROUP:
+                this.selectFirstGroup();
+                return;
+            case InventoryFurnitureService.SELECT_EXISTING_GROUP_DEFAULT:
+                this.selectExistingGroupOrDefault();
+                return;
+        }
     }
 
     public get groupItems(): GroupItem[]

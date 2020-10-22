@@ -69,13 +69,13 @@ export class GroupItem implements IGetImageListener
         return this._items.getValue(id);
     }
 
-    public push(k: FurnitureItem, _arg_2: boolean = false): void
+    public push(item: FurnitureItem, unseen: boolean = false): void
     {
-        const existing = this._items.getValue(k.id);
+        const existing = this._items.getValue(item.id);
 
         if(!existing)
         {
-            this._items.add(k.id, k);
+            this._items.add(item.id, item);
         }
         else
         {
@@ -164,6 +164,22 @@ export class GroupItem implements IGetImageListener
         const item = this._items.getWithIndex((this._items.length - 1));
 
         return item;
+    }
+
+    public unlockAllItems(): void
+    {
+        let didUnlock = false;
+
+        if(this._items.length)
+        {
+            for(let item of this._items.getValues())
+            {
+                if(item && item.locked)
+                {
+                    item.locked = false;
+                }
+            }
+        }
     }
 
     private setName(): void

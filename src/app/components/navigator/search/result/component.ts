@@ -5,18 +5,18 @@ import { NavigatorDisplayMode } from '../NavigatorDisplayMode';
 @Component({
     selector: '[nitro-navigator-search-result-component]',
     template: `
-    <div class="nitro-navigator-search-result-component">
-        <div class="card-header">
-            <div class="header-left" (click)="toggleCollapsed()">
-                <i class="fas header-icon" [ngClass]="{ 'fa-plus': !isCollapsed, 'fa-minus': isCollapsed }"></i>
-                {{ resultCode | translate }}
-            </div>
-            <div class="header-right" *ngIf="isCollapsed">
-                <i class="fas header-icon" *ngIf="displayMode !== 2" (click)="toggleListMode()" [ngClass]="{ 'fa-th-large': displayMode === 0, 'fa-th-list': displayMode === 1 }"></i>
+    <div class="card bg-light">
+        <div class="card-header-container">
+            <div class="card-header-overlay"></div>
+            <div class="card-header">
+                <div class="header-title" (click)="toggleCollapsed()">{{ resultCode | translate }}</div>
+                <div class="header-close" *ngIf="displayMode !== 2" (click)="toggleListMode()"><i class="fas" [ngClass]="{ 'fa-th-large': displayMode === 0, 'fa-th-list': displayMode === 1 }"></i></div>
             </div>
         </div>
-        <div class="card-body" *ngIf="isCollapsed" [ngClass]="{ 'result-grid': (displayMode === 1 || displayMode === 2) }">
-            <div *ngFor="let room of result.rooms" nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
+        <div class="card-body" *ngIf="isCollapsed">
+            <div class="container">
+                <div *ngFor="let room of result.rooms" nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
+            </div>
         </div>
     </div>`
 })

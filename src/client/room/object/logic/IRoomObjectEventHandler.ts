@@ -12,6 +12,7 @@ export interface IRoomObjectEventHandler extends IRoomObjectMouseHandler, IDispo
     getEventTypes(): string[];
     useObject(): void;
     setObject(object: IRoomObjectController): void;
+    tearDown(): void;
     object: IRoomObjectController;
     eventDispatcher: IEventDispatcher;
     widget: string;

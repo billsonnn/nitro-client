@@ -33,14 +33,24 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
         this.handle = this.dragHandle ? element.querySelector(this.dragHandle) : element;
         this.target = this.dragTarget ? element.querySelector(this.dragTarget) : element;
 
-        if(this.handle) this.handle.classList.add('header-draggable');
+        if(this.handle)
+        {
+            this.handle.classList.add('header-draggable');
+
+            this.handle.parentElement.classList.add('header-draggable');
+        }
 
         this.setupEvents();
     }
   
     public ngOnDestroy(): void
     {
-        if(this.handle) this.handle.classList.remove('header-draggable');
+        if(this.handle)
+        {
+            this.handle.classList.remove('header-draggable');
+
+            this.handle.parentElement.classList.remove('header-draggable');
+        }
         
         this.destroy$.next();
     }

@@ -1,3 +1,4 @@
+import { IRoomObjectController } from '../../../room/object/IRoomObjectController';
 import { IRoomRenderingCanvas } from '../../../room/renderer/IRoomRenderingCanvas';
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { RoomId } from '../../../room/utils/RoomId';
@@ -16,14 +17,14 @@ import { RoomPlaneParser } from '../object/RoomPlaneParser';
 
 export class RoomPreviewer 
 {
-    public static SCALE_NORMAL: number      = 64;
-    public static SCALE_SMALL: number       = 32;
-    public static PREVIEW_COUNTER: number   = 0;
-    
-    private static PREVIEW_CANVAS_ID: number                = 1;
-    private static PREVIEW_OBJECT_ID: number                = 1;
-    private static PREVIEW_OBJECT_LOCATION_X: number        = 2;
-    private static PREVIEW_OBJECT_LOCATION_Y: number        = 2;
+    public static SCALE_NORMAL: number                      = 64;
+    public static SCALE_SMALL: number                       = 32;
+    public static PREVIEW_COUNTER: number                   = 0;
+    public static PREVIEW_CANVAS_ID: number                 = 1;
+    public static PREVIEW_OBJECT_ID: number                 = 1;
+    public static PREVIEW_OBJECT_LOCATION_X: number         = 2;
+    public static PREVIEW_OBJECT_LOCATION_Y: number         = 2;
+
     private static ALLOWED_IMAGE_CUT: number                = 0.25;
     private static AUTOMATIC_STATE_CHANGE_INTERVAL: number  = 2500;
     private static ZOOM_ENABLED: boolean                    = true;
@@ -242,6 +243,31 @@ export class RoomPreviewer
             this._automaticStateChange = false;
 
             if(this._currentPreviewObjectCategory !== RoomObjectCategory.UNIT) this._roomEngine.changeObjectState(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
+        }
+    }
+
+    public changeRoomObjectDirection(): void
+    { 
+        if(this.isRoomEngineReady)
+        {
+            const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
+
+            if(!roomObject) return;
+
+            let direction = this._roomEngine.objectEventHandler._Str_17555(roomObject, true);
+
+            switch(this._currentPreviewObjectCategory)
+            {
+                case RoomObjectCategory.FLOOR:
+                    let floorLocation   = new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y);
+                    let floorDirection  = new Vector3d(direction, direction, direction);
+                    
+                    this._roomEngine.updateRoomObjectFloor(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, floorLocation, floorDirection, null, null);
+                    return;
+                case RoomObjectCategory.WALL:
+                    //this._roomEngine.updateRoomObjectWall(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, null, direction, null, null);
+                    return;
+            }
         }
     }
 
@@ -633,6 +659,18 @@ export class RoomPreviewer
             const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, RoomObjectCategory.UNIT);
 
             if(roomObject && roomObject.visualization) return roomObject.visualization.getImage(0xFFFFFF, -1);
+        }
+
+        return null;
+    }
+
+    public getRoomPreviewObject(): IRoomObjectController
+    {
+        if(this.isRoomEngineReady)
+        {
+            const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
+
+            if(roomObject) return roomObject;
         }
 
         return null;

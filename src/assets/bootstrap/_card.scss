@@ -96,18 +96,20 @@
   background-position: center;
   background-size: contain;
 
-  &:before {
-    content: "";
-    position: absolute;
-    width: 98%;
-    height: 5px;
-    border-radius: 5px;
-    top: 5px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    background: rgb($white, 1);
-    z-index: 1;
+  &.header-draggable {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 98%;
+      height: 5px;
+      border-radius: 5px;
+      top: 5px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      background: rgb($white, 1);
+      z-index: 1;
+    }
   }
 
   > *:not(.card-header-overlay) {

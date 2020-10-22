@@ -36,6 +36,7 @@ import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomVi
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
+import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
@@ -95,10 +96,10 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
     public lastMouseMove:number                 = 0;
     public isMouseMove: boolean                 = false;
 
-    public roomBackground: PIXI.Sprite          = null;
-    public roomColorizer: PIXI.Sprite           = null;
+    public roomBackgroundSprite: PIXI.Sprite    = null;
+    public roomColorizerSprite: PIXI.Sprite     = null;
     public roomBackgroundColor: number          = 0;
-    public roomColor: number                    = 0;
+    public roomColorizerColor: number           = 0;
 
     constructor(
         private ngZone: NgZone,
@@ -230,7 +231,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
             this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
-            this.setBackground(this.getRoomBackground());
+            this.setRoomBackground(this.getRoomBackground());
         }, 1);
     }
 	
@@ -391,6 +392,9 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
                 break;
             case RoomWidgetEnum.ROOM_DIMMER:
                 widgetHandler = new FurnitureDimmerWidgetHandler();
+                break;
+            case RoomWidgetEnum.CUSTOM_STACK_HEIGHT:
+                widgetHandler = new FurnitureCustomStackHeightWidgetHandler();
                 break;
             // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
             //     widgetHandler = new FurnitureTrophyWidgetHandler();
@@ -579,14 +583,30 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
             case RoomEngineObjectEvent.REQUEST_MOVE:
                 if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
-                    this.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_MOVE);
+                    this.roomEngine.processRoomObjectOperation(event.roomId, objectId, category, RoomObjectOperationType.OBJECT_MOVE);
                 }
                 break;
             case RoomEngineObjectEvent.REQUEST_ROTATE:
                 if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
-                    this.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                    this.roomEngine.processRoomObjectOperation(event.roomId, objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
+                break;
+            case RoomEngineTriggerWidgetEvent.OPEN_WIDGET:
+            case RoomEngineTriggerWidgetEvent.CLOSE_WIDGET:
+            case RoomEngineTriggerWidgetEvent.OPEN_FURNI_CONTEXT_MENU:
+            case RoomEngineTriggerWidgetEvent.CLOSE_FURNI_CONTEXT_MENU:
+            case RoomEngineTriggerWidgetEvent.REMOVE_DIMMER:
+            case RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN:
+            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
+            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
+            case RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR:
+            case RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING:
+            case RoomEngineTriggerWidgetEvent.REQUEST_HIGH_SCORE_DISPLAY:
+            case RoomEngineTriggerWidgetEvent.REQUEST_HIDE_HIGH_SCORE_DISPLAY:
+            case RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK:
+            case RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK:
+                this.processEvent(event);
                 break;
         }
 
@@ -661,62 +681,44 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         }
     }
 
-    public setRoomColorizer(k: number, _arg_2: number): void
+    private getRoomBackground(): PIXI.Sprite
     {
-        const colorizer = this.getRoomColorizer();
+        if(this.roomBackgroundSprite) return this.roomBackgroundSprite;
 
-        if(!colorizer) return;
+        const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0]);
 
-        let color = ColorConverter._Str_22130(k);
-        
-        color = ((color & 0xFFFF00) + _arg_2);
+        if(!canvas) return null;
 
-        k = ColorConverter._Str_13949(color);
+        const displayObject = canvas.displayObject as PIXI.Container;
+        const background    = new PIXI.Sprite(Texture.WHITE);
 
-        this.roomColor = k;
+        displayObject.addChildAt(background, 0);
 
-        this.setColor(colorizer);
+        this.roomBackgroundSprite = background;
+
+        return this.roomBackgroundSprite;
     }
 
     private getRoomColorizer(): PIXI.Sprite
     {
-        if(this.roomColorizer) return this.roomColorizer;
+        if(this.roomColorizerSprite) return this.roomColorizerSprite;
 
         const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0]);
 
         if(!canvas) return null;
 
         const displayObject = canvas.displayObject as PIXI.Container;
+        const background    = new PIXI.Sprite(Texture.WHITE);
 
-        const background = new PIXI.Sprite(Texture.WHITE);
+        // whole room colorizer disabled
+        //displayObject.addChildAt(background, displayObject.children.length);
 
-        displayObject.addChildAt(background, 1);
+        this.roomColorizerSprite = background;
 
-        this.roomColorizer = background;
-
-        return this.roomColorizer;
+        return this.roomColorizerSprite;
     }
 
-    private getRoomBackground(): PIXI.Sprite
-    {
-        if(this.roomBackground) return this.roomBackground;
-
-        const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0]);
-
-        if(!canvas) return null;
-
-        const displayObject = canvas.displayObject as PIXI.Container;
-
-        const background = new PIXI.Sprite(Texture.WHITE);
-
-        displayObject.addChildAt(background, 0);
-
-        this.roomBackground = background;
-
-        return this.roomBackground;
-    }
-
-    public setBackgroundColor(hue: number, saturation: number, lightness: number): void
+    public setRoomBackgroundColor(hue: number, saturation: number, lightness: number): void
     {
         this.roomBackgroundColor = ColorConverter._Str_13949(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
 
@@ -732,11 +734,22 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         {
             background.visible = true;
 
-            this.setBackground(background);
+            this.setRoomBackground(background);
         }
     }
 
-    private setBackground(sprite: PIXI.Sprite): void
+    public setRoomColorizerColor(color: number, brightness: number): void
+    {
+        this.roomColorizerColor = ColorConverter._Str_13949(((ColorConverter._Str_22130(color) & 0xFFFF00) + brightness));
+
+        const colorizer = this.getRoomColorizer();
+
+        if(!colorizer) return;
+
+        this.setRoomColorizer(colorizer);
+    }
+
+    private setRoomBackground(sprite: PIXI.Sprite): void
     {
         if(!sprite) return;
 
@@ -745,11 +758,11 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
     }
 
-    private setColor(sprite: PIXI.Sprite): void
+    private setRoomColorizer(sprite: PIXI.Sprite): void
     {
         if(!sprite) return;
 
-        sprite.tint     = this.roomColor;
+        sprite.tint     = this.roomColorizerColor;
         sprite.width    = (Nitro.instance.renderer.width / window.devicePixelRatio);
         sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
     }

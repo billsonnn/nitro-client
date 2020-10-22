@@ -7,6 +7,8 @@ import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/name/component
 import { RoomAvatarInfoOwnAvatarComponent } from './widgets/avatarinfo/ownavatar/component';
 import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
+import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
+import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/bot/component';
 import { RoomInfoStandComponent } from './widgets/infostand/component';
 import { RoomInfoStandFurniComponent } from './widgets/infostand/furni/component';
@@ -35,7 +37,9 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoComponent,
         RoomAvatarInfoAvatarComponent,
         RoomAvatarInfoNameComponent,
-        RoomAvatarInfoOwnAvatarComponent
+        RoomAvatarInfoOwnAvatarComponent,
+        CustomStackHeightComponent,
+        DimmerFurniComponent
     ],
     providers: [
     ],
@@ -54,7 +58,9 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoComponent,
         RoomAvatarInfoAvatarComponent,
         RoomAvatarInfoNameComponent,
-        RoomAvatarInfoOwnAvatarComponent
+        RoomAvatarInfoOwnAvatarComponent,
+        CustomStackHeightComponent,
+        DimmerFurniComponent
     ]
 })
 export class RoomModule {} 

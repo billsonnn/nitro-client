@@ -7,7 +7,7 @@ import { InventoryTradingService } from './trading/service';
 @Component({
 	selector: 'nitro-inventory-component',
     template: `
-    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component" [ngStyle]="{ 'opacity': (isObjectMoverRequested ? 0 : 1) }">
+    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component">
         <div *ngIf="isLoading" class="card-loading-overlay"></div>
         <div class="card-header-container">
             <div class="card-header-overlay"></div>
@@ -43,26 +43,19 @@ export class InventoryComponent implements OnChanges
         const prev = changes.visible.previousValue;
         const next = changes.visible.currentValue;
 
-        if(next && (prev !== next))
-        {
-            this.showFurniture();
-        }
-    }
-
-    private hideInventories(): void
-    {
-        this._inventoryService.furnitureVisible = false;
+        if(next && (prev !== next)) this.showFurniture();
     }
 
     public showFurniture(): void
-    {
-        this.hideInventories();
-        
+    {        
         this._inventoryService.furnitureVisible = true;
     }
 
     public hide(): void
     {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.tradingVisible   = false;
+
         this._settingsService.hideInventory();
     }
 

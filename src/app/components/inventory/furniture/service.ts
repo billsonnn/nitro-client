@@ -1,4 +1,5 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { FurnitureListAddOrUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
 import { FurnitureListEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListEvent';
@@ -17,12 +18,14 @@ import { FurnitureItem } from '../items/FurnitureItem';
 import { GroupItem } from '../items/GroupItem';
 import { InventoryService } from '../service';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
-import { InventoryFurnitureComponent } from './component';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
 {
-    private _controller: InventoryFurnitureComponent = null;
+    public static SELECT_FIRST_GROUP: string            = 'IFS_SELECT_FIRST_GROUP';
+    public static SELECT_EXISTING_GROUP_DEFAULT: string = 'IFS_SELECT_EXISTING_GROUP_DEFAULT';
+
+    private _events: Subject<string>;
     private _messages: IMessageEvent[] = [];
     private _furniMsgFragments: Map<number, FurnitureListItemParser>[] = [];
     private _groupItems: GroupItem[] = [];
@@ -36,6 +39,8 @@ export class InventoryFurnitureService implements OnDestroy
         private _inventoryService: InventoryService,
         private _ngZone: NgZone)
     {
+        this._events = new EventEmitter();
+        
         this.registerMessages();
     }
 
@@ -226,7 +231,7 @@ export class InventoryFurnitureService implements OnDestroy
 
         this._isInitialized = true;
 
-        if(this._controller) this._controller.selectExistingGroupOrDefault();
+        this._events.next(InventoryFurnitureService.SELECT_EXISTING_GROUP_DEFAULT);
     }
 
     private getAllItemIds(): number[]
@@ -425,7 +430,7 @@ export class InventoryFurnitureService implements OnDestroy
 
                     if(!this.attemptItemPlacement())
                     {
-                        if(this._controller) this._controller.selectExistingGroupOrDefault();
+                        this._events.next(InventoryFurnitureService.SELECT_EXISTING_GROUP_DEFAULT);
                     }
                 }
 
@@ -435,7 +440,7 @@ export class InventoryFurnitureService implements OnDestroy
 
                     if(groupItem.selected)
                     {
-                        if(this._controller) this._controller.selectFirstGroup();
+                        this._events.next(InventoryFurnitureService.SELECT_FIRST_GROUP);
                     }
 
                     groupItem.dispose();
@@ -472,7 +477,7 @@ export class InventoryFurnitureService implements OnDestroy
             }
         }
 
-        // update item tracker _Str_6956();
+        this._inventoryService.updateUnseenCount();
     }
 
     public attemptItemPlacement(flag: boolean = false): boolean
@@ -511,16 +516,16 @@ export class InventoryFurnitureService implements OnDestroy
 
         if((item.category === FurniCategory._Str_5186)) // or external image from furnidata
         {
-            isMoving = Nitro.instance.roomEngine._Str_5346(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString());
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString());
         }
         else
         {
-            isMoving = Nitro.instance.roomEngine._Str_5346(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString(), item.stuffData);
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString(), item.stuffData);
         }
 
         if(isMoving)
         {
-            this._itemIdInFurniPlacing      = item.ref;
+            this._itemIdInFurniPlacing = item.ref;
 
             this.setObjectMoverRequested(true);
         }
@@ -534,7 +539,7 @@ export class InventoryFurnitureService implements OnDestroy
 
             this.setObjectMoverRequested(false);
 
-            this._itemIdInFurniPlacing      = -1;
+            this._itemIdInFurniPlacing = -1;
         }
     }
 
@@ -596,8 +601,13 @@ export class InventoryFurnitureService implements OnDestroy
     private setObjectMoverRequested(flag: boolean)
     {
         if(this._isObjectMoverRequested === flag) return;
-        
+
         this._ngZone.run(() => (this._isObjectMoverRequested = flag));
+    }
+
+    public get events(): Subject<string>
+    {
+        return this._events;
     }
 
     public get isInitalized(): boolean
@@ -608,16 +618,6 @@ export class InventoryFurnitureService implements OnDestroy
     public get groupItems(): GroupItem[]
     {
         return this._groupItems;
-    }
-
-    public get controller(): InventoryFurnitureComponent
-    {
-        return this._controller;
-    }
-
-    public set controller(controller: InventoryFurnitureComponent)
-    {
-        this._controller = controller;
     }
 
     public get isObjectMoverRequested(): boolean

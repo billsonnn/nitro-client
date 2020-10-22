@@ -5,15 +5,18 @@ import { UserCurrencyComposer } from '../../../client/nitro/communication/messag
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { IRoomSession } from '../../../client/nitro/session/IRoomSession';
-import { IUnseenItemTracker } from './unseen/IUnseenItemTracker';
+import { UnseenItemCategory } from './unseen/UnseenItemCategory';
 import { UnseenItemTracker } from './unseen/UnseenItemTracker';
 
 @Injectable()
 export class InventoryService implements OnDestroy
 {
     private _messages: IMessageEvent[];
-    private _unseenTracker: IUnseenItemTracker;
+    private _unseenTracker: UnseenItemTracker;
     private _roomSession: IRoomSession;
+
+    private _unseenCount: number = 0;
+    private _unseenCounts: Map<number, number>;
 
     private _furnitureVisible: boolean = false;
     private _tradingVisible: boolean = false;
@@ -22,8 +25,10 @@ export class InventoryService implements OnDestroy
         private _ngZone: NgZone)
     {
         this._messages      = [];
-        this._unseenTracker = new UnseenItemTracker(Nitro.instance.communication);
+        this._unseenTracker = new UnseenItemTracker(Nitro.instance.communication, this);
         this._roomSession   = null;
+
+        this._unseenCounts  = new Map();
 
         Nitro.instance.communication.connection.send(new UserCurrencyComposer());
 
@@ -87,7 +92,32 @@ export class InventoryService implements OnDestroy
 
     }
 
-    public get unseenTracker(): IUnseenItemTracker
+    public updateUnseenCount(): void
+    {
+        function run()
+        {
+            let count = 0;
+
+            const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+    
+            count += furniCount;
+    
+            this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+    
+            this._unseenCount = count;
+        }
+
+        if(!NgZone.isInAngularZone())
+        {
+            this._ngZone.run(() => run.apply(this));
+        }
+        else
+        {
+            run.apply(this);
+        }
+    }
+
+    public get unseenTracker(): UnseenItemTracker
     {
         return this._unseenTracker;
     }
@@ -95,6 +125,11 @@ export class InventoryService implements OnDestroy
     public get roomSession(): IRoomSession
     {
         return this._roomSession;
+    }
+
+    public get unseenCount(): number
+    {
+        return this._unseenCount;
     }
 
     public get furnitureVisible(): boolean

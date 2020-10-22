@@ -1,13 +1,19 @@
 import { IAssetData } from '../../../../../core/asset/interfaces';
+import { RoomWidgetEnum } from '../../../../ui/widget/enums/RoomWidgetEnum';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
-import { FurnitureLogic } from './FurnitureLogic';
+import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
-export class FurnitureCustomStackHeightLogic extends FurnitureLogic
+export class FurnitureCustomStackHeightLogic extends FurnitureMultiStateLogic
 {
     public initialize(asset: IAssetData)
     {
         super.initialize(asset);
 
         if(this.object && this.object.model) this.object.model.setValue(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE, 1);
+    }
+
+    public get widget(): string
+    {
+        return RoomWidgetEnum.CUSTOM_STACK_HEIGHT;
     }
 }

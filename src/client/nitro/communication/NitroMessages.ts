@@ -47,7 +47,7 @@ import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/Roo
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
-import { RoomFowardEvent } from './messages/incoming/room/access/RoomFowardEvent';
+import { RoomForwardEvent } from './messages/incoming/room/access/RoomForwardEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
 import { RoomInfoEvent } from './messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from './messages/incoming/room/data/RoomInfoOwnerEvent';
@@ -64,6 +64,7 @@ import { FurnitureFloorUpdateEvent } from './messages/incoming/room/furniture/fl
 import { FurnitureAliasesEvent } from './messages/incoming/room/furniture/FurnitureAliasesEvent';
 import { FurnitureDataEvent } from './messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/FurnitureItemDataEvent';
+import { FurnitureStackHeightEvent } from './messages/incoming/room/furniture/FurnitureStackHeightEvent';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -242,7 +243,7 @@ export class NitroMessages implements IMessageConfiguration
 
             // ACCESS
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
-            this._events.set(IncomingHeader.ROOM_FORWARD, RoomFowardEvent);
+            this._events.set(IncomingHeader.ROOM_FORWARD, RoomForwardEvent);
 
                 // DOORBELL
                 this._events.set(IncomingHeader.ROOM_DOORBELL, RoomDoorbellEvent);
@@ -271,6 +272,7 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
             this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
             this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
+            this._events.set(IncomingHeader.ITEM_STACK_HELPER, FurnitureStackHeightEvent);
             this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
             this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
 

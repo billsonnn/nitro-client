@@ -63,7 +63,7 @@ export class ExtendedSprite extends PIXI.Sprite
 
         if(!(sprite instanceof PIXI.Sprite)) return false;
 
-        if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
+        //if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
 
         const texture       = sprite.texture;
         const baseTexture   = texture.baseTexture;
@@ -76,7 +76,7 @@ export class ExtendedSprite extends PIXI.Sprite
         if(!sprite.getLocalBounds().contains(x, y)) return false;
 
         //@ts-ignore
-        if(!baseTexture.hitMap || (baseTexture.hitMapLastThreshold !== sprite.alphaTolerance))
+        if(!baseTexture.hitMap)
         {
             let canvas: HTMLCanvasElement = null;
 
@@ -97,23 +97,22 @@ export class ExtendedSprite extends PIXI.Sprite
                 }
             }
 
-            if(!ExtendedSprite.generateHitMap(baseTexture, sprite.alphaTolerance, canvas)) return false;
+            if(!ExtendedSprite.generateHitMap(baseTexture, canvas)) return false;
         }
 
         //@ts-ignore
         const hitMap        = baseTexture.hitMap;
+        //@ts-ignore
+        const width         = baseTexture.hitMapWidth;
         const resolution    = baseTexture.resolution;
         const dx            = Math.round((x + texture.frame.x) * resolution);
         const dy            = Math.round((y + texture.frame.y) * resolution);
-        //@ts-ignore
-        const num           = (dx + (dy * baseTexture.hitMapWidth));
-        const num32         = ((num / 32) | 0);
-        const numRest       = (num - (num32 * 32));
+        const index         = (((dy * width) + dx) * 4);
 
-        return ((hitMap[num32] & (1 << numRest)) !== 0);
+        return ((hitMap[index + 3] !== undefined) && (hitMap[index + 3] > sprite.alphaTolerance));
     }
     
-    private static generateHitMap(baseTexture: PIXI.BaseTexture, threshold: number, tempCanvas: HTMLCanvasElement = null): boolean
+    private static generateHitMap(baseTexture: PIXI.BaseTexture, tempCanvas: HTMLCanvasElement = null): boolean
     {
         let canvas: HTMLCanvasElement           = null;
         let context: CanvasRenderingContext2D   = null;
@@ -154,26 +153,11 @@ export class ExtendedSprite extends PIXI.Sprite
         const width     = canvas.width;
         const height    = canvas.height;
         const imageData = context.getImageData(0, 0, width, height);
-        const hitMap    = new Uint32Array(Math.ceil(width * height / 32));
-    
-        for(let j = 0; j < height; j++)
-        {
-            for(let i = 0; i < width; i++)
-            {
-                const num       = j * width + i;
-                const num32     = num / 32 | 0;
-                const numRest   = num - num32 * 32;
-                
-                if(imageData.data[(4 * num) + 3] > threshold) hitMap[num32] |= (1 << numRest);
-            }
-        }
 
         //@ts-ignore
-        baseTexture.hitMap              = hitMap;
+        baseTexture.hitMap              = imageData.data;
         //@ts-ignore
         baseTexture.hitMapWidth         = width;
-        //@ts-ignore
-        baseTexture.hitMapLastThreshold = threshold;
 
         return true;
     }

@@ -28,7 +28,6 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        console.log(k);
         switch(k.type)
         {
             case RoomWidgetFurniToWidgetMessage.REQUEST_DIMMER:
@@ -66,8 +65,6 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
-        console.log(event);
-
         switch(event.type)
         {
             case RoomSessionDimmerPresetsEvent.RSDPE_PRESETS:

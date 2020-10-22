@@ -12,8 +12,6 @@ import { NitroCommunicationManager } from './communication/NitroCommunicationMan
 import { INitro } from './INitro';
 import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
 import { NitroLocalizationManager } from './localization/NitroLocalizationManager';
-import { INitroNavigator } from './navigator/INitroNavigator';
-import { NitroNavigator } from './navigator/NitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
 import { RoomEngine } from './room/RoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
@@ -39,7 +37,6 @@ export class Nitro extends PIXI.Application implements INitro
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
-    private _navigator: INitroNavigator;
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -82,7 +79,6 @@ export class Nitro extends PIXI.Application implements INitro
         this._sessionDataManager    = new SessionDataManager(this._communication);
         this._roomSessionManager    = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager           = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
-        this._navigator             = new NitroNavigator(this._communication, this._sessionDataManager, this._roomSessionManager);
 
         this._isReady       = false;
         this._isDisposed    = false;
@@ -130,7 +126,6 @@ export class Nitro extends PIXI.Application implements INitro
 
         if(this._localization) this._localization.init();
         if(this._avatar)        this._avatar.init();
-        if(this._navigator)     this._navigator.init();
 
         if(this._roomEngine)
         {
@@ -156,13 +151,6 @@ export class Nitro extends PIXI.Application implements INitro
     public dispose(): void
     {
         if(this._isDisposed) return;
-
-        if(this._navigator)
-        {
-            this._navigator.dispose();
-
-            this._navigator = null;
-        }
 
         if(this._roomManager)
         {
@@ -260,11 +248,6 @@ export class Nitro extends PIXI.Application implements INitro
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
-    }
-
-    public get navigator(): INitroNavigator
-    {
-        return this._navigator;
     }
 
     public get time(): number

@@ -1808,18 +1808,17 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return true;
     }
 
-    public updateRoomObjectWall(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, extra: string): boolean
+    public updateRoomObjectWall(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, extra: string = null): boolean
     {
         const object = this.getRoomObjectWall(roomId, objectId);
 
         if(!object || !object.logic) return false;
 
-        const updateMessage = new RoomObjectUpdateMessage(location, direction);
-        const data          = new LegacyDataType();
+        const updateMessage     = new RoomObjectUpdateMessage(location, direction);
+        const data              = new LegacyDataType();
+        const dataUpdateMessage = new ObjectDataUpdateMessage(state, data);
 
         data.setString(extra);
-
-        const dataUpdateMessage = new ObjectDataUpdateMessage(state, data);
         
         object.logic.processUpdateMessage(updateMessage);
         object.logic.processUpdateMessage(dataUpdateMessage);
@@ -2467,11 +2466,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
-    public processRoomObjectOperation(objectId: number, category: number, operation: string): boolean
+    public processRoomObjectOperation(roomId: number, objectId: number, category: number, operation: string): boolean
     {
         if(!this._roomObjectEventHandler) return false;
 
-        this._roomObjectEventHandler.processRoomObjectOperation(this._activeRoomId, objectId, category, operation);
+        this._roomObjectEventHandler.processRoomObjectOperation(roomId, objectId, category, operation);
     }
 
     private processRoomObjectEvent(event: RoomObjectEvent): void
@@ -2487,7 +2486,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomObjectEventHandler.handleRoomObjectEvent(event, roomId);
     }
 
-    public _Str_5346(placementSource: string, id: number, category: number, typeId: number, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
+    public processRoomObjectPlacement(placementSource: string, id: number, category: number, typeId: number, legacyString: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
     {
         const roomInstance = this.getRoomInstance(this._activeRoomId);
 
@@ -2495,7 +2494,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!this._roomObjectEventHandler) return false;
         
-        return this._roomObjectEventHandler._Str_5346(placementSource, this._activeRoomId, id, category, typeId, instanceData, stuffData, state, frameNumber, posture);
+        return this._roomObjectEventHandler.processRoomObjectPlacement(placementSource, this._activeRoomId, id, category, typeId, legacyString, stuffData, state, frameNumber, posture);
     }
 
     public getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId: number = -1): PIXI.Point

@@ -4,7 +4,6 @@ import { IRoomManager } from '../room/IRoomManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
-import { INitroNavigator } from './navigator/INitroNavigator';
 import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
@@ -22,7 +21,6 @@ export interface INitro extends PIXI.Application
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;
     roomManager: IRoomManager;
-    navigator: INitroNavigator;
     time: number;
     isReady: boolean;
     isDisposed: boolean;

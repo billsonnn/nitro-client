@@ -56,6 +56,8 @@ export interface IRoomEngine extends INitroManager
     addFurnitureFloorByTypeName(roomId: number, id: number, typeName: string, location: IVector3D, direction: IVector3D, state: number, objectData: IObjectData, extra?: number, expires?: number, usagePolicy?: number, ownerId?: number, ownerName?: string, synchronized?: boolean, realRoomObject?: boolean, sizeZ?: number): boolean;
     addFurnitureWall(roomId: number, id: number, typeId: number, location: IVector3D, direction: IVector3D, state: number, extra: string, expires?: number, usagePolicy?: number, ownerId?: number, ownerName?: string, realRoomObject?: boolean): boolean;
     initalizeTemporaryObjectsByType(type: string, _arg_2: boolean): void;
+    updateRoomObjectFloor(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, data: IObjectData, extra?: number): boolean;
+    updateRoomObjectWall(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, state: number, extra?: string): boolean;
     updateRoomObjectUserAction(roomId: number, objectId: number, action: string, value: number, parameter?: string): boolean;
     updateRoomObjectUserFigure(roomId: number, objectId: number, figure: string, gender?: string, subType?: string, isRiding?: boolean): boolean;
     updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay?: number): boolean;
@@ -72,8 +74,8 @@ export interface IRoomEngine extends INitroManager
     useRoomObject(objectId: number, category: number): boolean;
     objectInitialized(roomId: string, objectId: number, category: number): void;
     changeObjectState(roomId: number, objectId: number, category: number): void;
-    processRoomObjectOperation(objectId: number, category: number, operation: string): boolean;
-    _Str_5346(placementSource: string, id: number, category: number, typeId: number, instanceData?: string, stuffData?: IObjectData, state?: number, frameNumber?: number, posture?: string): boolean;
+    processRoomObjectOperation(roomId: number, objectId: number, category: number, operation: string): boolean;
+    processRoomObjectPlacement(placementSource: string, id: number, category: number, typeId: number, legacyString?: string, stuffData?: IObjectData, state?: number, frameNumber?: number, posture?: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;

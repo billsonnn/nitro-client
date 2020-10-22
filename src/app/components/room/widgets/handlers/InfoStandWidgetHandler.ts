@@ -128,16 +128,16 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 if(userData) this._widget.inventoryTrading.startTrade(userData.webID, userData.name);
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_MOVE:
-                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_MOVE);
+                this._container.roomEngine.processRoomObjectOperation(this.container.roomEngine.activeRoomId, objectId, objectCategory, RoomObjectOperationType.OBJECT_MOVE);
                 return;
             case RoomWidgetFurniActionMessage.RWFUAM_ROTATE:
-                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                this._container.roomEngine.processRoomObjectOperation(this.container.roomEngine.activeRoomId, objectId, objectCategory, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_PICKUP:
-                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_PICKUP);
+                this._container.roomEngine.processRoomObjectOperation(this.container.roomEngine.activeRoomId, objectId, objectCategory, RoomObjectOperationType.OBJECT_PICKUP);
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_EJECT:
-                this._container.roomEngine.processRoomObjectOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_EJECT);
+                this._container.roomEngine.processRoomObjectOperation(this.container.roomEngine.activeRoomId, objectId, objectCategory, RoomObjectOperationType.OBJECT_EJECT);
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_USE:
                 this._container.roomEngine.useRoomObject(objectId, objectCategory);

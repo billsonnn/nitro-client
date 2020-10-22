@@ -5,6 +5,7 @@ import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBac
 import { RoomEngineDimmerStateEvent } from '../../client/nitro/room/events/RoomEngineDimmerStateEvent';
 import { RoomEngineEvent } from '../../client/nitro/room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../../client/nitro/room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from '../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../../client/nitro/room/events/RoomObjectHSLColorEnabledEvent';
 import { RoomZoomEvent } from '../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSessionChatEvent';
@@ -19,6 +20,8 @@ import { AlertService } from '../shared/services/alert/service';
 import { RoomComponent } from './room/component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
+import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
+import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandComponent } from './room/widgets/infostand/component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
 
@@ -75,6 +78,8 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent.bind(this));
 			}
 
 			if(Nitro.instance.roomSessionManager.events)
@@ -114,6 +119,8 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
+				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent.bind(this));
+				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent.bind(this));
 			}
 
 			if(Nitro.instance.roomSessionManager.events)
@@ -213,6 +220,8 @@ export class MainComponent implements OnInit, OnDestroy
 		desktop.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
 		desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
 		desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
+		desktop.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
+		desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
 
 		if(!desktop.roomSession.isSpectator)
 		{
@@ -256,20 +265,21 @@ export class MainComponent implements OnInit, OnDestroy
 				this.ngZone.run(() => this.isInRoom = false);
 				return;
 			case RoomZoomEvent.ROOM_ZOOM:
-                const zoomEvent = (event as RoomZoomEvent);
+				const zoomEvent = (event as RoomZoomEvent);
+				const zoomLevel = ((zoomEvent.level < 0) ? -1 : (zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1)))
 
-				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1))));
+				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), zoomLevel);
 				return;
 			case RoomBackgroundColorEvent.ROOM_COLOR:
 				const colorEvent = (event as RoomBackgroundColorEvent);
 
 				if(colorEvent._Str_11464)
 				{
-					desktop.setRoomColorizer(0x000000, 0xFF);
+					desktop.setRoomColorizerColor(0x000000, 0xFF);
 				}
 				else
 				{
-					desktop.setRoomColorizer(colorEvent.color, colorEvent._Str_5123);
+					desktop.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
 				}
 				return;
 			case RoomEngineDimmerStateEvent.ROOM_COLOR:
@@ -278,8 +288,8 @@ export class MainComponent implements OnInit, OnDestroy
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
 				const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
 				
-				if(hslColorEvent.enable) desktop.setBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
-                else desktop.setBackgroundColor(0, 0, 0);
+				if(hslColorEvent.enable) desktop.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
+                else desktop.setRoomBackgroundColor(0, 0, 0);
                 return;
 		}
 	}

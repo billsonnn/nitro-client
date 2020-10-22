@@ -11,6 +11,7 @@ import { Queue } from '../../../client/nitro/window/motion/Queue';
 import { Wait } from '../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../core/settings/service';
 import { SessionService } from '../../security/services/session.service';
+import { InventoryService } from '../inventory/service';
 import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
 
 @Component({
@@ -27,7 +28,7 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
                     <li class="list-group-item" *ngIf="isInRoom" ><i class="icon icon-habbo"></i></li>
                     <li class="list-group-item" *ngIf="!isInRoom"><i class="icon icon-house"></i></li>
                     <li class="list-group-item" (click)="toggleNavigator()"><i class="icon icon-rooms"></i></li>
-                    <li class="list-group-item" (click)="toggleInventory()"><i class="icon icon-inventory"></i></li>
+                    <li class="list-group-item" (click)="toggleInventory()"><i class="icon icon-inventory"></i> <div class="badge badge-secondary" *ngIf="unseenCount">{{ unseenCount }}</div></li>
                     <li class="list-group-item" (click)="toggleCatalog()"><i class="icon icon-catalog"></i></li>
                     <li class="list-group-item avatar-image"><nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></nitro-avatar-image></li>
                 </ul>
@@ -44,6 +45,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     public navigationList: ElementRef<HTMLElement>;
 
     constructor(
+        private _inventoryService: InventoryService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
         private ngZone: NgZone) {}
@@ -150,5 +152,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
     public get navigationListElement(): HTMLElement
     {
         return ((this.navigationList && this.navigationList.nativeElement) || null);
+    }
+
+    public get unseenCount(): number
+    {
+        return this._inventoryService.unseenCount;
     }
 }

@@ -98,6 +98,11 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         this._object = object;
         this._object.setLogic(this);
     }
+
+    public tearDown(): void
+    {
+        return;
+    }
     
     public get object(): IRoomObjectController
     {

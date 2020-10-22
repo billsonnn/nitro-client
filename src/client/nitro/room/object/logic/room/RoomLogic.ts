@@ -209,7 +209,6 @@ export class RoomLogic extends RoomObjectLogicBase
 
         if(message instanceof ObjectRoomColorUpdateMessage)
         {
-            console.log(message);
             this.onObjectRoomColorUpdateMessage(message, model);
 
             return;

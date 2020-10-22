@@ -12,6 +12,7 @@ export interface IRoomObjectController extends IRoomObject
     setVisualization(visualization: IRoomObjectGraphicVisualization): void;
     setLogic(logic: IRoomObjectEventHandler): void;
     processUpdateMessage(message: RoomObjectUpdateMessage): void;
+    tearDown(): void;
     isReady: boolean;
     logic: IRoomObjectEventHandler;
 }

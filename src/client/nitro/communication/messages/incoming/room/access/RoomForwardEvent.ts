@@ -2,7 +2,7 @@ import { IMessageEvent } from '../../../../../../core/communication/messages/IMe
 import { MessageEvent } from '../../../../../../core/communication/messages/MessageEvent';
 import { RoomFowardParser as RoomForwardParser } from '../../../parser/room/access/RoomFowardParser';
 
-export class RoomFowardEvent extends MessageEvent implements IMessageEvent
+export class RoomForwardEvent extends MessageEvent implements IMessageEvent
 {
     constructor(callBack: Function)
     {
