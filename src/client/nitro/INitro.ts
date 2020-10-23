@@ -1,3 +1,4 @@
+import { Application } from 'pixi.js';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
 import { IRoomManager } from '../room/IRoomManager';
@@ -8,7 +9,7 @@ import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
 import { ISessionDataManager } from './session/ISessionDataManager';
 
-export interface INitro extends PIXI.Application
+export interface INitro extends Application
 {
     init(): void;
     dispose(): void;

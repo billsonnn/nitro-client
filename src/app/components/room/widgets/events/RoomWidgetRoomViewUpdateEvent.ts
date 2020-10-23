@@ -1,3 +1,4 @@
+import { Point, Rectangle } from 'pixi.js';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetRoomViewUpdateEvent extends RoomWidgetUpdateEvent
@@ -6,11 +7,11 @@ export class RoomWidgetRoomViewUpdateEvent extends RoomWidgetUpdateEvent
     public static SCALE_CHANGED: string     = 'RWRVUE_ROOM_VIEW_SCALE_CHANGED';
     public static POSITION_CHANGED: string  = 'RWRVUE_ROOM_VIEW_POSITION_CHANGED';
 
-    private _roomViewRectangle: PIXI.Rectangle;
-    private _positionDelta: PIXI.Point;
+    private _roomViewRectangle: Rectangle;
+    private _positionDelta: Point;
     private _scale: number;
 
-    constructor(type: string, view: PIXI.Rectangle = null, position: PIXI.Point = null, scale: number = 0)
+    constructor(type: string, view: Rectangle = null, position: Point = null, scale: number = 0)
     {
         super(type);
 
@@ -19,14 +20,14 @@ export class RoomWidgetRoomViewUpdateEvent extends RoomWidgetUpdateEvent
         this._scale             = scale;
     }
 
-    public get roomViewRectangle(): PIXI.Rectangle
+    public get roomViewRectangle(): Rectangle
     {
         if(!this._roomViewRectangle) return null;
         
         return this._roomViewRectangle.clone();
     }
 
-    public get positionDelta(): PIXI.Point
+    public get positionDelta(): Point
     {
         if(!this._positionDelta) return null;
         

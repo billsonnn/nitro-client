@@ -1,3 +1,4 @@
+import { Point } from 'pixi.js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { ActionDefinition } from './actions/ActionDefinition';
@@ -335,7 +336,7 @@ export class AvatarStructure extends EventDispatcher
         return this._geometry._Str_2250(k, _local_4, _arg_2);
     }
 
-    public _Str_1888(k:IActiveActionData, _arg_2: number, _arg_3: number, _arg_4: string): PIXI.Point
+    public _Str_1888(k:IActiveActionData, _arg_2: number, _arg_3: number, _arg_4: string): Point
     {
         const _local_5 = this._animationData._Str_2244(k._Str_742);
 

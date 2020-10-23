@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../room/utils/IVector3D';
+﻿import { Point } from 'pixi.js';
+import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 import { RoomFloorHole } from './RoomFloorHole';
 import { RoomMapData } from './RoomMapData';
@@ -74,7 +75,7 @@ export class RoomPlaneParser
         return tileHeight;
     }
 
-    private static findEntranceTile(matricies: number[][]): PIXI.Point
+    private static findEntranceTile(matricies: number[][]): Point
     {
         if(!matricies) return null;
 
@@ -115,7 +116,7 @@ export class RoomPlaneParser
 
         while(i < (_local_6.length - 1))
         {
-            if(((Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i - 1)]) - 1)) && (Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i + 1)]) - 1)))) return new PIXI.Point(Math.trunc((_local_6[i]) | 0), i);
+            if(((Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i - 1)]) - 1)) && (Math.trunc(_local_6[i]) <= (Math.trunc(_local_6[(i + 1)]) - 1)))) return new Point(Math.trunc((_local_6[i]) | 0), i);
 
             i++;
         }
@@ -595,7 +596,7 @@ export class RoomPlaneParser
             }
             _local_3++;
         }
-        var _local_4: PIXI.Point = RoomPlaneParser.findEntranceTile(this._tileMatrix);
+        var _local_4: Point = RoomPlaneParser.findEntranceTile(this._tileMatrix);
 
         _local_3 = 0;
         while (_local_3 < this._height)
@@ -616,7 +617,7 @@ export class RoomPlaneParser
         return this.initialize(_local_4);
     }
 
-    private initialize(k: PIXI.Point): boolean
+    private initialize(k: Point): boolean
     {
         var _local_5: number[][];
         var _local_2: number = 0;
@@ -645,17 +646,17 @@ export class RoomPlaneParser
         return true;
     }
 
-    private generateWallData(k: PIXI.Point, _arg_2: boolean): RoomWallData
+    private generateWallData(k: Point, _arg_2: boolean): RoomWallData
     {
         var _local_8: boolean;
         var _local_9: boolean;
         var _local_10: number;
-        var _local_11: PIXI.Point;
+        var _local_11: Point;
         var _local_12: number;
         var _local_3: RoomWallData = new RoomWallData();
         var _local_4: Function[] = [this.extractTopWall.bind(this), this.extractRightWall.bind(this), this.extractBottomWall.bind(this), this.extractLeftWall.bind(this)];
         var _local_5: number = 0;
-        var _local_6: PIXI.Point = new PIXI.Point(k.x, k.y);
+        var _local_6: Point = new Point(k.x, k.y);
         var _local_7: number = 0;
         while (_local_7++ < 1000)
         {
@@ -747,7 +748,7 @@ export class RoomPlaneParser
 
     private updateWallsNextToHoles(k: RoomWallData): void
     {
-        var _local_4: PIXI.Point;
+        var _local_4: Point;
         var _local_5: number;
         var _local_6: number;
         var _local_7: IVector3D;
@@ -797,10 +798,10 @@ export class RoomPlaneParser
         }
     }
 
-    private resolveOriginalWallIndex(k: PIXI.Point, _arg_2: PIXI.Point, _arg_3: RoomWallData): number
+    private resolveOriginalWallIndex(k: Point, _arg_2: Point, _arg_3: RoomWallData): number
     {
-        var _local_10: PIXI.Point;
-        var _local_11: PIXI.Point;
+        var _local_10: Point;
+        var _local_11: Point;
         var _local_12: number;
         var _local_13: number;
         var _local_14: number;
@@ -849,8 +850,8 @@ export class RoomPlaneParser
 
     private hideOriginallyHiddenWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
-        var _local_5: PIXI.Point;
-        var _local_6: PIXI.Point;
+        var _local_5: Point;
+        var _local_6: Point;
         var _local_7: IVector3D;
         var _local_8: number;
         var _local_9: number;
@@ -861,7 +862,7 @@ export class RoomPlaneParser
             if (!k._Str_10019(_local_4))
             {
                 _local_5 = k._Str_10778(_local_4);
-                _local_6 = new PIXI.Point(_local_5.x, _local_5.y);
+                _local_6 = new Point(_local_5.x, _local_5.y);
                 _local_7 = RoomWallData.WALL_DIRECTION_VECTORS[k.getDirection(_local_4)];
                 _local_8 = k._Str_13743(_local_4);
                 _local_6.x = (_local_6.x + (_local_7.x * _local_8));
@@ -894,7 +895,7 @@ export class RoomPlaneParser
     {
         var _local_5: number;
         var _local_6: number;
-        var _local_8: PIXI.Point;
+        var _local_8: Point;
         var _local_9: number;
         var _local_10: number;
         var _local_11: IVector3D;
@@ -1032,7 +1033,7 @@ export class RoomPlaneParser
         {
             return false;
         }
-        var _local_10: PIXI.Point = new PIXI.Point(_local_8, _local_9);
+        var _local_10: Point = new Point(_local_8, _local_9);
         var _local_11: RoomWallData = this.generateWallData(_local_10, true);
         var _local_12: RoomWallData = this.generateWallData(_local_10, false);
         if (_local_11 != null)
@@ -1059,7 +1060,7 @@ export class RoomPlaneParser
         return true;
     }
 
-    private extractTopWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractTopWall(k: Point, _arg_2: boolean): Point
     {
         if (k == null)
         {
@@ -1075,18 +1076,18 @@ export class RoomPlaneParser
         {
             if (this.getTileHeightInternal((k.x + _local_3), k.y) > _local_4)
             {
-                return new PIXI.Point(((k.x + _local_3) - 1), k.y);
+                return new Point(((k.x + _local_3) - 1), k.y);
             }
             if (this.getTileHeightInternal((k.x + _local_3), (k.y + 1)) <= _local_4)
             {
-                return new PIXI.Point((k.x + _local_3), (k.y + 1));
+                return new Point((k.x + _local_3), (k.y + 1));
             }
             _local_3++;
         }
         return null;
     }
 
-    private extractRightWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractRightWall(k: Point, _arg_2: boolean): Point
     {
         if (k == null)
         {
@@ -1102,18 +1103,18 @@ export class RoomPlaneParser
         {
             if (this.getTileHeightInternal(k.x, (k.y + _local_3)) > _local_4)
             {
-                return new PIXI.Point(k.x, (k.y + (_local_3 - 1)));
+                return new Point(k.x, (k.y + (_local_3 - 1)));
             }
             if (this.getTileHeightInternal((k.x - 1), (k.y + _local_3)) <= _local_4)
             {
-                return new PIXI.Point((k.x - 1), (k.y + _local_3));
+                return new Point((k.x - 1), (k.y + _local_3));
             }
             _local_3++;
         }
         return null;
     }
 
-    private extractBottomWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractBottomWall(k: Point, _arg_2: boolean): Point
     {
         if (k == null)
         {
@@ -1129,18 +1130,18 @@ export class RoomPlaneParser
         {
             if (this.getTileHeightInternal((k.x - _local_3), k.y) > _local_4)
             {
-                return new PIXI.Point((k.x - (_local_3 - 1)), k.y);
+                return new Point((k.x - (_local_3 - 1)), k.y);
             }
             if (this.getTileHeightInternal((k.x - _local_3), (k.y - 1)) <= _local_4)
             {
-                return new PIXI.Point((k.x - _local_3), (k.y - 1));
+                return new Point((k.x - _local_3), (k.y - 1));
             }
             _local_3++;
         }
         return null;
     }
 
-    private extractLeftWall(k: PIXI.Point, _arg_2: boolean): PIXI.Point
+    private extractLeftWall(k: Point, _arg_2: boolean): Point
     {
         if (k == null)
         {
@@ -1156,11 +1157,11 @@ export class RoomPlaneParser
         {
             if (this.getTileHeightInternal(k.x, (k.y - _local_3)) > _local_4)
             {
-                return new PIXI.Point(k.x, (k.y - (_local_3 - 1)));
+                return new Point(k.x, (k.y - (_local_3 - 1)));
             }
             if (this.getTileHeightInternal((k.x + 1), (k.y - _local_3)) <= _local_4)
             {
-                return new PIXI.Point((k.x + 1), (k.y - _local_3));
+                return new Point((k.x + 1), (k.y - _local_3));
             }
             _local_3++;
         }

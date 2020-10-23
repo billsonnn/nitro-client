@@ -1,4 +1,5 @@
-﻿import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+﻿import { Graphics, Matrix } from 'pixi.js';
+import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
 import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { AnimationItem } from './AnimationItem';
@@ -6,7 +7,7 @@ import { AnimationItem } from './AnimationItem';
 export class PlaneVisualizationAnimationLayer implements IDisposable
 {
     private _color: number = 0;
-    private _bitmapData: PIXI.Graphics = null;
+    private _bitmapData: Graphics = null;
     private _isDisposed: boolean = false;
     private _items: AnimationItem[];
 
@@ -69,7 +70,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
         }
     }
 
-    public render(k: PIXI.Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: number, _arg_10: number, _arg_11: number): PIXI.Graphics
+    public render(k: Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number, _arg_7: number, _arg_8: number, _arg_9: number, _arg_10: number, _arg_11: number): Graphics
     {
         if ((((k == null) || (!(k.width == _arg_2))) || (!(k.height == _arg_3))))
         {
@@ -80,7 +81,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                     this._bitmapData.destroy();
                 }
 
-                this._bitmapData = new PIXI.Graphics()
+                this._bitmapData = new Graphics()
                     .drawRect(0, 0, _arg_2, _arg_3);
             }
             else
@@ -114,7 +115,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                         if(_local_14.x > 0 && (_local_14.x + _local_13.bitmapData.width < k.width)) {
                             k
                             .beginFill(0x00FF00)
-                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
                             .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
                             .endFill();
                         }
@@ -122,7 +123,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                             let difference = k.width - _local_14.x;
                             k
                             .beginFill(0x00FF00)
-                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
                             .drawRect(_local_14.x, _local_14.y, difference, _local_13.bitmapData.height)
                             .endFill();
                         }
@@ -131,7 +132,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                             let difference = _local_13.bitmapData.width + _local_14.x;
                             k
                             .beginFill(0x00FF00)
-                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new PIXI.Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
+                            .beginTextureFill({ texture: _local_13.bitmapData.texture, matrix: new Matrix(1, 0, 0, 1, _local_14.x, _local_14.y) })
                             .drawRect(0, _local_14.y, difference, _local_13.bitmapData.height)
                             .endFill();
                         }

@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 import { AvatarVisualization } from '../AvatarVisualization';
 import { IAvatarAddition } from './IAvatarAddition';
@@ -6,7 +7,7 @@ export class TypingBubbleAddition implements IAvatarAddition
 {
     private _id: number;
     private _visualization: AvatarVisualization;
-    private _asset: PIXI.Texture;
+    private _asset: Texture;
     private _relativeDepth: number;
 
     constructor(id: number, visualization: AvatarVisualization)

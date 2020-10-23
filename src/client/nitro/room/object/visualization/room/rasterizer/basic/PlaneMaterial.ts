@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Graphics } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneMaterialCellMatrix } from './PlaneMaterialCellMatrix';
 
 export class PlaneMaterial 
@@ -75,7 +76,7 @@ export class PlaneMaterial
         return null;
     }
 
-    public render(k: PIXI.Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: boolean, _arg_6: number, _arg_7: number, _arg_8: boolean): PIXI.Graphics
+    public render(k: Graphics, _arg_2: number, _arg_3: number, _arg_4: IVector3D, _arg_5: boolean, _arg_6: number, _arg_7: number, _arg_8: boolean): Graphics
     {
         if(_arg_2 < 1) _arg_2 = 1;
 

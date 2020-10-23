@@ -1,3 +1,4 @@
+import { RenderTexture } from 'pixi.js';
 import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IAnimationLayerData } from './animation/IAnimationLayerData';
@@ -15,7 +16,7 @@ export interface IAvatarImage extends IDisposable
     _Str_797(): string;
     _Str_754(): ISpriteDataContainer[];
     _Str_607(_arg_1: ISpriteDataContainer): IAnimationLayerData;
-    getImage(setType: string, hightlight: boolean, scale?: number, cache?: boolean): PIXI.RenderTexture;
+    getImage(setType: string, hightlight: boolean, scale?: number, cache?: boolean): RenderTexture;
     getCroppedImage(setType: string, scale?: number): HTMLImageElement;
     getAsset(_arg_1: string): IGraphicAsset;
     getDirection(): number;

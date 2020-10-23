@@ -1,3 +1,4 @@
+import { Spritesheet, Texture } from 'pixi.js';
 import { AssetManager } from '../../../../core/asset/AssetManager';
 import { IAsset, IAssetData, IAssetPalette } from '../../../../core/asset/interfaces';
 import { Nitro } from '../../../../nitro/Nitro';
@@ -15,12 +16,12 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
 
     private _name: string;
     private _data: IAssetData;
-    private _textures: Map<string, PIXI.Texture>;
+    private _textures: Map<string, Texture>;
     private _assets: Map<string, GraphicAsset>;
     private _palettes: Map<string, GraphicAssetPalette>;
     private _paletteAssetNames: string[];
 
-    constructor(data: IAssetData, spritesheet: PIXI.Spritesheet)
+    constructor(data: IAssetData, spritesheet: Spritesheet)
     {
         if(!data) throw new Error('invalid_collection');
 
@@ -159,7 +160,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         }
     }
 
-    private createAsset(name: string, source: string, texture: PIXI.Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
+    private createAsset(name: string, source: string, texture: Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
     {
         if(this._assets.get(name)) return false;
 
@@ -170,7 +171,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return true;
     }
 
-    private replaceAsset(name: string, source: string, texture: PIXI.Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
+    private replaceAsset(name: string, source: string, texture: Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
     {
         const existing = this._assets.get(name);
 
@@ -252,7 +253,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return existing;
     }
 
-    public addAsset(name: string, texture: PIXI.Texture, override: boolean, x: number = 0, y: number = 0, flipH: boolean = false, flipV: boolean = false): boolean
+    public addAsset(name: string, texture: Texture, override: boolean, x: number = 0, y: number = 0, flipH: boolean = false, flipV: boolean = false): boolean
     {
         if(!name || !texture) return false;
 
@@ -299,7 +300,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         existing.recycle();
     }
 
-    public getLibraryAsset(name: string): PIXI.Texture
+    public getLibraryAsset(name: string): Texture
     {
         if(!name) return null;
 
@@ -312,7 +313,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return texture;
     }
 
-    private addLibraryAsset(textures: PIXI.Texture[]): void
+    private addLibraryAsset(textures: Texture[]): void
     {
         if(!textures) return;
 
@@ -361,7 +362,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return this._data;
     }
 
-    public get textures(): Map<string, PIXI.Texture>
+    public get textures(): Map<string, Texture>
     {
         return this._textures;
     }

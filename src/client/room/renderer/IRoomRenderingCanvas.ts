@@ -1,3 +1,4 @@
+import { DisplayObject, Point } from 'pixi.js';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { IRoomGeometry } from '../utils/IRoomGeometry';
 import { IRoomCanvasMouseListener } from './IRoomCanvasMouseListener';
@@ -8,7 +9,7 @@ export interface IRoomRenderingCanvas
     dispose(): void;
     initialize(width: number, height: number): void;
     setMask(flag: boolean): void;
-    setScale(scale: number, point?: PIXI.Point, offsetPoint?: PIXI.Point): void
+    setScale(scale: number, point?: Point, offsetPoint?: Point): void
     render(time: number, update?: boolean): void;
     update(): void;
     setMouseListener(listener: IRoomCanvasMouseListener): void;
@@ -19,7 +20,7 @@ export interface IRoomRenderingCanvas
     getSortableSpriteList(): RoomObjectSpriteData[];
     id: number;
     geometry: IRoomGeometry;
-    displayObject: PIXI.DisplayObject;
+    displayObject: DisplayObject;
     screenOffsetX: number;
     screenOffsetY: number;
     scale: number;

@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { FurnitureThumbnailVisualization } from './FurnitureThumbnailVisualization';
 
 export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVisualization
@@ -30,7 +31,7 @@ export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVi
 
                     image.onload = () =>
                     {
-                        const texture = PIXI.Texture.from(image);
+                        const texture = Texture.from(image);
 
                         this._Str_6645(texture);
                     }

@@ -1,3 +1,4 @@
+import { Point } from 'pixi.js';
 import { IRoomGeometry } from './IRoomGeometry';
 import { IVector3D } from './IVector3D';
 import { Vector3d } from './Vector3d';
@@ -365,18 +366,18 @@ export class RoomGeometry implements IRoomGeometry
         return _local_2;
     }
 
-    public getScreenPoint(k: IVector3D): PIXI.Point
+    public getScreenPoint(k: IVector3D): Point
     {
         var _local_2: IVector3D = this.getScreenPosition(k);
         if (_local_2 == null)
         {
             return null;
         }
-        var _local_3: PIXI.Point = new PIXI.Point(_local_2.x, _local_2.y);
+        var _local_3: Point = new Point(_local_2.x, _local_2.y);
         return _local_3;
     }
 
-    public getPlanePosition(k: PIXI.Point, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D): PIXI.Point
+    public getPlanePosition(k: Point, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D): Point
     {
         var _local_15: number;
         var _local_16: number;
@@ -398,7 +399,7 @@ export class RoomGeometry implements IRoomGeometry
             _local_14.subtract(_local_10);
             _local_15 = ((Vector3d.scalarProjection(_local_14, _arg_3) / _local_11.length) * _arg_3.length);
             _local_16 = ((Vector3d.scalarProjection(_local_14, _arg_4) / _local_12.length) * _arg_4.length);
-            return new PIXI.Point(_local_15, _local_16);
+            return new Point(_local_15, _local_16);
         }
         return null;
     }

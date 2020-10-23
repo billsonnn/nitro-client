@@ -1,12 +1,14 @@
-﻿export class ImageData 
+﻿import { Point, Rectangle, Texture } from 'pixi.js';
+
+export class ImageData 
 {
-    private _bitmap: PIXI.Texture;
-    private _rect: PIXI.Rectangle;
-    private _regPoint: PIXI.Point;
+    private _bitmap: Texture;
+    private _rect: Rectangle;
+    private _regPoint: Point;
     private _flipH: boolean;
     private _color: number;
 
-    constructor(k: PIXI.Texture, rectangle: PIXI.Rectangle, _arg_3: PIXI.Point, flipH: boolean, color: number)
+    constructor(k: Texture, rectangle: Rectangle, _arg_3: Point, flipH: boolean, color: number)
     {
         this._bitmap    = k;
         this._rect      = rectangle;
@@ -24,17 +26,17 @@
         this._color     = null;
     }
 
-    public get bitmap(): PIXI.Texture
+    public get bitmap(): Texture
     {
         return this._bitmap;
     }
 
-    public get rect(): PIXI.Rectangle
+    public get rect(): Rectangle
     {
         return this._rect;
     }
 
-    public get _Str_1076(): PIXI.Point
+    public get _Str_1076(): Point
     {
         return this._regPoint;
     }
@@ -49,8 +51,8 @@
         return this._color;
     }
 
-    public get _Str_1567(): PIXI.Rectangle
+    public get _Str_1567(): Rectangle
     {
-        return new PIXI.Rectangle(-(this._regPoint.x), -(this._regPoint.y), this._rect.width, this._rect.height);
+        return new Rectangle(-(this._regPoint.x), -(this._regPoint.y), this._rect.width, this._rect.height);
     }
 }

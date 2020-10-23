@@ -1,8 +1,10 @@
+import { Rectangle, Texture } from 'pixi.js';
+
 export interface IGraphicAsset
 {
     name: string;
     source: string;
-    texture: PIXI.Texture;
+    texture: Texture;
     usesPalette: boolean;
     x: number;
     y: number;
@@ -12,5 +14,5 @@ export interface IGraphicAsset
     offsetY: number;
     flipH: boolean;
     flipV: boolean;
-    rectangle: PIXI.Rectangle;
+    rectangle: Rectangle;
 }

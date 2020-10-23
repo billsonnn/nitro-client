@@ -1,4 +1,5 @@
-﻿import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+﻿import { Texture } from 'pixi.js';
+import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { IGetImageListener } from '../../../../client/nitro/room/IGetImageListener';
 import { ImageResult } from '../../../../client/nitro/room/ImageResult';
@@ -257,7 +258,7 @@ export class GroupItem implements IGetImageListener
         this._iconUrl = url;
     }
 
-    public imageReady(id: number, texture: PIXI.Texture, image: HTMLImageElement = null): void
+    public imageReady(id: number, texture: Texture, image: HTMLImageElement = null): void
     {
         if((id === -1) || !image) return;
 

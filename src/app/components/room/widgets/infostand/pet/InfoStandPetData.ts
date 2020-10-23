@@ -1,4 +1,5 @@
-﻿import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
+﻿import { Texture } from 'pixi.js';
+import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
 
 export class InfoStandPetData 
 {
@@ -15,7 +16,7 @@ export class InfoStandPetData
     private _petId: number = -1;
     private _type: number;
     private _race: number;
-    private _image: PIXI.Texture;
+    private _image: Texture;
     private _isOwnPet: boolean;
     private _ownerId: number;
     private _ownerName: string;
@@ -51,7 +52,7 @@ export class InfoStandPetData
         return this._race;
     }
 
-    public get image(): PIXI.Texture
+    public get image(): Texture
     {
         return this._image;
     }

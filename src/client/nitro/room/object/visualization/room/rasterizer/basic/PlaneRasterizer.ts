@@ -1,4 +1,5 @@
-﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
+﻿import { Graphics, Point, Texture } from 'pixi.js';
+import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
@@ -251,7 +252,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
                                 if(texture)
                                 {
-                                    let newTexture: PIXI.Texture = null;
+                                    let newTexture: Texture = null;
 
                                     if(asset.flipH)
                                     {
@@ -406,7 +407,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                 const textureId = cell.textureId;
 
                 let assetNames: string[]        = null;
-                let offsetPoints: PIXI.Point[]  = null;
+                let offsetPoints: Point[]  = null;
                 let graphics: IGraphicAsset[]   = null;
                 let limit: number               = 0;
 
@@ -485,9 +486,9 @@ export class PlaneRasterizer implements IPlaneRasterizer
         return assetNames;
     }
 
-    private _Str_24448(k: any): PIXI.Point[]
+    private _Str_24448(k: any): Point[]
     {
-        const offsets: PIXI.Point[] = [];
+        const offsets: Point[] = [];
 
         if(k && k.offsets && k.offsets.length)
         {
@@ -500,7 +501,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                 const x = offset.x;
                 const y = offset.y;
 
-                offsets.push(new PIXI.Point(x, y));
+                offsets.push(new Point(x, y));
 
                 index++;
             }
@@ -590,7 +591,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
         }
     }
 
-    public render(k: PIXI.Graphics, _arg_2: string, _arg_3: number, _arg_4: number, _arg_5: number, _arg_6: IVector3D, _arg_7: boolean, _arg_8: number  =0, _arg_9: number = 0, _arg_10: number = 0, _arg_11: number = 0, _arg_12: number = 0): PlaneBitmapData
+    public render(k: Graphics, _arg_2: string, _arg_3: number, _arg_4: number, _arg_5: number, _arg_6: IVector3D, _arg_7: boolean, _arg_8: number  =0, _arg_9: number = 0, _arg_10: number = 0, _arg_11: number = 0, _arg_12: number = 0): PlaneBitmapData
     {
         return null;
     }

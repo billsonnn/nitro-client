@@ -1,3 +1,4 @@
+import { Spritesheet, Texture } from 'pixi.js';
 import { AssetManager } from './AssetManager';
 import { IAssetLibrary } from './IAssetLibrary';
 import { IAssetData } from './interfaces';
@@ -6,7 +7,7 @@ export class AssetLibrary implements IAssetLibrary
 {
     private _name: string;
     private _data: IAssetData;
-    private _textures: Map<string, PIXI.Texture>;
+    private _textures: Map<string, Texture>;
 
     constructor(name: string)
     {
@@ -28,7 +29,7 @@ export class AssetLibrary implements IAssetLibrary
         this._name  = null;
     }
 
-    public defineSpritesheet(spritesheet: PIXI.Spritesheet): void
+    public defineSpritesheet(spritesheet: Spritesheet): void
     {
         if(!spritesheet) return;
 
@@ -49,7 +50,7 @@ export class AssetLibrary implements IAssetLibrary
         }
     }
 
-    public getTexture(name: string): PIXI.Texture
+    public getTexture(name: string): Texture
     {
         if(!name) return null;
 

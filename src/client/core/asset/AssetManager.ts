@@ -1,4 +1,4 @@
-import { ILoaderOptions } from 'pixi.js';
+import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
@@ -8,7 +8,7 @@ import { IAssetData } from './interfaces';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
-    private _textures: Map<string, PIXI.Texture>;
+    private _textures: Map<string, Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
     private _pendingUrls: Map<string, Function[]>;
 
@@ -26,7 +26,7 @@ export class AssetManager extends Disposable implements IAssetManager
         return (name.substring(0, name.lastIndexOf('.')) || name);
     }
 
-    public getTexture(name: string): PIXI.Texture
+    public getTexture(name: string): Texture
     {
         if(!name) return null;
 
@@ -37,7 +37,7 @@ export class AssetManager extends Disposable implements IAssetManager
         return existing;
     }
 
-    public setTexture(name: string, texture: PIXI.Texture): void
+    public setTexture(name: string, texture: Texture): void
     {
         if(!name || !texture) return;
 
@@ -75,7 +75,7 @@ export class AssetManager extends Disposable implements IAssetManager
         return existing;
     }
 
-    public createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): IGraphicAssetCollection
+    public createCollection(data: IAssetData, spritesheet: Spritesheet): IGraphicAssetCollection
     {
         if(!data) return null;
 
@@ -106,7 +106,7 @@ export class AssetManager extends Disposable implements IAssetManager
         let totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: PIXI.Loader) =>
+        const onDownloaded = (loader: Loader) =>
         {
             totalDownloaded++;
 
@@ -119,14 +119,14 @@ export class AssetManager extends Disposable implements IAssetManager
         {
             if(!url) continue;
 
-            const loader = new PIXI.Loader();
+            const loader = new Loader();
 
             const options: ILoaderOptions = {
                 crossOrigin: false
             }
 
             loader
-                .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
+                .use((resource: LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
                 .add(url, options)
                 .load();
         }
@@ -134,11 +134,11 @@ export class AssetManager extends Disposable implements IAssetManager
         return true;
     }
     
-    private assetLoader(loader: PIXI.Loader, resource: PIXI.LoaderResource, next: Function, onDownloaded: Function): void
+    private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error) return next();
 
-        if(resource.type === PIXI.LoaderResource.TYPE.JSON)
+        if(resource.type === LoaderResource.TYPE.JSON)
         {
             const assetData = (resource.data as IAssetData);
 
@@ -150,11 +150,11 @@ export class AssetManager extends Disposable implements IAssetManager
 
                 if(!imageUrl) return;
 
-                const baseTexture = PIXI.BaseTexture.from(imageUrl);
+                const baseTexture = BaseTexture.from(imageUrl);
 
                 if(baseTexture.valid)
                 {
-                    const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+                    const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
 
                     spritesheet.parse(textures =>
                     {
@@ -167,7 +167,7 @@ export class AssetManager extends Disposable implements IAssetManager
                 {
                     baseTexture.once('loaded', () =>
                     {
-                        const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+                        const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
 
                         spritesheet.parse(textures =>
                         {
@@ -188,7 +188,7 @@ export class AssetManager extends Disposable implements IAssetManager
             return;
         }
 
-        if(resource.type === PIXI.LoaderResource.TYPE.IMAGE)
+        if(resource.type === LoaderResource.TYPE.IMAGE)
         {
             const split = resource.name.split('/');
             const name  = split[(split.length - 1)];

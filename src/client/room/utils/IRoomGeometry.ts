@@ -1,11 +1,12 @@
+import { Point } from 'pixi.js';
 import { IVector3D } from './IVector3D';
 
 export interface IRoomGeometry
 {
     getCoordinatePosition(_arg_1: IVector3D): IVector3D;
-    getScreenPoint(_arg_1: IVector3D): PIXI.Point;
+    getScreenPoint(_arg_1: IVector3D): Point;
     getScreenPosition(_arg_1: IVector3D): IVector3D;
-    getPlanePosition(_arg_1: PIXI.Point, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D): PIXI.Point;
+    getPlanePosition(_arg_1: Point, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D): Point;
     setDisplacement(_arg_1: IVector3D, _arg_2: IVector3D): void;
     adjustLocation(_arg_1: IVector3D, _arg_2: number): void;
     performZoom(): void;

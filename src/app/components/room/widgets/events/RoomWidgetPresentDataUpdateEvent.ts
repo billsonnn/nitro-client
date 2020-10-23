@@ -1,4 +1,5 @@
-﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { Texture } from 'pixi.js';
+import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -15,14 +16,14 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     private _Str_2625: string = '';
     private _text: string;
     private _controller: boolean;
-    private _Str_12168: PIXI.Texture;
+    private _Str_12168: Texture;
     private _Str_19174: string;
     private _Str_19510: string;
     private _Str_3054: number = -1;
     private _Str_3970: string = '';
     private _Str_3224: boolean;
 
-    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: boolean = false, _arg_5: PIXI.Texture = null, _arg_6: string = null, _arg_7: string = null)
+    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: boolean = false, _arg_5: Texture = null, _arg_6: string = null, _arg_7: string = null)
     {
         super(k);
 
@@ -69,7 +70,7 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         return this._controller;
     }
 
-    public get _Str_11625(): PIXI.Texture
+    public get _Str_11625(): Texture
     {
         return this._Str_12168;
     }

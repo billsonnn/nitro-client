@@ -1,3 +1,4 @@
+import { Container, Point, Rectangle, RenderTexture, Sprite } from 'pixi.js';
 import { RoomObjectSpriteData } from '../../data/RoomObjectSpriteData';
 import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { TextureUtils } from '../../utils/TextureUtils';
@@ -107,12 +108,12 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         }
     }
 
-    public get image(): PIXI.RenderTexture
+    public get image(): RenderTexture
     {
         return this.getImage(0, -1);
     }
 
-    public getImage(bgColor: number, originalId: number): PIXI.RenderTexture
+    public getImage(bgColor: number, originalId: number): RenderTexture
     {
         const boundingRectangle = this.getBoundingRectangle();
 
@@ -137,7 +138,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
             return b.relativeDepth - a.relativeDepth;
         });
 
-        const container = new PIXI.Container();
+        const container = new Container();
 
         index = 0;
 
@@ -148,7 +149,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
             if(texture)
             {
-                const sprite = PIXI.Sprite.from(texture);
+                const sprite = Sprite.from(texture);
 
                 sprite.alpha            = (objectSprite.alpha / 255);
                 sprite.tint             = objectSprite.color;
@@ -174,10 +175,10 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
         return texture;
     }
 
-    public getBoundingRectangle(): PIXI.Rectangle
+    public getBoundingRectangle(): Rectangle
     {
         const totalSprites  = this.totalSprites;
-        const rectangle     = new PIXI.Rectangle();
+        const rectangle     = new Rectangle();
 
         let iterator = 0;
 
@@ -190,7 +191,7 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
                 let offsetX = ((sprite.flipH) ? (-(sprite.width) + sprite.offsetX) : sprite.offsetX);
                 let offsetY = ((sprite.flipV) ? (-(sprite.height) + sprite.offsetY) : sprite.offsetY);
 
-                const point = new PIXI.Point(offsetX, offsetY);
+                const point = new Point(offsetX, offsetY);
 
                 if(iterator === 0)
                 {

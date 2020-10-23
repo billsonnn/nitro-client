@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { INitroManager } from '../../core/common/INitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { IFurnitureData } from './furniture/IFurnitureData';
@@ -11,9 +12,9 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): IFurnitureData;
     getWallItemData(id: number): IFurnitureData;
     getWallItemDataByName(name: string): IFurnitureData;
-    getBadgeImage(name: string): PIXI.Texture;
+    getBadgeImage(name: string): Texture;
     loadBadgeImage(name: string): string;
-    getGroupBadgeImage(name: string): PIXI.Texture;
+    getGroupBadgeImage(name: string): Texture;
     loadGroupBadgeImage(name: string): string;
     isUserIgnored(userName: string): boolean;
     hasSecurity(level: number): boolean;

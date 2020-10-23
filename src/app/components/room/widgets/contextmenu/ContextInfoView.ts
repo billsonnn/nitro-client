@@ -1,4 +1,5 @@
 import { ComponentRef, Directive, ElementRef } from '@angular/core';
+import { Point, Rectangle } from 'pixi.js';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { FixedSizeStack } from '../../../../../client/nitro/utils/FixedSizeStack';
 import { IContextMenuParentWidget } from './IContextMenuParentWidget';
@@ -56,7 +57,7 @@ export class ContextInfoView
         }
     }
 
-    public update(rectangle: PIXI.Rectangle, point: PIXI.Point, time: number): void
+    public update(rectangle: Rectangle, point: Point, time: number): void
     {
         if(!rectangle) return;
 
@@ -140,7 +141,7 @@ export class ContextInfoView
         this.hide(true);
     }
 
-    protected getOffset(k: PIXI.Rectangle): number
+    protected getOffset(k: Rectangle): number
     {
         let _local_2 = -(this.activeViewElement.offsetHeight);
 

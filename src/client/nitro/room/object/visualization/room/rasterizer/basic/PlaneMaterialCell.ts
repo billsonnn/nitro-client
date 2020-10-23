@@ -1,4 +1,5 @@
-﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
+﻿import { Graphics, Matrix, Point, Rectangle } from 'pixi.js';
+import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Randomizer } from '../../utils/Randomizer';
@@ -6,13 +7,13 @@ import { PlaneTexture } from './PlaneTexture';
 
 export class PlaneMaterialCell 
 {
-    private _cachedBitmapData: PIXI.Graphics;
+    private _cachedBitmapData: Graphics;
     private _texture: PlaneTexture;
-    private _extraItemOffsets: PIXI.Point[];
+    private _extraItemOffsets: Point[];
     private _extraItemAssets: IGraphicAsset[];
     private _extraItemCount: number = 0;
 
-    constructor(k: PlaneTexture, _arg_2: IGraphicAsset[] = null, _arg_3: PIXI.Point[] = null, _arg_4: number = 0)
+    constructor(k: PlaneTexture, _arg_2: IGraphicAsset[] = null, _arg_3: Point[] = null, _arg_4: number = 0)
     {
         this._cachedBitmapData  = null;
         this._texture           = k;
@@ -43,7 +44,7 @@ export class PlaneMaterialCell
                     {
                         const point = _arg_3[pointIndex];
 
-                        if(point) this._extraItemOffsets.push(new PIXI.Point(point.x, point.y));
+                        if(point) this._extraItemOffsets.push(new Point(point.x, point.y));
 
                         pointIndex++;
                     }
@@ -102,7 +103,7 @@ export class PlaneMaterialCell
         return 0;
     }
 
-    public render(normal: IVector3D, textureOffsetX: number, textureOffsetY: number): PIXI.Graphics
+    public render(normal: IVector3D, textureOffsetX: number, textureOffsetY: number): Graphics
     {
         if(!this._texture) return null;
 
@@ -110,14 +111,14 @@ export class PlaneMaterialCell
 
         if(!texture) return null;
 
-        let bitmap = new PIXI.Graphics()
+        let bitmap = new Graphics()
             .beginTextureFill({ texture })
             .drawRect(0, 0, texture.width, texture.height)
             .endFill();
 
         if((textureOffsetX !== 0) || (textureOffsetY !== 0))
         {
-            const sourceBitmap = new PIXI.Graphics()
+            const sourceBitmap = new Graphics()
                 .beginFill(0)
                 .drawRect(0, 0, (bitmap.width * 2), (bitmap.height * 2))
                 .endFill()
@@ -128,7 +129,7 @@ export class PlaneMaterialCell
                 .drawRect(bitmap.width, bitmap.height, bitmap.width, bitmap.height)
                 .endFill();
 
-            bitmap = new PIXI.Graphics()
+            bitmap = new Graphics()
                 .beginFill(0)
                 .drawRect(0, 0, bitmap.width, bitmap.height)
                 .endFill();
@@ -137,7 +138,7 @@ export class PlaneMaterialCell
 
             while(textureOffsetY < 0) textureOffsetY += texture.height;
 
-            const sourceTexture = TextureUtils.generateTexture(sourceBitmap, new PIXI.Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
+            const sourceTexture = TextureUtils.generateTexture(sourceBitmap, new Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
 
             if(sourceTexture)
             {
@@ -162,7 +163,7 @@ export class PlaneMaterialCell
                     }
                     else
                     {
-                        const bitmapTexture = TextureUtils.generateTexture(bitmap, new PIXI.Rectangle(0, 0, bitmap.width, bitmap.height));
+                        const bitmapTexture = TextureUtils.generateTexture(bitmap, new Rectangle(0, 0, bitmap.width, bitmap.height));
 
                         if(bitmapTexture)
                         {
@@ -193,8 +194,8 @@ export class PlaneMaterialCell
 
                         if(assetTexture)
                         {
-                            const offsetFinal   = new PIXI.Point((offset.x + item.offsetX), (offset.y + item.offsetY));
-                            const flipMatrix    = new PIXI.Matrix();
+                            const offsetFinal   = new Point((offset.x + item.offsetX), (offset.y + item.offsetY));
+                            const flipMatrix    = new Matrix();
 
                             let x           = 1;
                             let y           = 1;

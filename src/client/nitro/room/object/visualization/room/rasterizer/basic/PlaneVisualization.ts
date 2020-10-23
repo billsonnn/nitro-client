@@ -1,4 +1,5 @@
-﻿import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
+﻿import { Graphics, Rectangle } from 'pixi.js';
+import { IDisposable } from '../../../../../../../core/common/disposable/IDisposable';
 import { IGraphicAssetCollection } from '../../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
@@ -12,7 +13,7 @@ export class PlaneVisualization
 {
     private _layers: IDisposable[];
     private _geometry: IRoomGeometry;
-    private _cachedBitmapData: PIXI.Graphics;
+    private _cachedBitmapData: Graphics;
     private _cachedBitmapNormal: Vector3d;
     private _isCached: boolean;
     private _hasAnimationLayers: boolean;
@@ -141,7 +142,7 @@ export class PlaneVisualization
         return this._layers as PlaneVisualizationLayer[];
     }
 
-    public render(canvas: PIXI.Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number = 0, offsetY: number = 0, maxX: number = 0, maxY: number = 0, dimensionX: number = 0, dimensionY: number = 0, timeSinceStartMs: number = 0): PIXI.Graphics
+    public render(canvas: Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number = 0, offsetY: number = 0, maxX: number = 0, maxY: number = 0, dimensionX: number = 0, dimensionY: number = 0, timeSinceStartMs: number = 0): Graphics
     {
         if(width < 1) width = 1;
 
@@ -157,7 +158,7 @@ export class PlaneVisualization
                 {
                     if(canvas)
                     {
-                        const texture = TextureUtils.generateTexture(this._cachedBitmapData, new PIXI.Rectangle(0, 0, width, height));
+                        const texture = TextureUtils.generateTexture(this._cachedBitmapData, new Rectangle(0, 0, width, height));
 
                         if(texture)
                         {
@@ -185,7 +186,7 @@ export class PlaneVisualization
 
         if(!this._cachedBitmapData)
         {
-            const graphic = new PIXI.Graphics()
+            const graphic = new Graphics()
                 .beginFill(0xFFFFFF)
                 .drawRect(0, 0, width, height)
                 .endFill();
@@ -224,7 +225,7 @@ export class PlaneVisualization
 
         if(canvas && (canvas !== this._cachedBitmapData))
         {
-            const texture = TextureUtils.generateTexture(canvas, new PIXI.Rectangle(0, 0, canvas.width, canvas.height));
+            const texture = TextureUtils.generateTexture(canvas, new Rectangle(0, 0, canvas.width, canvas.height));
 
             this._cachedBitmapData
                 .beginTextureFill({ texture })

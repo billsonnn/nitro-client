@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../room/utils/IVector3D';
+﻿import { Point } from 'pixi.js';
+import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
 export class RoomWallData 
@@ -17,8 +18,8 @@ export class RoomWallData
         new Vector3d(1, 0, 0)
     ];
 
-    private _corners: PIXI.Point[];
-    private _endPoints: PIXI.Point[];
+    private _corners: Point[];
+    private _endPoints: Point[];
     private _directions: number[];
     private _lengths: number[];
     private _leftTurns: boolean[];
@@ -44,7 +45,7 @@ export class RoomWallData
         this._count             = 0;
     }
 
-    public _Str_17862(k: PIXI.Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): void
+    public _Str_17862(k: Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): void
     {
         if (((this._addDuplicates) || (this._Str_22484(k, _arg_2, _arg_3, _arg_4, _arg_5))))
         {
@@ -60,7 +61,7 @@ export class RoomWallData
         }
     }
 
-    private _Str_22484(k: PIXI.Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): boolean
+    private _Str_22484(k: Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): boolean
     {
         let _local_6 = 0;
         
@@ -80,12 +81,12 @@ export class RoomWallData
         return this._count;
     }
 
-    public _Str_10778(k: number): PIXI.Point
+    public _Str_10778(k: number): Point
     {
         return this._corners[k];
     }
 
-    public _Str_19138(k: number): PIXI.Point
+    public _Str_19138(k: number): Point
     {
         this._Str_23674();
         return this._endPoints[k];
@@ -148,7 +149,7 @@ export class RoomWallData
             const corner = this._corners[k];
 
             _local_3 = RoomWallData.WALL_DIRECTION_VECTORS[this.getDirection(k)];
-            this._corners[k] = new PIXI.Point((corner.x + (_arg_2 * _local_3.x)), (corner.y + (_arg_2 * _local_3.y)));
+            this._corners[k] = new Point((corner.x + (_arg_2 * _local_3.x)), (corner.y + (_arg_2 * _local_3.y)));
             this._lengths[k] = (this._lengths[k] - _arg_2);
             this._manuallyLeftCut[k] = true;
         }
@@ -157,8 +158,8 @@ export class RoomWallData
     private _Str_23674(): void
     {
         var k: number;
-        var _local_2: PIXI.Point;
-        var _local_3: PIXI.Point;
+        var _local_2: Point;
+        var _local_3: Point;
         var _local_4:IVector3D;
         var _local_5: number;
         if (this._endPoints.length != this.count)
@@ -168,7 +169,7 @@ export class RoomWallData
             while (k < this.count)
             {
                 _local_2 = this._Str_10778(k);
-                _local_3 = new PIXI.Point(_local_2.x, _local_2.y);
+                _local_3 = new Point(_local_2.x, _local_2.y);
                 _local_4 = RoomWallData.WALL_DIRECTION_VECTORS[this.getDirection(k)];
                 _local_5 = this._Str_13743(k);
                 _local_3.x = (_local_3.x + (_local_4.x * _local_5));

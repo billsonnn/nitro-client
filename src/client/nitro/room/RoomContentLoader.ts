@@ -1,4 +1,4 @@
-import { ILoaderOptions } from 'pixi.js';
+import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
@@ -266,7 +266,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         return image;
     }
 
-    public addAssetToCollection(collectionName: string, assetName: string, texture: PIXI.Texture): boolean
+    public addAssetToCollection(collectionName: string, assetName: string, texture: Texture): boolean
     {
         const collection = this.getCollection(collectionName);
 
@@ -275,7 +275,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         return collection.addAsset(assetName, texture, true, 0, 0, false, false);
     }
 
-    private createCollection(data: IAssetData, spritesheet: PIXI.Spritesheet): GraphicAssetCollection
+    private createCollection(data: IAssetData, spritesheet: Spritesheet): GraphicAssetCollection
     {
         if(!data || !spritesheet) return null;
 
@@ -396,7 +396,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         let totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: PIXI.Loader) =>
+        const onDownloaded = (loader: Loader) =>
         {
             totalDownloaded++;
 
@@ -416,14 +416,14 @@ export class RoomContentLoader implements IFurnitureDataListener
         {
             if(!url) continue;
 
-            const loader = new PIXI.Loader();
+            const loader = new Loader();
 
             const options: ILoaderOptions = {
                 crossOrigin: false
             }
 
             loader
-                .use((resource: PIXI.LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
+                .use((resource: LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
                 .add(assetUrls, options)
                 .load();
         }
@@ -431,11 +431,11 @@ export class RoomContentLoader implements IFurnitureDataListener
         return true;
     }
     
-    private assetLoader(loader: PIXI.Loader, resource: PIXI.LoaderResource, next: Function, onDownloaded: Function): void
+    private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error) return next();
 
-        if(resource.type === PIXI.LoaderResource.TYPE.JSON)
+        if(resource.type === LoaderResource.TYPE.JSON)
         {
             const assetData = (resource.data as IAssetData);
 
@@ -447,11 +447,11 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if(!imageUrl) return;
 
-                const baseTexture = PIXI.BaseTexture.from(imageUrl);
+                const baseTexture = BaseTexture.from(imageUrl);
 
                 if(baseTexture.valid)
                 {
-                    const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+                    const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
 
                     spritesheet.parse(textures =>
                     {
@@ -464,7 +464,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                 {
                     baseTexture.once('loaded', () =>
                     {
-                        const spritesheet = new PIXI.Spritesheet(baseTexture, assetData.spritesheet);
+                        const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
 
                         spritesheet.parse(textures =>
                         {

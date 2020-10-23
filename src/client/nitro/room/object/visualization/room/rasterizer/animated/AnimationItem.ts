@@ -1,4 +1,5 @@
-﻿import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
+﻿import { Point } from 'pixi.js';
+import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 
 export class AnimationItem 
 {
@@ -35,7 +36,7 @@ export class AnimationItem
         this._bitmapData = null;
     }
 
-    public _Str_6729(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number): PIXI.Point
+    public _Str_6729(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number): Point
     {
         let _local_6 = this._x;
         let _local_7 = this._y;
@@ -47,6 +48,6 @@ export class AnimationItem
         const _local_8 = ((_local_6 % 1) * k);
         const _local_9 = ((_local_7 % 1) * _arg_2);
 
-        return new PIXI.Point(_local_8, _local_9);
+        return new Point(_local_8, _local_9);
     }
 }

@@ -1,3 +1,4 @@
+import { Point } from 'pixi.js';
 import { RoomObjectEvent } from '../../../../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../../../../room/events/RoomObjectMouseEvent';
 import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
@@ -341,7 +342,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
         planeId--;
 
-        let _local_7: PIXI.Point = null;
+        let _local_7: Point = null;
 
         const _local_8  = this._planeParser.getPlaneLocation(planeId);
         const _local_9  = this._planeParser.getPlaneLeftSide(planeId);
@@ -358,7 +359,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
         const _local_15 = event._Str_24406;
         const _local_16 = event._Str_25684;
-        const _local_17 = new PIXI.Point(_local_15, _local_16);
+        const _local_17 = new Point(_local_15, _local_16);
 
         _local_7 = geometry.getPlanePosition(_local_17, _local_8, _local_9, _local_10);
 

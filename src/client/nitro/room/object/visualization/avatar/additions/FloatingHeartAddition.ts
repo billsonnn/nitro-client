@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 import { Nitro } from '../../../../../Nitro';
 import { AvatarVisualization } from '../AvatarVisualization';
@@ -11,7 +12,7 @@ export class FloatingHeartAddition extends ExpressionAddition
     private static STATE_FLOAT: number              = 2;
     private static STATE_COMPLETE: number           = 3;
 
-    private _asset: PIXI.Texture;
+    private _asset: Texture;
     private _startTime: number;
     private _delta: number;
     private _offsetY: number;

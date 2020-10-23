@@ -1,3 +1,4 @@
+import { DisplayObject, Point, Rectangle, RenderTexture } from 'pixi.js';
 import { IRoomObjectController } from '../../../room/object/IRoomObjectController';
 import { IRoomRenderingCanvas } from '../../../room/renderer/IRoomRenderingCanvas';
 import { IVector3D } from '../../../room/utils/IVector3D';
@@ -34,21 +35,21 @@ export class RoomPreviewer
     private _currentPreviewObjectType: number = 0;
     private _currentPreviewObjectCategory: number = 0;
     private _currentPreviewObjectData: string = '';
-    private _currentPreviewRectangle: PIXI.Rectangle = null;
+    private _currentPreviewRectangle: Rectangle = null;
     private _currentPreviewCanvasWidth: number = 0;
     private _currentPreviewCanvasHeight: number = 0;
     private _currentPreviewScale: number = 64;
     private _currentPreviewNeedsZoomOut: boolean;
     private _automaticStateChange: boolean;
     private _previousAutomaticStateChangeTime: number;
-    private _addViewOffset: PIXI.Point;
+    private _addViewOffset: Point;
     private _disableUpdate: boolean = false;
 
     constructor(roomEngine: IRoomEngine, roomId: number = 1)
     {
         this._roomEngine    = roomEngine;
         this._previewRoomId = RoomId.makeRoomPreviewerId(roomId);
-        this._addViewOffset = new PIXI.Point(0, 0);
+        this._addViewOffset = new Point(0, 0);
 
         if(this.isRoomEngineReady && this._roomEngine.events)
         {
@@ -286,7 +287,7 @@ export class RoomPreviewer
         }
     }
 
-    public getRoomCanvas(width: number, height: number): PIXI.DisplayObject
+    public getRoomCanvas(width: number, height: number): DisplayObject
     {
         if(this.isRoomEngineReady)
         {
@@ -318,17 +319,17 @@ export class RoomPreviewer
         }
     }
 
-    public set addViewOffset(point: PIXI.Point)
+    public set addViewOffset(point: Point)
     {
         this._addViewOffset = point;
     }
 
-    public get addViewOffset(): PIXI.Point
+    public get addViewOffset(): Point
     {
         return this._addViewOffset;
     }
 
-    private updatePreviewObjectBoundingRectangle(point: PIXI.Point): void
+    private updatePreviewObjectBoundingRectangle(point: Point): void
     {
         const objectBounds = this._roomEngine.getRoomObjectBoundingRectangle(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory, RoomPreviewer.PREVIEW_CANVAS_ID);
 
@@ -353,7 +354,7 @@ export class RoomPreviewer
         }
     }
 
-    private validatePreviewSize(point: PIXI.Point): PIXI.Point
+    private validatePreviewSize(point: Point): Point
     {
         if(((this._currentPreviewRectangle.width < 1) || (this._currentPreviewRectangle.height < 1)))
         {
@@ -492,7 +493,7 @@ export class RoomPreviewer
         if(this.isRoomEngineReady) this._roomEngine.updateRoomInstancePlaneVisibility(this._previewRoomId, wallsVisible, floorsVisible);
     }
 
-    private getCanvasOffset(point: PIXI.Point): PIXI.Point
+    private getCanvasOffset(point: Point): Point
     {
         if(((this._currentPreviewRectangle.width < 1) || (this._currentPreviewRectangle.height < 1))) return point;
 
@@ -532,7 +533,7 @@ export class RoomPreviewer
                 y = (point.y + ((offsetY * 10) / _local_7));
             }
 
-            return new PIXI.Point(x, y);
+            return new Point(x, y);
         }
 
         return null;
@@ -652,7 +653,7 @@ export class RoomPreviewer
         return null;
     }
 
-    public getRoomObjectCurrentImage(): PIXI.RenderTexture
+    public getRoomObjectCurrentImage(): RenderTexture
     {
         if(this.isRoomEngineReady)
         {

@@ -1,3 +1,4 @@
+import { Matrix, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IGraphicAsset } from '../../../../../room/object/visualization/utils/IGraphicAsset';
 import { TextureUtils } from '../../../../../room/utils/TextureUtils';
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
@@ -7,7 +8,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
     protected static THUMBNAIL: string = 'THUMBNAIL';
 
     private _Str_22237: string;
-    private _Str_10040: PIXI.Texture;
+    private _Str_10040: Texture;
     private _Str_21698: number;
     private _Str_16232: boolean;
 
@@ -26,7 +27,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         return !(this._Str_10040 == null);
     }
 
-    public _Str_6645(k: PIXI.Texture): void
+    public _Str_6645(k: Texture): void
     {
         this._Str_10040 = k;
         this._Str_16232 = true;
@@ -60,7 +61,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         this._Str_21698 = this.direction;
     }
 
-    private _Str_20857(k: PIXI.Texture, scale: number): void
+    private _Str_20857(k: Texture, scale: number): void
     {
         let layerId = 0;
 
@@ -87,12 +88,10 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
         }
     }
 
-    private _Str_25562(texture: PIXI.Texture, asset: IGraphicAsset): PIXI.Texture
+    private _Str_25562(texture: Texture, asset: IGraphicAsset): Texture
     {
-        let graphic: PIXI.Graphics = null;
-        
         const _local_3  = 1.1;
-        const matrix    = new PIXI.Matrix();
+        const matrix    = new Matrix();
         const _local_5  = (asset.width / texture.width);
 
         switch(this.direction)
@@ -123,11 +122,11 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
                 matrix.ty = 0;
         }
 
-        const sprite = PIXI.Sprite.from(texture);
+        const sprite = Sprite.from(texture);
 
         sprite.transform.setFromMatrix(matrix);
 
-        return TextureUtils.generateTexture(sprite, new PIXI.Rectangle(0, 0, asset.width, asset.height));
+        return TextureUtils.generateTexture(sprite, new Rectangle(0, 0, asset.width, asset.height));
     }
 
     protected getSpriteAssetName(scale: number, layerId: number): string

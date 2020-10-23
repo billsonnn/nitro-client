@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { Disposable } from '../../../../../core/common/disposable/Disposable';
 import { IObjectVisualizationData } from '../../../../../room/object/visualization/IRoomObjectVisualizationData';
@@ -36,7 +37,7 @@ export class AvatarVisualizationData extends Disposable implements IObjectVisual
         return avatarImage;
     }
 
-    public getAvatarRendererAsset(name: string): PIXI.Texture
+    public getAvatarRendererAsset(name: string): Texture
     {
         if(!this._avatarRenderer) return null;
 

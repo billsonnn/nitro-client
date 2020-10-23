@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Texture } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneTextureBitmap } from './PlaneTextureBitmap';
 
 export class PlaneTexture 
@@ -28,12 +29,12 @@ export class PlaneTexture
         }
     }
 
-    public _Str_16790(k: PIXI.Texture, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1, _arg_6: string = null): void
+    public _Str_16790(k: Texture, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1, _arg_6: string = null): void
     {
         this._bitmaps.push(new PlaneTextureBitmap(k, _arg_2, _arg_3, _arg_4, _arg_5, _arg_6));
     }
 
-    public _Str_4913(k: IVector3D): PIXI.Texture
+    public _Str_4913(k: IVector3D): Texture
     {
         const _local_2 = this._Str_21702(k);
 

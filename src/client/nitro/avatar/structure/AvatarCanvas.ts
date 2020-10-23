@@ -1,22 +1,23 @@
-﻿import { AvatarScaleType } from '../enum/AvatarScaleType';
+﻿import { Point } from 'pixi.js';
+import { AvatarScaleType } from '../enum/AvatarScaleType';
 
 export class AvatarCanvas 
 {
     private _id: string;
     private _width: number;
     private _height: number;
-    private _offset: PIXI.Point;
-    private _regPoint: PIXI.Point;
+    private _offset: Point;
+    private _regPoint: Point;
 
     constructor(k: any, _arg_2: string)
     {
         this._id        = k.id;
         this._width     = k.width;
         this._height    = k.height;
-        this._offset    = new PIXI.Point(k.dx, k.dy);
+        this._offset    = new Point(k.dx, k.dy);
 
-        if(_arg_2 == AvatarScaleType.LARGE) this._regPoint = new PIXI.Point(((this._width - 64) / 2), 0);
-        else this._regPoint = new PIXI.Point(((this._width - 32) / 2), 0);
+        if(_arg_2 == AvatarScaleType.LARGE) this._regPoint = new Point(((this._width - 64) / 2), 0);
+        else this._regPoint = new Point(((this._width - 32) / 2), 0);
     }
 
     public get width(): number
@@ -29,7 +30,7 @@ export class AvatarCanvas
         return this._height;
     }
 
-    public get offset(): PIXI.Point
+    public get offset(): Point
     {
         return this._offset;
     }
@@ -39,7 +40,7 @@ export class AvatarCanvas
         return this._id;
     }
 
-    public get _Str_1076(): PIXI.Point
+    public get _Str_1076(): Point
     {
         return this._regPoint;
     }

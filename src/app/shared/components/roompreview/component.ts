@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DisplayObject } from 'pixi.js';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
 import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRenderingCanvas';
@@ -22,7 +23,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 	public height: number = 1;
 
 	public renderingCanvas: IRoomRenderingCanvas = null;
-	public displayObject: PIXI.DisplayObject = null;
+	public displayObject: DisplayObject = null;
 	public imageUrl: string = null;
 	public isRunning: boolean = false;
 

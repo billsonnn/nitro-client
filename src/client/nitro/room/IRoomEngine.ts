@@ -1,3 +1,4 @@
+import { DisplayObject, Point, Rectangle } from 'pixi.js';
 import { INitroManager } from '../../core/common/INitroManager';
 import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomManager } from '../../room/IRoomManager';
@@ -24,12 +25,12 @@ export interface IRoomEngine extends INitroManager
     disableUpdate(flag: boolean): void;
     runUpdate(): void;
     createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance;
-    getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject;
-    setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point?: PIXI.Point, offsetPoint?: PIXI.Point): void;
+    getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): DisplayObject;
+    setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point?: Point, offsetPoint?: Point): void;
     setRoomInstanceRenderingCanvasMask(roomId: number, canvasId: number, flag: boolean): void;
     getRoomInstanceRenderingCanvas(roomId: number, canvasId?: number): IRoomRenderingCanvas;
-    getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId?: number): PIXI.Point;
-    setRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number, point: PIXI.Point): boolean;
+    getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId?: number): Point;
+    setRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number, point: Point): boolean;
     getRoomInstanceRenderingCanvasScale(roomId?: number, canvasId?: number): number;
     initializeRoomInstanceRenderingCanvas(roomId: number, canvasId: number, width: number, height: number): void;
     updateRoomInstancePlaneVisibility(roomId: number, wallVisible: boolean, floorVisible?: boolean): boolean;
@@ -44,8 +45,8 @@ export interface IRoomEngine extends INitroManager
     removeRoomObjectFloor(roomId: number, objectId: number, userId?: number, _arg_4?: boolean): void;
     removeRoomObjectWall(roomId: number, objectId: number, userId?: number): void;
     removeRoomObjectUser(roomId: number, objectId: number): void;
-    getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle;
-    getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): PIXI.Point;
+    getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): Rectangle;
+    getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): Point;
     getGenericRoomObjectImage(type: string, value: string, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, objectData?: IObjectData, state?: number, frameCount?: number, posture?: string, originalId?: number): ImageResult;
     getFurnitureFloorIcon(typeId: number, listener: IGetImageListener, extras?: string, objectData?: IObjectData): ImageResult;
     getFurnitureWallIcon(typeId: number, listener: IGetImageListener, extras?: string): ImageResult;
@@ -63,8 +64,8 @@ export interface IRoomEngine extends INitroManager
     updateRoomObjectUserEffect(roomId: number, objectId: number, effectId: number, delay?: number): boolean;
     updateRoomObjectUserGesture(roomId: number, objectId: number, gestureId: number): boolean;
     updateRoomObjectUserPosture(roomId: number, objectId: number, type: string, parameter?: string): boolean;
-    getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number, objectData?: IObjectData): ImageResult
-    getFurnitureWallImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number): ImageResult
+    getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number, objectData?: IObjectData): ImageResult;
+    getFurnitureWallImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, state?: number, frameCount?: number): ImageResult;
     getRoomObjectImage(roomId: number, objectId: number, category: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number): ImageResult;
     getRoomObjectPetImage(typeId: number, paletteId: number, color: number, direction: IVector3D, scale: number, listener: IGetImageListener, _arg_7?: boolean, bgColor?: number, customParts?: PetCustomPart[], posture?: string): ImageResult;
     selectRoomObject(roomId: number, objectId: number, objectCategory: number): void;

@@ -1,15 +1,17 @@
-﻿export class AvatarImageBodyPartContainer 
+﻿import { Point, Texture } from 'pixi.js';
+
+export class AvatarImageBodyPartContainer 
 {
-    private _image: PIXI.Texture;
-    private _regPoint: PIXI.Point;
-    private _offset: PIXI.Point;
+    private _image: Texture;
+    private _regPoint: Point;
+    private _offset: Point;
     private _isCacheable: boolean;
 
-    constructor(k: PIXI.Texture, _arg_2: PIXI.Point, _arg_3: boolean)
+    constructor(k: Texture, _arg_2: Point, _arg_3: boolean)
     {
         this._image         = k;
         this._regPoint      = _arg_2;
-        this._offset        = new PIXI.Point(0, 0);
+        this._offset        = new Point(0, 0);
         this._regPoint      = _arg_2;
         this._isCacheable   = _arg_3;
 
@@ -33,26 +35,26 @@
         this._offset.y      = this._offset.y;
     }
 
-    public _Str_1387(k: PIXI.Point): void
+    public _Str_1387(k: Point): void
     {
         this._regPoint = k;
 
         this._Str_1225();
     }
 
-    public get image(): PIXI.Texture
+    public get image(): Texture
     {
         return this._image;
     }
 
-    public set image(k: PIXI.Texture)
+    public set image(k: Texture)
     {
         if(this._image && (this._image !== k)) this._image.destroy();
 
         this._image = k;
     }
 
-    public get _Str_1076(): PIXI.Point
+    public get _Str_1076(): Point
     {
         const clone = this._regPoint.clone();
 
@@ -62,7 +64,7 @@
         return clone;
     }
 
-    public set offset(k: PIXI.Point)
+    public set offset(k: Point)
     {
         this._offset = k;
 

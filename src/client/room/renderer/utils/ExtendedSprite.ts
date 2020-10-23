@@ -1,6 +1,7 @@
+import { BaseTexture, Point, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { Nitro } from '../../../nitro/Nitro';
 
-export class ExtendedSprite extends PIXI.Sprite
+export class ExtendedSprite extends Sprite
 {
     private _offsetX: number;
     private _offsetY: number;
@@ -12,7 +13,7 @@ export class ExtendedSprite extends PIXI.Sprite
     private _pairedSpriteId: number;
     private _pairedSpriteUpdateCounter: number;
 
-    constructor(texture?: PIXI.Texture)
+    constructor(texture?: Texture)
     {
         super(texture);
         
@@ -37,13 +38,13 @@ export class ExtendedSprite extends PIXI.Sprite
         return true;
     }
 
-    public setTexture(texture: PIXI.Texture): void
+    public setTexture(texture: Texture): void
     {
-        if(!texture) texture = PIXI.Texture.EMPTY;
+        if(!texture) texture = Texture.EMPTY;
         
         if(texture === this.texture) return;
 
-        if(texture === PIXI.Texture.EMPTY)
+        if(texture === Texture.EMPTY)
         {
             this._pairedSpriteId            = -1;
             this._pairedSpriteUpdateCounter = -1;
@@ -52,18 +53,18 @@ export class ExtendedSprite extends PIXI.Sprite
         this.texture = texture;
     }
 
-    public containsPoint(point: PIXI.Point): boolean
+    public containsPoint(point: Point): boolean
     {        
         return ExtendedSprite.containsPoint(this, point);
     }
 
-    public static containsPoint(sprite: ExtendedSprite, point: PIXI.Point): boolean
+    public static containsPoint(sprite: ExtendedSprite, point: Point): boolean
     {
         if(!sprite || !point || (sprite.alphaTolerance > 255)) return false;
 
-        if(!(sprite instanceof PIXI.Sprite)) return false;
+        if(!(sprite instanceof Sprite)) return false;
 
-        //if(sprite.blendMode !== PIXI.BLEND_MODES.NORMAL) return;
+        //if(sprite.blendMode !== BLEND_MODES.NORMAL) return;
 
         const texture       = sprite.texture;
         const baseTexture   = texture.baseTexture;
@@ -85,7 +86,7 @@ export class ExtendedSprite extends PIXI.Sprite
                 //@ts-ignore
                 if(!texture.getLocalBounds)
                 {
-                    const tempSprite = PIXI.Sprite.from(texture);
+                    const tempSprite = Sprite.from(texture);
 
                     canvas = Nitro.instance.renderer.extract.canvas(tempSprite);
 
@@ -93,7 +94,7 @@ export class ExtendedSprite extends PIXI.Sprite
                 }
                 else
                 {
-                    canvas = Nitro.instance.renderer.extract.canvas(texture as PIXI.RenderTexture);
+                    canvas = Nitro.instance.renderer.extract.canvas(texture as RenderTexture);
                 }
             }
 
@@ -112,7 +113,7 @@ export class ExtendedSprite extends PIXI.Sprite
         return ((hitMap[index + 3] !== undefined) && (hitMap[index + 3] > sprite.alphaTolerance));
     }
     
-    private static generateHitMap(baseTexture: PIXI.BaseTexture, tempCanvas: HTMLCanvasElement = null): boolean
+    private static generateHitMap(baseTexture: BaseTexture, tempCanvas: HTMLCanvasElement = null): boolean
     {
         let canvas: HTMLCanvasElement           = null;
         let context: CanvasRenderingContext2D   = null;

@@ -1,3 +1,4 @@
+import { Rectangle } from 'pixi.js';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { IRoomObject } from '../../room/object/IRoomObject';
@@ -10,7 +11,7 @@ import { ISessionDataManager } from '../session/ISessionDataManager';
 export interface IRoomWidgetHandlerContainer
 {
     getFirstCanvasId(): number;
-    getRoomViewRect(): PIXI.Rectangle;
+    getRoomViewRect(): Rectangle;
     checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean;
     isOwnerOfFurniture(roomObject: IRoomObject): boolean;
     events: IEventDispatcher;

@@ -1,9 +1,11 @@
-﻿export class PlaneBitmapData 
+﻿import { Graphics } from 'pixi.js';
+
+export class PlaneBitmapData 
 {
-    private _bitmap: PIXI.Graphics;
+    private _bitmap: Graphics;
     private _timeStamp: number;
 
-    constructor(k: PIXI.Graphics, _arg_2: number)
+    constructor(k: Graphics, _arg_2: number)
     {
         this._bitmap    = k;
         this._timeStamp = _arg_2;
@@ -14,7 +16,7 @@
         this._bitmap = null;
     }
 
-    public get bitmap(): PIXI.Graphics
+    public get bitmap(): Graphics
     {
         return this._bitmap;
     }

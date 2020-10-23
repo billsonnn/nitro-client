@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { IRoomObjectSprite } from '../../../../../../room/object/visualization/IRoomObjectSprite';
 import { Nitro } from '../../../../../Nitro';
 import { AvatarVisualization } from '../AvatarVisualization';
@@ -13,7 +14,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
 
     private _id: number;
     private _visualization: AvatarVisualization;
-    private _asset: PIXI.Texture;
+    private _asset: Texture;
     private _startTime: number;
     private _offsetY: number;
     private _scale: number;

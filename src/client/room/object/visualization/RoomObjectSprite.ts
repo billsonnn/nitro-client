@@ -1,3 +1,4 @@
+import { BLEND_MODES, Filter, Texture } from 'pixi.js';
 import { AlphaTolerance } from '../enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../enum/RoomObjectSpriteType';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
@@ -10,7 +11,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _name: string;
     private _type: string;
     private _spriteType: number;
-    private _texture: PIXI.Texture;
+    private _texture: Texture;
 
     private _width: number;
     private _height: number;
@@ -31,7 +32,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _tag: string;
     private _posture: string;
     private _alphaTolerance: number;
-    private _filters: PIXI.Filter[];
+    private _filters: Filter[];
 
     private _updateCounter: number;
 
@@ -52,7 +53,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._direction         = 0;
 
         this._alpha             = 255;
-        this._blendMode         = PIXI.BLEND_MODES.NORMAL;
+        this._blendMode         = BLEND_MODES.NORMAL;
         this._color             = 0xFFFFFF;
         this._relativeDepth     = 0;
         this._Str_8253          = false;
@@ -118,12 +119,12 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._spriteType = type;
     }
 
-    public get texture(): PIXI.Texture
+    public get texture(): Texture
     {
         return this._texture;
     }
 
-    public set texture(texture: PIXI.Texture)
+    public set texture(texture: Texture)
     {
         if(this._texture === texture) return;
 
@@ -364,12 +365,12 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._updateCounter++;
     }
 
-    public get filters(): PIXI.Filter[]
+    public get filters(): Filter[]
     {
         return this._filters;
     }
 
-    public set filters(filters: PIXI.Filter[])
+    public set filters(filters: Filter[])
     {
         this._filters = filters;
     }

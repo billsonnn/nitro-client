@@ -1,9 +1,10 @@
-﻿import { TextureUtils } from '../../room/utils/TextureUtils';
+﻿import { RenderTexture } from 'pixi.js';
+import { TextureUtils } from '../../room/utils/TextureUtils';
 
 export class ImageResult 
 {
     public id: number               = 0;
-    public data: PIXI.RenderTexture = null;
+    public data: RenderTexture      = null;
     public image: HTMLImageElement  = null;
 
     public getImage(): HTMLImageElement

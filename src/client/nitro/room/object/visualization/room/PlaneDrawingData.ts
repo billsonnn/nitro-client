@@ -1,12 +1,13 @@
-﻿import { IPlaneDrawingData } from '../../../../../room/object/visualization/IPlaneDrawingData';
+﻿import { Point } from 'pixi.js';
+import { IPlaneDrawingData } from '../../../../../room/object/visualization/IPlaneDrawingData';
 
 export class PlaneDrawingData implements IPlaneDrawingData
 {
     private _z: number;
-    private _points: PIXI.Point[];
+    private _points: Point[];
     private _color: number;
     private _maskAssetNames: string[];
-    private _maskAssetLocations: PIXI.Point[];
+    private _maskAssetLocations: Point[];
     private _maskAssetFlipHs: boolean[];
     private _maskAssetFlipVs: boolean[];
     private _alignBottom: boolean;
@@ -32,7 +33,7 @@ export class PlaneDrawingData implements IPlaneDrawingData
         this._alignBottom   = _arg_3;
     }
 
-    public addMask(k: string, _arg_2: PIXI.Point, _arg_3: boolean, _arg_4: boolean): void
+    public addMask(k: string, _arg_2: Point, _arg_3: boolean, _arg_4: boolean): void
     {
         this._maskAssetNames.push(k);
         this._maskAssetLocations.push(_arg_2);
@@ -55,12 +56,12 @@ export class PlaneDrawingData implements IPlaneDrawingData
         return this._z;
     }
 
-    public set cornerPoints(k: PIXI.Point[])
+    public set cornerPoints(k: Point[])
     {
         this._points = k;
     }
 
-    public get cornerPoints(): PIXI.Point[]
+    public get cornerPoints(): Point[]
     {
         return this._points;
     }
@@ -75,7 +76,7 @@ export class PlaneDrawingData implements IPlaneDrawingData
         return this._maskAssetNames;
     }
 
-    public get _Str_20731(): PIXI.Point[]
+    public get _Str_20731(): Point[]
     {
         return this._maskAssetLocations;
     }

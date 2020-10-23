@@ -1,8 +1,9 @@
-﻿import { TextureUtils } from './TextureUtils';
+﻿import { Graphics, Matrix, Texture } from 'pixi.js';
+import { TextureUtils } from './TextureUtils';
 
-export class Rasterizer 
+export class Rasterizer
 {
-    // public static line(k:BitmapData, _arg_2: PIXI.Point, _arg_3: PIXI.Point, _arg_4: number): void
+    // public static line(k:BitmapData, _arg_2: Point, _arg_3: Point, _arg_4: number): void
     // {
     //     var _local_5:int;
     //     var _local_6:int;
@@ -60,16 +61,16 @@ export class Rasterizer
     //     k.unlock();
     // }
 
-    public static _Str_16640(k: PIXI.Texture): PIXI.Texture
+    public static _Str_16640(k: Texture): Texture
     {
         if(!k) return null;
 
-        const matrix = new PIXI.Matrix();
+        const matrix = new Matrix();
 
         matrix.scale(-1, 1);
         matrix.translate(k.width, 0);
 
-        const graphic = new PIXI.Graphics();
+        const graphic = new Graphics();
 
         graphic
             .beginTextureFill({
@@ -82,16 +83,16 @@ export class Rasterizer
         return TextureUtils.generateTexture(graphic);
     }
 
-    public static _Str_20706(k: PIXI.Texture): PIXI.Texture
+    public static _Str_20706(k: Texture): Texture
     {
         if(!k) return null;
 
-        const matrix = new PIXI.Matrix();
+        const matrix = new Matrix();
 
         matrix.scale(1, -1);
         matrix.translate(0, k.height);
 
-        const graphic = new PIXI.Graphics();
+        const graphic = new Graphics();
 
         graphic
             .beginTextureFill({
@@ -104,16 +105,16 @@ export class Rasterizer
         return TextureUtils.generateTexture(graphic);
     }
 
-    public static _Str_20356(k: PIXI.Texture): PIXI.Texture
+    public static _Str_20356(k: Texture): Texture
     {
         if(!k) return null;
 
-        const matrix = new PIXI.Matrix();
+        const matrix = new Matrix();
 
         matrix.scale(-1, -1);
         matrix.translate(k.width, k.height);
 
-        const graphic = new PIXI.Graphics();
+        const graphic = new Graphics();
 
         graphic
             .beginTextureFill({

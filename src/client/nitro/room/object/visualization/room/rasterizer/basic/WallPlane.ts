@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Graphics } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { Plane } from './Plane';
 
@@ -8,7 +9,7 @@ export class WallPlane extends Plane
     public static _Str_5433: number = 45;
     public static _Str_5509: number = 30;
 
-    public render(k: PIXI.Graphics, _arg_2: number, _arg_3: number, size: number, _arg_5: IVector3D, _arg_6: boolean): PIXI.Graphics
+    public render(k: Graphics, _arg_2: number, _arg_3: number, size: number, _arg_5: IVector3D, _arg_6: boolean): Graphics
     {
         const visualization = this._Str_6009(size);
 

@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Graphics, Rectangle } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { PlaneMaterial } from './PlaneMaterial';
 
@@ -13,7 +14,7 @@ export class PlaneVisualizationLayer
     private _color: number;
     private _offset: number;
     private _align: number;
-    private _bitmapData: PIXI.Graphics;
+    private _bitmapData: Graphics;
     private _isDisposed: boolean;
 
    constructor(k: PlaneMaterial, _arg_2: number, _arg_3: number, _arg_4: number = 0)
@@ -59,11 +60,11 @@ export class PlaneVisualizationLayer
         }
     }
 
-    public render(canvas: PIXI.Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number, offsetY: number): PIXI.Graphics
+    public render(canvas: Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number, offsetY: number): Graphics
     {
         if(!canvas || (canvas.width !== width) || (canvas.height !== height)) canvas = null;
 
-        let bitmapData: PIXI.Graphics = null;
+        let bitmapData: Graphics = null;
 
         if(this._material)
         {
@@ -86,7 +87,7 @@ export class PlaneVisualizationLayer
 
                 if(this._bitmapData) this._bitmapData.destroy();
 
-                const graphic = new PIXI.Graphics()
+                const graphic = new Graphics()
                     .beginFill(0xFFFFFF)
                     .drawRect(0, 0, width, height)
                     .endFill();
@@ -112,7 +113,7 @@ export class PlaneVisualizationLayer
 
             if(canvas && (bitmapData !== canvas))
             {
-                const texture = TextureUtils.generateTexture(bitmapData, new PIXI.Rectangle(0, 0, width, height));
+                const texture = TextureUtils.generateTexture(bitmapData, new Rectangle(0, 0, width, height));
 
                 canvas
                     .beginTextureFill({ texture })

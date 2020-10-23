@@ -1,4 +1,5 @@
-﻿import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+﻿import { Point, Rectangle } from 'pixi.js';
+import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
@@ -51,8 +52,8 @@ export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 
                 const userData = session.userDataManager.getDataByType(k._Str_1577, k._Str_1723);
 
-                let objectBounds: PIXI.Rectangle    = null;
-                let objectLocation: PIXI.Point      = null;
+                let objectBounds: Rectangle    = null;
+                let objectLocation: Point      = null;
 
                 if(userData)
                 {

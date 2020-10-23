@@ -1,12 +1,13 @@
+import { Point } from 'pixi.js';
 import { AnimationActionPart } from './AnimationActionPart';
 
 export class AnimationAction
 {
-    public static _Str_1934: PIXI.Point = new PIXI.Point(0, 0);
+    public static _Str_1934: Point = new Point(0, 0);
 
     private _id: string;
     private _actionParts: Map<string, AnimationActionPart>;
-    private _bodyPartOffsets: Map<number, Map<number, Map<string, PIXI.Point>>>;
+    private _bodyPartOffsets: Map<number, Map<number, Map<string, Point>>>;
     private _frameCount: number;
     private _frameIndexes: number[];
 
@@ -42,7 +43,7 @@ export class AnimationAction
 
                 this._frameCount = Math.max(this._frameCount, frameId);
 
-                const directions: Map<number, Map<string, PIXI.Point>> = new Map();
+                const directions: Map<number, Map<string, Point>> = new Map();
 
                 this._bodyPartOffsets.set(frameId, directions);
 
@@ -54,7 +55,7 @@ export class AnimationAction
 
                         const directionId = direction.id;
 
-                        const offsets: Map<string, PIXI.Point> = new Map();
+                        const offsets: Map<string, Point> = new Map();
 
                         directions.set(directionId, offsets);
 
@@ -72,7 +73,7 @@ export class AnimationAction
                                 if(part.dx !== undefined) dx = part.dx;
                                 if(part.dy !== undefined) dy = part.dy;
 
-                                offsets.set(partId, new PIXI.Point(dx, dy));
+                                offsets.set(partId, new Point(dx, dy));
                             }
                         }
                     }
@@ -101,7 +102,7 @@ export class AnimationAction
         return existing;
     }
 
-    public _Str_1888(frameId: number, frameCount: number, partId: string): PIXI.Point
+    public _Str_1888(frameId: number, frameCount: number, partId: string): Point
     {
         const frameIndex    = (frameCount % this._frameIndexes.length);
         const frameNumber   = this._frameIndexes[frameIndex];

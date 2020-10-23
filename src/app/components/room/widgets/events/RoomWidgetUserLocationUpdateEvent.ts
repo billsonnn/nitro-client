@@ -1,14 +1,15 @@
-﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { Point, Rectangle } from 'pixi.js';
+import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetUserLocationUpdateEvent extends RoomWidgetUpdateEvent
 {
     public static RWULUE_USER_LOCATION_UPDATE: string = 'RWULUE_USER_LOCATION_UPDATE';
 
     private _userId: number;
-    private _rectangle: PIXI.Rectangle;
-    private _Str_20775: PIXI.Point;
+    private _rectangle: Rectangle;
+    private _Str_20775: Point;
 
-    constructor(k: number, _arg_2: PIXI.Rectangle, _arg_3: PIXI.Point)
+    constructor(k: number, _arg_2: Rectangle, _arg_3: Point)
     {
         super(RoomWidgetUserLocationUpdateEvent.RWULUE_USER_LOCATION_UPDATE)
 
@@ -22,12 +23,12 @@ export class RoomWidgetUserLocationUpdateEvent extends RoomWidgetUpdateEvent
         return this._userId;
     }
 
-    public get rectangle(): PIXI.Rectangle
+    public get rectangle(): Rectangle
     {
         return this._rectangle;
     }
 
-    public get _Str_9337(): PIXI.Point
+    public get _Str_9337(): Point
     {
         return this._Str_20775;
     }

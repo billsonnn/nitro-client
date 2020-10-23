@@ -1,3 +1,5 @@
+import { Texture } from 'pixi.js';
+
 export interface IAsset
 {
     source?: string;
@@ -5,5 +7,5 @@ export interface IAsset
     y: number;
     flipH?: boolean;
     usesPalette?: boolean;
-    texture: PIXI.Texture;
+    texture: Texture;
 }

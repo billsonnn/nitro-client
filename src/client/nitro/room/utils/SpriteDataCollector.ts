@@ -1,4 +1,5 @@
-﻿import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
+﻿import { Point, Rectangle } from 'pixi.js';
+import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
 import { IPlaneDrawingData } from '../../../room/object/visualization/IPlaneDrawingData';
 import { IPlaneVisualization } from '../../../room/object/visualization/IPlaneVisualization';
 import { IRoomObjectSpriteVisualization } from '../../../room/object/visualization/IRoomObjectSpriteVisualization';
@@ -67,17 +68,17 @@ export class SpriteDataCollector
         return -1;
     }
 
-    private static _Str_20789(k:RoomObjectSpriteData, _arg_2: PIXI.Rectangle, _arg_3: IRoomRenderingCanvas): boolean
+    private static _Str_20789(k:RoomObjectSpriteData, _arg_2: Rectangle, _arg_3: IRoomRenderingCanvas): boolean
     {
         return true;
-        // var _local_4 = new PIXI.Rectangle((k.x + _arg_3.screenOffsetX), (k.y + _arg_3.screenOffsetY), k.width, k.height);
+        // var _local_4 = new Rectangle((k.x + _arg_3.screenOffsetX), (k.y + _arg_3.screenOffsetY), k.width, k.height);
         // // intersects
         // return _local_4.contains(_arg_2.x, _arg_2.y);
     }
 
-    private static _Str_14110(k: PIXI.Point, _arg_2: PIXI.Point, _arg_3: PIXI.Point, _arg_4: PIXI.Point): PIXI.Point[]
+    private static _Str_14110(k: Point, _arg_2: Point, _arg_3: Point, _arg_4: Point): Point[]
     {
-        const points: PIXI.Point[] = [];
+        const points: Point[] = [];
 
         if (k.x == _arg_2.x)
         {
@@ -132,7 +133,7 @@ export class SpriteDataCollector
     }
 
 
-    public _Str_4536(k: PIXI.Rectangle, _arg_2:IRoomRenderingCanvas, _arg_3:RoomEngine, _arg_4: number):String
+    public _Str_4536(k: Rectangle, _arg_2:IRoomRenderingCanvas, _arg_3:RoomEngine, _arg_4: number):String
     {
         let _local_5: Object[] = [];
         let _local_6 = _arg_2.getSortableSpriteList();
@@ -208,7 +209,7 @@ export class SpriteDataCollector
         return JSON.stringify(new Object());
     }
 
-    private _Str_25132(k: RoomObjectSpriteData, _arg_2: PIXI.Rectangle, _arg_3: IRoomRenderingCanvas, _arg_4: RoomEngine): Object
+    private _Str_25132(k: RoomObjectSpriteData, _arg_2: Rectangle, _arg_3: IRoomRenderingCanvas, _arg_4: RoomEngine): Object
     {
         var _local_7: string = null;
         var _local_9: string[] = [];
@@ -282,12 +283,12 @@ export class SpriteDataCollector
         return _local_5;
     }
 
-    private _Str_25196(k: PIXI.Rectangle, _arg_2: number, _arg_3: IPlaneDrawingData[]): PlaneDrawingData
+    private _Str_25196(k: Rectangle, _arg_2: number, _arg_3: IPlaneDrawingData[]): PlaneDrawingData
     {
-        const _local_4 = new PIXI.Point(0, 0);
-        const _local_5 = new PIXI.Point(k.width, 0);
-        const _local_6 = new PIXI.Point(0, k.height);
-        const _local_7 = new PIXI.Point(k.width, k.height);
+        const _local_4 = new Point(0, 0);
+        const _local_5 = new Point(k.width, 0);
+        const _local_6 = new Point(0, k.height);
+        const _local_7 = new Point(k.width, k.height);
         const _local_8 = SpriteDataCollector._Str_14110(_local_4, _local_5, _local_6, _local_7);
 
         let _local_9 = 0;
@@ -369,7 +370,7 @@ export class SpriteDataCollector
         return _local_8;
     }
 
-    public _Str_22985(k: PIXI.Rectangle, _arg_2: IRoomRenderingCanvas, _arg_3: RoomEngine, _arg_4: number): PlaneDrawingData[]
+    public _Str_22985(k: Rectangle, _arg_2: IRoomRenderingCanvas, _arg_3: RoomEngine, _arg_4: number): PlaneDrawingData[]
     {
         var _local_5: PlaneDrawingData[] = [];
 
@@ -385,7 +386,7 @@ export class SpriteDataCollector
             for(let _local_11 of _local_9)
             {
                 const _local_12 = _local_11.plane;
-                const _local_13: PIXI.Point[] = [];
+                const _local_13: Point[] = [];
 
                 const _local_14 = Vector3d.sum(_local_12.location, _local_12._Str_5424);
                 const _local_15 = _local_8.getScreenPoint(_local_12.location);

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, NgZone, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Texture } from 'pixi.js';
+import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IConnection } from '../../../client/core/communication/connections/IConnection';
 import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
 import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
@@ -96,8 +96,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
     public lastMouseMove:number                 = 0;
     public isMouseMove: boolean                 = false;
 
-    public roomBackgroundSprite: PIXI.Sprite    = null;
-    public roomColorizerSprite: PIXI.Sprite     = null;
+    public roomBackgroundSprite: Sprite    = null;
+    public roomColorizerSprite: Sprite     = null;
     public roomBackgroundColor: number          = 0;
     public roomColorizerColor: number           = 0;
 
@@ -681,7 +681,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         }
     }
 
-    private getRoomBackground(): PIXI.Sprite
+    private getRoomBackground(): Sprite
     {
         if(this.roomBackgroundSprite) return this.roomBackgroundSprite;
 
@@ -689,8 +689,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         if(!canvas) return null;
 
-        const displayObject = canvas.displayObject as PIXI.Container;
-        const background    = new PIXI.Sprite(Texture.WHITE);
+        const displayObject = canvas.displayObject as Container;
+        const background    = new Sprite(Texture.WHITE);
 
         displayObject.addChildAt(background, 0);
 
@@ -699,7 +699,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         return this.roomBackgroundSprite;
     }
 
-    private getRoomColorizer(): PIXI.Sprite
+    private getRoomColorizer(): Sprite
     {
         if(this.roomColorizerSprite) return this.roomColorizerSprite;
 
@@ -707,8 +707,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         if(!canvas) return null;
 
-        const displayObject = canvas.displayObject as PIXI.Container;
-        const background    = new PIXI.Sprite(Texture.WHITE);
+        const displayObject = canvas.displayObject as Container;
+        const background    = new Sprite(Texture.WHITE);
 
         // whole room colorizer disabled
         //displayObject.addChildAt(background, displayObject.children.length);
@@ -749,7 +749,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         this.setRoomColorizer(colorizer);
     }
 
-    private setRoomBackground(sprite: PIXI.Sprite): void
+    private setRoomBackground(sprite: Sprite): void
     {
         if(!sprite) return;
 
@@ -758,7 +758,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
     }
 
-    private setRoomColorizer(sprite: PIXI.Sprite): void
+    private setRoomColorizer(sprite: Sprite): void
     {
         if(!sprite) return;
 
@@ -774,10 +774,10 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         return 0;
     }
 
-    public getRoomViewRect(): PIXI.Rectangle
+    public getRoomViewRect(): Rectangle
     {
         const bounds = ((this.roomViewReference && this.roomViewReference.nativeElement && this.roomViewReference.nativeElement.getBoundingClientRect()) || null);
 
-        return new PIXI.Rectangle((bounds.x || 0), (bounds.y || 0), (bounds.width || 0), (bounds.height || 0));
+        return new Rectangle((bounds.x || 0), (bounds.y || 0), (bounds.width || 0), (bounds.height || 0));
     }
 }

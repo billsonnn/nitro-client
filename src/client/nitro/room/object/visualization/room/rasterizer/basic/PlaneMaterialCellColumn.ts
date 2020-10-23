@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Graphics, Rectangle } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
@@ -15,7 +16,7 @@ export class PlaneMaterialCellColumn
     private _cells: PlaneMaterialCell[];
     private _repeatMode: number;
     private _width: number;
-    private _cachedBitmapData: PIXI.Graphics;
+    private _cachedBitmapData: Graphics;
     private _cachedBitmapNormal: Vector3d;
     private _cachedBitmapDataOffsetX: number;
     private _cachedBitmapDataOffsetY: number;
@@ -124,7 +125,7 @@ export class PlaneMaterialCellColumn
         this._isCached = false;
     }
 
-    public render(height: number, normal: IVector3D, offsetX: number, offsetY: number): PIXI.Graphics
+    public render(height: number, normal: IVector3D, offsetX: number, offsetY: number): Graphics
     {
         let ht = 0;
 
@@ -174,7 +175,7 @@ export class PlaneMaterialCellColumn
 
         if(!this._cachedBitmapData)
         {
-            this._cachedBitmapData = new PIXI.Graphics()
+            this._cachedBitmapData = new Graphics()
                 .beginFill(0xFFFFFF)
                 .drawRect(0, 0, this._width, height)
                 .endFill();
@@ -261,7 +262,7 @@ export class PlaneMaterialCellColumn
                 {
                     if(!_arg_3) _arg_2 -= graphic.height;
 
-                    const texture = TextureUtils.generateTexture(graphic, new PIXI.Rectangle(0, 0, graphic.width, graphic.height));
+                    const texture = TextureUtils.generateTexture(graphic, new Rectangle(0, 0, graphic.width, graphic.height));
 
                     if(texture)
                     {

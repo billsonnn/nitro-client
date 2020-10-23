@@ -1,3 +1,4 @@
+import { Graphics, Matrix, Point, Rectangle } from 'pixi.js';
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
 import { TextureUtils } from '../../../room/utils/TextureUtils';
 import { Nitro } from '../../Nitro';
@@ -31,7 +32,7 @@ export class AvatarImageCache
     private _disposed: boolean;
     private _geometryType: string;
     private _unionImages: ImageData[];
-    private _matrix: PIXI.Matrix;
+    private _matrix: Matrix;
     private _serverRenderData: RoomObjectSpriteData[];
 
     constructor(k: AvatarStructure, _arg_2: IAvatarImage, _arg_3: AssetAliasCollection, _arg_4: string)
@@ -44,7 +45,7 @@ export class AvatarImageCache
         this._canvas            = null;
         this._disposed          = false;
         this._unionImages       = [];
-        this._matrix            = new PIXI.Matrix();
+        this._matrix            = new Matrix();
         this._serverRenderData  = new Array();
     }
 
@@ -166,7 +167,7 @@ export class AvatarImageCache
         let _local_8                        = _local_7;
         let _local_9: string[]              = [];
         let _local_10: Map<string, string>  = new Map();
-        let _local_11                       = new PIXI.Point();
+        let _local_11                       = new Point();
 
         if (!((!(_local_7)) || (!(_local_7._Str_742))))
         {
@@ -387,7 +388,7 @@ export class AvatarImageCache
                         {
                             if(container.isColorable && container.color) color = container.color._Str_915;
 
-                            const offset = new PIXI.Point(-(asset.x), -(asset.y));
+                            const offset = new Point(-(asset.x), -(asset.y));
 
                             if(flipH) offset.x = (offset.x + ((this._scale === AvatarScaleType.LARGE) ? 65 : 31));
 
@@ -431,7 +432,7 @@ export class AvatarImageCache
 
         const imageData     = this._Str_1236(this._unionImages, isFlipped);
         const canvasOffset  = ((this._scale === AvatarScaleType.LARGE) ? (this._canvas.height - 16) : (this._canvas.height - 8));
-        const offset        = new PIXI.Point(-(imageData._Str_1076.x), (canvasOffset - imageData._Str_1076.y));
+        const offset        = new Point(-(imageData._Str_1076.x), (canvasOffset - imageData._Str_1076.y));
 
         if(isFlipped && (assetPartDefinition !== 'lay')) offset.x = (offset.x + ((this._scale === AvatarScaleType.LARGE) ? 67 : 31));
 
@@ -461,12 +462,12 @@ export class AvatarImageCache
 
     private _Str_1236(k: ImageData[], isFlipped: boolean): ImageData
     {
-        let bounds = new PIXI.Rectangle();
+        let bounds = new Rectangle();
 
         for(let data of k) data && bounds.enlarge(data._Str_1567);
 
-        const point     = new PIXI.Point(-(bounds.x), -(bounds.y));
-        const container = new PIXI.Graphics()
+        const point     = new Point(-(bounds.x), -(bounds.y));
+        const container = new Graphics()
             .drawRect(0, 0, bounds.width, bounds.height);
 
         for(let data of k)

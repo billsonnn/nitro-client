@@ -1,4 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Point } from 'pixi.js';
 import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
@@ -30,7 +31,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public timeoutTime: number      = 0;
     public originalScale: number    = 1;
     public scaleFactor: number      = 0;
-    public cameraOffset: PIXI.Point = new PIXI.Point();
+    public cameraOffset: Point      = new Point();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];
     public tempChats: ComponentRef<RoomChatItemComponent>[]     = [];

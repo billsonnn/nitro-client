@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
@@ -905,7 +906,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         k.name              = ((_arg_3 + "_") + this._Str_5928);
     }
 
-    private _Str_22446(k: RoomPlane, _arg_2: string): PIXI.Texture
+    private _Str_22446(k: RoomPlane, _arg_2: string): Texture
     {
         return k.bitmapData;
     }

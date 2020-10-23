@@ -1,4 +1,5 @@
-﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { Texture } from 'pixi.js';
+import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -17,7 +18,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _age: number;
     private _name: string;
     private _id: number;
-    private _image: PIXI.Texture;
+    private _image: Texture;
     private _Str_6689: number;
     private _Str_20932: number;
     private _Str_10121: boolean;
@@ -39,7 +40,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _remainingGrowTime: number;
     private _publiclyBreedable: boolean;
 
-    constructor(k: number, _arg_2: number, _arg_3: string, _arg_4: number, _arg_5: PIXI.Texture, _arg_6: boolean, _arg_7: number, _arg_8: string, _arg_9: number, _arg_10: number)
+    constructor(k: number, _arg_2: number, _arg_3: string, _arg_4: number, _arg_5: Texture, _arg_6: boolean, _arg_7: number, _arg_8: string, _arg_9: number, _arg_10: number)
     {
         super(RoomWidgetPetInfostandUpdateEvent.PET_INFO);
 
@@ -60,7 +61,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._name;
     }
 
-    public get image(): PIXI.Texture
+    public get image(): Texture
     {
         return this._image;
     }

@@ -1,16 +1,18 @@
-﻿export class PlaneTextureBitmap 
+﻿import { Texture } from 'pixi.js';
+
+export class PlaneTextureBitmap 
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;
 
-    private _bitmap: PIXI.Texture;
+    private _bitmap: Texture;
     private _normalMinX: number;
     private _normalMaxX: number;
     private _normalMinY: number;
     private _normalMaxY: number;
     private _assetName: string;
 
-    constructor(k: PIXI.Texture, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1, _arg_6: string = null)
+    constructor(k: Texture, _arg_2: number = -1, _arg_3: number = 1, _arg_4: number = -1, _arg_5: number = 1, _arg_6: string = null)
     {
         this._normalMinX    = _arg_2;
         this._normalMaxX    = _arg_3;
@@ -20,7 +22,7 @@
         this._bitmap        = k;
     }
 
-    public get bitmap(): PIXI.Texture
+    public get bitmap(): Texture
     {
         return this._bitmap;
     }

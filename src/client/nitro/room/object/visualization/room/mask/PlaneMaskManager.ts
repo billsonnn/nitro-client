@@ -1,4 +1,5 @@
-﻿import { IGraphicAssetCollection } from '../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
+﻿import { Graphics, Matrix, Point } from 'pixi.js';
+import { IGraphicAssetCollection } from '../../../../../../room/object/visualization/utils/IGraphicAssetCollection';
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMask } from './PlaneMask';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
@@ -140,7 +141,7 @@ export class PlaneMaskManager
         return graphicName;
     }
 
-    public _Str_17859(k: PIXI.Graphics, _arg_2: string, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number): boolean
+    public _Str_17859(k: Graphics, _arg_2: string, _arg_3: number, _arg_4: IVector3D, _arg_5: number, _arg_6: number): boolean
     {
         const mask = this._masks.get(_arg_2);
 
@@ -154,9 +155,9 @@ export class PlaneMaskManager
 
         if(!texture) return true;
 
-        const point = new PIXI.Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
+        const point = new Point((_arg_5 + asset.offsetX), (_arg_6 + asset.offsetY));
 
-        const matrix = new PIXI.Matrix();
+        const matrix = new Matrix();
 
         let a = 1;
         let b = 1;

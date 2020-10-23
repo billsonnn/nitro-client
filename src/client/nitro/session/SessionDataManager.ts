@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
@@ -284,12 +285,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
-    public getBadgeImage(name: string): PIXI.Texture
+    public getBadgeImage(name: string): Texture
     {
         return this._badgeImageManager.getBadgeImage(name);
     }
 
-    public getGroupBadgeImage(name: string): PIXI.Texture
+    public getGroupBadgeImage(name: string): Texture
     {
         return this._badgeImageManager.getBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }

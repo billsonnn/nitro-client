@@ -1,3 +1,4 @@
+import { Application, SCALE_MODES, settings } from 'pixi.js';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
@@ -19,9 +20,9 @@ import { ISessionDataManager } from './session/ISessionDataManager';
 import { RoomSessionManager } from './session/RoomSessionManager';
 import { SessionDataManager } from './session/SessionDataManager';
 
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
-export class Nitro extends PIXI.Application implements INitro
+export class Nitro extends Application implements INitro
 {
     public static READY: string = 'NE_READY';
     public static CONFIGURATION = NitroConfiguration;

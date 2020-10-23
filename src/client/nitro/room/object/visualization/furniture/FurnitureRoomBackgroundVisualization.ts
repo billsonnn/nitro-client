@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { DirectionalOffsetData } from '../data/DirectionalOffsetData';
 import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
 
@@ -5,7 +6,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
 {
     private _imageOffset: DirectionalOffsetData;
 
-    protected imageReady(texture: PIXI.Texture, imageUrl: string): void
+    protected imageReady(texture: Texture, imageUrl: string): void
     {
         super.imageReady(texture, imageUrl);
 

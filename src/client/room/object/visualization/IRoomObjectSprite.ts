@@ -1,10 +1,12 @@
+import { Filter, Texture } from 'pixi.js';
+
 export interface IRoomObjectSprite
 {
     id: number;
     name: string;
     type: string;
     spriteType: number;
-    texture: PIXI.Texture;
+    texture: Texture;
     width: number;
     height: number;
     offsetX: number;
@@ -23,6 +25,6 @@ export interface IRoomObjectSprite
     tag: string;
     posture: string;
     alphaTolerance: number;
-    filters: PIXI.Filter[];
+    filters: Filter[];
     updateCounter: number;
 }

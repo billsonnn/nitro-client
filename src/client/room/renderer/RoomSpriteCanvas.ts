@@ -1,4 +1,4 @@
-import { Texture } from 'pixi.js';
+import { Container, DisplayObject, Point, Rectangle, Sprite, Texture } from 'pixi.js';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
@@ -27,9 +27,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _geometry: IRoomGeometry;
     private _renderTimestamp: number;
 
-    private _master: PIXI.Container;
-    private _display: PIXI.Container;
-    private _mask: PIXI.Sprite;
+    private _master: Container;
+    private _display: Container;
+    private _mask: Sprite;
 
     private _sortableSprites: SortableSprite[];
     private _spriteCount: number;
@@ -44,7 +44,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _renderedHeight: number;
     private _screenOffsetX: number;
     private _screenOffsetY: number;
-    private _mouseLocation: PIXI.Point;
+    private _mouseLocation: Point;
     private _mouseOldX: number;
     private _mouseOldY: number;
     private _mouseCheckCount: number;
@@ -88,7 +88,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._renderedHeight                = 0;
         this._screenOffsetX                 = 0;
         this._screenOffsetY                 = 0;
-        this._mouseLocation                 = new PIXI.Point;
+        this._mouseLocation                 = new Point;
         this._mouseOldX                     = 0;
         this._mouseOldY                     = 0;
         this._mouseCheckCount               = 0;
@@ -115,14 +115,14 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         if(!this._master)
         {
-            this._master = new PIXI.Sprite();
+            this._master = new Sprite();
 
             this._master.interactiveChildren = false;
         }
 
         if(!this._display)
         {
-            const display = new PIXI.Container();
+            const display = new Container();
 
             display.name = 'canvas';
 
@@ -162,7 +162,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             if(!this._mask)
             {
-                this._mask = new PIXI.Sprite(Texture.WHITE);
+                this._mask = new Sprite(Texture.WHITE);
 
                 this._mask.name = 'mask';
 
@@ -182,14 +182,14 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             if(this._master.hitArea)
             {
-                const hitArea = (this._master.hitArea as PIXI.Rectangle);
+                const hitArea = (this._master.hitArea as Rectangle);
 
                 hitArea.width   = width;
                 hitArea.height  = height;
             }
             else
             {
-                this._master.hitArea = new PIXI.Rectangle(0, 0, width, height);
+                this._master.hitArea = new Rectangle(0, 0, width, height);
             }
         }
 
@@ -224,11 +224,11 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
     }
 
-    public setScale(scale: number, point: PIXI.Point = null, offsetPoint: PIXI.Point = null): void
+    public setScale(scale: number, point: Point = null, offsetPoint: Point = null): void
     {
         if(!this._master || !this._display) return;
 
-        if(!point) point = new PIXI.Point((this._width / 2), (this._height / 2));
+        if(!point) point = new Point((this._width / 2), (this._height / 2));
 
         if(!offsetPoint) offsetPoint = point;
 
@@ -725,7 +725,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             const extendedSprite = this.getExtendedSprite(spriteId);
 
-            if(extendedSprite && extendedSprite.containsPoint(new PIXI.Point((x - extendedSprite.x), (y - extendedSprite.y))))
+            if(extendedSprite && extendedSprite.containsPoint(new Point((x - extendedSprite.x), (y - extendedSprite.y))))
             {
                 if(extendedSprite.clickHandling && ((type === MouseEventType.MOUSE_CLICK) || (type === MouseEventType.DOUBLE_CLICK)))
                 {
@@ -889,7 +889,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         return this._geometry;
     }
 
-    public get displayObject(): PIXI.DisplayObject
+    public get displayObject(): DisplayObject
     {
         return this._master;
     }

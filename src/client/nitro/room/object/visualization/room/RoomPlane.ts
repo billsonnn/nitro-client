@@ -1,3 +1,4 @@
+import { Graphics, Matrix, Point, Rectangle, Texture } from 'pixi.js';
 import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
@@ -15,7 +16,7 @@ import { Randomizer } from './utils/Randomizer';
 
 export class RoomPlane implements IRoomPlane
 {
-    private static ZERO_POINT: PIXI.Point = new PIXI.Point(0, 0);
+    private static ZERO_POINT: Point = new Point(0, 0);
     public static TYPE_UNDEFINED: number = 0;
     public static TYPE_WALL: number = 1;
     public static TYPE_FLOOR: number = 2;
@@ -33,9 +34,9 @@ export class RoomPlane implements IRoomPlane
     private _Str_3406: number;
     private _type: number;
     private _Str_3816: boolean;
-    private _Str_1049: PIXI.Graphics;
+    private _Str_1049: Graphics;
     private _Str_13946: boolean;
-    private _offset: PIXI.Point;
+    private _offset: Point;
     private _relativeDepth: number;
     private _color: number;
     private _rasterizer: IPlaneRasterizer;
@@ -52,7 +53,7 @@ export class RoomPlane implements IRoomPlane
     private _Str_4047: RoomPlaneBitmapMask[];
     private _Str_5088: RoomPlaneRectangleMask[];
     private _Str_4891: boolean;
-    private _Str_2730: PIXI.Graphics;
+    private _Str_2730: Graphics;
     private _Str_8341: RoomPlaneBitmapMask[];
     private _Str_14495: RoomPlaneRectangleMask[];
     private _Str_2820:Vector3d;
@@ -106,7 +107,7 @@ export class RoomPlane implements IRoomPlane
         this._Str_576   = null;
         this._Str_13946 = true;
         this._Str_3406  = -1;
-        this._offset = new PIXI.Point();
+        this._offset = new Point();
         this._relativeDepth = 0;
         this._type = _arg_5;
         this._color     = 0;
@@ -148,11 +149,11 @@ export class RoomPlane implements IRoomPlane
         return this._Str_7367;
     }
 
-    public get bitmapData(): PIXI.Texture
+    public get bitmapData(): Texture
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        const texture = TextureUtils.generateTexture(this._Str_1049, new PIXI.Rectangle(0, 0, this._Str_1720, this._height));
+        const texture = TextureUtils.generateTexture(this._Str_1049, new Rectangle(0, 0, this._Str_1720, this._height));
 
         return texture;
     }
@@ -162,7 +163,7 @@ export class RoomPlane implements IRoomPlane
         return (this._Str_3816 && this._Str_7367);
     }
 
-    public get offset(): PIXI.Point
+    public get offset(): Point
     {
         return this._offset;
     }
@@ -287,7 +288,7 @@ export class RoomPlane implements IRoomPlane
         this._disposed = true;
     }
 
-    public _Str_24896(k: PIXI.Texture): PIXI.Texture
+    public _Str_24896(k: Texture): Texture
     {
         if(!this.visible || !this._Str_1049 || !k) return null;
 
@@ -314,7 +315,7 @@ export class RoomPlane implements IRoomPlane
         return true;
     }
 
-    private _Str_11000(k: PIXI.Graphics = null): void
+    private _Str_11000(k: Graphics = null): void
     {
         if(this._Str_2708 && this._Str_2708.size)
         {
@@ -356,7 +357,7 @@ export class RoomPlane implements IRoomPlane
         return false;
     }
 
-    private _Str_10114(k: IRoomGeometry, _arg_2: number): PIXI.Graphics
+    private _Str_10114(k: IRoomGeometry, _arg_2: number): Graphics
     {
         if(!k) return null;
 
@@ -378,7 +379,7 @@ export class RoomPlane implements IRoomPlane
                 _local_3 = this._Str_2708.get(_local_4);
             }
 
-            let _local_8: PIXI.Graphics = null;
+            let _local_8: Graphics = null;
 
             if(_local_3) _local_8 = _local_3.bitmap;
 
@@ -393,7 +394,7 @@ export class RoomPlane implements IRoomPlane
             }
             else
             {
-                const _local_9 = new PIXI.Graphics();
+                const _local_9 = new Graphics();
 
                 _local_9.beginFill(0xFFFFFF)
                 _local_9.drawRect(0, 0, _local_5, _local_6);
@@ -459,7 +460,7 @@ export class RoomPlane implements IRoomPlane
                         {
                             const _local_3  = (this._Str_2730.width * (1 - (mask._Str_5120 / this._Str_2920.length)));
                             const _local_4  = (this._Str_2730.height * (1 - (mask._Str_4659 / this._Str_2943.length)));
-                            const _local_11 = new PIXI.Point((_local_3 + asset.offsetX), (_local_4 + asset.offsetY));
+                            const _local_11 = new Point((_local_3 + asset.offsetX), (_local_4 + asset.offsetY));
 
                             _local_5.addMask(assetName, _local_11, asset.flipH, asset.flipV);
                         }
@@ -639,7 +640,7 @@ export class RoomPlane implements IRoomPlane
                     if((this._Str_1720 < 1) || (this._height < 1)) return false;
                 }
 
-                const graphic = new PIXI.Graphics();
+                const graphic = new Graphics();
 
                 graphic.beginFill(0xFFFFFF, 0);
                 graphic.drawRect(0, 0, this._Str_1720, this._height);
@@ -713,7 +714,7 @@ export class RoomPlane implements IRoomPlane
         this._height = _local_5;
     }
 
-    private _Str_17000(k: IRoomGeometry, _arg_2: PIXI.Graphics): void
+    private _Str_17000(k: IRoomGeometry, _arg_2: Graphics): void
     {
         if (((((((this._Str_2820 == null) || (this._Str_2745 == null)) || (this._Str_2639 == null)) || (this._Str_2766 == null)) || (_arg_2 == null)) || (this._Str_1049 == null)))
         {
@@ -746,7 +747,7 @@ export class RoomPlane implements IRoomPlane
         var _local_8: number = (_local_6 / _arg_2.width);
         var _local_9: number = (_local_3 / _arg_2.height);
         var _local_10: number = (_local_4 / _arg_2.height);
-        var _local_11 = new PIXI.Matrix();
+        var _local_11 = new Matrix();
         _local_11.a = _local_7;
         _local_11.b = _local_8;
         _local_11.c = _local_9;
@@ -756,7 +757,7 @@ export class RoomPlane implements IRoomPlane
         this.draw(_arg_2, _local_11);
     }
 
-    private draw(k: PIXI.Graphics, matrix: PIXI.Matrix): void
+    private draw(k: Graphics, matrix: Matrix): void
     {
         const clone = k.clone();
         
@@ -874,7 +875,7 @@ export class RoomPlane implements IRoomPlane
         if(_local_3) this._Str_4891 = false;
     }
 
-    private _Str_17859(texture: PIXI.Graphics, geometry: IRoomGeometry): void
+    private _Str_17859(texture: Graphics, geometry: IRoomGeometry): void
     {
         if(!texture || !geometry) return;
 
@@ -893,7 +894,7 @@ export class RoomPlane implements IRoomPlane
                 this._Str_2730 = null;
             }
 
-            const graphic = new PIXI.Graphics();
+            const graphic = new Graphics();
 
             graphic
                 .beginFill(0xFFFFFF, 0)
@@ -974,7 +975,7 @@ export class RoomPlane implements IRoomPlane
         this._Str_24790(texture, this._Str_2730);
     }
 
-    private _Str_24790(texture: PIXI.Graphics, mask: PIXI.Graphics): void
+    private _Str_24790(texture: Graphics, mask: Graphics): void
     {
         if(!texture || !mask) return;
 
@@ -999,7 +1000,7 @@ export class RoomPlane implements IRoomPlane
 
         textureCtx.putImageData(textureImageData, 0, 0);
 
-        const newTexture = PIXI.Texture.from(textureCanvas);
+        const newTexture = Texture.from(textureCanvas);
 
         if(!newTexture) return;
         

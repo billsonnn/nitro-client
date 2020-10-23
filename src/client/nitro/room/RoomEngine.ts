@@ -1,3 +1,4 @@
+import { Container, DisplayObject, Matrix, Point, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IDisposable } from '../../core/common/disposable/IDisposable';
 import { IUpdateReceiver } from '../../core/common/IUpdateReceiver';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
@@ -473,7 +474,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return instance;
     }
 
-    public getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): PIXI.DisplayObject
+    public getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): DisplayObject
     {
         const instance = this.getRoomInstance(roomId);
 
@@ -516,11 +517,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             canvas.geometry.setDisplacement(vector, direction);
 
-            const displayObject = canvas.displayObject as PIXI.Container;
+            const displayObject = canvas.displayObject as Container;
 
             if(displayObject)
             {
-                const overlay = PIXI.Sprite.from(PIXI.Texture.EMPTY)
+                const overlay = Sprite.from(Texture.EMPTY)
 
                 overlay.name        = RoomEngine.OVERLAY;
                 overlay.interactive = false;
@@ -539,7 +540,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(roomCanvas) roomCanvas.setMask(flag);
     }
 
-    public setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point: PIXI.Point = null, offsetPoint: PIXI.Point = null): void
+    public setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point: Point = null, offsetPoint: Point = null): void
     {
         const roomCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
@@ -575,7 +576,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return this.getRoomInstanceRenderingCanvas(this._activeRoomId, this._activeRoomActiveCanvas);
     }
 
-    public getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number = -1): PIXI.Point
+    public getRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number = -1): Point
     {
         if(canvasId === -1) canvasId = this._activeRoomActiveCanvas;
 
@@ -583,10 +584,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!renderingCanvas) return null;
 
-        return new PIXI.Point(renderingCanvas.screenOffsetX, renderingCanvas.screenOffsetY);
+        return new Point(renderingCanvas.screenOffsetX, renderingCanvas.screenOffsetY);
     }
 
-    public setRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number, point: PIXI.Point): boolean
+    public setRoomInstanceRenderingCanvasOffset(roomId: number, canvasId: number, point: Point): boolean
     {
         const renderingCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
@@ -1126,10 +1127,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             const _local_20 = Math.round(((_local_16 + _local_18) / 2));
             const _local_21 = Math.round(((_local_17 + _local_19) / 2));
             const _local_22 = 2;
-            let _local_23 = new PIXI.Point((_local_15.x - _local_20), (_local_15.y - _local_21));
+            let _local_23 = new Point((_local_15.x - _local_20), (_local_15.y - _local_21));
             const _local_24 = (roomGeometry.scale / Math.sqrt(2));
             const _local_25 = (_local_24 / 2);
-            const _local_26 = new PIXI.Matrix();
+            const _local_26 = new Matrix();
             _local_26.rotate(((-(roomGeometry.direction.x + 90) / 180) * Math.PI));
             _local_23 = _local_26.apply(_local_23);
             _local_23.y = (_local_23.y * (_local_25 / _local_24));
@@ -1367,16 +1368,16 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
-    private _Str_25261(roomId: number, canvasId: number): PIXI.Rectangle
+    private _Str_25261(roomId: number, canvasId: number): Rectangle
     {
         const canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
         if(!canvas) return null;
 
-        return new PIXI.Rectangle(0, 0, canvas.width, canvas.height);
+        return new Rectangle(0, 0, canvas.width, canvas.height);
     }
 
-    public getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): PIXI.Rectangle
+    public getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): Rectangle
     {
         const geometry = this.getRoomInstanceGeometry(roomId, canvasId);
 
@@ -1416,7 +1417,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return rectangle;
     }
 
-    public getCanvasBoundingRectangle(canvasId: number): PIXI.Rectangle
+    public getCanvasBoundingRectangle(canvasId: number): Rectangle
     {
         return this.getRoomObjectBoundingRectangle(this._activeRoomId, RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM, canvasId);
     }
@@ -2497,7 +2498,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return this._roomObjectEventHandler.processRoomObjectPlacement(placementSource, this._activeRoomId, id, category, typeId, legacyString, stuffData, state, frameNumber, posture);
     }
 
-    public getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId: number = -1): PIXI.Point
+    public getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId: number = -1): Point
     {
         if(canvasId == -1) canvasId = this._activeRoomActiveCanvas;
 
@@ -2540,7 +2541,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomObjectEventHandler._Str_8675(this._activeRoomId);
     }
 
-    private _Str_24651(k: PIXI.Sprite, _arg_2: string, _arg_3: PIXI.Texture): PIXI.Sprite
+    private _Str_24651(k: Sprite, _arg_2: string, _arg_3: Texture): Sprite
     {
         if(!k || !_arg_3) return;
 
@@ -2548,7 +2549,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(_local_4) return null;
 
-        _local_4 = PIXI.Sprite.from(_arg_3);
+        _local_4 = Sprite.from(_arg_3);
         _local_4.name = _arg_2;
 
         k.addChild(_local_4);
@@ -3026,7 +3027,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     const objectId      = roomObject.id;
                     const visualization = roomObject.visualization;
 
-                    let texture: PIXI.Texture = null;
+                    let texture: Texture = null;
 
                     if(visualization)
                     {
@@ -3102,22 +3103,22 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._Str_21215(sprite, RoomEngine.OBJECT_ICON_SPRITE);
     }
 
-    private getRenderingCanvasOverlay(k: IRoomRenderingCanvas): PIXI.Sprite
+    private getRenderingCanvasOverlay(k: IRoomRenderingCanvas): Sprite
     {
         if(!k) return null;
 
-        const displayObject = k.displayObject as PIXI.Container;
+        const displayObject = k.displayObject as Container;
 
         if(!displayObject) return null;
 
-        const sprite = displayObject.getChildByName(RoomEngine.OVERLAY) as PIXI.Sprite;
+        const sprite = displayObject.getChildByName(RoomEngine.OVERLAY) as Sprite;
 
         if(!sprite) return null;
 
         return sprite;
     }
 
-    private _Str_21215(k: PIXI.Sprite, _arg_2: string): boolean
+    private _Str_21215(k: Sprite, _arg_2: string): boolean
     {
         if(!k) return false;
 
@@ -3125,7 +3126,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         while(index >= 0)
         {
-            const child = k.getChildAt(index) as PIXI.Sprite;
+            const child = k.getChildAt(index) as Sprite;
 
             if(child)
             {
@@ -3135,7 +3136,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
                     if(child.children.length)
                     {
-                        const firstChild = child.getChildAt(0) as PIXI.Sprite;
+                        const firstChild = child.getChildAt(0) as Sprite;
                         
                         firstChild.parent.removeChild(firstChild);
 
@@ -3152,7 +3153,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         return false;
     }
 
-    private _Str_16498(k: PIXI.Sprite, _arg_2: string): PIXI.Sprite
+    private _Str_16498(k: Sprite, _arg_2: string): Sprite
     {
         if(!k) return null;
 
@@ -3160,7 +3161,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         while(index >= 0)
         {
-            const child = k.getChildAt(index) as PIXI.Sprite;
+            const child = k.getChildAt(index) as Sprite;
 
             if(child)
             {
@@ -3201,7 +3202,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(tileObjectMap) tileObjectMap.populate(this._Str_21072(k, RoomObjectCategory.FLOOR));
     }
 
-    public _Str_9972(k: PIXI.Rectangle, _arg_2: number, _arg_3: boolean = false, _arg_4: boolean = true, _arg_5: boolean = false, canvasId: number = -1): IMessageComposer
+    public _Str_9972(k: Rectangle, _arg_2: number, _arg_3: boolean = false, _arg_4: boolean = true, _arg_5: boolean = false, canvasId: number = -1): IMessageComposer
     {
         let canvas: IRoomRenderingCanvas = null;
 

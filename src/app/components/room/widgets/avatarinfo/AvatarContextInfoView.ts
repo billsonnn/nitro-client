@@ -1,3 +1,4 @@
+import { Rectangle } from 'pixi.js';
 import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
 import { ContextInfoView } from '../contextmenu/ContextInfoView';
 
@@ -18,7 +19,7 @@ export class AvatarContextInfoView extends ContextInfoView
         view.completeSetup();
     }
 
-    protected getOffset(k: PIXI.Rectangle): number
+    protected getOffset(k: Rectangle): number
     {
         let y = -(this.activeViewElement.offsetHeight);
 

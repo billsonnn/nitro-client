@@ -1,4 +1,5 @@
-﻿import { IVector3D } from '../../../../../../../room/utils/IVector3D';
+﻿import { Graphics, Point, Rectangle } from 'pixi.js';
+import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { Randomizer } from '../../utils/Randomizer';
@@ -23,7 +24,7 @@ export class PlaneMaterialCellMatrix
     private _columns: PlaneMaterialCellColumn[];
     private _repeatMode: number = 1;
     private _align: number = 1;
-    private _cachedBitmapData: PIXI.Graphics;
+    private _cachedBitmapData: Graphics;
     private _cachedBitmapNormal: Vector3d = null;
     private _cachedBitmapHeight: number = 0;
     private _isCached: boolean = false;
@@ -152,7 +153,7 @@ export class PlaneMaterialCellMatrix
         return true;
     }
 
-    public render(canvas: PIXI.Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number, offsetY: number, topAlign: boolean): PIXI.Graphics
+    public render(canvas: Graphics, width: number, height: number, normal: IVector3D, useTexture: boolean, offsetX: number, offsetY: number, topAlign: boolean): Graphics
     {
         if(width < 1) width = 1;
 
@@ -212,7 +213,7 @@ export class PlaneMaterialCellMatrix
 
             if(!this._cachedBitmapData)
             {
-                const graphic = new PIXI.Graphics()
+                const graphic = new Graphics()
                     .beginFill(0xFFFFFF)
                     .drawRect(0, 0, width, height)
                     .endFill();
@@ -241,7 +242,7 @@ export class PlaneMaterialCellMatrix
         {
             this._cachedBitmapHeight = height;
 
-            const graphic = new PIXI.Graphics()
+            const graphic = new Graphics()
                 .beginFill(0xFFFFFF)
                 .drawRect(0, 0, width, height)
                 .endFill();
@@ -249,7 +250,7 @@ export class PlaneMaterialCellMatrix
             this._cachedBitmapData = graphic;
         }
 
-        const columns: PIXI.Graphics[] = [];
+        const columns: Graphics[] = [];
 
         var columnIndex = 0;
 
@@ -310,21 +311,21 @@ export class PlaneMaterialCellMatrix
         return this._cachedBitmapData;
     }
 
-    private _Str_17578(k: PIXI.Graphics, _arg_2: number, _arg_3: number, _arg_4: boolean): void
+    private _Str_17578(k: Graphics, _arg_2: number, _arg_3: number, _arg_4: boolean): void
     {
         if(!k || !this._cachedBitmapData || (k === this._cachedBitmapData)) return;
 
         if(!_arg_4) _arg_3 = ((k.height - _arg_2) - _arg_3);
 
-        let _local_5: PIXI.Rectangle;
+        let _local_5: Rectangle;
 
         if(this._align == PlaneMaterialCellMatrix.ALIGN_TOP)
         {
-            _local_5 = new PIXI.Rectangle(0, 0, this._cachedBitmapData.width, this._cachedBitmapHeight);
+            _local_5 = new Rectangle(0, 0, this._cachedBitmapData.width, this._cachedBitmapHeight);
         }
         else
         {
-            _local_5 = new PIXI.Rectangle(0, (this._cachedBitmapData.height - this._cachedBitmapHeight), this._cachedBitmapData.width, this._cachedBitmapHeight);
+            _local_5 = new Rectangle(0, (this._cachedBitmapData.height - this._cachedBitmapHeight), this._cachedBitmapData.width, this._cachedBitmapHeight);
         }
 
         const texture = TextureUtils.generateTexture(this._cachedBitmapData, _local_5);
@@ -338,7 +339,7 @@ export class PlaneMaterialCellMatrix
         }
     }
 
-    private _Str_25859(k: PIXI.Graphics[]): number
+    private _Str_25859(k: Graphics[]): number
     {
         if(!k || !k.length) return 0;
 
@@ -354,12 +355,12 @@ export class PlaneMaterialCellMatrix
         return width;
     }
 
-    private _Str_4606(k: PIXI.Graphics, _arg_2: PIXI.Graphics[], _arg_3: number, _arg_4: boolean): PIXI.Point
+    private _Str_4606(k: Graphics, _arg_2: Graphics[], _arg_3: number, _arg_4: boolean): Point
     {
-        if(!k || !_arg_2 || !_arg_2.length) return new PIXI.Point(_arg_3, 0);
+        if(!k || !_arg_2 || !_arg_2.length) return new Point(_arg_3, 0);
 
         var height: number = 0;
-        var _local_6: PIXI.Graphics = null;
+        var _local_6: Graphics = null;
         var _local_7 = 0;
 
         while (_local_7 < _arg_2.length)
@@ -384,7 +385,7 @@ export class PlaneMaterialCellMatrix
                     _local_8 = (k.height - _local_6.height);
                 }
 
-                const texture = TextureUtils.generateTexture(_local_6, new PIXI.Rectangle(0, 0, _local_6.width, _local_6.height));
+                const texture = TextureUtils.generateTexture(_local_6, new Rectangle(0, 0, _local_6.width, _local_6.height));
 
                 if(texture)
                 {
@@ -403,15 +404,15 @@ export class PlaneMaterialCellMatrix
                 }
                 if ((((_arg_4) && (_arg_3 >= k.width)) || ((!(_arg_4)) && (_arg_3 <= 0))))
                 {
-                    return new PIXI.Point(_arg_3, height);
+                    return new Point(_arg_3, height);
                 }
             }
             _local_7++;
         }
-        return new PIXI.Point(_arg_3, height);
+        return new Point(_arg_3, height);
     }
 
-    private _Str_18711(k: PIXI.Graphics, _arg_2: PIXI.Graphics[]): number
+    private _Str_18711(k: Graphics, _arg_2: Graphics[]): number
     {
         if(!k || !_arg_2 || !_arg_2.length) return 0;
 

@@ -1,4 +1,4 @@
-import { GlowFilter } from '@pixi/filter-glow';
+import { BLEND_MODES, Texture } from 'pixi.js';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../../../../../room/object/IRoomObject';
@@ -296,12 +296,12 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
                     if(highlightEnabled)
                     {
-                        sprite.filters  = [
-                            new GlowFilter({
-                                color: 0xFFFFFF,
-                                distance: 6
-                            })
-                        ];
+                        // sprite.filters  = [
+                        //     new GlowFilter({
+                        //         color: 0xFFFFFF,
+                        //         distance: 6
+                        //     })
+                        // ];
                     }
                     else
                     {
@@ -449,7 +449,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                                 sprite.relativeDepth = (AvatarVisualization._Str_11358 - ((0.001 * this.totalSprites) * offsetZ));
                             }
 
-                            if(spriteData.ink === 33) sprite.blendMode = PIXI.BLEND_MODES.ADD;
+                            if(spriteData.ink === 33) sprite.blendMode = BLEND_MODES.ADD;
                         }
                     }
 
@@ -946,7 +946,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         
         if(sprite)
         {
-            sprite.texture  = PIXI.Texture.EMPTY;
+            sprite.texture  = Texture.EMPTY;
             sprite.alpha    = 255;
         }
     }
@@ -1046,7 +1046,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         }
     }
 
-    public getAvatarRenderAsset(name: string): PIXI.Texture
+    public getAvatarRenderAsset(name: string): Texture
     {
         return this._data ? this._data.getAvatarRendererAsset(name) : null;
     }

@@ -1,4 +1,5 @@
-﻿import { NitroConfiguration } from '../../../../../../../NitroConfiguration';
+﻿import { Graphics } from 'pixi.js';
+import { NitroConfiguration } from '../../../../../../../NitroConfiguration';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneBitmapData } from '../../utils/PlaneBitmapData';
 import { Randomizer } from '../../utils/Randomizer';
@@ -196,7 +197,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
         return _local_3;
     }
 
-    public render(canvas: PIXI.Graphics, id: string, width: number, height: number, scale: number, normal: IVector3D, useTexture: boolean, offsetX: number = 0, offsetY: number = 0, maxX: number = 0, maxY: number = 0, timeSinceStartMs: number = 0): PlaneBitmapData
+    public render(canvas: Graphics, id: string, width: number, height: number, scale: number, normal: IVector3D, useTexture: boolean, offsetX: number = 0, offsetY: number = 0, maxX: number = 0, maxY: number = 0, timeSinceStartMs: number = 0): PlaneBitmapData
     {
         let plane = this._Str_3491(id) as LandscapePlane;
 

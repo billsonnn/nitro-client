@@ -1,3 +1,4 @@
+import { Point } from 'pixi.js';
 import { IConnection } from '../../../../../client/core/communication/connections/IConnection';
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { AvatarFigurePartType } from '../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
@@ -34,7 +35,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     private _avatarImageCache: Map<string, HTMLImageElement>;
     private _petImageCache: Map<string, HTMLImageElement>;
     private _primaryCanvasScale: number;
-    private _primaryCanvasOriginPos: PIXI.Point;
+    private _primaryCanvasOriginPos: Point;
     private _tempScreenPosVector: Vector3d;
 
     private _disposed: boolean;

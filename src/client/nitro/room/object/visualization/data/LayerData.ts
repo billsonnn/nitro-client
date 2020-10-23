@@ -1,18 +1,20 @@
+import { BLEND_MODES } from 'pixi.js';
+
 export class LayerData
 {
     public static DEFAULT_COUNT: number         = 0;
     public static DEFAULT_DIRECTION: number     = 0;
     public static DEFAULT_TAG: string           = '';
-    public static DEFAULT_INK: number           = PIXI.BLEND_MODES.NORMAL;
+    public static DEFAULT_INK: number           = BLEND_MODES.NORMAL;
     public static DEFAULT_ALPHA: number         = 255;
     public static DEFAULT_IGNORE_MOUSE: boolean = false;
     public static DEFAULT_XOFFSET: number       = 0;
     public static DEFAULT_YOFFSET: number       = 0;
     public static DEFAULT_ZOFFSET: number       = 0;
 
-    public static ADD_INK: number               = PIXI.BLEND_MODES.ADD;
-    public static SUBTRACT_INK: number          = PIXI.BLEND_MODES.NORMAL;
-    public static DARKEN_INK: number            = PIXI.BLEND_MODES.NORMAL;
+    public static ADD_INK: number               = BLEND_MODES.ADD;
+    public static SUBTRACT_INK: number          = BLEND_MODES.NORMAL;
+    public static DARKEN_INK: number            = BLEND_MODES.NORMAL;
 
     private _tag: string;
     private _ink: number;

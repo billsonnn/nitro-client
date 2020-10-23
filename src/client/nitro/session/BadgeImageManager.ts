@@ -1,4 +1,5 @@
-﻿import { IAssetManager } from '../../core/asset/IAssetManager';
+﻿import { Texture } from 'pixi.js';
+import { IAssetManager } from '../../core/asset/IAssetManager';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { NitroConfiguration } from '../../NitroConfiguration';
 import { BadgeInfo } from './BadgeInfo';
@@ -28,7 +29,7 @@ export class BadgeImageManager
         this._assets = null;
     }
 
-    public getBadgeImage(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = true, _arg_4: boolean = false): PIXI.Texture
+    public getBadgeImage(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = true, _arg_4: boolean = false): Texture
     {
         let badge = this._Str_10735(k, _arg_2, _arg_4);
 
@@ -55,7 +56,7 @@ export class BadgeImageManager
         return null;
     }
 
-    private _Str_10735(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): PIXI.Texture
+    private _Str_10735(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): Texture
     {
         const badgeName = this.getBadgeAssetName(k, _arg_3);
 
@@ -95,7 +96,7 @@ export class BadgeImageManager
         return null;
     }
 
-    private _Str_20965(): PIXI.Texture
+    private _Str_20965(): Texture
     {
         const existing = this._assets.getTexture('loading_icon');
 

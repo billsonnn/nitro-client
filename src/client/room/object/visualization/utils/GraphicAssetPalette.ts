@@ -1,3 +1,4 @@
+import { Sprite, Texture } from 'pixi.js';
 import { Nitro } from '../../../../nitro/Nitro';
 
 export class GraphicAssetPalette
@@ -21,9 +22,9 @@ export class GraphicAssetPalette
 
     }
 
-    public applyPalette(texture: PIXI.Texture): PIXI.Texture
+    public applyPalette(texture: Texture): Texture
     {
-        const sprite            = PIXI.Sprite.from(texture);
+        const sprite            = Sprite.from(texture);
         const textureCanvas     = Nitro.instance.renderer.extract.canvas(sprite);
         const textureCtx        = textureCanvas.getContext('2d');
         const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
@@ -42,7 +43,7 @@ export class GraphicAssetPalette
 
         textureCtx.putImageData(textureImageData, 0, 0);
 
-        return PIXI.Texture.from(textureCanvas);
+        return Texture.from(textureCanvas);
     }
 
     public get primaryColor(): number
