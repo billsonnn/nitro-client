@@ -21,7 +21,7 @@ import { FurnitureFireworksVisualization } from './visualization/furniture/Furni
 import { FurnitureGiftWrappedFireworksVisualization } from './visualization/furniture/FurnitureGiftWrappedFireworksVisualization';
 import { FurnitureGiftWrappedVisualization } from './visualization/furniture/FurnitureGiftWrappedVisualization';
 import { FurnitureGuildCustomizedVisualization } from './visualization/furniture/FurnitureGuildCustomizedVisualization';
-import { FurnitureGuildIsometricBadgeVisualization } from './visualization/furniture/FurnitureGuildisometricBadgeVisualization';
+import { FurnitureGuildIsometricBadgeVisualization } from './visualization/furniture/FurnitureGuildIsometricBadgeVisualization';
 import { FurnitureHabboWheelVisualization } from './visualization/furniture/FurnitureHabboWheelVisualization';
 import { FurnitureMannequinVisualization } from './visualization/furniture/FurnitureMannequinVisualization';
 import { FurnitureMannequinVisualizationData } from './visualization/furniture/FurnitureMannequinVisualizationData';
@@ -32,7 +32,7 @@ import { FurnitureQueueTileVisualization } from './visualization/furniture/Furni
 import { FurnitureResettingAnimatedVisualization } from './visualization/furniture/FurnitureResettingAnimatedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualization/furniture/FurnitureRoomBackgroundVisualization';
 import { FurnitureScoreBoardVisualization } from './visualization/furniture/FurnitureScoreBoardVisualization';
-import { FurnitureSoundblockVisualization } from './visualization/furniture/FurnitureSoundblockVisualization';
+import { FurnitureSoundBlockVisualization } from './visualization/furniture/FurnitureSoundBlockVisualization';
 import { FurnitureStickieVisualization } from './visualization/furniture/FurnitureStickieVisualization';
 import { FurnitureValRandomizerVisualization } from './visualization/furniture/FurnitureValRandomizerVisualization';
 import { FurnitureVisualization } from './visualization/furniture/FurnitureVisualization';
@@ -158,7 +158,7 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
                 visualization = FurnitureScoreBoardVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_SOUNDBLOCK:
-                visualization = FurnitureSoundblockVisualization;
+                visualization = FurnitureSoundBlockVisualization;
                 break;
             case RoomObjectVisualizationType.FURNITURE_STICKIE:
                 visualization = FurnitureStickieVisualization;
