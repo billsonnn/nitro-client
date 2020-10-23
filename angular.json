@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "nitro-ui": {
+    "nitro": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,18 +15,24 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist/nitro-ui",
+            "customWebpackConfig": {
+              "path": "./webpack.config.js",
+              "mergeStrategies": {
+                "module.rules": "prepend"
+              },
+              "replaceDuplicatePlugins": true
+            },
+            "outputPath": "dist/nitro",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "showCircularDependencies": false,
             "aot": true,
+            "vendorChunk": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
@@ -66,7 +72,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nitro-ui:build",
+            "browserTarget": "nitro:build",
             "host": "localhost",
             "port": 8080,
             "disableHostCheck": true,
@@ -74,11 +80,11 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "nitro-ui:build:production"
+              "browserTarget": "nitro:build:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "nitro-ui"
+  "defaultProject": "nitro"
 }
