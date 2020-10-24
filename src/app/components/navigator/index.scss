@@ -36,8 +36,8 @@
 }
 
 .nitro-navigator-room-creator-component {
-    width: 600px;
-    max-width: 600px;
+    width: 700px;
+    max-width: 700px;
 
     .grid-container {
 
@@ -53,14 +53,28 @@
                 border-radius: 3px;
                 border: 2px solid transparent;
                 overflow: hidden;
-            }
+    
+                &:hover {
+                    cursor: pointer;
+                }
+    
+                &:active,
+                &.active {
+                    transform: scale(0.95);
+                }
+    
+                &:hover,
+                &.active {
+                    border-color: $white;
+                }
+    
+                &:nth-child(2n) {
+                    margin-right: 0;
+                }
 
-            &:nth-child(2n) {
-                margin-right: 0;
-            }
-
-            &:nth-child(5n) {
-                margin: 5px 5px 0 0;
+                &:nth-child(5n) {
+                    margin-right: inherit;
+                }
             }
         }
     }

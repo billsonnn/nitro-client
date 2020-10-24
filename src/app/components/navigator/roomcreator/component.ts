@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { RoomCreateComposer } from '../../../../client/nitro/communication/messages/outgoing/room/RoomCreateComposer';
 import { NavigatorCategoryDataParser } from '../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
+import { Nitro } from '../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../client/nitro/session/HabboClubLevelEnum';
 import { NavigatorService } from '../service';
 import { RoomLayout } from './RoomLayout';
@@ -20,17 +22,17 @@ import { RoomLayout } from './RoomLayout';
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-7">
                     <div class="grid-container">
                         <div class="grid-items">
-                            <div class="item-detail" *ngFor="let layout of layouts | keyvalue">
+                            <div class="item-detail" *ngFor="let layout of layouts | keyvalue" (click)="setModel(layout.value.name)">
                                 <div class="detail-image"></div>
                                 <div class="badge badge-secondary">{{ layout.value.tileSize }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-5">
                     <form [formGroup]="form" novalidate>
                         <div class="form-group">
                             <label>{{ ('navigator.createroom.roomnameinfo') | translate }}</label>
@@ -42,24 +44,24 @@ import { RoomLayout } from './RoomLayout';
                         </div>
                         <div class="form-group">
                             <label>{{ ('navigator.category') | translate }}</label>
-                            <select class="form-control form-control-sm">
+                            <select class="form-control form-control-sm" formControlName="categoryId">
                                 <option *ngFor="let category of categories" [value]="category.id">{{ (category.name) | translate }}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>{{ ('navigator.maxvisitors') | translate }}</label>
-                            <select class="form-control form-control-sm">
+                            <select class="form-control form-control-sm" formControlName="maxVisitors">
                                 <option *ngFor="let amount of maxVisitors" [value]="amount">{{ amount }}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>{{ ('navigator.tradesettings') | translate }}</label>
-                            <select class="form-control form-control-sm">
+                            <select class="form-control form-control-sm" formControlName="tradeSetting">
                                 <option *ngFor="let type of tradeSettings | keyvalue" [value]="type.key">{{ (type.value) | translate }}</option>
                             </select>
                         </div>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary">{{ ('navigator.createroom.create') | translate }}</button>
+                            <button type="button" class="btn btn-primary" (click)="onSubmit($event)">{{ ('navigator.createroom.create') | translate }}</button>
                             <button type="button" class="btn btn-primary">{{ ('generic.cancel') | translate }}</button>
                         </div>
                     </form>
@@ -75,7 +77,7 @@ export class NavigatorRoomCreatorComponent implements OnInit
 
     private _form: FormGroup;
 
-    private _layouts: RoomLayout[];
+    private _layouts: RoomLayout[] = [];
     private _maxVisitors: number[] = [];
     private _tradeSettings: string[] = [];
 
@@ -86,19 +88,42 @@ export class NavigatorRoomCreatorComponent implements OnInit
 
     public ngOnInit(): void
     {
-        this._form = this._formBuilder.group({
-            roomName: [ null ],
-            roomDesc: [ null ]
-        });
-
         this.setLayouts();
         this.setMaxVisitors(50);
         this.setTradeSettings();
+
+        this._form = this._formBuilder.group({
+            roomName: [ null ],
+            roomDesc: [ null ],
+            categoryId: [ this.categories[0].id ],
+            maxVisitors: [ this.maxVisitors[0] ],
+            tradeSetting: [ 0 ],
+            modelName: [ this.layouts[0].name ]
+        });
+    }
+
+    public onSubmit(event: MouseEvent): void
+    {
+        const roomName      = this._form.controls.roomName.value;
+        const roomDesc      = this._form.controls.roomDesc.value || '';
+        const categoryId    = this._form.controls.categoryId.value;
+        const maxVisitors   = this._form.controls.maxVisitors.value;
+        const tradeSetting  = this._form.controls.tradeSetting.value;
+        const modelName     = 'model_' + this._form.controls.modelName.value;
+
+        if(!roomName || (roomName === '')) return;
+
+        Nitro.instance.communication.connection.send(new RoomCreateComposer(roomName, roomDesc, modelName, categoryId, maxVisitors, tradeSetting));
     }
 
     public hide(): void
     {
         this._activeModal.close();
+    }
+
+    public setModel(name: string): void
+    {
+        this._form.controls.modelName.setValue(name);
     }
 
     private setLayouts(): void
