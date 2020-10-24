@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { RoomCreateComposer } from '../../../../client/nitro/communication/messages/outgoing/room/RoomCreateComposer';
 import { NavigatorCategoryDataParser } from '../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
@@ -70,7 +72,7 @@ import { RoomLayout } from './RoomLayout';
         </div>
     </div>`
 })
-export class NavigatorRoomCreatorComponent implements OnInit
+export class NavigatorRoomCreatorComponent implements OnInit, OnDestroy
 {
     private static MAX_VISITOR_STEPPER: number = 10;
     private static MAX_VISITOR_INCREMENTOR: number = 5;
@@ -80,6 +82,8 @@ export class NavigatorRoomCreatorComponent implements OnInit
     private _layouts: RoomLayout[] = [];
     private _maxVisitors: number[] = [];
     private _tradeSettings: string[] = [];
+
+    private _roomCreateListener: IMessageEvent = null;
 
     constructor(
         private _navigatorService: NavigatorService,
@@ -100,6 +104,20 @@ export class NavigatorRoomCreatorComponent implements OnInit
             tradeSetting: [ 0 ],
             modelName: [ this.layouts[0].name ]
         });
+
+        this._roomCreateListener = new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this));
+
+        Nitro.instance.communication.registerMessageEvent(this._roomCreateListener);
+    }
+
+    public ngOnDestroy(): void
+    {
+        Nitro.instance.communication.removeMessageEvent(this._roomCreateListener);
+    }
+
+    private onRoomCreatedEvent(event: RoomCreatedEvent): void
+    {
+        this.hide();
     }
 
     public onSubmit(event: MouseEvent): void
@@ -112,6 +130,8 @@ export class NavigatorRoomCreatorComponent implements OnInit
         const modelName     = 'model_' + this._form.controls.modelName.value;
 
         if(!roomName || (roomName === '')) return;
+
+         console.log(categoryId);
 
         Nitro.instance.communication.connection.send(new RoomCreateComposer(roomName, roomDesc, modelName, categoryId, maxVisitors, tradeSetting));
     }
