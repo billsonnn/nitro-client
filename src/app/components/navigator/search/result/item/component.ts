@@ -52,8 +52,6 @@ export class NavigatorSearchResultItemComponent
         this._navigatorService.goToRoom(this.room.roomId);
     }
 
-
-
     public get isGroup(): boolean
     {
         return (this.room && (this.room.habboGroupId > -1));

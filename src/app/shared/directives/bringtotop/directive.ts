@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
 
 @Directive({
     selector: '[bringToTop]'
@@ -10,6 +10,9 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
     private static Z_INDEX_INCREASE: number = 1;
   
     private target: HTMLElement = null;
+
+    @Input()
+    public bringToTop: string;
   
     constructor(
         private elementRef: ElementRef,
@@ -25,14 +28,14 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
 
         this.addTarget();
         this.registerEvents();
-        this.bringToTop();
+        this.bringToFront();
     }
   
     public ngOnDestroy(): void
     {
         this.unregisterEvents();
         this.removeTarget();
-        this.bringToTop();
+        this.bringToFront();
     }
 
     private addTarget(): void
@@ -63,7 +66,7 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         {
             if(!this.target) return;
 
-            this.target.addEventListener('mousedown', this.bringToTop.bind(this));
+            this.target.addEventListener('mousedown', this.bringToFront.bind(this));
         });
     }
 
@@ -73,11 +76,11 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         {
             if(!this.target) return;
 
-            this.target.removeEventListener('mousedown', this.bringToTop.bind(this));
+            this.target.removeEventListener('mousedown', this.bringToFront.bind(this));
         });
     }
 
-    private bringToTop(event: MouseEvent = null): void
+    private bringToFront(event: MouseEvent = null): void
     {
         this.moveTarget();
 

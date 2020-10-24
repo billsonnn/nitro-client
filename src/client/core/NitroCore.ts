@@ -3,10 +3,13 @@ import { IAssetManager } from './asset/IAssetManager';
 import { Disposable } from './common/disposable/Disposable';
 import { CommunicationManager } from './communication/CommunicationManager';
 import { ICommunicationManager } from './communication/ICommunicationManager';
+import { INitroConfigurationManager } from './configuration/INitroConfigurationManager';
+import { NitroConfigurationManager } from './configuration/NitroConfigurationManager';
 import { INitroCore } from './INitroCore';
 
 export class NitroCore extends Disposable implements INitroCore
 {
+    private _configuration: INitroConfigurationManager;
     private _asset: IAssetManager;
     private _communication: ICommunicationManager;
 
@@ -20,6 +23,7 @@ export class NitroCore extends Disposable implements INitroCore
             'color: #000000; background: #FFFFFF; padding:5px 0;',
             'background: #000000; padding:5px 0;' ]);
 
+        this._configuration = new NitroConfigurationManager();
         this._asset         = new AssetManager();
         this._communication = new CommunicationManager();
     }
@@ -39,6 +43,11 @@ export class NitroCore extends Disposable implements INitroCore
 
             this._communication = null;
         }
+    }
+
+    public get configuration(): INitroConfigurationManager
+    {
+        return this._configuration;
     }
 
     public get asset(): IAssetManager

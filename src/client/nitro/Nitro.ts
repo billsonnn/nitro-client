@@ -63,13 +63,7 @@ export class Nitro extends Application implements INitro
     {
         super(options);
 
-        if(!Nitro.INSTANCE)
-        {
-            Nitro.INSTANCE = this;
-
-            //@ts-ignore
-            window.NitroInstance = Nitro.INSTANCE;
-        }
+        if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
 
         this._core                  = core;
         this._events                = new EventDispatcher();

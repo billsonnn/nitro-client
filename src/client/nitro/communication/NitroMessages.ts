@@ -57,6 +57,7 @@ import { RoomSettingsEvent } from './messages/incoming/room/data/RoomSettingsEve
 import { RoomSettingsSavedEvent } from './messages/incoming/room/data/RoomSettingsSavedEvent';
 import { RoomSettingsUpdatedEvent } from './messages/incoming/room/data/RoomSettingsUpdatedEvent';
 import { ObjectsRollingEvent } from './messages/incoming/room/engine/ObjectsRollingEvent';
+import { RoomCreatedEvent } from './messages/incoming/room/engine/RoomCreatedEvent';
 import { FurnitureFloorAddEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorAddEvent';
 import { FurnitureFloorEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorEvent';
 import { FurnitureFloorRemoveEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorRemoveEvent';
@@ -142,6 +143,7 @@ import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
 import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
+import { RoomCreateComposer } from './messages/outgoing/room/RoomCreateComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -267,6 +269,7 @@ export class NitroMessages implements IMessageConfiguration
 
             // ENGINE
             this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
+            this._events.set(IncomingHeader.ROOM_CREATED, RoomCreatedEvent);
 
             // FURNITURE
             this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
@@ -384,6 +387,7 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
 
         // ROOM
+            this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
 
             // ACCESS
             this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { ToastrModule } from 'ngx-toastr';
 import { AlertToastComponent } from './components/alerts/alert/component';
@@ -28,6 +28,7 @@ import { AlertService } from './services/alert/service';
 		ToastrModule.forRoot(),
 		NgbDropdownModule,
 		NgbTooltipModule,
+		NgbModalModule,
 		NgxBootstrapSliderModule
 	],
 	exports: [
@@ -36,6 +37,7 @@ import { AlertService } from './services/alert/service';
 		ReactiveFormsModule,
 		NgbDropdownModule,
 		NgbTooltipModule,
+		NgbModalModule,
 		NgxBootstrapSliderModule,
 		AvatarImageComponent,
 		BadgeComponent,

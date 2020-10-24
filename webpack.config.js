@@ -6,20 +6,13 @@ module.exports = {
     plugins: [
         new JavaScriptObfuscator({
             compact: true,
-            controlFlowFlattening: false,
-            deadCodeInjection: false,
-            debugProtection: false,
-            debugProtectionInterval: false,
             disableConsoleOutput: true,
             identifierNamesGenerator: 'hexadecimal',
-            log: false,
-            renameGlobals: false,
+            renameProperties: true,
             rotateStringArray: true,
             selfDefending: true,
             shuffleStringArray: true,
-            splitStrings: false,
-            stringArray: true,
-            unicodeEscapeSequence: false
+            stringArray: true
         }, [ 'runtime.**.js', 'polyfills.**.js', 'vendor.**.js' ])
     ]
 };

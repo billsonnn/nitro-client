@@ -27,6 +27,7 @@ import { NavigatorService } from './service';
         NavigatorSearchResultComponent,
         NavigatorSearchResultItemComponent,
         NavigatorRoomCreatorComponent
-    ]
+    ],
+    entryComponents: [ NavigatorRoomCreatorComponent ]
 })
 export class NavigatorModule {}

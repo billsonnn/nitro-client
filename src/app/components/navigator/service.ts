@@ -11,12 +11,14 @@ import { NavigatorSettingsEvent } from '../../../client/nitro/communication/mess
 import { RoomForwardEvent } from '../../../client/nitro/communication/messages/incoming/room/access/RoomForwardEvent';
 import { RoomInfoEvent } from '../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from '../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
+import { RoomCreatedEvent } from '../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { UserInfoEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { NavigatorCategoriesComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSearchComposer';
 import { NavigatorSettingsComposer } from '../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSettingsComposer';
 import { RoomInfoComposer } from '../../../client/nitro/communication/messages/outgoing/room/data/RoomInfoComposer';
+import { NavigatorCategoryDataParser } from '../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
 import { NavigatorSearchResultList } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
 import { RoomDataParser } from '../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
@@ -55,17 +57,14 @@ export class NavigatorService implements OnDestroy
 
     private _topLevelContexts: NavigatorTopLevelContext[];
     private _topLevelContext: NavigatorTopLevelContext;
+    private _categories: NavigatorCategoryDataParser[];
     private _filter: INavigatorSearchFilter;
     private _lastSearchResults: NavigatorSearchResultList[];
     private _lastSearch: string;
 
-    private _isCreatorMode: boolean;
     private _isSearching: boolean;
     private _isLoaded: boolean;
     private _isLoading: boolean;
-
-    private _width: number;
-    private _height: number;
 
     constructor(
         private _settingsService: SettingsService,
@@ -73,17 +72,14 @@ export class NavigatorService implements OnDestroy
     {
         this._topLevelContexts  = [];
         this._topLevelContext   = null;
+        this._categories        = [];
         this._filter            = NavigatorService.SEARCH_FILTERS[0];
         this._lastSearchResults = [];
         this._lastSearch        = null;
 
-        this._isCreatorMode     = false;
         this._isSearching       = false;
         this._isLoaded          = false;
         this._isLoading         = false;
-
-        this._width             = 435;
-        this._height            = 535;
 
         this.registerMessages();
     }
@@ -104,6 +100,7 @@ export class NavigatorService implements OnDestroy
                 new RoomForwardEvent(this.onRoomForwardEvent.bind(this)),
                 new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
                 new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)),
                 new NavigatorCollapsedEvent(this.onNavigatorCollapsedEvent.bind(this)),
                 new NavigatorEventCategoriesEvent(this.onNavigatorEventCategoriesEvent.bind(this)),
@@ -215,9 +212,26 @@ export class NavigatorService implements OnDestroy
         }
     }
 
+    private onRoomCreatedEvent(event: RoomCreatedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this.createSession(parser.roomId);
+    }
+
     private onNavigatorCategoriesEvent(event: NavigatorCategoriesEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => this._categories = parser.categories);
     }
 
     private onNavigatorCollapsedEvent(event: NavigatorCollapsedEvent): void
@@ -367,13 +381,6 @@ export class NavigatorService implements OnDestroy
         this._ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorSearchComposer(code, query)));
     }
 
-    public setCreatorMode(flag: boolean = true): void
-    {
-        if(this._isCreatorMode === flag) return;
-
-        this._isCreatorMode = flag;
-    }
-
     public loadNavigator(): void
     {
         if(this._isLoaded || this._isLoading) return;
@@ -393,6 +400,11 @@ export class NavigatorService implements OnDestroy
         return this._topLevelContext;
     }
 
+    public get categories(): NavigatorCategoryDataParser[]
+    {
+        return this._categories;
+    }
+
     public get filter(): INavigatorSearchFilter
     {
         return this._filter;
@@ -401,11 +413,6 @@ export class NavigatorService implements OnDestroy
     public get lastSearchResults(): NavigatorSearchResultList[]
     {
         return this._lastSearchResults;
-    }
-
-    public get isCreatorMode(): boolean
-    {
-        return this._isCreatorMode;
     }
 
     public get isSearching(): boolean
@@ -421,15 +428,5 @@ export class NavigatorService implements OnDestroy
     public get isLoading(): boolean
     {
         return this._isLoading;
-    }
-
-    public get width(): number
-    {
-        return this._width;
-    }
-
-    public get height(): number
-    {
-        return this._height;
     }
 }

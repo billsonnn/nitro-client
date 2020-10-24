@@ -1,7 +1,9 @@
-import { Component, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NavigatorSearchResultList } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
 import { SettingsService } from '../../core/settings/service';
+import { NavigatorRoomCreatorComponent } from './roomcreator/component';
 import { NavigatorService } from './service';
 
 @Component({
@@ -18,18 +20,15 @@ import { NavigatorService } from './service';
             <div class="card-header-tabs">
                 <div class="nav nav-tabs w-100 px-4">
                     <div *ngFor="let context of topLevelContexts" class="nav-item nav-link" [ngClass]="{ 'active': ((topLevelContext === context) && !isCreatorMode) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</div>
-                    <div *ngIf="!isLoading" class="nav-item nav-link" [ngClass]="{ 'active': isCreatorMode }" (click)="setCreatorMode(true)"><i class="fas fa-plus"></i></div>
+                    <div *ngIf="!isLoading" class="nav-item nav-link" (click)="openRoomCreator()"><i class="fas fa-plus"></i></div>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <ng-container *ngIf="!isCreatorMode">
-                <div nitro-navigator-search-component></div>
-                <div class="results-container">
-                    <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
-                </div>
-            </ng-container>
-            <div *ngIf="isCreatorMode" nitro-navigator-room-creator-component></div>
+            <div nitro-navigator-search-component></div>
+            <div class="results-container">
+                <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
+            </div>
         </div>
     </div>`
 })
@@ -38,10 +37,12 @@ export class NavigatorComponent implements OnChanges
     @Input()
     public visible: boolean = false;
 
+    private _roomCreatorModal: NgbModalRef;
+
     constructor(
-        private settingsService: SettingsService,
-        private navigatorService: NavigatorService,
-        private ngZone: NgZone) {}
+        private _settingsService: SettingsService,
+        private _navigatorService: NavigatorService,
+        private _modalService: NgbModal) {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -49,76 +50,66 @@ export class NavigatorComponent implements OnChanges
         const next = changes.visible.currentValue;
 
         if(next && (next !== prev)) this.prepareNavigator();
-
-        else if(!next && (next !== prev)) this.hideNavigator();
     }
 
     private prepareNavigator(): void
     {
-        if(!this.navigatorService.isLoaded)
+        if(!this._navigatorService.isLoaded)
         {
-            this.navigatorService.loadNavigator();
+            this._navigatorService.loadNavigator();
         }
         else
         {
-            this.navigatorService.search();
+            this._navigatorService.search();
         }
-    }
-
-    private hideNavigator(): void
-    {
-        this.setCreatorMode(false);
     }
 
     public setCurrentContext(context: NavigatorTopLevelContext): void
     {
-        this.setCreatorMode(false);
-
-        this.navigatorService.setCurrentContext(context);
-    }
-
-    public setCreatorMode(flag: boolean = true): void
-    {
-        this.navigatorService.setCreatorMode(flag);
-    }
-
-    public get topLevelContext(): NavigatorTopLevelContext
-    {
-        return ((this.navigatorService && this.navigatorService.topLevelContext) || null);
-    }
-
-    public get topLevelContexts(): NavigatorTopLevelContext[]
-    {
-        return ((this.navigatorService && this.navigatorService.topLevelContexts) || null);
-    }
-
-    public get lastSearchResults(): NavigatorSearchResultList[]
-    {
-        return this.navigatorService.lastSearchResults;
-    }
-
-    public get isLoading(): boolean
-    {
-        return (this.navigatorService && (this.navigatorService.isLoading || this.navigatorService.isSearching));
+        this._navigatorService.setCurrentContext(context);
     }
 
     public hide(): void
     {
-        this.settingsService.hideNavigator();
+        this._settingsService.hideNavigator();
     }
 
-    public get width(): number
+    public openRoomCreator(): void
     {
-        return this.navigatorService.width;
+        if(this._roomCreatorModal)
+        {
+            const componentInstance = (this._roomCreatorModal.componentInstance as NavigatorRoomCreatorComponent);
+
+            return;
+        }
+        
+        this._roomCreatorModal = this._modalService.open(NavigatorRoomCreatorComponent, {
+            backdrop: false
+        });
+
+        if(this._roomCreatorModal)
+        {
+            this._roomCreatorModal.result.then(() => (this._roomCreatorModal = null));
+        }
     }
 
-    public get height(): number
+    public get topLevelContext(): NavigatorTopLevelContext
     {
-        return this.navigatorService.height;
+        return ((this._navigatorService && this._navigatorService.topLevelContext) || null);
     }
 
-    public get isCreatorMode(): boolean
+    public get topLevelContexts(): NavigatorTopLevelContext[]
     {
-        return this.navigatorService.isCreatorMode;
+        return ((this._navigatorService && this._navigatorService.topLevelContexts) || null);
+    }
+
+    public get lastSearchResults(): NavigatorSearchResultList[]
+    {
+        return this._navigatorService.lastSearchResults;
+    }
+
+    public get isLoading(): boolean
+    {
+        return (this._navigatorService && (this._navigatorService.isLoading || this._navigatorService.isSearching));
     }
 }
