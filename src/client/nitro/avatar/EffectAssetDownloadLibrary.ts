@@ -29,7 +29,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
         this._animation     = null;
 
         this._downloadUrl = this._downloadUrl.replace(/%libname%/gi, this._libraryName);
-        this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision.toString());
+        //this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision.toString());
 
         const asset = this._assets.getCollection(this._libraryName);
 

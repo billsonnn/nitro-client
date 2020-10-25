@@ -1,9 +1,9 @@
 export class NitroConfiguration
 {
     public static RELEASE_VERSION           = 'PRODUCTION-201611291003-338511768';
-    public static SOCKET_URL                = 'wss://nitro-socket.nextgenhabbo.com';
+    public static SOCKET_URL                = 'wss://arcturus.habborw.com';
     //public static SOCKET_URL                = 'wss://system.nitrots.co';
-    public static ASSET_URL                 = 'https://assets.nitrots.co';
+    public static ASSET_URL                 = 'https://nitro-assets.hrw.pw';
 
     public static EXTERNAL_TEXTS_URL        = NitroConfiguration.ASSET_URL + '/gamedata/json/ExternalTexts.json';
     public static AVATAR_GEOMETRY_URL       = NitroConfiguration.ASSET_URL + '/gamedata/json/HabboAvatarGeometry.json';
@@ -15,7 +15,7 @@ export class NitroConfiguration
     public static AVATAR_EFFECTMAP_URL      = NitroConfiguration.ASSET_URL + '/gamedata/json/EffectMap.json';
     public static AVATAR_ASSET_URL          = NitroConfiguration.ASSET_URL + '/figure/%libname%/%libname%.json';
     public static AVATAR_ASSET_EFFECT_URL   = NitroConfiguration.ASSET_URL + '/effect/%libname%/%libname%.json';
-    public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureDataNGH.json';
+    public static FURNIDATA_URL             = NitroConfiguration.ASSET_URL + '/gamedata/json/FurnitureData.json';
     public static BADGE_URL                 = NitroConfiguration.ASSET_URL + '/badges/%badgename%.gif';
     public static GROUP_BADGE_URL           = NitroConfiguration.ASSET_URL + '/group-badge/%badgedata%';
     public static PET_ASSET_URL             = NitroConfiguration.ASSET_URL + '/pet/%libname%/%libname%.json';
