@@ -6,20 +6,20 @@ module.exports = {
     plugins: [
         new JavaScriptObfuscator({
             compact: true,
-            controlFlowFlattening: true,
-            deadCodeInjection: true,
+            controlFlowFlattening: false,
+            deadCodeInjection: false,
             debugProtection: false,
             debugProtectionInterval: false,
             disableConsoleOutput: true,
-            identifierNamesGenerator: 'hexadecimal',
+            identifierNamesGenerator: 'mangled',
             log: false,
             renameGlobals: true,
             renameProperties: false,
             rotateStringArray: false,
             selfDefending: true,
-            shuffleStringArray: true,
-            splitStrings: true,
-            stringArray: true,
+            shuffleStringArray: false,
+            splitStrings: false,
+            stringArray: false,
             unicodeEscapeSequence: false,
             domainLock: ['nitro.habborw.com']
         }, [ 'runtime.**.js', 'polyfills.**.js', 'vendor.**.js' ])
