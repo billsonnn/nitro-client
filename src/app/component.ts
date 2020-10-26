@@ -10,8 +10,8 @@ import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
 	selector: 'app-root',
     template: `
     <div id="nitro">
-        <nitro-loading *ngIf="!isReady" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
-        <nitro-main-component *ngIf="isReady"></nitro-main-component>
+        <nitro-loading *ngIf="!isReady || isError" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
+        <nitro-main-component *ngIf="isReady && !isError"></nitro-main-component>
     </div>`
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
@@ -120,6 +120,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 });
 				break;
 			case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
+                if(Nitro.instance.roomEngine)
+                {
+                    Nitro.instance.roomEngine.dispose();
+                }
+
                 this.ngZone.run(() =>
                 {
                     this.isError        = true;
