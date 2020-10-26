@@ -46,7 +46,7 @@ export class EvaWireFormat implements ICodec
                     if(!value) buffer.writeShort(0);
                     else
                     {
-                        const length = ByteBuffer.calculateUTF8Chars(value);
+                        const length = ByteBuffer.calculateUTF8Bytes(value);
                         
                         buffer.writeShort(length).writeString(value);
                     }
