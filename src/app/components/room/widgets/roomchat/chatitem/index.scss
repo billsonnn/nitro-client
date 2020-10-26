@@ -101,11 +101,10 @@
                 position: relative;
                 bottom: -4px;
                 image-rendering: initial;
-                //height: auto !important;
-                //transform: scale(0.5);
-                // position: absolute;
-                // top: -9px;
-                // left: -15px;
+
+                &.scale-0-5 {
+                    transform: scale((0.5));
+                }
             }
         }
     }

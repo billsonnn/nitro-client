@@ -79,15 +79,10 @@ export class RoomChatItemComponent
     {
         if(!this.senderImage) return;
 
-        const imageElement  = document.createElement('img');
-        const scale         = 0.5;
+        const imageElement = document.createElement('img');
 
-        imageElement.src = this.senderImage.src;
-
-        imageElement.onload = (() =>
-        {
-            imageElement.height = (imageElement.height * scale);
-        });
+        imageElement.src        = this.senderImage.src;
+        imageElement.className  = 'scale-0-5';
 
         this.chatItemUserImageReference.nativeElement.appendChild(imageElement);
     }
