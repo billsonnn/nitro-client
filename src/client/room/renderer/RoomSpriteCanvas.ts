@@ -1,4 +1,4 @@
-import { Container, DisplayObject, Point, Rectangle, Sprite, Texture } from 'pixi.js';
+import { Container, DisplayObject, Point, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
@@ -9,6 +9,7 @@ import { IRoomObjectSpriteVisualization } from '../object/visualization/IRoomObj
 import { IRoomGeometry } from '../utils/IRoomGeometry';
 import { RoomEnterEffect } from '../utils/RoomEnterEffect';
 import { RoomGeometry } from '../utils/RoomGeometry';
+import { TextureUtils } from '../utils/TextureUtils';
 import { Vector3d } from '../utils/Vector3d';
 import { RoomObjectCache } from './cache/RoomObjectCache';
 import { RoomObjectCacheItem } from './cache/RoomObjectCacheItem';
@@ -24,7 +25,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _id: number;
     private _container: IRoomSpriteCanvasContainer;
 
-    private _geometry: IRoomGeometry;
+    private _geometry: RoomGeometry;
     private _renderTimestamp: number;
 
     private _master: Container;
@@ -134,13 +135,29 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public dispose(): void
     {
+        this._Str_20677(0, true);
+
+        if(this._geometry)
+        {
+            this._geometry.dispose();
+
+            this._geometry = null;
+        }
+
+        if(this._mask) this._mask = null;
+
+        if(this._objectCache)
+        {
+            this._objectCache.dispose();
+
+            this._objectCache = null;
+        }
+
         if(this._master)
         {
-            for(let child of this._master.children)
+            while(this._master.children.length)
             {
-                if(!child) continue;
-
-                if(child.parent) child.parent.removeChild(child);
+                const child = this._master.removeChildAt(0);
 
                 child.destroy();
             }
@@ -151,6 +168,35 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             this._master = null;
         }
+
+        this._display           = null;
+        this._sortableSprites   = [];
+
+        if(this._mouseActiveObjects)
+        {
+            this._mouseActiveObjects.clear();
+
+            this._mouseActiveObjects = null;
+        }
+
+        if(this._spritePool)
+        {
+            for(let sprite of this._spritePool)
+            {
+                this._Str_21974(sprite, true);
+            }
+
+            this._spritePool = [];
+        }
+
+        if(this._eventCache)
+        {
+            this._eventCache.clear();
+
+            this._eventCache = null;
+        }
+
+        this._mouseListener = null;
     }
 
     public initialize(width: number, height: number): void
@@ -621,7 +667,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._activeSpriteCount = spriteCount;
     }
 
-    private _Str_21914(k: ExtendedSprite, _arg_2: IRoomObjectSprite): void
+    private _Str_21914(sprite: ExtendedSprite, _arg_2: IRoomObjectSprite): void
     {
         if(!RoomEnterEffect._Str_19559() || !_arg_2) return;
 
@@ -630,29 +676,29 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             case RoomObjectSpriteType._Str_10494:
                 return;
             case RoomObjectSpriteType._Str_8616:
-                k.alpha = RoomEnterEffect._Str_16017(0.9);
+                sprite.alpha = RoomEnterEffect._Str_16017(0.9);
                 return;
             case RoomObjectSpriteType._Str_11629:
-                k.alpha = RoomEnterEffect._Str_16017(0.5);
+                sprite.alpha = RoomEnterEffect._Str_16017(0.5);
                 return;
             default:
-                k.alpha = RoomEnterEffect._Str_16017(0.1);
+                sprite.alpha = RoomEnterEffect._Str_16017(0.1);
         }
     }
 
-    private _Str_21974(k: ExtendedSprite, _arg_2: boolean): void
+    private _Str_21974(sprite: ExtendedSprite, _arg_2: boolean): void
     {
-        if (k != null)
+        if (sprite != null)
         {
             if (!_arg_2)
             {
-                k.setTexture(null);
+                sprite.setTexture(null);
             }
             else
             {
-                if(k.parent) k.parent.removeChild(k);
+                if(sprite.parent) sprite.parent.removeChild(sprite);
 
-                k.destroy();
+                sprite.destroy();
             }
         }
     }
@@ -877,6 +923,27 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
 
         if(this._eventCache) this._eventCache.clear();
+    }
+
+    public getDisplayAsTexture(): RenderTexture
+    {
+        this._noSpriteVisibilityChecking = true;
+        var k = this._scale;
+        var _local_2 = this._screenOffsetX;
+        var _local_3 = this._screenOffsetY;
+        this.setScale(1);
+        this._screenOffsetX = 0;
+        this._screenOffsetY = 0;
+        this.render(-1, true);
+
+        const texture = TextureUtils.generateTexture(this._display);
+
+        this._noSpriteVisibilityChecking = false;
+        this.setScale(k);
+        this._screenOffsetX = _local_2;
+        this._screenOffsetY = _local_3;
+
+        return texture;
     }
 
     public get id(): number

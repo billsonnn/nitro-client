@@ -1,4 +1,4 @@
-import { DisplayObject, Point } from 'pixi.js';
+import { DisplayObject, Point, RenderTexture } from 'pixi.js';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { IRoomGeometry } from '../utils/IRoomGeometry';
 import { IRoomCanvasMouseListener } from './IRoomCanvasMouseListener';
@@ -18,6 +18,7 @@ export interface IRoomRenderingCanvas
     _Str_14588(): SortableSprite[];
     _Str_21232(k: number, _arg_2: number, _arg_3: string, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): boolean;
     getSortableSpriteList(): RoomObjectSpriteData[];
+    getDisplayAsTexture(): RenderTexture;
     id: number;
     geometry: IRoomGeometry;
     displayObject: DisplayObject;

@@ -55,7 +55,22 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
     public dispose(): void
     {
-        
+        if(this._sprites)
+        {
+            while(this._sprites.length)
+            {
+                const sprite = (this._sprites[0] as RoomObjectSprite);
+
+                if(sprite) sprite.dispose();
+
+                this._sprites.pop();
+            }
+
+            this._sprites = null;
+        }
+
+        this._object    = null;
+        this._asset     = null;
     }
 
     public getSprite(index: number): IRoomObjectSprite

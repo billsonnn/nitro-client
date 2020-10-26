@@ -159,7 +159,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._landscapeType     = null;
         this._maskData          = null;
         this._geometryUpdateId  = -1;
-        this._roomScale             = 0;
+        this._roomScale         = 0;
     }
 
     public update(geometry: IRoomGeometry, time: number, update: boolean, skipUpdate: boolean): void
@@ -351,17 +351,17 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this._Str_2540)
         {
-            let index = 0;
 
-            while(index < this._Str_2540.length)
+            while(this._Str_2540.length)
             {
-                const plane = this._Str_2540[index];
+                const plane = this._Str_2540[0];
 
                 if(plane) plane.dispose();
 
-                index++;
+                this._Str_2540.pop();
             }
 
+            this._Str_2540 = [];
             this._Str_2540 = [];
         }
         

@@ -89,7 +89,14 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(this._animationStates)
         {
-            for(let animationState of this._animationStates) animationState && animationState.dispose();
+            while(this._animationStates.length)
+            {
+                const animationState = this._animationStates[0];
+
+                if(animationState) animationState.dispose();
+
+                this._animationStates.pop();
+            }
 
             this._animationStates = null;
         }
