@@ -44,7 +44,12 @@ export class EvaWireFormat implements ICodec
                     break;
                 case 'string':
                     if(!value) buffer.writeShort(0);
-                    else buffer.writeShort(value.length).writeString(value);
+                    else
+                    {
+                        const length = ByteBuffer.calculateUTF8Chars(value);
+                        
+                        buffer.writeShort(length).writeString(value);
+                    }
                     break;
             }
         }

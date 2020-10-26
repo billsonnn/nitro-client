@@ -47,18 +47,11 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
 
     public readString(): string
     {
-        let string = '';
-        
         let length = this.readShort();
 
-        while(length)
-        {
-            string += String.fromCharCode(this.readByte());
+        const buffer = this._buffer.readBytes(length);
 
-            length--;
-        }
-
-        return string;
+        return buffer.toString('utf8');
     }
 
     public get header(): number
