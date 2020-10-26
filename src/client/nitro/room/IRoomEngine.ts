@@ -78,6 +78,7 @@ export interface IRoomEngine extends INitroManager
     processRoomObjectOperation(roomId: number, objectId: number, category: number, operation: string): boolean;
     processRoomObjectPlacement(placementSource: string, id: number, category: number, typeId: number, legacyString?: string, stuffData?: IObjectData, state?: number, frameNumber?: number, posture?: string): boolean;
     dispatchMouseEvent(canvasId: number, x: number, y: number, type: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean, buttonDown: boolean): void;
+    createRoomScreenshot(roomId: number, canvasId: number): void;
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;
     roomManager: IRoomManager;

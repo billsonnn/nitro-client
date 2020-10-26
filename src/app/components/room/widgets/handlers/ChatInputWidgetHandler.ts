@@ -122,10 +122,13 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                             this._container.roomSession.sendSignMessage(parseInt(secondPart));
                             return null;
                         case ":iddqd":
-                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, -1));
+                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, -1, true));
                             return null;
                         case ':zoom':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart)));
+                            return null;
+                        case ':screenshot':
+                            this._container.roomEngine.createRoomScreenshot(this._container.roomSession.roomId, this._container.getFirstCanvasId());
                             return null;
                     }
                 }

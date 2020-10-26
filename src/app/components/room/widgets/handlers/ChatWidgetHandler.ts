@@ -357,7 +357,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         {
             if(this._container)
             {
-                container.roomEngine.events.removeEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
+                this._container.roomEngine.events.removeEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
             }
         }
 

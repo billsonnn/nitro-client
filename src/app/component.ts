@@ -120,10 +120,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 });
 				break;
 			case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
-                if(Nitro.instance.roomEngine)
-                {
-                    Nitro.instance.roomEngine.dispose();
-                }
+                if(Nitro.instance.roomEngine) Nitro.instance.roomEngine.dispose();
 
                 this.ngZone.run(() =>
                 {

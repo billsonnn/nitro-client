@@ -234,6 +234,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._ready) return;
 
+        for(let [ key,  value ] of this._roomInstanceDatas)
+        {
+            this.removeRoomInstance(key);
+        }
+
         Nitro.instance.ticker.remove(this.update, this);
 
         if(this._roomObjectEventHandler) this._roomObjectEventHandler.dispose();
@@ -3246,6 +3251,24 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         //return new RenderRoomMessageComposer(_local_12, _local_10, _local_11, this._activeRoomId, this._sessionDataManager._Str_8500);
 
         return null;
+    }
+
+    public createRoomScreenshot(roomId: number, canvasId: number): void
+    {
+        let canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!canvas) return;
+
+        const texture = canvas.getDisplayAsTexture();
+
+        const base64 = Nitro.instance.renderer.extract.base64(texture);
+
+        const image = new Image();
+
+        image.src = base64;
+
+        const newWindow = window.open('');
+        newWindow.document.write(image.outerHTML);
     }
 
     public objectsInitialized(k: string): void

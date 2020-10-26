@@ -266,7 +266,10 @@ export class MainComponent implements OnInit, OnDestroy
 				return;
 			case RoomZoomEvent.ROOM_ZOOM:
 				const zoomEvent = (event as RoomZoomEvent);
-				const zoomLevel = ((zoomEvent.level < 0) ? -1 : (zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1)))
+				
+				let zoomLevel = ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1)));
+
+				if(zoomEvent.percise) zoomLevel = zoomEvent.level;
 
 				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), zoomLevel);
 				return;
