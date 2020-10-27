@@ -21,7 +21,7 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
     <div class="nitro-toolbar-component">
         <div class="card">
             <div class="card-header">
-                <div class="header-title">Nitro</div>
+                <div class="nitro-icon"></div>
             </div>
             <div class="card-body">
                 <div nitro-toolbar-cameracontrols-component></div>

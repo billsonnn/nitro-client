@@ -3,6 +3,13 @@
     top: 20px;
     left: 20px;
 
+    .nitro-icon {
+		background: url('https://nitro-assets.hrw.pw/nitro-icon-white.png') no-repeat;
+		background-size: contain;
+		width: calc(298px / 10);
+		height: calc(425px / 10);
+	}
+
     .card {
         width: 80px;
         max-width: 80px;

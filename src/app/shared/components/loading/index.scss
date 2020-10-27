@@ -7,38 +7,38 @@
 	height: 100%;
 
 	.logo {
-		background: url('https://nitro-assets.hrw.pw/nitro-logo.png') no-repeat;
+		background: url('https://nitro-assets.hrw.pw/nitro-logo-white.png') no-repeat;
 		background-size: contain;
-		width: 1021px;
-		height: 513px;
-		transform: scale(0.5);
+		width: calc(1021px / 3);
+		height: calc(513px / 3);
 	}
 
 	.container {
-		margin-top: -50px;
+		margin-top: 40px;
 
 		.text {
 			text-align: center;
 			margin-bottom: 20px;
-			font-size: 28px;
+			font-size: 20px;
 		}
 
 		.progress-container {
 
 			.loading-bar {
-				width: 400px;
-				background-color: black;
+
+				width: 350px;
+				background-color: $destiny;
 				border-radius: 2px;
 				margin: 0 auto;
 				border: 1px solid white;
 				box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 1);
-				padding: 4px;
+				padding: 2px;
 				margin-bottom: 20px;
 
 				.bar {
-					background-image: -webkit-linear-gradient(bottom, #8CA1AD 50%, #BACAD3 50%);
+					background-color: #387697;
 					display: block;
-					height: 20px;
+					height: 10px;
 					width: 0%;
 					transition: width 1s;
 				}

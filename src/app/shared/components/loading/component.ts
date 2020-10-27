@@ -4,16 +4,14 @@ import { Component, Input } from '@angular/core';
 	selector: 'nitro-loading',
 	template: `
 	<div class="nitro-loading-component">
-		<div class="loading-view">
-			<div class="logo"></div>
-			<div class="container">
-				<div *ngIf="message && message.length" class="text">{{ message }}</div>
-				<div *ngIf="!hideProgress" class="progress-container">
-					<div class="loading-bar">
-						<div class="bar" [ngStyle]="{ 'width': ((percentage || 0) + '%') }"></div>
-					</div>
-					<div class="percent">{{ (percentage || 0) }}%</div>
+		<div class="logo"></div>
+		<div class="container">
+			<div *ngIf="message && message.length && hideProgress" class="text">{{ message }}</div>
+			<div *ngIf="!hideProgress" class="progress-container">
+				<div class="loading-bar">
+					<div class="bar" [ngStyle]="{ 'width': ((percentage || 0) + '%') }"></div>
 				</div>
+				<div class="percent">{{ (percentage || 0) }}%</div>
 			</div>
 		</div>
 	</div>`
