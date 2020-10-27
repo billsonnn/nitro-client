@@ -64,6 +64,8 @@ export class NitroCommunicationDemo extends NitroManager
         this._sso           = null;
         this._handShaking   = false;
 
+        this.stopPonging();
+
         super.onDispose();
     }
 
@@ -76,6 +78,8 @@ export class NitroCommunicationDemo extends NitroManager
         this._didConnect = true;
 
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, connection);
+
+        if(Nitro.instance.getConfiguration<boolean>('communication.pong.manually"')) this.startPonging();
 
         this.startHandshake(connection);
 
@@ -90,6 +94,8 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(!connection) return;
 
+        this.stopPonging();
+
         if(this._didConnect) this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_CLOSED, connection);
     }
 
@@ -98,6 +104,8 @@ export class NitroCommunicationDemo extends NitroManager
         const connection = this._communication.connection;
 
         if(!connection) return;
+
+        this.stopPonging();
 
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ERROR, connection);
     }
@@ -158,6 +166,22 @@ export class NitroCommunicationDemo extends NitroManager
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED, connection);
 
         this._handShaking = false;
+    }
+
+    private startPonging(): void
+    {
+        this.stopPonging();
+
+        this._pongInterval = setInterval(this.sendPong.bind(this), Nitro.instance.getConfiguration<number>('communication.pong.interval.ms'));
+    }
+
+    private stopPonging(): void
+    {
+        if(!this._pongInterval) return;
+
+        clearInterval(this._pongInterval);
+
+        this._pongInterval = null;
     }
 
     private sendPong(connection: IConnection = null): void
