@@ -1,4 +1,4 @@
-import { BaseTexture, Point, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { BaseTexture, BLEND_MODES, Point, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { Nitro } from '../../../nitro/Nitro';
 
 export class ExtendedSprite extends Sprite
@@ -64,7 +64,7 @@ export class ExtendedSprite extends Sprite
 
         if(!(sprite instanceof Sprite)) return false;
 
-        //if(sprite.blendMode !== BLEND_MODES.NORMAL) return;
+        if(sprite.blendMode !== BLEND_MODES.NORMAL) return;
 
         const texture       = sprite.texture;
         const baseTexture   = texture.baseTexture;

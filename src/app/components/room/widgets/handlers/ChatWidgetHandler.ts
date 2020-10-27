@@ -7,7 +7,6 @@ import { AvatarSetType } from '../../../../../client/nitro/avatar/enum/AvatarSet
 import { IAvatarImageListener } from '../../../../../client/nitro/avatar/IAvatarImageListener';
 import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
@@ -69,18 +68,6 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     public update(): void
     {
         this._Str_20006();
-    }
-
-    private onRoomEngineEvent(event: RoomEngineEvent): void
-    {
-        switch(event.type)
-        {
-            case RoomEngineEvent.ROOM_ZOOMED:
-                const scale = this._container.roomEngine.getRoomInstanceRenderingCanvasScale(event.roomId);
-
-                this._primaryCanvasScale = scale;
-                return;
-        }
     }
 
     private _Str_20006(): void
@@ -349,18 +336,6 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
-        if(container)
-        {
-            container.roomEngine.events.addEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
-        }
-        else
-        {
-            if(this._container)
-            {
-                this._container.roomEngine.events.removeEventListener(RoomEngineEvent.ROOM_ZOOMED, this.onRoomEngineEvent.bind(this));
-            }
-        }
-
         this._container = container;
     }
 

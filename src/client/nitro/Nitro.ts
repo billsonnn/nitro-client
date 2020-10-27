@@ -100,7 +100,7 @@ export class Nitro extends Application implements INitro
         canvas.className    = 'client-canvas';
         
         const instance = new this(new NitroCore(), {
-            transparent: false,
+            transparent: true,
             autoDensity: true,
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
