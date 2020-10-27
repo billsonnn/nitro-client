@@ -205,7 +205,11 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         const chatInstance = chat.instance;
 
-        chatInstance.setY((chatInstance.getY() - nextHeight));
+        let y = chatInstance.height;
+
+        if(nextHeight) y = nextHeight;
+
+        chatInstance.setY((chatInstance.getY() - y));
 
         if(chatInstance.getY() < (-(chatInstance.height * 2))) this.hideChat(chat);
     }
@@ -214,9 +218,16 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     {
         let i = (this.chats.length - 1);
 
+        let height = 0;
+
         while(i >= 0)
         {
-            this.moveChatUp(this.chats[i], 15);
+            if(i === (this.chats.length - 1))
+            {
+                height = this.chats[i].instance.height;
+            }
+            
+            this.moveChatUp(this.chats[i], height);
 
             i--;
         }
@@ -257,7 +268,9 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
                 const currentChat           = this.tempChats[i];
                 const currentChatInstance   = currentChat.instance;
 
-                this.moveChatUp(currentChat, chatInstance.height);
+                let height = chatInstance.height;
+
+                this.moveChatUp(currentChat, height);
 
                 i--;
             }

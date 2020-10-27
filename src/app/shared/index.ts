@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { ToastrModule } from 'ngx-toastr';
@@ -29,7 +30,8 @@ import { AlertService } from './services/alert/service';
 		NgbDropdownModule,
 		NgbTooltipModule,
 		NgbModalModule,
-		NgxBootstrapSliderModule
+		NgxBootstrapSliderModule,
+		PickerModule
 	],
 	exports: [
 		CommonModule,
@@ -39,6 +41,7 @@ import { AlertService } from './services/alert/service';
 		NgbTooltipModule,
 		NgbModalModule,
 		NgxBootstrapSliderModule,
+		PickerModule,
 		AvatarImageComponent,
 		BadgeComponent,
 		FurnitureGridComponent,

@@ -1,4 +1,5 @@
 import { AfterViewChecked, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ConfigurationEvent } from '../client/core/configuration/ConfigurationEvent';
 import { NitroEvent } from '../client/core/events/NitroEvent';
 import { AvatarRenderEvent } from '../client/nitro/avatar/events/AvatarRenderEvent';
 import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/NitroCommunicationDemoEvent';
@@ -39,7 +40,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             if(!Nitro.instance)
             {
                 Nitro.bootstrap({
-                    configurationUrl: '',
                     sso: (new URLSearchParams(window.location.search).get('sso') || null)
                 });
             }
@@ -53,11 +53,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.localization.events.addEventListener(NitroLocalizationEvent.LOADED, this.onNitroEvent.bind(this));
             Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onNitroEvent.bind(this));
             Nitro.instance.avatar.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent.bind(this));
+            Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onNitroEvent.bind(this));
+            Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.FAILED, this.onNitroEvent.bind(this));
 
-            Nitro.instance.core.asset.downloadAssets(Nitro.CONFIGURATION.PRELOAD_ASSETS, (status: boolean) =>
-            {
-                Nitro.instance.communication.init();
-            });
+            Nitro.instance.core.configuration.init(); 
         });
     }
 
@@ -74,7 +73,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.localization.events.removeEventListener(NitroLocalizationEvent.LOADED, this.onNitroEvent.bind(this));
             Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onNitroEvent.bind(this));
             Nitro.instance.avatar.events.removeEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent.bind(this));
+            Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.LOADED, this.onNitroEvent.bind(this));
+            Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.FAILED, this.onNitroEvent.bind(this));
         });
+    }
+
+    private getPreloadAssetUrls(): string[]
+    {
+        let urls: string[] = [];
+
+        const assetUrls = Nitro.instance.getConfiguration<string[]>('preload.assets.urls');
+
+        if(assetUrls && assetUrls.length)
+        {
+            for(let url of assetUrls)
+            {
+                urls.push(Nitro.instance.core.configuration.interpolate(url));
+            }
+        }
+
+        return urls;
     }
 
     private onNitroEvent(event: NitroEvent): void
@@ -83,6 +101,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
 
         switch(event.type)
         {
+            case ConfigurationEvent.LOADED:
+                Nitro.instance.core.asset.downloadAssets(this.getPreloadAssetUrls(), (status: boolean) =>
+                {
+                    Nitro.instance.communication.init();
+                });
+                return;
+            case ConfigurationEvent.FAILED:
+                this.ngZone.run(() =>
+                {
+                    this.isError        = true;
+                    this.message        = 'Configuration Failed';
+                    this.percentage     = 0;
+                    this.hideProgress   = true;
+                });
+                return;
 			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING:
                 this.ngZone.run(() =>
                 {

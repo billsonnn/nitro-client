@@ -1,6 +1,5 @@
 import { Texture } from 'pixi.js';
 import { NitroManager } from '../../core/common/NitroManager';
-import { NitroConfiguration } from '../../NitroConfiguration';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { AvailabilityStatusMessageEvent } from '../communication/messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { UserPermissionsEvent } from '../communication/messages/incoming/user/access/UserPermissionsEvent';
@@ -109,7 +108,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
-        this._furnitureData.loadFurnitureData(NitroConfiguration.FURNIDATA_URL);
+        this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>("furnidata.url"));
     }
 
     private loadBadgeImageManager(): void

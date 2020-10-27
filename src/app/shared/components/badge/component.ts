@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NitroConfiguration } from '../../../../client/NitroConfiguration';
+import { Nitro } from '../../../../client/nitro/Nitro';
 
 @Component({
 	selector: 'nitro-badge',
@@ -16,6 +16,6 @@ export class BadgeComponent
 
 	public get badgeUrl(): string
 	{
-		return (NitroConfiguration.BADGE_URL.replace('%badgename%', this.badge));
+		return ((Nitro.instance.getConfiguration<string>("badge.asset.url")).replace('%badgename%', this.badge));
 	}
 }

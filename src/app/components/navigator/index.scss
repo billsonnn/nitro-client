@@ -36,8 +36,8 @@
 }
 
 .nitro-navigator-room-creator-component {
-    width: 700px;
-    max-width: 700px;
+    width: 650px;
+    max-width: 650px;
 
     .grid-container {
 
@@ -46,7 +46,7 @@
 
             .item-detail {
                 width: calc(1 / 2 * 100% - (1 - 1 / 2) * 5px);
-                height: 70px;
+                height: 100px;
                 padding: 3px;
                 margin: 5px 5px 0 0;
                 background: $destiny;

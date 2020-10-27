@@ -2,7 +2,6 @@ import { Parser } from 'xml2js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroManager } from '../../core/common/NitroManager';
 import { NitroEvent } from '../../core/events/NitroEvent';
-import { NitroConfiguration } from '../../NitroConfiguration';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { Nitro } from '../Nitro';
 import { AssetAliasCollection } from './alias/AssetAliasCollection';
@@ -139,7 +138,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadActions(): void
     {
-        const defaultActions = NitroConfiguration.AVATAR_DEFAULT_ACTIONS;
+        const defaultActions = Nitro.instance.getConfiguration<string>("avatar.default.actions");
 
         if(defaultActions) this._structure._Str_1060(Nitro.instance.core.asset, defaultActions);
 
@@ -147,7 +146,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         try
         {
-            request.open('GET', NitroConfiguration.AVATAR_ACTIONS_URL);
+            request.open('GET', Nitro.instance.getConfiguration<string>("avatar.actions.url"));
 
             request.send();
 
@@ -184,7 +183,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
     private loadFigureData(): void
     {
-        const defaultFigureData = NitroConfiguration.AVATAR_DEFAULT_FIGUREDATA;
+        const defaultFigureData = Nitro.instance.getConfiguration<string>("avatar.default.figuredata");
 
         if(defaultFigureData)
         {
@@ -198,7 +197,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
             });
         }
 
-        const structureDownloader = new AvatarStructureDownload(NitroConfiguration.AVATAR_FIGUREDATA_URL, (this._structure.figureData as IFigureSetData));
+        const structureDownloader = new AvatarStructureDownload(Nitro.instance.getConfiguration<string>("avatar.figuredata.url"), (this._structure.figureData as IFigureSetData));
 
         structureDownloader.addEventListener(AvatarStructureDownload.AVATAR_STRUCTURE_DONE, this.onAvatarStructureDownloadDone.bind(this));
     }

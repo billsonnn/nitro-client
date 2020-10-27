@@ -110,8 +110,6 @@ export class RoomChatItemComponent
     {
         if(!this.chatContainerElement) return;
 
-        y = y - 1;
-
         this.y = y;
 
         this.chatContainerElement.style.top = (y + 'px');
@@ -119,12 +117,12 @@ export class RoomChatItemComponent
 
     public get width(): number
     {
-        return ((this.chatContainerElement && this.chatContainerElement.offsetWidth) || 0);
+        return ((this.chatContainerElement && this.chatContainerElement.clientWidth) || 0);
     }
 
     public get height(): number
     {
-        return ((this.chatContainerElement && this.chatContainerElement.offsetHeight) || 0);
+        return ((this.chatContainerElement && this.chatContainerElement.clientHeight) || 0);
     }
 
     public get chatContainerElement(): HTMLDivElement

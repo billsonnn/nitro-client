@@ -1,6 +1,5 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
-import { NitroConfiguration } from '../../NitroConfiguration';
 import { IVector3D } from '../../room/utils/IVector3D';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { PetType } from '../avatar/pets/PetType';
@@ -44,6 +43,7 @@ import { RoomModelComposer } from '../communication/messages/outgoing/room/mappi
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
 import { FurnitureWallDataParser } from '../communication/messages/parser/room/furniture/wall/FurnitureWallDataParser';
 import { RoomDoorParser } from '../communication/messages/parser/room/mapping/RoomDoorParser';
+import { Nitro } from '../Nitro';
 import { IRoomCreator } from './IRoomCreator';
 import { LegacyDataType } from './object/data/type/LegacyDataType';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
@@ -413,7 +413,7 @@ export class RoomMessageHandler extends Disposable
         {
             this._roomCreator.updateRoomObjectUserLocation(this._currentRoomId, unitRollData.id, unitRollData.location, unitRollData.targetLocation);
 
-            if(!NitroConfiguration.ROLLING_OVERRIDES_POSTURE) return;
+            if(Nitro.instance.getConfiguration<boolean>("avatar.rolling.overrides.posture")) return;
 
             const object = this._roomCreator.getRoomObjectUser(this._currentRoomId, unitRollData.id);
 

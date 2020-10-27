@@ -1,7 +1,7 @@
 import { ClientDeviceCategoryEnum } from '../../../../../core/communication/connections/enums/ClientDeviceCategoryEnum';
 import { ClientPlatformEnum } from '../../../../../core/communication/connections/enums/ClientPlatformEnum';
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
-import { NitroConfiguration } from '../../../../../NitroConfiguration';
+import { Nitro } from '../../../../Nitro';
 
 export class ClientReleaseVersionComposer implements IMessageComposer
 {
@@ -9,7 +9,7 @@ export class ClientReleaseVersionComposer implements IMessageComposer
 
     constructor()
     {
-        this._data = [ NitroConfiguration.RELEASE_VERSION, ClientPlatformEnum.HTML5, ClientPlatformEnum.HTML5, ClientDeviceCategoryEnum.BROWSER ];
+        this._data = [ Nitro.RELEASE_VERSION, ClientPlatformEnum.HTML5, ClientPlatformEnum.HTML5, ClientDeviceCategoryEnum.BROWSER ];
     }
 
     public getMessageArray(): any[]

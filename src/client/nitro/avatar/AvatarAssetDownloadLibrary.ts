@@ -53,6 +53,7 @@ export class AvatarAssetDownloadLibrary extends EventDispatcher
 
         this._assets.downloadAsset(this._downloadUrl, () =>
         {
+            console.log('lib finished', this._libraryName)
             this._state = AvatarAssetDownloadLibrary.LOADED;
 
             this.dispatchEvent(new AvatarRenderLibraryEvent(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this));

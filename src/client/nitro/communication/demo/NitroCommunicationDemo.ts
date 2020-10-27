@@ -2,7 +2,6 @@ import { NitroLogger } from '../../../core/common/logger/NitroLogger';
 import { NitroManager } from '../../../core/common/NitroManager';
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { SocketConnectionEvent } from '../../../core/communication/events/SocketConnectionEvent';
-import { NitroConfiguration } from '../../../NitroConfiguration';
 import { Nitro } from '../../Nitro';
 import { INitroCommunicationManager } from '../INitroCommunicationManager';
 import { ClientPingEvent } from '../messages/incoming/client/ClientPingEvent';
@@ -53,8 +52,6 @@ export class NitroCommunicationDemo extends NitroManager
 
     protected onDispose(): void
     {
-        this.stopPonging();
-
         const connection = this._communication.connection;
 
         if(connection)
@@ -79,8 +76,6 @@ export class NitroCommunicationDemo extends NitroManager
         this._didConnect = true;
 
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, connection);
-
-        if(NitroConfiguration.CLIENT_KEEPS_ALIVE) this.startPonging();
 
         this.startHandshake(connection);
 
@@ -163,22 +158,6 @@ export class NitroCommunicationDemo extends NitroManager
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKED, connection);
 
         this._handShaking = false;
-    }
-
-    private startPonging(): void
-    {
-        this.stopPonging();
-
-        this._pongInterval = setInterval(this.sendPong.bind(this), NitroConfiguration.PONG_INTERVAL_MS);
-    }
-
-    private stopPonging(): void
-    {
-        if(!this._pongInterval) return;
-
-        clearInterval(this._pongInterval);
-
-        this._pongInterval = null;
     }
 
     private sendPong(connection: IConnection = null): void

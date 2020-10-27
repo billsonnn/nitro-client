@@ -17,6 +17,7 @@
         overflow: scroll;
 
         .item-detail {
+            position: relative;
             width: calc(1 / 5 * 100% - (1 - 1 / 5) * 5px);
             height: 70px;
             padding: 3px;
@@ -46,7 +47,7 @@
 
             .detail-image {
                 width: 100%;
-                height: 45px;
+                height: 100%;
                 background-position: center;
                 background-repeat: no-repeat;
                 background-origin: content-box;
@@ -58,7 +59,9 @@
             }
         
             .badge {
+                position: sticky;
                 width: 100%;
+                bottom: 0;
                 padding: 2px;
                 font-size: 11px;
             }

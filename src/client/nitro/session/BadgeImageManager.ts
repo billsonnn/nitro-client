@@ -1,7 +1,7 @@
 ﻿import { Texture } from 'pixi.js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
-import { NitroConfiguration } from '../../NitroConfiguration';
+import { Nitro } from '../Nitro';
 import { BadgeInfo } from './BadgeInfo';
 import { BadgeImageReadyEvent } from './events/BadgeImageReadyEvent';
 
@@ -71,12 +71,12 @@ export class BadgeImageManager
         switch (_arg_2)
         {
             case BadgeImageManager.NORMAL_BADGE:
-                url = (NitroConfiguration.BADGE_URL).replace('%badgename%', k);
+                url = (Nitro.instance.getConfiguration<string>("badge.asset.url")).replace('%badgename%', k);
                 break;
             case BadgeImageManager.GROUP_BADGE:
                 if(!this._requestedGroupBadges.get(badgeName))
                 {
-                    url = (NitroConfiguration.GROUP_BADGE_URL).replace('%badgedata%', k);
+                    url = (Nitro.instance.getConfiguration<string>("badge.asset.group.url")).replace('%badgedata%', k);
                     
                     this._requestedGroupBadges.set(badgeName, true);
                 }

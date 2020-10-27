@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
-import { AppConfiguration } from '../../../../../AppConfiguration';
 
 @Component({
 	selector: 'nitro-room-chatinput-styleselector-component',
@@ -41,7 +40,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public ngOnInit(): void
     {
-        const styles = AppConfiguration.CHAT_STYLES;
+        const styles = Nitro.instance.getConfiguration<{ styleId: number, minRank: number, isSystemStyle: boolean, isHcOnly: boolean, isAmbassadorOnly: boolean }[]>("chat.styles");
 
         for(let style of styles)
         {
@@ -54,7 +53,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
                 continue;
             }
 
-            if(style.isSystemStyle || (AppConfiguration.DISABLED_CHAT_STYLES.indexOf(style.styleId) >= 0)) continue;
+            if(style.isSystemStyle || (Nitro.instance.getConfiguration<number[]>("chat.styles.disabled").indexOf(style.styleId) >= 0)) continue;
 
             if(style.isHcOnly && (Nitro.instance.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964))
             {

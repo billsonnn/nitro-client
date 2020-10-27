@@ -7,7 +7,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 @Component({
 	selector: 'nitro-avatar-image',
 	template: `
-	<img *ngIf="avatarUrl" [src]="avatarUrl" />`
+	<img *ngIf="avatarUrl" [src]="avatarUrl" [ngStyle]="{ 'transform': 'scale(' + scale + ')'}" />`
 })
 export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvatarImageListener
 {
@@ -31,7 +31,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 	public needsUpdate: boolean	= true;
 
 	constructor(
-		private ngZone: NgZone) {}
+		private _ngZone: NgZone) {}
 
 	public ngOnInit(): void
 	{
@@ -97,7 +97,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 	{
 		let avatarUrl: string = null;
 
-		this.ngZone.runOutsideAngular(() =>
+		this._ngZone.runOutsideAngular(() =>
 		{
 			this.needsUpdate = false;
 
@@ -117,9 +117,9 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 				avatarUrl = image.src;
 	
 				avatarImage.dispose();
+
+				if(avatarUrl) this._ngZone.run(() => (this.avatarUrl = avatarUrl));
 			}
 		});
-
-		if(avatarUrl) this.ngZone.run(() => (this.avatarUrl = avatarUrl));
 	}
 }

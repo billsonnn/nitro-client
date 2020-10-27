@@ -1,4 +1,4 @@
-import { NitroConfiguration } from '../../NitroConfiguration';
+import { Nitro } from '../../nitro/Nitro';
 import { Disposable } from '../common/disposable/Disposable';
 import { IDisposable } from '../common/disposable/IDisposable';
 import { NitroLogger } from '../common/logger/NitroLogger';
@@ -62,7 +62,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     {
         if(!event) return false;
 
-        if(NitroConfiguration.EVENT_DISPATCHER_LOG) NitroLogger.log(`DISPATCHED: ${ event.type }`, 'Event Dispatcher');
+        if(Nitro.instance.getConfiguration<boolean>("system.dispatcher.log")) NitroLogger.log(`DISPATCHED: ${ event.type }`, 'Event Dispatcher');
 
         this.processEvent(event);
 

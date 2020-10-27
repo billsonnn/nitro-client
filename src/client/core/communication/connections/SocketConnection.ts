@@ -1,4 +1,4 @@
-import { NitroConfiguration } from '../../../NitroConfiguration';
+import { Nitro } from '../../../nitro/Nitro';
 import { NitroLogger } from '../../common/logger/NitroLogger';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { EvaWireFormat } from '../codec/evawire/EvaWireFormat';
@@ -189,12 +189,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!encoded)
             {
-                if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
             this.write(encoded.toBuffer());
         }
@@ -252,7 +252,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            if(NitroConfiguration.PACKET_LOG) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
             
             this.handleMessages(...messages);
         }

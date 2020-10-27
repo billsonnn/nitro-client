@@ -3,15 +3,15 @@ import { IAssetManager } from './asset/IAssetManager';
 import { Disposable } from './common/disposable/Disposable';
 import { CommunicationManager } from './communication/CommunicationManager';
 import { ICommunicationManager } from './communication/ICommunicationManager';
-import { INitroConfigurationManager } from './configuration/INitroConfigurationManager';
-import { NitroConfigurationManager } from './configuration/NitroConfigurationManager';
+import { ConfigurationManager } from './configuration/ConfigurationManager';
+import { IConfigurationManager } from './configuration/IConfigurationManager';
 import { INitroCore } from './INitroCore';
 
 export class NitroCore extends Disposable implements INitroCore
 {
-    private _configuration: INitroConfigurationManager;
-    private _asset: IAssetManager;
+    private _configuration: IConfigurationManager;
     private _communication: ICommunicationManager;
+    private _asset: IAssetManager;
 
     constructor()
     {
@@ -23,9 +23,9 @@ export class NitroCore extends Disposable implements INitroCore
             'color: #000000; background: #FFFFFF; padding:5px 0;',
             'background: #000000; padding:5px 0;' ]);
 
-        this._configuration = new NitroConfigurationManager();
-        this._asset         = new AssetManager();
+        this._configuration = new ConfigurationManager();
         this._communication = new CommunicationManager();
+        this._asset         = new AssetManager();
     }
 
     protected onDispose(): void
@@ -45,18 +45,18 @@ export class NitroCore extends Disposable implements INitroCore
         }
     }
 
-    public get configuration(): INitroConfigurationManager
+    public get configuration(): IConfigurationManager
     {
         return this._configuration;
-    }
-
-    public get asset(): IAssetManager
-    {
-        return this._asset;
     }
 
     public get communication(): ICommunicationManager
     {
         return this._communication;
+    }
+
+    public get asset(): IAssetManager
+    {
+        return this._asset;
     }
 }

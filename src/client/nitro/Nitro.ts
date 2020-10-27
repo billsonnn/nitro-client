@@ -1,9 +1,9 @@
 import { Application, SCALE_MODES, settings } from 'pixi.js';
+import { ConfigurationEvent } from '../core/configuration/ConfigurationEvent';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
-import { NitroConfiguration } from '../NitroConfiguration';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
@@ -24,10 +24,9 @@ settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
 export class Nitro extends Application implements INitro
 {
-    public static READY: string = 'NE_READY';
-    public static CONFIGURATION = NitroConfiguration;
-
-    private static INSTANCE: INitro = null;
+    public static RELEASE_VERSION: string   = 'NITRO-01';
+    public static READY: string             = 'NE_READY';
+    private static INSTANCE: INitro         = null;
 
     private _core: INitroCore;
     private _events: IEventDispatcher;
@@ -77,12 +76,13 @@ export class Nitro extends Application implements INitro
 
         this._isReady       = false;
         this._isDisposed    = false;
+
+        this._core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onConfigurationLoadedEvent.bind(this));
     }
 
     public static bootstrap(options: any): void
     {
         options = {
-            configurationUrl: (options.configurationUrl || ''),
             sso: (options.sso || null),
             canvasParent: (options.canvasParent || document.body)
         };
@@ -107,8 +107,6 @@ export class Nitro extends Application implements INitro
             height: window.innerHeight,
             view: canvas
         });
-
-        instance.ticker.maxFPS  = NitroConfiguration.FPS;
 
         instance.communication.demo.setSSO(options.sso);
     }
@@ -195,9 +193,19 @@ export class Nitro extends Application implements INitro
         this._isReady       = false;
     }
 
+    private onConfigurationLoadedEvent(event: ConfigurationEvent): void
+    {
+        Nitro.instance.ticker.maxFPS = this.getConfiguration<number>("system.fps");
+    }
+
     private setupRenderer(): void
     {
         Nitro.instance.resizeTo = window;
+    }
+
+    public getConfiguration<T>(key: string): T
+    {
+        return this._core.configuration.getValue<T>(key);
     }
 
     public get core(): INitroCore

@@ -1,7 +1,6 @@
 import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
-import { NitroConfiguration } from '../../NitroConfiguration';
 import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
@@ -80,7 +79,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         this.setFurnitureData();
 
-        for(let [ index, name ] of NitroConfiguration.PET_TYPES.entries()) this._pets[name] = index;
+        for(let [ index, name ] of Nitro.instance.getConfiguration<string[]>('pet.types').entries()) this._pets[name] = index;
     }
 
     public dispose(): void
@@ -324,7 +323,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPetNameForType(type: number): string
     {
-        return NitroConfiguration.PET_TYPES[type] || null;
+        return Nitro.instance.getConfiguration<string[]>("pet.types")[type] || null;
     }
 
     public isLoaderType(type: string): boolean
@@ -510,7 +509,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         return existing;
     }
 
-    private getAssetUrls(type: string, param: string = null, icon: boolean = false): string[]
+    public getAssetUrls(type: string, param: string = null, icon: boolean = false): string[]
     {
         switch(type)
         {
@@ -584,22 +583,22 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     private getAssetUrlWithRoomBase(assetName: string): string
     {
-        return (NitroConfiguration.ROOM_ASSET_URL.replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>("room.asset.url").replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithFurniBase(assetName: string): string
     {
-        return (NitroConfiguration.FURNI_ASSET_URL.replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>("furni.asset.url").replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithFurniIconBase(assetName: string): string
     {
-        return (NitroConfiguration.FURNI_ASSET_ICON_URL.replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>("furni.asset.icon.url").replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithPetBase(assetName: string): string
     {
-        return (NitroConfiguration.PET_ASSET_URL.replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>("pet.asset.url").replace(/%libname%/gi, assetName));
     }
 
     public setRoomObjectRoomId(object: IRoomObject, roomId: string): void

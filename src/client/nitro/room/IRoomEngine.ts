@@ -16,6 +16,7 @@ import { IGetImageListener } from './IGetImageListener';
 import { ImageResult } from './ImageResult';
 import { IObjectData } from './object/data/IObjectData';
 import { RoomMapData } from './object/RoomMapData';
+import { RoomContentLoader } from './RoomContentLoader';
 import { RoomObjectEventHandler } from './RoomObjectEventHandler';
 
 export interface IRoomEngine extends INitroManager
@@ -86,6 +87,7 @@ export interface IRoomEngine extends INitroManager
     roomRendererFactory: IRoomRendererFactory;
     visualizationFactory: IRoomObjectVisualizationFactory;
     logicFactory: IRoomObjectLogicFactory;
+    roomContentLoader: RoomContentLoader;
     activeRoomId: number;
     ready: boolean;
     disposed: boolean;

@@ -6,7 +6,6 @@ import { CatalogPurchaseData } from '../../../../client/nitro/communication/mess
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
-import { AppConfiguration } from '../../../AppConfiguration';
 
 @Injectable()
 export class CatalogService
@@ -100,9 +99,9 @@ export class CatalogService
 
         let furniName = furniData.className;
 
-        if(furniData.colorId > 0) furniName = furniName + '_' + furniData.colorId;
+        const assetUrl = Nitro.instance.roomEngine.roomContentLoader.getAssetUrls(furniData.className, (furniData.colorId.toString()), true);
 
-        return (AppConfiguration.FURNITURE_ICON_URL.replace('%name%', furniName));
+        return ((assetUrl[0]) || null);
     }
 
     public get tabEmitter(): EventEmitter<CatalogPageData>

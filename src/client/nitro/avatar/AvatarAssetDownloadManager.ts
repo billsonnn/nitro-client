@@ -2,7 +2,7 @@ import { IAssetManager } from '../../core/asset/IAssetManager';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { NitroEvent } from '../../core/events/NitroEvent';
-import { NitroConfiguration } from '../../NitroConfiguration';
+import { Nitro } from '../Nitro';
 import { AvatarAssetDownloadLibrary } from './AvatarAssetDownloadLibrary';
 import { AvatarStructure } from './AvatarStructure';
 import { AvatarRenderEvent } from './events/AvatarRenderEvent';
@@ -37,7 +37,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._assets                = assets;
         this._structure             = structure;
 
-        this._missingMandatoryLibs  = NitroConfiguration.MANDATORY_AVATAR_LIBRARIES;
+        this._missingMandatoryLibs  = Nitro.instance.getConfiguration<string[]>("avatar.mandatory.libraries");
         this._figureMap             = new Map();
         this._pendingContainers     = [];
         this._figureListeners       = new Map();
@@ -58,7 +58,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         try
         {
-            request.open('GET', NitroConfiguration.AVATAR_FIGUREMAP_URL);
+            request.open('GET', Nitro.instance.getConfiguration<string>("avatar.figuremap.url"));
 
             request.send();
 
@@ -102,7 +102,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             this._libraryNames.push(id);
 
-            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, NitroConfiguration.AVATAR_ASSET_URL);
+            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, Nitro.instance.getConfiguration<string>("avatar.asset.url"));
 
             downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
 
@@ -287,11 +287,14 @@ export class AvatarAssetDownloadManager extends EventDispatcher
             {
                 let listeners = this._figureListeners.get(figure);
 
-                if(!listeners) listeners = [];
+                if(!listeners)
+                {
+                    listeners = [];
+
+                    this._figureListeners.set(figure, listeners);
+                }
 
                 listeners.push(listener);
-
-                this._figureListeners.set(figure, listeners);
             }
 
             this._incompleteFigures.set(figure, pendingLibraries);

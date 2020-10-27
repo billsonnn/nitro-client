@@ -1,6 +1,6 @@
 ﻿import { NitroManager } from '../../core/common/NitroManager';
 import { AdvancedMap } from '../../core/utils/AdvancedMap';
-import { NitroConfiguration } from '../../NitroConfiguration';
+import { Nitro } from '../Nitro';
 import { INitroLocalizationManager } from './INitroLocalizationManager';
 import { NitroLocalizationEvent } from './NitroLocalizationEvent';
 
@@ -17,7 +17,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
     protected onInit(): void
     {
-        this.loadLocalizationFromURL(NitroConfiguration.EXTERNAL_TEXTS_URL);
+        this.loadLocalizationFromURL(Nitro.instance.getConfiguration<string>("external.texts.url"));
     }
 
     public loadLocalizationFromURL(url: string): void
