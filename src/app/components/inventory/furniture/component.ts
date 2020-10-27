@@ -23,7 +23,7 @@ import { InventoryFurnitureService } from './service';
                 <div nitro-furniture-grid-component [list]="groupItems" [selected]="selectedGroup" (selectedChange)="selectGroup($event)"></div>
             </div>
             <div class="d-flex flex-column col-5">
-                <div nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
+                <div class="bg-black" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
                 <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup">
                     <div class="d-flex justify-content-center align-items-center h6 text-center wh-100">{{ selectedGroup.name }}</div>
                     <div class="btn-group-vertical w-100">

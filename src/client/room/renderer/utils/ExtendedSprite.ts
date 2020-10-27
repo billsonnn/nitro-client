@@ -13,7 +13,7 @@ export class ExtendedSprite extends Sprite
     private _pairedSpriteId: number;
     private _pairedSpriteUpdateCounter: number;
 
-    constructor(texture?: Texture)
+    constructor(texture: Texture = null)
     {
         super(texture);
         
