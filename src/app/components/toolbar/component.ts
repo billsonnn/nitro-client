@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DesktopViewComposer } from '../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomEngineAnimateIconEvent } from '../../../client/nitro/room/events/RoomEngineAnimateIconEvent';
 import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
@@ -25,7 +26,7 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
             <div class="card-body">
                 <div nitro-toolbar-cameracontrols-component></div>
                 <ul #navigationList class="list-group">
-                    <li class="list-group-item" *ngIf="isInRoom" ><i class="icon icon-habbo"></i></li>
+                    <li class="list-group-item" *ngIf="isInRoom" (click)="visitDesktop()"><i class="icon icon-habbo"></i></li>
                     <li class="list-group-item" *ngIf="!isInRoom"><i class="icon icon-house"></i></li>
                     <li class="list-group-item" (click)="toggleNavigator()"><i class="icon icon-rooms"></i></li>
                     <li class="list-group-item" (click)="toggleInventory()"><i class="icon icon-inventory"></i> <div class="badge badge-secondary" *ngIf="unseenCount">{{ unseenCount }}</div></li>
@@ -79,6 +80,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
     public toggleNavigator(): void
     {
         this.settingsService.toggleNavigator();
+    }
+
+    public visitDesktop(): void
+    {
+        Nitro.instance.communication.connection.send(new DesktopViewComposer());
     }
 
     private onRoomEngineEvent(event: RoomEngineEvent): void
