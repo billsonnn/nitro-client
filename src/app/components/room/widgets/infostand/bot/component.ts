@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { RoomWidgetUserInfostandUpdateEvent } from '../../events/RoomWidgetUserInfostandUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomInfoStandComponent } from '../component';
 
 @Component({
@@ -52,7 +52,7 @@ export class RoomInfoStandBotComponent
         if(this.visible) this.visible = false;
     }
 
-    public update(event: RoomWidgetUserInfostandUpdateEvent): void
+    public update(event: RoomWidgetUpdateInfostandUserEvent): void
     {
         this.name   = event.name;
         this.motto  = event.motto;

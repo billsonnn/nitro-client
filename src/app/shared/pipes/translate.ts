@@ -6,6 +6,6 @@ export class TranslatePipe implements PipeTransform
 {
     public transform(value: string): string
     {
-        return Nitro.instance.localization.getValue(value);
+        return Nitro.instance.getLocalization(value);
     }
 }

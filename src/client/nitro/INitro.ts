@@ -14,6 +14,7 @@ export interface INitro extends Application
     init(): void;
     dispose(): void;
     getConfiguration<T>(key: string): T;
+    getLocalization(key: string): string;
     core: INitroCore;
     events: IEventDispatcher;
     localization: INitroLocalizationManager;
@@ -23,6 +24,8 @@ export interface INitro extends Application
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;
     roomManager: IRoomManager;
+    width: number;
+    height: number;
     time: number;
     isReady: boolean;
     isDisposed: boolean;

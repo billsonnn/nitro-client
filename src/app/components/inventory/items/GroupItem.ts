@@ -215,7 +215,7 @@ export class GroupItem implements IGetImageListener
                 }
         }
 
-        this._name = Nitro.instance.localization.getValue(key);
+        this._name = Nitro.instance.getLocalization(key);
     }
 
     private setDescription(): void

@@ -2,6 +2,10 @@ import { IMessageDataWrapper } from '../../../../../../core/communication/messag
 
 export class RoomModerationParser
 {
+    public static _Str_10707: number    = 0;
+    public static _Str_5047: number     = 1;
+    public static _Str_11537: number    = 2;
+
     private _allowMute: number;
     private _allowKick: number;
     private _allowBan: number;

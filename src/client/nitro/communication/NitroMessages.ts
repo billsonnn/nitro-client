@@ -129,11 +129,18 @@ import { NavigatorSettingsComposer } from './messages/outgoing/navigator/Navigat
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
+import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
+import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
+import { RoomGiveRightsComposer } from './messages/outgoing/room/action/RoomGiveRightsComposer';
+import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUserComposer';
+import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
+import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from './messages/outgoing/room/furniture/FurniturePlaceComposer';
+import { FurniturePlacePaintComposer } from './messages/outgoing/room/furniture/FurniturePlacePaintComposer';
 import { FurniturePostItPlaceComposer } from './messages/outgoing/room/furniture/FurniturePostItPlaceComposer';
 import { FurnitureColorWheelComposer } from './messages/outgoing/room/furniture/logic/FurnitureColorWheelComposer';
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
@@ -387,10 +394,18 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
 
         // ROOM
-            this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
+        this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
 
             // ACCESS
             this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);
+
+            // ACTION
+            this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);
+            this._composers.set(OutgoingHeader.ROOM_BAN_GIVE, RoomBanUserComposer);
+            this._composers.set(OutgoingHeader.ROOM_RIGHTS_GIVE, RoomGiveRightsComposer);
+            this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
+            this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
+            this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
 
             // DATA
             this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
@@ -399,6 +414,7 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
             this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
             this._composers.set(OutgoingHeader.FURNITURE_PLACE, FurniturePlaceComposer);
+            this._composers.set(OutgoingHeader.ITEM_PAINT, FurniturePlacePaintComposer);
             this._composers.set(OutgoingHeader.FURNITURE_POSTIT_PLACE, FurniturePostItPlaceComposer);
 
                 // FLOOR

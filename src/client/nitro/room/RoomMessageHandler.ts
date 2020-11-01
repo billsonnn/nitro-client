@@ -43,7 +43,6 @@ import { RoomModelComposer } from '../communication/messages/outgoing/room/mappi
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
 import { FurnitureWallDataParser } from '../communication/messages/parser/room/furniture/wall/FurnitureWallDataParser';
 import { RoomDoorParser } from '../communication/messages/parser/room/mapping/RoomDoorParser';
-import { Nitro } from '../Nitro';
 import { IRoomCreator } from './IRoomCreator';
 import { LegacyDataType } from './object/data/type/LegacyDataType';
 import { RoomObjectUserType } from './object/RoomObjectUserType';
@@ -412,8 +411,6 @@ export class RoomMessageHandler extends Disposable
         if(unitRollData)
         {
             this._roomCreator.updateRoomObjectUserLocation(this._currentRoomId, unitRollData.id, unitRollData.location, unitRollData.targetLocation);
-
-            if(Nitro.instance.getConfiguration<boolean>("avatar.rolling.overrides.posture")) return;
 
             const object = this._roomCreator.getRoomObjectUser(this._currentRoomId, unitRollData.id);
 

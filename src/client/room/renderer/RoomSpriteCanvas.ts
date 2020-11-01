@@ -688,18 +688,19 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     private _Str_21974(sprite: ExtendedSprite, _arg_2: boolean): void
     {
-        if (sprite != null)
-        {
-            if (!_arg_2)
-            {
-                sprite.setTexture(null);
-            }
-            else
-            {
-                if(sprite.parent) sprite.parent.removeChild(sprite);
+        if(!sprite) return;
 
-                sprite.destroy();
-            }
+        if(!_arg_2)
+        {
+            console.log('clear texture', sprite.name);
+            sprite.setTexture(null);
+        }
+        else
+        {
+            console.log('destroy texture', sprite.name);
+            if(sprite.parent) sprite.parent.removeChild(sprite);
+
+            sprite.destroy();
         }
     }
 

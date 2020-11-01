@@ -110,7 +110,7 @@ export class OutgoingHeader
     public static ROOM_MODEL_BLOCKED_TILES       = 1687;
     public static ROOM_MODEL_DOOR                = 3559;
     public static ROOM_MODEL_SAVE                = 875;
-    public static ROOM_MODEL                    = 2300;
+    public static ROOM_MODEL                     = 2300;
     public static ROOM_MUTE                      = 3637;
     public static ROOM_MUTE_USER                 = 3485;
     public static ROOM_RIGHTS_GIVE               = 808;
@@ -120,6 +120,7 @@ export class OutgoingHeader
     public static ROOM_RIGHTS_REMOVE_OWN         = 3182;
     public static ROOM_SETTINGS                  = 3129;
     public static ROOM_SETTINGS_SAVE             = 1969;
+    public static ROOM_AMBASSADOR_ALERT          = 2996;
     public static SECURITY_MACHINE               = 2490;
     public static SECURITY_TICKET                = 2419;
     public static TRADE                          = 1481;

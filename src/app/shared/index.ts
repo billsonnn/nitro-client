@@ -7,6 +7,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AlertToastComponent } from './components/alerts/alert/component';
 import { ConfirmToastComponent } from './components/alerts/confirm/component';
@@ -19,6 +20,10 @@ import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
 import { TranslatePipe } from './pipes/translate';
 import { AlertService } from './services/alert/service';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+	suppressScrollX: true
+};
 
 @NgModule({
 	imports: [
@@ -33,7 +38,8 @@ import { AlertService } from './services/alert/service';
 		NgbModalModule,
 		NgxBootstrapSliderModule,
 		PickerModule,
-		EmojiModule
+		EmojiModule,
+		PerfectScrollbarModule
 	],
 	exports: [
 		CommonModule,
@@ -45,6 +51,7 @@ import { AlertService } from './services/alert/service';
 		NgxBootstrapSliderModule,
 		PickerModule,
 		EmojiModule,
+		PerfectScrollbarModule,
 		AvatarImageComponent,
 		BadgeComponent,
 		FurnitureGridComponent,
@@ -55,7 +62,11 @@ import { AlertService } from './services/alert/service';
 		TranslatePipe
 	],
 	providers: [
-		AlertService
+		AlertService,
+		{
+			provide: PERFECT_SCROLLBAR_CONFIG,
+			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+		}
 	],
 	declarations: [
 		AlertToastComponent,

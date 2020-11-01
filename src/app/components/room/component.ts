@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, NgZone, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IConnection } from '../../../client/core/communication/connections/IConnection';
 import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
@@ -49,10 +49,8 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
         <ng-template #widgetContainer></ng-template>
     </div>`
 })
-export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
-{
-    public static ROOM_VIEW_READY: string = 'RC_ROOM_VIEW_READY';
-    
+export class RoomComponent implements OnDestroy, AfterViewInit, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
+{    
     @Input()
     public roomSession: IRoomSession;
 
@@ -105,16 +103,11 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         private ngZone: NgZone,
         private componentFactoryResolver: ComponentFactoryResolver) {}
 
-    public ngOnInit(): void
-    {
-        if(this.roomSession) this.roomSessionManager.startSession(this.roomSession);
-    }
-
-	public ngAfterViewInit(): void
+    public ngAfterViewInit(): void
 	{
         this.didViewInit = true;
 
-        this.insertRoomView();
+        if(this.roomSession) this.roomSessionManager.startSession(this.roomSession);
     }
     
     public ngOnDestroy(): void
@@ -146,10 +139,11 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
 	public prepareCanvas(canvasId: number): void
     {
+        console.log(NgZone.isInAngularZone());
         if(!this.roomSession || (this.canvasIds.indexOf(canvasId) >= 0)) return;
 
-        const width     = (Nitro.instance.renderer.width / window.devicePixelRatio);
-        const height    = (Nitro.instance.renderer.height / window.devicePixelRatio);
+        const width     = Nitro.instance.width;
+        const height    = Nitro.instance.height;
         const scale     = RoomGeometry.SCALE_ZOOMED_IN;
 
         const displayObject = this.roomEngine.getRoomInstanceDisplay(this.roomSession.roomId, canvasId, width, height, scale);
@@ -211,12 +205,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         if(this.roomCanvasReference && this.roomCanvasReference.nativeElement)
         {
-			this.roomCanvasReference.nativeElement.innerHTML = '';
-
 			if(this.roomCanvasWrapper) this.roomCanvasReference.nativeElement.appendChild(this.roomCanvasWrapper);
         }
-
-        this.events.dispatchEvent(new NitroEvent(RoomComponent.ROOM_VIEW_READY));
     }
 	
 	private onWindowResizeEvent(event: UIEvent): void
@@ -227,7 +217,7 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
 
         this.resizeTimer = setTimeout(() =>
         {
-            this.roomEngine.initializeRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0], (Nitro.instance.renderer.view.width / window.devicePixelRatio), (Nitro.instance.renderer.view.height / window.devicePixelRatio));
+            this.roomEngine.initializeRoomInstanceRenderingCanvas(this.roomSession.roomId, this.canvasIds[0], Nitro.instance.width, Nitro.instance.height);
 
             this.events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
@@ -583,13 +573,13 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
             case RoomEngineObjectEvent.REQUEST_MOVE:
                 if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
-                    this.roomEngine.processRoomObjectOperation(event.roomId, objectId, category, RoomObjectOperationType.OBJECT_MOVE);
+                    this.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_MOVE);
                 }
                 break;
             case RoomEngineObjectEvent.REQUEST_ROTATE:
                 if(this.checkFurniManipulationRights(event.roomId, objectId, category))
                 {
-                    this.roomEngine.processRoomObjectOperation(event.roomId, objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
+                    this.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
                 break;
             case RoomEngineTriggerWidgetEvent.OPEN_WIDGET:
@@ -754,8 +744,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         if(!sprite) return;
 
         sprite.tint     = this.roomBackgroundColor;
-        sprite.width    = (Nitro.instance.renderer.width / window.devicePixelRatio);
-        sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
+        sprite.width    = Nitro.instance.width;
+        sprite.height   = Nitro.instance.height;
     }
 
     private setRoomColorizer(sprite: Sprite): void
@@ -763,8 +753,8 @@ export class RoomComponent implements OnInit, OnDestroy, AfterViewInit, IRoomWid
         if(!sprite) return;
 
         sprite.tint     = this.roomColorizerColor;
-        sprite.width    = (Nitro.instance.renderer.width / window.devicePixelRatio);
-        sprite.height   = (Nitro.instance.renderer.height / window.devicePixelRatio);
+        sprite.width    = Nitro.instance.width;
+        sprite.height   = Nitro.instance.height;
     }
 
     public getFirstCanvasId(): number

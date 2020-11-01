@@ -6,7 +6,7 @@ import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniIn
 import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfostandUpdateEvent';
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
-import { RoomWidgetUserInfostandUpdateEvent } from '../events/RoomWidgetUserInfostandUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { InfoStandWidgetHandler } from '../handlers/InfoStandWidgetHandler';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomInfoStandBotComponent } from './bot/component';
@@ -89,9 +89,9 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.objectDeselectedHandler.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this.objectRemovedHandler.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.objectRemovedHandler.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this.userInfostandUpdateHandler.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this.userInfostandUpdateHandler.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.BOT, this.botInfostandUpdateHandler.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this.userInfostandUpdateHandler.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.userInfostandUpdateHandler.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.BOT, this.botInfostandUpdateHandler.bind(this));
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this.furniInfostandUpdateHandler.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this.rentableBotInfostandUpdateHandler.bind(this));
         eventDispatcher.addEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this.petInfostandUpdateHandler.bind(this));
@@ -107,9 +107,9 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.objectDeselectedHandler.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this.objectRemovedHandler.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.objectRemovedHandler.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this.userInfostandUpdateHandler.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this.userInfostandUpdateHandler.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.BOT, this.botInfostandUpdateHandler.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this.userInfostandUpdateHandler.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.userInfostandUpdateHandler.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.BOT, this.botInfostandUpdateHandler.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this.furniInfostandUpdateHandler.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this.rentableBotInfostandUpdateHandler.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this.petInfostandUpdateHandler.bind(this));
@@ -188,7 +188,7 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
         if(remove) this.close();
     }
 
-    private userInfostandUpdateHandler(event: RoomWidgetUserInfostandUpdateEvent): void
+    private userInfostandUpdateHandler(event: RoomWidgetUpdateInfostandUserEvent): void
     {
         if(!event || !this.userView) return;
 
@@ -204,7 +204,7 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
         });
     }
 
-    private botInfostandUpdateHandler(event: RoomWidgetUserInfostandUpdateEvent): void
+    private botInfostandUpdateHandler(event: RoomWidgetUpdateInfostandUserEvent): void
     {
         if(!event) return;
 

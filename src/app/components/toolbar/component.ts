@@ -20,12 +20,10 @@ import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
     template: `
     <div class="nitro-toolbar-component">
         <div class="card">
-            <div class="card-header">
-                <div class="nitro-icon"></div>
-            </div>
             <div class="card-body">
                 <div nitro-toolbar-cameracontrols-component></div>
                 <ul #navigationList class="list-group">
+                    <li class="list-group-item logo"><div class="nitro-icon"></div></li>
                     <li class="list-group-item" *ngIf="isInRoom" (click)="visitDesktop()"><i class="icon icon-habbo"></i></li>
                     <li class="list-group-item" *ngIf="!isInRoom"><i class="icon icon-house"></i></li>
                     <li class="list-group-item" (click)="toggleNavigator()"><i class="icon icon-rooms"></i></li>

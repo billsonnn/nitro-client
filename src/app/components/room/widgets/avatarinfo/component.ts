@@ -15,7 +15,7 @@ import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
-import { RoomWidgetUserInfostandUpdateEvent } from '../events/RoomWidgetUserInfostandUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
 import { AvatarInfoWidgetHandler } from '../handlers/AvatarInfoWidgetHandler';
 import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
@@ -75,8 +75,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
         eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
@@ -93,8 +93,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
         eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserInfostandUpdateEvent.PEER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
@@ -121,9 +121,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     this._Str_12674(nameEvent.userId, nameEvent.userName, nameEvent.userType, nameEvent.roomIndex, null);
                 }
                 break;
-            case RoomWidgetUserInfostandUpdateEvent.OWN_USER:
-            case RoomWidgetUserInfostandUpdateEvent.PEER:
-                const infostandEvent = (event as RoomWidgetUserInfostandUpdateEvent);
+            case RoomWidgetUpdateInfostandUserEvent.OWN_USER:
+            case RoomWidgetUpdateInfostandUserEvent.PEER:
+                const infostandEvent = (event as RoomWidgetUpdateInfostandUserEvent);
 
                 this.userInfoData.populate(infostandEvent);
 

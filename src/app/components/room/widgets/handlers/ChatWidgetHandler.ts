@@ -49,7 +49,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         this._avatarColorCache          = new Map();
         this._avatarImageCache          = new Map();
         this._petImageCache             = new Map();
-        this._primaryCanvasScale        = 1;
+        this._primaryCanvasScale        = 0;
         this._primaryCanvasOriginPos    = null;
         this._tempScreenPosVector       = new Vector3d();
 
@@ -80,12 +80,17 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(!geometry) return;
 
+        let scale = 1;
+
+        if(this._primaryCanvasScale > 0) scale = (geometry.scale / this._primaryCanvasScale);
+
         if(!this._primaryCanvasOriginPos)
         {
             this._tempScreenPosVector.x     = 0;
             this._tempScreenPosVector.y     = 0;
             this._tempScreenPosVector.z     = 0;
             this._primaryCanvasOriginPos    = geometry.getScreenPoint(this._tempScreenPosVector);
+            this._primaryCanvasScale        = (geometry.scale - 10);
         }
 
         let eventType: string               = '';
@@ -105,7 +110,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
-                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, 1));
+                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
 
                 if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
                 {

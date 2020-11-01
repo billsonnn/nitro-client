@@ -1,6 +1,12 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { RoomEnterComposer } from '../communication/messages/outgoing/room/access/RoomEnterComposer';
+import { RoomAmbassadorAlertComposer } from '../communication/messages/outgoing/room/action/RoomAmbassadorAlertComposer';
+import { RoomBanUserComposer } from '../communication/messages/outgoing/room/action/RoomBanUserComposer';
+import { RoomGiveRightsComposer } from '../communication/messages/outgoing/room/action/RoomGiveRightsComposer';
+import { RoomKickUserComposer } from '../communication/messages/outgoing/room/action/RoomKickUserComposer';
+import { RoomMuteUserComposer } from '../communication/messages/outgoing/room/action/RoomMuteUserComposer';
+import { RoomTakeRightsComposer } from '../communication/messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -181,6 +187,36 @@ export class RoomSession extends Disposable implements IRoomSession
         // send doorbell
     }
 
+    public sendAmbassadorAlertMessage(userId: number): void
+    {
+        this._connection.send(new RoomAmbassadorAlertComposer(userId));
+    }
+
+    public sendKickMessage(userId: number): void
+    {
+        this._connection.send(new RoomKickUserComposer(userId));
+    }
+
+    public sendMuteMessage(userId: number, minutes: number): void
+    {
+        this._connection.send(new RoomMuteUserComposer(userId, minutes, this._roomId));
+    }
+
+    public sendBanMessage(userId: number, type: string): void
+    {
+        this._connection.send(new RoomBanUserComposer(userId, type, this._roomId));
+    }
+
+    public sendGiveRightsMessage(userId: number): void
+    {
+        this._connection.send(new RoomGiveRightsComposer(userId));
+    }
+
+    public sendTakeRightsMessage(userId: number): void
+    {
+        this._connection.send(new RoomTakeRightsComposer([ userId ]));
+    }
+
     public pickupPet(id: number): void
     {
         if(!this._connection) return;
@@ -233,6 +269,11 @@ export class RoomSession extends Disposable implements IRoomSession
     public get tradeMode(): number
     {
         return this._tradeMode;
+    }
+
+    public get _Str_7411(): boolean
+    {
+        return true;
     }
 
     public set tradeMode(mode: number)

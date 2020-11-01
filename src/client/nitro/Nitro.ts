@@ -2,6 +2,7 @@ import { Application, SCALE_MODES, settings } from 'pixi.js';
 import { ConfigurationEvent } from '../core/configuration/ConfigurationEvent';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
+import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
 import { IRoomManager } from '../room/IRoomManager';
@@ -24,6 +25,7 @@ settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
 export class Nitro extends Application implements INitro
 {
+    public static CONTEXT_LOST: string      = 'CONTEXT_LOST';
     public static RELEASE_VERSION: string   = 'NITRO-01';
     public static READY: string             = 'NE_READY';
     private static INSTANCE: INitro         = null;
@@ -105,8 +107,11 @@ export class Nitro extends Application implements INitro
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
             height: window.innerHeight,
+            powerPreference: 'high-performance',
             view: canvas
         });
+
+        canvas.addEventListener('webglcontextlost', () => instance.events.dispatchEvent(new NitroEvent(Nitro.CONTEXT_LOST)));
 
         instance.communication.demo.setSSO(options.sso);
     }
@@ -208,6 +213,11 @@ export class Nitro extends Application implements INitro
         return this._core.configuration.getValue<T>(key);
     }
 
+    public getLocalization(key: string): string
+    {
+        return this._localization.getValue(key);
+    }
+
     public get core(): INitroCore
     {
         return this._core;
@@ -251,6 +261,16 @@ export class Nitro extends Application implements INitro
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
+    }
+
+    public get width(): number
+    {
+        return (this.renderer.width / this.renderer.resolution);
+    }
+
+    public get height(): number
+    {
+        return (this.renderer.height / this.renderer.resolution);
     }
 
     public get time(): number

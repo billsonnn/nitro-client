@@ -13,7 +13,6 @@ export class RoomDataParser
     public static DOORBELL_STATE            = 1;
     public static PASSWORD_STATE            = 2;
 
-
     private _roomId: number;
     private _roomName: string;
     private _showOwner: boolean;
@@ -65,10 +64,15 @@ export class RoomDataParser
         this._score                 = 0;
         this._ranking               = 0;
         this._categoryId            = 0;
+        this._totalStars            = 0;
+        this._groupId               = 0;
+        this._groupName             = null;
+        this._groupBadge            = null;
         this._tags                  = [];
         this._bitMask               = 0;
-        this._showOwner             = true;
+        this._thumbnail             = null;
         this._allowPets             = false;
+        this._showOwner             = true;
         this._displayAd             = false;
         this._adName                = null;
         this._adDescription         = null;

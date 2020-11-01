@@ -1362,6 +1362,36 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         }
     }
 
+    public processRoomObjectWallOperation(roomId: number, objectId: number, category: number, operation: string, data: Map<string, string>): boolean
+    {
+        if(!this._roomEngine) return false;
+
+        const roomObject = this._roomEngine.getRoomObject(roomId, objectId, category);
+
+        if(!roomObject) return false;
+
+        switch (operation)
+        {
+            case RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA:
+                if (this._roomEngine.connection)
+                {
+                    //this._roomEngine.connection.send(new _Str_5686(objectId, data));
+                }
+                break;
+        }
+        
+        return true;
+    }
+
+    public processRoomObjectFloorOperation(roomId: number, objectId: number, operation: string, data: string): boolean
+    {
+        if(!this._roomEngine) return false;
+        
+        //this._roomEngine.connection.send(new _Str_10640(objectId, operation, data));
+        
+        return true;
+    }
+
     public processRoomObjectOperation(roomId: number, objectId: number, category: number, operation: string): boolean
     {
         if(!this._roomEngine) return false;

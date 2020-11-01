@@ -20,7 +20,7 @@ import { RoomAvatarInfoComponent } from '../component';
                 <ng-container *ngFor="let entry of menu">
                     <ul *ngIf="(mode === entry.mode)" class="list-group">
                         <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ ('widget.memenu.' + item.name) | translate }}</li>
+                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
                         </ng-container>
                     </ul>
                 </ng-container>
@@ -44,7 +44,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
 
-    public menu: { mode: number, items: { name: string, visible: boolean }[] }[] = [];
+    public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
 
     public static setup(view: RoomAvatarInfoAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
@@ -75,42 +75,52 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'add_friend',
+                        localization: 'infostand.button.friend',
                         visible: this.avatarData.canBeAskedForAFriend
                     },
                     {
                         name: 'trade',
+                        localization: 'infostand.button.trade',
                         visible: this.avatarData._Str_5751
                     },
                     {
                         name: 'whisper',
+                        localization: 'infostand.button.whisper',
                         visible: true
                     },
                     {
                         name: 'respect',
+                        localization: 'infostand.button.respect',
                         visible: (this.avatarData._Str_3577 > 0)
                     },
                     {
                         name: 'ignore',
+                        localization: 'infostand.button.ignore',
                         visible: !this.avatarData._Str_3655
                     },
                     {
                         name: 'unignore',
+                        localization: 'infostand.button.unignore',
                         visible: this.avatarData._Str_3655
                     },
                     {
                         name: 'report',
+                        localization: 'infostand.button.report',
                         visible: true
                     },
                     {
                         name: 'moderate',
+                        localization: 'infostand.link.moderate',
                         visible: this.moderateMenuHasContent()
                     },
                     {
                         name: 'ambassador',
+                        localization: 'infostand.link.ambassador',
                         visible: this.ambassadorMenuHasContent()
                     },
                     {
                         name: 'pass_handitem',
+                        localization: 'avatar.widget.pass_hand_item',
                         visible: giveHandItem
                     }
                 ]
@@ -120,26 +130,32 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'kick',
+                        localization: 'infostand.button.kick',
                         visible: true
                     },
                     {
                         name: 'mute',
+                        localization: 'infostand.button.mute',
                         visible: true
                     },
                     {
                         name: 'ban',
+                        localization: 'infostand.button.ban',
                         visible: true
                     },
                     {
                         name: 'give_rights',
-                        visible: true
+                        localization: 'infostand.button.giverights',
+                        visible: this.isShowGiveRights()
                     },
                     {
                         name: 'remove_rights',
-                        visible: true
+                        localization: 'infostand.button.removerights',
+                        visible: this.isShowRemoveRights()
                     },
                     {
                         name: 'back',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]
@@ -149,18 +165,22 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'ban_hour',
+                        localization: 'infostand.button.ban_hour',
                         visible: true
                     },
                     {
                         name: 'ban_day',
+                        localization: 'infostand.button.ban_day',
                         visible: true
                     },
                     {
                         name: 'ban_perm',
+                        localization: 'infostand.button.ban_perm',
                         visible: true
                     },
                     {
                         name: 'back_moderate',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]
@@ -170,18 +190,22 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'mute_2min',
+                        localization: 'infostand.button.mute_2min',
                         visible: true
                     },
                     {
                         name: 'mute_5min',
+                        localization: 'infostand.button.mute_5min',
                         visible: true
                     },
                     {
                         name: 'mute_10min',
+                        localization: 'infostand.button.mute_10min',
                         visible: true
                     },
                     {
                         name: 'back_moderate',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]
@@ -191,18 +215,22 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'ambassador_alert',
+                        localization: 'infostand.button.alert',
                         visible: true
                     },
                     {
                         name: 'ambassador_kick',
+                        localization: 'infostand.button.kick',
                         visible: true
                     },
                     {
                         name: 'ambassador_mute',
+                        localization: 'infostand.button.mute',
                         visible: true
                     },
                     {
                         name: 'back',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]
@@ -212,22 +240,27 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 items: [
                     {
                         name: 'ambassador_mute_2min',
+                        localization: 'infostand.button.mute_2min',
                         visible: true
                     },
                     {
                         name: 'ambassador_mute_10min',
+                        localization: 'infostand.button.mute_10min',
                         visible: true
                     },
                     {
                         name: 'ambassador_mute_60min',
+                        localization: 'infostand.button.mute_60min',
                         visible: true
                     },
                     {
                         name: 'ambassador_mute_18hr',
+                        localization: 'infostand.button.mute_18hr',
                         visible: true
                     },
                     {
                         name: 'back_ambassador',
+                        localization: 'generic.back',
                         visible: true
                     }
                 ]

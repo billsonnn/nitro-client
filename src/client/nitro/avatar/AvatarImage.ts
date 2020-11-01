@@ -122,7 +122,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(this._Str_671)
         {
-            this._Str_671.destroy();
+            this._Str_671.destroy(true);
 
             this._Str_671 = null;
         }
@@ -135,7 +135,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(this._Str_864)
         {
-            for(let k of this._Str_864.values()) if(k) k.destroy();
+            for(let k of this._Str_864.values()) if(k) k.destroy(true);
 
             this._Str_864 = null;
         }
@@ -328,7 +328,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if((this._Str_1586 || (this._Str_671 == null)) || ((!(this._Str_671.width == avatarCanvas.width)) || (!(this._Str_671.height == avatarCanvas.height))))
         {
-            if(this._Str_671 && !this._Str_1586) this._Str_671.destroy();
+            if(this._Str_671 && !this._Str_1586) this._Str_671.destroy(true);
 
             this._Str_671   = null;
             this._Str_1586  = false;
@@ -393,7 +393,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
                 this.applyPalette(avatarImage, this._Str_2121.reds);
 
-                if(this._Str_671) this._Str_671.destroy();
+                if(this._Str_671) this._Str_671.destroy(true);
 
                 this._Str_671 = avatarImage;
             }
@@ -479,10 +479,9 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return null;
     }
 
-    private applyPalette(texture: Texture, reds: number[] = null, greens: number[] = null, blues: [] = null, alphas: number[] = null): Texture
+    private applyPalette(texture: RenderTexture, reds: number[] = null, greens: number[] = null, blues: [] = null, alphas: number[] = null): Texture
     {
-        const sprite            = Sprite.from(texture);
-        const textureCanvas     = Nitro.instance.renderer.extract.canvas(sprite);
+        const textureCanvas     = Nitro.instance.renderer.extract.canvas(texture);
         const textureCtx        = textureCanvas.getContext('2d');
         const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
         const data              = textureImageData.data;
@@ -572,7 +571,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(existing)
         {
-            existing.destroy();
+            existing.destroy(true);
 
             this._Str_864.delete(k);
 

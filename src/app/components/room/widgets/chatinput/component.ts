@@ -1,6 +1,12 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
+import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { SystemChatStyleEnum } from '../../../../../client/nitro/ui/widget/enums/SystemChatStyleEnum';
+import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
+import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
+import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { ChatInputWidgetHandler } from '../handlers/ChatInputWidgetHandler';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
@@ -15,7 +21,7 @@ import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMes
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
 })
-export class RoomChatInputComponent extends ConversionTrackingWidget implements OnDestroy, AfterViewInit
+export class RoomChatInputComponent extends ConversionTrackingWidget implements OnInit, OnDestroy, AfterViewInit
 {
     @ViewChild('chatInputView')
     public chatInputView: ElementRef<HTMLInputElement>;
@@ -30,11 +36,22 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public currentStyle: number         = -1;
     public needsStyleUpdate: boolean    = false;
 
+    private _chatModeIdWhisper: string  = null;
+    private _chatModeIdShout: string    = null;
+    private _chatModeIdSpeak: string    = null;
+
     constructor(
         private ngZone: NgZone
     )
     {
         super();
+    }
+
+    public ngOnInit(): void
+    {
+        this._chatModeIdWhisper = Nitro.instance.getLocalization("widgets.chatinput.mode.whisper");
+        this._chatModeIdShout   = Nitro.instance.getLocalization("widgets.chatinput.mode.shout");
+        this._chatModeIdSpeak   = Nitro.instance.getLocalization("widgets.chatinput.mode.speak");
     }
 
     public ngAfterViewInit(): void
@@ -65,6 +82,61 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         });
     }
 
+    public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
+    {
+        if(!eventDispatcher) return;
+        
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent.bind(this));
+
+        super.registerUpdateEvents(eventDispatcher);
+    }
+
+    public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
+    {
+        if(!eventDispatcher) return;
+        
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent.bind(this));
+    }
+
+    private onRoomWidgetRoomObjectUpdateEvent(event: RoomWidgetRoomObjectUpdateEvent): void
+    {
+        this.selectedUsername = '';
+    }
+
+    private onRoomWidgetUpdateInfostandUserEvent(event: RoomWidgetUpdateInfostandUserEvent): void
+    {
+        if(!event) return;
+
+        this.selectedUsername = event.name;
+    }
+
+    private onRoomWidgetChatInputContentUpdateEvent(event: RoomWidgetChatInputContentUpdateEvent): void
+    {
+        if(!event) return;
+
+        switch(event._Str_23621)
+        {
+            case RoomWidgetChatInputContentUpdateEvent.WHISPER:
+                const localization = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
+
+                this.inputView.value = localization + ' ' + event.userName + ' ';
+                return;
+            case RoomWidgetChatInputContentUpdateEvent.SHOUT:
+                return;
+        }
+    }
+
+    private onRoomWidgetFloodControlEvent(event: RoomWidgetFloodControlEvent): void
+    {
+        if(!event) return;
+    }
+
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
@@ -78,7 +150,9 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         if(this.anotherInputHasFocus()) return;
 
-        this.setInputFocus();
+        const input = this.chatInputView && this.chatInputView.nativeElement;
+
+        if(document.activeElement !== input) this.setInputFocus();
 
         const key       = event.keyCode;
         const shiftKey  = event.shiftKey;
@@ -97,7 +171,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
                     const value = this.inputView.value;
                     const parts = value.split(' ');
 
-                    if((parts[0] === ':whisper') && (parts.length === 3) && (parts[2] === ''))
+                    if((parts[0] === this._chatModeIdWhisper) && (parts.length === 3) && (parts[2] === ''))
                     {
                         this.inputView.value    = '';
                         this.lastContent        = '';
@@ -163,20 +237,20 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         switch(parts[0])
         {
-            case ':whisper':
+            case this._chatModeIdWhisper:
                 chatType        = RoomWidgetChatMessage.CHAT_WHISPER;
                 recipientName   = parts[1];
-                append          = (`:whisper ${ recipientName } `);
+                append          = (this._chatModeIdWhisper + ' ' + recipientName + ' ');
 
                 parts.shift();
                 parts.shift();
                 break;
-            case ':shout':
+            case this._chatModeIdShout:
                 chatType = RoomWidgetChatMessage.CHAT_SHOUT;
 
                 parts.shift();
                 break;
-            case ':speak':
+            case this._chatModeIdSpeak:
                 chatType = RoomWidgetChatMessage.CHAT_DEFAULT;
 
                 parts.shift();
@@ -225,7 +299,13 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     private setInputFocus(): void
     {
-        this.chatInputView && this.chatInputView.nativeElement && this.chatInputView.nativeElement.focus();
+        const input = this.chatInputView && this.chatInputView.nativeElement;
+        
+        if(!input) return;
+        
+        input.focus();
+
+        input.setSelectionRange((input.value.length * 2), (input.value.length * 2));
     }
 
     private checkSpecialKeywordForInput(): void
@@ -237,7 +317,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         const text              = inputView.value;
         const selectedUsername  = this.selectedUsername;
 
-        if((text !== ':whisper') || (selectedUsername.length === 0)) return;
+        if((text !== this._chatModeIdWhisper) || (selectedUsername.length === 0)) return;
 
         inputView.value = `${ inputView.value } ${ this.selectedUsername }`;
     }

@@ -7,6 +7,7 @@ import { FurnitureListInvalidateEvent } from '../../../../client/nitro/communica
 import { FurnitureListRemovedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListRemovedEvent';
 import { FurniturePostItPlacedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
 import { FurnitureListComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/furni/FurnitureListComposer';
+import { FurniturePlacePaintComposer } from '../../../../client/nitro/communication/messages/outgoing/room/furniture/FurniturePlacePaintComposer';
 import { FurnitureListItemParser } from '../../../../client/nitro/communication/messages/parser/inventory/furniture/utils/FurnitureListItemParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomObjectPlacementSource } from '../../../../client/nitro/room/enums/RoomObjectPlacementSource';
@@ -496,7 +497,7 @@ export class InventoryFurnitureService implements OnDestroy
         {
             if(flag) return false;
 
-            //this._communication.connection.send(new _Str_5270(_local_3.id));
+            Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(item.id));
         }
         else
         {

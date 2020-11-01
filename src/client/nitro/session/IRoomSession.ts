@@ -21,6 +21,12 @@ export interface IRoomSession extends IDisposable
     sendSignMessage(sign: number): void;
     sendPostureMessage(posture: number): void;
     sendDoorbellApprovalMessage(userName: string, flag: boolean): void;
+    sendAmbassadorAlertMessage(userId: number): void;
+    sendKickMessage(userId: number): void;
+    sendMuteMessage(userId: number, minutes: number): void;
+    sendBanMessage(userId: number, type: string): void;
+    sendGiveRightsMessage(userId: number): void;
+    sendTakeRightsMessage(userId: number): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
     connection: IConnection;
@@ -28,6 +34,7 @@ export interface IRoomSession extends IDisposable
     roomId: number;
     state: string;
     tradeMode: number;
+    _Str_7411: boolean;
     doorMode: number;
     allowPets: boolean;
     controllerLevel: number;

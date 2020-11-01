@@ -99,9 +99,9 @@ export class ContextInfoView
 
         if(top <= 0) top = ContextInfoView.SPACE_AROUND_EDGES;
 
-        if(top >= ((Nitro.instance.renderer.height / window.devicePixelRatio) - this.activeViewElement.offsetHeight)) top = (((Nitro.instance.renderer.height / window.devicePixelRatio) - this.activeViewElement.offsetHeight) - ContextInfoView.SPACE_AROUND_EDGES);
+        if(top >= (Nitro.instance.height - this.activeViewElement.offsetHeight)) top = ((Nitro.instance.height - this.activeViewElement.offsetHeight) - ContextInfoView.SPACE_AROUND_EDGES);
 
-        if(left >= ((Nitro.instance.renderer.width / window.devicePixelRatio) - this.activeViewElement.offsetWidth)) left = (((Nitro.instance.renderer.width / window.devicePixelRatio) - this.activeViewElement.offsetWidth) - ContextInfoView.SPACE_AROUND_EDGES);
+        if(left >= (Nitro.instance.width - this.activeViewElement.offsetWidth)) left = ((Nitro.instance.width - this.activeViewElement.offsetWidth) - ContextInfoView.SPACE_AROUND_EDGES);
 
         if(left < 0) left = 0 + ContextInfoView.BUBBLE_DROP_SPEED;
 

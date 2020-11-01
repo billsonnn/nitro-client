@@ -1,5 +1,4 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { NitroEvent } from '../../client/core/events/NitroEvent';
 import { Nitro } from '../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBackgroundColorEvent';
 import { RoomEngineDimmerStateEvent } from '../../client/nitro/room/events/RoomEngineDimmerStateEvent';
@@ -175,8 +174,6 @@ export class MainComponent implements OnInit, OnDestroy
 		desktop.sessionDataManager	= Nitro.instance.sessionDataManager;
 		desktop.roomSessionManager	= Nitro.instance.roomSessionManager;
 
-		desktop.events.addEventListener(RoomComponent.ROOM_VIEW_READY, this.onRoomViewReady.bind(this));
-
 		this.desktops.set(roomId, desktopRef);
 
         return desktop;
@@ -205,29 +202,6 @@ export class MainComponent implements OnInit, OnDestroy
 
 			instance.update();
         }
-	}
-
-	private onRoomViewReady(event: NitroEvent): void
-	{
-		if(!event) return;
-
-		const roomId 	= this.getRoomId(Nitro.instance.roomEngine.activeRoomId);
-		const desktop	= this.getDesktop(roomId);
-
-		if(!desktop) return;
-
-		desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
-		desktop.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
-		desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
-		desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
-		desktop.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
-		desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
-
-		if(!desktop.roomSession.isSpectator)
-		{
-			desktop.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
-			desktop.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
-		}
 	}
 
 	private onRoomEngineEvent(event: RoomEngineEvent): void
@@ -259,6 +233,19 @@ export class MainComponent implements OnInit, OnDestroy
 					this.hotelViewVisible = false;
 					this.isInRoom = true;
 				});
+
+				desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
+				desktop.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
+				desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
+				desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
+				desktop.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
+				desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+
+				if(!desktop.roomSession.isSpectator)
+				{
+					desktop.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
+					desktop.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
+				}
 				return;
 			case RoomEngineEvent.DISPOSED:
 				this.destroyDesktop(roomId);

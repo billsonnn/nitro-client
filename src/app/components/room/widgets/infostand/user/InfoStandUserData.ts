@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUserInfostandUpdateEvent } from '../../events/RoomWidgetUserInfostandUpdateEvent';
+﻿import { RoomWidgetUpdateInfostandUserEvent } from '../../events/RoomWidgetUpdateInfostandUserEvent';
 
 export class InfoStandUserData 
 {
@@ -131,10 +131,10 @@ export class InfoStandUserData
 
     public _Str_18577(): boolean
     {
-        return (this.type === RoomWidgetUserInfostandUpdateEvent.BOT);
+        return (this.type === RoomWidgetUpdateInfostandUserEvent.BOT);
     }
 
-    public populate(k: RoomWidgetUserInfostandUpdateEvent): void
+    public populate(k: RoomWidgetUpdateInfostandUserEvent): void
     {
         this.userId = k.webID;
         this.userName = k.name;
