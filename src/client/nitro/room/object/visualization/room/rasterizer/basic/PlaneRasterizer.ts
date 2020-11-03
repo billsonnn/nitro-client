@@ -252,15 +252,11 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
                                 if(texture)
                                 {
-                                    let newTexture: Texture = null;
+                                    let newTexture: Texture = texture;
 
                                     if(asset.flipH)
                                     {
                                         newTexture = Rasterizer._Str_16640(texture);
-                                    }
-                                    else
-                                    {
-                                        newTexture = texture.clone();
                                     }
 
                                     plane._Str_16790(newTexture, normalMinX, normalMaxX, normalMinY, normalMaxY, assetName);

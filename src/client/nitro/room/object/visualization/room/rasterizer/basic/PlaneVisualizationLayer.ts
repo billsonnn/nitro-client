@@ -1,6 +1,7 @@
 ﻿import { Graphics, Rectangle } from 'pixi.js';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
+import { RoomVisualization } from '../../RoomVisualization';
 import { PlaneMaterial } from './PlaneMaterial';
 
 export class PlaneVisualizationLayer 
@@ -115,6 +116,8 @@ export class PlaneVisualizationLayer
             {
                 const texture = TextureUtils.generateTexture(bitmapData, new Rectangle(0, 0, width, height));
 
+                RoomVisualization.RENDER_TEXTURES.push(texture);
+                
                 canvas
                     .beginTextureFill({ texture })
                     .drawRect(0, 0, width, height)

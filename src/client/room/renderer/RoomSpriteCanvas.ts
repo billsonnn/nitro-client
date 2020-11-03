@@ -692,12 +692,10 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(!_arg_2)
         {
-            console.log('clear texture', sprite.name);
             sprite.setTexture(null);
         }
         else
         {
-            console.log('destroy texture', sprite.name);
             if(sprite.parent) sprite.parent.removeChild(sprite);
 
             sprite.destroy();

@@ -401,7 +401,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if (((!(_local_4 == null)) && (_local_11)))
         {
-            this.cacheFullImage(_local_4, (this._Str_671.clone() as RenderTexture));
+            this.cacheFullImage(_local_4, this._Str_671);
         }
 
         if(scale !== 1)

@@ -1,6 +1,5 @@
-﻿import { Graphics, Rectangle } from 'pixi.js';
+﻿import { Graphics } from 'pixi.js';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
-import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 
@@ -262,17 +261,11 @@ export class PlaneMaterialCellColumn
                 {
                     if(!_arg_3) _arg_2 -= graphic.height;
 
-                    const texture = TextureUtils.generateTexture(graphic, new Rectangle(0, 0, graphic.width, graphic.height));
+                    graphic.y = _arg_2;
 
-                    if(texture)
-                    {
-                        this._cachedBitmapData
-                            .beginTextureFill({ texture })
-                            .drawRect(0, _arg_2, texture.width, texture.height)
-                            .endFill();
-                    }
+                    this._cachedBitmapData.addChild(graphic);
 
-                    if(_arg_3) _arg_2 = (_arg_2 + texture.height);
+                    if(_arg_3) _arg_2 = (_arg_2 + graphic.height);
 
                     if(((_arg_3) && (_arg_2 >= this._cachedBitmapData.height)) || ((!(_arg_3)) && (_arg_2 <= 0))) return _arg_2;
                 }

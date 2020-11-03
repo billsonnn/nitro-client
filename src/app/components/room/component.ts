@@ -139,7 +139,6 @@ export class RoomComponent implements OnDestroy, AfterViewInit, IRoomWidgetHandl
 
 	public prepareCanvas(canvasId: number): void
     {
-        console.log(NgZone.isInAngularZone());
         if(!this.roomSession || (this.canvasIds.indexOf(canvasId) >= 0)) return;
 
         const width     = Nitro.instance.width;

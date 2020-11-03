@@ -2,6 +2,7 @@
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
+import { RoomVisualization } from '../../RoomVisualization';
 import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 import { PlaneMaterialCellColumn } from './PlaneMaterialCellColumn';
@@ -330,6 +331,8 @@ export class PlaneMaterialCellMatrix
 
         const texture = TextureUtils.generateTexture(this._cachedBitmapData, _local_5);
 
+        RoomVisualization.RENDER_TEXTURES.push(texture);
+
         if(texture)
         {
             k
@@ -387,6 +390,8 @@ export class PlaneMaterialCellMatrix
 
                 const texture = TextureUtils.generateTexture(_local_6, new Rectangle(0, 0, _local_6.width, _local_6.height));
 
+                RoomVisualization.RENDER_TEXTURES.push(texture);
+                
                 if(texture)
                 {
                     k.beginTextureFill({ texture });

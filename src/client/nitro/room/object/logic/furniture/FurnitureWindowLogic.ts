@@ -12,7 +12,7 @@ export class FurnitureWindowLogic extends FurnitureMultiStateLogic
 
         if(maskType)
         {
-            this.object.model.setValue(RoomObjectVariable.FURNITURE_USES_PLANE_MASK, 1);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_USES_PLANE_MASK, 0);
             this.object.model.setValue(RoomObjectVariable.FURNITURE_PLANE_MASK_TYPE, maskType);
         }
     }

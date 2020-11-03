@@ -70,6 +70,18 @@ export class AvatarImageCache
 
             this._cache = null;
         }
+
+        if(this._unionImages)
+        {
+            for(let image of this._unionImages)
+            {
+                if(!image) continue;
+
+                image.dispose();
+            }
+
+            this._unionImages = [];
+        }
     }
 
     public _Str_1086(k: number = 60000): void
@@ -498,9 +510,9 @@ export class AvatarImageCache
             }
 
             container
-                    .beginTextureFill({ texture, matrix: this._matrix, color })
-                    .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
-                    .endFill();
+                .beginTextureFill({ texture, matrix: this._matrix, color })
+                .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
+                .endFill();
         }
 
         const texture = TextureUtils.generateTexture(container);

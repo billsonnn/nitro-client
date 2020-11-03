@@ -1,4 +1,4 @@
-﻿import { Point, Texture } from 'pixi.js';
+﻿import { Point, RenderTexture, Texture } from 'pixi.js';
 
 export class AvatarImageBodyPartContainer 
 {
@@ -20,7 +20,17 @@ export class AvatarImageBodyPartContainer
 
     public dispose(): void
     {
-        if(this._image) this._image.destroy();
+        if(this._image)
+        {
+            if(this._image instanceof RenderTexture)
+            {
+                this._image.destroy(true);
+            }
+            else
+            {
+                this._image.destroy();
+            }
+        }
 
         this._image     = null;
         this._regPoint  = null;
@@ -49,7 +59,17 @@ export class AvatarImageBodyPartContainer
 
     public set image(k: Texture)
     {
-        if(this._image && (this._image !== k)) this._image.destroy();
+        if(this._image && (this._image !== k))
+        {
+            if(this._image instanceof RenderTexture)
+            {
+                this._image.destroy(true);
+            }
+            else
+            {
+                this._image.destroy();
+            }
+        }
 
         this._image = k;
     }

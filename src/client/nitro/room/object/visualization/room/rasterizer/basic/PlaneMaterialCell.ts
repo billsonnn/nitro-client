@@ -1,8 +1,6 @@
-﻿import { Graphics, Matrix, Point, Rectangle } from 'pixi.js';
+﻿import { Graphics, Point, Sprite, TilingSprite } from 'pixi.js';
 import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
-import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
-import { Randomizer } from '../../utils/Randomizer';
 import { PlaneTexture } from './PlaneTexture';
 
 export class PlaneMaterialCell 
@@ -103,7 +101,7 @@ export class PlaneMaterialCell
         return 0;
     }
 
-    public render(normal: IVector3D, textureOffsetX: number, textureOffsetY: number): Graphics
+    public render(normal: IVector3D, textureOffsetX: number, textureOffsetY: number): Sprite
     {
         if(!this._texture) return null;
 
@@ -111,127 +109,125 @@ export class PlaneMaterialCell
 
         if(!texture) return null;
 
-        let bitmap = new Graphics()
-            .beginTextureFill({ texture })
-            .drawRect(0, 0, texture.width, texture.height)
-            .endFill();
+        let bitmap: Sprite = null;
 
         if((textureOffsetX !== 0) || (textureOffsetY !== 0))
         {
-            const sourceBitmap = new Graphics()
-                .beginFill(0)
-                .drawRect(0, 0, (bitmap.width * 2), (bitmap.height * 2))
-                .endFill()
-                .beginTextureFill({ texture })
-                .drawRect(0, 0, bitmap.width, bitmap.height)
-                .drawRect(bitmap.width, 0, bitmap.width, bitmap.height)
-                .drawRect(0, bitmap.height, bitmap.width, bitmap.height)
-                .drawRect(bitmap.width, bitmap.height, bitmap.width, bitmap.height)
-                .endFill();
-
-            bitmap = new Graphics()
-                .beginFill(0)
-                .drawRect(0, 0, bitmap.width, bitmap.height)
-                .endFill();
-
             while(textureOffsetX < 0) textureOffsetX += texture.width;
 
             while(textureOffsetY < 0) textureOffsetY += texture.height;
 
-            const sourceTexture = TextureUtils.generateTexture(sourceBitmap, new Rectangle((textureOffsetX % bitmap.width), (textureOffsetY % bitmap.height), texture.width, texture.height));
+            const tiling = new TilingSprite(texture, texture.width, texture.height);
 
-            if(sourceTexture)
+            tiling.tilePosition.x = (textureOffsetX % texture.width);
+            tiling.tilePosition.y = (textureOffsetY % texture.height);
+
+            tiling.uvRespectAnchor = true;
+
+            if(textureOffsetX)
             {
-                bitmap
-                    .beginTextureFill({ texture: sourceTexture })
-                    .drawRect(0, 0, texture.width, texture.height)
-                    .endFill();
+                tiling.anchor.x = 1;
+                tiling.scale.x  = -1;
             }
+
+            if(textureOffsetY)
+            {
+                tiling.anchor.y = 1;
+                tiling.scale.y  = -1;
+            }
+
+            bitmap = tiling;
+        }
+        else
+        {
+            bitmap = new Sprite(texture);
         }
 
         if(bitmap)
         {
-            if(!this.isStatic)
-            {
-                if(this._cachedBitmapData)
-                {
-                    if((this._cachedBitmapData.width !== bitmap.width) || (this._cachedBitmapData.height !== bitmap.height))
-                    {
-                        this._cachedBitmapData.destroy();
+            // if(!this.isStatic)
+            // {
+            //     if(this._cachedBitmapData)
+            //     {
+            //         if((this._cachedBitmapData.width !== bitmap.width) || (this._cachedBitmapData.height !== bitmap.height))
+            //         {
+            //             this._cachedBitmapData.destroy();
 
-                        this._cachedBitmapData = null;
-                    }
-                    else
-                    {
-                        const bitmapTexture = TextureUtils.generateTexture(bitmap, new Rectangle(0, 0, bitmap.width, bitmap.height));
+            //             this._cachedBitmapData = null;
+            //         }
+            //         else
+            //         {
+            //             const bitmapTexture = TextureUtils.generateTexture(bitmap, new Rectangle(0, 0, bitmap.width, bitmap.height));
 
-                        if(bitmapTexture)
-                        {
-                            this._cachedBitmapData
-                                .beginTextureFill({ texture: bitmapTexture })
-                                .drawRect(0, 0, bitmapTexture.width, bitmapTexture.height)
-                                .endFill();
-                        }
-                    }
-                }
+            //             RoomVisualization.RENDER_TEXTURES.push(bitmapTexture);
+                        
+            //             if(bitmapTexture)
+            //             {
+            //                 this._cachedBitmapData
+            //                     .beginTextureFill({ texture: bitmapTexture })
+            //                     .drawRect(0, 0, bitmapTexture.width, bitmapTexture.height)
+            //                     .endFill();
+            //             }
+            //         }
+            //     }
 
-                if(!this._cachedBitmapData) this._cachedBitmapData = bitmap.clone();
+            //     if(!this._cachedBitmapData) this._cachedBitmapData = bitmap.clone();
 
-                const limitMin      = Math.min(this._extraItemCount, this._extraItemOffsets.length);
-                const limitMax      = Math.max(this._extraItemCount, this._extraItemOffsets.length);
-                const offsetIndexes = Randomizer._Str_23572(this._extraItemCount, limitMax);
+            //     const limitMin      = Math.min(this._extraItemCount, this._extraItemOffsets.length);
+            //     const limitMax      = Math.max(this._extraItemCount, this._extraItemOffsets.length);
+            //     const offsetIndexes = Randomizer._Str_23572(this._extraItemCount, limitMax);
 
-                let i = 0;
+            //     let i = 0;
 
-                while (i < limitMin)
-                {
-                    const offset    = this._extraItemOffsets[offsetIndexes[i]];
-                    const item      = this._extraItemAssets[(i % this._extraItemAssets.length)];
+            //     while (i < limitMin)
+            //     {
+            //         const offset    = this._extraItemOffsets[offsetIndexes[i]];
+            //         const item      = this._extraItemAssets[(i % this._extraItemAssets.length)];
 
-                    if(offset && item)
-                    {
-                        const assetTexture = item.texture;
+            //         if(offset && item)
+            //         {
+            //             const assetTexture = item.texture;
 
-                        if(assetTexture)
-                        {
-                            const offsetFinal   = new Point((offset.x + item.offsetX), (offset.y + item.offsetY));
-                            const flipMatrix    = new Matrix();
+            //             if(assetTexture)
+            //             {
+            //                 const offsetFinal   = new Point((offset.x + item.offsetX), (offset.y + item.offsetY));
+            //                 const flipMatrix    = new Matrix();
 
-                            let x           = 1;
-                            let y           = 1;
-                            let translateX  = 0;
-                            let translateY  = 0;
+            //                 let x           = 1;
+            //                 let y           = 1;
+            //                 let translateX  = 0;
+            //                 let translateY  = 0;
 
-                            if(item.flipH)
-                            {
-                                x           = -1;
-                                translateX  = assetTexture.width;
-                            }
+            //                 if(item.flipH)
+            //                 {
+            //                     x           = -1;
+            //                     translateX  = assetTexture.width;
+            //                 }
 
-                            if(item.flipV)
-                            {
-                                y           = -1;
-                                translateY  = assetTexture.height;
-                            }
+            //                 if(item.flipV)
+            //                 {
+            //                     y           = -1;
+            //                     translateY  = assetTexture.height;
+            //                 }
                             
-                            let offsetX = (offsetFinal.x + translateX);
-                            offsetX = ((offsetX >> 1) << 1);
+            //                 let offsetX = (offsetFinal.x + translateX);
+            //                 offsetX = ((offsetX >> 1) << 1);
 
-                            flipMatrix.scale(x, y);
-                            flipMatrix.translate(offsetX, (offsetFinal.y + translateY));
+            //                 flipMatrix.scale(x, y);
+            //                 flipMatrix.translate(offsetX, (offsetFinal.y + translateY));
 
-                            this._cachedBitmapData
-                                .beginTextureFill({ texture: assetTexture, matrix: flipMatrix })
-                                .drawRect(flipMatrix.tx, flipMatrix.ty, assetTexture.width, assetTexture.height)
-                                .endFill();
-                        }
-                    }
+            //                 this._cachedBitmapData
+            //                     .beginTextureFill({ texture: assetTexture, matrix: flipMatrix })
+            //                     .drawRect(flipMatrix.tx, flipMatrix.ty, assetTexture.width, assetTexture.height)
+            //                     .endFill();
+            //             }
+            //         }
 
-                    i++;
-                }
+            //         i++;
+            //     }
 
-                return this._cachedBitmapData;
-            }
+            //     return this._cachedBitmapData;
+            // }
 
             return bitmap;
         }

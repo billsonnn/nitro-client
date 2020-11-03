@@ -1,4 +1,4 @@
-import { Texture } from 'pixi.js';
+import { RenderTexture, Texture } from 'pixi.js';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
@@ -21,6 +21,8 @@ import { RoomVisualizationData } from './RoomVisualizationData';
 
 export class RoomVisualization extends RoomObjectSpriteVisualization implements IPlaneVisualization
 {
+    public static RENDER_TEXTURES: RenderTexture[] = [];
+
     public static _Str_18544: number    = 0xFFFFFF;
     public static _Str_18640: number    = 0xDDDDDD;
     public static _Str_16664: number    = 0xBBBBBB;
@@ -224,6 +226,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         
         this.updateModelCounter = objectModel.updateCounter;
         this._lastUpdateTime    = time;
+
+        while(RoomVisualization.RENDER_TEXTURES.length)
+        {
+            const texture = RoomVisualization.RENDER_TEXTURES.pop();
+
+            texture.destroy(true);
+        }
     }
 
     private updateGeometry(k: IRoomGeometry): boolean
