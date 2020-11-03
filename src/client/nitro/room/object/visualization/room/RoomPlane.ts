@@ -1,4 +1,4 @@
-import { Graphics, Matrix, Point, Rectangle, Texture } from 'pixi.js';
+import { Graphics, Matrix, Point, Rectangle, RenderTexture, Texture } from 'pixi.js';
 import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../room/utils/IVector3D';
@@ -11,6 +11,7 @@ import { PlaneVisualizationLayer } from './rasterizer/basic/PlaneVisualizationLa
 import { IPlaneRasterizer } from './rasterizer/IPlaneRasterizer';
 import { RoomPlaneBitmapMask } from './RoomPlaneBitmapMask';
 import { RoomPlaneRectangleMask } from './RoomPlaneRectangleMask';
+import { RoomVisualization } from './RoomVisualization';
 import { PlaneBitmapData } from './utils/PlaneBitmapData';
 import { Randomizer } from './utils/Randomizer';
 
@@ -153,7 +154,14 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        const texture = TextureUtils.generateTexture(this._Str_1049, new Rectangle(0, 0, this._Str_1720, this._height));
+        let texture: RenderTexture = RoomVisualization.RENDER_TEXTURE_CACHE.get(this._Str_1049);
+
+        if(!texture)
+        {
+            texture = TextureUtils.generateTexture(this._Str_1049, new Rectangle(0, 0, this._Str_1720, this._height));
+
+            RoomVisualization.RENDER_TEXTURE_CACHE.set(this._Str_1049, texture);
+        }
 
         return texture;
     }

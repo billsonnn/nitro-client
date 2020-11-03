@@ -12,6 +12,11 @@ export class TextureUtils
         return TextureUtils.getRenderer().generateTexture(displayObject, scaleMode, resolution, region);
     }
 
+    public static destroyRenderTexture(texture: RenderTexture): void
+    {
+        texture.destroy(true);
+    }
+
     public static generateImage(target: DisplayObject | RenderTexture): HTMLImageElement
     {
         if(!target) return null;

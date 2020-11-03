@@ -5,7 +5,6 @@ import { IRoomGeometry } from '../../../../../../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
-import { RoomVisualization } from '../../RoomVisualization';
 import { PlaneVisualizationAnimationLayer } from '../animated/PlaneVisualizationAnimationLayer';
 import { PlaneMaterial } from './PlaneMaterial';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
@@ -161,8 +160,6 @@ export class PlaneVisualization
                     {
                         const texture = TextureUtils.generateTexture(this._cachedBitmapData, new Rectangle(0, 0, width, height));
 
-                        RoomVisualization.RENDER_TEXTURES.push(texture);
-
                         if(texture)
                         {
                             canvas
@@ -229,8 +226,6 @@ export class PlaneVisualization
         if(canvas && (canvas !== this._cachedBitmapData))
         {
             const texture = TextureUtils.generateTexture(canvas, new Rectangle(0, 0, canvas.width, canvas.height));
-
-            RoomVisualization.RENDER_TEXTURES.push(texture);
             
             this._cachedBitmapData
                 .beginTextureFill({ texture })

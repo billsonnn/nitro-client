@@ -1,4 +1,4 @@
-﻿import { Graphics, Point, Rectangle } from 'pixi.js';
+﻿import { Graphics, Point, Rectangle, RenderTexture } from 'pixi.js';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
@@ -331,8 +331,6 @@ export class PlaneMaterialCellMatrix
 
         const texture = TextureUtils.generateTexture(this._cachedBitmapData, _local_5);
 
-        RoomVisualization.RENDER_TEXTURES.push(texture);
-
         if(texture)
         {
             k
@@ -388,17 +386,19 @@ export class PlaneMaterialCellMatrix
                     _local_8 = (k.height - _local_6.height);
                 }
 
-                const texture = TextureUtils.generateTexture(_local_6, new Rectangle(0, 0, _local_6.width, _local_6.height));
+                let texture: RenderTexture = RoomVisualization.RENDER_TEXTURE_CACHE.get(_local_6);
 
-                RoomVisualization.RENDER_TEXTURES.push(texture);
-                
-                if(texture)
+                if(!texture)
                 {
-                    k.beginTextureFill({ texture });
-                    k.drawRect(_arg_3, _local_8, texture.width, texture.height);
-                    k.endFill();
+                    texture = TextureUtils.generateTexture(_local_6, new Rectangle(0, 0, _local_6.width, _local_6.height));
+
+                    RoomVisualization.RENDER_TEXTURE_CACHE.set(_local_6, texture);
                 }
-                //k.copyPixels(_local_6, _local_6.rect, new Point(_arg_3, _local_8), _local_6, null, true);
+                
+                k.beginTextureFill({ texture });
+                k.drawRect(_arg_3, _local_8, texture.width, texture.height);
+                k.endFill();
+
                 if (_local_6.height > height)
                 {
                     height = _local_6.height;

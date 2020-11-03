@@ -1172,7 +1172,7 @@ export class RoomPlaneParser
     {
         var _local_12:Vector3d;
         this.addPlane(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
-        this.addPlane(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
+        //this.addPlane(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
         var _local_8: number = (RoomPlaneParser.WALL_THICKNESS * this._wallThicknessMultiplier);
         var _local_9: number = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
         var _local_10:Vector3d = Vector3d.crossProduct(_arg_2, _arg_3);

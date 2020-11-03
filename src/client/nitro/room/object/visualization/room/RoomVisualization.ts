@@ -8,6 +8,7 @@ import { IObjectVisualizationData } from '../../../../../room/object/visualizati
 import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
+import { TextureUtils } from '../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomMapData } from '../../RoomMapData';
 import { RoomMapMaskData } from '../../RoomMapMaskData';
@@ -21,7 +22,7 @@ import { RoomVisualizationData } from './RoomVisualizationData';
 
 export class RoomVisualization extends RoomObjectSpriteVisualization implements IPlaneVisualization
 {
-    public static RENDER_TEXTURES: RenderTexture[] = [];
+    public static RENDER_TEXTURE_CACHE: Map<any, RenderTexture> = new Map();
 
     public static _Str_18544: number    = 0xFFFFFF;
     public static _Str_18640: number    = 0xDDDDDD;
@@ -105,6 +106,16 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._typeVisibility[RoomPlane.TYPE_FLOOR]      = true;
         this._typeVisibility[RoomPlane.TYPE_WALL]       = true;
         this._typeVisibility[RoomPlane.TYPE_LANDSCAPE]  = true;
+    }
+
+    public static clearTextureCache(): void
+    {
+        if(RoomVisualization.RENDER_TEXTURE_CACHE)
+        {
+            for(let texture of RoomVisualization.RENDER_TEXTURE_CACHE.values()) TextureUtils.destroyRenderTexture(texture);
+
+            RoomVisualization.RENDER_TEXTURE_CACHE.clear();
+        }
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -226,13 +237,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         
         this.updateModelCounter = objectModel.updateCounter;
         this._lastUpdateTime    = time;
-
-        while(RoomVisualization.RENDER_TEXTURES.length)
-        {
-            const texture = RoomVisualization.RENDER_TEXTURES.pop();
-
-            texture.destroy(true);
-        }
     }
 
     private updateGeometry(k: IRoomGeometry): boolean
@@ -360,7 +364,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(this._Str_2540)
         {
-
             while(this._Str_2540.length)
             {
                 const plane = this._Str_2540[0];
@@ -376,13 +379,18 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         
         this._isPlaneSet    = false;
         this._Str_5928      = (this._Str_5928 + 1);
+        
+        RoomVisualization.clearTextureCache();
 
         this.reset();
+        
     }
 
     protected _Str_25732(): void
     {
         if(!this.object || this._isPlaneSet) return;
+
+        RoomVisualization.clearTextureCache();
         
         if(!isNaN(this._floorThickness)) this._roomPlaneParser.floorThicknessMultiplier = this._floorThickness;
         if(!isNaN(this._wallThickness)) this._roomPlaneParser.wallThicknessMultiplier = this._wallThickness;
