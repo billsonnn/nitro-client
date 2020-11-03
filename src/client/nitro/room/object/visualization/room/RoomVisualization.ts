@@ -22,7 +22,9 @@ import { RoomVisualizationData } from './RoomVisualizationData';
 
 export class RoomVisualization extends RoomObjectSpriteVisualization implements IPlaneVisualization
 {
-    public static RENDER_TEXTURE_CACHE: Map<any, RenderTexture> = new Map();
+    public static LAST_VISUALIZATION: RoomVisualization = null;
+
+    public static RENDER_TEXTURE_CACHE: Map<RoomVisualization, Map<any, RenderTexture>> = new Map();
 
     public static _Str_18544: number    = 0xFFFFFF;
     public static _Str_18640: number    = 0xDDDDDD;
@@ -108,14 +110,49 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._typeVisibility[RoomPlane.TYPE_LANDSCAPE]  = true;
     }
 
+    public static getTextureCache(key: any): RenderTexture
+    {
+        const existing = RoomVisualization.RENDER_TEXTURE_CACHE.get(RoomVisualization.LAST_VISUALIZATION);
+
+        if(!existing) return null;
+
+        return existing.get(key);
+    }
+
+    public static addTextureCache(key: any, value: RenderTexture): void
+    {
+        if(!RoomVisualization.LAST_VISUALIZATION) return;
+
+        let existing = RoomVisualization.RENDER_TEXTURE_CACHE.get(RoomVisualization.LAST_VISUALIZATION);
+
+        if(!existing)
+        {
+            existing = new Map();
+
+            RoomVisualization.RENDER_TEXTURE_CACHE.set(RoomVisualization.LAST_VISUALIZATION, existing);
+        }
+
+        existing.set(key, value);
+    }
+
     public static clearTextureCache(): void
     {
-        if(RoomVisualization.RENDER_TEXTURE_CACHE)
-        {
-            for(let texture of RoomVisualization.RENDER_TEXTURE_CACHE.values()) TextureUtils.destroyRenderTexture(texture);
+        const visualization = RoomVisualization.LAST_VISUALIZATION;
 
-            RoomVisualization.RENDER_TEXTURE_CACHE.clear();
+        if(!visualization) return;
+
+        const existing = RoomVisualization.RENDER_TEXTURE_CACHE.get(visualization);
+
+        if(!existing) return;
+
+        for(let texture of existing.values())
+        {
+            TextureUtils.destroyRenderTexture(texture);
         }
+
+        existing.clear();
+
+        RoomVisualization.RENDER_TEXTURE_CACHE.delete(visualization);
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -379,6 +416,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         
         this._isPlaneSet    = false;
         this._Str_5928      = (this._Str_5928 + 1);
+
+        RoomVisualization.LAST_VISUALIZATION = this;
         
         RoomVisualization.clearTextureCache();
 
@@ -389,6 +428,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     protected _Str_25732(): void
     {
         if(!this.object || this._isPlaneSet) return;
+
+        RoomVisualization.LAST_VISUALIZATION = this;
 
         RoomVisualization.clearTextureCache();
         

@@ -1,4 +1,4 @@
-﻿import { Graphics, Rectangle, RenderTexture } from 'pixi.js';
+﻿import { Graphics, Rectangle } from 'pixi.js';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { RoomVisualization } from '../../RoomVisualization';
@@ -114,13 +114,13 @@ export class PlaneVisualizationLayer
 
             if(canvas && (bitmapData !== canvas))
             {
-                let texture: RenderTexture = RoomVisualization.RENDER_TEXTURE_CACHE.get(bitmapData);
+                let texture = RoomVisualization.getTextureCache(bitmapData);
 
                 if(!texture)
                 {
                     texture = TextureUtils.generateTexture(bitmapData, new Rectangle(0, 0, width, height));
 
-                    RoomVisualization.RENDER_TEXTURE_CACHE.set(bitmapData, texture);
+                    RoomVisualization.addTextureCache(bitmapData, texture);
                 }
                 
                 canvas

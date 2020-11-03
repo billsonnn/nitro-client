@@ -154,13 +154,13 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this.visible || !this._Str_1049) return null;
 
-        let texture: RenderTexture = RoomVisualization.RENDER_TEXTURE_CACHE.get(this._Str_1049);
+        let texture: RenderTexture = RoomVisualization.getTextureCache(this._Str_1049);
 
         if(!texture)
         {
             texture = TextureUtils.generateTexture(this._Str_1049, new Rectangle(0, 0, this._Str_1720, this._height));
 
-            RoomVisualization.RENDER_TEXTURE_CACHE.set(this._Str_1049, texture);
+            RoomVisualization.addTextureCache(this._Str_1049, texture);
         }
 
         return texture;

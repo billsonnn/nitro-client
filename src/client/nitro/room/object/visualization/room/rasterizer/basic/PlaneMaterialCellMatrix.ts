@@ -1,4 +1,4 @@
-﻿import { Graphics, Point, Rectangle, RenderTexture } from 'pixi.js';
+﻿import { Graphics, Point, Rectangle } from 'pixi.js';
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
@@ -386,13 +386,13 @@ export class PlaneMaterialCellMatrix
                     _local_8 = (k.height - _local_6.height);
                 }
 
-                let texture: RenderTexture = RoomVisualization.RENDER_TEXTURE_CACHE.get(_local_6);
+                let texture = RoomVisualization.getTextureCache(_local_6);
 
                 if(!texture)
                 {
                     texture = TextureUtils.generateTexture(_local_6, new Rectangle(0, 0, _local_6.width, _local_6.height));
 
-                    RoomVisualization.RENDER_TEXTURE_CACHE.set(_local_6, texture);
+                    RoomVisualization.addTextureCache(_local_6, texture);
                 }
                 
                 k.beginTextureFill({ texture });
