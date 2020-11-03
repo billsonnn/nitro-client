@@ -153,6 +153,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         existing.clear();
 
         RoomVisualization.RENDER_TEXTURE_CACHE.delete(visualization);
+
+        RoomVisualization.LAST_VISUALIZATION = null;
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -422,7 +424,6 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         RoomVisualization.clearTextureCache();
 
         this.reset();
-        
     }
 
     protected _Str_25732(): void
