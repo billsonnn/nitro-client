@@ -101,7 +101,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         this._noSpriteVisibilityChecking    = false;
         this._usesExclusionRectangles       = false;
-        this._usesMask                      = true;
+        this._usesMask                      = false;
         this._canvasUpdated                 = false;
 
         this._objectCache                   = new RoomObjectCache(this._container.roomObjectVariableAccurateZ);
