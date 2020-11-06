@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Nitro } from '../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBackgroundColorEvent';
 import { RoomEngineDimmerStateEvent } from '../../client/nitro/room/events/RoomEngineDimmerStateEvent';
@@ -11,12 +11,11 @@ import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSess
 import { RoomSessionDanceEvent } from '../../client/nitro/session/events/RoomSessionDanceEvent';
 import { RoomSessionEvent } from '../../client/nitro/session/events/RoomSessionEvent';
 import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/RoomSessionUserBadgesEvent';
-import { IRoomSession } from '../../client/nitro/session/IRoomSession';
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomId } from '../../client/room/utils/RoomId';
 import { SettingsService } from '../core/settings/service';
 import { AlertService } from '../shared/services/alert/service';
-import { RoomComponent } from './room/component';
+import { RoomComponent } from './room/room.component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
@@ -28,37 +27,31 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 	selector: 'nitro-main-component',
     template: `
 	<div class="nitro-main-component">
-		<nitro-toolbar-component [isInRoom]="isInRoom"></nitro-toolbar-component>
+		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
 		<nitro-purse-component></nitro-purse-component>
 		<nitro-catalog-component></nitro-catalog-component>
-		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
 		<nitro-navigator-component [visible]="navigatorVisible"></nitro-navigator-component>
-		<nitro-hotelview-component *ngIf="hotelViewVisible"></nitro-hotelview-component>
-		<ng-template #desktopContainer></ng-template>
+		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
+		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
+		<nitro-room-component></nitro-room-component>
     </div>`
 })
 export class MainComponent implements OnInit, OnDestroy
 {
-    @ViewChild('desktopContainer', { read: ViewContainerRef })
-	public desktopContainer: ViewContainerRef;
+	@ViewChild(RoomComponent)
+	public roomComponent: RoomComponent = null;
 
-	public desktops: Map<string, ComponentRef<RoomComponent>> = new Map();
-
-	public isInRoom: boolean = false;
-	public hotelViewVisible: boolean = true;
+	private _landingViewVisible: boolean = true;
 
 	constructor(
-		private alertService: AlertService,
-		private settingsService: SettingsService,
-		private ngZone: NgZone,
-		private componentFactoryResolver: ComponentFactoryResolver) {}
+		private _alertService: AlertService,
+		private _settingsService: SettingsService,
+		private _ngZone: NgZone) {}
 
 	public ngOnInit(): void
 	{
-		this.ngZone.runOutsideAngular(() =>
+		this._ngZone.runOutsideAngular(() =>
 		{
-			Nitro.instance.ticker.add(this.update, this);
-
 			if(Nitro.instance.roomEngine.events)
 			{
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
@@ -96,10 +89,8 @@ export class MainComponent implements OnInit, OnDestroy
 
 	public ngOnDestroy(): void
 	{
-		this.ngZone.runOutsideAngular(() =>
+		this._ngZone.runOutsideAngular(() =>
 		{
-			Nitro.instance.ticker.remove(this.update, this);
-
 			if(Nitro.instance.roomEngine.events)
 			{
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
@@ -130,126 +121,46 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent.bind(this));
+				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent.bind(this));
 			}
 		});
-	}
-
-	public getDesktop(roomId: string): RoomComponent
-    {
-        if(!roomId) return null;
-
-        const existing = this.desktops.get(roomId);
-
-        if(!existing) return null;
-        
-        return existing.instance;
-	}
-
-	public createDesktopForSession(session: IRoomSession): RoomComponent
-    {
-        if(!session) return null;
-
-        const roomId = this.getRoomId(session.roomId);
-
-        let desktop = this.getDesktop(roomId);
-
-		if(desktop) return desktop;
-
-		let desktopRef: ComponentRef<RoomComponent> = null;
-
-		this.ngZone.run(() =>
-		{
-			const componentFactory = this.componentFactoryResolver.resolveComponentFactory(RoomComponent);
-
-			desktopRef	= this.desktopContainer.createComponent(componentFactory);
-			desktop 	= desktopRef.instance;
-		});
-
-		if(!desktop) return;
-
-		desktop.roomSession 		= session;
-		desktop.connection			= Nitro.instance.communication.connection;
-		desktop.roomEngine			= Nitro.instance.roomEngine;
-		desktop.avatarRenderManager	= Nitro.instance.avatar;
-		desktop.sessionDataManager	= Nitro.instance.sessionDataManager;
-		desktop.roomSessionManager	= Nitro.instance.roomSessionManager;
-
-		this.desktops.set(roomId, desktopRef);
-
-        return desktop;
-	}
-	
-	public destroyDesktop(roomId: string): void
-    {
-        const desktop = this.desktops.get(roomId);
-
-		if(!desktop) return;
-		
-		this.desktopContainer.remove(this.desktopContainer.indexOf(desktop.hostView));
-
-        this.desktops.delete(roomId);
-	}
-
-	public update(time: number): void
-    {
-        if(!this.desktops || !this.desktops.size) return;
-
-        for(let desktop of this.desktops.values())
-        {
-			if(!desktop) continue;
-			
-			const instance = desktop.instance;
-
-			instance.update();
-        }
 	}
 
 	private onRoomEngineEvent(event: RoomEngineEvent): void
 	{
 		if(!event) return;
 
-        const roomId = this.getRoomId(event.roomId);
+		if(RoomId.isRoomPreviewerId(event.roomId)) return;
 
-        let desktop = this.getDesktop(roomId);
+		const session = Nitro.instance.roomSessionManager.getSession(event.roomId);
 
-        if(!desktop)
-        {
-            const session = Nitro.instance.roomSessionManager.getSession(event.roomId);
-
-            if(session) desktop = this.createDesktopForSession(session);
-
-            if(!desktop) return;
-        }
+		if(!session) return;
 
 		switch(event.type)
 		{
 			case RoomEngineEvent.INITIALIZED:
-				desktop.prepareCanvas(this.getCanvasId(event.roomId));
-
-				if(Nitro.instance.roomEngine && !RoomId.isRoomPreviewerId(event.roomId)) Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
-                
-				this.ngZone.run(() =>
+				if(this.roomComponent)
 				{
-					this.hotelViewVisible = false;
-					this.isInRoom = true;
-				});
+					this.roomComponent.prepareRoom(session);
 
-				desktop.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
-				desktop.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
-				desktop.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
-				desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
-				desktop.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
-				desktop.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+					Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
 
-				if(!desktop.roomSession.isSpectator)
-				{
-					desktop.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
-					desktop.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
+					this.roomComponent.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
+					this.roomComponent.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
+					this.roomComponent.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
+					this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
+					this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
+					this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+
+					if(!this.roomComponent.roomSession.isSpectator)
+					{
+						this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
+						this.roomComponent.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
+					}
 				}
 				return;
 			case RoomEngineEvent.DISPOSED:
-				this.destroyDesktop(roomId);
-				this.ngZone.run(() => this.isInRoom = false);
+				if(this.roomComponent) this.roomComponent.endRoom();
 				return;
 			case RoomZoomEvent.ROOM_ZOOM:
 				const zoomEvent = (event as RoomZoomEvent);
@@ -258,40 +169,44 @@ export class MainComponent implements OnInit, OnDestroy
 
 				if(zoomEvent.percise) zoomLevel = zoomEvent.level;
 
-				Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(Nitro.instance.roomEngine.activeRoomId, this.getCanvasId(Nitro.instance.roomEngine.activeRoomId), zoomLevel);
+				if(this.roomComponent)
+				{
+					Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(this.roomComponent.roomSession.roomId, this.roomComponent.getFirstCanvasId(), zoomLevel);
+				}
 				return;
 			case RoomBackgroundColorEvent.ROOM_COLOR:
-				const colorEvent = (event as RoomBackgroundColorEvent);
+				if(this.roomComponent)
+				{
+					const colorEvent = (event as RoomBackgroundColorEvent);
 
-				if(colorEvent._Str_11464)
-				{
-					desktop.setRoomColorizerColor(0x000000, 0xFF);
-				}
-				else
-				{
-					desktop.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
+					if(colorEvent._Str_11464)
+					{
+						this.roomComponent.setRoomColorizerColor(0x000000, 0xFF);
+					}
+					else
+					{
+						this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
+					}
 				}
 				return;
 			case RoomEngineDimmerStateEvent.ROOM_COLOR:
-				desktop._Str_2485(event);
+				if(this.roomComponent) this.roomComponent._Str_2485(event);
 				return;
             case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
-				const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
-				
-				if(hslColorEvent.enable) desktop.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
-                else desktop.setRoomBackgroundColor(0, 0, 0);
+				if(this.roomComponent)
+				{
+					const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
+					
+					if(hslColorEvent.enable) this.roomComponent.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
+					else this.roomComponent.setRoomBackgroundColor(0, 0, 0);
+				}
                 return;
 		}
 	}
 
 	public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
 	{
-		const roomId    = this.getRoomId(event.roomId);
-        const desktop   = this.getDesktop(roomId);
-
-        if(!desktop) return;
-
-        desktop.onRoomEngineObjectEvent(event);
+		(this.roomComponent && this.roomComponent.onRoomEngineObjectEvent(event));
 	}
 
 	private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -301,48 +216,43 @@ export class MainComponent implements OnInit, OnDestroy
 		switch(event.type)
 		{
 			case RoomSessionEvent.CREATED:
-				this.createDesktopForSession(event.session);
+				this._ngZone.run(() =>
+				{
+					this._landingViewVisible = false;
+				});
+
+				Nitro.instance.roomSessionManager.startSession(event.session);
 				return;
 			case RoomSessionEvent.STARTED:
 				return;
 			case RoomSessionEvent.ROOM_DATA:
 				return;
 			case RoomSessionEvent.ENDED:
-				if(event.session)
+				if(this.roomComponent) this.roomComponent.endRoom();
+				
+				this._ngZone.run(() =>
 				{
-					this.destroyDesktop(this.getRoomId(event.session.roomId));
-
-					if(event.openLandingView)
-					{
-						this.ngZone.run(() => (this.hotelViewVisible = true));
-					}
-				}
+					this._landingViewVisible = event.openLandingView;
+				});
 				return;
 			default:
-				const desktop = this.getDesktop(this.getRoomId(event.session.roomId));
-
-				if(desktop) desktop.processEvent(event);
+				(this.roomComponent && this.roomComponent.processEvent(event));
 				return;
 		}
 	}
-	
-	private getRoomId(roomId: number): string
-    {
-        return 'hard_coded_room_id';
-    }
 
-	public getCanvasId(roomId: number): number
+	public get landingViewVisible(): boolean
 	{
-		return 1;
+		return this._landingViewVisible;
 	}
 
 	public get navigatorVisible(): boolean
 	{
-		return this.settingsService.navigatorVisible;
+		return this._settingsService.navigatorVisible;
 	}
 
 	public get inventoryVisible(): boolean
     {
-        return this.settingsService.inventoryVisible;
+        return this._settingsService.inventoryVisible;
     }
 }

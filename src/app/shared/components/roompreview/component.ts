@@ -33,10 +33,10 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
 	public ngOnInit(): void
 	{
+		if(!this.roomPreviewer) return;
+		
 		if(this.width === 1) this.width 	= this._elementRef.nativeElement.offsetWidth;
 		if(this.height === 1) this.height	= this._elementRef.nativeElement.offsetHeight;
-		
-		if(!this.roomPreviewer) this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
 	}
 
 	public ngOnDestroy(): void

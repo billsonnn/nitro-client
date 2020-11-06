@@ -301,8 +301,6 @@ export class NavigatorService implements OnDestroy
     public goToRoom(roomId: number): void
     {
         Nitro.instance.communication.connection.send(new RoomInfoComposer(roomId, false, true));
-
-        console.log('need hiding');
     }
 
     private createSession(roomId: number, password: string = null): void

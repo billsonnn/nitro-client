@@ -5,6 +5,7 @@ import { UserCurrencyComposer } from '../../../client/nitro/communication/messag
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { IRoomSession } from '../../../client/nitro/session/IRoomSession';
+import { SettingsService } from '../../core/settings/service';
 import { UnseenItemCategory } from './unseen/UnseenItemCategory';
 import { UnseenItemTracker } from './unseen/UnseenItemTracker';
 
@@ -22,6 +23,7 @@ export class InventoryService implements OnDestroy
     private _tradingVisible: boolean = false;
 
     constructor(
+        private _settingsService: SettingsService,
         private _ngZone: NgZone)
     {
         this._messages      = [];
@@ -82,6 +84,7 @@ export class InventoryService implements OnDestroy
                 this._roomSession = event.session;
                 return;
             case RoomSessionEvent.ENDED:
+                this._ngZone.run(() => this._settingsService.hideInventory());
                 this._roomSession = null;
                 return;
         }

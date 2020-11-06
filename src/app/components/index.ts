@@ -6,7 +6,7 @@ import { HotelViewModule } from './hotelview';
 import { InventoryModule } from './inventory';
 import { NavigatorModule } from './navigator';
 import { PurseModule } from './purse';
-import { RoomModule } from './room';
+import { RoomModule } from './room/room.module';
 import { ToolbarModule } from './toolbar';
 
 @NgModule({

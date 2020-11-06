@@ -61,9 +61,9 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent.bind(this));
 
         super.unregisterUpdateEvents(eventDispatcher);
     }

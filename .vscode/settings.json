@@ -7,5 +7,12 @@
         "source.organizeImports": true,
     },
     "emmet.showExpandedAbbreviation": "never",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "LineCount.excludes": [
+        "**/.vscode/**",
+        "**/node_modules/**",
+        "dist",
+        "src/assets",
+        "*.as"
+    ]
 }

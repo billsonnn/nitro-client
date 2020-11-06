@@ -101,7 +101,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         this._noSpriteVisibilityChecking    = false;
         this._usesExclusionRectangles       = false;
-        this._usesMask                      = false;
+        this._usesMask                      = true;
         this._canvasUpdated                 = false;
 
         this._objectCache                   = new RoomObjectCache(this._container.roomObjectVariableAccurateZ);
@@ -568,6 +568,17 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             extendedSprite.setTexture(objectSprite.texture);
 
+            if(objectSprite.updateContainer)
+            {
+                const length = extendedSprite.children.length;
+
+                if(length === 1) extendedSprite.removeChildAt(0);
+
+                extendedSprite.addChild(objectSprite.container);
+
+                objectSprite.updateContainer = false;
+            }
+
             if(objectSprite.flipH)
             {
                 if(extendedSprite.scale.x !== -1) extendedSprite.scale.x = -1;
@@ -610,6 +621,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(!extendedSprite) extendedSprite = new ExtendedSprite();
 
+        if(extendedSprite.children.length) extendedSprite.removeChildren();
+
         extendedSprite.tag              = sprite.tag;
         extendedSprite.alphaTolerance   = sprite.alphaTolerance;
         extendedSprite.alpha            = (sprite.alpha / 255);
@@ -625,6 +638,13 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         extendedSprite.filters          = sprite.filters;
 
         extendedSprite.setTexture(sprite.texture);
+
+        if(sprite.updateContainer)
+        {
+            extendedSprite.addChild(sprite.container);
+
+            sprite.updateContainer = false;
+        }
 
         if(sprite.flipH) extendedSprite.scale.x = -1;
 
@@ -698,7 +718,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             if(sprite.parent) sprite.parent.removeChild(sprite);
 
-            sprite.destroy();
+            sprite.destroy({
+                children: true
+            });
         }
     }
 

@@ -235,31 +235,40 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
     private _Str_1469(): string
     {
-        var k:IActiveActionData;
-        var _local_2: number;
-        if (!this._Str_2042)
-        {
-            return null;
-        }
-        if (((this._Str_1163.length == 1) && (this._Str_1668 == this._Str_1374)))
+        if(!this._Str_2042) return null;
+
+        if(((this._Str_1163.length == 1) && (this._Str_1668 == this._Str_1374)))
         {
             return (this._Str_1668 + this._Str_1306) + (this._Str_1724 % 4);
         }
-        if (this._Str_1163.length == 2)
+
+        if(this._Str_1163.length == 2)
         {
             for(let k of this._Str_1163)
             {
-                if (((k._Str_695 == 'fx') && ((((k._Str_727 == '33') || (k._Str_727 == '34')) || (k._Str_727 == '35')) || (k._Str_727 == '36'))))
+                if(((k._Str_695 == 'fx') && ((((k._Str_727 == '33') || (k._Str_727 == '34')) || (k._Str_727 == '35')) || (k._Str_727 == '36'))))
                 {
                     return (this._Str_1668 + this._Str_1306) + 0;
                 }
-                if (((k._Str_695 == 'fx') && ((k._Str_727 == '38') || (k._Str_727 == '39'))))
+
+                if(((k._Str_695 == 'fx') && ((k._Str_727 == '38') || (k._Str_727 == '39'))))
                 {
-                    _local_2 = (this._Str_1724 % 11);
-                    return (((this._Str_1668 + '_') + this._Str_1374) + this._Str_1306) + _local_2;
+                    return (((this._Str_1668 + '_') + this._Str_1374) + this._Str_1306) + (this._Str_1724 % 11);
+                }
+                
+                if((k._Str_695 === 'dance') && ((k._Str_727 === '1') || (k._Str_727 === '2') || (k._Str_727 === '3') || (k._Str_727 === '4')))
+                {
+                    let frame = (this._Str_1724 % 8);
+
+                    if((k._Str_727 === '3')) frame = (this._Str_1724 % 10);
+
+                    if((k._Str_727 === '4')) frame = (this._Str_1724 % 16);
+
+                    return (((this._Str_1668 + k._Str_695) + k._Str_727) + frame);
                 }
             }
         }
+
         return null;
     }
 
@@ -340,6 +349,13 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         const container = new Container();
 
+        const sprite = new Sprite(Texture.EMPTY);
+        
+        sprite.width     = avatarCanvas.width;
+        sprite.height    = avatarCanvas.height;
+
+        container.addChild(sprite);
+
         var _local_11 = true;
         var _local_12 = (_local_6.length - 1);
 
@@ -364,7 +380,9 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     _local_10.x += avatarCanvas._Str_1076.x;
                     _local_10.y += avatarCanvas._Str_1076.y;
 
-                    const sprite = Sprite.from(_local_9);
+                    const sprite = new Sprite(Texture.EMPTY);
+
+                    sprite.addChild(_local_9);
 
                     if(sprite)
                     {
@@ -378,7 +396,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             _local_12--;
         }
 
-        const texture = TextureUtils.generateTexture(container, new Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        const texture = TextureUtils.generateTexture(container);
 
         if(!texture) return null;
         
@@ -391,7 +409,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             {
                 let avatarImage = this._Str_1894(this._Str_671);
 
-                this.applyPalette(avatarImage, this._Str_2121.reds);
+                //this.applyPalette(avatarImage, this._Str_2121.reds);
 
                 if(this._Str_671) this._Str_671.destroy(true);
 
@@ -493,15 +511,15 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 			var b = i + 2;
             var a = i + 3;
             
-			var red = (reds) ? reds[data[r]] : data[r] << 16;
-			var green = (greens) ? greens[data[g]] : data[g] << 8;
-			var blue = (blues) ? blues[data[b]] : data[b];
-            var alpha = (alphas) ? alphas[data[a]] : (data[a] << 24) >>> 0;
+			var red = reds[data[r]];
+			var green = reds[data[g]]
+			var blue = reds[data[b]];
+            var alpha = reds[data[a]];
             
-			data[r] = ((red >> 16 & 0xFF) + (green >> 16 & 0xFF) + (blue >> 16 & 0xFF) + (alpha >> 16 & 0xFF)) % 256;
-			data[g] = ((red >> 8 & 0xFF) + (green >> 8 & 0xFF) + (blue >> 8 & 0xFF) + (alpha >> 8 & 0xFF)) % 256;
-			data[b] = ((red & 0xFF) + (green & 0xFF) + (blue & 0xFF) + (alpha & 0xFF)) % 256;
-            data[a] = ((red >> 24 & 0xFF) + (green >> 24 & 0xFF) + (blue >> 24 & 0xFF) + (alpha >> 24 & 0xFF)) % 256;
+			// data[r] = ((red >> 16 & 0xFF) + (green >> 16 & 0xFF) + (blue >> 16 & 0xFF) + (alpha >> 16 & 0xFF)) % 256;
+			// data[g] = ((red >> 8 & 0xFF) + (green >> 8 & 0xFF) + (blue >> 8 & 0xFF) + (alpha >> 8 & 0xFF)) % 256;
+			// data[b] = ((red & 0xFF) + (green & 0xFF) + (blue & 0xFF) + (alpha & 0xFF)) % 256;
+            // data[a] = ((red >> 24 & 0xFF) + (green >> 24 & 0xFF) + (blue >> 24 & 0xFF) + (alpha >> 24 & 0xFF)) % 256;
         }
 
         textureCtx.putImageData(textureImageData, 0, 0);
@@ -542,7 +560,10 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 }
 
                 const offset = bodyPart._Str_1076;
-                const sprite = Sprite.from(texture);
+                
+                const sprite = new Sprite(Texture.EMPTY);
+
+                sprite.addChild(texture);
 
                 sprite.x = offset.x;
                 sprite.y = offset.y;
@@ -574,11 +595,9 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
             existing.destroy(true);
 
             this._Str_864.delete(k);
-
-            existing = _arg_2;
         }
 
-        this._Str_864.set(k, existing);
+        this._Str_864.set(k, _arg_2);
     }
 
     public getAsset(k: string): IGraphicAsset

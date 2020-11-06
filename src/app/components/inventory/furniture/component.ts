@@ -20,7 +20,17 @@ import { InventoryFurnitureService } from './service';
         </div>
         <div class="row" *ngIf="groupItems.length">
             <div class="col-7">
-                <div nitro-furniture-grid-component [list]="groupItems" [selected]="selectedGroup" (selectedChange)="selectGroup($event)"></div>
+                <perfect-scrollbar style="max-height: 225px;">
+                    <div class="grid-container">
+                        <div class="grid-items">
+                            <div class="item-detail" *ngFor="let groupItem of groupItems" [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (selected === selectedGroup) }" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }" (click)="selectGroup(groupItem)">
+                                <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
+                                <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
+                                <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
             </div>
             <div class="d-flex flex-column col-5">
                 <div class="bg-black" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
@@ -40,7 +50,9 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     @Input()
     public visible: boolean = false;
 
+    @Input()
     public roomPreviewer: RoomPreviewer = null;
+    
     public selectedGroup: GroupItem = null;
 
     private _furnitureEventSubscription: Subscription;
@@ -53,11 +65,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public ngOnInit(): void
     {
-        if(!this.roomPreviewer)
-        {
-            this.roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
-        }
-
         if(this._inventoryFurnitureService.isInitalized) this.selectExistingGroupOrDefault();
 
         this._furnitureEventSubscription = this._inventoryFurnitureService.events.subscribe(this.onInventoryFurnitureServiceEvent.bind(this));
@@ -68,16 +75,14 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         const prev = changes.visible.previousValue;
         const next = changes.visible.currentValue;
 
-        if(next && (next !== prev)) this.prepareInventory();
+        if(next && (next !== prev))
+        {
+            this.prepareInventory();
+        }
     }
 
     public ngOnDestroy(): void
     {
-        if(this.roomPreviewer)
-        {
-            this.roomPreviewer.dispose();
-        }
-
         if(this._furnitureEventSubscription) this._furnitureEventSubscription.unsubscribe();
     }
 
@@ -223,6 +228,15 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                 this.selectExistingGroupOrDefault();
                 return;
         }
+    }
+
+    public getIconUrl(groupItem: GroupItem): string
+    {
+        const imageUrl = ((groupItem && groupItem.iconUrl) || null);
+
+        if(imageUrl && (imageUrl !== '')) return `url('${ imageUrl }')`;
+
+        return null;
     }
 
     public get groupItems(): GroupItem[]

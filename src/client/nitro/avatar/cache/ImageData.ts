@@ -1,16 +1,18 @@
-﻿import { Point, Rectangle, Texture } from 'pixi.js';
+﻿import { Container, Point, Rectangle, Texture } from 'pixi.js';
 
 export class ImageData 
 {
-    private _bitmap: Texture;
+    private _texture: Texture;
+    private _container: Container;
     private _rect: Rectangle;
     private _regPoint: Point;
     private _flipH: boolean;
     private _color: number;
 
-    constructor(k: Texture, rectangle: Rectangle, _arg_3: Point, flipH: boolean, color: number)
+    constructor(texture: Texture, rectangle: Rectangle, _arg_3: Point, flipH: boolean, color: number, container: Container = null)
     {
-        this._bitmap    = k;
+        this._texture   = texture;
+        this._container = container;
         this._rect      = rectangle;
         this._regPoint  = _arg_3;
         this._flipH     = flipH;
@@ -21,14 +23,19 @@ export class ImageData
 
     public dispose(): void
     {
-        this._bitmap    = null;
+        this._texture    = null;
         this._regPoint  = null;
         this._color     = null;
     }
 
-    public get bitmap(): Texture
+    public get texture(): Texture
     {
-        return this._bitmap;
+        return this._texture;
+    }
+
+    public get container(): Container
+    {
+        return this._container;
     }
 
     public get rect(): Rectangle

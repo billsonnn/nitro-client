@@ -1,4 +1,6 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Nitro } from '../../../client/nitro/Nitro';
+import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../core/settings/service';
 import { InventoryFurnitureService } from './furniture/service';
 import { InventoryService } from './service';
@@ -22,21 +24,39 @@ import { InventoryTradingService } from './trading/service';
             </div>
         </div>
         <div class="card-body">
-            <div nitro-inventory-furniture-component [visible]="furnitureVisible"></div>
+            <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
             <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
         </div>
     </div>`
 })
-export class InventoryComponent implements OnChanges
+export class InventoryComponent implements OnInit, OnDestroy, OnChanges
 {
     @Input()
     public visible: boolean = false;
+
+    private _roomPreviewer: RoomPreviewer = null;
 
     constructor(
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
         private _inventoryTradingService: InventoryTradingService,
         private _settingsService: SettingsService) {}
+
+    public ngOnInit(): void
+    {
+        if(!this._roomPreviewer)
+        {
+            this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
+        }
+    }
+
+    public ngOnDestroy(): void
+    {
+        if(this._roomPreviewer)
+        {
+            this._roomPreviewer.dispose();
+        }
+    }
 
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -57,6 +77,11 @@ export class InventoryComponent implements OnChanges
         this._inventoryService.tradingVisible   = false;
 
         this._settingsService.hideInventory();
+    }
+
+    public get roomPreviewer(): RoomPreviewer
+    {
+        return this._roomPreviewer;
     }
 
     public get furnitureVisible(): boolean

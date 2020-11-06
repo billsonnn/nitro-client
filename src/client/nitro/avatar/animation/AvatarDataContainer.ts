@@ -1,11 +1,12 @@
-﻿import { IAvatarDataContainer } from './IAvatarDataContainer';
+﻿import { AdjustmentFilter } from '@pixi/filter-adjustment';
+import { IAvatarDataContainer } from './IAvatarDataContainer';
 
 export class AvatarDataContainer implements IAvatarDataContainer 
 {
     private _ink: number;
     private _foreGround: number;
     private _backGround: number;
-    private _colorTransform: any;
+    private _colorTransform: AdjustmentFilter;
     private _rgb: number;
     private _r: number;
     private _g: number;
@@ -27,26 +28,25 @@ export class AvatarDataContainer implements IAvatarDataContainer
         foreground = foreground.replace('#', '');
         background = background.replace('#', '');
 
-        this._foreGround        = parseInt(foreground, 16);
-        this._backGround        = parseInt(background, 16);
-        this._rgb               = parseInt(foreground, 16);
-        this._r                 = ((this._rgb >> 16) & 0xFF);
-        this._g                 = ((this._rgb >> 8) & 0xFF);
-        this._b                 = ((this._rgb >> 0) & 0xFF);
-        this._redMultiplier     = ((this._r / 0xFF) * 1);
-        this._greenMultiplier   = ((this._g / 0xFF) * 1);
-        this._blueMultiplier    = ((this._b / 0xFF) * 1);
+        this._foreGround            = parseInt(foreground, 16);
+        this._backGround            = parseInt(background, 16);
+        this._colorTransform        = null;
+        this._rgb                   = parseInt(foreground, 16);
+        this._r                     = ((this._rgb >> 16) & 0xFF);
+        this._g                     = ((this._rgb >> 8) & 0xFF);
+        this._b                     = ((this._rgb >> 0) & 0xFF);
+        this._redMultiplier         = ((this._r / 0xFF) * 1);
+        this._greenMultiplier       = ((this._g / 0xFF) * 1);
+        this._blueMultiplier        = ((this._b / 0xFF) * 1);
+        this._alphaMultiplier       = 1;
+        this._paletteIsGrayscale    = true;
 
-        if (this._ink == 37)
+        if(this._ink === 37)
         {
             this._alphaMultiplier = 0.5;
             this._paletteIsGrayscale = false;
         }
-        else
-        {
-            this._paletteIsGrayscale = true;
-        }
-        //this._colorTransform = new ColorTransform(this._redMultiplier, this._greenMultiplier, this._blueMultiplier, this._alphaMultiplier);
+
         this._colorMap = this._Str_1181(this._backGround, this._foreGround);
     }
 
@@ -55,7 +55,7 @@ export class AvatarDataContainer implements IAvatarDataContainer
         return this._ink;
     }
 
-    public get colorTransform(): any
+    public get colorTransform(): AdjustmentFilter
     {
         return this._colorTransform;
     }
@@ -125,10 +125,12 @@ export class AvatarDataContainer implements IAvatarDataContainer
             _local_18.push(((((_local_20 << 24) | (_local_21 << 16)) | (_local_22 << 8)) | _local_23));
             _local_24++;
         }
+
         _local_15.set('alphas', _local_16);
         _local_15.set('reds', _local_16);
         _local_15.set('greens', _local_17);
         _local_15.set('blues', _local_18);
+
         return _local_15;
     }
 }

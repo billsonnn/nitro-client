@@ -53,7 +53,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
     {
         view.avatarData = avatarData;
 
-        if(view.widget.isDancing && view.widget._Str_6454) view.mode = RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES;
+        if(view.widget.isDancing && view.widget.hasClub) view.mode = RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES;
         
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
@@ -71,7 +71,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     {
                         name: 'decorate',
                         localization: 'widget.avatar.decorate',
-                        visible: (this.widget._Str_6454 && (this.avatarData.roomControllerLevel >= RoomControllerLevel.GUEST) || this.avatarData._Str_3246)
+                        visible: (this.widget.hasClub && (this.avatarData.roomControllerLevel >= RoomControllerLevel.GUEST) || this.avatarData._Str_3246)
                     },
                     {
                         name: 'change_looks',
@@ -81,17 +81,17 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     {
                         name: 'dance_menu',
                         localization: 'widget.memenu.dance',
-                        visible: (this.widget._Str_6454 && !isRidingHorse)
+                        visible: (this.widget.hasClub && !isRidingHorse)
                     },
                     {
                         name: 'dance',
                         localization: 'widget.memenu.dance',
-                        visible: (!this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse)
+                        visible: (!this.widget.isDancing && !this.widget.hasClub && !isRidingHorse)
                     },
                     {
                         name: 'dance_stop',
                         localization: 'widget.memenu.dance.stop',
-                        visible: (this.widget.isDancing && !this.widget._Str_6454 && !isRidingHorse)
+                        visible: (this.widget.isDancing && !this.widget.hasClub && !isRidingHorse)
                     },
                     {
                         name: 'expressions',
@@ -101,7 +101,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     {
                         name: 'signs',
                         localization: 'infostand.show.signs',
-                        visible: (this.widget._Str_6454)
+                        visible: true
                     },
                     {
                         name: 'drop_hand_item',
@@ -166,12 +166,12 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     {
                         name: 'laugh',
                         localization: 'widget.memenu.laugh',
-                        visible: (!this.widget._Str_12708 && this.widget._Str_7303)
+                        visible: (!this.widget._Str_12708 && this.widget.hasVip)
                     },
                     {
                         name: 'blow',
                         localization: 'widget.memenu.blow',
-                        visible: (!this.widget._Str_12708 && this.widget._Str_7303)
+                        visible: (!this.widget._Str_12708 && this.widget.hasVip)
                     },
                     {
                         name: 'idle',

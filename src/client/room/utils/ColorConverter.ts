@@ -3,8 +3,6 @@ import { Vector3d } from './Vector3d';
 
 export class ColorConverter 
 {
-
-
     public static _Str_22130(k: number): number
     {
         var _local_2: number = (((k >> 16) & 0xFF) / 0xFF);

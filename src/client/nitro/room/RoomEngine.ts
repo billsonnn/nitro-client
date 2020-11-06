@@ -306,7 +306,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.DISPOSED, roomId));
     }
 
-    public createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance
+    public createRoomInstance(roomId: number, roomMap: RoomMapData): void
     {
         let floorType       = '111';
         let wallType        = '201';
@@ -363,8 +363,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(!instance) return;
 
         this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
-
-        return instance;
     }
 
     private setupRoomInstance(roomId: number, roomMap: RoomMapData, floorType: string, wallType: string, landscapeType: string, worldType: string): IRoomInstance

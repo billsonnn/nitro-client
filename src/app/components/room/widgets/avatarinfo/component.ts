@@ -472,12 +472,12 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         return this.handler.roomSession.isDecorating;
     }
 
-    public get _Str_6454(): boolean
+    public get hasClub(): boolean
     {
         return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964);
     }
 
-    public get _Str_7303(): boolean
+    public get hasVip(): boolean
     {
         return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2575);
     }

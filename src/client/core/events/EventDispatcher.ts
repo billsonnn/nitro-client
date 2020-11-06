@@ -102,7 +102,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
         }
     }
 
-    private removeAllListeners(): void
+    public removeAllListeners(): void
     {
         if(!this._listeners || !this._listeners.size) return;
 

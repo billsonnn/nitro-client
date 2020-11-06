@@ -1,4 +1,4 @@
-import { BLEND_MODES, Filter, Texture } from 'pixi.js';
+import { BLEND_MODES, Container, Filter, Texture } from 'pixi.js';
 import { AlphaTolerance } from '../enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../enum/RoomObjectSpriteType';
 import { IRoomObjectSprite } from './IRoomObjectSprite';
@@ -12,6 +12,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _type: string;
     private _spriteType: number;
     private _texture: Texture;
+    private _container: Container;
 
     private _width: number;
     private _height: number;
@@ -35,6 +36,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
     private _filters: Filter[];
 
     private _updateCounter: number;
+    private _updateContainer: boolean;
 
     constructor()
     {
@@ -43,6 +45,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._type              = '';
         this._spriteType        = RoomObjectSpriteType.DEFAULT;
         this._texture           = null;
+        this._container         = null;
 
         this._width             = 0;
         this._height            = 0;
@@ -66,6 +69,7 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._filters           = [];
 
         this._updateCounter     = 0;
+        this._updateContainer   = false;
     }
 
     public dispose(): void
@@ -137,6 +141,30 @@ export class RoomObjectSprite implements IRoomObjectSprite
         this._texture = texture;
 
         this._updateCounter++;
+    }
+
+    public get container(): Container
+    {
+        return this._container;
+    }
+
+    public set container(container: Container)
+    {
+        if(this._container === container) return;
+
+        this.texture = Texture.EMPTY;
+
+        if(container)
+        {
+            this._width     = container.width;
+            this._height    = container.height;
+        }
+
+        this._container = container;
+
+        this._updateCounter++;
+
+        this._updateContainer = true;
     }
 
     public get width(): number
@@ -378,5 +406,15 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public get updateCounter(): number
     {
         return this._updateCounter;
+    }
+
+    public get updateContainer(): boolean
+    {
+        return this._updateContainer;
+    }
+
+    public set updateContainer(flag: boolean)
+    {
+        this._updateContainer = flag;
     }
 }

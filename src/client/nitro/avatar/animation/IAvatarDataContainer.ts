@@ -1,7 +1,9 @@
-﻿export interface IAvatarDataContainer 
+﻿import { AdjustmentFilter } from '@pixi/filter-adjustment';
+
+export interface IAvatarDataContainer 
 {
     ink: number;
-    colorTransform: any;
+    colorTransform: AdjustmentFilter;
     _Str_832: boolean;
     reds: number[];
     greens: number[];

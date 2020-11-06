@@ -1,6 +1,5 @@
-import { Graphics, Matrix, Point, Rectangle } from 'pixi.js';
+import { Container, Matrix, Point, Rectangle, Sprite, Texture } from 'pixi.js';
 import { RoomObjectSpriteData } from '../../../room/data/RoomObjectSpriteData';
-import { TextureUtils } from '../../../room/utils/TextureUtils';
 import { Nitro } from '../../Nitro';
 import { IActiveActionData } from '../actions/IActiveActionData';
 import { AssetAliasCollection } from '../alias/AssetAliasCollection';
@@ -459,7 +458,7 @@ export class AvatarImageCache
             imageIndex--;
         }
         
-        return new AvatarImageBodyPartContainer(imageData.bitmap, offset, isCacheable);
+        return new AvatarImageBodyPartContainer(imageData.container, offset, isCacheable);
     }
 
     private _Str_1652(k: number): string
@@ -479,14 +478,20 @@ export class AvatarImageCache
         for(let data of k) data && bounds.enlarge(data._Str_1567);
 
         const point     = new Point(-(bounds.x), -(bounds.y));
-        const container = new Graphics()
-            .drawRect(0, 0, bounds.width, bounds.height);
+        const container = new Container();
+
+        const sprite = new Sprite(Texture.EMPTY);
+
+        sprite.width    = bounds.width;
+        sprite.height   = bounds.height;
+
+        container.addChild(sprite);
 
         for(let data of k)
         {
             if(!data) continue;
 
-            const texture   = data.bitmap;
+            const texture   = data.texture;
             const color     = data.color;
             const flipH     = (!(isFlipped && data.flipH) && (isFlipped || data.flipH));
             const regPoint  = point.clone();
@@ -509,14 +514,14 @@ export class AvatarImageCache
                 this._matrix.ty = (regPoint.y - data.rect.y);
             }
 
-            container
-                .beginTextureFill({ texture, matrix: this._matrix, color })
-                .drawRect(regPoint.x, regPoint.y, data.rect.width, data.rect.height)
-                .endFill();
+            const sprite = new Sprite(texture);
+
+            sprite.tint = color;
+            sprite.transform.setFromMatrix(this._matrix);
+
+            container.addChild(sprite);
         }
 
-        const texture = TextureUtils.generateTexture(container);
-
-        return new ImageData(texture, container.getLocalBounds(), point, isFlipped, null);
+        return new ImageData(null, container.getLocalBounds(), point, isFlipped, null, container);
     }
 }

@@ -1,4 +1,4 @@
-import { Filter, Texture } from 'pixi.js';
+import { Container, Filter, Texture } from 'pixi.js';
 
 export interface IRoomObjectSprite
 {
@@ -7,6 +7,7 @@ export interface IRoomObjectSprite
     type: string;
     spriteType: number;
     texture: Texture;
+    container: Container;
     width: number;
     height: number;
     offsetX: number;
@@ -27,4 +28,5 @@ export interface IRoomObjectSprite
     alphaTolerance: number;
     filters: Filter[];
     updateCounter: number;
+    updateContainer: boolean;
 }

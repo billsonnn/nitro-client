@@ -29,8 +29,8 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public chatContainer: ViewContainerRef;
 
     public timeoutTime: number      = 0;
-    public originalScale: number    = 1;
-    public scaleFactor: number      = 0;
+    public originalScale: number    = 0;
+    public scaleFactor: number      = 1;
     public cameraOffset: Point      = new Point();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
-import { RoomComponent } from './component';
+import { RoomComponent } from './room.component';
 import { RoomAvatarInfoAvatarComponent } from './widgets/avatarinfo/avatar/component';
 import { RoomAvatarInfoComponent } from './widgets/avatarinfo/component';
 import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/name/component';
@@ -41,8 +41,6 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         CustomStackHeightComponent,
         DimmerFurniComponent
     ],
-    providers: [
-    ],
     declarations: [
         RoomComponent,
         RoomChatInputComponent,
@@ -63,4 +61,4 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         DimmerFurniComponent
     ]
 })
-export class RoomModule {} 
+export class RoomModule {}

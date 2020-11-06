@@ -14,7 +14,7 @@ export interface IRoomCreator
     updateRoomInstancePlaneThickness(roomId: number, wallThickness: number, floorThickness: number): boolean;
     updateRoomInstancePlaneType(roomId: number, floorType?: string, wallType?: string, landscapeType?: string, _arg_5?: boolean): boolean;
     removeRoomInstance(roomId: number): void;
-    createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance;
+    createRoomInstance(roomId: number, roomMap: RoomMapData): void;
     setRoomSessionOwnUser(roomId: number, objectId: number): void;
     setRoomInstanceModelName(roomId: number, name: string): void;
     getFurnitureStackingHeightMap(roomId: number): FurnitureStackingHeightMap;

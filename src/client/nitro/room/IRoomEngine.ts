@@ -1,6 +1,5 @@
 import { DisplayObject, Point, Rectangle } from 'pixi.js';
 import { INitroManager } from '../../core/common/INitroManager';
-import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomManager } from '../../room/IRoomManager';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IRoomObjectLogicFactory } from '../../room/object/logic/IRoomObjectLogicFactory';
@@ -25,7 +24,7 @@ export interface IRoomEngine extends INitroManager
     onRoomEngineInitalized(flag: boolean): void;
     disableUpdate(flag: boolean): void;
     runUpdate(): void;
-    createRoomInstance(roomId: number, roomMap: RoomMapData): IRoomInstance;
+    createRoomInstance(roomId: number, roomMap: RoomMapData): void;
     getRoomInstanceDisplay(roomId: number, id: number, width: number, height: number, scale: number): DisplayObject;
     setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point?: Point, offsetPoint?: Point): void;
     setRoomInstanceRenderingCanvasMask(roomId: number, canvasId: number, flag: boolean): void;
