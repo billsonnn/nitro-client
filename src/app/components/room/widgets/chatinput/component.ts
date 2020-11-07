@@ -16,7 +16,7 @@ import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMes
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
-            <input #chatInputView type="text" class="chat-input" />
+            <input #chatInputView type="text" class="chat-input" [maxLength]="inputMaxLength" />
         </div>
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
@@ -39,6 +39,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private _chatModeIdWhisper: string  = null;
     private _chatModeIdShout: string    = null;
     private _chatModeIdSpeak: string    = null;
+    private _maxChatLength: number      = 0;
 
     constructor(
         private ngZone: NgZone
@@ -52,6 +53,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         this._chatModeIdWhisper = Nitro.instance.getLocalization("widgets.chatinput.mode.whisper");
         this._chatModeIdShout   = Nitro.instance.getLocalization("widgets.chatinput.mode.shout");
         this._chatModeIdSpeak   = Nitro.instance.getLocalization("widgets.chatinput.mode.speak");
+        this._maxChatLength     = Nitro.instance.getConfiguration<number>("chat.input.maxlength", 100);
     }
 
     public ngAfterViewInit(): void
@@ -264,8 +266,8 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         if(this.typingTimer) this.resetTypingTimer();
 
         if(this.idleTimer) this.resetIdleTimer();
-            
-        this.sendChat(text, chatType, recipientName, this.currentStyle);
+
+        if(text.length <= this._maxChatLength) this.sendChat(text, chatType, recipientName, this.currentStyle);
 
         this.isTyping = false;
 
@@ -370,6 +372,11 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         if(this.isTyping) this.typingStartedSent = true;
 
         this.sendTypingMessage();
+    }
+
+    public get inputMaxLength(): number
+    {
+        return this._maxChatLength;
     }
 
     public get inputView(): HTMLInputElement
