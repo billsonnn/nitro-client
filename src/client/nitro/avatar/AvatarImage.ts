@@ -1,4 +1,5 @@
 import { Container, filters, Graphics, Matrix, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { AdvancedMap } from '../../core/utils/AdvancedMap';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { TextureUtils } from '../../room/utils/TextureUtils';
 import { Nitro } from '../Nitro';
@@ -59,7 +60,8 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     private _sortedActions: IActiveActionData[];
     private _lastActionsString: string;
     private _currentActionsString: string;
-    private _fullImageCache: Map<string, RenderTexture>;
+    private _fullImageCache: AdvancedMap<string, RenderTexture>;
+    private _fullImageCacheSize: number = 5;
     protected _isCachedImage: boolean = false;
     private _useFullImageCache: boolean = false;
     private _effectIdInUse: number = -1;
@@ -98,7 +100,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         this._defaultAction = new ActiveActionData(AvatarAction.POSTURE_STAND);
         this._defaultAction._Str_742 = this._structure._Str_1675(AvatarImage.DEFAULT_ACTION);
         this.resetActions();
-        this._fullImageCache = new Map();
+        this._fullImageCache = new AdvancedMap();
         this._animationFrameCount = 0;
     }
 
@@ -135,7 +137,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(this._fullImageCache)
         {
-            for(let k of this._fullImageCache.values()) if(k) k.destroy(true);
+            for(let k of this._fullImageCache.getValues()) (k && k.destroy(true));
 
             this._fullImageCache = null;
         }
@@ -524,13 +526,13 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
     protected getFullImage(k: string): RenderTexture
     {
-        const existing = this._fullImageCache.get(k);
+        const existing = this._fullImageCache.getValue(k);
 
         if(existing)
         {
             if(!existing.valid)
             {
-                this._fullImageCache.delete(k);
+                this._fullImageCache.remove(k);
 
                 existing.destroy(true);
             }
@@ -543,16 +545,28 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
     protected cacheFullImage(k: string, _arg_2: RenderTexture): void
     {
-        let existing = this._fullImageCache.get(k);
+        let existing = this._fullImageCache.getValue(k);
 
         if(existing)
         {
-            this._fullImageCache.delete(k);
+            this._fullImageCache.remove(k);
             
             existing.destroy(true);
         }
 
-        this._fullImageCache.set(k, _arg_2);
+        if(this._fullImageCache.length === this._fullImageCacheSize)
+        {
+            const oldestKey = this._fullImageCache.getKey(0);
+
+            if(oldestKey)
+            {
+                const removed = this._fullImageCache.remove(oldestKey);
+
+                removed.destroy(true);
+            }
+        }
+
+        this._fullImageCache.add(k, _arg_2);
     }
 
     public getAsset(k: string): IGraphicAsset

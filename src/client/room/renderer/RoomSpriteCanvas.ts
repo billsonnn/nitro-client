@@ -429,7 +429,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         let z   = vector.z;
 
         if(x > 0) z = (z + (x * 1.2E-7));
-        else z = (z + (-x * 1.2E-7));
+        else z = (z + (-(x) * 1.2E-7));
 
         x = (x + (this._width / 2));
         y = (y + (this._height / 2));
