@@ -5,9 +5,11 @@ import { CatalogPageData } from '../../../../client/nitro/communication/messages
 	selector: '[nitro-catalog-navigation-component]',
     template: `
     <div class="nitro-catalog-navigation-component">
-        <div class="scroll-container">
-            <nitro-catalog-navigation-set-component *ngIf="catalogPage" [catalogPage]="catalogPage" [activePage]="activePage"></nitro-catalog-navigation-set-component>
-        </div>
+        <perfect-scrollbar style="max-height: 435px;">
+            <div class="scroll-container">
+                <nitro-catalog-navigation-set-component *ngIf="catalogPage" [catalogPage]="catalogPage" [activePage]="activePage"></nitro-catalog-navigation-set-component>
+            </div>
+        </perfect-scrollbar>
     </div>`
 })
 export class CatalogNavigationComponent

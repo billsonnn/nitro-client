@@ -25,14 +25,16 @@ import { RoomLayout } from './RoomLayout';
         <div class="card-body">
             <div class="row">
                 <div class="col-7">
-                    <div class="grid-container">
-                        <div class="grid-items">
-                            <div class="item-detail" *ngFor="let layout of layouts" [ngClass]="{ 'active': (roomLayoutControl.value === layout.name) }" (click)="setRoomLayout(layout.name)">
-                                <div class="detail-image" [ngStyle]="{ 'background-image': getRoomLayoutImageUrl(layout.name) }"></div>
-                                <div class="badge badge-secondary">{{ layout.tileSize }} {{ ('navigator.createroom.tilesize') | translate }}</div>
+                    <perfect-scrollbar style="max-height: 438px;">
+                        <div class="grid-container">
+                            <div class="grid-items">
+                                <div class="item-detail" *ngFor="let layout of layouts" [ngClass]="{ 'active': (roomLayoutControl.value === layout.name) }" (click)="setRoomLayout(layout.name)">
+                                    <div class="detail-image" [ngStyle]="{ 'background-image': getRoomLayoutImageUrl(layout.name) }"></div>
+                                    <div class="badge badge-secondary">{{ layout.tileSize }} {{ ('navigator.createroom.tilesize') | translate }}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </perfect-scrollbar>
                 </div>
                 <div class="col-5">
                     <form [formGroup]="form" (ngSubmit)="onSubmit($event)">

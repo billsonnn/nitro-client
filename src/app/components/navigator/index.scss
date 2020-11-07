@@ -42,14 +42,12 @@
     .grid-container {
 
         .grid-items {
-            height: 438px;
 
             .item-detail {
                 width: calc(1 / 2 * 100% - (1 - 1 / 2) * 5px);
                 height: 100px;
                 padding: 3px;
                 margin: 5px 5px 0 0;
-                background: $destiny;
                 border-radius: 3px;
                 border: 2px solid transparent;
                 overflow: hidden;

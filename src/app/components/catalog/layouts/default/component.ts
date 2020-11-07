@@ -15,7 +15,9 @@ import { CatalogLayout } from '../component';
             <div class="w-100 h-100 position-absolute" nitro-catalog-purchase-component [catalogPage]="catalogPage" [offer]="activeOffer" [roomPreviewer]="roomPreviewer"></div>
         </div>
         <div class="d-flex flex-row">
-            <div class="w-100" nitro-catalog-offer-grid-component [catalogPage]="catalogPage" [offers]="(pageParser && pageParser.offers)" [activeOffer]="activeOffer"></div>
+            <perfect-scrollbar style="max-height: 165px;">
+                <div class="w-100" nitro-catalog-offer-grid-component [catalogPage]="catalogPage" [offers]="(pageParser && pageParser.offers)" [activeOffer]="activeOffer"></div>
+            </perfect-scrollbar>
         </div>
     </div>`
 })
