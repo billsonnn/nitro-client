@@ -160,7 +160,7 @@ export class MainComponent implements OnInit, OnDestroy
 				}
 				return;
 			case RoomEngineEvent.DISPOSED:
-				if(this.roomComponent) this.roomComponent.endRoom();
+				//if(this.roomComponent) this.roomComponent.endRoom();
 				return;
 			case RoomZoomEvent.ROOM_ZOOM:
 				const zoomEvent = (event as RoomZoomEvent);

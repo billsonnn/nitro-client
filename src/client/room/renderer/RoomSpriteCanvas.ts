@@ -55,6 +55,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _eventId: number;
     private _scale: number;
     
+    private _restrictsScaling: boolean;
     private _noSpriteVisibilityChecking: boolean;
     private _usesExclusionRectangles: boolean;
     private _usesMask: boolean;
@@ -99,6 +100,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this._eventId                       = 0;
         this._scale                         = 1;
 
+        this._restrictsScaling              = false;
         this._noSpriteVisibilityChecking    = false;
         this._usesExclusionRectangles       = false;
         this._usesMask                      = true;
@@ -270,9 +272,11 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         }
     }
 
-    public setScale(scale: number, point: Point = null, offsetPoint: Point = null): void
+    public setScale(scale: number, point: Point = null, offsetPoint: Point = null, override: boolean = false): void
     {
         if(!this._master || !this._display) return;
+
+        if(this._restrictsScaling && !override) false;
 
         if(!point) point = new Point((this._width / 2), (this._height / 2));
 
@@ -281,8 +285,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         point = this._display.toLocal(point);
 
         this._scale         = scale;
-        this._screenOffsetX = (offsetPoint.x - (point.x * this._scale));
-        this._screenOffsetY = (offsetPoint.y - (point.y * this._scale));
+        this.screenOffsetX  = (offsetPoint.x - (point.x * this._scale));
+        this.screenOffsetY  = (offsetPoint.y - (point.y * this._scale));
     }
 
     public render(time: number, update: boolean = false): void
@@ -952,7 +956,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         var k = this._scale;
         var _local_2 = this._screenOffsetX;
         var _local_3 = this._screenOffsetY;
-        this.setScale(1);
+        this.setScale(1, null, null, true);
         this._screenOffsetX = 0;
         this._screenOffsetY = 0;
         this.render(-1, true);
@@ -960,7 +964,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         const texture = TextureUtils.generateTexture(this._display);
 
         this._noSpriteVisibilityChecking = false;
-        this.setScale(k);
+        this.setScale(k, null, null, true);
         this._screenOffsetX = _local_2;
         this._screenOffsetY = _local_3;
 
@@ -989,7 +993,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetX(x: number)
     {
-        this._screenOffsetX = x;
+        this._mouseLocation.x   = (this._mouseLocation.x - (x - this._screenOffsetX));
+        this._screenOffsetX     = x;
     }
 
     public get screenOffsetY(): number
@@ -999,7 +1004,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetY(y: number)
     {
-        this._screenOffsetY = y;
+        this._mouseLocation.y   = (this._mouseLocation.y - (y - this._screenOffsetY));
+        this._screenOffsetY     = y;
     }
 
     public get scale(): number
@@ -1015,6 +1021,16 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public get height(): number
     {
         return (this._height * this._scale);
+    }
+
+    public get restrictsScaling(): boolean
+    {
+        return this._restrictsScaling;
+    }
+
+    public set restrictsScaling(flag: boolean)
+    {
+        this._restrictsScaling = flag;
     }
 
     public get canvasUpdated(): boolean

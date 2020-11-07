@@ -100,8 +100,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(!displayObject) return;
 
-
-
         const geometry = (Nitro.instance.roomEngine.getRoomInstanceGeometry(session.roomId, canvasId) as RoomGeometry);
 
         if(geometry)
@@ -199,7 +197,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         window.onresize = null;
 
-        this.roomCanvasReference.nativeElement.removeChild(canvas);
+        if(canvas.parentElement) canvas.parentElement.removeChild(canvas);
     }
 
     private onMouseEvent(event: MouseEvent): void

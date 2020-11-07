@@ -149,6 +149,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _activeRoomDragX: number;
     private _activeRoomDragY: number;
     private _roomDraggingAlwaysCenters: boolean;
+    private _roomAllowsDragging: boolean;
     private _roomDatas: Map<number, RoomData>;
     private _roomInstanceDatas: Map<number, RoomInstanceData>;
     private _skipFurnitureCreationForNextFrame: boolean;
@@ -178,21 +179,22 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._visualizationFactory      = new RoomObjectVisualizationFactory();
         this._logicFactory              = new RoomObjectLogicFactory();
 
-        this._activeRoomActiveCanvasMouseX                    = 0;
-        this._activeRoomActiveCanvasMouseY                    = 0;
-        this._activeRoomIsDragged                  = false;
-        this._activeRoomWasDragged                  = false;
-        this._activeRoomDragStartX                 = 0;
-        this._activeRoomDragStartY                 = 0;
-        this._activeRoomDragX                 = 0;
-        this._activeRoomDragY                 = 0;
-        this._skipFurnitureCreationForNextFrame                  = false;
+        this._activeRoomActiveCanvasMouseX      = 0;
+        this._activeRoomActiveCanvasMouseY      = 0;
+        this._activeRoomIsDragged               = false;
+        this._activeRoomWasDragged              = false;
+        this._activeRoomDragStartX              = 0;
+        this._activeRoomDragStartY              = 0;
+        this._activeRoomDragX                   = 0;
+        this._activeRoomDragY                   = 0;
+        this._skipFurnitureCreationForNextFrame = false;
         this._mouseCursorUpdate                 = false;
-        this._imageObjectIdBank                = null;
-        this._imageCallbacks            = new Map();
-        this._thumbnailCallbacks          = new Map();
-        this._roomDraggingAlwaysCenters            = false;
-        this._badgeListenerObjects            = new Map();
+        this._imageObjectIdBank                 = null;
+        this._imageCallbacks                    = new Map();
+        this._thumbnailCallbacks                = new Map();
+        this._roomDraggingAlwaysCenters         = false;
+        this._roomAllowsDragging                = true;
+        this._badgeListenerObjects              = new Map();
     }
 
     public onInit(): void
@@ -362,6 +364,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!instance) return;
 
+        if(roomMap.restrictsDragging)
+        {
+            this._roomAllowsDragging = false;
+        }
+        else
+        {
+            this._roomAllowsDragging = true;
+        }
+
         this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.INITIALIZED, roomId));
     }
 
@@ -382,6 +393,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(roomMap)
         {
+            instance.model.setValue(RoomVariableEnum.RESTRICTS_DRAGGING, roomMap.restrictsDragging);
+            instance.model.setValue(RoomVariableEnum.RESTRICTS_SCALING, roomMap.restrictsScaling);
+            instance.model.setValue(RoomVariableEnum.RESTRICTED_SCALE, roomMap.restrictedScale);
+
             const dimensions = roomMap.dimensions;
 
             if(dimensions)
@@ -499,6 +514,23 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!canvas) return null;
 
+        const restrictedScaling = instance.model.getValue<boolean>(RoomVariableEnum.RESTRICTS_SCALING);
+
+        if(restrictedScaling)
+        {
+            let restrictedScale = instance.model.getValue<number>(RoomVariableEnum.RESTRICTED_SCALE);
+
+            if(!restrictedScale) restrictedScale = 1;
+
+            canvas.setScale(restrictedScale);
+
+            canvas.restrictsScaling = true;
+        }
+        else
+        {
+            canvas.restrictsScaling = false;
+        }
+
         canvas.setMouseListener(this._roomObjectEventHandler);
 
         if(canvas.geometry)
@@ -542,13 +574,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(roomCanvas) roomCanvas.setMask(flag);
     }
 
-    public setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point: Point = null, offsetPoint: Point = null): void
+    public setRoomInstanceRenderingCanvasScale(roomId: number, canvasId: number, scale: number, point: Point = null, offsetPoint: Point = null, override: boolean = false): void
     {
         const roomCanvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
         if(roomCanvas)
         {
-            roomCanvas.setScale(scale, point, offsetPoint);
+            if(roomCanvas.restrictsScaling && !override) return;
+
+            roomCanvas.setScale(scale, point, offsetPoint, override);
 
             this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.ROOM_ZOOMED, roomId));
         }
@@ -2333,10 +2367,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             if(!altKey && !ctrlKey && !shiftKey && !this.isDecorating)
             {
-                this._activeRoomIsDragged  = true;
-                this._activeRoomWasDragged  = false;
-                this._activeRoomDragStartX = this._activeRoomActiveCanvasMouseX;
-                this._activeRoomDragStartY = this._activeRoomActiveCanvasMouseY;
+                if(this._roomAllowsDragging)
+                {
+                    this._activeRoomIsDragged   = true;
+                    this._activeRoomWasDragged  = false;
+                    this._activeRoomDragStartX  = this._activeRoomActiveCanvasMouseX;
+                    this._activeRoomDragStartY  = this._activeRoomActiveCanvasMouseY;
+                }
             }
         }
         else

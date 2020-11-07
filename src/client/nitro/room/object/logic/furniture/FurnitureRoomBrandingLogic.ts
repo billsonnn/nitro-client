@@ -109,7 +109,17 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!texture)
         {
-            asset.downloadAsset(imageUrl, () => this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED)));
+            asset.downloadAsset(imageUrl, (flag: boolean) =>
+            {
+                if(flag)
+                {
+                    this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADED));
+                }
+                else
+                {
+                    this.processUpdateMessage(new ObjectAdUpdateMessage(ObjectAdUpdateMessage.IMAGE_LOADING_FAILED));
+                }
+            });
 
             return;
         }

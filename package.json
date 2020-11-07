@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-slider/ngx-slider": "^2.0.2",
     "@angular/animations": "^10.0.10",
     "@angular/common": "~10.0.4",
     "@angular/compiler": "~10.0.4",
@@ -25,7 +26,6 @@
     "@pixi/filter-glow": "^3.1.1",
     "bytebuffer": "^5.0.1",
     "ng-animate": "^0.3.4",
-    "ngx-bootstrap-slider": "^1.9.0",
     "ngx-perfect-scrollbar": "^10.0.1",
     "ngx-toastr": "^13.0.0",
     "pixi.js": "^5.3.3",

@@ -1,3 +1,4 @@
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AlertToastComponent } from './components/alerts/alert/component';
@@ -36,7 +36,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgbDropdownModule,
 		NgbTooltipModule,
 		NgbModalModule,
-		NgxBootstrapSliderModule,
+		NgxSliderModule,
 		PickerModule,
 		EmojiModule,
 		PerfectScrollbarModule
@@ -45,10 +45,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+		ToastrModule,
 		NgbDropdownModule,
 		NgbTooltipModule,
 		NgbModalModule,
-		NgxBootstrapSliderModule,
+		NgxSliderModule,
 		PickerModule,
 		EmojiModule,
 		PerfectScrollbarModule,

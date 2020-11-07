@@ -9,7 +9,7 @@ export interface IRoomRenderingCanvas
     dispose(): void;
     initialize(width: number, height: number): void;
     setMask(flag: boolean): void;
-    setScale(scale: number, point?: Point, offsetPoint?: Point): void
+    setScale(scale: number, point?: Point, offsetPoint?: Point, override?: boolean): void
     render(time: number, update?: boolean): void;
     update(): void;
     setMouseListener(listener: IRoomCanvasMouseListener): void;
@@ -27,5 +27,6 @@ export interface IRoomRenderingCanvas
     scale: number;
     width: number;
     height: number;
+    restrictsScaling: boolean;
     canvasUpdated: boolean;
 }

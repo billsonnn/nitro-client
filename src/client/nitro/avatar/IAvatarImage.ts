@@ -9,28 +9,28 @@ import { IPartColor } from './structure/figure/IPartColor';
 
 export interface IAvatarImage extends IDisposable
 {
-    _Str_1009(): any;
+    getServerRenderData(): any;
     setDirection(_arg_1: string, _arg_2: number): void;
-    _Str_880(_arg_1: string, _arg_2: number): void;
-    _Str_953(_arg_1?: number): void;
-    _Str_797(): string;
-    _Str_754(): ISpriteDataContainer[];
-    _Str_607(_arg_1: ISpriteDataContainer): IAnimationLayerData;
+    setDirectionAngle(_arg_1: string, _arg_2: number): void;
+    updateAnimationByFrames(_arg_1?: number): void;
+    getScale(): string;
+    getSprites(): ISpriteDataContainer[];
+    getLayerData(_arg_1: ISpriteDataContainer): IAnimationLayerData;
     getImage(setType: string, hightlight: boolean, scale?: number, cache?: boolean): RenderTexture;
     getCroppedImage(setType: string, scale?: number): HTMLImageElement;
     getAsset(_arg_1: string): IGraphicAsset;
     getDirection(): number;
-    _Str_784(): IAvatarFigureContainer;
-    _Str_867(_arg_1: string): IPartColor;
-    _Str_899(): boolean;
-    _Str_781(): number[];
-    _Str_913(): void;
-    _Str_962(): void;
+    getFigure(): IAvatarFigureContainer;
+    getPartColor(_arg_1: string): IPartColor;
+    isAnimating(): boolean;
+    getCanvasOffsets(): number[];
+    initActionAppends(): void;
+    endActionAppends(): void;
     appendAction(_arg_1: string, ..._args: any[]): boolean;
-    _Str_920: IAvatarDataContainer;
+    avatarSpriteData: IAvatarDataContainer;
     isPlaceholder(): boolean;
-    _Str_998(): void;
-    _Str_677: boolean;
-    _Str_833(): void;
-    _Str_792: string;
+    forceActionUpdate(): void;
+    animationHasResetOnToggle: boolean;
+    resetAnimationFrameCounter(): void;
+    mainAction: string;
 }

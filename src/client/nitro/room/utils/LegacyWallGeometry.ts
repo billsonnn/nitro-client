@@ -3,6 +3,8 @@ import { Vector3d } from '../../../room/utils/Vector3d';
 
 export class LegacyWallGeometry 
 {
+    public static DEFAULT_SCALE: number = 32;
+    
     private static L: string = "l";
     private static R: string = "r";
 

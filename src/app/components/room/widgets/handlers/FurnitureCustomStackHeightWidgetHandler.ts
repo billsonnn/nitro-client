@@ -14,10 +14,9 @@ import { CustomStackHeightComponent } from '../furniture/customstackheight/compo
 export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler 
 {
     private _container: IRoomWidgetHandlerContainer = null;
-    private _widget: CustomStackHeightComponent = null;
-    private _lastFurniId: number = -1;
-
-    private _messageEvents: IMessageEvent[];
+    private _widget: CustomStackHeightComponent     = null;
+    private _lastFurniId: number                    = -1;
+    private _messages: IMessageEvent[]              = [];
 
     public dispose(): void
     {
@@ -66,7 +65,7 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
         }
     }
 
-    public update():void
+    public update(): void
     {
     }
 
@@ -87,9 +86,23 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
 
     public set container(k: IRoomWidgetHandlerContainer)
     {
-        this._container = k;
+        if(k !== this._container)
+        {
+            if(this._container)
+            {
+                for(let message of this._messages) this._container.connection.removeMessageEvent(message);
 
-        this._container.connection.addMessageEvent(new FurnitureStackHeightEvent(this.onFurnitureStackHeightEvent.bind(this)));
+                this._messages = [];
+            }
+
+            const message = new FurnitureStackHeightEvent(this.onFurnitureStackHeightEvent.bind(this));
+
+            this._messages.push(message);
+
+            k.connection.addMessageEvent(message);
+        }
+
+        this._container = k;
     }
 
     public get messageTypes(): string[]

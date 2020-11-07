@@ -50,6 +50,7 @@ import { RoomObjectVariable } from './object/RoomObjectVariable';
 import { RoomPlaneParser } from './object/RoomPlaneParser';
 import { RoomVariableEnum } from './RoomVariableEnum';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
+import { LegacyWallGeometry } from './utils/LegacyWallGeometry';
 import { ObjectRolling } from './utils/ObjectRolling';
 
 export class RoomMessageHandler extends Disposable
@@ -273,7 +274,20 @@ export class RoomMessageHandler extends Disposable
         this._planeParser.initializeFromTileData(parser.wallHeight);
         this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), (doorZ + this._planeParser.wallHeight));
 
-        wallGeometry.scale = parser.scale;
+        if(parser.scale === 64)
+        {
+            this._planeParser.restrictsDragging = true;
+            this._planeParser.restrictsScaling  = true;
+            this._planeParser.restrictedScale   = 0.5;
+        }
+        else
+        {
+            this._planeParser.restrictsDragging = false;
+            this._planeParser.restrictsScaling  = false;
+            this._planeParser.restrictedScale   = 1;
+        }
+
+        wallGeometry.scale = LegacyWallGeometry.DEFAULT_SCALE;
         wallGeometry.initialize(width, height, this._planeParser.floorHeight);
 
         let heightIterator = (parser.height - 1);

@@ -53,19 +53,22 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
 
         this._state = EffectAssetDownloadLibrary.LOADING;
 
-        this._assets.downloadAsset(this._downloadUrl, () =>
+        this._assets.downloadAsset(this._downloadUrl, (flag: boolean) =>
         {
-            this._state = EffectAssetDownloadLibrary.LOADED;
-
-            const collection = this._assets.getCollection(this._libraryName);
-
-            if(collection)
+            if(flag)
             {
-                //@ts-ignore
-                this._animation = collection.data.animations;
-            }
+                this._state = EffectAssetDownloadLibrary.LOADED;
 
-            this.dispatchEvent(new AvatarRenderEffectLibraryEvent(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this));
+                const collection = this._assets.getCollection(this._libraryName);
+
+                if(collection)
+                {
+                    //@ts-ignore
+                    this._animation = collection.data.animations;
+                }
+
+                this.dispatchEvent(new AvatarRenderEffectLibraryEvent(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this));
+            }
         });
     }
 

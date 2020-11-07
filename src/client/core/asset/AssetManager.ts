@@ -106,13 +106,13 @@ export class AssetManager extends Disposable implements IAssetManager
         let totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader) =>
+        const onDownloaded = (loader: Loader, flag: boolean) =>
         {
             totalDownloaded++;
 
             if(loader) loader.destroy();
 
-            if(totalDownloaded === totalToDownload) cb(true);
+            if(totalDownloaded === totalToDownload) cb(flag);
         }
 
         for(let url of assetUrls)
@@ -136,7 +136,12 @@ export class AssetManager extends Disposable implements IAssetManager
     
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
-        if(!resource || resource.error) return next();
+        if(!resource || resource.error)
+        {
+            onDownloaded(loader, false);
+
+            return;
+        }
 
         if(resource.type === LoaderResource.TYPE.JSON)
         {
@@ -160,7 +165,7 @@ export class AssetManager extends Disposable implements IAssetManager
                     {
                         this.createCollection(assetData, spritesheet);
 
-                        onDownloaded(loader);
+                        onDownloaded(loader, true);
                     });
                 }
                 else
@@ -173,7 +178,7 @@ export class AssetManager extends Disposable implements IAssetManager
                         {
                             this.createCollection(assetData, spritesheet);
 
-                            onDownloaded(loader);
+                            onDownloaded(loader, true);
                         });
                     });
                 }
@@ -183,7 +188,7 @@ export class AssetManager extends Disposable implements IAssetManager
                 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader);
+            onDownloaded(loader, true);
 
             return;
         }
@@ -195,7 +200,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
             this.setTexture(name, resource.texture);
 
-            onDownloaded(loader);
+            onDownloaded(loader, true);
 
             return;
         }

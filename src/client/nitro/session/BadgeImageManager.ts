@@ -85,11 +85,14 @@ export class BadgeImageManager
 
         if(url)
         {
-            this._assets.downloadAsset(url, () =>
+            this._assets.downloadAsset(url, (flag: boolean) =>
             {
-                const texture = this._assets.getTexture(k);
+                if(flag)
+                {
+                    const texture = this._assets.getTexture(k);
 
-                if(texture && this._events) this._events.dispatchEvent(new BadgeImageReadyEvent(k, texture.clone()));
+                    if(texture && this._events) this._events.dispatchEvent(new BadgeImageReadyEvent(k, texture.clone()));
+                }
             });
         }
         

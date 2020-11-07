@@ -395,19 +395,26 @@ export class RoomContentLoader implements IFurnitureDataListener
         let totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader) =>
+        const onDownloaded = (loader: Loader, flag: boolean) =>
         {
-            totalDownloaded++;
-
             if(loader) loader.destroy();
 
-            if(totalDownloaded === totalToDownload)
+            if(flag)
             {
-                const events = this._events.get(type);
+                totalDownloaded++;
 
-                if(!events) return;
+                if(totalDownloaded === totalToDownload)
+                {
+                    const events = this._events.get(type);
 
-                events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
+                    if(!events) return;
+
+                    events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
+                }
+            }
+            else
+            {
+                events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_FAILURE, type));
             }
         }
 
@@ -432,7 +439,12 @@ export class RoomContentLoader implements IFurnitureDataListener
     
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
-        if(!resource || resource.error) return next();
+        if(!resource || resource.error)
+        {
+            onDownloaded(loader, false);
+
+            return;
+        }
 
         if(resource.type === LoaderResource.TYPE.JSON)
         {

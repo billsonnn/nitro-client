@@ -263,7 +263,7 @@ export class AvatarImageCache
 
         if(!_local_13 || _arg_3)
         {
-            const _local_19 = this._structure._Str_713(k, this._avatar._Str_784(), _local_8, this._geometryType, _local_5, _local_9, this._avatar, _local_10);
+            const _local_19 = this._structure._Str_713(k, this._avatar.getFigure(), _local_8, this._geometryType, _local_5, _local_9, this._avatar, _local_10);
             
             _local_13 = new AvatarImageDirectionCache(_local_19);
 

@@ -76,7 +76,11 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         const canvasId  = this._container.getFirstCanvasId();
         const roomId    = this._container.roomSession.roomId;
-        const geometry  = this._container.roomEngine.getRoomInstanceGeometry(roomId, canvasId);
+        const canvas    = this._container.roomEngine.getRoomInstanceRenderingCanvas(roomId, canvasId);
+
+        if(!canvas) return;
+
+        const geometry  = canvas.geometry;
 
         if(!geometry) return;
 
@@ -106,7 +110,10 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         {
             const offset = this._container.roomEngine.getRoomInstanceRenderingCanvasOffset(roomId, canvasId);
 
-            if(offset) screenPoint.set((screenPoint.x + offset.x), (screenPoint.y + offset.y));
+            if(offset)
+            {
+                screenPoint.set((screenPoint.x + offset.x), (screenPoint.y + offset.y));
+            }
 
             if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
@@ -282,7 +289,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         
         const texture   = avatarImage.getImage(AvatarSetType.HEAD, false);
         const image     = Nitro.instance.renderer.extract.image(texture);
-        const color     = avatarImage._Str_867(AvatarFigurePartType.CHEST);
+        const color     = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 
         this._avatarColorCache.set(figure, ((color && color._Str_915) || 16777215));
 

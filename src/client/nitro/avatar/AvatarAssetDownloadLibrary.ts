@@ -51,11 +51,14 @@ export class AvatarAssetDownloadLibrary extends EventDispatcher
 
         this._state = AvatarAssetDownloadLibrary.LOADING;
 
-        this._assets.downloadAsset(this._downloadUrl, () =>
+        this._assets.downloadAsset(this._downloadUrl, (flag: boolean) =>
         {
-            this._state = AvatarAssetDownloadLibrary.LOADED;
+            if(flag)
+            {
+                this._state = AvatarAssetDownloadLibrary.LOADED;
 
-            this.dispatchEvent(new AvatarRenderLibraryEvent(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this));
+                this.dispatchEvent(new AvatarRenderLibraryEvent(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this));
+            }
         });
     }
 
