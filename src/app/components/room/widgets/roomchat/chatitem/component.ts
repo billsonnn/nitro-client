@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEvent';
 
 @Component({
     template: `
-    <div #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}">
+    <div #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}" (click)="selectUser()">
         <div class="chat-left" [ngStyle]="{ 'background-color': senderColorString }">
             <div #chatItemUserImage class="user-image"></div>
             <div class="user-pointer"></div>
@@ -113,6 +114,11 @@ export class RoomChatItemComponent
         this.y = y;
 
         this.chatContainerElement.style.top = (y + 'px');
+    }
+
+    public selectUser(): void
+    {
+        Nitro.instance.roomEngine.selectRoomObject(this.roomId, this.senderId, this.senderCategory);
     }
 
     public get width(): number
