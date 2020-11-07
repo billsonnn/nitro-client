@@ -210,9 +210,9 @@ export class Nitro extends Application implements INitro
         Nitro.instance.resizeTo = window;
     }
 
-    public getConfiguration<T>(key: string): T
+    public getConfiguration<T>(key: string, value: T = null): T
     {
-        return this._core.configuration.getValue<T>(key);
+        return this._core.configuration.getValue<T>(key, value);
     }
 
     public getLocalization(key: string): string

@@ -13,7 +13,7 @@ export interface INitro extends Application
 {
     init(): void;
     dispose(): void;
-    getConfiguration<T>(key: string): T;
+    getConfiguration<T>(key: string, value?: T): T;
     getLocalization(key: string): string;
     core: INitroCore;
     events: IEventDispatcher;

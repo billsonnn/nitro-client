@@ -120,11 +120,11 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         return value.replace(/%/g, '');
     }
 
-    public getValue<T>(key: string): T
+    public getValue<T>(key: string, value: T = null): T
     {
         let existing = this._definitions.getValue(key);
 
-        if(existing === undefined) existing = key;
+        if(existing === undefined) existing = value;
 
         return (existing as T);
     }
