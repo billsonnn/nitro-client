@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
+import { Container, filters, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IConnection } from '../../../client/core/communication/connections/IConnection';
 import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
 import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
@@ -50,6 +50,8 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
+    private static COLOR_MATRIX: filters.ColorMatrixFilter = new filters.ColorMatrixFilter();
+
     @ViewChild('roomCanvas')
     public roomCanvasReference: ElementRef<HTMLDivElement>;
 
@@ -63,10 +65,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]> = new Map();
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
 
-    private _roomBackgroundSprite: Sprite = null;
-    private _roomColorizerSprite: Sprite  = null;
-    private _roomBackgroundColor: number  = 0;
-    private _roomColorizerColor: number   = 0;
+    private _roomColorMatrix: filters.ColorMatrixFilter = null;
+    private _roomBackground: Sprite                     = null;
+    private _roomBackgroundColor: number                = 0;
+    private _roomColorizerColor: number                 = 0;
 
     private _resizeTimer: any 		= null;
     private _didMouseMove: boolean  = false;
@@ -96,7 +98,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         const height    = Nitro.instance.height;
         const scale     = RoomGeometry.SCALE_ZOOMED_IN;
 
-        const displayObject = Nitro.instance.roomEngine.getRoomInstanceDisplay(session.roomId, canvasId, width, height, scale);
+        const displayObject = (Nitro.instance.roomEngine.getRoomInstanceDisplay(session.roomId, canvasId, width, height, scale) as Sprite);
 
         if(!displayObject) return;
 
@@ -155,10 +157,12 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             this._ngZone.run(() => widget.destroy());
         }
 
-        this._roomBackgroundSprite  = null;
-        this._roomColorizerSprite   = null;
+        this._roomColorMatrix       = null;
+        this._roomBackground        = null;
         this._roomBackgroundColor   = 0;
         this._roomColorizerColor    = 0;
+
+        RoomComponent.COLOR_MATRIX.reset();
         
         this._widgets.clear();
         this._widgetHandlerMessageMap.clear();
@@ -262,7 +266,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
             this._events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
-            //this.setRoomBackground(this.getRoomBackground());
+            this.setRoomBackground();
         }, 1);
     }
 
@@ -598,39 +602,39 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     private getRoomBackground(): Sprite
     {
-        if(this._roomBackgroundSprite) return this._roomBackgroundSprite;
+        if(this._roomBackground) return this._roomBackground;
 
         const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.getFirstCanvasId());
 
         if(!canvas) return null;
 
-        const displayObject = (canvas.displayObject as Container);
+        const displayObject = (canvas.master as Container);
         const background    = new Sprite(Texture.WHITE);
 
         displayObject.addChildAt(background, 0);
 
-        this._roomBackgroundSprite = background;
+        this._roomBackground = background;
 
-        return this._roomBackgroundSprite;
+        return this._roomBackground;
     }
 
-    private getRoomColorizer(): Sprite
+    private getRoomColorizer(): filters.ColorMatrixFilter
     {
-        if(this._roomColorizerSprite) return this._roomColorizerSprite;
+        if(this._roomColorMatrix) return this._roomColorMatrix;
 
         const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.getFirstCanvasId());
 
         if(!canvas) return null;
 
-        const displayObject = (canvas.displayObject as Container);
-        const background    = new Sprite(Texture.WHITE);
+        const display = canvas.display;
 
-        // whole room colorizer disabled
-        //displayObject.addChildAt(background, displayObject.children.length);
+        if(!display) return null;
 
-        this._roomColorizerSprite = background;
+        this._roomColorMatrix = RoomComponent.COLOR_MATRIX;
 
-        return this._roomColorizerSprite;
+        display.filters = [ this._roomColorMatrix ];
+
+        return this._roomColorMatrix;
     }
 
     public setRoomBackgroundColor(hue: number, saturation: number, lightness: number): void
@@ -649,7 +653,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         {
             background.visible = true;
 
-            this.setRoomBackground(background);
+            this.setRoomBackground();
         }
     }
 
@@ -657,31 +661,33 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     {
         this._roomColorizerColor = ColorConverter._Str_13949(((ColorConverter._Str_22130(color) & 0xFFFF00) + brightness));
 
-        const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.getFirstCanvasId());
-
-        const colorizer = this.getRoomColorizer();
-
-        if(!colorizer) return;
-
-        this.setRoomColorizer(colorizer);
+        this.setRoomColorizer();
     }
 
-    private setRoomBackground(sprite: Sprite): void
+    private setRoomBackground(): void
     {
-        if(!sprite) return;
+        const background = this.getRoomBackground();
 
-        sprite.tint     = this._roomBackgroundColor;
-        sprite.width    = Nitro.instance.width;
-        sprite.height   = Nitro.instance.height;
+        if(!background) return;
+
+        background.tint     = this._roomBackgroundColor;
+        background.width    = Nitro.instance.width;
+        background.height   = Nitro.instance.height;
     }
 
-    private setRoomColorizer(sprite: Sprite): void
+    private setRoomColorizer(): void
     {
-        if(!sprite) return;
+        const colorMatrix = this.getRoomColorizer();
 
-        sprite.tint     = this._roomColorizerColor;
-        sprite.width    = Nitro.instance.width;
-        sprite.height   = Nitro.instance.height;
+        if(!colorMatrix) return;
+
+        const r = (this._roomColorizerColor >> 16 & 0xFF);
+        const g = (this._roomColorizerColor >> 8 & 0xFF);
+        const b = (this._roomColorizerColor & 0xFF);
+
+        colorMatrix.matrix[0]   = (r / 255);
+        colorMatrix.matrix[6]   = (g / 255);
+        colorMatrix.matrix[12]  = (b / 255);
     }
 
     public getFirstCanvasId(): number

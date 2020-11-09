@@ -1,4 +1,4 @@
-import { Container, DisplayObject, Graphics, Point, Rectangle, RenderTexture, Sprite } from 'pixi.js';
+import { DisplayObject, Graphics, Point, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
@@ -28,8 +28,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _geometry: RoomGeometry;
     private _renderTimestamp: number;
 
-    private _master: Container;
-    private _display: Container;
+    private _master: Sprite;
+    private _display: Sprite;
     private _mask: Graphics;
 
     private _sortableSprites: SortableSprite[];
@@ -125,7 +125,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(!this._display)
         {
-            const display = new Container();
+            const display = new Sprite(Texture.EMPTY);
 
             display.name = 'canvas';
 
@@ -212,7 +212,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 this._mask = new Graphics()
                     .beginFill(0xFF0000)
-                    .drawRect(0, 0, width, height);
+                    .drawRect(0, 0, width, height)
+                    .endFill();
 
                 this._mask.name = 'mask';
 
@@ -237,6 +238,21 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             else
             {
                 this._master.hitArea = new Rectangle(0, 0, width, height);
+            }
+        }
+
+        if(this._display)
+        {
+            if(this._display.filterArea)
+            {
+                const filterArea = this._display.filterArea;
+
+                filterArea.width    = width;
+                filterArea.height   = height;
+            }
+            else
+            {
+                this._display.filterArea = new Rectangle(0, 0, width, height);
             }
         }
 
@@ -980,9 +996,14 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         return this._geometry;
     }
 
-    public get displayObject(): DisplayObject
+    public get master(): DisplayObject
     {
         return this._master;
+    }
+
+    public get display(): DisplayObject
+    {
+        return this._display;
     }
 
     public get screenOffsetX(): number
