@@ -22,8 +22,6 @@ export class RoomObjectModel implements IRoomObjectModel
     {
         const existing = this._map.get(key);
 
-        if(existing === undefined) return null;
-
         return (existing as T);
     }
 

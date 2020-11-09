@@ -62,7 +62,7 @@ export class RoomObjectLocationCacheItem
 
             const accurateZ = object.model.getValue<number>(this._roomObjectVariableAccurateZ);
 
-            if((isNaN(accurateZ) || accurateZ === 0))
+            if(isNaN(accurateZ) || (accurateZ === 0))
             {
                 const rounded = new Vector3d(Math.round(location.x), Math.round(location.y), location.z);
 

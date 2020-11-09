@@ -491,7 +491,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                 {
                     if(this._cachedAvatarEffects.length >= AvatarVisualization.MAX_EFFECT_CACHE)
                     {
-                        console.log('remove one');
                         const cached = this._cachedAvatarEffects.remove(this._cachedAvatarEffects.getKey(0));
 
                         if(cached) cached.dispose();
