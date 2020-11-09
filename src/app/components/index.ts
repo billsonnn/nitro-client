@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared';
+import { AvatarEditorModule } from './avatareditor/avatareditor.module';
 import { CatalogModule } from './catalog';
 import { MainComponent } from './component';
 import { HotelViewModule } from './hotelview';
@@ -12,6 +13,7 @@ import { ToolbarModule } from './toolbar';
 @NgModule({
 	imports: [
         SharedModule,
+        AvatarEditorModule,
         CatalogModule,
         HotelViewModule,
         InventoryModule,

@@ -14,6 +14,7 @@
   border: $card-border-width solid $card-border-color;
   @include border-radius($card-border-radius);
   @include box-shadow($card-box-shadow);
+  filter: $box-filter;
 
   > hr {
     margin-right: 0;
@@ -77,7 +78,7 @@
 //
 
 .card-loading-overlay {
-  background-color: rgba($light, 0.5);
+  background-color: rgba($secondary, 0.5);
   position: absolute;
   top: 0;
   left: 0;
@@ -119,7 +120,7 @@
 }
 
 .card-header-overlay {
-  background-color: rgba($light, 0.8);
+  background-color: rgba($secondary, 0.8);
   position: absolute;
   top: 0;
   left: 0;

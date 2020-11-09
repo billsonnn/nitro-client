@@ -8,7 +8,7 @@
     max-height: 640px;
 
     .loading-overlay {
-        background-color: rgba($light, 0.5);
+        background-color: rgba($secondary, 0.5);
         position: absolute;
         top: 0;
         left: 0;
@@ -22,7 +22,7 @@
         flex-direction: column;
         position: relative;
         width: 100%;
-        background-color: rgba($light, 1);
+        background-color: rgba($secondary, 1);
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
@@ -42,7 +42,7 @@
         }
 
         .header-overlay {
-            background-color: rgba($light, 0.8);
+            background-color: rgba($secondary, 0.8);
             position: absolute;
             top: 0;
             left: 0;

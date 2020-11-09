@@ -1,4 +1,5 @@
 import { BLEND_MODES, Texture } from 'pixi.js';
+import { AdvancedMap } from '../../../../../core/utils/AdvancedMap';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObject } from '../../../../../room/object/IRoomObject';
@@ -28,13 +29,13 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private static OWN_USER_ID: number              = 4;
     private static UPDATE_TIME_INCREASER: number    = 41;
     private static OFFSET_MULTIPLIER: number        = 1000;
-    private static AVATAR_LAYER_ID: number       = 0;
+    private static AVATAR_LAYER_ID: number          = 0;
     private static SHADOW_LAYER_ID: number          = 1;
     private static _Str_17502: number               = 97;
     private static _Str_11587: number               = 2;
     private static _Str_14491: number               = 2;
     private static _Str_18338: number[]             = [0, 0, 0];
-    private static _Str_18169: number               = 3;
+    private static MAX_EFFECT_CACHE: number         = 2;
     private static _Str_9540: number                = 0;
     private static _Str_12370: number               = 1000;
     private static _Str_11358: number               = -0.01;
@@ -44,8 +45,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     protected _data: AvatarVisualizationData;
 
     private _avatarImage: IAvatarImage;
-    private _cachedAvatars: Map<string, IAvatarImage>;
-    private _cachedAvatarEffects: Map<string, IAvatarImage>;
+    private _cachedAvatars: AdvancedMap<string, IAvatarImage>;
+    private _cachedAvatarEffects: AdvancedMap<string, IAvatarImage>;
     private _shadow: IGraphicAsset;
     private _lastUpdate: number;
     private _disposed: boolean;
@@ -95,8 +96,8 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         this._data                  = null;
 
         this._avatarImage           = null;
-        this._cachedAvatars         = new Map();
-        this._cachedAvatarEffects   = new Map();
+        this._cachedAvatars         = new AdvancedMap();
+        this._cachedAvatarEffects   = new AdvancedMap();
         this._shadow                = null;
         this._lastUpdate            = -1000;
         this._disposed            = false;
@@ -466,13 +467,13 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         if(!effectId)
         {
-            cachedImage = this._cachedAvatars.get(imageName);
+            cachedImage = this._cachedAvatars.getValue(imageName);
         }
         else
         {
             imageName += '-' + effectId;
 
-            cachedImage = this._cachedAvatarEffects.get(imageName);
+            cachedImage = this._cachedAvatarEffects.getValue(imageName);
         }
 
         if(!cachedImage)
@@ -483,17 +484,20 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             {
                 if(!effectId)
                 {
-                    this._cachedAvatars.set(imageName, cachedImage);
+                    this._cachedAvatars.add(imageName, cachedImage);
                 }
 
                 else
                 {
-                    if(this._cachedAvatarEffects.size >= AvatarVisualization._Str_18169)
+                    if(this._cachedAvatarEffects.length >= AvatarVisualization.MAX_EFFECT_CACHE)
                     {
-                        // remove 1
+                        console.log('remove one');
+                        const cached = this._cachedAvatarEffects.remove(this._cachedAvatarEffects.getKey(0));
+
+                        if(cached) cached.dispose();
                     }
 
-                    this._cachedAvatarEffects.set(imageName, cachedImage);
+                    this._cachedAvatarEffects.add(imageName, cachedImage);
                 }
             }
         }
@@ -933,12 +937,12 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
     private clearAvatar(): void
     {
-        for(let avatar of this._cachedAvatars.values()) avatar && avatar.dispose();
+        for(let avatar of this._cachedAvatars.getValues()) avatar && avatar.dispose();
 
-        for(let avatar of this._cachedAvatarEffects.values()) avatar && avatar.dispose();
+        for(let avatar of this._cachedAvatarEffects.getValues()) avatar && avatar.dispose();
 
-        this._cachedAvatars.clear();
-        this._cachedAvatarEffects.clear();
+        this._cachedAvatars.reset();
+        this._cachedAvatarEffects.reset();
         
         this._avatarImage = null;
 

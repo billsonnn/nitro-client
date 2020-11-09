@@ -1,4 +1,4 @@
-import { Container, filters, Graphics, Matrix, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { Container, filters, Rectangle, RenderTexture, Texture } from 'pixi.js';
 import { AdvancedMap } from '../../core/utils/AdvancedMap';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { TextureUtils } from '../../room/utils/TextureUtils';
@@ -48,6 +48,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     protected _avatarSpriteData: IAvatarDataContainer;
     protected _actions: ActiveActionData[];
     protected _image: RenderTexture;
+    protected _reusableTexture: RenderTexture;
 
     private _defaultAction: IActiveActionData;
     private _frameCounter: number = 0;
@@ -316,33 +317,21 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(!this._actionsSorted) this.endActionAppends();
 
-        const _local_4 = this.getFullImageCacheKey();
-
-        if(_local_4)
-        {
-            if(this.getFullImage(_local_4))
-            {
-                this._changes = false;
-
-                if(hightlight) return (this.getFullImage(_local_4).clone() as RenderTexture);
-
-                this._image   = this.getFullImage(_local_4);
-                this._isCachedImage  = true;
-
-                return this._image;
-            }
-        }
-
         const avatarCanvas = this._structure._Str_1664(this._scale, this._mainAction._Str_742._Str_868);
 
         if(!avatarCanvas) return null;
 
-        if((this._isCachedImage || (this._image == null)) || ((!(this._image.width == avatarCanvas.width)) || (!(this._image.height == avatarCanvas.height))))
+        if(this._image && ((this._image.width !== avatarCanvas.width) || (this._image.height !== avatarCanvas.height)))
         {
-            if(this._image && !this._isCachedImage) this._image.destroy(true);
+            if(this._reusableTexture)
+            {
+                this._reusableTexture.destroy(true);
 
-            this._image   = null;
-            this._isCachedImage  = false;
+                this._reusableTexture = null;
+            }
+
+            this._image         = null;
+            this._isCachedImage = false;
         }
 
         const _local_6 = this.getBodyParts(setType, this._mainAction._Str_742._Str_868, this._mainDirection);
@@ -351,91 +340,61 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         const container = new Container();
 
-        var _local_11 = true;
-        var _local_12 = (_local_6.length - 1);
+        let isCachable  = true;
+        let partCount   = (_local_6.length - 1);
 
-        while(_local_12 >= 0)
+        while(partCount >= 0)
         {
-            const _local_7 = _local_6[_local_12];
-            const _local_8 = this._cache._Str_1629(_local_7, this._frameCounter);
+            const _local_7 = _local_6[partCount];
+            const part = this._cache._Str_1629(_local_7, this._frameCounter);
 
-            if(_local_8)
+            if(part)
             {
-                const _local_9 = _local_8.image;
+                const partCacheContainer = part.image;
 
-                _local_11 = ((_local_11) && (_local_8._Str_1807));
+                isCachable = ((isCachable) && (part._Str_1807));
 
-                let _local_10 = _local_8._Str_1076.clone();
+                let point = part._Str_1076.clone();
 
-                _local_10.x += avatarCanvas.offset.x;
-                _local_10.y += avatarCanvas.offset.y;
+                point.x += avatarCanvas.offset.x;
+                point.y += avatarCanvas.offset.y;
 
-                if(_local_9 && _local_10)
+                if(partCacheContainer && point)
                 {
-                    _local_10.x += avatarCanvas._Str_1076.x;
-                    _local_10.y += avatarCanvas._Str_1076.y;
+                    point.x += avatarCanvas._Str_1076.x;
+                    point.y += avatarCanvas._Str_1076.y;
 
                     const partContainer = new Container();
 
-                    partContainer.addChild(_local_9);
+                    partContainer.addChild(partCacheContainer);
 
                     if(partContainer)
                     {
-                        partContainer.position.set(_local_10.x, _local_10.y);
+                        partContainer.position.set(point.x, point.y);
 
                         container.addChild(partContainer);
                     }
                 }
             }
 
-            _local_12--;
+            partCount--;
         }
 
-        const texture = TextureUtils.generateTexture(container, new Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        if(this._avatarSpriteData && this._avatarSpriteData._Str_832) this.convertToGrayscale(container);
 
-        if(!texture) return null;
+        if(this._reusableTexture)
+        {
+            Nitro.instance.renderer.render(container, this._reusableTexture, true);
+        }
+        else
+        {
+            this._reusableTexture = TextureUtils.generateTexture(container, new Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        }
+
+        if(!this._reusableTexture) return null;
         
-        this._image   = texture;
-        this._changes  = false;
-
-        if(this._avatarSpriteData)
-        {
-            if(this._avatarSpriteData._Str_832)
-            {
-                let avatarImage = this.convertToGrayscale(this._image);
-
-                //this.applyPalette(avatarImage, this._Str_2121.reds);
-
-                if(this._image) this._image.destroy(true);
-
-                this._image = avatarImage;
-            }
-        }
-
-        if (((!(_local_4 == null)) && (_local_11)))
-        {
-            this.cacheFullImage(_local_4, this._image);
-        }
-
-        if(scale !== 1)
-        {
-            const matrix = new Matrix();
-
-            matrix.scale(scale, scale);
-
-            const graphic = new Graphics();
-
-            graphic
-                .beginTextureFill({ texture: this._image, matrix })
-                .drawRect(0, 0, (this._image.width * scale), (this._image.height * scale))
-                .endFill();
-
-            const texture = TextureUtils.generateTexture(graphic);
-
-            if(texture) this._image = texture;
-        }
-
-        if(this._image && hightlight) return (this._image.clone() as RenderTexture);
+        this._image     = this._reusableTexture;
+        this._changes   = false;
         
         return this._image;
     }
@@ -908,14 +867,14 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._avatarSpriteData;
     }
 
-    private convertToGrayscale(k: Texture, _arg_2: string = 'CHANNELS_EQUAL'): RenderTexture
+    private convertToGrayscale(container: Container, channel: string = 'CHANNELS_EQUAL'): Container
     {
         let _local_3 = 0.33;
         let _local_4 = 0.33;
         let _local_5 = 0.33;
         let _local_6 = 1;
 
-        switch (_arg_2)
+        switch(channel)
         {
             case AvatarImage.CHANNELS_UNIQUE:
                 _local_3 = 0.3;
@@ -948,16 +907,9 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         colorFilter.matrix = [_local_3, _local_4, _local_5, 0, 0, _local_3, _local_4, _local_5, 0, 0, _local_3, _local_4, _local_5, 0, 0, 0, 0, 0, 1, 0];
 
-        const sprite = Sprite.from(k);
+        container.filters = [ colorFilter ];
 
-        if(sprite)
-        {
-            sprite.filters = [ colorFilter ];
-
-            return TextureUtils.generateTexture(sprite, new Rectangle(0, 0, k.width, k.height));
-        }
-
-        return null;
+        return container;
     }
 
     private errorThis(k: string): void

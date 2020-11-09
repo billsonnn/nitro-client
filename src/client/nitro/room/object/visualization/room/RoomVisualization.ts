@@ -1,4 +1,5 @@
 import { RenderTexture, Texture } from 'pixi.js';
+import { AdvancedMap } from '../../../../../core/utils/AdvancedMap';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
 import { IRoomObjectModel } from '../../../../../room/object/IRoomObjectModel';
@@ -8,7 +9,6 @@ import { IObjectVisualizationData } from '../../../../../room/object/visualizati
 import { IRoomPlane } from '../../../../../room/object/visualization/IRoomPlane';
 import { RoomObjectSpriteVisualization } from '../../../../../room/object/visualization/RoomObjectSpriteVisualization';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
-import { TextureUtils } from '../../../../../room/utils/TextureUtils';
 import { Vector3d } from '../../../../../room/utils/Vector3d';
 import { RoomMapData } from '../../RoomMapData';
 import { RoomMapMaskData } from '../../RoomMapMaskData';
@@ -24,7 +24,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 {
     public static LAST_VISUALIZATION: RoomVisualization = null;
 
-    public static RENDER_TEXTURE_CACHE: Map<RoomVisualization, Map<any, RenderTexture>> = new Map();
+    public static RENDER_TEXTURE_CACHE: Map<RoomVisualization, AdvancedMap<any, RenderTexture>> = new Map();
 
     public static _Str_18544: number    = 0xFFFFFF;
     public static _Str_18640: number    = 0xDDDDDD;
@@ -88,7 +88,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._Str_2540                  = [];
         this._Str_4864                  = [];
         this._Str_6648                  = [];
-        this._roomScale                     = 0;
+        this._roomScale                 = 0;
         this._lastUpdateTime            = -1000;
         this._updateIntervalTime        = 250;
         this._wallType                  = null;
@@ -116,7 +116,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         if(!existing) return null;
 
-        return existing.get(key);
+        return existing.getValue(key);
     }
 
     public static addTextureCache(key: any, value: RenderTexture): void
@@ -127,34 +127,12 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         if(!existing)
         {
-            existing = new Map();
+            existing = new AdvancedMap();
 
             RoomVisualization.RENDER_TEXTURE_CACHE.set(RoomVisualization.LAST_VISUALIZATION, existing);
         }
 
-        existing.set(key, value);
-    }
-
-    public static clearTextureCache(): void
-    {
-        const visualization = RoomVisualization.LAST_VISUALIZATION;
-
-        if(!visualization) return;
-
-        const existing = RoomVisualization.RENDER_TEXTURE_CACHE.get(visualization);
-
-        if(!existing) return;
-
-        for(let texture of existing.values())
-        {
-            TextureUtils.destroyRenderTexture(texture);
-        }
-
-        existing.clear();
-
-        RoomVisualization.RENDER_TEXTURE_CACHE.delete(visualization);
-
-        RoomVisualization.LAST_VISUALIZATION = null;
+        existing.add(key, value);
     }
 
     public initialize(data: IObjectVisualizationData): boolean
@@ -200,6 +178,20 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
             this._data = null;
         }
+
+        const existingTextureCache = RoomVisualization.RENDER_TEXTURE_CACHE.get(this);
+
+        if(existingTextureCache)
+        {
+            for(let texture of existingTextureCache.getValues())
+            {
+                texture.destroy(true);
+            }
+
+            existingTextureCache.dispose();
+
+            RoomVisualization.RENDER_TEXTURE_CACHE.delete(this);
+        }
     }
 
     protected reset(): void
@@ -218,6 +210,14 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     {
         if(!this.object || !geometry) return;
 
+        RoomVisualization.LAST_VISUALIZATION = this;
+
+        let removeCount = 0;
+
+        const existing = RoomVisualization.RENDER_TEXTURE_CACHE.get(RoomVisualization.LAST_VISUALIZATION);
+
+        if(existing) removeCount = existing.length;
+
         const geometryUpdate    = this.updateGeometry(geometry);
         const objectModel       = this.object.model;
 
@@ -227,13 +227,34 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         if(this.updateHole(objectModel)) needsUpdate = true;
 
-        this._Str_25732();
+        if(this._Str_25732())
+        {
+            if(existing && removeCount)
+            {
+                setTimeout(() =>
+                {
+                    while(removeCount)
+                    {
+                        const texture = existing.getWithIndex(0);
+
+                        if(texture)
+                        {
+                            texture.destroy(true);
+
+                            existing.remove(existing.getKey(0));
+                        }
+
+                        removeCount--;
+                    }
+                }, 0);
+            }
+        }
 
         needsUpdate = this.updateMasks(objectModel);
 
         if(((time < (this._lastUpdateTime + this._updateIntervalTime)) && (!geometryUpdate)) && (!needsUpdate)) return;
 
-        if(this.updatePlanes(objectModel)) needsUpdate = true;
+        if(this.updatePlanes(objectModel)) needsUpdate = true
 
         if(this._Str_16913(geometry, geometryUpdate, time)) needsUpdate = true;
 
@@ -419,20 +440,12 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         this._isPlaneSet    = false;
         this._Str_5928      = (this._Str_5928 + 1);
 
-        RoomVisualization.LAST_VISUALIZATION = this;
-        
-        RoomVisualization.clearTextureCache();
-
         this.reset();
     }
 
-    protected _Str_25732(): void
+    protected _Str_25732(): boolean
     {
-        if(!this.object || this._isPlaneSet) return;
-
-        RoomVisualization.LAST_VISUALIZATION = this;
-
-        RoomVisualization.clearTextureCache();
+        if(!this.object || this._isPlaneSet) return false;
         
         if(!isNaN(this._floorThickness)) this._roomPlaneParser.floorThicknessMultiplier = this._floorThickness;
         if(!isNaN(this._wallThickness)) this._roomPlaneParser.wallThicknessMultiplier = this._wallThickness;
@@ -613,6 +626,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         this._isPlaneSet = true;
         this._Str_18024();
+
+        return true;
     }
 
     protected _Str_18024(): void

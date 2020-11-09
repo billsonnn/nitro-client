@@ -81,7 +81,7 @@ export class ExtendedSprite extends Sprite
 
         if(!(sprite instanceof Sprite)) return false;
 
-        if(sprite.blendMode !== BLEND_MODES.NORMAL) return;
+        if((sprite.texture === Texture.EMPTY) || (sprite.blendMode !== BLEND_MODES.NORMAL)) return;
 
         const texture       = sprite.texture;
         const baseTexture   = texture.baseTexture;
@@ -173,9 +173,9 @@ export class ExtendedSprite extends Sprite
         const imageData = context.getImageData(0, 0, width, height);
 
         //@ts-ignore
-        baseTexture.hitMap              = imageData.data;
+        baseTexture.hitMap      = imageData.data;
         //@ts-ignore
-        baseTexture.hitMapWidth         = width;
+        baseTexture.hitMapWidth = width;
 
         return true;
     }

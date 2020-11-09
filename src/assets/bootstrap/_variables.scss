@@ -44,9 +44,10 @@ $yellow:        #ffc107 !default;
 $green:         #28a745 !default;
 $teal:          #20c997 !default;
 $cyan:          #17a2b8 !default;
-$destiny:       #131313 !default;
-$destiny-light: #222222 !default;
-$destiny-lighter: #242424 !default;
+$cod-gray:      #181818 !default;
+$mine-shaft:    #2B2B2B !default;
+$tundora:       #494949 !default;
+$forest-green:  #297D29 !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -62,25 +63,20 @@ $colors: map-merge(
     "green":          $green,
     "teal":           $teal,
     "cyan":           $cyan,
-    "destiny":        $destiny,
-    "destiny-light":  $destiny-light,
-    "destiny-lighter": $destiny-lighter,
-    "white":          $white,
-    "gray":           $gray-600,
-    "gray-dark":      $gray-800
+    "cod-gray":       $cod-gray,
+    "mine-shaft":     $mine-shaft,
+    "tundora":        $tundora,
+    "forest-green":   $forest-green
   ),
   $colors
 );
 
-$primary:       $destiny !default;
-$secondary:     $gray-600 !default;
-$success:       $green !default;
+$primary:       $mine-shaft !default;
+$secondary:     $tundora !default;
+$success:       $forest-green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $destiny-light !default;
-$lighter:       $destiny-lighter !default;
-$dark:          $gray-800 !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -92,9 +88,6 @@ $theme-colors: map-merge(
     "info":       $info,
     "warning":    $warning,
     "danger":     $danger,
-    "light":      $light,
-    "lighter":    $lighter,
-    "dark":       $dark
   ),
   $theme-colors
 );
@@ -248,14 +241,15 @@ $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
 $border-width:                1px !default;
-$border-color:                $gray-300 !default;
+$border-color:                $black !default;
 
-$border-radius:               0 !default;
+$border-radius:               7px !default;
 $border-radius-lg:            $border-radius !default;
 $border-radius-sm:            $border-radius !default;
 
 $rounded-pill:                50rem !default;
 
+$box-filter:                  drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 $box-shadow-sm:               0 .125rem .25rem rgba($black, .075) !default;
 $box-shadow:                  0 .5rem 1rem rgba($black, .15) !default;
 $box-shadow-lg:               0 1rem 3rem rgba($black, .175) !default;
@@ -716,7 +710,7 @@ $nav-tabs-border-width:             0 !default;
 $nav-tabs-border-radius:            $border-radius !default;
 $nav-tabs-link-hover-border-color:  $gray-200 $gray-200 $nav-tabs-border-color !default;
 $nav-tabs-link-active-color:        $white !default;
-$nav-tabs-link-active-bg:           $destiny !default;
+$nav-tabs-link-active-bg:           $primary !default;
 $nav-tabs-link-active-border-color: $gray-300 $gray-300 $nav-tabs-link-active-bg !default;
 
 $nav-pills-border-radius:           $border-radius !default;
@@ -849,8 +843,8 @@ $card-cap-bg:                       transparent !default;
 $card-cap-color:                    null !default;
 $card-height:                       null !default;
 $card-color:                        null !default;
-$card-bg:                           rgba($destiny, 1) !default;
-$card-box-shadow:                   0 0 6px 0 rgba(0, 0, 0, .3) !default;
+$card-bg:                           rgba($cod-gray, 1) !default;
+$card-box-shadow:                   0 !default;
 
 $card-img-overlay-padding:          1.25rem !default;
 
