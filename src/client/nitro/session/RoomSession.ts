@@ -172,7 +172,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendSignMessage(sign: number): void
     {
-        if((sign < 0) || (sign >= 17)) return;
+        if((sign < 0) || (sign > 17)) return;
 
         this._connection.send(new RoomUnitSignComposer(sign));
     }
