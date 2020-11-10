@@ -10,20 +10,14 @@ import { InventoryTradingService } from './trading/service';
 	selector: 'nitro-inventory-component',
     template: `
     <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component">
-        <div *ngIf="isLoading" class="card-loading-overlay"></div>
-        <div class="card-header-container">
-            <div class="card-header-overlay"></div>
-            <div class="card-header">
-                <div class="header-title">{{ ('inventory.title') | translate }}</div>
-                <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
-            </div>
-            <div class="card-header-tabs">
-                <div class="nav nav-tabs w-100 px-4">
-                    <div class="nav-item nav-link" [ngClass]="{ 'active': furnitureVisible || tradingVisible }" (click)="showFurniture()">{{ 'inventory.furni' | translate }}</div>
-                </div>
-            </div>
+        <div class="card-header">
+            {{ ('inventory.title') | translate }}
+            <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
         </div>
         <div class="card-body">
+            <div class="btn-group w-100 mb-3">
+                <button type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
+            </div>
             <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
             <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
         </div>

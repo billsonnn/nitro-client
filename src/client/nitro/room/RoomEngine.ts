@@ -551,7 +551,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             canvas.geometry.setDisplacement(vector, direction);
 
-            const displayObject = canvas.displayObject as Container;
+            const displayObject = (canvas.master as Container);
 
             if(displayObject)
             {
@@ -564,7 +564,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             }
         }
 
-        return canvas.displayObject;
+        return canvas.master;
     }
 
     public setRoomInstanceRenderingCanvasMask(roomId: number, canvasId: number, flag: boolean): void
@@ -2221,7 +2221,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         let stateIndex = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX);
 
-        if(stateIndex === null) stateIndex = 1;
+        if(isNaN(stateIndex)) stateIndex = 1;
         else stateIndex = (stateIndex + 1);
 
         roomObject.model.setValue(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX, stateIndex);
@@ -3164,7 +3164,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!k) return null;
 
-        const displayObject = k.displayObject as Container;
+        const displayObject = k.master as Container;
 
         if(!displayObject) return null;
 

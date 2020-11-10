@@ -21,7 +21,8 @@ export interface IRoomRenderingCanvas
     getDisplayAsTexture(): RenderTexture;
     id: number;
     geometry: IRoomGeometry;
-    displayObject: DisplayObject;
+    master: DisplayObject;
+    display: DisplayObject;
     screenOffsetX: number;
     screenOffsetY: number;
     scale: number;

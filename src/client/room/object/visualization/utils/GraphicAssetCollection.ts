@@ -294,7 +294,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         {
             this._textures.delete(existing.source);
 
-            texture.destroy();
+            texture.destroy(true);
         }
 
         existing.recycle();

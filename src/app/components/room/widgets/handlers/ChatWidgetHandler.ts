@@ -287,9 +287,8 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(!avatarImage) return;
         
-        const texture   = avatarImage.getImage(AvatarSetType.HEAD, false);
-        const image     = Nitro.instance.renderer.extract.image(texture);
-        const color     = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
+        const image = avatarImage.getCroppedImage(AvatarSetType.HEAD);
+        const color = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 
         this._avatarColorCache.set(figure, ((color && color._Str_915) || 16777215));
 

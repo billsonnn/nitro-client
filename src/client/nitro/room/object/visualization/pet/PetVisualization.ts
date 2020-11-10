@@ -122,8 +122,34 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
         if(this.updateModelCounter === model.updateCounter) return false;
 
-        let posture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
-        let gesture = model.getValue<string>(RoomObjectVariable.FIGURE_GESTURE);
+        // _local_4 = _local_3.getString(RoomObjectVariableEnum.FIGURE_POSTURE);
+        // _local_5 = _local_3.getString(RoomObjectVariableEnum.FIGURE_GESTURE);
+        // _local_6 = _local_3.getNumber(RoomObjectVariableEnum.FIGURE_POSTURE);
+        // if (!isNaN(_local_6))
+        // {
+        //     _local_16 = this._animationData._Str_17398(_Str_3289);
+        //     if (_local_16 > 0)
+        //     {
+        //         _local_4 = this._animationData._Str_14207(_Str_3289, (_local_6 % _local_16), true);
+        //         _local_5 = null;
+        //     }
+        // }
+        // _local_7 = _local_3.getNumber(RoomObjectVariableEnum.FIGURE_GESTURE);
+        // if (!isNaN(_local_7))
+        // {
+        //     _local_17 = this._animationData._Str_16869(_Str_3289);
+        //     if (_local_17 > 0)
+        //     {
+        //         _local_5 = this._animationData._Str_17844(_Str_3289, (_local_7 % _local_17));
+        //     }
+        // }
+        // this._Str_14314(_local_4, _local_5);
+
+
+
+        let posture     = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
+        let gesture     = model.getValue<string>(RoomObjectVariable.FIGURE_GESTURE);
+        let tempPosture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
 
         this.setPostureAndGesture(posture, gesture);
 

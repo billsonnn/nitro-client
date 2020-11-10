@@ -1,4 +1,4 @@
-import { Container, filters, Rectangle, RenderTexture, Texture } from 'pixi.js';
+import { Container, filters, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { AdvancedMap } from '../../core/utils/AdvancedMap';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { TextureUtils } from '../../room/utils/TextureUtils';
@@ -309,7 +309,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
     }
 
-    public getImage(setType: string, hightlight: boolean, scale: number = 1): RenderTexture
+    public getImage(setType: string, hightlight: boolean, scale: number = 1, cache: boolean = true): RenderTexture
     {
         if(!this._changes) return this._image;
 
@@ -345,22 +345,31 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         while(partCount >= 0)
         {
-            const _local_7 = _local_6[partCount];
-            const part = this._cache._Str_1629(_local_7, this._frameCounter);
+            const set = _local_6[partCount];
+            const part = this._cache._Str_1629(set, this._frameCounter);
 
             if(part)
             {
                 const partCacheContainer = part.image;
 
+                if(!partCacheContainer)
+                {
+                    container.destroy({
+                        children: true
+                    });
+
+                    return null;
+                }
+
                 isCachable = ((isCachable) && (part._Str_1807));
 
-                let point = part._Str_1076.clone();
+                const point = part._Str_1076.clone();
 
-                point.x += avatarCanvas.offset.x;
-                point.y += avatarCanvas.offset.y;
-
-                if(partCacheContainer && point)
+                if(point)
                 {
+                    point.x += avatarCanvas.offset.x;
+                    point.y += avatarCanvas.offset.y;
+
                     point.x += avatarCanvas._Str_1076.x;
                     point.y += avatarCanvas._Str_1076.y;
 
@@ -381,6 +390,11 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
 
         if(this._avatarSpriteData && this._avatarSpriteData._Str_832) this.convertToGrayscale(container);
+
+        if(!cache)
+        {
+            return TextureUtils.generateTexture(container, new Rectangle(0, 0, avatarCanvas.width, avatarCanvas.height));
+        }
 
         if(this._reusableTexture)
         {
@@ -439,41 +453,59 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(!avatarCanvas) return null;
 
-        const setTypes = this.getBodyParts(setType, this._mainAction._Str_742._Str_868, this._mainDirection);
-
+        const setTypes  = this.getBodyParts(setType, this._mainAction._Str_742._Str_868, this._mainDirection);
         const container = new Container();
+        const sprite    = new Sprite(Texture.EMPTY);
 
-        let _local_12 = (setTypes.length - 1);
+        sprite.width    = avatarCanvas.width;
+        sprite.height   = avatarCanvas.height;
 
-        while(_local_12 >= 0)
+        container.addChild(sprite);
+
+        let partCount = (setTypes.length - 1);
+
+        while(partCount >= 0)
         {
-            const set       = setTypes[_local_12];
-            const bodyPart  = this._cache._Str_1629(set, this._frameCounter);
+            const set   = setTypes[partCount];
+            const part  = this._cache._Str_1629(set, this._frameCounter);
 
-            if(bodyPart)
+            if(part)
             {
-                const texture = bodyPart.image;
+                const partCacheContainer = part.image;
 
-                if(!texture)
+                if(!partCacheContainer)
                 {
-                    container.destroy();
+                    container.destroy({
+                        children: true
+                    });
 
                     return null;
                 }
 
-                const offset = bodyPart._Str_1076;
+                const point = part._Str_1076.clone();
 
-                const partContainer = new Container();
+                if(point)
+                {
+                    point.x += avatarCanvas.offset.x;
+                    point.y += avatarCanvas.offset.y;
 
-                partContainer.addChild(texture);
+                    point.x += avatarCanvas._Str_1076.x;
+                    point.y += avatarCanvas._Str_1076.y;
 
-                partContainer.x = offset.x;
-                partContainer.y = offset.y;
+                    const partContainer = new Container();
 
-                container.addChild(partContainer);
+                    partContainer.addChild(partCacheContainer);
+
+                    if(partContainer)
+                    {
+                        partContainer.position.set(point.x, point.y);
+
+                        container.addChild(partContainer);
+                    }
+                }
             }
 
-            _local_12--;
+            partCount--;
         }
 
         const image = Nitro.instance.renderer.extract.image(container);

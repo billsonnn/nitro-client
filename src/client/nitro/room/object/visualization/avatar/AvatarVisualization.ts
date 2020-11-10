@@ -256,7 +256,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             }
         }
 
-        const update1 = ((objectUpdate || updateModel) || didScaleUpdate);
+        const update1 = (objectUpdate || updateModel || didScaleUpdate);
         const update2 = ((this._Str_1222 || (this._Str_12697 > 0)) && update);
 
         if(update1) this._Str_12697 = AvatarVisualization._Str_14491;
@@ -451,6 +451,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                             }
 
                             if(spriteData.ink === 33) sprite.blendMode = BLEND_MODES.ADD;
+                            else sprite.blendMode = BLEND_MODES.NORMAL;
                         }
                     }
 

@@ -104,20 +104,20 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
     {
         if(!this.avatarExists() || forceUpdate)
         {
-            const _local_2 = this._data.createAvatarImage(this._figure, this._mannequinScale, this._gender, this);
+            const avatarImage = this._data.createAvatarImage(this._figure, this._mannequinScale, this._gender, this);
 
-            if(_local_2)
+            if(avatarImage)
             {
-               _local_2.setDirection(AvatarSetType.FULL, this.direction);
+                avatarImage.setDirection(AvatarSetType.FULL, this.direction);
 
                 if(this._dynamicAssetName) this.asset.disposeAsset(this._dynamicAssetName);
 
-                this.asset.addAsset(this._Str_10185(), _local_2.getImage(AvatarSetType.FULL, true), true);
+                this.asset.addAsset(this._Str_10185(), avatarImage.getImage(AvatarSetType.FULL, false, 1, false), true);
 
                 this._dynamicAssetName  = this._Str_10185();
                 this._needsUpdate       = true;
 
-                _local_2.dispose();
+                avatarImage.dispose();
             }
         }
     }

@@ -1337,7 +1337,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         }
                     }
 
-                    else if(roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_IS_STICKIE) !== null)
+                    else if(roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_IS_STICKIE))
                     {
                         this._roomEngine.connection.send(new FurniturePostItPlaceComposer(objectId, wallLocation));
                     }

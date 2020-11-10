@@ -110,7 +110,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
             const state = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_AUTOMATIC_STATE_INDEX);
 
-            if(state !== null)
+            if(!isNaN(state))
             {
                 const animationId = this._data.getAnimationId(this._animationScale, state);
 

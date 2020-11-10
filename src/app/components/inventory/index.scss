@@ -4,34 +4,6 @@
     left: $inventory-gutter-x;
     width: $inventory-width;
     max-width: $inventory-width;
-
-    .card-body {
-
-        > * {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    @media (pointer:none), (pointer:coarse) {
-        left: 0;
-        top: 100px;
-        right: 0;
-        bottom: 0;
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: unset;
-
-        .card-body {
-            overflow-y: auto;
-        }
-    }
-
-    @media (pointer:none), (pointer:coarse) and (orientation:landscape) {
-        left: 80px;
-        top: 0;
-    }
 }
 
 @import './furniture';

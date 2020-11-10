@@ -27,7 +27,7 @@ export class Nitro extends Application implements INitro
 {
     public static WEBGL_CONTEXT_LOST: string    = 'NE_WEBGL_CONTEXT_LOST';
     public static WEBGL_UNAVAILABLE: string     = 'NE_WEBGL_UNAVAILABLE';
-    public static RELEASE_VERSION: string       = 'NITRO-0-2-0';
+    public static RELEASE_VERSION: string       = 'NITRO-0-3-0';
     public static READY: string                 = 'NE_READY';
 
     private static INSTANCE: INitro         = null;
@@ -106,6 +106,7 @@ export class Nitro extends Application implements INitro
         const instance = new this(new NitroCore(), {
             transparent: true,
             autoDensity: true,
+            resizeTo: window,
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
             height: window.innerHeight,
@@ -122,10 +123,8 @@ export class Nitro extends Application implements INitro
     {
         if(this._isReady || this._isDisposed) return;
 
-        this.setupRenderer();
-
         if(this._localization) this._localization.init();
-        if(this._avatar)        this._avatar.init();
+        if(this._avatar) this._avatar.init();
 
         if(this._roomEngine)
         {
@@ -203,11 +202,6 @@ export class Nitro extends Application implements INitro
     private onConfigurationLoadedEvent(event: ConfigurationEvent): void
     {
         Nitro.instance.ticker.maxFPS = this.getConfiguration<number>("system.fps");
-    }
-
-    private setupRenderer(): void
-    {
-        Nitro.instance.resizeTo = window;
     }
 
     public getConfiguration<T>(key: string, value: T = null): T

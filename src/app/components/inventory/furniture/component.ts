@@ -13,26 +13,24 @@ import { InventoryFurnitureService } from './service';
 @Component({
 	selector: '[nitro-inventory-furniture-component]',
     template: `
-    <div *ngIf="visible" class="nitro-inventory-furni-component">
-        <div class="row" *ngIf="!groupItems.length">
+    <div *ngIf="visible" class="row nitro-inventory-furni-component">
+        <div class="col-12" *ngIf="!groupItems.length">
             {{ ('inventory.empty.title') | translate }}
             {{ ('inventory.empty.desc') | translate }}
         </div>
-        <div class="row" *ngIf="groupItems.length">
+        <ng-container *ngIf="groupItems.length">
             <div class="col-7">
-                <perfect-scrollbar style="max-height: 225px;">
-                    <div class="grid-container">
-                        <div class="grid-items">
-                            <div class="item-detail" *ngFor="let groupItem of groupItems" [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (selected === selectedGroup) }" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }" (click)="selectGroup(groupItem)">
-                                <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
-                                <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
-                                <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
-                            </div>
+                <perfect-scrollbar class="grid-container position-relative w-100 px-1" style="max-height: 225px;">
+                    <div class="grid-items grid-5">
+                        <div class="item-detail" *ngFor="let groupItem of groupItems" [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (selected === selectedGroup) }" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }" (click)="selectGroup(groupItem)">
+                            <div class="detail-image" [ngStyle]="{ 'background-image': getIconUrl(groupItem) }"></div>
+                            <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
+                            <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
                         </div>
                     </div>
                 </perfect-scrollbar>
             </div>
-            <div class="d-flex flex-column col-5">
+            <div class="col-5 flex-column">
                 <div class="bg-black" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
                 <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup">
                     <div class="d-flex justify-content-center align-items-center h6 text-center wh-100">{{ selectedGroup.name }}</div>
@@ -42,7 +40,7 @@ import { InventoryFurnitureService } from './service';
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
     </div>`
 })
 export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy

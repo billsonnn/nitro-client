@@ -1,4 +1,4 @@
-import { DisplayObject, Rectangle, Renderer, RenderTexture, SCALE_MODES } from 'pixi.js';
+import { DisplayObject, Rectangle, Renderer, RenderTexture, SCALE_MODES, Texture } from 'pixi.js';
 import { Nitro } from '../../nitro/Nitro';
 
 export class TextureUtils
@@ -12,9 +12,11 @@ export class TextureUtils
         return TextureUtils.getRenderer().generateTexture(displayObject, scaleMode, resolution, region);
     }
 
-    public static destroyRenderTexture(texture: RenderTexture): void
+    public static generateTextureFromImage(image: HTMLImageElement): Texture
     {
-        texture.destroy(true);
+        if(!image) return null;
+
+        return Texture.from(image);
     }
 
     public static generateImage(target: DisplayObject | RenderTexture): HTMLImageElement

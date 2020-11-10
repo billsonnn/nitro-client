@@ -1,6 +1,5 @@
 import { BaseTexture, BLEND_MODES, Point, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { Nitro } from '../../../nitro/Nitro';
-import { TextureUtils } from '../../utils/TextureUtils';
 
 export class ExtendedSprite extends Sprite
 {
@@ -39,10 +38,7 @@ export class ExtendedSprite extends Sprite
 
         super.destroy(options);
 
-        if(texture instanceof RenderTexture)
-        {
-            TextureUtils.destroyRenderTexture(texture);
-        }
+        if(texture instanceof RenderTexture) texture.destroy(true);
     }
 
     public needsUpdate(pairedSpriteId: number, pairedSpriteUpdateCounter: number): boolean

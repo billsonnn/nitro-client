@@ -13,8 +13,6 @@
   background-clip: border-box;
   border: $card-border-width solid $card-border-color;
   @include border-radius($card-border-radius);
-  @include box-shadow($card-box-shadow);
-  filter: $box-filter;
 
   > hr {
     margin-right: 0;
@@ -35,6 +33,13 @@
       @include border-bottom-radius($card-inner-border-radius);
     }
   }
+
+  // Due to specificity of the above selector (`.card > .list-group`), we must
+  // use a child selector here to prevent double borders.
+  > .card-header + .list-group,
+  > .list-group + .card-footer {
+    border-top: 0;
+  }
 }
 
 .card-body {
@@ -46,8 +51,6 @@
   min-height: 1px;
   padding: $card-spacer-x;
   color: $card-color;
-  width: 100%;
-  height: 100%;
 }
 
 .card-title {
@@ -77,86 +80,15 @@
 // Optional textual caps
 //
 
-.card-loading-overlay {
-  background-color: rgba($secondary, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-}
-
-.card-header-container {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-  background-color: rgba($card-cap-bg, 1);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-
-  &.header-draggable {
-    &:before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 5px;
-      border-radius: 5px;
-      top: 5px;
-      left: 0;
-      right: 0;
-      margin: auto;
-      background: rgb($white, 1);
-      z-index: 1;
-    }
-  }
-
-  > *:not(.card-header-overlay) {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-.card-header-overlay {
-  background-color: rgba($secondary, 0.8);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
 .card-header {
   padding: $card-spacer-y $card-spacer-x;
   margin-bottom: 0; // Removes the default margin-bottom of <hN>
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: $card-cap-color;
   background-color: $card-cap-bg;
   border-bottom: $card-border-width solid $card-border-color;
 
-  &.header-draggable {
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .header-close {
-    cursor: pointer;
-  }
-
   &:first-child {
     @include border-radius($card-inner-border-radius $card-inner-border-radius 0 0);
-  }
-
-  + .list-group {
-    .list-group-item:first-child {
-      border-top: 0;
-    }
   }
 }
 
@@ -177,7 +109,10 @@
 //
 
 .card-header-tabs {
-  width: 100%;
+  margin-right: -$card-spacer-x / 2;
+  margin-bottom: -$card-spacer-y;
+  margin-left: -$card-spacer-x / 2;
+  border-bottom: 0;
 }
 
 .card-header-pills {
@@ -193,6 +128,7 @@
   bottom: 0;
   left: 0;
   padding: $card-img-overlay-padding;
+  @include border-radius($card-inner-border-radius);
 }
 
 .card-img,
@@ -270,12 +206,12 @@
 
           .card-img-top,
           .card-header {
-            // stylelint-disable-next-line property-blacklist
+            // stylelint-disable-next-line property-disallowed-list
             border-top-right-radius: 0;
           }
           .card-img-bottom,
           .card-footer {
-            // stylelint-disable-next-line property-blacklist
+            // stylelint-disable-next-line property-disallowed-list
             border-bottom-right-radius: 0;
           }
         }
@@ -285,12 +221,12 @@
 
           .card-img-top,
           .card-header {
-            // stylelint-disable-next-line property-blacklist
+            // stylelint-disable-next-line property-disallowed-list
             border-top-left-radius: 0;
           }
           .card-img-bottom,
           .card-footer {
-            // stylelint-disable-next-line property-blacklist
+            // stylelint-disable-next-line property-disallowed-list
             border-bottom-left-radius: 0;
           }
         }
@@ -328,6 +264,8 @@
 //
 
 .accordion {
+  overflow-anchor: none;
+
   > .card {
     overflow: hidden;
 
