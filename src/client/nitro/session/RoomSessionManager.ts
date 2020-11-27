@@ -168,7 +168,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         return true;
     }
 
-    private removeSession(id: number, openLandingView: boolean = true): void
+    public removeSession(id: number, openLandingView: boolean = true): void
     {
         const session = this.getSession(id);
 

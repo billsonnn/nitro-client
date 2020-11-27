@@ -896,61 +896,52 @@ export class RoomPlaneParser
 
     private addWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
-        var _local_5: number;
-        var _local_6: number;
-        var _local_8: Point;
-        var _local_9: number;
-        var _local_10: number;
-        var _local_11: IVector3D;
-        var _local_12: IVector3D;
-        var _local_13: number;
-        var _local_14: number;
-        var _local_15: number;
-        var _local_16:Vector3d;
-        var _local_17: number;
-        var _local_18:Vector3d;
-        var _local_19:Vector3d;
-        var _local_20: number;
-        var _local_21:Vector3d;
-        var _local_22: boolean;
-        var _local_23: boolean;
-        var _local_24: boolean;
-        var _local_25: boolean;
-        var _local_26: boolean;
-        var _local_27: number;
-        var _local_3: number = k.count;
-        var _local_4: number = _arg_2.count;
-        var _local_7: number = 0;
-        while (_local_7 < _local_3)
+        let _local_3 = k.count;
+        let _local_4 = _arg_2.count;
+        let _local_7 = 0;
+
+        while(_local_7 < _local_3)
         {
-            if (!k._Str_10019(_local_7))
+            if(!k._Str_10019(_local_7))
             {
-                _local_8 = k._Str_10778(_local_7);
-                _local_9 = k.getDirection(_local_7);
-                _local_10 = k._Str_13743(_local_7);
-                _local_11 = RoomWallData.WALL_DIRECTION_VECTORS[_local_9];
-                _local_12 = RoomWallData.WALL_NORMAL_VECTORS[_local_9];
-                _local_13 = -1;
-                _local_14 = 0;
-                while (_local_14 < _local_10)
+                let _local_8 = k._Str_10778(_local_7);
+                let _local_9 = k.getDirection(_local_7);
+                let _local_10 = k._Str_13743(_local_7);
+                let _local_11 = RoomWallData.WALL_DIRECTION_VECTORS[_local_9];
+                let _local_12 = RoomWallData.WALL_NORMAL_VECTORS[_local_9];
+                let _local_13 = -1;
+                let _local_14 = 0;
+
+                while(_local_14 < _local_10)
                 {
-                    _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
-                    if (((_local_27 >= 0) && ((_local_27 < _local_13) || (_local_13 < 0))))
+                    let _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
+                    
+                    if(((_local_27 >= 0) && ((_local_27 < _local_13) || (_local_13 < 0))))
                     {
                         _local_13 = _local_27;
                     }
+
                     _local_14++;
                 }
-                _local_15 = _local_13;
-                _local_16 = new Vector3d(_local_8.x, _local_8.y, _local_15);
+
+                let _local_15 = _local_13;
+
+                let _local_16 = new Vector3d(_local_8.x, _local_8.y, _local_15);
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_12, 0.5));
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_11, -0.5));
-                _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
-                _local_18 = Vector3d.product(_local_11, -(_local_10));
-                _local_19 = new Vector3d(0, 0, _local_17);
+
+                let _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
+                let _local_18 = Vector3d.product(_local_11, -(_local_10));
+                let _local_19 = new Vector3d(0, 0, _local_17);
+                
                 _local_16 = Vector3d.dif(_local_16, _local_18);
-                _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
-                if (_local_20 >= 0)
+
+                let _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
+
+                let _local_5 = 0;
+                let _local_6 = 0;
+
+                if(_local_20 >= 0)
                 {
                     _local_5 = _arg_2.getDirection(((_local_20 + 1) % _local_4));
                     _local_6 = _arg_2.getDirection((((_local_20 - 1) + _local_4) % _local_4));
@@ -960,8 +951,10 @@ export class RoomPlaneParser
                     _local_5 = k.getDirection(((_local_7 + 1) % _local_3));
                     _local_6 = k.getDirection((((_local_7 - 1) + _local_3) % _local_3));
                 }
-                _local_21 = null;
-                if ((((_local_5 - _local_9) + 4) % 4) == 3)
+
+                let _local_21 = null;
+
+                if((((_local_5 - _local_9) + 4) % 4) == 3)
                 {
                     _local_21 = RoomWallData.WALL_NORMAL_VECTORS[_local_5];
                 }
@@ -972,13 +965,16 @@ export class RoomPlaneParser
                         _local_21 = RoomWallData.WALL_NORMAL_VECTORS[_local_6];
                     }
                 }
-                _local_22 = k._Str_17084(_local_7);
-                _local_23 = k._Str_17084((((_local_7 - 1) + _local_3) % _local_3));
-                _local_24 = k._Str_10019(((_local_7 + 1) % _local_3));
-                _local_25 = k._Str_25455(_local_7);
-                _local_26 = k._Str_24163(_local_7);
+
+                let _local_22 = k._Str_17084(_local_7);
+                let _local_23 = k._Str_17084((((_local_7 - 1) + _local_3) % _local_3));
+                let _local_24 = k._Str_10019(((_local_7 + 1) % _local_3));
+                let _local_25 = k._Str_25455(_local_7);
+                let _local_26 = k._Str_24163(_local_7);
+
                 this.addWall(_local_16, _local_18, _local_19, _local_21, ((!(_local_23)) || (_local_25)), ((!(_local_22)) || (_local_26)), (!(_local_24)));
             }
+
             _local_7++;
         }
     }
@@ -1173,7 +1169,6 @@ export class RoomPlaneParser
 
     private addWall(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): void
     {
-        var _local_12:Vector3d;
         this.addPlane(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
         //this.addPlane(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
         var _local_8: number = (RoomPlaneParser.WALL_THICKNESS * this._wallThicknessMultiplier);
@@ -1190,7 +1185,7 @@ export class RoomPlaneParser
             this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
             if (_arg_7)
             {
-                _local_12 = Vector3d.product(_arg_2, (_local_8 / _arg_2.length));
+                const _local_12 = Vector3d.product(_arg_2, (_local_8 / _arg_2.length));
                 this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
             }
         }

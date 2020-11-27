@@ -26,6 +26,9 @@ export interface ISessionDataManager extends INitroManager
     figure: string;
     gender: string;
     realName: string;
+    respectsReceived: number;
+    respectsLeft: number;
+    respectsPetLeft: number;
     clubLevel: number;
     securityLevel: number;
     isAmbassador: boolean;
@@ -33,4 +36,6 @@ export interface ISessionDataManager extends INitroManager
     isSystemShutdown: boolean;
     isAuthenticHabbo: boolean;
     isModerator: boolean;
+    isCameraFollowDisabled: boolean;
+    uiFlags: number;
 }

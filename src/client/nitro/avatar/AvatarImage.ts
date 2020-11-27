@@ -828,7 +828,10 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                     }
                 }
 
-                if(_local_2 && _local_2.resetOnToggle) this._animationHasResetOnToggle = true;
+                if(_local_2 && _local_2.resetOnToggle)
+                {
+                    this._animationHasResetOnToggle = true;
+                }
             }
         }
 

@@ -401,6 +401,8 @@ export class RoomObjectSprite implements IRoomObjectSprite
     public set filters(filters: Filter[])
     {
         this._filters = filters;
+
+        this._updateCounter++;
     }
 
     public get updateCounter(): number

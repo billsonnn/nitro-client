@@ -90,14 +90,23 @@ import { RoomUnitExpressionEvent } from './messages/incoming/room/unit/RoomUnitE
 import { RoomUnitHandItemEvent } from './messages/incoming/room/unit/RoomUnitHandItemEvent';
 import { RoomUnitIdleEvent } from './messages/incoming/room/unit/RoomUnitIdleEvent';
 import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEvent';
+import { RoomUnitNumberEvent } from './messages/incoming/room/unit/RoomUnitNumberEvent';
 import { RoomUnitRemoveEvent } from './messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from './messages/incoming/room/unit/RoomUnitStatusEvent';
+import { WiredFurniActionEvent } from './messages/incoming/roomevents/WiredFurniActionEvent';
+import { WiredFurniConditionEvent } from './messages/incoming/roomevents/WiredFurniConditionEvent';
+import { WiredFurniTriggerEvent } from './messages/incoming/roomevents/WiredFurniTriggerEvent';
+import { WiredOpenEvent } from './messages/incoming/roomevents/WiredOpenEvent';
+import { WiredRewardResultMessageEvent } from './messages/incoming/roomevents/WiredRewardResultMessageEvent';
+import { WiredSaveSuccessEvent } from './messages/incoming/roomevents/WiredSaveSuccessEvent';
+import { WiredValidationErrorEvent } from './messages/incoming/roomevents/WiredValidationErrorEvent';
 import { AuthenticatedEvent } from './messages/incoming/security/AuthenticatedEvent';
 import { UserPerksEvent } from './messages/incoming/user/access/UserPerksEvent';
 import { UserPermissionsEvent } from './messages/incoming/user/access/UserPermissionsEvent';
 import { UserCurrentBadgesEvent } from './messages/incoming/user/data/UserCurrentBadgesEvent';
 import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
+import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
@@ -128,6 +137,7 @@ import { NavigatorSearchSaveComposer } from './messages/outgoing/navigator/Navig
 import { NavigatorSettingsComposer } from './messages/outgoing/navigator/NavigatorSettingsComposer';
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
+import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
@@ -165,6 +175,11 @@ import { RoomUnitLookComposer } from './messages/outgoing/room/unit/RoomUnitLook
 import { RoomUnitPostureComposer } from './messages/outgoing/room/unit/RoomUnitPostureComposer';
 import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSignComposer';
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
+import { ApplySnapshotMessageComposer } from './messages/outgoing/roomevents/ApplySnapshotMessageComposer';
+import { OpenMessageComposer } from './messages/outgoing/roomevents/OpenMessageComposer';
+import { UpdateActionMessageComposer } from './messages/outgoing/roomevents/UpdateActionMessageComposer';
+import { UpdateConditionMessageComposer } from './messages/outgoing/roomevents/UpdateConditionMessageComposer';
+import { UpdateTriggerMessageComposer } from './messages/outgoing/roomevents/UpdateTriggerMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
 import { UserCurrentBadgesComposer } from './messages/outgoing/user/data/UserCurrentBadgesComposer';
 import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
@@ -173,6 +188,7 @@ import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer
 import { UserMottoComposer } from './messages/outgoing/user/data/UserMottoComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
+import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -319,6 +335,7 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.UNIT_HAND_ITEM, RoomUnitHandItemEvent);
             this._events.set(IncomingHeader.UNIT_IDLE, RoomUnitIdleEvent);
             this._events.set(IncomingHeader.UNIT_INFO, RoomUnitInfoEvent);
+            this._events.set(IncomingHeader.UNIT_NUMBER, RoomUnitNumberEvent);
             this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
             this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
 
@@ -327,6 +344,15 @@ export class NitroMessages implements IMessageConfiguration
                 this._events.set(IncomingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutEvent);
                 this._events.set(IncomingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperEvent);
                 this._events.set(IncomingHeader.UNIT_TYPING, RoomUnitTypingEvent);
+
+        // ROOM EVENTS
+        this._events.set(IncomingHeader.WIRED_ACTION, WiredFurniActionEvent);
+        this._events.set(IncomingHeader.WIRED_CONDITION, WiredFurniConditionEvent);
+        this._events.set(IncomingHeader.WIRED_TRIGGER, WiredFurniTriggerEvent);
+        this._events.set(IncomingHeader.WIRED_OPEN, WiredOpenEvent);
+        this._events.set(IncomingHeader.WIRED_REWARD, WiredRewardResultMessageEvent);
+        this._events.set(IncomingHeader.WIRED_SAVE, WiredSaveSuccessEvent);
+        this._events.set(IncomingHeader.WIRED_ERROR, WiredValidationErrorEvent);
 
         // SECURITY
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);
@@ -341,6 +367,7 @@ export class NitroMessages implements IMessageConfiguration
             this._events.set(IncomingHeader.USER_BADGES_CURRENT, UserCurrentBadgesEvent);
             this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);
             this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
+            this._events.set(IncomingHeader.USER_SETTINGS, UserSettingsEvent);
 
             // INVENTORY
 
@@ -393,6 +420,9 @@ export class NitroMessages implements IMessageConfiguration
             this._composers.set(OutgoingHeader.TRADE_ITEM_REMOVE, TradingListItemRemoveComposer);
             this._composers.set(OutgoingHeader.TRADE, TradingOpenComposer);
             this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
+
+        // PET
+        this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
@@ -452,16 +482,27 @@ export class NitroMessages implements IMessageConfiguration
                 this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
                 this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
                 this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
+
+        // ROOM EVENTS
+        this._composers.set(OutgoingHeader.WIRED_APPLY_SNAPSHOT, ApplySnapshotMessageComposer);
+        this._composers.set(OutgoingHeader.WIRED_OPEN, OpenMessageComposer);
+        this._composers.set(OutgoingHeader.WIRED_ACTION_SAVE, UpdateActionMessageComposer);
+        this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
+        this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
+
                 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 
         // USER
-        this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
-        this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
-        this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
-        this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
-        this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
+        this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);
+
+            // DATA
+            this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
+            this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
+            this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
+            this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
+            this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
 
             // INVENTORY
 

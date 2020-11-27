@@ -1,0 +1,8 @@
+.nitro-wired-component {
+    position: absolute;
+    width: 275px;
+    max-width: 275px;
+    left: calc(50vw - #{($navigator-width / 2)});
+    //top: calc(50vh - #{($navigator-height / 2)});
+    top: 45vh;
+}

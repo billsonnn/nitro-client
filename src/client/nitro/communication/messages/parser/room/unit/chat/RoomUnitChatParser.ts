@@ -3,7 +3,7 @@ import { IMessageParser } from '../../../../../../../core/communication/messages
 
 export class RoomUnitChatParser implements IMessageParser
 {
-    private _unitId: number;
+    private _roomIndex: number;
     private _message: string;
     private _gesture: number;
     private _bubble: number;
@@ -12,7 +12,7 @@ export class RoomUnitChatParser implements IMessageParser
 
     public flush(): boolean
     {
-        this._unitId        = null;
+        this._roomIndex     = null;
         this._message       = null;
         this._gesture       = 0;
         this._bubble        = 0;
@@ -26,7 +26,7 @@ export class RoomUnitChatParser implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._unitId        = wrapper.readInt();
+        this._roomIndex     = wrapper.readInt();
         this._message       = wrapper.readString();
         this._gesture       = wrapper.readInt();
         this._bubble        = wrapper.readInt();
@@ -56,9 +56,9 @@ export class RoomUnitChatParser implements IMessageParser
         return true;
     }
 
-    public get unitId(): number
+    public get roomIndex(): number
     {
-        return this._unitId;
+        return this._roomIndex;
     }
 
     public get message(): string

@@ -7,6 +7,7 @@ import { IRoomEngine } from '../../../../client/nitro/room/IRoomEngine';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 import { FurniCategory } from './FurniCategory';
 import { FurnitureItem } from './FurnitureItem';
+import { IFurnitureItem } from './IFurnitureItem';
 
 export class GroupItem implements IGetImageListener
 {
@@ -68,6 +69,36 @@ export class GroupItem implements IGetImageListener
     public getItemById(id: number): FurnitureItem
     {
         return this._items.getValue(id);
+    }
+
+    public getTradeItems(count: number): IFurnitureItem[]
+    {
+        let items: IFurnitureItem[] = [];
+
+        const furnitureItem = this.getLastItem();
+
+        if(!furnitureItem) return items;
+
+        let found   = 0;
+        let i       = 0;
+
+        while(i < this._items.length)
+        {
+            if(found >= count) break;
+
+            const item = this.getItemByIndex(i);
+
+            if(!item.locked && item.isTradable && (item.type === furnitureItem.type))
+            {
+                items.push(item);
+
+                found++;
+            }
+
+            i++;
+        }
+
+        return items;
     }
 
     public push(item: FurnitureItem, unseen: boolean = false): void
@@ -180,6 +211,16 @@ export class GroupItem implements IGetImageListener
                     item.locked = false;
                 }
             }
+        }
+    }
+
+    public lockItemIds(itemIds: number[]): void
+    {
+        for(let item of this._items.getValues())
+        {
+            let locked = (itemIds.indexOf(item.ref) >= 0);
+
+            if(item.locked !== locked) item.locked = locked;
         }
     }
 

@@ -38,12 +38,12 @@ export class Vector3d implements IVector3D
 
     public static dotProduct(vector1: IVector3D, vector2: IVector3D): number
     {
-        if(!vector1 || !vector2) return null;
+        if(!vector1 || !vector2) return 0;
 
         return (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
     }
 
-    public static crossProduct(vector1: IVector3D, vector2: IVector3D):Vector3d
+    public static crossProduct(vector1: IVector3D, vector2: IVector3D): Vector3d
     {
         if(!vector1 || !vector2) return null;
 
@@ -52,13 +52,16 @@ export class Vector3d implements IVector3D
 
     public static scalarProjection(vector1: IVector3D, vector2: IVector3D): number
     {
-        if(!vector1 || !vector2) return null;
+        if(!vector1 || !vector2) return -1;
 
         const length = vector2.length;
 
-        if(length <= 0) return -1;
+        if(length > 0)
+        {
+            return ((vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z)) / length;
+        }
 
-        return ((vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z)) / length;
+        return -1;
     }
 
     public static cosAngle(vector1: IVector3D, vector2:IVector3D): number

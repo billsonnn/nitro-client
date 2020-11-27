@@ -1,18 +1,19 @@
 ﻿import { NitroManager } from '../../core/common/NitroManager';
-import { AdvancedMap } from '../../core/utils/AdvancedMap';
 import { Nitro } from '../Nitro';
 import { INitroLocalizationManager } from './INitroLocalizationManager';
 import { NitroLocalizationEvent } from './NitroLocalizationEvent';
 
 export class NitroLocalizationManager extends NitroManager implements INitroLocalizationManager
 {
-    private _definitions: AdvancedMap<string, string>;
+    private _definitions: Map<string, string>;
+    private _parameters: Map<string, Map<string, string>>;
 
     constructor()
     {
         super();
 
-        this._definitions = new AdvancedMap();
+        this._definitions   = new Map();
+        this._parameters    = new Map();
     }
 
     protected onInit(): void
@@ -62,18 +63,56 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         data = JSON.parse(data);
 
-        for(let key in data) this._definitions.add(key, data[key]);
+        for(let key in data) this._definitions.set(key, data[key]);
     }
 
-    public getValue(key: string): string
+    public getValue(key: string, replacements: { [index: string]: any } = null): string
     {
         if(key.startsWith('${')) key = key.substr(2, (key.length - 3));
 
-        return (this._definitions.getValue(key) || key);
+        let value = (this._definitions.get(key) || key);
+
+        if(replacements)
+        {
+            for(let item in replacements)
+            {
+                let replacement = this.getValue(replacements[item]);
+
+                this.registerParameter(key, item, replacement);
+            }
+        }
+
+        const parameters = this._parameters.get(key);
+
+        if(parameters)
+        {
+            for(let [ parameter, replacement ] of parameters)
+            {
+                value = value.replace('%' + parameter + '%', replacement);
+            }
+        }
+
+        return value;
     }
 
     public setValue(key: string, value: string): void
     {
-        this._definitions.add(key, value);
+        this._definitions.set(key, value);
+    }
+
+    public registerParameter(key: string, parameter: string, value: string): void
+    {
+        if(!key || (key.length === 0) || !parameter || (parameter.length === 0)) return;
+
+        let existing = this._parameters.get(key);
+
+        if(!existing)
+        {
+            existing = new Map();
+
+            this._parameters.set(key, existing);
+        }
+
+        existing.set(parameter, value);
     }
 }

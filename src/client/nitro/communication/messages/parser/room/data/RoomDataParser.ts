@@ -156,24 +156,14 @@ export class RoomDataParser
         return true;
     }
 
-    public get id(): number
+    public get roomId(): number
     {
         return this._roomId;
     }
 
-    public get name(): string
+    public get roomName(): string
     {
         return this._roomName;
-    }
-
-    public get description(): string
-    {
-        return this._description;
-    }
-
-    public get showOwner(): boolean
-    {
-        return this._showOwner;
     }
 
     public get ownerId(): number
@@ -201,6 +191,11 @@ export class RoomDataParser
         return this._maxUserCount;
     }
 
+    public get description(): string
+    {
+        return this._description;
+    }
+
     public get tradeMode(): number
     {
         return this._tradeMode;
@@ -221,28 +216,58 @@ export class RoomDataParser
         return this._categoryId;
     }
 
-    public get totalStarts(): number
+    public get tags(): string[]
     {
-        return this._totalStars;
+        return this._tags;
     }
 
-    public get guildId(): number
+    public get officialRoomPicRef(): string
+    {
+        return this._officialRoomPicRef;
+    }
+
+    public get habboGroupId(): number
     {
         return this._groupId;
     }
 
-    public get guildName(): string
+    public get groupName(): string
     {
         return this._groupName;
     }
 
-    public get groupBadge(): string
+    public get groupBadgeCode(): string
     {
         return this._groupBadge;
+    }
+
+    public get roomAdName(): string
+    {
+        return this._adName;
+    }
+
+    public get roomAdDescription(): string
+    {
+        return this._adDescription;
+    }
+
+    public get roomAdExpiresInMin(): number
+    {
+        return this._adExpiresIn;
+    }
+
+    public get showOwner(): boolean
+    {
+        return this._showOwner;
     }
 
     public get allowPets(): boolean
     {
         return this._allowPets;
+    }
+
+    public get displayRoomEntryAd(): boolean
+    {
+        return this._displayAd;
     }
 }

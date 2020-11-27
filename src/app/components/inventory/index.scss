@@ -1,10 +1,1 @@
-.nitro-inventory-component {
-    position: absolute;
-    top: $inventory-gutter-y;
-    left: $inventory-gutter-x;
-    width: $inventory-width;
-    max-width: $inventory-width;
-}
-
-@import './furniture';
-@import './trading';
+@import './components';

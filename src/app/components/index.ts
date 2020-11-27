@@ -4,11 +4,12 @@ import { AvatarEditorModule } from './avatareditor/avatareditor.module';
 import { CatalogModule } from './catalog';
 import { MainComponent } from './component';
 import { HotelViewModule } from './hotelview';
-import { InventoryModule } from './inventory';
-import { NavigatorModule } from './navigator';
+import { InventoryModule } from './inventory/inventory.module';
+import { NavigatorModule } from './navigator/navigator.module';
 import { PurseModule } from './purse';
 import { RoomModule } from './room/room.module';
 import { ToolbarModule } from './toolbar';
+import { WiredModule } from './wired/wired.module';
 
 @NgModule({
 	imports: [
@@ -20,7 +21,8 @@ import { ToolbarModule } from './toolbar';
         NavigatorModule,
         PurseModule,
         RoomModule,
-        ToolbarModule
+        ToolbarModule,
+        WiredModule
     ],
     exports: [
         MainComponent

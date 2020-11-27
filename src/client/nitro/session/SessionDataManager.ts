@@ -1,10 +1,14 @@
 import { Texture } from 'pixi.js';
 import { NitroManager } from '../../core/common/NitroManager';
+import { IMessageComposer } from '../../core/communication/messages/IMessageComposer';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { AvailabilityStatusMessageEvent } from '../communication/messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { UserPermissionsEvent } from '../communication/messages/incoming/user/access/UserPermissionsEvent';
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
+import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
+import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
 import { Nitro } from '../Nitro';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
@@ -22,6 +26,9 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _figure: string;
     private _gender: string;
     private _realName: string;
+    private _respectsReceived: number;
+    private _respectsLeft: number;
+    private _respectsPetLeft: number;
 
     private _clubLevel: number;
     private _securityLevel: number;
@@ -30,6 +37,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _systemOpen: boolean;
     private _systemShutdown: boolean;
     private _isAuthenticHabbo: boolean;
+    private _isRoomCameraFollowDisabled: boolean;
+    private _uiFlags: number;
 
     private _floorItems: Map<number, IFurnitureData>;
     private _wallItems: Map<number, IFurnitureData>;
@@ -56,6 +65,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemOpen                    = false;
         this._systemShutdown                = false;
         this._isAuthenticHabbo              = false;
+        this._isRoomCameraFollowDisabled    = false;
+        this._uiFlags                       = 0;
 
         this._floorItems                    = new Map();
         this._wallItems                     = new Map();
@@ -77,6 +88,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
         this._communication.registerMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
         this._communication.registerMessageEvent(new AvailabilityStatusMessageEvent(this.onAvailabilityStatusMessageEvent.bind(this)));
+        this._communication.registerMessageEvent(new UserSettingsEvent(this.onUserSettingsEvent.bind(this)));
     }
 
     protected onDispose(): void
@@ -177,11 +189,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         if(!userInfo) return;
 
-        this._userId    = userInfo.userId;
-        this._name      = userInfo.username;
-        this._figure    = userInfo.figure;
-        this._gender    = userInfo.gender;
-        this._realName  = userInfo.realName;
+        this._userId            = userInfo.userId;
+        this._name              = userInfo.username;
+        this._figure            = userInfo.figure;
+        this._gender            = userInfo.gender;
+        this._realName          = userInfo.realName;
+        this._respectsReceived  = userInfo.respectsReceived;
+        this._respectsLeft      = userInfo.respectsRemaining;
+        this._respectsPetLeft   = userInfo.respectsPetRemaining;
     }
 
     private onUserPermissionsEvent(event: UserPermissionsEvent): void
@@ -214,6 +229,18 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
                 for(let listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
+    }
+
+    private onUserSettingsEvent(event: UserSettingsEvent): void
+    {
+        if(!(event instanceof UserSettingsEvent) || !event.connection) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._isRoomCameraFollowDisabled    = parser.cameraFollow;
+        this._uiFlags                       = parser.flags;
     }
 
     private onFurnitureDataReadyEvent(event: Event): void
@@ -316,20 +343,25 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     public giveRespect(userId: number): void
     {
-        // if (((k >= 0) && (this._Str_3437 > 0)))
-        // {
-        //     this.send(new _Str_10714(k));
-        //     this._Str_3437 = (this._Str_3437 - 1);
-        // }
+        if((userId < 0) || (this._respectsLeft <= 0)) return;
+
+        this.send(new UserRespectComposer(userId));
+
+        this._respectsLeft--;
     }
 
     public givePetRespect(petId: number): void
     {
-        // if (((k >= 0) && (this._Str_3973 > 0)))
-        // {
-        //     this.send(new _Str_8184(k));
-        //     this._Str_3973 = (this._Str_3973 - 1);
-        // }
+        if((petId < 0) || (this._respectsPetLeft <= 0)) return;
+
+        this.send(new PetRespectComposer(petId));
+        
+        this._respectsPetLeft--;
+    }
+
+    private send(composer: IMessageComposer): void
+    {
+        this._communication.connection.send(composer);
     }
 
     public get communication(): INitroCommunicationManager
@@ -360,6 +392,21 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public get realName(): string
     {
         return this._realName;
+    }
+
+    public get respectsReceived(): number
+    {
+        return this._respectsReceived;
+    }
+
+    public get respectsLeft(): number
+    {
+        return this._respectsLeft;
+    }
+
+    public get respectsPetLeft(): number
+    {
+        return this._respectsPetLeft;
     }
 
     public get clubLevel(): number
@@ -395,5 +442,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public get isModerator(): boolean
     {
         return (this._securityLevel >= SecurityLevel.MODERATOR);
+    }
+
+    public get isCameraFollowDisabled(): boolean
+    {
+        return this._isRoomCameraFollowDisabled;
+    }
+
+    public get uiFlags(): number
+    {
+        return this._uiFlags;
     }
 }

@@ -35,7 +35,7 @@ export class AnimationManager implements IAnimationManager
 
     public _Str_607(animation: string, frameCount: number, spriteId: string): IAnimationLayerData
     {
-        const existing = this._Str_720(animation) as Animation;
+        const existing = this._Str_720(animation);
 
         if(!existing) return null;
 

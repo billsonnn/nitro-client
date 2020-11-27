@@ -1,5 +1,5 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
-import { NavigatorSearchResultRoom } from './NavigatorSearchResultRoom';
+import { RoomDataParser } from '../../room/data/RoomDataParser';
 
 export class NavigatorSearchResultList
 {
@@ -8,7 +8,7 @@ export class NavigatorSearchResultList
     private _action: number;
     private _closed: boolean;
     private _mode: number;
-    private _rooms: NavigatorSearchResultRoom[];
+    private _rooms: RoomDataParser[];
 
     constructor(wrapper: IMessageDataWrapper)
     {
@@ -44,7 +44,7 @@ export class NavigatorSearchResultList
 
         while(totalRooms > 0)
         {
-            this._rooms.push(new NavigatorSearchResultRoom(wrapper));
+            this._rooms.push(new RoomDataParser(wrapper));
 
             totalRooms--;
         }
@@ -77,7 +77,7 @@ export class NavigatorSearchResultList
         return this._mode;
     }
 
-    public get rooms(): NavigatorSearchResultRoom[]
+    public get rooms(): RoomDataParser[]
     {
         return this._rooms;
     }

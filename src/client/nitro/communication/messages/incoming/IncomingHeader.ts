@@ -148,6 +148,7 @@ export class IncomingHeader
     public static UNIT_REMOVE                  = 2661;
     public static UNIT_STATUS                  = 1640;
     public static UNIT_TYPING                  = 1717;
+    public static UNIT_NUMBER                  = 2324;
     public static USER_ACHIEVEMENT_SCORE       = 1968;
     public static USER_BADGES                  = 717;
     public static USER_BADGES_ADD              = 2493;
@@ -185,6 +186,9 @@ export class IncomingHeader
     public static WIRED_CONDITION              = 1108;
     public static WIRED_SAVE                   = 1155;
     public static WIRED_TRIGGER                = 383;
+    public static WIRED_OPEN                   = 1830;
+    public static WIRED_REWARD                 = 178;
+    public static WIRED_ERROR                  = 156;
     public static UNSEEN_ITEMS                 = 2103;
     public static FURNITURE_ALIASES            = 1723;
 }

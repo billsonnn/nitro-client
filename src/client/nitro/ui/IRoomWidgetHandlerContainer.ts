@@ -1,4 +1,5 @@
 import { Rectangle } from 'pixi.js';
+import { WiredService } from '../../../app/components/wired/services/wired.service';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { IRoomObject } from '../../room/object/IRoomObject';
@@ -21,4 +22,5 @@ export interface IRoomWidgetHandlerContainer
     roomSession: IRoomSession;
     roomSessionManager: IRoomSessionManager;
     sessionDataManager: ISessionDataManager;
+    wiredService: WiredService;
 }

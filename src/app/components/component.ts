@@ -33,6 +33,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 		<nitro-navigator-component [visible]="navigatorVisible"></nitro-navigator-component>
 		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
 		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
+		<nitro-wired-component></nitro-wired-component>
 		<nitro-room-component></nitro-room-component>
     </div>`
 })
@@ -181,7 +182,7 @@ export class MainComponent implements OnInit, OnDestroy
 
 					if(colorEvent._Str_11464)
 					{
-						this.roomComponent.setRoomColorizerColor(0x000000, 0xFF);
+						this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
 					}
 					else
 					{

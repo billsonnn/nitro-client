@@ -91,6 +91,7 @@ export class OutgoingHeader
     public static PET_PICKUP                     = 1581;
     public static PET_PLACE                      = 2647;
     public static PET_RIDE                       = 1036;
+    public static PET_RESPECT                    = 3202;
     public static RECYCLER_PRIZES                = 398;
     public static RELEASE_VERSION                = 4000;
     public static REPORT                         = 1691;
@@ -176,4 +177,6 @@ export class OutgoingHeader
     public static WIRED_ACTION_SAVE              = 2281;
     public static WIRED_TRIGGER_SAVE             = 1520;
     public static WIRED_CONDITION_SAVE           = 3203;
+    public static WIRED_OPEN                     = 768;
+    public static WIRED_APPLY_SNAPSHOT           = 3373;
 }

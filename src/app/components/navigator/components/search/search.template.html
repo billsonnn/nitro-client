@@ -1,0 +1,9 @@
+<div class="input-group mb-3">
+    <div class="input-group-prepend" ngbDropdown>
+        <button type="button" class="btn btn-primary" ngbDropdownToggle>{{ ('navigator.filter.' + this.currentFilter.name) | translate }}</button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <button class="dropdown-item" *ngFor="let filter of searchFilters" ngbDropdownItem (click)="changeFilter(filter)">{{ ('navigator.filter.' + filter.name) | translate }}</button>
+        </div>
+    </div>
+    <input type="text" class="form-control" [(ngModel)]="searchValue" [placeholder]="('navigator.filter.input.placeholder') | translate" (keydown.enter)="search($event)">
+</div>

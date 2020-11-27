@@ -34,7 +34,7 @@ export class RoomChatHandler extends BaseHandler
         if(event instanceof RoomUnitChatShoutEvent) chatType = RoomSessionChatEvent.CHAT_SHOUT;
         else if(event instanceof RoomUnitChatWhisperEvent) chatType = RoomSessionChatEvent.CHAT_WHISPER;
 
-        const chatEvent = new RoomSessionChatEvent(RoomSessionChatEvent.CHAT_EVENT, session, parser.unitId, parser.message, chatType, parser.bubble);
+        const chatEvent = new RoomSessionChatEvent(RoomSessionChatEvent.CHAT_EVENT, session, parser.roomIndex, parser.message, chatType, parser.bubble);
 
         this.listener.events.dispatchEvent(chatEvent);
     }

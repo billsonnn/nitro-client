@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
@@ -12,15 +13,13 @@ import { RoomAvatarInfoComponent } from '../component';
 	selector: 'nitro-room-avatarinfo-avatar-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-avatar-component context-menu">
-        <div class="card">
-            <div class="card-header">
-                <div class="header-title">{{ userName }}</div>
-            </div>
+        <div class="card align-items-center">
+            <div class="d-flex card-header align-items-center w-100">{{ userName }}</div>
             <div class="card-body">
                 <ng-container *ngFor="let entry of menu">
-                    <ul *ngIf="(mode === entry.mode)" class="list-group">
+                    <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush">
                         <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
+                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate:fakeValue }}</li>
                         </ng-container>
                     </ul>
                 </ng-container>
@@ -43,8 +42,15 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
+    public fakeValue: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
+
+    constructor(
+        private _applicationRef: ApplicationRef)
+    {
+        super();
+    }
 
     public static setup(view: RoomAvatarInfoAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
@@ -68,6 +74,8 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 
             if((carryId > 0) && (carryId < 999999)) giveHandItem = true;
         }
+
+        Nitro.instance.localization.registerParameter('infostand.button.respect', 'count', this.avatarData._Str_3577.toString());
 
         this.menu = [
             {
@@ -318,15 +326,18 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                     messageType = RoomWidgetUserActionMessage.RWUAM_SEND_FRIEND_REQUEST;
                     break;
                 case 'respect':
-                    // this._data._Str_3577--;
-                    // _local_6 = this._data._Str_3577;
-                    // this.widget.localizations.registerParameter('infostand.button.respect', 'count', _local_6.toString());
-                    // _Str_2304('respect', (this._data._Str_3577 > 0));
-                    // messageType = RoomWidgetUserActionMessage.RWUAM_RESPECT_USER;
-                    // if (_local_6 > 0)
-                    // {
-                    //     _local_3 = false;
-                    // }
+                    this.avatarData._Str_3577--;
+
+                    Nitro.instance.localization.registerParameter('infostand.button.respect', 'count', this.avatarData._Str_3577.toString());
+
+                    messageType = RoomWidgetUserActionMessage.RWUAM_RESPECT_USER;
+
+                    if(this.avatarData._Str_3577 > 0)
+                    {
+                        hideMenu = false;
+
+                        this.fakeValue++;
+                    }
                     break;
                 case 'ignore':
                     this.avatarData._Str_3655 = true;

@@ -1,7 +1,7 @@
 ﻿import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { INitroCommunicationManager } from '../../../../client/nitro/communication/INitroCommunicationManager';
 import { UnseenItemsEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
-import { InventoryService } from '../service';
+import { InventoryService } from '../services/inventory.service';
 import { IUnseenItemTracker } from './IUnseenItemTracker';
 
 export class UnseenItemTracker implements IUnseenItemTracker

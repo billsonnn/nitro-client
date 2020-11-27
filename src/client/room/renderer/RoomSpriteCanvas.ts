@@ -1,4 +1,4 @@
-import { DisplayObject, Graphics, Point, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { Container, DisplayObject, Graphics, Point, Rectangle, RenderTexture, Sprite } from 'pixi.js';
 import { MouseEventType } from '../../nitro/ui/MouseEventType';
 import { RoomObjectSpriteData } from '../data/RoomObjectSpriteData';
 import { RoomSpriteMouseEvent } from '../events/RoomSpriteMouseEvent';
@@ -22,6 +22,8 @@ import { SortableSprite } from './utils/SortableSprite';
 
 export class RoomSpriteCanvas implements IRoomRenderingCanvas
 {
+    public static FPS: number = 24;
+
     private _id: number;
     private _container: IRoomSpriteCanvasContainer;
 
@@ -29,7 +31,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _renderTimestamp: number;
 
     private _master: Sprite;
-    private _display: Sprite;
+    private _display: Container;
     private _mask: Graphics;
 
     private _sortableSprites: SortableSprite[];
@@ -125,7 +127,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(!this._display)
         {
-            const display = new Sprite(Texture.EMPTY);
+            const display = new Container();
 
             display.name = 'canvas';
 
@@ -224,6 +226,14 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                     if(this._display) this._display.mask = this._mask;
                 }
             }
+            else
+            {
+                this._mask
+                    .clear()
+                    .beginFill(0xFF0000)
+                    .drawRect(0, 0, width, height)
+                    .endFill();
+            }
         }
 
         if(this._master)
@@ -239,20 +249,17 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 this._master.hitArea = new Rectangle(0, 0, width, height);
             }
-        }
 
-        if(this._display)
-        {
-            if(this._display.filterArea)
+            if(this._master.filterArea)
             {
-                const filterArea = this._display.filterArea;
+                const filterArea = this._master.filterArea;
 
                 filterArea.width    = width;
                 filterArea.height   = height;
             }
             else
             {
-                this._display.filterArea = new Rectangle(0, 0, width, height);
+                this._master.filterArea = new Rectangle(0, 0, width, height);
             }
         }
 
@@ -574,6 +581,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             extendedSprite.name             = sprite.name;
             extendedSprite._Str_4593        = objectSprite._Str_4593;
             extendedSprite.clickHandling    = objectSprite.clickHandling;
+            extendedSprite.filters          = objectSprite.filters;
 
             const alpha = (objectSprite.alpha / 255);
 
@@ -583,9 +591,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if(extendedSprite.blendMode !== objectSprite.blendMode) extendedSprite.blendMode = objectSprite.blendMode;
 
-            if(extendedSprite.filters !== objectSprite.filters) extendedSprite.filters = objectSprite.filters;
-
-            extendedSprite.setTexture(objectSprite.texture);
+            if(extendedSprite.texture !== objectSprite.texture) extendedSprite.setTexture(objectSprite.texture);
 
             if(objectSprite.updateContainer)
             {

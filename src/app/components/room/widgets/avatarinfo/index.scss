@@ -4,17 +4,13 @@
         position: absolute;
 
         .card {
-            align-items: center;
             z-index: 301;
 
             .card-header {
                 padding: 5px 15px;
                 align-items: center;
                 justify-content: center;
-
-                .header-title {
-                    font-size: 14px;
-                }
+                font-size: 14px;
             }
 
             .card-body {

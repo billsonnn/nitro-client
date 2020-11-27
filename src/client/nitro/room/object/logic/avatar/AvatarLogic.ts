@@ -19,6 +19,7 @@ import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarF
 import { ObjectAvatarFlatControlUpdateMessage } from '../../../messages/ObjectAvatarFlatControlUpdateMessage';
 import { ObjectAvatarGestureUpdateMessage } from '../../../messages/ObjectAvatarGestureUpdateMessage';
 import { ObjectAvatarOwnMessage } from '../../../messages/ObjectAvatarOwnMessage';
+import { ObjectAvatarPlayerValueUpdateMessage } from '../../../messages/ObjectAvatarPlayerValueUpdateMessage';
 import { ObjectAvatarPostureUpdateMessage } from '../../../messages/ObjectAvatarPostureUpdateMessage';
 import { ObjectAvatarSelectedMessage } from '../../../messages/ObjectAvatarSelectedMessage';
 import { ObjectAvatarSignUpdateMessage } from '../../../messages/ObjectAvatarSignUpdateMessage';
@@ -54,6 +55,7 @@ export class AvatarLogic extends MovingObjectLogic
     private _animationEndTimestamp: number;
     private _signEndTimestamp: number;
     private _gestureEndTimestamp: number;
+    private _numberValueEndTimestamp: number;
 
     constructor()
     {
@@ -74,6 +76,7 @@ export class AvatarLogic extends MovingObjectLogic
         this._animationEndTimestamp         = 0;
         this._signEndTimestamp              = 0;
         this._gestureEndTimestamp           = 0;
+        this._numberValueEndTimestamp       = 0;
     }
 
     public getEventTypes(): string[]
@@ -231,6 +234,13 @@ export class AvatarLogic extends MovingObjectLogic
 
             this._effectChangeTimeStamp = 0;
         }
+
+        if ((this._numberValueEndTimestamp > 0) && (time > this._numberValueEndTimestamp))
+        {
+            model.setValue(RoomObjectVariable.FIGURE_NUMBER_VALUE, 0);
+            
+            this._numberValueEndTimestamp = 0;
+        }
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
@@ -255,7 +265,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectVariable.FIGURE_TALK, 1);
 
-            this._talkingEndTimestamp = this.time + (message.numberOfWords * 1000);
+            this._talkingEndTimestamp = (this.time + (message.numberOfWords * 1000));
 
             return;
         }
@@ -280,7 +290,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectVariable.FIGURE_GESTURE, message.gesture);
 
-            this._gestureEndTimestamp = this.time + 3000;
+            this._gestureEndTimestamp = (this.time + 3000);
 
             return;
         }
@@ -308,7 +318,16 @@ export class AvatarLogic extends MovingObjectLogic
             model.setValue(RoomObjectVariable.FIGURE_SLEEP, message.isSleeping ? 1 : 0);
 
             if(message.isSleeping) this._blinkingStartTimestamp = -1;
-            else this._blinkingStartTimestamp = this.time + this.randomBlinkStartTimestamp();
+            else this._blinkingStartTimestamp = (this.time + this.randomBlinkStartTimestamp());
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarPlayerValueUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_NUMBER_VALUE, message.value);
+
+            this._numberValueEndTimestamp = (this.time + 3000);
 
             return;
         }
@@ -352,7 +371,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             model.setValue(RoomObjectVariable.FIGURE_SIGN, message.signType);
 
-            this._signEndTimestamp = this.time + 5000;
+            this._signEndTimestamp = (this.time + 5000);
 
             return;
         }
@@ -388,7 +407,7 @@ export class AvatarLogic extends MovingObjectLogic
         }
     }
 
-    private updateAvatarEffect(effect: number, delay: number,  model: IRoomObjectModel): void
+    private updateAvatarEffect(effect: number, delay: number, model: IRoomObjectModel): void
     {
         if(effect === AvatarLogic._Str_13364)
         {
@@ -396,7 +415,7 @@ export class AvatarLogic extends MovingObjectLogic
             this._newEffect             = AvatarLogic._Str_15351;
         }
 
-        else if (effect === AvatarLogic._Str_13733)
+        else if(effect === AvatarLogic._Str_13733)
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = AvatarLogic._Str_13094;

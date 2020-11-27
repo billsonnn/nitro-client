@@ -75,7 +75,7 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
     private processAdUpdate(message: ObjectAdUpdateMessage): void
     {
-        if(!message) return;
+        if(!message || !this.object) return;
 
         switch(message.type)
         {

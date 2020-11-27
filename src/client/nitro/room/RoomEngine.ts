@@ -864,8 +864,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             return;
         }
 
-        const startTime         = Nitro.instance.time;
-        const furniturePerTick  = 25;
+        const startTime         = new Date().valueOf();
+        const furniturePerTick  = 5;
         const hasTickLimit      = true;
 
         for(let instanceData of this._roomInstanceDatas.values())
@@ -876,7 +876,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             let totalFurnitureAdded: number = 0;
             let furnitureAdded: boolean     = false;
 
-            while(pendingData = instanceData.getNextPendingFurnitureFloor())
+            while((pendingData = instanceData.getNextPendingFurnitureFloor()))
             {
                 furnitureAdded = this.processPendingFurnitureFloor(instanceData.roomId, pendingData.id, pendingData);
 
@@ -884,7 +884,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 {
                     if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        const time = Nitro.instance.time;
+                        const time = new Date().valueOf();
 
                         if((time - startTime) >= 40)
                         {
@@ -904,7 +904,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 {
                     if(!(++totalFurnitureAdded % furniturePerTick))
                     {
-                        const time = Nitro.instance.time;
+                        const time = new Date().valueOf();
 
                         if((time - startTime) >= 40)
                         {
@@ -1118,40 +1118,40 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
-    private _Str_25242(k: number, _arg_2: number, _arg_3:IVector3D, _arg_4: number): void
+    private _Str_25242(roomId: number, canvasId: number, objectLocation: IVector3D, time: number): void
     {
-        const renderingCanvas   = this.getRoomInstanceRenderingCanvas(k, _arg_2);
-        const instanceData      = this.getRoomInstanceData(k);
+        const renderingCanvas   = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+        const instanceData      = this.getRoomInstanceData(roomId);
 
         if(!renderingCanvas || !instanceData || (renderingCanvas.scale !== 1)) return;
 
         const roomGeometry  = (renderingCanvas.geometry as RoomGeometry);
         const roomCamera    = instanceData.roomCamera;
-        const roomInstance  = this.getRoomInstance(k);
+        const roomInstance  = this.getRoomInstance(roomId);
 
         if(!roomGeometry || !roomCamera || !roomInstance) return;
         
-        let canvasRectangle = this._Str_25261(k, _arg_2);
+        let canvasRectangle = this._Str_25261(roomId, canvasId);
 
         if(!canvasRectangle) return;
 
-        let _local_10   = (Math.floor(_arg_3.z) + 1);
+        let _local_10   = (Math.floor(objectLocation.z) + 1);
         let width       = Math.round(canvasRectangle.width);
         let height      = Math.round(canvasRectangle.height);
-        let bounds      = this.getCanvasBoundingRectangle(_arg_2);
+        let bounds      = this.getCanvasBoundingRectangle(canvasId);
 
         if(bounds && ((bounds.right < 0) || (bounds.bottom < 0) || (bounds.left >= width) || (bounds.top >= height)))
         {
             roomCamera.reset();
         }
 
-        if((roomCamera._Str_7609 !== width) || (roomCamera._Str_7902 !== height) || (roomCamera.scale !== roomGeometry.scale) || (roomCamera._Str_16377 !== roomGeometry.updateId) || !Vector3d.isEqual(_arg_3, roomCamera._Str_16185) || roomCamera._Str_12536)
+        if((roomCamera._Str_7609 !== width) || (roomCamera._Str_7902 !== height) || (roomCamera.scale !== roomGeometry.scale) || (roomCamera._Str_16377 !== roomGeometry.updateId) || !Vector3d.isEqual(objectLocation, roomCamera._Str_16185) || roomCamera._Str_12536)
         {
-            roomCamera._Str_16185 = _arg_3;
+            roomCamera._Str_16185 = objectLocation;
             
             const _local_15 = new Vector3d();
             
-            _local_15.assign(_arg_3);
+            _local_15.assign(objectLocation);
 
             _local_15.x = Math.round(_local_15.x);
             _local_15.y = Math.round(_local_15.y);
@@ -1374,18 +1374,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             roomCamera._Str_18975 = bounds.width;
             roomCamera._Str_15953 = bounds.height;
             
-            if(true) //!this._sessionDataManager._Str_18110
+            if(!this._sessionDataManager.isCameraFollowDisabled)
             {
-                if (this._Str_11555)
+                if(this._Str_11555)
                 {
-                    roomCamera.update(_arg_4, 8);
+                    roomCamera.update(time, 8);
                 }
                 else
                 {
-                    roomCamera.update(_arg_4, 0.5);
+                    roomCamera.update(time, 0.5);
                 }
             }
-            if (this._Str_11555)
+
+            if(this._Str_11555)
             {
                 renderingCanvas.screenOffsetX = -(roomCamera.location.x);
                 renderingCanvas.screenOffsetY = -(roomCamera.location.y);

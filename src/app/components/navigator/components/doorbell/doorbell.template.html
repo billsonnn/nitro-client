@@ -1,0 +1,21 @@
+<div class="modal-header">
+    {{ ('navigator.doorbell.title') | translate }}
+    <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <span *ngIf="!isWaiting && !noAnswer">{{ ('navigator.doorbell.info') | translate }}</span>
+            <span *ngIf="isWaiting && !noAnswer">{{ ('navigator.doorbell.waiting') | translate }}</span>
+            <span *ngIf="noAnswer">{{ ('navigator.doorbell.no.answer') | translate }}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" (click)="close()">{{ ('generic.cancel') | translate }}</button>
+                <button *ngIf="!isWaiting && !noAnswer" type="button" class="btn btn-primary" (click)="ring()">{{ ('navigator.doorbell.button.ring') | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -282,6 +282,18 @@ i {
             height: 18px;
         }
 
+        &.trade-locked-icon {
+            background-image: url('./images/inventory/trading/locked-icon.png');
+            width: 29px;
+            height: 43px;
+        }
+
+        &.trade-unlocked-icon {
+            background-image: url('./images/inventory/trading/unlocked-icon.png');
+            width: 29px;
+            height: 43px;
+        }
+
         &.spin {
             animation: rotating 1s linear infinite;
         }

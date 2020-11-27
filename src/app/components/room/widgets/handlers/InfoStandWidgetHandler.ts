@@ -80,7 +80,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             const petMessages = [
                 RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE,
-                RoomWidgetUserActionMessage._Str_6480,
+                RoomWidgetUserActionMessage.RWUAM_RESPECT_PET,
                 RoomWidgetUserActionMessage.RWUAM_PICKUP_PET,
                 RoomWidgetUserActionMessage.RWUAM_MOUNT_PET,
                 RoomWidgetUserActionMessage.RWUAM_TOGGLE_PET_RIDING_PERMISSION,
@@ -124,10 +124,10 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 //this._container.friendList._Str_14642(_local_2, _local_3.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_RESPECT_USER:
-                //this._container.sessionDataManager._Str_20136(_local_2);
+                this._container.sessionDataManager.giveRespect(userId);
                 break;
-            case RoomWidgetUserActionMessage._Str_6480:
-                //this._container.sessionDataManager._Str_21665(_local_2);
+            case RoomWidgetUserActionMessage.RWUAM_RESPECT_PET:
+                this._container.sessionDataManager.givePetRespect(userId);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_WHISPER_USER:
                 this._container.events.dispatchEvent(new RoomWidgetChatInputContentUpdateEvent(RoomWidgetChatInputContentUpdateEvent.WHISPER, userData.name));
@@ -162,7 +162,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 this._container.roomSession.sendTakeRightsMessage((message as RoomWidgetUserActionMessage).userId);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_START_TRADING:
-                if(userData) this._widget.inventoryTrading.startTrade(userData.webID, userData.name);
+                if(userData) this._widget.inventoryTrading.startTrade(userData.roomIndex, userData.name);
                 break;
             // case RoomWidgetUserActionMessage.RWUAM_OPEN_HOME_PAGE:
             //     this._container.sessionDataManager._Str_21275((message as RoomWidgetUserActionMessage).userId, _local_3.name);
@@ -356,7 +356,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 if(objectType.indexOf('poster') === 0)
                 {
                     id          = -1;
-                    name        = ('poster_' + parseInt(objectType.replace('poster', '')) + '_name');
+                    name        = ('${poster_' + parseInt(objectType.replace('poster', '')) + '_name}');
                     roomIndex   = roomObject.id;
                 }
                 else
@@ -465,10 +465,10 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 //infostandEvent.rentCouldBeUsedForBuyout    = furnitureData._Str_8116;
                 //infostandEvent._Str_6098    = furnitureData._Str_6098;
 
-                // if (((!(this._container._Str_10421 == null)) && (k.category == RoomObjectCategory.FLOOR)))
-                // {
-                //     this._container._Str_10421._Str_15677(roomObject.getId(), furnitureData._Str_2772);
-                // }
+                if(this._container.wiredService && (k.category === RoomObjectCategory.FLOOR))
+                {
+                    this._container.wiredService.selectFurniture(roomObject.id, furnitureData.name);
+                }
             }
         }
 
@@ -621,7 +621,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             }
 
             event.isIgnored = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
-            //event._Str_3577 = this._container.sessionDataManager._Str_3577;
+            event._Str_3577 = this._container.sessionDataManager.respectsLeft;
 
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;
@@ -866,7 +866,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             RoomWidgetUserActionMessage.RWUAM_DISMOUNT_PET,
             RoomWidgetUserActionMessage.RWUAM_SADDLE_OFF,
             RoomWidgetUserActionMessage.RWUAM_TRAIN_PET,
-            RoomWidgetUserActionMessage._Str_6480,
+            RoomWidgetUserActionMessage.RWUAM_RESPECT_PET,
             RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE,
             RoomWidgetChangeMottoMessage.RWVM_CHANGE_MOTTO_MESSAGE,
             RoomWidgetUserActionMessage.RWUAM_GIVE_LIGHT_TO_PET,

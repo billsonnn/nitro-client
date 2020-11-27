@@ -1,4 +1,4 @@
-import { RenderTexture, Texture } from 'pixi.js';
+import { Rectangle, RenderTexture, Texture } from 'pixi.js';
 import { AdvancedMap } from '../../../../../core/utils/AdvancedMap';
 import { AlphaTolerance } from '../../../../../room/object/enum/AlphaTolerance';
 import { RoomObjectSpriteType } from '../../../../../room/object/enum/RoomObjectSpriteType';
@@ -44,6 +44,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     private _roomPlaneBitmapMaskParser: RoomPlaneBitmapMaskParser;
 
     private _geometryUpdateId: number;
+    private _boundingRectangle: Rectangle;
     private _directionX: number;
     private _directionY: number;
     private _directionZ: number;
@@ -305,7 +306,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         if(this._geometryUpdateId === k.updateId) return false;
 
-        this._geometryUpdateId = k.updateId;
+        this._geometryUpdateId  = k.updateId;
+        this._boundingRectangle = null;
 
         const direction = k.direction;
 
@@ -329,7 +331,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
         const floorThickness    = k.getValue<number>(RoomObjectVariable.ROOM_FLOOR_THICKNESS);
         const wallThickness     = k.getValue<number>(RoomObjectVariable.ROOM_WALL_THICKNESS);
 
-        if(((floorThickness !== null) && (wallThickness !== null)) && ((floorThickness !== this._floorThickness) || (wallThickness !== this._wallThickness)))
+        if((!isNaN(floorThickness) && !isNaN(wallThickness)) && ((floorThickness !== this._floorThickness) || (wallThickness !== this._wallThickness)))
         {            
             this._floorThickness    = floorThickness;
             this._wallThickness     = wallThickness;
@@ -348,7 +350,7 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         const holeUpdate = k.getValue<number>(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME);
 
-        if((holeUpdate !== null) && (holeUpdate !== this._holeUpdateTime))
+        if(!isNaN(holeUpdate) && (holeUpdate !== this._holeUpdateTime))
         {
             this._holeUpdateTime = holeUpdate;
 
@@ -983,6 +985,13 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
     private _Str_22446(k: RoomPlane, _arg_2: string): Texture
     {
         return k.bitmapData;
+    }
+
+    public getBoundingRectangle(): Rectangle
+    {
+        if(!this._boundingRectangle) this._boundingRectangle = super.getBoundingRectangle();
+
+        return new Rectangle(this._boundingRectangle.x, this._boundingRectangle.y, this._boundingRectangle.width, this._boundingRectangle.height);
     }
 
     public get _Str_19113(): IRoomPlane[]

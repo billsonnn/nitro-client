@@ -8,14 +8,14 @@ export class UserInfoDataParser
     private _gender: string;
     private _motto: string;
     private _realName: string;
-    private _boolean1: boolean;
+    private _directMail: boolean;
     private _respectsReceived: number;
     private _respectsRemaining: number;
     private _respectsPetRemaining: number;
-    private _boolean2: boolean;
-    private _accountCreated: string;
+    private _streamPublishingAllowed: boolean;
+    private _lastAccessDate: string;
     private _canChangeName: boolean;
-    private _boolean3: boolean;
+    private _safetyLocked: boolean;
 
     constructor(wrapper: IMessageDataWrapper)
     {
@@ -27,20 +27,20 @@ export class UserInfoDataParser
 
     public flush(): boolean
     {
-        this._userId                = 0;
-        this._username              = null;
-        this._figure                = null;
-        this._gender                = null;
-        this._motto                 = null;
-        this._realName              = null;
-        this._boolean1              = false;
-        this._respectsReceived      = 0;
-        this._respectsRemaining     = 0;
-        this._respectsPetRemaining  = 0;
-        this._boolean2              = false;
-        this._accountCreated        = null;
-        this._canChangeName         = false;
-        this._boolean3              = false;
+        this._userId                    = 0;
+        this._username                  = null;
+        this._figure                    = null;
+        this._gender                    = null;
+        this._motto                     = null;
+        this._realName                  = null;
+        this._directMail                = false;
+        this._respectsReceived          = 0;
+        this._respectsRemaining         = 0;
+        this._respectsPetRemaining      = 0;
+        this._streamPublishingAllowed   = false;
+        this._lastAccessDate            = null;
+        this._canChangeName             = false;
+        this._safetyLocked              = false;
 
         return true;
     }
@@ -55,14 +55,14 @@ export class UserInfoDataParser
         this._gender                = wrapper.readString();
         this._motto                 = wrapper.readString();
         this._realName              = wrapper.readString();
-        this._boolean1              = wrapper.readBoolean();
+        this._directMail              = wrapper.readBoolean();
         this._respectsReceived      = wrapper.readInt();
         this._respectsRemaining     = wrapper.readInt();
         this._respectsPetRemaining  = wrapper.readInt();
-        this._boolean2              = wrapper.readBoolean();
-        this._accountCreated        = wrapper.readString();
+        this._streamPublishingAllowed              = wrapper.readBoolean();
+        this._lastAccessDate        = wrapper.readString();
         this._canChangeName         = wrapper.readBoolean();
-        this._boolean3              = wrapper.readBoolean();
+        this._safetyLocked              = wrapper.readBoolean();
 
         return true;
     }
@@ -95,5 +95,45 @@ export class UserInfoDataParser
     public get realName(): string
     {
         return this._realName;
+    }
+
+    public get directMail(): boolean
+    {
+        return this._directMail;
+    }
+
+    public get respectsReceived(): number
+    {
+        return this._respectsReceived;
+    }
+
+    public get respectsRemaining(): number
+    {
+        return this._respectsRemaining;
+    }
+
+    public get respectsPetRemaining(): number
+    {
+        return this._respectsPetRemaining;
+    }
+
+    public get streamPublishingAllowed(): boolean
+    {
+        return this._streamPublishingAllowed;
+    }
+
+    public get lastAccessedDate(): string
+    {
+        return this._lastAccessDate;
+    }
+
+    public get canChangeName(): boolean
+    {
+        return this._canChangeName;
+    }
+
+    public get safetyLocked(): boolean
+    {
+        return this._safetyLocked;
     }
 }

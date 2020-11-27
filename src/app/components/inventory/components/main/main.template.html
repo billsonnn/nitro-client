@@ -1,0 +1,13 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component">
+    <div class="card-header">
+        {{ ('inventory.title') | translate }}
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <div class="btn-group w-100 mb-3">
+            <button type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
+        </div>
+        <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
+        <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
+    </div>
+</div>

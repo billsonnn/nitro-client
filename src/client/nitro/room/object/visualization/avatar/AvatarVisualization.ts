@@ -17,6 +17,7 @@ import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
 import { IAvatarAddition } from './additions/IAvatarAddition';
+import { NumberBubbleAddition } from './additions/NumberBubbleAddition';
 import { TypingBubbleAddition } from './additions/TypingBubbleAddition';
 import { AvatarVisualizationData } from './AvatarVisualizationData';
 
@@ -26,6 +27,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private static FLOATING_IDLE_Z_ID: number       = 1;
     private static TYPING_BUBBLE_ID: number         = 2;
     private static EXPRESSION_ID: number            = 3;
+    private static NUMBER_BUBBLE_ID: number         = 4;
     private static OWN_USER_ID: number              = 4;
     private static UPDATE_TIME_INCREASER: number    = 41;
     private static OFFSET_MULTIPLIER: number        = 1000;
@@ -178,7 +180,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         const model     = this.object.model;
         const scale     = geometry.scale;
-        const effect    = +this._effect;
+        const effect    = this._effect;
 
         let didScaleUpdate  = false;
         let didEffectUpdate = false;
@@ -198,7 +200,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
             if(effect !== this._effect) didEffectUpdate = true;
 
-            if((didScaleUpdate || !this._avatarImage) || didEffectUpdate)
+            if(didScaleUpdate || !this._avatarImage || didEffectUpdate)
             {
                 this._avatarImage = this.createAvatarImage(scale, this._effect);
 
@@ -425,34 +427,33 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
                         const asset = this._avatarImage.getAsset(assetName);
 
-                        if(asset)
+                        if(!asset) continue;
+
+                        sprite.texture  = asset.texture;
+                        sprite.offsetX  = ((asset.offsetX - (scale / 2)) + offsetX);
+                        sprite.offsetY  = (asset.offsetY + offsetY);
+                        sprite.flipH    = asset.flipH;
+
+                        if(spriteData._Str_767)
                         {
-                            sprite.texture  = asset.texture;
-                            sprite.offsetX  = ((asset.offsetX - (scale / 2)) + offsetX);
-                            sprite.offsetY  = (asset.offsetY + offsetY);
-                            sprite.flipH    = asset.flipH;
-
-                            if(spriteData._Str_767)
-                            {
-                                sprite.offsetY += ((this._verticalOffset * scale) / (2 * AvatarVisualization._Str_12370));
-                            }
-                            else
-                            {
-                                sprite.offsetY += this._postureOffset;
-                            }
-
-                            if(this._Str_8935)
-                            {
-                                sprite.relativeDepth = (AvatarVisualization._Str_9235 - ((0.001 * this.totalSprites) * offsetZ));
-                            }
-                            else
-                            {
-                                sprite.relativeDepth = (AvatarVisualization._Str_11358 - ((0.001 * this.totalSprites) * offsetZ));
-                            }
-
-                            if(spriteData.ink === 33) sprite.blendMode = BLEND_MODES.ADD;
-                            else sprite.blendMode = BLEND_MODES.NORMAL;
+                            sprite.offsetY += ((this._verticalOffset * scale) / (2 * AvatarVisualization._Str_12370));
                         }
+                        else
+                        {
+                            sprite.offsetY += this._postureOffset;
+                        }
+
+                        if(this._Str_8935)
+                        {
+                            sprite.relativeDepth = (AvatarVisualization._Str_9235 - ((0.001 * this.totalSprites) * offsetZ));
+                        }
+                        else
+                        {
+                            sprite.relativeDepth = (AvatarVisualization._Str_11358 - ((0.001 * this.totalSprites) * offsetZ));
+                        }
+
+                        if(spriteData.ink === 33) sprite.blendMode = BLEND_MODES.ADD;
+                        else sprite.blendMode = BLEND_MODES.NORMAL;
                     }
 
                     _local_21++;
@@ -737,6 +738,21 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         else
         {
             if(typingAddition) this.removeAddition(AvatarVisualization.TYPING_BUBBLE_ID);
+        }
+
+        const numberValue = model.getValue<number>(RoomObjectVariable.FIGURE_NUMBER_VALUE);
+
+        let numberAddition = this.getAddition(AvatarVisualization.NUMBER_BUBBLE_ID);
+
+        if(numberValue > 0)
+        {
+            if(!numberAddition) numberAddition = this.addAddition(new NumberBubbleAddition(AvatarVisualization.NUMBER_BUBBLE_ID, numberValue, this));
+
+            needsUpdate = true;
+        }
+        else
+        {
+            if(numberAddition) this.removeAddition(AvatarVisualization.NUMBER_BUBBLE_ID);
         }
 
         let expressionAddition = this.getAddition(AvatarVisualization.EXPRESSION_ID);

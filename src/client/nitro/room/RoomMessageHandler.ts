@@ -35,6 +35,7 @@ import { RoomUnitExpressionEvent } from '../communication/messages/incoming/room
 import { RoomUnitHandItemEvent } from '../communication/messages/incoming/room/unit/RoomUnitHandItemEvent';
 import { RoomUnitIdleEvent } from '../communication/messages/incoming/room/unit/RoomUnitIdleEvent';
 import { RoomUnitInfoEvent } from '../communication/messages/incoming/room/unit/RoomUnitInfoEvent';
+import { RoomUnitNumberEvent } from '../communication/messages/incoming/room/unit/RoomUnitNumberEvent';
 import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
@@ -128,6 +129,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomUnitHandItemEvent(this.onRoomUnitHandItemEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitIdleEvent(this.onRoomUnitIdleEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitInfoEvent(this.onRoomUnitInfoEvent.bind(this)));
+        this._connection.addMessageEvent(new RoomUnitNumberEvent(this.onRoomUnitNumberEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitRemoveEvent(this.onRoomUnitRemoveEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitStatusEvent(this.onRoomUnitStatusEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitChatEvent(this.onRoomUnitChatEvent.bind(this)));
@@ -158,7 +160,11 @@ export class RoomMessageHandler extends Disposable
     {
         if(!(event instanceof UserInfoEvent) || !event.connection) return;
 
-        this._ownUserId = event.getParser().userInfo.userId;
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ownUserId = parser.userInfo.userId;
     }
 
     private onRoomModelNameEvent(event: RoomModelNameEvent): void
@@ -693,6 +699,19 @@ export class RoomMessageHandler extends Disposable
         this._roomCreator.updateRoomObjectUserFigure(this._currentRoomId, event.getParser().unitId, event.getParser().figure, event.getParser().gender);
     }
 
+    private onRoomUnitNumberEvent(event: RoomUnitNumberEvent): void
+    {
+        if(!(event instanceof RoomUnitNumberEvent) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        console.log(this._currentRoomId, parser.unitId, RoomObjectVariable.FIGURE_NUMBER_VALUE, parser.value)
+
+        this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, parser.unitId, RoomObjectVariable.FIGURE_NUMBER_VALUE, parser.value);
+    }
+
     private onRoomUnitRemoveEvent(event: RoomUnitRemoveEvent): void
     {
         if(!(event instanceof RoomUnitRemoveEvent) || !event.connection || !this._roomCreator) return;
@@ -787,8 +806,8 @@ export class RoomMessageHandler extends Disposable
 
         if(!parser) return;
 
-        this._roomCreator.updateRoomObjectUserGesture(this._currentRoomId, parser.unitId, parser.gesture);
-        this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, parser.unitId, RoomObjectVariable.FIGURE_TALK, (parser.message.length / 10));
+        this._roomCreator.updateRoomObjectUserGesture(this._currentRoomId, parser.roomIndex, parser.gesture);
+        this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, parser.roomIndex, RoomObjectVariable.FIGURE_TALK, (parser.message.length / 10));
     }
 
     private onRoomUnitTypingEvent(event: RoomUnitTypingEvent): void

@@ -174,7 +174,6 @@ export class AvatarStructure extends EventDispatcher
 
     public _Str_720(k: string): Animation
     {
-        //@ts-ignore
         return this._animationManager._Str_720(k) as Animation;
     }
 

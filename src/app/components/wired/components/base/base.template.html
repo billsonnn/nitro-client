@@ -1,0 +1,16 @@
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-wired-component">
+    <div class="card-header">
+        {{ ('wiredfurni.title') | translate }}
+        <button type="button" class="close" (click)="cancel()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        {{ furniName }}
+        {{ furniDescription }}
+        <ng-content></ng-content>
+        <ng-container *ngIf="requiresFurni">
+            {{ ('wiredfurni.pickfurnis.caption') | translate:furniSelectionCount }}
+        </ng-container>
+        <button type="button" class="btn btn-primary" (click)="save()">{{ ('wiredfurni.ready') | translate }}</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">{{ ('cancel') | translate }}</button>
+    </div>
+</div>

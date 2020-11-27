@@ -1,6 +1,7 @@
 import { Application } from 'pixi.js';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { INitroCore } from '../core/INitroCore';
+import { NitroTimer } from '../core/utils/NitroTimer';
 import { IRoomManager } from '../room/IRoomManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
@@ -14,7 +15,8 @@ export interface INitro extends Application
     init(): void;
     dispose(): void;
     getConfiguration<T>(key: string, value?: T): T;
-    getLocalization(key: string): string;
+    getLocalization(key: string, replacements?: { [index: string]: any }): string;
+    nitroTimer: NitroTimer;
     core: INitroCore;
     events: IEventDispatcher;
     localization: INitroLocalizationManager;

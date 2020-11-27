@@ -5,10 +5,8 @@ import { AvatarContextInfoView } from '../AvatarContextInfoView';
 	selector: 'nitro-room-avatarinfo-name-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-name-component context-menu">
-        <div class="card">
-            <div class="card-header">
-                <div class="header-title">{{ userName }}</div>
-            </div>
+        <div class="card align-items-center">
+            <div class="d-flex card-header border-0 align-items-center w-100">{{ userName }}</div>
             <div class="card-pointer"></div>
         </div>
     </div>`

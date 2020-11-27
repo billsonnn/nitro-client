@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Container, filters, Rectangle, Sprite, Texture } from 'pixi.js';
+import { AdjustmentFilter } from '@pixi/filter-adjustment';
+import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { IConnection } from '../../../client/core/communication/connections/IConnection';
 import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
 import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
@@ -30,6 +31,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { WiredService } from '../wired/services/wired.service';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
@@ -50,7 +52,7 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
-    private static COLOR_MATRIX: filters.ColorMatrixFilter = new filters.ColorMatrixFilter();
+    private static COLOR_ADJUSTMENT: AdjustmentFilter = new AdjustmentFilter();
 
     @ViewChild('roomCanvas')
     public roomCanvasReference: ElementRef<HTMLDivElement>;
@@ -65,10 +67,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]> = new Map();
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
 
-    private _roomColorMatrix: filters.ColorMatrixFilter = null;
-    private _roomBackground: Sprite                     = null;
-    private _roomBackgroundColor: number                = 0;
-    private _roomColorizerColor: number                 = 0;
+    private _roomColorAdjustor: AdjustmentFilter    = null;
+    private _roomBackground: Sprite                 = null;
+    private _roomBackgroundColor: number            = 0;
+    private _roomColorizerColor: number             = 0;
 
     private _resizeTimer: any 		= null;
     private _didMouseMove: boolean  = false;
@@ -78,6 +80,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _isMouseMove: boolean   = false;
 
     constructor(
+        private _wiredService: WiredService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     ) {}
@@ -157,12 +160,14 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             this._ngZone.run(() => widget.destroy());
         }
 
-        this._roomColorMatrix       = null;
+        this._roomColorAdjustor       = null;
         this._roomBackground        = null;
         this._roomBackgroundColor   = 0;
         this._roomColorizerColor    = 0;
 
-        RoomComponent.COLOR_MATRIX.reset();
+        RoomComponent.COLOR_ADJUSTMENT.red      = 1;
+        RoomComponent.COLOR_ADJUSTMENT.green    = 1;
+        RoomComponent.COLOR_ADJUSTMENT.blue     = 1;
         
         this._widgets.clear();
         this._widgetHandlerMessageMap.clear();
@@ -618,23 +623,23 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         return this._roomBackground;
     }
 
-    private getRoomColorizer(): filters.ColorMatrixFilter
+    private getRoomColorizer(): AdjustmentFilter
     {
-        if(this._roomColorMatrix) return this._roomColorMatrix;
+        if(this._roomColorAdjustor) return this._roomColorAdjustor;
 
         const canvas = this.roomEngine.getRoomInstanceRenderingCanvas(this.roomSession.roomId, this.getFirstCanvasId());
 
         if(!canvas) return null;
 
-        const display = canvas.display;
+        const display = canvas.master;
 
         if(!display) return null;
 
-        this._roomColorMatrix = RoomComponent.COLOR_MATRIX;
+        this._roomColorAdjustor = RoomComponent.COLOR_ADJUSTMENT;
 
-        display.filters = [ this._roomColorMatrix ];
+        display.filters = [ this._roomColorAdjustor ];
 
-        return this._roomColorMatrix;
+        return this._roomColorAdjustor;
     }
 
     public setRoomBackgroundColor(hue: number, saturation: number, lightness: number): void
@@ -685,9 +690,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         const g = (this._roomColorizerColor >> 8 & 0xFF);
         const b = (this._roomColorizerColor & 0xFF);
 
-        colorMatrix.matrix[0]   = (r / 255);
-        colorMatrix.matrix[6]   = (g / 255);
-        colorMatrix.matrix[12]  = (b / 255);
+        colorMatrix.red     = (r / 255);
+        colorMatrix.green   = (g / 255);
+        colorMatrix.blue    = (b / 255);
     }
 
     public getFirstCanvasId(): number
@@ -735,5 +740,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get roomSession(): IRoomSession
     {
         return this._roomSession;
+    }
+
+    public get wiredService(): WiredService
+    {
+        return this._wiredService;
     }
 }

@@ -34,7 +34,7 @@ export class Animation implements IAnimation
         this._addData           = null;
         this._overriddenActions = null;
         this._overrideFrames    = null;
-        this._resetOnToggle     = _arg_2.resetOnToggle || false;
+        this._resetOnToggle     = (_arg_2.resetOnToggle || false);
 
         if(_arg_2.sprites && _arg_2.sprites.length)
         {

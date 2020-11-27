@@ -31,7 +31,7 @@ export class RoomDataHandler extends BaseHandler
         const roomData = parser.data;
 
         roomSession.tradeMode           = roomData.tradeMode;
-        roomSession.isGuildRoom         = (roomData.guildId !== 0);
+        roomSession.isGuildRoom         = (roomData.habboGroupId !== 0);
         roomSession.doorMode            = roomData.doorMode;
         roomSession.allowPets           = roomData.allowPets;
         roomSession.moderationSettings  = parser.moderation;

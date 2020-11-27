@@ -15,13 +15,11 @@ import { RoomAvatarInfoComponent } from '../component';
 	selector: 'nitro-room-avatarinfo-ownavatar-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-ownavatar-component context-menu">
-        <div class="card">
-            <div class="card-header">
-                <div class="header-title">{{ userName }}</div>
-            </div>
+        <div class="card align-items-center">
+            <div class="d-flex card-header align-items-center w-100">{{ userName }}</div>
             <div class="card-body">
                 <ng-container *ngFor="let entry of menu">
-                    <ul *ngIf="(mode === entry.mode)" class="list-group">
+                    <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush">
                         <ng-container *ngFor="let item of entry.items">
                             <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
                         </ng-container>

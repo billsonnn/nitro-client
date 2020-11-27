@@ -9,7 +9,7 @@ $navigator-height: 600px;
 $navigator-gutter-x: 120px;
 $navigator-gutter-y: $gutters-y;
 
-$inventory-width: 500px;
+$inventory-width: 515px;
 $inventory-height: 374px;
 $inventory-gutter-x: 120px;
 $inventory-gutter-y: $gutters-y;
@@ -21,3 +21,4 @@ $inventory-gutter-y: $gutters-y;
 @import './purse';
 @import './room';
 @import './toolbar';
+@import './wired';

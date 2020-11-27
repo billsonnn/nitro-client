@@ -1,0 +1,39 @@
+<div *ngIf="visible" class="row nitro-inventory-furni-component">
+    <div class="col-12" *ngIf="!groupItems.length">
+        {{ ('inventory.empty.title') | translate }}
+        {{ ('inventory.empty.desc') | translate }}
+    </div>
+    <ng-container *ngIf="groupItems.length">
+        <div class="col-7 d-flex flex-column" style="z-index: 1;">
+            <perfect-scrollbar class="grid-container position-relative w-100 px-1" style="min-height: 205px;max-height: 205px;">
+                <div class="grid-items grid-5">
+                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let groupItem of groupItems | paginate: paginateConfig" [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (groupItem === selectedGroup) }" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }" (mousedown)="selectGroup(groupItem)">
+                        <div class="d-flex flex-grow-1 align-items-center detail-image">
+                            <img [src]="getIconUrl(groupItem)" />
+                        </div>
+                        <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{ groupItem.getUnlockedCount() }}</div>
+                        <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{ groupItem.stuffData.uniqueNumber }}</div>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+            <pagination-template *ngIf="groupItems.length > paginateConfig.itemsPerPage" #p="paginationApi" [id]="paginateConfig.id" [maxSize]="11" (pageChange)="paginateConfig.currentPage = $event">
+                <ul class="pagination pagination-sm custom-pagination">
+                    <li class="page-item" *ngFor="let page of p.pages" [class.active]="p.getCurrent() === page.value">
+                        <div class="page-link" *ngIf="p.getCurrent() !== page.value" (click)="p.setCurrent(page.value)">{{ page.label }}</div>
+                        <div class="page-link" *ngIf="p.getCurrent() === page.value">{{ page.label }}</div>
+                    </li>
+                </ul>
+            </pagination-template>
+        </div>
+        <div class="col-5 d-flex flex-column">
+            <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
+            <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup" style="z-index: 1;">
+                <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedGroup.name }}</div>
+                <div class="btn-group-vertical w-100">
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-primary w-100" (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                    <button *ngIf="tradeRunning" type="button" class="btn btn-primary w-100" (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{ ('inventory.trading.offer') | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

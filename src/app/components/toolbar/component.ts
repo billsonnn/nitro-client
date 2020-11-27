@@ -12,7 +12,7 @@ import { Queue } from '../../../client/nitro/window/motion/Queue';
 import { Wait } from '../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../core/settings/service';
 import { SessionService } from '../../security/services/session.service';
-import { InventoryService } from '../inventory/service';
+import { InventoryService } from '../inventory/services/inventory.service';
 import { ToolbarIconEnum } from './enums/ToolbarIconEnum';
 
 @Component({
@@ -82,7 +82,12 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
     public visitDesktop(): void
     {
-        Nitro.instance.communication.connection.send(new DesktopViewComposer());
+        if(Nitro.instance.roomSessionManager.getSession(-1))
+        {
+            Nitro.instance.communication.connection.send(new DesktopViewComposer());
+
+            Nitro.instance.roomSessionManager.removeSession(-1);
+        }
     }
 
     private onRoomEngineEvent(event: RoomEngineEvent): void

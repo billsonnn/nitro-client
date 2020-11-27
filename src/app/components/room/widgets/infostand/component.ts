@@ -1,7 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { InventoryTradingService } from '../../../inventory/trading/service';
+import { InventoryService } from '../../../inventory/services/inventory.service';
+import { InventoryTradingService } from '../../../inventory/services/trading.service';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfostandUpdateEvent';
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../events/RoomWidgetRentableBotInfostandUpdateEvent';
@@ -43,7 +44,7 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
     public botData      = new InfoStandRentableBotData();
 
     constructor(
-        private _inventoryTradingService: InventoryTradingService,
+        private _inventoryService: InventoryService,
         private ngZone: NgZone,
         private componentFactoryResolver: ComponentFactoryResolver,
         private changeDetector: ChangeDetectorRef)
@@ -283,6 +284,6 @@ export class RoomInfoStandComponent extends ConversionTrackingWidget implements 
 
     public get inventoryTrading(): InventoryTradingService
     {
-        return this._inventoryTradingService;
+        return this._inventoryService.controller.tradeService;
     }
 }

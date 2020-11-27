@@ -27,7 +27,7 @@ export class RoomWidgetUserActionMessage extends RoomWidgetMessage
     public static RWUAM_DISMOUNT_PET: string = 'RWUAM_DISMOUNT_PET';
     public static RWUAM_SADDLE_OFF: string = 'RWUAM_SADDLE_OFF';
     public static RWUAM_TRAIN_PET: string = 'RWUAM_TRAIN_PET';
-    public static _Str_6480: string = ' RWUAM_RESPECT_PET';
+    public static RWUAM_RESPECT_PET: string = ' RWUAM_RESPECT_PET';
     public static RWUAM_TREAT_PET: string = 'RWUAM_TREAT_PET';
     public static RWUAM_REQUEST_PET_UPDATE: string = 'RWUAM_REQUEST_PET_UPDATE';
     public static RWUAM_START_NAME_CHANGE: string = 'RWUAM_START_NAME_CHANGE';

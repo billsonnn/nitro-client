@@ -5,6 +5,7 @@ import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
+import { NitroTimer } from '../core/utils/NitroTimer';
 import { IRoomManager } from '../room/IRoomManager';
 import { RoomManager } from '../room/RoomManager';
 import { AvatarRenderManager } from './avatar/AvatarRenderManager';
@@ -32,6 +33,7 @@ export class Nitro extends Application implements INitro
 
     private static INSTANCE: INitro         = null;
 
+    private _nitroTimer: NitroTimer;
     private _core: INitroCore;
     private _events: IEventDispatcher;
     private _localization: INitroLocalizationManager;
@@ -68,6 +70,7 @@ export class Nitro extends Application implements INitro
 
         if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
 
+        this._nitroTimer            = new NitroTimer();
         this._core                  = core;
         this._events                = new EventDispatcher();
         this._localization          = new NitroLocalizationManager();
@@ -201,7 +204,9 @@ export class Nitro extends Application implements INitro
 
     private onConfigurationLoadedEvent(event: ConfigurationEvent): void
     {
-        Nitro.instance.ticker.maxFPS = this.getConfiguration<number>("system.fps");
+        const fps = this.getConfiguration<number>("system.fps", 24);
+
+        Nitro.instance.ticker.maxFPS = fps;
     }
 
     public getConfiguration<T>(key: string, value: T = null): T
@@ -209,9 +214,14 @@ export class Nitro extends Application implements INitro
         return this._core.configuration.getValue<T>(key, value);
     }
 
-    public getLocalization(key: string): string
+    public getLocalization(key: string, replacements: { [index: string]: any } = null): string
     {
-        return this._localization.getValue(key);
+        return this._localization.getValue(key, replacements);
+    }
+
+    public get nitroTimer(): NitroTimer
+    {
+        return this._nitroTimer;
     }
 
     public get core(): INitroCore
