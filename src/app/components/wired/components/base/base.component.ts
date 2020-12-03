@@ -52,4 +52,16 @@ export class WiredBaseComponent implements OnInit
     {
         return this._wiredService.component.maximumItemSelectionCount;
     }
+
+    public get wiredType(): string
+    {
+        const wiredFactory = this._wiredService.component._Str_19071();
+
+        if(wiredFactory)
+        {
+            return wiredFactory._Str_1196();
+        }
+
+        return '';
+    }
 }

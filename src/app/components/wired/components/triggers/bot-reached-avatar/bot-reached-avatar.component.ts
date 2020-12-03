@@ -11,6 +11,8 @@ export class BotReachedAvatarComponent extends WiredTrigger
 {
     public static CODE: number = WiredTriggerType.BOT_REACHED_AVATAR;
 
+    public keyword: string = '';
+
     public get code(): number
     {
         return BotReachedAvatarComponent.CODE;
@@ -21,24 +23,18 @@ export class BotReachedAvatarComponent extends WiredTrigger
         return WiredMainComponent._Str_5431;
     }
 
-    // public readStringParamFromForm(k:IWindowContainer): string
-    // {
-    //     return this._Str_2453(k).text;
-    // }
-
     public onEditStart(trigger: Triggerable): void
     {
-        //this._Str_2453(k).text = _arg_2.stringData;
+        this.keyword = trigger.stringData;
+    }
+
+    public readStringParamFromForm(): string
+    {
+        return this.keyword;
     }
 
     public get hasSpecialInputs(): boolean
     {
         return true;
     }
-
-    // private _Str_2453(k:IWindowContainer):ITextFieldWindow
-    // {
-    //     var _local_2:ITextFieldWindow = ITextFieldWindow(k.findChildByName("bot_name"));
-    //     return _local_2;
-    // }
 }

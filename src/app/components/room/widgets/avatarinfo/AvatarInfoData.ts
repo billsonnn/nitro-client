@@ -203,7 +203,7 @@ export class AvatarInfoData
         this._canTrade = k.canTrade;
         this._canTradeReason = k._Str_6622;
         this._isIgnored = k.isIgnored;
-        this._respectLeft = k._Str_3577;
+        this._respectLeft = k.respectLeft;
         this._isOwnUser = (k.type === RoomWidgetUpdateInfostandUserEvent.OWN_USER);
         this._allowNameChange = k._Str_4330;
         this._isGuildRoom = k.isGuildRoom;

@@ -4,13 +4,17 @@
         <button type="button" class="close" (click)="cancel()"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body">
-        {{ furniName }}
-        {{ furniDescription }}
+        <div class="wired-info mb-2">
+            <p class="d-flex align-items-center mb-2"><i class="icon icon-wired-{{ wiredType }} mr-2"></i> {{ furniName }}<br />{{ furniDescription }}</p>
+        </div>
         <ng-content></ng-content>
-        <ng-container *ngIf="requiresFurni">
-            {{ ('wiredfurni.pickfurnis.caption') | translate:furniSelectionCount }}
-        </ng-container>
-        <button type="button" class="btn btn-primary" (click)="save()">{{ ('wiredfurni.ready') | translate }}</button>
-        <button type="button" class="btn btn-secondary" (click)="cancel()">{{ ('cancel') | translate }}</button>
+        <div *ngIf="requiresFurni" class="select-furni mt-2 pt-2">
+            <p class="font-weight-bold mb-0">{{ ('wiredfurni.pickfurnis.caption') | translate:furniSelectionCount }}</p>
+            <p class="mb-0">{{ ('wiredfurni.pickfurnis.desc') | translate }}</p>
+        </div>
+        <div class="btn-group w-100 mt-2">
+            <button type="button" class="btn btn-success" (click)="save()">{{ ('wiredfurni.ready') | translate }}</button>
+            <button type="button" class="btn btn-secondary" (click)="cancel()">{{ ('cancel') | translate }}</button>
+        </div>
     </div>
 </div>

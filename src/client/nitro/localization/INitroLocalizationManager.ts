@@ -2,7 +2,8 @@
 
 export interface INitroLocalizationManager extends INitroManager 
 {
-    getValue(key: string, replacements?: { [index: string]: any }): string
+    getValue(key: string, doParams?: boolean): string;
+    getValueWithParameter(key: string, parameter: string, replacement: string): string;
     setValue(key: string, value: string): void;
     registerParameter(key: string, parameter: string, value: string): void;
 }

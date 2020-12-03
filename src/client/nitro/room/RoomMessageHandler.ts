@@ -707,8 +707,6 @@ export class RoomMessageHandler extends Disposable
 
         if(!parser) return;
 
-        console.log(this._currentRoomId, parser.unitId, RoomObjectVariable.FIGURE_NUMBER_VALUE, parser.value)
-
         this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, parser.unitId, RoomObjectVariable.FIGURE_NUMBER_VALUE, parser.value);
     }
 

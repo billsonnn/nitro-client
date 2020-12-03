@@ -142,7 +142,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, event.connection);
 
-        //event.connection.send(new UserHomeRoomComposer(18532));
+        //event.connection.send(new UserHomeRoomComposer(555));
 
         event.connection.send(new UserInfoComposer());
     }

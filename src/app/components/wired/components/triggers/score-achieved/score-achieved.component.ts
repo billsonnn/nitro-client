@@ -1,5 +1,7 @@
-﻿import { Component } from '@angular/core';
+﻿import { Options } from '@angular-slider/ngx-slider';
+import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { WiredTrigger } from '../WiredTrigger';
 import { WiredTriggerType } from '../WiredTriggerType';
 
@@ -8,33 +10,56 @@ import { WiredTriggerType } from '../WiredTriggerType';
 })
 export class ScoreAchievedComponent extends WiredTrigger
 {
+    private static MINIMUM_VALUE: number = 1;
+    private static MAXIMUM_VALUE: number = 1000;
+    private static STEPPER_VALUE: number = 1;
+
     public static CODE: number = WiredTriggerType.SCORE_ACHIEVED;
 
-    //private _slider:SliderWindowController;
+    public score: number = 0;
+    public fakeUpdate: number = 0;
 
     public get code(): number
     {
         return ScoreAchievedComponent.CODE;
     }
 
-    // public readIntegerParamsFromForm(k:IWindowContainer):Array
-    // {
-    //     var _local_2:Array = new Array();
-    //     _local_2.push(this._slider.getValue());
-    //     return _local_2;
-    // }
-
-    public onInitStart(): void
-    {
-        // this._slider = new SliderWindowController(_arg_2, this._Str_2453(k), _arg_2.assets, 1, 1000, 1);
-        // this._slider._Str_2526(1);
-        // this._slider.addEventListener(Event.CHANGE, this.onSliderChange);
-    }
-
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = trigger.intData[0];
-        //this._slider._Str_2526(_local_3);
+        this.score = (trigger.intData[0] || 0);
+
+        this.updateLocaleParameter();
+    }
+
+    public readIntegerParamsFromForm(): number[]
+    {
+        return [ this.score ];
+    }
+
+    public onSliderChange(): void
+    {
+        this.updateLocaleParameter();
+    }
+
+    public decrease(): void
+    {
+        this.score -= 1;
+
+        if(this.score < ScoreAchievedComponent.MINIMUM_VALUE) this.score = ScoreAchievedComponent.MINIMUM_VALUE;
+    }
+
+    public increase(): void
+    {
+        this.score += 1;
+
+        if(this.score > ScoreAchievedComponent.MAXIMUM_VALUE) this.score = ScoreAchievedComponent.MAXIMUM_VALUE;
+    }
+
+    private updateLocaleParameter(): void
+    {
+        Nitro.instance.localization.registerParameter('wiredfurni.params.setscore', 'points', this.score.toString());
+
+        this.fakeUpdate++;
     }
 
     public get hasSpecialInputs(): boolean
@@ -42,25 +67,14 @@ export class ScoreAchievedComponent extends WiredTrigger
         return true;
     }
 
-    // private _Str_2453(k:IWindowContainer):IWindowContainer
-    // {
-    //     return k.findChildByName("score_slider_cont") as IWindowContainer;
-    // }
-
-    // private onSliderChange(k:Event): void
-    // {
-    //     var _local_2:SliderWindowController;
-    //     var _local_3:Number;
-    //     var _local_4: number;
-    //     if (k.type == Event.CHANGE)
-    //     {
-    //         _local_2 = (k.target as SliderWindowController);
-    //         if (_local_2)
-    //         {
-    //             _local_3 = _local_2.getValue();
-    //             _local_4 = int(_local_3);
-    //             this._roomEvents.localization.registerParameter("wiredfurni.params.setscore", "points", ("" + _local_4));
-    //         }
-    //     }
-    // }
+    public get sliderOptions(): Options
+    {
+        return {
+            floor: ScoreAchievedComponent.MINIMUM_VALUE,
+            ceil: ScoreAchievedComponent.MAXIMUM_VALUE,
+            step: ScoreAchievedComponent.STEPPER_VALUE,
+            hidePointerLabels: true,
+            hideLimitLabels: true,
+        };
+    }
 }

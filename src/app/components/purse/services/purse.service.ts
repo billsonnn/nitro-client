@@ -12,14 +12,12 @@ export class PurseService implements OnDestroy
     private _currencies: Map<number, number>;
 
     constructor(
-        private ngZone: NgZone)
+        private _ngZone: NgZone)
     {
         this._messages      = [];
         this._currencies    = new Map();
 
         this.registerMessages();
-
-        this.requestUpdate();
     }
 
     public ngOnDestroy(): void
@@ -29,7 +27,7 @@ export class PurseService implements OnDestroy
 
     private registerMessages(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             this.unregisterMessages();
 
@@ -44,7 +42,7 @@ export class PurseService implements OnDestroy
 
     private unregisterMessages(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             if(this._messages && this._messages.length)
             {
@@ -66,7 +64,7 @@ export class PurseService implements OnDestroy
 
         const parser = event.getParser();
 
-        this.ngZone.run(() =>
+        this._ngZone.run(() =>
         {
             this.setCurrency(-1, parseFloat(parser.credits));
         });
@@ -78,7 +76,7 @@ export class PurseService implements OnDestroy
 
         const parser = event.getParser();
 
-        this.ngZone.run(() =>
+        this._ngZone.run(() =>
         {
             for(let [ type, amount ] of parser.currencies) this.setCurrency(type, amount);
         });
@@ -92,5 +90,10 @@ export class PurseService implements OnDestroy
     public get currencies(): Map<number, number>
     {
         return this._currencies;
+    }
+
+    public get visibleCurrencies(): number[]
+    {
+        return Nitro.instance.getConfiguration<number[]>('system.currency.types', []);
     }
 }

@@ -1,15 +1,13 @@
 .nitro-hotelview-component {
-    
     display: block;
 	position: fixed;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 70px);
 	background: rgba(0, 0, 0, 1);
-	z-index: 0;
 
 	.hotel-image {
 		display: block;
-		position: fixed;
+		position: relative;
 		height: 100%;
 		width: 100%;
 		background-color: #68E5FF;
@@ -23,9 +21,9 @@
     }
 	
 	.avatar-image {
-		bottom: 25px;
-		left: 125px;
-		position: fixed;
-		z-index: 2;
+		bottom: 12px;
+		left: 63px;
+		position: absolute;
+		z-index: 1;
 	}
 }

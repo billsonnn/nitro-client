@@ -64,7 +64,7 @@
             <ng-container [ngSwitch]="state">
                 <button *ngSwitchCase=0 type="button" class="btn btn-primary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ 'inventory.trading.accept' | translate }}</button>
                 <button *ngSwitchCase=1 type="button" class="btn btn-primary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ (ownUserAccepts ? 'inventory.trading.modify' : 'inventory.trading.accept') | translate }}</button>
-                <button *ngSwitchCase=2 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.countdown' | translate: '{ "counter": ' + timerTick + ' }' }}</button>
+                <button *ngSwitchCase=2 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.countdown' | translate:'counter':timerTick }}</button>
                 <button *ngSwitchCase=3 type="button" class="btn btn-primary" (click)="progressTrade()">{{ 'inventory.trading.confirm' | translate }}</button>
                 <button *ngSwitchCase=4 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.info.waiting' | translate }}</button>
                 <button *ngSwitchCase=5 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.accept' | translate }}</button>

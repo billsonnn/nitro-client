@@ -4,8 +4,6 @@ $customstackheight-width: 300px;
     position: absolute;
     width: $customstackheight-width;
     max-width: $customstackheight-width;
-    left: calc(50vw - #{($customstackheight-width / 2)});
-    top: calc(50vh / 2);
 
     @media (pointer:none), (pointer:coarse) {
         position: fixed;

@@ -168,7 +168,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         if(skipUpdate)
         {
-            this._animationNumber = this._animationNumber | this.updateAnimation(scale);
+            this._animationNumber = (this._animationNumber | this.updateAnimation(scale));
         }
         else
         {
@@ -224,7 +224,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         this._selectedColor = model.getValue<number>(RoomObjectVariable.FURNITURE_COLOR);
         this._clickUrl      = model.getValue<string>(RoomObjectVariable.FURNITURE_AD_URL);
-        this._furnitureLift = model.getValue<number>(RoomObjectVariable.FURNITURE_LIFT_AMOUNT);
+        this._furnitureLift = (model.getValue<number>(RoomObjectVariable.FURNITURE_LIFT_AMOUNT) || 0);
 
         let alphaMultiplier = model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
 

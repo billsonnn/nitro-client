@@ -20,19 +20,19 @@ import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
-import { RoomInfoStandComponent } from './room/widgets/infostand/component';
+import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
 
 @Component({
 	selector: 'nitro-main-component',
     template: `
 	<div class="nitro-main-component">
+		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
 		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
-		<nitro-purse-component></nitro-purse-component>
+		<nitro-purse-main-component></nitro-purse-main-component>
 		<nitro-catalog-component></nitro-catalog-component>
 		<nitro-navigator-component [visible]="navigatorVisible"></nitro-navigator-component>
 		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
-		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
 		<nitro-wired-component></nitro-wired-component>
 		<nitro-room-component></nitro-room-component>
     </div>`
@@ -147,7 +147,7 @@ export class MainComponent implements OnInit, OnDestroy
 					Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
 
 					this.roomComponent.createWidget(RoomWidgetEnum.CHAT_WIDGET, RoomChatComponent);
-					this.roomComponent.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandComponent);
+					this.roomComponent.createWidget(RoomWidgetEnum.INFOSTAND, RoomInfoStandMainComponent);
 					this.roomComponent.createWidget(RoomWidgetEnum.LOCATION_WIDGET, null);
 					this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, null);
 					this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);

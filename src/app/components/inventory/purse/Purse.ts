@@ -13,7 +13,6 @@ export class Purse
     private _minutesSinceLastModified: number = -1;
     private _lastUpdated: number;
 
-
     public get clubDays(): number
     {
         return this._clubDays;

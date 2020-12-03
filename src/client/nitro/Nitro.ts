@@ -87,13 +87,8 @@ export class Nitro extends Application implements INitro
         this._core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onConfigurationLoadedEvent.bind(this));
     }
 
-    public static bootstrap(options: any): void
+    public static bootstrap(): void
     {
-        options = {
-            sso: (options.sso || null),
-            canvasParent: (options.canvasParent || document.body)
-        };
-
         if(Nitro.INSTANCE)
         {
             Nitro.INSTANCE.dispose();
@@ -119,7 +114,10 @@ export class Nitro extends Application implements INitro
 
         canvas.addEventListener('webglcontextlost', () => instance.events.dispatchEvent(new NitroEvent(Nitro.WEBGL_CONTEXT_LOST)));
 
-        instance.communication.demo.setSSO(options.sso);
+        //@ts-ignore
+        let sso = (NitroConfig.sso as string);
+
+        instance.communication.demo.setSSO(sso);
     }
 
     public init(): void
@@ -214,9 +212,14 @@ export class Nitro extends Application implements INitro
         return this._core.configuration.getValue<T>(key, value);
     }
 
-    public getLocalization(key: string, replacements: { [index: string]: any } = null): string
+    public getLocalization(key: string): string
     {
-        return this._localization.getValue(key, replacements);
+        return this._localization.getValue(key);
+    }
+
+    public getLocalizationWithParameter(key: string, parameter: string, replacement: string): string
+    {
+        return this._localization.getValueWithParameter(key, parameter, replacement);
     }
 
     public get nitroTimer(): NitroTimer

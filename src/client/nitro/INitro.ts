@@ -15,7 +15,8 @@ export interface INitro extends Application
     init(): void;
     dispose(): void;
     getConfiguration<T>(key: string, value?: T): T;
-    getLocalization(key: string, replacements?: { [index: string]: any }): string;
+    getLocalization(key: string): string;
+    getLocalizationWithParameter(key: string, parameter: string, replacement: string): string;
     nitroTimer: NitroTimer;
     core: INitroCore;
     events: IEventDispatcher;

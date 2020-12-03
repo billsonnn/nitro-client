@@ -1,6 +1,4 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { AvatarScaleType } from '../../../../../client/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '../../../../../client/nitro/avatar/enum/AvatarSetType';
 import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
 import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
 import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
@@ -27,7 +25,7 @@ import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatI
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
-import { RoomInfoStandComponent } from '../infostand/component';
+import { RoomInfoStandMainComponent } from '../infostand/components/main/main.component';
 import { RoomWidgetChangeMottoMessage } from '../messages/RoomWidgetChangeMottoMessage';
 import { RoomWidgetFurniActionMessage } from '../messages/RoomWidgetFurniActionMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
@@ -38,17 +36,14 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     private static ACTIVITY_POINTS_DISPLAY_ENABLED: boolean = true;
 
     private _container: IRoomWidgetHandlerContainer;
-    private _widget: RoomInfoStandComponent;
-    private _avatarImageCache: Map<string, HTMLImageElement>;
-    private _furniImageCache: Map<string, HTMLImageElement>;
+    private _widget: RoomInfoStandMainComponent;
 
     private _disposed: boolean;
 
     constructor()
     {
-        this._container         = null;
-        this._widget            = null;
-        this._avatarImageCache  = new Map();
+        this._container = null;
+        this._widget    = null;
 
         this._disposed  = false;
     }
@@ -57,7 +52,6 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     {
         if(this.disposed) return;
 
-        this._avatarImageCache = null;
         this.container = null;
         
         this._disposed  = true;
@@ -257,9 +251,6 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetUserActionMessage.RWUAM_REPORT:
                 break;
             case RoomWidgetUserActionMessage.RWUAM_REPORT_CFH_OTHER:
-                break;
-            case RoomWidgetChangeMottoMessage.RWVM_CHANGE_MOTTO_MESSAGE:
-                this._container.roomSession.sendMottoMessage((message as RoomWidgetChangeMottoMessage).motto);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_AMBASSADOR_ALERT_USER:
                 this._container.roomSession.sendAmbassadorAlertMessage((message as RoomWidgetUserActionMessage).userId);
@@ -621,7 +612,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             }
 
             event.isIgnored = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
-            event._Str_3577 = this._container.sessionDataManager.respectsLeft;
+            event.respectLeft = this._container.sessionDataManager.respectsLeft;
 
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;
@@ -706,17 +697,17 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         event.name          = _arg_4.name;
         event.motto         = _arg_4.custom;
-        event._Str_2394     = _arg_4.webID;
-        event._Str_3313     = roomIndex;
+        event.id     = _arg_4.webID;
+        event.roomIndex     = roomIndex;
         event.ownerId       = _arg_4.ownerId;
         event.ownerName     = _arg_4.ownerName;
-        event._Str_2899      = _arg_4.botSkills;
+        event.botSkills      = _arg_4.botSkills;
 
         let roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
 
         if(roomObject)
         {
-            event._Str_3249 = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
+            event.carryId = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);
         }
 
         event._Str_3246             = this._container.roomSession.isRoomOwner;
@@ -726,31 +717,6 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         event.figure                = _arg_4.figure;
 
         this._container.events.dispatchEvent(event);
-    }
-
-    public getUserImage(figure: string): HTMLImageElement
-    {
-        let existing = this._avatarImageCache.get(figure);
-
-        if(!existing)
-        {
-            const avatarImage = this._container.avatarRenderManager.createAvatarImage(figure, AvatarScaleType.LARGE, null, null);
-
-            if(avatarImage)
-            {
-                avatarImage.setDirection(AvatarSetType.FULL, 4);
-                
-                const image = avatarImage.getCroppedImage(AvatarSetType.FULL);
-
-                if(image) existing = image;
-
-                avatarImage.dispose();
-            }
-
-            if(existing) this._avatarImageCache.set(figure, existing);
-        }
-
-        return existing;
     }
 
     private _Str_9213(event: RoomWidgetUpdateInfostandUserEvent): boolean
@@ -910,12 +876,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(!k) return;
     }
 
-    public get widget(): RoomInfoStandComponent
+    public get widget(): RoomInfoStandMainComponent
     {
         return this._widget;
     }
 
-    public set widget(widget: RoomInfoStandComponent)
+    public set widget(widget: RoomInfoStandMainComponent)
     {
         this._widget = widget;
     }

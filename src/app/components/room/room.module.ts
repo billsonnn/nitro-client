@@ -9,12 +9,12 @@ import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
-import { RoomInfoStandBotComponent } from './widgets/infostand/bot/component';
-import { RoomInfoStandComponent } from './widgets/infostand/component';
-import { RoomInfoStandFurniComponent } from './widgets/infostand/furni/component';
-import { RoomInfoStandPetComponent } from './widgets/infostand/pet/component';
-import { RoomInfoStandRentableBotComponent } from './widgets/infostand/rentablebot/component';
-import { RoomInfoStandUserComponent } from './widgets/infostand/user/component';
+import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
+import { RoomInfoStandFurniComponent } from './widgets/infostand/components/furni/furni.component';
+import { RoomInfoStandMainComponent } from './widgets/infostand/components/main/main.component';
+import { RoomInfoStandPetComponent } from './widgets/infostand/components/pet/pet.component';
+import { RoomInfoStandRentableBotComponent } from './widgets/infostand/components/rentablebot/rentablebot.component';
+import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 
@@ -28,7 +28,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomChatComponent,
         RoomChatItemComponent,
         RoomChatInputStyleSelectorComponent,
-        RoomInfoStandComponent,
+        RoomInfoStandMainComponent,
         RoomInfoStandBotComponent,
         RoomInfoStandFurniComponent,
         RoomInfoStandPetComponent,
@@ -47,7 +47,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomChatComponent,
         RoomChatItemComponent,
         RoomChatInputStyleSelectorComponent,
-        RoomInfoStandComponent,
+        RoomInfoStandMainComponent,
         RoomInfoStandBotComponent,
         RoomInfoStandFurniComponent,
         RoomInfoStandPetComponent,

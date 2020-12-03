@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, NgZone, OnDestroy, ViewContainerRef } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
@@ -7,37 +7,63 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 })
 export class DraggableDirective implements AfterViewInit, OnDestroy
 {
+    private static POS_MEMORY = new Map();
+
     @Input()
     public dragHandle: string;
 
     @Input()
     public dragTarget: string;
+
+    @Input()
+    public center: boolean = true;
   
-    private target: HTMLElement = null;
-    private handle: HTMLElement = null;
-    private delta               = {x: 0, y: 0};
-    private offset              = {x: 0, y: 0};
-  
-    private destroy$ = new Subject<void>();
+    private _name: string           = null;
+    private _target: HTMLElement    = null;
+    private _handle: HTMLElement    = null;
+    private _delta                  = {x: 0, y: 0};
+    private _offset                 = {x: 0, y: 0};
+    private _destroy                = new Subject<void>();
   
     constructor(
-        private elementRef: ElementRef,
-        private zone: NgZone) {}
+        private _viewContainerRef: ViewContainerRef,
+        private _elementRef: ElementRef,
+        private _ngZone: NgZone) {}
   
     public ngAfterViewInit(): void
     {
-        const element = (this.elementRef.nativeElement as HTMLElement);
+        this._name = this._viewContainerRef['_hostTNode']['classesWithoutHost'];
+        
+        const element = (this._elementRef.nativeElement as HTMLElement);
 
         if(!element) return;
 
-        this.handle = this.dragHandle ? element.querySelector(this.dragHandle) : element;
-        this.target = this.dragTarget ? element.querySelector(this.dragTarget) : element;
+        this._handle = this.dragHandle ? element.querySelector(this.dragHandle) : element;
+        this._target = this.dragTarget ? element.querySelector(this.dragTarget) : element;
 
-        if(this.handle)
+        if(this._handle)
         {
-            this.handle.classList.add('header-draggable');
+            this._handle.classList.add('header-draggable');
 
-            this.handle.parentElement.classList.add('header-draggable');
+            this._handle.parentElement.classList.add('header-draggable');
+        }
+
+        if(this.center)
+        {
+            element.style.top = `calc(50vh - ${ (element.offsetHeight / 2) }px)`;
+            element.style.left = `calc(50vw - ${ (element.offsetWidth / 2) }px)`;
+        }
+
+        const memory = DraggableDirective.POS_MEMORY.get(this._name);
+
+        if(memory)
+        {
+            this._offset.x  = memory.offset.x;
+            this._offset.y  = memory.offset.y;
+            this._delta.x   = memory.delta.x;
+            this._delta.y   = memory.delta.y;
+
+            this.translate();
         }
 
         this.setupEvents();
@@ -45,21 +71,21 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
   
     public ngOnDestroy(): void
     {
-        if(this.handle)
+        if(this._handle)
         {
-            this.handle.classList.remove('header-draggable');
+            this._handle.classList.remove('header-draggable');
 
-            this.handle.parentElement.classList.remove('header-draggable');
+            this._handle.parentElement.classList.remove('header-draggable');
         }
         
-        this.destroy$.next();
+        this._destroy.next();
     }
 
     private setupEvents(): void
     {
-        this.zone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
-            let mousedown$  = fromEvent(this.handle, 'mousedown');
+            let mousedown$  = fromEvent(this._handle, 'mousedown');
             let mousemove$  = fromEvent(document, 'mousemove');
             let mouseup$    = fromEvent(document, 'mouseup');
     
@@ -75,7 +101,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
                                 map((event: MouseEvent) => {
                                     event.preventDefault();
 
-                                    this.delta = {
+                                    this._delta = {
                                         x: event.clientX - startX,
                                         y: event.clientY - startY
                                     };
@@ -83,32 +109,43 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
                                 takeUntil(mouseup$)
                             );
                     }),
-                    takeUntil(this.destroy$)
+                    takeUntil(this._destroy)
                 );
     
             mousedrag$.subscribe(() =>
             {
-                if(this.delta.x === 0 && this.delta.y === 0) return;
+                if(this._delta.x === 0 && this._delta.y === 0) return;
         
                 this.translate();
             });
     
             mouseup$
                 .pipe(
-                    takeUntil(this.destroy$)
+                    takeUntil(this._destroy)
                 );
                 
             mouseup$.subscribe(() =>
             {
-                this.offset.x  += this.delta.x;
-                this.offset.y  += this.delta.y;
-                this.delta      = {x: 0, y: 0};
+                this._offset.x  += this._delta.x;
+                this._offset.y  += this._delta.y;
+                this._delta      = {x: 0, y: 0};
+
+                DraggableDirective.POS_MEMORY.set(this._name, {
+                    offset: {
+                        x: this._offset.x,
+                        y: this._offset.y
+                    },
+                    delta: {
+                        x: this._delta.x,
+                        y: this._delta.y
+                    }
+                });
             });
         });
     }
   
     private translate(): void
     {
-        this.target.style.transform = `translate(${this.offset.x + this.delta.x}px, ${this.offset.y + this.delta.y}px)`;
+        this._target.style.transform = `translate(${this._offset.x + this._delta.x}px, ${this._offset.y + this._delta.y}px)`;
     }
 }

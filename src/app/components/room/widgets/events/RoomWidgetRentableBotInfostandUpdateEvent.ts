@@ -10,7 +10,7 @@ export class RoomWidgetRentableBotInfostandUpdateEvent extends RoomWidgetUpdateE
     private _Str_4900: number = 0;
     private _figure: string = "";
     private _badges: string[];
-    private _Str_5228: number = 0;
+    private _caryId: number = 0;
     private _Str_5131: number = 0;
     private _ownerId: number;
     private _ownerName: string;
@@ -46,12 +46,12 @@ export class RoomWidgetRentableBotInfostandUpdateEvent extends RoomWidgetUpdateE
         return this._motto;
     }
 
-    public set _Str_2394(k: number)
+    public set id(k: number)
     {
         this._Str_4900 = k;
     }
 
-    public get _Str_2394(): number
+    public get id(): number
     {
         return this._Str_4900;
     }
@@ -126,32 +126,32 @@ export class RoomWidgetRentableBotInfostandUpdateEvent extends RoomWidgetUpdateE
         return this._Str_4028;
     }
 
-    public set _Str_3249(k: number)
+    public set carryId(k: number)
     {
-        this._Str_5228 = k;
+        this._caryId = k;
     }
 
-    public get _Str_3249(): number
+    public get carryId(): number
     {
-        return this._Str_5228;
+        return this._caryId;
     }
 
-    public set _Str_3313(k: number)
+    public set roomIndex(k: number)
     {
         this._Str_5131 = k;
     }
 
-    public get _Str_3313(): number
+    public get roomIndex(): number
     {
         return this._Str_5131;
     }
 
-    public get _Str_2899(): number[]
+    public get botSkills(): number[]
     {
         return this._Str_3986;
     }
 
-    public set _Str_2899(k: number[])
+    public set botSkills(k: number[])
     {
         this._Str_3986 = k;
     }

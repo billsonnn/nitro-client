@@ -75,22 +75,19 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
         this._furniSelectedIds = [ ...this._updated.selectedItems ];
 
-        setTimeout(() =>
+        wired.onEditStart(this._updated);
+
+        this._selectionVisualizer.applySelectionShaderToFurni(this._furniSelectedIds);
+
+        if(this._updated instanceof ActionDefinition)
         {
-            wired.onEditStart(this._updated);
-
-            this._selectionVisualizer.applySelectionShaderToFurni(this._furniSelectedIds);
-
-            if(this._updated instanceof ActionDefinition)
-            {
-            //     _local_5 = ActionDefinition(this._updated);
-            //     _local_6 = _local_5._Str_25459;
-            //     this._delaySlider._Str_2526(_local_6);
-            }
-        }, 0);
+        //     _local_5 = ActionDefinition(this._updated);
+        //     _local_6 = _local_5._Str_25459;
+        //     this._delaySlider._Str_2526(_local_6);
+        }
     }
 
-    private _Str_19071(): IUserDefinedRoomEventsCtrl
+    public _Str_19071(): IUserDefinedRoomEventsCtrl
     {
         if(this._updated instanceof TriggerDefinition) return this._triggerConfs;
 

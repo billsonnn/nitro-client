@@ -11,7 +11,8 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            configurationUrl: 'https://nitro-assets.hrw.pw/configuration.json'
+            configurationUrl: 'https://nitro-assets.hrw.pw/configuration.json',
+            sso: (new URLSearchParams(window.location.search).get('sso') || null)
         };
     </script>
 </body>

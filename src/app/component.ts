@@ -33,6 +33,9 @@ export class AppComponent implements OnInit, OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
+            //@ts-ignore
+            if(!NitroConfig) throw new Error('NitroConfig is not defined!');
+            
             if(!WebGL.isWebGLAvailable())
             {
                 this.onNitroEvent(new NitroEvent(Nitro.WEBGL_UNAVAILABLE));
@@ -40,12 +43,7 @@ export class AppComponent implements OnInit, OnDestroy
                 return;
             }
             
-            if(!Nitro.instance)
-            {
-                Nitro.bootstrap({
-                    sso: (new URLSearchParams(window.location.search).get('sso') || null)
-                });
-            }
+            if(!Nitro.instance) Nitro.bootstrap();
 
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, this.onNitroEvent.bind(this));
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, this.onNitroEvent.bind(this));

@@ -1,0 +1,23 @@
+<div class="d-flex flex-column align-items-end">
+    <div class="card nitro-room-infostand-furni-component">
+        <div class="card-header">
+            {{ furniData.name }}
+            <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="card-body">
+            <div class="w-100">
+                <img class="d-block mx-auto" [src]="furniData.imageUrl" />
+            </div>
+            <div class="d-flex flex-column mt-2">
+                <p class="text-center w-100">{{ furniData.description }}</p>
+                <p class="mb-0">{{ ('furni.owner') | translate }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="button-container btn-group mt-2">
+        <button *ngIf="canMove" type="button" class="btn btn-primary" (click)="processButtonAction('move')">{{ 'infostand.button.move' | translate }}</button>
+        <button *ngIf="canRotate" type="button" class="btn btn-primary" (click)="processButtonAction('rotate')">{{ 'infostand.button.rotate' | translate }}</button>
+        <button *ngIf="(pickupMode !== 0)" type="button" class="btn btn-primary" (click)="processButtonAction('pickup')">{{ (pickupMode === 1 ? 'infostand.button.eject' : 'infostand.button.pickup') | translate }}</button>
+        <button *ngIf="canUse" type="button" class="btn btn-primary" (click)="processButtonAction('use')">{{ 'infostand.button.use' | translate }}</button>
+    </div>
+</div>

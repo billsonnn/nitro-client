@@ -1,0 +1,5 @@
+<div class="nitro-purse-component">
+    <ng-container *ngFor="let currency of currencies | keyvalue">
+        <div *ngIf="isVisible(currency.key)" nitro-purse-currency-component [type]="currency.key" [value]="currency.value"></div>
+    </ng-container>
+</div>

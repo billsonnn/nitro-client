@@ -6,9 +6,9 @@ import { MainComponent } from './component';
 import { HotelViewModule } from './hotelview';
 import { InventoryModule } from './inventory/inventory.module';
 import { NavigatorModule } from './navigator/navigator.module';
-import { PurseModule } from './purse';
+import { PurseModule } from './purse/purse.module';
 import { RoomModule } from './room/room.module';
-import { ToolbarModule } from './toolbar';
+import { ToolbarModule } from './toolbar/toolbar.module';
 import { WiredModule } from './wired/wired.module';
 
 @NgModule({

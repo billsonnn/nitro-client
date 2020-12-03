@@ -149,12 +149,12 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._groupName;
     }
 
-    public set _Str_5235(k: string)
+    public set groupBadgeId(k: string)
     {
         this._Str_11289 = k;
     }
 
-    public get _Str_5235(): string
+    public get groupBadgeId(): string
     {
         return this._Str_11289;
     }
@@ -169,12 +169,12 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
         return this._canBeAskedForAFriend;
     }
 
-    public set _Str_3577(k: number)
+    public set respectLeft(k: number)
     {
         this._Str_3437 = k;
     }
 
-    public get _Str_3577(): number
+    public get respectLeft(): number
     {
         return this._Str_3437;
     }

@@ -4,8 +4,6 @@
     max-width: $navigator-width;
     height: $navigator-height;
     max-height: $navigator-height;
-    left: calc(50vw - #{($navigator-width / 2)});
-    top: calc(50vh - #{($navigator-height / 2)});
 }
 
 .search-result-item {

@@ -2,7 +2,19 @@
     position: absolute;
     width: 275px;
     max-width: 275px;
-    left: calc(50vw - #{($navigator-width / 2)});
-    //top: calc(50vh - #{($navigator-height / 2)});
-    top: 45vh;
+
+    .card-body {
+
+        .wired-info {
+            border-bottom: $card-cap-border-width solid $card-cap-border-color;
+        }
+
+        .select-furni {
+            border-top: $card-cap-border-width solid $card-cap-border-color;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
 }

@@ -10,6 +10,21 @@ i {
         background-color: transparent;
         background-repeat: no-repeat;
         background-position: center;
+        background-size: contain;
+
+        &.icon-nitro-light {
+            background-image: url('https://nitro-assets.hrw.pw/logos/nitro-n-light.svg');
+        }
+
+        &.icon-nitro-dark {
+            background-image: url('https://nitro-assets.hrw.pw/logos/nitro-n-dark.svg');
+        }
+
+        &.icon-nitro-light,
+        &.icon-nitro-dark {
+            width: 100%;
+            height: 40px;
+        }
 
         &.icon-currency--1 {
             background-image: url('./images/wallet/icons/credit.png');
@@ -101,9 +116,27 @@ i {
             width: 36px;
             height: 32px;
 
-            &.is-unsee {
+            &.is-unseen {
                 background-image: url('./images/toolbar/icons/message_unsee.gif');
             }
+        }
+
+        &.icon-wired-trigger {
+            background-image: url('./images/wired/icon_trigger.png');
+            width: 13px;
+            height: 14px;
+        }
+
+        &.icon-wired-condition {
+            background-image: url('./images/wired/icon_condition.png');
+            width: 13px;
+            height: 14px;
+        }
+
+        &.icon-wired-action {
+            background-image: url('./images/wired/icon_action.png');
+            width: 13px;
+            height: 14px;
         }
 
         &.arrow-left-icon {

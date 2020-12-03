@@ -97,11 +97,9 @@ export class CatalogService
     {
         if(!furniData) return null;
 
-        let furniName = furniData.className;
-
         const assetUrl = Nitro.instance.roomEngine.roomContentLoader.getAssetUrls(furniData.className, (furniData.colorId.toString()), true);
 
-        return ((assetUrl[0]) || null);
+        return ((assetUrl && assetUrl[0]) || null);
     }
 
     public get tabEmitter(): EventEmitter<CatalogPageData>
