@@ -10,7 +10,7 @@ import { NavigatorDoorbellComponent } from '../doorbell/doorbell.component';
 import { NavigatorPasswordComponent } from '../password/password.component';
 
 @Component({
-	selector: 'nitro-navigator-component',
+	selector: 'nitro-navigator-main-component',
     templateUrl: './main.template.html'
 })
 export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy

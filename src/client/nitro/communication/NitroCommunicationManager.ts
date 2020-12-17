@@ -102,6 +102,8 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
     {
         if(!this._connection) return;
 
+        console.log('remove', event);
+
         this._connection.removeMessageEvent(event);
     }
 

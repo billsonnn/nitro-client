@@ -30,9 +30,9 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
 		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
 		<nitro-purse-main-component></nitro-purse-main-component>
-		<nitro-catalog-component></nitro-catalog-component>
-		<nitro-navigator-component [visible]="navigatorVisible"></nitro-navigator-component>
-		<nitro-inventory-component [visible]="inventoryVisible"></nitro-inventory-component>
+		<nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
+		<nitro-navigator-main-component [visible]="navigatorVisible"></nitro-navigator-main-component>
+		<nitro-inventory-main-component [visible]="inventoryVisible"></nitro-inventory-main-component>
 		<nitro-wired-component></nitro-wired-component>
 		<nitro-room-component></nitro-room-component>
     </div>`
@@ -245,6 +245,11 @@ export class MainComponent implements OnInit, OnDestroy
 	public get landingViewVisible(): boolean
 	{
 		return this._landingViewVisible;
+	}
+
+	public get catalogVisible(): boolean
+	{
+		return this._settingsService.catalogVisible;
 	}
 
 	public get navigatorVisible(): boolean

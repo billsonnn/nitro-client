@@ -28,19 +28,6 @@ export class ExtendedSprite extends Sprite
         this._pairedSpriteUpdateCounter = -1;
     }
 
-    public destroy(options?: {
-        children?: boolean;
-        texture?: boolean;
-        baseTexture?: boolean;
-    }): void
-    {
-        const texture = this.texture;
-
-        super.destroy(options);
-
-        if(texture instanceof RenderTexture) texture.destroy(true);
-    }
-
     public needsUpdate(pairedSpriteId: number, pairedSpriteUpdateCounter: number): boolean
     {
         if((this._pairedSpriteId === pairedSpriteId) && (this._pairedSpriteUpdateCounter === pairedSpriteUpdateCounter)) return false;

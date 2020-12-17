@@ -574,7 +574,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             return true;
         }
 
-        if(extendedSprite.needsUpdate(objectSprite.id, objectSprite.updateCounter) || RoomEnterEffect._Str_19559())
+        if(extendedSprite.needsUpdate(objectSprite.id, objectSprite.updateCounter) || RoomEnterEffect.isVisualizationOn())
         {
             extendedSprite.tag              = objectSprite.tag;
             extendedSprite.alphaTolerance   = objectSprite.alphaTolerance;
@@ -714,20 +714,20 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     private _Str_21914(sprite: ExtendedSprite, _arg_2: IRoomObjectSprite): void
     {
-        if(!RoomEnterEffect._Str_19559() || !_arg_2) return;
+        if(!RoomEnterEffect.isVisualizationOn() || !_arg_2) return;
 
         switch(_arg_2.spriteType)
         {
             case RoomObjectSpriteType._Str_10494:
                 return;
             case RoomObjectSpriteType._Str_8616:
-                sprite.alpha = RoomEnterEffect._Str_16017(0.9);
+                sprite.alpha = RoomEnterEffect.getDelta(0.9);
                 return;
             case RoomObjectSpriteType._Str_11629:
-                sprite.alpha = RoomEnterEffect._Str_16017(0.5);
+                sprite.alpha = RoomEnterEffect.getDelta(0.5);
                 return;
             default:
-                sprite.alpha = RoomEnterEffect._Str_16017(0.1);
+                sprite.alpha = RoomEnterEffect.getDelta(0.1);
         }
     }
 

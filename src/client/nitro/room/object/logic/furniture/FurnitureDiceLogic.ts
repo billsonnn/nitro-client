@@ -51,12 +51,12 @@ export class FurnitureDiceLogic extends FurnitureLogic
                 }
                 else
                 {
-                    if(((event._Str_4216 === 'activate') || (this.object.getState(0) === 0)) || (this.object.getState(0) === 100))
+                    if(((event.spriteTag === 'activate') || (this.object.getState(0) === 0)) || (this.object.getState(0) === 100))
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
                     }
                     
-                    else if(event._Str_4216 === 'deactivate')
+                    else if(event.spriteTag === 'deactivate')
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_OFF, this.object);
                     }

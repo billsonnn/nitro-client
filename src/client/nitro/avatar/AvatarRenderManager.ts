@@ -4,6 +4,7 @@ import { NitroManager } from '../../core/common/NitroManager';
 import { NitroEvent } from '../../core/events/NitroEvent';
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { Nitro } from '../Nitro';
+import { FigureDataContainer } from '../utils/FigureDataContainer';
 import { AssetAliasCollection } from './alias/AssetAliasCollection';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
 import { AvatarFigureContainer } from './AvatarFigureContainer';
@@ -20,6 +21,7 @@ import { IAvatarImageListener } from './IAvatarImageListener';
 import { IAvatarRenderManager } from './IAvatarRenderManager';
 import { PlaceHolderAvatarImage } from './PlaceHolderAvatarImage';
 import { AvatarStructureDownload } from './structure/AvatarStructureDownload';
+import { IFigurePartSet } from './structure/figure/IFigurePartSet';
 import { IFigureSetData } from './structure/IFigureSetData';
 import { IStructureData } from './structure/IStructureData';
 
@@ -329,6 +331,45 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         }
 
         return !(isValid);
+    }
+
+    public isValidFigureSetForGender(setId: number, gender: string): boolean
+    {
+        const structure = this.structureData;
+        const partSet   = structure._Str_938(setId);
+
+        return !!(partSet && ((partSet.gender.toUpperCase() === 'U') || (partSet.gender.toUpperCase() === gender.toUpperCase())));
+    }
+
+    public getFigureStringWithFigureIds(k: string, _arg_2: string, _arg_3: number[]): string
+    {
+        const container = new FigureDataContainer();
+
+        container._Str_2153(k, _arg_2);
+
+        const partSets: IFigurePartSet[] = this._Str_1667(_arg_3);
+
+        for(let partSet of partSets)
+        {
+            container._Str_2088(partSet.type, partSet.id, container.getColourIds(partSet.type));
+        }
+
+        return container._Str_1008();
+    }
+
+    private _Str_1667(k: number[]): IFigurePartSet[]
+    {
+        const structure                     = this.structureData;
+        const partSets: IFigurePartSet[]   = [];
+
+        for(let _local_4 of k)
+        {
+            const partSet = structure._Str_938(_local_4);
+
+            if(partSet) partSets.push(partSet);
+        }
+
+        return partSets;
     }
 
     public getAssetByName(name: string): IGraphicAsset

@@ -159,6 +159,7 @@ export class IncomingHeader
     public static USER_CLOTHING                = 1450;
     public static USER_CREDITS                 = 3475;
     public static USER_CURRENCY                = 2018;
+    public static USER_CURRENCY_UPDATE         = 2275;
     public static USER_EFFECTS                 = 340;
     public static USER_FAVORITE_ROOM           = 2524;
     public static USER_FAVORITE_ROOM_COUNT     = 151;

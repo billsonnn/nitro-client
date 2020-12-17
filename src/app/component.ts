@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ConfigurationEvent } from '../client/core/configuration/ConfigurationEvent';
 import { NitroEvent } from '../client/core/events/NitroEvent';
 import { AvatarRenderEvent } from '../client/nitro/avatar/events/AvatarRenderEvent';
@@ -16,7 +16,7 @@ import { WebGL } from '../client/nitro/utils/WebGL';
         <nitro-main-component *ngIf="isReady && !isError"></nitro-main-component>
     </div>`
 })
-export class AppComponent implements OnInit, OnDestroy
+export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
 {
     public message: string              = 'Starting';
     public percentage: number           = 0;
@@ -28,6 +28,11 @@ export class AppComponent implements OnInit, OnDestroy
 
     constructor(
         private _ngZone: NgZone) {}
+
+    public ngAfterViewChecked(): void
+    {
+        //console.log('checked');
+    }
 
     public ngOnInit(): void
     {

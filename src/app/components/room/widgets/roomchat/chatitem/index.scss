@@ -81,7 +81,7 @@
     .chat-right {
         padding: 5px 8px 5px 5px;
         line-height: 16px;
-        word-break: break-all;
+        word-break: break-word;
     }
 
     .chat-left {
@@ -101,10 +101,6 @@
             img {
                 position: relative;
                 bottom: -4px;
-
-                &.scale-0-5 {
-                    transform: scale((0.5));
-                }
             }
         }
     }
@@ -130,14 +126,18 @@
         }
     }
 
-    &.chat-type-0 { // normal
-        .chat-right {
-            font-weight: 300;
-            font-size: 13px;
-        }
+    &.chat-type-0,
+    &.chat-type-1,
+    &.chat-type-2 {
 
         .chat-left {
             background-image: linear-gradient(0deg, rgba(0,0,0,0.3), rgba(0,0,0,0.3));
+        }
+    }
+
+    &.chat-type-0 { // normal
+        .chat-right {
+            font-weight: 300;
         }
     }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Nitro } from '../../../../../client/nitro/Nitro';
 import { PurseService } from '../../services/purse.service';
 
 @Component({
@@ -19,6 +20,13 @@ export class PurseMainComponent implements OnInit
         if(this._purseService.visibleCurrencies.indexOf(type) === -1) return false;
 
         return true;
+    }
+
+    public getCurrencyUrl(type: number): string
+    {
+        let url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
+
+        return url.replace('%type%', type.toString());
     }
 
     public get currencies(): Map<number, number>

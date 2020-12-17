@@ -1,54 +1,249 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
+import { CatalogModeEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogModeEvent';
+import { CatalogPageEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPageEvent';
+import { CatalogPagesEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPagesEvent';
+import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
+import { CatalogPurchaseFailedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseFailedEvent';
+import { CatalogPurchaseUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogSearchEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSearchEvent';
+import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
+import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
+import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
+import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
+import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogProductOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { CatalogPurchaseData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPurchaseData';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
+import { SettingsService } from '../../../core/settings/service';
+import { AlertService } from '../../../shared/services/alert/service';
+import { CatalogMainComponent } from '../components/main/main.component';
 
 @Injectable()
-export class CatalogService
+export class CatalogService implements OnDestroy
 {
-    private _tabEmitter: EventEmitter<CatalogPageData>;
-    private _pageEmitter: EventEmitter<CatalogPageData>;
-    private _offerEmitter: EventEmitter<CatalogPageOfferData>;
-    private _purchaseEmitter: EventEmitter<CatalogPurchaseData>;
+    public static MODE_NORMAL: string = 'NORMAL';
 
-    constructor()
+    private _messages: IMessageEvent[] = [];
+    private _component: CatalogMainComponent = null;
+    private _catalogMode: number = -1;
+    private _catalogRoot: CatalogPageData = null;
+    private _activePage: CatalogPageParser = null;
+    private _activePageData: CatalogPageData = null;
+    private _isLoading: boolean = false;
+
+    constructor(
+        private _settingsService: SettingsService,
+        private _alertService: AlertService,
+        private _ngZone: NgZone)
     {
-        this._tabEmitter        = new EventEmitter();
-        this._pageEmitter       = new EventEmitter();
-        this._offerEmitter      = new EventEmitter();
-        this._purchaseEmitter   = new EventEmitter();
+        this.registerMessages();
     }
 
-    public selectTab(tab: CatalogPageData): void
+    public ngOnDestroy(): void
     {
-        if(!tab) return;
-
-        if(this._tabEmitter) this._tabEmitter.emit(tab);
+        this.unregisterMessages();
     }
 
-    public selectPage(page: CatalogPageData): void
+    private registerMessages(): void
     {
-        if(!page) return;
+        this._ngZone.runOutsideAngular(() =>
+        {
+            this._messages = [
+                new CatalogClubEvent(this.onCatalogClubEvent.bind(this)),
+                new CatalogModeEvent(this.onCatalogModeEvent.bind(this)),
+                new CatalogPageEvent(this.onCatalogPageEvent.bind(this)),
+                new CatalogPagesEvent(this.onCatalogPagesEvent.bind(this)),
+                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this)),
+                new CatalogPurchaseFailedEvent(this.onCatalogPurchaseFailedEvent.bind(this)),
+                new CatalogPurchaseUnavailableEvent(this.onCatalogPurchaseUnavailableEvent.bind(this)),
+                new CatalogSearchEvent(this.onCatalogSearchEvent.bind(this)),
+                new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
+                new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this))
+            ];
 
-        if(this._pageEmitter) this._pageEmitter.emit(page);
+            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        });
     }
 
-    public selectOffer(offer: CatalogPageOfferData): void
+    public unregisterMessages(): void
     {
-        if(!offer) return;
+        this._ngZone.runOutsideAngular(() =>
+        {
+            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
-        if(this._offerEmitter) this._offerEmitter.emit(offer);
+            this._messages = [];
+        });
     }
 
-    public receivePurchase(purchase: CatalogPurchaseData): void
+    private onCatalogClubEvent(event: CatalogClubEvent): void
     {
-        if(!purchase) return;
+        console.log(event);
+    }
 
-        if(this._purchaseEmitter) this._purchaseEmitter.emit(purchase);
+    private onCatalogModeEvent(event: CatalogModeEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => (this._catalogMode = parser.mode));
+    }
+
+    private onCatalogPageEvent(event: CatalogPageEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._activePage = parser;
+
+            if(this._component) this._component.setupLayout();
+
+            this._isLoading = false;
+        });
+    }
+
+    private onCatalogPagesEvent(event: CatalogPagesEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._catalogRoot = parser.root;
+
+            this._isLoading = false;
+
+            (this._component && this._component.selectFirstTab());
+        });
+    }
+
+    private onCatalogPurchaseEvent(event: CatalogPurchaseEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => (this._component && this._component.hidePurchaseConfirmation()));
+    }
+
+    private onCatalogPurchaseFailedEvent(event: CatalogPurchaseFailedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._alertService.alert('${catalog.alert.purchaseerror.title}, ${catalog.alert.purchaseerror.description.' + parser.code + '}');
+
+            (this._component && this._component.hidePurchaseConfirmation());
+        });
+    }
+
+    private onCatalogPurchaseUnavailableEvent(event: CatalogPurchaseUnavailableEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+    }
+
+    private onCatalogSearchEvent(event: CatalogSearchEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+    }
+
+    private onCatalogSoldOutEvent(event: CatalogSoldOutEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+    }
+
+    private onCatalogUpdatedEvent(event: CatalogUpdatedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._isLoading         = false;
+            this._catalogMode       = -1;
+            this._catalogRoot       = null;
+            this._activePage        = null;
+            this._activePageData    = null;
+    
+            if(this._component) this._component.reset();
+
+            if(this._settingsService.catalogVisible)
+            {
+                this._component.hide();
+
+                this._alertService.alert('catalog reset');
+            }
+        });
+    }
+
+    public setupCatalog(mode: string): void
+    {
+        if(!mode) return;
+
+        this._isLoading         = true;
+        this._catalogRoot       = null;
+        this._activePage        = null;
+        this._activePageData    = null;
+
+        (this._component && this._component.reset());
+
+        Nitro.instance.communication.connection.send(new CatalogModeComposer(mode));
+    }
+
+    public requestPage(page: CatalogPageData): void
+    {
+        if(!page || !this.canSelectPage(page)) return;
+        
+        this._activePageData = page;
+
+        if(page.pageId === -1) return;
+
+        this._isLoading = true;
+
+        this.requestPageData(page.pageId, -1, CatalogService.MODE_NORMAL);
+    }
+
+    private requestPageData(pageId: number, offerId: number, catalogType: string): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogPageComposer(pageId, offerId, catalogType));
     }
 
     public isDescendant(page: CatalogPageData, descendant: CatalogPageData): boolean
@@ -101,24 +296,48 @@ export class CatalogService
 
         return ((assetUrl && assetUrl[0]) || null);
     }
-
-    public get tabEmitter(): EventEmitter<CatalogPageData>
+    
+    public purchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number, extra: string = null): void
     {
-        return this._tabEmitter;
+        if(!page || !offer || !quantity) return;
+
+        Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(page.pageId, offer.offerId, extra, quantity));
     }
 
-    public get pageEmitter(): EventEmitter<CatalogPageData>
+    private canSelectPage(page: CatalogPageData): boolean
     {
-        return this._pageEmitter;
+        if(!page || !page.visible) return false;
+
+        return true;
     }
 
-    public get offerEmitter(): EventEmitter<CatalogPageOfferData>
+    public get component(): CatalogMainComponent
     {
-        return this._offerEmitter;
+        return this._component;
     }
 
-    public get purchaseEmitter(): EventEmitter<CatalogPurchaseData>
+    public set component(component: CatalogMainComponent)
     {
-        return this._purchaseEmitter;
+        this._component = component;
+    }
+
+    public get catalogMode(): number
+    {
+        return this._catalogMode;
+    }
+
+    public get catalogRoot(): CatalogPageData
+    {
+        return this._catalogRoot;
+    }
+
+    public get activePage(): CatalogPageParser
+    {
+        return this._activePage;
+    }
+
+    public get activePageData(): CatalogPageData
+    {
+        return this._activePageData;
     }
 }

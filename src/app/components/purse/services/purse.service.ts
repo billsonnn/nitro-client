@@ -2,6 +2,7 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { UserCreditsEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
+import { UserCurrencyUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserCurrencyComposer } from '../../../../client/nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 
@@ -33,7 +34,8 @@ export class PurseService implements OnDestroy
 
             this._messages = [
                 new UserCreditsEvent(this.onUserCreditsEvent.bind(this)),
-                new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this))
+                new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this)),
+                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this))
             ];
 
             for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -80,6 +82,15 @@ export class PurseService implements OnDestroy
         {
             for(let [ type, amount ] of parser.currencies) this.setCurrency(type, amount);
         });
+    }
+
+    private onUserCurrencyUpdateEvent(event: UserCurrencyUpdateEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        this._ngZone.run(() => this.setCurrency(parser.type, parser.amount));
     }
 
     private setCurrency(type: number, amount: number): void

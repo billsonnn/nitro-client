@@ -1,0 +1,12 @@
+<div class="nav-item">
+    <li class="d-flex list-group-item align-items-center" [ngClass]="{ 'active': isActive }" (click)="selectPage()">
+        <div class="d-flex flex-grow-1">
+            <div class="icon-container">
+                <img class="icon" [src]="iconUrl" />
+            </div>
+            <p class="flex-grow-1 mb-0">{{ catalogPage.localization }}</p>
+        </div>
+        <i *ngIf="catalogPage.children && catalogPage.children.length" class="fas" [ngClass]="{ 'fa-sort-down': !isToggled, 'fa-sort-up': isToggled }"></i>
+    </li>
+    <nitro-catalog-navigation-set-component *ngIf="isToggled && catalogPage.children && (catalogPage.children.length > 0)" [catalogPage]="catalogPage"></nitro-catalog-navigation-set-component>
+</div>

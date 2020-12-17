@@ -2,77 +2,77 @@
 
 export class RoomEnterEffect 
 {
-    public static _Str_14599: number = 0;
-    public static _Str_11894: number = 1;
-    public static _Str_14215: number = 2;
-    public static _Str_12882: number = 3;
+    public static STATE_NOT_INITIALIZED: number     = 0;
+    public static STATE_START_DELAY: number         = 1;
+    public static STATE_RUNNING: number             = 2;
+    public static STATE_OVER: number                = 3;
 
-    private static _Str_621: number     = RoomEnterEffect._Str_14599;
-    private static _Str_7125: boolean   = false;
-    private static _Str_11007: number;
-    private static _Str_12311: number   = 0;
-    private static _Str_6886: number    = (20 * 1000);
-    private static _Str_7448: number    = 2000;
+    private static _state: number                   = RoomEnterEffect.STATE_NOT_INITIALIZED;
+    private static _visualizationOn: boolean        = false;
+    private static _currentDelta: number            = 0;
+    private static _initializationTimeMs: number    = 0;
+    private static _startDelayMs: number            = (20 * 1000);
+    private static _effectDurationMs: number        = 2000;
 
     public static init(delay: number, duration: number): void
     {
-        RoomEnterEffect._Str_11007  = 0;
-        RoomEnterEffect._Str_6886   = delay;
-        RoomEnterEffect._Str_7448   = duration;
-        RoomEnterEffect._Str_12311  = Nitro.instance.time;
-        RoomEnterEffect._Str_621    = RoomEnterEffect._Str_11894;
+        RoomEnterEffect._currentDelta           = 0;
+        RoomEnterEffect._startDelayMs           = delay;
+        RoomEnterEffect._effectDurationMs       = duration;
+        RoomEnterEffect._initializationTimeMs   = Nitro.instance.time;
+        RoomEnterEffect._state                  = RoomEnterEffect.STATE_START_DELAY;
     }
 
-    public static _Str_23419(): void
+    public static turnVisualizationOn(): void
     {
-        if((RoomEnterEffect._Str_621 === RoomEnterEffect._Str_14599) || (RoomEnterEffect._Str_621 === RoomEnterEffect._Str_12882)) return;
+        if((RoomEnterEffect._state === RoomEnterEffect.STATE_NOT_INITIALIZED) || (RoomEnterEffect._state === RoomEnterEffect.STATE_OVER)) return;
 
-        const k = (Nitro.instance.time - RoomEnterEffect._Str_12311);
+        const k = (Nitro.instance.time - RoomEnterEffect._initializationTimeMs);
 
-        if(k > (RoomEnterEffect._Str_6886 + RoomEnterEffect._Str_7448))
+        if(k > (RoomEnterEffect._startDelayMs + RoomEnterEffect._effectDurationMs))
         {
-            RoomEnterEffect._Str_621 = RoomEnterEffect._Str_12882;
+            RoomEnterEffect._state = RoomEnterEffect.STATE_OVER;
 
             return;
         }
 
-        RoomEnterEffect._Str_7125 = true;
+        RoomEnterEffect._visualizationOn = true;
 
-        if(k < RoomEnterEffect._Str_6886)
+        if(k < RoomEnterEffect._startDelayMs)
         {
-            RoomEnterEffect._Str_621 = RoomEnterEffect._Str_11894;
+            RoomEnterEffect._state = RoomEnterEffect.STATE_START_DELAY;
 
             return;
         }
 
-        RoomEnterEffect._Str_621    = RoomEnterEffect._Str_14215;
-        RoomEnterEffect._Str_11007  = ((k - RoomEnterEffect._Str_6886) / RoomEnterEffect._Str_7448);
+        RoomEnterEffect._state    = RoomEnterEffect.STATE_RUNNING;
+        RoomEnterEffect._currentDelta  = ((k - RoomEnterEffect._startDelayMs) / RoomEnterEffect._effectDurationMs);
     }
 
-    public static _Str_22392(): void
+    public static turnVisualizationOff(): void
     {
-        RoomEnterEffect._Str_7125 = false;
+        RoomEnterEffect._visualizationOn = false;
     }
 
-    public static _Str_19559(): boolean
+    public static isVisualizationOn(): boolean
     {
-        return (RoomEnterEffect._Str_7125) && (RoomEnterEffect._Str_1349());
+        return (RoomEnterEffect._visualizationOn) && (RoomEnterEffect.isRunning());
     }
 
-    public static _Str_1349(): boolean
+    public static isRunning(): boolean
     {
-        if((RoomEnterEffect._Str_621 === RoomEnterEffect._Str_11894) || (RoomEnterEffect._Str_621 === RoomEnterEffect._Str_14215)) return true;
+        if((RoomEnterEffect._state === RoomEnterEffect.STATE_START_DELAY) || (RoomEnterEffect._state === RoomEnterEffect.STATE_RUNNING)) return true;
 
         return false;
     }
 
-    public static _Str_16017(k: number = 0, _arg_2: number = 1): number
+    public static getDelta(k: number = 0, _arg_2: number = 1): number
     {
-        return Math.min(Math.max(RoomEnterEffect._Str_11007, k), _arg_2);
+        return Math.min(Math.max(RoomEnterEffect._currentDelta, k), _arg_2);
     }
 
-    public static get _Str_17562(): number
+    public static get totalRunningTime(): number
     {
-        return RoomEnterEffect._Str_6886 + RoomEnterEffect._Str_7448;
+        return RoomEnterEffect._startDelayMs + RoomEnterEffect._effectDurationMs;
     }
 }

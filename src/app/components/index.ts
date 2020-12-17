@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared';
 import { AvatarEditorModule } from './avatareditor/avatareditor.module';
-import { CatalogModule } from './catalog';
+import { CatalogModule } from './catalog/catalog.module';
 import { MainComponent } from './component';
 import { HotelViewModule } from './hotelview';
 import { InventoryModule } from './inventory/inventory.module';

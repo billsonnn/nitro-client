@@ -13,6 +13,8 @@ export interface IAvatarRenderManager extends INitroManager
 {
     createAvatarImage(figure: string, size: string, gender: string, listener?: IAvatarImageListener, effectListener?: IAvatarEffectListener): IAvatarImage;
     downloadAvatarFigure(container: AvatarFigureContainer, listener: IAvatarImageListener): void;
+    isValidFigureSetForGender(setId: number, gender: string): boolean;
+    getFigureStringWithFigureIds(k: string, _arg_2: string, _arg_3: number[]): string;
     getAssetByName(name: string): IGraphicAsset;
     assets: IAssetManager;
     isReady: boolean;

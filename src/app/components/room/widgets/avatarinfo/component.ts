@@ -210,7 +210,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 {
                     if(this.isDecorting) return;
 
-                    if(RoomEnterEffect._Str_1349())
+                    if(RoomEnterEffect.isRunning())
                     {
 
                     }

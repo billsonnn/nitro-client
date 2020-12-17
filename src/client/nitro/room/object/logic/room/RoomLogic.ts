@@ -321,7 +321,7 @@ export class RoomLogic extends RoomObjectLogicBase
     {
         if(!event || !geometry || !this.object || !this.object.model) return;
 
-        const tag = event._Str_4216;
+        const tag = event.spriteTag;
 
         let planeId: number = 0;
 
@@ -357,8 +357,8 @@ export class RoomLogic extends RoomObjectLogicBase
 
         if (((_local_13 == 0) || (_local_14 == 0))) return;
 
-        const _local_15 = event._Str_24406;
-        const _local_16 = event._Str_25684;
+        const _local_15 = event.screenX;
+        const _local_16 = event.screenY;
         const _local_17 = new Point(_local_15, _local_16);
 
         _local_7 = geometry.getPlanePosition(_local_17, _local_8, _local_9, _local_10);

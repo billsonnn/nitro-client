@@ -138,7 +138,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     {
         if(!event || !object) return;
 
-        if(RoomEnterEffect._Str_1349()) return;
+        if(RoomEnterEffect.isRunning()) return;
 
         const type = object.type;
 

@@ -27,21 +27,26 @@ i {
         }
 
         &.icon-currency--1 {
-            background-image: url('./images/wallet/icons/credit.png');
+            background-image: url('./images/wallet/icons/-1.png');
             width: 15px;
             height: 15px;
         }
 
         &.icon-currency-0 {
-            background-image: url('./images/wallet/icons/ducket.png');
+            background-image: url('./images/wallet/icons/0.png');
             width: 15px;
             height: 15px;
         }
 
-        &.icon-currency-5,
-        &.icon-currency-50 {
-            background-image: url('./images/wallet/icons/diamond.png');
+        &.icon-currency-5 {
+            background-image: url('./images/wallet/icons/5.png');
             width: 15px;
+            height: 15px;
+        }
+
+        &.icon-currency-101 {
+            background-image: url('./images/wallet/icons/101.png');
+            width: 12px;
             height: 15px;
         }
 

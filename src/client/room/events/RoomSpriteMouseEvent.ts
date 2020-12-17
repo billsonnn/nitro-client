@@ -48,17 +48,17 @@ export class RoomSpriteMouseEvent
         return this._canvasId;
     }
 
-    public get _Str_4216(): string
+    public get spriteTag(): string
     {
         return this._spriteTag;
     }
 
-    public get _Str_24406(): number
+    public get screenX(): number
     {
         return this._screenX;
     }
 
-    public get _Str_25684(): number
+    public get screenY(): number
     {
         return this._screenY;
     }

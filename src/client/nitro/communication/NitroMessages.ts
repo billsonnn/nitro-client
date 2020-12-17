@@ -109,6 +109,7 @@ import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
+import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
@@ -374,6 +375,7 @@ export class NitroMessages implements IMessageConfiguration
                 // CURRENCY
                 this._events.set(IncomingHeader.USER_CREDITS, UserCreditsEvent);
                 this._events.set(IncomingHeader.USER_CURRENCY, UserCurrencyEvent);
+                this._events.set(IncomingHeader.USER_CURRENCY_UPDATE, UserCurrencyUpdateEvent);
 
                 // SUBSCRIPTION
                 this._events.set(IncomingHeader.USER_SUBSCRIPTION, UserSubscriptionEvent);

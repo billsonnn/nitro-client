@@ -23,7 +23,7 @@ export class FurnitureCounterClockLogic extends FurnitureLogic
         switch(event.type)
         {
             case MouseEventType.DOUBLE_CLICK:
-                switch(event._Str_4216)
+                switch(event.spriteTag)
                 {
                     case 'start_stop':
                         objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 1);

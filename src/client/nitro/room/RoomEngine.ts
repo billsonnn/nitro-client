@@ -824,7 +824,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._roomManager) return;
 
-        RoomEnterEffect._Str_23419();
+        RoomEnterEffect.turnVisualizationOn();
 
         time = Nitro.instance.time;
 
@@ -836,7 +836,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(this._mouseCursorUpdate) this.setPointer();
 
-        RoomEnterEffect._Str_22392();
+        RoomEnterEffect.turnVisualizationOff();
     }
 
     private setPointer(): void

@@ -93,11 +93,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     protected onDispose(): void
     {
-        this._communication.removeMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
-        this._communication.removeMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
-        this._communication.removeMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
-        this._communication.removeMessageEvent(new AvailabilityStatusMessageEvent(this.onAvailabilityStatusMessageEvent.bind(this)));
-
         this.destroyFurnitureData();
 
         super.onDispose();

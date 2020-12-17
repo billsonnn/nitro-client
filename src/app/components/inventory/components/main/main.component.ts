@@ -7,7 +7,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { InventoryTradingService } from '../../services/trading.service';
 
 @Component({
-    selector: 'nitro-inventory-component',
+    selector: 'nitro-inventory-main-component',
     templateUrl: './main.template.html'
 })
 export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges

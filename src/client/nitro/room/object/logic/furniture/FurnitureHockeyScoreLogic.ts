@@ -23,7 +23,7 @@ export class FurnitureHockeyScoreLogic extends FurnitureLogic
         switch(event.type)
         {
             case MouseEventType.DOUBLE_CLICK:
-                switch(event._Str_4216)
+                switch(event.spriteTag)
                 {
                     case 'off':
                         objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 3);
@@ -31,7 +31,7 @@ export class FurnitureHockeyScoreLogic extends FurnitureLogic
                 }
                 break;
             case MouseEventType.MOUSE_CLICK:
-                switch(event._Str_4216)
+                switch(event.spriteTag)
                 {
                     case 'inc':
                         objectEvent = new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object, 2);
