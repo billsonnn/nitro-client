@@ -10,7 +10,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { SettingsService } from '../../../../core/settings/service';
-import { AlertService } from '../../../../shared/services/alert/service';
+import { AlertService } from '../../../alert/services/alert.service';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredService } from '../../services/wired.service';
 import { WiredFurniture } from '../../WiredFurniture';
@@ -19,7 +19,7 @@ import { WiredConditionFactory } from '../conditions/WiredConditionFactory';
 import { WiredTriggerFactory } from '../triggers/WiredTriggerFactory';
 
 @Component({
-	selector: 'nitro-wired-component',
+	selector: 'nitro-wired-main-component',
     templateUrl: './main.template.html'
 })
 export class WiredMainComponent implements OnInit, OnDestroy
@@ -144,9 +144,10 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         if(!this.isOwnerOfFurniture(this._updated.id))
         {
-            this._alertService.alert('${wiredfurni.nonowner.change.confirm.title}, ${wiredfurni.nonowner.change.confirm.body}');
-
-            // then this.update();
+            this._alertService.alertConfirm('${wiredfurni.nonowner.change.confirm.body}', '${wiredfurni.nonowner.change.confirm.title}', () =>
+            {
+                this.update();
+            });
 
             return;
         }

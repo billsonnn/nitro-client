@@ -158,7 +158,7 @@ export class AvatarImageCache
         this._canvas        = null;
     }
 
-    public _Str_1629(k: string, _arg_2: number, _arg_3: boolean = false): AvatarImageBodyPartContainer
+    public _Str_1629(k: string, frameNumber: number, _arg_3: boolean = false): AvatarImageBodyPartContainer
     {
         let _local_4 = this._Str_1050(k);
 
@@ -171,7 +171,7 @@ export class AvatarImageCache
 
         let _local_5 = _local_4.getDirection();
         let _local_7 = _local_4._Str_2244();
-        let frameCount = _arg_2;
+        let frameCount = frameNumber;
 
         if(_local_7._Str_742._Str_812) frameCount -= _local_7._Str_664;
 
@@ -187,7 +187,7 @@ export class AvatarImageCache
                 let _local_15 = _local_5;
 
                 const _local_16 = this._structure._Str_720(((_local_7._Str_742.state + '.') + _local_7._Str_727));
-                const _local_17 = (_arg_2 - _local_7._Str_664);
+                const _local_17 = (frameNumber - _local_7._Str_664);
 
                 if(_local_16)
                 {

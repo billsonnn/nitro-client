@@ -6,5 +6,5 @@ export interface IRoomRendererBase
     removeObject(object: IRoomObject): void;
     dispose(): void;
     reset(): void;
-    update(time: number): void;
+    update(time: number, update?: boolean): void;
 }

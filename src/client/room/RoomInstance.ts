@@ -231,7 +231,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
         this._updateCategories.splice(index, 1);
     }
 
-    public update(time: number): void
+    public update(time: number, update: boolean = false): void
     {
         for(let category of this._updateCategories)
         {
@@ -253,7 +253,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
             }
         }
 
-        this._renderer && this._renderer.update(time);
+        this._renderer && this._renderer.update(time, update);
     }
 
     public hasUninitializedObjects(): boolean

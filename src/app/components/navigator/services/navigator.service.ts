@@ -5,17 +5,20 @@ import { NavigatorCollapsedEvent } from '../../../../client/nitro/communication/
 import { NavigatorEventCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorEventCategoriesEvent';
 import { NavigatorLiftedEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorLiftedEvent';
 import { NavigatorMetadataEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorMetadataEvent';
+import { NavigatorOpenRoomCreatorEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorOpenRoomCreatorEvent';
 import { NavigatorSearchesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSettingsEvent';
 import { RoomDoorbellAcceptedEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
 import { RoomDoorbellEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
 import { RoomDoorbellRejectedEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellRejectedEvent';
+import { RoomEnterErrorEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/RoomEnterErrorEvent';
 import { RoomForwardEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/RoomForwardEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
 import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
+import { DesktopViewComposer } from '../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
 import { NavigatorCategoriesComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSearchComposer';
@@ -24,10 +27,14 @@ import { RoomInfoComposer } from '../../../../client/nitro/communication/message
 import { NavigatorCategoryDataParser } from '../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
 import { NavigatorSearchResultList } from '../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
+import { RoomEnterErrorParser } from '../../../../client/nitro/communication/messages/parser/room/access/RoomEnterErrorParser';
 import { RoomDataParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { ToolbarIconEnum } from '../../../../client/nitro/enums/ToolbarIconEnum';
+import { NitroToolbarEvent } from '../../../../client/nitro/events/NitroToolbarEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { SettingsService } from '../../../core/settings/service';
+import { AlertService } from '../../alert/services/alert.service';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
 
@@ -72,6 +79,7 @@ export class NavigatorService implements OnDestroy
     private _isLoading: boolean;
 
     constructor(
+        private _alertService: AlertService,
         private _settingsService: SettingsService,
         private _ngZone: NgZone)
     {
@@ -106,6 +114,7 @@ export class NavigatorService implements OnDestroy
                 new RoomForwardEvent(this.onRoomForwardEvent.bind(this)),
                 new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
                 new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new RoomEnterErrorEvent(this.onRoomEnterErrorEvent.bind(this)),
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
                 new RoomDoorbellAcceptedEvent(this.onRoomDoorbellAcceptedEvent.bind(this)),
@@ -115,6 +124,7 @@ export class NavigatorService implements OnDestroy
                 new NavigatorEventCategoriesEvent(this.onNavigatorEventCategoriesEvent.bind(this)),
                 new NavigatorLiftedEvent(this.onNavigatorLiftedEvent.bind(this)),
                 new NavigatorMetadataEvent(this.onNavigatorMetadataEvent.bind(this)),
+                new NavigatorOpenRoomCreatorEvent(this.onNavigatorOpenRoomCreatorEvent.bind(this)),
                 new NavigatorSearchesEvent(this.onNavigatorSearchesEvent.bind(this)),
                 new NavigatorSearchEvent(this.onNavigatorSearchEvent.bind(this)),
                 new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this)),
@@ -190,8 +200,6 @@ export class NavigatorService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(event);
-
         if(parser.roomEnter)
         {
             // if an ad needs to display, do it here
@@ -221,6 +229,40 @@ export class NavigatorService implements OnDestroy
                 // update room data with new data
             }
         }
+    }
+
+    private onRoomEnterErrorEvent(event: RoomEnterErrorEvent): void
+    {
+        if(!(event instanceof RoomEnterErrorEvent)) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        switch(parser.reason)
+        {
+            case RoomEnterErrorParser.FULL_ERROR:
+                this._ngZone.run(() => this._alertService.alert('${navigator.guestroomfull.text}', '${navigator.guestroomfull.title}'));
+                break;
+            case RoomEnterErrorParser.QUEUE_ERROR:
+                this._ngZone.run(() => this._alertService.alert('${room.queue.error.title}', '${room.queue.error. ' + parser.parameter + '}'));
+                break;
+            case RoomEnterErrorParser.BANNED:
+                this._ngZone.run(() => this._alertService.alert('${navigator.banned.title}', '${navigator.banned.text}'));
+                break;
+            default:
+                this._ngZone.run(() => this._alertService.alert('${room.queue.error.title}', '${room.queue.error.title}'));
+                break;
+
+        }
+
+        Nitro.instance.communication.connection.send(new DesktopViewComposer());
+
+        const toolbarEvent = new NitroToolbarEvent(NitroToolbarEvent.TOOLBAR_CLICK);
+
+        toolbarEvent.iconName = ToolbarIconEnum.HOTEL_VIEW;
+
+        Nitro.instance.roomEngine.events.dispatchEvent(toolbarEvent);
     }
 
     private onRoomCreatedEvent(event: RoomCreatedEvent): void
@@ -289,17 +331,29 @@ export class NavigatorService implements OnDestroy
 
     private onNavigatorCollapsedEvent(event: NavigatorCollapsedEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     private onNavigatorEventCategoriesEvent(event: NavigatorEventCategoriesEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     private onNavigatorLiftedEvent(event: NavigatorLiftedEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     private onNavigatorMetadataEvent(event: NavigatorMetadataEvent): void
@@ -309,8 +363,6 @@ export class NavigatorService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-
-        console.log(event);
 
         this._ngZone.run(() =>
         {
@@ -324,9 +376,26 @@ export class NavigatorService implements OnDestroy
         });
     }
 
+    private onNavigatorOpenRoomCreatorEvent(event: NavigatorOpenRoomCreatorEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._component) return;
+
+        this._ngZone.run(() => this._component.openRoomCreator());
+    }
+
     private onNavigatorSearchesEvent(event: NavigatorSearchesEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     private onNavigatorSearchEvent(event: NavigatorSearchEvent): void
@@ -352,7 +421,11 @@ export class NavigatorService implements OnDestroy
 
     private onNavigatorSettingsEvent(event: NavigatorSettingsEvent): void
     {
-        console.log(event);
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     public goToRoom(roomId: number, password: string = null): void

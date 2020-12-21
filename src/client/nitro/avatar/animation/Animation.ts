@@ -170,6 +170,8 @@ export class Animation implements IAnimation
 
     private _Str_2259(frameCount: number, _arg_2: string = null): AnimationLayerData[]
     {
+        if(frameCount < 0) frameCount = 0;
+        
         let layers: AnimationLayerData[] = [];
 
         if(!_arg_2)

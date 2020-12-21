@@ -1,0 +1,11 @@
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-alert nitro-alert-generic-component" noMemory="true">
+    <div class="card-header text-center">
+        {{ title }}
+    </div>
+    <div class="card-body">
+        <div class="d-flex flex-column" [innerHTML]="message | keepHtml"></div>
+        <div class="d-flex align-items-center justify-content-center">
+            <button type="button" class="btn btn-success" (click)="close()">{{ ('generic.close') | translate }}</button>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
 import { GenericAlertEvent } from './messages/incoming/generic/GenericAlertEvent';
 import { GenericAlertLinkEvent } from './messages/incoming/generic/GenericAlertLinkEvent';
+import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { FurnitureListAddOrUpdateEvent } from './messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
 import { FurnitureListEvent } from './messages/incoming/inventory/furni/FurnitureListEvent';
@@ -36,9 +37,11 @@ import { NavigatorCollapsedEvent } from './messages/incoming/navigator/Navigator
 import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
 import { NavigatorLiftedEvent } from './messages/incoming/navigator/NavigatorLiftedEvent';
 import { NavigatorMetadataEvent } from './messages/incoming/navigator/NavigatorMetadataEvent';
+import { NavigatorOpenRoomCreatorEvent } from './messages/incoming/navigator/NavigatorOpenRoomCreatorEvent';
 import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
+import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
 import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
 import { RoomDoorbellAcceptedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
 import { RoomDoorbellEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellEvent';
@@ -46,6 +49,7 @@ import { RoomDoorbellRejectedEvent } from './messages/incoming/room/access/doorb
 import { RoomRightsClearEvent } from './messages/incoming/room/access/rights/RoomRightsClearEvent';
 import { RoomRightsEvent } from './messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/RoomRightsOwnerEvent';
+import { RoomEnterErrorEvent } from './messages/incoming/room/access/RoomEnterErrorEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
 import { RoomForwardEvent } from './messages/incoming/room/access/RoomForwardEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
@@ -232,6 +236,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GENERIC_ALERT, GenericAlertEvent);
         this._events.set(IncomingHeader.GENERIC_ALERT_LINK, GenericAlertLinkEvent);
 
+        // HELP
+        this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
+
         // INVENTORY
 
             // FURNITURE
@@ -258,17 +265,20 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NAVIGATOR_COLLAPSED, NavigatorCollapsedEvent);
         this._events.set(IncomingHeader.NAVIGATOR_EVENT_CATEGORIES, NavigatorEventCategoriesEvent);
         this._events.set(IncomingHeader.NAVIGATOR_LIFTED, NavigatorLiftedEvent);
-        this._events.set(IncomingHeader.NAVIGATOR_SEARCH, NavigatorSearchEvent);
-        this._events.set(IncomingHeader.NAVIGATOR_SEARCHES, NavigatorSearchesEvent);
-        this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsEvent);
         this._events.set(IncomingHeader.NAVIGATOR_METADATA, NavigatorMetadataEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_OPEN_ROOM_CREATOR, NavigatorOpenRoomCreatorEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_SEARCHES, NavigatorSearchesEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_SEARCH, NavigatorSearchEvent);
+        this._events.set(IncomingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsEvent);
 
         // NOTIFICATIONS
+        this._events.set(IncomingHeader.MOTD_MESSAGES, MOTDNotificationEvent);
         this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
 
         // ROOM
 
             // ACCESS
+            this._events.set(IncomingHeader.ROOM_ENTER_ERROR, RoomEnterErrorEvent);
             this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
             this._events.set(IncomingHeader.ROOM_FORWARD, RoomForwardEvent);
 

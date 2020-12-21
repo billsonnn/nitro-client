@@ -2,6 +2,7 @@ import { Application, SCALE_MODES, settings } from 'pixi.js';
 import { ConfigurationEvent } from '../core/configuration/ConfigurationEvent';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
+import { ILinkEventTracker } from '../core/events/ILinkEventTracker';
 import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
@@ -43,6 +44,7 @@ export class Nitro extends Application implements INitro
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
+    private _linkTrackers: ILinkEventTracker[];
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -80,6 +82,7 @@ export class Nitro extends Application implements INitro
         this._sessionDataManager    = new SessionDataManager(this._communication);
         this._roomSessionManager    = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager           = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
+        this._linkTrackers          = [];
 
         this._isReady       = false;
         this._isDisposed    = false;
@@ -220,6 +223,43 @@ export class Nitro extends Application implements INitro
     public getLocalizationWithParameter(key: string, parameter: string, replacement: string): string
     {
         return this._localization.getValueWithParameter(key, parameter, replacement);
+    }
+
+    public addLinkEventTracker(tracker: ILinkEventTracker): void
+    {
+        if(this._linkTrackers.indexOf(tracker) >= 0) return;
+
+        this._linkTrackers.push(tracker);
+    }
+
+    public removeLinkEventTracker(tracker: ILinkEventTracker): void
+    {
+        const index = this._linkTrackers.indexOf(tracker);
+
+        if(index === -1) return;
+
+        this._linkTrackers.splice(index, 1);
+    }
+
+    public createLinkEvent(link: string): void
+    {
+        if(!link || (link === '')) return;
+
+        for(let tracker of this._linkTrackers)
+        {
+            if(!tracker) continue;
+
+            const prefix = tracker.eventUrlPrefix;
+
+            if(prefix.length > 0)
+            {
+                if(link.substr(0, prefix.length) === prefix) tracker.linkReceived(link);
+            }
+            else
+            {
+                tracker.linkReceived(link);
+            }
+        }
     }
 
     public get nitroTimer(): NitroTimer

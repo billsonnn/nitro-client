@@ -36,7 +36,7 @@ export class IncomingHeader
     public static GAME_CENTER_STATUS           = 2893;
     public static GENERIC_ALERT                = 3801;
     public static GENERIC_ALERT_LINK           = 2030;
-    public static GENERIC_ALERT_MESSAGES       = 2035;
+    public static MOTD_MESSAGES                = 2035;
     public static GENERIC_ERROR                = 1600;
     public static GIFT_CONFIG                  = 2234;
     public static GROUP_BADGES                 = 2402;
@@ -80,6 +80,7 @@ export class IncomingHeader
     public static NAVIGATOR_SEARCHES           = 3984;
     public static NAVIGATOR_SETTINGS           = 518;
     public static NAVIGATOR_METADATA           = 3052;
+    public static NAVIGATOR_OPEN_ROOM_CREATOR  = 2064;
     public static NOTIFICATION_LIST            = 1992;
     public static PET_FIGURE_UPDATE            = 1924;
     public static PET_INFO                     = 2901;
@@ -168,7 +169,7 @@ export class IncomingHeader
     public static USER_FURNITURE_ADD           = 104;
     public static USER_FURNITURE_REFRESH       = 3151;
     public static USER_FURNITURE_REMOVE        = 159;
-    public static USER_FURNITURE_POSTIT_PLACED  = 1501;
+    public static USER_FURNITURE_POSTIT_PLACED = 1501;
     public static USER_HOME_ROOM               = 2875;
     public static USER_IGNORED                 = 126;
     public static USER_INFO                    = 2725;
@@ -192,4 +193,5 @@ export class IncomingHeader
     public static WIRED_ERROR                  = 156;
     public static UNSEEN_ITEMS                 = 2103;
     public static FURNITURE_ALIASES            = 1723;
+    public static CFH_RESULT_MESSAGE           = 934;
 }

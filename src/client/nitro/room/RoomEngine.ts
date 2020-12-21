@@ -29,6 +29,8 @@ import { Vector3d } from '../../room/utils/Vector3d';
 import { PetCustomPart } from '../avatar/pets/PetCustomPart';
 import { PetFigureData } from '../avatar/pets/PetFigureData';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
+import { ToolbarIconEnum } from '../enums/ToolbarIconEnum';
+import { NitroToolbarAnimateIconEvent } from '../events/NitroToolbarAnimateIconEvent';
 import { Nitro } from '../Nitro';
 import { RoomControllerLevel } from '../session/enum/RoomControllerLevel';
 import { BadgeImageReadyEvent } from '../session/events/BadgeImageReadyEvent';
@@ -38,7 +40,6 @@ import { ISessionDataManager } from '../session/ISessionDataManager';
 import { MouseEventType } from '../ui/MouseEventType';
 import { FurniId } from '../utils/FurniId';
 import { RoomBackgroundColorEvent } from './events/RoomBackgroundColorEvent';
-import { RoomEngineAnimateIconEvent } from './events/RoomEngineAnimateIconEvent';
 import { RoomEngineEvent } from './events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
@@ -171,9 +172,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._ready                     = false;
 
         this._activeRoomId              = -1;
-        this._activeRoomActiveCanvas              = -1;
-        this._roomInstanceDatas          = new Map();
-        this._roomDatas           = new Map();
+        this._activeRoomActiveCanvas    = -1;
+        this._roomInstanceDatas         = new Map();
+        this._roomDatas                 = new Map();
 
         this._roomRendererFactory       = new RoomRendererFactory();
         this._visualizationFactory      = new RoomObjectVisualizationFactory();
@@ -229,6 +230,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
 
         Nitro.instance.ticker.add(this.update, this);
+
+        document.addEventListener('visibilitychange', this.runVisibilityUpdate.bind(this));
     }
 
     public onDispose(): void
@@ -239,6 +242,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             this.removeRoomInstance(key);
         }
+
+        document.removeEventListener('visibilitychange', this.runVisibilityUpdate.bind(this));
 
         Nitro.instance.ticker.remove(this.update, this);
 
@@ -820,7 +825,12 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this.update(1);
     }
 
-    public update(time: number): void
+    public runVisibilityUpdate(): void
+    {
+        if(!document.hidden) this.update(1, true);
+    }
+
+    public update(time: number, update: boolean = false): void
     {
         if(!this._roomManager) return;
 
@@ -830,7 +840,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this.processPendingFurniture();
 
-        this._roomManager.update(time);
+        this._roomManager.update(time, update);
 
         this._Str_22919(time);
 
@@ -1726,7 +1736,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                         {
                             const image = Nitro.instance.renderer.extract.image(icon);
 
-                            if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
+                            if(this.events)
+                            {
+                                const event = new NitroToolbarAnimateIconEvent(image, screenLocation.x, screenLocation.y);
+
+                                event.iconName = ToolbarIconEnum.INVENTORY;
+
+                                this.events.dispatchEvent(event);
+                            }
                         }
                     }
                 }
@@ -1764,7 +1781,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     {
                         const image = Nitro.instance.renderer.extract.image(icon);
 
-                        if(this.events) this.events.dispatchEvent(new RoomEngineAnimateIconEvent(roomId, 'inventory', image, screenLocation.x, screenLocation.y));
+                        if(this.events)
+                        {
+                            const event = new NitroToolbarAnimateIconEvent(image, screenLocation.x, screenLocation.y);
+
+                            event.iconName = ToolbarIconEnum.INVENTORY;
+
+                            this.events.dispatchEvent(event);
+                        }
                     }
                 }
             }

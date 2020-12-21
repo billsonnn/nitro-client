@@ -510,7 +510,6 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     {
         if((!_arg_4 && (this.updateObjectCounter === object.updateCounter)) && (this._geometryUpdateCounter === geometry.updateId)) return false;
 
-        let someUpdate      = update;
         let direction       = (object.getDirection().x - geometry.direction.x);
         let headDirection   = (this._headDirection - geometry.direction.x);
 
@@ -527,7 +526,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         if((direction !== this._angle) || _arg_4)
         {
-            someUpdate = true;
+            update = true;
 
             this._angle = direction;
 
@@ -539,7 +538,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         if((headDirection !== this._headAngle) || _arg_4)
         {
-            someUpdate = true;
+            update = true;
 
             this._headAngle = headDirection;
 
@@ -556,7 +555,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         this.updateObjectCounter = this.object.updateCounter;
 
-        return someUpdate;
+        return update;
     }
 
     protected updateModel(model: IRoomObjectModel, scale: number): boolean

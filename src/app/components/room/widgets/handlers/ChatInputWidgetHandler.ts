@@ -130,6 +130,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':screenshot':
                             this._container.roomEngine.createRoomScreenshot(this._container.roomSession.roomId, this._container.getFirstCanvasId());
                             return null;
+                        case ':pickall':
+                            this._container.alertService.alertConfirm('${room.confirm.pick_all}', '${generic.alert.title}', () =>
+                            {
+                                this._container.sessionDataManager.sendSpecialCommandMessage(':pickall');
+                            });
+                            return null;
                     }
                 }
 

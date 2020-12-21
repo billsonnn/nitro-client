@@ -4,7 +4,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
-import { AlertService } from '../../../../shared/services/alert/service';
+import { AlertService } from '../../../alert/services/alert.service';
 import { FurniCategory } from '../../items/FurniCategory';
 import { GroupItem } from '../../items/GroupItem';
 import { IFurnitureItem } from '../../items/IFurnitureItem';
@@ -26,7 +26,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public paginateConfig: PaginationInstance = {
         id: 'custom',
-        itemsPerPage: 15,
+        itemsPerPage: 250,
         currentPage: 1
     };
 
@@ -223,7 +223,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
             }
             else
             {
-                this._alertService.alert('${trading.items.too_many_items.title} ${trading.items.too_many_items.desc}');
+                this._alertService.alert('${trading.items.too_many_items.desc}', '${trading.items.too_many_items.title}');
             }
         }
     }

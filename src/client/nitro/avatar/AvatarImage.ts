@@ -406,6 +406,11 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         }
 
         if(!this._reusableTexture) return null;
+
+        // if(this._avatarSpriteData && this._avatarSpriteData._Str_832)
+        // {
+        //     this._reusableTexture = this.applyPalette(this._reusableTexture, this._avatarSpriteData.reds);
+        // }
         
         this._image     = this._reusableTexture;
         this._changes   = false;
@@ -413,35 +418,28 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         return this._image;
     }
 
-    private applyPalette(texture: RenderTexture, reds: number[] = null, greens: number[] = null, blues: [] = null, alphas: number[] = null): Texture
-    {
-        const textureCanvas     = Nitro.instance.renderer.extract.canvas(texture);
-        const textureCtx        = textureCanvas.getContext('2d');
-        const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
-        const data              = textureImageData.data;
+    // public applyPalette(texture: RenderTexture, reds: number[] = [], greens: number[] = [], blues: number[] = []): RenderTexture
+    // {
+    //     const textureCanvas     = Nitro.instance.renderer.extract.canvas(texture);
+    //     const textureCtx        = textureCanvas.getContext('2d');
+    //     const textureImageData  = textureCtx.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
+    //     const data              = textureImageData.data;
 
-        for(let i = 0; i < data.length; i += 4)
-        {
-            var r = i;
-			var g = i + 1;
-			var b = i + 2;
-            var a = i + 3;
-            
-			var red = reds[data[r]];
-			var green = reds[data[g]]
-			var blue = reds[data[b]];
-            var alpha = reds[data[a]];
-            
-			// data[r] = ((red >> 16 & 0xFF) + (green >> 16 & 0xFF) + (blue >> 16 & 0xFF) + (alpha >> 16 & 0xFF)) % 256;
-			// data[g] = ((red >> 8 & 0xFF) + (green >> 8 & 0xFF) + (blue >> 8 & 0xFF) + (alpha >> 8 & 0xFF)) % 256;
-			// data[b] = ((red & 0xFF) + (green & 0xFF) + (blue & 0xFF) + (alpha & 0xFF)) % 256;
-            // data[a] = ((red >> 24 & 0xFF) + (green >> 24 & 0xFF) + (blue >> 24 & 0xFF) + (alpha >> 24 & 0xFF)) % 256;
-        }
+    //     for(let i = 0; i < data.length; i += 4)
+    //     {
+    //         let paletteColor = this._palette[data[ i + 1 ]];
 
-        textureCtx.putImageData(textureImageData, 0, 0);
+    //         if(paletteColor === undefined) paletteColor = [ 0, 0, 0 ];
 
-        return Texture.from(textureCanvas);
-    }
+    //         data[ i ]       = paletteColor[0];
+    //         data[ i + 1 ]   = paletteColor[1];
+    //         data[ i + 2 ]   = paletteColor[2];
+    //     }
+
+    //     textureCtx.putImageData(textureImageData, 0, 0);
+
+    //     return Texture.from(textureCanvas);
+    // }
 
     public getCroppedImage(setType: string, scale: number = 1): HTMLImageElement
     {

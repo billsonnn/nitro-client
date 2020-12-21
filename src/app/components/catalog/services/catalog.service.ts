@@ -21,7 +21,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
 import { SettingsService } from '../../../core/settings/service';
-import { AlertService } from '../../../shared/services/alert/service';
+import { AlertService } from '../../alert/services/alert.service';
 import { CatalogMainComponent } from '../components/main/main.component';
 
 @Injectable()
@@ -154,7 +154,7 @@ export class CatalogService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            this._alertService.alert('${catalog.alert.purchaseerror.title}, ${catalog.alert.purchaseerror.description.' + parser.code + '}');
+            this._alertService.alert('${catalog.alert.purchaseerror.description.' + parser.code + '}', '${catalog.alert.purchaseerror.title}');
 
             (this._component && this._component.hidePurchaseConfirmation());
         });
@@ -209,7 +209,7 @@ export class CatalogService implements OnDestroy
             {
                 this._component.hide();
 
-                this._alertService.alert('catalog reset');
+                this._alertService.alert('${catalog.alert.published.description}', '${catalog.alert.published.title}');
             }
         });
     }

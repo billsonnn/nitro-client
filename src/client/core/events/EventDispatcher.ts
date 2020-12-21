@@ -95,7 +95,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
             catch(err)
             {
-                console.error(err);
+                NitroLogger.log(err);
 
                 return;
             }

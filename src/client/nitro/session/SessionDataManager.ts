@@ -8,6 +8,7 @@ import { UserFigureEvent } from '../communication/messages/incoming/user/data/Us
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
 import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
 import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
+import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
 import { Nitro } from '../Nitro';
 import { BadgeImageManager } from './BadgeImageManager';
@@ -352,6 +353,11 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new PetRespectComposer(petId));
         
         this._respectsPetLeft--;
+    }
+
+    public sendSpecialCommandMessage(text: string, styleId: number = 0): void
+    {
+        this.send(new RoomUnitChatComposer(text));
     }
 
     private send(composer: IMessageComposer): void

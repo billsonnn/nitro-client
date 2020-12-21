@@ -87,18 +87,18 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         }
     }
 
-    public render(time: number): void
+    public render(time: number, update: boolean = false): void
     {
         if(!this._canvases || !this._canvases.size) return;
 
-        for(let canvas of this._canvases.values()) canvas && canvas.render(time);
+        for(let canvas of this._canvases.values()) canvas && canvas.render(time, update);
     }
 
-    public update(time: number): void
+    public update(time: number, update: boolean = false): void
     {
         if(!this._canvases || !this._canvases.size) return;
 
-        this.render(time);
+        this.render(time, update);
         
         for(let canvas of this._canvases.values()) canvas && canvas.update();
     }
