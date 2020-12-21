@@ -13,6 +13,7 @@ import { CatalogSoldOutEvent } from './messages/incoming/catalog/CatalogSoldOutE
 import { CatalogUpdatedEvent } from './messages/incoming/catalog/CatalogUpdatedEvent';
 import { ClientPingEvent } from './messages/incoming/client/ClientPingEvent';
 import { DesktopViewEvent } from './messages/incoming/desktop/DesktopViewEvent';
+import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericAlertEvent } from './messages/incoming/generic/GenericAlertEvent';
 import { GenericAlertLinkEvent } from './messages/incoming/generic/GenericAlertLinkEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
@@ -379,6 +380,9 @@ export class NitroMessages implements IMessageConfiguration
 
                 // SUBSCRIPTION
                 this._events.set(IncomingHeader.USER_SUBSCRIPTION, UserSubscriptionEvent);
+
+        // GAMES
+        this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
     }
 
     private registerComposers(): void

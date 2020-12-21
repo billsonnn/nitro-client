@@ -175,6 +175,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this._events.removeAllListeners();
 
         this.removeCanvas();
+
+        Nitro.instance.externalInterface.call('logDebug', 'Navigator: exiting room');
     }
 
     private insertCanvas(): void

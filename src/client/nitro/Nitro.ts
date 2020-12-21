@@ -12,6 +12,9 @@ import { AvatarRenderManager } from './avatar/AvatarRenderManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
 import { NitroCommunicationManager } from './communication/NitroCommunicationManager';
+import { ILegacyExternalInterface } from './externalInterface/ILegacyExternalInterface';
+import { LegacyExternalInterface } from './externalInterface/LegacyExternalInterface';
+import { GameMessageHandler } from './game/GameMessageHandler';
 import { INitro } from './INitro';
 import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
 import { NitroLocalizationManager } from './localization/NitroLocalizationManager';
@@ -43,6 +46,7 @@ export class Nitro extends Application implements INitro
     private _sessionDataManager: ISessionDataManager;
     private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
+    private _legacyExternalInterface: ILegacyExternalInterface;
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -70,16 +74,17 @@ export class Nitro extends Application implements INitro
 
         if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
 
-        this._nitroTimer            = new NitroTimer();
-        this._core                  = core;
-        this._events                = new EventDispatcher();
-        this._localization          = new NitroLocalizationManager();
-        this._communication         = new NitroCommunicationManager(core.communication);
-        this._avatar                = new AvatarRenderManager();
-        this._roomEngine            = new RoomEngine(this._communication);
-        this._sessionDataManager    = new SessionDataManager(this._communication);
-        this._roomSessionManager    = new RoomSessionManager(this._communication, this._roomEngine);
-        this._roomManager           = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
+        this._nitroTimer              = new NitroTimer();
+        this._core                    = core;
+        this._events                  = new EventDispatcher();
+        this._localization            = new NitroLocalizationManager();
+        this._communication           = new NitroCommunicationManager(core.communication);
+        this._avatar                  = new AvatarRenderManager();
+        this._roomEngine              = new RoomEngine(this._communication);
+        this._sessionDataManager      = new SessionDataManager(this._communication);
+        this._roomSessionManager      = new RoomSessionManager(this._communication, this._roomEngine);
+        this._roomManager             = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
+        this._legacyExternalInterface = new LegacyExternalInterface();
 
         this._isReady       = false;
         this._isDisposed    = false;
@@ -139,6 +144,8 @@ export class Nitro extends Application implements INitro
             if(this._roomManager) this._roomManager.init();
             if(this._roomSessionManager) this._roomSessionManager.init();
         }
+
+        new GameMessageHandler(this._communication.connection);
 
         if(!this._communication.connection)
         {
@@ -270,6 +277,11 @@ export class Nitro extends Application implements INitro
     public get roomManager(): IRoomManager
     {
         return this._roomManager;
+    }
+
+    public get externalInterface(): ILegacyExternalInterface
+    {
+        return this._legacyExternalInterface;
     }
 
     public get width(): number

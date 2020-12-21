@@ -5,6 +5,7 @@ import { NitroTimer } from '../core/utils/NitroTimer';
 import { IRoomManager } from '../room/IRoomManager';
 import { IAvatarRenderManager } from './avatar/IAvatarRenderManager';
 import { INitroCommunicationManager } from './communication/INitroCommunicationManager';
+import { ILegacyExternalInterface } from './externalInterface/ILegacyExternalInterface';
 import { INitroLocalizationManager } from './localization/INitroLocalizationManager';
 import { IRoomEngine } from './room/IRoomEngine';
 import { IRoomSessionManager } from './session/IRoomSessionManager';
@@ -27,6 +28,7 @@ export interface INitro extends Application
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;
     roomManager: IRoomManager;
+    externalInterface: ILegacyExternalInterface;
     width: number;
     height: number;
     time: number;

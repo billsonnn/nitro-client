@@ -192,4 +192,5 @@ export class IncomingHeader
     public static WIRED_ERROR                  = 156;
     public static UNSEEN_ITEMS                 = 2103;
     public static FURNITURE_ALIASES            = 1723;
+    public static LOAD_GAME_URL                = 2624;
 }

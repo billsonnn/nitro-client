@@ -180,6 +180,8 @@ export class NavigatorService implements OnDestroy
         if(!parser) return;
 
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, true, false));
+
+        Nitro.instance.externalInterface.call('legacyTrack', 'navigator', 'private', [parser.roomId]);
     }
 
     private onRoomInfoEvent(event: RoomInfoEvent): void

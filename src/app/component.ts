@@ -26,6 +26,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
     public isAvatarRenderReady: boolean = false;
     public isError: boolean             = false;
 
+    private _connectionTimeout: NodeJS.Timeout;
+
     constructor(
         private _ngZone: NgZone) {}
 
@@ -63,6 +65,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.FAILED, this.onNitroEvent.bind(this));
 
             Nitro.instance.core.configuration.init(); 
+
+            this._connectionTimeout = setTimeout(this.onConnectionTimeout.bind(this), 15 * 1000);
         });
     }
 
@@ -81,6 +85,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
             Nitro.instance.avatar.events.removeEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent.bind(this));
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.LOADED, this.onNitroEvent.bind(this));
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.FAILED, this.onNitroEvent.bind(this));
+        
+            clearTimeout(this._connectionTimeout);
         });
     }
 
@@ -149,6 +155,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                     this.percentage     = (this.percentage + 20);
                     this.hideProgress   = false;
                 });
+
+                clearTimeout(this._connectionTimeout);
 				break;
 			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
                 this._ngZone.run(() =>
@@ -168,6 +176,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                 });
                 
                 Nitro.instance.init();
+                clearTimeout(this._connectionTimeout);
 				break;
 			case NitroCommunicationDemoEvent.CONNECTION_ERROR:
                 this._ngZone.run(() =>
@@ -188,6 +197,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
                     this.percentage     = 0;
                     this.hideProgress   = true;
                 });
+                Nitro.instance.externalInterface.call('disconnect', -1, 'client.init.handshake.fail');
                 break;
             case NitroLocalizationEvent.LOADED:
                 this._ngZone.run(() =>
@@ -221,5 +231,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked
     public get isReady(): boolean
     {
         return ((this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady) || false);
+    }
+
+    /**
+     * On Flash, if an origin TCP socket is unreachable (e.g. the server is down)
+     * the initial crossdomain security check fails due to a timeout. This timeout
+     * simulates the failing crossdomain security check.
+     */
+    private onConnectionTimeout()
+    {
+        Nitro.instance.externalInterface.call('logDebug', 'TcpAuth control socket security error');
     }
 }
