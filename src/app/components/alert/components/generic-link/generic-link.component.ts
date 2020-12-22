@@ -7,4 +7,14 @@ import { AlertGenericComponent } from '../generic/generic.component';
 export class AlertGenericLinkComponent extends AlertGenericComponent
 {
     public link: string = '';
+
+    public openLink(): void
+    {
+        window.open(this.link, '_blank');
+    }
+
+    public get hasLink(): boolean
+    {
+        return (this.link.length > 0);
+    }
 }
