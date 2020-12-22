@@ -232,152 +232,24 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         const chatInstance = chat.instance;
 
-        let i = 0;
+        const lastChat          = this.chats[this.chats.length - 1];
+        const lastChatInstance  = (lastChat && lastChat.instance);
 
-        while(i < this.chats.length)
+        if(!lastChatInstance) return;
+
+        const lowestPoint   = ((lastChatInstance.getY() + lastChatInstance.height) - 1);
+        const highestPoint  = chatInstance.getY();
+        const requiredSpace = (chatInstance.height + 1);
+
+        const spaceAvailable = (this.chatViewElement.offsetHeight - lowestPoint);
+
+        if(spaceAvailable < requiredSpace)
         {
-            const existing          = this.chats[i];
-            const existingInstance  = existing.instance;
-
-            if(existing)
+            for(let chat of this.chats)
             {
-                if(this.doOverlap(chatInstance.getX(), chatInstance.getY(), (chatInstance.getX() + chatInstance.width), (chatInstance.getY() - chatInstance.height), existingInstance.getX(), existingInstance.getY(), (existingInstance.getX() + existingInstance.width), (existingInstance.getY() - existingInstance.height)))
-                {
-                    this.tempChats.push(existing);
-
-                    this.checkOverlappingChats(existing, chat);
-                }
-            }
-
-            i++;
-        }
-
-        let moveHeight = 0;
-
-        if(this.tempChats.length)
-        {
-            const tempChat          = this.tempChats[0];
-            const tempChatInstance  = (tempChat && tempChat.instance);
-
-            if(tempChatInstance)
-            {
-                const difference = (this.chatViewElement.offsetHeight - (tempChatInstance.getY() + (tempChatInstance.height - 1)));
-
-                moveHeight = (Math.abs(chatInstance.height - difference));
-                //console.log(this.chatViewElement.offsetHeight - (tempChatInstance.getY() + (tempChatInstance.height - 1)));
-                //console.log(this.chatViewElement.offsetHeight - (tempChatInstance.getY() + (tempChatInstance.height - 1)));
-
-
-                //console.log(chatInstance.height - (this.chatViewElement.offsetHeight - (tempChatInstance.getY() + tempChatInstance.height)))
-                //moveHeight = (chatInstance.height - (this.chatViewElement.offsetHeight - (tempChatInstance.getY() + tempChatInstance.height)))
-                //moveHeight = (((chatInstance.getY() + chatInstance.height) - (tempChatInstance.getY() + tempChatInstance.height)) + chatInstance.height) - 1;
-                //console.log('TEMP CHAT: ', tempChatInstance.getY(), tempChatInstance.height, (tempChatInstance.getY() + tempChatInstance.height));
-                //console.log('NEW CHAT: ', chatInstance.getY(), chatInstance.height, (chatInstance.getY() + chatInstance.height));
-                //console.log((tempChatInstance.getY() + tempChatInstance.height) - (chatInstance.getY() + chatInstance.height));
-            }
-
-            i = (this.tempChats.length - 1);
-
-            while(i >= 0)
-            {
-                this.moveChatUp(this.tempChats[i], chatInstance.height);
-
-                i--;
-            }
-
-            this.tempChats = [];
-        }
-
-        // if(this.tempChats.length)
-        // {
-        //     i = (this.tempChats.length - 1);
-
-        //     while(i >= 0)
-        //     {
-        //         const tempChat          = this.tempChats[i];
-        //         //const tempChatInstance  = (tempChat && tempChat.instance);
-
-        //         //console.log(tempChatInstance)
-
-        //         //console.log((tempChatInstance.getY() + tempChatInstance.height) - chatInstance.y);
-
-        //         this.moveChatUp(tempChat, chatInstance.height);
-
-        //         i--;
-        //     }
-
-        //     this.tempChats = [];
-        // }
-
-        // if(this.tempChats.length)
-        // {
-        //     i = (this.tempChats.length - 1);
-            
-        //     while(i >= 0)
-        //     {
-        //         const tempChat      = this.tempChats[i];
-        //         const nextTempChat  = this.tempChats[i + 1];
-
-        //         console.log(tempChat.instance.height, chat.instance.height);
-
-        //         const y = tempChat.instance.getY() + tempChat.instance.height;
-        //         const newChatY = chat.instance.getY();
-
-        //         console.log(y - newChatY);
-
-        //         let height = chatInstance.height;
-
-        //         this.moveChatUp(tempChat, height);
-
-        //         i--;
-        //     }
-
-        //     this.tempChats = [];
-        // }
-    }
-
-    private checkOverlappingChats(chat1: ComponentRef<RoomChatItemComponent>, chat2: ComponentRef<RoomChatItemComponent>): void
-    {
-        const chat1Instance = chat1.instance;
-        const x1            = chat1Instance.getX();
-        const y1            = chat1Instance.getY();
-        const width1        = chat1Instance.width;
-        const height1       = chat1Instance.height;
-
-        const chat2Instance = chat2.instance;
-        const x2            = chat2Instance.getX();
-        const y2            = chat2Instance.getY();
-        const width2        = chat2Instance.width;
-        const height2       = chat2Instance.height;
-
-        for(let chat of this.chats)
-        {
-            if(!chat) continue;
-
-            const chat3Instance = chat.instance;
-            const x3            = chat3Instance.getX();
-            const y3            = chat3Instance.getY();
-            const width3        = chat3Instance.width;
-            const height3       = chat3Instance.height;
-
-            if(this.doOverlap(x1, (y1 - height2), (x1 + width1), (y1 - height2 - height1), x3, y3, (x3 + width3), (y3 - height3)) && (y1 > y3))
-            {
-                if(this.tempChats.indexOf(chat) !== -1) continue;
-                
-                this.tempChats.push(chat);
-
-                this.checkOverlappingChats(chat, chat2);
+                this.moveChatUp(chat, (requiredSpace - spaceAvailable));
             }
         }
-    }
-
-    private doOverlap(l1x: number, l1y: number, r1x: number, r1y: number, l2x: number, l2y: number, r2x: number, r2y: number): boolean
-    {
-        if(l1x > r2x || l2x > r1x) return false;
-
-        if(l1y < r2y || l2y < r1y) return false;
-
-        return true;
     }
 
     private resetAllChatLocations(): void
