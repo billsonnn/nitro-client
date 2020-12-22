@@ -382,13 +382,13 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         this._pendingContentTypes.push(contentType);
     }
 
-    public update(time: number): void
+    public update(time: number, update: boolean = false): void
     {
         this.processPendingContentTypes(time);
 
         if(!this._rooms.size) return;
 
-        for(let room of this._rooms.values()) room && room.update(time);
+        for(let room of this._rooms.values()) room && room.update(time, update);
     }
 
     public createRoomObjectManager(category: number): IRoomObjectManager

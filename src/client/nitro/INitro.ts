@@ -1,5 +1,6 @@
 import { Application } from 'pixi.js';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
+import { ILinkEventTracker } from '../core/events/ILinkEventTracker';
 import { INitroCore } from '../core/INitroCore';
 import { NitroTimer } from '../core/utils/NitroTimer';
 import { IRoomManager } from '../room/IRoomManager';
@@ -18,6 +19,9 @@ export interface INitro extends Application
     getConfiguration<T>(key: string, value?: T): T;
     getLocalization(key: string): string;
     getLocalizationWithParameter(key: string, parameter: string, replacement: string): string;
+    addLinkEventTracker(tracker: ILinkEventTracker): void;
+    removeLinkEventTracker(tracker: ILinkEventTracker): void;
+    createLinkEvent(link: string): void;
     nitroTimer: NitroTimer;
     core: INitroCore;
     events: IEventDispatcher;

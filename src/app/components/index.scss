@@ -8,6 +8,7 @@ $navigator-height: 600px;
 
 $inventory-width: 515px;
 
+@import './alert';
 @import './catalog';
 @import './hotelview';
 @import './inventory';

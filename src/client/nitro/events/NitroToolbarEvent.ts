@@ -1,0 +1,34 @@
+import { NitroEvent } from '../../core/events/NitroEvent';
+
+export class NitroToolbarEvent extends NitroEvent
+{
+    public static TOOLBAR_CLICK: string = 'NTE_TOOLBAR_CLICK';
+
+    private _iconId: string;
+    private _iconName: string;
+
+    constructor(type: string)
+    {
+        super(type);
+    }
+
+    public get iconId(): string
+    {
+        return this._iconId;
+    }
+
+    public set iconId(id: string)
+    {
+        this._iconId = id;
+    }
+
+    public get iconName(): string
+    {
+        return this._iconName;
+    }
+
+    public set iconName(name: string)
+    {
+        this._iconName = name;
+    }
+}

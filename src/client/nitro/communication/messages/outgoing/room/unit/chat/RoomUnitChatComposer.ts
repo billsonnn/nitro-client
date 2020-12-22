@@ -4,7 +4,7 @@ export class RoomUnitChatComposer implements IMessageComposer
 {
     private _data: any[];
 
-    constructor(message: string, styleId: number)
+    constructor(message: string, styleId: number = 0)
     {
         this._data = [ message, styleId ];
     }

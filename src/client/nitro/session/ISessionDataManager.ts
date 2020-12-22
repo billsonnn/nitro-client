@@ -20,6 +20,7 @@ export interface ISessionDataManager extends INitroManager
     hasSecurity(level: number): boolean;
     giveRespect(userId: number): void;
     givePetRespect(petId: number): void;
+    sendSpecialCommandMessage(text: string, styleId?: number): void;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;

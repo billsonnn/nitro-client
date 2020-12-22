@@ -19,7 +19,7 @@ export interface IRoomInstance extends IDisposable
     removeAllManagers(): void;
     addUpdateCategory(category: number): void;
     removeUpdateCategory(category: number): void;
-    update(time: number): void;
+    update(time: number, update?: boolean): void;
     id: string;
     container: IRoomInstanceContainer;
     renderer: IRoomRendererBase;

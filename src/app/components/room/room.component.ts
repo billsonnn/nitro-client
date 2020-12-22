@@ -31,6 +31,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { AlertService } from '../alert/services/alert.service';
 import { WiredService } from '../wired/services/wired.service';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
@@ -80,6 +81,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _isMouseMove: boolean   = false;
 
     constructor(
+        private _alertService: AlertService,
         private _wiredService: WiredService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
@@ -742,6 +744,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get roomSession(): IRoomSession
     {
         return this._roomSession;
+    }
+
+    public get alertService(): AlertService
+    {
+        return this._alertService;
     }
 
     public get wiredService(): WiredService

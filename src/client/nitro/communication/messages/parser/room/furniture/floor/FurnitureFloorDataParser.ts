@@ -100,12 +100,12 @@ export class FurnitureFloorDataParser
 
     public get z(): number
     {
-        return this._z;
+        return ((isNaN(this._z)) ? 0 : this._z);
     }
 
     public get stackHeight(): number
     {
-        return this._stackHeight;
+        return ((isNaN(this._stackHeight)) ? 0 : this._stackHeight);
     }
 
     public get type(): number

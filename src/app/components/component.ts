@@ -14,7 +14,7 @@ import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/Ro
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomId } from '../../client/room/utils/RoomId';
 import { SettingsService } from '../core/settings/service';
-import { AlertService } from '../shared/services/alert/service';
+import { AlertService } from './alert/services/alert.service';
 import { RoomComponent } from './room/room.component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
@@ -27,13 +27,17 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 	selector: 'nitro-main-component',
     template: `
 	<div class="nitro-main-component">
+		<nitro-alert-main-component></nitro-alert-main-component>
+		<nitro-notifications-main-component></nitro-notifications-main-component>
+		<nitro-call-for-help-main-component></nitro-call-for-help-main-component>
+		<nitro-pedia-main-component></nitro-pedia-main-component>
 		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
 		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
 		<nitro-purse-main-component></nitro-purse-main-component>
 		<nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
 		<nitro-navigator-main-component [visible]="navigatorVisible"></nitro-navigator-main-component>
 		<nitro-inventory-main-component [visible]="inventoryVisible"></nitro-inventory-main-component>
-		<nitro-wired-component></nitro-wired-component>
+		<nitro-wired-main-component></nitro-wired-main-component>
 		<nitro-room-component></nitro-room-component>
     </div>`
 })

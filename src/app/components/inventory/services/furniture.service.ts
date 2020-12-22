@@ -256,6 +256,8 @@ export class InventoryFurnitureService implements OnDestroy
             if(addedSet.length) this._inventoryService.updateItemLocking();
         }
 
+        if(addedSet.length && this._inventoryService.furniController) this._inventoryService.furniController.paginateConfig.currentPage = 1;
+
         this._isInitialized = true;
 
         if(this._inventoryService.furniController) this._inventoryService.furniController.selectExistingGroupOrDefault();

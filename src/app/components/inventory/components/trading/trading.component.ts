@@ -1,5 +1,5 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { AlertService } from '../../../../shared/services/alert/service';
+import { AlertService } from '../../../alert/services/alert.service';
 import { GroupItem } from '../../items/GroupItem';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryTradingService } from '../../services/trading.service';

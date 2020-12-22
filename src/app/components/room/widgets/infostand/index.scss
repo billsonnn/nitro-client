@@ -89,6 +89,7 @@
                     color: rgba($white, 1);
                     position: relative;
                     background: transparent;
+                    resize: none;
 
                     &:focus {
                         font-style: italic;

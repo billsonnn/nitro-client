@@ -13,7 +13,7 @@ export interface IRoomManager extends INitroManager
     removeUpdateCategory(category: number): void;
     createRoomObjectAndInitalize(roomId: string, objectId: number, type: string, category: number): IRoomObject;
     setContentLoader(loader: RoomContentLoader): void;
-    update(time: number): void;
+    update(time: number, update?: boolean): void;
     rooms: Map<string, IRoomInstance>;
     events: IEventDispatcher;
 }

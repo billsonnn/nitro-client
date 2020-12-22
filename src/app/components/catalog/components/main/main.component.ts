@@ -6,7 +6,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../../../core/settings/service';
-import { AlertService } from '../../../../shared/services/alert/service';
+import { AlertService } from '../../../alert/services/alert.service';
 import { CatalogLayout } from '../../CatalogLayout';
 import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';

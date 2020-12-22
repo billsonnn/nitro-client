@@ -4,14 +4,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
-import { AlertToastComponent } from './components/alerts/alert/component';
-import { ConfirmToastComponent } from './components/alerts/confirm/component';
 import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
 import { FurnitureGridComponent } from './components/furnituregrid/component';
@@ -19,8 +15,8 @@ import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
+import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 import { TranslatePipe } from './pipes/translate';
-import { AlertService } from './services/alert/service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	suppressScrollX: true
@@ -39,8 +35,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgbModalModule,
 		NgxPaginationModule,
 		NgxSliderModule,
-		PickerModule,
-		EmojiModule,
 		PerfectScrollbarModule
 	],
 	exports: [
@@ -53,8 +47,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgbModalModule,
 		NgxPaginationModule,
 		NgxSliderModule,
-		PickerModule,
-		EmojiModule,
 		PerfectScrollbarModule,
 		AvatarImageComponent,
 		BadgeComponent,
@@ -63,18 +55,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		RoomPreviewComponent,
 		DraggableDirective,
 		BringToTopDirective,
+		EscapeHtmlPipe,
 		TranslatePipe
 	],
 	providers: [
-		AlertService,
 		{
 			provide: PERFECT_SCROLLBAR_CONFIG,
 			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
 		}
 	],
 	declarations: [
-		AlertToastComponent,
-		ConfirmToastComponent,
 		AvatarImageComponent,
 		BadgeComponent,
 		FurnitureGridComponent,
@@ -82,8 +72,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		RoomPreviewComponent,
 		DraggableDirective,
 		BringToTopDirective,
+		EscapeHtmlPipe,
 		TranslatePipe
-	],
-	entryComponents: [ ConfirmToastComponent, AlertToastComponent ]
+	]
 })
 export class SharedModule {}

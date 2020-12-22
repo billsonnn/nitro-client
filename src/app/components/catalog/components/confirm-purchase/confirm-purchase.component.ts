@@ -1,8 +1,9 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
+import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomEngineAnimateIconEvent } from '../../../../../client/nitro/room/events/RoomEngineAnimateIconEvent';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { CatalogService } from '../../services/catalog.service';
   
@@ -97,8 +98,12 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
             }
 
             const bounds = element.getBoundingClientRect();
+
+            const event = new NitroToolbarAnimateIconEvent(element, bounds.x, bounds.y);
+
+            event.iconName = ToolbarIconEnum.INVENTORY;
             
-            Nitro.instance.roomEngine.events.dispatchEvent(new RoomEngineAnimateIconEvent(this._catalogService.component.roomPreviewer.roomId, 'inventory', element, bounds.x, bounds.y));
+            Nitro.instance.roomEngine.events.dispatchEvent(event);
         });
     }
 

@@ -26,7 +26,7 @@ import { TradingListItemParser } from '../../../../client/nitro/communication/me
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 import { StringDataType } from '../../../../client/nitro/room/object/data/type/StringDataType';
-import { AlertService } from '../../../shared/services/alert/service';
+import { AlertService } from '../../alert/services/alert.service';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { FurniCategory } from '../items/FurniCategory';
 import { FurnitureItem } from '../items/FurnitureItem';
@@ -167,13 +167,13 @@ export class InventoryTradingService implements OnDestroy
         {
             if(parser.reason === TradingCloseParser._Str_16410)
             {
-                this._alertService.alert('${inventory.trading.notification.title} ${inventory.trading.notification.commiterror.caption} ${inventory.trading.notification.commiterror.info}');
+                this._alertService.alert('${inventory.trading.notification.commiterror.caption}', '${inventory.trading.notification.title}');
             }
             else
             {
                 if(parser._Str_4963 !== this._ownUserIndex)
                 {
-                    this._alertService.alert('${inventory.trading.notification.title} ${inventory.trading.info.closed}');
+                    this._alertService.alert('${inventory.trading.info.closed}', '${inventory.trading.notification.title}');
                 }
             }
 

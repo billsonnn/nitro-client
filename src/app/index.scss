@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap');
 
-* {
-    image-rendering: pixelated;
-}
 
 html,
 body {
@@ -13,6 +10,7 @@ body {
     height: 100%;
     overflow: hidden;
     user-select: none;
+    image-rendering: pixelated;
 }
 
 #nitro {

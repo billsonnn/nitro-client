@@ -1,4 +1,4 @@
-import { BaseTexture, BLEND_MODES, Point, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { BaseTexture, BLEND_MODES, Point, Renderer, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { Nitro } from '../../../nitro/Nitro';
 
 export class ExtendedSprite extends Sprite
@@ -36,6 +36,23 @@ export class ExtendedSprite extends Sprite
         this._pairedSpriteUpdateCounter = pairedSpriteUpdateCounter;
 
         return true;
+    }
+
+    public render(renderer: Renderer): void
+    {
+        try
+        {
+            //@ts-ignore
+            let uvs = this._texture._uvs.uvsFloat32;
+        }
+
+        catch(err)
+        {
+            console.log(this);
+            console.error(err);
+        }
+        
+        super.render(renderer);
     }
 
     public setTexture(texture: Texture): void

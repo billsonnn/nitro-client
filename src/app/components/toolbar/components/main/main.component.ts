@@ -1,8 +1,9 @@
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
+import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
+import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
+import { NitroToolbarEvent } from '../../../../../client/nitro/events/NitroToolbarEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomEngineAnimateIconEvent } from '../../../../../client/nitro/room/events/RoomEngineAnimateIconEvent';
-import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
 import { Dispose } from '../../../../../client/nitro/window/motion/Dispose';
 import { DropBounce } from '../../../../../client/nitro/window/motion/DropBounce';
 import { EaseOut } from '../../../../../client/nitro/window/motion/EaseOut';
@@ -13,7 +14,6 @@ import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
-import { ToolbarIconEnum } from '../../enums/ToolbarIconEnum';
 
 @Component({
     selector: 'nitro-toolbar-component',
@@ -37,7 +37,8 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(RoomEngineAnimateIconEvent.ANIMATE, this.onRoomEngineEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
         });
     }
 
@@ -45,55 +46,58 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineAnimateIconEvent.ANIMATE, this.onRoomEngineEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
         });
     }
 
-    public toggleCatalog(): void
-    {
-        this.settingsService.toggleCatalog();
-    }
-
-    public toggleInventory(): void
-    {
-        this.settingsService.toggleInventory();
-    }
-
-    public toggleNavigator(): void
-    {
-        this.settingsService.toggleNavigator();
-    }
-
-    public visitDesktop(): void
-    {
-        if(Nitro.instance.roomSessionManager.getSession(-1))
-        {
-            Nitro.instance.communication.connection.send(new DesktopViewComposer());
-
-            Nitro.instance.roomSessionManager.removeSession(-1);
-        }
-    }
-
-    private onRoomEngineEvent(event: RoomEngineEvent): void
+    private onNitroToolbarEvent(event: NitroToolbarEvent): void
     {
         if(!event) return;
 
         switch(event.type)
         {
-            case RoomEngineAnimateIconEvent.ANIMATE:
-                const iconEvent = (event as RoomEngineAnimateIconEvent);
+            case NitroToolbarEvent.TOOLBAR_CLICK:
+                this.clickIcon(event.iconName);
+                return;
+            case NitroToolbarAnimateIconEvent.ANIMATE_ICON:
+                const iconEvent = (event as NitroToolbarAnimateIconEvent);
 
-                this.animateToIcon(iconEvent.icon, iconEvent.image, iconEvent.x, iconEvent.y);
+                this.animateToIcon(iconEvent.iconName, iconEvent.image, iconEvent.x, iconEvent.y);
                 return;
         }
     }
 
-    public animateToIcon(icon: string, image: HTMLImageElement, x: number, y: number): void
+    public clickIcon(name: string): void
     {
-        if(!icon || !image || !this.navigationListElement) return;
+        if(!name || (name === '')) return;
 
-        const iconName  = this.getIconName(icon);
-        const target    = (this.navigationListElement.getElementsByClassName(iconName)[0] as HTMLElement);
+        switch(name)
+        {
+            case ToolbarIconEnum.HOTEL_VIEW:
+                this.visitDesktop();
+                return;
+            case ToolbarIconEnum.NAVIGATOR:
+                this.toggleNavigator();
+                return;
+            case ToolbarIconEnum.CATALOG:
+                this.toggleCatalog();
+                return;
+            case ToolbarIconEnum.INVENTORY:
+                this.toggleInventory();
+                return;
+        }
+    }
+
+    public animateToIcon(iconName: string, image: HTMLImageElement, x: number, y: number): void
+    {
+        if(!iconName || !image || !this.navigationListElement) return;
+
+        iconName  = this.getIconName(iconName);
+
+        if(iconName === '') return;
+        
+        const target = (this.navigationListElement.getElementsByClassName(iconName)[0] as HTMLElement);
 
         if(target)
         {
@@ -130,10 +134,41 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     {
         switch(icon)
         {
+            case ToolbarIconEnum.HOTEL_VIEW:
+                return 'icon-hotelview';
+            case ToolbarIconEnum.NAVIGATOR:
+                return 'icon-navigator';
+            case ToolbarIconEnum.CATALOG:
+                return 'icon-catalog';
             case ToolbarIconEnum.INVENTORY:
                 return 'icon-inventory';
             default:
-                return null;
+                return '';
+        }
+    }
+
+    public toggleCatalog(): void
+    {
+        this.settingsService.toggleCatalog();
+    }
+
+    public toggleInventory(): void
+    {
+        this.settingsService.toggleInventory();
+    }
+
+    public toggleNavigator(): void
+    {
+        this.settingsService.toggleNavigator();
+    }
+
+    public visitDesktop(): void
+    {
+        if(Nitro.instance.roomSessionManager.getSession(-1))
+        {
+            Nitro.instance.communication.connection.send(new DesktopViewComposer());
+
+            Nitro.instance.roomSessionManager.removeSession(-1);
         }
     }
 

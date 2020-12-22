@@ -17,6 +17,9 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
     @Input()
     public center: boolean = true;
+
+    @Input()
+    public noMemory: boolean = false;
   
     private _name: string           = null;
     private _target: HTMLElement    = null;
@@ -130,16 +133,19 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
                 this._offset.y  += this._delta.y;
                 this._delta      = {x: 0, y: 0};
 
-                DraggableDirective.POS_MEMORY.set(this._name, {
-                    offset: {
-                        x: this._offset.x,
-                        y: this._offset.y
-                    },
-                    delta: {
-                        x: this._delta.x,
-                        y: this._delta.y
-                    }
-                });
+                if(!this.noMemory)
+                {
+                    DraggableDirective.POS_MEMORY.set(this._name, {
+                        offset: {
+                            x: this._offset.x,
+                            y: this._offset.y
+                        },
+                        delta: {
+                            x: this._delta.x,
+                            y: this._delta.y
+                        }
+                    });
+                }
             });
         });
     }
