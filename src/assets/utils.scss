@@ -1,8 +1,9 @@
 .scale-0-5 {
-    transform: scale((0.5));
-    -moz-transform: scale(2);
+    -moz-transform: scale(0.5);
+    transform: scale(0.5);
 }
 
 .scale-0-75 {
+    -moz-transform: scale(0.75);
     transform: scale((0.75));
 }

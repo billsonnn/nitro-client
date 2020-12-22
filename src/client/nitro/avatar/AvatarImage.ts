@@ -125,7 +125,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(this._image)
         {
-            this._image.destroy(true);
+            this._image.destroy();
 
             this._image = null;
         }
@@ -138,7 +138,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
 
         if(this._fullImageCache)
         {
-            for(let k of this._fullImageCache.getValues()) (k && k.destroy(true));
+            for(let k of this._fullImageCache.getValues()) (k && k.destroy());
 
             this._fullImageCache = null;
         }

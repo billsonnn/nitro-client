@@ -23,6 +23,18 @@ export class RoomInfoStandUserComponent extends RoomInfoStandBaseComponent
         }
     }
 
+    public resizeTextArea(event: KeyboardEvent): void
+    {
+        if(!event) return;
+
+        const target = (event.target as HTMLTextAreaElement);
+
+        if(!target) return;
+
+        target.style.height = '0px';
+        target.style.height = ((target.scrollHeight) + 'px');
+    }
+
     public saveMotto(event: KeyboardEvent): void
     {
         if(this.userData.motto.length > 38) return;
