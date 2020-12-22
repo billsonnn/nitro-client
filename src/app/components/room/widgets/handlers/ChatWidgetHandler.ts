@@ -230,34 +230,13 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                             username    = userData.name;
                         }
 
-                        const text = chatEvent.message;
+                        let text = chatEvent.message;
 
-                        if(chatType === RoomSessionChatEvent._Str_8971)
+                        switch(chatType)
                         {
-                            // generic hand item
-                            console.log('hand item chat');
-                        }
-
-                        if(chatType === RoomSessionChatEvent._Str_8909)
-                        {
-                            console.log('mute timeout chat');
-                        }
-
-                        if(((chatType === RoomSessionChatEvent._Str_6065) || (chatType === RoomSessionChatEvent._Str_5998)) || (chatType === RoomSessionChatEvent._Str_5904))
-                        {
-                            console.log('pet revived chat');
-
-                            if(chatType === RoomSessionChatEvent._Str_5998)
-                            {
-                                console.log('pet fertilized chat');
-                            }
-                            else
-                            {
-                                if(chatType === RoomSessionChatEvent._Str_5904)
-                                {
-                                    console.log('pet seed fertilized chat');
-                                }
-                            }
+                            case RoomSessionChatEvent._Str_5821:
+                                text = Nitro.instance.localization.getValueWithParameter('widgets.chatbubble.respect', 'username', username);
+                                break;
                         }
 
                         if(this._container && this._container.events) this._container.events.dispatchEvent(new RoomWidgetChatUpdateEvent(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, userData.roomIndex, text, username, RoomObjectCategory.UNIT, userType, petType, x, y, image, avatarColor, chatEvent.session.roomId, chatType, styleId, []));

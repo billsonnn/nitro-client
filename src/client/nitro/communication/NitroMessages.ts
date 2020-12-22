@@ -42,6 +42,7 @@ import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorS
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
 import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
+import { RespectReceivedEvent } from './messages/incoming/notifications/RespectReceivedEvent';
 import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
 import { RoomDoorbellAcceptedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
 import { RoomDoorbellEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellEvent';
@@ -273,6 +274,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // NOTIFICATIONS
         this._events.set(IncomingHeader.MOTD_MESSAGES, MOTDNotificationEvent);
+        this._events.set(IncomingHeader.USER_RESPECT, RespectReceivedEvent);
         this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
 
         // ROOM
