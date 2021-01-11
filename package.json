@@ -40,9 +40,7 @@
     "@angular/compiler-cli": "~10.0.4",
     "@types/bytebuffer": "^5.0.41",
     "@types/node": "^12.11.1",
-    "javascript-obfuscator": "^2.6.1",
     "ts-node": "~8.3.0",
-    "typescript": "~3.9.5",
-    "webpack-obfuscator": "^2.6.0"
+    "typescript": "~3.9.5"
   }
 }
