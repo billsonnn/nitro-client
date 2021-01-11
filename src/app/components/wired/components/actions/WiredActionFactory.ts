@@ -19,6 +19,7 @@ import { WiredAction } from './WiredAction';
 import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-to.component';
 import { MuteUserComponent } from './mute-user/mute-user.component';
 import { BotChangeFigureComponent } from './bot-change-figure/bot-change-figure.component';
+import { BotTalkDirectToAvatarComponent } from './bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -58,6 +59,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return MuteUserComponent;
             case BotChangeFigureComponent.CODE:
                 return BotChangeFigureComponent;
+            case BotTalkDirectToAvatarComponent.CODE:
+                return BotTalkDirectToAvatarComponent;
         }
 
         return null;

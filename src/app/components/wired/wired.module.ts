@@ -1,3 +1,4 @@
+import { BotTalkDirectToAvatarComponent } from './components/actions/bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
 import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
 import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
 import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
@@ -103,6 +104,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         BotMoveComponent,
         MuteUserComponent,
         BotChangeFigureComponent,
+        BotTalkDirectToAvatarComponent,
     ],
     providers: [
         WiredService
@@ -156,6 +158,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         BotMoveComponent,
         MuteUserComponent,
         BotChangeFigureComponent,
+        BotTalkDirectToAvatarComponent,
     ]
 })
 export class WiredModule
