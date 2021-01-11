@@ -1,0 +1,24 @@
+.scale-0-5 {
+    transform: scale(0.5);
+}
+
+.scale-0-75 {
+    transform: scale(0.75);
+}
+
+.scale-1 {
+    transform: scale(1);
+}
+
+.scale-2 {
+    transform: scale(2);
+}
+
+ul {
+
+    &.columns-3 {
+        display: block;
+        columns: 3;
+        font-size: 0;
+    }
+}

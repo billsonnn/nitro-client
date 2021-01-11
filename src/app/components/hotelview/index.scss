@@ -1,0 +1,29 @@
+.nitro-hotelview-component {
+    display: block;
+	position: fixed;
+	width: 100%;
+	height: calc(100% - 70px);
+	background: rgba(0, 0, 0, 1);
+
+	.hotel-image {
+		display: block;
+		position: relative;
+		height: 100%;
+		width: 100%;
+		background-color: #68E5FF;
+		background: url('../../../assets/images/hotelview/rainbow19_background_left.png'), 
+				   url('../../../assets/images/hotelview/background_right_easter2016.png'),
+				   url('../../../assets/images/hotelview/rainbow19_background_gradient.png');
+		background-repeat: no-repeat, no-repeat, repeat-x;
+		background-position: left bottom, right bottom, 100px top;
+		background-size: auto, auto, auto, 1% 100%;
+		z-index: 1;
+    }
+	
+	.avatar-image {
+		bottom: 12px;
+		left: 63px;
+		position: absolute;
+		z-index: 1;
+	}
+}

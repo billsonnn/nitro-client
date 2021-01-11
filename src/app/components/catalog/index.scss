@@ -1,0 +1,111 @@
+.nitro-catalog-component {
+    position: absolute;
+    width: $catalog-width;
+    max-width: $catalog-width;
+
+    .nitro-catalog-navigation-component {
+        margin-right: ($grid-gutter-width / 2);
+
+        .list-group {
+
+            .nav-item {
+                    
+                .list-group-item {
+                    padding: 4px 10px;
+                    font-weight: 300;
+                    font-size: 14px;
+                    width: 100%;
+        
+                    &:hover {
+                        background: rgba(196, 196, 196, 0.1);
+                        cursor: pointer;
+                    }
+        
+                    .icon-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 20px;
+                        margin-right: 3px;
+                    }
+                }
+
+                .nav-item {
+                    
+                    .list-group-item {
+                        padding-left: 18px;
+                    }
+
+                    .nav-item {
+                
+                        .list-group-item {
+                            padding-left: 26px;
+                        }
+
+                        .nav-item {
+            
+                            .list-group-item {
+                                padding-left: 34px;
+                            }
+
+                            .nav-item {
+        
+                                .list-group-item {
+                                    padding-left: 42px;
+                                }
+
+                                .nav-item {
+    
+                                    .list-group-item {
+                                        padding-left: 50px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .offer-name {
+        top: 5px;
+        left: 10px;
+        padding: 5px;
+        background-color: rgba($primary, 1);
+        border-radius: $border-radius;
+        z-index: 1;
+    }
+
+    .quantity-area,
+    .purchase-area {
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .quantity-area {
+
+        input {
+            width: 45px;
+        }
+    }
+}
+
+.nitro-catalog-confirm-purchase-component {
+    position: absolute;
+    width: 300px;
+
+    .product-preview {
+        width: 120px;
+        height: 150px;
+        max-width: 120px;
+        max-height: 150px;
+        background-color: rgba($primary, 1);
+        background-repeat: no-repeat;
+        background-position: center;
+        overflow: hidden;
+        border-radius: $border-radius;
+    }
+}

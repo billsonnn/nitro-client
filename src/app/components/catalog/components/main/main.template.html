@@ -1,0 +1,20 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-catalog-component">
+    <div class="card-header">
+        {{ ('catalog.title') | translate }}
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <div *ngIf="catalogRoot && (catalogRoot.children.length > 0)" class="btn-group w-100 mb-3">
+            <ng-container *ngFor="let child of catalogRoot.children">
+                <button type="button" class="btn btn-primary" [ngClass]="{ 'active': (activeTab === child) }" (click)="selectTab(child)">{{ child.localization }}</button>
+            </ng-container>
+        </div>
+        <div class="row no-gutters">
+            <div nitro-catalog-navigation-component class="col-4"></div>
+            <div class="col-8">
+                <ng-template #layoutsContainer></ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+<nitro-catalog-confirm-purchase-component *ngIf="purchaseOffer !== null" [page]="purchaseOfferPage" [offer]="purchaseOffer" [quantity]="purchaseOfferQuantity" [extra]="purchaseOfferExtra" [completed]="purchaseCompleted"></nitro-catalog-confirm-purchase-component>

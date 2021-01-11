@@ -1,0 +1,84 @@
+import { AvatarEditorFigureCategory } from '../../../../client/nitro/avatar/enum/AvatarEditorFigureCategory';
+import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
+import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
+import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
+import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
+import { Nitro } from '../../../../client/nitro/Nitro';
+import { CategoryBaseModel } from '../common/CategoryBaseModel';
+
+export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
+{
+    private _imageCallBackHandled: boolean = false;
+
+    public init(): void
+    {
+        super.init();
+
+        this._Str_3130(FigureData.FACE);
+
+        this._Str_2367 = true;
+    }
+
+    public selectColor(k: string, _arg_2: number, _arg_3: number): void
+    {
+        super.selectColor(k, _arg_2, _arg_3);
+        
+        this.updateSelectionsFromFigure(FigureData.FACE);
+    }
+
+    protected updateSelectionsFromFigure(k: string): void
+    {
+        if(!this._categories || !this._Str_2278 || !this._Str_2278.figureData) return;
+
+        const category = this._categories.getValue(k);
+
+        if(!category) return;
+
+        const setId = this._Str_2278.figureData.getPartSetId(k);
+
+        let colorIds = this._Str_2278.figureData.getColourIds(k);
+
+        if(!colorIds) colorIds = [];
+
+        category._Str_20245(setId);
+        category._Str_17669(colorIds);
+
+        for(let part of category._Str_806)
+        {
+            const figure        = this.controller.figureData.getFigureStringWithFace(part.id);
+            const avatarImage   = Nitro.instance.avatar.createAvatarImage(figure, AvatarScaleType.LARGE, null, this);
+
+            const sprite = avatarImage.getImageAsSprite(AvatarSetType.HEAD);
+
+            if(sprite)
+            {
+                sprite.y = 10;
+
+                part.iconImage = sprite;
+
+                setTimeout(() => avatarImage.dispose(), 0);
+            }
+        }
+
+        // if (this._Str_2271) this._Str_2271._Str_5614(k, _local_4.length);
+    }
+
+    public resetFigure(figure: string): void
+    {
+        if(this._imageCallBackHandled) return;
+        
+        this._imageCallBackHandled = true;
+
+        this.updateSelectionsFromFigure(FigureData.FACE);
+    }
+
+    public get canSetGender(): boolean
+    {
+        return true;
+    }
+
+    public get name(): string
+    {
+        return AvatarEditorFigureCategory.GENERIC;
+    }
+}

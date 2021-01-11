@@ -1,0 +1,20 @@
+.nitro-wired-component {
+    position: absolute;
+    width: 275px;
+    max-width: 275px;
+
+    .card-body {
+
+        .wired-info {
+            border-bottom: $card-cap-border-width solid $card-cap-border-color;
+        }
+
+        .select-furni {
+            border-top: $card-cap-border-width solid $card-cap-border-color;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+<div class="nitro-purse-component">
+    <div class="grid-container position-relative">
+        <div class="grid-items grid-2">
+            <ng-container *ngFor="let currency of currencies | keyvalue">
+                <div class="d-flex item-detail" *ngIf="isVisible(currency.key)">
+                    <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">{{ currency.value | number }}</div>
+                    <div class="detail-icon bg-primary">
+                        <div class="currency-icon" [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key) + ')' }"></div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Nitro</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <app-root></app-root>
+    <script>
+        var NitroConfig = {
+            configurationUrl: 'configuration.json',
+            sso: (new URLSearchParams(window.location.search).get('sso') || null)
+        };
+    </script>
+</body>
+</html>

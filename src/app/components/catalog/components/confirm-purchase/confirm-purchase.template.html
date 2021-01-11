@@ -1,0 +1,24 @@
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-catalog-confirm-purchase-component">
+    <div class="card-header">
+        {{ ('catalog.purchase_confirmation.title') | translate }}
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex card-body">
+        <div #imageElement class="product-preview" [ngStyle]="{ 'background-image': 'url(' + imageUrl + ')'}"></div>
+        <div class="d-flex flex-grow-1 flex-column justify-content-center p-2">
+            <div class="offer-name">{{ offer.localizationId }}</div>
+            <div class="offer-quantity" *ngIf="quantity">X {{ quantity }}</div>
+            <div class="d-flex align-items-center justify-content-center badge badge-secondary">
+                <p *ngIf="costCredits" class="d-flex align-items-center mb-0"><i class="icon icon-currency--1 mr-1"></i> {{ costCredits }}</p>
+                <p *ngIf="costCredits && costPoints" class="mx-2 mb-0">+</p>
+                <p *ngIf="costPoints" class="d-flex align-items-center mb-0"><i class="icon icon-currency-{{ pointsType }} mr-1"></i>{{ costPoints }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-space-between button-container btn-group">
+            <button type="button" class="btn btn-primary" (click)="hide()">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
+            <button type="button" class="btn btn-success" (click)="purchase()">{{ ('catalog.purchase_confirmation.buy') | translate }}</button>
+        </div>
+    </div>
+</div>

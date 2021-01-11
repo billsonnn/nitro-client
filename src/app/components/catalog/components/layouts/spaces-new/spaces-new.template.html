@@ -1,0 +1,37 @@
+<div class="d-flex flex-column w-100 h-100 nitro-catalog-layout-spaces-component">
+    <div class="d-flex justify-content-center align-items-center position-relative w-100 flex-grow-1">
+        <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
+        <ng-container *ngIf="activeOffer">
+            <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="265" [height]="170"></div>
+            <div class="flex-grow-1">
+                <nitro-catalog-purchase-component [activePage]="activePage" [activeOffer]="activeOffer" [vertical]="true"></nitro-catalog-purchase-component>
+            </div>
+        </ng-container>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="btn-group my-2">
+            <button type="button" class="btn btn-primary btn-sm" [ngClass]="{ 'active': (activeGroupIndex === 0) }" (click)="switchCategory('walls')">{{ ('catalog.spaces.tab.walls') | translate }}</button>
+            <button type="button" class="btn btn-primary btn-sm" [ngClass]="{ 'active': (activeGroupIndex === 1) }" (click)="switchCategory('floor')">{{ ('catalog.spaces.tab.floors') | translate }}</button>
+            <button type="button" class="btn btn-primary btn-sm" [ngClass]="{ 'active': (activeGroupIndex === 2) }" (click)="switchCategory('landscape')">{{ ('catalog.spaces.tab.views') | translate }}</button>
+        </div>
+    </div>
+    <perfect-scrollbar *ngIf="activeGroupIndex >= 0" class="grid-container position-relative w-100" style="min-height: 205px;max-height: 205px;">
+        <div class="grid-items grid-6">
+            <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let offer of groups[activeGroupIndex]" [ngClass]="{ 'active': (activeOffer === offer) }" (click)="selectOffer(offer)">
+                <div class="d-flex flex-grow-1 align-items-center detail-image" [ngStyle]="{ 'background-image': 'url(' + offerImage(offer) + ')' }"></div>
+                <div class="badge badge-secondary" *ngIf="(offerCount(offer) > 1)">{{ offerCount(offer) }}</div>
+                <div class="d-flex align-items-center justify-content-center badge badge-secondary">
+                    <div *ngIf="offer.priceCredits && offer.priceActivityPoints" class="d-flex mr-1">+</div>
+                    <div class="d-flex flex-column">
+                        <div *ngIf="offer.priceCredits" class="d-flex align-items-center">
+                            <i class="icon icon-currency--1 scale-0-75"></i> {{ offer.priceCredits }}
+                        </div>
+                        <div *ngIf="offer.priceActivityPoints" class="d-flex align-items-center">
+                            <i class="icon icon-currency-{{ offer.priceActivityPointsType }} scale-0-75"></i> {{ offer.priceActivityPoints }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>

@@ -1,0 +1,22 @@
+<div class="btn-group w-100 my-1" style="min-height:45px;">
+    <ng-container *ngIf="categories.length > 1">
+        <button type="button" *ngFor="let category of categories.getValues()" class="btn btn-primary d-flex justify-content-center align-items-center" [ngClass]="{ 'active': (activeCategory === category) }" (click)="selectCategory(category.name)"><i class="icon {{ category.name }}-icon" [ngClass]="{ 'selected': (activeCategory === category) }"></i></button>
+    </ng-container>
+    <ng-container *ngIf="canSetGender">
+        <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" (click)="selectGender('M')" [ngClass]="{ 'active': (gender === 'M') }"><i class="icon male-icon" [ngClass]="{ 'selected': (gender === 'M') }"></i></button>
+        <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" (click)="selectGender('F')" [ngClass]="{ 'active': (gender === 'F') }"><i class="icon female-icon" [ngClass]="{ 'selected': (gender === 'F') }"></i></button>
+    </ng-container>
+</div>
+<ng-container *ngIf="activeCategory">
+    <div class="d-flex">
+        <div class="w-100" nitro-avatar-set-viewer-component [model]="model" [category]="activeCategory" [partSet]="activeCategory._Str_806"></div>
+    </div>
+    <div class="d-flex no-gutters mt-1">
+        <div class="d-flex flex-column" *ngIf="(maxPaletteCount >= 1)" [ngClass]="{ 'col-6 pr-1': (maxPaletteCount >= 2), 'flex-grow-1': (maxPaletteCount <= 1) }">
+            <div nitro-avatar-palette-viewer-component [model]="model" [category]="activeCategory" [paletteSet]="activeCategory._Str_783(0)" [paletteIndex]="0" [maxPaletteCount]="maxPaletteCount"></div>
+        </div>
+        <div class="d-flex col-6 pl-1 flex-column" *ngIf="(maxPaletteCount === 2)">
+            <div nitro-avatar-palette-viewer-component [model]="model" [category]="activeCategory" [paletteSet]="activeCategory._Str_783(1)" [paletteIndex]="1" [maxPaletteCount]="maxPaletteCount"></div>
+        </div>
+    </div>
+</ng-container>

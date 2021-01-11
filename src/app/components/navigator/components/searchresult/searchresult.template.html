@@ -1,0 +1,10 @@
+<div class="card bg-primary">
+    <div class="card-header">
+        <div class="header-title" (click)="toggleCollapsed()"><i class="mr-2 fas" [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i>{{ resultCode | translate }}</div>
+    </div>
+    <div class="card-body py-0" *ngIf="isCollapsed">
+        <ng-container *ngFor="let room of result.rooms">
+            <div nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="card nitro-room-infostand-bot-component">
+    <div class="card-header">
+        {{ userData.name }}
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <div class="d-flex flex-nowrap">
+            <div class="body-image bot">
+                <div nitro-avatar-image [figure]="userData.figure" [direction]="4"></div>
+            </div>
+            <div class="flex-grow-1">
+                <div class="badge-container">
+                    <div *ngFor="let badge of userData.badges" class="badge-item">
+                        <nitro-badge *ngIf="(badge !== '')" [badge]="badge"></nitro-badge>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-2">
+            <div *ngIf="(userData.motto !== '')" class="motto-container">
+                <span class="motto">{{ userData.motto }}</span>
+            </div>
+        </div>
+        <div class="d-flex flex-column mt-2">
+            <p *ngIf="(userData.carryItem > 0)" class="mb-0">{{ ('infostand.text.handitem') | translate }}</p>
+        </div>
+    </div>
+</div>

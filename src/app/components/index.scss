@@ -1,0 +1,22 @@
+.nitro-main-component {
+}
+
+$catalog-width: 600px;
+
+$navigator-width: 500px;
+$navigator-height: 600px;
+
+$inventory-width: 515px;
+$friendlist-width: 500px;
+
+@import './avatar-editor';
+@import './catalog';
+@import './friendlist';
+@import './hotelview';
+@import './inventory';
+@import './navigator';
+@import './notification';
+@import './purse';
+@import './room';
+@import './toolbar';
+@import './wired';
