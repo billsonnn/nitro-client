@@ -179,9 +179,9 @@ export class MainComponent implements OnInit, OnDestroy
 				
 				let zoomLevel = ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1)));
 
-				if(zoomEvent.percise) zoomLevel = zoomEvent.level;
+				if(zoomEvent.forceFlip || zoomEvent.asDelta) zoomLevel = zoomEvent.level;
 
-				if(this.roomComponent) Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(this.roomComponent.roomSession.roomId, this.roomComponent.getFirstCanvasId(), zoomLevel, null, null, zoomEvent.asDelta);
+				if(this.roomComponent) Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(this.roomComponent.roomSession.roomId, this.roomComponent.getFirstCanvasId(), zoomLevel, null, null, false, zoomEvent.asDelta);
 				
 				return;
 			case RoomBackgroundColorEvent.ROOM_COLOR:

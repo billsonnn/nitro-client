@@ -289,12 +289,14 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     {
         if(!event || !this._roomSession) return;
 
-        //@ts-ignore
-        let deltaY      = (-(1 / 40) * (event.wheelDeltaY || event.deltaY));
-        const direction = ((deltaY < 0) ? 1 : -1);
-        const factor    = (1 + direction * deltaY);
+        if(event.target !== Nitro.instance.renderer.view) return;
 
-        Nitro.instance.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._roomSession.roomId, factor, true, true));
+        //@ts-ignore
+        const deltaY    = (-(1 / 40) * (event.wheelDeltaY || event.deltaY));
+        const direction = ((deltaY < 0) ? 1 : -1);
+        const factor    = (1 + direction * 0.1);
+
+        Nitro.instance.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._roomSession.roomId, factor, false, true));
     }
 
     public update(): void

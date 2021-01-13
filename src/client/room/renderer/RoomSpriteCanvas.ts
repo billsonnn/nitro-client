@@ -329,10 +329,10 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if((this._width !== this._renderedWidth) || (this._height !== this._renderedHeight)) update = true;
 
-        if((this._display.x !== this._screenOffsetX) || (this._display.y !== this._screenOffsetY))
+        if((this._display.x !== ~~(this._screenOffsetX)) || (this._display.y !== ~~(this._screenOffsetY)))
         {
-            this._display.x = this._screenOffsetX;
-            this._display.y = this._screenOffsetY;
+            this._display.x = ~~(this._screenOffsetX);
+            this._display.y = ~~(this._screenOffsetY);
 
             update = true;
         }
@@ -631,8 +631,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             this._Str_21914(extendedSprite, objectSprite);
         }
         
-        if(extendedSprite.x !== sprite.x) extendedSprite.x = sprite.x;
-        if(extendedSprite.y !== sprite.y) extendedSprite.y = sprite.y;
+        if(extendedSprite.x !== sprite.x) extendedSprite.x = ~~(sprite.x);
+        if(extendedSprite.y !== sprite.y) extendedSprite.y = ~~(sprite.y);
 
         extendedSprite.offsetX = objectSprite.offsetX;
         extendedSprite.offsetY = objectSprite.offsetY;
@@ -658,8 +658,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         extendedSprite.alphaTolerance   = sprite.alphaTolerance;
         extendedSprite.alpha            = (sprite.alpha / 255);
         extendedSprite.tint             = sprite.color;
-        extendedSprite.x                = sortableSprite.x;
-        extendedSprite.y                = sortableSprite.y;
+        extendedSprite.x                = ~~(sortableSprite.x);
+        extendedSprite.y                = ~~(sortableSprite.y);
         extendedSprite.offsetX          = sprite.offsetX;
         extendedSprite.offsetY          = sprite.offsetY;
         extendedSprite.name             = sprite.name;
@@ -980,35 +980,27 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public getDisplayAsTexture(): RenderTexture
     {
         this._noSpriteVisibilityChecking = true;
-
-        const scale     = this._scale;
-        const width     = this._width;
-        const height    = this._height;
-        const offsetX   = this._screenOffsetX;
-        const offsetY   = this._screenOffsetY;
-
-        this.initialize(this._master.width, this._master.height);
+        var k = this._scale;
+        var _local_2 = this._screenOffsetX;
+        var _local_3 = this._screenOffsetY;
         this.setScale(1, null, null, true);
-
         this._screenOffsetX = 0;
         this._screenOffsetY = 0;
-
         this.render(-1, true);
 
+        const bounds = this._display.getBounds();
+
         const renderTexture = RenderTexture.create({
-            width: this._master.width,
-            height: this._master.height
+            width: this._display.width,
+            height: this._display.height
         });
 
-        Nitro.instance.renderer.render(this._display, renderTexture, true, new Matrix(1, 0, 0, 1));
+        Nitro.instance.renderer.render(this._display, renderTexture, true, new Matrix(1, 0, 0, 1, -(bounds.x), -(bounds.y)));
 
-        this._noSpriteVisibilityChecking    = false;
-
-        this.initialize(width, height);
-        this.setScale(scale, null, null, true);
-        
-        this._screenOffsetX = offsetX;
-        this._screenOffsetY = offsetY;
+        this._noSpriteVisibilityChecking = false;
+        this.setScale(k, null, null, true);
+        this._screenOffsetX = _local_2;
+        this._screenOffsetY = _local_3;
 
         return renderTexture;
     }
@@ -1057,7 +1049,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public get scale(): number
     {
-        return Math.floor(this._scale);
+        return this._scale;
     }
 
     public get width(): number
