@@ -1,28 +1,43 @@
-<div class="d-flex my-1 p-1 align-items-center search-result-item" (click)="visit()">
-    <div class="d-flex align-items-center flex-grow-1">
-        <div class="badge badge-primary mr-3"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
-        {{ room.roomName }}
+<div class="d-flex flex-row search-result-item card mb-2 nitro-navigator-search-result-list-component small" (click)="visit()" *ngIf="displayMode == 0">
+    <div class="badge badge-primary nitro-navigator-search-result-list-image-component d-flex flex-column m-1 p-0">
+        <div class="badge badge-primary nitro-navigator-search-result-list-image-component d-flex flex-column h-100" [style]="'background:url('+thumbnail+')'">
+            <div class="badge badge-secondary mr-3 mt-auto text-center w-100" [ngClass]="entryBg"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
+        </div>
+    </div>
+    <div class="nitro-navigator-search-result-list-info-component p-1">
+        <span>{{ room.roomName }}</span>
+        <span>{{ room.ownerName }}</span>
+        <div class="d-flex flex-r0w align-items-center">
+            <button type="button" class="btn btn-sm btn-primary mr-2" [ngbTooltip]="roomInfoTooltip" tooltipClass="search-result-item-tooltip" placement="right" container="body"><i class="fas fa-info-circle"></i></button>
+            <i class="fas fa-users mr-2" *ngIf="isGroup"></i>
+            <i class="fas fa-lock mr-2" *ngIf="isDoorbell"></i>
+            <i class="fas fa-key mr-2" *ngIf="isPassword"></i>
+        </div>
     </div>
     <ng-template #roomInfoTooltip>
         <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    pic
-                </div>
-                <div class="col-10">
-                    <span>{{ room.roomName }}</span>
-                    <span>{{ room.description }}</span>
-                </div>
-            </div>
-            <div class="row">
-                <i class="fas fa-user mr-1"></i>{{ room.ownerName }}
-            </div>
+            <span class="d-block">{{ room.roomName }}</span>
+            <span class="d-block small text-muted">"{{ room.description }}"</span>
+            <span class="d-block" *ngIf="room.ownerName != null"><i class="fas fa-user mr-1"></i>{{ room.ownerName }}</span>
         </div>
     </ng-template>
-    <div class="d-flex align-items-center">
-        <i class="fas fa-users mr-2" *ngIf="isGroup"></i>
-        <i class="fas fa-lock mr-2" *ngIf="isDoorbell"></i>
-        <i class="fas fa-key mr-2" *ngIf="isPassword"></i>
+</div>
+
+<div class="d-flex mb-2 align-items-center search-result-item card nitro-navigator-search-result-thumbnail-component" (click)="visit()" *ngIf="displayMode != 0">
+    <div class="nitro-navigator-thumbnail bg-primary mb-1">
+        <div class="nitro-navigator-thumbnail d-flex flex-column align-items-center" [style]="'background:url('+thumbnail+')'">
+            <div class="badge badge-secondary mt-auto text-center w-100" [ngClass]="entryBg"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
+        </div>
+    </div>
+    <div class="thumbnail-footer">
+        <span>{{ room.roomName }}</span>
         <button type="button" class="btn btn-sm btn-primary" [ngbTooltip]="roomInfoTooltip" tooltipClass="search-result-item-tooltip" placement="right" container="body"><i class="fas fa-info-circle"></i></button>
+        <ng-template #roomInfoTooltip>
+            <div class="container">
+                <span class="d-block">{{ room.roomName }}</span>
+                <span class="d-block small text-muted">"{{ room.description }}"</span>
+                <span class="d-block" *ngIf="room.ownerName != null"><i class="fas fa-user mr-1"></i>{{ room.ownerName }}</span>
+            </div>
+        </ng-template>
     </div>
 </div>

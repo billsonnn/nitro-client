@@ -58,4 +58,33 @@ export class NavigatorSearchItemComponent
     {
         return (this.room && (this.room.doorMode === RoomDataParser.PASSWORD_STATE));
     }
+
+    public get thumbnail(): string
+    { 
+        if (!this.room) return;
+        
+        let thumbnailUrl: string = Nitro.instance.core.configuration.getValue("thumbnails.url");
+
+        thumbnailUrl = thumbnailUrl.replace('%thumbnail%', this.room.roomId.toString());
+
+        return thumbnailUrl;
+    }
+
+    public get entryBg(): String 
+    {
+        var bg: String = 'badge-secondary';
+
+        var num: Number = (100 * (this.room.userCount / this.room.maxUserCount));
+
+        if (num >= 92) {
+            bg = 'badge-danger'
+        } else if (num >= 50) {
+            bg = 'badge-warning text-white'
+        }
+        else if (num > 0) {
+            bg = 'badge-success'
+        }
+        
+        return bg;
+    }
 }

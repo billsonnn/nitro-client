@@ -1,10 +1,17 @@
 <div class="card bg-primary">
     <div class="card-header">
-        <div class="header-title" (click)="toggleCollapsed()"><i class="mr-2 fas" [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i>{{ resultCode | translate }}</div>
+        <div class="header-title">
+            <i class="mr-2 fas" (click)="toggleCollapsed()"
+                [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i>
+            {{ resultCode | translate }}
+            <i class="fas fa-bars float-right" [class.fa-th]="displayMode == 0" *ngIf="displayMode != 2" (click)="toggleListMode()"></i>
+        </div>
     </div>
-    <div class="card-body py-0" *ngIf="isCollapsed">
-        <ng-container *ngFor="let room of result.rooms">
-            <div nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
-        </ng-container>
+    <div class="card-body py-0">
+        <div class="d-flex flex-wrap flex-row nitro-navigator-room-list mt-2 mb-2" *ngIf="isCollapsed">
+            <ng-container *ngFor="let room of result.rooms">
+                <div nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
+            </ng-container>
+        </div>
     </div>
 </div>

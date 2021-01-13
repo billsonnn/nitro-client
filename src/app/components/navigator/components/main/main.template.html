@@ -4,12 +4,13 @@
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body">
+        <div nitro-navigator-slider-component *ngIf="sliderVisible"></div>
         <div class="btn-group w-100 mb-3">
             <button *ngFor="let context of topLevelContexts" type="button" class="btn btn-primary" [ngClass]="{ 'active': (topLevelContext === context) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</button>
             <button type="button" class="btn btn-primary" (click)="openRoomCreator()"><i class="fas fa-plus"></i></button>
         </div>
         <div nitro-navigator-search-component></div>
-        <perfect-scrollbar class="results-container position-relative w-100" style="min-height: 400px;max-height: 400px;">
+        <perfect-scrollbar class="results-container position-relative w-100 pr-1" style="min-height: 350px;max-height: 350px;height:350px;">
             <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
         </perfect-scrollbar>
     </div>

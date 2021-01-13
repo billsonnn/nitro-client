@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Nitro } from 'src/client/nitro/Nitro';
 import { NavigatorSearchResultList } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
 import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
@@ -199,5 +200,10 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     public get isLoading(): boolean
     {
         return (this._navigatorService && (this._navigatorService.isLoading || this._navigatorService.isSearching));
+    }
+
+    public get sliderVisible(): boolean
+    { 
+        return (Nitro.instance.core.configuration.getValue("navigator.slider.enabled"))
     }
 }

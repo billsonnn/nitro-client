@@ -16,6 +16,7 @@ import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 import { TranslatePipe } from './pipes/translate';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	suppressScrollX: true
@@ -34,7 +35,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgbModalModule,
 		NgxPaginationModule,
 		NgxSliderModule,
-		PerfectScrollbarModule
+		PerfectScrollbarModule,
+		MDBBootstrapModule.forRoot()
 	],
 	exports: [
 		CommonModule,
@@ -47,6 +49,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgxPaginationModule,
 		NgxSliderModule,
 		PerfectScrollbarModule,
+		MDBBootstrapModule,
 		AvatarImageComponent,
 		BadgeComponent,
 		LoadingComponent,

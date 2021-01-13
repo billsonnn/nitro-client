@@ -89,6 +89,7 @@ export class OutgoingHeader
     public static NAVIGATOR_SEARCH_SAVE          = 2226;
     public static NAVIGATOR_SETTINGS             = 1782;
     public static NAVIGATOR_SETTINGS_SAVE        = 3159;
+    public static NAVIGATOR_CATEGORY_LIST_MODE   = 1202;
     public static PET_INFO                       = 2934;
     public static PET_PICKUP                     = 1581;
     public static PET_PLACE                      = 2647;
@@ -180,4 +181,5 @@ export class OutgoingHeader
     public static WIRED_CONDITION_SAVE           = 3203;
     public static WIRED_OPEN                     = 768;
     public static WIRED_TRIGGER_SAVE             = 1520;
+    
 }
