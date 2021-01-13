@@ -25,15 +25,20 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 
 @Component({
 	selector: 'nitro-main-component',
-    template: `
+	template: `
 	<div class="nitro-main-component">
 		<nitro-notification-main-component></nitro-notification-main-component>
+		<div class="nitro-right-side">
+			<div class="d-flex flex-column">
+				<nitro-purse-main-component></nitro-purse-main-component>
+				<nitro-notification-centre-component></nitro-notification-centre-component>
+			</div>
+		</div>
 		<nitro-call-for-help-main-component></nitro-call-for-help-main-component>
 		<nitro-pedia-main-component></nitro-pedia-main-component>
 		<nitro-avatar-editor-main-component [visible]="avatarEditorVisible"></nitro-avatar-editor-main-component>
 		<nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
 		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
-		<nitro-purse-main-component></nitro-purse-main-component>
 		<nitro-friendlist-main-component [visible]="friendListVisible"></nitro-friendlist-main-component>
 		<nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
 		<nitro-navigator-main-component [visible]="navigatorVisible"></nitro-navigator-main-component>
@@ -42,8 +47,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
 		<nitro-room-component></nitro-room-component>
     </div>`
 })
-export class MainComponent implements OnInit, OnDestroy
-{
+export class MainComponent implements OnInit, OnDestroy {
 	@ViewChild(RoomComponent)
 	public roomComponent: RoomComponent = null;
 
@@ -52,14 +56,11 @@ export class MainComponent implements OnInit, OnDestroy
 	constructor(
 		private _notificationService: NotificationService,
 		private _settingsService: SettingsService,
-		private _ngZone: NgZone) {}
+		private _ngZone: NgZone) { }
 
-	public ngOnInit(): void
-	{
-		this._ngZone.runOutsideAngular(() =>
-		{
-			if(Nitro.instance.roomEngine.events)
-			{
+	public ngOnInit(): void {
+		this._ngZone.runOutsideAngular(() => {
+			if (Nitro.instance.roomEngine.events) {
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
@@ -82,8 +83,7 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
 			}
 
-			if(Nitro.instance.roomSessionManager.events)
-			{
+			if (Nitro.instance.roomSessionManager.events) {
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
@@ -95,12 +95,9 @@ export class MainComponent implements OnInit, OnDestroy
 		});
 	}
 
-	public ngOnDestroy(): void
-	{
-		this._ngZone.runOutsideAngular(() =>
-		{
-			if(Nitro.instance.roomEngine.events)
-			{
+	public ngOnDestroy(): void {
+		this._ngZone.runOutsideAngular(() => {
+			if (Nitro.instance.roomEngine.events) {
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
@@ -123,8 +120,7 @@ export class MainComponent implements OnInit, OnDestroy
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
 			}
 
-			if(Nitro.instance.roomSessionManager.events)
-			{
+			if (Nitro.instance.roomSessionManager.events) {
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
@@ -136,21 +132,18 @@ export class MainComponent implements OnInit, OnDestroy
 		});
 	}
 
-	private onRoomEngineEvent(event: RoomEngineEvent): void
-	{
-		if(!event) return;
+	private onRoomEngineEvent(event: RoomEngineEvent): void {
+		if (!event) return;
 
-		if(RoomId.isRoomPreviewerId(event.roomId)) return;
+		if (RoomId.isRoomPreviewerId(event.roomId)) return;
 
 		const session = Nitro.instance.roomSessionManager.getSession(event.roomId);
 
-		if(!session) return;
+		if (!session) return;
 
-		switch(event.type)
-		{
+		switch (event.type) {
 			case RoomEngineEvent.INITIALIZED:
-				if(this.roomComponent)
-				{
+				if (this.roomComponent) {
 					this.roomComponent.prepareRoom(session);
 
 					Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
@@ -164,8 +157,7 @@ export class MainComponent implements OnInit, OnDestroy
 					this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
 					this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
 
-					if(!this.roomComponent.roomSession.isSpectator)
-					{
+					if (!this.roomComponent.roomSession.isSpectator) {
 						this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
 						this.roomComponent.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
 					}
@@ -176,58 +168,50 @@ export class MainComponent implements OnInit, OnDestroy
 				return;
 			case RoomZoomEvent.ROOM_ZOOM:
 				const zoomEvent = (event as RoomZoomEvent);
-				
+
 				let zoomLevel = ((zoomEvent.level < 1) ? 0.5 : (1 << (Math.floor(zoomEvent.level) - 1)));
 
-				if(zoomEvent.forceFlip || zoomEvent.asDelta) zoomLevel = zoomEvent.level;
+				if (zoomEvent.forceFlip || zoomEvent.asDelta) zoomLevel = zoomEvent.level;
 
-				if(this.roomComponent) Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(this.roomComponent.roomSession.roomId, this.roomComponent.getFirstCanvasId(), zoomLevel, null, null, false, zoomEvent.asDelta);
-				
+				if (this.roomComponent) Nitro.instance.roomEngine.setRoomInstanceRenderingCanvasScale(this.roomComponent.roomSession.roomId, this.roomComponent.getFirstCanvasId(), zoomLevel, null, null, false, zoomEvent.asDelta);
+
 				return;
 			case RoomBackgroundColorEvent.ROOM_COLOR:
-				if(this.roomComponent)
-				{
+				if (this.roomComponent) {
 					const colorEvent = (event as RoomBackgroundColorEvent);
 
-					if(colorEvent._Str_11464)
-					{
+					if (colorEvent._Str_11464) {
 						this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
 					}
-					else
-					{
+					else {
 						this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
 					}
 				}
 				return;
 			case RoomEngineDimmerStateEvent.ROOM_COLOR:
-				if(this.roomComponent) this.roomComponent._Str_2485(event);
+				if (this.roomComponent) this.roomComponent._Str_2485(event);
 				return;
-            case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
-				if(this.roomComponent)
-				{
+			case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
+				if (this.roomComponent) {
 					const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
-					
-					if(hslColorEvent.enable) this.roomComponent.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
+
+					if (hslColorEvent.enable) this.roomComponent.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
 					else this.roomComponent.setRoomBackgroundColor(0, 0, 0);
 				}
-                return;
+				return;
 		}
 	}
 
-	public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
-	{
+	public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void {
 		(this.roomComponent && this.roomComponent.onRoomEngineObjectEvent(event));
 	}
 
-	private onRoomSessionEvent(event: RoomSessionEvent): void
-	{
-		if(!event) return;
+	private onRoomSessionEvent(event: RoomSessionEvent): void {
+		if (!event) return;
 
-		switch(event.type)
-		{
+		switch (event.type) {
 			case RoomSessionEvent.CREATED:
-				this._ngZone.run(() =>
-				{
+				this._ngZone.run(() => {
 					this._landingViewVisible = false;
 				});
 
@@ -238,10 +222,9 @@ export class MainComponent implements OnInit, OnDestroy
 			case RoomSessionEvent.ROOM_DATA:
 				return;
 			case RoomSessionEvent.ENDED:
-				if(this.roomComponent) this.roomComponent.endRoom();
-				
-				this._ngZone.run(() =>
-				{
+				if (this.roomComponent) this.roomComponent.endRoom();
+
+				this._ngZone.run(() => {
 					this._landingViewVisible = event.openLandingView;
 				});
 				return;
@@ -251,33 +234,27 @@ export class MainComponent implements OnInit, OnDestroy
 		}
 	}
 
-	public get landingViewVisible(): boolean
-	{
+	public get landingViewVisible(): boolean {
 		return this._landingViewVisible;
 	}
 
-	public get avatarEditorVisible(): boolean
-	{
+	public get avatarEditorVisible(): boolean {
 		return this._settingsService.avatarEditorVisible;
 	}
 
-	public get catalogVisible(): boolean
-	{
+	public get catalogVisible(): boolean {
 		return this._settingsService.catalogVisible;
 	}
 
-	public get navigatorVisible(): boolean
-	{
+	public get navigatorVisible(): boolean {
 		return this._settingsService.navigatorVisible;
 	}
 
-	public get inventoryVisible(): boolean
-    {
-        return this._settingsService.inventoryVisible;
+	public get inventoryVisible(): boolean {
+		return this._settingsService.inventoryVisible;
 	}
-	
-	public get friendListVisible(): boolean
-    {
-        return this._settingsService.friendListVisible;
-    }
+
+	public get friendListVisible(): boolean {
+		return this._settingsService.friendListVisible;
+	}
 }
