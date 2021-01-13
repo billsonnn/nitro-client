@@ -19,8 +19,6 @@ declare global
 			closeWebPageAndRestoreClient?: () => void;
 			openHabblet?: (name: string, param: string) => void;
 			closeHabblet?: (name: string, param: string) => void;
-			showGame?: (gameUrl: string) => void;
-			hideGame?: () => void;
 			openExternalLink?: (link: string) => void;
 			roomVisited?: (roomId: number) => void;
 			openMinimail?: (target: string) => void;

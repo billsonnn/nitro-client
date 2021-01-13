@@ -144,7 +144,7 @@ export class HabboWebTools
         {
             if(LegacyExternalInterface.available)
             {
-                LegacyExternalInterface.call('showGame', gameUrl);
+                LegacyExternalInterface.callGame('showGame', gameUrl);
             }
         }
 
@@ -160,7 +160,7 @@ export class HabboWebTools
         {
             if(LegacyExternalInterface.available)
             {
-                LegacyExternalInterface.call('hideGame');
+                LegacyExternalInterface.callGame('hideGame');
             }
         }
 
