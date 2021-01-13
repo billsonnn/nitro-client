@@ -8,6 +8,7 @@ import { NitroEvent } from '../../../client/core/events/NitroEvent';
 import { IAvatarRenderManager } from '../../../client/nitro/avatar/IAvatarRenderManager';
 import { LegacyExternalInterface } from '../../../client/nitro/externalInterface/LegacyExternalInterface';
 import { Nitro } from '../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
@@ -35,6 +36,7 @@ import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
+import { RoomWidgetRoomEngineUpdateEvent } from './widgets/events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
@@ -479,6 +481,21 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         }
 
         return null;
+    }
+
+    public onRoomEngineEvent(event: RoomEngineEvent): void
+    {
+        if(!event) return;
+
+        switch(event.type)
+        {
+            case RoomEngineEvent.NORMAL_MODE:
+                this._events.dispatchEvent(new RoomWidgetRoomEngineUpdateEvent(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, event.roomId));
+                return;
+            case RoomEngineEvent.GAME_MODE:
+                this._events.dispatchEvent(new RoomWidgetRoomEngineUpdateEvent(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, event.roomId));
+                return;
+        }
     }
 
     public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void

@@ -58,11 +58,18 @@ export class MainComponent implements OnInit, OnDestroy {
 		private _settingsService: SettingsService,
 		private _ngZone: NgZone) { }
 
-	public ngOnInit(): void {
-		this._ngZone.runOutsideAngular(() => {
-			if (Nitro.instance.roomEngine.events) {
+	public ngOnInit(): void
+	{
+		this._ngZone.runOutsideAngular(() =>
+		{
+			if (Nitro.instance.roomEngine.events)
+			{
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onInterstitialEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.OBJECTS_INITIALIZED, this.onInterstitialEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.NORMAL_MODE, this.onInterstitialEvent.bind(this));
+				Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.GAME_MODE, this.onInterstitialEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.addEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
@@ -83,7 +90,8 @@ export class MainComponent implements OnInit, OnDestroy {
 				Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
 			}
 
-			if (Nitro.instance.roomSessionManager.events) {
+			if (Nitro.instance.roomSessionManager.events)
+			{
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
@@ -95,9 +103,12 @@ export class MainComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	public ngOnDestroy(): void {
-		this._ngZone.runOutsideAngular(() => {
-			if (Nitro.instance.roomEngine.events) {
+	public ngOnDestroy(): void
+	{
+		this._ngZone.runOutsideAngular(() =>
+		{
+			if (Nitro.instance.roomEngine.events)
+			{
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
 				Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
@@ -120,7 +131,8 @@ export class MainComponent implements OnInit, OnDestroy {
 				Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
 			}
 
-			if (Nitro.instance.roomSessionManager.events) {
+			if(Nitro.instance.roomSessionManager.events)
+			{
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
 				Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
@@ -132,7 +144,8 @@ export class MainComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private onRoomEngineEvent(event: RoomEngineEvent): void {
+	private onRoomEngineEvent(event: RoomEngineEvent): void
+	{
 		if (!event) return;
 
 		if (RoomId.isRoomPreviewerId(event.roomId)) return;
@@ -141,9 +154,11 @@ export class MainComponent implements OnInit, OnDestroy {
 
 		if (!session) return;
 
-		switch (event.type) {
+		switch (event.type)
+		{
 			case RoomEngineEvent.INITIALIZED:
-				if (this.roomComponent) {
+				if (this.roomComponent)
+				{
 					this.roomComponent.prepareRoom(session);
 
 					Nitro.instance.roomEngine.setActiveRoomId(event.roomId);
@@ -157,7 +172,8 @@ export class MainComponent implements OnInit, OnDestroy {
 					this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
 					this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
 
-					if (!this.roomComponent.roomSession.isSpectator) {
+					if (!this.roomComponent.roomSession.isSpectator)
+					{
 						this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
 						this.roomComponent.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
 					}
@@ -177,10 +193,12 @@ export class MainComponent implements OnInit, OnDestroy {
 
 				return;
 			case RoomBackgroundColorEvent.ROOM_COLOR:
-				if (this.roomComponent) {
+				if (this.roomComponent)
+				{
 					const colorEvent = (event as RoomBackgroundColorEvent);
 
-					if (colorEvent._Str_11464) {
+					if (colorEvent._Str_11464)
+					{
 						this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
 					}
 					else {
@@ -192,7 +210,8 @@ export class MainComponent implements OnInit, OnDestroy {
 				if (this.roomComponent) this.roomComponent._Str_2485(event);
 				return;
 			case RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR:
-				if (this.roomComponent) {
+				if (this.roomComponent)
+				{
 					const hslColorEvent = (event as RoomObjectHSLColorEnabledEvent);
 
 					if (hslColorEvent.enable) this.roomComponent.setRoomBackgroundColor(hslColorEvent.hue, hslColorEvent.saturation, hslColorEvent.lightness);
@@ -202,16 +221,29 @@ export class MainComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void {
+	private onInterstitialEvent(event: RoomEngineEvent): void
+	{
+		if(!event) return;
+
+		if((event.type !== RoomEngineEvent.GAME_MODE) && (event.type !== RoomEngineEvent.NORMAL_MODE)) return;
+
+		this.roomComponent && this.roomComponent.onRoomEngineEvent(event);
+	}
+
+	public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
+	{
 		(this.roomComponent && this.roomComponent.onRoomEngineObjectEvent(event));
 	}
 
-	private onRoomSessionEvent(event: RoomSessionEvent): void {
+	private onRoomSessionEvent(event: RoomSessionEvent): void
+	{
 		if (!event) return;
 
-		switch (event.type) {
+		switch (event.type)
+		{
 			case RoomSessionEvent.CREATED:
-				this._ngZone.run(() => {
+				this._ngZone.run(() =>
+				{
 					this._landingViewVisible = false;
 				});
 

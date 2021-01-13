@@ -16,6 +16,7 @@ import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidge
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
+import { RoomWidgetRoomEngineUpdateEvent } from '../events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
@@ -59,8 +60,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public petInfoData: PetInfoData     = new PetInfoData();
     public isDancing: boolean           = false;
 
-    private _isInitialized: boolean              = false;
+    private _isInitialized: boolean             = false;
     private _isRoomEnteredOwnAvatarHighlight    = false;
+    private _isGameMode                         = false;
 
     constructor(
         private _avatarEditorService: AvatarEditorService,
@@ -92,6 +94,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -111,6 +115,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
@@ -206,6 +212,12 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     }
                 }
                 break;
+            case RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE:
+                this._isGameMode = false;
+                break;
+            case RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE:
+                this._isGameMode = true;
+                break;
         }
         
         this.toggleUpdateReceiver();
@@ -231,68 +243,71 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         {
             if(this.view) this.removeView(this.view, false);
 
-            if(isAvatarMenu)
+            if(!this._isGameMode)
             {
-                if(avatarData._Str_11453)
+                if(isAvatarMenu)
                 {
-                    if(this.isDecorting) return;
-
-                    if(RoomEnterEffect.isRunning())
+                    if(avatarData._Str_11453)
                     {
+                        if(this.isDecorting) return;
 
+                        if(RoomEnterEffect.isRunning())
+                        {
+
+                        }
+                        else
+                        {
+                            if(!this.cachedOwnAvatarMenuView) this.cachedOwnAvatarMenuView = this.createView(RoomAvatarInfoOwnAvatarComponent);
+
+                            this.view = this.cachedOwnAvatarMenuView;
+
+                            this._ngZone.run(() => RoomAvatarInfoOwnAvatarComponent.setup((this.view.instance as RoomAvatarInfoOwnAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+                        }
                     }
                     else
                     {
-                        if(!this.cachedOwnAvatarMenuView) this.cachedOwnAvatarMenuView = this.createView(RoomAvatarInfoOwnAvatarComponent);
+                        if(!this.cachedAvatarMenuView) this.cachedAvatarMenuView = this.createView(RoomAvatarInfoAvatarComponent);
 
-                        this.view = this.cachedOwnAvatarMenuView;
+                        this.view = this.cachedAvatarMenuView;
 
-                        this._ngZone.run(() => RoomAvatarInfoOwnAvatarComponent.setup((this.view.instance as RoomAvatarInfoOwnAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+                        this._ngZone.run(() => RoomAvatarInfoAvatarComponent.setup((this.view.instance as RoomAvatarInfoAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+
+                        for(let view of this.cachedNameBubbles.values())
+                        {
+                            const viewInstance = view.instance;
+
+                            if(viewInstance.userId !== userId) continue;
+
+                            this.removeView(view, false);
+
+                            break;
+                        }
                     }
                 }
                 else
                 {
-                    if(!this.cachedAvatarMenuView) this.cachedAvatarMenuView = this.createView(RoomAvatarInfoAvatarComponent);
-
-                    this.view = this.cachedAvatarMenuView;
-
-                    this._ngZone.run(() => RoomAvatarInfoAvatarComponent.setup((this.view.instance as RoomAvatarInfoAvatarComponent), userId, userName, userType, roomIndex, avatarData));
-
-                    for(let view of this.cachedNameBubbles.values())
+                    if(!this.handler.roomEngine.isDecorating)
                     {
-                        const viewInstance = view.instance;
+                        if(!this.cachedNameView) this.cachedNameView = this.createView(RoomAvatarInfoNameComponent);
 
-                        if(viewInstance.userId !== userId) continue;
+                        this.view = this.cachedNameView;
 
-                        this.removeView(view, false);
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if(!this.handler.roomEngine.isDecorating)
-                {
-                    if(!this.cachedNameView) this.cachedNameView = this.createView(RoomAvatarInfoNameComponent);
-
-                    this.view = this.cachedNameView;
-
-                    this._ngZone.run(() =>
-                    {
-                        if(this.handler.container.sessionDataManager.userId === userId)
+                        this._ngZone.run(() =>
                         {
-                            RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex);
-
-                            if(this._isRoomEnteredOwnAvatarHighlight)
+                            if(this.handler.container.sessionDataManager.userId === userId)
                             {
+                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex);
+
+                                if(this._isRoomEnteredOwnAvatarHighlight)
+                                {
+                                }
                             }
-                        }
-                        else
-                        {
-                            RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true);
-                        }
-                    });
+                            else
+                            {
+                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true);
+                            }
+                        });
+                    }
                 }
             }
         }

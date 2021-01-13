@@ -105,6 +105,7 @@ import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNa
 import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { PetFigureUpdateEvent } from './messages/incoming/room/pet/PetFigureUpdateEvent';
+import { YouArePlayingGameEvent } from './messages/incoming/room/session/YouArePlayingGameEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from './messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from './messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -404,6 +405,9 @@ export class NitroMessages implements IMessageConfiguration
 
             // PET
             this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
+
+            // SESSION
+            this._events.set(IncomingHeader.PLAYING_GAME, YouArePlayingGameEvent);
 
             // UNIT
             this._events.set(IncomingHeader.UNIT_DANCE, RoomUnitDanceEvent);

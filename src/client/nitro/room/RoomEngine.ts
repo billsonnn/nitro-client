@@ -807,6 +807,26 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
+    public setRoomEngineGameMode(roomId: number, isPlaying: boolean): void
+    {
+        const roomInstance = this.getRoomInstance(roomId);
+
+        if(!roomInstance) return;
+
+        const mode = isPlaying ? 1 : 0;
+
+        roomInstance.model.setValue(RoomVariableEnum.IS_PLAYING_GAME, mode);
+
+        if(mode === 0)
+        {
+            this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.NORMAL_MODE, roomId));
+        }
+        else
+        {
+            this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.GAME_MODE, roomId));
+        }
+    }
+
     public disableUpdate(flag: boolean): void
     {
         if(flag)

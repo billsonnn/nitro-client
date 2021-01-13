@@ -24,6 +24,7 @@ import { RoomModelNameEvent } from '../communication/messages/incoming/room/mapp
 import { RoomPaintEvent } from '../communication/messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from '../communication/messages/incoming/room/mapping/RoomThicknessEvent';
 import { PetFigureUpdateEvent } from '../communication/messages/incoming/room/pet/PetFigureUpdateEvent';
+import { YouArePlayingGameEvent } from '../communication/messages/incoming/room/session/YouArePlayingGameEvent';
 import { RoomUnitChatEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from '../communication/messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -137,6 +138,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomUnitChatWhisperEvent(this.onRoomUnitChatEvent.bind(this)));
         this._connection.addMessageEvent(new RoomUnitTypingEvent(this.onRoomUnitTypingEvent.bind(this)));
         this._connection.addMessageEvent(new PetFigureUpdateEvent(this.onPetFigureUpdateEvent.bind(this)));
+        this._connection.addMessageEvent(new YouArePlayingGameEvent(this.onYouArePlayingGameEvent.bind(this)));
     }
 
     public setRoomId(id: number): void
@@ -824,6 +826,15 @@ export class RoomMessageHandler extends Disposable
         if(!parser) return;
 
         this._roomCreator.updateRoomObjectUserFigure(this._currentRoomId, parser.roomIndex, parser.figureData.figuredata, '' , '', parser.isRiding)
+    }
+
+    private onYouArePlayingGameEvent(event: YouArePlayingGameEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
     }
 
     private addRoomObjectFurnitureFloor(roomId: number, data: FurnitureFloorDataParser): void
