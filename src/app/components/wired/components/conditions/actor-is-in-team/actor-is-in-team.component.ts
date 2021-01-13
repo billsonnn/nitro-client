@@ -9,7 +9,9 @@ import { WiredConditionType } from '../WiredConditionType';
 export class ActorIsInTeamComponent extends WiredCondition
 {
     public static CODE: number          = WiredConditionType.ACTOR_IS_IN_TEAM;
-    public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_IN_TEAM;
+	public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_IN_TEAM;
+
+	public team: string = "1"; // Default Red
 
     public get code(): number
     {
@@ -23,29 +25,16 @@ export class ActorIsInTeamComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = trigger.intData[0];
-        //this._Str_6616(k)._Str_2520(this._Str_9779(k, _local_3));
-    }
+        this.team = trigger.intData[0].toString();
+	}
 
-    // public readIntegerParamsFromForm(k:IWindowContainer):Array
-    // {
-    //     var _local_2:Array = new Array();
-    //     _local_2.push(this._Str_6616(k)._Str_2657().id);
-    //     return _local_2;
-    // }
+	public readIntegerParamsFromForm(): number[]
+    {
+        return [ Number.parseInt(this.team) ];
+    }
 
     public get hasSpecialInputs(): boolean
     {
         return true;
     }
-
-    // private _Str_9779(k:IWindowContainer, _arg_2: number):IRadioButtonWindow
-    // {
-    //     return IRadioButtonWindow(k.findChildByName((("team_" + _arg_2) + "_radio")));
-    // }
-
-    // private _Str_6616(k:IWindowContainer):ISelectorWindow
-    // {
-    //     return ISelectorWindow(k.findChildByName("team_selector"));
-    // }
 }
