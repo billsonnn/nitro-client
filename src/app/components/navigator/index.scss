@@ -8,6 +8,10 @@
     cursor: pointer;
 }
 
+.results-container {
+    @include border-radius($card-border-radius);
+}
+
 .nitro-navigator-room-list {
     [nitro-navigator-search-result-item-component]:nth-child(2n) {
         .nitro-navigator-search-result-list-component {

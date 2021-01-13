@@ -1,4 +1,4 @@
-<div class="w-100 card nitro-navigator-slider-component mb-2 d-flex flex-column">
+<div class="w-100 card nitro-navigator-slider-component mt-2 d-flex flex-column">
     <mdb-carousel [isControls]="false" [animation]="'slide'" [isControls]="true">
         <mdb-carousel-item *ngFor="let con of sliderContent">
             <div class="nitro-navigator-slider-image-component py-2 px-0 h-100" [style]="'background:url('+con.image+')'" (click)="visit(con.roomId)">
