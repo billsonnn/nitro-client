@@ -5,12 +5,17 @@
     </div>
     <div class="card-body">
         <div class="btn-group w-100 mb-3">
-            <button *ngFor="let context of topLevelContexts" type="button" class="btn btn-primary" [ngClass]="{ 'active': (topLevelContext === context) }" (click)="setCurrentContext(context)">{{ ('navigator.toplevelview.' + context.code) | translate }}</button>
-            <button type="button" class="btn btn-primary" (click)="openRoomCreator()"><i class="fas fa-plus"></i></button>
+            <button *ngFor="let context of topLevelContexts" type="button" class="btn btn-primary"
+                [ngClass]="{ 'active': (topLevelContext === context) }" (click)="setCurrentContext(context)">{{
+                ('navigator.toplevelview.' + context.code) | translate }}</button>
+            <button type="button" class="btn btn-primary" (click)="openRoomCreator()"><i
+                    class="fas fa-plus"></i></button>
         </div>
         <div nitro-navigator-search-component></div>
-        <perfect-scrollbar class="results-container position-relative w-100" style="min-height: 400px;max-height: 400px;">
-            <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
+        <perfect-scrollbar class="results-container position-relative w-100"
+            style="min-height: 400px;max-height: 400px;height:400px;">
+            <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result"
+                nitro-navigator-search-result-component></div>
         </perfect-scrollbar>
     </div>
 </div>
