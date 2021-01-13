@@ -16,7 +16,7 @@ import { ToolbarModule } from './toolbar/toolbar.module';
 import { WiredModule } from './wired/wired.module';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule,
         NotificationModule,
         AvatarEditorModule,
@@ -39,4 +39,4 @@ import { WiredModule } from './wired/wired.module';
         MainComponent
     ]
 })
-export class ComponentsModule {} 
+export class ComponentsModule { } 
