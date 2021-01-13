@@ -1,9 +1,10 @@
-<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-alert nitro-alert-multiple-messages-component" noMemory="true">
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-alert nitro-alert-multiple-messages-component"
+    noMemory="true">
     <div class="card-header text-center">
         {{ title }}
     </div>
     <div class="card-body">
-        <perfect-scrollbar class="position-relative w-100" style="min-height:275px;max-height:275px;">
+        <perfect-scrollbar class="position-relative w-100" style="min-height:275px;max-height:275px;height:275px;">
             <ng-container *ngFor="let message of messages">
                 <div class="d-flex flex-column" [innerHTML]="message | keepHtml"></div>
             </ng-container>
