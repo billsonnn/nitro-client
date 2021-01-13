@@ -4,15 +4,13 @@ import { CatalogLayoutFrontPageFeaturedComponent } from './components/layouts/fr
 import { CatalogLayoutFrontPage4Component } from './components/layouts/frontpage4/frontpage4.component';
 import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.component';
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
+import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 
-export class CatalogLayoutFactory
-{
-    public getLayoutForType(type: string): typeof CatalogLayout
-    {
-        switch(type)
-        {
+export class CatalogLayoutFactory {
+    public getLayoutForType(type: string): typeof CatalogLayout {
+        switch (type) {
             case CatalogLayoutFrontPageFeaturedComponent.CODE:
                 return CatalogLayoutFrontPageFeaturedComponent;
             case CatalogLayoutFrontPage4Component.CODE:
@@ -21,6 +19,8 @@ export class CatalogLayoutFactory
                 return CatalogLayoutPetsComponent;
             case CatalogLayoutPets2Component.CODE:
                 return CatalogLayoutPets2Component;
+            case CatalogLayoutPets3Component.CODE:
+                return CatalogLayoutPets3Component;
             case CatalogLayoutSpacesNewComponent.CODE:
                 return CatalogLayoutSpacesNewComponent;
             case CatalogLayoutDefaultComponent.CODE:

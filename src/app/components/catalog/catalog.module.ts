@@ -14,9 +14,10 @@ import { CatalogNavigationSetComponent } from './components/navigation-set/navig
 import { CatalogNavigationComponent } from './components/navigation/navigation.component';
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -26,6 +27,7 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutFrontPage4Component,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
+        CatalogLayoutPets3Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogMainComponent,
@@ -44,6 +46,7 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutFrontPage4Component,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
+        CatalogLayoutPets3Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogMainComponent,
@@ -53,4 +56,4 @@ import { CatalogService } from './services/catalog.service';
         CatalogPurchaseComponent
     ]
 })
-export class CatalogModule {}
+export class CatalogModule { }
