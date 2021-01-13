@@ -38,9 +38,10 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     private _figureStructureData: IStructureData;
     private _categories: AdvancedMap<string, CategoryBaseModel>;
     private _figures: Map<string, FigureData>;
-    private _figureString: string;
     private _gender: string;
     private _clubMemberLevel: number;
+    private _lastSavedFigure: string;
+    private _lastSavedGender: string;
 
     private _aciveCategory: CategoryBaseModel;
 
@@ -56,9 +57,10 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         this._figureStructureData   = Nitro.instance.avatar.structureData;
         this._categories            = new AdvancedMap();
         this._figures               = new Map();
-        this._figureString          = '';
         this._gender                = FigureData.M;
         this._clubMemberLevel       = 0;
+        this._lastSavedFigure       = '';
+        this._lastSavedGender       = FigureData.M;
 
         const maleFigure    = new FigureData();
         const femaleFigure  = new FigureData();
@@ -107,7 +109,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         this._aciveCategory = category;
     }
 
-    public loadAvatarInEditor(figure: string, gender: string, clubMemberLevel: number): void
+    public loadAvatarInEditor(figure: string, gender: string, clubMemberLevel: number, reset: boolean = true): void
     {
         switch(gender)
         {
@@ -133,12 +135,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(!figureData) return;
 
-        figureData.loadAvatarData(figure, gender);
-
-        if(figure !== this._figureString)
+        if(figure !== figureData.getFigureString())
         {
-            this._figureString = figure;
-
             update = true;
         }
 
@@ -149,6 +147,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
             update = true;
         }
 
+        figureData.loadAvatarData(figure, gender);
+
         if(update)
         {
             for(let category of this._categories.getValues())
@@ -157,6 +157,12 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
                 category.reset();
             }
+        }
+
+        if(reset)
+        {
+            this._lastSavedFigure   = figure;
+            this._lastSavedGender   = this._gender;
         }
     }
 
@@ -425,9 +431,26 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(!figureData) return;
 
-        Nitro.instance.communication.connection.send(new UserFigureComposer(figureData.gender, figureData._Str_1008()));
+        this._lastSavedFigure   = figureData.getFigureString();
+        this._lastSavedGender   = figureData.gender;
+
+        Nitro.instance.communication.connection.send(new UserFigureComposer(figureData.gender, this._lastSavedFigure));
 
         this.hide();
+    }
+
+    public clearFigure(): void
+    {
+        const figureData = this.figureData;
+
+        if(!figureData) return;
+
+        this.loadAvatarInEditor(figureData.getFigureStringWithFace(0, false), figureData.gender, this._clubMemberLevel, false);
+    }
+
+    public resetFigure(): void
+    {
+        this.loadAvatarInEditor(this._lastSavedFigure, this._gender, this._clubMemberLevel);
     }
 
     private get _Str_25757(): boolean

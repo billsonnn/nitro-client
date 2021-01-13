@@ -43,8 +43,8 @@ export class FigureData implements IAvatarImageListener
         this._colors    = new Map();
         this._gender    = gender;
 
-        this._Str_958(figureString);
-        this._Str_2491();
+        this.parseFigureString(figureString);
+        this.updateView();
     }
 
     public dispose(): void
@@ -66,7 +66,7 @@ export class FigureData implements IAvatarImageListener
         return this._isDisposed;
     }
 
-    private _Str_958(figure: string): void
+    private parseFigureString(figure: string): void
     {
         if(!figure) return;
 
@@ -95,7 +95,7 @@ export class FigureData implements IAvatarImageListener
 
             if(!colorIds.length) colorIds.push(0);
 
-            this._Str_1876(setType, setId, false);
+            this.savePartSetId(setType, setId, false);
             this.savePartSetColourId(setType, colorIds, false);
         }
     }
@@ -119,7 +119,7 @@ export class FigureData implements IAvatarImageListener
         // return [this._avatarEditor._Str_24919(k)];
     }
 
-    public _Str_1008(): string
+    public getFigureString(): string
     {
         let figureString: string    = '';
         let setParts: string[]      = [];
@@ -159,13 +159,13 @@ export class FigureData implements IAvatarImageListener
         return figureString;
     }
 
-    public _Str_2088(k: string, _arg_2: number, _arg_3: number[], _arg_4: boolean = false): void
+    public savePartData(k: string, _arg_2: number, _arg_3: number[], _arg_4: boolean = false): void
     {
-        this._Str_1876(k, _arg_2, _arg_4);
+        this.savePartSetId(k, _arg_2, _arg_4);
         this.savePartSetColourId(k, _arg_3, _arg_4);
     }
 
-    private _Str_1876(k: string, _arg_2: number, _arg_3: boolean = true): void
+    private savePartSetId(k: string, _arg_2: number, _arg_3: boolean = true): void
     {
         switch(k)
         {
@@ -193,7 +193,7 @@ export class FigureData implements IAvatarImageListener
                 break;
         }
 
-        if(_arg_3) this._Str_2491();
+        if(_arg_3) this.updateView();
     }
 
     public savePartSetColourId(k: string, _arg_2: number[], _arg_3: boolean = true): void
@@ -217,10 +217,10 @@ export class FigureData implements IAvatarImageListener
                 break;
         }
 
-        if(_arg_3) this._Str_2491();
+        if(_arg_3) this.updateView();
     }
 
-    public getFigureStringWithFace(k: number): string
+    public getFigureStringWithFace(k: number, override = true): string
     {
         let figureString = '';
 
@@ -235,7 +235,7 @@ export class FigureData implements IAvatarImageListener
             
             let setId = this._data.get(setType);
 
-            if(setType === FigureData.FACE) setId = k;
+            if((setType === FigureData.FACE) && override) setId = k;
 
             let figureSet = ((setType + '-') + setId);
 
@@ -268,9 +268,9 @@ export class FigureData implements IAvatarImageListener
         return figureString;
     }
 
-    public _Str_2491(): void
+    public updateView(): void
     {
-        this._view.update(this._Str_1008(), this._avatarEffectType, this._direction);
+        this._view.update(this.getFigureString(), this._avatarEffectType, this._direction);
     }
 
     public get view(): FigureDataView
@@ -285,7 +285,7 @@ export class FigureData implements IAvatarImageListener
 
     public resetFigure(k: string): void
     {
-        this._Str_2491();
+        this.updateView();
     }
 
     public set avatarEffectType(k: number)
@@ -306,6 +306,6 @@ export class FigureData implements IAvatarImageListener
     public set direction(k: number)
     {
         this._direction = k;
-        this._Str_2491();
+        this.updateView();
     }
 }

@@ -287,7 +287,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const figureData   = new PetFigureData(figure);
         const typeId       = figureData.typeId;
 
-        const image = this._container.roomEngine.getRoomObjectPetImage(typeId, figureData.paletteId, figureData.color, new Vector3d((direction * 45)), scale, null, (typeId !== 15), 0, figureData.customParts, posture);
+        const image = this._container.roomEngine.getRoomObjectPetImage(typeId, figureData.paletteId, figureData.color, new Vector3d((direction * 45)), scale, null, false, 0, figureData.customParts, posture);
 
         if(image)
         {

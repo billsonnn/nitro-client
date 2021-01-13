@@ -25,9 +25,11 @@ export class AvatarEditorModelViewerComponent implements OnChanges
         this.prepareModel();
     }
 
-    private prepareModel(): void
+    public prepareModel(): void
     {
         if(!this.model) return;
+
+        this.model.setViewer(this);
 
         this.model.init();
         
@@ -62,7 +64,7 @@ export class AvatarEditorModelViewerComponent implements OnChanges
 
         this._activeCategory = category;
 
-        for(let part of this._activeCategory._Str_806)
+        for(let part of this._activeCategory.parts)
         {
             if(!part || !part.isSelected) continue;
 

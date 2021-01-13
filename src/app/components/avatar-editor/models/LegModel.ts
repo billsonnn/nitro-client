@@ -8,11 +8,11 @@ export class LegModel extends CategoryBaseModel
     {
         super.init();
 
-        this._Str_3130(FigureData.LG);
-        this._Str_3130(FigureData.SH);
-        this._Str_3130(FigureData.WA);
+        this.addCategory(FigureData.LG);
+        this.addCategory(FigureData.SH);
+        this.addCategory(FigureData.WA);
 
-        this._Str_2367 = true;
+        this._isInitalized = true;
     }
 
     public get name(): string
