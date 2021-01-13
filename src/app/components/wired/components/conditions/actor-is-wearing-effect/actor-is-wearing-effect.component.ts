@@ -11,6 +11,8 @@ export class ActorIsWearingEffectComponent extends WiredCondition
     public static CODE: number          = WiredConditionType.ACTOR_IS_WEARING_EFFECT;
     public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_WEARING_EFFECT;
 
+	public effectId: string;
+
     public get code(): number
     {
         return ActorIsWearingEffectComponent.CODE;
@@ -19,28 +21,21 @@ export class ActorIsWearingEffectComponent extends WiredCondition
     public get negativeCode(): number
     {
         return ActorIsWearingEffectComponent.NEGATIVE_CODE;
-    }
+	}
 
-    // public readIntegerParamsFromForm(k:IWindowContainer):Array
-    // {
-    //     var _local_2:Array = [];
-    //     _local_2.push(int(this.getSpecialInputTextField(k).text));
-    //     return _local_2;
-    // }
+	public readIntegerParamsFromForm(): number[]
+    {
+		const effectId = parseInt(this.effectId);
+		return isNaN(effectId) ? [] : [ effectId ];
+	}
 
     public onEditStart(trigger: Triggerable): void
     {
-        //this.getSpecialInputTextField(k).text = _arg_2.intData[0];
+		this.effectId = trigger.stringData.length > 0 ? trigger.stringData : '0';
     }
 
     public get hasSpecialInputs(): boolean
     {
         return true;
     }
-
-    // private getSpecialInputTextField(k:IWindowContainer):ITextFieldWindow
-    // {
-    //     var _local_2:ITextFieldWindow = ITextFieldWindow(k.findChildByName("effect_id"));
-    //     return _local_2;
-    // }
 }
