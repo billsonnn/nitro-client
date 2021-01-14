@@ -16,16 +16,17 @@ export class NavigatorSearchResultComponent implements OnInit
 
     public ngOnInit(): void
     {
-        this._displayMode   = this.result.mode;
-        this._isCollapsed   = this.result.closed;
+        this._displayMode = this.result.mode;
+        this._isCollapsed = this.result.closed;
     }
 
     public toggleListMode(): void
     {
-        if(this._displayMode === NavigatorDisplayMode.THUMBNAILS) return;
+        if (this._displayMode === NavigatorDisplayMode.FORCED_THUMBNAILS) return;
 
-        if(this._displayMode === NavigatorDisplayMode.LIST) this._displayMode = NavigatorDisplayMode.THUMBNAILS;
+        if (this._displayMode === NavigatorDisplayMode.LIST) this._displayMode = NavigatorDisplayMode.THUMBNAILS;
         else this._displayMode = NavigatorDisplayMode.LIST;
+
     }
 
     public toggleCollapsed(): void
@@ -37,7 +38,7 @@ export class NavigatorSearchResultComponent implements OnInit
     {
         let name = this.result.code;
 
-        if(this.result.code.startsWith('${'))
+        if (this.result.code.startsWith('${'))
         {
             name = name.substr(2, (name.length - 3));
         }

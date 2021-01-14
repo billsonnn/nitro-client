@@ -7,3 +7,84 @@
 .search-result-item {
     cursor: pointer;
 }
+
+.results-container {
+    @include border-radius($card-border-radius);
+}
+
+.nitro-navigator-room-list {
+    [nitro-navigator-search-result-item-component]:nth-child(2n) {
+        .nitro-navigator-search-result-list-component {
+            margin-right:0;
+        } 
+    }
+
+    [nitro-navigator-search-result-item-component]:nth-child(3n) {
+        .nitro-navigator-search-result-thumbnail-component {
+            margin-right:0;
+        } 
+    }
+
+    .nitro-navigator-thumbnail {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background-repeat: no-repeat;
+        background-position: center;
+        @include border-radius($card-border-radius);
+        background-image: url(../../../assets/images/navigator/thumbnail_placeholder.png);
+    }
+}
+
+.nitro-navigator-search-result-list-component {
+    width: 216px;
+    margin-right: 8px;
+
+    .nitro-navigator-search-result-list-image-component {
+        width:69px;
+        background-image: url(../../../assets/images/navigator/thumbnail_placeholder.png);
+        background-position: center;
+    }
+
+    .nitro-navigator-search-result-list-info-component {
+        span {
+            width:100%;
+            min-height:19px;
+            max-height: 19px;
+            display: block;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+
+.nitro-navigator-search-result-thumbnail-component {
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    overflow: hidden;
+    padding: 15px 5px 5px 5px;
+    margin-right: 8px;
+    align-items: center;
+
+    .thumbnail-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 32px;
+        overflow: hidden;
+        font-size: .8rem;
+
+        span {
+            line-height: 15px;
+            width: 80px;
+            max-height: 29px;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+@import './components/slider/index.scss';

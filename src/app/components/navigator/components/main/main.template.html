@@ -9,8 +9,9 @@
             <button type="button" class="btn btn-primary" (click)="openRoomCreator()"><i class="fas fa-plus"></i></button>
         </div>
         <div nitro-navigator-search-component></div>
-        <perfect-scrollbar class="results-container position-relative w-100" style="min-height: 400px;max-height: 400px;">
+        <perfect-scrollbar class="results-container position-relative w-100 pr-1" style="min-height: 350px;max-height: 350px;height:350px;">
             <div class="mb-3" *ngFor="let result of lastSearchResults" [result]="result" nitro-navigator-search-result-component></div>
         </perfect-scrollbar>
+        <div nitro-navigator-slider-component *ngIf="sliderVisible"></div>
     </div>
 </div>
