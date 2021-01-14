@@ -17,14 +17,14 @@ export class TimeElapsedLessComponent extends WiredCondition
     private static MAXIMUM_VALUE: number = 1200;
     private static STEPPER_VALUE: number = 1;
 
-	public time: number = 0;
+    public time: number = 0;
 
     public get code(): number
     {
         return TimeElapsedLessComponent.CODE;
     }
 
-	public onEditStart(trigger: Triggerable): void
+    public onEditStart(trigger: Triggerable): void
     {
         this.time = (trigger.intData[0] || 1);
 

@@ -10,7 +10,7 @@ import { WiredConditionType } from '../WiredConditionType';
 export class DontHaveStackedFurnisComponent extends WiredCondition
 {
     public static CODE: number = WiredConditionType.NOT_HAS_STACKED_FURNIS;
-	public requireAll: string = '0';
+    public requireAll: string = '0';
 
     public get code(): number
     {
@@ -25,9 +25,9 @@ export class DontHaveStackedFurnisComponent extends WiredCondition
     public onEditStart(trigger: Triggerable): void
     {
         this.requireAll = (((trigger.intData.length > 0) && (trigger.intData[0] === 1)) ? '1' : '0');
-	}
+    }
 
-	public readIntegerParamsFromForm(): number[]
+    public readIntegerParamsFromForm(): number[]
     {
         return [ ((this.requireAll === '1') ? 1 : 0) ];
     }
