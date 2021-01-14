@@ -17,7 +17,8 @@ export class NavigatorSearchItemComponent
 
     constructor(
         private _navigatorService: NavigatorService,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone) 
+    {}
 
     public visit(): void
     {

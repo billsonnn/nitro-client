@@ -68,7 +68,7 @@ export class CatalogService implements OnDestroy
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this))
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -76,7 +76,7 @@ export class CatalogService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -257,7 +257,7 @@ export class CatalogService implements OnDestroy
 
         if(page.children.length)
         {
-            for(let child of page.children)
+            for(const child of page.children)
             {
                 if(!child) continue;
 

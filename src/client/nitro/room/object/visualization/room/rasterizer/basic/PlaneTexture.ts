@@ -18,7 +18,7 @@ export class PlaneTexture
     {
         if(this._bitmaps)
         {
-            for(let bitmap of this._bitmaps)
+            for(const bitmap of this._bitmaps)
             {
                 if(!bitmap) continue;
 
@@ -47,7 +47,7 @@ export class PlaneTexture
     {
         if(!k) return null;
 
-        for(let bitmap of this._bitmaps)
+        for(const bitmap of this._bitmaps)
         {
             if(!bitmap) continue;
 

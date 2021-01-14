@@ -118,7 +118,7 @@ export class FurnitureItem implements IFurnitureItem
     {
         if(this._secondsToExpiration === -1) return -1;
 
-        let time: number = -1;
+        let time = -1;
 
         if(this._hasRentPeriodStarted)
         {

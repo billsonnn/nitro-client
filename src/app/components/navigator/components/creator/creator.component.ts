@@ -30,7 +30,8 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
     constructor(
         private _navigatorService: NavigatorService,
         private _activeModal: NgbActiveModal,
-        private _formBuilder: FormBuilder) {}
+        private _formBuilder: FormBuilder) 
+    {}
 
     public ngOnInit(): void
     {
@@ -164,7 +165,7 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
 
     public getRoomLayoutImageUrl(name: string): string
     {
-        let imageUrl = Nitro.instance.getConfiguration<string>("images.url");
+        let imageUrl = Nitro.instance.getConfiguration<string>('images.url');
 
         imageUrl += `/navigator/models/model_${ name }.png`;
 

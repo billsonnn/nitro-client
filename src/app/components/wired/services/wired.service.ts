@@ -57,7 +57,7 @@ export class WiredService implements OnDestroy
                 new DesktopViewEvent(this.onDesktopViewEvent.bind(this)),
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -69,7 +69,7 @@ export class WiredService implements OnDestroy
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -80,8 +80,8 @@ export class WiredService implements OnDestroy
         if(!event) return;
 
         switch(event.type)
-		{
-			case RoomSessionEvent.CREATED:
+        {
+            case RoomSessionEvent.CREATED:
             case RoomSessionEvent.STARTED:
                 this._roomSession = event.session;
                 return;
@@ -89,7 +89,7 @@ export class WiredService implements OnDestroy
                 this._roomSession = null;
 
                 this._ngZone.run(() => (this._component && this._component.close()));
-				return;
+                return;
         }
     }
 

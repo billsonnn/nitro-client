@@ -14,9 +14,9 @@ export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
     {
         super.init();
 
-        this._Str_3130(FigureData.FACE);
+        this.addCategory(FigureData.FACE);
 
-        this._Str_2367 = true;
+        this._isInitalized = true;
     }
 
     public selectColor(k: string, _arg_2: number, _arg_3: number): void
@@ -28,22 +28,22 @@ export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
 
     protected updateSelectionsFromFigure(k: string): void
     {
-        if(!this._categories || !this._Str_2278 || !this._Str_2278.figureData) return;
+        if(!this._categories || !this._editor || !this._editor.figureData) return;
 
         const category = this._categories.getValue(k);
 
         if(!category) return;
 
-        const setId = this._Str_2278.figureData.getPartSetId(k);
+        const setId = this._editor.figureData.getPartSetId(k);
 
-        let colorIds = this._Str_2278.figureData.getColourIds(k);
+        let colorIds = this._editor.figureData.getColourIds(k);
 
         if(!colorIds) colorIds = [];
 
-        category._Str_20245(setId);
-        category._Str_17669(colorIds);
+        category.selectPartId(setId);
+        category.selectColorIds(colorIds);
 
-        for(let part of category._Str_806)
+        for(const part of category.parts)
         {
             const figure        = this.controller.figureData.getFigureStringWithFace(part.id);
             const avatarImage   = Nitro.instance.avatar.createAvatarImage(figure, AvatarScaleType.LARGE, null, this);

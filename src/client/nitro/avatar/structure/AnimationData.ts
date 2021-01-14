@@ -15,7 +15,7 @@ export class AnimationData implements IFigureSetData
     {
         if(data && (data.length > 0))
         {
-            for(let animation of data)
+            for(const animation of data)
             {
                 if(!animation) continue;
 
@@ -30,7 +30,7 @@ export class AnimationData implements IFigureSetData
 
     public _Str_1017(k: any): boolean
     {
-        for(let _local_2 of k.action)
+        for(const _local_2 of k.action)
         {
             this._actions.set(_local_2.id, new AnimationAction(_local_2));
         }

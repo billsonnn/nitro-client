@@ -16,7 +16,7 @@ import { CatalogPurchaseComponent } from './components/purchase/purchase.compone
 import { CatalogService } from './services/catalog.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -53,4 +53,5 @@ import { CatalogService } from './services/catalog.service';
         CatalogPurchaseComponent
     ]
 })
-export class CatalogModule {}
+export class CatalogModule 
+{}

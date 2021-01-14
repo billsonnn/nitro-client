@@ -214,7 +214,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendTakeRightsMessage(userId: number): void
     {
-        this._connection.send(new RoomTakeRightsComposer([ userId ]));
+        this._connection.send(new RoomTakeRightsComposer(userId));
     }
 
     public pickupPet(id: number): void
@@ -266,14 +266,14 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._state;
     }
 
-    public get tradeMode(): number
-    {
-        return this._tradeMode;
-    }
-
     public get _Str_7411(): boolean
     {
         return true;
+    }
+
+    public get tradeMode(): number
+    {
+        return this._tradeMode;
     }
 
     public set tradeMode(mode: number)

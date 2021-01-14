@@ -46,7 +46,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         if(!existing || !existing.length) return;
 
-        for(let [ index, callback ] of existing.entries())
+        for(const [ index, callback ] of existing.entries())
         {
             if(!callback || callback !== callback) continue;
 
@@ -62,7 +62,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     {
         if(!event) return false;
 
-        if(Nitro.instance.getConfiguration<boolean>("system.dispatcher.log")) NitroLogger.log(`DISPATCHED: ${ event.type }`, 'Event Dispatcher');
+        if(Nitro.instance.getConfiguration<boolean>('system.dispatcher.log')) NitroLogger.log(`DISPATCHED: ${ event.type }`, 'Event Dispatcher');
 
         this.processEvent(event);
 
@@ -77,7 +77,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         const callbacks = [];
 
-        for(let callback of existing)
+        for(const callback of existing)
         {
             if(!callback) continue;
 
@@ -93,7 +93,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
                 callback(event);
             }
 
-            catch(err)
+            catch (err)
             {
                 NitroLogger.log(err);
 
@@ -106,11 +106,11 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     {
         if(!this._listeners || !this._listeners.size) return;
 
-        for(let [ type, callbacks ] of this._listeners.entries())
+        for(const [ type, callbacks ] of this._listeners.entries())
         {
             if(!type || !callbacks.length) continue;
 
-            for(let callback of callbacks)
+            for(const callback of callbacks)
             {
                 if(!callback) continue;
 

@@ -20,7 +20,11 @@
                     <i class="icon arrow-right-icon" (click)="rotateAvatar(figureData.direction - 1)"></i>
                 </div>
             </div>
-            <button type="button" class="btn btn-success" (click)="saveFigure()">{{ ('avatareditor.save') | translate }}</button>
+            <div class="btn-group mb-1">
+                <button type="button" class="btn btn-sm btn-primary" (click)="resetFigure()"><i class="fas fa-undo"></i></button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="clearFigure()"><i class="fas fa-trash"></i></button>
+            </div>
+            <button type="button" class="btn btn-sm btn-success" (click)="saveFigure()">{{ ('avatareditor.save') | translate }}</button>
         </div>
     </div>
 </div>

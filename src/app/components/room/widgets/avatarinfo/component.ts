@@ -16,6 +16,7 @@ import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidge
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
+import { RoomWidgetRoomEngineUpdateEvent } from '../events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
@@ -31,7 +32,7 @@ import { RoomAvatarInfoOwnAvatarComponent } from './ownavatar/component';
 import { PetInfoData } from './PetInfoData';
 
 @Component({
-	selector: 'nitro-room-avatarinfo-component',
+    selector: 'nitro-room-avatarinfo-component',
     template: `
     <div class="nitro-room-avatarinfo-component">
         <ng-template #contextsContainer></ng-template>
@@ -59,8 +60,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public petInfoData: PetInfoData     = new PetInfoData();
     public isDancing: boolean           = false;
 
-    private _isInitialized: boolean              = false;
+    private _isInitialized: boolean             = false;
     private _isRoomEnteredOwnAvatarHighlight    = false;
+    private _isGameMode                         = false;
 
     constructor(
         private _avatarEditorService: AvatarEditorService,
@@ -92,6 +94,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -111,6 +115,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
@@ -119,9 +125,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         const viewInstance = ((this.view && this.view.instance) || null);
 
-        switch (event.type)
+        switch(event.type)
         {
-            case RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO:
+            case RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO: {
                 const avatarInfoEvent = (event as RoomWidgetAvatarInfoEvent);
 
                 this._isRoomEnteredOwnAvatarHighlight = (!this._isInitialized && this.handler.container.roomSession && (avatarInfoEvent._Str_2707 === this.handler.container.roomSession.ownRoomIndex));
@@ -130,7 +136,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 this._isInitialized = true;
                 break;
-            case RoomObjectNameEvent.RWONE_TYPE:
+            }
+            case RoomObjectNameEvent.RWONE_TYPE: {
                 const nameEvent = (event as RoomObjectNameEvent);
 
                 if(nameEvent.category === RoomObjectCategory.UNIT)
@@ -138,8 +145,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     this._Str_12674(nameEvent.userId, nameEvent.userName, nameEvent.userType, nameEvent.roomIndex, false, null);
                 }
                 break;
+            }
             case RoomWidgetUpdateInfostandUserEvent.OWN_USER:
-            case RoomWidgetUpdateInfostandUserEvent.PEER:
+            case RoomWidgetUpdateInfostandUserEvent.PEER: {
                 const infostandEvent = (event as RoomWidgetUpdateInfostandUserEvent);
 
                 this.userInfoData.populate(infostandEvent);
@@ -148,18 +156,20 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 this._Str_12674(infostandEvent.webID, infostandEvent.name, infostandEvent.userType, infostandEvent.roomIndex, false, userData);
                 break;
-            case RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED:
+            }
+            case RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED: {
                 if(!this._isInitialized)
                 {
                     this._Str_25716();
                 }
                 break;
-            case RoomWidgetRoomObjectUpdateEvent.USER_REMOVED:
+            }
+            case RoomWidgetRoomObjectUpdateEvent.USER_REMOVED: {
                 const removedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
                 if(viewInstance && ((viewInstance as AvatarContextInfoView).roomIndex === removedEvent.id)) this.removeView(this.view, false);
 
-                for(let view of this.cachedNameBubbles.values())
+                for(const view of this.cachedNameBubbles.values())
                 {
                     const viewInstance = view.instance;
 
@@ -172,15 +182,14 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 }
 
                 break;
+            }
             case RoomWidgetFurniInfostandUpdateEvent.FURNI:
                 if(this.view) this.removeView(this.view, false);
                 break;
             case RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED:
-                const deselectedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
-
                 if(this.view) this.removeView(this.view, false);
                 break;
-            case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER:
+            case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER: {
                 if(this._isRoomEnteredOwnAvatarHighlight) return;
 
                 const rollOverEvent = (event as RoomWidgetRoomObjectUpdateEvent);
@@ -191,7 +200,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     this.messageListener.processWidgetMessage(new RoomWidgetRoomObjectMessage(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME, rollOverEvent.id, rollOverEvent.category));
                 }
                 break;
-            case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT:
+            }
+            case RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT: {
                 if(this._isRoomEnteredOwnAvatarHighlight) return;
 
                 const rollOutEvent = (event as RoomWidgetRoomObjectUpdateEvent);
@@ -206,6 +216,13 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     }
                 }
                 break;
+            }
+            case RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE:
+                this._isGameMode = false;
+                break;
+            case RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE:
+                this._isGameMode = true;
+                break;
         }
         
         this.toggleUpdateReceiver();
@@ -213,7 +230,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
     private _Str_12674(userId: number, userName: string, userType: number, roomIndex: number, flag: boolean, avatarData: AvatarInfoData): void
     {
-        let isAvatarMenu = !!avatarData;
+        const isAvatarMenu = !!avatarData;
 
         let viewInstance = (this.view && this.view.instance);
 
@@ -231,68 +248,72 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         {
             if(this.view) this.removeView(this.view, false);
 
-            if(isAvatarMenu)
+            if(!this._isGameMode)
             {
-                if(avatarData._Str_11453)
+                if(isAvatarMenu)
                 {
-                    if(this.isDecorting) return;
-
-                    if(RoomEnterEffect.isRunning())
+                    if(avatarData._Str_11453)
                     {
+                        if(this.isDecorting) return;
 
+                        if(RoomEnterEffect.isRunning())
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            if(!this.cachedOwnAvatarMenuView) this.cachedOwnAvatarMenuView = this.createView(RoomAvatarInfoOwnAvatarComponent);
+
+                            this.view = this.cachedOwnAvatarMenuView;
+
+                            this._ngZone.run(() => RoomAvatarInfoOwnAvatarComponent.setup((this.view.instance as RoomAvatarInfoOwnAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+                        }
                     }
                     else
                     {
-                        if(!this.cachedOwnAvatarMenuView) this.cachedOwnAvatarMenuView = this.createView(RoomAvatarInfoOwnAvatarComponent);
+                        if(!this.cachedAvatarMenuView) this.cachedAvatarMenuView = this.createView(RoomAvatarInfoAvatarComponent);
 
-                        this.view = this.cachedOwnAvatarMenuView;
+                        this.view = this.cachedAvatarMenuView;
 
-                        this._ngZone.run(() => RoomAvatarInfoOwnAvatarComponent.setup((this.view.instance as RoomAvatarInfoOwnAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+                        this._ngZone.run(() => RoomAvatarInfoAvatarComponent.setup((this.view.instance as RoomAvatarInfoAvatarComponent), userId, userName, userType, roomIndex, avatarData));
+
+                        for(const view of this.cachedNameBubbles.values())
+                        {
+                            const viewInstance = view.instance;
+
+                            if(viewInstance.userId !== userId) continue;
+
+                            this.removeView(view, false);
+
+                            break;
+                        }
                     }
                 }
                 else
                 {
-                    if(!this.cachedAvatarMenuView) this.cachedAvatarMenuView = this.createView(RoomAvatarInfoAvatarComponent);
-
-                    this.view = this.cachedAvatarMenuView;
-
-                    this._ngZone.run(() => RoomAvatarInfoAvatarComponent.setup((this.view.instance as RoomAvatarInfoAvatarComponent), userId, userName, userType, roomIndex, avatarData));
-
-                    for(let view of this.cachedNameBubbles.values())
+                    if(!this.handler.roomEngine.isDecorating)
                     {
-                        const viewInstance = view.instance;
+                        if(!this.cachedNameView) this.cachedNameView = this.createView(RoomAvatarInfoNameComponent);
 
-                        if(viewInstance.userId !== userId) continue;
+                        this.view = this.cachedNameView;
 
-                        this.removeView(view, false);
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if(!this.handler.roomEngine.isDecorating)
-                {
-                    if(!this.cachedNameView) this.cachedNameView = this.createView(RoomAvatarInfoNameComponent);
-
-                    this.view = this.cachedNameView;
-
-                    this._ngZone.run(() =>
-                    {
-                        if(this.handler.container.sessionDataManager.userId === userId)
+                        this._ngZone.run(() =>
                         {
-                            RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex);
-
-                            if(this._isRoomEnteredOwnAvatarHighlight)
+                            if(this.handler.container.sessionDataManager.userId === userId)
                             {
+                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex);
+
+                                if(this._isRoomEnteredOwnAvatarHighlight)
+                                {
+                                    //
+                                }
                             }
-                        }
-                        else
-                        {
-                            RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true);
-                        }
-                    });
+                            else
+                            {
+                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true);
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -382,7 +403,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
             if(message) viewInstance.update(message.rectangle, message._Str_9337, time);
         }
 
-        for(let view of this.cachedNameBubbles.values())
+        for(const view of this.cachedNameBubbles.values())
         {
             if(!view) continue;
 

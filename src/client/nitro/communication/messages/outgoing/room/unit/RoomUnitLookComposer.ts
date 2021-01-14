@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RoomUnitLookComposer implements IMessageComposer
+export class RoomUnitLookComposer implements IMessageComposer<ConstructorParameters<typeof RoomUnitLookComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof RoomUnitLookComposer>;
 
     constructor(x: number, y: number)
     {
         this._data = [ x, y ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

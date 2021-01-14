@@ -97,7 +97,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
             this._primaryCanvasScale        = (geometry.scale - 10);
         }
 
-        let eventType: string               = '';
+        let eventType               = '';
         let _local_6: RoomWidgetUpdateEvent = null;
 
         this._tempScreenPosVector.x = 0;
@@ -146,11 +146,6 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     {
         if(!message || this._disposed) return null;
 
-        switch(message.type)
-        {
-
-        }
-
         return null;
     }
 
@@ -160,7 +155,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         switch(event.type)
         {
-            case RoomSessionChatEvent.CHAT_EVENT:
+            case RoomSessionChatEvent.CHAT_EVENT: {
                 const chatEvent = (event as RoomSessionChatEvent);
 
                 const roomObject = this._container.roomEngine.getRoomObject(chatEvent.session.roomId, chatEvent.objectId, RoomObjectCategory.UNIT);
@@ -198,7 +193,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                         let username                = '';
                         let avatarColor             = 0;
                         let image: HTMLImageElement = null;
-                        let chatType                = chatEvent.chatType;
+                        const chatType                = chatEvent.chatType;
                         let styleId                 = chatEvent.style;
                         let userType                = 0;
                         let petType                 = -1;
@@ -245,6 +240,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                 }
 
                 return;
+            }
         }
     }
 
@@ -287,7 +283,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const figureData   = new PetFigureData(figure);
         const typeId       = figureData.typeId;
 
-        const image = this._container.roomEngine.getRoomObjectPetImage(typeId, figureData.paletteId, figureData.color, new Vector3d((direction * 45)), scale, null, (typeId !== 15), 0, figureData.customParts, posture);
+        const image = this._container.roomEngine.getRoomObjectPetImage(typeId, figureData.paletteId, figureData.color, new Vector3d((direction * 45)), scale, null, false, 0, figureData.customParts, posture);
 
         if(image)
         {

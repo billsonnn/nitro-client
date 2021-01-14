@@ -19,7 +19,7 @@ export class Palette implements IPalette
 
     public _Str_2015(data: any): void
     {
-        for(let color of data.color)
+        for(const color of data.color)
         {
             const newColor = new PartColor(color);
 

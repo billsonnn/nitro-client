@@ -64,7 +64,7 @@ export class HighScoreDataType extends ObjectDataBase implements IObjectData
         this._clearType = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_CLEAR_TYPE);
         this._entries   = [];
 
-        let totalEntries = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_COUNT);
+        const totalEntries = model.getValue<number>(RoomObjectVariable.FURNITURE_HIGHSCORE_DATA_ENTRY_COUNT);
 
         let i = 0;
 

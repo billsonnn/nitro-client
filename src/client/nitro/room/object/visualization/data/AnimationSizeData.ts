@@ -20,7 +20,7 @@ export class AnimationSizeData extends SizeData
     {
         super.dispose();
 
-        for(let animation of this._animations.values())
+        for(const animation of this._animations.values())
         {
             if(!animation) continue;
 
@@ -36,7 +36,7 @@ export class AnimationSizeData extends SizeData
     {
         if(!animations) return true;
 
-        for(let key in animations)
+        for(const key in animations)
         {
             const animation = animations[key];
 

@@ -5,7 +5,7 @@ import { SettingsService } from '../../../../core/settings/service';
 import { FriendListService } from '../../services/friendlist.service';
 
 @Component({
-	selector: 'nitro-friendlist-main-component',
+    selector: 'nitro-friendlist-main-component',
     templateUrl: './main.template.html'
 })
 export class FriendListMainComponent implements OnInit, OnDestroy
@@ -16,7 +16,8 @@ export class FriendListMainComponent implements OnInit, OnDestroy
     constructor(
         private _settingsService: SettingsService,
         private _friendListService: FriendListService,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {

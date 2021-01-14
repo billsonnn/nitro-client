@@ -10,7 +10,7 @@ export class ActivePartSet
 
         if(data.activeParts && (data.activeParts.length > 0))
         {
-            for(let part of data.activeParts)
+            for(const part of data.activeParts)
             {
                 if(!part) continue;
 

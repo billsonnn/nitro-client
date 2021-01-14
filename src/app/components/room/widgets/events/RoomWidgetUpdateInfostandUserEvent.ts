@@ -2,29 +2,29 @@
 
 export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
 {
-    public static OWN_USER: string = "RWUIUE_OWN_USER";
-    public static BOT: string = "RWUIUE_BOT";
-    public static PEER: string = "RWUIUE_PEER";
+    public static OWN_USER: string = 'RWUIUE_OWN_USER';
+    public static BOT: string = 'RWUIUE_BOT';
+    public static PEER: string = 'RWUIUE_PEER';
     public static _Str_18400: number = 0;
     public static _Str_14161: number = 2;
     public static _Str_13798: number = 3;
-    public static _Str_7492: string = "BOT";
+    public static _Str_7492: string = 'BOT';
 
-    private _name: string = "";
-    private _motto: string = "";
+    private _name: string = '';
+    private _motto: string = '';
     private _activityPoints: number;
     private _Str_4900: number = 0;
     private _xp: number = 0;
     private _Str_3021: number;
-    private _figure: string = "";
+    private _figure: string = '';
     private _badges: string[];
     private _groupId: number = 0;
-    private _groupName: string = "";
-    private _Str_11289: string = "";
+    private _groupName: string = '';
+    private _Str_11289: string = '';
     private _Str_5228: number = 0;
     private _Str_5131: number = 0;
     private _Str_8522: boolean = false;
-    private _realName: string = "";
+    private _realName: string = '';
     private _Str_3947: boolean = false;
     private _Str_4026: boolean = false;
     private _Str_4028: boolean = false;

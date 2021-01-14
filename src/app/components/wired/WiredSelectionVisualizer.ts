@@ -32,7 +32,7 @@ export class WiredSelectionVisualizer
 
     public clearSelectionShaderFromFurni(furniIds: number[]): void
     {
-        for(let furniId of furniIds)
+        for(const furniId of furniIds)
         {
             this.clearSelectionShader(this.getRoomObject(furniId));
         }
@@ -40,7 +40,7 @@ export class WiredSelectionVisualizer
 
     public applySelectionShaderToFurni(furniIds: number[]): void
     {
-        for(let furniId of furniIds)
+        for(const furniId of furniIds)
         {
             this.applySelectionShader(this.getRoomObject(furniId));
         }
@@ -61,7 +61,7 @@ export class WiredSelectionVisualizer
 
         if(!visualization) return;
 
-        for(let sprite of visualization.sprites)
+        for(const sprite of visualization.sprites)
         {
             if(sprite.blendMode === BLEND_MODES.ADD) continue;
 
@@ -77,7 +77,7 @@ export class WiredSelectionVisualizer
 
         if(!visualization) return;
 
-        for(let sprite of visualization.sprites)
+        for(const sprite of visualization.sprites)
         {
             sprite.filters = [];
         }

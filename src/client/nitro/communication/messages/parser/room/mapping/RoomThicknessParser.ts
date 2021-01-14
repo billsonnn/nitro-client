@@ -46,6 +46,6 @@ export class RoomThicknessParser implements IMessageParser
 
     public get thicknessFloor(): number
     {
-        return this._thicknessFloor
+        return this._thicknessFloor;
     }
 }

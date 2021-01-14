@@ -37,12 +37,12 @@ export class AnimationFrameSequenceData
     public initialize(): void
     {
         let frameIndex: number  = (this._frameIndexes.length - 1);
-        let realIndex: number   = -1;
-        let nextIndex: number   = 1;
+        let realIndex   = -1;
+        let nextIndex   = 1;
 
         while(frameIndex >= 0)
         {
-            if (this._frameIndexes[frameIndex] === realIndex)
+            if(this._frameIndexes[frameIndex] === realIndex)
             {
                 nextIndex++;
             }
@@ -60,7 +60,7 @@ export class AnimationFrameSequenceData
 
     public addFrame(id: number, x: number, y: number, randomX: number, randomY: number, directionalOffset: DirectionalOffsetData): void
     {
-        let repeats: number = 1;
+        let repeats = 1;
 
         if(this._frames.length > 0)
         {

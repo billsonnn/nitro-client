@@ -14,7 +14,7 @@ export class _Str_5753
 
         let totalCount = wrapper.readInt();
 
-        while (totalCount > 0)
+        while(totalCount > 0)
         {
             this._breeds.push(wrapper.readInt());
 

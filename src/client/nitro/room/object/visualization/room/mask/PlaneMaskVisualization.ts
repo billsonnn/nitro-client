@@ -16,7 +16,7 @@ export class PlaneMaskVisualization
 
     public dispose(): void
     {
-        for(let mask of this._bitmaps)
+        for(const mask of this._bitmaps)
         {
             if(!mask) continue;
 
@@ -35,7 +35,7 @@ export class PlaneMaskVisualization
     {
         if(!k) return null;
 
-        for(let mask of this._bitmaps)
+        for(const mask of this._bitmaps)
         {
             if(!mask) continue;
 

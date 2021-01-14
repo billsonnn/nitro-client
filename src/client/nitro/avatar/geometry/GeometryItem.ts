@@ -45,7 +45,7 @@ export class GeometryItem extends Node3D
 
     public toString(): string
     {
-        return ((((this._id + ": ") + this.location) + " - ") + this._Str_1604);
+        return ((((this._id + ': ') + this.location) + ' - ') + this._Str_1604);
     }
 
     public get _Str_1457(): boolean

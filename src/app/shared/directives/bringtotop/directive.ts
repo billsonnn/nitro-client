@@ -16,7 +16,8 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
   
     constructor(
         private elementRef: ElementRef,
-        private ngZone: NgZone) {}
+        private ngZone: NgZone) 
+    {}
   
     public ngAfterViewInit(): void
     {
@@ -86,7 +87,7 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
 
         let zIndex = BringToTopDirective.Z_INDEX_START;
 
-        for(let target of BringToTopDirective.TOP_TARGETS)
+        for(const target of BringToTopDirective.TOP_TARGETS)
         {
             if(!target) continue;
 

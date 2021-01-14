@@ -10,7 +10,7 @@ import { NavigatorSearchResultComponent } from './components/searchresult/search
 import { NavigatorService } from './services/navigator.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -36,4 +36,5 @@ import { NavigatorService } from './services/navigator.service';
     ],
     entryComponents: [ NavigatorCreatorComponent, NavigatorDoorbellComponent, NavigatorPasswordComponent ]
 })
-export class NavigatorModule {}
+export class NavigatorModule 
+{}

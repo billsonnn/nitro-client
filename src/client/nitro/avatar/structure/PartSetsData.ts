@@ -19,7 +19,7 @@ export class PartSetsData implements IFigureSetData
     {
         if(data.partSet && (data.partSet.length > 0))
         {
-            for(let part of data.partSet)
+            for(const part of data.partSet)
             {
                 if(!part) continue;
 
@@ -29,7 +29,7 @@ export class PartSetsData implements IFigureSetData
 
         if(data.activePartSets && (data.activePartSets.length > 0))
         {
-            for(let activePart of data.activePartSets)
+            for(const activePart of data.activePartSets)
             {
                 if(!activePart) continue;
 
@@ -44,7 +44,7 @@ export class PartSetsData implements IFigureSetData
     {
         if(data.partSet && (data.partSet.length > 0))
         {
-            for(let part of data.partSet)
+            for(const part of data.partSet)
             {
                 if(!part) continue;
 
@@ -54,7 +54,7 @@ export class PartSetsData implements IFigureSetData
 
         if(data.activePartSets && (data.activePartSets.length > 0))
         {
-            for(let activePart of data.activePartSets)
+            for(const activePart of data.activePartSets)
             {
                 if(!activePart) continue;
 

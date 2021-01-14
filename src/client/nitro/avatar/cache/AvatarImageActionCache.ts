@@ -43,7 +43,7 @@ export class AvatarImageActionCache
     {
         if(!this._Str_586 || this._disposed) return;
 
-        for(let [ key, cache ] of this._Str_586.entries())
+        for(const [ key, cache ] of this._Str_586.entries())
         {
             if(!cache) continue;
 

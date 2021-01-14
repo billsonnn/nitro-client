@@ -31,7 +31,7 @@ export class AvatarEditorService implements OnDestroy
             this._messages = [
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -39,7 +39,7 @@ export class AvatarEditorService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });

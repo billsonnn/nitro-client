@@ -21,7 +21,8 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _settingsService: SettingsService,
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
-        private _inventoryTradingService: InventoryTradingService) {}
+        private _inventoryTradingService: InventoryTradingService) 
+    {}
 
     public ngOnInit(): void
     {
@@ -75,7 +76,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
 
     public updateItemLocking(): void
     {
-        let itemIds: number[] = [];
+        const itemIds: number[] = [];
 
         itemIds.push(...this._inventoryTradingService.getOwnTradingItemIds());
 
@@ -86,7 +87,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
             return;
         }
 
-        for(let item of this._inventoryFurnitureService.groupItems) item.lockItemIds(itemIds);
+        for(const item of this._inventoryFurnitureService.groupItems) item.lockItemIds(itemIds);
     }
 
     public setAllFurnitureSeen(): void

@@ -34,7 +34,7 @@ export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVi
                         const texture = Texture.from(image);
 
                         this._Str_6645(texture);
-                    }
+                    };
                 }
                 else
                 {
