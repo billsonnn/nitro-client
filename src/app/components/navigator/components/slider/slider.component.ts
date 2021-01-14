@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Nitro } from 'src/client/nitro/Nitro';
 import { NavigatorService } from '../../services/navigator.service';
 
@@ -12,11 +12,12 @@ export class NavigatorSliderComponent implements OnInit
     
     constructor(
         private _navigatorService: NavigatorService,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone) 
+    {}
     
     public ngOnInit(): void
     {
-        this._sliderContent = Nitro.instance.core.configuration.getValue("navigator.slider.content");
+        this._sliderContent = Nitro.instance.core.configuration.getValue('navigator.slider.content');
     }
 
     public visit(room: number): void
