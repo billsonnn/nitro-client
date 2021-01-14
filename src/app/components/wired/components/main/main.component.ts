@@ -1,3 +1,4 @@
+import { WiredActionFactory } from './../actions/WiredActionFactory';
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { ConditionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
@@ -31,9 +32,9 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     @ViewChild('inputsContainer', { read: ViewContainerRef })
     public inputsContainer: ViewContainerRef;
-    
+
     private _triggerConfs: WiredTriggerFactory;
-    //private _actionTypes: ActionTypes;
+    private _actionTypes: WiredActionFactory;
     private _conditionTypes: WiredConditionFactory;
     private _selectionVisualizer: WiredSelectionVisualizer;
 
@@ -46,7 +47,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void
@@ -54,7 +55,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
         this._wiredService.component = this;
 
         this._triggerConfs          = new WiredTriggerFactory();
-        //this._actionTypes           = new ActionTypes();
+        this._actionTypes           = new WiredActionFactory();
         this._conditionTypes        = new WiredConditionFactory();
         this._selectionVisualizer   = new WiredSelectionVisualizer(this);
     }
@@ -82,9 +83,9 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
         if(this._updated instanceof ActionDefinition)
         {
-        //     _local_5 = ActionDefinition(this._updated);
-        //     _local_6 = _local_5._Str_25459;
-        //     this._delaySlider._Str_2526(_local_6);
+            // _local_5 = ActionDefinition(this._updated);
+            // _local_6 = _local_5._Str_25459;
+            // this._delaySlider._Str_2526(_local_6);
         }
     }
 
@@ -92,7 +93,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         if(this._updated instanceof TriggerDefinition) return this._triggerConfs;
 
-        //if(this._updated instanceof ActionDefinition) return this._actionTypes;
+        if(this._updated instanceof ActionDefinition) return this._actionTypes;
 
         if(this._updated instanceof ConditionDefinition) return this._conditionTypes;
 
@@ -165,7 +166,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
         if(_local_2)
         {
             this._notificationService.alert('Update failed' + _local_2);
-            
+
             return;
         }
 

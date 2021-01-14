@@ -1,3 +1,4 @@
+import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { WiredBaseComponent } from './components/base/base.component';
@@ -70,7 +71,8 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-        TriggerPeriodicallyLongComponent
+		TriggerPeriodicallyLongComponent,
+		ToggleFurniStateComponent,
     ],
     providers: [
         WiredService
@@ -107,8 +109,9 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-        TriggerPeriodicallyLongComponent
+		TriggerPeriodicallyLongComponent,
+		ToggleFurniStateComponent,
     ]
 })
-export class WiredModule 
+export class WiredModule
 {}
