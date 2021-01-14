@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class NavigatorCategoryListModeComposer implements IMessageComposer
+export class NavigatorCategoryListModeComposer implements IMessageComposer<ConstructorParameters<typeof NavigatorCategoryListModeComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof NavigatorCategoryListModeComposer>;
 
     constructor(category: string, listmode: number)
     {
         this._data = [category, listmode];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }
