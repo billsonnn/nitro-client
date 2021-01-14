@@ -1,9 +1,9 @@
-﻿import { ToggleFurniComponent } from './../triggers/toggle-furni/toggle-furni.component';
-import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
+﻿import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
 import { WiredAction } from './WiredAction';
+import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -11,8 +11,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
     {
         switch(code)
         {
-			case ToggleFurniComponent.CODE:
-                return ToggleFurniComponent;
+			case ToggleFurniStateComponent.CODE:
+                return ToggleFurniStateComponent;
         }
 
         return null;

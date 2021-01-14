@@ -1,8 +1,8 @@
-﻿import { Options } from '@angular-slider/ngx-slider';
+﻿import { WiredFurniture } from './../../../WiredFurniture';
+import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Nitro } from 'src/client/nitro/Nitro';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { TriggerOnceComponent } from '../../triggers/trigger-once/trigger-once.component';
 import { WiredCondition } from '../WiredCondition';
 import { WiredConditionType } from '../WiredConditionType';
 
@@ -57,7 +57,7 @@ export class TimeElapsedMoreComponent extends WiredCondition
 
     protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.allowafter', 'seconds', TriggerOnceComponent.getLocaleName(this.time));
+        Nitro.instance.localization.registerParameter('wiredfurni.params.allowafter', 'seconds', WiredFurniture.getLocaleName(this.time));
 
         this.updateCount++;
     }
