@@ -9,6 +9,6 @@ export class RoomWidgetMessage
 
     public get type(): string
     {
-        return this._type
+        return this._type;
     }
 }

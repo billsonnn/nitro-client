@@ -11,7 +11,7 @@ export class RoomWidgetChooserContentEvent extends RoomWidgetUpdateEvent
 
     constructor(k: string, _arg_2: _Str_3405[], _arg_3: boolean = false)
     {
-        super(k)
+        super(k);
 
         this._items = _arg_2.slice();
         this._Str_10043 = _arg_3;

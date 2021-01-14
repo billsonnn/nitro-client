@@ -4,7 +4,8 @@ import { NotificationService } from '../../services/notification.service';
 @Component({
     templateUrl: './notificationdialog.temlate.html'
 })
-export class NotificationDialogComponent {
+export class NotificationDialogComponent 
+{
     public image: string = '';
     public message: string = '';
 
@@ -12,12 +13,20 @@ export class NotificationDialogComponent {
 
     constructor(
         private _notificationService: NotificationService
-    ) {
-        setTimeout(() => { this.removing = true; }, 1000)
-        setTimeout(() => { this.close() }, 5000)
+    ) 
+    {
+        setTimeout(() => 
+        {
+            this.removing = true; 
+        }, 1000);
+        setTimeout(() => 
+        {
+            this.close(); 
+        }, 5000);
     }
 
-    public close(): void {
+    public close(): void 
+    {
         this._notificationService.notificationCentre.close(this);
     }
 }

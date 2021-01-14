@@ -57,11 +57,11 @@ export class RoomObjectSortableSpriteCacheItem
 
     public _Str_20276(k: number): void
     {
-        if (k < this._sprites.length)
+        if(k < this._sprites.length)
         {
             let iterator = k;
 
-            while (iterator < this._sprites.length)
+            while(iterator < this._sprites.length)
             {
                 const sprite = this._sprites[iterator];
 

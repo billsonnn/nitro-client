@@ -13,11 +13,11 @@ export class PetInfoData
     public _Str_5175: boolean = false;
     public level: number = 0;
     public maximumLevel: number = 0;
-    public name: string = "";
+    public name: string = '';
     public happyness: number = 0;
     public maximumHappyness: number = 0;
     public ownerId: number = 0;
-    public ownerName: string = "";
+    public ownerName: string = '';
     public _Str_14767: number = 0;
     public respect: number = 0;
     public _Str_2985: number = 0;

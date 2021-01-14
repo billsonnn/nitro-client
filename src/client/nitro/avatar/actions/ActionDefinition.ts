@@ -43,7 +43,7 @@ export class ActionDefinition implements IActionDefinition
 
         if(data.params && (data.params.length > 0))
         {
-            for(let param of data.params)
+            for(const param of data.params)
             {
                 if(!param) continue;
 
@@ -54,7 +54,7 @@ export class ActionDefinition implements IActionDefinition
 
         if(data.types && (data.types.length > 0))
         {
-            for(let type of data.types)
+            for(const type of data.types)
             {
                 if(!type) continue;
 

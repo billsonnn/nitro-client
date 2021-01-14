@@ -15,22 +15,22 @@ export class NitroLogger implements INitroLogger
         this._print         = true;
     }
     
-    public log(message: any): void
+    public log(message: string): void
     {
         this.printMessage(message);
     }
     
-    public error(message: any, trace?: any): void
+    public error(message: string, trace?: string): void
     {
         this.printMessage(trace || message);
     }
     
-    public warn(message: any): void
+    public warn(message: string): void
     {
         this.printMessage(message);
     }
     
-    public printMessage(message: any): void
+    public printMessage(message: string): void
     {
         if(!this._print) return;
 

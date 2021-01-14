@@ -34,7 +34,7 @@ export class TimeElapsedMoreComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = (trigger.intData[0] - 1);
+        const _local_3: number = (trigger.intData[0] - 1);
         //this._slider._Str_2526(_local_3);
     }
 

@@ -26,7 +26,7 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
 
             data.setString(this._nextState.toString());
 
-            super.processUpdateMessage(new ObjectDataUpdateMessage(this._nextState, data))
+            super.processUpdateMessage(new ObjectDataUpdateMessage(this._nextState, data));
         }
 
         super.update(totalTimeRunning);
@@ -54,7 +54,7 @@ export class FurnitureIceStormLogic extends FurnitureMultiStateLogic
 
             data.setString(state.toString());
 
-            super.processUpdateMessage(new ObjectDataUpdateMessage(state, data))
+            super.processUpdateMessage(new ObjectDataUpdateMessage(state, data));
         }
         else
         {

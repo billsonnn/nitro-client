@@ -1,13 +1,14 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { NotificationService } from '../../services/notification.service';
-import { NotificationDialogComponent } from '../notificationdialog/notificationdialog.component'
+import { NotificationDialogComponent } from '../notificationdialog/notificationdialog.component';
 
 @Component({
     selector: 'nitro-notification-centre-component',
     templateUrl: './nc.template.html'
 })
-export class NotificationCentreComponent implements OnInit, OnDestroy {
+export class NotificationCentreComponent implements OnInit, OnDestroy 
+{
     @ViewChild('alertsContainer', { read: ViewContainerRef })
     public alertsContainer: ViewContainerRef;
 
@@ -16,32 +17,39 @@ export class NotificationCentreComponent implements OnInit, OnDestroy {
     constructor(
         private _notificationService: NotificationService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) { }
+        private _ngZone: NgZone) 
+    { }
 
-    public ngOnInit(): void {
+    public ngOnInit(): void 
+    {
         this._notificationService.notificationCentre = this;
     }
 
-    public ngOnDestroy(): void {
+    public ngOnDestroy(): void 
+    {
         this._notificationService.notificationCentre = null;
     }
 
-    public publish(params: Array<string>, type: string): NotificationDialogComponent {
-        let asset = params[0].split("}");
+    public publish(params: Array<string>, type: string): NotificationDialogComponent 
+    {
+        const asset = params[0].split('}');
 
-        let image = Nitro.instance.core.configuration.getValue("c.images.url") + "/" + asset[1];
+        const image = Nitro.instance.core.configuration.getValue('c.images.url') + '/' + asset[1];
 
         return this.buildPublish(params[2], image);
     }
 
-    public buildPublish(message: string, image: string) {
+    public buildPublish(message: string, image: string): NotificationDialogComponent
+    {
         let component: NotificationDialogComponent = null;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() => 
+        {
             component = this.createComponent(NotificationDialogComponent);
 
-            if (message) {
-                if (message.startsWith('${')) message = Nitro.instance.getLocalization(message);
+            if(message) 
+            {
+                if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
 
                 message = message.replace(/\r\n|\r|\n/g, '<br />');
             }
@@ -51,13 +59,14 @@ export class NotificationCentreComponent implements OnInit, OnDestroy {
             component.image = image;
         });
 
-        if (!component) return null;
+        if(!component) return null;
 
         return component;
     }
 
-    private createComponent(type: typeof NotificationDialogComponent): NotificationDialogComponent {
-        if (!type) return null;
+    private createComponent(type: typeof NotificationDialogComponent): NotificationDialogComponent 
+    {
+        if(!type) return null;
 
         let instance: NotificationDialogComponent = null;
 
@@ -65,7 +74,8 @@ export class NotificationCentreComponent implements OnInit, OnDestroy {
 
         let ref: ComponentRef<NotificationDialogComponent> = null;
 
-        if (factory) {
+        if(factory) 
+        {
             ref = this.alertsContainer.createComponent(factory);
 
             this._alerts.set(ref.instance, ref);
@@ -76,29 +86,32 @@ export class NotificationCentreComponent implements OnInit, OnDestroy {
         return instance;
     }
 
-    public close(component: NotificationDialogComponent): void {
-        if (!component) return;
+    public close(component: NotificationDialogComponent): void 
+    {
+        if(!component) return;
 
         const ref = this._alerts.get(component);
 
-        if (!ref) return;
+        if(!ref) return;
 
         this._alerts.delete(component);
 
         this.removeView(ref.hostView);
     }
 
-    public removeView(view: ViewRef): void {
-        if (!view) return;
+    public removeView(view: ViewRef): void 
+    {
+        if(!view) return;
 
         const index = this.alertsContainer.indexOf(view);
 
-        if (index === -1) return;
+        if(index === -1) return;
 
         this.alertsContainer.remove(index);
     }
 
-    public get alerts(): Map<NotificationDialogComponent, ComponentRef<NotificationDialogComponent>> {
+    public get alerts(): Map<NotificationDialogComponent, ComponentRef<NotificationDialogComponent>> 
+    {
         return this._alerts;
     }
 }

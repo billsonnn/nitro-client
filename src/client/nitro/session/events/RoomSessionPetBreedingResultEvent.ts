@@ -11,8 +11,9 @@ export class RoomSessionPetBreedingResultEvent extends RoomSessionEvent
     constructor(k: IRoomSession, _arg_2: any, _arg_3: any)
     {
         super(RoomSessionPetBreedingResultEvent.RSPFUE_PET_BREEDING_RESULT, k);
-        this._resultData = _arg_2;
-        this._otherResultData = _arg_3;
+
+        this._resultData        = _arg_2;
+        this._otherResultData   = _arg_3;
     }
 
     public get _Str_3713(): any

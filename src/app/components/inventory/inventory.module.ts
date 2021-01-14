@@ -10,7 +10,7 @@ import { InventoryService } from './services/inventory.service';
 import { InventoryTradingService } from './services/trading.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -33,4 +33,5 @@ import { InventoryTradingService } from './services/trading.service';
         InventoryTradingComponent
     ]
 })
-export class InventoryModule {}
+export class InventoryModule 
+{}

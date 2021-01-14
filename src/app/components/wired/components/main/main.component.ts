@@ -19,7 +19,7 @@ import { WiredConditionFactory } from '../conditions/WiredConditionFactory';
 import { WiredTriggerFactory } from '../triggers/WiredTriggerFactory';
 
 @Component({
-	selector: 'nitro-wired-main-component',
+    selector: 'nitro-wired-main-component',
     templateUrl: './main.template.html'
 })
 export class WiredMainComponent implements OnInit, OnDestroy
@@ -46,7 +46,8 @@ export class WiredMainComponent implements OnInit, OnDestroy
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone) 
+    {}
 
     public ngOnInit(): void
     {
@@ -235,7 +236,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     public getFurniName(): string
     {
-        let spriteId = ((this._updated && this._updated.spriteId) || -1);
+        const spriteId = ((this._updated && this._updated.spriteId) || -1);
 
         const furniData = Nitro.instance.sessionDataManager.getFloorItemData(spriteId);
 
@@ -249,7 +250,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     public getFurniDescription(): string
     {
-        let spriteId = ((this._updated && this._updated.spriteId) || -1);
+        const spriteId = ((this._updated && this._updated.spriteId) || -1);
 
         const furniData = Nitro.instance.sessionDataManager.getFloorItemData(spriteId);
 

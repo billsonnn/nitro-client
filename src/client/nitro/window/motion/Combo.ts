@@ -12,14 +12,14 @@ export class Combo extends Motion
         this._runningMotions = [];
         this._removedMotions = [];
 
-        for(let motion of motions) this._runningMotions.push(motion);
+        for(const motion of motions) this._runningMotions.push(motion);
     }
 
     public start(): void
     {
         super.start();
 
-        for(let motion of this._runningMotions) motion.start();
+        for(const motion of this._runningMotions) motion.start();
     }
 
     public tick(k: number): void
@@ -35,7 +35,7 @@ export class Combo extends Motion
             if(motion.running) motion.stop();
         }
 
-        for(let motion of this._runningMotions)
+        for(const motion of this._runningMotions)
         {
             if(motion.running) motion.tick(k);
 
@@ -44,7 +44,7 @@ export class Combo extends Motion
 
         if(this._runningMotions.length > 0)
         {
-            for (let motion of this._runningMotions)
+            for(const motion of this._runningMotions)
             {
                 this._target = motion.target;
 

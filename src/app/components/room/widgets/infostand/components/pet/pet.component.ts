@@ -4,7 +4,7 @@ import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
 
 @Component({
-	selector: 'nitro-room-infostand-pet-component',
+    selector: 'nitro-room-infostand-pet-component',
     template: `
     <div class="nitro-room-infostand-pet-component">
         pet

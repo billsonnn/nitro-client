@@ -37,12 +37,12 @@ export class UnseenItemTracker implements IUnseenItemTracker
             new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this))
         ];
 
-        for(let message of this._messages) this._communication.registerMessageEvent(message);
+        for(const message of this._messages) this._communication.registerMessageEvent(message);
     }
 
     private unregisterMessages(): void
     {
-        for(let message of this._messages) this._communication.removeMessageEvent(message);
+        for(const message of this._messages) this._communication.removeMessageEvent(message);
     }
 
     public _Str_8813(k: number): boolean
@@ -62,7 +62,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
 
         const existing = this._unseenItems[category];
 
-        for(let itemId of itemIds)
+        for(const itemId of itemIds)
         {
             existing.splice(existing.indexOf(itemId), 1);
         }
@@ -128,7 +128,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
 
         if(!parser) return;
 
-        for(let category of parser.categories)
+        for(const category of parser.categories)
         {
             const itemIds = parser.getItemsByCategory(category);
 
@@ -151,7 +151,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
             this._unseenItems[category] = unseenItems;
         }
 
-        for(let itemId of itemIds)
+        for(const itemId of itemIds)
         {
             if(unseenItems.indexOf(itemId) === -1) unseenItems.push(itemId);
         }

@@ -5,7 +5,7 @@ import { IConfigurationManager } from './IConfigurationManager';
 
 export class ConfigurationManager extends NitroManager implements IConfigurationManager
 {
-    private _definitions: AdvancedMap<string, any>;
+    private _definitions: AdvancedMap<string, unknown>;
 
     constructor()
     {
@@ -41,7 +41,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
             request.send();
         }
 
-        catch(e)
+        catch (e)
         {
             this.logger.error(e);
         }
@@ -73,17 +73,17 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         this.events && this.events.dispatchEvent(new ConfigurationEvent(type));
     }
 
-    private parseConfiguration(data: any): boolean
+    private parseConfiguration(data: string): boolean
     {
         if(!data || (data === '')) return false;
 
-        data = JSON.parse(data);
+        const configObject = JSON.parse(data);
 
         const regex = new RegExp(/%(.*?)%/g);
 
-        for(let key in data)
+        for(const key in configObject)
         {
-            let value = data[key];
+            let value = configObject[key];
 
             if(typeof value === 'string')
             {
@@ -104,9 +104,9 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
         if(pieces && pieces.length)
         {
-            for(let piece of pieces)
+            for(const piece of pieces)
             {
-                const existing = this._definitions.getValue(this.removeInterpolateKey(piece));
+                const existing = (this._definitions.getValue(this.removeInterpolateKey(piece)) as string);
 
                 if(existing) (value = value.replace(piece, existing));
             }
@@ -129,7 +129,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         return (existing as T);
     }
 
-    public setValue(key: string, value: any): void
+    public setValue(key: string, value: string): void
     {
         this._definitions.add(key, value);
     }

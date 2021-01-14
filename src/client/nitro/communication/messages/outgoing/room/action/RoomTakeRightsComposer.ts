@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RoomTakeRightsComposer implements IMessageComposer
+export class RoomTakeRightsComposer implements IMessageComposer<ConstructorParameters<typeof RoomTakeRightsComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof RoomTakeRightsComposer>;
 
-    constructor(userIds: number[])
+    constructor(...userIds: number[])
     {
         this._data = [ userIds.length, ...userIds ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

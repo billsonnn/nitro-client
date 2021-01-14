@@ -65,7 +65,7 @@ export class NumberDataType extends ObjectDataBase
         {
             if(i === 0)
             {
-
+                //
             }
             else
             {

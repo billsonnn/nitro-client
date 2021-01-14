@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class PetRespectComposer implements IMessageComposer
+export class PetRespectComposer implements IMessageComposer<ConstructorParameters<typeof PetRespectComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof PetRespectComposer>;
 
     constructor(petId: number)
     {
         this._data = [ petId ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

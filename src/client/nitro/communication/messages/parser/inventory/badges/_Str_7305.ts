@@ -26,7 +26,7 @@ export class _Str_7305 implements IMessageParser
 
             let _local_6 = 0;
 
-            while (_local_6 < _local_5)
+            while(_local_6 < _local_5)
             {
                 this._data.push(new _Str_7446(_local_4, wrapper));
 

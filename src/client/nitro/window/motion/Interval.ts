@@ -31,7 +31,7 @@ export class Interval extends Motion
     {
         super.tick(time);
 
-        let elapsed = ((time - this._startTimeMs) / this._duration);
+        const elapsed = ((time - this._startTimeMs) / this._duration);
 
         if(elapsed < 1)
         {

@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../../core/communication/messages/IMessageComposer';
 
-export class FurnitureFloorUpdateComposer implements IMessageComposer
+export class FurnitureFloorUpdateComposer implements IMessageComposer<ConstructorParameters<typeof FurnitureFloorUpdateComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof FurnitureFloorUpdateComposer>;
 
     constructor(itemId: number, x: number, y: number, direction: number)
     {
         this._data = [ itemId, x, y, direction ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

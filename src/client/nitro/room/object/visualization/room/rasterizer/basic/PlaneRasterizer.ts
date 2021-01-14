@@ -57,7 +57,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
     {
         if(this._planes)
         {
-            for(let plane of this._planes.values())
+            for(const plane of this._planes.values())
             {
                 if(!plane) continue;
 
@@ -83,7 +83,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
         if(this._geometries)
         {
-            for(let geometry of this._geometries.values())
+            for(const geometry of this._geometries.values())
             {
                 if(!geometry) continue;
 
@@ -99,14 +99,14 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
     public _Str_3355(): void
     {
-        for(let plane of this._planes.values())
+        for(const plane of this._planes.values())
         {
             if(!plane) continue;
 
             plane._Str_3355();
         }
 
-        for(let material of this._materials.values())
+        for(const material of this._materials.values())
         {
             if(!material) continue;
 
@@ -128,7 +128,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
     private _Str_21781(): void
     {
-        for(let material of this._materials.values())
+        for(const material of this._materials.values())
         {
             if(!material) continue;
 
@@ -140,7 +140,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
     private _Str_21447(): void
     {
-        for(let texture of this._textures.values())
+        for(const texture of this._textures.values())
         {
             if(!texture) continue;
 
@@ -216,7 +216,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
         if(k.length)
         {
-            for(let texture of k)
+            for(const texture of k)
             {
                 if(!texture) continue;
 
@@ -228,7 +228,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
                     if(texture.bitmaps && texture.bitmaps.length)
                     {
-                        for(let bitmap of texture.bitmaps)
+                        for(const bitmap of texture.bitmaps)
                         {
                             if(!bitmap) continue;
 
@@ -275,7 +275,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
     {
         if(!k || !k.length) return;
 
-        for(let material of k)
+        for(const material of k)
         {
             if(!material) continue;
 
@@ -284,16 +284,16 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
             if(material.matrices && material.matrices.length)
             {
-                for(let matrix of material.matrices)
+                for(const matrix of material.matrices)
                 {
                     if(!matrix) continue;
 
                     let repeatMode  = matrix.repeatMode;
                     let align       = matrix.align;
-                    let normalMinX  = PlaneMaterialCellMatrix._Str_3268;
-                    let normalMaxX  = PlaneMaterialCellMatrix._Str_3271;
-                    let normalMinY  = PlaneMaterialCellMatrix._Str_3268;
-                    let normalMaxY  = PlaneMaterialCellMatrix._Str_3271;
+                    const normalMinX  = PlaneMaterialCellMatrix._Str_3268;
+                    const normalMaxX  = PlaneMaterialCellMatrix._Str_3271;
+                    const normalMinY  = PlaneMaterialCellMatrix._Str_3268;
+                    const normalMaxY  = PlaneMaterialCellMatrix._Str_3271;
 
                     switch(repeatMode)
                     {
@@ -317,7 +317,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                             break;
                     }
 
-                    switch (align)
+                    switch(align)
                     {
                         case 'top':
                             align = PlaneMaterialCellMatrix.ALIGN_TOP;
@@ -352,16 +352,17 @@ export class PlaneRasterizer implements IPlaneRasterizer
         }
     }
 
-    private _Str_24431(k: any, _arg_2: PlaneMaterialCellMatrix, _arg_3: number): void
+    private _Str_24431(k: { repeatMode: string, width: number }, _arg_2: PlaneMaterialCellMatrix, _arg_3: number): void
     {
         if(!k || !_arg_2) return;
 
-        let repeatMode  = k.repeatMode;
-        let width       = k.width;
+        let repeatMode = PlaneMaterialCellColumn._Str_7916;
+
+        const width = k.width;
 
         const cells = this._Str_25217(k);
 
-        switch(repeatMode)
+        switch(k.repeatMode)
         {
             case 'borders':
                 repeatMode = PlaneMaterialCellColumn._Str_6087;
@@ -405,7 +406,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                 let assetNames: string[]        = null;
                 let offsetPoints: Point[]  = null;
                 let graphics: IGraphicAsset[]   = null;
-                let limit: number               = 0;
+                let limit               = 0;
 
                 if(cell.extras && cell.extras.length)
                 {
@@ -433,7 +434,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                 {
                     graphics = [];
 
-                    for(let assetName of assetNames)
+                    for(const assetName of assetNames)
                     {
                         if(!assetName) continue;
 
@@ -533,7 +534,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
 
         if(_arg_2 && _arg_2.length)
         {
-            for(let visualization of _arg_2)
+            for(const visualization of _arg_2)
             {
                 if(!visualization) continue;
 

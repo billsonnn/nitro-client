@@ -44,7 +44,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         if(this._categories)
         {
-            for(let k of this._categories.getValues())
+            for(const k of this._categories.getValues())
             {
                 if(k) k.dispose();
             }
@@ -97,7 +97,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
     {
         if(!this._categories) return false;
 
-        for(let category of this._categories.getValues())
+        for(const category of this._categories.getValues())
         {
             if(!category) continue;
 
@@ -111,7 +111,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
     {
         if(!this._categories) return false;
 
-        for(let category of this._categories.getValues())
+        for(const category of this._categories.getValues())
         {
             if(!category) continue;
 
@@ -127,7 +127,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         let _local_2 = false;
 
-        for(let name of this._categories.getKeys())
+        for(const name of this._categories.getKeys())
         {
             const category = this._categories.getValue(name);
 
@@ -161,13 +161,13 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         let _local_2 = false;
 
-        for(let name of this._categories.getKeys())
+        for(const name of this._categories.getKeys())
         {
             const category = this._categories.getValue(name);
 
             if(!category) continue;
 
-            let _local_6 = false;
+            const _local_6 = false;
 
             // if(category._Str_8360(this._Str_2278.manager.inventory)) _local_6 = true;
 
@@ -175,7 +175,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
             {
                 const _local_7 = category.getCurrentPart();
 
-                if (_local_7 && this._editor && this._editor.figureData && category)
+                if(_local_7 && this._editor && this._editor.figureData && category)
                 {
                     this._editor.figureData.savePartData(name, _local_7.id, category.getSelectedColorIds(), true);
                 }
@@ -189,7 +189,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
     public selectPart(k: string, _arg_2: number): void
     {
-        var categoryData = this._categories.getValue(k);
+        const categoryData = this._categories.getValue(k);
 
         if(!categoryData) return;
 

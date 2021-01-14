@@ -65,7 +65,7 @@ export class FurnitureFloorHoleLogic extends FurnitureMultiStateLogic
         {
             if((location.x !== this._currentLocation.x) || (location.y !== this._currentLocation.y))
             {
-                if (this._currentState === FurnitureFloorHoleLogic._Str_9306)
+                if(this._currentState === FurnitureFloorHoleLogic._Str_9306)
                 {
                     if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectFloorHoleEvent(RoomObjectFloorHoleEvent.ADD_HOLE, this.object));
                 }

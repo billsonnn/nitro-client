@@ -19,7 +19,7 @@ export class FloorRasterizer extends PlaneRasterizer
     {
         if(!k) return;
 
-        for(let floorIndex in k)
+        for(const floorIndex in k)
         {
             const floor = k[floorIndex];
 

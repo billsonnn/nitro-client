@@ -23,7 +23,7 @@ export class ActorIsInTeamComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = trigger.intData[0];
+        const _local_3: number = trigger.intData[0];
         //this._Str_6616(k)._Str_2520(this._Str_9779(k, _local_3));
     }
 

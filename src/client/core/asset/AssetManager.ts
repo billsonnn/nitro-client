@@ -50,7 +50,7 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!name) return null;
 
-        for(let collection of this._collections.values())
+        for(const collection of this._collections.values())
         {
             if(!collection) continue;
 
@@ -83,7 +83,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
         if(collection)
         {
-            for(let [ name, texture ] of collection.textures.entries()) this.setTexture(name, texture);
+            for(const [ name, texture ] of collection.textures.entries()) this.setTexture(name, texture);
 
             this._collections.set(collection.name, collection);
         }
@@ -103,7 +103,7 @@ export class AssetManager extends Disposable implements IAssetManager
             return true;
         }
 
-        let totalToDownload = assetUrls.length;
+        const totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
         const onDownloaded = (loader: Loader, flag: boolean) =>
@@ -113,9 +113,9 @@ export class AssetManager extends Disposable implements IAssetManager
             if(loader) loader.destroy();
 
             if(totalDownloaded === totalToDownload) cb(flag);
-        }
+        };
 
-        for(let url of assetUrls)
+        for(const url of assetUrls)
         {
             if(!url) continue;
 

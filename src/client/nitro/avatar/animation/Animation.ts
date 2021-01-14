@@ -40,7 +40,7 @@ export class Animation implements IAnimation
         {
             this._spriteData = [];
 
-            for(let sprite of _arg_2.sprites) this._spriteData.push(new SpriteDataContainer(this, sprite));
+            for(const sprite of _arg_2.sprites) this._spriteData.push(new SpriteDataContainer(this, sprite));
         }
 
         if(_arg_2.avatars && _arg_2.avatars.length) this._avatarData = new AvatarDataContainer(_arg_2.avatars[0]);
@@ -51,14 +51,14 @@ export class Animation implements IAnimation
         {
             this._removeData = [];
 
-            for(let remove of _arg_2.removes) this._removeData.push(remove.id);
+            for(const remove of _arg_2.removes) this._removeData.push(remove.id);
         }
 
         if(_arg_2.adds && _arg_2.adds.length)
         {
             this._addData = [];
 
-            for(let add of _arg_2.adds) this._addData.push(new AddDataContainer(add));
+            for(const add of _arg_2.adds) this._addData.push(new AddDataContainer(add));
         }
 
         if(_arg_2.overrides && _arg_2.overrides.length)
@@ -66,7 +66,7 @@ export class Animation implements IAnimation
             this._overrideFrames    = new Map();
             this._overriddenActions = new Map();
 
-            for(let override of _arg_2.overrides)
+            for(const override of _arg_2.overrides)
             {
                 const name  = override.name as string;
                 const value = override.override as string;
@@ -88,7 +88,7 @@ export class Animation implements IAnimation
     {
         if(!_arg_2 || !_arg_2.length) return;
 
-        for(let frame of _arg_2)
+        for(const frame of _arg_2)
         {
             let repeats = 1;
 
@@ -102,7 +102,7 @@ export class Animation implements IAnimation
 
                 if(frame.bodyparts && frame.bodyparts.length)
                 {
-                    for(let bodyPart of frame.bodyparts)
+                    for(const bodyPart of frame.bodyparts)
                     {
                         const definition    = _arg_3._Str_1675(bodyPart.action);
                         const layer         = new AnimationLayerData(bodyPart, AnimationLayerData.BODYPART, definition);
@@ -113,7 +113,7 @@ export class Animation implements IAnimation
 
                 if(frame.fxs && frame.fxs.length)
                 {
-                    for(let fx of frame.fxs)
+                    for(const fx of frame.fxs)
                     {
                         const definition    = _arg_3._Str_1675(fx.action);
                         const layer         = new AnimationLayerData(fx, AnimationLayerData.FX, definition);
@@ -156,7 +156,7 @@ export class Animation implements IAnimation
 
         const keys: string[] = [];
 
-        for(let key of this._overriddenActions.keys()) keys.push(key);
+        for(const key of this._overriddenActions.keys()) keys.push(key);
 
         return keys;
     }
@@ -198,18 +198,18 @@ export class Animation implements IAnimation
     {
         const _local_3: string[] = [];
 
-        for(let layer of this._Str_2259(k, _arg_2))
+        for(const layer of this._Str_2259(k, _arg_2))
         {
             if(layer.type === AnimationLayerData.BODYPART)
             {
                 _local_3.push(layer.id);
             }
             
-            else if (layer.type === AnimationLayerData.FX)
+            else if(layer.type === AnimationLayerData.FX)
             {
                 if(this._addData && this._addData.length)
                 {
-                    for(let _local_5 of this._addData)
+                    for(const _local_5 of this._addData)
                     {
                         if(_local_5.id === layer.id) _local_3.push(_local_5.align);
                     }
@@ -222,7 +222,7 @@ export class Animation implements IAnimation
 
     public _Str_607(frameCount: number, spriteId: string, _arg_3: string = null): AnimationLayerData
     {
-        for(let layer of this._Str_2259(frameCount, _arg_3))
+        for(const layer of this._Str_2259(frameCount, _arg_3))
         {
             if(layer.id === spriteId) return layer;
             
@@ -230,7 +230,7 @@ export class Animation implements IAnimation
             {
                 if(this._addData && this._addData.length)
                 {
-                    for(let addData of this._addData)
+                    for(const addData of this._addData)
                     {
                         if(((addData.align === spriteId) && (addData.id === layer.id))) return layer;
                     }
@@ -260,7 +260,7 @@ export class Animation implements IAnimation
     {
         if(this._addData)
         {
-            for(let _local_2 of this._addData)
+            for(const _local_2 of this._addData)
             {
                 if(_local_2.id === k) return _local_2;
             }

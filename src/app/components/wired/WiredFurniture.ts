@@ -9,7 +9,8 @@ export class WiredFurniture
 {
     constructor(
         protected _wiredService: WiredService,
-        protected _formBuilder: FormBuilder) {}
+        protected _formBuilder: FormBuilder) 
+    {}
 
     public get code(): number
     {
@@ -43,7 +44,6 @@ export class WiredFurniture
 
     public onInitStart(): void
     {
-
     }
 
     public onEditStart(trigger: Triggerable): void

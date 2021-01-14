@@ -125,7 +125,7 @@ export class Nitro extends Application implements INitro
         canvas.addEventListener('webglcontextlost', () => instance.events.dispatchEvent(new NitroEvent(Nitro.WEBGL_CONTEXT_LOST)));
 
         //@ts-ignore
-        let sso = (NitroConfig.sso as string);
+        const sso = (NitroConfig.sso as string);
 
         instance.communication.demo.setSSO(sso);
     }
@@ -213,8 +213,8 @@ export class Nitro extends Application implements INitro
 
     private onConfigurationLoadedEvent(event: ConfigurationEvent): void
     {
-        const animationFPS  = this.getConfiguration<number>("animation.fps", 24);
-        const limitsFPS     = this.getConfiguration<boolean>("limits.fps", true);
+        const animationFPS  = this.getConfiguration<number>('animation.fps', 24);
+        const limitsFPS     = this.getConfiguration<boolean>('limits.fps', true);
 
         Nitro.instance.ticker.maxFPS = animationFPS;
     }
@@ -259,7 +259,7 @@ export class Nitro extends Application implements INitro
     {
         if(!link || (link === '')) return;
 
-        for(let tracker of this._linkTrackers)
+        for(const tracker of this._linkTrackers)
         {
             if(!tracker) continue;
 

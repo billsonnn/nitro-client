@@ -20,7 +20,7 @@ export class CommunicationManager extends Disposable implements ICommunicationMa
     {
         if(!this._connections || !this._connections.length) return;
         
-        for(let connection of this._connections.values()) connection && connection.dispose();
+        for(const connection of this._connections.values()) connection && connection.dispose();
     }
 
     public createConnection(stateListener: IConnectionStateListener = null): IConnection

@@ -44,8 +44,8 @@ export class UserCountInComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = trigger.intData[0];
-        var _local_4: number = trigger.intData[1];
+        //const _local_3: number = trigger.intData[0];
+        //const _local_4: number = trigger.intData[1];
         // this._minSlider._Str_2526(_local_3);
         // this._maxSlider._Str_2526(_local_4);
     }

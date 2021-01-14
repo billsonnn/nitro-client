@@ -157,7 +157,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     {
         if(!geometry) return;
 
-        let scale           = geometry.scale;
+        const scale           = geometry.scale;
         let updateSprites   = false;
 
         if(this.updateObject(scale, geometry.direction.x)) updateSprites = true;
@@ -375,10 +375,10 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected cacheSpriteAssetName(scale: number, layerId: number, cache: boolean): string
     {
-        let type        = this._type;
-        let size        = (cache) ? this._cacheSize : this.getValidSize(scale);
+        const type        = this._type;
+        const size        = (cache) ? this._cacheSize : this.getValidSize(scale);
         let layerCode   = '';
-        let isntIcon    = (size !== 1);
+        const isntIcon    = (size !== 1);
 
         if(layerId !== this._shadowLayerIndex)
         {

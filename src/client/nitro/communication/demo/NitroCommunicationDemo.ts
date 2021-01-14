@@ -83,7 +83,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         this.startHandshake(connection);
 
-        connection.send(new ClientReleaseVersionComposer());
+        connection.send(new ClientReleaseVersionComposer(null, null, null, null));
 
         this.tryAuthentication(connection);
     }
@@ -116,7 +116,7 @@ export class NitroCommunicationDemo extends NitroManager
         {
             if(!this._sso)
             {
-                NitroLogger.log(`Login without an SSO ticket is not supported`);
+                NitroLogger.log('Login without an SSO ticket is not supported');
             }
 
             this.dispatchCommunicationDemoEvent(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, connection);

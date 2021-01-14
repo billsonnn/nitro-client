@@ -238,7 +238,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._ready) return;
 
-        for(let [ key,  value ] of this._roomInstanceDatas)
+        for(const [ key,  value ] of this._roomInstanceDatas)
         {
             this.removeRoomInstance(key);
         }
@@ -340,14 +340,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             this._roomDatas.set(roomId, data);
 
-            NitroLogger.log(`Room Engine not initilized yet, can not create room. Room data stored for later initialization.`);
+            NitroLogger.log('Room Engine not initilized yet, can not create room. Room data stored for later initialization.');
 
             return;
         }
 
         if(!roomMap)
         {
-            NitroLogger.log(`Room property messages received before floor height map, will initialize when floor height map received.`);
+            NitroLogger.log('Room property messages received before floor height map, will initialize when floor height map received.');
 
             return;
         }
@@ -560,7 +560,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             if(displayObject)
             {
-                const overlay = Sprite.from(Texture.EMPTY)
+                const overlay = Sprite.from(Texture.EMPTY);
 
                 overlay.name        = RoomEngine.OVERLAY;
                 overlay.interactive = false;
@@ -898,13 +898,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         const furniturePerTick  = 5;
         const hasTickLimit      = true;
 
-        for(let instanceData of this._roomInstanceDatas.values())
+        for(const instanceData of this._roomInstanceDatas.values())
         {
             if(!instanceData) continue;
 
             let pendingData: FurnitureData  = null;
-            let totalFurnitureAdded: number = 0;
-            let furnitureAdded: boolean     = false;
+            let totalFurnitureAdded = 0;
+            let furnitureAdded     = false;
 
             while((pendingData = instanceData.getNextPendingFurnitureFloor()))
             {
@@ -965,11 +965,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this.events.dispatchEvent(new RoomEngineEvent(RoomEngineEvent.ENGINE_INITIALIZED, 0));
 
-        for(let roomData of this._roomDatas.values())
+        for(const roomData of this._roomDatas.values())
         {
             if(!roomData) continue;
 
-            this.createRoomInstance(roomData.roomId, roomData.data)
+            this.createRoomInstance(roomData.roomId, roomData.data);
         }
     }
 
@@ -1103,7 +1103,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             camera._Str_10760   = objectId;
             camera._Str_16562   = RoomObjectCategory.UNIT;
 
-            camera._Str_19465(this._Str_19549)
+            camera._Str_19465(this._Str_19549);
         }
     }
 
@@ -1115,7 +1115,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     private _Str_22919(time: number): void
     {
-        for(let instanceData of this._roomInstanceDatas.values())
+        for(const instanceData of this._roomInstanceDatas.values())
         {
             if(!instanceData) continue;
 
@@ -1161,14 +1161,14 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!roomGeometry || !roomCamera || !roomInstance) return;
         
-        let canvasRectangle = this._Str_25261(roomId, canvasId);
+        const canvasRectangle = this._Str_25261(roomId, canvasId);
 
         if(!canvasRectangle) return;
 
         let _local_10   = (Math.floor(objectLocation.z) + 1);
-        let width       = Math.round(canvasRectangle.width);
-        let height      = Math.round(canvasRectangle.height);
-        let bounds      = this.getCanvasBoundingRectangle(canvasId);
+        const width       = Math.round(canvasRectangle.width);
+        const height      = Math.round(canvasRectangle.height);
+        const bounds      = this.getCanvasBoundingRectangle(canvasId);
 
         if(bounds && ((bounds.right < 0) || (bounds.bottom < 0) || (bounds.left >= width) || (bounds.top >= height)))
         {
@@ -1244,9 +1244,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             let _local_35 = false;
             let _local_36 = false;
             let _local_37 = false;
-            let _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
+            const _local_38 = Math.round(((_local_31 - _local_29) * _local_24));
 
-            if (_local_38 < canvasRectangle.width)
+            if(_local_38 < canvasRectangle.width)
             {
                 _local_10 = 2;
                 _local_23.x = ((_local_31 + _local_29) / 2);
@@ -1254,19 +1254,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             }
             else
             {
-                if (_local_23.x > (_local_31 - _local_27))
+                if(_local_23.x > (_local_31 - _local_27))
                 {
                     _local_23.x = (_local_31 - _local_27);
                     _local_34 = true;
                 }
-                if (_local_23.x < (_local_29 + _local_27))
+                if(_local_23.x < (_local_29 + _local_27))
                 {
                     _local_23.x = (_local_29 + _local_27);
                     _local_34 = true;
                 }
             }
-            let _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
-            if (_local_39 < canvasRectangle.height)
+            const _local_39 = Math.round(((_local_32 - _local_30) * _local_25));
+            if(_local_39 < canvasRectangle.height)
             {
                 _local_10 = 2;
                 _local_23.y = ((_local_32 + _local_30) / 2);
@@ -1274,17 +1274,17 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             }
             else
             {
-                if (_local_23.y > (_local_32 - _local_28))
+                if(_local_23.y > (_local_32 - _local_28))
                 {
                     _local_23.y = (_local_32 - _local_28);
                     _local_35 = true;
                 }
-                if (_local_23.y < (_local_30 + _local_28))
+                if(_local_23.y < (_local_30 + _local_28))
                 {
                     _local_23.y = (_local_30 + _local_28);
                     _local_35 = true;
                 }
-                if (_local_35)
+                if(_local_35)
                 {
                     _local_23.y = (_local_23.y / (_local_25 / _local_24));
                 }
@@ -1296,25 +1296,25 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             let _local_40 = 0.35;
             let _local_41 = 0.2;
             let _local_42 = 0.2;
-            let _local_43 = 10;
-            let _local_44 = 10;
-            if ((_local_42 * width) > 100)
+            const _local_43 = 10;
+            const _local_44 = 10;
+            if((_local_42 * width) > 100)
             {
                 _local_42 = (100 / width);
             }
-            if ((_local_40 * height) > 150)
+            if((_local_40 * height) > 150)
             {
                 _local_40 = (150 / height);
             }
-            if ((_local_41 * height) > 150)
+            if((_local_41 * height) > 150)
             {
                 _local_41 = (150 / height);
             }
-            if ((((roomCamera._Str_10235) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+            if((((roomCamera._Str_10235) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
             {
                 _local_42 = 0;
             }
-            if ((((roomCamera._Str_10446) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
+            if((((roomCamera._Str_10446) && (roomCamera._Str_7609 == width)) && (roomCamera._Str_7902 == height)))
             {
                 _local_40 = 0;
                 _local_41 = 0;
@@ -1328,12 +1328,12 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 canvasRectangle.width = _local_43;
             }
 
-            if (canvasRectangle.height < _local_44)
+            if(canvasRectangle.height < _local_44)
             {
                 canvasRectangle.height = _local_44;
             }
             
-            if ((_local_40 + _local_41) > 0)
+            if((_local_40 + _local_41) > 0)
             {
                 canvasRectangle.x += (-(canvasRectangle.width) / 2);
                 canvasRectangle.y += (-(canvasRectangle.height) * (_local_41 / (_local_40 + _local_41)));
@@ -1341,7 +1341,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             else
             {
                 canvasRectangle.x += (-(canvasRectangle.width) / 2);
-                canvasRectangle.y += (-(canvasRectangle.height) / 2)
+                canvasRectangle.y += (-(canvasRectangle.height) / 2);
             }
 
             _local_33 = roomGeometry.getScreenPoint(_local_15);
@@ -1358,7 +1358,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 if(!roomCamera.location)
                 {
                     roomGeometry.location = _local_15;
-                    if (this._Str_11555)
+                    if(this._Str_11555)
                     {
                         roomCamera._Str_20685(new Vector3d(0, 0, 0));
                     }
@@ -1367,8 +1367,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                         roomCamera._Str_20685(_local_15);
                     }
                 }
-                let _local_45 = roomGeometry.getScreenPoint(_local_15);
-                let _local_46 = new Vector3d(0, 0, 0);
+                const _local_45 = roomGeometry.getScreenPoint(_local_15);
+                const _local_46 = new Vector3d(0, 0, 0);
                 if(_local_45)
                 {
                     _local_46.x = _local_45.x;
@@ -1378,7 +1378,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 {
                     roomCamera._Str_10235 = _local_34;
                     roomCamera._Str_10446 = _local_35;
-                    if (this._Str_11555)
+                    if(this._Str_11555)
                     {
                         roomCamera.target = _local_46;
                     }
@@ -1773,7 +1773,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this.removeRoomObject(roomId, objectId, RoomObjectCategory.FLOOR);
         this.setMouseDefault(roomId, RoomObjectCategory.FLOOR, objectId);
 
-        if(_arg_4) this._Str_17722(roomId, "RoomEngine.disposeObjectFurniture()");
+        if(_arg_4) this._Str_17722(roomId, 'RoomEngine.disposeObjectFurniture()');
     }
 
     public getRoomObjectWall(roomId: number, objectId: number): IRoomObjectController
@@ -2064,9 +2064,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!heightMap || !wallGeometry) return location;
 
-        var _local_5 = location.z;
-        var _local_6 = heightMap.getTileHeight(location.x, location.y);
-        var _local_7 = wallGeometry.getHeight(location.x, location.y);
+        let _local_5 = location.z;
+        const _local_6 = heightMap.getTileHeight(location.x, location.y);
+        const _local_7 = wallGeometry.getHeight(location.x, location.y);
 
         if((Math.abs((_local_5 - _local_6)) < 0.1) && (Math.abs((_local_6 - _local_7)) < 0.1))
         {
@@ -2324,7 +2324,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!listeners) return;
 
-        for(let listener of listeners)
+        for(const listener of listeners)
         {
             if(!listener) continue;
 
@@ -2467,7 +2467,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                             offsetX = (x - this._activeRoomDragStartX);
                             offsetY = (y - this._activeRoomDragStartY);
                             
-                            if (((((offsetX <= -(RoomEngine.DRAG_THRESHOLD)) || (offsetX >= RoomEngine.DRAG_THRESHOLD)) || (offsetY <= -(RoomEngine.DRAG_THRESHOLD))) || (offsetY >= RoomEngine.DRAG_THRESHOLD)))
+                            if(((((offsetX <= -(RoomEngine.DRAG_THRESHOLD)) || (offsetX >= RoomEngine.DRAG_THRESHOLD)) || (offsetY <= -(RoomEngine.DRAG_THRESHOLD))) || (offsetY >= RoomEngine.DRAG_THRESHOLD)))
                             {
                                 this._activeRoomWasDragged = true;
                             }
@@ -2675,7 +2675,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             if(image)
             {
-                for(let listener of listeners)
+                for(const listener of listeners)
                 {
                     if(!listener) continue;
 
@@ -2715,7 +2715,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 {
                     type = RoomObjectUserType.getTypeString(objectId);
 
-                    if(type === "pet")
+                    if(type === 'pet')
                     {
                         type = this.getPetType(instanceData);
 
@@ -2758,10 +2758,10 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     {
         if(!this._roomManager) return null;
 
-        let id: number          = -1;
+        let id          = -1;
         let type: string        = null;
         let data: IObjectData   = null;
-        let color: string       = '';
+        let color       = '';
         let extras: string      = null;
 
         const roomIdString  = this.getRoomId(roomId);
@@ -2779,7 +2779,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 switch(category)
                 {
                     case RoomObjectCategory.FLOOR:
-                    case RoomObjectCategory.WALL:
+                    case RoomObjectCategory.WALL: {
                         color   = (roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_COLOR).toString());
                         extras  = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_EXTRAS);
 
@@ -2793,6 +2793,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                         }
 
                         break;
+                    }
                     case RoomObjectCategory.UNIT:
                         color = roomObject.model.getValue<string>(RoomObjectVariable.FIGURE);
                         break;
@@ -2806,7 +2807,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getFurnitureFloorIconUrl(typeId: number): string
     {
         let type: string    = null;
-        let color: string   = '';
+        let color   = '';
 
         if(this._roomContentLoader)
         {
@@ -2827,7 +2828,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getFurnitureWallIconUrl(typeId: number, extra: string = null): string
     {
         let type: string    = null;
-        let color: string   = '';
+        let color   = '';
 
         if(this._roomContentLoader)
         {
@@ -2848,7 +2849,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getFurnitureFloorImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor: number = 0, extras: string = null, state: number = -1, frameCount: number = -1, objectData: IObjectData = null): ImageResult
     {
         let type: string    = null;
-        let color: string   = '';
+        let color   = '';
 
         if(this._roomContentLoader)
         {
@@ -2867,7 +2868,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getFurnitureWallImage(typeId: number, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor: number = 0, extras: string = null, state: number =-1, frameCount: number = -1): ImageResult
     {
         let type: string    = null;
-        let color: string   = '';
+        let color   = '';
 
         if(this._roomContentLoader)
         {
@@ -2886,17 +2887,17 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getRoomObjectPetImage(typeId: number, paletteId: number, color: number, direction: IVector3D, scale: number, listener: IGetImageListener, _arg_7: boolean = true, bgColor: number = 0, customParts: PetCustomPart[] = null, posture: string = null): ImageResult
     {
         let type: string = null;
-        let value = ((((typeId + " ") + paletteId) + " ") + color.toString(16));
+        let value = ((((typeId + ' ') + paletteId) + ' ') + color.toString(16));
 
-        if(!_arg_7) value = (value + (" " + "head"));
+        if(!_arg_7) value = (value + (' ' + 'head'));
 
         if(customParts)
         {
-            value = (value + (" " + customParts.length));
+            value = (value + (' ' + customParts.length));
 
-            for(let _local_13 of customParts)
+            for(const _local_13 of customParts)
             {
-                value = (value + (((((" " + _local_13.layerId) + " ") + _local_13.partId) + " ") + _local_13.paletteId));
+                value = (value + (((((' ' + _local_13.layerId) + ' ') + _local_13.partId) + ' ') + _local_13.paletteId));
             }
         }
 
@@ -2925,7 +2926,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
 
         let objectId        = this._imageObjectIdBank._Str_19709();
-        let objectCategory  = this.getRoomObjectCategoryForType(type);
+        const objectCategory  = this.getRoomObjectCategoryForType(type);
 
         if(objectId < 0) return imageResult;
 
@@ -2994,7 +2995,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             }
         }
 
-        let geometry = new RoomGeometry(scale, new Vector3d(-135, 30, 0), new Vector3d(11, 11, 5));
+        const geometry = new RoomGeometry(scale, new Vector3d(-135, 30, 0), new Vector3d(11, 11, 5));
 
         visualization.update(geometry, 0, true, false);
 
@@ -3002,7 +3003,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             let i = 0;
 
-            while (i < frameCount)
+            while(i < frameCount)
             {
                 visualization.update(geometry, 0, true, false);
 
@@ -3064,7 +3065,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
 
         let objectId        = this._thumbnailObjectIdBank._Str_19709();
-        let objectCategory  = this.getRoomObjectCategoryForType(type);
+        const objectCategory  = this.getRoomObjectCategoryForType(type);
 
         if(objectId < 0) return imageResult;
 
@@ -3122,7 +3123,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(objectManager && objectManager.objects.length)
         {
-            for(let roomObject of objectManager.objects.getValues())
+            for(const roomObject of objectManager.objects.getValues())
             {
                 if(roomObject && roomObject.model && (roomObject.type === type))
                 {
@@ -3164,7 +3165,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     {
                         this._imageCallbacks.delete(objectId.toString());
 
-                        for(let imageListener of imageListeners)
+                        for(const imageListener of imageListeners)
                         {
                             if(!imageListener) continue;
 
@@ -3304,7 +3305,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(tileObjectMap) tileObjectMap.populate(this._Str_21072(k, RoomObjectCategory.FLOOR));
     }
 
-    public _Str_9972(k: Rectangle, _arg_2: number, _arg_3: boolean = false, _arg_4: boolean = true, _arg_5: boolean = false, canvasId: number = -1): IMessageComposer
+    public _Str_9972(k: Rectangle, _arg_2: number, _arg_3: boolean = false, _arg_4: boolean = true, _arg_5: boolean = false, canvasId: number = -1): IMessageComposer<unknown[]>
     {
         let canvas: IRoomRenderingCanvas = null;
 
@@ -3326,15 +3327,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         let _local_8 = -1;
 
-        if (((!(_arg_4)) && (!(this._roomSessionManager.getSession(this._activeRoomId) == null))))
+        if(((!(_arg_4)) && (!(this._roomSessionManager.getSession(this._activeRoomId) == null))))
         {
             _local_8 = this._roomSessionManager.getSession(this._activeRoomId).ownRoomIndex;
         }
 
-        var _local_9 = new SpriteDataCollector();
-        var _local_10 = _local_9._Str_4536(k, canvas, this, _local_8);
-        var _local_11 = _local_9._Str_24177(this);
-        var _local_12 = _local_9._Str_22985(k, canvas, this, _arg_2);
+        const _local_9 = new SpriteDataCollector();
+        const _local_10 = _local_9._Str_4536(k, canvas, this, _local_8);
+        const _local_11 = _local_9._Str_24177(this);
+        const _local_12 = _local_9._Str_22985(k, canvas, this, _arg_2);
 
         if(_arg_5) canvas._Str_22174();
 
@@ -3352,7 +3353,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     public createRoomScreenshot(roomId: number, canvasId: number): void
     {
-        let canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
+        const canvas = this.getRoomInstanceRenderingCanvas(roomId, canvasId);
 
         if(!canvas) return;
 

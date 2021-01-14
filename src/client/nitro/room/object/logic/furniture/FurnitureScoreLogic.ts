@@ -55,7 +55,7 @@ export class FurnitureScoreLogic extends FurnitureLogic
 
         if((currentScore !== this._score) && (time >= (this._scoreTimer + this._scoreIncreaser)))
         {
-            let _local_3 = (time - this._scoreTimer);
+            const _local_3 = (time - this._scoreTimer);
             let _local_4 = (_local_3 / this._scoreIncreaser);
             let _local_5 = 1;
 

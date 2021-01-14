@@ -30,7 +30,7 @@ export class FurnitureInternalLinkHandler implements IRoomWidgetHandler
 
         let widgetEvent: RoomEngineTriggerWidgetEvent = null;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);

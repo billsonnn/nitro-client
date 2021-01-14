@@ -5,8 +5,8 @@ import { IAnimationLayerData } from './IAnimationLayerData';
 
 export class AnimationLayerData implements IAnimationLayerData
 {
-    public static BODYPART: string = "bodypart";
-    public static FX: string = "fx";
+    public static BODYPART: string = 'bodypart';
+    public static FX: string = 'fx';
 
     private _id: string;
     private _action: IActiveActionData;
@@ -31,7 +31,7 @@ export class AnimationLayerData implements IAnimationLayerData
         this._base              = (k.base || '');
         this._items             = new Map();
 
-        if(k.items) for(let _local_4 of k.items) this._items.set(_local_4.id, _local_4.base);
+        if(k.items) for(const _local_4 of k.items) this._items.set(_local_4.id, _local_4.base);
 
         let _local_5 = '';
 
