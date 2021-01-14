@@ -8,13 +8,13 @@ export class HeadModel extends CategoryBaseModel
     {
         super.init();
 
-        this._Str_3130(FigureData.HR);
-        this._Str_3130(FigureData.HA);
-        this._Str_3130(FigureData.HE);
-        this._Str_3130(FigureData.EA);
-        this._Str_3130(FigureData.FA);
+        this.addCategory(FigureData.HR);
+        this.addCategory(FigureData.HA);
+        this.addCategory(FigureData.HE);
+        this.addCategory(FigureData.EA);
+        this.addCategory(FigureData.FA);
 
-        this._Str_2367 = true;
+        this._isInitalized = true;
     }
 
     public get name(): string

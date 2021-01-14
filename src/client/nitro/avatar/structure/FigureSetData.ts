@@ -26,7 +26,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
     {
         if(!data) return false;
 
-        for(let palette of data.colors[0].palette)
+        for(const palette of data.colors[0].palette)
         {
             const newPalette = new Palette(palette);
 
@@ -35,7 +35,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
             this._palettes.set(newPalette.id.toString(), newPalette);
         }
 
-        for(let set of data.sets[0].settype)
+        for(const set of data.sets[0].settype)
         {
             const newSet = new SetType(set);
 
@@ -49,7 +49,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
 
     public _Str_1133(k: any): void
     {
-        for(let _local_2 of k.sets[0].settype)
+        for(const _local_2 of k.sets[0].settype)
         {
             const setType = this._setTypes.get(_local_2['$'].type);
 
@@ -70,7 +70,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
     {
         if(!k) return false;
 
-        for(let _local_2 of k.colors[0].palette)
+        for(const _local_2 of k.colors[0].palette)
         {
             const id        = _local_2['$'].id.toString();
             const _local_4  = this._palettes.get(id);
@@ -85,7 +85,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
             }
         }
 
-        for(let _local_3 of k.sets[0].settype)
+        for(const _local_3 of k.sets[0].settype)
         {
             const type      = _local_3['$'].type;
             const _local_5  = this._setTypes.get(type);
@@ -107,7 +107,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
     {
         const types: string[] = [];
 
-        for(let set of this._setTypes.values())
+        for(const set of this._setTypes.values())
         {
             if(!set || !set._Str_895(k, _arg_2)) continue;
 
@@ -138,7 +138,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
 
     public _Str_938(k: number): IFigurePartSet
     {
-        for(let set of this._setTypes.values())
+        for(const set of this._setTypes.values())
         {
             const partSet = set._Str_1020(k);
 

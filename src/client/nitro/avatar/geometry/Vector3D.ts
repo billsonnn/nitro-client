@@ -78,7 +78,7 @@
 
     public toString(): string
     {
-        return (((((("Vector3D: (" + this._x) + ",") + this._y) + ",") + this._z) + ")");
+        return (((((('Vector3D: (' + this._x) + ',') + this._y) + ',') + this._z) + ')');
     }
 
     public get x(): number

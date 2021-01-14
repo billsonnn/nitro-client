@@ -235,7 +235,7 @@ export class AvatarLogic extends MovingObjectLogic
             this._effectChangeTimeStamp = 0;
         }
 
-        if ((this._numberValueEndTimestamp > 0) && (time > this._numberValueEndTimestamp))
+        if((this._numberValueEndTimestamp > 0) && (time > this._numberValueEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_NUMBER_VALUE, 0);
             
@@ -308,7 +308,7 @@ export class AvatarLogic extends MovingObjectLogic
 
         if(message instanceof ObjectAvatarDanceUpdateMessage)
         {
-            model.setValue(RoomObjectVariable.FIGURE_DANCE, message.danceStyle)
+            model.setValue(RoomObjectVariable.FIGURE_DANCE, message.danceStyle);
 
             return;
         }
@@ -430,7 +430,7 @@ export class AvatarLogic extends MovingObjectLogic
             this._newEffect             = AvatarLogic._Str_13094;
         }
 
-        else if (model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
+        else if(model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_15351)
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
@@ -438,7 +438,7 @@ export class AvatarLogic extends MovingObjectLogic
             effect = AvatarLogic._Str_13364;
         }
 
-        else if (model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
+        else if(model.getValue<number>(RoomObjectVariable.FIGURE_EFFECT) === AvatarLogic._Str_13094)
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + AvatarLogic._Str_8860);
             this._newEffect             = effect;
@@ -446,7 +446,7 @@ export class AvatarLogic extends MovingObjectLogic
             effect = AvatarLogic._Str_13733;
         }
 
-        else if (delay === 0)
+        else if(delay === 0)
         {
             this._effectChangeTimeStamp = 0;
         }

@@ -152,7 +152,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     protected setSubAnimation(animationData: AnimationStateData, animationId: number, _arg_3: boolean = true): boolean
     {
-        let currentAnimation = animationData.animationId;
+        const currentAnimation = animationData.animationId;
 
         if(_arg_3)
         {
@@ -285,7 +285,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         if(animationData.animationOver && !this._directionChanged) return 0;
 
-        let animationId = this.getAnimationId(animationData);
+        const animationId = this.getAnimationId(animationData);
         let frameCount  = animationData.frameCounter;
 
         if(!frameCount) frameCount = this._data.getStartFrame(scale, animationId, this._direction);
@@ -299,9 +299,9 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         let update          = 0;
         let layerUpdate     = (1 << (this._animatedLayerCount - 1));
 
-        while (layerId >= 0)
+        while(layerId >= 0)
         {
-            let sequenceId: number = 0;
+            let sequenceId = 0;
 
             animationPlayed = animationData.getAnimationPlayed(layerId);
 

@@ -10,7 +10,7 @@ import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
 import { WebGL } from '../client/nitro/utils/WebGL';
 
 @Component({
-	selector: 'app-root',
+    selector: 'app-root',
     template: `
     <div id="nitro">
         <nitro-loading *ngIf="!isReady || isError" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
@@ -30,7 +30,8 @@ export class AppComponent implements OnInit, OnDestroy
     private _connectionTimeout: NodeJS.Timeout;
 
     constructor(
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone) 
+    {}
 
     public ngOnInit(): void
     {
@@ -88,13 +89,13 @@ export class AppComponent implements OnInit, OnDestroy
 
     private getPreloadAssetUrls(): string[]
     {
-        let urls: string[] = [];
+        const urls: string[] = [];
 
         const assetUrls = Nitro.instance.getConfiguration<string[]>('preload.assets.urls');
 
         if(assetUrls && assetUrls.length)
         {
-            for(let url of assetUrls)
+            for(const url of assetUrls)
             {
                 urls.push(Nitro.instance.core.configuration.interpolate(url));
             }
@@ -141,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy
 
                 setTimeout(() => location.reload(), 1500);
                 return;
-			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING:
+            case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING:
                 this._ngZone.run(() =>
                 {
                     this.message        = 'Handshaking';
@@ -150,8 +151,8 @@ export class AppComponent implements OnInit, OnDestroy
                 });
 
                 clearTimeout(this._connectionTimeout);
-				break;
-			case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
+                break;
+            case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
                 this._ngZone.run(() =>
                 {
                     this.isError        = true;
@@ -159,8 +160,8 @@ export class AppComponent implements OnInit, OnDestroy
                     this.percentage     = 0;
                     this.hideProgress   = true;
                 });
-				break;
-			case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
+                break;
+            case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
                 this._ngZone.run(() =>
                 {
                     this.message        = 'Preparing Nitro';
@@ -170,8 +171,8 @@ export class AppComponent implements OnInit, OnDestroy
                 
                 Nitro.instance.init();
                 clearTimeout(this._connectionTimeout);
-				break;
-			case NitroCommunicationDemoEvent.CONNECTION_ERROR:
+                break;
+            case NitroCommunicationDemoEvent.CONNECTION_ERROR:
                 this._ngZone.run(() =>
                 {
                     this.isError        = true;
@@ -179,8 +180,8 @@ export class AppComponent implements OnInit, OnDestroy
                     this.percentage     = 0;
                     this.hideProgress   = true;
                 });
-				break;
-			case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
+                break;
+            case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
                 if(Nitro.instance.roomEngine) Nitro.instance.roomEngine.dispose();
 
                 this._ngZone.run(() =>

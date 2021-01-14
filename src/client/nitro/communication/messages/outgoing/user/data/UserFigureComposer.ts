@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class UserFigureComposer implements IMessageComposer
+export class UserFigureComposer implements IMessageComposer<ConstructorParameters<typeof UserFigureComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof UserFigureComposer>;
 
     constructor(gender: string, figure: string)
     {
         this._data = [ gender, figure ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

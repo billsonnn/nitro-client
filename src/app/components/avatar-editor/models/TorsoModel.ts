@@ -8,12 +8,12 @@ export class TorsoModel extends CategoryBaseModel
     {
         super.init();
 
-        this._Str_3130(FigureData.CC);
-        this._Str_3130(FigureData.CH);
-        this._Str_3130(FigureData.CHEST_ACCESSORIES);
-        this._Str_3130(FigureData.CHEST_PRINTS);
+        this.addCategory(FigureData.CH);
+        this.addCategory(FigureData.CHEST_ACCESSORIES);
+        this.addCategory(FigureData.CC);
+        this.addCategory(FigureData.CHEST_PRINTS);
 
-        this._Str_2367 = true;
+        this._isInitalized = true;
     }
 
     public get name(): string

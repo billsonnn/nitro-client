@@ -6,15 +6,16 @@ import { SecurityModule } from './security';
 import { SharedModule } from './shared';
 
 @NgModule({
-	imports: [
-		SharedModule,
-		CoreModule,
-		SecurityModule,
-		ComponentsModule
-	],
-	declarations: [
-		AppComponent
-	],
-	bootstrap: [ AppComponent ]
+    imports: [
+        SharedModule,
+        CoreModule,
+        SecurityModule,
+        ComponentsModule
+    ],
+    declarations: [
+        AppComponent
+    ],
+    bootstrap: [ AppComponent ]
 })
-export class AppModule {} 
+export class AppModule 
+{} 

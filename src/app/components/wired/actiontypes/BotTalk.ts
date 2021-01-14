@@ -5,7 +5,7 @@ import { DefaultActionType } from './DefaultActionType';
 
 export class BotTalk extends DefaultActionType
 {
-    private static _Str_4332: string = "\t";
+    private static _Str_4332: string = '\t';
 
     public get code(): number
     {
@@ -26,7 +26,7 @@ export class BotTalk extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3 = _arg_2.stringData.split(BotTalk._Str_4332);
+        const _local_3 = _arg_2.stringData.split(BotTalk._Str_4332);
         // this._Str_2453(k, "bot_name").text = ((_local_3.length >= 1) ? _local_3[0] : "");
         // this._Str_2453(k, "chat_message").text = ((_local_3.length == 2) ? _local_3[1] : "");
         // this._Str_4281(k, "type_selector")._Str_2520(this._Str_10005(k, ("radio_" + _arg_2.intData[0])));

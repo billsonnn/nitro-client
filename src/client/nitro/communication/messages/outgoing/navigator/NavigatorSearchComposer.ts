@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class NavigatorSearchComposer implements IMessageComposer
+export class NavigatorSearchComposer implements IMessageComposer<ConstructorParameters<typeof NavigatorSearchComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof NavigatorSearchComposer>;
 
     constructor(code: string, data: string)
     {
         this._data = [ code, data ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

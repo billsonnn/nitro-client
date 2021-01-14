@@ -44,9 +44,9 @@ export class RoomUnitStatusParser implements IMessageParser
         if(!wrapper) return null;
         
         const unitId        = wrapper.readInt();
-        let x               = wrapper.readInt();
-        let y               = wrapper.readInt();
-        let z               = parseFloat(wrapper.readString());
+        const x               = wrapper.readInt();
+        const y               = wrapper.readInt();
+        const z               = parseFloat(wrapper.readString());
         const headDirection = ((wrapper.readInt() % 8) * 45);
         const direction     = ((wrapper.readInt() % 8) * 45);
         const actions       = wrapper.readString();
@@ -57,7 +57,7 @@ export class RoomUnitStatusParser implements IMessageParser
         let height      = 0;
         let canStandUp  = false;
         let didMove     = false;
-        let isSlide     = false;
+        const isSlide     = false;
 
         if(actions)
         {
@@ -87,7 +87,7 @@ export class RoomUnitStatusParser implements IMessageParser
                             didMove = true;
 
                             break;
-                        case 'sit':
+                        case 'sit': {
                             const sitHeight = parseFloat(value);
 
                             if(extra !== undefined) canStandUp = value === '1';
@@ -95,12 +95,14 @@ export class RoomUnitStatusParser implements IMessageParser
                             height = sitHeight;
 
                             break;
-                        case 'lay':
+                        }
+                        case 'lay': {
                             const layHeight = parseFloat(value);
 
                             height = layHeight;
 
                             break;
+                        }
                     }
 
                     statusActions.push(new RoomUnitStatusAction(key, value));

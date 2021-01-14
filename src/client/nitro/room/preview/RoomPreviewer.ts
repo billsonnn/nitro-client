@@ -77,7 +77,7 @@ export class RoomPreviewer
     {
         if(this.isRoomEngineReady)
         {
-            let size = 7;
+            const size = 7;
 
             const planeParser = new RoomPlaneParser();
 
@@ -255,16 +255,17 @@ export class RoomPreviewer
 
             if(!roomObject) return;
 
-            let direction = this._roomEngine.objectEventHandler._Str_17555(roomObject, true);
+            const direction = this._roomEngine.objectEventHandler._Str_17555(roomObject, true);
 
             switch(this._currentPreviewObjectCategory)
             {
-                case RoomObjectCategory.FLOOR:
-                    let floorLocation   = new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y);
-                    let floorDirection  = new Vector3d(direction, direction, direction);
+                case RoomObjectCategory.FLOOR: {
+                    const floorLocation   = new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y);
+                    const floorDirection  = new Vector3d(direction, direction, direction);
                     
                     this._roomEngine.updateRoomObjectFloor(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, floorLocation, floorDirection, null, null);
                     return;
+                }
                 case RoomObjectCategory.WALL:
                     //this._roomEngine.updateRoomObjectWall(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, null, direction, null, null);
                     return;
@@ -361,7 +362,7 @@ export class RoomPreviewer
             return point;
         }
 
-        if (this.isRoomEngineReady)
+        if(this.isRoomEngineReady)
         {
             const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
 
@@ -405,7 +406,7 @@ export class RoomPreviewer
                 }
             }
 
-            else if ((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
+            else if((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
             {
                 if(RoomPreviewer.ZOOM_ENABLED)
                 {
@@ -458,7 +459,7 @@ export class RoomPreviewer
     {
         if(this.isRoomEngineReady)
         {
-            if (RoomPreviewer.ZOOM_ENABLED)
+            if(RoomPreviewer.ZOOM_ENABLED)
             {
                 this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 0.5);
             }
@@ -499,7 +500,7 @@ export class RoomPreviewer
 
         let x       = (-(this._currentPreviewRectangle.left + this._currentPreviewRectangle.right) >> 1);
         let y       = (-(this._currentPreviewRectangle.top + this._currentPreviewRectangle.bottom) >> 1);
-        let height  = ((this._currentPreviewCanvasHeight - this._currentPreviewRectangle.height) >> 1);
+        const height  = ((this._currentPreviewCanvasHeight - this._currentPreviewRectangle.height) >> 1);
 
         if(height > 10)
         {
@@ -520,8 +521,8 @@ export class RoomPreviewer
         y = (y + this._addViewOffset.y);
         x = (x + this._addViewOffset.x);
 
-        let offsetX = (x - point.x);
-        let offsetY = (y - point.y);
+        const offsetX = (x - point.x);
+        const offsetY = (y - point.y);
 
         if((offsetX !== 0) || (offsetY !== 0))
         {
@@ -586,7 +587,7 @@ export class RoomPreviewer
     {
         if(!event) return;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomEngineEvent.INITIALIZED:
                 if((event.roomId === this._previewRoomId) && this.isRoomEngineReady)

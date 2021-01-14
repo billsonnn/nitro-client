@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../../core/communication/messages/IMessageComposer';
 
-export class FurnitureRandomStateComposer implements IMessageComposer
+export class FurnitureRandomStateComposer implements IMessageComposer<ConstructorParameters<typeof FurnitureRandomStateComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof FurnitureRandomStateComposer>;
 
     constructor(itemId: number, state: number)
     {
         this._data = [ itemId, state ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

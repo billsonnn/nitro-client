@@ -47,7 +47,7 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
 
     public readString(): string
     {
-        let length = this.readShort();
+        const length = this.readShort();
 
         const buffer = this._buffer.readBytes(length);
 

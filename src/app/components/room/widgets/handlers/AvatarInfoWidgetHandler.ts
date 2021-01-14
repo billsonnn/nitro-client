@@ -63,12 +63,12 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
         if(message instanceof RoomWidgetUserActionMessage) userId = message.userId;
 
-        switch (message.type)
+        switch(message.type)
         {
             case RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO:
                 this.getOwnCharacterInfo();
                 break;
-            case RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE:
+            case RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE: {
                 const danceMessage = (message as RoomWidgetDanceMessage);
 
                 if(this._container && this._container.roomSession)
@@ -76,15 +76,17 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
                     this._container.roomSession.sendDanceMessage(danceMessage.style);
                 }
                 break;
-            case RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION:
+            }
+            case RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION: {
                 const expressionMessage = (message as RoomWidgetAvatarExpressionMessage);
 
                 if(this._container && this._container.roomSession)
                 {
-                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677)
+                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677);
                 }
                 break;
-            case RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE:
+            }
+            case RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE: {
                 const postureMessage = (message as RoomWidgetChangePostureMessage);
 
                 if(this._container && this._container.roomSession)
@@ -92,6 +94,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
                     this._container.roomSession.sendPostureMessage(postureMessage.posture);
                 }
                 break;
+            }
         }
 
         return null;
@@ -101,12 +104,12 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
     {
         if(!event) return;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomSessionUserDataUpdateEvent.USER_DATA_UPDATED:
                 this._container.events.dispatchEvent(new RoomWidgetUserDataUpdateEvent());
                 return;
-            case RoomSessionDanceEvent.RSDE_DANCE:
+            case RoomSessionDanceEvent.RSDE_DANCE: {
                 const danceEvent = (event as RoomSessionDanceEvent);
 
                 if(this._widget && this._container && this._container.roomSession && this._container.roomSession.userDataManager)
@@ -119,16 +122,17 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
                     }
                 }
                 return;
+            }
         }
     }
 
     private getOwnCharacterInfo(): void
     {
-        let userId      = this._container.sessionDataManager.userId;
-        let userName    = this._container.sessionDataManager.userName;
+        const userId      = this._container.sessionDataManager.userId;
+        const userName    = this._container.sessionDataManager.userName;
         //let _local_3: boolean = this._container.sessionDataManager._Str_11198;
-        let _local_3    = false;
-        let _local_4    = this._container.roomSession.userDataManager.getUserData(userId);
+        const _local_3    = false;
+        const _local_4    = this._container.roomSession.userDataManager.getUserData(userId);
 
         if(_local_4) this._container.events.dispatchEvent(new RoomWidgetAvatarInfoEvent(userId, userName, _local_4.type, _local_4.roomIndex, _local_3));
     }

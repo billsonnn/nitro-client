@@ -46,7 +46,7 @@ export class ExtendedSprite extends Sprite
             (this._texture && this._texture._uvs.uvsFloat32);
         }
 
-        catch(err)
+        catch (err)
         {
             return;
         }
@@ -144,7 +144,7 @@ export class ExtendedSprite extends Sprite
             if(!baseTexture.resource) return false;
 
             //@ts-ignore
-            let source = baseTexture.resource.source as HTMLCanvasElement;
+            const source = baseTexture.resource.source as HTMLCanvasElement;
 
             if(!source) return false;
 

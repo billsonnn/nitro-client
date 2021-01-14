@@ -3,7 +3,7 @@ import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
 
 @Component({
-	selector: 'nitro-room-chatinput-styleselector-component',
+    selector: 'nitro-room-chatinput-styleselector-component',
     template: `
     <div class="nitro-room-chatinput-styleselector-component">
         <i class="icon chatstyles-icon" (click)="toggleSelector()"></i>
@@ -32,17 +32,16 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
     public lastSelectedId       = 0;
     public styleIds: number[]   = [];
 
-    public animation: any;
-
     constructor(
         private changeDetector: ChangeDetectorRef,
-        private ngZone: NgZone) {}
+        private ngZone: NgZone) 
+    {}
 
     public ngOnInit(): void
     {
-        const styles = Nitro.instance.getConfiguration<{ styleId: number, minRank: number, isSystemStyle: boolean, isHcOnly: boolean, isAmbassadorOnly: boolean }[]>("chat.styles");
+        const styles = Nitro.instance.getConfiguration<{ styleId: number, minRank: number, isSystemStyle: boolean, isHcOnly: boolean, isAmbassadorOnly: boolean }[]>('chat.styles');
 
-        for(let style of styles)
+        for(const style of styles)
         {
             if(!style) continue;
 
@@ -53,7 +52,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
                 continue;
             }
 
-            if(style.isSystemStyle || (Nitro.instance.getConfiguration<number[]>("chat.styles.disabled").indexOf(style.styleId) >= 0)) continue;
+            if(style.isSystemStyle || (Nitro.instance.getConfiguration<number[]>('chat.styles.disabled').indexOf(style.styleId) >= 0)) continue;
 
             if(style.isHcOnly && (Nitro.instance.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964))
             {

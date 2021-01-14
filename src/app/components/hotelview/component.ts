@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SessionService } from '../../security/services/session.service';
 
 @Component({
-	selector: 'nitro-hotelview-component',
+    selector: 'nitro-hotelview-component',
     template: `
     <div class="nitro-hotelview-component">
         <div class="hotel-image"></div>
@@ -12,7 +12,8 @@ import { SessionService } from '../../security/services/session.service';
 export class HotelViewComponent
 {
     constructor(
-        private sessionService: SessionService) {}
+        private sessionService: SessionService) 
+    {}
 
     public get figure(): string
     {

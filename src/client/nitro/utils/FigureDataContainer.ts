@@ -52,7 +52,7 @@
     {
         if(!k) return;
 
-        for(let set of k.split('.'))
+        for(const set of k.split('.'))
         {
             const _local_3 = set.split('-');
 
@@ -104,13 +104,13 @@
 
         const sets: string[] = [];
 
-        for(let [ key, value ] of this._data.entries())
+        for(const [ key, value ] of this._data.entries())
         {
             let set = ((key + '-') + value);
 
             const colors = this._colors.get(key);
 
-            if(colors) for(let color of colors) set = (set + ('-' + color));
+            if(colors) for(const color of colors) set = (set + ('-' + color));
 
             sets.push(set);
         }
@@ -190,9 +190,9 @@
         const partSets: string[] = [ FigureDataContainer.HD ];
 
         let figure          = '';
-        let sets: string[]  = [];
+        const sets: string[]  = [];
 
-        for(let part of partSets)
+        for(const part of partSets)
         {
             const colors = this._colors.get(part);
 

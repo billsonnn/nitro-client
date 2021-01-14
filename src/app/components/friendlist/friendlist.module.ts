@@ -4,7 +4,7 @@ import { FriendListMainComponent } from './components/main/main.component';
 import { FriendListService } from './services/friendlist.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -17,4 +17,5 @@ import { FriendListService } from './services/friendlist.service';
         FriendListMainComponent
     ]
 })
-export class FriendListModule {}
+export class FriendListModule 
+{}

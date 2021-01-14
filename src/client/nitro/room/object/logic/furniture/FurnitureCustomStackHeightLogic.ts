@@ -5,7 +5,7 @@ import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureCustomStackHeightLogic extends FurnitureMultiStateLogic
 {
-    public initialize(asset: IAssetData)
+    public initialize(asset: IAssetData): void
     {
         super.initialize(asset);
 

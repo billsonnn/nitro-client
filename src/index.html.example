@@ -11,7 +11,7 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            configurationUrl: 'configuration.json',
+            configurationUrl: 'http://your-url/configuration.json',
             sso: (new URLSearchParams(window.location.search).get('sso') || null)
         };
     </script>

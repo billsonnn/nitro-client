@@ -19,7 +19,7 @@ import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -61,4 +61,5 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         DimmerFurniComponent
     ]
 })
-export class RoomModule {}
+export class RoomModule 
+{}

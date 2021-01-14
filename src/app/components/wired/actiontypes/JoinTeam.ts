@@ -12,7 +12,7 @@ export class JoinTeam extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3: number = _arg_2.intData[0];
+        const _local_3: number = _arg_2.intData[0];
         //this._Str_6616(k)._Str_2520(this._Str_9779(k, _local_3));
     }
 

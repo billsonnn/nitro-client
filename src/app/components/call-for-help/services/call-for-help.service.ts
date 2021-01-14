@@ -46,14 +46,14 @@ export class CallForHelpService implements OnDestroy
             new CallForHelpResultMessageEvent(this.onCallForHelpResultMessageEvent.bind(this))
         ];
 
-        for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
     }
 
     private unregisterMessages(): void
     {
         if(this._messages && this._messages.length)
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
         }
     }
 

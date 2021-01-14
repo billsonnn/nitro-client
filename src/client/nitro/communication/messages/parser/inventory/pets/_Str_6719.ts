@@ -27,7 +27,7 @@ export class _Str_6719 implements IMessageParser
             this._pet2 = null;
         }
 
-        for(let k of this._Str_4447) k && k.dispose();
+        for(const k of this._Str_4447) k && k.dispose();
 
         this._Str_4447 = [];
 
@@ -44,7 +44,7 @@ export class _Str_6719 implements IMessageParser
 
         let totalCount = wrapper.readInt();
 
-        while (totalCount > 0)
+        while(totalCount > 0)
         {
             this._Str_4447.push(new _Str_5753(wrapper));
 

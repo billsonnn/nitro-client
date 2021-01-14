@@ -73,7 +73,7 @@ export class GroupItem implements IGetImageListener
 
     public getTradeItems(count: number): IFurnitureItem[]
     {
-        let items: IFurnitureItem[] = [];
+        const items: IFurnitureItem[] = [];
 
         const furnitureItem = this.getLastItem();
 
@@ -147,7 +147,7 @@ export class GroupItem implements IGetImageListener
 
     public getTotalCount(): number
     {
-        var k: number = 0;
+        const k = 0;
 
         if(this._category === FurniCategory._Str_12351)
         {
@@ -200,11 +200,11 @@ export class GroupItem implements IGetImageListener
 
     public unlockAllItems(): void
     {
-        let didUnlock = false;
+        const didUnlock = false;
 
         if(this._items.length)
         {
-            for(let item of this._items.getValues())
+            for(const item of this._items.getValues())
             {
                 if(item && item.locked)
                 {
@@ -216,9 +216,9 @@ export class GroupItem implements IGetImageListener
 
     public lockItemIds(itemIds: number[]): void
     {
-        for(let item of this._items.getValues())
+        for(const item of this._items.getValues())
         {
-            let locked = (itemIds.indexOf(item.ref) >= 0);
+            const locked = (itemIds.indexOf(item.ref) >= 0);
 
             if(item.locked !== locked) item.locked = locked;
         }
@@ -237,7 +237,7 @@ export class GroupItem implements IGetImageListener
 
         let key = '';
         
-        switch (this._category)
+        switch(this._category)
         {
             case FurniCategory._Str_5186:
                 key = (('poster_' + k.stuffData.getLegacyString()) + '_name');

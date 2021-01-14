@@ -3,7 +3,7 @@ import { SharedModule } from '../../shared';
 import { ToolbarMainComponent } from './components/main/main.component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -15,4 +15,5 @@ import { ToolbarMainComponent } from './components/main/main.component';
         ToolbarMainComponent
     ]
 })
-export class ToolbarModule {}
+export class ToolbarModule 
+{}

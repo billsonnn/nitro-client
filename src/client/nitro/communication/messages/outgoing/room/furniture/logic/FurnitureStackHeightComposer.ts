@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../../core/communication/messages/IMessageComposer';
 
-export class FurnitureStackHeightComposer implements IMessageComposer
+export class FurnitureStackHeightComposer implements IMessageComposer<ConstructorParameters<typeof FurnitureStackHeightComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof FurnitureStackHeightComposer>;
 
     constructor(itemId: number, height: number = -100)
     {
         this._data = [ itemId, height ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

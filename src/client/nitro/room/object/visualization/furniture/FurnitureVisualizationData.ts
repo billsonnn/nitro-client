@@ -50,7 +50,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         if(this._sizeDatas && this._sizeDatas.size)
         {
-            for(let size of this._sizeDatas.values()) size && size.dispose();
+            for(const size of this._sizeDatas.values()) size && size.dispose();
 
             this._sizeDatas = null;
         }
@@ -65,7 +65,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
 
         if(this._sizeDatas && this._sizeDatas.size)
         {
-            for(let size of this._sizeDatas.values()) size && size.dispose();
+            for(const size of this._sizeDatas.values()) size && size.dispose();
         }
 
         this._sizeDatas.clear();
@@ -84,10 +84,10 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         if(!visualizations) return false;
 
-        for(let visualization of visualizations)
+        for(const visualization of visualizations)
         {
-            let layerCount    = visualization.layerCount;
-            let angle         = visualization.angle;
+            const layerCount    = visualization.layerCount;
+            const angle         = visualization.angle;
             let size          = visualization.size;
             
             if(size < 1) size = 1;
@@ -98,7 +98,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
 
             if(!sizeData) return false;
 
-            for(let key in visualization)
+            for(const key in visualization)
             {
                 //@ts-ignore
                 const data = visualization[key];

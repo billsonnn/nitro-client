@@ -26,7 +26,7 @@ export class SetType implements ISetType
 
     public dispose(): void
     {
-        for(let set of this._partSets.getValues())
+        for(const set of this._partSets.getValues())
         {
             const partSet = set as FigurePartSet;
 
@@ -38,7 +38,7 @@ export class SetType implements ISetType
 
     public _Str_1874(k: any): void
     {
-        for(let _local_2 of k)
+        for(const _local_2 of k)
         {
             const _local_3 = (_local_2.id as string);
             const _local_4 = (this._partSets.getValue(_local_3) as FigurePartSet);
@@ -56,12 +56,12 @@ export class SetType implements ISetType
     {
         if(!k || !k.set) return;
 
-        for(let set of k.set) this._partSets.add(set['$'].id, new FigurePartSet(this._type, set));
+        for(const set of k.set) this._partSets.add(set['$'].id, new FigurePartSet(this._type, set));
     }
 
     public _Str_2264(k: string): IFigurePartSet
     {
-        for(let set of this._partSets.getValues())
+        for(const set of this._partSets.getValues())
         {
             if(!set) continue;
 

@@ -8,7 +8,8 @@ import { PurseService } from '../../services/purse.service';
 })
 export class PurseMainComponent implements OnInit
 {
-    constructor(private _purseService: PurseService) {}
+    constructor(private _purseService: PurseService) 
+    {}
 
     public ngOnInit(): void
     {
@@ -24,7 +25,7 @@ export class PurseMainComponent implements OnInit
 
     public getCurrencyUrl(type: number): string
     {
-        let url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
+        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
 
         return url.replace('%type%', type.toString());
     }

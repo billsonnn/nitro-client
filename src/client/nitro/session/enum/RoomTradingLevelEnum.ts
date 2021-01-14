@@ -7,14 +7,14 @@
 
     public static _Str_22614(k: number): string
     {
-        switch (k)
+        switch(k)
         {
             case RoomTradingLevelEnum._Str_9173:
-                return "${trading.mode.free}";
+                return '${trading.mode.free}';
             case RoomTradingLevelEnum._Str_14475:
-                return "${trading.mode.controller}";
+                return '${trading.mode.controller}';
             case RoomTradingLevelEnum._Str_12752:
-                return "${trading.mode.not.allowed}";
+                return '${trading.mode.not.allowed}';
         }
 
         return '';

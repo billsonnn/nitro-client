@@ -39,7 +39,6 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
     public update(): void
     {
-
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -50,22 +49,23 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
         switch(message.type)
         {
-            case RoomWidgetChatTypingMessage.TYPING_STATUS:
-                let typingMessage = (message as RoomWidgetChatTypingMessage);
+            case RoomWidgetChatTypingMessage.TYPING_STATUS: {
+                const typingMessage = (message as RoomWidgetChatTypingMessage);
 
                 this._container.roomSession.sendChatTypingMessage(typingMessage.isTyping);
                 break;
-            case RoomWidgetChatMessage.MESSAGE_CHAT:
-                let chatMessage = (message as RoomWidgetChatMessage);
+            }
+            case RoomWidgetChatMessage.MESSAGE_CHAT: {
+                const chatMessage = (message as RoomWidgetChatMessage);
 
                 if(chatMessage.text === '') return null;
 
                 let text    = chatMessage.text;
-                let parts   = chatMessage.text.split(' ');
+                const parts   = chatMessage.text.split(' ');
 
                 if(parts.length > 0)
                 {
-                    let firstPart   = parts[0];
+                    const firstPart   = parts[0];
                     let secondPart  = '';
 
                     if(parts.length > 1) secondPart = parts[1];
@@ -88,45 +88,45 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
                     switch(firstPart.toLowerCase())
                     {
-                        case ":d":
-                        case ";d":
-                            if (this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
+                        case ':d':
+                        case ';d':
+                            if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_7336._Str_6677);
                             }
                             break;
-                        case "o/":
-                        case "_o/":
+                        case 'o/':
+                        case '_o/':
                             this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6268._Str_6677);
                             return null;
-                        case ":kiss":
-                            if (this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                        case ':kiss':
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_5579._Str_6677);
                                 return null;
                             }
                             break;
-                        case ":jump":
-                            if (this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                        case ':jump':
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_16682._Str_6677);
                                 return null;
                             }
                             break;
-                        case ":idle":
+                        case ':idle':
                             this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6989._Str_6677);
                             return null;
-                        case "_b":
+                        case '_b':
                             this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6325._Str_6677);
                             return null;
-                        case ":sign":
+                        case ':sign':
                             this._container.roomSession.sendSignMessage(parseInt(secondPart));
                             return null;
-                        case ":iddqd":
+                        case ':iddqd':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, -1, true));
                             return null;
                         case ':zoom':
-                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart), true));
+                            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart), false));
                             return null;
                         case ':screenshot':
                             this._container.roomEngine.createRoomScreenshot(this._container.roomSession.roomId, this._container.getFirstCanvasId());
@@ -141,12 +141,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':nitro':
                         case ':billsonnn':
                             this._container.notificationService.alertWithScrollableMessages([
-                                `<div class="d-flex flex-column justify-content-center align-items-center"><div style="width: 350px; height: 120px; margin: 10px; background: transparent url('https://assets-1.nitrots.co/nitro-dark.svg') no-repeat center; filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);"></div><b>Version: ` + Nitro.RELEASE_VERSION + `</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>`], 'Nitro HTML5');
+                                '<div class="d-flex flex-column justify-content-center align-items-center"><div style="width: 350px; height: 120px; margin: 10px; background: transparent url(\'https://assets-1.nitrots.co/nitro-dark.svg\') no-repeat center; filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
                             return null;
                     }
                 }
 
-                let styleId = chatMessage.styleId;
+                const styleId = chatMessage.styleId;
 
                 if(this._container && this._container.roomSession)
                 {
@@ -164,6 +164,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                     }
                 }
                 break;
+            }
             case RoomWidgetChatSelectAvatarMessage.MESSAGE_SELECT_AVATAR:
                 widgetMessage = message;
                 break;

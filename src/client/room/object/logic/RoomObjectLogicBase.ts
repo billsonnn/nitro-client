@@ -23,7 +23,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         this._time      = 0;
     }
 
-    public initialize(data: any): void
+    public initialize(data: unknown): void
     {
         return;
     }
@@ -57,7 +57,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     {
         const types = k.concat();
 
-        for(let type of _arg_2)
+        for(const type of _arg_2)
         {
             if(!type || (types.indexOf(type) >= 0)) continue;
 
@@ -67,7 +67,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         return types;
     }
 
-    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry)
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         return;
     }

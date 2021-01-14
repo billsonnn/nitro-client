@@ -42,7 +42,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 
         let widgetEvent: RoomEngineTriggerWidgetEvent = null;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);
@@ -94,8 +94,8 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 
         this._roomIdToEnter = 0;
 
-        let roomName    = roomData.roomName;
-        let ownerName   = roomData.ownerName;
+        const roomName    = roomData.roomName;
+        const ownerName   = roomData.ownerName;
         let message     = Nitro.instance.getLocalization('room.link.confirmation.message');
 
         if(message && (message.indexOf('%%room_name%%') > -1))
@@ -153,7 +153,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
         {
             if(this._container)
             {
-                for(let message of this._messages) this._container.connection.removeMessageEvent(message);
+                for(const message of this._messages) this._container.connection.removeMessageEvent(message);
 
                 this._messages = [];
             }
@@ -165,7 +165,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
         {
             this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
 
-            for(let message of this._messages) container.connection.addMessageEvent(message);
+            for(const message of this._messages) container.connection.addMessageEvent(message);
         }
     }
 

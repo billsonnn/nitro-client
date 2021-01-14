@@ -42,7 +42,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
         const randomNumber = Math.trunc((Math.random() * 654321));
 
-        for(let landscapeIndex in k)
+        for(const landscapeIndex in k)
         {
             const landscape = k[landscapeIndex];
 
@@ -53,7 +53,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
             const plane = new LandscapePlane();
 
-            for(let visualization of visualizations)
+            for(const visualization of visualizations)
             {
                 if(!visualization) continue;
 
@@ -131,7 +131,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
 
                                 if(items && items.length)
                                 {
-                                    for(let item of items)
+                                    for(const item of items)
                                     {
                                         if(item)
                                         {
@@ -139,8 +139,8 @@ export class LandscapeRasterizer extends PlaneRasterizer
                                             const assetId   = item.assetId;
                                             const x         = this._Str_21504(item.x || '', item.randomX || '');
                                             const y         = this._Str_21504(item.y || '', item.randomY || '');
-                                            const speedX    = item.speedX ? item.speedX / Nitro.instance.getConfiguration<number>("system.fps") : 0;
-                                            const speedY    = item.speedY ? item.speedY / Nitro.instance.getConfiguration<number>("system.fps") : 0;
+                                            const speedX    = item.speedX ? item.speedX / Nitro.instance.getConfiguration<number>('system.fps') : 0;
+                                            const speedY    = item.speedY ? item.speedY / Nitro.instance.getConfiguration<number>('system.fps') : 0;
 
                                             animationItems.push({
                                                 asset: assetId,
@@ -162,7 +162,7 @@ export class LandscapeRasterizer extends PlaneRasterizer
                 }
             }
 
-            if (!this._Str_3453(id, plane)) plane.dispose();
+            if(!this._Str_3453(id, plane)) plane.dispose();
         }
     }
 
