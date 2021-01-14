@@ -71,7 +71,7 @@ export class ActionTypes implements IUserDefinedRoomEventsCtrl
 
     public _Str_9781(code: number): WiredFurniture
     {
-        for(let action of this._types)
+        for(const action of this._types)
         {
             if(action.code !== code) continue;
 

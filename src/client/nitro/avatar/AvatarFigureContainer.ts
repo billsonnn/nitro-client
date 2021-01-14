@@ -62,7 +62,7 @@ export class AvatarFigureContainer implements IAvatarFigureContainer
     {
         const parts: string[] = [];
 
-        for(let key of this.partSets().keys())
+        for(const key of this.partSets().keys())
         {
             if(!key) continue;
 
@@ -90,7 +90,7 @@ export class AvatarFigureContainer implements IAvatarFigureContainer
     {
         if(!figure) figure = '';
 
-        for(let part of figure.split('.'))
+        for(const part of figure.split('.'))
         {
             const pieces = part.split('-');
 

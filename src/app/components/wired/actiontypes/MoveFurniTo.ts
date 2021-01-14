@@ -41,7 +41,7 @@ export class MoveFurniTo extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3: number = _arg_2.intData[0];
+        const _local_3: number = _arg_2.intData[0];
         // this._Str_19308(k)._Str_2520(this._Str_24416(k, _local_3));
         // this._slider._Str_2526(_arg_2.intData[1]);
     }

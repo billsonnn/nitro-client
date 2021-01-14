@@ -26,7 +26,7 @@ export class SpriteDataCollector
     {
         const datas: RoomObjectSpriteData[] = [];
 
-        for(let data of k)
+        for(const data of k)
         {
             if(!data) continue;
 
@@ -40,7 +40,7 @@ export class SpriteDataCollector
 
                     if(spriteList)
                     {
-                        for(let sprite of spriteList)
+                        for(const sprite of spriteList)
                         {
                             sprite.x = (sprite.x + ((data.x + (data.width / 2)) + SpriteDataCollector._Str_16967));
                             sprite.y = (sprite.y + ((data.y + data.height) + SpriteDataCollector._Str_18197));
@@ -80,19 +80,19 @@ export class SpriteDataCollector
     {
         const points: Point[] = [];
 
-        if (k.x == _arg_2.x)
+        if(k.x == _arg_2.x)
         {
             points.push(k, _arg_3, _arg_2, _arg_4);
         }
         else
         {
-            if (k.x == _arg_3.x)
+            if(k.x == _arg_3.x)
             {
                 points.push(k, _arg_2, _arg_3, _arg_4);
             }
             else
             {
-                if ((((_arg_2.x < k.x) && (_arg_2.y > k.y)) || ((_arg_2.x > k.x) && (_arg_2.y < k.y))))
+                if((((_arg_2.x < k.x) && (_arg_2.y > k.y)) || ((_arg_2.x > k.x) && (_arg_2.y < k.y))))
                 {
                     points.push(k, _arg_3, _arg_2, _arg_4);
                 }
@@ -103,7 +103,7 @@ export class SpriteDataCollector
             }
         }
 
-        if (points[0].x < points[1].x)
+        if(points[0].x < points[1].x)
         {
             let _local_6 = points[0];
 
@@ -116,7 +116,7 @@ export class SpriteDataCollector
             points[3] = _local_6;
         }
 
-        if (points[0].y < points[2].y)
+        if(points[0].y < points[2].y)
         {
             let _local_6 = points[0];
 
@@ -133,14 +133,14 @@ export class SpriteDataCollector
     }
 
 
-    public _Str_4536(k: Rectangle, _arg_2:IRoomRenderingCanvas, _arg_3:RoomEngine, _arg_4: number):String
+    public _Str_4536(k: Rectangle, _arg_2:IRoomRenderingCanvas, _arg_3:RoomEngine, _arg_4: number): string
     {
-        let _local_5: Object[] = [];
+        const _local_5: Object[] = [];
         let _local_6 = _arg_2.getSortableSpriteList();
 
         const _local_7 = _arg_3._Str_21072(_arg_3.activeRoomId, RoomObjectCategory.UNIT);
 
-        for(let _local_8 of _local_7)
+        for(const _local_8 of _local_7)
         {
             if(_local_8.id !== _arg_4)
             {
@@ -151,7 +151,7 @@ export class SpriteDataCollector
                     let _local_12 = 0;
                     let _local_13 = 0;
 
-                    for(let _local_14 of _local_6)
+                    for(const _local_14 of _local_6)
                     {
                         if(_local_14.name === ('avatar_' + _local_8.id))
                         {
@@ -168,7 +168,7 @@ export class SpriteDataCollector
                     {
                         if(_local_13 === 0) _local_13 = _local_15.y;
 
-                        for(let _local_16 of _local_11)
+                        for(const _local_16 of _local_11)
                         {
                             _local_16.x = (_local_16.x + (_local_15.x - _arg_2.screenOffsetX));
                             _local_16.y = (_local_16.y + _local_13);
@@ -189,7 +189,7 @@ export class SpriteDataCollector
         _local_6 = SpriteDataCollector._Str_22230(_local_6, _arg_3);
         _local_6.sort(SpriteDataCollector._Str_22564);
 
-        for(let _local_9 of _local_6)
+        for(const _local_9 of _local_6)
         {
             if((((((!(_local_9.name === null)) && (_local_9.name.length > 0)) && (!(_local_9.name.indexOf('tile_cursor_') === 0))) && (SpriteDataCollector._Str_20789(_local_9, k, _arg_2))) && ((_arg_4 < 0) || (!(_local_9.objectId == _arg_4)))))
             {
@@ -211,11 +211,26 @@ export class SpriteDataCollector
 
     private _Str_25132(k: RoomObjectSpriteData, _arg_2: Rectangle, _arg_3: IRoomRenderingCanvas, _arg_4: RoomEngine): Object
     {
-        var _local_7: string = null;
-        var _local_9: string[] = [];
+        let _local_7: string = null;
+        let _local_9: string[] = [];
 
-        var _local_5: any = new Object();
-        var _local_6 = k.name;
+        const _local_5: {
+            name?: string,
+            x?: number,
+            y?: number,
+            z?: number,
+            alpha?: number,
+            flipH?: boolean,
+            skew?: number,
+            frame?: boolean,
+            color?: number,
+            blendMode?: string,
+            width?: number,
+            height?: number,
+            posture?: string
+        } = {};
+
+        let _local_6 = k.name;
 
         if(k.name.indexOf('@') !== -1)
         {
@@ -318,14 +333,14 @@ export class SpriteDataCollector
     {
         const _local_4: Map<number, { plane: IRoomPlane, z: number }> = new Map();
 
-        let _local_5: number = 1;
+        let _local_5 = 1;
 
         if(this._Str_6409)
         {
             _local_5 = (_local_5 + this._Str_6409);
         }
 
-        for(let _local_6 of k)
+        for(const _local_6 of k)
         {
             const _local_10 = {
                 plane: _local_6,
@@ -346,7 +361,7 @@ export class SpriteDataCollector
 
         let _local_8: { plane: IRoomPlane, z: number }[] = [];
 
-        for(let sprite of sprites)
+        for(const sprite of sprites)
         {
             const objectSprite = sprite.sprite;
 
@@ -354,7 +369,7 @@ export class SpriteDataCollector
             {
                 const _local_10 = _local_4.get(objectSprite.id);
 
-                if (_local_10)
+                if(_local_10)
                 {
                     _local_4.delete(objectSprite.id);
 
@@ -372,7 +387,7 @@ export class SpriteDataCollector
 
     public _Str_22985(k: Rectangle, _arg_2: IRoomRenderingCanvas, _arg_3: RoomEngine, _arg_4: number): PlaneDrawingData[]
     {
-        var _local_5: PlaneDrawingData[] = [];
+        const _local_5: PlaneDrawingData[] = [];
 
         const roomObject    = _arg_3.getRoomObject(_arg_3.activeRoomId, RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
         const visualization = (roomObject.visualization as unknown as IPlaneVisualization);
@@ -383,7 +398,7 @@ export class SpriteDataCollector
             const _local_9  = this._Str_25623(visualization._Str_19113, _arg_2, _arg_3);
             const _local_10 = Nitro.instance.stage;
 
-            for(let _local_11 of _local_9)
+            for(const _local_11 of _local_9)
             {
                 const _local_12 = _local_11.plane;
                 const _local_13: Point[] = [];
@@ -399,7 +414,7 @@ export class SpriteDataCollector
                 let _local_19 = 0;
                 let _local_20 = 0;
 
-                for(let _local_21 of _local_13)
+                for(const _local_21 of _local_13)
                 {
                     _local_21.x += (_local_10.width / 2);
                     _local_21.y += (_local_10.height / 2);
@@ -421,12 +436,13 @@ export class SpriteDataCollector
 
                 if(((Math.abs(_local_19) === 4) || (Math.abs(_local_20) === 4)))
                 {
+                    //
                 }
                 else
                 {
                     const _local_22 = SpriteDataCollector._Str_14110(_local_15, _local_16, _local_17, _local_18);
 
-                    for(let _local_23 of _local_12._Str_22136(_local_8))
+                    for(const _local_23 of _local_12._Str_22136(_local_8))
                     {
                         _local_23.cornerPoints  = _local_22;
                         _local_23.z             = _local_11.z;

@@ -11,7 +11,7 @@ import { NavigatorService } from './services/navigator.service';
 import { NavigatorSliderComponent } from './components/slider/slider.component'
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -39,4 +39,5 @@ import { NavigatorSliderComponent } from './components/slider/slider.component'
     ],
     entryComponents: [ NavigatorCreatorComponent, NavigatorDoorbellComponent, NavigatorPasswordComponent ]
 })
-export class NavigatorModule {}
+export class NavigatorModule 
+{}

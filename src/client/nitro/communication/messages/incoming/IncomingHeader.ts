@@ -205,4 +205,5 @@ export class IncomingHeader
     public static WIRED_REWARD                     = 178;
     public static WIRED_SAVE                       = 1155;
     public static WIRED_TRIGGER                    = 383;
+    public static PLAYING_GAME                     = 448;
 }

@@ -19,7 +19,7 @@ import { TranslatePipe } from './pipes/translate';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-	suppressScrollX: true
+    suppressScrollX: true
 };
 
 @NgModule({
@@ -76,4 +76,5 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		TranslatePipe
 	]
 })
-export class SharedModule {}
+export class SharedModule 
+{}

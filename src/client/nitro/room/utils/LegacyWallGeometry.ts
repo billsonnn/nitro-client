@@ -5,8 +5,8 @@ export class LegacyWallGeometry
 {
     public static DEFAULT_SCALE: number = 32;
     
-    private static L: string = "l";
-    private static R: string = "r";
+    private static L: string = 'l';
+    private static R: string = 'r';
 
     private _isDisposed: boolean;
     private _scale: number;
@@ -115,25 +115,25 @@ export class LegacyWallGeometry
 
     public getLocation(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: string): IVector3D
     {
-        var _local_12: number;
-        var _local_6: number;
-        var _local_7: number;
-        if (((k == 0) && (_arg_2 == 0)))
+        let _local_12: number;
+        let _local_6: number;
+        let _local_7: number;
+        if(((k == 0) && (_arg_2 == 0)))
         {
             k = this._width;
             _arg_2 = this._height;
             _local_12 = Math.round((this.scale / 10));
-            if (_arg_5 == LegacyWallGeometry.R)
+            if(_arg_5 == LegacyWallGeometry.R)
             {
                 _local_7 = (this._width - 1);
-                while (_local_7 >= 0)
+                while(_local_7 >= 0)
                 {
                     _local_6 = 1;
-                    while (_local_6 < this._height)
+                    while(_local_6 < this._height)
                     {
-                        if (this.getHeight(_local_7, _local_6) <= this._floorHeight)
+                        if(this.getHeight(_local_7, _local_6) <= this._floorHeight)
                         {
-                            if ((_local_6 - 1) < _arg_2)
+                            if((_local_6 - 1) < _arg_2)
                             {
                                 k = _local_7;
                                 _arg_2 = (_local_6 - 1);
@@ -150,14 +150,14 @@ export class LegacyWallGeometry
             else
             {
                 _local_6 = (this._height - 1);
-                while (_local_6 >= 0)
+                while(_local_6 >= 0)
                 {
                     _local_7 = 1;
-                    while (_local_7 < this._width)
+                    while(_local_7 < this._width)
                     {
-                        if (this.getHeight(_local_7, _local_6) <= this._floorHeight)
+                        if(this.getHeight(_local_7, _local_6) <= this._floorHeight)
                         {
-                            if ((_local_7 - 1) < k)
+                            if((_local_7 - 1) < k)
                             {
                                 k = (_local_7 - 1);
                                 _arg_2 = _local_6;
@@ -172,10 +172,10 @@ export class LegacyWallGeometry
                 _arg_3 = (_arg_3 - _local_12);
             }
         }
-        var _local_8: number = k;
-        var _local_9: number = _arg_2;
-        var _local_10: number = this.getHeight(k, _arg_2);
-        if (_arg_5 == LegacyWallGeometry.R)
+        let _local_8: number = k;
+        let _local_9: number = _arg_2;
+        let _local_10: number = this.getHeight(k, _arg_2);
+        if(_arg_5 == LegacyWallGeometry.R)
         {
             _local_8 = (_local_8 + ((_arg_3 / (this._scale / 2)) - 0.5));
             _local_9 = (_local_9 + 0.5);
@@ -187,29 +187,28 @@ export class LegacyWallGeometry
             _local_8 = (_local_8 + 0.5);
             _local_10 = (_local_10 - ((_arg_4 - (((this._scale / 2) - _arg_3) / 2)) / (this._scale / 2)));
         }
-        var _local_11:Vector3d = new Vector3d(_local_8, _local_9, _local_10);
+        const _local_11:Vector3d = new Vector3d(_local_8, _local_9, _local_10);
         return _local_11;
     }
 
     public _Str_24084(k: number, _arg_2: number, _arg_3: string):IVector3D
     {
-        var _local_4: number;
-        var _local_5: number;
-        var _local_6: number = 0;
-        var _local_7: number = 0;
+        let _local_4: number;
+        let _local_5: number;
+        let _local_6 = 0;
+        let _local_7 = 0;
         _local_5 = Math.ceil(k);
         _local_6 = (_local_5 - k);
-        var _local_8: number;
-        var _local_9: number;
-        var _local_10: number;
-        var _local_11: number;
-        var _local_12: number = 0;
+        let _local_8: number;
+        let _local_9: number;
+        let _local_11: number;
+        let _local_12 = 0;
         _local_4 = 0;
-        while (_local_4 < this._width)
+        while(_local_4 < this._width)
         {
-            if (((_local_5 >= 0) && (_local_5 < this._height)))
+            if(((_local_5 >= 0) && (_local_5 < this._height)))
             {
-                if (this.getHeight(_local_4, _local_5) <= this._floorHeight)
+                if(this.getHeight(_local_4, _local_5) <= this._floorHeight)
                 {
                     _local_8 = (_local_4 - 1);
                     _local_9 = _local_5;
@@ -217,7 +216,7 @@ export class LegacyWallGeometry
                     _arg_3 = LegacyWallGeometry.L;
                     break;
                 }
-                if (this.getHeight(_local_4, (_local_5 + 1)) <= this._floorHeight)
+                if(this.getHeight(_local_4, (_local_5 + 1)) <= this._floorHeight)
                 {
                     _local_8 = _local_4;
                     _local_9 = _local_5;
@@ -229,12 +228,12 @@ export class LegacyWallGeometry
             _local_5++;
             _local_4++;
         }
-        _local_10 = ((this.scale / 2) * _local_6);
-        var _local_13: number = ((-(_local_7) * this.scale) / 2);
+        const _local_10 = ((this.scale / 2) * _local_6);
+        let _local_13: number = ((-(_local_7) * this.scale) / 2);
         _local_13 = (_local_13 + ((((-(_arg_2) * 18) / 32) * this.scale) / 2));
         _local_12 = this.getHeight(_local_8, _local_9);
         _local_11 = (((_local_12 * this.scale) / 2) + _local_13);
-        if (_arg_3 == LegacyWallGeometry.R)
+        if(_arg_3 == LegacyWallGeometry.R)
         {
             _local_11 = (_local_11 + ((_local_6 * this.scale) / 4));
         }
@@ -247,17 +246,17 @@ export class LegacyWallGeometry
 
     public _Str_22875(k:IVector3D, _arg_2: number): [ number, number, number, number, string ]
     {
-        if (k == null)
+        if(k == null)
         {
             return null;
         }
-        var _local_3: number = 0;
-        var _local_4: number = 0;
-        var _local_5: number = 0;
-        var _local_6: number = 0;
-        var _local_7: string = "";
-        var _local_8: number = 0;
-        if (_arg_2 == 90)
+        let _local_3 = 0;
+        let _local_4 = 0;
+        let _local_5 = 0;
+        let _local_6 = 0;
+        let _local_7 = '';
+        let _local_8 = 0;
+        if(_arg_2 == 90)
         {
             _local_3 = Math.floor((k.x - 0.5));
             _local_4 = Math.floor((k.y + 0.5));
@@ -268,7 +267,7 @@ export class LegacyWallGeometry
         }
         else
         {
-            if (_arg_2 == 180)
+            if(_arg_2 == 180)
             {
                 _local_3 = Math.floor((k.x + 0.5));
                 _local_4 = Math.floor((k.y - 0.5));
@@ -287,23 +286,23 @@ export class LegacyWallGeometry
 
     public _Str_21860(k:IVector3D, _arg_2: number): string
     {
-        var _local_3 = this._Str_22875(k, _arg_2);
-        if (_local_3 == null)
+        const _local_3 = this._Str_22875(k, _arg_2);
+        if(_local_3 == null)
         {
             return null;
         }
-        var _local_4: number = Math.trunc(_local_3[0]);
-        var _local_5: number = Math.trunc(_local_3[1]);
-        var _local_6: number = Math.trunc(_local_3[2]);
-        var _local_7: number = Math.trunc(_local_3[3]);
-        var _local_8: string = _local_3[4];
-        var _local_9: string = (((((((((":w=" + _local_4) + ",") + _local_5) + " l=") + _local_6) + ",") + _local_7) + " ") + _local_8);
+        const _local_4: number = Math.trunc(_local_3[0]);
+        const _local_5: number = Math.trunc(_local_3[1]);
+        const _local_6: number = Math.trunc(_local_3[2]);
+        const _local_7: number = Math.trunc(_local_3[3]);
+        const _local_8: string = _local_3[4];
+        const _local_9: string = (((((((((':w=' + _local_4) + ',') + _local_5) + ' l=') + _local_6) + ',') + _local_7) + ' ') + _local_8);
         return _local_9;
     }
 
     public getDirection(k: string): number
     {
-        if (k == LegacyWallGeometry.R)
+        if(k == LegacyWallGeometry.R)
         {
             return 180;
         }

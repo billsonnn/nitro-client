@@ -2,7 +2,7 @@
 
 export class RoomObjectHSLColorEnabledEvent extends RoomEngineEvent 
 {
-    public static ROOM_BACKGROUND_COLOR: string = "ROHSLCEE_ROOM_BACKGROUND_COLOR";
+    public static ROOM_BACKGROUND_COLOR: string = 'ROHSLCEE_ROOM_BACKGROUND_COLOR';
 
     private _enable: boolean;
     private _hue: number;

@@ -14,7 +14,7 @@ import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-	selector: 'nitro-catalog-main-component',
+    selector: 'nitro-catalog-main-component',
     templateUrl: './main.template.html'
 })
 export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
@@ -43,7 +43,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone) 
+    {}
 
     public ngOnInit(): void
     {
@@ -228,7 +229,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
         if(this._activeOffer)
         {
-            let product = this._activeOffer.products[0];
+            const product = this._activeOffer.products[0];
 
             if(!product) return;
 
@@ -250,7 +251,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                             const setIds: number[]  = [];
                             const sets              = furniData.customParams.split(',');
 
-                            for(let set of sets)
+                            for(const set of sets)
                             {
                                 const setId = parseInt(set);
 

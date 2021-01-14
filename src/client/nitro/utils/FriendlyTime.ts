@@ -25,7 +25,7 @@ export class FriendlyTime
         return FriendlyTime.getLocalization(('friendlytime.seconds' + key), Math.round(seconds));
     }
 
-    public static shortFormat(seconds: number, key: string = '', threshold: number = 3):String
+    public static shortFormat(seconds: number, key: string = '', threshold: number = 3): string
     {
         if(seconds > (threshold * FriendlyTime.YEAR)) return FriendlyTime.getLocalization(('friendlytime.years.short' + key), Math.round((seconds / FriendlyTime.YEAR)));
 

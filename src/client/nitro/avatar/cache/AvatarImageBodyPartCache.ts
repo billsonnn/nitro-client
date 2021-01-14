@@ -15,11 +15,11 @@ export class AvatarImageBodyPartCache
 
     public dispose(): void
     {
-        this._Str_587("[dispose]");
+        this._Str_587('[dispose]');
 
         if(!this._Str_586) return;
 
-        for(let direction of this._Str_586.values())
+        for(const direction of this._Str_586.values())
         {
             if(direction) direction.dispose();
         }

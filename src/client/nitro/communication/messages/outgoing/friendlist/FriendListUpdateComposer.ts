@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class FriendListUpdateComposer implements IMessageComposer
+export class FriendListUpdateComposer implements IMessageComposer<ConstructorParameters<typeof FriendListUpdateComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof FriendListUpdateComposer>;
 
     constructor()
     {
         this._data = [];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

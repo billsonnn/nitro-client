@@ -95,9 +95,12 @@ export class FurnitureLogic extends MovingObjectLogic
 
         if(directions && directions.length)
         {
-            for(let direction of directions) this._directions.push(direction);
+            for(const direction of directions) this._directions.push(direction);
 
-            this._directions.sort((a, b) => { return a - b });
+            this._directions.sort((a, b) => 
+            {
+                return a - b; 
+            });
         }
 
         model.setValue(RoomObjectVariable.FURNITURE_SIZE_X, this._sizeX);

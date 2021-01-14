@@ -11,7 +11,7 @@ import { NavigatorDoorbellComponent } from '../doorbell/doorbell.component';
 import { NavigatorPasswordComponent } from '../password/password.component';
 
 @Component({
-	selector: 'nitro-navigator-main-component',
+    selector: 'nitro-navigator-main-component',
     templateUrl: './main.template.html'
 })
 export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
@@ -27,7 +27,8 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private _settingsService: SettingsService,
         private _navigatorService: NavigatorService,
-        private _modalService: NgbModal) {}
+        private _modalService: NgbModal) 
+    {}
 
     public ngOnInit(): void
     {

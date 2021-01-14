@@ -35,7 +35,7 @@ import { TriggerPeriodicallyComponent } from './components/triggers/trigger-peri
 import { WiredService } from './services/wired.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -110,4 +110,5 @@ import { WiredService } from './services/wired.service';
         TriggerPeriodicallyLongComponent
     ]
 })
-export class WiredModule {}
+export class WiredModule 
+{}

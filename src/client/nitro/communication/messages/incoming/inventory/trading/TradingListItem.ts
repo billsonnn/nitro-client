@@ -40,10 +40,10 @@ export class TradingListItem implements IFurnitureItemData
         this._Str_9291              = wrapper.readInt();
         this._Str_8744              = wrapper.readInt();
         this._Str_9700              = wrapper.readInt();
-        this._Str_3182              = ((this.furniType === "S") ? wrapper.readInt() : -1);
+        this._Str_3182              = ((this.furniType === 'S') ? wrapper.readInt() : -1);
         this._flatId                = -1;
         this._rentable              = false;
-        this._isWallItem            = (this._furniType === "I");
+        this._isWallItem            = (this._furniType === 'I');
     }
 
     public get itemId(): number
@@ -158,6 +158,6 @@ export class TradingListItem implements IFurnitureItemData
 
     public get _Str_19297(): boolean
     {
-        return (this._furniType.indexOf("external_image") !== -1);
+        return (this._furniType.indexOf('external_image') !== -1);
     }
 }

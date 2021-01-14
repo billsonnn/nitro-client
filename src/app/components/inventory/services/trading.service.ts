@@ -80,7 +80,7 @@ export class InventoryTradingService implements OnDestroy
     public static _Str_16998(spriteId: number, stuffData: IObjectData): string
     {
         let _local_3 = spriteId.toString();
-        let _local_4 = (stuffData as StringDataType);
+        const _local_4 = (stuffData as StringDataType);
 
         if(!(stuffData instanceof StringDataType)) return _local_3;
 
@@ -118,7 +118,7 @@ export class InventoryTradingService implements OnDestroy
                 new TradingYouAreNotAllowedEvent(this.onTradingYouAreNotAllowedEvent.bind(this)),
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -126,7 +126,7 @@ export class InventoryTradingService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -191,7 +191,7 @@ export class InventoryTradingService implements OnDestroy
             {
                 if(parser._Str_4963 !== this._ownUserIndex)
                 {
-                    this.tradingNotificationMessage(InventoryTradingComponent.ALERT_OTHER_CANCELLED)
+                    this.tradingNotificationMessage(InventoryTradingComponent.ALERT_OTHER_CANCELLED);
                 }
             }
 
@@ -278,9 +278,9 @@ export class InventoryTradingService implements OnDestroy
 
         if(otherUserId === sessionDataManager.userId)
         {
-            let swapUserId = ownUserId;
-            let swapUserName = ownUserName;
-            let swapCanTrade = ownUserCanTrade;
+            const swapUserId = ownUserId;
+            const swapUserName = ownUserName;
+            const swapCanTrade = ownUserCanTrade;
 
             ownUserId           = otherUserId;
             ownUserName         = otherUserName;
@@ -359,7 +359,7 @@ export class InventoryTradingService implements OnDestroy
         }
     }
 
-    public startTrade(userId: number, userName: string)
+    public startTrade(userId: number, userName: string): void
     {
         if(!this.controller) return;
 
@@ -389,7 +389,7 @@ export class InventoryTradingService implements OnDestroy
     {
         if(!this.controller) return;
         
-        let totalItems = k.length;
+        const totalItems = k.length;
 
         let i = 0;
 
@@ -482,7 +482,7 @@ export class InventoryTradingService implements OnDestroy
         {
             const tradeIds: number[] = [];
 
-            for(let itemId of itemIds)
+            for(const itemId of itemIds)
             {
                 if(this.canTradeItem(isWallItem, spriteId, category, groupable, stuffData))
                 {
@@ -498,7 +498,7 @@ export class InventoryTradingService implements OnDestroy
                 }
                 else
                 {
-                    Nitro.instance.communication.connection.send(new TradingListAddItemsComposer(tradeIds));
+                    Nitro.instance.communication.connection.send(new TradingListAddItemsComposer(...tradeIds));
                 }
             }
         }
@@ -548,11 +548,11 @@ export class InventoryTradingService implements OnDestroy
 
     public getOwnTradingItemIds(): number[]
     {
-        let itemIds: number[] = [];
+        const itemIds: number[] = [];
 
         if(!this._ownUserItems || !this._ownUserItems.length) return itemIds;
 
-        for(let groupItem of this._ownUserItems.getValues())
+        for(const groupItem of this._ownUserItems.getValues())
         {
             let i = 0;
 
@@ -622,7 +622,7 @@ export class InventoryTradingService implements OnDestroy
     {
         if(this._state === state) return;
 
-        let oldState = this._state;
+        const oldState = this._state;
 
         let didAssign = false;
 

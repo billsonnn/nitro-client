@@ -23,7 +23,7 @@ export class PlaneMask
     {
         if(this._maskVisualizations)
         {
-            for(let mask of this._maskVisualizations.values())
+            for(const mask of this._maskVisualizations.values())
             {
                 if(!mask) continue;
 
@@ -56,7 +56,7 @@ export class PlaneMask
     private _Str_8560(k: number): number
     {
         let sizeIndex   = 0;
-        let index       = 1;
+        const index       = 1;
 
         while(index < this._sizes.length)
         {

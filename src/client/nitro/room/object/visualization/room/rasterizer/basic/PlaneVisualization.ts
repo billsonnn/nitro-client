@@ -53,7 +53,7 @@ export class PlaneVisualization
     {
         if(this._layers && this._layers.length)
         {
-            for(let layer of this._layers)
+            for(const layer of this._layers)
             {
                 if(!layer) continue;
 
@@ -93,7 +93,7 @@ export class PlaneVisualization
 
         if(this._layers && this._layers.length)
         {
-            for(let layer of this._layers)
+            for(const layer of this._layers)
             {
                 if(!layer) continue;
 
@@ -207,7 +207,7 @@ export class PlaneVisualization
 
         if(this._layers && this._layers.length)
         {
-            for(let layer of this._layers)
+            for(const layer of this._layers)
             {
                 if(!layer) continue;
 

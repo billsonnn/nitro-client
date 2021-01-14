@@ -40,11 +40,11 @@ export class LandscapePlane extends Plane
 
         if(!visualization || !visualization.geometry) return null;
 
-        var _local_13 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 0));
-        var _local_14 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 1));
-        var _local_15 = visualization.geometry.getScreenPoint(new Vector3d(0, 1, 0));
+        const _local_13 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 0));
+        const _local_14 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 1));
+        const _local_15 = visualization.geometry.getScreenPoint(new Vector3d(0, 1, 0));
         
-        if (_local_13 && _local_14 && _local_15)
+        if(_local_13 && _local_14 && _local_15)
         {
             _arg_2 = Math.round(Math.abs((((_local_13.x - _local_15.x) * _arg_2) / visualization.geometry.scale)));
             _arg_3 = Math.round(Math.abs((((_local_13.y - _local_14.y) * _arg_3) / visualization.geometry.scale)));

@@ -31,7 +31,7 @@ export class AvatarImagePartContainer
         this._isBlendable       = _arg_10;
         this._blendTransform    = null;
 
-        if(this._partType === "ey") this._isColorable = false;
+        if(this._partType === 'ey') this._isColorable = false;
     }
 
     public _Str_1674(k: number): number

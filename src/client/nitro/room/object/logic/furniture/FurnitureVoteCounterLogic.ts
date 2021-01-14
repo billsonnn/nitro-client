@@ -75,7 +75,7 @@ export class FurnitureVoteCounterLogic extends FurnitureMultiStateLogic
         {
             if((this._Str_8221 !== this._total) && (time >= (this._lastUpdate + this._interval)))
             {
-                let _local_2 = (time - this._lastUpdate);
+                const _local_2 = (time - this._lastUpdate);
                 let _local_3 = (_local_2 / this._interval);
                 let _local_4 = 1;
 

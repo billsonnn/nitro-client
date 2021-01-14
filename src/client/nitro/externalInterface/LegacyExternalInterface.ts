@@ -39,48 +39,48 @@ declare global
 
 export class LegacyExternalInterface
 {
-	public static get available(): boolean
-	{
-		return true;
-	}
+    public static get available(): boolean
+    {
+        return true;
+    }
 
-	public static call<K extends keyof typeof window.FlashExternalInterface>(
-		method: K,
-		...params: Parameters<typeof window.FlashExternalInterface[K]>
-	): ReturnType<typeof window.FlashExternalInterface[K]> | undefined
-	{
-		if(window.top !== window)
-		{
-			window.top.postMessage('Nitro_LegacyExternalInterface' + JSON.stringify({
-				method,
-				params
-			}), '*');
-		}
+    public static call<K extends keyof typeof window.FlashExternalInterface>(
+        method: K,
+        ...params: Parameters<typeof window.FlashExternalInterface[K]>
+    ): ReturnType<typeof window.FlashExternalInterface[K]> | undefined
+    {
+        if(window.top !== window)
+        {
+            window.top.postMessage('Nitro_LegacyExternalInterface' + JSON.stringify({
+                method,
+                params
+            }), '*');
+        }
 
-		if(!('FlashExternalInterface' in window)) return undefined;
+        if(!('FlashExternalInterface' in window)) return undefined;
 
-		const fn = window.FlashExternalInterface[method] as Function;
+        const fn = window.FlashExternalInterface[method] as Function;
 
-		return typeof fn !== 'undefined' ? fn(...params) : undefined;
-	}
+        return typeof fn !== 'undefined' ? fn(...params) : undefined;
+    }
 
-	public static callGame<K extends keyof typeof window.FlashExternalGameInterface>(
-		method: K,
-		...params: Parameters<typeof window.FlashExternalGameInterface[K]>
-	): ReturnType<typeof window.FlashExternalGameInterface[K]> | undefined
-	{
-		if(window.top !== window)
-		{
-			window.top.postMessage('Nitro_LegacyExternalGameInterface' + JSON.stringify({
-				method,
-				params
-			}), '*');
-		}
+    public static callGame<K extends keyof typeof window.FlashExternalGameInterface>(
+        method: K,
+        ...params: Parameters<typeof window.FlashExternalGameInterface[K]>
+    ): ReturnType<typeof window.FlashExternalGameInterface[K]> | undefined
+    {
+        if(window.top !== window)
+        {
+            window.top.postMessage('Nitro_LegacyExternalGameInterface' + JSON.stringify({
+                method,
+                params
+            }), '*');
+        }
 
-		if(!('FlashExternalGameInterface' in window)) return undefined;
+        if(!('FlashExternalGameInterface' in window)) return undefined;
 
-		const fn = window.FlashExternalGameInterface[method] as Function;
+        const fn = window.FlashExternalGameInterface[method] as Function;
 
-		return typeof fn !== 'undefined' ? fn(...params) : undefined;
-	}
+        return typeof fn !== 'undefined' ? fn(...params) : undefined;
+    }
 }

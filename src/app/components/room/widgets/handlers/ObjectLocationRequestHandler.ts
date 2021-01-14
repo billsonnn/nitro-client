@@ -45,7 +45,7 @@ export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 
         const session = this._container.roomSession;
 
-        switch (k.type)
+        switch(k.type)
         {
             case RoomWidgetGetObjectLocationMessage.RWGOI_MESSAGE_GET_OBJECT_LOCATION: {
                 if(!session || !session.userDataManager) return null;

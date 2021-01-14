@@ -74,7 +74,7 @@ export class Matrix4x4
     {
         let index = 0;
 
-        while (index < this._data.length)
+        while(index < this._data.length)
         {
             this._data[index] = (this._data[index] * k);
 

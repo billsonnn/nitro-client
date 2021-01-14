@@ -35,7 +35,8 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _navigatorService: NavigatorService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
-        private ngZone: NgZone) {}
+        private ngZone: NgZone) 
+    {}
 
     public ngOnInit(): void
     {
@@ -64,11 +65,12 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
             case NitroToolbarEvent.TOOLBAR_CLICK:
                 this.clickIcon(event.iconName);
                 return;
-            case NitroToolbarAnimateIconEvent.ANIMATE_ICON:
+            case NitroToolbarAnimateIconEvent.ANIMATE_ICON: {
                 const iconEvent = (event as NitroToolbarAnimateIconEvent);
 
                 this.animateToIcon(iconEvent.iconName, iconEvent.image, iconEvent.x, iconEvent.y);
                 return;
+            }
         }
     }
 
@@ -126,11 +128,11 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
             const targetBounds  = target.getBoundingClientRect();
             const imageBounds   = image.getBoundingClientRect();
 
-            let left    = (imageBounds.x - targetBounds.x);
-            let top     = (imageBounds.y - targetBounds.y);
-            let squared = Math.sqrt(((left * left) + (top * top)));
-            var wait    = (500 - Math.abs(((((1 / squared) * 100) * 500) * 0.5)));
-            var height  = 20;
+            const left    = (imageBounds.x - targetBounds.x);
+            const top     = (imageBounds.y - targetBounds.y);
+            const squared = Math.sqrt(((left * left) + (top * top)));
+            const wait    = (500 - Math.abs(((((1 / squared) * 100) * 500) * 0.5)));
+            const height  = 20;
 
             const motionName = (`ToolbarBouncing[${ iconName }]`);
 
@@ -139,7 +141,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 Motions._Str_4598(new Queue(new Wait((wait + 8)), new DropBounce(target, 400, 12))).tag = motionName;
             }
 
-            var _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
+            const _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
             
             Motions._Str_4598(_local_19);
         }

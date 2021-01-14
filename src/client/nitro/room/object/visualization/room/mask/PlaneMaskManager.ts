@@ -29,7 +29,7 @@ export class PlaneMaskManager
 
         if(this._masks && this._masks.size)
         {
-            for(let mask of this._masks.values())
+            for(const mask of this._masks.values())
             {
                 if(!mask) continue;
 
@@ -114,7 +114,7 @@ export class PlaneMaskManager
 
         let graphicName: string = null;
 
-        for(let bitmap of k)
+        for(const bitmap of k)
         {
             if(!bitmap) continue;
 
@@ -173,7 +173,7 @@ export class PlaneMaskManager
         if(asset.flipV)
         {
             b = -1;
-            d = -(texture.height)
+            d = -(texture.height);
         }
 
         matrix.scale(a, b);

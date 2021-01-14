@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class SetRelationshipStatusComposer implements IMessageComposer
+export class SetRelationshipStatusComposer implements IMessageComposer<ConstructorParameters<typeof SetRelationshipStatusComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof SetRelationshipStatusComposer>;
 
     constructor(userId: number, relationship: number)
     {
         this._data = [ userId, relationship ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

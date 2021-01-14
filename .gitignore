@@ -50,3 +50,6 @@ Thumbs.db
 *.zip
 *.as
 *.bin
+
+# Nitro
+/src/index.html
