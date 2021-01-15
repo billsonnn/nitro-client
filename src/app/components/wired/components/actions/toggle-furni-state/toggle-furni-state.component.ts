@@ -11,67 +11,58 @@ import { Options } from '@angular-slider/ngx-slider';
 @Component({
     templateUrl: './toggle-furni-state.template.html'
 })
-export class ToggleFurniStateComponent extends WiredAction
+export class ToggleFurniStateComponent extends WiredAction 
 {
     public static CODE: number = WiredActionType.TOGGLE_FURNI_STATE;
 
-	private static MINIMUM_VALUE: number = 1;
+    private static MINIMUM_VALUE: number = 1;
     private static MAXIMUM_VALUE: number = 20;
-	private static STEPPER_VALUE: number = 1;
+    private static STEPPER_VALUE: number = 1;
 
-    public get code(): number
+    public get code(): number 
     {
         return ToggleFurniStateComponent.CODE;
     }
 
-    public onEditStart(trigger: Triggerable): void
+    public onEditStart(trigger: Triggerable): void 
     {
-		const actionDefinition = trigger as any as ActionDefinition;
-		this.delay = actionDefinition._Str_25459;
-	}
+        const actionDefinition = trigger as any as ActionDefinition;
+        this.delay = actionDefinition.delayInPulses;
+        this.updateLocaleParameter();
+    }
 
-	public readIntegerParamsFromForm(): number[]
-    {
-        return [ this.delay ];
-	}
-
-	public onSliderChange(): void
+    public onSliderChange(): void 
     {
         this.updateLocaleParameter();
     }
 
-    public decrease(): void
+    public decrease(): void 
     {
         this.delay -= 1;
 
         if(this.delay < ToggleFurniStateComponent.MINIMUM_VALUE) this.delay = ToggleFurniStateComponent.MINIMUM_VALUE;
     }
 
-    public increase(): void
+    public increase(): void 
     {
         this.delay += 1;
 
         if(this.delay > ToggleFurniStateComponent.MAXIMUM_VALUE) this.delay = ToggleFurniStateComponent.MAXIMUM_VALUE;
     }
 
-    protected updateLocaleParameter(): void
+    protected updateLocaleParameter(): void 
     {
         Nitro.instance.localization.registerParameter('wiredfurni.params.delay', 'seconds', WiredFurniture.getLocaleName(this.delay));
 
         this.updateCount++;
     }
 
-    public get hasSpecialInputs(): boolean
+    public get requiresFurni(): number 
     {
-        return true;
-	}
+        return WiredMainComponent._Str_5430;
+    }
 
-	public get requiresFurni(): number
-    {
-        return WiredMainComponent._Str_4873;
-	}
-
-	public get sliderOptions(): Options
+    public get sliderOptions(): Options 
     {
         return {
             floor: ToggleFurniStateComponent.MINIMUM_VALUE,
