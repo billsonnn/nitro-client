@@ -1,4 +1,4 @@
-![](nitro-shadow.svg)
+![](https://svgshare.com/i/TAX.svg)
 
 
 # Nitro HTML5 Client
