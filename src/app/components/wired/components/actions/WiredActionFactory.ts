@@ -1,4 +1,5 @@
-﻿import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
+﻿import { TeleportComponent } from './teleport/teleport.component';
+import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
@@ -12,7 +13,9 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
         switch(code)
         {
 			case ToggleFurniStateComponent.CODE:
-                return ToggleFurniStateComponent;
+				return ToggleFurniStateComponent;
+			case TeleportComponent.CODE:
+				return TeleportComponent;
         }
 
         return null;

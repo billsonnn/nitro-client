@@ -1,3 +1,4 @@
+import { TeleportComponent } from './components/actions/teleport/teleport.component';
 import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
@@ -41,7 +42,7 @@ import { WiredService } from './services/wired.service';
     ],
     exports: [
         WiredMainComponent,
-        WiredBaseComponent,
+		WiredBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,
@@ -73,13 +74,14 @@ import { WiredService } from './services/wired.service';
         TriggerPeriodicallyComponent,
 		TriggerPeriodicallyLongComponent,
 		ToggleFurniStateComponent,
+		TeleportComponent,
     ],
     providers: [
         WiredService
     ],
     declarations: [
         WiredMainComponent,
-        WiredBaseComponent,
+		WiredBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,
@@ -111,6 +113,7 @@ import { WiredService } from './services/wired.service';
         TriggerPeriodicallyComponent,
 		TriggerPeriodicallyLongComponent,
 		ToggleFurniStateComponent,
+		TeleportComponent,
     ]
 })
 export class WiredModule
