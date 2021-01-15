@@ -1,3 +1,4 @@
+import { ChaseComponent } from './components/actions/chase/chase.component';
 import { TeleportComponent } from './components/actions/teleport/teleport.component';
 import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { NgModule } from '@angular/core';
@@ -75,6 +76,7 @@ import { WiredService } from './services/wired.service';
 		TriggerPeriodicallyLongComponent,
 		ToggleFurniStateComponent,
 		TeleportComponent,
+		ChaseComponent,
     ],
     providers: [
         WiredService
@@ -114,6 +116,7 @@ import { WiredService } from './services/wired.service';
 		TriggerPeriodicallyLongComponent,
 		ToggleFurniStateComponent,
 		TeleportComponent,
+		ChaseComponent,
     ]
 })
 export class WiredModule
