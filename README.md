@@ -1,4 +1,4 @@
-![](https://nitro-assets.hrw.pw/logos/nitro-light.svg)
+![](https://git.krews.org/nitro/nitro-client/uploads/30424e25a701745e2ce4106fdfd6c076/nitro-light__1_.svg)
 
 
 # Nitro HTML5 Client
