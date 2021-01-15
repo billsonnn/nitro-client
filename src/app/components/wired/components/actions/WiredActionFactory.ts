@@ -1,4 +1,5 @@
-﻿import { FleeComponent } from './flee/flee.component';
+﻿import { CallAnotherStackComponent } from './call-another-stack/call-another-stack.component';
+import { FleeComponent } from './flee/flee.component';
 import { ChaseComponent } from './chase/chase.component';
 import { TeleportComponent } from './teleport/teleport.component';
 import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
@@ -22,6 +23,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 				return ChaseComponent;
 			case FleeComponent.CODE:
 				return FleeComponent;
+			case CallAnotherStackComponent.CODE:
+				return CallAnotherStackComponent;
         }
 
         return null;

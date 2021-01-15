@@ -1,3 +1,4 @@
+import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
 import { FleeComponent } from './components/actions/flee/flee.component';
 import { ChaseComponent } from './components/actions/chase/chase.component';
 import { TeleportComponent } from './components/actions/teleport/teleport.component';
@@ -79,6 +80,7 @@ import { WiredService } from './services/wired.service';
 		TeleportComponent,
 		ChaseComponent,
 		FleeComponent,
+		CallAnotherStackComponent,
     ],
     providers: [
         WiredService
@@ -120,6 +122,7 @@ import { WiredService } from './services/wired.service';
 		TeleportComponent,
 		ChaseComponent,
 		FleeComponent,
+		CallAnotherStackComponent,
     ]
 })
 export class WiredModule
