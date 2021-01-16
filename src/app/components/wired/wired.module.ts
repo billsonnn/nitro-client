@@ -1,3 +1,4 @@
+import { ResetComponent } from './components/actions/reset/reset.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';
@@ -49,7 +50,7 @@ import { WiredService } from './services/wired.service';
     ],
     exports: [
         WiredMainComponent,
-		WiredBaseComponent,
+        WiredBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,
@@ -79,23 +80,24 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-		TriggerPeriodicallyLongComponent,
-		ToggleFurniStateComponent,
-		TeleportComponent,
-		ChaseComponent,
-		FleeComponent,
-		CallAnotherStackComponent,
-		ChatComponent,
-		BotGiveHandItemComponent,
-		BotFollowAvatarComponent,
-		LeaveTeamComponent,
+        TriggerPeriodicallyLongComponent,
+        ToggleFurniStateComponent,
+        TeleportComponent,
+        ChaseComponent,
+        FleeComponent,
+        CallAnotherStackComponent,
+        ChatComponent,
+        BotGiveHandItemComponent,
+        BotFollowAvatarComponent,
+        LeaveTeamComponent,
+        ResetComponent,
     ],
     providers: [
         WiredService
     ],
     declarations: [
         WiredMainComponent,
-		WiredBaseComponent,
+        WiredBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,
@@ -125,16 +127,17 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-		TriggerPeriodicallyLongComponent,
-		ToggleFurniStateComponent,
-		TeleportComponent,
-		ChaseComponent,
-		FleeComponent,
-		CallAnotherStackComponent,
-		ChatComponent,
-		BotGiveHandItemComponent,
-		BotFollowAvatarComponent,
-		LeaveTeamComponent,
+        TriggerPeriodicallyLongComponent,
+        ToggleFurniStateComponent,
+        TeleportComponent,
+        ChaseComponent,
+        FleeComponent,
+        CallAnotherStackComponent,
+        ChatComponent,
+        BotGiveHandItemComponent,
+        BotFollowAvatarComponent,
+        LeaveTeamComponent,
+        ResetComponent,
     ]
 })
 export class WiredModule
