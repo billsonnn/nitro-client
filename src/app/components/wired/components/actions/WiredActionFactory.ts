@@ -1,13 +1,14 @@
-﻿import { CallAnotherStackComponent } from './call-another-stack/call-another-stack.component';
-import { FleeComponent } from './flee/flee.component';
-import { ChaseComponent } from './chase/chase.component';
-import { TeleportComponent } from './teleport/teleport.component';
-import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
+﻿import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
-import { WiredAction } from './WiredAction';
+import { CallAnotherStackComponent } from './call-another-stack/call-another-stack.component';
+import { ChaseComponent } from './chase/chase.component';
+import { ChatComponent } from './chat/chat.component';
+import { FleeComponent } from './flee/flee.component';
+import { TeleportComponent } from './teleport/teleport.component';
 import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
+import { WiredAction } from './WiredAction';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -25,6 +26,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 				return FleeComponent;
 			case CallAnotherStackComponent.CODE:
 				return CallAnotherStackComponent;
+			case ChatComponent.CODE:
+				return ChatComponent;
         }
 
         return null;

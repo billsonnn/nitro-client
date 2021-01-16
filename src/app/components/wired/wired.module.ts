@@ -1,10 +1,11 @@
-import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
-import { FleeComponent } from './components/actions/flee/flee.component';
-import { ChaseComponent } from './components/actions/chase/chase.component';
-import { TeleportComponent } from './components/actions/teleport/teleport.component';
-import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
+import { ChaseComponent } from './components/actions/chase/chase.component';
+import { ChatComponent } from './components/actions/chat/chat.component';
+import { FleeComponent } from './components/actions/flee/flee.component';
+import { TeleportComponent } from './components/actions/teleport/teleport.component';
+import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { WiredBaseComponent } from './components/base/base.component';
 import { ActorHasHandItemComponent } from './components/conditions/actor-has-hand-item/actor-has-hand-item.component';
 import { ActorIsInGroupComponent } from './components/conditions/actor-is-in-group/actor-is-in-group.component';
@@ -81,6 +82,7 @@ import { WiredService } from './services/wired.service';
 		ChaseComponent,
 		FleeComponent,
 		CallAnotherStackComponent,
+		ChatComponent,
     ],
     providers: [
         WiredService
@@ -123,6 +125,7 @@ import { WiredService } from './services/wired.service';
 		ChaseComponent,
 		FleeComponent,
 		CallAnotherStackComponent,
+		ChatComponent,
     ]
 })
 export class WiredModule

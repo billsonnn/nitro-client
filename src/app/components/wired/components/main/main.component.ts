@@ -1,4 +1,3 @@
-import { WiredActionFactory } from './../actions/WiredActionFactory';
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { ConditionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
@@ -16,9 +15,10 @@ import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredService } from '../../services/wired.service';
 import { WiredFurniture } from '../../WiredFurniture';
 import { WiredSelectionVisualizer } from '../../WiredSelectionVisualizer';
+import { WiredAction } from '../actions/WiredAction';
 import { WiredConditionFactory } from '../conditions/WiredConditionFactory';
 import { WiredTriggerFactory } from '../triggers/WiredTriggerFactory';
-import { WiredAction } from '../actions/WiredAction';
+import { WiredActionFactory } from './../actions/WiredActionFactory';
 
 @Component({
     selector: 'nitro-wired-main-component',
@@ -155,11 +155,11 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         const wired = this._Str_3959();
 
-        const _local_2 = wired.validate();
+        const validateError = wired.validate();
 
-        if(_local_2)
+        if(validateError)
         {
-            this._notificationService.alert('Update failed' + _local_2);
+            this._notificationService.alert(validateError, 'Update failed');
 
             return;
         }
