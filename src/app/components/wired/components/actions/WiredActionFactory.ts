@@ -1,4 +1,5 @@
-﻿import { BotTeleportComponent } from './bot-teleport/bot-teleport.component';
+﻿import { BotMoveComponent } from './bot-move/bot-move.component';
+import { BotTeleportComponent } from './bot-teleport/bot-teleport.component';
 import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
@@ -49,6 +50,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return BotTeleportComponent;
             case SetFurniStateToComponent.CODE:
                 return SetFurniStateToComponent;
+            case BotMoveComponent.CODE:
+                return BotMoveComponent;
         }
 
         return null;

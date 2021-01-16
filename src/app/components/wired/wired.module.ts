@@ -1,3 +1,4 @@
+import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
 import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
 import { ResetComponent } from './components/actions/reset/reset.component';
 import { NgModule } from '@angular/core';
@@ -97,6 +98,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         KickFromRoomComponent,
         BotTeleportComponent,
         SetFurniStateToComponent,
+        BotMoveComponent,
     ],
     providers: [
         WiredService
@@ -147,6 +149,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         KickFromRoomComponent,
         BotTeleportComponent,
         SetFurniStateToComponent,
+        BotMoveComponent,
     ]
 })
 export class WiredModule
