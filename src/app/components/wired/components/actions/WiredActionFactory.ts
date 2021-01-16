@@ -17,6 +17,7 @@ import { TeleportComponent } from './teleport/teleport.component';
 import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
 import { WiredAction } from './WiredAction';
 import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-to.component';
+import { MuteUserComponent } from './mute-user/mute-user.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -52,6 +53,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return SetFurniStateToComponent;
             case BotMoveComponent.CODE:
                 return BotMoveComponent;
+            case MuteUserComponent.CODE:
+                return MuteUserComponent;
         }
 
         return null;

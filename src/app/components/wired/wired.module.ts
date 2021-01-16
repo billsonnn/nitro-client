@@ -1,3 +1,4 @@
+import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
 import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
 import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
 import { ResetComponent } from './components/actions/reset/reset.component';
@@ -99,6 +100,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         BotTeleportComponent,
         SetFurniStateToComponent,
         BotMoveComponent,
+        MuteUserComponent,
     ],
     providers: [
         WiredService
@@ -150,6 +152,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         BotTeleportComponent,
         SetFurniStateToComponent,
         BotMoveComponent,
+        MuteUserComponent,
     ]
 })
 export class WiredModule
