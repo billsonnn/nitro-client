@@ -8,6 +8,7 @@ import { CallAnotherStackComponent } from './call-another-stack/call-another-sta
 import { ChaseComponent } from './chase/chase.component';
 import { ChatComponent } from './chat/chat.component';
 import { FleeComponent } from './flee/flee.component';
+import { LeaveTeamComponent } from './leave-team/leave-team.component';
 import { TeleportComponent } from './teleport/teleport.component';
 import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
 import { WiredAction } from './WiredAction';
@@ -34,6 +35,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 				return BotGiveHandItemComponent;
 			case BotFollowAvatarComponent.CODE:
 				return BotFollowAvatarComponent;
+			case LeaveTeamComponent.CODE:
+				return LeaveTeamComponent;
         }
 
         return null;

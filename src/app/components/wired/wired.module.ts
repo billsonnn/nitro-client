@@ -6,6 +6,7 @@ import { CallAnotherStackComponent } from './components/actions/call-another-sta
 import { ChaseComponent } from './components/actions/chase/chase.component';
 import { ChatComponent } from './components/actions/chat/chat.component';
 import { FleeComponent } from './components/actions/flee/flee.component';
+import { LeaveTeamComponent } from './components/actions/leave-team/leave-team.component';
 import { TeleportComponent } from './components/actions/teleport/teleport.component';
 import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { WiredBaseComponent } from './components/base/base.component';
@@ -87,6 +88,7 @@ import { WiredService } from './services/wired.service';
 		ChatComponent,
 		BotGiveHandItemComponent,
 		BotFollowAvatarComponent,
+		LeaveTeamComponent,
     ],
     providers: [
         WiredService
@@ -132,6 +134,7 @@ import { WiredService } from './services/wired.service';
 		ChatComponent,
 		BotGiveHandItemComponent,
 		BotFollowAvatarComponent,
+		LeaveTeamComponent,
     ]
 })
 export class WiredModule
