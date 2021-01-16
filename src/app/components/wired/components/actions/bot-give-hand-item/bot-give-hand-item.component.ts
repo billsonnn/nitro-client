@@ -10,33 +10,36 @@ export class BotGiveHandItemComponent extends WiredAction
 {
     public static CODE: number = WiredActionType.BOT_GIVE_HAND_ITEM;
 
-	public botName: string;
-	public allowedHanditemIds: string[] = ['2', '5', '7', '8', '9', '10', '27'];
-	public handitemId: string = '0';
+    public botName: string;
+    public allowedHanditemIds: string[] = ['2', '5', '7', '8', '9', '10', '27'];
+    public handitemId: string = '0';
 
     public get code(): number
     {
         return BotGiveHandItemComponent.CODE;
-	}
+    }
 
-	public onEditStart(trigger: Triggerable): void
+    public onEditStart(trigger: Triggerable): void
     {
-		this.botName = trigger.stringData;
+        this.botName = trigger.stringData;
 
-		if (trigger.intData.length > 0 && this.allowedHanditemIds.includes(trigger.intData[0].toString())) {
-			this.handitemId = trigger.intData[0].toString();
-		} else {
-			this.handitemId = '0';
-		}
-		super.onEditStart(trigger);
-	}
+        if(trigger.intData.length > 0 && this.allowedHanditemIds.includes(trigger.intData[0].toString()))
+        {
+            this.handitemId = trigger.intData[0].toString();
+        }
+        else
+        {
+            this.handitemId = '0';
+        }
+        super.onEditStart(trigger);
+    }
 
-	public readStringParamFromForm(): string
+    public readStringParamFromForm(): string
     {
         return this.botName;
-	}
+    }
 
-	public readIntegerParamsFromForm(): number[]
+    public readIntegerParamsFromForm(): number[]
     {
         return [ Number.parseInt(this.handitemId) ];
     }

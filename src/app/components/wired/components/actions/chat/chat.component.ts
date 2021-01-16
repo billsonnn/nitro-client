@@ -11,36 +11,36 @@ export class ChatComponent extends WiredAction
 {
     public static CODE: number = WiredActionType.CHAT;
 
-	public message: string;
+    public message: string;
 
     public get code(): number
     {
         return ChatComponent.CODE;
     }
 
-	public get hasSpecialInputs(): boolean
+    public get hasSpecialInputs(): boolean
     {
         return true;
-	}
+    }
 
-	public readStringParamFromForm(): string
+    public readStringParamFromForm(): string
     {
         return this.message;
-	}
+    }
 
     public onEditStart(trigger: Triggerable): void
     {
-		this.message = trigger.stringData;
-		super.onEditStart(trigger);
-	}
+        this.message = trigger.stringData;
+        super.onEditStart(trigger);
+    }
 
-	public validate(): string
+    public validate(): string
     {
-        var messageMaxSize: number = 100;
-        if (this.message.length > messageMaxSize)
+        const messageMaxSize = 100;
+        if(this.message.length > messageMaxSize)
         {
-			return Nitro.instance.localization.getValue('wiredfurni.chatmsgtoolong', false);
+            return Nitro.instance.localization.getValue('wiredfurni.chatmsgtoolong', false);
         }
         return null;
-	}
+    }
 }

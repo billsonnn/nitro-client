@@ -1,19 +1,19 @@
-﻿import { ActionDefinition } from 'src/client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
+﻿import { Options } from '@angular-slider/ngx-slider';
+import { ActionDefinition } from 'src/client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from 'src/client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { WiredFurniture } from '../../WiredFurniture';
 import { Nitro } from 'src/client/nitro/Nitro';
-import { Options } from '@angular-slider/ngx-slider';
+import { WiredFurniture } from '../../WiredFurniture';
 
-export class WiredAction extends WiredFurniture {
-
-	private static DELAY_MINIMUM_VALUE: number = 1;
+export class WiredAction extends WiredFurniture
+{
+    private static DELAY_MINIMUM_VALUE: number = 1;
     private static DELAY_MAXIMUM_VALUE: number = 20;
-	private static DELAY_STEPPER_VALUE: number = 1;
+    private static DELAY_STEPPER_VALUE: number = 1;
 
-	public updateCount: number = 0;
-	public delay: number = 0;
+    public updateCount: number = 0;
+    public delay: number = 0;
 
-	public onEditStart(trigger: Triggerable): void
+    public onEditStart(trigger: Triggerable): void
     {
         const actionDefinition = trigger as any as ActionDefinition;
         this.delay = actionDefinition.delayInPulses;
@@ -44,9 +44,9 @@ export class WiredAction extends WiredFurniture {
         Nitro.instance.localization.registerParameter('wiredfurni.params.delay', 'seconds', WiredFurniture.getLocaleName(this.delay));
 
         this.updateCount++;
-	}
+    }
 
-	public get delaySliderOptions(): Options
+    public get delaySliderOptions(): Options
     {
         return {
             floor: WiredAction.DELAY_MINIMUM_VALUE,

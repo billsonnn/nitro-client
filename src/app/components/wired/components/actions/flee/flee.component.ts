@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { WiredAction } from './../WiredAction';
-import { WiredActionType } from '../WiredActionType';
 import { WiredMainComponent } from '../../main/main.component';
+import { WiredActionType } from '../WiredActionType';
+import { WiredAction } from './../WiredAction';
 
 @Component({
     templateUrl: './flee.template.html'

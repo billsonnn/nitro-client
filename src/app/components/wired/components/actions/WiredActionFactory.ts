@@ -19,24 +19,24 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
     {
         switch(code)
         {
-			case ToggleFurniStateComponent.CODE:
-				return ToggleFurniStateComponent;
-			case TeleportComponent.CODE:
-				return TeleportComponent;
-			case ChaseComponent.CODE:
-				return ChaseComponent;
-			case FleeComponent.CODE:
-				return FleeComponent;
-			case CallAnotherStackComponent.CODE:
-				return CallAnotherStackComponent;
-			case ChatComponent.CODE:
-				return ChatComponent;
-			case BotGiveHandItemComponent.CODE:
-				return BotGiveHandItemComponent;
-			case BotFollowAvatarComponent.CODE:
-				return BotFollowAvatarComponent;
-			case LeaveTeamComponent.CODE:
-				return LeaveTeamComponent;
+            case ToggleFurniStateComponent.CODE:
+                return ToggleFurniStateComponent;
+            case TeleportComponent.CODE:
+                return TeleportComponent;
+            case ChaseComponent.CODE:
+                return ChaseComponent;
+            case FleeComponent.CODE:
+                return FleeComponent;
+            case CallAnotherStackComponent.CODE:
+                return CallAnotherStackComponent;
+            case ChatComponent.CODE:
+                return ChatComponent;
+            case BotGiveHandItemComponent.CODE:
+                return BotGiveHandItemComponent;
+            case BotFollowAvatarComponent.CODE:
+                return BotFollowAvatarComponent;
+            case LeaveTeamComponent.CODE:
+                return LeaveTeamComponent;
         }
 
         return null;
@@ -55,5 +55,5 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
     public _Str_1196(): string
     {
         return 'action';
-	}
+    }
 }
