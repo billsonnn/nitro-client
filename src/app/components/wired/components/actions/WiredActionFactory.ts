@@ -15,6 +15,7 @@ import { ResetComponent } from './reset/reset.component';
 import { TeleportComponent } from './teleport/teleport.component';
 import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
 import { WiredAction } from './WiredAction';
+import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-to.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -46,6 +47,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return KickFromRoomComponent;
             case BotTeleportComponent.CODE:
                 return BotTeleportComponent;
+            case SetFurniStateToComponent.CODE:
+                return SetFurniStateToComponent;
         }
 
         return null;

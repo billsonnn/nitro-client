@@ -1,3 +1,4 @@
+import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
 import { ResetComponent } from './components/actions/reset/reset.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
@@ -95,6 +96,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         ResetComponent,
         KickFromRoomComponent,
         BotTeleportComponent,
+        SetFurniStateToComponent,
     ],
     providers: [
         WiredService
@@ -144,6 +146,7 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         ResetComponent,
         KickFromRoomComponent,
         BotTeleportComponent,
+        SetFurniStateToComponent,
     ]
 })
 export class WiredModule
