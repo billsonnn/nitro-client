@@ -432,10 +432,12 @@ export class RoomPreviewer
             {
                 this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1);
             }
+            else
+            {
+                const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
 
-            const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
-
-            geometry.performZoomIn();
+                geometry.performZoomIn();    
+            }
         }
 
         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
