@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';
 import { BotGiveHandItemComponent } from './components/actions/bot-give-hand-item/bot-give-hand-item.component';
 import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
 import { ChaseComponent } from './components/actions/chase/chase.component';
@@ -85,6 +86,7 @@ import { WiredService } from './services/wired.service';
 		CallAnotherStackComponent,
 		ChatComponent,
 		BotGiveHandItemComponent,
+		BotFollowAvatarComponent,
     ],
     providers: [
         WiredService
@@ -129,6 +131,7 @@ import { WiredService } from './services/wired.service';
 		CallAnotherStackComponent,
 		ChatComponent,
 		BotGiveHandItemComponent,
+		BotFollowAvatarComponent,
     ]
 })
 export class WiredModule

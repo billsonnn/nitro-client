@@ -2,6 +2,7 @@
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
+import { BotFollowAvatarComponent } from './bot-follow-avatar/bot-follow-avatar.component';
 import { BotGiveHandItemComponent } from './bot-give-hand-item/bot-give-hand-item.component';
 import { CallAnotherStackComponent } from './call-another-stack/call-another-stack.component';
 import { ChaseComponent } from './chase/chase.component';
@@ -31,6 +32,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 				return ChatComponent;
 			case BotGiveHandItemComponent.CODE:
 				return BotGiveHandItemComponent;
+			case BotFollowAvatarComponent.CODE:
+				return BotFollowAvatarComponent;
         }
 
         return null;
