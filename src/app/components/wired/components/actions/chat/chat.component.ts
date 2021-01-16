@@ -30,7 +30,8 @@ export class ChatComponent extends WiredAction
 
     public onEditStart(trigger: Triggerable): void
     {
-        this.message = trigger.stringData;
+		this.message = trigger.stringData;
+		super.onEditStart(trigger);
 	}
 
 	public validate(): string

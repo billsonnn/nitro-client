@@ -28,6 +28,7 @@ export class BotGiveHandItemComponent extends WiredAction
 		} else {
 			this.handitemId = '0';
 		}
+		super.onEditStart(trigger);
 	}
 
 	public readStringParamFromForm(): string
