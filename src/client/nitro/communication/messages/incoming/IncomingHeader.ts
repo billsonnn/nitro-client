@@ -206,4 +206,5 @@ export class IncomingHeader
     public static WIRED_SAVE                       = 1155;
     public static WIRED_TRIGGER                    = 383;
     public static PLAYING_GAME                     = 448;
+    public static FURNITURE_STATE_2                = 3431;
 }
