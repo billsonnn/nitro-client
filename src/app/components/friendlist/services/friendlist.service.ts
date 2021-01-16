@@ -6,6 +6,8 @@ import { FollowFriendFailedEvent } from '../../../../client/nitro/communication/
 import { FriendListFragmentEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendListFragmentEvent';
 import { FriendListUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendListUpdateEvent';
 import { FriendNotificationEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendNotificationEvent';
+import { FriendParser } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendParser';
+import { FriendRequestData } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendRequestData';
 import { FriendRequestsEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendRequestsEvent';
 import { HabboSearchResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/HabboSearchResultEvent';
 import { InstantMessageErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/InstantMessageErrorEvent';
@@ -20,6 +22,10 @@ import { RoomInviteEvent } from '../../../../client/nitro/communication/messages
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
+import { MessengerChat } from '../common/MessengerChat';
+import { MessengerFriend } from '../common/MessengerFriend';
+import { MessengerRequest } from '../common/MessengerRequest';
+import { MessengerThread } from '../common/MessengerThread';
 import { FriendListMainComponent } from '../components/main/main.component';
 
 @Injectable()
@@ -28,11 +34,20 @@ export class FriendListService implements OnDestroy
     private _component: FriendListMainComponent;
     private _messages: IMessageEvent[];
 
+    private _friends: Map<number, MessengerFriend>;
+    private _requests: Map<number, MessengerRequest>;
+    private _threads: Map<number, MessengerThread>;
+
+    private _friendListReady: boolean = false;
+
     constructor(
         private _notificationService: NotificationService,
         private _ngZone: NgZone)
     {
         this._component = null;
+
+        this._friends   = new Map();
+        this._requests  = new Map();
 
         this.registerMessages();
     }
@@ -116,7 +131,12 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() =>
+        {
+            for(const friend of parser.fragment) this.updateFriend(friend);
+
+            if((parser.fragmentNumber + 1) === parser.totalFragments) this._friendListReady = true;
+        });
     }
 
     private onFriendListUpdateEvent(event: FriendListUpdateEvent): void
@@ -127,7 +147,14 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() =>
+        {
+            for(const friend of parser.addedFriends) this.updateFriend(friend);
+
+            for(const friend of parser.updatedFriends) this.updateFriend(friend);
+    
+            for(const id of parser.removedFriendIds) this.removeFriend(id);
+        });
     }
 
     private onFriendNotificationEvent(event: FriendNotificationEvent): void
@@ -149,7 +176,10 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() =>
+        {
+            for(const request of parser.requests) this.updateFriendRequest(request);
+        });
     }
 
     private onHabboSearchResultEvent(event: HabboSearchResultEvent): void
@@ -228,7 +258,11 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        const thread = this.getMessageThread(parser.senderId);
+
+        if(!thread) return;
+
+        this._ngZone.run(() => thread.insertChat(parser.senderId, parser.messageText, parser.secondsSinceSent, parser.extraData));
     }
 
     private onNewFriendRequestEvent(event: NewFriendRequestEvent): void
@@ -239,7 +273,7 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() => this.updateFriendRequest(parser.request));
     }
 
     private onRoomInviteErrorEvent(event: RoomInviteErrorEvent): void
@@ -261,7 +295,76 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        const thread = this.getMessageThread(parser.senderId);
+
+        if(!thread) return;
+
+        this._ngZone.run(() => thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE));
+    }
+
+    public getFriend(id: number): MessengerFriend
+    {
+        const existing = this._friends.get(id);
+
+        if(!existing) return null;
+
+        return existing;
+    }
+
+    private updateFriend(data: FriendParser): void
+    {
+        if(!data) return;
+
+        let existing = this._friends.get(data.id);
+
+        if(!existing)
+        {
+            existing = new MessengerFriend();
+
+            this._friends.set(data.id, existing);
+        }
+
+        existing.populate(data);
+    }
+
+    private removeFriend(id: number): void
+    {
+        this._friends.delete(id);
+    }
+
+    private updateFriendRequest(data: FriendRequestData): void
+    {
+        if(!data) return;
+
+        let existing = this._requests.get(data.requestId);
+
+        if(!existing)
+        {
+            existing = new MessengerRequest();
+
+            this._requests.set(data.requestId, existing);
+        }
+
+        existing.populate(data);
+    }
+
+    private removeRequest(id: number): void
+    {
+        this._requests.delete(id);
+    }
+
+    private getMessageThread(id: number): MessengerThread
+    {
+        let existing = this._threads.get(id);
+
+        if(!existing)
+        {
+            existing = new MessengerThread(id);
+
+            this._threads.set(id, existing);
+        }
+
+        return existing;
     }
 
     private requestFriendRequests(): void
@@ -277,5 +380,20 @@ export class FriendListService implements OnDestroy
     public set component(component: FriendListMainComponent)
     {
         this._component = component;
+    }
+
+    public get friends(): Map<number, MessengerFriend>
+    {
+        return this._friends;
+    }
+
+    public get requests(): Map<number, MessengerRequest>
+    {
+        return this._requests;
+    }
+
+    public get threads(): Map<number, MessengerThread>
+    {
+        return this._threads;
     }
 }
