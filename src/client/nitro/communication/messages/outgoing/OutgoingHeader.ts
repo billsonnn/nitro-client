@@ -181,5 +181,6 @@ export class OutgoingHeader
     public static WIRED_CONDITION_SAVE           = 3203;
     public static WIRED_OPEN                     = 768;
     public static WIRED_TRIGGER_SAVE             = 1520;
-    
+    public static GET_ITEM_DATA                  = 3964;
+
 }

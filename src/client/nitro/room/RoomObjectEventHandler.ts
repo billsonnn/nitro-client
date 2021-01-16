@@ -11,6 +11,7 @@ import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../room/utils/IVector3D';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
+import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -685,6 +686,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectWidgetRequestEvent.HIDE_HIGH_SCORE_DISPLAY:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_HIDE_HIGH_SCORE_DISPLAY, roomId, objectId, objectCategory));
                 return;
+            case RoomObjectWidgetRequestEvent.STICKIE:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, roomId, objectId, objectCategory));
+                return;
 
         }
     }
@@ -1118,6 +1122,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 this._roomEngine.connection.send(new FurnitureColorWheelComposer(objectId));
                 return;
             case RoomObjectFurnitureActionEvent.STICKIE:
+                this._roomEngine.connection.send(new GetItemDataComposer(objectId));
                 return;
             case RoomObjectFurnitureActionEvent.ENTER_ONEWAYDOOR:
                 return;
