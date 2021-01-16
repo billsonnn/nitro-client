@@ -21,7 +21,7 @@ export class YouArePlayingGameParser implements IMessageParser
         return true;
     }
 
-    public isPlaying(): boolean
+    public get isPlaying(): boolean
     {
         return this._isPlaying;
     }

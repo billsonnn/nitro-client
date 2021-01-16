@@ -50,4 +50,5 @@ export interface IRoomCreator
     updateRoomObjectUserOwn(roomId: number, objectId: number): void;
     getPetTypeId(figure: string): number;
     _Str_17722(k: number, _arg_2: string): void;
+    setRoomEngineGameMode(roomId: number, isPlaying: boolean): void;
 }
