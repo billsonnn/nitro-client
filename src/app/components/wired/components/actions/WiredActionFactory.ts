@@ -8,6 +8,7 @@ import { CallAnotherStackComponent } from './call-another-stack/call-another-sta
 import { ChaseComponent } from './chase/chase.component';
 import { ChatComponent } from './chat/chat.component';
 import { FleeComponent } from './flee/flee.component';
+import { KickFromRoomComponent } from './kick-from-room/kick-from-room.component';
 import { LeaveTeamComponent } from './leave-team/leave-team.component';
 import { ResetComponent } from './reset/reset.component';
 import { TeleportComponent } from './teleport/teleport.component';
@@ -40,6 +41,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return LeaveTeamComponent;
             case ResetComponent.CODE:
                 return ResetComponent;
+            case KickFromRoomComponent.CODE:
+                return KickFromRoomComponent;
         }
 
         return null;

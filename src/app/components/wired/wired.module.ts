@@ -43,6 +43,7 @@ import { TriggerOnceComponent } from './components/triggers/trigger-once/trigger
 import { TriggerPeriodicallyLongComponent } from './components/triggers/trigger-periodically-long/trigger-periodically-long.component';
 import { TriggerPeriodicallyComponent } from './components/triggers/trigger-periodically/trigger-periodically.component';
 import { WiredService } from './services/wired.service';
+import { KickFromRoomComponent } from './components/actions/kick-from-room/kick-from-room.component';
 
 @NgModule({
     imports: [
@@ -91,6 +92,7 @@ import { WiredService } from './services/wired.service';
         BotFollowAvatarComponent,
         LeaveTeamComponent,
         ResetComponent,
+        KickFromRoomComponent,
     ],
     providers: [
         WiredService
@@ -138,6 +140,7 @@ import { WiredService } from './services/wired.service';
         BotFollowAvatarComponent,
         LeaveTeamComponent,
         ResetComponent,
+        KickFromRoomComponent,
     ]
 })
 export class WiredModule
