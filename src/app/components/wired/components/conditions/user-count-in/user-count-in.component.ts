@@ -13,12 +13,12 @@ export class UserCountInComponent extends WiredCondition
     public static CODE: number          = WiredConditionType.USER_COUNT_IN;
     public static NEGATIVE_CODE: number = WiredConditionType.NOT_USER_COUNT_IN;
 
-	private static MINIMUM_VALUE: number = 1;
+    private static MINIMUM_VALUE: number = 1;
     private static MAXIMUM_VALUE: number = 50;
-	private static STEPPER_VALUE: number = 1;
+    private static STEPPER_VALUE: number = 1;
 
-	public minUsers: number = 0;
-	public maxUsers: number = 0;
+    public minUsers: number = 0;
+    public maxUsers: number = 0;
 
     public get code(): number
     {
@@ -28,22 +28,22 @@ export class UserCountInComponent extends WiredCondition
     public get negativeCode(): number
     {
         return UserCountInComponent.NEGATIVE_CODE;
-	}
+    }
 
-	public onEditStart(trigger: Triggerable): void
+    public onEditStart(trigger: Triggerable): void
     {
         this.minUsers = (trigger.intData[0] || 1);
-		this.maxUsers = (trigger.intData[1] || 50);
+        this.maxUsers = (trigger.intData[1] || 50);
 
         this.updateLocaleParameter();
     }
 
-	public readIntegerParamsFromForm(): number[]
+    public readIntegerParamsFromForm(): number[]
     {
         return [ this.minUsers, this.maxUsers ];
-	}
+    }
 
-	public onSliderChange(): void
+    public onSliderChange(): void
     {
         this.updateLocaleParameter();
     }
@@ -53,9 +53,9 @@ export class UserCountInComponent extends WiredCondition
         this.minUsers -= 1;
 
         if(this.minUsers < UserCountInComponent.MINIMUM_VALUE) this.minUsers = UserCountInComponent.MINIMUM_VALUE;
-	}
+    }
 
-	public decreaseMax(): void
+    public decreaseMax(): void
     {
         this.maxUsers -= 1;
 
@@ -67,29 +67,29 @@ export class UserCountInComponent extends WiredCondition
         this.minUsers += 1;
 
         if(this.minUsers > UserCountInComponent.MAXIMUM_VALUE) this.minUsers = UserCountInComponent.MAXIMUM_VALUE;
-	}
+    }
 
-	public increaseMax(): void
+    public increaseMax(): void
     {
         this.maxUsers += 1;
 
         if(this.maxUsers > UserCountInComponent.MAXIMUM_VALUE) this.maxUsers = UserCountInComponent.MAXIMUM_VALUE;
     }
 
-	protected updateLocaleParameter(): void
+    protected updateLocaleParameter(): void
     {
-		Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmin', 'value', this.minUsers.toString());
-		Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmax', 'value', this.maxUsers.toString());
+        Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmin', 'value', this.minUsers.toString());
+        Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmax', 'value', this.maxUsers.toString());
 
         this.updateCount++;
-	}
+    }
 
     public get hasSpecialInputs(): boolean
     {
         return true;
     }
 
-	public get sliderOptions(): Options
+    public get sliderOptions(): Options
     {
         return {
             floor: UserCountInComponent.MINIMUM_VALUE,

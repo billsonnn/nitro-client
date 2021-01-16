@@ -53,3 +53,4 @@ Thumbs.db
 
 # Nitro
 /src/index.html
+/src/configuration.json

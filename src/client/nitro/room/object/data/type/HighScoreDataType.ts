@@ -113,4 +113,9 @@ export class HighScoreDataType extends ObjectDataBase implements IObjectData
     {
         return this._state;
     }
+
+    public get entries(): HighScoreData[]
+    {
+        return this._entries;
+    }
 }

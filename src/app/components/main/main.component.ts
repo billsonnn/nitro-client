@@ -1,23 +1,19 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ConfigurationEvent } from '../client/core/configuration/ConfigurationEvent';
-import { NitroEvent } from '../client/core/events/NitroEvent';
-import { AvatarRenderEvent } from '../client/nitro/avatar/events/AvatarRenderEvent';
-import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/NitroCommunicationDemoEvent';
-import { LegacyExternalInterface } from '../client/nitro/externalInterface/LegacyExternalInterface';
-import { NitroLocalizationEvent } from '../client/nitro/localization/NitroLocalizationEvent';
-import { Nitro } from '../client/nitro/Nitro';
-import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
-import { WebGL } from '../client/nitro/utils/WebGL';
+import { ConfigurationEvent } from '../../../client/core/configuration/ConfigurationEvent';
+import { NitroEvent } from '../../../client/core/events/NitroEvent';
+import { AvatarRenderEvent } from '../../../client/nitro/avatar/events/AvatarRenderEvent';
+import { NitroCommunicationDemoEvent } from '../../../client/nitro/communication/demo/NitroCommunicationDemoEvent';
+import { LegacyExternalInterface } from '../../../client/nitro/externalInterface/LegacyExternalInterface';
+import { NitroLocalizationEvent } from '../../../client/nitro/localization/NitroLocalizationEvent';
+import { Nitro } from '../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
+import { WebGL } from '../../../client/nitro/utils/WebGL';
 
 @Component({
     selector: 'app-root',
-    template: `
-    <div id="nitro">
-        <nitro-loading *ngIf="!isReady || isError" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
-        <nitro-main-component *ngIf="isReady && !isError"></nitro-main-component>
-    </div>`
+    templateUrl: './main.template.html'
 })
-export class AppComponent implements OnInit, OnDestroy
+export class AppMainComponent implements OnInit, OnDestroy
 {
     public message: string              = 'Starting';
     public percentage: number           = 0;

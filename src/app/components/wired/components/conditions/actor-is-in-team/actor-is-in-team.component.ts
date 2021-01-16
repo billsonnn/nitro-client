@@ -9,9 +9,9 @@ import { WiredConditionType } from '../WiredConditionType';
 export class ActorIsInTeamComponent extends WiredCondition
 {
     public static CODE: number          = WiredConditionType.ACTOR_IS_IN_TEAM;
-	public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_IN_TEAM;
+    public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_IN_TEAM;
 
-	public team: string = "1"; // Default Red
+    public team: string = '1';
 
     public get code(): number
     {
@@ -26,9 +26,9 @@ export class ActorIsInTeamComponent extends WiredCondition
     public onEditStart(trigger: Triggerable): void
     {
         this.team = trigger.intData[0].toString();
-	}
+    }
 
-	public readIntegerParamsFromForm(): number[]
+    public readIntegerParamsFromForm(): number[]
     {
         return [ Number.parseInt(this.team) ];
     }

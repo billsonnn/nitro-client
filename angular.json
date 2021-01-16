@@ -33,6 +33,7 @@
             "aot": true,
             "vendorChunk": true,
             "assets": [
+              "src/configuration.json"
             ],
             "styles": [
               "src/styles.scss"

@@ -11,7 +11,7 @@ export class ActorIsWearingEffectComponent extends WiredCondition
     public static CODE: number          = WiredConditionType.ACTOR_IS_WEARING_EFFECT;
     public static NEGATIVE_CODE: number = WiredConditionType.NOT_ACTOR_WEARING_EFFECT;
 
-	public effectId: string;
+    public effectId: string;
 
     public get code(): number
     {
@@ -21,17 +21,17 @@ export class ActorIsWearingEffectComponent extends WiredCondition
     public get negativeCode(): number
     {
         return ActorIsWearingEffectComponent.NEGATIVE_CODE;
-	}
+    }
 
-	public readIntegerParamsFromForm(): number[]
+    public readIntegerParamsFromForm(): number[]
     {
-		const effectId = parseInt(this.effectId);
-		return isNaN(effectId) ? [] : [ effectId ];
-	}
+        const effectId = parseInt(this.effectId);
+        return isNaN(effectId) ? [] : [ effectId ];
+    }
 
     public onEditStart(trigger: Triggerable): void
     {
-		this.effectId = trigger.stringData.length > 0 ? trigger.stringData : '0';
+        this.effectId = trigger.stringData.length > 0 ? trigger.stringData : '0';
     }
 
     public get hasSpecialInputs(): boolean

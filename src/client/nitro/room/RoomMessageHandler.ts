@@ -835,6 +835,8 @@ export class RoomMessageHandler extends Disposable
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._roomCreator.setRoomEngineGameMode(this._currentRoomId, parser.isPlaying);
     }
 
     private addRoomObjectFurnitureFloor(roomId: number, data: FurnitureFloorDataParser): void
