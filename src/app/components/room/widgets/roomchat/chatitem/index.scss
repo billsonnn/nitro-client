@@ -18,7 +18,7 @@
 .nitro-room-chat-item-component {
     position: absolute;
     transition: top 0.2s ease 0s;
-    font-size: 9.4pt;
+    font-size: 14px;
     color: #000;
     visibility: hidden;
     user-select: none;
@@ -55,7 +55,6 @@
     }
 
     b {
-        font-weight: normal;
         text-shadow: 0px 0px #000;
     }
 
@@ -68,7 +67,7 @@
     .chat-left {
         border-radius: 5px 0 0 5px;
         width: 26px;
-        padding: 3px 0 0 0px;
+        padding: 5px 0 0 0px;
         z-index: 0;
         border-right: solid 1px #000;
         flex-shrink: 0;
@@ -156,7 +155,7 @@
 
     &.chat-type-2 { // shout
         .chat-right {
-            font-weight: 500;
+            font-weight: 700;
         }
     }
     

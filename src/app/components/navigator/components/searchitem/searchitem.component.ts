@@ -15,6 +15,9 @@ export class NavigatorSearchItemComponent
     @Input()
     public displayMode: number;
 
+    private _thumbnailUrl: string = null;
+    private _didRequestUrl: boolean = false;
+
     constructor(
         private _navigatorService: NavigatorService,
         private _ngZone: NgZone) 
@@ -61,29 +64,48 @@ export class NavigatorSearchItemComponent
     }
 
     public get thumbnail(): string
-    { 
-        if (!this.room) return;
-        
-        let thumbnailUrl: string = Nitro.instance.core.configuration.getValue("thumbnails.url");
+    {
+        if(this._thumbnailUrl) return this._thumbnailUrl;
+
+        if(!this.room || this._didRequestUrl) return null;
+
+        let thumbnailUrl = Nitro.instance.core.configuration.getValue<string>('thumbnails.url');
 
         thumbnailUrl = thumbnailUrl.replace('%thumbnail%', this.room.roomId.toString());
 
-        return thumbnailUrl;
+        const request = new XMLHttpRequest();
+        
+        request.open('GET', thumbnailUrl, true);
+        
+        request.onreadystatechange = () =>
+        {
+            if((request.readyState === 4) && (request.status === 200)) this._thumbnailUrl = thumbnailUrl;
+        };
+
+        request.send();
+
+        this._didRequestUrl = true;
+
+        return null;
     }
 
-    public get entryBg(): String 
+    public get entryBg(): string 
     {
-        var bg: String = 'badge-secondary';
+        const num: number = (100 * (this.room.userCount / this.room.maxUserCount));
 
-        var num: Number = (100 * (this.room.userCount / this.room.maxUserCount));
+        let bg = 'badge-secondary';
 
-        if (num >= 92) {
-            bg = 'badge-danger'
-        } else if (num >= 50) {
-            bg = 'badge-warning text-white'
+        if(num >= 92)
+        {
+            bg = 'badge-danger';
         }
-        else if (num > 0) {
-            bg = 'badge-success'
+        else if(num >= 50)
+        {
+            bg = 'badge-warning text-white';
+        }
+        else if(num > 0)
+        {
+            bg = 'badge-success';
         }
         
         return bg;
