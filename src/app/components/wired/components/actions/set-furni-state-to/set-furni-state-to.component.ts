@@ -25,6 +25,7 @@ export class SetFurniStateToComponent extends WiredAction
         this.state = trigger.getBoolean(0);
         this.direction = trigger.getBoolean(1);
         this.position = trigger.getBoolean(2);
+        super.onEditStart(trigger);
     }
 
     public readIntegerParamsFromForm(): number[]
