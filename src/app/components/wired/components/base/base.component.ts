@@ -10,7 +10,7 @@ export class WiredBaseComponent implements OnInit
 {
     constructor(
         private _wiredService: WiredService
-    ) 
+    )
     {}
 
     public ngOnInit(): void

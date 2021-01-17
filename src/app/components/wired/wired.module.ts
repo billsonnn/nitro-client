@@ -1,5 +1,20 @@
+import { BotTalkDirectToAvatarComponent } from './components/actions/bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
+import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
+import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
+import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
+import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
+import { ResetComponent } from './components/actions/reset/reset.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';
+import { BotGiveHandItemComponent } from './components/actions/bot-give-hand-item/bot-give-hand-item.component';
+import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
+import { ChaseComponent } from './components/actions/chase/chase.component';
+import { ChatComponent } from './components/actions/chat/chat.component';
+import { FleeComponent } from './components/actions/flee/flee.component';
+import { LeaveTeamComponent } from './components/actions/leave-team/leave-team.component';
+import { TeleportComponent } from './components/actions/teleport/teleport.component';
+import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { WiredBaseComponent } from './components/base/base.component';
 import { ActorHasHandItemComponent } from './components/conditions/actor-has-hand-item/actor-has-hand-item.component';
 import { ActorIsInGroupComponent } from './components/conditions/actor-is-in-group/actor-is-in-group.component';
@@ -33,6 +48,8 @@ import { TriggerOnceComponent } from './components/triggers/trigger-once/trigger
 import { TriggerPeriodicallyLongComponent } from './components/triggers/trigger-periodically-long/trigger-periodically-long.component';
 import { TriggerPeriodicallyComponent } from './components/triggers/trigger-periodically/trigger-periodically.component';
 import { WiredService } from './services/wired.service';
+import { KickFromRoomComponent } from './components/actions/kick-from-room/kick-from-room.component';
+import { BotTeleportComponent } from './components/actions/bot-teleport/bot-teleport.component';
 
 @NgModule({
     imports: [
@@ -70,7 +87,24 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-        TriggerPeriodicallyLongComponent
+        TriggerPeriodicallyLongComponent,
+        ToggleFurniStateComponent,
+        TeleportComponent,
+        ChaseComponent,
+        FleeComponent,
+        CallAnotherStackComponent,
+        ChatComponent,
+        BotGiveHandItemComponent,
+        BotFollowAvatarComponent,
+        LeaveTeamComponent,
+        ResetComponent,
+        KickFromRoomComponent,
+        BotTeleportComponent,
+        SetFurniStateToComponent,
+        BotMoveComponent,
+        MuteUserComponent,
+        BotChangeFigureComponent,
+        BotTalkDirectToAvatarComponent,
     ],
     providers: [
         WiredService
@@ -107,8 +141,25 @@ import { WiredService } from './services/wired.service';
         ToggleFurniComponent,
         TriggerOnceComponent,
         TriggerPeriodicallyComponent,
-        TriggerPeriodicallyLongComponent
+        TriggerPeriodicallyLongComponent,
+        ToggleFurniStateComponent,
+        TeleportComponent,
+        ChaseComponent,
+        FleeComponent,
+        CallAnotherStackComponent,
+        ChatComponent,
+        BotGiveHandItemComponent,
+        BotFollowAvatarComponent,
+        LeaveTeamComponent,
+        ResetComponent,
+        KickFromRoomComponent,
+        BotTeleportComponent,
+        SetFurniStateToComponent,
+        BotMoveComponent,
+        MuteUserComponent,
+        BotChangeFigureComponent,
+        BotTalkDirectToAvatarComponent,
     ]
 })
-export class WiredModule 
+export class WiredModule
 {}
