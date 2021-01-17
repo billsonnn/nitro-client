@@ -58,9 +58,9 @@ export class WiredFurniture
     public validate(): string
     {
         return null;
-	}
+    }
 
-	public static getLocaleName(value: number): string
+    public static getLocaleName(value: number): string
     {
         const time = Math.floor((value / 2));
 
