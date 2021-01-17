@@ -234,6 +234,7 @@ import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/sub
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
+import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { FurnitureOneWayDoorComposer } from './messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
 import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 
@@ -548,6 +549,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
+
+        // ENGINE
+        this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
 
         // FURNITURE
         this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
