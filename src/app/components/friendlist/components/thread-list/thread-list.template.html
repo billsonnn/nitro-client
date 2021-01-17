@@ -1,0 +1,4 @@
+<div class="" *ngFor="let thread of threads | keyvalue" (click)="selectThread(thread.value)">
+    {{ thread.value.participantOther.name }}<br />
+    {{ thread.value.chats[thread.value.chats.length - 1].message }}
+</div>

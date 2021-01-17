@@ -19,6 +19,7 @@ import { NewConsoleMessageEvent } from '../../../../client/nitro/communication/m
 import { NewFriendRequestEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/NewFriendRequestEvent';
 import { RoomInviteErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteErrorEvent';
 import { RoomInviteEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteEvent';
+import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -34,6 +35,7 @@ export class FriendListService implements OnDestroy
     private _component: FriendListMainComponent;
     private _messages: IMessageEvent[];
 
+    private _selfFriend: MessengerFriend;
     private _friends: Map<number, MessengerFriend>;
     private _requests: Map<number, MessengerRequest>;
     private _threads: Map<number, MessengerThread>;
@@ -46,8 +48,10 @@ export class FriendListService implements OnDestroy
     {
         this._component = null;
 
-        this._friends   = new Map();
-        this._requests  = new Map();
+        this._selfFriend    = new MessengerFriend();
+        this._friends       = new Map();
+        this._requests      = new Map();
+        this._threads       = new Map();
 
         this.registerMessages();
     }
@@ -78,7 +82,8 @@ export class FriendListService implements OnDestroy
             new NewConsoleMessageEvent(this.onNewConsoleMessageEvent.bind(this)),
             new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)),
             new RoomInviteErrorEvent(this.onRoomInviteErrorEvent.bind(this)),
-            new RoomInviteEvent(this.onRoomInviteEvent.bind(this))
+            new RoomInviteEvent(this.onRoomInviteEvent.bind(this)),
+            new UserInfoEvent(this.onUserInfoEvent.bind(this))
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -302,6 +307,21 @@ export class FriendListService implements OnDestroy
         this._ngZone.run(() => thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE));
     }
 
+    private onUserInfoEvent(event: UserInfoEvent): void
+    {
+        if(!event) return;
+
+        const friend = this._selfFriend;
+
+        this._ngZone.run(() =>
+        {
+            friend.id     = Nitro.instance.sessionDataManager.userId;
+            friend.name   = Nitro.instance.sessionDataManager.userName;
+            friend.gender = ((Nitro.instance.sessionDataManager.gender === 'M') ? 1 : 0);
+            friend.figure = Nitro.instance.sessionDataManager.figure;
+        });
+    }
+
     public getFriend(id: number): MessengerFriend
     {
         const existing = this._friends.get(id);
@@ -359,7 +379,11 @@ export class FriendListService implements OnDestroy
 
         if(!existing)
         {
-            existing = new MessengerThread(id);
+            const friend = this.getFriend(id);
+
+            if(!friend) return;
+
+            existing = new MessengerThread(this._selfFriend, friend);
 
             this._threads.set(id, existing);
         }

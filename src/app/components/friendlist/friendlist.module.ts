@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/index';
 import { FriendListMainComponent } from './components/main/main.component';
+import { FriendListThreadListComponent } from './components/thread-list/thread-list.component';
+import { FriendListThreadViewerComponent } from './components/thread-viewer/thread-viewer.component';
 import { FriendListService } from './services/friendlist.service';
 
 @NgModule({
@@ -8,13 +10,17 @@ import { FriendListService } from './services/friendlist.service';
         SharedModule
     ],
     exports: [
-        FriendListMainComponent
+        FriendListMainComponent,
+        FriendListThreadListComponent,
+        FriendListThreadViewerComponent
     ],
     providers: [
         FriendListService
     ],
     declarations: [
-        FriendListMainComponent
+        FriendListMainComponent,
+        FriendListThreadListComponent,
+        FriendListThreadViewerComponent
     ]
 })
 export class FriendListModule 

@@ -2,20 +2,20 @@ import { FriendParser } from '../../../../client/nitro/communication/messages/in
 
 export class MessengerFriend
 {
-    private _id: number;
-    private _name: string;
-    private _gender: number;
-    private _online: boolean;
-    private _followingAllowed: boolean;
-    private _figure: string;
-    private _categoryId: number;
-    private _motto: string;
-    private _realName: string;
-    private _lastAccess: string;
-    private _persistedMessageUser: boolean;
-    private _vipMember: boolean;
-    private _pocketHabboUser: boolean;
-    private _relationshipStatus: number;
+    private _id: number = -1;
+    private _name: string = null;
+    private _gender: number = 0;
+    private _online: boolean = false;
+    private _followingAllowed: boolean = false;
+    private _figure: string = null;
+    private _categoryId: number = 0;
+    private _motto: string = null;
+    private _realName: string = null;
+    private _lastAccess: string = null;
+    private _persistedMessageUser: boolean = false;
+    private _vipMember: boolean = false;
+    private _pocketHabboUser: boolean = false;
+    private _relationshipStatus: number = -1;
 
     public populate(data: FriendParser): boolean
     {
@@ -44,9 +44,19 @@ export class MessengerFriend
         return this._id;
     }
 
+    public set id(id: number)
+    {
+        this._id = id;
+    }
+
     public get name(): string
     {
         return this._name;
+    }
+
+    public set name(name: string)
+    {
+        this._name = name;
     }
 
     public get gender(): number
@@ -54,9 +64,19 @@ export class MessengerFriend
         return this._gender;
     }
 
+    public set gender(gender: number)
+    {
+        this._gender = gender;
+    }
+
     public get online(): boolean
     {
         return this._online;
+    }
+
+    public set online(flag: boolean)
+    {
+        this._online = flag;
     }
 
     public get followingAllowed(): boolean
@@ -64,9 +84,19 @@ export class MessengerFriend
         return this._followingAllowed;
     }
 
+    public set followingAllowed(flag: boolean)
+    {
+        this._followingAllowed = flag;
+    }
+
     public get figure(): string
     {
         return this._figure;
+    }
+
+    public set figure(figure: string)
+    {
+        this._figure = figure;
     }
 
     public get categoryId(): number
@@ -74,9 +104,19 @@ export class MessengerFriend
         return this._categoryId;
     }
 
+    public set categoryId(id: number)
+    {
+        this._categoryId = id;
+    }
+
     public get motto(): string
     {
         return this._motto;
+    }
+
+    public set motto(motto: string)
+    {
+        this._motto = motto;
     }
 
     public get lastAccess(): string
@@ -84,9 +124,19 @@ export class MessengerFriend
         return this._lastAccess;
     }
 
+    public set lastAccess(lastAccess: string)
+    {
+        this._lastAccess = lastAccess;
+    }
+
     public get realName(): string
     {
         return this._realName;
+    }
+
+    public set realName(name: string)
+    {
+        this._realName = name;
     }
 
     public get persistedMessageUser(): boolean
@@ -94,9 +144,19 @@ export class MessengerFriend
         return this._persistedMessageUser;
     }
 
+    public set persistedMessageUser(flag: boolean)
+    {
+        this._persistedMessageUser = flag;
+    }
+
     public get vipMember(): boolean
     {
         return this._vipMember;
+    }
+
+    public set vipMember(flag: boolean)
+    {
+        this._vipMember = flag;
     }
 
     public get pocketHabboUser(): boolean
@@ -104,8 +164,18 @@ export class MessengerFriend
         return this._pocketHabboUser;
     }
 
+    public set pocketHabboUser(flag: boolean)
+    {
+        this._pocketHabboUser = flag;
+    }
+
     public get relationshipStatus(): number
     {
         return this._relationshipStatus;
+    }
+
+    public set relationshipStatus(status: number)
+    {
+        this._relationshipStatus = status;
     }
 }

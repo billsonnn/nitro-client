@@ -4,5 +4,9 @@
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body">
+        <div nitro-friendlist-thread-list-component [threadSelector]="selectThread" class="col-3"></div>
+        <div class="col-9">
+            <div *ngIf="currentThread" nitro-friendlist-thread-viewer-component [thread]="currentThread"></div>
+        </div>
     </div>
 </div>
