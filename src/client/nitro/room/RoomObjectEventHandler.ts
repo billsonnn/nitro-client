@@ -19,6 +19,7 @@ import { FurnitureColorWheelComposer } from '../communication/messages/outgoing/
 import { FurnitureDiceActivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
 import { FurnitureMultiStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { FurnitureOneWayDoorComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
 import { FurnitureRandomStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureRandomStateComposer';
 import { FurnitureWallMultiStateComposer } from '../communication/messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
 import { FurnitureWallUpdateComposer } from '../communication/messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
@@ -1120,6 +1121,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectFurnitureActionEvent.STICKIE:
                 return;
             case RoomObjectFurnitureActionEvent.ENTER_ONEWAYDOOR:
+                this._roomEngine.connection.send(new FurnitureOneWayDoorComposer(objectId));
                 return;
         }
     }

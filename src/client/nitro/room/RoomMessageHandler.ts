@@ -11,6 +11,7 @@ import { FurnitureFloorUpdateEvent } from '../communication/messages/incoming/ro
 import { FurnitureAliasesEvent } from '../communication/messages/incoming/room/furniture/FurnitureAliasesEvent';
 import { FurnitureDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from '../communication/messages/incoming/room/furniture/FurnitureItemDataEvent';
+import { FurnitureState2Event } from '../communication/messages/incoming/room/furniture/FurnitureState2Event';
 import { FurnitureStateEvent } from '../communication/messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from '../communication/messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from '../communication/messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -139,6 +140,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new RoomUnitTypingEvent(this.onRoomUnitTypingEvent.bind(this)));
         this._connection.addMessageEvent(new PetFigureUpdateEvent(this.onPetFigureUpdateEvent.bind(this)));
         this._connection.addMessageEvent(new YouArePlayingGameEvent(this.onYouArePlayingGameEvent.bind(this)));
+        this._connection.addMessageEvent(new FurnitureState2Event(this.onFurnitureState2Event.bind(this)));
     }
 
     public setRoomId(id: number): void
@@ -622,6 +624,15 @@ export class RoomMessageHandler extends Disposable
         const parser = event.getParser();
 
         this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.itemId, null, null, parser.state, new LegacyDataType());
+    }
+
+    private onFurnitureState2Event(event: FurnitureState2Event): void
+    {
+        if(!(event instanceof FurnitureState2Event) || !event.connection || !this._roomCreator) return;
+
+        const parser = event.getParser();
+
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, parser.itemId, null, null, parser.value, new LegacyDataType());
     }
 
     private onRoomUnitDanceEvent(event: RoomUnitDanceEvent): void
