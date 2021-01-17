@@ -182,5 +182,5 @@ export class OutgoingHeader
     public static WIRED_OPEN                     = 768;
     public static WIRED_TRIGGER_SAVE             = 1520;
     public static GET_ITEM_DATA                  = 3964;
-
+    public static ONE_WAY_DOOR_CLICK             = 2765;
 }

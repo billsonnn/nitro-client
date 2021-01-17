@@ -235,6 +235,8 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
+import { FurnitureOneWayDoorComposer } from './messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
+import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -383,6 +385,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.ITEM_STACK_HELPER, FurnitureStackHeightEvent);
         this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
         this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
+        this._events.set(IncomingHeader.FURNITURE_STATE_2, FurnitureState2Event);
 
         // FLOOR
         this._events.set(IncomingHeader.FURNITURE_FLOOR_ADD, FurnitureFloorAddEvent);
@@ -571,6 +574,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.FURNITURE_RANDOMSTATE, FurnitureRandomStateComposer);
         this._composers.set(OutgoingHeader.ITEM_STACK_HELPER, FurnitureStackHeightComposer);
         this._composers.set(OutgoingHeader.FURNITURE_WALL_MULTISTATE, FurnitureWallMultiStateComposer);
+        this._composers.set(OutgoingHeader.ONE_WAY_DOOR_CLICK, FurnitureOneWayDoorComposer);
 
         // MAPPING
         this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
