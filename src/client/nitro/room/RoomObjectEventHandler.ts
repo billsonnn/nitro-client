@@ -12,6 +12,8 @@ import { IVector3D } from '../../room/utils/IVector3D';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
+import { ModifyWallItemDataComposer } from '../communication/messages/outgoing/room/engine/ModifyWallItemDataComposer';
+import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -1860,6 +1862,30 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(!wallGeometry._Str_10375(x, y)) return false;
 
         roomObject.setLocation(new Vector3d(x, y, wallGeometry.getHeight(x, y)));
+
+        return true;
+    }
+
+    public modifyWallItemData(roomId: number, objectId: number, colorHex: string, text: string): boolean
+    {
+        if(!this._roomEngine || !this._roomEngine.connection)
+        {
+            return false;
+        }
+
+        this._roomEngine.connection.send(new ModifyWallItemDataComposer(objectId, colorHex, text));
+
+        return true;
+    }
+
+    public deleteWallItem(roomId: number, itemId: number): boolean
+    {
+        if(!this._roomEngine || !this._roomEngine.connection)
+        {
+            return false;
+        }
+
+        this._roomEngine.connection.send(new RemoveWallItemComposer(itemId));
 
         return true;
     }
