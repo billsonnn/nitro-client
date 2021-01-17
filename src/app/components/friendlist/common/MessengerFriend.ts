@@ -16,6 +16,7 @@ export class MessengerFriend
     private _vipMember: boolean = false;
     private _pocketHabboUser: boolean = false;
     private _relationshipStatus: number = -1;
+    private _unread:number = 0;
 
     public populate(data: FriendParser): boolean
     {
@@ -177,5 +178,15 @@ export class MessengerFriend
     public set relationshipStatus(status: number)
     {
         this._relationshipStatus = status;
+    }
+
+    public get unread(): number
+    {
+        return this._unread;
+    }
+
+    public set unread(unread: number)
+    { 
+        this._unread = unread;
     }
 }

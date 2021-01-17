@@ -1,4 +1,30 @@
-<div class="" *ngFor="let chat of chats">
-    {{ chat.sender.name }}<br />
-    {{ chat.message }}
+<div class="nitro-friendlist-thread-viewer-component">
+    <div class="d-flex flex-row thread-viewer-user mb-1 justify-content-between">
+        <div class="d-flex flex-row">
+            <div class="avatar-img" nitro-avatar-image [headOnly]="1" [figure]="thread.participantOther.figure" [direction]="2"></div>
+            <div class="thread-viewer-user-info">
+                <b class="d-flex flex-row">{{participantOther.name}}<div class="ml-2 p-1 rounded-circle align-self-center" [ngClass]="[participantOther.online ? 'bg-success' : 'bg-danger']"></div></b>
+                <span class="d-block text-muted small text-truncate">{{participantOther.motto}}</span>
+            </div>
+        </div>
+        <div class="input-group-prepend align-self-center" ngbDropdown>
+            <div class="btn-group">
+                <div class="btn btn-sm btn-dgreen align-self-center" *ngIf="(participantOther.online)" (click)="followFriend(thread.participantOther.id)"><i class="fas fa-arrow-right"></i></div>
+                <button type="button" class="btn btn-primary btn-sm" ngbDropdownToggle>{{relations[thread.participantOther.relationshipStatus]}}</button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <button class="dropdown-item small" *ngFor="let relation of relations; let i = index;" (click)="changeRelation(i)" ngbDropdownItem>{{relation}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <perfect-scrollbar #threadScroller class="position-relative w-100 pr-1" style="min-height: 310px;max-height: 350px;height:310px;">
+        <div class="thread-viewer-list">
+            <div *ngFor="let chat of chats" class="thread-viewer-list-item" [ngClass]="{'thread-viewer-list-right':(chat.sender.id == participantSelf.id), 'thread-viewer-list-left': (chat.sender.id != participantSelf.id) }">
+                <div class="thread-viewer-list-item-message mb-1 p-2" [ngClass]="[chat.sender.id == participantSelf.id ? thread.chatColour : '']">{{ chat.message }}</div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <div class="thread-viewer-input">
+        <input #threadInput class="thread-viewer-input form-control" type="text" maxLength="420" />
+    </div>
 </div>

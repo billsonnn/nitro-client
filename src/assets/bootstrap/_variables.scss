@@ -37,7 +37,7 @@ $blue:      #007bff !default;
 $indigo:    #6610f2 !default;
 $purple:    #6f42c1 !default;
 $pink:      #e83e8c !default;
-$red:       #dc3545 !default;
+$red:       #ba1111 !default;
 $orange:    #fd7e14 !default;
 $yellow:    #ffc107 !default;
 $green:     #28a745 !default;
@@ -47,6 +47,7 @@ $cod-gray:  #181818 !default;
 $mine-shaft:#2B2B2B !default;
 $tundora:   #494949 !default;
 $emperor:   #555555 !default;
+$darkgreen:     #006400 !default;
 
 $colors: () !default;
 $colors: map-merge(
@@ -93,7 +94,9 @@ $theme-colors: map-merge(
     "light":      $light,
     "dark":       $dark,
     "black":      $black,
-    "emperor":    $emperor
+    "emperor":    $emperor,
+    "pink":       $pink,
+    "dgreen": $darkgreen,
   ),
   $theme-colors
 );

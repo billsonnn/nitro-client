@@ -1,4 +1,35 @@
-<div class="" *ngFor="let thread of threads | keyvalue" (click)="selectThread(thread.value)">
-    {{ thread.value.participantOther.name }}<br />
-    {{ thread.value.chats[thread.value.chats.length - 1].message }}
-</div>
+<perfect-scrollbar class="position-relative w-100 pr-1 nitro-friend-list" style="min-height: 400px;max-height: 350px;height:400px;">
+    <div class="nitro-friend-list-search">
+    </div>
+
+    <div class="input-group-prepend align-self-center" ngbDropdown>
+        <button type="button" class="btn btn-primary btn-sm w-100 mb-1" ngbDropdownToggle>{{ options[optionActive] | translate }}</button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <button class="dropdown-item small" *ngFor="let option of options; let i = index;" (click)="changeTab(i)" ngbDropdownItem>{{ option | translate }}</button>
+        </div>
+    </div>
+
+    <div *ngIf="optionActive == 0">
+        <div class="btn-group w-100 mb-1" *ngFor="let friend of onlineFriends | keyvalue">
+            <div class="btn btn-sm btn-primary w-100 text-truncate" (click)="selectThread(thread(friend.value.id))">
+                {{ friend.value.name }}
+            </div>
+            <div *ngIf="friend.value.unread != 0" class="btn btn-sm btn-danger" (click)="selectThread(thread(friend.value.id))">
+                {{ friend.value.unread }}
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="optionActive == 1">
+        <div class="btn-group w-100 mb-1" *ngFor="let friend of friendRequests | keyvalue">
+            <div class="btn btn-sm btn-dgreen" (click)="friendRequest(true,friend.value)"><i class="fas fa-thumbs-up"></i></div>
+            <div class="btn btn-sm btn-primary w-100 text-truncate" >
+                {{ friend.value.requesterName }}
+            </div>
+            <div class="btn btn-sm btn-danger" (click)="friendRequest(false,friend)"><i class="fas fa-thumbs-down"></i></div>
+        </div>
+    </div>
+
+
+
+</perfect-scrollbar>

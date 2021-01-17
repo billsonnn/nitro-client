@@ -1,4 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { AcceptFriendResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/AcceptFriendResultEvent';
 import { FindFriendsProcessResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FindFriendsProcessResultEvent';
@@ -41,6 +42,10 @@ export class FriendListService implements OnDestroy
     private _threads: Map<number, MessengerThread>;
 
     private _friendListReady: boolean = false;
+
+    private _currentThread: MessengerThread;
+
+    private _scroller: PerfectScrollbarComponent;
 
     constructor(
         private _notificationService: NotificationService,
@@ -215,9 +220,33 @@ export class FriendListService implements OnDestroy
 
         const parser = event.getParser();
 
-        if(!parser) return;
+        if (!parser) return;
+        
+        var message: string;
 
-        console.log(parser);
+        console.log(parser)
+
+        switch (parser.errorCode)
+        { 
+            case 1:
+                message = "${friendlist.error.friendlistownlimit}";
+                break;
+            case 2:
+                message = "${friendlist.error.friendlistlimitofrequester}";
+                break;
+            case 3:
+                message = "${friendlist.error.friend_requests_disabled}";
+                break;
+            case 4:
+                message = "${friendlist.error.requestnotfound}";
+                break;
+            default:
+                message = ((("Received messenger error: msg: " + parser.clientMessageId) + ", errorCode: ") + parser.errorCode);
+                break;
+            
+        }
+
+        this._notificationService.alert(message, "${friendlist.alert.title}")
     }
 
     private onMessengerInitEvent(event: MessengerInitEvent): void
@@ -267,7 +296,18 @@ export class FriendListService implements OnDestroy
 
         if(!thread) return;
 
-        this._ngZone.run(() => thread.insertChat(parser.senderId, parser.messageText, parser.secondsSinceSent, parser.extraData));
+        this._ngZone.run(() =>
+        {
+            thread.insertChat(parser.senderId, parser.messageText, parser.secondsSinceSent, parser.extraData);
+
+            if (this._currentThread == thread) return;
+
+            setTimeout(() => { this._scroller.directiveRef.scrollToBottom(0, 300) }, 1);
+
+            this._friends.get(parser.senderId).unread++;
+
+        });
+
     }
 
     private onNewFriendRequestEvent(event: NewFriendRequestEvent): void
@@ -304,7 +344,11 @@ export class FriendListService implements OnDestroy
 
         if(!thread) return;
 
-        this._ngZone.run(() => thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE));
+        this._ngZone.run(() =>
+        {
+            thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE)
+
+        });
     }
 
     private onUserInfoEvent(event: UserInfoEvent): void
@@ -373,7 +417,7 @@ export class FriendListService implements OnDestroy
         this._requests.delete(id);
     }
 
-    private getMessageThread(id: number): MessengerThread
+    public getMessageThread(id: number): MessengerThread
     {
         let existing = this._threads.get(id);
 
@@ -396,6 +440,18 @@ export class FriendListService implements OnDestroy
         Nitro.instance.communication.connection.send(new GetFriendRequestsComposer());
     }
 
+    public get currentThread(): MessengerThread
+    { 
+        return this._currentThread;
+    }
+
+    public set currentThread(thread: MessengerThread)
+    { 
+        this._friends.get(thread.participantOther.id).unread = 0;
+
+        this._currentThread = thread;
+    }
+
     public get component(): FriendListMainComponent
     {
         return this._component;
@@ -404,6 +460,11 @@ export class FriendListService implements OnDestroy
     public set component(component: FriendListMainComponent)
     {
         this._component = component;
+    }
+
+    public get selfFriend(): MessengerFriend
+    {
+        return this._selfFriend;
     }
 
     public get friends(): Map<number, MessengerFriend>
@@ -419,5 +480,15 @@ export class FriendListService implements OnDestroy
     public get threads(): Map<number, MessengerThread>
     {
         return this._threads;
+    }
+
+    public get scroller(): PerfectScrollbarComponent
+    { 
+        return this._scroller
+    }
+
+    public set scroller(scroller: PerfectScrollbarComponent)
+    { 
+        this._scroller = scroller;
     }
 }

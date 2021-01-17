@@ -18,7 +18,8 @@ export class MessengerChat
         this._sender            = sender;
         this._message           = message;
         this._secondsSinceSent  = secondsSinceSent;
-        this._extraData         = extraData;
+        this._extraData = extraData;
+        
     }
 
     public get type(): number
@@ -45,4 +46,5 @@ export class MessengerChat
     {
         return this._extraData;
     }
+
 }

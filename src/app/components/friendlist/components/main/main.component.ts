@@ -45,8 +45,6 @@ export class FriendListMainComponent implements OnInit, OnDestroy
     {
         if(!thread) return;
 
-        console.log('select', thread);
-
         this._currentThread = thread;
     }
 

@@ -1,5 +1,6 @@
 import { MessengerChat } from './MessengerChat';
 import { MessengerFriend } from './MessengerFriend';
+import { RelationshipStatusEnum } from './RelationshipStatusEnum';
 
 export class MessengerThread
 {
@@ -47,5 +48,31 @@ export class MessengerThread
     public get chats(): MessengerChat[]
     {
         return this._chats;
+    }
+
+    public get chatColour(): string
+    { 
+        var colour: string;
+
+        switch (this._participantOther.relationshipStatus)
+        { 
+            case RelationshipStatusEnum.NONE:
+                colour = "bg-blue";
+                break
+            case RelationshipStatusEnum.HEART:
+                colour = "bg-pink";
+                break;
+            case RelationshipStatusEnum.SMILE:
+                colour = "bg-warning";
+                break;
+            case RelationshipStatusEnum.BOBBA:
+                colour = "bg-dark";
+                break;
+            default:
+                colour = "bg-blue";
+                break;
+        }
+
+        return colour;
     }
 }
