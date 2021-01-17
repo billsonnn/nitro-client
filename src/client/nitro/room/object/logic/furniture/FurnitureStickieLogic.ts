@@ -73,6 +73,6 @@ export class FurnitureStickieLogic extends FurnitureLogic
 
     public useObject(): void
     {
-        (this.object && this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.STICKIE, this.object)));
+        (this.object && this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.STICKIE, this.object)));
     }
 }
