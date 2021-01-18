@@ -12,6 +12,7 @@ import { IVector3D } from '../../room/utils/IVector3D';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
+import { PlaceBotComposer } from '../communication/messages/outgoing/room/engine/PlaceBotComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -1354,7 +1355,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                         else if(selectedData.typeId === RoomObjectType.RENTABLE_BOT)
                         {
-                            // this._roomEngine.connection.send(new _Str_8136(_local_5, int(_local_9), int(_local_10)));
+                            this._roomEngine.connection.send(new PlaceBotComposer(objectId, Math.floor(x), Math.floor(y)));
                         }
                     }
 

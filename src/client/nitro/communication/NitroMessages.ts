@@ -196,6 +196,7 @@ import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUs
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
+import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -561,6 +562,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
+        this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
 
         // FURNITURE
         this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
