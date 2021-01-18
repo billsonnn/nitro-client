@@ -1,16 +1,16 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { _Str_3013 } from './_Str_3013';
+import { BotData } from './BotData';
 
-export class _Str_6995 implements IMessageParser
+export class BotAddedToInventoryParser implements IMessageParser
 {
-    private _item: _Str_3013;
-    private _Str_12302: boolean;
+    private _item: BotData;
+    private _openInventory: boolean;
 
     public flush(): boolean
     {
-        this._item      = null;
-        this._Str_12302 = false;
+        this._item          = null;
+        this._openInventory = false;
 
         return true;
     }
@@ -19,19 +19,19 @@ export class _Str_6995 implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._item      = new _Str_3013(wrapper);
-        this._Str_12302 = wrapper.readBoolean();
+        this._item          = new BotData(wrapper);
+        this._openInventory = wrapper.readBoolean();
 
         return true;
     }
 
-    public get item(): _Str_3013
+    public get item(): BotData
     {
         return this._item;
     }
 
-    public _Str_19947(): boolean
+    public openInventory(): boolean
     {
-        return this._Str_12302;
+        return this._openInventory;
     }
 }
