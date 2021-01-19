@@ -35,12 +35,12 @@ export class ActionDefinition extends Triggerable
         return this._type;
     }
 
-    public get _Str_25459(): number
+    public get delayInPulses(): number
     {
         return this._delayInPulses;
     }
 
-    public get _Str_22128(): number[]
+    public get conflictingTriggers(): number[]
     {
         return this._conflictingTriggers;
     }

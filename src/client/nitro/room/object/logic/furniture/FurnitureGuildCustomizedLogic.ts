@@ -23,7 +23,7 @@ export class FurnitureGuildCustomizedLogic extends FurnitureMultiStateLogic
             {
                 this.updateGroupId(data.getValue(FurnitureGuildCustomizedLogic.GROUPID_KEY));
                 this.updateBadge(data.getValue(FurnitureGuildCustomizedLogic.BADGE_KEY));
-                this.updateColors(data.getValue(FurnitureGuildCustomizedLogic.COLOR1_KEY), data.getValue(FurnitureGuildCustomizedLogic.COLOR2_KEY))
+                this.updateColors(data.getValue(FurnitureGuildCustomizedLogic.COLOR1_KEY), data.getValue(FurnitureGuildCustomizedLogic.COLOR2_KEY));
             }
         }
     }

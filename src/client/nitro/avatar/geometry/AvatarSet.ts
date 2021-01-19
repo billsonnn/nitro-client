@@ -16,7 +16,7 @@
 
         if(k.avatarSets && (k.avatarSets.length > 0))
         {
-            for(let avatarSet of k.avatarSets)
+            for(const avatarSet of k.avatarSets)
             {
                 if(!avatarSet) continue;
 
@@ -28,7 +28,7 @@
 
         if(k.bodyParts && (k.bodyParts.length > 0))
         {
-            for(let bodyPart of k.bodyParts)
+            for(const bodyPart of k.bodyParts)
             {
                 if(!bodyPart) continue;
 
@@ -38,7 +38,7 @@
 
         let bodyParts = this._bodyParts.concat();
 
-        for(let avatarSet of this._avatarSets.values())
+        for(const avatarSet of this._avatarSets.values())
         {
             if(!avatarSet) continue;
 
@@ -52,7 +52,7 @@
     {
         if(k === this._id) return this;
 
-        for(let avatarSet of this._avatarSets.values())
+        for(const avatarSet of this._avatarSets.values())
         {
             if(!avatarSet) continue;
 
@@ -78,7 +78,7 @@
     {
         if(this._isMain) return true;
 
-        for(let avatarSet of this._avatarSets.values())
+        for(const avatarSet of this._avatarSets.values())
         {
             if(!avatarSet) continue;
 

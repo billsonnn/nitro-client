@@ -128,7 +128,7 @@ export class AnimationStateData
     {
         if(!this._frames || !this._frames.length) return;
 
-        for(let frame of this._frames)
+        for(const frame of this._frames)
         {
             if(!frame) continue;
 

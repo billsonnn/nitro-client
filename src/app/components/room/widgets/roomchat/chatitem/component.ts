@@ -42,8 +42,6 @@ export class RoomChatItemComponent
     public x: number;
     public y: number;
 
-    public animation: any;
-
     public update(k: RoomWidgetChatUpdateEvent): void
     {
         this.chatType           = k.chatType;

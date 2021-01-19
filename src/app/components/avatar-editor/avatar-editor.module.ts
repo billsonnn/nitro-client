@@ -7,7 +7,7 @@ import { AvatarEditorSetViewerComponent } from './components/set-viewer/set-view
 import { AvatarEditorService } from './services/avatar-editor.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -26,4 +26,5 @@ import { AvatarEditorService } from './services/avatar-editor.service';
         AvatarEditorSetViewerComponent
     ]
 })
-export class AvatarEditorModule {}
+export class AvatarEditorModule 
+{}

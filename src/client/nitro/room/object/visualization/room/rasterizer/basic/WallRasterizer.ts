@@ -19,7 +19,7 @@ export class WallRasterizer extends PlaneRasterizer
     {
         if(!k) return;
 
-        for(let wallIndex in k)
+        for(const wallIndex in k)
         {
             const wall = k[wallIndex];
 

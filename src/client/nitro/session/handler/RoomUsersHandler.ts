@@ -43,7 +43,7 @@ export class RoomUsersHandler extends BaseHandler
 
         if(users && users.length)
         {
-            for(let user of users)
+            for(const user of users)
             {
                 if(!user) continue;
 

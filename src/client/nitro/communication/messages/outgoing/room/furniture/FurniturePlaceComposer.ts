@@ -1,7 +1,7 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 import { RoomObjectCategory } from '../../../../../room/object/RoomObjectCategory';
 
-export class FurniturePlaceComposer implements IMessageComposer
+export class FurniturePlaceComposer implements IMessageComposer<string[]>
 {
     private _itemId: number;
     private _category: number;
@@ -20,7 +20,7 @@ export class FurniturePlaceComposer implements IMessageComposer
         this._direction     = direction;
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         switch(this._category)
         {

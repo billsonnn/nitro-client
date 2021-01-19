@@ -23,13 +23,13 @@ import { TorsoModel } from '../../models/TorsoModel';
 import { AvatarEditorService } from '../../services/avatar-editor.service';
 
 @Component({
-	selector: 'nitro-avatar-editor-main-component',
+    selector: 'nitro-avatar-editor-main-component',
     templateUrl: './main.template.html'
 })
 export class AvatarEditorMainComponent implements OnInit, OnDestroy
 {
-    private static _Str_18590: string   = "hr-100.hd-180-7.ch-215-66.lg-270-79.sh-305-62.ha-1002-70.wa-2007";
-    private static _Str_18820: string   = "hr-515-33.hd-600-1.ch-635-70.lg-716-66-62.sh-735-68";
+    private static _Str_18590: string   = 'hr-100.hd-180-7.ch-215-66.lg-270-79.sh-305-62.ha-1002-70.wa-2007';
+    private static _Str_18820: string   = 'hr-515-33.hd-600-1.ch-635-70.lg-716-66-62.sh-735-68';
     private static _Str_6331: number    = 2;
 
     @Input()
@@ -48,7 +48,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     constructor(
         private _inventoryService: InventoryService,
         private _settingsService: SettingsService,
-        private _avatarEditorService: AvatarEditorService) {}
+        private _avatarEditorService: AvatarEditorService) 
+    {}
 
     public ngOnInit(): void
     {
@@ -151,7 +152,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(update)
         {
-            for(let category of this._categories.getValues())
+            for(const category of this._categories.getValues())
             {
                 if(!category) continue;
 
@@ -170,8 +171,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         if(!k || !_arg_2) return null;
 
-        var _local_3: AvatarEditorGridPartItem[]    = [];
-        var _local_4: AvatarEditorGridColorItem[][] = [];
+        const _local_3: AvatarEditorGridPartItem[]    = [];
+        const _local_4: AvatarEditorGridColorItem[][] = [];
 
         let _local_5 = 0;
 
@@ -192,12 +193,12 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         let _local_10 = this.figureData.getColourIds(_arg_2);
 
-        if(!_local_10) _local_10 = new Array();
+        if(!_local_10) _local_10 = [];
 
         const _local_11: IPartColor[]   = new Array(_local_10.length);
         const _local_12                 = this._Str_24175;
 
-        for(let _local_13 of _local_9.colors.values())
+        for(const _local_13 of _local_9.colors.values())
         {
             if(_local_13.isSelectable && (_local_12 || (this.clubMemberLevel >= _local_13.clubLevel)))
             {
@@ -274,7 +275,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
             }
             else
             {
-                if (_local_6.gender == this.gender)
+                if(_local_6.gender == this.gender)
                 {
                     _local_28 = true;
                 }
@@ -350,10 +351,10 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
     private _Str_25189(k: AvatarEditorGridPartItem, _arg_2: AvatarEditorGridPartItem): number
     {
-        var _local_3 = (!k.partSet ? 9999999999 : k.partSet.clubLevel);
-        var _local_4 = (!_arg_2.partSet ? 9999999999 : _arg_2.partSet.clubLevel);
-        var _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        var _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_3 = (!k.partSet ? 9999999999 : k.partSet.clubLevel);
+        const _local_4 = (!_arg_2.partSet ? 9999999999 : _arg_2.partSet.clubLevel);
+        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
 
         if(_local_5 && !_local_6) return 1;
 
@@ -372,10 +373,10 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
     private _Str_23935(k: AvatarEditorGridPartItem, _arg_2: AvatarEditorGridPartItem): number
     {
-        var _local_3 = (!k.partSet ? -1 : k.partSet.clubLevel);
-        var _local_4 = (!_arg_2.partSet ? -1 : _arg_2.partSet.clubLevel);
-        var _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        var _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_3 = (!k.partSet ? -1 : k.partSet.clubLevel);
+        const _local_4 = (!_arg_2.partSet ? -1 : _arg_2.partSet.clubLevel);
+        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
 
         if(_local_5 && !_local_6) return 1;
 
@@ -394,8 +395,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
     private _Str_23625(k: AvatarEditorGridColorItem, _arg_2: AvatarEditorGridColorItem): number
     {
-        var _local_3 = (!k._Str_3420 ? -1 : k._Str_3420.clubLevel);
-        var _local_4 = (!_arg_2._Str_3420 ? -1 : _arg_2._Str_3420.clubLevel);
+        const _local_3 = (!k._Str_3420 ? -1 : k._Str_3420.clubLevel);
+        const _local_4 = (!_arg_2._Str_3420 ? -1 : _arg_2._Str_3420.clubLevel);
 
         if(_local_3 < _local_4) return -1;
 
@@ -512,7 +513,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         this._gender = k;
 
-        for(let _local_2 of this._categories.getValues()) _local_2.reset();
+        for(const _local_2 of this._categories.getValues()) _local_2.reset();
 
         this.selectFirstCategory();
     }

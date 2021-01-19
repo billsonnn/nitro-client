@@ -12,7 +12,7 @@ export class InfoStandPetData
     private _nutrition: number;
     private _nutritionMax: number;
     private _petRespect: number;
-    private _name: string = "";
+    private _name: string = '';
     private _petId: number = -1;
     private _type: number;
     private _race: number;

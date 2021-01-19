@@ -78,7 +78,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     {
         if(!this._handlers || !this._handlers.length) return;
         
-        for(let handler of this._handlers)
+        for(const handler of this._handlers)
         {
             if(!handler) continue;
 

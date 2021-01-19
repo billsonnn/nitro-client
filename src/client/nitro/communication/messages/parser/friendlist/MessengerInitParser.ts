@@ -26,7 +26,7 @@ export class MessengerInitParser implements IMessageParser
         this._normalFriendLimit     = wrapper.readInt();
         this._extendedFriendLimit   = wrapper.readInt();
 
-        let totalCategories = wrapper.readInt();
+        const totalCategories = wrapper.readInt();
 
         while(totalCategories > 0)
         {

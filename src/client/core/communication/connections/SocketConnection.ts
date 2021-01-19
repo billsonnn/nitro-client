@@ -24,7 +24,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private _dataBuffer: ArrayBuffer;
     private _isReady: boolean;
 
-    private _pendingClientMessages: IMessageComposer[];
+    private _pendingClientMessages: IMessageComposer<unknown[]>[];
     private _pendingServerMessages: IMessageDataWrapper[];
 
 
@@ -144,7 +144,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, <ArrayBuffer> reader.result);
 
             this.processReceivedData();
-        }
+        };
     }
 
     private dispatchConnectionEvent(type: string, event: Event): void
@@ -157,7 +157,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._isAuthenticated = true;
     }
 
-    public send(...composers: IMessageComposer[]): boolean
+    public send(...composers: IMessageComposer<unknown[]>[]): boolean
     {
         if(this.disposed || !composers) return false;
         
@@ -172,7 +172,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             return false;
         }
         
-        for(let composer of composers)
+        for(const composer of composers)
         {
             if(!composer) continue;
 
@@ -189,12 +189,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!encoded)
             {
-                if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
             this.write(encoded.toBuffer());
         }
@@ -216,7 +216,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             this.processData();
         }
 
-        catch(err)
+        catch (err)
         {
             NitroLogger.log(err);
         }
@@ -244,7 +244,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         if(!wrappers || !wrappers.length) return;
 
-        for(let wrapper of wrappers)
+        for(const wrapper of wrappers)
         {
             if(!wrapper) continue;
 
@@ -252,7 +252,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
             
             this.handleMessages(...messages);
         }
@@ -290,7 +290,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             if(!parser || !parser.flush() || !parser.parse(wrapper)) return null;
         }
 
-        catch(e)
+        catch (e)
         {
             NitroLogger.log(`Error parsing message: ${ e }`, events[0].constructor.name);
 
@@ -304,7 +304,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         messages = [ ...messages ];
 
-        for(let message of messages)
+        for(const message of messages)
         {
             if(!message) continue;
 

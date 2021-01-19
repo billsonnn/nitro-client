@@ -21,7 +21,7 @@ export class AvatarActionManager
     {
         if(!data) return;
 
-        for(let action of data.actions)
+        for(const action of data.actions)
         {
             if(!action || !action.state) continue;
 
@@ -37,13 +37,13 @@ export class AvatarActionManager
     {
         if(!offsets || !offsets.length) return;
 
-        for(let offset of offsets)
+        for(const offset of offsets)
         {
             const action = this._actions.get(offset.action);
 
             if(!action) continue;
 
-            for(let canvasOffset of offset.offsets)
+            for(const canvasOffset of offset.offsets)
             {
                 const size      = (canvasOffset.size || '');
                 const direction = canvasOffset.direction;
@@ -63,7 +63,7 @@ export class AvatarActionManager
     {
         if(!id) return null;
 
-        for(let action of this._actions.values())
+        for(const action of this._actions.values())
         {
             if(!action || (action.id !== id)) continue;
 
@@ -86,7 +86,7 @@ export class AvatarActionManager
     {
         if(this._defaultAction) return this._defaultAction;
 
-        for(let action of this._actions.values())
+        for(const action of this._actions.values())
         {
             if(!action || !action._Str_804) continue;
 
@@ -102,7 +102,7 @@ export class AvatarActionManager
     {
         let canvasOffsets: number[] = [];
 
-        for(let activeAction of k)
+        for(const activeAction of k)
         {
             if(!activeAction) continue;
 
@@ -121,9 +121,9 @@ export class AvatarActionManager
 
         actions = this._Str_1247(actions);
 
-        let validatedActions: IActiveActionData[] = [];
+        const validatedActions: IActiveActionData[] = [];
 
-        for(let action of actions)
+        for(const action of actions)
         {
             if(!action) continue;
 
@@ -144,9 +144,9 @@ export class AvatarActionManager
     private _Str_1247(actions: IActiveActionData[]): IActiveActionData[]
     {
         let preventions: string[]               = [];
-        let activeActions: IActiveActionData[]  = [];
+        const activeActions: IActiveActionData[]  = [];
 
-        for(let action of actions)
+        for(const action of actions)
         {
             if(!action) continue;
 
@@ -155,7 +155,7 @@ export class AvatarActionManager
             if(localAction) preventions = preventions.concat(localAction._Str_733(action._Str_727));
         }
 
-        for(let action of actions)
+        for(const action of actions)
         {
             if(!action) continue;
 

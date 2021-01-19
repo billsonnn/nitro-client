@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RoomAmbassadorAlertComposer implements IMessageComposer
+export class RoomAmbassadorAlertComposer implements IMessageComposer<ConstructorParameters<typeof RoomAmbassadorAlertComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof RoomAmbassadorAlertComposer>;
 
     constructor(userId: number)
     {
         this._data = [ userId ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

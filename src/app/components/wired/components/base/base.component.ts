@@ -3,14 +3,15 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { WiredService } from '../../services/wired.service';
 
 @Component({
-	selector: 'nitro-wired-base-component',
+    selector: 'nitro-wired-base-component',
     templateUrl: './base.template.html'
 })
 export class WiredBaseComponent implements OnInit
 {
     constructor(
         private _wiredService: WiredService
-    ) {}
+    )
+    {}
 
     public ngOnInit(): void
     {

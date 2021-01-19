@@ -6,9 +6,11 @@ import { NotificationMainComponent } from './components/main/main.component';
 import { NotificationModeratorMessageComponent } from './components/moderator-message/moderator-message.component';
 import { NotificationMultipleMessagesComponent } from './components/motd/motd.component';
 import { NotificationService } from './services/notification.service';
+import { NotificationDialogComponent } from './components/notificationdialog/notificationdialog.component';
+import { NotificationCentreComponent } from './components/notification-centre/nc.component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -16,7 +18,9 @@ import { NotificationService } from './services/notification.service';
         NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
         NotificationMainComponent,
-        NotificationMultipleMessagesComponent
+        NotificationMultipleMessagesComponent,
+        NotificationDialogComponent,
+        NotificationCentreComponent,
     ],
     providers: [
         NotificationService
@@ -26,7 +30,10 @@ import { NotificationService } from './services/notification.service';
         NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
         NotificationMainComponent,
-        NotificationMultipleMessagesComponent
+        NotificationMultipleMessagesComponent,
+        NotificationDialogComponent,
+        NotificationCentreComponent
     ]
 })
-export class NotificationModule {}
+export class NotificationModule 
+{ }

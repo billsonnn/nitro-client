@@ -27,11 +27,11 @@ export class CategoryData
 
         let i = 0;
 
-        while (i < palettes.length)
+        while(i < palettes.length)
         {
             const _local_4 = palettes[i];
 
-            if (((_local_4._Str_3420) && (_local_4._Str_3420.clubLevel <= clubLevel)))
+            if(((_local_4._Str_3420) && (_local_4._Str_3420.clubLevel <= clubLevel)))
             {
                 return _local_4._Str_3420.id;
             }
@@ -44,7 +44,7 @@ export class CategoryData
 
     public init(): void
     {
-        for(let part of this._parts)
+        for(const part of this._parts)
         {
             if(!part) continue;
 
@@ -57,16 +57,16 @@ export class CategoryData
     {
         if(this._parts)
         {
-            for(let k of this._parts) k.dispose();
+            for(const k of this._parts) k.dispose();
 
             this._parts = null;
         }
 
         if(this._palettes)
         {
-            for(let _local_2 of this._palettes)
+            for(const _local_2 of this._palettes)
             {
-                if(_local_2) for(let _local_3 of _local_2) _local_3.dispose();
+                if(_local_2) for(const _local_3 of _local_2) _local_3.dispose();
             }
 
             this._palettes = null;
@@ -82,11 +82,11 @@ export class CategoryData
 
         let i = 0;
 
-        while (i < this._parts.length)
+        while(i < this._parts.length)
         {
             const partItem = this._parts[i];
 
-            if (partItem.id === partId)
+            if(partItem.id === partId)
             {
                 this.selectPartIndex(i);
 
@@ -105,7 +105,7 @@ export class CategoryData
 
         let i = 0;
 
-        while (i < this._palettes.length)
+        while(i < this._palettes.length)
         {
             const palette = this.getPalette(i);
 
@@ -282,11 +282,11 @@ export class CategoryData
 
         let i = 0;
 
-        while (i < this._paletteIndexes.length)
+        while(i < this._paletteIndexes.length)
         {
             const colorItem = this.getSelectedColor(i);
 
-            if (colorItem)
+            if(colorItem)
             {
                 partColors.push(colorItem._Str_3420);
             }
@@ -343,7 +343,7 @@ export class CategoryData
     {
         const k = this.getSelectedColors();
 
-        for(let _local_2 of this._parts)
+        for(const _local_2 of this._parts)
         {
             if(_local_2) _local_2.colors = k;
         }
@@ -355,11 +355,11 @@ export class CategoryData
 
         const _local_3 = this.getSelectedColors();
 
-        if (_local_3)
+        if(_local_3)
         {
             let _local_6 = 0;
 
-            while (_local_6 < _local_3.length)
+            while(_local_6 < _local_3.length)
             {
                 const _local_7 = _local_3[_local_6];
                 
@@ -370,7 +370,7 @@ export class CategoryData
         }
 
         let _local_4 = false;
-        var _local_5 = this.getCurrentPart();
+        const _local_5 = this.getCurrentPart();
 
         if(_local_5 && _local_5.partSet)
         {
@@ -402,11 +402,11 @@ export class CategoryData
     {
         const _local_2 = this.getCurrentPart();
 
-        if (((_local_2) && (_local_2.partSet)))
+        if(((_local_2) && (_local_2.partSet)))
         {
             const _local_3 = _local_2.partSet;
 
-            if (_local_3.clubLevel > k)
+            if(_local_3.clubLevel > k)
             {
                 const _local_4 = this.selectPartIndex(0);
 
@@ -421,10 +421,10 @@ export class CategoryData
 
     public stripClubColorsOverLevel(k: number): boolean
     {
-        let _local_2: number[]  = [];
-        let _local_3            = this.getSelectedColors();
+        const _local_2: number[]  = [];
+        const _local_3            = this.getSelectedColors();
         let _local_4            = false;
-        let _local_5            = this.getPalette(0);
+        const _local_5            = this.getPalette(0);
 
         const _local_6 = CategoryData.defaultColorId(_local_5, k);
 

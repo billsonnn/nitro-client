@@ -25,22 +25,22 @@ export class PlaneMaskBitmap
         return this._asset;
     }
 
-    public get normalMinX():Number
+    public get normalMinX(): number
     {
         return this._normalMinX;
     }
 
-    public get normalMaxX():Number
+    public get normalMaxX(): number
     {
         return this._normalMaxX;
     }
 
-    public get normalMinY():Number
+    public get normalMinY(): number
     {
         return this._normalMinY;
     }
 
-    public get normalMaxY():Number
+    public get normalMaxY(): number
     {
         return this._normalMaxY;
     }

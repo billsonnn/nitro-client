@@ -87,31 +87,31 @@ export class AvatarDataContainer implements IAvatarDataContainer
 
     private _Str_1181(k: number, _arg_2: number): Map<string, number[]>
     {
-        var _local_3 = ((k >> 24) & 0xFF);
-        var _local_4 = ((k >> 16) & 0xFF);
-        var _local_5 = ((k >> 8) & 0xFF);
-        var _local_6 = ((k >> 0) & 0xFF);
-        var _local_7 = ((_arg_2 >> 24) & 0xFF);
-        var _local_8 = ((_arg_2 >> 16) & 0xFF);
-        var _local_9 = ((_arg_2 >> 8) & 0xFF);
-        var _local_10 = ((_arg_2 >> 0) & 0xFF);
-        var _local_11 = ((_local_7 - _local_3) / 0xFF);
-        var _local_12 = ((_local_8 - _local_4) / 0xFF);
-        var _local_13 = ((_local_9 - _local_5) / 0xFF);
-        var _local_14 = ((_local_10 - _local_6) / 0xFF);
-        var _local_15: Map<string, number[]> = new Map();
-        var _local_16: number[] = [];
-        var _local_17: number[] = [];
-        var _local_18: number[] = [];
-        var _local_19: number[] = [];
-        var _local_20 = _local_3;
-        var _local_21 = _local_4;
-        var _local_22 = _local_5;
-        var _local_23 = _local_6;
-        var _local_24: number = 0;
-        while (_local_24 < 0x0100)
+        const _local_3 = ((k >> 24) & 0xFF);
+        const _local_4 = ((k >> 16) & 0xFF);
+        const _local_5 = ((k >> 8) & 0xFF);
+        const _local_6 = ((k >> 0) & 0xFF);
+        const _local_7 = ((_arg_2 >> 24) & 0xFF);
+        const _local_8 = ((_arg_2 >> 16) & 0xFF);
+        const _local_9 = ((_arg_2 >> 8) & 0xFF);
+        const _local_10 = ((_arg_2 >> 0) & 0xFF);
+        const _local_11 = ((_local_7 - _local_3) / 0xFF);
+        const _local_12 = ((_local_8 - _local_4) / 0xFF);
+        const _local_13 = ((_local_9 - _local_5) / 0xFF);
+        const _local_14 = ((_local_10 - _local_6) / 0xFF);
+        const _local_15: Map<string, number[]> = new Map();
+        const _local_16: number[] = [];
+        const _local_17: number[] = [];
+        const _local_18: number[] = [];
+        const _local_19: number[] = [];
+        let _local_20 = _local_3;
+        let _local_21 = _local_4;
+        let _local_22 = _local_5;
+        let _local_23 = _local_6;
+        let _local_24 = 0;
+        while(_local_24 < 0x0100)
         {
-            if ((((_local_21 == _local_4) && (_local_22 == _local_5)) && (_local_23 == _local_6)))
+            if((((_local_21 == _local_4) && (_local_22 == _local_5)) && (_local_23 == _local_6)))
             {
                 _local_20 = 0;
             }

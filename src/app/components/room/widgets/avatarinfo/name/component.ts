@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AvatarContextInfoView } from '../AvatarContextInfoView';
 
 @Component({
-	selector: 'nitro-room-avatarinfo-name-component',
+    selector: 'nitro-room-avatarinfo-name-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-name-component context-menu">
         <div class="card align-items-center">

@@ -74,7 +74,7 @@ export class FigureData implements IAvatarImageListener
 
         if(!sets || !sets.length) return;
 
-        for(let set of sets)
+        for(const set of sets)
         {
             const parts = set.split('-');
 
@@ -121,10 +121,10 @@ export class FigureData implements IAvatarImageListener
 
     public getFigureString(): string
     {
-        let figureString: string    = '';
-        let setParts: string[]      = [];
+        let figureString    = '';
+        const setParts: string[]      = [];
 
-        for(let [ setType, setId ] of this._data.entries())
+        for(const [ setType, setId ] of this._data.entries())
         {
             const colorIds = this._colors.get(setType);
 
@@ -182,7 +182,7 @@ export class FigureData implements IAvatarImageListener
             case FigureData.LG:
             case FigureData.SH:
             case FigureData.WA:
-                if (_arg_2 >= 0)
+                if(_arg_2 >= 0)
                 {
                     this._data.set(k, _arg_2);
                 }
@@ -227,7 +227,7 @@ export class FigureData implements IAvatarImageListener
         const setTypes: string[]    = [ FigureData.FACE ];
         const figureSets: string[]  = [];
 
-        for(let setType of setTypes)
+        for(const setType of setTypes)
         {
             const colors = this._colors.get(setType);
 
@@ -243,7 +243,7 @@ export class FigureData implements IAvatarImageListener
             {
                 let i = 0;
 
-                while (i < colors.length)
+                while(i < colors.length)
                 {
                     figureSet = (figureSet + ('-' + colors[i]));
 
@@ -254,9 +254,9 @@ export class FigureData implements IAvatarImageListener
             figureSets.push(figureSet);
         }
 
-       let i = 0;
+        let i = 0;
 
-        while (i < figureSets.length)
+        while(i < figureSets.length)
         {
             figureString = (figureString + figureSets[i]);
 

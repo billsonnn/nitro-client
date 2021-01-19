@@ -26,16 +26,16 @@ export class RoomUnitParser implements IMessageParser
 
         while(i < totalUsers)
         {
-            let id        = wrapper.readInt();
-            let username  = wrapper.readString();
-            let custom    = wrapper.readString();
+            const id        = wrapper.readInt();
+            const username  = wrapper.readString();
+            const custom    = wrapper.readString();
             let figure    = wrapper.readString();
-            let roomIndex = wrapper.readInt();
-            let x         = wrapper.readInt();
-            let y         = wrapper.readInt();
-            let z         = parseFloat(wrapper.readString());
-            let direction = wrapper.readInt();
-            let type      = wrapper.readInt();
+            const roomIndex = wrapper.readInt();
+            const x         = wrapper.readInt();
+            const y         = wrapper.readInt();
+            const z         = parseFloat(wrapper.readString());
+            const direction = wrapper.readInt();
+            const type      = wrapper.readInt();
 
             const user = new UserMessageData(roomIndex);
 
@@ -91,7 +91,7 @@ export class RoomUnitParser implements IMessageParser
                 user.webID      = (roomIndex * -1);
 
                 if(figure.indexOf('/') === -1) user.figure = figure;
-                else user.figure = "hr-100-.hd-180-1.ch-876-66.lg-270-94.sh-300-64";
+                else user.figure = 'hr-100-.hd-180-1.ch-876-66.lg-270-94.sh-300-64';
 
                 user.sex = UserMessageData.M;
             }
@@ -132,45 +132,45 @@ export class RoomUnitParser implements IMessageParser
 
     private resolveSex(sex: string): string
     {
-        if(sex.substr(0, 1).toLowerCase() === "f") return UserMessageData.F;
+        if(sex.substr(0, 1).toLowerCase() === 'f') return UserMessageData.F;
 
         return UserMessageData.M;
     }
 
     private convertSwimFigure(k: string, _arg_2: string, _arg_3: string): string
     {
-        let _local_4    = _arg_2.split(".");
+        const _local_4    = _arg_2.split('.');
         let _local_5    = 1;
         let _local_6    = 1;
         let _local_7    = 1;
-        let _local_8    = 10000;
+        const _local_8    = 10000;
         let i           = 0;
 
         while(i < _local_4.length)
         {
             const _local_13 = _local_4[i];
-            const _local_14 = _local_13.split("-");
+            const _local_14 = _local_13.split('-');
 
             if(_local_14.length > 2)
             {
                 const _local_15 = _local_14[0];
 
-                if(_local_15 === "hd") _local_5 = parseInt(_local_14[2]);
+                if(_local_15 === 'hd') _local_5 = parseInt(_local_14[2]);
             }
 
             i++;
         }
 
-        const _local_10 = ["238,238,238", "250,56,49", "253,146,160", "42,199,210", "53,51,44", "239,255,146", "198,255,152", "255,146,90", "157,89,126", "182,243,255", "109,255,51", "51,120,201", "255,182,49", "223,161,233", "249,251,50", "202,175,143", "197,198,197", "71,98,61", "138,131,97", "255,140,51", "84,198,39", "30,108,153", "152,79,136", "119,200,255", "255,192,142", "60,75,135", "124,44,71", "215,255,227", "143,63,28", "255,99,147", "31,155,121", "253,255,51"];
-        const _local_11 = k.split("=");
+        const _local_10 = ['238,238,238', '250,56,49', '253,146,160', '42,199,210', '53,51,44', '239,255,146', '198,255,152', '255,146,90', '157,89,126', '182,243,255', '109,255,51', '51,120,201', '255,182,49', '223,161,233', '249,251,50', '202,175,143', '197,198,197', '71,98,61', '138,131,97', '255,140,51', '84,198,39', '30,108,153', '152,79,136', '119,200,255', '255,192,142', '60,75,135', '124,44,71', '215,255,227', '143,63,28', '255,99,147', '31,155,121', '253,255,51'];
+        const _local_11 = k.split('=');
 
         if(_local_11.length > 1)
         {
-            const _local_16 = _local_11[1].split("/");
+            const _local_16 = _local_11[1].split('/');
             const _local_17 = _local_16[0];
             const _local_18 = _local_16[1];
 
-            if(_arg_3 === "F") _local_7 = 10010;
+            if(_arg_3 === 'F') _local_7 = 10010;
             else _local_7 = 10011;
 
             const _local_19 = _local_10.indexOf(_local_18);
@@ -178,7 +178,7 @@ export class RoomUnitParser implements IMessageParser
             _local_6 = ((_local_8 + _local_19) + 1);
         }
 
-        return _arg_2 + (((((".bds-10001-" + _local_5) + ".ss-") + _local_7) + "-") + _local_6);
+        return _arg_2 + ((((('.bds-10001-' + _local_5) + '.ss-') + _local_7) + '-') + _local_6);
     }
 
     public get users(): UserMessageData[]

@@ -18,7 +18,8 @@ export class AvatarEditorModelViewerComponent implements OnChanges
 
     private _activeCategory: CategoryData;
 
-    constructor(private _avatarEditorService: AvatarEditorService) {}
+    constructor(private _avatarEditorService: AvatarEditorService) 
+    {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -42,7 +43,7 @@ export class AvatarEditorModelViewerComponent implements OnChanges
     {
         if(!this.model) return;
 
-        for(let name of this.model.categories.getKeys())
+        for(const name of this.model.categories.getKeys())
         {
             if(!name) continue;
 
@@ -64,7 +65,7 @@ export class AvatarEditorModelViewerComponent implements OnChanges
 
         this._activeCategory = category;
 
-        for(let part of this._activeCategory.parts)
+        for(const part of this._activeCategory.parts)
         {
             if(!part || !part.isSelected) continue;
 

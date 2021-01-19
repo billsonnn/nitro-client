@@ -12,6 +12,10 @@ export class MatchSnapshotComponent extends WiredCondition
     public static CODE: number          = WiredConditionType.STATES_MATCH;
     public static NEGATIVE_CODE: number = WiredConditionType.NOT_STATES_MATCH;
 
+    public state: boolean;
+    public direction: boolean;
+    public position: boolean;
+
     public get code(): number
     {
         return MatchSnapshotComponent.CODE;
@@ -34,54 +38,18 @@ export class MatchSnapshotComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        // this.select(this._Str_10847(k), _arg_2.getBoolean(0));
-        // this.select(this._Str_10700(k), _arg_2.getBoolean(1));
-        // this.select(this._Str_10629(k), _arg_2.getBoolean(2));
+        this.state = trigger.getBoolean(0);
+        this.direction = trigger.getBoolean(1);
+        this.position = trigger.getBoolean(2);
     }
 
-    // private select(k:ICheckBoxWindow, _arg_2: boolean): void
-    // {
-    //     if (_arg_2)
-    //     {
-    //         k.select();
-    //     }
-    //     else
-    //     {
-    //         k._Str_2205();
-    //     }
-    // }
-
-    // public readIntegerParamsFromForm(k:IWindowContainer):Array
-    // {
-    //     var _local_2:Array = new Array();
-    //     _local_2.push(this._Str_7329(this._Str_10847(k)));
-    //     _local_2.push(this._Str_7329(this._Str_10700(k)));
-    //     _local_2.push(this._Str_7329(this._Str_10629(k)));
-    //     return _local_2;
-    // }
+    public readIntegerParamsFromForm(): number[]
+    {
+        return [ this.state ? 1 : 0, this.direction ? 1 : 0, this.position ? 1 : 0 ];
+    }
 
     public get hasSpecialInputs(): boolean
     {
         return true;
     }
-
-    // private _Str_10847(k:IWindowContainer):ICheckBoxWindow
-    // {
-    //     return ICheckBoxWindow(k.findChildByName("include_state_checkbox"));
-    // }
-
-    // private _Str_10700(k:IWindowContainer):ICheckBoxWindow
-    // {
-    //     return ICheckBoxWindow(k.findChildByName("include_rotation_checkbox"));
-    // }
-
-    // private _Str_10629(k:IWindowContainer):ICheckBoxWindow
-    // {
-    //     return ICheckBoxWindow(k.findChildByName("include_location_checkbox"));
-    // }
-
-    // private _Str_7329(k:ICheckBoxWindow): number
-    // {
-    //     return (k._Str_2365) ? 1 : 0;
-    // }
 }

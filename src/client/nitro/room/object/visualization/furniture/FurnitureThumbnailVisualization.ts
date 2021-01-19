@@ -145,6 +145,6 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
 
     protected _Str_12961(k: number, _arg_2: number): string
     {
-        return [this._type, k, "thumb", _arg_2].join("_");
+        return [this._type, k, 'thumb', _arg_2].join('_');
     }
 }

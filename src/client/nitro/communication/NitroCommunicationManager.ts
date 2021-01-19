@@ -47,7 +47,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
 
         if(this._demo) this._demo.init();
 
-        this._connection.init(Nitro.instance.getConfiguration<string>("socket.url"));
+        this._connection.init(Nitro.instance.getConfiguration<string>('socket.url'));
     }
 
     protected onDispose(): void
@@ -66,17 +66,17 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
 
     private onConnectionOpenedEvent(event: Event): void
     {
-        this.logger.log(`Connection Initialized`);
+        this.logger.log('Connection Initialized');
     }
 
     private onConnectionClosedEvent(event: CloseEvent): void
     {
-        this.logger.log(`Connection Closed`);
+        this.logger.log('Connection Closed');
     }
 
     private onConnectionErrorEvent(event: Event): void
     {
-        this.logger.log(`Connection Error`);
+        this.logger.log('Connection Error');
     }
 
     private onConnectionAuthenticatedEvent(event: NitroEvent): void

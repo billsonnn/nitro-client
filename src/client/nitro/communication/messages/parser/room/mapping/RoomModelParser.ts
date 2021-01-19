@@ -33,10 +33,10 @@ export class RoomModelParser implements IMessageParser
         this._model         = wrapper.readString();
 
         const model     = this._model.split('\r');
-        let modelRows = model.length;
+        const modelRows = model.length;
 
         let width   = 0;
-        let height  = 0;
+        const height  = 0;
 
         let iterator = 0;
 

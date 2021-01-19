@@ -1,15 +1,15 @@
 ﻿import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class TradingCancelComposer implements IMessageComposer 
+export class TradingCancelComposer implements IMessageComposer<ConstructorParameters<typeof TradingCancelComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof TradingCancelComposer>;
 
     constructor()
     {
         this._data = [];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

@@ -17,6 +17,7 @@ import { NewConsoleMessageEvent } from '../../../../client/nitro/communication/m
 import { NewFriendRequestEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/NewFriendRequestEvent';
 import { RoomInviteErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteErrorEvent';
 import { RoomInviteEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteEvent';
+import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 import { FriendListMainComponent } from '../components/main/main.component';
@@ -65,14 +66,14 @@ export class FriendListService implements OnDestroy
             new RoomInviteEvent(this.onRoomInviteEvent.bind(this))
         ];
 
-        for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
     }
 
     private unregisterMessages(): void
     {
         if(this._messages && this._messages.length)
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
         }
     }
 
@@ -193,6 +194,8 @@ export class FriendListService implements OnDestroy
         if(!parser) return;
 
         console.log(parser);
+
+        this.requestFriendRequests();
     }
 
     private onMiniMailNewMessageEvent(event: MiniMailNewMessageEvent): void
@@ -259,6 +262,11 @@ export class FriendListService implements OnDestroy
         if(!parser) return;
 
         console.log(parser);
+    }
+
+    private requestFriendRequests(): void
+    {
+        Nitro.instance.communication.connection.send(new GetFriendRequestsComposer());
     }
 
     public get component(): FriendListMainComponent
