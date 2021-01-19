@@ -196,6 +196,8 @@ import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUs
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
+import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
+import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
 import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
@@ -563,6 +565,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
+        this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
+        this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
         this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
         this._composers.set(OutgoingHeader.BOT_PICKUP, RemoveBotFromFlatComposer);
 
