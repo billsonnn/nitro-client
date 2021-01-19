@@ -1,18 +1,17 @@
-<div class="nitro-toolbar-component">
-    <div class="card rounded-0">
-        <div #navigationList class="d-flex card-body justify-content-between py-0 w-100">
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-dark"></i></li>
+<div class="nitro-toolbar-component d-flex flex-row">
+    <div class="card">
+        <div #navigationList class="d-flex card-body justify-content-between p-0 w-100">
+            <ul class="list-group list-group-vertical">
+                <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-light"></i></li>
                 <li class="list-group-item" *ngIf="!isInRoom" (click)="clickIcon('home_room')"><i class="icon icon-house"></i></li>
                 <li class="list-group-item" (click)="clickIcon('navigator')"><i class="icon icon-rooms"></i></li>
                 <li class="list-group-item" (click)="clickIcon('catalog')"><i class="icon icon-catalog"></i></li>
                 <li class="list-group-item" (click)="clickIcon('inventory')"><i class="icon icon-inventory"></i> <div class="badge badge-secondary" *ngIf="unseenCount">{{ unseenCount }}</div></li>
+                <li class="list-group-item" (click)="clickIcon('friendlist')"><i class="icon icon-friendall"></i></li>
+                <li class="list-group-item splitter"></li>
                 <li class="list-group-item avatar-image" (click)="clickIcon('me_menu')">
                     <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
                 </li>
-            </ul>
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item" (click)="clickIcon('friendlist')"><i class="icon icon-friendall"></i></li>
             </ul>
         </div>
     </div>

@@ -3,9 +3,11 @@
     position: relative;
     right: 30px;
     pointer-events: all;
+    height: 100%;
 
     i.icon {
         cursor: pointer;
+        align-self: center;
     }
 
     .component-styles-container {

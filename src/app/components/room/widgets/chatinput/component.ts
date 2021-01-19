@@ -16,7 +16,7 @@ import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMes
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
-            <input #chatInputView type="text" class="chat-input" [maxLength]="inputMaxLength" />
+            <input #chatInputView type="text" class="chat-input" [style.width]="_chatWidth" [maxLength]="inputMaxLength" />
         </div>
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
@@ -40,6 +40,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private _chatModeIdShout: string                    = null;
     private _chatModeIdSpeak: string                    = null;
     private _maxChatLength: number                      = 0;
+    public _chatWidth: number                           = 0;
 
     constructor(
         private ngZone: NgZone
@@ -158,7 +159,15 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         if(document.activeElement !== input) this.setInputFocus();
 
         const key       = event.keyCode;
-        const shiftKey  = event.shiftKey;
+        const shiftKey = event.shiftKey;
+        
+        // length  * 8 ig
+        
+        let width = (this.chatInputView.nativeElement.value.length / this.chatInputView.nativeElement.value.length + 8 - 1) * this.chatInputView.nativeElement.value.length
+        
+        this.chatInputView.nativeElement.style.width = width + "px";
+
+        //
 
         switch(key)
         {
@@ -180,6 +189,8 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
                         this.lastContent        = '';
                     }
                 }
+                return;
+            default:
                 return;
         }
     }
@@ -389,4 +400,5 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         return (this.widgetHandler as ChatInputWidgetHandler);
     }
+
 }
