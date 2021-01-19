@@ -43,6 +43,7 @@ export interface IRoomEngineServices
     updateMousePointer(type: string, objectId: number, objectType: string): void;
     _Str_17948(): void;
     getRoomTileObjectMap(k: number): TileObjectMap;
+    isPlayingGame(): boolean;
     connection: IConnection;
     sessionDataManager: ISessionDataManager;
     roomSessionManager: IRoomSessionManager;

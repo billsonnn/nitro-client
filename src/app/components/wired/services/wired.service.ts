@@ -101,7 +101,7 @@ export class WiredService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() => this._component.setupTrigger(parser.definition));
     }
 
     private onWiredFurniConditionEvent(event: WiredFurniConditionEvent): void

@@ -14,6 +14,7 @@ import { Vector3d } from '../../room/utils/Vector3d';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from '../communication/messages/outgoing/room/engine/ModifyWallItemDataComposer';
 import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
+import { PlaceBotComposer } from '../communication/messages/outgoing/room/engine/PlaceBotComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -148,7 +149,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         let category = this._roomEngine.getRoomObjectCategoryForType(type);
 
-        if(category !== RoomObjectCategory.ROOM) category = RoomObjectCategory.MINIMUM;
+        if(category !== RoomObjectCategory.ROOM && (!this._roomEngine.isPlayingGame() || category !== RoomObjectCategory.UNIT)) category = RoomObjectCategory.MINIMUM;
 
         const _local_7 = this._Str_18648(category, event.type);
 
@@ -787,7 +788,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
 
-            if(!(((event instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, event._Str_16836, event._Str_17676, stackingHeightMap))))
+            if(!(((event instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, Math.floor(event.tileX + 0.5), Math.floor(event.tileY + 0.5), stackingHeightMap))))
             {
                 this._Str_18155(roomObject, selectedData, selectedData.loc.x, selectedData.loc.y, stackingHeightMap);
 
@@ -919,7 +920,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             else if(selectedData.category === RoomObjectCategory.UNIT)
             {
-                if((event instanceof RoomObjectTileMouseEvent) && this._Str_25586(roomObject, (event.tileX + 0.5), (event.tileY + 0.5), this._roomEngine.getLegacyWallGeometry(roomId)))
+                if((event instanceof RoomObjectTileMouseEvent) && !this._Str_25586(roomObject, Math.floor(event.tileX + 0.5), Math.floor(event.tileY + 0.5), this._roomEngine.getLegacyWallGeometry(roomId)))
                 {
                     this._roomEngine.removeRoomObjectUser(roomId, selectedData.id);
 
@@ -1356,7 +1357,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                         else if(selectedData.typeId === RoomObjectType.RENTABLE_BOT)
                         {
-                            // this._roomEngine.connection.send(new _Str_8136(_local_5, int(_local_9), int(_local_10)));
+                            this._roomEngine.connection.send(new PlaceBotComposer(objectId, Math.floor(x), Math.floor(y)));
                         }
                     }
 
