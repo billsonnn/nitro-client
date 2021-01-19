@@ -13,11 +13,11 @@ i {
         background-size: contain;
 
         &.icon-nitro-light {
-            background-image: url('https://nitro-assets.hrw.pw/logos/nitro-n-light.svg');
+            background-image: url('./images/nitro/nitro-n-light.svg');
         }
 
         &.icon-nitro-dark {
-            background-image: url('https://nitro-assets.hrw.pw/logos/nitro-n-dark.svg');
+            background-image: url('./images/nitro/nitro-n-dark.svg');
         }
 
         &.icon-nitro-light,
@@ -41,12 +41,6 @@ i {
         &.icon-currency-5 {
             background-image: url('./images/wallet/icons/5.png');
             width: 15px;
-            height: 15px;
-        }
-
-        &.icon-currency-101 {
-            background-image: url('./images/wallet/icons/101.png');
-            width: 12px;
             height: 15px;
         }
 
