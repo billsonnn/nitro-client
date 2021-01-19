@@ -4,7 +4,7 @@ import { HabbopediaPageComponent } from './components/page/page.component';
 import { HabbopediaService } from './services/habbopedia.service';
 
 @NgModule({
-	imports: [
+    imports: [
     ],
     exports: [
         HabbopediaMainComponent,
@@ -18,4 +18,5 @@ import { HabbopediaService } from './services/habbopedia.service';
         HabbopediaPageComponent
     ]
 })
-export class HabbopediaModule {}
+export class HabbopediaModule 
+{}

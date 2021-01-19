@@ -24,7 +24,7 @@ import { RoomInfoStandRentableBotComponent } from '../rentablebot/rentablebot.co
 import { RoomInfoStandUserComponent } from '../user/user.component';
 
 @Component({
-	templateUrl: './main.template.html'
+    templateUrl: './main.template.html'
 })
 export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 {
@@ -109,7 +109,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
         if(type > 0)
         {
-            switch (event.type)
+            switch(event.type)
             {
                 case RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED:
                     if(type === InfoStandType.FURNI && (event.id === this._furniData.id)) remove = true;

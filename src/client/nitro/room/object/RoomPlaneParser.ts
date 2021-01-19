@@ -82,11 +82,11 @@ export class RoomPlaneParser
     {
         if(!matricies) return null;
 
-        let length = matricies.length;
+        const length = matricies.length;
 
         if(!length) return null;
 
-        var _local_6: number[] = [];
+        const _local_6: number[] = [];
 
         let i = 0;
 
@@ -129,44 +129,43 @@ export class RoomPlaneParser
 
     private static expandFloorTiles(k: number[][]): number[][]
     {
-        var _local_2: number;
-        var _local_5: number;
-        var _local_6: number;
-        var _local_7: number;
-        var _local_8: number;
-        var _local_10: number;
-        var _local_11: number;
-        var _local_12: number;
-        var _local_13: number;
-        var _local_14: number;
-        var _local_15: number;
-        var _local_16: number;
-        var _local_17: number;
-        _local_2 = k.length;
-        var _local_3: number = k[0].length;
-        var _local_4: number[][] = [];
+        let _local_5: number;
+        let _local_6: number;
+        let _local_7: number;
+        let _local_8: number;
+        let _local_10: number;
+        let _local_11: number;
+        let _local_12: number;
+        let _local_13: number;
+        let _local_14: number;
+        let _local_15: number;
+        let _local_16: number;
+        let _local_17: number;
+        const _local_2 = k.length;
+        const _local_3: number = k[0].length;
+        const _local_4: number[][] = [];
         _local_6 = 0;
-        while (_local_6 < (_local_2 * 4))
+        while(_local_6 < (_local_2 * 4))
         {
             _local_4[_local_6] = [];
             _local_6++;
         }
-        var _local_9: number = 0;
+        let _local_9 = 0;
         _local_6 = 0;
-        while (_local_6 < _local_2)
+        while(_local_6 < _local_2)
         {
             _local_10 = 0;
             _local_5 = 0;
-            while (_local_5 < _local_3)
+            while(_local_5 < _local_3)
             {
                 _local_11 = k[_local_6][_local_5];
-                if (((_local_11 < 0) || (_local_11 <= 0xFF)))
+                if(((_local_11 < 0) || (_local_11 <= 0xFF)))
                 {
                     _local_8 = 0;
-                    while (_local_8 < 4)
+                    while(_local_8 < 4)
                     {
                         _local_7 = 0;
-                        while (_local_7 < 4)
+                        while(_local_7 < 4)
                         {
                             if(_local_4[(_local_9 + _local_8)] === undefined) _local_4[(_local_9 + _local_8)] = [];
                             
@@ -184,7 +183,7 @@ export class RoomPlaneParser
                     _local_15 = (_local_12 + (((_local_11 >> 9) & 0x01) * 3));
                     _local_16 = (_local_12 + (((_local_11 >> 8) & 0x01) * 3));
                     _local_7 = 0;
-                    while (_local_7 < 3)
+                    while(_local_7 < 3)
                     {
                         _local_17 = (_local_7 + 1);
                         _local_4[_local_9][(_local_10 + _local_7)] = (((_local_13 * (3 - _local_7)) + (_local_14 * _local_7)) / 3);
@@ -209,31 +208,32 @@ export class RoomPlaneParser
 
     private static addTileTypes(k: number[][]): void
     {
-        var _local_4: number;
-        var _local_5: number;
-        var _local_6: number;
-        var _local_7: number;
-        var _local_8: number;
-        var _local_9: number;
-        var _local_10: number;
-        var _local_11: number;
-        var _local_12: number;
-        var _local_13: number;
-        var _local_14: number;
-        var _local_15: number;
-        var _local_16: number;
-        var _local_17: number;
-        var _local_2: number = (k.length - 1);
-        var _local_3: number = (k[0].length - 1);
+        let _local_4: number;
+        let _local_5: number;
+        let _local_6: number;
+        let _local_7: number;
+        let _local_8: number;
+        let _local_9: number;
+        let _local_10: number;
+        let _local_11: number;
+        let _local_12: number;
+        let _local_13: number;
+        let _local_14: number;
+        let _local_15: number;
+        let _local_16: number;
+        let _local_17: number;
+        const _local_2: number = (k.length - 1);
+        const _local_3: number = (k[0].length - 1);
         _local_5 = 1;
-        while (_local_5 < _local_2)
+        while(_local_5 < _local_2)
         {
             _local_4 = 1;
-            while (_local_4 < _local_3)
+            while(_local_4 < _local_3)
             {
                 _local_6 = k[_local_5][_local_4];
-                if (_local_6 < 0)
+                if(_local_6 < 0)
                 {
+                    //
                 }
                 else
                 {
@@ -248,7 +248,7 @@ export class RoomPlaneParser
                     _local_15 = (_local_6 + 1);
                     _local_16 = (_local_6 - 1);
                     _local_17 = (((((((_local_7 == _local_15) || (_local_8 == _local_15)) || (_local_10 == _local_15)) ? 8 : 0) | ((((_local_9 == _local_15) || (_local_8 == _local_15)) || (_local_11 == _local_15)) ? 4 : 0)) | ((((_local_12 == _local_15) || (_local_13 == _local_15)) || (_local_10 == _local_15)) ? 2 : 0)) | ((((_local_14 == _local_15) || (_local_13 == _local_15)) || (_local_11 == _local_15)) ? 1 : 0));
-                    if (_local_17 == 15)
+                    if(_local_17 == 15)
                     {
                         _local_17 = 0;
                     }
@@ -265,7 +265,7 @@ export class RoomPlaneParser
         k.shift();
         k.pop();
 
-        for(let _local_2 of k)
+        for(const _local_2 of k)
         {
             _local_2.shift();
             _local_2.pop();
@@ -274,14 +274,14 @@ export class RoomPlaneParser
 
     private static padHeightMap(k: number[][]): void
     {
-        var _local_2: number[] = [];
-        var _local_3: number[] = [];
-        for(let _local_4 of k)
+        const _local_2: number[] = [];
+        const _local_3: number[] = [];
+        for(const _local_4 of k)
         {
             _local_4.push(RoomPlaneParser.TILE_BLOCKED);
             _local_4.unshift(RoomPlaneParser.TILE_BLOCKED);
         }
-        for(let _local_5 of k[0])
+        for(const _local_5 of k[0])
         {
             _local_2.push(RoomPlaneParser.TILE_BLOCKED);
             _local_3.push(RoomPlaneParser.TILE_BLOCKED);
@@ -328,7 +328,7 @@ export class RoomPlaneParser
 
     public get floorHeight(): number
     {
-        if (this._fixedWallHeight != -1)
+        if(this._fixedWallHeight != -1)
         {
             return this._fixedWallHeight;
         }
@@ -337,7 +337,7 @@ export class RoomPlaneParser
 
     public get wallHeight(): number
     {
-        if (this._fixedWallHeight != -1)
+        if(this._fixedWallHeight != -1)
         {
             return this._fixedWallHeight + 3.6;
         }
@@ -346,7 +346,7 @@ export class RoomPlaneParser
 
     public set wallHeight(k: number)
     {
-        if (k < 0)
+        if(k < 0)
         {
             k = 0;
         }
@@ -360,7 +360,7 @@ export class RoomPlaneParser
 
     public set wallThicknessMultiplier(k: number)
     {
-        if (k < 0)
+        if(k < 0)
         {
             k = 0;
         }
@@ -374,7 +374,7 @@ export class RoomPlaneParser
 
     public set floorThicknessMultiplier(k: number)
     {
-        if (k < 0)
+        if(k < 0)
         {
             k = 0;
         }
@@ -387,7 +387,7 @@ export class RoomPlaneParser
         this._tileMatrix = null;
         this._tileMatrixOriginal = null;
         this._floorHoleMatrix = null;
-        if (this._floorHoles != null)
+        if(this._floorHoles != null)
         {
             this._floorHoles.clear();
             this._floorHoles = null;
@@ -421,15 +421,15 @@ export class RoomPlaneParser
 
         let y = 0;
 
-        while (y < height)
+        while(y < height)
         {
-            let tileMatrix            = [];
-            let tileMatrixOriginal    = [];
-            let floorHoleMatrix       = [];
+            const tileMatrix            = [];
+            const tileMatrixOriginal    = [];
+            const floorHoleMatrix       = [];
 
             let x = 0;
 
-            while (x < width)
+            while(x < width)
             {
                 tileMatrix[x]           = RoomPlaneParser.TILE_BLOCKED;
                 tileMatrixOriginal[x]   = RoomPlaneParser.TILE_BLOCKED;
@@ -457,82 +457,82 @@ export class RoomPlaneParser
 
     public setTileHeight(k: number, _arg_2: number, _arg_3: number): boolean
     {
-        var _local_4: number[];
-        var _local_5: boolean;
-        var _local_6: number;
-        var _local_7: boolean;
-        var _local_8: number;
-        if (((((k >= 0) && (k < this._width)) && (_arg_2 >= 0)) && (_arg_2 < this._height)))
+        let _local_4: number[];
+        let _local_5: boolean;
+        let _local_6: number;
+        let _local_7: boolean;
+        let _local_8: number;
+        if(((((k >= 0) && (k < this._width)) && (_arg_2 >= 0)) && (_arg_2 < this._height)))
         {
             _local_4 = this._tileMatrix[_arg_2];
             
             _local_4[k] = _arg_3;
-            if (_arg_3 >= 0)
+            if(_arg_3 >= 0)
             {
-                if (k < this._minX)
+                if(k < this._minX)
                 {
                     this._minX = k;
                 }
-                if (k > this._maxX)
+                if(k > this._maxX)
                 {
                     this._maxX = k;
                 }
-                if (_arg_2 < this._minY)
+                if(_arg_2 < this._minY)
                 {
                     this._minY = _arg_2;
                 }
-                if (_arg_2 > this._maxY)
+                if(_arg_2 > this._maxY)
                 {
                     this._maxY = _arg_2;
                 }
             }
             else
             {
-                if (((k == this._minX) || (k == this._maxX)))
+                if(((k == this._minX) || (k == this._maxX)))
                 {
                     _local_5 = false;
                     _local_6 = this._minY;
-                    while (_local_6 < this._maxY)
+                    while(_local_6 < this._maxY)
                     {
-                        if (this.getTileHeightInternal(k, _local_6) >= 0)
+                        if(this.getTileHeightInternal(k, _local_6) >= 0)
                         {
                             _local_5 = true;
                             break;
                         }
                         _local_6++;
                     }
-                    if (!_local_5)
+                    if(!_local_5)
                     {
-                        if (k == this._minX)
+                        if(k == this._minX)
                         {
                             this._minX++;
                         }
-                        if (k == this._maxX)
+                        if(k == this._maxX)
                         {
                             this._maxX--;
                         }
                     }
                 }
-                if (((_arg_2 == this._minY) || (_arg_2 == this._maxY)))
+                if(((_arg_2 == this._minY) || (_arg_2 == this._maxY)))
                 {
                     _local_7 = false;
                     _local_8 = this._minX;
-                    while (_local_8 < this._maxX)
+                    while(_local_8 < this._maxX)
                     {
-                        if (this.getTileHeight(_local_8, _arg_2) >= 0)
+                        if(this.getTileHeight(_local_8, _arg_2) >= 0)
                         {
                             _local_7 = true;
                             break;
                         }
                         _local_8++;
                     }
-                    if (!_local_7)
+                    if(!_local_7)
                     {
-                        if (_arg_2 == this._minY)
+                        if(_arg_2 == this._minY)
                         {
                             this._minY++;
                         }
-                        if (_arg_2 == this._maxY)
+                        if(_arg_2 == this._maxY)
                         {
                             this._maxY--;
                         }
@@ -546,12 +546,12 @@ export class RoomPlaneParser
 
     public getTileHeight(k: number, _arg_2: number): number
     {
-        if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
+        if(((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
             return RoomPlaneParser.TILE_BLOCKED;
         }
 
-        var _local_3 = this._tileMatrix[_arg_2];
+        const _local_3 = this._tileMatrix[_arg_2];
 
         if(_local_3[k] === undefined) return 0;
 
@@ -560,38 +560,38 @@ export class RoomPlaneParser
 
     private getTileHeightOriginal(k: number, _arg_2: number): number
     {
-        if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
+        if(((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
             return RoomPlaneParser.TILE_BLOCKED;
         }
-        if (this._floorHoleMatrix[_arg_2][k])
+        if(this._floorHoleMatrix[_arg_2][k])
         {
             return RoomPlaneParser.TILE_HOLE;
         }
-        var _local_3 = this._tileMatrixOriginal[_arg_2];
+        const _local_3 = this._tileMatrixOriginal[_arg_2];
         return _local_3[k];
     }
 
     private getTileHeightInternal(k: number, _arg_2: number): number
     {
-        if (((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
+        if(((((k < 0) || (k >= this._width)) || (_arg_2 < 0)) || (_arg_2 >= this._height)))
         {
             return RoomPlaneParser.TILE_BLOCKED;
         }
-        var _local_3 = this._tileMatrix[_arg_2];
+        const _local_3 = this._tileMatrix[_arg_2];
         return _local_3[k];
     }
 
     public initializeFromTileData(k: number=-1): boolean
     {
-        var _local_2: number;
-        var _local_3: number;
+        let _local_2: number;
+        let _local_3: number;
         this._fixedWallHeight = k;
         _local_3 = 0;
-        while (_local_3 < this._height)
+        while(_local_3 < this._height)
         {
             _local_2 = 0;
-            while (_local_2 < this._width)
+            while(_local_2 < this._width)
             {
                 if(this._tileMatrixOriginal[_local_3] === undefined) this._tileMatrixOriginal[_local_3] = [];
                 this._tileMatrixOriginal[_local_3][_local_2] = this._tileMatrix[_local_3][_local_2];
@@ -599,16 +599,16 @@ export class RoomPlaneParser
             }
             _local_3++;
         }
-        var _local_4: Point = RoomPlaneParser.findEntranceTile(this._tileMatrix);
+        const _local_4: Point = RoomPlaneParser.findEntranceTile(this._tileMatrix);
 
         _local_3 = 0;
-        while (_local_3 < this._height)
+        while(_local_3 < this._height)
         {
             _local_2 = 0;
-            while (_local_2 < this._width)
+            while(_local_2 < this._width)
             {
                 if(this._floorHoleMatrix[_local_3] === undefined) this._floorHoleMatrix[_local_3] = [];
-                if (this._floorHoleMatrix[_local_3][_local_2])
+                if(this._floorHoleMatrix[_local_3][_local_2])
                 {
                     this.setTileHeight(_local_2, _local_3, RoomPlaneParser.TILE_HOLE);
                 }
@@ -622,25 +622,24 @@ export class RoomPlaneParser
 
     private initialize(k: Point): boolean
     {
-        var _local_5: number[][];
-        var _local_2: number = 0;
-        if (k != null)
+        let _local_2 = 0;
+        if(k != null)
         {
             _local_2 = this.getTileHeight(k.x, k.y);
             this.setTileHeight(k.x, k.y, RoomPlaneParser.TILE_BLOCKED);
         }
         this._floorHeight = RoomPlaneParser.getFloorHeight(this._tileMatrix);
         this.createWallPlanes();
-        var _local_3: number[][] = [];
+        const _local_3: number[][] = [];
 
-        for(let _local_4 of this._tileMatrix) _local_3.push(_local_4.concat());
+        for(const _local_4 of this._tileMatrix) _local_3.push(_local_4.concat());
 
         RoomPlaneParser.padHeightMap(_local_3);
         RoomPlaneParser.addTileTypes(_local_3);
         RoomPlaneParser.unpadHeightMap(_local_3);
-        _local_5 = RoomPlaneParser.expandFloorTiles(_local_3);
+        const _local_5 = RoomPlaneParser.expandFloorTiles(_local_3);
         this.extractPlanes(_local_5);
-        if (k != null)
+        if(k != null)
         {
             this.setTileHeight(k.x, k.y, _local_2);
             this.addFloor(new Vector3d((k.x + 0.5), (k.y + 0.5), _local_2), new Vector3d(-1, 0, 0), new Vector3d(0, -1, 0), false, false, false, false);
@@ -651,32 +650,32 @@ export class RoomPlaneParser
 
     private generateWallData(k: Point, _arg_2: boolean): RoomWallData
     {
-        var _local_8: boolean;
-        var _local_9: boolean;
-        var _local_10: number;
-        var _local_11: Point;
-        var _local_12: number;
-        var _local_3: RoomWallData = new RoomWallData();
-        var _local_4: Function[] = [this.extractTopWall.bind(this), this.extractRightWall.bind(this), this.extractBottomWall.bind(this), this.extractLeftWall.bind(this)];
-        var _local_5: number = 0;
-        var _local_6: Point = new Point(k.x, k.y);
-        var _local_7: number = 0;
-        while (_local_7++ < 1000)
+        let _local_8: boolean;
+        let _local_9: boolean;
+        let _local_10: number;
+        let _local_11: Point;
+        let _local_12: number;
+        const _local_3: RoomWallData = new RoomWallData();
+        const _local_4: Function[] = [this.extractTopWall.bind(this), this.extractRightWall.bind(this), this.extractBottomWall.bind(this), this.extractLeftWall.bind(this)];
+        let _local_5 = 0;
+        let _local_6: Point = new Point(k.x, k.y);
+        let _local_7 = 0;
+        while(_local_7++ < 1000)
         {
             _local_8 = false;
             _local_9 = false;
             _local_10 = _local_5;
-            if (((((_local_6.x < this.minX) || (_local_6.x > this.maxX)) || (_local_6.y < this.minY)) || (_local_6.y > this.maxY)))
+            if(((((_local_6.x < this.minX) || (_local_6.x > this.maxX)) || (_local_6.y < this.minY)) || (_local_6.y > this.maxY)))
             {
                 _local_8 = true;
             }
             _local_11 = _local_4[_local_5](_local_6, _arg_2);
-            if (_local_11 == null)
+            if(_local_11 == null)
             {
                 return null;
             }
             _local_12 = (Math.abs((_local_11.x - _local_6.x)) + Math.abs((_local_11.y - _local_6.y)));
-            if (((_local_6.x == _local_11.x) || (_local_6.y == _local_11.y)))
+            if(((_local_6.x == _local_11.x) || (_local_6.y == _local_11.y)))
             {
                 _local_5 = (((_local_5 - 1) + _local_4.length) % _local_4.length);
                 _local_12 = (_local_12 + 1);
@@ -688,13 +687,13 @@ export class RoomPlaneParser
                 _local_12--;
             }
             _local_3._Str_17862(_local_6, _local_10, _local_12, _local_8, _local_9);
-            if ((((_local_11.x == k.x) && (_local_11.y == k.y)) && ((!(_local_11.x == _local_6.x)) || (!(_local_11.y == _local_6.y)))))
+            if((((_local_11.x == k.x) && (_local_11.y == k.y)) && ((!(_local_11.x == _local_6.x)) || (!(_local_11.y == _local_6.y)))))
             {
                 break;
             }
             _local_6 = _local_11;
         }
-        if (_local_3.count == 0)
+        if(_local_3.count == 0)
         {
             return null;
         }
@@ -703,43 +702,43 @@ export class RoomPlaneParser
 
     private hidePeninsulaWallChains(k: RoomWallData): void
     {
-        var _local_5: number;
-        var _local_6: number;
-        var _local_7: boolean;
-        var _local_8: number;
-        var _local_2: number = 0;
-        var _local_3: number = k.count;
-        while (_local_2 < _local_3)
+        let _local_5: number;
+        let _local_6: number;
+        let _local_7: boolean;
+        let _local_8: number;
+        let _local_2 = 0;
+        const _local_3: number = k.count;
+        while(_local_2 < _local_3)
         {
             const _local_4 = _local_2;
             
             _local_5 = _local_2;
             _local_6 = 0;
             _local_7 = false;
-            while (((!(k._Str_25208(_local_2))) && (_local_2 < _local_3)))
+            while(((!(k._Str_25208(_local_2))) && (_local_2 < _local_3)))
             {
-                if (k._Str_17084(_local_2))
+                if(k._Str_17084(_local_2))
                 {
                     _local_6++;
                 }
                 else
                 {
-                    if (_local_6 > 0)
+                    if(_local_6 > 0)
                     {
                         _local_6--;
                     }
                 }
-                if (_local_6 > 1)
+                if(_local_6 > 1)
                 {
                     _local_7 = true;
                 }
                 _local_5 = _local_2;
                 _local_2++;
             }
-            if (_local_7)
+            if(_local_7)
             {
                 _local_8 = _local_4;
-                while (_local_8 <= _local_5)
+                while(_local_8 <= _local_5)
                 {
                     k._Str_15901(_local_8, true);
                     _local_8++;
@@ -751,18 +750,18 @@ export class RoomPlaneParser
 
     private updateWallsNextToHoles(k: RoomWallData): void
     {
-        var _local_4: Point;
-        var _local_5: number;
-        var _local_6: number;
-        var _local_7: IVector3D;
-        var _local_8: IVector3D;
-        var _local_9: number;
-        var _local_10: number;
-        var _local_2: number = k.count;
-        var _local_3: number = 0;
-        while (_local_3 < _local_2)
+        let _local_4: Point;
+        let _local_5: number;
+        let _local_6: number;
+        let _local_7: IVector3D;
+        let _local_8: IVector3D;
+        let _local_9: number;
+        let _local_10: number;
+        const _local_2: number = k.count;
+        let _local_3 = 0;
+        while(_local_3 < _local_2)
         {
-            if (!k._Str_10019(_local_3))
+            if(!k._Str_10019(_local_3))
             {
                 _local_4 = k._Str_10778(_local_3);
                 _local_5 = k.getDirection(_local_3);
@@ -771,11 +770,11 @@ export class RoomPlaneParser
                 _local_8 = RoomWallData.WALL_NORMAL_VECTORS[_local_5];
                 _local_9 = 0;
                 _local_10 = 0;
-                while (_local_10 < _local_6)
+                while(_local_10 < _local_6)
                 {
-                    if (this.getTileHeightInternal(((_local_4.x + (_local_10 * _local_7.x)) - _local_8.x), ((_local_4.y + (_local_10 * _local_7.y)) - _local_8.y)) == RoomPlaneParser.TILE_HOLE)
+                    if(this.getTileHeightInternal(((_local_4.x + (_local_10 * _local_7.x)) - _local_8.x), ((_local_4.y + (_local_10 * _local_7.y)) - _local_8.y)) == RoomPlaneParser.TILE_HOLE)
                     {
-                        if (((_local_10 > 0) && (_local_9 == 0)))
+                        if(((_local_10 > 0) && (_local_9 == 0)))
                         {
                             k._Str_24531(_local_3, _local_10);
                             break;
@@ -784,7 +783,7 @@ export class RoomPlaneParser
                     }
                     else
                     {
-                        if (_local_9 > 0)
+                        if(_local_9 > 0)
                         {
                             k._Str_23976(_local_3, _local_9);
                             break;
@@ -792,7 +791,7 @@ export class RoomPlaneParser
                     }
                     _local_10++;
                 }
-                if (_local_9 == _local_6)
+                if(_local_9 == _local_6)
                 {
                     k._Str_15901(_local_3, true);
                 }
@@ -803,29 +802,29 @@ export class RoomPlaneParser
 
     private resolveOriginalWallIndex(k: Point, _arg_2: Point, _arg_3: RoomWallData): number
     {
-        var _local_10: Point;
-        var _local_11: Point;
-        var _local_12: number;
-        var _local_13: number;
-        var _local_14: number;
-        var _local_15: number;
-        var _local_4: number = Math.min(k.y, _arg_2.y);
-        var _local_5: number = Math.max(k.y, _arg_2.y);
-        var _local_6: number = Math.min(k.x, _arg_2.x);
-        var _local_7: number = Math.max(k.x, _arg_2.x);
-        var _local_8: number = _arg_3.count;
-        var _local_9: number = 0;
-        while (_local_9 < _local_8)
+        let _local_10: Point;
+        let _local_11: Point;
+        let _local_12: number;
+        let _local_13: number;
+        let _local_14: number;
+        let _local_15: number;
+        const _local_4: number = Math.min(k.y, _arg_2.y);
+        const _local_5: number = Math.max(k.y, _arg_2.y);
+        const _local_6: number = Math.min(k.x, _arg_2.x);
+        const _local_7: number = Math.max(k.x, _arg_2.x);
+        const _local_8: number = _arg_3.count;
+        let _local_9 = 0;
+        while(_local_9 < _local_8)
         {
             _local_10 = _arg_3._Str_10778(_local_9);
             _local_11 = _arg_3._Str_19138(_local_9);
-            if (k.x == _arg_2.x)
+            if(k.x == _arg_2.x)
             {
-                if (((_local_10.x == k.x) && (_local_11.x == k.x)))
+                if(((_local_10.x == k.x) && (_local_11.x == k.x)))
                 {
                     _local_12 = Math.min(_local_10.y, _local_11.y);
                     _local_13 = Math.max(_local_10.y, _local_11.y);
-                    if (((_local_12 <= _local_4) && (_local_5 <= _local_13)))
+                    if(((_local_12 <= _local_4) && (_local_5 <= _local_13)))
                     {
                         return _local_9;
                     }
@@ -833,13 +832,13 @@ export class RoomPlaneParser
             }
             else
             {
-                if (k.y == _arg_2.y)
+                if(k.y == _arg_2.y)
                 {
-                    if (((_local_10.y == k.y) && (_local_11.y == k.y)))
+                    if(((_local_10.y == k.y) && (_local_11.y == k.y)))
                     {
                         _local_14 = Math.min(_local_10.x, _local_11.x);
                         _local_15 = Math.max(_local_10.x, _local_11.x);
-                        if (((_local_14 <= _local_6) && (_local_7 <= _local_15)))
+                        if(((_local_14 <= _local_6) && (_local_7 <= _local_15)))
                         {
                             return _local_9;
                         }
@@ -853,16 +852,16 @@ export class RoomPlaneParser
 
     private hideOriginallyHiddenWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
-        var _local_5: Point;
-        var _local_6: Point;
-        var _local_7: IVector3D;
-        var _local_8: number;
-        var _local_9: number;
-        var _local_3: number = k.count;
-        var _local_4: number = 0;
-        while (_local_4 < _local_3)
+        let _local_5: Point;
+        let _local_6: Point;
+        let _local_7: IVector3D;
+        let _local_8: number;
+        let _local_9: number;
+        const _local_3: number = k.count;
+        let _local_4 = 0;
+        while(_local_4 < _local_3)
         {
-            if (!k._Str_10019(_local_4))
+            if(!k._Str_10019(_local_4))
             {
                 _local_5 = k._Str_10778(_local_4);
                 _local_6 = new Point(_local_5.x, _local_5.y);
@@ -871,9 +870,9 @@ export class RoomPlaneParser
                 _local_6.x = (_local_6.x + (_local_7.x * _local_8));
                 _local_6.y = (_local_6.y + (_local_7.y * _local_8));
                 _local_9 = this.resolveOriginalWallIndex(_local_5, _local_6, _arg_2);
-                if (_local_9 >= 0)
+                if(_local_9 >= 0)
                 {
-                    if (_arg_2._Str_10019(_local_9))
+                    if(_arg_2._Str_10019(_local_9))
                     {
                         k._Str_15901(_local_4, true);
                     }
@@ -896,25 +895,25 @@ export class RoomPlaneParser
 
     private addWalls(k: RoomWallData, _arg_2: RoomWallData): void
     {
-        let _local_3 = k.count;
-        let _local_4 = _arg_2.count;
+        const _local_3 = k.count;
+        const _local_4 = _arg_2.count;
         let _local_7 = 0;
 
         while(_local_7 < _local_3)
         {
             if(!k._Str_10019(_local_7))
             {
-                let _local_8 = k._Str_10778(_local_7);
-                let _local_9 = k.getDirection(_local_7);
-                let _local_10 = k._Str_13743(_local_7);
-                let _local_11 = RoomWallData.WALL_DIRECTION_VECTORS[_local_9];
-                let _local_12 = RoomWallData.WALL_NORMAL_VECTORS[_local_9];
+                const _local_8 = k._Str_10778(_local_7);
+                const _local_9 = k.getDirection(_local_7);
+                const _local_10 = k._Str_13743(_local_7);
+                const _local_11 = RoomWallData.WALL_DIRECTION_VECTORS[_local_9];
+                const _local_12 = RoomWallData.WALL_NORMAL_VECTORS[_local_9];
                 let _local_13 = -1;
                 let _local_14 = 0;
 
                 while(_local_14 < _local_10)
                 {
-                    let _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
+                    const _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
                     
                     if(((_local_27 >= 0) && ((_local_27 < _local_13) || (_local_13 < 0))))
                     {
@@ -924,19 +923,19 @@ export class RoomPlaneParser
                     _local_14++;
                 }
 
-                let _local_15 = _local_13;
+                const _local_15 = _local_13;
 
                 let _local_16 = new Vector3d(_local_8.x, _local_8.y, _local_15);
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_12, 0.5));
                 _local_16 = Vector3d.sum(_local_16, Vector3d.product(_local_11, -0.5));
 
-                let _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
-                let _local_18 = Vector3d.product(_local_11, -(_local_10));
-                let _local_19 = new Vector3d(0, 0, _local_17);
+                const _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
+                const _local_18 = Vector3d.product(_local_11, -(_local_10));
+                const _local_19 = new Vector3d(0, 0, _local_17);
                 
                 _local_16 = Vector3d.dif(_local_16, _local_18);
 
-                let _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
+                const _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
 
                 let _local_5 = 0;
                 let _local_6 = 0;
@@ -960,17 +959,17 @@ export class RoomPlaneParser
                 }
                 else
                 {
-                    if ((((_local_9 - _local_6) + 4) % 4) == 3)
+                    if((((_local_9 - _local_6) + 4) % 4) == 3)
                     {
                         _local_21 = RoomWallData.WALL_NORMAL_VECTORS[_local_6];
                     }
                 }
 
-                let _local_22 = k._Str_17084(_local_7);
-                let _local_23 = k._Str_17084((((_local_7 - 1) + _local_3) % _local_3));
-                let _local_24 = k._Str_10019(((_local_7 + 1) % _local_3));
-                let _local_25 = k._Str_25455(_local_7);
-                let _local_26 = k._Str_24163(_local_7);
+                const _local_22 = k._Str_17084(_local_7);
+                const _local_23 = k._Str_17084((((_local_7 - 1) + _local_3) % _local_3));
+                const _local_24 = k._Str_10019(((_local_7 + 1) % _local_3));
+                const _local_25 = k._Str_25455(_local_7);
+                const _local_26 = k._Str_24163(_local_7);
 
                 this.addWall(_local_16, _local_18, _local_19, _local_21, ((!(_local_23)) || (_local_25)), ((!(_local_22)) || (_local_26)), (!(_local_24)));
             }
@@ -981,31 +980,31 @@ export class RoomPlaneParser
 
     private createWallPlanes(): boolean
     {
-        var _local_13: number;
-        var _local_14: number;
-        var k = this._tileMatrix;
-        if (k == null)
+        let _local_13: number;
+        let _local_14: number;
+        const k = this._tileMatrix;
+        if(k == null)
         {
             return false;
         }
-        var _local_2: number;
-        var _local_3: number;
-        var _local_4: number[];
-        var _local_5: number = k.length;
-        var _local_6: number = 0;
-        if (_local_5 == 0)
+        let _local_2: number;
+        let _local_3: number;
+        let _local_4: number[];
+        const _local_5: number = k.length;
+        let _local_6 = 0;
+        if(_local_5 == 0)
         {
             return false;
         }
         _local_2 = 0;
-        while (_local_2 < _local_5)
+        while(_local_2 < _local_5)
         {
             _local_4 = k[_local_2];
-            if (((_local_4 == null) || (_local_4.length == 0)))
+            if(((_local_4 == null) || (_local_4.length == 0)))
             {
                 return false;
             }
-            if (_local_6 > 0)
+            if(_local_6 > 0)
             {
                 _local_6 = Math.min(_local_6, _local_4.length);
             }
@@ -1015,27 +1014,27 @@ export class RoomPlaneParser
             }
             _local_2++;
         }
-        var _local_7: number = Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, ((this._fixedWallHeight != -1) ? this._fixedWallHeight : RoomPlaneParser.getFloorHeight(k)));
-        var _local_8: number = this.minX;
-        var _local_9: number = this.minY;
+        const _local_7: number = Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, ((this._fixedWallHeight != -1) ? this._fixedWallHeight : RoomPlaneParser.getFloorHeight(k)));
+        const _local_8: number = this.minX;
+        let _local_9: number = this.minY;
         _local_9 = this.minY;
-        while (_local_9 <= this.maxY)
+        while(_local_9 <= this.maxY)
         {
-            if (this.getTileHeightInternal(_local_8, _local_9) > RoomPlaneParser.TILE_HOLE)
+            if(this.getTileHeightInternal(_local_8, _local_9) > RoomPlaneParser.TILE_HOLE)
             {
                 _local_9--;
                 break;
             }
             _local_9++;
         }
-        if (_local_9 > this.maxY)
+        if(_local_9 > this.maxY)
         {
             return false;
         }
-        var _local_10: Point = new Point(_local_8, _local_9);
-        var _local_11: RoomWallData = this.generateWallData(_local_10, true);
-        var _local_12: RoomWallData = this.generateWallData(_local_10, false);
-        if (_local_11 != null)
+        const _local_10: Point = new Point(_local_8, _local_9);
+        const _local_11: RoomWallData = this.generateWallData(_local_10, true);
+        const _local_12: RoomWallData = this.generateWallData(_local_10, false);
+        if(_local_11 != null)
         {
             _local_13 = _local_11.count;
             _local_14 = _local_12.count;
@@ -1043,12 +1042,12 @@ export class RoomPlaneParser
             this.addWalls(_local_11, _local_12);
         }
         _local_3 = 0;
-        while (_local_3 < this.tileMapHeight)
+        while(_local_3 < this.tileMapHeight)
         {
             _local_2 = 0;
-            while (_local_2 < this.tileMapWidth)
+            while(_local_2 < this.tileMapWidth)
             {
-                if (this.getTileHeightInternal(_local_2, _local_3) < 0)
+                if(this.getTileHeightInternal(_local_2, _local_3) < 0)
                 {
                     this.setTileHeight(_local_2, _local_3, -(_local_7 + this.wallHeight));
                 }
@@ -1061,23 +1060,23 @@ export class RoomPlaneParser
 
     private extractTopWall(k: Point, _arg_2: boolean): Point
     {
-        if (k == null)
+        if(k == null)
         {
             return null;
         }
-        var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser.TILE_HOLE;
-        if (!_arg_2)
+        let _local_3 = 1;
+        let _local_4: number = RoomPlaneParser.TILE_HOLE;
+        if(!_arg_2)
         {
             _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
-        while (_local_3 < 1000)
+        while(_local_3 < 1000)
         {
-            if (this.getTileHeightInternal((k.x + _local_3), k.y) > _local_4)
+            if(this.getTileHeightInternal((k.x + _local_3), k.y) > _local_4)
             {
                 return new Point(((k.x + _local_3) - 1), k.y);
             }
-            if (this.getTileHeightInternal((k.x + _local_3), (k.y + 1)) <= _local_4)
+            if(this.getTileHeightInternal((k.x + _local_3), (k.y + 1)) <= _local_4)
             {
                 return new Point((k.x + _local_3), (k.y + 1));
             }
@@ -1088,23 +1087,23 @@ export class RoomPlaneParser
 
     private extractRightWall(k: Point, _arg_2: boolean): Point
     {
-        if (k == null)
+        if(k == null)
         {
             return null;
         }
-        var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser.TILE_HOLE;
-        if (!_arg_2)
+        let _local_3 = 1;
+        let _local_4: number = RoomPlaneParser.TILE_HOLE;
+        if(!_arg_2)
         {
             _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
-        while (_local_3 < 1000)
+        while(_local_3 < 1000)
         {
-            if (this.getTileHeightInternal(k.x, (k.y + _local_3)) > _local_4)
+            if(this.getTileHeightInternal(k.x, (k.y + _local_3)) > _local_4)
             {
                 return new Point(k.x, (k.y + (_local_3 - 1)));
             }
-            if (this.getTileHeightInternal((k.x - 1), (k.y + _local_3)) <= _local_4)
+            if(this.getTileHeightInternal((k.x - 1), (k.y + _local_3)) <= _local_4)
             {
                 return new Point((k.x - 1), (k.y + _local_3));
             }
@@ -1115,23 +1114,23 @@ export class RoomPlaneParser
 
     private extractBottomWall(k: Point, _arg_2: boolean): Point
     {
-        if (k == null)
+        if(k == null)
         {
             return null;
         }
-        var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser.TILE_HOLE;
-        if (!_arg_2)
+        let _local_3 = 1;
+        let _local_4: number = RoomPlaneParser.TILE_HOLE;
+        if(!_arg_2)
         {
             _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
-        while (_local_3 < 1000)
+        while(_local_3 < 1000)
         {
-            if (this.getTileHeightInternal((k.x - _local_3), k.y) > _local_4)
+            if(this.getTileHeightInternal((k.x - _local_3), k.y) > _local_4)
             {
                 return new Point((k.x - (_local_3 - 1)), k.y);
             }
-            if (this.getTileHeightInternal((k.x - _local_3), (k.y - 1)) <= _local_4)
+            if(this.getTileHeightInternal((k.x - _local_3), (k.y - 1)) <= _local_4)
             {
                 return new Point((k.x - _local_3), (k.y - 1));
             }
@@ -1142,23 +1141,23 @@ export class RoomPlaneParser
 
     private extractLeftWall(k: Point, _arg_2: boolean): Point
     {
-        if (k == null)
+        if(k == null)
         {
             return null;
         }
-        var _local_3: number = 1;
-        var _local_4: number = RoomPlaneParser.TILE_HOLE;
-        if (!_arg_2)
+        let _local_3 = 1;
+        let _local_4: number = RoomPlaneParser.TILE_HOLE;
+        if(!_arg_2)
         {
             _local_4 = RoomPlaneParser.TILE_BLOCKED;
         }
-        while (_local_3 < 1000)
+        while(_local_3 < 1000)
         {
-            if (this.getTileHeightInternal(k.x, (k.y - _local_3)) > _local_4)
+            if(this.getTileHeightInternal(k.x, (k.y - _local_3)) > _local_4)
             {
                 return new Point(k.x, (k.y - (_local_3 - 1)));
             }
-            if (this.getTileHeightInternal((k.x + 1), (k.y - _local_3)) <= _local_4)
+            if(this.getTileHeightInternal((k.x + 1), (k.y - _local_3)) <= _local_4)
             {
                 return new Point((k.x + 1), (k.y - _local_3));
             }
@@ -1171,19 +1170,19 @@ export class RoomPlaneParser
     {
         this.addPlane(RoomPlaneData.PLANE_WALL, k, _arg_2, _arg_3, [_arg_4]);
         //this.addPlane(RoomPlaneData.PLANE_LANDSCAPE, k, _arg_2, _arg_3, [_arg_4]);
-        var _local_8: number = (RoomPlaneParser.WALL_THICKNESS * this._wallThicknessMultiplier);
-        var _local_9: number = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
-        var _local_10:Vector3d = Vector3d.crossProduct(_arg_2, _arg_3);
-        var _local_11:Vector3d = Vector3d.product(_local_10, ((1 / _local_10.length) * -(_local_8)));
+        const _local_8: number = (RoomPlaneParser.WALL_THICKNESS * this._wallThicknessMultiplier);
+        const _local_9: number = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
+        const _local_10:Vector3d = Vector3d.crossProduct(_arg_2, _arg_3);
+        const _local_11:Vector3d = Vector3d.product(_local_10, ((1 / _local_10.length) * -(_local_8)));
         this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, _arg_3), _arg_2, _local_11, [_local_10, _arg_4]);
-        if (_arg_5)
+        if(_arg_5)
         {
             this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_2), _arg_3), Vector3d.product(_arg_3, (-(_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
         }
-        if (_arg_6)
+        if(_arg_6)
         {
             this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(k, Vector3d.product(_arg_3, (-(_local_9) / _arg_3.length))), Vector3d.product(_arg_3, ((_arg_3.length + _local_9) / _arg_3.length)), _local_11, [_local_10, _arg_4]);
-            if (_arg_7)
+            if(_arg_7)
             {
                 const _local_12 = Vector3d.product(_arg_2, (_local_8 / _arg_2.length));
                 this.addPlane(RoomPlaneData.PLANE_WALL, Vector3d.sum(Vector3d.sum(k, _arg_3), Vector3d.product(_local_12, -1)), _local_12, _local_11, [_local_10, _arg_2, _arg_4]);
@@ -1193,28 +1192,28 @@ export class RoomPlaneParser
 
     private addFloor(k: IVector3D, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean, _arg_7: boolean): void
     {
-        var _local_9: number;
-        var _local_10:Vector3d;
-        var _local_11:Vector3d;
-        var _local_8: RoomPlaneData = this.addPlane(RoomPlaneData.PLANE_FLOOR, k, _arg_2, _arg_3);
-        if (_local_8 != null)
+        let _local_9: number;
+        let _local_10:Vector3d;
+        let _local_11:Vector3d;
+        const _local_8: RoomPlaneData = this.addPlane(RoomPlaneData.PLANE_FLOOR, k, _arg_2, _arg_3);
+        if(_local_8 != null)
         {
             _local_9 = (RoomPlaneParser.FLOOR_THICKNESS * this._floorThicknessMultiplier);
             _local_10 = new Vector3d(0, 0, _local_9);
             _local_11 = Vector3d.dif(k, _local_10);
-            if (_arg_6)
+            if(_arg_6)
             {
                 this.addPlane(RoomPlaneData.PLANE_FLOOR, _local_11, _arg_2, _local_10);
             }
-            if (_arg_7)
+            if(_arg_7)
             {
                 this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, Vector3d.sum(_arg_2, _arg_3)), Vector3d.product(_arg_2, -1), _local_10);
             }
-            if (_arg_4)
+            if(_arg_4)
             {
                 this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_3), Vector3d.product(_arg_3, -1), _local_10);
             }
-            if (_arg_5)
+            if(_arg_5)
             {
                 this.addPlane(RoomPlaneData.PLANE_FLOOR, Vector3d.sum(_local_11, _arg_2), _arg_3, _local_10);
             }
@@ -1292,11 +1291,11 @@ export class RoomPlaneParser
 
     private addPlane(k: number, _arg_2: IVector3D, _arg_3: IVector3D, _arg_4: IVector3D, _arg_5: IVector3D[] = null): RoomPlaneData
     {
-        if (((_arg_3.length == 0) || (_arg_4.length == 0)))
+        if(((_arg_3.length == 0) || (_arg_4.length == 0)))
         {
             return null;
         }
-        var _local_6: RoomPlaneData = new RoomPlaneData(k, _arg_2, _arg_3, _arg_4, _arg_5);
+        const _local_6: RoomPlaneData = new RoomPlaneData(k, _arg_2, _arg_3, _arg_4, _arg_5);
         this._planes.push(_local_6);
         return _local_6;
     }
@@ -1340,7 +1339,7 @@ export class RoomPlaneParser
             y++;
         }
 
-        for(let [ holeId, holeData ] of this._floorHoles.entries())
+        for(const [ holeId, holeData ] of this._floorHoles.entries())
         {
             if(!holeData) continue;
 
@@ -1413,18 +1412,18 @@ export class RoomPlaneParser
 
     public getPlaneSecondaryNormals(k: number): IVector3D[]
     {
-        var _local_3: IVector3D[];
-        var _local_4: number;
-        if (((k < 0) || (k >= this.planeCount)))
+        let _local_3: IVector3D[];
+        let _local_4: number;
+        if(((k < 0) || (k >= this.planeCount)))
         {
             return null;
         }
-        var _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
-        if (_local_2 != null)
+        const _local_2: RoomPlaneData = (this._planes[k] as RoomPlaneData);
+        if(_local_2 != null)
         {
             _local_3 = [];
             _local_4 = 0;
-            while (_local_4 < _local_2._Str_20277)
+            while(_local_4 < _local_2._Str_20277)
             {
                 _local_3.push(_local_2._Str_22585(_local_4));
                 _local_4++;
@@ -1519,30 +1518,30 @@ export class RoomPlaneParser
 
     private initializeHoleMap(): void
     {
-        var k: number;
-        var _local_2: number;
-        var _local_3: boolean[];
-        var _local_5:RoomFloorHole;
-        var _local_6: number;
-        var _local_7: number;
-        var _local_8: number;
-        var _local_9: number;
+        let k: number;
+        let _local_2: number;
+        let _local_3: boolean[];
+        let _local_5:RoomFloorHole;
+        let _local_6: number;
+        let _local_7: number;
+        let _local_8: number;
+        let _local_9: number;
         _local_2 = 0;
-        while (_local_2 < this._height)
+        while(_local_2 < this._height)
         {
             _local_3 = this._floorHoleMatrix[_local_2];
             k = 0;
-            while (k < this._width)
+            while(k < this._width)
             {
                 _local_3[k] = false;
                 k++;
             }
             _local_2++;
         }
-        for(let _local_4 of this._floorHoles.values())
+        for(const _local_4 of this._floorHoles.values())
         {
             _local_5 = _local_4;
-            if (_local_5 != null)
+            if(_local_5 != null)
             {
                 _local_6 = _local_5.x;
                 _local_7 = ((_local_5.x + _local_5.width) - 1);
@@ -1553,11 +1552,11 @@ export class RoomPlaneParser
                 _local_8 = ((_local_8 < 0) ? 0 : _local_8);
                 _local_9 = ((_local_9 >= this._height) ? (this._height - 1) : _local_9);
                 _local_2 = _local_8;
-                while (_local_2 <= _local_9)
+                while(_local_2 <= _local_9)
                 {
                     _local_3 = this._floorHoleMatrix[_local_2];
                     k = _local_6;
-                    while (k <= _local_7)
+                    while(k <= _local_7)
                     {
                         _local_3[k] = true;
                         k++;
@@ -1570,49 +1569,51 @@ export class RoomPlaneParser
 
     private extractPlanes(k: number[][]): void
     {
-        var _local_2: number;
-        var _local_7: number;
-        var _local_8: number;
-        var _local_9: number;
-        var _local_10: number;
-        var _local_11: boolean;
-        var _local_12: boolean;
-        var _local_13: boolean;
-        var _local_14: boolean;
-        var _local_15: number;
-        var _local_16: number;
-        var _local_17: boolean;
-        var _local_18: number;
-        var _local_19: number;
-        var _local_20: number;
-        var _local_21: number;
-        _local_2 = k.length;
-        var _local_3: number = k[0].length;
-        var _local_4: boolean[][] = [];
-        var _local_5: number = 0;
-        while (_local_5 < _local_2)
+        let _local_7: number;
+        let _local_8: number;
+        let _local_9: number;
+        let _local_10: number;
+        let _local_11: boolean;
+        let _local_12: boolean;
+        let _local_13: boolean;
+        let _local_14: boolean;
+        let _local_15: number;
+        let _local_16: number;
+        let _local_17: boolean;
+        let _local_18: number;
+        let _local_19: number;
+        let _local_20: number;
+        let _local_21: number;
+
+        const _local_2 = k.length;
+
+        const _local_3: number = k[0].length;
+        const _local_4: boolean[][] = [];
+        let _local_5 = 0;
+        while(_local_5 < _local_2)
         {
             _local_4[_local_5] = [];
             _local_5++;
         }
-        var _local_6: number = 0;
-        while (_local_6 < _local_2)
+        let _local_6 = 0;
+        while(_local_6 < _local_2)
         {
             _local_7 = 0;
-            while (_local_7 < _local_3)
+            while(_local_7 < _local_3)
             {
                 _local_8 = k[_local_6][_local_7];
-                if (((_local_8 < 0) || (_local_4[_local_6][_local_7])))
+                if(((_local_8 < 0) || (_local_4[_local_6][_local_7])))
                 {
+                    //
                 }
                 else
                 {
                     _local_11 = ((_local_7 == 0) || (!(k[_local_6][(_local_7 - 1)] == _local_8)));
                     _local_12 = ((_local_6 == 0) || (!(k[(_local_6 - 1)][_local_7] == _local_8)));
                     _local_9 = (_local_7 + 1);
-                    while (_local_9 < _local_3)
+                    while(_local_9 < _local_3)
                     {
-                        if ((((!(k[_local_6][_local_9] == _local_8)) || (_local_4[_local_6][_local_9])) || ((_local_6 > 0) && ((k[(_local_6 - 1)][_local_9] == _local_8) == _local_12))))
+                        if((((!(k[_local_6][_local_9] == _local_8)) || (_local_4[_local_6][_local_9])) || ((_local_6 > 0) && ((k[(_local_6 - 1)][_local_9] == _local_8) == _local_12))))
                         {
                             break;
                         }
@@ -1621,14 +1622,14 @@ export class RoomPlaneParser
                     _local_13 = ((_local_9 == _local_3) || (!(k[_local_6][_local_9] == _local_8)));
                     _local_17 = false;
                     _local_10 = (_local_6 + 1);
-                    while (((_local_10 < _local_2) && (!(_local_17))))
+                    while(((_local_10 < _local_2) && (!(_local_17))))
                     {
                         _local_14 = (!(k[_local_10][_local_7] == _local_8));
                         _local_17 = (((_local_14) || ((_local_7 > 0) && ((k[_local_10][(_local_7 - 1)] == _local_8) == _local_11))) || ((_local_9 < _local_3) && ((k[_local_10][_local_9] == _local_8) == _local_13)));
                         _local_15 = _local_7;
-                        while (_local_15 < _local_9)
+                        while(_local_15 < _local_9)
                         {
-                            if ((k[_local_10][_local_15] == _local_8) == _local_14)
+                            if((k[_local_10][_local_15] == _local_8) == _local_14)
                             {
                                 _local_17 = true;
                                 _local_9 = _local_15;
@@ -1636,7 +1637,7 @@ export class RoomPlaneParser
                             }
                             _local_15++;
                         }
-                        if (_local_17)
+                        if(_local_17)
                         {
                             break;
                         }
@@ -1645,10 +1646,10 @@ export class RoomPlaneParser
                     _local_14 = ((_local_14) || (_local_10 == _local_2));
                     _local_13 = ((_local_9 == _local_3) || (!(k[_local_6][_local_9] == _local_8)));
                     _local_16 = _local_6;
-                    while (_local_16 < _local_10)
+                    while(_local_16 < _local_10)
                     {
                         _local_15 = _local_7;
-                        while (_local_15 < _local_9)
+                        while(_local_15 < _local_9)
                         {
                             _local_4[_local_16][_local_15] = true;
                             _local_15++;

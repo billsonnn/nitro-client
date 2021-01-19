@@ -12,7 +12,7 @@ import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 
 @Component({
-	selector: 'nitro-room-chatinput-component',
+    selector: 'nitro-room-chatinput-component',
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
@@ -26,20 +26,20 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     @ViewChild('chatInputView')
     public chatInputView: ElementRef<HTMLInputElement>;
 
-    public selectedUsername: string     = '';
-    public floodBlocked: boolean        = false;
-    public lastContent: string          = '';
-    public isTyping: boolean            = false;
-    public typingStartedSent: boolean   = false;
-    public typingTimer: any             = null;
-    public idleTimer: any               = null;
-    public currentStyle: number         = -1;
-    public needsStyleUpdate: boolean    = false;
+    public selectedUsername: string                     = '';
+    public floodBlocked: boolean                        = false;
+    public lastContent: string                          = '';
+    public isTyping: boolean                            = false;
+    public typingStartedSent: boolean                   = false;
+    public typingTimer: ReturnType<typeof setTimeout>   = null;
+    public idleTimer: ReturnType<typeof setTimeout>     = null;
+    public currentStyle: number                         = -1;
+    public needsStyleUpdate: boolean                    = false;
 
-    private _chatModeIdWhisper: string  = null;
-    private _chatModeIdShout: string    = null;
-    private _chatModeIdSpeak: string    = null;
-    private _maxChatLength: number      = 0;
+    private _chatModeIdWhisper: string                  = null;
+    private _chatModeIdShout: string                    = null;
+    private _chatModeIdSpeak: string                    = null;
+    private _maxChatLength: number                      = 0;
 
     constructor(
         private ngZone: NgZone
@@ -50,10 +50,10 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public ngOnInit(): void
     {
-        this._chatModeIdWhisper = Nitro.instance.getLocalization("widgets.chatinput.mode.whisper");
-        this._chatModeIdShout   = Nitro.instance.getLocalization("widgets.chatinput.mode.shout");
-        this._chatModeIdSpeak   = Nitro.instance.getLocalization("widgets.chatinput.mode.speak");
-        this._maxChatLength     = Nitro.instance.getConfiguration<number>("chat.input.maxlength", 100);
+        this._chatModeIdWhisper = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
+        this._chatModeIdShout   = Nitro.instance.getLocalization('widgets.chatinput.mode.shout');
+        this._chatModeIdSpeak   = Nitro.instance.getLocalization('widgets.chatinput.mode.speak');
+        this._maxChatLength     = Nitro.instance.getConfiguration<number>('chat.input.maxlength', 100);
     }
 
     public ngAfterViewInit(): void
@@ -124,11 +124,12 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         switch(event._Str_23621)
         {
-            case RoomWidgetChatInputContentUpdateEvent.WHISPER:
+            case RoomWidgetChatInputContentUpdateEvent.WHISPER: {
                 const localization = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
 
                 this.inputView.value = localization + ' ' + event.userName + ' ';
                 return;
+            }
             case RoomWidgetChatInputContentUpdateEvent.SHOUT:
                 return;
         }
@@ -206,7 +207,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         {
             this.lastContent = value;
 
-            if (!this.isTyping)
+            if(!this.isTyping)
             {
                 this.isTyping = true;
 
@@ -261,7 +262,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         text = parts.join(' ');
 
-        let chatStyle = SystemChatStyleEnum.NORMAL;
+        const chatStyle = SystemChatStyleEnum.NORMAL;
         
         if(this.typingTimer) this.resetTypingTimer();
 

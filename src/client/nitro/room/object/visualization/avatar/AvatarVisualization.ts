@@ -149,7 +149,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         
         this._data  = data;
 
-        this.setSpriteCount(AvatarVisualization._Str_11587)
+        this.setSpriteCount(AvatarVisualization._Str_11587);
 
         super.initialize(data);
 
@@ -235,7 +235,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             {
                 let index = this._Str_16697;
 
-                for(let addition of this._additions.values())
+                for(const addition of this._additions.values())
                 {
                     addition.update(this.getSprite(index++), scale);
                 }
@@ -252,7 +252,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         {
             let index = this._Str_16697;
 
-            for(let addition of this._additions.values())
+            for(const addition of this._additions.values())
             {
                 if(addition.animate(this.getSprite(index++))) this.updateSpriteCounter++;
             }
@@ -350,9 +350,9 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             this._Str_1222 = this._avatarImage.isAnimating();
 
             let _local_21   = AvatarVisualization._Str_11587;
-            let direction   = this._avatarImage.getDirection();
+            const direction   = this._avatarImage.getDirection();
 
-            for(let spriteData of this._avatarImage.getSprites())
+            for(const spriteData of this._avatarImage.getSprites())
             {
                 if(spriteData.id === AvatarVisualization.AVATAR)
                 {
@@ -398,7 +398,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                         let frameNumber = 0;
                         let offsetX     = spriteData._Str_809(direction);
                         let offsetY     = spriteData._Str_739(direction);
-                        let offsetZ     = spriteData._Str_839(direction);
+                        const offsetZ     = spriteData._Str_839(direction);
                         let dd          = 0;
 
                         if(spriteData._Str_949) dd = direction;
@@ -423,7 +423,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                             if(dd > 7) dd -= 8;
                         }
 
-                        const assetName = ((((((this._avatarImage.getScale() + "_") + spriteData.member) + "_") + dd) + "_") + frameNumber);
+                        const assetName = ((((((this._avatarImage.getScale() + '_') + spriteData.member) + '_') + dd) + '_') + frameNumber);
 
                         const asset = this._avatarImage.getAsset(assetName);
 
@@ -912,7 +912,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         let spriteCount = AvatarVisualization._Str_11587;
 
-        for(let sprite of this._avatarImage.getSprites())
+        for(const sprite of this._avatarImage.getSprites())
         {
             if(sprite.id !== AvatarVisualization.AVATAR) spriteCount++;
         }
@@ -923,7 +923,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         if(this._additions)
         {
-            for(let addition of this._additions.values()) this.createSprite();
+            for(const addition of this._additions.values()) this.createSprite();
         }
     }
 
@@ -950,9 +950,9 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
     private clearAvatar(): void
     {
-        for(let avatar of this._cachedAvatars.getValues()) avatar && avatar.dispose();
+        for(const avatar of this._cachedAvatars.getValues()) avatar && avatar.dispose();
 
-        for(let avatar of this._cachedAvatarEffects.getValues()) avatar && avatar.dispose();
+        for(const avatar of this._cachedAvatarEffects.getValues()) avatar && avatar.dispose();
 
         this._cachedAvatars.reset();
         this._cachedAvatarEffects.reset();
@@ -981,7 +981,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
     private addAddition(addition: IAvatarAddition): IAvatarAddition
     {
-        const existing = this.getAddition(addition.id)
+        const existing = this.getAddition(addition.id);
 
         if(existing) return;
 

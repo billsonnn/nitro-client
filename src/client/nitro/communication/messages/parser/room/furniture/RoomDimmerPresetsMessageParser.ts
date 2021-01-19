@@ -44,7 +44,7 @@ export class RoomDimmerPresetsMessageParser implements IMessageParser
 
         let _local_3 = 0;
 
-        while (_local_3 < totalPresets)
+        while(_local_3 < totalPresets)
         {
             const _local_4 = k.readInt();
             const _local_5 = k.readInt();

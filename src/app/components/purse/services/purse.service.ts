@@ -38,7 +38,7 @@ export class PurseService implements OnDestroy
                 new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this))
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -48,11 +48,11 @@ export class PurseService implements OnDestroy
         {
             if(this._messages && this._messages.length)
             {
-                for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+                for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
                 this._messages = [];
             }
-        })
+        });
     }
 
     public requestUpdate(): void
@@ -80,7 +80,7 @@ export class PurseService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            for(let [ type, amount ] of parser.currencies) this.setCurrency(type, amount);
+            for(const [ type, amount ] of parser.currencies) this.setCurrency(type, amount);
         });
     }
 

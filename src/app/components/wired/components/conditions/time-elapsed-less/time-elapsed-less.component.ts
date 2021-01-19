@@ -1,4 +1,7 @@
-﻿import { Component } from '@angular/core';
+﻿import { WiredFurniture } from './../../../WiredFurniture';
+import { Options } from '@angular-slider/ngx-slider';
+import { Component } from '@angular/core';
+import { Nitro } from 'src/client/nitro/Nitro';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredCondition } from '../WiredCondition';
 import { WiredConditionType } from '../WiredConditionType';
@@ -9,33 +12,54 @@ import { WiredConditionType } from '../WiredConditionType';
 export class TimeElapsedLessComponent extends WiredCondition
 {
     public static CODE: number = WiredConditionType.TIME_ELAPSED_LESS;
-    
-    //private _slider:SliderWindowController;
+
+    private static MINIMUM_VALUE: number = 1;
+    private static MAXIMUM_VALUE: number = 1200;
+    private static STEPPER_VALUE: number = 1;
+
+    public time: number = 0;
 
     public get code(): number
     {
         return TimeElapsedLessComponent.CODE;
     }
 
-    // public readIntegerParamsFromForm(k:IWindowContainer):Array
-    // {
-    //     var _local_2:Array = new Array();
-    //     var _local_3: number = this._slider.getValue();
-    //     _local_2.push((_local_3 + 1));
-    //     return _local_2;
-    // }
-
-    public onInit(): void
-    {
-        // this._slider = new SliderWindowController(_arg_2, this._Str_2453(k), _arg_2.assets, 1, 1200, 1);
-        // this._slider._Str_2526(1);
-        // this._slider.addEventListener(Event.CHANGE, this.onSliderChange);
-    }
-
     public onEditStart(trigger: Triggerable): void
     {
-        var _local_3: number = (trigger.intData[0] - 1);
-        //this._slider._Str_2526(_local_3);
+        this.time = (trigger.intData[0] || 1);
+
+        this.updateLocaleParameter();
+    }
+
+    public readIntegerParamsFromForm(): number[]
+    {
+        return [ this.time ];
+    }
+
+    public onSliderChange(): void
+    {
+        this.updateLocaleParameter();
+    }
+
+    public decrease(): void
+    {
+        this.time -= 1;
+
+        if(this.time < TimeElapsedLessComponent.MINIMUM_VALUE) this.time = TimeElapsedLessComponent.MINIMUM_VALUE;
+    }
+
+    public increase(): void
+    {
+        this.time += 1;
+
+        if(this.time > TimeElapsedLessComponent.MAXIMUM_VALUE) this.time = TimeElapsedLessComponent.MAXIMUM_VALUE;
+    }
+
+    protected updateLocaleParameter(): void
+    {
+        Nitro.instance.localization.registerParameter('wiredfurni.params.allowbefore', 'seconds', WiredFurniture.getLocaleName(this.time));
+
+        this.updateCount++;
     }
 
     public get hasSpecialInputs(): boolean
@@ -43,27 +67,14 @@ export class TimeElapsedLessComponent extends WiredCondition
         return true;
     }
 
-    // private _Str_2453(k:IWindowContainer):IWindowContainer
-    // {
-    //     return k.findChildByName("slider_container") as IWindowContainer;
-    // }
-
-    // private onSliderChange(k:Event): void
-    // {
-    //     var _local_2:SliderWindowController;
-    //     var _local_3:Number;
-    //     var _local_4: number;
-    //     var _local_5: string;
-    //     if (k.type == Event.CHANGE)
-    //     {
-    //         _local_2 = (k.target as SliderWindowController);
-    //         if (_local_2)
-    //         {
-    //             _local_3 = _local_2.getValue();
-    //             _local_4 = int(_local_3);
-    //             _local_5 = TriggerOnce._Str_11919(_local_4);
-    //             this._roomEvents.localization.registerParameter("wiredfurni.params.allowbefore", "seconds", _local_5);
-    //         }
-    //     }
-    // }
+    public get sliderOptions(): Options
+    {
+        return {
+            floor: TimeElapsedLessComponent.MINIMUM_VALUE,
+            ceil: TimeElapsedLessComponent.MAXIMUM_VALUE,
+            step: TimeElapsedLessComponent.STEPPER_VALUE,
+            hidePointerLabels: true,
+            hideLimitLabels: true,
+        };
+    }
 }

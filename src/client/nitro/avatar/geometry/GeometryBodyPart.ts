@@ -22,7 +22,7 @@ export class GeometryBodyPart extends Node3D
 
         if(k.items && (k.items.length > 0))
         {
-            for(let item of k.items)
+            for(const item of k.items)
             {
                 if(!item) continue;
 
@@ -40,7 +40,7 @@ export class GeometryBodyPart extends Node3D
 
         if(existing)
         {
-            for(let index in existing)
+            for(const index in existing)
             {
                 const item = existing[index];
 
@@ -57,7 +57,7 @@ export class GeometryBodyPart extends Node3D
     {
         const ids: string[] = [];
 
-        for(let part of this._parts.values())
+        for(const part of this._parts.values())
         {
             if(!part) continue;
 
@@ -70,7 +70,7 @@ export class GeometryBodyPart extends Node3D
 
             if(existing)
             {
-                for(let index in existing)
+                for(const index in existing)
                 {
                     const part = existing[index];
 
@@ -125,7 +125,7 @@ export class GeometryBodyPart extends Node3D
     {
         const parts: [ number, GeometryItem ][] = [];
 
-        for(let part of this._parts.values())
+        for(const part of this._parts.values())
         {
             if(!part) continue;
 
@@ -138,7 +138,7 @@ export class GeometryBodyPart extends Node3D
 
         if(existingDynamic)
         {
-            for(let index in existingDynamic)
+            for(const index in existingDynamic)
             {
                 const part = existingDynamic[index];
 
@@ -164,7 +164,7 @@ export class GeometryBodyPart extends Node3D
 
         const partIds: string[] = [];
 
-        for(let part of parts)
+        for(const part of parts)
         {
             if(!part) continue;
 

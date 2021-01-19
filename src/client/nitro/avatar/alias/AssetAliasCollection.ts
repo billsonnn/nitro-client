@@ -31,7 +31,7 @@ export class AssetAliasCollection
 
     public init(): void
     {
-        for(let collection of this._assets.collections.values())
+        for(const collection of this._assets.collections.values())
         {
             if(!collection) continue;
 
@@ -39,13 +39,13 @@ export class AssetAliasCollection
 
             if(!aliases) continue;
 
-            for(let name in aliases)
+            for(const name in aliases)
             {
                 const alias = aliases[name];
 
                 if(!alias) continue;
 
-                this._aliases.set(name, new AssetAlias(name, alias))
+                this._aliases.set(name, new AssetAlias(name, alias));
             }
         }
     }

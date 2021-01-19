@@ -29,7 +29,7 @@ export class AnimationLayerData
     {
         if(!this._frameSequences || !this._frameSequences.length) return;
 
-        for(let sequence of this._frameSequences)
+        for(const sequence of this._frameSequences)
         {
             if(!sequence) continue;
 
@@ -52,7 +52,7 @@ export class AnimationLayerData
     {
         this._frameCount = 0;
 
-        for(let sequence of this._frameSequences)
+        for(const sequence of this._frameSequences)
         {
             if(!sequence) continue;
 
@@ -132,8 +132,8 @@ export class AnimationLayerData
 
         let x           = frame.getX(direction);
         let y           = frame.getY(direction);
-        let randomX     = frame.randomX;
-        let randomY     = frame.randomY;
+        const randomX     = frame.randomX;
+        const randomY     = frame.randomY;
         let repeats     = frame.repeats;
         let isLastFrame = false;
 

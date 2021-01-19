@@ -156,12 +156,12 @@ export class GiveReward extends DefaultActionType
 
     private _Str_19618(k: string, _arg_2: string, _arg_3: string): string
     {
-        var _local_4: number = 100;
-        while (k.indexOf(_arg_2) > -1)
+        let _local_4 = 100;
+        while(k.indexOf(_arg_2) > -1)
         {
             k = k.replace(_arg_2, _arg_3);
             _local_4--;
-            if (_local_4 < 1)
+            if(_local_4 < 1)
             {
                 break;
             }

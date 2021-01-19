@@ -14,11 +14,11 @@
         this._ink   = k.ink || 0;
         this._blend = 0;
 
-        var _local_2 = k.blend;
+        const _local_2 = k.blend;
 
         if(_local_2)
         {
-            if (_local_2.length > 0)
+            if(_local_2.length > 0)
             {
                 this._blend = parseInt(_local_2);
 

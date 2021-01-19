@@ -30,7 +30,7 @@ export class FigurePartSet implements IFigurePartSet
         this._isPreSelectable   = parseInt(data['$'].preselectable) === 1;
         this._isSellable        = parseInt(data['$'].sellable) === 1;
         
-        for(let part of data.part)
+        for(const part of data.part)
         {
             const newPart   = new FigurePart(part);
             const partIndex = this.getPartIndex(newPart);
@@ -43,15 +43,15 @@ export class FigurePartSet implements IFigurePartSet
         {
             const hiddenLayers = data.hiddenlayers[0];
 
-            for(let layer of hiddenLayers.layer) this._hiddenLayers.push(layer['$'].parttype);
+            for(const layer of hiddenLayers.layer) this._hiddenLayers.push(layer['$'].parttype);
         }
     }
 
     public dispose(): void
     {
-        for(let part of this._parts)
+        for(const part of this._parts)
         {
-            let figurePart = part as FigurePart;
+            const figurePart = part as FigurePart;
 
             figurePart.dispose();
         }
@@ -82,7 +82,7 @@ export class FigurePartSet implements IFigurePartSet
 
     public _Str_989(k: string, _arg_2: number): IFigurePart
     {
-        for(let part of this._parts)
+        for(const part of this._parts)
         {
             if((part.type !== k) || (part.id !== _arg_2)) continue;
 

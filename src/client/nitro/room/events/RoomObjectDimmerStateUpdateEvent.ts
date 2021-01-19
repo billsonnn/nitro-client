@@ -3,7 +3,7 @@ import { IRoomObject } from '../../../room/object/IRoomObject';
 
 export class RoomObjectDimmerStateUpdateEvent extends RoomObjectEvent
 {
-    public static DIMMER_STATE: string = "RODSUE_DIMMER_STATE";
+    public static DIMMER_STATE: string = 'RODSUE_DIMMER_STATE';
 
     private _state: number;
     private _presetId: number;

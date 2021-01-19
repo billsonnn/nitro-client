@@ -73,7 +73,7 @@ export class PlaneMaterialCellColumn
     {
         if(this._cells && this._cells.length)
         {
-            for(let cell of this._cells)
+            for(const cell of this._cells)
             {
                 if(!cell) continue;
 
@@ -104,7 +104,7 @@ export class PlaneMaterialCellColumn
             this._cachedBitmapData = null;
         }
 
-        if (this._cachedBitmapNormal)
+        if(this._cachedBitmapNormal)
         {
             this._cachedBitmapNormal.x = 0;
             this._cachedBitmapNormal.y = 0;
@@ -113,7 +113,7 @@ export class PlaneMaterialCellColumn
 
         if(this._cells && this._cells.length)
         {
-            for(let cell of this._cells)
+            for(const cell of this._cells)
             {
                 if(!cell) continue;
 
@@ -186,26 +186,26 @@ export class PlaneMaterialCellColumn
 
         if(!this._cells.length) return this._cachedBitmapData;
 
-        switch (this._repeatMode)
+        switch(this._repeatMode)
         {
             case PlaneMaterialCellColumn._Str_9685:
                 this._Str_25839(normal);
                 break;
             case PlaneMaterialCellColumn._Str_6087:
                 console.log('tru2');
-            //     this._Str_18476(normal);
+                //     this._Str_18476(normal);
                 break;
             case PlaneMaterialCellColumn._Str_6114:
                 console.log('tru3');
-            //     this._Str_17295(normal);
+                //     this._Str_17295(normal);
                 break;
             case PlaneMaterialCellColumn._Str_6187:
                 console.log('tru4');
-            //     this._Str_18019(normal);
+                //     this._Str_18019(normal);
                 break;
             case PlaneMaterialCellColumn._Str_6063:
                 console.log('tru5');
-            //     this._Str_16099(normal);
+                //     this._Str_16099(normal);
                 break;
             default:
                 this._Str_18711(normal, offsetX, offsetY);
@@ -244,7 +244,7 @@ export class PlaneMaterialCellColumn
         {
             let cell: PlaneMaterialCell = null;
 
-            if (_arg_3)
+            if(_arg_3)
             {
                 cell = k[cellIndex];
             }
@@ -290,7 +290,7 @@ export class PlaneMaterialCellColumn
         
         let index = 0;
 
-        while (index < this._cachedBitmapData.height)
+        while(index < this._cachedBitmapData.height)
         {
             index = this._Str_4757(this._cells, index, true, k, _arg_2, _arg_3);
 

@@ -126,7 +126,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
 
-        this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>("furnidata.url"));
+        this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>('furnidata.url'));
     }
 
     private loadBadgeImageManager(): void
@@ -147,14 +147,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         const furnitureData: IFurnitureData[] = [];
 
-        for(let data of this._floorItems.values())
+        for(const data of this._floorItems.values())
         {
             if(!data) continue;
 
             furnitureData.push(data);
         }
 
-        for(let data of this._wallItems.values())
+        for(const data of this._wallItems.values())
         {
             if(!data) continue;
 
@@ -235,7 +235,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
             {
-                for(let listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
+                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
     }
@@ -306,7 +306,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
             {
-                for(let listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
+                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
     }
@@ -333,7 +333,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         if(!name || !this._floorItems || !this._floorItems.size) return null;
 
-        for(let item of this._floorItems.values())
+        for(const item of this._floorItems.values())
         {
             if(!item || (item.className !== name)) continue;
 
@@ -354,7 +354,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         if(!name || !this._wallItems || !this._wallItems.size) return null;
 
-        for(let item of this._wallItems.values())
+        for(const item of this._wallItems.values())
         {
             if(!item || (item.className !== name)) continue;
 
@@ -415,7 +415,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new RoomUnitChatComposer(text));
     }
 
-    private send(composer: IMessageComposer): void
+    private send(composer: IMessageComposer<unknown[]>): void
     {
         this._communication.connection.send(composer);
     }

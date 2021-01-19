@@ -55,7 +55,7 @@ export class AvatarAction
     {
         expressionId = parseInt(expressionId as any);
         
-        switch (expressionId)
+        switch(expressionId)
         {
             case 1:
                 return 5000;

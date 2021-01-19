@@ -23,7 +23,7 @@ export class AchievementResolution
     {
         this._achievementId = 0;
         this._level         = 0;
-        this._badgeId       = "";
+        this._badgeId       = '';
         this._Str_8741      = 0;
     }
 

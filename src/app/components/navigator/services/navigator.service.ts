@@ -142,7 +142,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new NavigatorHomeRoomEvent(this.onNavigatorHomeRoomEvent.bind(this)),
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -152,7 +152,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         {
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
 
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -163,10 +163,10 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         if(!event) return;
 
         switch(event.type)
-		{
-			case RoomSessionEvent.CREATED:
-				this._ngZone.run(() => this._settingsService.hideNavigator());
-				return;
+        {
+            case RoomSessionEvent.CREATED:
+                this._ngZone.run(() => this._settingsService.hideNavigator());
+                return;
         }
     }
 
@@ -490,7 +490,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         if(!code) return null;
 
-        for(let context of this._topLevelContexts)
+        for(const context of this._topLevelContexts)
         {
             if(!context || (context.code !== code)) continue;
 
@@ -591,18 +591,19 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         switch(parts[1])
         {
-            case "goto":
+            case 'goto':
                 if(parts.length > 2)
                 {
-                    switch (parts[2])
+                    switch(parts[2])
                     {
-                        case "home":
+                        case 'home':
                             this.goToHomeRoom();
                             break;
-                        default:
+                        default: {
                             const roomId = parseInt(parts[2]);
 
                             if(roomId > 0) this.goToPrivateRoom(roomId);
+                        }
                     }
                 }
                 return;

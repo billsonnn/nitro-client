@@ -14,7 +14,7 @@ export class RoomObjectUserType
 
     public static getTypeString(type: number): string
     {
-        for(let key in RoomObjectUserType.AVATAR_TYPES)
+        for(const key in RoomObjectUserType.AVATAR_TYPES)
         {
             if(!key) continue;
 

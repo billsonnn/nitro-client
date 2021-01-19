@@ -183,7 +183,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(this._spritePool)
         {
-            for(let sprite of this._spritePool)
+            for(const sprite of this._spritePool)
             {
                 this._Str_21974(sprite, true);
             }
@@ -350,7 +350,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(objects.size)
         {
-            for(let object of objects.values())
+            for(const object of objects.values())
             {
                 if(!object) continue;
 
@@ -464,7 +464,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         let spriteCount = 0;
 
-        for(let sprite of visualization.sprites.values())
+        for(const sprite of visualization.sprites.values())
         {
             if(!sprite || !sprite.visible) continue;
 
@@ -473,19 +473,19 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if(!texture || !baseTexture) continue;
 
-            let spriteX = ((x + sprite.offsetX) + this._screenOffsetX);
-            let spriteY = ((y + sprite.offsetY) + this._screenOffsetY);
+            const spriteX = ((x + sprite.offsetX) + this._screenOffsetX);
+            const spriteY = ((y + sprite.offsetY) + this._screenOffsetY);
 
             if(sprite.flipH)
             {
-                let checkX = ((x + (-(texture.width + (-(sprite.offsetX))))) + this._screenOffsetX);
+                const checkX = ((x + (-(texture.width + (-(sprite.offsetX))))) + this._screenOffsetX);
 
                 if(!this.isSpriteVisible(checkX, spriteY, texture.width, texture.height)) continue;
             }
 
             else if(sprite.flipV)
             {
-                let checkY = ((y + (-(texture.height + (-(sprite.offsetY))))) + this._screenOffsetY);
+                const checkY = ((y + (-(texture.height + (-(sprite.offsetY))))) + this._screenOffsetY);
 
                 if(!this.isSpriteVisible(spriteX, checkY, texture.width, texture.height)) continue;
             }
@@ -827,7 +827,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 if(extendedSprite.clickHandling && ((type === MouseEventType.MOUSE_CLICK) || (type === MouseEventType.DOUBLE_CLICK)))
                 {
-
+                    //
                 }
                 else
                 {
@@ -888,7 +888,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         const keys: string[] = [];
 
-        for(let key of this._mouseActiveObjects.keys()) key && keys.push(key);
+        for(const key of this._mouseActiveObjects.keys()) key && keys.push(key);
 
         let index = 0;
 
@@ -932,9 +932,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         const screenX: number       = (x - (this._width / 2));
         const screenY: number       = (y - (this._height / 2));
-        const canvasName: string    = `canvas_${ this._id }`;
+        const canvasName            = `canvas_${ this._id }`;
 
-        return new RoomSpriteMouseEvent(type, ((canvasName + "_") + this._eventId), canvasName, _arg_6, screenX, screenY, _arg_3, _arg_4, _arg_8, _arg_7, _arg_9, _arg_10);
+        return new RoomSpriteMouseEvent(type, ((canvasName + '_') + this._eventId), canvasName, _arg_6, screenX, screenY, _arg_3, _arg_4, _arg_8, _arg_7, _arg_9, _arg_10);
     }
 
     protected _Str_14715(k: RoomSpriteMouseEvent, _arg_2: string): void
@@ -949,7 +949,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         if(!this._container || !this._eventCache) return;
 
-        for(let [ key, event ] of this._eventCache.entries())
+        for(const [ key, event ] of this._eventCache.entries())
         {
             if(!this._eventCache) return;
 
@@ -980,9 +980,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public getDisplayAsTexture(): RenderTexture
     {
         this._noSpriteVisibilityChecking = true;
-        var k = this._scale;
-        var _local_2 = this._screenOffsetX;
-        var _local_3 = this._screenOffsetY;
+        const k = this._scale;
+        const _local_2 = this._screenOffsetX;
+        const _local_3 = this._screenOffsetY;
         this.setScale(1, null, null, true);
         this._screenOffsetX = 0;
         this._screenOffsetY = 0;

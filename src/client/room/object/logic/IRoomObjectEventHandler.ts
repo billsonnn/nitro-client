@@ -6,7 +6,7 @@ import { IRoomObjectMouseHandler } from './IRoomObjectMouseHandler';
 
 export interface IRoomObjectEventHandler extends IRoomObjectMouseHandler, IDisposable
 {
-    initialize(data: any): void;
+    initialize(data: unknown): void;
     update(totalTimeRunning: number): void;
     processUpdateMessage(message: RoomObjectUpdateMessage): void;
     getEventTypes(): string[];

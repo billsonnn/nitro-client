@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class HabboSearchComposer implements IMessageComposer
+export class HabboSearchComposer implements IMessageComposer<ConstructorParameters<typeof HabboSearchComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof HabboSearchComposer>;
 
     constructor(search: string)
     {
         this._data = [ search ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

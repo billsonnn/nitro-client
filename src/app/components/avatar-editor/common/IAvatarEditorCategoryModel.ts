@@ -1,4 +1,5 @@
 ﻿import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorMainComponent } from '../components/main/main.component';
 import { AvatarEditorModelViewerComponent } from '../components/model-viewer/model-viewer.component';
 import { CategoryData } from './CategoryData';
@@ -14,7 +15,7 @@ export interface IAvatarEditorCategoryModel
     selectPart(_arg_1: string, _arg_2: number): void;
     selectColor(_arg_1: string, _arg_2: number, _arg_3: number): void;
     hasClubSelectionsOverLevel(_arg_1: number): boolean;
-    hasInvalidSelectedItems(_arg_1: any): boolean; // inventory
+    hasInvalidSelectedItems(_arg_1: InventoryService): boolean;
     _Str_15298(_arg_1: number): boolean;
     _Str_8360(): boolean;
     categories: AdvancedMap<string, CategoryData>;

@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../../core/communication/messages/IMessageComposer';
 
-export class FurnitureColorWheelComposer implements IMessageComposer
+export class FurnitureColorWheelComposer implements IMessageComposer<ConstructorParameters<typeof FurnitureColorWheelComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof FurnitureColorWheelComposer>;
 
     constructor(itemId: number)
     {
         this._data = [ itemId ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

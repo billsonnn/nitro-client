@@ -18,7 +18,7 @@ export class NotificationConfirmComponent extends NotificationBroadcastMessageCo
                 this.callback();
             }
 
-            catch(err)
+            catch (err)
             {
                 NitroLogger.log(err);
             }

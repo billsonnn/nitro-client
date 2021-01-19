@@ -1,28 +1,30 @@
-<div class="d-flex my-1 p-1 align-items-center search-result-item" (click)="visit()">
-    <div class="d-flex align-items-center flex-grow-1">
-        <div class="badge badge-primary mr-3"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
-        {{ room.roomName }}
-    </div>
-    <ng-template #roomInfoTooltip>
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    pic
-                </div>
-                <div class="col-10">
-                    <span>{{ room.roomName }}</span>
-                    <span>{{ room.description }}</span>
-                </div>
+<button type="button" class="btn btn-primary detail-info" (click)="visit()" [ngClass]="{ 'small-detail': (displayMode === 0) }">
+    <div class="d-flex" [ngClass]="{ 'h-100': (displayMode >= 1) }">
+        <div *ngIf="(displayMode >= 1)" class="d-flex flex-column position-relative image-container rounded p-1 mr-1">
+            <div class="has-image w-100 h-100" [ngStyle]="thumbnail && { 'background-image': 'url(' + thumbnail + ')' }"></div>
+            <div class="badge badge-secondary text-center w-100" [ngClass]="entryBg" style="bottom:0;"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
+        </div>
+        <div class="d-flex justify-content-center flex-grow-1 overflow-hidden" [ngClass]="{ 'p-2 bg-secondary rounded flex-column': (displayMode >= 1) }">
+            <div *ngIf="(displayMode === 0)" class="d-flex justify-content-center align-items-center badge badge-secondary text-center" [ngClass]="entryBg"><i class="fas fa-user mr-1"></i>{{ room.userCount }}</div>
+            <div class="d-flex flex-column justify-content-center flex-grow-1" [ngClass]="{ 'align-items-center': (displayMode >= 1), 'align-items-start px-2': (displayMode === 0) }">
+                <span class="d-block text-truncate" style="max-width:95%;">{{ room.roomName }}</span>
+                <span *ngIf="(displayMode >= 1) && room.ownerName" class="d-block text-truncate" style="max-width:95%">{{ room.ownerName }}</span>
             </div>
-            <div class="row">
-                <i class="fas fa-user mr-1"></i>{{ room.ownerName }}
+            <div class="d-flex flex-row-reverse align-items-center">
+                <i class="fas fa-info-circle" [ngbTooltip]="roomInfoTooltip" tooltipClass="search-result-item-tooltip" placement="right" container="body"></i>
+                <ng-container *ngIf="(displayMode === 0)">
+                    <i class="fas fa-users mr-2" *ngIf="isGroup"></i>
+                    <i class="fas fa-lock mr-2" *ngIf="isDoorbell"></i>
+                    <i class="fas fa-key mr-2" *ngIf="isPassword"></i>
+                </ng-container>
             </div>
         </div>
-    </ng-template>
-    <div class="d-flex align-items-center">
-        <i class="fas fa-users mr-2" *ngIf="isGroup"></i>
-        <i class="fas fa-lock mr-2" *ngIf="isDoorbell"></i>
-        <i class="fas fa-key mr-2" *ngIf="isPassword"></i>
-        <button type="button" class="btn btn-sm btn-primary" [ngbTooltip]="roomInfoTooltip" tooltipClass="search-result-item-tooltip" placement="right" container="body"><i class="fas fa-info-circle"></i></button>
+        <ng-template #roomInfoTooltip>
+            <div class="container">
+                <span class="d-block">{{ room.roomName }}</span>
+                <span class="d-block small text-muted">"{{ room.description }}"</span>
+                <span class="d-block" *ngIf="room.ownerName != null"><i class="fas fa-user mr-1"></i>{{ room.ownerName }}</span>
+            </div>
+        </ng-template>
     </div>
-</div>
+</button>

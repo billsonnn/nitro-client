@@ -1,4 +1,5 @@
-﻿import { Options } from '@angular-slider/ngx-slider';
+﻿import { WiredFurniture } from './../../../WiredFurniture';
+import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
@@ -57,7 +58,7 @@ export class TriggerPeriodicallyComponent extends WiredTrigger
 
     protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.settime', 'seconds', TriggerOnceComponent.getLocaleName(this.time));
+        Nitro.instance.localization.registerParameter('wiredfurni.params.settime', 'seconds', WiredFurniture.getLocaleName(this.time));
 
         this.updateCount++;
     }

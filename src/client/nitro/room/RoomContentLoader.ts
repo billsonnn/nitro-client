@@ -79,7 +79,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         this.setFurnitureData();
 
-        for(let [ index, name ] of Nitro.instance.getConfiguration<string[]>('pet.types').entries()) this._pets[name] = index;
+        for(const [ index, name ] of Nitro.instance.getConfiguration<string[]>('pet.types').entries()) this._pets[name] = index;
     }
 
     public dispose(): void
@@ -126,7 +126,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     {
         if(!furnitureData) return;
 
-        for(let furniture of furnitureData)
+        for(const furniture of furnitureData)
         {
             if(!furniture) continue;
 
@@ -323,7 +323,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPetNameForType(type: number): string
     {
-        return Nitro.instance.getConfiguration<string[]>("pet.types")[type] || null;
+        return Nitro.instance.getConfiguration<string[]>('pet.types')[type] || null;
     }
 
     public isLoaderType(type: string): boolean
@@ -368,12 +368,12 @@ export class RoomContentLoader implements IFurnitureDataListener
                 this._images.set(([ type, param ].join('_')), image);
                 
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), true);
-            }
+            };
 
             image.onerror = () =>
             {
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), false);
-            }
+            };
 
             return true;
         }
@@ -392,7 +392,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._pendingContentTypes.push(type);
         this._events.set(type, events);
 
-        let totalToDownload = assetUrls.length;
+        const totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
         const onDownloaded = (loader: Loader, flag: boolean) =>
@@ -416,9 +416,9 @@ export class RoomContentLoader implements IFurnitureDataListener
             {
                 events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_FAILURE, type));
             }
-        }
+        };
 
-        for(let url of assetUrls)
+        for(const url of assetUrls)
         {
             if(!url) continue;
 
@@ -426,7 +426,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             const options: ILoaderOptions = {
                 crossOrigin: false
-            }
+            };
 
             loader
                 .use((resource: LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
@@ -550,12 +550,12 @@ export class RoomContentLoader implements IFurnitureDataListener
             case RoomContentLoader.PLACE_HOLDER_PET:
                 return [ this.getAssetUrlWithRoomBase('place_holder_pet') ];
             case RoomContentLoader.ROOM:
-                return [ this.getAssetUrlWithRoomBase('room') ]
+                return [ this.getAssetUrlWithRoomBase('room') ];
             case RoomContentLoader.TILE_CURSOR:
                 return [ this.getAssetUrlWithRoomBase('tile_cursor') ];
             case RoomContentLoader.SELECTION_ARROW:
                 return [ this.getAssetUrlWithRoomBase('selection_arrow') ];
-            default:
+            default: {
                 const category = this.getCategoryForType(type);
 
                 if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
@@ -566,7 +566,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                         let assetUrl = this.getAssetUrlWithFurniIconBase(name);
 
-                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null))
+                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null));
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
 
@@ -582,6 +582,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                 }
 
                 return null;
+            }
         }
     }
 
@@ -613,22 +614,22 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     private getAssetUrlWithRoomBase(assetName: string): string
     {
-        return (Nitro.instance.getConfiguration<string>("room.asset.url").replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>('room.asset.url').replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithFurniBase(assetName: string): string
     {
-        return (Nitro.instance.getConfiguration<string>("furni.asset.url").replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>('furni.asset.url').replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithFurniIconBase(assetName: string): string
     {
-        return (Nitro.instance.getConfiguration<string>("furni.asset.icon.url").replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>('furni.asset.icon.url').replace(/%libname%/gi, assetName));
     }
 
     public getAssetUrlWithPetBase(assetName: string): string
     {
-        return (Nitro.instance.getConfiguration<string>("pet.asset.url").replace(/%libname%/gi, assetName));
+        return (Nitro.instance.getConfiguration<string>('pet.asset.url').replace(/%libname%/gi, assetName));
     }
 
     public setRoomObjectRoomId(object: IRoomObject, roomId: string): void

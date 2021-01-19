@@ -68,7 +68,7 @@ export class InventoryService implements OnDestroy
                 new FigureSetIdsMessageEvent(this.onFigureSetIdsMessageEvent.bind(this))
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -79,7 +79,7 @@ export class InventoryService implements OnDestroy
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
             Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
 
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });

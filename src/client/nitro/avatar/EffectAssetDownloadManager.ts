@@ -36,7 +36,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
         this._assets                = assets;
         this._structure             = structure;
 
-        this._missingMandatoryLibs  = Nitro.instance.getConfiguration<string[]>("avatar.mandatory.effect.libraries");
+        this._missingMandatoryLibs  = Nitro.instance.getConfiguration<string[]>('avatar.mandatory.effect.libraries');
         this._effectMap             = new Map();
         this._effectListeners       = new Map();
         this._incompleteEffects     = new Map();
@@ -57,7 +57,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
         try
         {
-            request.open('GET', Nitro.instance.getConfiguration<string>("avatar.effectmap.url"));
+            request.open('GET', Nitro.instance.getConfiguration<string>('avatar.effectmap.url'));
 
             request.send();
 
@@ -75,12 +75,15 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
                     this.dispatchEvent(new NitroEvent(EffectAssetDownloadManager.DOWNLOADER_READY));
                 }
-            }
+            };
 
-            request.onerror = e => { throw new Error('invalid_avatar_effect_map'); };
+            request.onerror = e => 
+            {
+                throw new Error('invalid_avatar_effect_map'); 
+            };
         }
 
-        catch(e)
+        catch (e)
         {
             NitroLogger.log(e);
         }
@@ -90,7 +93,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
     {
         if(!data) return;
 
-        for(let effect of data)
+        for(const effect of data)
         {
             if(!effect) continue;
 
@@ -102,7 +105,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
             this._libraryNames.push(lib);
 
-            const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, Nitro.instance.getConfiguration<string>("avatar.asset.effect.url"));
+            const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, Nitro.instance.getConfiguration<string>('avatar.asset.effect.url'));
 
             downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
 
@@ -142,7 +145,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
             this._incompleteEffects.set(id.toString(), pendingLibraries);
 
-            for(let library of pendingLibraries)
+            for(const library of pendingLibraries)
             {
                 if(!library) continue;
 
@@ -159,7 +162,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
     {
         if(!event) return;
 
-        for(let [ id, listener ] of this._initDownloadBuffer)
+        for(const [ id, listener ] of this._initDownloadBuffer)
         {
             this.downloadAvatarEffect(id, listener);
         }
@@ -175,11 +178,11 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
         this._structure._Str_2061(event.library.animation);
 
-        for(let [ id, libraries ] of this._incompleteEffects.entries())
+        for(const [ id, libraries ] of this._incompleteEffects.entries())
         {
             let isReady = true;
 
-            for(let library of libraries)
+            for(const library of libraries)
             {
                 if(!library || library.isLoaded) continue;
 
@@ -194,7 +197,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
                 const listeners = this._effectListeners.get(id);
 
-                for(let listener of listeners)
+                for(const listener of listeners)
                 {
                     if(!listener || listener.disposed) continue;
 
@@ -207,7 +210,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
             }
         }
 
-        for(let id of loadedEffects) this._incompleteEffects.delete(id);
+        for(const id of loadedEffects) this._incompleteEffects.delete(id);
 
         let index = 0;
 
@@ -228,13 +231,13 @@ export class EffectAssetDownloadManager extends EventDispatcher
     {
         const libraries = this._missingMandatoryLibs.slice();
 
-        for(let library of libraries)
+        for(const library of libraries)
         {
             if(!library) continue;
 
             const map = this._effectMap.get(library);
 
-            if(map) for(let effect of map) effect && this.downloadLibrary(effect);
+            if(map) for(const effect of map) effect && this.downloadLibrary(effect);
         }
     }
 
@@ -252,15 +255,15 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
     private getAvatarEffectPendingLibraries(id: number): EffectAssetDownloadLibrary[]
     {
-        let pendingLibraries: EffectAssetDownloadLibrary[] = [];
+        const pendingLibraries: EffectAssetDownloadLibrary[] = [];
 
         if(!this._structure) return pendingLibraries;
 
-        var libraries = this._effectMap.get(id.toString());
+        const libraries = this._effectMap.get(id.toString());
 
         if(libraries)
         {
-            for(let library of libraries)
+            for(const library of libraries)
             {
                 if(!library || library.isLoaded) continue;
 

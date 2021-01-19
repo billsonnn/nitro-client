@@ -45,7 +45,7 @@ export class AvatarImageCache
         this._disposed          = false;
         this._unionImages       = [];
         this._matrix            = new Matrix();
-        this._serverRenderData  = new Array();
+        this._serverRenderData  = [];
     }
 
     public dispose(): void
@@ -60,7 +60,7 @@ export class AvatarImageCache
 
         if(this._cache)
         {
-            for(let cache of this._cache.values())
+            for(const cache of this._cache.values())
             {
                 if(!cache) continue;
 
@@ -72,7 +72,7 @@ export class AvatarImageCache
 
         if(this._unionImages)
         {
-            for(let image of this._unionImages)
+            for(const image of this._unionImages)
             {
                 if(!image) continue;
 
@@ -89,7 +89,7 @@ export class AvatarImageCache
 
         if(this._cache)
         {
-            for(let cache of this._cache.values())
+            for(const cache of this._cache.values())
             {
                 if(!cache) continue;
 
@@ -102,7 +102,7 @@ export class AvatarImageCache
     {
         if(this._cache)
         {
-            for(let cache of this._cache.values())
+            for(const cache of this._cache.values())
             {
                 if(!cache) continue;
 
@@ -117,7 +117,7 @@ export class AvatarImageCache
 
         if(parts)
         {
-            for(let part of parts)
+            for(const part of parts)
             {
                 const actionCache = this._Str_1050(part);
 
@@ -132,7 +132,7 @@ export class AvatarImageCache
     {
         const _local_3 = this._structure._Str_2021(k, this._avatar);
 
-        for(let _local_4 of _local_3)
+        for(const _local_4 of _local_3)
         {
             const _local_5 = this._Str_1050(_local_4);
 
@@ -178,11 +178,11 @@ export class AvatarImageCache
         let _local_8                        = _local_7;
         let _local_9: string[]              = [];
         let _local_10: Map<string, string>  = new Map();
-        let _local_11                       = new Point();
+        const _local_11                       = new Point();
 
-        if (!((!(_local_7)) || (!(_local_7._Str_742))))
+        if(!((!(_local_7)) || (!(_local_7._Str_742))))
         {
-            if (_local_7._Str_742._Str_861)
+            if(_local_7._Str_742._Str_861)
             {
                 let _local_15 = _local_5;
 
@@ -330,7 +330,7 @@ export class AvatarImageCache
             if(!this._canvas) return null;
         }
 
-        let isFlipped           = AvatarDirectionAngle.DIRECTION_IS_FLIPPED[direction] || false;
+        const isFlipped           = AvatarDirectionAngle.DIRECTION_IS_FLIPPED[direction] || false;
         let assetPartDefinition = _arg_4._Str_742._Str_778;
         let isCacheable         = true;
         let containerIndex      = (containers.length - 1);
@@ -463,8 +463,8 @@ export class AvatarImageCache
 
     private _Str_1652(k: number): string
     {
-        var _local_2: string = (k * 0xFF).toString(16);
-        if (_local_2.length < 2)
+        let _local_2: string = (k * 0xFF).toString(16);
+        if(_local_2.length < 2)
         {
             _local_2 = ('0' + _local_2);
         }
@@ -473,9 +473,9 @@ export class AvatarImageCache
 
     private _Str_1236(k: ImageData[], isFlipped: boolean): ImageData
     {
-        let bounds = new Rectangle();
+        const bounds = new Rectangle();
 
-        for(let data of k) data && bounds.enlarge(data._Str_1567);
+        for(const data of k) data && bounds.enlarge(data._Str_1567);
 
         const point     = new Point(-(bounds.x), -(bounds.y));
         const container = new Container();
@@ -487,7 +487,7 @@ export class AvatarImageCache
 
         container.addChild(sprite);
 
-        for(let data of k)
+        for(const data of k)
         {
             if(!data) continue;
 

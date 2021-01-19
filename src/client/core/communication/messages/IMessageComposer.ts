@@ -1,5 +1,5 @@
-export interface IMessageComposer
+export interface IMessageComposer<T extends unknown[]>
 {
     dispose(): void;
-    getMessageArray(): any[];
+    getMessageArray(): T;
 }

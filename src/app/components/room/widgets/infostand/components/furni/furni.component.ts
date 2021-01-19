@@ -10,7 +10,7 @@ import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
 
 @Component({
-	templateUrl: './furni.template.html'
+    templateUrl: './furni.template.html'
 })
 export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
 {
@@ -40,7 +40,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             canRotate   = (!event.isWallItem);
         }
         
-        let isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
+        const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
 
         if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
         {

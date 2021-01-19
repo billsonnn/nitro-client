@@ -51,7 +51,7 @@ export class WiredSelectionFilter extends Filter
 
     public set lineColor(value: number | number[])
     {
-        let arr = this.uniforms.lineColor;
+        const arr = this.uniforms.lineColor;
 
         if(typeof value === 'number')
         {
@@ -76,7 +76,7 @@ export class WiredSelectionFilter extends Filter
 
     public set color(value: number | number[])
     {
-        let arr = this.uniforms.color;
+        const arr = this.uniforms.color;
 
         if(typeof value === 'number')
         {

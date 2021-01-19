@@ -3,7 +3,7 @@ import { Vector3d } from './Vector3d';
 
 export class ColorConverter 
 {
-    public static int2rgb(color: number)
+    public static int2rgb(color: number): string
     {
         color >>>= 0;
         const b = color & 0xFF;
@@ -11,29 +11,29 @@ export class ColorConverter
         const r = (color & 0xFF0000) >>> 16;
         const a = ( (color & 0xFF000000) >>> 24 ) / 255;
         
-        return "rgba(" + [r, g, b, 1].join(",") + ")";
+        return 'rgba(' + [r, g, b, 1].join(',') + ')';
     }
 
     public static _Str_22130(k: number): number
     {
-        var _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
-        var _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
-        var _local_4: number = ((k & 0xFF) / 0xFF);
-        var _local_5: number = Math.max(_local_2, _local_3, _local_4);
-        var _local_6: number = Math.min(_local_2, _local_3, _local_4);
-        var _local_7: number = (_local_5 - _local_6);
-        var _local_8: number = 0;
-        var _local_9: number = 0;
-        var _local_10: number = 0;
-        if (_local_7 == 0)
+        const _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
+        const _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
+        const _local_4: number = ((k & 0xFF) / 0xFF);
+        const _local_5: number = Math.max(_local_2, _local_3, _local_4);
+        const _local_6: number = Math.min(_local_2, _local_3, _local_4);
+        const _local_7: number = (_local_5 - _local_6);
+        let _local_8 = 0;
+        let _local_9 = 0;
+        let _local_10 = 0;
+        if(_local_7 == 0)
         {
             _local_8 = 0;
         }
         else
         {
-            if (_local_5 == _local_2)
+            if(_local_5 == _local_2)
             {
-                if (_local_3 > _local_4)
+                if(_local_3 > _local_4)
                 {
                     _local_8 = ((60 * (_local_3 - _local_4)) / _local_7);
                 }
@@ -44,13 +44,13 @@ export class ColorConverter
             }
             else
             {
-                if (_local_5 == _local_3)
+                if(_local_5 == _local_3)
                 {
                     _local_8 = (((60 * (_local_4 - _local_2)) / _local_7) + 120);
                 }
                 else
                 {
-                    if (_local_5 == _local_4)
+                    if(_local_5 == _local_4)
                     {
                         _local_8 = (((60 * (_local_2 - _local_3)) / _local_7) + 240);
                     }
@@ -58,13 +58,13 @@ export class ColorConverter
             }
         }
         _local_9 = (0.5 * (_local_5 + _local_6));
-        if (_local_7 == 0)
+        if(_local_7 == 0)
         {
             _local_10 = 0;
         }
         else
         {
-            if (_local_9 <= 0.5)
+            if(_local_9 <= 0.5)
             {
                 _local_10 = ((_local_7 / _local_9) * 0.5);
             }
@@ -73,31 +73,31 @@ export class ColorConverter
                 _local_10 = ((_local_7 / (1 - _local_9)) * 0.5);
             }
         }
-        var _local_11: number = Math.round(((_local_8 / 360) * 0xFF));
-        var _local_12: number = Math.round((_local_10 * 0xFF));
-        var _local_13: number = Math.round((_local_9 * 0xFF));
-        var _local_14: number = (((_local_11 << 16) + (_local_12 << 8)) + _local_13);
+        const _local_11: number = Math.round(((_local_8 / 360) * 0xFF));
+        const _local_12: number = Math.round((_local_10 * 0xFF));
+        const _local_13: number = Math.round((_local_9 * 0xFF));
+        const _local_14: number = (((_local_11 << 16) + (_local_12 << 8)) + _local_13);
         return _local_14;
     }
 
     public static _Str_13949(k: number): number
     {
-        var _local_12: number;
-        var _local_13: number;
-        var _local_14: number;
-        var _local_15: number;
-        var _local_16: number;
-        var _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
-        var _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
-        var _local_4: number = ((k & 0xFF) / 0xFF);
-        var _local_5: number = 0;
-        var _local_6: number = 0;
-        var _local_7: number = 0;
-        if (_local_3 > 0)
+        let _local_12: number;
+        let _local_13: number;
+        let _local_14: number;
+        let _local_15: number;
+        let _local_16: number;
+        const _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
+        const _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
+        const _local_4: number = ((k & 0xFF) / 0xFF);
+        let _local_5 = 0;
+        let _local_6 = 0;
+        let _local_7 = 0;
+        if(_local_3 > 0)
         {
             _local_12 = 0;
             _local_13 = 0;
-            if (_local_4 < 0.5)
+            if(_local_4 < 0.5)
             {
                 _local_12 = (_local_4 * (1 + _local_3));
             }
@@ -109,52 +109,52 @@ export class ColorConverter
             _local_14 = (_local_2 + (1 / 3));
             _local_15 = _local_2;
             _local_16 = (_local_2 - (1 / 3));
-            if (_local_14 < 0)
+            if(_local_14 < 0)
             {
                 _local_14 = (_local_14 + 1);
             }
             else
             {
-                if (_local_14 > 1)
+                if(_local_14 > 1)
                 {
                     _local_14--;
                 }
             }
-            if (_local_15 < 0)
+            if(_local_15 < 0)
             {
                 _local_15 = (_local_15 + 1);
             }
             else
             {
-                if (_local_15 > 1)
+                if(_local_15 > 1)
                 {
                     _local_15--;
                 }
             }
-            if (_local_16 < 0)
+            if(_local_16 < 0)
             {
                 _local_16 = (_local_16 + 1);
             }
             else
             {
-                if (_local_16 > 1)
+                if(_local_16 > 1)
                 {
                     _local_16--;
                 }
             }
-            if ((_local_14 * 6) < 1)
+            if((_local_14 * 6) < 1)
             {
                 _local_5 = (_local_13 + (((_local_12 - _local_13) * 6) * _local_14));
             }
             else
             {
-                if ((_local_14 * 2) < 1)
+                if((_local_14 * 2) < 1)
                 {
                     _local_5 = _local_12;
                 }
                 else
                 {
-                    if ((_local_14 * 3) < 2)
+                    if((_local_14 * 3) < 2)
                     {
                         _local_5 = (_local_13 + (((_local_12 - _local_13) * 6) * ((2 / 3) - _local_14)));
                     }
@@ -164,19 +164,19 @@ export class ColorConverter
                     }
                 }
             }
-            if ((_local_15 * 6) < 1)
+            if((_local_15 * 6) < 1)
             {
                 _local_6 = (_local_13 + (((_local_12 - _local_13) * 6) * _local_15));
             }
             else
             {
-                if ((_local_15 * 2) < 1)
+                if((_local_15 * 2) < 1)
                 {
                     _local_6 = _local_12;
                 }
                 else
                 {
-                    if ((_local_15 * 3) < 2)
+                    if((_local_15 * 3) < 2)
                     {
                         _local_6 = (_local_13 + (((_local_12 - _local_13) * 6) * ((2 / 3) - _local_15)));
                     }
@@ -186,19 +186,19 @@ export class ColorConverter
                     }
                 }
             }
-            if ((_local_16 * 6) < 1)
+            if((_local_16 * 6) < 1)
             {
                 _local_7 = (_local_13 + (((_local_12 - _local_13) * 6) * _local_16));
             }
             else
             {
-                if ((_local_16 * 2) < 1)
+                if((_local_16 * 2) < 1)
                 {
                     _local_7 = _local_12;
                 }
                 else
                 {
-                    if ((_local_16 * 3) < 2)
+                    if((_local_16 * 3) < 2)
                     {
                         _local_7 = (_local_13 + (((_local_12 - _local_13) * 6) * ((2 / 3) - _local_16)));
                     }
@@ -215,19 +215,19 @@ export class ColorConverter
             _local_6 = _local_4;
             _local_7 = _local_4;
         }
-        var _local_8: number = Math.round((_local_5 * 0xFF));
-        var _local_9: number = Math.round((_local_6 * 0xFF));
-        var _local_10: number = Math.round((_local_7 * 0xFF));
-        var _local_11: number = (((_local_8 << 16) + (_local_9 << 8)) + _local_10);
+        const _local_8: number = Math.round((_local_5 * 0xFF));
+        const _local_9: number = Math.round((_local_6 * 0xFF));
+        const _local_10: number = Math.round((_local_7 * 0xFF));
+        const _local_11: number = (((_local_8 << 16) + (_local_9 << 8)) + _local_10);
         return _local_11;
     }
 
     public static rgb2xyz(k: number): IVector3D
     {
-        var _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
-        var _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
-        var _local_4: number = (((k >> 0) & 0xFF) / 0xFF);
-        if (_local_2 > 0.04045)
+        let _local_2: number = (((k >> 16) & 0xFF) / 0xFF);
+        let _local_3: number = (((k >> 8) & 0xFF) / 0xFF);
+        let _local_4: number = (((k >> 0) & 0xFF) / 0xFF);
+        if(_local_2 > 0.04045)
         {
             _local_2 = Math.pow(((_local_2 + 0.055) / 1.055), 2.4);
         }
@@ -235,7 +235,7 @@ export class ColorConverter
         {
             _local_2 = (_local_2 / 12.92);
         }
-        if (_local_3 > 0.04045)
+        if(_local_3 > 0.04045)
         {
             _local_3 = Math.pow(((_local_3 + 0.055) / 1.055), 2.4);
         }
@@ -243,7 +243,7 @@ export class ColorConverter
         {
             _local_3 = (_local_3 / 12.92);
         }
-        if (_local_4 > 0.04045)
+        if(_local_4 > 0.04045)
         {
             _local_4 = Math.pow(((_local_4 + 0.055) / 1.055), 2.4);
         }
@@ -259,10 +259,10 @@ export class ColorConverter
 
     public static _Str_22784(k:IVector3D):IVector3D
     {
-        var _local_2: number = (k.x / 95.047);
-        var _local_3: number = (k.y / 100);
-        var _local_4: number = (k.z / 108.883);
-        if (_local_2 > 0.008856)
+        let _local_2: number = (k.x / 95.047);
+        let _local_3: number = (k.y / 100);
+        let _local_4: number = (k.z / 108.883);
+        if(_local_2 > 0.008856)
         {
             _local_2 = Math.pow(_local_2, (1 / 3));
         }
@@ -270,7 +270,7 @@ export class ColorConverter
         {
             _local_2 = ((7.787 * _local_2) + (16 / 116));
         }
-        if (_local_3 > 0.008856)
+        if(_local_3 > 0.008856)
         {
             _local_3 = Math.pow(_local_3, (1 / 3));
         }
@@ -278,7 +278,7 @@ export class ColorConverter
         {
             _local_3 = ((7.787 * _local_3) + (16 / 116));
         }
-        if (_local_4 > 0.008856)
+        if(_local_4 > 0.008856)
         {
             _local_4 = Math.pow(_local_4, (1 / 3));
         }

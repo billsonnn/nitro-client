@@ -86,13 +86,13 @@ export class RoomPlane implements IRoomPlane
         this._Str_2943 = new Vector3d();
         this._Str_2943.assign(_arg_4);
         this._normal = Vector3d.crossProduct(this._Str_2920, this._Str_2943);
-        if (this._normal.length > 0)
+        if(this._normal.length > 0)
         {
             this._normal.multiply((1 / this._normal.length));
         }
-        if (_arg_7 != null)
+        if(_arg_7 != null)
         {
-            for(let entry of _arg_7)
+            for(const entry of _arg_7)
             {
                 if(!entry) continue;
 
@@ -260,7 +260,7 @@ export class RoomPlane implements IRoomPlane
 
         if(this._Str_2708)
         {
-            for(let bitmap of this._Str_2708.values())
+            for(const bitmap of this._Str_2708.values())
             {
                 if(!bitmap) continue;
 
@@ -327,7 +327,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(this._Str_2708 && this._Str_2708.size)
         {
-            for(let bitmap of this._Str_2708.values())
+            for(const bitmap of this._Str_2708.values())
             {
                 if(!bitmap) continue;
 
@@ -371,7 +371,7 @@ export class RoomPlane implements IRoomPlane
 
         let _local_3: PlaneBitmapData = null;
 
-        if (this._Str_10518(k, _arg_2))
+        if(this._Str_10518(k, _arg_2))
         {
             const _local_4 = this.getTextureIdentifier(k.scale);
             const _local_5 = (this._Str_2920.length * k.scale);
@@ -404,7 +404,7 @@ export class RoomPlane implements IRoomPlane
             {
                 const _local_9 = new Graphics();
 
-                _local_9.beginFill(0xFFFFFF)
+                _local_9.beginFill(0xFFFFFF);
                 _local_9.drawRect(0, 0, _local_5, _local_6);
                 _local_9.endFill();
 
@@ -445,7 +445,7 @@ export class RoomPlane implements IRoomPlane
 
         const _local_5 = new PlaneDrawingData();
 
-        let index = 0;
+        const index = 0;
 
         while(index < this._Str_4047.length)
         {
@@ -490,7 +490,7 @@ export class RoomPlane implements IRoomPlane
 
     public _Str_22136(geometry:IRoomGeometry): PlaneDrawingData[]
     {
-        var drawingDatas: PlaneDrawingData[] = [];
+        const drawingDatas: PlaneDrawingData[] = [];
 
         if(this._Str_3816)
         {
@@ -514,11 +514,11 @@ export class RoomPlane implements IRoomPlane
 
                         Randomizer._Str_17384(this._Str_16308);
 
-                        for(let column of cm._Str_23721(this._Str_24802(geometry)))
+                        for(const column of cm._Str_23721(this._Str_24802(geometry)))
                         {
-                            let assetNames: string[] = [];
+                            const assetNames: string[] = [];
 
-                            for(let cell of column._Str_22299())
+                            for(const cell of column._Str_22299())
                             {
                                 const name = cell._Str_2125(normal);
                                 
@@ -561,9 +561,9 @@ export class RoomPlane implements IRoomPlane
     {
         if(!geometry || this._disposed) return false;
 
-        let geometryChanged: boolean = false;
+        let geometryChanged = false;
 
-        if (this._Str_3406 != geometry.updateId) geometryChanged = true;
+        if(this._Str_3406 != geometry.updateId) geometryChanged = true;
 
         if(!geometryChanged || !this._Str_7367)
         {
@@ -591,7 +591,7 @@ export class RoomPlane implements IRoomPlane
 
             let i = 0;
 
-            while (i < this._Str_5886.length)
+            while(i < this._Str_5886.length)
             {
                 cosAngle = Vector3d.cosAngle(geometry.directionAxis, this._Str_5886[i]);
 
@@ -616,12 +616,12 @@ export class RoomPlane implements IRoomPlane
 
             let relativeDepth = (Math.max(this._Str_2820.z, this._Str_2745.z, this._Str_2639.z, this._Str_2766.z) - originZ);
 
-            if (this._type === RoomPlane.TYPE_FLOOR)
+            if(this._type === RoomPlane.TYPE_FLOOR)
             {
                 relativeDepth = (relativeDepth - ((this._location.z + Math.min(0, this._Str_2920.z, this._Str_2943.z)) * 8));
             }
 
-            if (this._type === RoomPlane.TYPE_LANDSCAPE)
+            if(this._type === RoomPlane.TYPE_LANDSCAPE)
             {
                 relativeDepth = (relativeDepth + 0.02);
             }
@@ -702,10 +702,10 @@ export class RoomPlane implements IRoomPlane
         this._Str_2766.y = Math.round(this._Str_2766.y);
         this._offset.x = Math.round(this._offset.x);
         this._offset.y = Math.round(this._offset.y);
-        var _local_2: number = Math.min(this._Str_2820.x, this._Str_2745.x, this._Str_2639.x, this._Str_2766.x);
-        var _local_3: number = Math.max(this._Str_2820.x, this._Str_2745.x, this._Str_2639.x, this._Str_2766.x);
-        var _local_4: number = Math.min(this._Str_2820.y, this._Str_2745.y, this._Str_2639.y, this._Str_2766.y);
-        var _local_5: number = Math.max(this._Str_2820.y, this._Str_2745.y, this._Str_2639.y, this._Str_2766.y);
+        const _local_2: number = Math.min(this._Str_2820.x, this._Str_2745.x, this._Str_2639.x, this._Str_2766.x);
+        let _local_3: number = Math.max(this._Str_2820.x, this._Str_2745.x, this._Str_2639.x, this._Str_2766.x);
+        const _local_4: number = Math.min(this._Str_2820.y, this._Str_2745.y, this._Str_2639.y, this._Str_2766.y);
+        let _local_5: number = Math.max(this._Str_2820.y, this._Str_2745.y, this._Str_2639.y, this._Str_2766.y);
         _local_3 = (_local_3 - _local_2);
         this._offset.x = (this._offset.x - _local_2);
         this._Str_2820.x = (this._Str_2820.x - _local_2);
@@ -724,38 +724,38 @@ export class RoomPlane implements IRoomPlane
 
     private _Str_17000(k: IRoomGeometry, _arg_2: Graphics): void
     {
-        if (((((((this._Str_2820 == null) || (this._Str_2745 == null)) || (this._Str_2639 == null)) || (this._Str_2766 == null)) || (_arg_2 == null)) || (this._Str_1049 == null)))
+        if(((((((this._Str_2820 == null) || (this._Str_2745 == null)) || (this._Str_2639 == null)) || (this._Str_2766 == null)) || (_arg_2 == null)) || (this._Str_1049 == null)))
         {
             return;
         }
-        var _local_3: number = (this._Str_2766.x - this._Str_2639.x);
-        var _local_4: number = (this._Str_2766.y - this._Str_2639.y);
-        var _local_5: number = (this._Str_2745.x - this._Str_2639.x);
-        var _local_6: number = (this._Str_2745.y - this._Str_2639.y);
-        if (((this._type == RoomPlane.TYPE_WALL) || (this._type == RoomPlane.TYPE_LANDSCAPE)))
+        let _local_3: number = (this._Str_2766.x - this._Str_2639.x);
+        let _local_4: number = (this._Str_2766.y - this._Str_2639.y);
+        let _local_5: number = (this._Str_2745.x - this._Str_2639.x);
+        let _local_6: number = (this._Str_2745.y - this._Str_2639.y);
+        if(((this._type == RoomPlane.TYPE_WALL) || (this._type == RoomPlane.TYPE_LANDSCAPE)))
         {
-            if (Math.abs((_local_5 - _arg_2.width)) <= 1)
+            if(Math.abs((_local_5 - _arg_2.width)) <= 1)
             {
                 _local_5 = _arg_2.width;
             }
-            if (Math.abs((_local_6 - _arg_2.width)) <= 1)
+            if(Math.abs((_local_6 - _arg_2.width)) <= 1)
             {
                 _local_6 = _arg_2.width;
             }
-            if (Math.abs((_local_3 - _arg_2.height)) <= 1)
+            if(Math.abs((_local_3 - _arg_2.height)) <= 1)
             {
                 _local_3 = _arg_2.height;
             }
-            if (Math.abs((_local_4 - _arg_2.height)) <= 1)
+            if(Math.abs((_local_4 - _arg_2.height)) <= 1)
             {
                 _local_4 = _arg_2.height;
             }
         }
-        var _local_7: number = (_local_5 / _arg_2.width);
-        var _local_8: number = (_local_6 / _arg_2.width);
-        var _local_9: number = (_local_3 / _arg_2.height);
-        var _local_10: number = (_local_4 / _arg_2.height);
-        var _local_11 = new Matrix();
+        const _local_7: number = (_local_5 / _arg_2.width);
+        const _local_8: number = (_local_6 / _arg_2.width);
+        const _local_9: number = (_local_3 / _arg_2.height);
+        const _local_10: number = (_local_4 / _arg_2.height);
+        const _local_11 = new Matrix();
         _local_11.a = _local_7;
         _local_11.b = _local_8;
         _local_11.c = _local_9;
@@ -788,13 +788,13 @@ export class RoomPlane implements IRoomPlane
 
         let _local_5 = 0;
         
-        while (_local_5 < this._Str_4047.length)
+        while(_local_5 < this._Str_4047.length)
         {
             const mask = this._Str_4047[_local_5];
 
             if(mask)
             {
-                if ((((mask.type === k) && (mask._Str_5120 === _arg_2)) && (mask._Str_4659 === _arg_3))) return false;
+                if((((mask.type === k) && (mask._Str_5120 === _arg_2)) && (mask._Str_4659 === _arg_3))) return false;
             }
 
             _local_5++;
@@ -820,7 +820,7 @@ export class RoomPlane implements IRoomPlane
     {
         if(this._Str_4542)
         {
-            for(let mask of this._Str_5088)
+            for(const mask of this._Str_5088)
             {
                 if(!mask) continue;
 
@@ -842,18 +842,18 @@ export class RoomPlane implements IRoomPlane
     {
         if(!this._Str_4891) return;
 
-        var _local_3: boolean = true;
+        let _local_3 = true;
         let _local_6: boolean;
 
         if(this._Str_4047.length === this._Str_8341.length)
         {
-            for(let mask of this._Str_4047)
+            for(const mask of this._Str_4047)
             {
                 if(!mask) continue;
 
                 _local_6 = false;
 
-                for(let plane of this._Str_8341)
+                for(const plane of this._Str_8341)
                 {
                     if(!plane) continue;
 
@@ -889,8 +889,8 @@ export class RoomPlane implements IRoomPlane
 
         if(((!this._Str_4542) || ((!this._Str_4047.length && !this._Str_5088.length) && !this._Str_4891)) || !this._Str_4795) return;
 
-        let width   = texture.width;
-        let height  = texture.height;
+        const width   = texture.width;
+        const height  = texture.height;
 
         this._Str_19336();
 
@@ -954,7 +954,7 @@ export class RoomPlane implements IRoomPlane
 
             i = 0;
 
-            while (i < this._Str_5088.length)
+            while(i < this._Str_5088.length)
             {
                 const rectMask = this._Str_5088[i];
 
@@ -963,8 +963,8 @@ export class RoomPlane implements IRoomPlane
                     posX    = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
                     posY    = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
                     
-                    let wd  = ((this._Str_2730.width * rectMask._Str_9124) / this._Str_2920.length);
-                    let ht  = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
+                    const wd  = ((this._Str_2730.width * rectMask._Str_9124) / this._Str_2920.length);
+                    const ht  = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
 
                     this._Str_2730
                         .beginFill(0xFF0000)

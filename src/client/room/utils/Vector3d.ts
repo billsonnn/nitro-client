@@ -182,6 +182,6 @@ export class Vector3d implements IVector3D
 
     public toString(): string
     {
-        return `[Vector3d: ${ this._x }, ${ this._y }, ${ this._z }]`
+        return `[Vector3d: ${ this._x }, ${ this._y }, ${ this._z }]`;
     }
 }

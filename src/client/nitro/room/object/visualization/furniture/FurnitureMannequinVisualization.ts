@@ -61,7 +61,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
 
     protected updateObject(scale: number, direction: number): boolean
     {
-        let updateObject = super.updateObject(scale, direction);
+        const updateObject = super.updateObject(scale, direction);
 
         if(updateObject)
         {

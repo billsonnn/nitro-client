@@ -134,8 +134,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
         if((boundingRectangle.width * boundingRectangle.height) === 0) return null;
 
-        let spriteCount                     = this.totalSprites;
-        let spriteList: IRoomObjectSprite[] = [];
+        const spriteCount                     = this.totalSprites;
+        const spriteList: IRoomObjectSprite[] = [];
 
         let index = 0;
 
@@ -203,8 +203,8 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
 
             if(sprite && sprite.texture && sprite.visible)
             {
-                let offsetX = ((sprite.flipH) ? (-(sprite.width) + sprite.offsetX) : sprite.offsetX);
-                let offsetY = ((sprite.flipV) ? (-(sprite.height) + sprite.offsetY) : sprite.offsetY);
+                const offsetX = ((sprite.flipH) ? (-(sprite.width) + sprite.offsetX) : sprite.offsetX);
+                const offsetY = ((sprite.flipV) ? (-(sprite.height) + sprite.offsetY) : sprite.offsetY);
 
                 const point = new Point(offsetX, offsetY);
 

@@ -14,7 +14,7 @@ export class EvaWireFormat implements ICodec
 
         buffer.writeInt(0).writeShort(header);
 
-        for(let value of messages)
+        for(const value of messages)
         {
             let type: string = typeof value;
 

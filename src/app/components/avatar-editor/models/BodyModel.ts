@@ -43,7 +43,7 @@ export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
         category.selectPartId(setId);
         category.selectColorIds(colorIds);
 
-        for(let part of category.parts)
+        for(const part of category.parts)
         {
             const figure        = this.controller.figureData.getFigureStringWithFace(part.id);
             const avatarImage   = Nitro.instance.avatar.createAvatarImage(figure, AvatarScaleType.LARGE, null, this);
