@@ -207,4 +207,6 @@ export class IncomingHeader
     public static WIRED_TRIGGER                    = 383;
     public static PLAYING_GAME                     = 448;
     public static FURNITURE_STATE_2                = 3431;
+    public static REMOVE_BOT_FROM_INVENTORY        = 233;
+    public static ADD_BOT_TO_INVENTORY             = 1352;
 }

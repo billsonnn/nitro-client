@@ -33,6 +33,9 @@ import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent'
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
+import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
+import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
 import { FigureSetIdsMessageEvent } from './messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
 import { FurnitureListAddOrUpdateEvent } from './messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
 import { FurnitureListEvent } from './messages/incoming/inventory/furni/FurnitureListEvent';
@@ -92,6 +95,7 @@ import { FurnitureAliasesEvent } from './messages/incoming/room/furniture/Furnit
 import { FurnitureDataEvent } from './messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStackHeightEvent } from './messages/incoming/room/furniture/FurnitureStackHeightEvent';
+import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -160,6 +164,7 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
 import { TradingAcceptComposer } from './messages/outgoing/inventory/trading/TradingAcceptComposer';
@@ -172,6 +177,7 @@ import { TradingListItemRemoveComposer } from './messages/outgoing/inventory/tra
 import { TradingOpenComposer } from './messages/outgoing/inventory/trading/TradingOpenComposer';
 import { TradingUnacceptComposer } from './messages/outgoing/inventory/trading/TradingUnacceptComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
+import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
 import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchCloseComposer } from './messages/outgoing/navigator/NavigatorSearchCloseComposer';
 import { NavigatorSearchComposer } from './messages/outgoing/navigator/NavigatorSearchComposer';
@@ -189,6 +195,9 @@ import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUs
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
+import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
+import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
+import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -199,6 +208,7 @@ import { FurnitureColorWheelComposer } from './messages/outgoing/room/furniture/
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
 import { FurnitureMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { FurnitureOneWayDoorComposer } from './messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
 import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureRandomStateComposer';
 import { FurnitureStackHeightComposer } from './messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
@@ -233,10 +243,6 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
-import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
-import { FurnitureOneWayDoorComposer } from './messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
-import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -459,6 +465,11 @@ export class NitroMessages implements IMessageConfiguration
 
         // INVENTORY
 
+        // BOTS
+        this._events.set(IncomingHeader.USER_BOTS, BotInventoryMessageEvent);
+        this._events.set(IncomingHeader.REMOVE_BOT_FROM_INVENTORY, BotRemovedFromInventoryEvent);
+        this._events.set(IncomingHeader.ADD_BOT_TO_INVENTORY, BotAddedToInventoryEvent);
+
         // CURRENCY
         this._events.set(IncomingHeader.USER_CREDITS, UserCreditsEvent);
         this._events.set(IncomingHeader.USER_CURRENCY, UserCurrencyEvent);
@@ -552,6 +563,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
+        this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
+        this._composers.set(OutgoingHeader.BOT_PICKUP, RemoveBotFromFlatComposer);
 
         // FURNITURE
         this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
@@ -618,6 +631,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
 
         // INVENTORY
+
+        // BOTS
+        this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);
 
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);
