@@ -9,6 +9,9 @@ import { FriendListService } from '../../services/friendlist.service';
 export class FriendListThreadListComponent
 {
     @Input()
+    public currentThread: MessengerThread = null;
+    
+    @Input()
     public threadSelector: (thread: MessengerThread) => void = null;
 
     constructor(

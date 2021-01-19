@@ -9,7 +9,7 @@
                 {{ ('friendlist.friends') | translate }}<span *ngIf="(totalFriendRequests > 0)" class="badge badge-danger ml-1" style="font-size:12px;">{{ totalFriendRequests }}</span>
             </button>
             <perfect-scrollbar class="position-relative w-100" style="min-height:350px;max-height:350px;height:350px;">
-                <div nitro-friendlist-thread-list-component [threadSelector]="selectThread"></div>
+                <div nitro-friendlist-thread-list-component [currentThread]="currentThread" [threadSelector]="selectThread"></div>
             </perfect-scrollbar>
         </div>
         <div class="col-8">

@@ -1,1 +1,1 @@
-<button *ngFor="let thread of threads | keyvalue" type="button" class="btn btn-primary w-100" (click)="selectThread(thread.value)">{{ thread.value.participantOther.name }}</button>
+<button *ngFor="let thread of threads | keyvalue" type="button" class="btn btn-primary w-100" [ngClass]="{ 'active': (currentThread === thread.value) }" (click)="selectThread(thread.value)">{{ thread.value.participantOther.name }}</button>
