@@ -14,7 +14,8 @@ export class FriendListMainComponent implements OnInit, OnDestroy
     @Input()
     public visible: boolean = false;
 
-    private _currentThread: MessengerThread
+    private _currentThread: MessengerThread = null;
+    private _friendsVisible: boolean = true;
 
     constructor(
         private _settingsService: SettingsService,
@@ -41,15 +42,32 @@ export class FriendListMainComponent implements OnInit, OnDestroy
         this._settingsService.hideFriendList();
     }
 
+    public displayFriends(): void
+    {
+        this._friendsVisible    = true;
+        this._currentThread     = null;
+    }
+
     public selectThread(thread: MessengerThread): void
     {
         if(!thread) return;
 
-        this._currentThread = thread;
+        this._friendsVisible    = false;
+        this._currentThread     = thread;
     }
 
     public get currentThread(): MessengerThread
     {
         return this._currentThread;
+    }
+
+    public get friendsVisible(): boolean
+    {
+        return (this._friendsVisible && !this._currentThread);
+    }
+
+    public get totalFriendRequests(): number
+    {
+        return this._friendListService.requests.size;
     }
 }

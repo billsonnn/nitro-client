@@ -4,9 +4,17 @@
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body row">
-        <div nitro-friendlist-thread-list-component [threadSelector]="selectThread" class="col" [class.col-4]="currentThread"></div>
-        <div class="col-8" *ngIf="currentThread">
-            <div nitro-friendlist-thread-viewer-component [thread]="currentThread"></div>
+        <div class="col-4 flex-column">
+            <button class="btn btn-primary w-100 mb-1" (click)="displayFriends()" [ngClass]="{ 'active': friendsVisible }">
+                {{ ('friendlist.friends') | translate }}<span *ngIf="(totalFriendRequests > 0)" class="badge badge-danger ml-1" style="font-size:12px;">{{ totalFriendRequests }}</span>
+            </button>
+            <perfect-scrollbar class="position-relative w-100" style="min-height:350px;max-height:350px;height:350px;">
+                <div nitro-friendlist-thread-list-component [threadSelector]="selectThread"></div>
+            </perfect-scrollbar>
+        </div>
+        <div class="col-8">
+            <div *ngIf="friendsVisible" nitro-friendlist-friends-viewer-component [threadSelector]="selectThread"></div>
+            <div *ngIf="currentThread" nitro-friendlist-thread-viewer-component [thread]="currentThread"></div>
         </div>
     </div>
 </div>

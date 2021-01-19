@@ -220,33 +220,33 @@ export class FriendListService implements OnDestroy
 
         const parser = event.getParser();
 
-        if (!parser) return;
+        if(!parser) return;
         
-        var message: string;
+        let message: string;
 
-        console.log(parser)
+        console.log(parser);
 
-        switch (parser.errorCode)
+        switch(parser.errorCode)
         { 
             case 1:
-                message = "${friendlist.error.friendlistownlimit}";
+                message = '${friendlist.error.friendlistownlimit}';
                 break;
             case 2:
-                message = "${friendlist.error.friendlistlimitofrequester}";
+                message = '${friendlist.error.friendlistlimitofrequester}';
                 break;
             case 3:
-                message = "${friendlist.error.friend_requests_disabled}";
+                message = '${friendlist.error.friend_requests_disabled}';
                 break;
             case 4:
-                message = "${friendlist.error.requestnotfound}";
+                message = '${friendlist.error.requestnotfound}';
                 break;
             default:
-                message = ((("Received messenger error: msg: " + parser.clientMessageId) + ", errorCode: ") + parser.errorCode);
+                message = ((('Received messenger error: msg: ' + parser.clientMessageId) + ', errorCode: ') + parser.errorCode);
                 break;
             
         }
 
-        this._notificationService.alert(message, "${friendlist.alert.title}")
+        this._notificationService.alert(message, '${friendlist.alert.title}');
     }
 
     private onMessengerInitEvent(event: MessengerInitEvent): void
@@ -300,9 +300,12 @@ export class FriendListService implements OnDestroy
         {
             thread.insertChat(parser.senderId, parser.messageText, parser.secondsSinceSent, parser.extraData);
 
-            if (this._currentThread == thread) return;
+            if(this._currentThread == thread) return;
 
-            setTimeout(() => { this._scroller.directiveRef.scrollToBottom(0, 300) }, 1);
+            setTimeout(() => 
+            {
+                this._scroller.directiveRef.scrollToBottom(0, 300); 
+            }, 1);
 
             this._friends.get(parser.senderId).unread++;
 
@@ -346,8 +349,7 @@ export class FriendListService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE)
-
+            thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE);
         });
     }
 
@@ -484,7 +486,7 @@ export class FriendListService implements OnDestroy
 
     public get scroller(): PerfectScrollbarComponent
     { 
-        return this._scroller
+        return this._scroller;
     }
 
     public set scroller(scroller: PerfectScrollbarComponent)
