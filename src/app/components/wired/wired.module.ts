@@ -1,3 +1,9 @@
+import { MoveFurniToComponent } from './components/actions/move-furni-to/move-furni-to.component';
+import { GiveScoreToPredefinedTeamComponent } from './components/actions/give-score-to-predefined-team/give-score-to-predifined-team.component';
+import { JoinTeamComponent } from './components/actions/join-team/join-team.component';
+import { MoveToDirectionComponent } from './components/actions/move-to-direction/move-to-direction.component';
+import { MoveFurniComponent } from './components/actions/move-furni/move-furni.component';
+import { BotTalkComponent } from './components/actions/bot-talk/bot-talk.component';
 import { BotTalkDirectToAvatarComponent } from './components/actions/bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
 import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
 import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
@@ -50,6 +56,7 @@ import { TriggerPeriodicallyComponent } from './components/triggers/trigger-peri
 import { WiredService } from './services/wired.service';
 import { KickFromRoomComponent } from './components/actions/kick-from-room/kick-from-room.component';
 import { BotTeleportComponent } from './components/actions/bot-teleport/bot-teleport.component';
+import { GiveScoreComponent } from './components/actions/give-score/give-score.component';
 
 @NgModule({
     imports: [
@@ -105,6 +112,13 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         MuteUserComponent,
         BotChangeFigureComponent,
         BotTalkDirectToAvatarComponent,
+        BotTalkComponent,
+        MoveFurniComponent,
+        MoveToDirectionComponent,
+        JoinTeamComponent,
+        GiveScoreToPredefinedTeamComponent,
+        GiveScoreComponent,
+        MoveFurniToComponent,
     ],
     providers: [
         WiredService
@@ -159,6 +173,13 @@ import { BotTeleportComponent } from './components/actions/bot-teleport/bot-tele
         MuteUserComponent,
         BotChangeFigureComponent,
         BotTalkDirectToAvatarComponent,
+        BotTalkComponent,
+        MoveFurniComponent,
+        MoveToDirectionComponent,
+        JoinTeamComponent,
+        GiveScoreToPredefinedTeamComponent,
+        GiveScoreComponent,
+        MoveFurniToComponent,
     ]
 })
 export class WiredModule

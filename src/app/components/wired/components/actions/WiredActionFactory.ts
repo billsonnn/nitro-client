@@ -1,4 +1,8 @@
-﻿import { BotMoveComponent } from './bot-move/bot-move.component';
+﻿import { MoveFurniToComponent } from './move-furni-to/move-furni-to.component';
+import { GiveScoreToPredefinedTeamComponent } from './give-score-to-predefined-team/give-score-to-predifined-team.component';
+import { JoinTeamComponent } from './join-team/join-team.component';
+import { MoveToDirectionComponent } from './move-to-direction/move-to-direction.component';
+import { BotMoveComponent } from './bot-move/bot-move.component';
 import { BotTeleportComponent } from './bot-teleport/bot-teleport.component';
 import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
@@ -20,6 +24,9 @@ import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-t
 import { MuteUserComponent } from './mute-user/mute-user.component';
 import { BotChangeFigureComponent } from './bot-change-figure/bot-change-figure.component';
 import { BotTalkDirectToAvatarComponent } from './bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
+import { BotTalkComponent } from './bot-talk/bot-talk.component';
+import { MoveFurniComponent } from './move-furni/move-furni.component';
+import { GiveScoreComponent } from './give-score/give-score.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -61,6 +68,20 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return BotChangeFigureComponent;
             case BotTalkDirectToAvatarComponent.CODE:
                 return BotTalkDirectToAvatarComponent;
+            case BotTalkComponent.CODE:
+                return BotTalkComponent;
+            case MoveFurniComponent.CODE:
+                return MoveFurniComponent;
+            case MoveToDirectionComponent.CODE:
+                return MoveToDirectionComponent;
+            case JoinTeamComponent.CODE:
+                return JoinTeamComponent;
+            case GiveScoreToPredefinedTeamComponent.CODE:
+                return GiveScoreToPredefinedTeamComponent;
+            case GiveScoreComponent.CODE:
+                return GiveScoreComponent;
+            case MoveFurniToComponent.CODE:
+                return MoveFurniToComponent;
         }
 
         return null;
