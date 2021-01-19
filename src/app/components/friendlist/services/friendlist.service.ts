@@ -22,6 +22,7 @@ import { RoomInviteErrorEvent } from '../../../../client/nitro/communication/mes
 import { RoomInviteEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteEvent';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
+import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 import { MessengerChat } from '../common/MessengerChat';
@@ -440,6 +441,24 @@ export class FriendListService implements OnDestroy
     private requestFriendRequests(): void
     {
         Nitro.instance.communication.connection.send(new GetFriendRequestsComposer());
+    }
+
+    public canBeAskedForAFriend(id: number): boolean
+    {
+        const existing = this._friends.get(id);
+
+        if(existing) return false;
+
+        return true;
+    }
+
+    public sendFriendRequest(id: number, username: string): void
+    {
+        const existing = this._friends.get(id);
+
+        if(existing) return;
+
+        Nitro.instance.communication.connection.send(new RequestFriendComposer(username));
     }
 
     public get currentThread(): MessengerThread

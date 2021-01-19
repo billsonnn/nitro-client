@@ -34,6 +34,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
 import { RoomWidgetRoomEngineUpdateEvent } from './widgets/events/RoomWidgetRoomEngineUpdateEvent';
@@ -89,6 +90,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     constructor(
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
+        private _friendService: FriendListService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     ) 
@@ -801,5 +803,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get wiredService(): WiredService
     {
         return this._wiredService;
+    }
+
+    public get friendService(): FriendListService
+    {
+        return this._friendService;
     }
 }

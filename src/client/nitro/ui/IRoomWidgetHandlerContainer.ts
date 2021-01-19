@@ -1,4 +1,5 @@
 import { Rectangle } from 'pixi.js';
+import { FriendListService } from '../../../app/components/friendlist/services/friendlist.service';
 import { NotificationService } from '../../../app/components/notification/services/notification.service';
 import { WiredService } from '../../../app/components/wired/services/wired.service';
 import { IConnection } from '../../core/communication/connections/IConnection';
@@ -25,4 +26,5 @@ export interface IRoomWidgetHandlerContainer
     sessionDataManager: ISessionDataManager;
     notificationService: NotificationService;
     wiredService: WiredService;
+    friendService: FriendListService;
 }
