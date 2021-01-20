@@ -1,24 +1,29 @@
-import { MoveFurniToComponent } from './components/actions/move-furni-to/move-furni-to.component';
-import { GiveScoreToPredefinedTeamComponent } from './components/actions/give-score-to-predefined-team/give-score-to-predifined-team.component';
-import { JoinTeamComponent } from './components/actions/join-team/join-team.component';
-import { MoveToDirectionComponent } from './components/actions/move-to-direction/move-to-direction.component';
-import { MoveFurniComponent } from './components/actions/move-furni/move-furni.component';
-import { BotTalkComponent } from './components/actions/bot-talk/bot-talk.component';
-import { BotTalkDirectToAvatarComponent } from './components/actions/bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
-import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
-import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
-import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
-import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
-import { ResetComponent } from './components/actions/reset/reset.component';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
 import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';
 import { BotGiveHandItemComponent } from './components/actions/bot-give-hand-item/bot-give-hand-item.component';
+import { BotMoveComponent } from './components/actions/bot-move/bot-move.component';
+import { BotTalkDirectToAvatarComponent } from './components/actions/bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
+import { BotTalkComponent } from './components/actions/bot-talk/bot-talk.component';
+import { BotTeleportComponent } from './components/actions/bot-teleport/bot-teleport.component';
 import { CallAnotherStackComponent } from './components/actions/call-another-stack/call-another-stack.component';
 import { ChaseComponent } from './components/actions/chase/chase.component';
 import { ChatComponent } from './components/actions/chat/chat.component';
 import { FleeComponent } from './components/actions/flee/flee.component';
+import { GiveRewardComponent } from './components/actions/give-reward/give-reward.component';
+import { GiveScoreToPredefinedTeamComponent } from './components/actions/give-score-to-predefined-team/give-score-to-predifined-team.component';
+import { GiveScoreComponent } from './components/actions/give-score/give-score.component';
+import { JoinTeamComponent } from './components/actions/join-team/join-team.component';
+import { KickFromRoomComponent } from './components/actions/kick-from-room/kick-from-room.component';
 import { LeaveTeamComponent } from './components/actions/leave-team/leave-team.component';
+import { MoveFurniToComponent } from './components/actions/move-furni-to/move-furni-to.component';
+import { MoveFurniComponent } from './components/actions/move-furni/move-furni.component';
+import { MoveToDirectionComponent } from './components/actions/move-to-direction/move-to-direction.component';
+import { MuteUserComponent } from './components/actions/mute-user/mute-user.component';
+import { ResetComponent } from './components/actions/reset/reset.component';
+import { SetFurniStateToComponent } from './components/actions/set-furni-state-to/set-furni-state-to.component';
 import { TeleportComponent } from './components/actions/teleport/teleport.component';
 import { ToggleFurniStateComponent } from './components/actions/toggle-furni-state/toggle-furni-state.component';
 import { WiredBaseComponent } from './components/base/base.component';
@@ -54,13 +59,11 @@ import { TriggerOnceComponent } from './components/triggers/trigger-once/trigger
 import { TriggerPeriodicallyLongComponent } from './components/triggers/trigger-periodically-long/trigger-periodically-long.component';
 import { TriggerPeriodicallyComponent } from './components/triggers/trigger-periodically/trigger-periodically.component';
 import { WiredService } from './services/wired.service';
-import { KickFromRoomComponent } from './components/actions/kick-from-room/kick-from-room.component';
-import { BotTeleportComponent } from './components/actions/bot-teleport/bot-teleport.component';
-import { GiveScoreComponent } from './components/actions/give-score/give-score.component';
 
 @NgModule({
     imports: [
-        SharedModule
+        SharedModule,
+        CommonModule,
     ],
     exports: [
         WiredMainComponent,
@@ -119,6 +122,7 @@ import { GiveScoreComponent } from './components/actions/give-score/give-score.c
         GiveScoreToPredefinedTeamComponent,
         GiveScoreComponent,
         MoveFurniToComponent,
+        GiveRewardComponent,
     ],
     providers: [
         WiredService
@@ -180,6 +184,7 @@ import { GiveScoreComponent } from './components/actions/give-score/give-score.c
         GiveScoreToPredefinedTeamComponent,
         GiveScoreComponent,
         MoveFurniToComponent,
+        GiveRewardComponent,
     ]
 })
 export class WiredModule
