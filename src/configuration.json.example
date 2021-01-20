@@ -1,6 +1,6 @@
 {
-    "socket.url": "wss://arcturus.habborw.com",
-    "asset.url": "https://nitro-assets.hrw.pw",
+    "socket.url": "WS/WSS_URL",
+    "asset.url": "https://ASSET_URL",
     "c.images.url": "https://ASSETS_URL/c_images",
     "thumbnails.url": "%c.images.url%/camera/thumbnails/%thumbnail%.png",
     "images.url": "%asset.url%/images",
