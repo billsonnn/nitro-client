@@ -1,11 +1,8 @@
 .nitro-notification-dialog {
     width:230px;
-    background: $card-bg !important;
     margin-bottom:5px;
-    border: $card-border-width solid $card-border-color !important;
-    @include border-radius($card-border-radius);
-    @include box-shadow($card-shadow);
     overflow: hidden;
+    padding: 0.23rem;
 
     -webkit-animation-duration: 0.4s;
     animation-duration: 0.4s; 

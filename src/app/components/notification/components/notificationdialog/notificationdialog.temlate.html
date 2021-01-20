@@ -1,10 +1,10 @@
-<div class="nitro-notification-dialog" [class.removing]="removing">
+<div class="nitro-notification-dialog btn btn-primary rounded" [class.removing]="removing">
     <div class="d-flex flex-row">
-        <div class="bg-primary nitro-notification-dialog-image">
-            <img [src]="image">
-        </div>
         <div class="nitro-notification-dialog-message">
             {{message}}
+        </div>
+        <div class="bg-secondary rounded nitro-notification-dialog-image">
+            <img [src]="image">
         </div>
     </div>
 </div>
