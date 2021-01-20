@@ -10,8 +10,8 @@
             </ng-container>
         </div>
         <div class="row no-gutters">
-            <div nitro-catalog-navigation-component class="col-4"></div>
-            <div class="col-8">
+            <div *ngIf="activePage && activePage.layoutCode !== 'frontpage4'" nitro-catalog-navigation-component class="col-4"></div>
+            <div [ngClass]="(activePage && activePage.layoutCode !== 'frontpage4') ? 'col-8' : 'col-12'">
                 <ng-template #layoutsContainer></ng-template>
             </div>
         </div>

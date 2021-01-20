@@ -24,7 +24,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     @ViewChild('layoutsContainer', { read: ViewContainerRef })
     public layoutsContainer: ViewContainerRef;
-    
+
     private _roomPreviewer: RoomPreviewer = null;
     private _lastComponent: ComponentRef<CatalogLayout> = null;
     private _layoutFactory: CatalogLayoutFactory = null;
@@ -43,7 +43,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void
@@ -83,7 +83,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
 
         this.reset();
-        
+
         this._catalogService.component  = null;
         this._layoutFactory             = null;
     }
@@ -203,7 +203,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public selectPage(page: CatalogPageData): void
     {
         if(!page) return;
-        
+
         this._catalogService.requestPage(page);
     }
 
@@ -211,7 +211,14 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     {
         if(!page) return;
 
-        this.selectPage((page.children && page.children[0]));
+        if(page.children.length === 0)
+        {
+            this.selectPage(page);
+        }
+        else
+        {
+            this.selectPage((page.children && page.children[0]));
+        }
     }
 
     public selectFirstTab(): void
@@ -268,7 +275,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                         }
                         return;
                     case ProductTypeEnum.WALL:
-                        
+
                         switch(furniData.className)
                         {
                             case 'floor':
