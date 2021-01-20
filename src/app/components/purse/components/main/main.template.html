@@ -2,15 +2,24 @@
     <div class="grid-container position-relative mb-1">
         <div class="grid-items grid-2">
             <ng-container *ngFor="let currency of currencies | keyvalue">
-                <div class="d-flex item-detail" *ngIf="isVisible(currency.key)">
+                <div class="d-flex item-detail btn btn-primary rounded" *ngIf="isVisible(currency.key)">
                     <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">{{
                         currency.value | number }}</div>
-                    <div class="detail-icon bg-primary">
+                    <div class="detail-icon bg-secondary" 
+                    [ngClass]="{ 'bg-pink' : currency.key == 0, 'bg-warning': currency.key == -1, 'bg-skyBlue': currency.key == 5 }">
                         <div class="currency-icon"
                             [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key) + ')' }"></div>
                     </div>
                 </div>
             </ng-container>
+            <div class="d-flex item-detail btn btn-primary rounded">
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">
+                    {{ hcDay | formatShort }}
+                </div>
+                <div class="detail-icon bg-orange">
+                    <div class="currency-icon"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
