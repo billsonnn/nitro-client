@@ -14,6 +14,7 @@ import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
+import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
 
@@ -33,6 +34,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _avatarEditorService: AvatarEditorService,
         private _inventoryService: InventoryService,
         private _navigatorService: NavigatorService,
+        private _friendListService: FriendListService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
         private ngZone: NgZone) 
@@ -215,8 +217,13 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         return ((this.navigationList && this.navigationList.nativeElement) || null);
     }
 
-    public get unseenCount(): number
+    public get unseenInventoryCount(): number
     {
         return this._inventoryService.unseenCount;
+    }
+
+    public get unseenFriendListCount(): number
+    {
+        return this._friendListService.notificationCount;
     }
 }

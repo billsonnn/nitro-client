@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { FollowFriendComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/FollowFriendComposer';
 import { SendMessageComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/SendMessageComposer';
 import { SetRelationshipStatusComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/SetRelationshipStatusComposer';
@@ -16,30 +18,21 @@ import { FriendListService } from '../../services/friendlist.service';
     templateUrl: './thread-viewer.template.html'
 })
     
-export class FriendListThreadViewerComponent implements OnChanges,AfterViewInit,OnInit
+export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
 {
     @Input()
     public thread: MessengerThread = null;
 
-    @ViewChild('threadInput')
-    public threadInput: ElementRef<HTMLInputElement>;
-
     @ViewChild('threadScroller')
     public threadScroller: PerfectScrollbarComponent;
 
-    public relations: Array<string>;
-    
+    private _subscription: Subscription = null;
 
     constructor(
         private _friendListService: FriendListService,
         private _settingsService: SettingsService,
         private _ngZone: NgZone)
-    { }
-    
-    public ngOnInit(): void
-    {
-        this.relations = RelationshipStatusEnum.relations;
-    }
+    {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -47,117 +40,109 @@ export class FriendListThreadViewerComponent implements OnChanges,AfterViewInit,
         const next = changes.thread.currentValue;
 
         if(next && (next !== prev)) this.prepareThread();
-        
+        else if(!next && (next !== prev)) this.unsubscribe();
+    }
+
+    public ngOnDestroy(): void
+    {
+        this.unsubscribe();
+    }
+
+    private unsubscribe(): void
+    {
+        if(this._subscription)
+        {
+            this._subscription.unsubscribe();
+
+            this._subscription = null;
+        }
     }
 
     private prepareThread(): void
     {
-        //
+        this.unsubscribe();
+
+        this._subscription = this.thread.emitter.asObservable().pipe(delay(1)).subscribe(string =>
+        {
+            switch(string)
+            {
+                case MessengerThread.MESSAGE_RECEIVED:
+                    this.messageReceived();
+                    return;
+            }
+        });
     }
 
-    public ngAfterViewInit(): void
+    private messageReceived(): void
     {
-        this._ngZone.runOutsideAngular(() =>
+        if(this.threadScroller)
         {
-            document.body.addEventListener('keydown', this.onKeyDownEvent.bind(this));
-            
-            this._friendListService.scroller = this.threadScroller;
-
-        });
+            this.threadScroller.directiveRef.scrollToBottom(0, 200);
+        }
     }
 
     public sendMessage(message: string): void
     {
-        if(!this.participantOther || !message) return;
+        if(!message || !message.length) return;
 
         this._ngZone.run(() =>
         {
-            this.thread.insertChat(this.participantSelf.id, message, 0, null);
+            this.thread.insertChat(Nitro.instance.sessionDataManager.userId, message, 0, null);
 
-            setTimeout(() => { this._friendListService.scroller.directiveRef.scrollToBottom(0, 300) }, 1);
+            this.thread.setRead();
         });
         
-        Nitro.instance.communication.connection.send(new SendMessageComposer(this.participantOther.id, message));
+        Nitro.instance.communication.connection.send(new SendMessageComposer(this.participant.id, message));
     }
 
     public changeRelation(relation: number): void
     {
-        if (!this.participantOther || relation == null) return;
+        if(!this.participant) return;
 
-        Nitro.instance.communication.connection.send(new SetRelationshipStatusComposer(this.participantOther.id, relation));
+        if(RelationshipStatusEnum.RELATIONSHIP_TYPES.indexOf(relation) === -1) return;
+
+        Nitro.instance.communication.connection.send(new SetRelationshipStatusComposer(this.participant.id, relation));
     }
 
-    public followFriend(friend: number): void
-    { 
-        if (!this.participantOther || !friend) return;
+    public followParticipant(): void
+    {
+        if(!this.participant) return;
 
         this._settingsService.toggleFriendList();
 
-        Nitro.instance.communication.connection.send(new FollowFriendComposer(friend));
+        Nitro.instance.communication.connection.send(new FollowFriendComposer(this.participant.id));
     }
 
-    private onKeyDownEvent(event: KeyboardEvent): void
+    public onKeyDownEvent(event: KeyboardEvent): void
     {
         if(!event) return;
 
-        if(this.anotherInputHasFocus()) return;
+        const target = (event.target as HTMLInputElement);
 
-        const input = this.threadInput && this.threadInput.nativeElement;
+        if(!target) return;
 
-        if(document.activeElement !== input) this.setInputFocus();
-
-        const key       = event.keyCode;
-
-        switch(key)
+        switch(event.key)
         {
-            case 13: // ENTER
-                this.sendMessage(this.threadInput.nativeElement.value);
-                this.threadInput.nativeElement.value = null;
+            case 'Enter':
+                this.sendMessage(target.value);
+
+                target.value = '';
                 return;
         }
     }
 
-    private anotherInputHasFocus(): boolean
+    public get participant(): MessengerFriend
     {
-        const activeElement = document.activeElement;
-
-        if(!activeElement) return false;
-
-        if(this.threadInput && this.threadInput.nativeElement && (this.threadInput.nativeElement === activeElement)) return false;
-
-        if((!(activeElement instanceof HTMLInputElement) && !(activeElement instanceof HTMLTextAreaElement))) return false;
-
-        return true;
-    }
-
-    private setInputFocus(): void
-    {
-        const input = this.threadInput && this.threadInput.nativeElement;
-        
-        if(!input) return;
-        
-        input.focus();
-
-        input.setSelectionRange((input.value.length * 2), (input.value.length * 2));
-    }
-
-    public get inputView(): HTMLInputElement
-    {
-        return ((this.threadInput && this.threadInput.nativeElement) || null);
-    }
-
-    public get participantSelf(): MessengerFriend
-    {
-        return this.thread.participantSelf;
-    }
-
-    public get participantOther(): MessengerFriend
-    {
-        return this.thread.participantOther;
+        return this.thread.participant;
     }
 
     public get chats(): MessengerChat[]
     {
         return this.thread.chats;
+    }
+
+    public get relations(): string[]
+    {
+        return RelationshipStatusEnum.RELATIONSHIP_NAMES;
     }
 }

@@ -1,48 +1,50 @@
+import { EventEmitter } from '@angular/core';
 import { MessengerChat } from './MessengerChat';
 import { MessengerFriend } from './MessengerFriend';
-import { RelationshipStatusEnum } from './RelationshipStatusEnum';
 
 export class MessengerThread
 {
-    private _participantSelf: MessengerFriend;
-    private _participantOther: MessengerFriend;
-    private _chats: MessengerChat[];
+    public static MESSAGE_RECEIVED: string = 'MT_MESSAGE_RECEIVED';
 
-    constructor(participantSelf: MessengerFriend, participantOther: MessengerFriend)
+    private _participant: MessengerFriend;
+    private _chats: MessengerChat[];
+    private _lastUpdated: Date;
+    private _unread: boolean;
+
+    private _emitter: EventEmitter<string>;
+
+    constructor(participant: MessengerFriend)
     {
-        this._participantSelf   = participantSelf;
-        this._participantOther  = participantOther;
-        this._chats             = [];
+        this._participant   = participant;
+        this._chats         = [];
+        this._lastUpdated   = new Date();
+        this._unread        = false;
+
+        this._emitter       = new EventEmitter();
     }
 
-    public insertChat(senderId: number, message: string, secondsSinceSent: number, extraData: string, type: number = 0): MessengerChat
+    public insertChat(senderId: number, message: string, secondsSinceSent: number = 0, extraData: string = null, type: number = 0): MessengerChat
     {
-        let participant: MessengerFriend = null;
-
-        if(senderId === this._participantOther.id)
-        {
-            participant = this._participantOther;
-        }
-        else
-        {
-            participant = this._participantSelf;
-        }
-
-        const chat = new MessengerChat(participant, message, secondsSinceSent, extraData, type);
+        const chat = new MessengerChat(senderId, message, secondsSinceSent, extraData, type);
 
         this._chats.push(chat);
+
+        this._lastUpdated   = new Date();
+        this._unread        = true;
+
+        this._emitter.emit(MessengerThread.MESSAGE_RECEIVED);
 
         return chat;
     }
 
-    public get participantSelf(): MessengerFriend
+    public setRead(): void
     {
-        return this._participantSelf;
+        this._unread = false;
     }
 
-    public get participantOther(): MessengerFriend
+    public get participant(): MessengerFriend
     {
-        return this._participantOther;
+        return this._participant;
     }
 
     public get chats(): MessengerChat[]
@@ -50,29 +52,18 @@ export class MessengerThread
         return this._chats;
     }
 
-    public get chatColour(): string
-    { 
-        var colour: string;
+    public get lastUpdated(): Date
+    {
+        return this._lastUpdated;
+    }
 
-        switch (this._participantOther.relationshipStatus)
-        { 
-            case RelationshipStatusEnum.NONE:
-                colour = "bg-blue";
-                break
-            case RelationshipStatusEnum.HEART:
-                colour = "bg-pink";
-                break;
-            case RelationshipStatusEnum.SMILE:
-                colour = "bg-warning";
-                break;
-            case RelationshipStatusEnum.BOBBA:
-                colour = "bg-dark";
-                break;
-            default:
-                colour = "bg-blue";
-                break;
-        }
+    public get unread(): boolean
+    {
+        return this._unread;
+    }
 
-        return colour;
+    public get emitter(): EventEmitter<string>
+    {
+        return this._emitter;
     }
 }

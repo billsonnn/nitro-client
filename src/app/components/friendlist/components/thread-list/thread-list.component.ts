@@ -8,6 +8,8 @@ import { FriendListService } from '../../services/friendlist.service';
 })
 export class FriendListThreadListComponent
 {
+    public static THREAD_SELECTED: string = 'FLTLC_THREAD_SELECTED';
+    
     @Input()
     public currentThread: MessengerThread = null;
     
@@ -26,8 +28,15 @@ export class FriendListThreadListComponent
         if(this.threadSelector) this.threadSelector(thread);
     }
 
-    public get threads(): Map<number, MessengerThread>
+    public get threads(): MessengerThread[]
     {
-        return this._friendListService.threads;
+        const threads = Array.from(this._friendListService.threads.values());
+
+        threads.sort((a, b) =>
+        {
+            return (<any> b.lastUpdated - <any> a.lastUpdated);
+        });
+
+        return threads;
     }
 }

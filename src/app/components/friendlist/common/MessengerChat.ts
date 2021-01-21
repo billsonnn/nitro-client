@@ -1,5 +1,3 @@
-import { MessengerFriend } from './MessengerFriend';
-
 export class MessengerChat
 {
     public static CHAT: number                  = 0;
@@ -7,19 +5,20 @@ export class MessengerChat
     public static STATUS_NOTIFICATION: number   = 2;
 
     private _type: number;
-    private _sender: MessengerFriend;
+    private _senderId: number;
     private _message: string;
     private _secondsSinceSent: number;
     private _extraData: string;
+    private _date: Date;
 
-    constructor(sender: MessengerFriend, message: string, secondsSinceSent: number, extraData: string, type: number = 0)
+    constructor(senderId: number, message: string, secondsSinceSent: number = 0, extraData: string = null, type: number = 0)
     {
         this._type              = type;
-        this._sender            = sender;
+        this._senderId          = senderId;
         this._message           = message;
         this._secondsSinceSent  = secondsSinceSent;
-        this._extraData = extraData;
-        
+        this._extraData         = extraData;
+        this._date              = new Date();
     }
 
     public get type(): number
@@ -27,9 +26,9 @@ export class MessengerChat
         return this._type;
     }
 
-    public get sender(): MessengerFriend
+    public get senderId(): number
     {
-        return this._sender;
+        return this._senderId;
     }
 
     public get message(): string
@@ -47,4 +46,8 @@ export class MessengerChat
         return this._extraData;
     }
 
+    public get date(): Date
+    {
+        return this._date;
+    }
 }

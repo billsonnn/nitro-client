@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MessengerInitComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/MessengerInitComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
@@ -9,13 +9,13 @@ import { FriendListService } from '../../services/friendlist.service';
     selector: 'nitro-friendlist-main-component',
     templateUrl: './main.template.html'
 })
-export class FriendListMainComponent implements OnInit, OnDestroy
+export class FriendListMainComponent implements OnInit, OnChanges, OnDestroy
 {
     @Input()
     public visible: boolean = false;
 
-    private _currentThread: MessengerThread = null;
     private _friendsVisible: boolean = true;
+    private _currentThread: MessengerThread = null;
 
     constructor(
         private _settingsService: SettingsService,
@@ -30,6 +30,14 @@ export class FriendListMainComponent implements OnInit, OnDestroy
         this._friendListService.component = this;
 
         Nitro.instance.communication.connection.send(new MessengerInitComposer());
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        const prev = changes.visible.previousValue;
+        const next = changes.visible.currentValue;
+
+        if(!next && (next !== prev)) this.selectThread(null);
     }
 
     public ngOnDestroy(): void
@@ -50,10 +58,18 @@ export class FriendListMainComponent implements OnInit, OnDestroy
 
     public selectThread(thread: MessengerThread): void
     {
-        if(!thread) return;
+        if(thread)
+        {
+            this._friendsVisible    = false;
+            this._currentThread     = thread;
 
-        this._friendsVisible    = false;
-        this._currentThread     = thread;
+            thread.setRead();
+
+            return;
+        }
+
+        this._friendsVisible    = true;
+        this._currentThread     = null;
     }
 
     public get currentThread(): MessengerThread

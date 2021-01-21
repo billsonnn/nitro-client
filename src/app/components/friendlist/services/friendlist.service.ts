@@ -1,5 +1,4 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { AcceptFriendResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/AcceptFriendResultEvent';
 import { FindFriendsProcessResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FindFriendsProcessResultEvent';
@@ -20,8 +19,10 @@ import { NewConsoleMessageEvent } from '../../../../client/nitro/communication/m
 import { NewFriendRequestEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/NewFriendRequestEvent';
 import { RoomInviteErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteErrorEvent';
 import { RoomInviteEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteEvent';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
+import { AcceptFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/AcceptFriendComposer';
+import { DeclineFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/DeclineFriendComposer';
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
+import { RemoveFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
 import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -37,16 +38,15 @@ export class FriendListService implements OnDestroy
     private _component: FriendListMainComponent;
     private _messages: IMessageEvent[];
 
-    private _selfFriend: MessengerFriend;
     private _friends: Map<number, MessengerFriend>;
     private _requests: Map<number, MessengerRequest>;
     private _threads: Map<number, MessengerThread>;
 
+    private _userFriendLimit: number;
+    private _normalFriendLimit: number;
+    private _extendedFriendLimit: number;
+
     private _friendListReady: boolean = false;
-
-    private _currentThread: MessengerThread;
-
-    private _scroller: PerfectScrollbarComponent;
 
     constructor(
         private _notificationService: NotificationService,
@@ -54,10 +54,13 @@ export class FriendListService implements OnDestroy
     {
         this._component = null;
 
-        this._selfFriend    = new MessengerFriend();
-        this._friends       = new Map();
-        this._requests      = new Map();
-        this._threads       = new Map();
+        this._friends               = new Map();
+        this._requests              = new Map();
+        this._threads               = new Map();
+
+        this._userFriendLimit       = 0;
+        this._normalFriendLimit     = 0;
+        this._extendedFriendLimit   = 0;
 
         this.registerMessages();
     }
@@ -69,38 +72,45 @@ export class FriendListService implements OnDestroy
 
     private registerMessages(): void
     {
-        if(this._messages) this.unregisterMessages();
+        this._ngZone.runOutsideAngular(() =>
+        {
+            if(this._messages) this.unregisterMessages();
 
-        this._messages = [
-            new AcceptFriendResultEvent(this.onAcceptFriendResultEvent.bind(this)),
-            new FindFriendsProcessResultEvent(this.onFindFriendsProcessResultEvent.bind(this)),
-            new FollowFriendFailedEvent(this.onFollowFriendFailedEvent.bind(this)),
-            new FriendListFragmentEvent(this.onFriendListFragmentEvent.bind(this)),
-            new FriendListUpdateEvent(this.onFriendListUpdateEvent.bind(this)),
-            new FriendNotificationEvent(this.onFriendNotificationEvent.bind(this)),
-            new FriendRequestsEvent(this.onFriendRequestsEvent.bind(this)),
-            new HabboSearchResultEvent(this.onHabboSearchResultEvent.bind(this)),
-            new InstantMessageErrorEvent(this.onInstantMessageErrorEvent.bind(this)),
-            new MessageErrorEvent(this.onMessageErrorEvent.bind(this)),
-            new MessengerInitEvent(this.onMessengerInitEvent.bind(this)),
-            new MiniMailNewMessageEvent(this.onMiniMailNewMessageEvent.bind(this)),
-            new MiniMailUnreadCountEvent(this.onMiniMailUnreadCountEvent.bind(this)),
-            new NewConsoleMessageEvent(this.onNewConsoleMessageEvent.bind(this)),
-            new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)),
-            new RoomInviteErrorEvent(this.onRoomInviteErrorEvent.bind(this)),
-            new RoomInviteEvent(this.onRoomInviteEvent.bind(this)),
-            new UserInfoEvent(this.onUserInfoEvent.bind(this))
-        ];
-
-        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            this._messages = [
+                new AcceptFriendResultEvent(this.onAcceptFriendResultEvent.bind(this)),
+                new FindFriendsProcessResultEvent(this.onFindFriendsProcessResultEvent.bind(this)),
+                new FollowFriendFailedEvent(this.onFollowFriendFailedEvent.bind(this)),
+                new FriendListFragmentEvent(this.onFriendListFragmentEvent.bind(this)),
+                new FriendListUpdateEvent(this.onFriendListUpdateEvent.bind(this)),
+                new FriendNotificationEvent(this.onFriendNotificationEvent.bind(this)),
+                new FriendRequestsEvent(this.onFriendRequestsEvent.bind(this)),
+                new HabboSearchResultEvent(this.onHabboSearchResultEvent.bind(this)),
+                new InstantMessageErrorEvent(this.onInstantMessageErrorEvent.bind(this)),
+                new MessageErrorEvent(this.onMessageErrorEvent.bind(this)),
+                new MessengerInitEvent(this.onMessengerInitEvent.bind(this)),
+                new MiniMailNewMessageEvent(this.onMiniMailNewMessageEvent.bind(this)),
+                new MiniMailUnreadCountEvent(this.onMiniMailUnreadCountEvent.bind(this)),
+                new NewConsoleMessageEvent(this.onNewConsoleMessageEvent.bind(this)),
+                new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)),
+                new RoomInviteErrorEvent(this.onRoomInviteErrorEvent.bind(this)),
+                new RoomInviteEvent(this.onRoomInviteEvent.bind(this))
+            ];
+    
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        });
     }
 
     private unregisterMessages(): void
     {
-        if(this._messages && this._messages.length)
+        this._ngZone.runOutsideAngular(() =>
         {
-            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
-        }
+            if(this._messages && this._messages.length)
+            {
+                for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            }
+
+            this._messages = null;
+        });
     }
 
     private onAcceptFriendResultEvent(event: AcceptFriendResultEvent): void
@@ -110,6 +120,8 @@ export class FriendListService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+
+        console.log(parser);
     }
 
     private onFindFriendsProcessResultEvent(event: FindFriendsProcessResultEvent): void
@@ -223,9 +235,7 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
         
-        let message: string;
-
-        console.log(parser);
+        let message = '';
 
         switch(parser.errorCode)
         { 
@@ -242,12 +252,12 @@ export class FriendListService implements OnDestroy
                 message = '${friendlist.error.requestnotfound}';
                 break;
             default:
-                message = ((('Received messenger error: msg: ' + parser.clientMessageId) + ', errorCode: ') + parser.errorCode);
+                message = (`Received messenger error: msg: ${ parser.clientMessageId }, errorCode: ${ parser.errorCode }`);
                 break;
             
         }
 
-        this._notificationService.alert(message, '${friendlist.alert.title}');
+        this._ngZone.run(() => this._notificationService.alert(message, '${friendlist.alert.title}'));
     }
 
     private onMessengerInitEvent(event: MessengerInitEvent): void
@@ -258,7 +268,12 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() =>
+        {
+            this._userFriendLimit       = parser.userFriendLimit;
+            this._normalFriendLimit     = parser.normalFriendLimit;
+            this._extendedFriendLimit   = parser.extendedFriendLimit;
+        });
 
         this.requestFriendRequests();
     }
@@ -270,8 +285,6 @@ export class FriendListService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-
-        console.log(parser);
     }
 
     private onMiniMailUnreadCountEvent(event: MiniMailUnreadCountEvent): void
@@ -281,8 +294,6 @@ export class FriendListService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-
-        console.log(parser);
     }
 
     private onNewConsoleMessageEvent(event: NewConsoleMessageEvent): void
@@ -301,15 +312,10 @@ export class FriendListService implements OnDestroy
         {
             thread.insertChat(parser.senderId, parser.messageText, parser.secondsSinceSent, parser.extraData);
 
-            if(this._currentThread == thread) return;
-
-            setTimeout(() => 
+            if(this._component && (this._component.currentThread === thread))
             {
-                this._scroller.directiveRef.scrollToBottom(0, 300); 
-            }, 1);
-
-            this._friends.get(parser.senderId).unread++;
-
+                thread.setRead();
+            }
         });
 
     }
@@ -351,21 +357,11 @@ export class FriendListService implements OnDestroy
         this._ngZone.run(() =>
         {
             thread.insertChat(parser.senderId, parser.messageText, 0, null, MessengerChat.ROOM_INVITE);
-        });
-    }
 
-    private onUserInfoEvent(event: UserInfoEvent): void
-    {
-        if(!event) return;
-
-        const friend = this._selfFriend;
-
-        this._ngZone.run(() =>
-        {
-            friend.id     = Nitro.instance.sessionDataManager.userId;
-            friend.name   = Nitro.instance.sessionDataManager.userName;
-            friend.gender = ((Nitro.instance.sessionDataManager.gender === 'M') ? 1 : 0);
-            friend.figure = Nitro.instance.sessionDataManager.figure;
+            if(this._component && (this._component.currentThread === thread))
+            {
+                thread.setRead();
+            }
         });
     }
 
@@ -394,9 +390,11 @@ export class FriendListService implements OnDestroy
         existing.populate(data);
     }
 
-    private removeFriend(id: number): void
+    public removeFriend(id: number): void
     {
         this._friends.delete(id);
+
+        Nitro.instance.communication.connection.send(new RemoveFriendComposer(id));
     }
 
     private updateFriendRequest(data: FriendRequestData): void
@@ -415,9 +413,25 @@ export class FriendListService implements OnDestroy
         existing.populate(data);
     }
 
-    private removeRequest(id: number): void
+    public acceptFriendRequest(request: MessengerRequest): void
     {
-        this._requests.delete(id);
+        this._requests.delete(request.requestId);
+
+        Nitro.instance.communication.connection.send(new AcceptFriendComposer(request.requestId));
+    }
+
+    public removeFriendRequest(request: MessengerRequest): void
+    {
+        this._requests.delete(request.requestId);
+
+        Nitro.instance.communication.connection.send(new DeclineFriendComposer(false, request.requestId));
+    }
+
+    public removeAllFriendRequests(): void
+    {
+        this._requests.clear();
+
+        Nitro.instance.communication.connection.send(new DeclineFriendComposer(true));
     }
 
     public getMessageThread(id: number): MessengerThread
@@ -430,7 +444,7 @@ export class FriendListService implements OnDestroy
 
             if(!friend) return;
 
-            existing = new MessengerThread(this._selfFriend, friend);
+            existing = new MessengerThread(friend);
 
             this._threads.set(id, existing);
         }
@@ -461,18 +475,6 @@ export class FriendListService implements OnDestroy
         Nitro.instance.communication.connection.send(new RequestFriendComposer(username));
     }
 
-    public get currentThread(): MessengerThread
-    { 
-        return this._currentThread;
-    }
-
-    public set currentThread(thread: MessengerThread)
-    { 
-        this._friends.get(thread.participantOther.id).unread = 0;
-
-        this._currentThread = thread;
-    }
-
     public get component(): FriendListMainComponent
     {
         return this._component;
@@ -481,11 +483,6 @@ export class FriendListService implements OnDestroy
     public set component(component: FriendListMainComponent)
     {
         this._component = component;
-    }
-
-    public get selfFriend(): MessengerFriend
-    {
-        return this._selfFriend;
     }
 
     public get friends(): Map<number, MessengerFriend>
@@ -503,13 +500,17 @@ export class FriendListService implements OnDestroy
         return this._threads;
     }
 
-    public get scroller(): PerfectScrollbarComponent
-    { 
-        return this._scroller;
+    public get unreadCount(): number
+    {
+        let count = 0;
+
+        for(const thread of this._threads.values()) (thread && thread.unread && (count++));
+
+        return count;
     }
 
-    public set scroller(scroller: PerfectScrollbarComponent)
-    { 
-        this._scroller = scroller;
+    public get notificationCount(): number
+    {
+        return (this.requests.size + this.unreadCount);
     }
 }

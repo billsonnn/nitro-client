@@ -1,7 +1,7 @@
 <div class="btn-group w-100 mb-1">
     <button type="button" class="btn btn-primary" [ngClass]="{ 'active': (friendsShowing && onlineOnly) }" (click)="showOnlineFriends()">{{ ('friendlist.online') | translate }}</button>
     <button type="button" class="btn btn-primary" [ngClass]="{ 'active': (friendsShowing && !onlineOnly) }" (click)="showFriends()">{{ ('friendlist.friends.all') | translate }}</button>
-    <button type="button" class="btn btn-primary" [ngClass]="{ 'active': requestsShowing }" (click)="showRequests()">{{ ('friendbar.requests.title') | translate }}</button>
+    <button type="button" class="btn btn-primary" [ngClass]="{ 'active': requestsShowing }" (click)="showRequests()">{{ ('friendbar.requests.title') | translate }}<span *ngIf="(totalFriendRequests > 0)" class="badge badge-danger ml-1" style="font-size:12px;">{{ totalFriendRequests }}</span></button>
     <button type="button" class="btn btn-success">{{ ('generic.search') | translate }}</button>
 </div>
 <div class="d-flex w-100">

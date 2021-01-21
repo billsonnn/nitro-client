@@ -55,4 +55,9 @@ export class FriendListFriendsViewerComponent
     {
         return this._onlineOnly;
     }
+
+    public get totalFriendRequests(): number
+    {
+        return this._friendListService.requests.size;
+    }
 }
