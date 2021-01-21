@@ -14,6 +14,7 @@ import { PurseModule } from './purse/purse.module';
 import { RoomModule } from './room/room.module';
 import { ToolbarModule } from './toolbar/toolbar.module';
 import { WiredModule } from './wired/wired.module';
+import { ModToolModule } from './mod-tool/mod-tool.module';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import { WiredModule } from './wired/wired.module';
         PurseModule,
         RoomModule,
         ToolbarModule,
-        WiredModule
+        WiredModule,
+        ModToolModule
     ],
     exports: [
         MainComponent
@@ -39,5 +41,5 @@ import { WiredModule } from './wired/wired.module';
         MainComponent
     ]
 })
-export class ComponentsModule 
-{ } 
+export class ComponentsModule
+{ }
