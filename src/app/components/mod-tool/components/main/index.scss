@@ -1,4 +1,9 @@
 .nitro-mod-tool-component {
+	.btn-group-vertical{
+		.btn {
+			margin-bottom:3px;
+		}
+	}
 	.mod-tool-card{
 		position: fixed;
 		top: 20px;
