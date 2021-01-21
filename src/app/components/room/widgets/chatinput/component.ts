@@ -16,7 +16,9 @@ import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMes
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
-            <input #chatInputView type="text" class="chat-input" [maxLength]="inputMaxLength" />
+            <div class="input-sizer">
+                <input #chatInputView type="text" class="chat-input" placeholder="{{ 'widgets.chatinput.default' | translate }}" (input)="chatInputView.parentElement.dataset.value = chatInputView.value" [maxLength]="inputMaxLength" />
+            </div>
         </div>
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
@@ -143,8 +145,17 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
+        
+        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = "";
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
+    }
+
+    public onChange(event: KeyboardEvent): void
+    { 
+        if (!event) return;
+
+        //this._chatViewInput.parentElement.dataset.value = this._chatViewInput.value
     }
 
     private onKeyDownEvent(event: KeyboardEvent): void
@@ -180,6 +191,8 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
                         this.lastContent        = '';
                     }
                 }
+                return;
+            default:
                 return;
         }
     }
@@ -389,4 +402,5 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         return (this.widgetHandler as ChatInputWidgetHandler);
     }
+
 }

@@ -81,10 +81,6 @@ export class NotificationService implements OnDestroy
         {
             this._ngZone.run(() => this._notificationCentre.publish(ob, parser.type));
         }
-        else
-        {
-            this._ngZone.run(() => this.alert(ob[2]));
-        }
     }
 
     private onModeratorMessageEvent(event: ModeratorMessageEvent): void

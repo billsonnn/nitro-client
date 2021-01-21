@@ -82,7 +82,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 mode: RoomAvatarInfoAvatarComponent.MODE_NORMAL,
                 items: [
                     {
-                        name: 'add_friend',
+                        name: 'friend',
                         localization: 'infostand.button.friend',
                         visible: this.avatarData.canBeAskedForAFriend
                     },
