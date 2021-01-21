@@ -16,6 +16,7 @@ import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
+import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -57,6 +58,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         EscapeHtmlPipe,
+        TimeAgoPipe,
         TranslatePipe
     ],
     providers: [
@@ -73,6 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         EscapeHtmlPipe,
+        TimeAgoPipe,
         TranslatePipe
     ]
 })

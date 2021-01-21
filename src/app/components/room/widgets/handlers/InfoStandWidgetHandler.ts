@@ -115,7 +115,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetRoomObjectMessage.GET_OBJECT_NAME:
                 return this.processObjectNameMessage((message as RoomWidgetRoomObjectMessage));
             case RoomWidgetUserActionMessage.RWUAM_SEND_FRIEND_REQUEST:
-                //this._container.friendList._Str_14642(_local_2, _local_3.name);
+                this._container.friendService.sendFriendRequest(userId, userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_RESPECT_USER:
                 this._container.sessionDataManager.giveRespect(userId);
@@ -587,7 +587,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(eventType == RoomWidgetUpdateInfostandUserEvent.OWN_USER)
         {
             event.realName = this._container.sessionDataManager.realName;
-            //event._Str_4330 = this._container.sessionDataManager._Str_11198;
+            event._Str_4330 = this._container.sessionDataManager.canChangeName;
         }
 
         event.isRoomOwner           = this._container.roomSession.isRoomOwner;
@@ -598,13 +598,15 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(eventType === RoomWidgetUpdateInfostandUserEvent.PEER)
         {
-            //event.canBeAskedForAFriend = this._container.friendList.canBeAskedForAFriend(_arg_4._Str_2394);
-            // _local_9 = this._container.friendList.getFriend(_arg_4._Str_2394);
-            // if (_local_9 != null)
-            // {
-            //     event.realName = _local_9.realName;
-            //     event.isFriend = true;
-            // }
+            event.canBeAskedForAFriend = this._container.friendService.canBeAskedForAFriend(_arg_4.webID);
+
+            const friend = this._container.friendService.getFriend(_arg_4.webID);
+
+            if(friend)
+            {
+                event.realName  = friend.realName;
+                event.isFriend  = true;
+            }
 
             if(roomObject)
             {
@@ -617,8 +619,8 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 event._Str_6701 = this._Str_23573(event);
             }
 
-            event.isIgnored = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
-            event.respectLeft = this._container.sessionDataManager.respectsLeft;
+            event.isIgnored     = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
+            event.respectLeft   = this._container.sessionDataManager.respectsLeft;
 
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;

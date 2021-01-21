@@ -44,6 +44,13 @@
                         position: relative;
                         filter: drop-shadow(2px 1px 0 rgba($white, 1)) drop-shadow(-2px 1px 0 rgba($white, 1)) drop-shadow(0 -2px 0 rgba($white, 1));
                     }
+
+                    .badge {
+                        position: absolute;
+                        top: -8px;
+                        right: 12px;
+                        font-size: 10px;
+                    }
                 }
             }
         }
