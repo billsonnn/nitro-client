@@ -9,9 +9,9 @@
                 <button type="button" class="btn btn-primary" [ngClass]="{ 'active': (activeTab === child) }" (click)="selectTab(child)">{{ child.localization }}</button>
             </ng-container>
         </div>
-        <div class="row no-gutters">
-            <div *ngIf="activePage && activePage.layoutCode !== 'frontpage4'" nitro-catalog-navigation-component class="col-4"></div>
-            <div [ngClass]="(activePage && activePage.layoutCode !== 'frontpage4') ? 'col-8' : 'col-12'">
+        <div *ngIf="activeTab" class="row no-gutters">
+            <div *ngIf="activeTab && (activeTab.children.length > 0)" nitro-catalog-navigation-component class="col-4"></div>
+            <div [ngClass]="{ 'col-8': (activeTab.children.length > 0), 'col-12': (!activeTab.children.length) }">
                 <ng-template #layoutsContainer></ng-template>
             </div>
         </div>

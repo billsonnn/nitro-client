@@ -345,6 +345,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._catalogService.activePage;
     }
 
+    public get activePageData(): CatalogPageData
+    {
+        return this._catalogService.activePageData;
+    }
+
     public get purchaseOfferPage(): CatalogPageParser
     {
         return this._purchaseOfferPage;
