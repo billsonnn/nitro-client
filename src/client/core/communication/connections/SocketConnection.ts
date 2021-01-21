@@ -196,7 +196,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
-            this.write(encoded.toBuffer());
+            this.write(encoded.getBuffer());
         }
 
         return true;

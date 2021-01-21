@@ -1,4 +1,5 @@
-import ByteBuffer from 'bytebuffer';
+import { BinaryReader } from '../BinaryReader';
+import { BinaryWriter } from '../BinaryWriter';
 import { IConnection } from '../../connections/IConnection';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
 import { Byte } from '../Byte';
@@ -8,11 +9,11 @@ import { EvaWireDataWrapper } from './EvaWireDataWrapper';
 
 export class EvaWireFormat implements ICodec
 {
-    public encode(header: number, messages: any[]): ByteBuffer
+    public encode(header: number, messages: any[]): BinaryWriter
     {
-        const buffer = new ByteBuffer();
+        const buffer = new BinaryWriter();
 
-        buffer.writeInt(0).writeShort(header);
+        buffer.writeShort(header);
 
         for(const value of messages)
         {
@@ -46,17 +47,13 @@ export class EvaWireFormat implements ICodec
                     if(!value) buffer.writeShort(0);
                     else
                     {
-                        const length = ByteBuffer.calculateUTF8Bytes(value);
-                        
-                        buffer.writeShort(length).writeString(value);
+                        buffer.writeString(value, true);
                     }
                     break;
             }
         }
 
-        buffer.writeInt(buffer.offset - 4, 0);
-
-        return buffer.slice(0, buffer.offset);
+        return new BinaryWriter().writeInt(buffer.getBuffer().length).writeBytes(buffer.getBuffer());
     }
 
     public decode(connection: IConnection): IMessageDataWrapper[]
@@ -69,8 +66,8 @@ export class EvaWireFormat implements ICodec
         {
             if(connection.dataBuffer.byteLength < 4) break;
             
-            const container = ByteBuffer.wrap(connection.dataBuffer);
-            const length    = container.readInt32();
+            const container = new BinaryReader(connection.dataBuffer);
+            const length    = container.readInt();
 
             if(length > (connection.dataBuffer.byteLength - 4)) break;
 

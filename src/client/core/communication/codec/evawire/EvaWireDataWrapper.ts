@@ -1,12 +1,12 @@
-import * as ByteBuffer from 'bytebuffer';
+import { BinaryReader } from '../BinaryReader';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
 
 export class EvaWireDataWrapper implements IMessageDataWrapper
 {
     private _header: number;
-    private _buffer: ByteBuffer;
+    private _buffer: BinaryReader;
 
-    constructor(header: number, buffer: ByteBuffer)
+    constructor(header: number, buffer: BinaryReader)
     {
         this._header    = header;
         this._buffer    = buffer;
@@ -19,7 +19,7 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
         return this._buffer.readByte();
     }
 
-    public readBytes(length: number): ByteBuffer
+    public readBytes(length: number): BinaryReader
     {
         if(!this._buffer) return null;
 
@@ -35,14 +35,14 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
     {
         if(!this._buffer) return -1;
 
-        return this._buffer.readInt16();
+        return this._buffer.readShort();
     }
 
     public readInt(): number
     {
         if(!this._buffer) return -1;
 
-        return this._buffer.readInt32();
+        return this._buffer.readInt();
     }
 
     public readString(): string
