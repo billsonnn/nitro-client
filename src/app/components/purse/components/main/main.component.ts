@@ -24,11 +24,11 @@ export class PurseMainComponent implements OnInit
         return true;
     }
 
-    public getCurrencyUrl(type: number): string
+    public getCurrencyUrl(type: string): string
     {
         const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
 
-        return url.replace('%type%', type.toString());
+        return url.replace('%type%', type);
     }
 
     public get currencies(): Map<number, number>
@@ -36,11 +36,11 @@ export class PurseMainComponent implements OnInit
         return this._purseService.currencies;
     }
 
-    public get hcDay(): String
+    public get hcDay(): string
     {
-        if (!this._purseService.hcSub) return;
+        if(!this._purseService.hcSub) return;
 
-        if (this._purseService.hcSub.totalSeconds == 0) return Nitro.instance.localization.getValue("purse.clubdays.zero.amount.text");
+        if(!this._purseService.hcSub.totalSeconds) return Nitro.instance.localization.getValue('purse.clubdays.zero.amount.text');
 
         return FriendlyTime.shortFormat(this._purseService.hcSub.totalSeconds * 60);
     }

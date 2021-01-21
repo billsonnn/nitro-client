@@ -8,7 +8,7 @@
                     <div class="detail-icon bg-secondary" 
                     [ngClass]="{ 'bg-pink' : currency.key == 0, 'bg-warning': currency.key == -1, 'bg-skyBlue': currency.key == 5 }">
                         <div class="currency-icon"
-                            [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key) + ')' }"></div>
+                            [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key.toString()) + ')' }"></div>
                     </div>
                 </div>
             </ng-container>
