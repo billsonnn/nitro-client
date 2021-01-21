@@ -5,11 +5,12 @@
 
     .item-detail {
         flex:46%;
-        margin-top: 3px;
-        margin-right: 3px;
+        margin-bottom: 3px;
         padding: 0.23rem;
+        margin-right: 3px;
 
-        &:nth-child(2n) {
+        &:nth-child(2n),
+        &:last-child {
             margin-right:0;
         }
 

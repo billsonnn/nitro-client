@@ -1,6 +1,6 @@
 <div class="nitro-toolbar-component d-flex flex-row">
-    <div class="card">
-        <div #navigationList class="d-flex card-body justify-content-between p-0 w-100">
+    <div class="btn btn-primary rounded p-0 nohover">
+        <div #navigationList class="d-flex justify-content-between p-0 w-100">
             <ul class="list-group list-group-vertical">
                 <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-light"></i></li>
                 <li class="list-group-item" *ngIf="!isInRoom" (click)="clickIcon('home_room')"><i class="icon icon-house"></i></li>

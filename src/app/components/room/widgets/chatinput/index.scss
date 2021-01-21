@@ -1,7 +1,7 @@
 .nitro-room-chatinput-component {
     position: fixed;
     display: flex;
-    bottom: 10px;
+    bottom: 20px;
     left:70px;
     pointer-events: none;
 
@@ -15,12 +15,39 @@
         padding-right:30px;
         width:100%;
 
+        .input-sizer {
+            display: inline-grid;
+            vertical-align: top;
+            align-items: center;
+            position: relative;
+            height: 100%;
+            padding:0 10px;
+            
+            &::after,
+            input,
+            textarea {
+              width: auto;
+              min-width: 1em;
+              grid-area: 1 / 2;
+              font: inherit;
+              margin: 0;
+              resize: none;
+              background: none;
+              appearance: none;
+              border: none;
+            }
+            
+            
+            &::after {
+              content: attr(data-value) ' ';
+              visibility: hidden;
+              white-space: pre-wrap;
+            }
+          }
+
         .chat-input {
-            min-width: 100px;
-            max-width: 300px;
             height: 100%;
             font-size: 18px;
-            padding: 0 10px;
             outline: 0;
             border: 0;
             position: relative;

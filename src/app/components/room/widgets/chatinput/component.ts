@@ -16,7 +16,9 @@ import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMes
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
-            <input #chatInputView type="text" class="chat-input" [style.width]="_chatWidth" [maxLength]="inputMaxLength" />
+            <div class="input-sizer">
+                <input #chatInputView type="text" class="chat-input" placeholder="{{ 'widgets.chatinput.default' | translate }}" (input)="chatInputView.parentElement.dataset.value = chatInputView.value" [maxLength]="inputMaxLength" />
+            </div>
         </div>
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
@@ -40,7 +42,6 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private _chatModeIdShout: string                    = null;
     private _chatModeIdSpeak: string                    = null;
     private _maxChatLength: number                      = 0;
-    public _chatWidth: number                           = 0;
 
     constructor(
         private ngZone: NgZone
@@ -144,8 +145,17 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
+        
+        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = "";
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
+    }
+
+    public onChange(event: KeyboardEvent): void
+    { 
+        if (!event) return;
+
+        //this._chatViewInput.parentElement.dataset.value = this._chatViewInput.value
     }
 
     private onKeyDownEvent(event: KeyboardEvent): void
@@ -159,15 +169,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         if(document.activeElement !== input) this.setInputFocus();
 
         const key       = event.keyCode;
-        const shiftKey = event.shiftKey;
-        
-        // length  * 8 ig
-        
-        let width = (this.chatInputView.nativeElement.value.length / this.chatInputView.nativeElement.value.length + 8 - 1) * this.chatInputView.nativeElement.value.length
-        
-        this.chatInputView.nativeElement.style.width = width + "px";
-
-        //
+        const shiftKey  = event.shiftKey;
 
         switch(key)
         {
