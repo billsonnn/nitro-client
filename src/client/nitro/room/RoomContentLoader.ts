@@ -1,5 +1,7 @@
 import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
+import { INitroLogger } from '../../core/common/logger/INitroLogger';
+import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
 import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
@@ -28,6 +30,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public static MANDATORY_LIBRARIES: string[] = [ RoomContentLoader.PLACE_HOLDER, RoomContentLoader.PLACE_HOLDER_WALL, RoomContentLoader.PLACE_HOLDER_PET, RoomContentLoader.ROOM, RoomContentLoader.TILE_CURSOR, RoomContentLoader.SELECTION_ARROW ];
 
+    private _logger: INitroLogger;
     private _stateEvents: IEventDispatcher;
     private _sessionDataManager: ISessionDataManager;
     private _waitingForSessionDataManager: boolean;
@@ -51,6 +54,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     constructor()
     {
+        this._logger                        = new NitroLogger(this.constructor.name);
         this._stateEvents                   = null;
         this._sessionDataManager            = null;
         this._waitingForSessionDataManager  = false;
@@ -365,6 +369,8 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             image.onload = () =>
             {
+                image.onerror = null;
+
                 this._images.set(([ type, param ].join('_')), image);
                 
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), true);
@@ -372,6 +378,10 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             image.onerror = () =>
             {
+                image.onload = null;
+
+                this._logger.error('Failed to download asset: ' + url);
+
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), false);
             };
 
@@ -395,26 +405,28 @@ export class RoomContentLoader implements IFurnitureDataListener
         const totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader, flag: boolean) =>
+        const onDownloaded = (loader: Loader, resource: LoaderResource, flag: boolean) =>
         {
             if(loader) loader.destroy();
 
-            if(flag)
+            if(!flag)
             {
-                totalDownloaded++;
-
-                if(totalDownloaded === totalToDownload)
-                {
-                    const events = this._events.get(type);
-
-                    if(!events) return;
-
-                    events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
-                }
-            }
-            else
-            {
+                this._logger.error('Failed to download asset: ' + resource.url);
+                
                 events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_FAILURE, type));
+
+                return;
+            }
+            
+            totalDownloaded++;
+
+            if(totalDownloaded === totalToDownload)
+            {
+                const events = this._events.get(type);
+
+                if(!events) return;
+
+                events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
             }
         };
 
@@ -443,7 +455,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         {
             if(resource && resource.texture) resource.texture.destroy(true);
             
-            onDownloaded(loader, false);
+            onDownloaded(loader, resource, false);
 
             return;
         }
@@ -454,18 +466,24 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             if(!assetData.type)
             {
-                onDownloaded(loader, false);
+                onDownloaded(loader, resource, false);
 
                 return;
             }
             
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
+                const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
 
-                if(!imageUrl) return;
+                if(!imageName || !imageName.length)
+                {
+                    onDownloaded(loader, resource, false);
 
-                const baseTexture = BaseTexture.from(imageUrl);
+                    return;
+                }
+
+                const imageUrl      = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + imageName);
+                const baseTexture   = BaseTexture.from(imageUrl);
 
                 if(baseTexture.valid)
                 {
@@ -475,7 +493,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                     {
                         this.createCollection(assetData, spritesheet);
 
-                        onDownloaded(loader, true);
+                        onDownloaded(loader, resource, true);
                     });
                 }
                 else
@@ -490,7 +508,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                         {
                             this.createCollection(assetData, spritesheet);
 
-                            onDownloaded(loader, true);
+                            onDownloaded(loader, resource, true);
                         });
                     });
 
@@ -498,7 +516,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                     {
                         baseTexture.removeAllListeners();
 
-                        onDownloaded(loader, false);
+                        onDownloaded(loader, resource, false);
                     });
                 }
 
@@ -507,11 +525,11 @@ export class RoomContentLoader implements IFurnitureDataListener
                 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
         }
         else
         {
-            onDownloaded(loader, false);
+            onDownloaded(loader, resource, false);
         }
     }
 

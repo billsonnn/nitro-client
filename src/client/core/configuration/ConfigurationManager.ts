@@ -77,23 +77,33 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
     {
         if(!data || (data === '')) return false;
 
-        const configObject = JSON.parse(data);
-
-        const regex = new RegExp(/%(.*?)%/g);
-
-        for(const key in configObject)
+        try
         {
-            let value = configObject[key];
+            const configObject = JSON.parse(data);
 
-            if(typeof value === 'string')
+            const regex = new RegExp(/%(.*?)%/g);
+
+            for(const key in configObject)
             {
-                value = this.interpolate((value as string), regex);
+                let value = configObject[key];
+
+                if(typeof value === 'string')
+                {
+                    value = this.interpolate((value as string), regex);
+                }
+
+                this._definitions.add(key, value);
             }
 
-            this._definitions.add(key, value);
+            return true;
         }
 
-        return true;
+        catch (e)
+        {
+            this.logger.error(e.stack);
+
+            return false;
+        }
     }
 
     public interpolate(value: string, regex: RegExp = null): string

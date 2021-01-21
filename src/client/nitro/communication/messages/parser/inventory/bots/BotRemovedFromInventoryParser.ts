@@ -1,7 +1,7 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
-export class _Str_7906 implements IMessageParser
+export class BotRemovedFromInventoryParser implements IMessageParser
 {
     private _itemId: number;
 
