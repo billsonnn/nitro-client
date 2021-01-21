@@ -1,32 +1,33 @@
-﻿import { MoveFurniToComponent } from './move-furni-to/move-furni-to.component';
-import { GiveScoreToPredefinedTeamComponent } from './give-score-to-predefined-team/give-score-to-predifined-team.component';
-import { JoinTeamComponent } from './join-team/join-team.component';
-import { MoveToDirectionComponent } from './move-to-direction/move-to-direction.component';
-import { BotMoveComponent } from './bot-move/bot-move.component';
-import { BotTeleportComponent } from './bot-teleport/bot-teleport.component';
-import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
+﻿import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
+import { BotChangeFigureComponent } from './bot-change-figure/bot-change-figure.component';
 import { BotFollowAvatarComponent } from './bot-follow-avatar/bot-follow-avatar.component';
 import { BotGiveHandItemComponent } from './bot-give-hand-item/bot-give-hand-item.component';
+import { BotMoveComponent } from './bot-move/bot-move.component';
+import { BotTalkDirectToAvatarComponent } from './bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
+import { BotTalkComponent } from './bot-talk/bot-talk.component';
+import { BotTeleportComponent } from './bot-teleport/bot-teleport.component';
 import { CallAnotherStackComponent } from './call-another-stack/call-another-stack.component';
 import { ChaseComponent } from './chase/chase.component';
 import { ChatComponent } from './chat/chat.component';
 import { FleeComponent } from './flee/flee.component';
+import { GiveRewardComponent } from './give-reward/give-reward.component';
+import { GiveScoreToPredefinedTeamComponent } from './give-score-to-predefined-team/give-score-to-predifined-team.component';
+import { GiveScoreComponent } from './give-score/give-score.component';
+import { JoinTeamComponent } from './join-team/join-team.component';
 import { KickFromRoomComponent } from './kick-from-room/kick-from-room.component';
 import { LeaveTeamComponent } from './leave-team/leave-team.component';
+import { MoveFurniToComponent } from './move-furni-to/move-furni-to.component';
+import { MoveFurniComponent } from './move-furni/move-furni.component';
+import { MoveToDirectionComponent } from './move-to-direction/move-to-direction.component';
+import { MuteUserComponent } from './mute-user/mute-user.component';
 import { ResetComponent } from './reset/reset.component';
+import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-to.component';
 import { TeleportComponent } from './teleport/teleport.component';
 import { ToggleFurniStateComponent } from './toggle-furni-state/toggle-furni-state.component';
 import { WiredAction } from './WiredAction';
-import { SetFurniStateToComponent } from './set-furni-state-to/set-furni-state-to.component';
-import { MuteUserComponent } from './mute-user/mute-user.component';
-import { BotChangeFigureComponent } from './bot-change-figure/bot-change-figure.component';
-import { BotTalkDirectToAvatarComponent } from './bot-talk-direct-to-avatar/bot-talk-direct-to-avatar.component';
-import { BotTalkComponent } from './bot-talk/bot-talk.component';
-import { MoveFurniComponent } from './move-furni/move-furni.component';
-import { GiveScoreComponent } from './give-score/give-score.component';
 
 export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 {
@@ -82,6 +83,8 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
                 return GiveScoreComponent;
             case MoveFurniToComponent.CODE:
                 return MoveFurniToComponent;
+            case GiveRewardComponent.CODE:
+                return GiveRewardComponent;
         }
 
         return null;
