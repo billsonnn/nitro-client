@@ -25,6 +25,7 @@ import { GetFriendRequestsComposer } from '../../../../client/nitro/communicatio
 import { RemoveFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
 import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
+import { SoundService } from '../../../shared/services/sound.service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { MessengerChat } from '../common/MessengerChat';
 import { MessengerFriend } from '../common/MessengerFriend';
@@ -50,6 +51,7 @@ export class FriendListService implements OnDestroy
 
     constructor(
         private _notificationService: NotificationService,
+        private _soundService: SoundService,
         private _ngZone: NgZone)
     {
         this._component = null;
@@ -318,6 +320,7 @@ export class FriendListService implements OnDestroy
             }
         });
 
+        this._soundService.playMessengerSound();
     }
 
     private onNewFriendRequestEvent(event: NewFriendRequestEvent): void

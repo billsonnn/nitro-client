@@ -17,8 +17,8 @@ import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
-import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
+import { SoundService } from './services/sound.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -66,7 +66,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        SoundService
     ],
     declarations: [
         AvatarImageComponent,
