@@ -9,18 +9,18 @@
         .list-group {
 
             .nav-item {
-                    
+
                 .list-group-item {
                     padding: 4px 10px;
                     font-weight: 300;
                     font-size: 14px;
                     width: 100%;
-        
+
                     &:hover {
                         background: rgba(196, 196, 196, 0.1);
                         cursor: pointer;
                     }
-        
+
                     .icon-container {
                         display: flex;
                         justify-content: center;
@@ -31,31 +31,31 @@
                 }
 
                 .nav-item {
-                    
+
                     .list-group-item {
                         padding-left: 18px;
                     }
 
                     .nav-item {
-                
+
                         .list-group-item {
                             padding-left: 26px;
                         }
 
                         .nav-item {
-            
+
                             .list-group-item {
                                 padding-left: 34px;
                             }
 
                             .nav-item {
-        
+
                                 .list-group-item {
                                     padding-left: 42px;
                                 }
 
                                 .nav-item {
-    
+
                                     .list-group-item {
                                         padding-left: 50px;
                                     }
@@ -90,6 +90,39 @@
         input {
             width: 45px;
         }
+    }
+
+	.front-page-item {
+        border-radius: 5px;
+        background-position: center;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.45);
+
+        .front-page-item-caption {
+            position: absolute;
+            background: rgba(0, 0, 0, .5);
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 5px 15px;
+            bottom: 0;
+            text-shadow: 2px 2px rgba(0, 0, 0, .2);
+        }
+    }
+
+    .front-page-item.tall {
+        height: 450px;
+    }
+
+    .front-page-item.wide {
+        height: 130px;
+        margin-bottom: 30px;
+    }
+
+    .front-page-item.wide:last-child {
+        margin-bottom: 0px;
     }
 }
 

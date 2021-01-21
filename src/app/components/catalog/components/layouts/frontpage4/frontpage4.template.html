@@ -1,3 +1,18 @@
-<div class="nitro-catalog-layout-frontpage4-component">
-    test
+<div class="nitro-catalog-layout-frontpage4-component row">
+    <div class="col-4">
+        <div *ngIf="activePage.frontPageItems[0]" class="front-page-item tall" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[0].itemPromoImage + ')'}">
+            <div class="front-page-item-caption">{{activePage.frontPageItems[0].itemName}}</div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div *ngIf="activePage.frontPageItems[1]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[1].itemPromoImage + ')'}">
+            <div class="front-page-item-caption">{{activePage.frontPageItems[1].itemName}}</div>
+        </div>
+        <div *ngIf="activePage.frontPageItems[2]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[2].itemPromoImage + ')'}">
+            <div class="front-page-item-caption">{{activePage.frontPageItems[2].itemName}}</div>
+        </div>
+        <div *ngIf="activePage.frontPageItems[3]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[3].itemPromoImage + ')'}">
+            <div class="front-page-item-caption">{{activePage.frontPageItems[3].itemName}}</div>
+        </div>
+    </div>
 </div>
