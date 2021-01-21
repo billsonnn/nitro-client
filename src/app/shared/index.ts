@@ -15,7 +15,7 @@ import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
-import { FormatShortPipe } from './pipes/formatShort';
+import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 import { TranslatePipe } from './pipes/translate';
 
