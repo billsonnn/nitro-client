@@ -1,4 +1,3 @@
-import { NitroLogger } from '../core/common/logger/NitroLogger';
 import { NitroManager } from '../core/common/NitroManager';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
@@ -331,7 +330,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
                     this._listener.initalizeTemporaryObjectsByType(type, false);
                 }
 
-                NitroLogger.log(`Invalid Collection: ${ type }`);
+                this.logger.log(`Invalid Collection: ${ type }`);
 
                 continue;
             }
