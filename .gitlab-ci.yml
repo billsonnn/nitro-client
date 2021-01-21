@@ -1,0 +1,24 @@
+image: node:15.6
+
+stages:
+  - dependencies
+  - build
+
+Install Dependencies:
+  stage: dependencies
+  script:
+    - npm i
+  cache:
+    key: ${CI_COMMIT_BRANCH}
+    paths:
+      - node_modules
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - node_modules
+
+Build Nitro:
+  stage: build
+  script:
+    - cp src/index.html.example src/index.html
+    - npm run build-prod
