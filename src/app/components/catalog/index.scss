@@ -2,6 +2,7 @@
     position: absolute;
     width: $catalog-width;
     max-width: $catalog-width;
+	min-height: $catalog-min-height;
 
     .nitro-catalog-navigation-component {
         margin-right: ($grid-gutter-width / 2);
