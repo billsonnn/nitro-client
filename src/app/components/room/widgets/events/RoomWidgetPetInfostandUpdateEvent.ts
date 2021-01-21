@@ -3,7 +3,7 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 
 export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {
-    public static PET_INFO: string = "RWPIUE_PET_INFO";
+    public static PET_INFO: string = 'RWPIUE_PET_INFO';
 
     private _level: number;
     private _maximumLevel: number;
@@ -96,19 +96,9 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._ownerName;
     }
 
-    public get _Str_5114(): boolean
-    {
-        return this._Str_11149;
-    }
-
     public get _Str_2707(): number
     {
         return this._Str_2775;
-    }
-
-    public get age(): number
-    {
-        return this._age;
     }
 
     public get unknownRarityLevel(): number
@@ -116,94 +106,9 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._unknownRarityLevel;
     }
 
-    public get saddle(): boolean
-    {
-        return this._saddle;
-    }
-
-    public get rider(): boolean
-    {
-        return this._rider;
-    }
-
-    public get breedable(): boolean
-    {
-        return this._breedable;
-    }
-
-    public get fullyGrown(): boolean
-    {
-        return this._fullyGrown;
-    }
-
-    public get dead(): boolean
-    {
-        return this._dead;
-    }
-
-    public get rarityLevel(): number
-    {
-        return this._rarityLevel;
-    }
-
-    public get _Str_3307(): string[]
-    {
-        return this._Str_4460;
-    }
-
-    public get publiclyRideable(): number
-    {
-        return this._publiclyRideable;
-    }
-
     public get level(): number
     {
         return this._level;
-    }
-
-    public get maximumLevel(): number
-    {
-        return this._maximumLevel;
-    }
-
-    public get experience(): number
-    {
-        return this._experience;
-    }
-
-    public get levelExperienceGoal(): number
-    {
-        return this._levelExperienceGoal;
-    }
-
-    public get energy(): number
-    {
-        return this._energy;
-    }
-
-    public get maximumEnergy(): number
-    {
-        return this._maximumEnergy;
-    }
-
-    public get happyness(): number
-    {
-        return this._happyness;
-    }
-
-    public get maximumHappyness(): number
-    {
-        return this._maximumHappyness;
-    }
-
-    public get _Str_2985(): number
-    {
-        return this._Str_3973;
-    }
-
-    public get respect(): number
-    {
-        return this._respect;
     }
 
     public set level(k: number)
@@ -211,9 +116,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._level = k;
     }
 
+    public get maximumLevel(): number
+    {
+        return this._maximumLevel;
+    }
+
     public set maximumLevel(k: number)
     {
         this._maximumLevel = k;
+    }
+
+    public get experience(): number
+    {
+        return this._experience;
     }
 
     public set experience(k: number)
@@ -221,9 +136,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._experience = k;
     }
 
+    public get levelExperienceGoal(): number
+    {
+        return this._levelExperienceGoal;
+    }
+
     public set levelExperienceGoal(k: number)
     {
         this._levelExperienceGoal = k;
+    }
+
+    public get energy(): number
+    {
+        return this._energy;
     }
 
     public set energy(k: number)
@@ -231,9 +156,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._energy = k;
     }
 
+    public get maximumEnergy(): number
+    {
+        return this._maximumEnergy;
+    }
+
     public set maximumEnergy(k: number)
     {
         this._maximumEnergy = k;
+    }
+
+    public get happyness(): number
+    {
+        return this._happyness;
     }
 
     public set happyness(k: number)
@@ -241,9 +176,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._happyness = k;
     }
 
+    public get maximumHappyness(): number
+    {
+        return this._maximumHappyness;
+    }
+
     public set maximumHappyness(k: number)
     {
         this._maximumHappyness = k;
+    }
+
+    public get _Str_2985(): number
+    {
+        return this._Str_3973;
     }
 
     public set _Str_2985(k: number)
@@ -251,9 +196,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._Str_3973 = k;
     }
 
+    public get _Str_5114(): boolean
+    {
+        return this._Str_11149;
+    }
+
     public set _Str_5114(k: boolean)
     {
         this._Str_11149 = k;
+    }
+
+    public get respect(): number
+    {
+        return this._respect;
     }
 
     public set respect(k: number)
@@ -261,9 +216,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._respect = k;
     }
 
+    public get age(): number
+    {
+        return this._age;
+    }
+
     public set age(k: number)
     {
         this._age = k;
+    }
+
+    public get saddle(): boolean
+    {
+        return this._saddle;
     }
 
     public set saddle(k: boolean)
@@ -271,9 +236,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._saddle = k;
     }
 
+    public get rider(): boolean
+    {
+        return this._rider;
+    }
+
     public set rider(k: boolean)
     {
         this._rider = k;
+    }
+
+    public get breedable(): boolean
+    {
+        return this._breedable;
     }
 
     public set breedable(k: boolean)
@@ -281,9 +256,19 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._breedable = k;
     }
 
+    public get _Str_3307(): string[]
+    {
+        return this._Str_4460;
+    }
+
     public set _Str_3307(k: string[])
     {
         this._Str_4460 = k;
+    }
+
+    public get publiclyRideable(): number
+    {
+        return this._publiclyRideable;
     }
 
     public set publiclyRideable(k: number)
@@ -291,14 +276,29 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._publiclyRideable = k;
     }
 
+    public get fullyGrown(): boolean
+    {
+        return this._fullyGrown;
+    }
+
     public set fullyGrown(k: boolean)
     {
         this._fullyGrown = k;
     }
 
+    public get dead(): boolean
+    {
+        return this._dead;
+    }
+
     public set dead(k: boolean)
     {
         this._dead = k;
+    }
+
+    public get rarityLevel(): number
+    {
+        return this._rarityLevel;
     }
 
     public set rarityLevel(k: number)

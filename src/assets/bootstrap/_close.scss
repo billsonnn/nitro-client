@@ -7,6 +7,7 @@
   text-shadow: $close-text-shadow;
   opacity: .5;
   outline: none !important;
+  cursor: pointer;
 
   // Override <a>'s hover style
   @include hover() {

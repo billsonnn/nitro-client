@@ -22,14 +22,14 @@ export class AdvancedMap<T, U> implements IDisposable
 
     public get disposed(): boolean
     {
-        return (!!!this._dictionary);
+        return (!this._dictionary);
     }
 
     public dispose(): void
     {
         if(!this._dictionary)
         {
-            for(let key of this._dictionary.keys()) this._dictionary.delete(key);
+            for(const key of this._dictionary.keys()) this._dictionary.delete(key);
 
             this._dictionary = null;
         }
@@ -41,7 +41,7 @@ export class AdvancedMap<T, U> implements IDisposable
 
     public reset(): void
     {
-        for(let key of this._dictionary.keys()) this._dictionary.delete(key);
+        for(const key of this._dictionary.keys()) this._dictionary.delete(key);
 
         this._length    = 0;
         this._array     = [];
@@ -143,7 +143,7 @@ export class AdvancedMap<T, U> implements IDisposable
 
     public concatenate(newValues: AdvancedMap<T, U>): void
     {
-        for(let k of newValues._keys) this.add(k, newValues.getValue(k));
+        for(const k of newValues._keys) this.add(k, newValues.getValue(k));
     }
 
     public clone(): AdvancedMap<T, U>

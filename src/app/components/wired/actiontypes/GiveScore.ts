@@ -36,8 +36,8 @@ export class GiveScore extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3: number = _arg_2.intData[0];
-        var _local_4: number = _arg_2.intData[1];
+        const _local_3: number = _arg_2.intData[0];
+        const _local_4: number = _arg_2.intData[1];
         // this._slider._Str_2526(_local_3);
         // this._counterSlider._Str_2526(_local_4);
     }

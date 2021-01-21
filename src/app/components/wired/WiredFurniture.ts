@@ -9,7 +9,8 @@ export class WiredFurniture
 {
     constructor(
         protected _wiredService: WiredService,
-        protected _formBuilder: FormBuilder) {}
+        protected _formBuilder: FormBuilder)
+    {}
 
     public get code(): number
     {
@@ -43,7 +44,6 @@ export class WiredFurniture
 
     public onInitStart(): void
     {
-
     }
 
     public onEditStart(trigger: Triggerable): void
@@ -58,5 +58,14 @@ export class WiredFurniture
     public validate(): string
     {
         return null;
+    }
+
+    public static getLocaleName(value: number): string
+    {
+        const time = Math.floor((value / 2));
+
+        if(!(value % 2)) return time.toString();
+
+        return (time + 0.5).toString();
     }
 }

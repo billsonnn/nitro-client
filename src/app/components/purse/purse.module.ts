@@ -5,7 +5,7 @@ import { PurseMainComponent } from './components/main/main.component';
 import { PurseService } from './services/purse.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -20,4 +20,5 @@ import { PurseService } from './services/purse.service';
         PurseCurrencyComponent
     ]
 })
-export class PurseModule {}
+export class PurseModule 
+{}

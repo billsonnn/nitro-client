@@ -81,7 +81,7 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 
             const eventTypes = instance.getEventTypes();
 
-            for(let eventType of eventTypes)
+            for(const eventType of eventTypes)
             {
                 if(!eventType) continue;
 
@@ -98,7 +98,7 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 
         this._registeredEvents.set(type, true);
 
-        for(let func of this._functions)
+        for(const func of this._functions)
         {
             if(!func) continue;
 
@@ -114,7 +114,7 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 
         this._functions.push(func);
 
-        for(let eventType of this._registeredEvents.keys())
+        for(const eventType of this._registeredEvents.keys())
         {
             if(!eventType) continue;
 
@@ -132,7 +132,7 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 
         this._functions.splice(index, 1);
 
-        for(let event of this._registeredEvents.keys())
+        for(const event of this._registeredEvents.keys())
         {
             if(!event) continue;
 

@@ -54,7 +54,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
         if(this._managers.size)
         {
-            for(let manager of this._managers.values())
+            for(const manager of this._managers.values())
             {
                 if(!manager) continue;
 
@@ -62,7 +62,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
                 if(!objects.length) continue;
 
-                for(let object of objects.getValues())
+                for(const object of objects.getValues())
                 {
                     if(!object) continue;
 
@@ -188,7 +188,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
     public removeAllManagers(): void
     {
-        for(let manager of this._managers.values())
+        for(const manager of this._managers.values())
         {
             if(!manager) continue;
 
@@ -198,7 +198,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
                 if(objects.length)
                 {
-                    for(let object of objects.getValues())
+                    for(const object of objects.getValues())
                     {
                         if(!object) continue;
 
@@ -233,7 +233,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
     public update(time: number, update: boolean = false): void
     {
-        for(let category of this._updateCategories)
+        for(const category of this._updateCategories)
         {
             const manager = this.getManager(category);
 
@@ -243,7 +243,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
             if(!objects.length) continue;
 
-            for(let object of objects.getValues())
+            for(const object of objects.getValues())
             {
                 if(!object) continue;
 
@@ -258,11 +258,11 @@ export class RoomInstance extends Disposable implements IRoomInstance
 
     public hasUninitializedObjects(): boolean
     {
-        for(let manager of this._managers.values())
+        for(const manager of this._managers.values())
         {
             if(!manager) continue;
 
-            for(let object of manager.objects.getValues())
+            for(const object of manager.objects.getValues())
             {
                 if(!object) continue;
 

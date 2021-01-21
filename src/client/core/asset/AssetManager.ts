@@ -3,11 +3,14 @@ import { GraphicAssetCollection } from '../../room/object/visualization/utils/Gr
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { Disposable } from '../common/disposable/Disposable';
+import { INitroLogger } from '../common/logger/INitroLogger';
+import { NitroLogger } from '../common/logger/NitroLogger';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
+    private _logger: INitroLogger;
     private _textures: Map<string, Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
     private _pendingUrls: Map<string, Function[]>;
@@ -16,9 +19,10 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         super();
 
-        this._textures          = new Map();
-        this._collections       = new Map();
-        this._pendingUrls       = new Map();
+        this._logger        = new NitroLogger(this.constructor.name);
+        this._textures      = new Map();
+        this._collections   = new Map();
+        this._pendingUrls   = new Map();
     }
 
     public static removeFileExtension(name: string): string
@@ -50,7 +54,7 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!name) return null;
 
-        for(let collection of this._collections.values())
+        for(const collection of this._collections.values())
         {
             if(!collection) continue;
 
@@ -83,7 +87,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
         if(collection)
         {
-            for(let [ name, texture ] of collection.textures.entries()) this.setTexture(name, texture);
+            for(const [ name, texture ] of collection.textures.entries()) this.setTexture(name, texture);
 
             this._collections.set(collection.name, collection);
         }
@@ -103,19 +107,27 @@ export class AssetManager extends Disposable implements IAssetManager
             return true;
         }
 
-        let totalToDownload = assetUrls.length;
+        const totalToDownload = assetUrls.length;
+
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader, flag: boolean) =>
+        const onDownloaded = (loader: Loader, resource: LoaderResource, flag: boolean) =>
         {
-            totalDownloaded++;
-
             if(loader) loader.destroy();
 
-            if(totalDownloaded === totalToDownload) cb(flag);
-        }
+            if(!flag)
+            {
+                this._logger.error('Failed to download asset: ' + resource.url);
 
-        for(let url of assetUrls)
+                return;
+            }
+
+            totalDownloaded++;
+
+            if(totalDownloaded === totalToDownload) cb(true);
+        };
+
+        for(const url of assetUrls)
         {
             if(!url) continue;
 
@@ -140,7 +152,7 @@ export class AssetManager extends Disposable implements IAssetManager
         {
             if(resource && resource.texture) resource.texture.destroy(true);
             
-            onDownloaded(loader, false);
+            onDownloaded(loader, resource, false);
 
             return;
         }
@@ -153,11 +165,17 @@ export class AssetManager extends Disposable implements IAssetManager
             
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
+                const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
 
-                if(!imageUrl) return;
+                if(!imageName || !imageName.length)
+                {
+                    onDownloaded(loader, resource, false);
 
-                const baseTexture = BaseTexture.from(imageUrl);
+                    return;
+                }
+
+                const imageUrl      = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + imageName);
+                const baseTexture   = BaseTexture.from(imageUrl);
 
                 if(baseTexture.valid)
                 {
@@ -167,7 +185,7 @@ export class AssetManager extends Disposable implements IAssetManager
                     {
                         this.createCollection(assetData, spritesheet);
 
-                        onDownloaded(loader, true);
+                        onDownloaded(loader, resource, true);
                     });
                 }
                 else
@@ -182,7 +200,7 @@ export class AssetManager extends Disposable implements IAssetManager
                         {
                             this.createCollection(assetData, spritesheet);
 
-                            onDownloaded(loader, true);
+                            onDownloaded(loader, resource, true);
                         });
                     });
 
@@ -190,7 +208,7 @@ export class AssetManager extends Disposable implements IAssetManager
                     {
                         baseTexture.removeAllListeners();
 
-                        onDownloaded(loader, false);
+                        onDownloaded(loader, resource, false);
                     });
                 }
 
@@ -199,7 +217,7 @@ export class AssetManager extends Disposable implements IAssetManager
                 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
 
             return;
         }
@@ -213,11 +231,11 @@ export class AssetManager extends Disposable implements IAssetManager
             {
                 this.setTexture(name, resource.texture);
 
-                onDownloaded(loader, true);
+                onDownloaded(loader, resource, true);
             }
             else
             {
-                onDownloaded(loader, false);
+                onDownloaded(loader, resource, false);
             }
 
             return;

@@ -1,10 +1,11 @@
 ﻿import { IPartColor } from '../../../../client/nitro/avatar/structure/figure/IPartColor';
+import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorGridColorItem } from './AvatarEditorGridColorItem';
 import { AvatarEditorGridPartItem } from './AvatarEditorGridPartItem';
 
 export class CategoryData 
 {
-    private _Str_13041: number = 2;
+    private MAX_PALETTES: number = 2;
 
     private _name: string;
     private _parts: AvatarEditorGridPartItem[];
@@ -20,22 +21,22 @@ export class CategoryData
         this._selectedPartIndex = -1;
     }
 
-    private static _Str_21219(palettes: AvatarEditorGridColorItem[], clubLevel: number): number
+    private static defaultColorId(palettes: AvatarEditorGridColorItem[], clubLevel: number): number
     {
         if(!palettes || !palettes.length) return -1;
 
-        let _local_3 = 0;
+        let i = 0;
 
-        while (_local_3 < palettes.length)
+        while(i < palettes.length)
         {
-            const _local_4 = palettes[_local_3];
+            const _local_4 = palettes[i];
 
-            if (((_local_4._Str_3420) && (_local_4._Str_3420.clubLevel <= clubLevel)))
+            if(((_local_4._Str_3420) && (_local_4._Str_3420.clubLevel <= clubLevel)))
             {
                 return _local_4._Str_3420.id;
             }
 
-            _local_3++;
+            i++;
         }
 
         return -1;
@@ -43,7 +44,7 @@ export class CategoryData
 
     public init(): void
     {
-        for(let part of this._parts)
+        for(const part of this._parts)
         {
             if(!part) continue;
 
@@ -56,16 +57,16 @@ export class CategoryData
     {
         if(this._parts)
         {
-            for(let k of this._parts) k.dispose();
+            for(const k of this._parts) k.dispose();
 
             this._parts = null;
         }
 
         if(this._palettes)
         {
-            for(let _local_2 of this._palettes)
+            for(const _local_2 of this._palettes)
             {
-                if(_local_2) for(let _local_3 of _local_2) _local_3.dispose();
+                if(_local_2) for(const _local_3 of _local_2) _local_3.dispose();
             }
 
             this._palettes = null;
@@ -75,19 +76,19 @@ export class CategoryData
         this._paletteIndexes    = null;
     }
 
-    public _Str_20245(k: number): void
+    public selectPartId(partId: number): void
     {
         if(!this._parts) return;
 
         let i = 0;
 
-        while (i < this._parts.length)
+        while(i < this._parts.length)
         {
-            const _local_3 = this._parts[i];
+            const partItem = this._parts[i];
 
-            if (_local_3.id === k)
+            if(partItem.id === partId)
             {
-                this._Str_8066(i);
+                this.selectPartIndex(i);
 
                 return;
             }
@@ -96,236 +97,234 @@ export class CategoryData
         }
     }
 
-    public _Str_17669(k: number[]): void
+    public selectColorIds(colorIds: number[]): void
     {
-        if(!k || !this._palettes) return;
+        if(!colorIds || !this._palettes) return;
 
-        this._paletteIndexes = new Array(k.length);
+        this._paletteIndexes = new Array(colorIds.length);
 
-        let _local_3 = 0;
+        let i = 0;
 
-        while (_local_3 < this._palettes.length)
+        while(i < this._palettes.length)
         {
-            const _local_4 = this._Str_783(_local_3);
+            const palette = this.getPalette(i);
 
-            if(_local_4)
+            if(palette)
             {
-                let _local_5 = 0;
+                let colorId = 0;
 
-                if (k.length > _local_3)
+                if(colorIds.length > i)
                 {
-                    _local_5 = k[_local_3];
+                    colorId = colorIds[i];
                 }
                 else
                 {
-                    const _local_7 = _local_4[0];
+                    const colorItem = palette[0];
 
-                    if(_local_7 && _local_7._Str_3420) _local_5 = _local_7._Str_3420.id;
+                    if(colorItem && colorItem._Str_3420) colorId = colorItem._Str_3420.id;
                 }
 
-                let _local_6 = 0;
+                let j = 0;
 
-                while(_local_6 < _local_4.length)
+                while(j < palette.length)
                 {
-                    const _local_2 = _local_4[_local_6];
+                    const colorItem = palette[j];
 
-                    if(_local_2._Str_3420.id === _local_5)
+                    if(colorItem._Str_3420.id === colorId)
                     {
-                        this._paletteIndexes[_local_3] = _local_6;
+                        this._paletteIndexes[i] = j;
 
-                        _local_2.isSelected = true;
+                        colorItem.isSelected = true;
                     }
                     else
                     {
-                        _local_2.isSelected = false;
+                        colorItem.isSelected = false;
                     }
 
-                    _local_6++;
+                    j++;
                 }
             }
 
-            _local_3++;
+            i++;
         }
 
-        this._Str_19574();
+        this.updatePartColors();
     }
 
-    public _Str_8066(k: number): AvatarEditorGridPartItem
+    public selectPartIndex(partIndex: number): AvatarEditorGridPartItem
     {
-        if (!this._parts)
-        {
-            return null;
-        }
-        if (((this._selectedPartIndex >= 0) && (this._parts.length > this._selectedPartIndex)))
-        {
-            const _local_2 = this._parts[this._selectedPartIndex];
+        if(!this._parts) return null;
 
-            if (_local_2)
+        if((this._selectedPartIndex >= 0) && (this._parts.length > this._selectedPartIndex))
+        {
+            const partItem = this._parts[this._selectedPartIndex];
+
+            if(partItem) partItem.isSelected = false;
+        }
+
+        if(this._parts.length > partIndex)
+        {
+            const partItem = this._parts[partIndex];
+
+            if(partItem)
             {
-                _local_2.isSelected = false;
+                partItem.isSelected = true;
+
+                this._selectedPartIndex = partIndex;
+
+                return partItem;
             }
         }
-        if (this._parts.length > k)
-        {
-            const _local_3 = (this._parts[k] as AvatarEditorGridPartItem);
 
-            if (_local_3)
-            {
-                _local_3.isSelected = true;
-
-                this._selectedPartIndex = k;
-
-                return _local_3;
-            }
-        }
         return null;
     }
 
-    public _Str_17959(k: number, _arg_2: number): AvatarEditorGridColorItem
+    public selectColorIndex(colorIndex: number, paletteId: number): AvatarEditorGridColorItem
     {
-        const _local_3 = this._Str_783(_arg_2);
+        const palette = this.getPalette(paletteId);
 
-        if(!_local_3) return null;
+        if(!palette) return null;
 
-        if(_local_3.length <= k) return null;
+        if(palette.length <= colorIndex) return null;
 
-        this._Str_23284(this._paletteIndexes[_arg_2], _arg_2);
+        this.deselectColorIndex(this._paletteIndexes[paletteId], paletteId);
 
-        this._paletteIndexes[_arg_2] = k;
+        this._paletteIndexes[paletteId] = colorIndex;
 
-        const _local_4 = _local_3[k];
+        const colorItem = palette[colorIndex];
        
-        if(!_local_4) return null;
+        if(!colorItem) return null;
 
-        _local_4.isSelected = true;
+        colorItem.isSelected = true;
 
-        this._Str_19574();
+        this.updatePartColors();
 
-        return _local_4;
+        return colorItem;
     }
 
-    public _Str_24480(k: number): number
+    public getCurrentColorIndex(k: number): number
     {
         return this._paletteIndexes[k];
     }
 
-    private _Str_23284(k: number, _arg_2: number): void
+    private deselectColorIndex(colorIndex: number, paletteIndex: number): void
     {
-        const _local_3 = this._Str_783(_arg_2);
+        const palette = this.getPalette(paletteIndex);
 
-        if(!_local_3) return;
+        if(!palette) return;
 
-        if(_local_3.length <= k) return;
+        if(palette.length <= colorIndex) return;
 
-        const _local_4 = _local_3[k];
+        const colorItem = palette[colorIndex];
 
-        if(!_local_4) return;
+        if(!colorItem) return;
 
-        _local_4.isSelected = false;
+        colorItem.isSelected = false;
     }
 
-    public _Str_11211(): number[]
+    public getSelectedColorIds(): number[]
     {
         if(!this._paletteIndexes || !this._paletteIndexes.length) return null;
 
         if(!this._palettes || !this._palettes.length) return null;
 
-        const k = this._palettes[0];
+        const palette = this._palettes[0];
 
-        if(!k || (!k.length)) return null;
+        if(!palette || (!palette.length)) return null;
 
-        const _local_2 = k[0];
+        const colorItem = palette[0];
 
-        if(!_local_2 || !_local_2._Str_3420) return null;
+        if(!colorItem || !colorItem._Str_3420) return null;
 
-        const _local_3              = _local_2._Str_3420.id;
-        const _local_4: number[]    = [];
+        const colorId               = colorItem._Str_3420.id;
+        const colorIds: number[]    = [];
 
-        let _local_5 = 0;
+        let i = 0;
 
-        while(_local_5 < this._paletteIndexes.length)
+        while(i < this._paletteIndexes.length)
         {
-            const _local_7 = this._palettes[_local_5];
+            const paletteSet = this._palettes[i];
 
-            if(!((!(_local_7)) || (_local_7.length <= _local_5)))
+            if(!((!(paletteSet)) || (paletteSet.length <= i)))
             {
-                if(_local_7.length > this._paletteIndexes[_local_5])
+                if(paletteSet.length > this._paletteIndexes[i])
                 {
-                    const _local_8 = _local_7[this._paletteIndexes[_local_5]];
+                    const color = paletteSet[this._paletteIndexes[i]];
 
-                    if(_local_8 && _local_8._Str_3420)
+                    if(color && color._Str_3420)
                     {
-                        _local_4.push(_local_8._Str_3420.id);
+                        colorIds.push(color._Str_3420.id);
                     }
                     else
                     {
-                        _local_4.push(_local_3);
+                        colorIds.push(colorId);
                     }
                 }
                 else
                 {
-                    _local_4.push(_local_3);
+                    colorIds.push(colorId);
                 }
             }
 
-            _local_5++;
+            i++;
         }
 
-        const _local_6 = this._Str_6315();
+        const partItem = this.getCurrentPart();
 
-        if(!_local_6) return null;
+        if(!partItem) return null;
 
-        return _local_4.slice(0, Math.max(_local_6.colorLayerCount, 1));
+        return colorIds.slice(0, Math.max(partItem.colorLayerCount, 1));
     }
 
-    private _Str_16788(): IPartColor[]
+    private getSelectedColors(): IPartColor[]
     {
-        const k: IPartColor[] = [];
+        const partColors: IPartColor[] = [];
 
-        let _local_3 = 0;
-        while (_local_3 < this._paletteIndexes.length)
+        let i = 0;
+
+        while(i < this._paletteIndexes.length)
         {
-            const _local_2 = this._Str_13355(_local_3);
+            const colorItem = this.getSelectedColor(i);
 
-            if (_local_2)
+            if(colorItem)
             {
-                k.push(_local_2._Str_3420);
+                partColors.push(colorItem._Str_3420);
             }
             else
             {
-                k.push(null);
+                partColors.push(null);
             }
 
-            _local_3++;
+            i++;
         }
 
-        return k;
+        return partColors;
     }
 
-    public _Str_13355(k: number): AvatarEditorGridColorItem
+    public getSelectedColor(k: number): AvatarEditorGridColorItem
     {
-        const _local_2 = this._Str_783(k);
+        const _local_2 = this.getPalette(k);
 
         if(!_local_2 || (_local_2.length <= this._paletteIndexes[k])) return null;
 
         return _local_2[this._paletteIndexes[k]];
     }
 
-    public _Str_26437(k: number): number
+    public getSelectedColorId(k: number): number
     {
-        const _local_2 = this._Str_13355(k);
+        const _local_2 = this.getSelectedColor(k);
 
         if(_local_2 && (_local_2._Str_3420)) return _local_2._Str_3420.id;
 
         return 0;
     }
 
-    public get _Str_806(): AvatarEditorGridPartItem[]
+    public get parts(): AvatarEditorGridPartItem[]
     {
         return this._parts;
     }
 
-    public _Str_783(k: number): AvatarEditorGridColorItem[]
+    public getPalette(k: number): AvatarEditorGridColorItem[]
     {
         if(!this._paletteIndexes || !this._palettes || (this._palettes.length <= k))
         {
@@ -335,32 +334,32 @@ export class CategoryData
         return this._palettes[k];
     }
 
-    public _Str_6315(): AvatarEditorGridPartItem
+    public getCurrentPart(): AvatarEditorGridPartItem
     {
         return this._parts[this._selectedPartIndex] as AvatarEditorGridPartItem;
     }
 
-    private _Str_19574(): void
+    private updatePartColors(): void
     {
-        const k = this._Str_16788();
+        const k = this.getSelectedColors();
 
-        for(let _local_2 of this._parts)
+        for(const _local_2 of this._parts)
         {
             if(_local_2) _local_2.colors = k;
         }
     }
 
-    public _Str_23352(k: number): boolean
+    public hasClubSelectionsOverLevel(k: number): boolean
     {
         let _local_2 = false;
 
-        const _local_3 = this._Str_16788();
+        const _local_3 = this.getSelectedColors();
 
-        if (_local_3)
+        if(_local_3)
         {
             let _local_6 = 0;
 
-            while (_local_6 < _local_3.length)
+            while(_local_6 < _local_3.length)
             {
                 const _local_7 = _local_3[_local_6];
                 
@@ -371,7 +370,7 @@ export class CategoryData
         }
 
         let _local_4 = false;
-        var _local_5 = this._Str_6315();
+        const _local_5 = this.getCurrentPart();
 
         if(_local_5 && _local_5.partSet)
         {
@@ -386,35 +385,32 @@ export class CategoryData
         return (_local_2) || (_local_4);
     }
 
-    // public _Str_7960(k:IHabboInventory): boolean
-    // {
-    //     var _local_4:IFigurePartSet;
-    //     var _local_2: boolean;
-    //     var _local_3:AvatarEditorGridPartItem = this._Str_6315();
-    //     if (((!(_local_3 == null)) && (_local_3.partSet)))
-    //     {
-    //         _local_4 = _local_3.partSet;
-    //         if ((((!(_local_4 == null)) && (_local_4._Str_651)) && (!(k._Str_14439(_local_4.id)))))
-    //         {
-    //             _local_2 = true;
-    //         }
-    //     }
-    //     return _local_2;
-    // }
-
-    public _Str_15298(k: number): boolean
+    public hasInvalidSelectedItems(inventory: InventoryService): boolean
     {
-        const _local_2 = this._Str_6315();
+        const part = this.getCurrentPart();
 
-        if (((_local_2) && (_local_2.partSet)))
+        if(!part) return false;
+
+        const partSet = part.partSet;
+
+        if(!partSet || !partSet._Str_651) return;
+
+        return !inventory.hasFigureSetId(partSet.id);
+    }
+
+    public stripClubItemsOverLevel(k: number): boolean
+    {
+        const _local_2 = this.getCurrentPart();
+
+        if(((_local_2) && (_local_2.partSet)))
         {
             const _local_3 = _local_2.partSet;
 
-            if (_local_3.clubLevel > k)
+            if(_local_3.clubLevel > k)
             {
-                const _local_4 = this._Str_8066(0);
+                const _local_4 = this.selectPartIndex(0);
 
-                if(_local_4 && !_local_4.partSet) this._Str_8066(1);
+                if(_local_4 && !_local_4.partSet) this.selectPartIndex(1);
 
                 return true;
             }
@@ -423,14 +419,14 @@ export class CategoryData
         return false;
     }
 
-    public _Str_23810(k: number): boolean
+    public stripClubColorsOverLevel(k: number): boolean
     {
-        let _local_2: number[]  = [];
-        let _local_3            = this._Str_16788();
+        const _local_2: number[]  = [];
+        const _local_3            = this.getSelectedColors();
         let _local_4            = false;
-        let _local_5            = this._Str_783(0);
+        const _local_5            = this.getPalette(0);
 
-        const _local_6 = CategoryData._Str_21219(_local_5, k);
+        const _local_6 = CategoryData.defaultColorId(_local_5, k);
 
         if(_local_6 === -1) return false;
 
@@ -461,12 +457,12 @@ export class CategoryData
             _local_7++;
         }
 
-        if(_local_4) this._Str_17669(_local_2);
+        if(_local_4) this.selectColorIds(_local_2);
 
         return _local_4;
     }
 
-    // public _Str_8360(k:IHabboInventory): boolean
+    // public stripInvalidSellableItems(k:IHabboInventory): boolean
     // {
     //     var _local_3:IFigurePartSet;
     //     var _local_4:AvatarEditorGridPartItem;
@@ -492,7 +488,7 @@ export class CategoryData
         return this._name;
     }
 
-    public get _Str_22359(): number
+    public get selectedPartIndex(): number
     {
         return this._selectedPartIndex;
     }

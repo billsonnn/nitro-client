@@ -115,7 +115,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetRoomObjectMessage.GET_OBJECT_NAME:
                 return this.processObjectNameMessage((message as RoomWidgetRoomObjectMessage));
             case RoomWidgetUserActionMessage.RWUAM_SEND_FRIEND_REQUEST:
-                //this._container.friendList._Str_14642(_local_2, _local_3.name);
+                this._container.friendService.sendFriendRequest(userId, userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_RESPECT_USER:
                 this._container.sessionDataManager.giveRespect(userId);
@@ -215,25 +215,25 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetChangeMottoMessage.RWVM_CHANGE_MOTTO_MESSAGE:
                 this._container.roomSession.sendMottoMessage((message as RoomWidgetChangeMottoMessage).motto);
                 return;
-            case RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA:
+            case RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA: {
                 const _local_10 = (message as RoomWidgetFurniActionMessage).objectData;
 
                 if(_local_10)
                 {
                     const _local_19 = new Map();
 
-                    let _local_20 = _local_10.split("\t");
+                    const _local_20 = _local_10.split('\t');
 
                     if(_local_20)
                     {
-                        for(let _local_21 of _local_20)
+                        for(const _local_21 of _local_20)
                         {
-                            let _local_22 = _local_21.split("=", 2);
+                            const _local_22 = _local_21.split('=', 2);
 
                             if(_local_22 && _local_22.length === 2)
                             {
-                                let _local_23 = _local_22[0];
-                                let _local_24 = _local_22[1];
+                                const _local_23 = _local_22[0];
+                                const _local_24 = _local_22[1];
 
                                 _local_19.set(_local_23, _local_24);
                             }
@@ -245,6 +245,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                     _local_19.clear();
                 }
                 break;
+            }
             case RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE:
                 //if(this._container.roomSession && this._container.roomSession.userDataManager) this._container.roomSession.userDataManager._Str_17612(_local_2);
                 break;
@@ -281,11 +282,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         switch(k.type)
         {
-            case RoomSessionUserBadgesEvent.RSUBE_BADGES:
+            case RoomSessionUserBadgesEvent.RSUBE_BADGES: {
                 const badgesEvent = (k as RoomSessionUserBadgesEvent);
 
                 this.widget.updateUserBadges(badgesEvent.userId, badgesEvent.badges);
                 return;
+            }
         }
     }
 
@@ -293,20 +295,20 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     {
         const roomId = this._container.roomSession.roomId;
 
-        switch (message.category)
+        switch(message.category)
         {
             case RoomObjectCategory.FLOOR:
             case RoomObjectCategory.WALL:
                 this._Str_23142(message, roomId);
                 break;
-            case RoomObjectCategory.UNIT:
+            case RoomObjectCategory.UNIT: {
                 if(!this._container.roomSession || !this._container.sessionDataManager || !this._container.events || !this._container.roomEngine) return null;
 
                 const userData = this._container.roomSession.userDataManager.getUserDataByIndex(message.id);
 
                 if(!userData) return null;
 
-                switch (userData.type)
+                switch(userData.type)
                 {
                     case RoomObjectType.PET:
                         //this._Str_25299(userData._Str_2394);
@@ -322,7 +324,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                         break;
                 }
                 break;
+            }
         }
+
         return null;
     }
 
@@ -330,15 +334,15 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     {
         const roomId = this._container.roomSession.roomId;
 
-        let id: number          = 0;
+        let id          = 0;
         let name: string        = null;
-        let type: number        = 0;
-        let roomIndex: number   = 0;
+        let type        = 0;
+        let roomIndex   = 0;
 
         switch(k.category)
         {
             case RoomObjectCategory.FLOOR:
-            case RoomObjectCategory.WALL:
+            case RoomObjectCategory.WALL: {
                 if(!this._container.events || !this._container.roomEngine) return null;
 
                 const roomObject    = this._container.roomEngine.getRoomObject(roomId, k.id, k.category);
@@ -373,7 +377,8 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                     roomIndex   = roomObject.id;
                 }
                 break;
-            case RoomObjectCategory.UNIT:
+            }
+            case RoomObjectCategory.UNIT: {
                 if(!this._container.roomSession || !this._container.roomSession.userDataManager) return null;
 
                 const userData = this._container.roomSession.userDataManager.getUserDataByIndex(k.id);
@@ -385,6 +390,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 type        = userData.type;
                 roomIndex   = userData.roomIndex;
                 break;
+            }
         }
 
         if(name) this._container.events.dispatchEvent(new RoomObjectNameEvent(id, k.category, name, type, roomIndex));
@@ -425,7 +431,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(objectType.indexOf('poster') === 0)
         {
-            let _local_13 = parseInt(objectType.replace('poster', ''));
+            const _local_13 = parseInt(objectType.replace('poster', ''));
 
             infostandEvent.name         = (('${poster_' + _local_13) + '_name}');
             infostandEvent.description  = (('${poster_' + _local_13) + '_desc}');
@@ -436,12 +442,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             let furnitureData: IFurnitureData = null;
 
-            if (k.category === RoomObjectCategory.FLOOR)
+            if(k.category === RoomObjectCategory.FLOOR)
             {
                 furnitureData = this._container.sessionDataManager.getFloorItemData(_local_14);
             }
 
-            else if (k.category == RoomObjectCategory.WALL)
+            else if(k.category == RoomObjectCategory.WALL)
             {
                 furnitureData = this._container.sessionDataManager.getWallItemData(_local_14);
             }
@@ -463,7 +469,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             }
         }
 
-        if (objectType.indexOf('post_it') > -1)
+        if(objectType.indexOf('post_it') > -1)
         {
             infostandEvent.isStickie = true;
         }
@@ -571,7 +577,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         event.roomIndex = roomIndex;
         event.userType = RoomObjectType.USER;
 
-        let roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
+        const roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
 
         if(roomObject)
         {
@@ -581,7 +587,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(eventType == RoomWidgetUpdateInfostandUserEvent.OWN_USER)
         {
             event.realName = this._container.sessionDataManager.realName;
-            //event._Str_4330 = this._container.sessionDataManager._Str_11198;
+            event._Str_4330 = this._container.sessionDataManager.canChangeName;
         }
 
         event.isRoomOwner           = this._container.roomSession.isRoomOwner;
@@ -592,17 +598,19 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(eventType === RoomWidgetUpdateInfostandUserEvent.PEER)
         {
-            //event.canBeAskedForAFriend = this._container.friendList.canBeAskedForAFriend(_arg_4._Str_2394);
-            // _local_9 = this._container.friendList.getFriend(_arg_4._Str_2394);
-            // if (_local_9 != null)
-            // {
-            //     event.realName = _local_9.realName;
-            //     event.isFriend = true;
-            // }
+            event.canBeAskedForAFriend = this._container.friendService.canBeAskedForAFriend(_arg_4.webID);
+
+            const friend = this._container.friendService.getFriend(_arg_4.webID);
+
+            if(friend)
+            {
+                event.realName  = friend.realName;
+                event.isFriend  = true;
+            }
 
             if(roomObject)
             {
-                let flatControl = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_FLAT_CONTROL);
+                const flatControl = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_FLAT_CONTROL);
 
                 if(flatControl !== null) event.flatControl = flatControl;
 
@@ -611,8 +619,8 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 event._Str_6701 = this._Str_23573(event);
             }
 
-            event.isIgnored = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
-            event.respectLeft = this._container.sessionDataManager.respectsLeft;
+            event.isIgnored     = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
+            event.respectLeft   = this._container.sessionDataManager.respectsLeft;
 
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;
@@ -625,12 +633,13 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 switch(tradeMode)
                 {
-                    case RoomTradingLevelEnum._Str_14475:
+                    case RoomTradingLevelEnum._Str_14475: {
                         const _local_15 = ((event.roomControllerLevel !== RoomControllerLevel.NONE) && (event.roomControllerLevel !== RoomControllerLevel.GUILD_MEMBER));
                         const _local_16 = ((event.flatControl !== RoomControllerLevel.NONE) && (event.flatControl !== RoomControllerLevel.GUILD_MEMBER));
 
                         event.canTrade = ((_local_15) || (_local_16));
                         break;
+                    }
                     case RoomTradingLevelEnum._Str_9173:
                         event.canTrade = true;
                         break;
@@ -673,7 +682,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         event.roomIndex     = roomIndex;
         event.userType      = _arg_4.type;
 
-        let roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
+        const roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
 
         if(roomObject)
         {
@@ -703,7 +712,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         event.ownerName     = _arg_4.ownerName;
         event.botSkills      = _arg_4.botSkills;
 
-        let roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
+        const roomObject = this._container.roomEngine.getRoomObject(roomId, roomIndex, category);
 
         if(roomObject)
         {
@@ -730,7 +739,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     {
         const settingsFunction = function (event: RoomWidgetUpdateInfostandUserEvent, moderation: RoomModerationParser): boolean
         {
-            switch (moderation.allowMute)
+            switch(moderation.allowMute)
             {
                 case RoomModerationParser._Str_5047:
                     return this._Str_9213(event);
@@ -744,9 +753,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_22729(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser):Boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
         {
-            switch (_arg_2.allowKick)
+            switch(_arg_2.allowKick)
             {
                 case RoomModerationParser._Str_11537:
                     return true;
@@ -762,9 +771,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_23573(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser):Boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
         {
-            switch (_arg_2.allowBan)
+            switch(_arg_2.allowBan)
             {
                 case RoomModerationParser._Str_5047:
                     return this._Str_9213(event);
@@ -796,7 +805,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     public get messageTypes(): string[]
     {
-        let types: string[] = [
+        const types: string[] = [
             RoomWidgetRoomObjectMessage.GET_OBJECT_INFO,
             RoomWidgetRoomObjectMessage.GET_OBJECT_NAME,
             RoomWidgetUserActionMessage.RWUAM_SEND_FRIEND_REQUEST,
@@ -866,11 +875,6 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     public set container(k: IRoomWidgetHandlerContainer)
     {
-        if(this._container)
-        {
-
-        }
-
         this._container = k;
 
         if(!k) return;

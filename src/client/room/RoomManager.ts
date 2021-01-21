@@ -1,4 +1,3 @@
-import { NitroLogger } from '../core/common/logger/NitroLogger';
 import { NitroManager } from '../core/common/NitroManager';
 import { RoomContentLoader } from '../nitro/room/RoomContentLoader';
 import { RoomContentLoadedEvent } from './events/RoomContentLoadedEvent';
@@ -69,7 +68,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         const mandatoryLibraries = RoomContentLoader.MANDATORY_LIBRARIES;
         
-        for(let library of mandatoryLibraries)
+        for(const library of mandatoryLibraries)
         {
             if(!library) continue;
 
@@ -103,7 +102,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(this._updateCategories.length)
         {
-            for(let category of this._updateCategories)
+            for(const category of this._updateCategories)
             {
                 instance.addUpdateCategory(category);
             }
@@ -135,7 +134,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         let logic                           = type;
         let assetName                       = type;
         let asset: IGraphicAssetCollection  = null;
-        let isLoading: boolean              = false;
+        let isLoading              = false;
 
         if(this._contentLoader.isLoaderType(type))
         {
@@ -217,15 +216,15 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         const logic             = asset.data.logicType;
         const visualizationData = this._visualizationFactory.getVisualizationData(type, visualization, asset.data);
 
-        for(let room of this._rooms.values())
+        for(const room of this._rooms.values())
         {
             if(!room) continue;
 
-            for(let [ category, manager ] of room.managers.entries())
+            for(const [ category, manager ] of room.managers.entries())
             {
                 if(!manager) continue;
 
-                for(let object of manager.objects.getValues())
+                for(const object of manager.objects.getValues())
                 {
                     if(!object || object.type !== type) continue;
 
@@ -276,7 +275,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(!this._rooms.size) return;
 
-        for(let room of this._rooms.values())
+        for(const room of this._rooms.values())
         {
             if(!room) continue;
 
@@ -294,7 +293,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(!this._rooms.size) return;
 
-        for(let room of this._rooms.values())
+        for(const room of this._rooms.values())
         {
             if(!room) continue;
 
@@ -331,7 +330,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
                     this._listener.initalizeTemporaryObjectsByType(type, false);
                 }
 
-                NitroLogger.log(`Invalid Collection: ${ type }`);
+                this.logger.log(`Invalid Collection: ${ type }`);
 
                 continue;
             }
@@ -391,7 +390,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         if(!this._rooms.size) return;
 
-        for(let room of this._rooms.values()) room && room.update(time, update);
+        for(const room of this._rooms.values()) room && room.update(time, update);
     }
 
     public createRoomObjectManager(category: number): IRoomObjectManager

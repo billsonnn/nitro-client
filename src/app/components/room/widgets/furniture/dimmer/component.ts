@@ -7,7 +7,7 @@ import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidg
 import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
 
 @Component({
-	selector: 'nitro-room-furniture-dimmer-component',
+    selector: 'nitro-room-furniture-dimmer-component',
     template: `
     <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-dimmer-component">
         <div *ngIf="isLoading" class="card-loading-overlay"></div>

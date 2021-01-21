@@ -7,7 +7,7 @@ export class SelectedRoomObjectData implements ISelectedRoomObjectData
 {
     private _id: number = 0;
     private _category: number = 0;
-    private _operation: string = "";
+    private _operation: string = '';
     private _loc: Vector3d = null;
     private _dir: Vector3d = null;
     private _typeId: number = 0;

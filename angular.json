@@ -25,6 +25,7 @@
               "replaceDuplicatePlugins": true
             },
             "outputPath": "dist",
+            "resourcesOutputPath": "assets",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -33,6 +34,7 @@
             "aot": true,
             "vendorChunk": true,
             "assets": [
+              "src/configuration.json"
             ],
             "styles": [
               "src/styles.scss"

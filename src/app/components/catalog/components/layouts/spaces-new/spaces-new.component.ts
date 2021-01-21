@@ -24,7 +24,7 @@ export class CatalogLayoutSpacesNewComponent extends CatalogLayoutDefaultCompone
 
     private sortOffers(): void
     {
-        for(let offer of this.offers)
+        for(const offer of this.offers)
         {
             if(!offer) continue;
 

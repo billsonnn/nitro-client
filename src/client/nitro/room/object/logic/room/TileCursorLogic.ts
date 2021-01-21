@@ -1,3 +1,4 @@
+import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectLogicBase } from '../../../../../room/object/logic/RoomObjectLogicBase';
 import { ObjectTileCursorUpdateMessage } from '../../../messages/ObjectTileCursorUpdateMessage';
@@ -20,7 +21,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
         this._isHidden      = false;
     }
 
-    public initialize(data: any): void
+    public initialize(data: IAssetData): void
     {
         if(!this.object) return;
 

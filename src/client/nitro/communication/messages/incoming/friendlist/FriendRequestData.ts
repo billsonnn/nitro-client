@@ -13,8 +13,8 @@ export class FriendRequestData
 
         this._requestId         = wrapper.readInt();
         this._requesterName     = wrapper.readString();
-        this._requesterUserId   = wrapper.readInt();
         this._figureString      = wrapper.readString();
+        this._requesterUserId   = this._requestId;
     }
 
     public get requestId(): number

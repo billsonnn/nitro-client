@@ -12,11 +12,13 @@ import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 
 @Component({
-	selector: 'nitro-room-chatinput-component',
+    selector: 'nitro-room-chatinput-component',
     template: `
     <div class="nitro-room-chatinput-component">
         <div class="chatinput-container">
-            <input #chatInputView type="text" class="chat-input" [maxLength]="inputMaxLength" />
+            <div class="input-sizer">
+                <input #chatInputView type="text" class="chat-input" placeholder="{{ 'widgets.chatinput.default' | translate }}" (input)="chatInputView.parentElement.dataset.value = chatInputView.value" [maxLength]="inputMaxLength" />
+            </div>
         </div>
         <nitro-room-chatinput-styleselector-component (styleSelected)="onStyleSelected($event)"></nitro-room-chatinput-styleselector-component>
     </div>`
@@ -26,20 +28,20 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     @ViewChild('chatInputView')
     public chatInputView: ElementRef<HTMLInputElement>;
 
-    public selectedUsername: string     = '';
-    public floodBlocked: boolean        = false;
-    public lastContent: string          = '';
-    public isTyping: boolean            = false;
-    public typingStartedSent: boolean   = false;
-    public typingTimer: any             = null;
-    public idleTimer: any               = null;
-    public currentStyle: number         = -1;
-    public needsStyleUpdate: boolean    = false;
+    public selectedUsername: string                     = '';
+    public floodBlocked: boolean                        = false;
+    public lastContent: string                          = '';
+    public isTyping: boolean                            = false;
+    public typingStartedSent: boolean                   = false;
+    public typingTimer: ReturnType<typeof setTimeout>   = null;
+    public idleTimer: ReturnType<typeof setTimeout>     = null;
+    public currentStyle: number                         = -1;
+    public needsStyleUpdate: boolean                    = false;
 
-    private _chatModeIdWhisper: string  = null;
-    private _chatModeIdShout: string    = null;
-    private _chatModeIdSpeak: string    = null;
-    private _maxChatLength: number      = 0;
+    private _chatModeIdWhisper: string                  = null;
+    private _chatModeIdShout: string                    = null;
+    private _chatModeIdSpeak: string                    = null;
+    private _maxChatLength: number                      = 0;
 
     constructor(
         private ngZone: NgZone
@@ -50,10 +52,10 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public ngOnInit(): void
     {
-        this._chatModeIdWhisper = Nitro.instance.getLocalization("widgets.chatinput.mode.whisper");
-        this._chatModeIdShout   = Nitro.instance.getLocalization("widgets.chatinput.mode.shout");
-        this._chatModeIdSpeak   = Nitro.instance.getLocalization("widgets.chatinput.mode.speak");
-        this._maxChatLength     = Nitro.instance.getConfiguration<number>("chat.input.maxlength", 100);
+        this._chatModeIdWhisper = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
+        this._chatModeIdShout   = Nitro.instance.getLocalization('widgets.chatinput.mode.shout');
+        this._chatModeIdSpeak   = Nitro.instance.getLocalization('widgets.chatinput.mode.speak');
+        this._maxChatLength     = Nitro.instance.getConfiguration<number>('chat.input.maxlength', 100);
     }
 
     public ngAfterViewInit(): void
@@ -124,11 +126,12 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         switch(event._Str_23621)
         {
-            case RoomWidgetChatInputContentUpdateEvent.WHISPER:
+            case RoomWidgetChatInputContentUpdateEvent.WHISPER: {
                 const localization = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
 
                 this.inputView.value = localization + ' ' + event.userName + ' ';
                 return;
+            }
             case RoomWidgetChatInputContentUpdateEvent.SHOUT:
                 return;
         }
@@ -142,8 +145,17 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
+        
+        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = "";
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
+    }
+
+    public onChange(event: KeyboardEvent): void
+    { 
+        if (!event) return;
+
+        //this._chatViewInput.parentElement.dataset.value = this._chatViewInput.value
     }
 
     private onKeyDownEvent(event: KeyboardEvent): void
@@ -180,6 +192,8 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
                     }
                 }
                 return;
+            default:
+                return;
         }
     }
 
@@ -206,7 +220,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         {
             this.lastContent = value;
 
-            if (!this.isTyping)
+            if(!this.isTyping)
             {
                 this.isTyping = true;
 
@@ -261,7 +275,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         text = parts.join(' ');
 
-        let chatStyle = SystemChatStyleEnum.NORMAL;
+        const chatStyle = SystemChatStyleEnum.NORMAL;
         
         if(this.typingTimer) this.resetTypingTimer();
 
@@ -388,4 +402,5 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         return (this.widgetHandler as ChatInputWidgetHandler);
     }
+
 }

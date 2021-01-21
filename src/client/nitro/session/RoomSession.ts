@@ -7,6 +7,7 @@ import { RoomGiveRightsComposer } from '../communication/messages/outgoing/room/
 import { RoomKickUserComposer } from '../communication/messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomMuteUserComposer } from '../communication/messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from '../communication/messages/outgoing/room/action/RoomTakeRightsComposer';
+import { RemoveBotFromFlatComposer } from '../communication/messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -214,7 +215,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendTakeRightsMessage(userId: number): void
     {
-        this._connection.send(new RoomTakeRightsComposer([ userId ]));
+        this._connection.send(new RoomTakeRightsComposer(userId));
     }
 
     public pickupPet(id: number): void
@@ -228,7 +229,7 @@ export class RoomSession extends Disposable implements IRoomSession
     {
         if(!this._connection) return;
 
-        //this._connection.send();
+        this._connection.send(new RemoveBotFromFlatComposer(id));
     }
 
     public get connection(): IConnection
@@ -266,14 +267,14 @@ export class RoomSession extends Disposable implements IRoomSession
         return this._state;
     }
 
-    public get tradeMode(): number
-    {
-        return this._tradeMode;
-    }
-
     public get _Str_7411(): boolean
     {
         return true;
+    }
+
+    public get tradeMode(): number
+    {
+        return this._tradeMode;
     }
 
     public set tradeMode(mode: number)

@@ -80,7 +80,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         {
             const colors = partSet._Str_806;
 
-            for(let color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color._Str_827);
+            for(const color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color._Str_827);
         }
     }
 
@@ -148,7 +148,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         const parts     = this.partSet._Str_806.concat().sort(this.sortByDrawOrder);
         const container = new Container();
 
-        for(let part of parts)
+        for(const part of parts)
         {
             if(!part) continue;
 
@@ -174,8 +174,8 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
             if(!hasAsset) continue;
 
-            let x                       = asset.offsetX;
-            let y                       = asset.offsetY;
+            const x                       = asset.offsetX;
+            const y                       = asset.offsetY;
             let partColor: IPartColor   = null;
 
             if(this._useColors && (part._Str_827 > 0))

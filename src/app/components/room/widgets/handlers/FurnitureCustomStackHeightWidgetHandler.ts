@@ -35,7 +35,7 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
 
         let widgetEvent: RoomEngineTriggerWidgetEvent = null;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomEngineTriggerWidgetEvent.OPEN_WIDGET:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);
@@ -90,7 +90,7 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
         {
             if(this._container)
             {
-                for(let message of this._messages) this._container.connection.removeMessageEvent(message);
+                for(const message of this._messages) this._container.connection.removeMessageEvent(message);
 
                 this._messages = [];
             }
@@ -102,7 +102,7 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
         {
             this._messages = [ new FurnitureStackHeightEvent(this.onFurnitureStackHeightEvent.bind(this)) ];
 
-            for(let message of this._messages) container.connection.addMessageEvent(message);
+            for(const message of this._messages) container.connection.addMessageEvent(message);
         }
     }
 

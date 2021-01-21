@@ -10,7 +10,7 @@ import { ChatWidgetHandler } from '../handlers/ChatWidgetHandler';
 import { RoomChatItemComponent } from './chatitem/component';
 
 @Component({
-	selector: 'nitro-room-chat-component',
+    selector: 'nitro-room-chat-component',
     template: `
     <div #chatView class="nitro-room-chat-component">
         <ng-template #chatContainer></ng-template>
@@ -161,7 +161,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
     private getFreeItemId(): string
     {
-        return ("chat_item_" + RoomChatComponent.CHAT_COUNTER);
+        return ('chat_item_' + RoomChatComponent.CHAT_COUNTER);
     }
 
     private addChat(chat: ComponentRef<RoomChatItemComponent>): void
@@ -245,7 +245,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         if(spaceAvailable < requiredSpace)
         {
-            for(let chat of this.chats)
+            for(const chat of this.chats)
             {
                 this.moveChatUp(chat, (requiredSpace - spaceAvailable));
             }

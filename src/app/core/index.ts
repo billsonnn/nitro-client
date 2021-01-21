@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { SettingsService } from './settings/service';
 
 @NgModule({
-	providers: [
+    providers: [
         SettingsService
     ]
 })
-export class CoreModule {}
+export class CoreModule 
+{}

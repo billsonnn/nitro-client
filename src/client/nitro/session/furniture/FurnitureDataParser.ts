@@ -63,17 +63,17 @@ export class FurnitureDataParser extends EventDispatcher
     {
         if(!request)
 
-        request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
+            request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
         request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
 
-    private parseFloorItems(data: any): void
+    private parseFloorItems(data: IFurnitureData[]): void
     {
         if(!data || !data.length) return;
 
-        for(let furniture of data)
+        for(const furniture of data)
         {
             if(!furniture) continue;
 
@@ -85,11 +85,11 @@ export class FurnitureDataParser extends EventDispatcher
         }
     }
 
-    private parseWallItems(data: any): void
+    private parseWallItems(data: IFurnitureData[]): void
     {
         if(!data || !data.length) return;
 
-        for(let furniture of data)
+        for(const furniture of data)
         {
             if(!furniture) continue;
 

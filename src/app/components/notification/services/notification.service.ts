@@ -1,4 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { NotificationDialogMessageEvent } from 'src/client/nitro/communication/messages/incoming/notifications/NotificationDialogMessageEvent';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { ModeratorMessageEvent } from '../../../../client/nitro/communication/messages/incoming/moderation/ModeratorMessageEvent';
 import { HabboBroadcastMessageEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/HabboBroadcastMessageEvent';
@@ -6,6 +7,7 @@ import { MOTDNotificationEvent } from '../../../../client/nitro/communication/me
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
 import { NotificationMainComponent } from '../components/main/main.component';
+import { NotificationCentreComponent } from '../components/notification-centre/nc.component';
 
 @Injectable()
 export class NotificationService implements OnDestroy
@@ -13,8 +15,9 @@ export class NotificationService implements OnDestroy
     private _component: NotificationMainComponent;
     private _messages: IMessageEvent[];
 
-    constructor(
-        private _ngZone: NgZone)
+    private _notificationCentre: NotificationCentreComponent;
+
+    constructor(private _ngZone: NgZone)
     {
         this._component = null;
 
@@ -33,17 +36,18 @@ export class NotificationService implements OnDestroy
         this._messages = [
             new HabboBroadcastMessageEvent(this.onHabboBroadcastMessageEvent.bind(this)),
             new ModeratorMessageEvent(this.onModeratorMessageEvent.bind(this)),
-            new MOTDNotificationEvent(this.onMOTDNotificationEvent.bind(this))
+            new MOTDNotificationEvent(this.onMOTDNotificationEvent.bind(this)),
+            new NotificationDialogMessageEvent(this.onNotificationDialogMessageEvent.bind(this))
         ];
 
-        for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
     }
 
     private unregisterMessages(): void
     {
         if(this._messages && this._messages.length)
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
         }
     }
 
@@ -56,6 +60,27 @@ export class NotificationService implements OnDestroy
         if(!parser) return;
 
         this._ngZone.run(() => this.alert(parser.message));
+    }
+
+    private onNotificationDialogMessageEvent(event: NotificationDialogMessageEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const ob = [];
+
+        parser.parameters.forEach(el =>
+        {
+            ob.push(el);
+        });
+        
+        if(ob[1] === 'BUBBLE')
+        {
+            this._ngZone.run(() => this._notificationCentre.publish(ob, parser.type));
+        }
     }
 
     private onModeratorMessageEvent(event: ModeratorMessageEvent): void
@@ -128,5 +153,15 @@ export class NotificationService implements OnDestroy
     public set component(component: NotificationMainComponent)
     {
         this._component = component;
+    }
+
+    public get notificationCentre(): NotificationCentreComponent
+    {
+        return this._notificationCentre;
+    }
+
+    public set notificationCentre(component: NotificationCentreComponent)
+    {
+        this._notificationCentre = component;
     }
 }

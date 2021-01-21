@@ -11,7 +11,8 @@ export class CatalogLayout
     public activePage: CatalogPageParser = null;
     
     constructor(
-        protected _catalogService: CatalogService) {}
+        protected _catalogService: CatalogService) 
+    {}
 
     public getText(index: number = 0): string
     {

@@ -20,7 +20,7 @@ export class PlaneMaterial
     {
         if(this._planeMaterialItems && this._planeMaterialItems.length)
         {
-            for(let item of this._planeMaterialItems)
+            for(const item of this._planeMaterialItems)
             {
                 if(!item) continue;
 
@@ -39,7 +39,7 @@ export class PlaneMaterial
 
         if(this._planeMaterialItems && this._planeMaterialItems.length)
         {
-            for(let item of this._planeMaterialItems)
+            for(const item of this._planeMaterialItems)
             {
                 if(!item) continue;
 
@@ -65,7 +65,7 @@ export class PlaneMaterial
 
         if(this._planeMaterialItems && this._planeMaterialItems.length)
         {
-            for(let item of this._planeMaterialItems)
+            for(const item of this._planeMaterialItems)
             {
                 if(!item) continue;
 

@@ -10,7 +10,7 @@ export class AnimationActionPart
 
         if(data.frames && (data.frames.length > 0))
         {
-            for(let frame of data.frames)
+            for(const frame of data.frames)
             {
                 if(!frame) continue;
 

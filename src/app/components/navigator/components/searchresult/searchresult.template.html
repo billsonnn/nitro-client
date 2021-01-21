@@ -1,10 +1,13 @@
-<div class="card bg-primary">
-    <div class="card-header">
-        <div class="header-title" (click)="toggleCollapsed()"><i class="mr-2 fas" [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i>{{ resultCode | translate }}</div>
-    </div>
-    <div class="card-body py-0" *ngIf="isCollapsed">
-        <ng-container *ngFor="let room of result.rooms">
-            <div nitro-navigator-search-result-item-component [room]="room" [displayMode]="displayMode"></div>
-        </ng-container>
+<div class="btn-group w-100">
+    <button type="button" class="btn btn-primary w-100 text-left" (click)="toggleCollapsed()">
+        <i class="fas" [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i> {{ resultCode | translate }}
+    </button>
+    <button *ngIf="(displayMode !== 2)" type="button" class="btn btn-primary" (click)="toggleListMode()">
+        <i class="fas" [ngClass]="{ 'fa-bars': (displayMode === 1), 'fa-th': (displayMode === 0) }"></i>
+    </button>
+</div>
+<div *ngIf="isCollapsed && (result.rooms.length > 0)" class="navigator-grid-container position-relative mt-1">
+    <div class="grid-items" [ngClass]="{ 'grid-2': (displayMode >= 1), 'grid-1': (displayMode === 0) }">
+        <div nitro-navigator-search-result-item-component *ngFor="let room of result.rooms" class="d-flex flex-column item-detail justify-content-center align-items-center" [room]="room" [displayMode]="displayMode" [ngClass]="{ 'tall-detail': (displayMode >= 1) }"></div>
     </div>
 </div>

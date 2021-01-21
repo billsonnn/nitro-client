@@ -97,7 +97,7 @@ export class FloatingHeartAddition extends ExpressionAddition
             sprite.relativeDepth    = -0.02;
             sprite.alpha            = 0;
 
-            let delta = this._delta;
+            const delta = this._delta;
 
             this.animate(sprite);
 
@@ -145,11 +145,11 @@ export class FloatingHeartAddition extends ExpressionAddition
 
         if(this._state === FloatingHeartAddition.STATE_FLOAT)
         {
-            let alpha = Math.pow(this._delta, 0.9);
+            const alpha = Math.pow(this._delta, 0.9);
 
             this._delta += 0.05;
 
-            let offset = ((this._scale < 48) ? -30 : -40);
+            const offset = ((this._scale < 48) ? -30 : -40);
 
             sprite.offsetY  = (this._offsetY + (((this._delta < 1) ? alpha : 1) * offset));
             sprite.alpha    = ((1 - alpha) * 255);

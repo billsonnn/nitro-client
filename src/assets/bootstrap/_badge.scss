@@ -8,7 +8,6 @@
   padding: $badge-padding-y $badge-padding-x;
   @include font-size($badge-font-size);
   font-weight: $badge-font-weight;
-  line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
@@ -30,7 +29,6 @@
 // Quick fix for badges in buttons
 .btn .badge {
   position: relative;
-  top: -1px;
 }
 
 // Pill badges

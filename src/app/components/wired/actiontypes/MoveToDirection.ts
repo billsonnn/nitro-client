@@ -26,8 +26,8 @@ export class MoveToDirection extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3: number = _arg_2.intData[0];
-        var _local_4: number = _arg_2.intData[1];
+        const _local_3: number = _arg_2.intData[0];
+        const _local_4: number = _arg_2.intData[1];
         // this._Str_22058(k)._Str_2520(this._Str_24927(k, _local_3));
         // this._Str_21411(k)._Str_2520(this._Str_22820(k, _local_4));
     }

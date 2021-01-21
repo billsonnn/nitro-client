@@ -18,7 +18,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
     protected onInit(): void
     {
-        this.loadLocalizationFromURL(Nitro.instance.getConfiguration<string>("external.texts.url"));
+        this.loadLocalizationFromURL(Nitro.instance.getConfiguration<string>('external.texts.url'));
     }
 
     public loadLocalizationFromURL(url: string): void
@@ -35,7 +35,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
             request.send();
         }
 
-        catch(e)
+        catch (e)
         {
             this.logger.error(e);
         }
@@ -63,7 +63,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         data = JSON.parse(data);
 
-        for(let key in data) this._definitions.set(key, data[key]);
+        for(const key in data) this._definitions.set(key, data[key]);
     }
 
     public getValue(key: string, doParams: boolean = true): string
@@ -78,7 +78,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
             if(parameters)
             {
-                for(let [ parameter, replacement ] of parameters)
+                for(const [ parameter, replacement ] of parameters)
                 {
                     value = value.replace('%' + parameter + '%', replacement);
                 }

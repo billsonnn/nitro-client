@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class AcceptFriendComposer implements IMessageComposer
+export class AcceptFriendComposer implements IMessageComposer<ConstructorParameters<typeof AcceptFriendComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof AcceptFriendComposer>;
 
     constructor(...userIds: number[])
     {
         this._data = [ userIds.length, ...userIds ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

@@ -41,12 +41,15 @@ export class AvatarStructureDownload extends EventDispatcher
 
                     this.dispatchEvent(new NitroEvent(AvatarStructureDownload.AVATAR_STRUCTURE_DONE));
                 });
-            }
+            };
 
-            request.onerror = e => { throw new Error('invalid_avatar_figure_data'); };
+            request.onerror = e => 
+            {
+                throw new Error('invalid_avatar_figure_data'); 
+            };
         }
 
-        catch(e)
+        catch (e)
         {
             NitroLogger.log(e);
         }

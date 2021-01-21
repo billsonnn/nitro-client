@@ -18,7 +18,7 @@ export class PlaneVisualizationLayer
     private _bitmapData: Graphics;
     private _isDisposed: boolean;
 
-   constructor(k: PlaneMaterial, _arg_2: number, _arg_3: number, _arg_4: number = 0)
+    constructor(k: PlaneMaterial, _arg_2: number, _arg_3: number, _arg_4: number = 0)
     {
         this._material      = k;
         this._offset        = _arg_4;

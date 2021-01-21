@@ -24,14 +24,15 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     private _name: string           = null;
     private _target: HTMLElement    = null;
     private _handle: HTMLElement    = null;
-    private _delta                  = {x: 0, y: 0};
-    private _offset                 = {x: 0, y: 0};
+    private _delta                  = { x: 0, y: 0 };
+    private _offset                 = { x: 0, y: 0 };
     private _destroy                = new Subject<void>();
   
     constructor(
         private _viewContainerRef: ViewContainerRef,
         private _elementRef: ElementRef,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
   
     public ngAfterViewInit(): void
     {
@@ -88,20 +89,21 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            let mousedown$  = fromEvent(this._handle, 'mousedown');
-            let mousemove$  = fromEvent(document, 'mousemove');
-            let mouseup$    = fromEvent(document, 'mouseup');
+            const mousedown$  = fromEvent(this._handle, 'mousedown');
+            const mousemove$  = fromEvent(document, 'mousemove');
+            const mouseup$    = fromEvent(document, 'mouseup');
     
-            let mousedrag$ = mousedown$
+            const mousedrag$ = mousedown$
                 .pipe(
                     switchMap((event: MouseEvent) =>
                     {
-                        let startX = event.clientX;
-                        let startY = event.clientY;
+                        const startX = event.clientX;
+                        const startY = event.clientY;
             
                         return mousemove$
                             .pipe(
-                                map((event: MouseEvent) => {
+                                map((event: MouseEvent) =>
+                                {
                                     event.preventDefault();
 
                                     this._delta = {
@@ -131,7 +133,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
             {
                 this._offset.x  += this._delta.x;
                 this._offset.y  += this._delta.y;
-                this._delta      = {x: 0, y: 0};
+                this._delta      = { x: 0, y: 0 };
 
                 if(!this.noMemory)
                 {

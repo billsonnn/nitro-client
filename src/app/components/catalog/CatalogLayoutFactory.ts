@@ -6,6 +6,7 @@ import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.compo
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
+import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
 
 export class CatalogLayoutFactory
 {
@@ -25,6 +26,8 @@ export class CatalogLayoutFactory
                 return CatalogLayoutSpacesNewComponent;
             case CatalogLayoutDefaultComponent.CODE:
                 return CatalogLayoutDefaultComponent;
+            case CatalogLayoutVipBuyComponent.CODE:
+                return CatalogLayoutVipBuyComponent;
             default:
                 return CatalogLayoutUnsupportedComponent;
         }

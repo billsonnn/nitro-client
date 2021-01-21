@@ -29,14 +29,15 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     public completed: boolean = false;
 
     @ViewChild('imageElement')
-    public imageElement: ElementRef<HTMLDivElement>;;
+    public imageElement: ElementRef<HTMLDivElement>;
 
     private _imageUrl: string = '';
 
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
-    ) {}
+    ) 
+    {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {

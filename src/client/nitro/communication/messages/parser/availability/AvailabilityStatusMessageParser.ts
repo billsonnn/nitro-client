@@ -11,7 +11,7 @@ export class AvailabilityStatusMessageParser implements IMessageParser
     {
         this._isOpen            = false;
         this._onShutdown        = false;
-        this._isAuthenticUser   = false
+        this._isAuthenticUser   = false;
 
         return true;
     }

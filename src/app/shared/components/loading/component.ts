@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'nitro-loading',
-	template: `
+    selector: 'nitro-loading',
+    template: `
 	<div class="nitro-loading-component">
 		<div class="logo"></div>
 		<div class="container">

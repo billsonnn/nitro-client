@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Nitro } from 'src/client/nitro/Nitro';
 import { NavigatorSearchResultList } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
 import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
@@ -10,7 +11,7 @@ import { NavigatorDoorbellComponent } from '../doorbell/doorbell.component';
 import { NavigatorPasswordComponent } from '../password/password.component';
 
 @Component({
-	selector: 'nitro-navigator-main-component',
+    selector: 'nitro-navigator-main-component',
     templateUrl: './main.template.html'
 })
 export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
@@ -26,7 +27,8 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private _settingsService: SettingsService,
         private _navigatorService: NavigatorService,
-        private _modalService: NgbModal) {}
+        private _modalService: NgbModal) 
+    {}
 
     public ngOnInit(): void
     {
@@ -199,5 +201,10 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     public get isLoading(): boolean
     {
         return (this._navigatorService && (this._navigatorService.isLoading || this._navigatorService.isSearching));
+    }
+
+    public get sliderVisible(): boolean
+    { 
+        return (Nitro.instance.core.configuration.getValue("navigator.slider.enabled"))
     }
 }

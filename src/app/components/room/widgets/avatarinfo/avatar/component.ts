@@ -10,7 +10,7 @@ import { AvatarInfoData } from '../AvatarInfoData';
 import { RoomAvatarInfoComponent } from '../component';
 
 @Component({
-	selector: 'nitro-room-avatarinfo-avatar-component',
+    selector: 'nitro-room-avatarinfo-avatar-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-avatar-component context-menu">
         <div class="card align-items-center">
@@ -82,7 +82,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 mode: RoomAvatarInfoAvatarComponent.MODE_NORMAL,
                 items: [
                     {
-                        name: 'add_friend',
+                        name: 'friend',
                         localization: 'infostand.button.friend',
                         visible: this.avatarData.canBeAskedForAFriend
                     },
@@ -280,7 +280,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
     {
         let messageType: string         = null;
         let message: RoomWidgetMessage  = null;
-        let hideMenu: boolean           = true;
+        let hideMenu           = true;
 
         if(name)
         {

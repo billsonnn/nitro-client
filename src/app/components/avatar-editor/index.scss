@@ -83,10 +83,11 @@
     }
 
     .avatar-spotlight {
-        top: -17px;
+        top: -16px;
         width: 130px;
         height: 305px;
         background: transparent url('../../../assets/images/avatareditor/spotlight.png') no-repeat center;
+        opacity: 0.3;
     }
 
     .avatar-shadow {
@@ -110,7 +111,7 @@
         display: flex;
         justify-content: center;
         position: absolute;
-        bottom: 22px;
+        bottom: 25px;
 
         .icon {
             cursor: pointer;

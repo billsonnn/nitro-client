@@ -78,7 +78,10 @@ export class FurnitureWallDataParser
 
             if(parts.length >= 3)
             {
-                let [ widthHeight, leftRight, direction ] = parts;
+                let widthHeight = parts[0];
+                let leftRight   = parts[1];
+
+                const direction = parts[2];
 
                 if((widthHeight.length > 3) && (leftRight.length > 2))
                 {
@@ -215,7 +218,7 @@ export class FurnitureWallDataParser
 
     public get direction(): string
     {
-        return this._direction
+        return this._direction;
     }
 
     public get _Str_22379(): boolean

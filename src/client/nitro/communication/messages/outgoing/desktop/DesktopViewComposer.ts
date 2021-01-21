@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class DesktopViewComposer implements IMessageComposer
+export class DesktopViewComposer implements IMessageComposer<ConstructorParameters<typeof DesktopViewComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof DesktopViewComposer>;
 
     constructor()
     {
         this._data = [];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

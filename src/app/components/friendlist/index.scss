@@ -1,4 +1,65 @@
 .nitro-friendlist-component {
     position: absolute;
     width: $friendlist-width;
+
+    .card-body {
+        background:url('../../../assets/images/bgs/chat.png');
+    }
+}
+
+.nitro-friend-list {
+    .nitro-friend-list-item {
+        max-width: 99%;
+    }
+}
+
+.nitro-friendlist-thread-viewer-component {
+    .thread-viewer-user {
+        border-bottom: $card-cap-border-width solid $card-cap-border-color;
+
+        .avatar-img {
+            width: 50px;
+            height: 50px;
+
+            img {
+                position: relative;
+                top: -40px;
+                left: -30px;
+            }
+        }
+    }
+
+    .thread-viewer-user-info {
+        span {
+            max-width: 55%;
+        }
+    }
+
+    .thread-viewer-list {
+        display: flex;
+        flex-direction: column;
+
+        .thread-viewer-list-item {
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+
+            .thread-viewer-list-item-message {
+                background:$secondary
+            }
+
+            &.thread-viewer-list-right {
+                align-self: flex-end;
+                flex-direction: row-reverse;
+                
+                .thread-viewer-list-item-message {
+                    background:$blue;
+                }
+
+                .avatar-image {
+                    transform: scaleX(-1);
+                }
+            }
+        }
+    } 
 }

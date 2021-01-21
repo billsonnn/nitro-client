@@ -2,7 +2,7 @@
 
 export class RoomWidgetUserTagsUpdateEvent extends RoomWidgetUpdateEvent
 {
-    public static USER_TAGS: string = "RWUTUE_USER_TAGS";
+    public static USER_TAGS: string = 'RWUTUE_USER_TAGS';
 
     private _userId: number;
     private _tags: string[];

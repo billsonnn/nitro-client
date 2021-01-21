@@ -5,7 +5,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-	selector: 'nitro-catalog-navigation-item-component',
+    selector: 'nitro-catalog-navigation-item-component',
     templateUrl: './navigation-item.template.html'
 })
 export class CatalogNavigationItemComponent
@@ -13,7 +13,8 @@ export class CatalogNavigationItemComponent
     @Input()
     public catalogPage: CatalogPageData = null;
 
-    constructor(private _catalogService: CatalogService) {}
+    constructor(private _catalogService: CatalogService) 
+    {}
 
     public selectPage(): void
     {
