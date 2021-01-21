@@ -54,23 +54,52 @@ export class GiveRewardComponent extends WiredAction
 
                     if(rowValues.length == 3)
                     {
-                        const badge = rowValues[0] == '0'; // Blame Wesley for this
+                        const badge = rowValues[0] == '0'; // Blame Habbo for this :'(
                         const itemCode = rowValues[1];
                         const probability = rowValues[2];
                         this.rewardRows.push({ badge: badge, itemCode: itemCode, probability: probability });
                     }
                 }
             });
-
-            if(this.rewardRows.length < 4)
+        }
+        if(this.rewardRows.length < 4)
+        {
+            for(let i = this.rewardRows.length; i < 4; i++)
             {
-                for(let i = this.rewardRows.length; i < 4; i++)
-                {
-                    this.rewardRows.push({ badge: false, itemCode: '', probability: '' });
-                }
+                this.rewardRows.push({ badge: false, itemCode: '', probability: '' });
             }
         }
         super.onEditStart(trigger);
+    }
+
+    public readIntegerParamsFromForm(): number[]
+    {
+        return [
+            Number.parseInt(this.rewardTime),
+            this.uniqueRewards ? 1 : 0,
+            this.rewardsLimit,
+            Number.parseInt(this.limitationInterval)
+        ];
+    }
+
+    public readStringParamFromForm(): string
+    {
+        let rewards = '';
+        for(let i = 0; i < this.rewardRows.length; i++)
+        {
+            const row = this.rewardRows[i];
+            if(row.itemCode == '')
+            {
+                continue;
+            }
+            const stringData = [
+                row.badge ? 0 : 1,
+                row.itemCode,
+                row.probability.toString()
+            ].join(',');
+            rewards  = rewards + (rewards == '' ? '' : ';') + stringData;
+        }
+        return rewards;
     }
 
     public decreaseLimit(): void
@@ -112,6 +141,68 @@ export class GiveRewardComponent extends WiredAction
     public get hasIntervalValue(): boolean
     {
         return this.rewardTime == this.SETTING_N_DAYS || this.rewardTime == this.SETTING_N_HOURS || this.rewardTime == this.SETTING_N_MINS;
+    }
+
+    public validate(): string
+    {
+        let probabilitiesSum = 0;
+        const probabilityMin = 1;
+        const probabilityMax = 100;
+
+        const itemCodeMaxLength = 100;
+
+        if(this.limitationInterval.trim().length > 0 && isNaN(Number.parseInt(this.limitationInterval)))
+        {
+            return 'The interval value has to be a number.';
+        }
+
+        for(let i = 0; i < this.rewardRows.length; i++)
+        {
+            const row = this.rewardRows[i];
+            if(row.itemCode.trim().length == 0 && row.probability.trim().length == 0)
+            {
+                continue;
+            }
+            if(row.itemCode.includes(','))
+            {
+                return 'Product/badge codes must not contain \',\' characters.';
+            }
+            if(row.itemCode.includes(';'))
+            {
+                return 'Product/badge codes must not contain \';\' characters.';
+            }
+            if(row.itemCode.length > itemCodeMaxLength)
+            {
+                return `Product/badge codes cannot contain more than ${itemCodeMaxLength} characters.`;
+            }
+            if(row.itemCode == '')
+            {
+                return 'Remember to define product/badge codes for all rewards (fill all fields or leave all fields empty).';
+            }
+            if(!this.uniqueRewards)
+            {
+                if(row.probability == '')
+                {
+                    return 'Remember to define probabilities for all rewards (fill all fields or leave all fields empty).';
+                }
+                const probability = Number.parseInt(row.probability);
+                if(isNaN(probability))
+                {
+                    return 'Make sure all probabilities are numbers.';
+                }
+                if(probability < probabilityMin || probability > probabilityMax)
+                {
+                    return `Make sure all probabilities are numbers between ${probabilityMin} and ${probabilityMax}.`;
+                }
+                probabilitiesSum += probability;
+            }
+        }
+
+        if(probabilitiesSum > probabilityMax)
+        {
+            return `The sum of probabilities cannot exceed ${probabilityMax}. You now have ${probabilitiesSum}.`;
+        }
+        return null;
     }
 }
 

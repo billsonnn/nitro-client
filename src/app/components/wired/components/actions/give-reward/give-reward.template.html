@@ -30,18 +30,20 @@
 	<p class="w-100 text-center mb-2">If checked each reward will be given once to each user. This will disable the probabilities option.</p>
 
 	<div class="form-row mb-2">
-		<table>
-			<tr>
-				<td><small>Badge</small></td>
-				<td><small>Item code</small></td>
-				<td *ngIf="uniqueRewards == false"><small>Probability</small></td>
-			</tr>
-			<tr *ngFor="let row of rewardRows; index as i;">
-				<td><input type="checkbox" [(ngModel)]="rewardRows[i].badge"></td>
-				<td><input class="form-control form-control-sm" type="text" [(ngModel)]="rewardRows[i].itemCode"></td>
-				<td *ngIf="uniqueRewards == false"><input class="form-control form-control-sm" type="text" [(ngModel)]="rewardRows[i].probability"></td>
-			</tr>
-		</table>
+		<perfect-scrollbar style="min-height:200px;max-height:200px;">
+			<table>
+				<tr>
+					<td><small>Badge</small></td>
+					<td><small>Item code</small></td>
+					<td *ngIf="uniqueRewards == false"><small>Probability</small></td>
+				</tr>
+				<tr *ngFor="let row of rewardRows; index as i;">
+					<td><input type="checkbox" [(ngModel)]="rewardRows[i].badge"></td>
+					<td><input class="form-control form-control-sm" type="text" [(ngModel)]="rewardRows[i].itemCode"></td>
+					<td *ngIf="uniqueRewards == false"><input class="form-control form-control-sm" type="text" [(ngModel)]="rewardRows[i].probability"></td>
+				</tr>
+			</table>
+		</perfect-scrollbar>
 	</div>
 	<button type="button" class="btn btn-primary btn-sm mb-2" (click)="increaseRewardsCount()"><i class="fas fa-plus"></i></button>
 
