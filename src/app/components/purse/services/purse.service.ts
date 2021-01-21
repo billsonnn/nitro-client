@@ -38,8 +38,8 @@ export class PurseService implements OnDestroy
             this._messages = [
                 new UserCreditsEvent(this.onUserCreditsEvent.bind(this)),
                 new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this)),
-                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this),
-                )
+                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this)),
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -70,10 +70,7 @@ export class PurseService implements OnDestroy
 
         const parser = event.getParser();
 
-        this._ngZone.run(() =>
-        {
-            this.setCurrency(-1, parseFloat(parser.credits));
-        });
+        this._ngZone.run(() => this.setCurrency(-1, parseFloat(parser.credits)));
     }
 
     private onUserCurrencyEvent(event: UserCurrencyEvent): void
@@ -103,15 +100,15 @@ export class PurseService implements OnDestroy
         
         const parser = event.getParser();
 
-        console.log(parser)
+        if(!parser) return;
 
-        switch (parser.name)
+        switch(parser.name)
         { 
-            case "habbo_club":
+            case 'habbo_club':
                 this._habboClubSubscription = parser;
-                break;
+                return;
             default:
-                console.log("unknown");
+                console.log('unknown');
         }
     }
 
