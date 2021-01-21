@@ -2,11 +2,13 @@
     position: absolute;
     right: 10px;
     bottom: 10px;
+    pointer-events: none;
 
     .infostand {
         min-width: 200px;
         max-width: 200px;
         z-index: 300;
+	    pointer-events: auto;
 
         .body-image {
             display: flex;
@@ -97,5 +99,9 @@
             display: block;
             font-size: 14px;
         }
+    }
+
+    .button-container {
+	    pointer-events: auto;
     }
 }
