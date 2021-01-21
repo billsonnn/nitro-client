@@ -1,16 +1,16 @@
 <div class="d-flex flex-column align-items-end">
-    <div class="card nitro-room-infostand-furni-component">
-        <div class="card-header">
+    <div class="infostand d-flex flex-column btn btn-primary rounded p-0 nohover">
+        <div class="d-flex align-items-center justify-content-between pt-3 px-3">
             {{ furniData.name }}
             <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
         </div>
-        <div class="card-body">
+        <div class="d-flex flex-column m-3">
             <div class="w-100">
                 <img class="d-block mx-auto" [src]="furniData.imageUrl" />
             </div>
             <div class="d-flex flex-column mt-2">
-                <p class="text-center w-100">{{ furniData.description }}</p>
-                <p class="mb-0">{{ ('furni.owner') | translate:updateCount }}</p>
+                <p class="badge badge-secondary mb-0">{{ furniData.description }}</p>
+                <p class="badge badge-secondary mt-2 mb-0">{{ ('furni.owner') | translate:updateCount }}</p>
             </div>
         </div>
     </div>

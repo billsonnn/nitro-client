@@ -1,57 +1,63 @@
 .nitro-toolbar-component {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 10px;
+    right: 0px;
+    bottom: 10px;
     z-index: 0;
     pointer-events: none;
 
-    .card {
-        width: 100%;
+    .btn-primary  {
+        pointer-events: none;
+    }
+
+    .list-group {
         align-items: center;
 
-        .card-body {
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: unset;
+            pointer-events: all;
+            width:100%;
 
-            .list-group {
-                align-items: center;
+            &:not(:last-child) {
+                padding-top:1rem;
+            }
 
-                .list-group-item {
-                    display: flex;
-                    width: 65px;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    padding: unset;
-                    pointer-events: all;
+            &:active {
+                -webkit-transform: translate(0, 1px);
+                transform: translate(0, 1px);
+            }
 
-                    &:active {
-                        -webkit-transform: translate(0, 1px);
-                        transform: translate(0, 1px);
-                    }
+            &.avatar-image {
+                width: 65px;
+                height: 70px;
+                overflow: hidden;
 
-                    &.avatar-image {
-                        width: 65px;
-                        height: 70px;
-
-                        img {
-                            position: relative;
-                            top: 10px;
-                        }
-                    }
-
-                    .icon,
-                    .avatar-image {
-                        position: relative;
-                        filter: drop-shadow(2px 1px 0 rgba($white, 1)) drop-shadow(-2px 1px 0 rgba($white, 1)) drop-shadow(0 -2px 0 rgba($white, 1));
-                    }
-
-                    .badge {
-                        position: absolute;
-                        top: -8px;
-                        right: 12px;
-                        font-size: 10px;
-                    }
+                img {
+                    position: relative;
+                    top: 10px;
                 }
+            }
+
+            .icon,
+            .avatar-image {
+                position: relative;
+                filter: drop-shadow(0px 2px 0px black);
+            }
+
+            &.splitter {
+                border-bottom: $card-cap-border-width solid $card-cap-border-color;
+                width: 100%;
+                height: 2px;
+            }
+
+            .unseenCount {
+                top:.8rem;
+                right:10px;
+                font-size:10px;
             }
         }
     }

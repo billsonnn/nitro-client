@@ -3,7 +3,9 @@ import { IMessageEvent } from '../../../../client/core/communication/messages/IM
 import { UserCreditsEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
+import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { UserCurrencyComposer } from '../../../../client/nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
+import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 
 @Injectable()
@@ -11,6 +13,7 @@ export class PurseService implements OnDestroy
 {
     private _messages: IMessageEvent[];
     private _currencies: Map<number, number>;
+    private _habboClubSubscription: UserSubscriptionParser;  
 
     constructor(
         private _ngZone: NgZone)
@@ -35,7 +38,8 @@ export class PurseService implements OnDestroy
             this._messages = [
                 new UserCreditsEvent(this.onUserCreditsEvent.bind(this)),
                 new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this)),
-                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this))
+                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this)),
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -66,10 +70,7 @@ export class PurseService implements OnDestroy
 
         const parser = event.getParser();
 
-        this._ngZone.run(() =>
-        {
-            this.setCurrency(-1, parseFloat(parser.credits));
-        });
+        this._ngZone.run(() => this.setCurrency(-1, parseFloat(parser.credits)));
     }
 
     private onUserCurrencyEvent(event: UserCurrencyEvent): void
@@ -93,6 +94,24 @@ export class PurseService implements OnDestroy
         this._ngZone.run(() => this.setCurrency(parser.type, parser.amount));
     }
 
+    private onUserSubscriptionEvent(event: UserSubscriptionEvent): void
+    {
+        if(!event) return;
+        
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        switch(parser.name)
+        { 
+            case 'habbo_club':
+                this._habboClubSubscription = parser;
+                return;
+            default:
+                console.log('unknown');
+        }
+    }
+
     private setCurrency(type: number, amount: number): void
     {
         this._currencies.set(type, amount);
@@ -106,5 +125,10 @@ export class PurseService implements OnDestroy
     public get visibleCurrencies(): number[]
     {
         return Nitro.instance.getConfiguration<number[]>('system.currency.types', []);
+    }
+
+    public get hcSub(): UserSubscriptionParser
+    {
+        return this._habboClubSubscription;
     }
 }

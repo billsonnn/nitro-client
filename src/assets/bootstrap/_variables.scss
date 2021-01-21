@@ -36,10 +36,10 @@ $grays: map-merge(
 $blue:      #007bff !default;
 $indigo:    #6610f2 !default;
 $purple:    #6f42c1 !default;
-$pink:      #e83e8c !default;
-$red:       #ba1111 !default;
-$orange:    #fd7e14 !default;
-$yellow:    #ffc107 !default;
+$pink:      #AB4BA9 !default;
+$red:       #dc3545 !default;
+$orange:    #A46614 !default;
+$yellow:    #E2AE1D !default;
 $green:     #28a745 !default;
 $teal:      #20c997 !default;
 $cyan:      #17a2b8 !default;
@@ -47,7 +47,7 @@ $cod-gray:  #181818 !default;
 $mine-shaft:#2B2B2B !default;
 $tundora:   #494949 !default;
 $emperor:   #555555 !default;
-$darkgreen:     #006400 !default;
+$skyBlue:   #5A8689 !default;
 
 $colors: () !default;
 $colors: map-merge(
@@ -68,7 +68,7 @@ $colors: map-merge(
     "emperor":    $emperor,
     "white":      $white,
     "gray":       $gray-600,
-    "gray-dark":  $gray-800
+    "gray-dark":  $gray-800,
   ),
   $colors
 );
@@ -96,7 +96,8 @@ $theme-colors: map-merge(
     "black":      $black,
     "emperor":    $emperor,
     "pink":       $pink,
-    "dgreen": $darkgreen,
+    "skyBlue":    $skyBlue,
+    "orange":     $orange
   ),
   $theme-colors
 );
@@ -1124,7 +1125,7 @@ $spinner-border-width-sm: .2em !default;
 
 // Close
 
-$close-font-size:                   $font-size-base * 1.5 !default;
+$close-font-size:                   $font-size-base * 1.1 !default;
 $close-font-weight:                 $font-weight-bold !default;
 $close-color:                       $white !default;
 $close-text-shadow:                 0 1px 0 $white !default;

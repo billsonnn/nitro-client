@@ -8,6 +8,7 @@ import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.compo
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
+import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
 import { CatalogMainComponent } from './components/main/main.component';
 import { CatalogNavigationItemComponent } from './components/navigation-item/navigation-item.component';
 import { CatalogNavigationSetComponent } from './components/navigation-set/navigation-set.component';
@@ -32,7 +33,8 @@ import { CatalogService } from './services/catalog.service';
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
-        CatalogPurchaseComponent
+        CatalogPurchaseComponent,
+        CatalogLayoutVipBuyComponent
     ],
     providers: [
         CatalogService
@@ -50,7 +52,8 @@ import { CatalogService } from './services/catalog.service';
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
-        CatalogPurchaseComponent
+        CatalogPurchaseComponent,
+        CatalogLayoutVipBuyComponent
     ]
 })
 export class CatalogModule 

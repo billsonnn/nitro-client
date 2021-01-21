@@ -15,6 +15,7 @@ import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
+import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
@@ -58,8 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         EscapeHtmlPipe,
-        TimeAgoPipe,
-        TranslatePipe
+        TranslatePipe,
+        FormatShortPipe
     ],
     providers: [
         {
@@ -75,8 +76,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         EscapeHtmlPipe,
-        TimeAgoPipe,
-        TranslatePipe
+        TranslatePipe,
+        FormatShortPipe
     ]
 })
 export class SharedModule 
