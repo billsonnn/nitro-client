@@ -53,7 +53,7 @@ export class EvaWireFormat implements ICodec
             }
         }
 
-        return new BinaryWriter().writeInt(buffer.getBuffer().length).writeBytes(buffer.getBuffer());
+        return new BinaryWriter().writeInt(buffer.getBuffer().byteLength).writeBytes(buffer.getBuffer());
     }
 
     public decode(connection: IConnection): IMessageDataWrapper[]

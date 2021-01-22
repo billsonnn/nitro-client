@@ -1,24 +1,22 @@
-import { Buffer } from 'buffer';
-
 export class BinaryReader
 {
     private _position: number;
-    private _buffer: Buffer;
+    private _dataView: DataView;
 
-    constructor(buffer: ArrayBuffer|Buffer)
+    constructor(buffer: ArrayBuffer)
     {
         this._position = 0;
-        this._buffer = Buffer.from(buffer);
+        this._dataView = new DataView(buffer);
     }
 
     public readByte(): number
     {
-        return this._buffer[this._position++];
+        return new Int8Array(this._dataView.buffer)[this._position++];
     }
 
     public readBytes(length: number): BinaryReader
     {
-        let buffer: BinaryReader = new BinaryReader(this._buffer.slice(this._position, this._position + length));
+        let buffer: BinaryReader = new BinaryReader(this._dataView.buffer.slice(this._position, this._position + length));
         this._position += length;
 
         return buffer;
@@ -26,7 +24,7 @@ export class BinaryReader
 
     public readShort(): number
     {
-        let short = this._buffer.readInt16BE(this._position);
+        let short = this._dataView.getInt16(this._position);
         this._position += 2;
 
         return short;
@@ -34,7 +32,7 @@ export class BinaryReader
 
     public readInt(): number
     {
-        let int = this._buffer.readInt32BE(this._position);
+        let int = this._dataView.getInt32(this._position);
         this._position += 4;
 
         return int;
@@ -42,11 +40,11 @@ export class BinaryReader
 
     public remaining(): number
     {
-        return this._buffer.length - this._position;
+        return this._dataView.byteLength - this._position;
     }
 
     public toString(encoding?: string)
     {
-        return encoding ? this._buffer.toString(encoding) : this._buffer.toString();
+        return new TextDecoder().decode(this._dataView.buffer);
     }
 }

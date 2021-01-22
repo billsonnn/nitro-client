@@ -202,7 +202,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
         return true;
     }
 
-    private write(buffer: Buffer): void
+    private write(buffer: ArrayBuffer): void
     {
         if(this._socket.readyState !== WebSocket.OPEN) return;
 
