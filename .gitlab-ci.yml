@@ -8,6 +8,7 @@ Build Nitro:
   script:
     - npm i
     - cp src/index.html.example src/index.html
+    - cp src/configuration.json.example src/configuration.json
     - npm run build-prod
   cache:
     key: ${CI_COMMIT_BRANCH}
