@@ -34,7 +34,12 @@
             "aot": true,
             "vendorChunk": true,
             "assets": [
-              "src/assets",
+              { 
+                "glob": "**/*",
+                "input": "src/assets/",
+                "ignore": ["**/*.scss"],
+                "output": "/assets/" 
+              },
               "src/configuration.json"
             ],
             "styles": [
@@ -54,13 +59,13 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "10mb"
                 },
                 {
