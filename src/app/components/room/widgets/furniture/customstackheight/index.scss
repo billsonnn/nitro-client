@@ -27,7 +27,7 @@ $customstackheight-width: 300px;
 
             .ngx-slider-full-bar {
                 background-color: transparent;
-                background-image: url('/assets/images/stackhelper/slider-background.png');
+                background-image: url('^assets/images/stackhelper/slider-background.png');
                 width: 41px;
                 height: 280px;
             }
@@ -46,7 +46,7 @@ $customstackheight-width: 300px;
                 top: auto; /* to remove the default positioning */
                 bottom: 0;
                 background-color: transparent;
-                background-image: url('/assets/images/stackhelper/slider-pointer.png');
+                background-image: url('^assets/images/stackhelper/slider-pointer.png');
                 border-radius: 0;
                 outline: none;
 

@@ -11,9 +11,9 @@
 		height: 100%;
 		width: 100%;
 		background-color: #68E5FF;
-		background: url('/assets/images/hotelview/rainbow19_background_left.png'), 
-				   url('/assets/images/hotelview/background_right_easter2016.png'),
-				   url('/assets/images/hotelview/rainbow19_background_gradient.png');
+		background: url('^assets/images/hotelview/rainbow19_background_left.png'), 
+				   url('^assets/images/hotelview/background_right_easter2016.png'),
+				   url('^assets/images/hotelview/rainbow19_background_gradient.png');
 		background-repeat: no-repeat, no-repeat, repeat-x;
 		background-position: left bottom, right bottom, 100px top;
 		background-size: auto, auto, auto, 1% 100%;
