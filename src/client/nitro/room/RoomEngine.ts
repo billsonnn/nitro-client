@@ -2052,7 +2052,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         const roomSession = ((this._roomSessionManager && this._roomSessionManager.getSession(roomId)) || null);
 
-        if(roomSession && (roomSession.ownRoomIndex))
+        if(roomSession && (roomSession.ownRoomIndex === objectId))
         {
             this._logicFactory.events.dispatchEvent(new RoomToObjectOwnAvatarMoveEvent(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, targetLocation));
         }
