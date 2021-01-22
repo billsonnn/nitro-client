@@ -46,9 +46,9 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         if(!existing || !existing.length) return;
 
-        for(const [ index, callback ] of existing.entries())
+        for(const [ index, existingCallback ] of existing.entries())
         {
-            if(!callback || callback !== callback) continue;
+            if(!existingCallback || (existingCallback !== callback)) continue;
 
             existing.splice(index, 1);
 
