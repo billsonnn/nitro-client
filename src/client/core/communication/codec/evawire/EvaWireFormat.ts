@@ -1,7 +1,7 @@
-import { BinaryReader } from '../BinaryReader';
-import { BinaryWriter } from '../BinaryWriter';
 import { IConnection } from '../../connections/IConnection';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
+import { BinaryReader } from '../BinaryReader';
+import { BinaryWriter } from '../BinaryWriter';
 import { Byte } from '../Byte';
 import { ICodec } from '../ICodec';
 import { Short } from '../Short';
@@ -11,9 +11,9 @@ export class EvaWireFormat implements ICodec
 {
     public encode(header: number, messages: any[]): BinaryWriter
     {
-        const buffer = new BinaryWriter();
+        const writer = new BinaryWriter();
 
-        buffer.writeShort(header);
+        writer.writeShort(header);
 
         for(const value of messages)
         {
@@ -29,31 +29,35 @@ export class EvaWireFormat implements ICodec
             switch(type)
             {
                 case 'null':
-                    buffer.writeShort(0);
+                    writer.writeShort(0);
                     break;
                 case 'byte':
-                    buffer.writeByte(value.value);
+                    writer.writeByte(value.value);
                     break;
                 case 'short':
-                    buffer.writeShort(value.value);
+                    writer.writeShort(value.value);
                     break;
                 case 'number':
-                    buffer.writeInt(value);
+                    writer.writeInt(value);
                     break;
                 case 'boolean':
-                    buffer.writeByte(value ? 1 : 0);
+                    writer.writeByte(value ? 1 : 0);
                     break;
                 case 'string':
-                    if(!value) buffer.writeShort(0);
+                    if(!value) writer.writeShort(0);
                     else
                     {
-                        buffer.writeString(value, true);
+                        writer.writeString(value, true);
                     }
                     break;
             }
         }
 
-        return new BinaryWriter().writeInt(buffer.getBuffer().byteLength).writeBytes(buffer.getBuffer());
+        const buffer = writer.getBuffer();
+
+        if(!buffer) return null;
+
+        return new BinaryWriter().writeInt(buffer.byteLength).writeBytes(buffer);
     }
 
     public decode(connection: IConnection): IMessageDataWrapper[]

@@ -1,5 +1,5 @@
-import { BinaryReader } from '../BinaryReader';
 import { IMessageDataWrapper } from '../../messages/IMessageDataWrapper';
+import { BinaryReader } from '../BinaryReader';
 
 export class EvaWireDataWrapper implements IMessageDataWrapper
 {
@@ -28,7 +28,7 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
 
     public readBoolean(): boolean
     {
-        return this.readByte() === 1;
+        return (this.readByte() === 1);
     }
 
     public readShort(): number
@@ -47,9 +47,8 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
 
     public readString(): string
     {
-        const length = this.readShort();
-
-        const buffer = this._buffer.readBytes(length);
+        const length    = this.readShort();
+        const buffer    = this._buffer.readBytes(length);
 
         return buffer.toString('utf8');
     }
@@ -61,6 +60,6 @@ export class EvaWireDataWrapper implements IMessageDataWrapper
 
     public get bytesAvailable(): boolean
     {
-        return this._buffer && this._buffer.remaining() > 0;
+        return (this._buffer && (this._buffer.remaining() > 0));
     }
 }
