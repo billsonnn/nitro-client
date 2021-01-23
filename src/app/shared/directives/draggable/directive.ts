@@ -10,7 +10,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     private static POS_MEMORY = new Map();
 
     @Input()
-    public dragHandle: string;
+    public dragHandle: string = '.drag-handler';
 
     @Input()
     public dragTarget: string;
