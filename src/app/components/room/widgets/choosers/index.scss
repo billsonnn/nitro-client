@@ -1,0 +1,11 @@
+.nitro-chooser-component {
+    position: absolute;
+    width: 275px;
+    max-width: 275px;
+
+    .card-body {
+        li.chooser__item {
+            font-size: 10pt;
+        }
+    }
+}
