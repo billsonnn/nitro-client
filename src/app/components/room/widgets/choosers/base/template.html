@@ -1,0 +1,20 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-customstackheight-component">
+    <div class="card-header-container">
+        <div class="card-header-overlay"></div>
+        <div class="card-header">
+            <div class="header-title">{{ ('widget.chooser.furni.title') | translate }}</div>
+            <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex">
+            <perfect-scrollbar style="max-height: 200px">
+                <ul>
+                    <li *ngFor="let row of _items">
+                        {{row.name}}
+                    </li>
+                </ul>
+            </perfect-scrollbar>
+        </div>
+    </div>
+</div>`
