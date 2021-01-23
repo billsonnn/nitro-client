@@ -49,6 +49,7 @@ import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureIntern
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
+import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
@@ -93,7 +94,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _friendService: FriendListService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
-    ) 
+    )
     {}
 
     public ngOnDestroy(): void
@@ -179,7 +180,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         RoomComponent.COLOR_ADJUSTMENT.red      = 1;
         RoomComponent.COLOR_ADJUSTMENT.green    = 1;
         RoomComponent.COLOR_ADJUSTMENT.blue     = 1;
-        
+
         this._widgets.clear();
         this._widgetHandlerMessageMap.clear();
         this._widgetHandlerEventMap.clear();
@@ -227,7 +228,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private onMouseEvent(event: MouseEvent): void
     {
         if(!event || !this._roomSession) return;
-        
+
         const x = event.clientX;
         const y = event.clientY;
 
@@ -238,7 +239,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             if(this._lastClick)
             {
                 this._clickCount = 1;
-                    
+
                 if(this._lastClick >= Date.now() - 300) this._clickCount++;
             }
 
@@ -355,6 +356,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.CUSTOM_STACK_HEIGHT:
                 widgetHandler = new FurnitureCustomStackHeightWidgetHandler();
+                break;
+            case RoomWidgetEnum.FURNI_CHOOSER:
+                widgetHandler = new FurniChooserWidgetHandler();
                 break;
             // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
             //     widgetHandler = new FurnitureTrophyWidgetHandler();
@@ -547,7 +551,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                         removedEventType = RoomWidgetRoomObjectUpdateEvent.USER_REMOVED;
                         break;
                 }
-                
+
                 if(removedEventType) updateEvent = new RoomWidgetRoomObjectUpdateEvent(removedEventType, objectId, category, event.roomId);
                 break;
             }

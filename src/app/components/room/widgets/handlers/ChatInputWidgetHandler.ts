@@ -12,6 +12,7 @@ import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
+import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
@@ -136,6 +137,13 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                             {
                                 this._container.sessionDataManager.sendSpecialCommandMessage(':pickall');
                             });
+                            return null;
+                        case ':furni':
+                            if(this._container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964)
+                            {
+                                // TODO: Add check for room owner/rights
+                                this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER));
+                            }
                             return null;
                         case ':client':
                         case ':nitro':
