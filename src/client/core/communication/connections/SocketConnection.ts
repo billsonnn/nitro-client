@@ -27,7 +27,6 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private _pendingClientMessages: IMessageComposer<unknown[]>[];
     private _pendingServerMessages: IMessageDataWrapper[];
 
-
     private _isAuthenticated: boolean;
 
     constructor(communicationManager: ICommunicationManager, stateListener: IConnectionStateListener)
@@ -141,7 +140,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         reader.onloadend = () =>
         {
-            this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, <ArrayBuffer> reader.result);
+            this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, (reader.result as ArrayBuffer));
 
             this.processReceivedData();
         };
@@ -196,13 +195,13 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
-            this.write(encoded.toBuffer());
+            this.write(encoded.getBuffer());
         }
 
         return true;
     }
 
-    private write(buffer: Buffer): void
+    private write(buffer: ArrayBuffer): void
     {
         if(this._socket.readyState !== WebSocket.OPEN) return;
 
@@ -267,12 +266,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     private concatArrayBuffers(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer
     {
-        const newBuffer = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+        const array = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
         
-        newBuffer.set(new Uint8Array(buffer1), 0);
-        newBuffer.set(new Uint8Array(buffer2), buffer1.byteLength);
+        array.set(new Uint8Array(buffer1), 0);
+        array.set(new Uint8Array(buffer2), buffer1.byteLength);
         
-        return newBuffer.buffer;
+        return array.buffer;
     }
 
     private getMessagesForWrapper(wrapper: IMessageDataWrapper): IMessageEvent[]
