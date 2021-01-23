@@ -1,4 +1,4 @@
-.nitro-avatar-editor-component {
+.nitro-avatar-editor {
     position: absolute;
     width: 600px;
     max-width: 600px;
@@ -83,11 +83,12 @@
     }
 
     .avatar-spotlight {
-        top: -16px;
+        top: -51px;
         width: 130px;
         height: 305px;
         background: transparent url('^assets/images/avatareditor/spotlight.png') no-repeat center;
         opacity: 0.3;
+        pointer-events: none;
     }
 
     .avatar-shadow {

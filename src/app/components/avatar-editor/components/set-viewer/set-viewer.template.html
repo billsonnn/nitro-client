@@ -3,7 +3,7 @@
     <div class="grid-items grid-6">
         <div class="d-flex flex-column item-detail justify-content-center align-items-center"
             *ngFor="let part of partSet" (click)="selectPart(part)">
-            <button type="button" class="btn btn-primary detail-info has-image"
+            <button type="button" class="btn btn-secondary detail-info has-image"
                 [ngClass]="{ 'active': part.isSelected }"
                 [ngStyle]="(part.imageUrl && { 'background-image': 'url(' + part.imageUrl + ')' })"></button>
         </div>
