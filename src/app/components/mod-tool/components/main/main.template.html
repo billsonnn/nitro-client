@@ -1,0 +1,33 @@
+<div *ngIf="visible"  class="card nitro-mod-tool-component">
+	<div [draggable] [center]="false" dragHandle=".card-header" class="card mod-tool-card">
+		<div class="card-header">
+			<span>Modtools</span>
+		</div>
+		<div class="card-body">
+			<div class="btn-group btn-group-vertical w-100">
+				<button (click)="toggleRoomTool()" class="btn btn-sm btn-primary btn-block">
+					<i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
+					Room Tool
+				</button>
+				<button (click)="toggleChatlogTool()" class="btn btn-sm btn-primary btn-block">
+					<i class="icon modtool-chatlog-icon" style="margin-right: 5px;"></i>
+					Chatlog Tool
+				</button>
+				<button (click)="toggleUserTool()" class="btn btn-sm btn-primary btn-block">
+					<i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
+					User: Damien
+				</button>
+				<button (click)="toggleReportsTool()" class="btn btn-sm btn-primary btn-block">
+					<i class="icon modtool-reports-icon" style="margin-right: 5px;"></i>
+					Reports Tool
+				</button>
+			</div>
+
+		</div>
+	</div>
+	<nitro-mod-tool-room-component [(visible)]="roomToolVisible"></nitro-mod-tool-room-component>
+	<nitro-mod-tool-chatlog-component [(visible)]="chatlogToolVisible"></nitro-mod-tool-chatlog-component>
+	<nitro-mod-tool-user-component [(visible)]="userToolVisible"></nitro-mod-tool-user-component>
+	<nitro-mod-tool-reports-component [(visible)]="reportsToolVisible"></nitro-mod-tool-reports-component>
+</div>
+

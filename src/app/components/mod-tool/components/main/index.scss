@@ -1,0 +1,51 @@
+.nitro-mod-tool-component {
+	.btn-group-vertical{
+		.btn {
+			margin-bottom:3px;
+		}
+	}
+	.mod-tool-card{
+		position: fixed;
+		top: 20px;
+		left:20px;
+		width:200px;
+	}
+	.room-tool-card{
+		position:fixed;
+		top:20px;
+		left: 230px;
+		width: 300px;
+		.badge{
+			display:block;
+			text-align:left;
+		}
+	}
+	.chatlog-tool-card{
+		position:fixed;
+		top:20px;
+		left: 230px;
+		min-width: 300px;
+	}
+	.user-tool-card{
+		position:fixed;
+		top:20px;
+		left: 230px;
+		min-width: 250px;
+	}
+	.card-header{
+		display:flex;
+		justify-content: start;
+		align-items: center;
+		span{
+			flex:1;
+		}
+	}
+	.btn{
+		white-space: nowrap;
+		display:flex;
+		justify-content: start;
+		align-items: center;
+		overflow-x:hidden;
+		text-overflow: ellipsis;
+	}
+}
