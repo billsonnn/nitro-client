@@ -65,8 +65,7 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 
         furniInRoom.sort(this.dynamicSort('name'));
 
-        // TODO: What is Godmode?
-        this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_FURNI_CHOOSER_CONTENT, furniInRoom, true));
+        this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_FURNI_CHOOSER_CONTENT, furniInRoom, false));
     }
 
     private dynamicSort(property)

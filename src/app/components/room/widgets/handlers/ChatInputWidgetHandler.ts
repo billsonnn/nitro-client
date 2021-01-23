@@ -142,7 +142,6 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':furni':
                             if(this._container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964)
                             {
-                                // TODO: Add check for room owner/rights
                                 this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER));
                             }
                             return null;
