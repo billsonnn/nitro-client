@@ -38,7 +38,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
         <nitro-pedia-main-component></nitro-pedia-main-component>
         <nitro-avatar-editor-main-component [visible]="avatarEditorVisible"></nitro-avatar-editor-main-component>
         <nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
-		<nitro-mod-tool-main-component [visible]="true"></nitro-mod-tool-main-component>
+		<nitro-mod-tool-main-component [visible]="modToolVisible"></nitro-mod-tool-main-component>
 		<nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
         <nitro-friendlist-main-component [visible]="friendListVisible"></nitro-friendlist-main-component>
         <nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
@@ -301,4 +301,9 @@ export class MainComponent implements OnInit, OnDestroy
     {
         return this._settingsService.friendListVisible;
     }
+
+    public get modToolVisible(): boolean
+	{
+		return Nitro.instance.sessionDataManager.isModerator;
+	}
 }

@@ -245,6 +245,8 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInfoEvent';
+import { ModtoolRequestRoomInfoComposer } from './messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -335,6 +337,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // MODERATION
         this._events.set(IncomingHeader.GENERIC_ALERT_LINK, ModeratorMessageEvent);
+
+        // MODTOOL
+        this._events.set(IncomingHeader.MODTOOL_ROOM_INFO, ModtoolRoomInfoEvent);
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);
@@ -644,6 +649,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // SUBSCRIPTION
         this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
+
+        // MODTOOL
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_INFO, ModtoolRequestRoomInfoComposer);
     }
 
     public get events(): Map<number, Function>

@@ -6,7 +6,30 @@
 			</span>
 		<button type="button" class="close" (click)="hideTool()"><i class="fas fa-times"></i></button>
 	</div>
-	<div class="card-body">
-		Not implemented yet
+	<div class="card-body" *ngIf="inRoom">
+		<div class="row">
+			<div class="col">
+				<div class="badge badge-secondary mb-1">
+					Name: {{roomName}}
+				</div>
+			</div>
+			<div class="col">
+				<div class="badge badge-secondary mb-1">
+					Id: {{roomId}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="badge badge-secondary mb-1">
+					Owner: {{roomOwnerName}}
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="card-body" *ngIf="!inRoom">
+		Not in a room
 	</div>
 </div>
