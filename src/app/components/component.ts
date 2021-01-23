@@ -22,6 +22,7 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
+import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
 
 @Component({
     selector: 'nitro-main-component',
@@ -47,7 +48,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
         <nitro-room-component></nitro-room-component>
     </div>`
 })
-export class MainComponent implements OnInit, OnDestroy 
+export class MainComponent implements OnInit, OnDestroy
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
@@ -57,7 +58,7 @@ export class MainComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     { }
 
     public ngOnInit(): void
@@ -76,6 +77,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
                 Nitro.instance.roomEngine.events.addEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
+                Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineEvent.bind(this));
 
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
@@ -173,6 +175,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_LINK, null);
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, null);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
@@ -204,7 +207,7 @@ export class MainComponent implements OnInit, OnDestroy
                     {
                         this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
                     }
-                    else 
+                    else
                     {
                         this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
                     }
@@ -260,7 +263,7 @@ export class MainComponent implements OnInit, OnDestroy
             case RoomSessionEvent.ENDED:
                 if(this.roomComponent) this.roomComponent.endRoom();
 
-                this._ngZone.run(() => 
+                this._ngZone.run(() =>
                 {
                     this._landingViewVisible = event.openLandingView;
                 });
@@ -271,32 +274,32 @@ export class MainComponent implements OnInit, OnDestroy
         }
     }
 
-    public get landingViewVisible(): boolean 
+    public get landingViewVisible(): boolean
     {
         return this._landingViewVisible;
     }
 
-    public get avatarEditorVisible(): boolean 
+    public get avatarEditorVisible(): boolean
     {
         return this._settingsService.avatarEditorVisible;
     }
 
-    public get catalogVisible(): boolean 
+    public get catalogVisible(): boolean
     {
         return this._settingsService.catalogVisible;
     }
 
-    public get navigatorVisible(): boolean 
+    public get navigatorVisible(): boolean
     {
         return this._settingsService.navigatorVisible;
     }
 
-    public get inventoryVisible(): boolean 
+    public get inventoryVisible(): boolean
     {
         return this._settingsService.inventoryVisible;
     }
 
-    public get friendListVisible(): boolean 
+    public get friendListVisible(): boolean
     {
         return this._settingsService.friendListVisible;
     }

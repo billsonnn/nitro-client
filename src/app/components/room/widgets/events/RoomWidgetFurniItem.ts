@@ -1,4 +1,4 @@
-﻿export class _Str_3405 
+﻿export class RoomWidgetFurniItem
 {
     private _id: number;
     private _category: number;
