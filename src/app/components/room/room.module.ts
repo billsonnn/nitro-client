@@ -19,6 +19,7 @@ import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import { ChooserWidgetBaseComponent } from './widgets/choosers/base/component';
 import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component';
+import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
 
 @NgModule({
     imports: [
@@ -43,7 +44,8 @@ import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component'
         CustomStackHeightComponent,
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
-        FurniChooserWidgetComponent
+        FurniChooserWidgetComponent,
+        UserChooserWidgetComponent
     ],
     declarations: [
         RoomComponent,
@@ -64,7 +66,8 @@ import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component'
         CustomStackHeightComponent,
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
-        FurniChooserWidgetComponent
+        FurniChooserWidgetComponent,
+        UserChooserWidgetComponent
     ]
 })
 export class RoomModule

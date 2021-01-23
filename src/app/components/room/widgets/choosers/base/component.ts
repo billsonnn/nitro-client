@@ -12,6 +12,7 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget
 
     protected _visible: boolean       = false;
     public _items: RoomWidgetFurniItem[] = [];
+    public title: string = null;
 
     constructor(
         protected _ngZone: NgZone)

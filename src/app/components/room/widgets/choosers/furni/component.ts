@@ -17,6 +17,7 @@ export class FurniChooserWidgetComponent extends ChooserWidgetBaseComponent
         protected _ngZone: NgZone)
     {
         super(_ngZone);
+        this.title = 'widget.chooser.furni.title';
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher)

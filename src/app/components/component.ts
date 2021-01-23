@@ -24,6 +24,7 @@ import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/
 import { RoomChatComponent } from './room/widgets/roomchat/component';
 import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
 import { FurniChooserWidgetComponent } from './room/widgets/choosers/furni/component';
+import { UserChooserWidgetComponent } from './room/widgets/choosers/user/component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -177,6 +178,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, FurniChooserWidgetComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, UserChooserWidgetComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
