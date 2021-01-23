@@ -10,7 +10,7 @@
         <div class="d-flex">
             <perfect-scrollbar style="max-height: 200px">
                 <ul>
-                    <li *ngFor="let row of _items">
+                    <li *ngFor="let row of _items" (click)="onSelectItem(row)">
                         {{row.name}}
                     </li>
                 </ul>

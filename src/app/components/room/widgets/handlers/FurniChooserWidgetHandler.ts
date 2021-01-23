@@ -10,6 +10,7 @@ import { RoomObjectVariable } from '../../../../../client/nitro/room/object/Room
 import { RoomWidgetFurniItem } from '../events/RoomWidgetFurniItem';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 
 export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 {
@@ -31,9 +32,24 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER:
                 this.processFurniChooser();
                 break;
+            case RoomWidgetRoomObjectMessage.SELECT_OBJECT:
+                this.selectFurni(k);
+                break;
         }
 
         return null;
+    }
+
+    private selectFurni(k: RoomWidgetMessage): void
+    {
+        const event = k as RoomWidgetRoomObjectMessage;
+
+        if(event == null) return;
+
+        if(event.category == RoomObjectCategory.WALL || event.category == RoomObjectCategory.FLOOR)
+        {
+            this._container.roomEngine.selectRoomObject(this._container.roomSession.roomId, event.id, event.category);
+        }
     }
 
     private processFurniChooser(): void
@@ -151,7 +167,9 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 
     public get messageTypes(): string[]
     {
-        return [RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER];
+        return [
+            RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER,
+            RoomWidgetRoomObjectMessage.SELECT_OBJECT];
     }
 
     public get eventTypes(): string[]

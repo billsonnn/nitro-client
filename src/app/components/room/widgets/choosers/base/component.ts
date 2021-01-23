@@ -55,4 +55,11 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget
     {
         this._items = items;
     }
+
+    public onSelectItem(row: RoomWidgetFurniItem):void
+    {
+        if(row == null || this._items == null || this._items.length == 0) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetRoomObjectMessage(RoomWidgetRoomObjectMessage.SELECT_OBJECT, row.id, row.category));
+    }
 }
