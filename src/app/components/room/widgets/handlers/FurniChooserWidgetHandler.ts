@@ -11,6 +11,7 @@ import { RoomObjectItem } from '../events/RoomObjectItem';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import * as sorting from '../../../../../utils/sorting';
 
 export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 {
@@ -63,29 +64,12 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
         this.processFloorFurni(roomId, furniInRoom);
         this.processWallFurni(roomId, furniInRoom);
 
-        furniInRoom.sort(this.dynamicSort('name'));
+        furniInRoom.sort(sorting.dynamicSort('name'));
 
         this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_FURNI_CHOOSER_CONTENT, furniInRoom, false));
     }
 
-    private dynamicSort(property)
-    {
-        // Source: https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
-        let sortOrder = 1;
-        if(property[0] === '-')
-        {
-            sortOrder = -1;
-            property = property.substr(1);
-        }
-        return function (a,b)
-        {
-            /* next line works with strings and numbers,
-             * and you may want to customize it to your needs
-             */
-            const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-            return result * sortOrder;
-        };
-    }
+
 
     private processWallFurni(roomId: number, furniInRoom: any[])
     {
