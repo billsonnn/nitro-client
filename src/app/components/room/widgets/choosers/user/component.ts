@@ -59,7 +59,9 @@ export class UserChooserWidgetComponent extends ChooserWidgetBaseComponent
 
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const that = this;
-        setTimeout(function() {
+        setTimeout(function()
+        {
+            if(that.disposed) return;
             that.messageListener.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_USER_CHOOSER));
         }, 100);
     }
