@@ -187,7 +187,7 @@ $body-color:                $white !default;
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $white !default;
 $link-decoration:                         none !default;
 $link-hover-color:                        darken($link-color, 15%) !default;
 $link-hover-decoration:                   underline !default;
@@ -249,7 +249,7 @@ $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
 $border-width:                1px !default;
-$border-color:                $gray-300 !default;
+$border-color:                $black !default;
 
 $border-radius:               7px !default;
 $border-radius-lg:            7px !default;
@@ -258,7 +258,7 @@ $border-radius-sm:            7px !default;
 $rounded-pill:                50rem !default;
 
 $box-shadow-sm:               0 .125rem .25rem rgba($black, .075) !default;
-$box-shadow:                  0 .5rem 1rem rgba($black, .15) !default;
+$box-shadow:                  0px 2px 0px rgba($black, 0.45), inset 0px 0px 0px 2px rgba($white, 0.1) !default;
 $box-shadow-lg:               0 1rem 3rem rgba($black, .175) !default;
 
 $component-active-color:      $white !default;
@@ -850,8 +850,8 @@ $card-cap-bg:                       rgba($black, .03) !default;
 $card-cap-color:                    null !default;
 $card-height:                       null !default;
 $card-color:                        null !default;
-$card-bg:                           rgba($cod-gray, .97) !default;
-$card-shadow:                       0 .25rem .5rem rgba($black, .5) !default;
+$card-bg:                           rgba($primary, 1) !default;
+$card-shadow:                       0px 2px 0px rgba($black, 0.45), inset 0px 0px 0px 2px rgba($white, 0.1) !default;
 
 $card-cap-border-width:             .97px !default;
 $card-cap-border-color:             rgba($emperor, .3) !default;
