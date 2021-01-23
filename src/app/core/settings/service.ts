@@ -8,6 +8,7 @@ export class SettingsService
     private _catalogVisible: boolean;
     private _inventoryVisible: boolean;
     private _friendlistVisible: boolean;
+    private _achievementsVisible: boolean;
 
     constructor()
     {
@@ -16,6 +17,7 @@ export class SettingsService
         this._catalogVisible        = false;
         this._inventoryVisible      = false;
         this._friendlistVisible     = false;
+        this._achievementsVisible   = false;
     }
 
     public showAvatarEditor(): void
@@ -93,6 +95,21 @@ export class SettingsService
         this._friendlistVisible = !this._friendlistVisible;
     }
 
+    public showAchievements(): void
+    {
+        this._achievementsVisible = true;
+    }
+
+    public hideAchievements(): void
+    {
+        this._achievementsVisible = false;
+    }
+
+    public toggleAchievements(): void
+    {
+        this._achievementsVisible = !this._achievementsVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -116,5 +133,10 @@ export class SettingsService
     public get friendListVisible(): boolean
     {
         return this._friendlistVisible;
+    }
+
+    public get achievementsVisible(): boolean
+    {
+        return this._achievementsVisible;
     }
 }

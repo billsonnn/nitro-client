@@ -1,0 +1,26 @@
+.nitro-achievements-main-component {
+    width: $achievements-width;
+    position: absolute;
+    
+    .achievement-category-grid {
+        display: grid;
+        grid-template-columns: repeat(3,94px);
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+
+        .achievement-category-button {
+            display:flex;
+            flex-direction: column;
+    
+            .achievement-category-progress {
+                position: absolute;
+                bottom: 1px;
+                text-align: center;
+                font-size: 12px;
+                left: 0;
+                right: 0;
+            }
+            
+        }
+    }
+}

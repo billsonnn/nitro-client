@@ -10,6 +10,8 @@ $navigator-height: 600px;
 $inventory-width: 515px;
 $friendlist-width: 645px;
 
+$achievements-width: 645px;
+
 @import './avatar-editor';
 @import './catalog';
 @import './friendlist';
@@ -21,3 +23,4 @@ $friendlist-width: 645px;
 @import './room';
 @import './toolbar';
 @import './wired';
+@import './achievements'

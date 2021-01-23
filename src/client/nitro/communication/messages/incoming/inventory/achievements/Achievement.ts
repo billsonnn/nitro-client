@@ -95,7 +95,7 @@ export class Achievement
         return this._Str_21707;
     }
 
-    public get _Str_20475(): number
+    public get totalLevels(): number
     {
         return this._Str_20339;
     }

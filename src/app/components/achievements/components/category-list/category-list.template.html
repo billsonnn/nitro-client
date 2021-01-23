@@ -1,0 +1,9 @@
+<div class="achievement-category-grid">
+    <div *ngFor="let ob of categories | keyvalue" class="bg-secondary rounded achievement-category-button px-1 py-2" (click)="selectCat(ob.value)">
+        <div class="align-self-center position-relative">
+            <img [src]="getCategoryImage(ob.key,ob.value)">
+            <div class="achievement-category-progress">{{ getCategoryProgress(ob.value) }}</div>
+        </div>
+        <div class="text-center small d-none">{{ 'quests.' + ob.key + '.name' | translate }}</div>
+    </div>
+</div>

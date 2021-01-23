@@ -1,0 +1,1 @@
+<div *ngFor="let ob of category" class="rounded" [ngClass]="[selectedBadge == ob.badgeId ? 'bg-emperor' : 'bg-secondary']" (click)="selectBadge(ob.badgeId)">{{ ob.badgeId }}</div>

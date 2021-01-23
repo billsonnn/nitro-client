@@ -1,0 +1,13 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-achievements-main-component">
+    <div class="card-header">{{ 'inventory.achievements' | translate }}</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <nitro-achievements-category-list-component></nitro-achievements-category-list-component>
+            </div>
+            <div class="col-6">
+                <nitro-achievements-category-component></nitro-achievements-category-component>
+            </div>
+        </div>
+    </div>
+</div>
