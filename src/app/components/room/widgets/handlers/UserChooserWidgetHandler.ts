@@ -7,7 +7,7 @@ import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/message
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetFurniItem } from '../events/RoomWidgetFurniItem';
+import { RoomObjectItem } from '../events/RoomObjectItem';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
@@ -72,7 +72,7 @@ export class UserChooserWidgetHandler implements IRoomWidgetHandler
 
             if(unitData == null) continue;
 
-            units.push(new RoomWidgetFurniItem(unitData.roomIndex, categoryId, unitData.name));
+            units.push(new RoomObjectItem(unitData.roomIndex, categoryId, unitData.name));
         }
 
         units.sort(this.dynamicSort('name'));

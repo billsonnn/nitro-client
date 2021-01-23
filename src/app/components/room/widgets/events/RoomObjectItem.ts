@@ -1,14 +1,14 @@
-﻿export class RoomWidgetFurniItem
+﻿export class RoomObjectItem
 {
     private _id: number;
     private _category: number;
     private _name: string;
 
-    constructor(k: number, _arg_2: number, _arg_3: string)
+    constructor(id: number, category: number, name: string)
     {
-        this._id = k;
-        this._category = _arg_2;
-        this._name = _arg_3;
+        this._id = id;
+        this._category = category;
+        this._name = name;
     }
 
     public get id(): number

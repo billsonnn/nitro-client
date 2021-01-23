@@ -7,7 +7,7 @@ import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/message
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetFurniItem } from '../events/RoomWidgetFurniItem';
+import { RoomObjectItem } from '../events/RoomObjectItem';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
@@ -118,12 +118,12 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
                 }
             }
 
-            furniInRoom.push(new RoomWidgetFurniItem(roomObject.id, RoomObjectCategory.WALL, name));
+            furniInRoom.push(new RoomObjectItem(roomObject.id, RoomObjectCategory.WALL, name));
 
         }
     }
 
-    private processFloorFurni(roomId: number, furniInRoom: RoomWidgetFurniItem[])
+    private processFloorFurni(roomId: number, furniInRoom: RoomObjectItem[])
     {
         const roomObjectCounts = this._container.roomEngine.getRoomObjectCount(roomId, RoomObjectCategory.FLOOR);
         for(let index = 0; index < roomObjectCounts; index++)
@@ -136,7 +136,7 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
             const floorItemData = this._container.sessionDataManager.getFloorItemData(furniTypeId);
             const name = floorItemData != null ? floorItemData.name : roomObject.type;
 
-            furniInRoom.push(new RoomWidgetFurniItem(roomObject.id, RoomObjectCategory.FLOOR, name));
+            furniInRoom.push(new RoomObjectItem(roomObject.id, RoomObjectCategory.FLOOR, name));
         }
     }
 

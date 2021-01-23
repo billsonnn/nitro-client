@@ -2,7 +2,7 @@ import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomWidgetRoomObjectMessage } from '../../messages/RoomWidgetRoomObjectMessage';
-import { RoomWidgetFurniItem } from '../../events/RoomWidgetFurniItem';
+import { RoomObjectItem } from '../../events/RoomObjectItem';
 @Component({
     selector: 'nitro-room-chooser-base-component',
     templateUrl: './template.html'
@@ -11,7 +11,7 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget
 {
 
     protected _visible: boolean       = false;
-    public _items: RoomWidgetFurniItem[] = [];
+    public _items: RoomObjectItem[] = [];
     public title: string = null;
 
     constructor(
@@ -52,12 +52,12 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget
         this._visible = flag;
     }
 
-    public populate(items: RoomWidgetFurniItem[]): void
+    public populate(items: RoomObjectItem[]): void
     {
         this._items = items;
     }
 
-    public onSelectItem(row: RoomWidgetFurniItem):void
+    public onSelectItem(row: RoomObjectItem):void
     {
         if(row == null || this._items == null || this._items.length == 0) return;
 
