@@ -11,12 +11,17 @@ export class BinaryReader
 
     public readByte(): number
     {
-        return new Int8Array(this._dataView.buffer)[this._position++];
+        const byte = this._dataView.getInt8(this._position);
+
+        this._position++;
+
+        return byte;
     }
 
     public readBytes(length: number): BinaryReader
     {
-        let buffer: BinaryReader = new BinaryReader(this._dataView.buffer.slice(this._position, this._position + length));
+        const buffer = new BinaryReader(this._dataView.buffer.slice(this._position, this._position + length));
+
         this._position += length;
 
         return buffer;
@@ -24,7 +29,8 @@ export class BinaryReader
 
     public readShort(): number
     {
-        let short = this._dataView.getInt16(this._position);
+        const short = this._dataView.getInt16(this._position);
+
         this._position += 2;
 
         return short;
@@ -32,7 +38,8 @@ export class BinaryReader
 
     public readInt(): number
     {
-        let int = this._dataView.getInt32(this._position);
+        const int = this._dataView.getInt32(this._position);
+
         this._position += 4;
 
         return int;
@@ -43,7 +50,7 @@ export class BinaryReader
         return this._dataView.byteLength - this._position;
     }
 
-    public toString(encoding?: string)
+    public toString(encoding?: string): string
     {
         return new TextDecoder().decode(this._dataView.buffer);
     }
