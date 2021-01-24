@@ -12,6 +12,17 @@
         margin-top: -3px;
         overflow: hidden;
 
+        &.grid-1 {
+
+            .item-detail {
+                width: calc(1 / 1 * 100% - (1 - 1 / 2) * 3px);
+
+                &:nth-child(1n) {
+                    margin-right: 0;
+                }
+            }
+        }
+
         &.grid-2 {
 
             .item-detail {
@@ -109,25 +120,6 @@
         }
 
         .item-detail {
-            height: 50px;
-            max-height: 50px;
-            margin: 3px 3px 0 0;
-            overflow: hidden;
-
-            .detail-info {
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-
-                &.has-image {
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-image: url('^assets/images/icons/loading-icon.png');
-                }
-            }
-        }
-
-        .item-detail {
             height: 65px;
             max-height: 65px;
             margin: 3px 3px 0 0;
@@ -137,6 +129,7 @@
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
+                font-size: 14px;
 
                 &.has-image {
                     background-repeat: no-repeat;
@@ -147,11 +140,6 @@
 
             &.unseen {
                 background-color: rgba($green, 1);
-            }
-        
-            .badge {
-                width: 100%;
-                padding: 2px;
             }
         }
 
