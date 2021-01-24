@@ -57,9 +57,11 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
 
         this._disposed              = false;
 
-        this.events.addEventListener(RoomContentLoadedEvent.RCLE_SUCCESS, this.onRoomContentLoadedEvent.bind(this));
-        this.events.addEventListener(RoomContentLoadedEvent.RCLE_FAILURE, this.onRoomContentLoadedEvent.bind(this));
-        this.events.addEventListener(RoomContentLoadedEvent.RCLE_CANCEL, this.onRoomContentLoadedEvent.bind(this));
+        this.onRoomContentLoadedEvent = this.onRoomContentLoadedEvent.bind(this);
+
+        this.events.addEventListener(RoomContentLoadedEvent.RCLE_SUCCESS, this.onRoomContentLoadedEvent);
+        this.events.addEventListener(RoomContentLoadedEvent.RCLE_FAILURE, this.onRoomContentLoadedEvent);
+        this.events.addEventListener(RoomContentLoadedEvent.RCLE_CANCEL, this.onRoomContentLoadedEvent);
     }
 
     public onInit(): void

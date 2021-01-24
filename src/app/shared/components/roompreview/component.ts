@@ -30,7 +30,9 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
     constructor(
         private _elementRef: ElementRef<HTMLDivElement>,
         private ngZone: NgZone) 
-    {}
+    {
+        this.onClick = this.onClick.bind(this);
+    }
 
     public ngOnInit(): void
     {
@@ -65,7 +67,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.ngZone.runOutsideAngular(() =>
         {
-            this.previewImageElement.addEventListener('click', this.onClick.bind(this));
+            this.previewImageElement.addEventListener('click', this.onClick);
 
             Nitro.instance.ticker.add(this.update, this);
         });
@@ -79,7 +81,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.ngZone.runOutsideAngular(() =>
         {
-            this.previewImageElement.removeEventListener('click', this.onClick.bind(this));
+            this.previewImageElement.removeEventListener('click', this.onClick);
 
             Nitro.instance.ticker.remove(this.update, this);
         });

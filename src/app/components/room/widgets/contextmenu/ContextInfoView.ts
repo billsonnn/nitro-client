@@ -34,6 +34,8 @@ export class ContextInfoView
         this.fadingOut         = false;
         this.opacity           = 1;
 
+        this.onTimerComplete = this.onTimerComplete.bind(this);
+
         if(this.fadeAfterDelay && this.willFade)
         {
             if(this.fadeStartTimer)
@@ -43,7 +45,7 @@ export class ContextInfoView
                 this.fadeStartTimer = null;
             }
             
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
     }
 
@@ -126,7 +128,7 @@ export class ContextInfoView
                 this.fadeStartTimer = null;
             }
 
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
         else
         {

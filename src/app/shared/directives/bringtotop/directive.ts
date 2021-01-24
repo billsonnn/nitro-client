@@ -17,7 +17,9 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
     constructor(
         private elementRef: ElementRef,
         private ngZone: NgZone) 
-    {}
+    {
+        this.bringToFront = this.bringToFront.bind(this);
+    }
   
     public ngAfterViewInit(): void
     {
@@ -67,7 +69,7 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         {
             if(!this.target) return;
 
-            this.target.addEventListener('mousedown', this.bringToFront.bind(this));
+            this.target.addEventListener('mousedown', this.bringToFront);
         });
     }
 
@@ -77,7 +79,7 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         {
             if(!this.target) return;
 
-            this.target.removeEventListener('mousedown', this.bringToFront.bind(this));
+            this.target.removeEventListener('mousedown', this.bringToFront);
         });
     }
 

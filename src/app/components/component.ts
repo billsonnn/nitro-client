@@ -6,6 +6,7 @@ import { RoomEngineEvent } from '../../client/nitro/room/events/RoomEngineEvent'
 import { RoomEngineObjectEvent } from '../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../../client/nitro/room/events/RoomObjectHSLColorEnabledEvent';
+import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
 import { RoomZoomEvent } from '../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSessionChatEvent';
 import { RoomSessionDanceEvent } from '../../client/nitro/session/events/RoomSessionDanceEvent';
@@ -22,9 +23,6 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
-import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
-import { FurniChooserWidgetComponent } from './room/widgets/choosers/furni/component';
-import { UserChooserWidgetComponent } from './room/widgets/choosers/user/component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -50,7 +48,7 @@ import { UserChooserWidgetComponent } from './room/widgets/choosers/user/compone
         <nitro-room-component></nitro-room-component>
     </div>`
 })
-export class MainComponent implements OnInit, OnDestroy
+export class MainComponent implements OnInit, OnDestroy 
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
@@ -60,8 +58,13 @@ export class MainComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
-        private _ngZone: NgZone)
-    { }
+        private _ngZone: NgZone) 
+    {
+        this.onRoomEngineEvent          = this.onRoomEngineEvent.bind(this);
+        this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
+        this.onRoomEngineObjectEvent    = this.onRoomEngineObjectEvent.bind(this);
+        this.onRoomSessionEvent         = this.onRoomSessionEvent.bind(this);
+    }
 
     public ngOnInit(): void
     {
@@ -69,42 +72,42 @@ export class MainComponent implements OnInit, OnDestroy
         {
             if(Nitro.instance.roomEngine.events)
             {
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onInterstitialEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.OBJECTS_INITIALIZED, this.onInterstitialEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.NORMAL_MODE, this.onInterstitialEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.GAME_MODE, this.onInterstitialEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineEvent.bind(this));
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.OBJECTS_INITIALIZED, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.NORMAL_MODE, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.GAME_MODE, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent);
 
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REQUEST_MOVE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REQUEST_MOVE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
             {
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent.bind(this));
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent);
             }
         });
     }
@@ -115,37 +118,38 @@ export class MainComponent implements OnInit, OnDestroy
         {
             if(Nitro.instance.roomEngine.events)
             {
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent.bind(this));
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineDimmerStateEvent.ROOM_COLOR, this.onRoomEngineEvent);
 
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REQUEST_MOVE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent.bind(this));
-                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent.bind(this));
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.SELECTED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.DESELECTED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REQUEST_MOVE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REQUEST_ROTATE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_ENTER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.MOUSE_LEAVE, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.OPEN_WIDGET, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
             {
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent.bind(this));
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent.bind(this));
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ROOM_DATA, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent);
             }
         });
     }
@@ -177,8 +181,6 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_LINK, null);
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
-                    this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, FurniChooserWidgetComponent);
-                    this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, UserChooserWidgetComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
@@ -210,7 +212,7 @@ export class MainComponent implements OnInit, OnDestroy
                     {
                         this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
                     }
-                    else
+                    else 
                     {
                         this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
                     }
@@ -266,7 +268,7 @@ export class MainComponent implements OnInit, OnDestroy
             case RoomSessionEvent.ENDED:
                 if(this.roomComponent) this.roomComponent.endRoom();
 
-                this._ngZone.run(() =>
+                this._ngZone.run(() => 
                 {
                     this._landingViewVisible = event.openLandingView;
                 });
@@ -277,32 +279,32 @@ export class MainComponent implements OnInit, OnDestroy
         }
     }
 
-    public get landingViewVisible(): boolean
+    public get landingViewVisible(): boolean 
     {
         return this._landingViewVisible;
     }
 
-    public get avatarEditorVisible(): boolean
+    public get avatarEditorVisible(): boolean 
     {
         return this._settingsService.avatarEditorVisible;
     }
 
-    public get catalogVisible(): boolean
+    public get catalogVisible(): boolean 
     {
         return this._settingsService.catalogVisible;
     }
 
-    public get navigatorVisible(): boolean
+    public get navigatorVisible(): boolean 
     {
         return this._settingsService.navigatorVisible;
     }
 
-    public get inventoryVisible(): boolean
+    public get inventoryVisible(): boolean 
     {
         return this._settingsService.inventoryVisible;
     }
 
-    public get friendListVisible(): boolean
+    public get friendListVisible(): boolean 
     {
         return this._settingsService.friendListVisible;
     }
