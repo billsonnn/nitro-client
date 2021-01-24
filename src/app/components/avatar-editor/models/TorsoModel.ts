@@ -9,9 +9,9 @@ export class TorsoModel extends CategoryBaseModel
         super.init();
 
         this.addCategory(FigureData.CH);
-        this.addCategory(FigureData.CHEST_ACCESSORIES);
-        this.addCategory(FigureData.CC);
         this.addCategory(FigureData.CHEST_PRINTS);
+        this.addCategory(FigureData.CC);
+        this.addCategory(FigureData.CHEST_ACCESSORIES);
 
         this._isInitalized = true;
     }
