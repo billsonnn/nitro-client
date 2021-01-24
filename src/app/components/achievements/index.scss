@@ -39,4 +39,8 @@
             transform: scale(2);
         }
     }
+    
+    .greyscale {
+        filter: grayscale(1);
+    }
 }

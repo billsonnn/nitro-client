@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Achievement } from '../../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
@@ -13,6 +13,9 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
     @Input()
     public visible: boolean = false;
     
+    @ViewChild('progressBar')
+    public progressBar: ElementRef<HTMLElement>;
+
     constructor(
         private _settingsService: SettingsService,
         private _achivementsService: AchievementsService,
@@ -28,6 +31,31 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
     public selectCat(selected: Achievement[]): void
     { 
         this._achivementsService.selected = selected;
+    }
+
+    public getProgress(stringify:boolean = false): string
+    { 
+        if(!this.categories) return;
+
+        const cats: any = this.categories;
+
+        let total = 0;
+
+        let completed = 0;
+
+        for(const loc of cats)
+        { 
+            for(const loc2 of loc['achievements'])
+            { 
+                completed += (loc2._Str_7518) ? loc2.level : (loc2.level - 1);
+
+                total += loc2.totalLevels; 
+            }
+        }
+
+        if(stringify) return completed + '/' + total;
+        
+        return '';
     }
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string

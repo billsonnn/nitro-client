@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Achievement } from '../../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { AchievementsService } from '../../services/AchievementsService';
+import { BadgeBaseAndLevel } from '../../utils/badge-base-and-level';
 
 @Component({
     selector: 'nitro-achievements-category-component',
@@ -25,51 +26,69 @@ export class AchievementsCategoryComponent implements OnInit, OnDestroy
 
     public selectBadge(badge: Achievement)
     { 
+        console.log(badge);
         this._selectedBadge = badge;
     }
 
     public getBadgeImageUrl(badge: Achievement): string
     { 
-        if(badge.totalLevels > 1) return Nitro.instance.core.configuration.getValue('badge.asset.url').toString().replace('%badgename%', badge.badgeId.replace(/[0-9]/g, '') + ((badge.level - 1) > 0 ? badge.level - 1 : badge.level ));
-        return Nitro.instance.core.configuration.getValue('badge.asset.url').toString().replace('%badgename%', badge.badgeId);
+        if(badge.totalLevels > 1) return Nitro.instance.getConfiguration('badge.asset.url').toString().replace('%badgename%', badge.badgeId.replace(/[0-9]/g, '') + ((badge.level - 1) > 0 ? badge.level - 1 : badge.level ));
+        return Nitro.instance.getConfiguration('badge.asset.url').toString().replace('%badgename%', badge.badgeId);
+    }
+
+    private getText(texts: string[]): string
+    {
+        let b = null;
+
+        for(let index = 0; index < texts.length; index++) 
+        {
+            const item = texts[index];
+
+            b = Nitro.instance.localization.getValue(item);
+
+            if(b !== item) 
+            {
+                return b;
+            }
+        }
+
+        return '';
+    }
+
+    private _Str_16394(k:Achievement):string
+    {
+        return (k._Str_7518) ? k.badgeId : this._Str_18179(k.badgeId);
+    }
+
+    public _Str_18179(k: string): string
+    {
+        const _local_2: BadgeBaseAndLevel = new BadgeBaseAndLevel(k);
+        
+        _local_2.level--;
+
+        return _local_2.getBadgeId;
     }
 
     public getBadgeText(badge: Achievement, desc = false): string
     {
-        let str: string;
+        const str: string = this._Str_16394(badge);
 
-        const newLevel = badge.level - 1;
+        const badgeBAse = new BadgeBaseAndLevel(str);
 
-        if(!desc)
+        let charReplaced: string;
+
+        if(desc) 
         {
-            const param = 'badge_name_' + badge.badgeId.replace(/[0-9]/g, '') + newLevel.toString();
-
-            const param2 = 'badge_name_' + badge.badgeId.replace(/[0-9]/g, '');
-    
-            str = Nitro.instance.localization.getValueWithParameter(param, 'roman', this.getRomanNumeral(newLevel));
-
-            console.log(str);
-    
-            if(str == param)
-            {
-                str = Nitro.instance.localization.getValueWithParameter(param2, 'roman', this.getRomanNumeral(newLevel));
-            }
+            charReplaced = this.getText(['badge_desc_' + str, 'badge_desc_' + badgeBAse.base]); 
         }
-        else
-        { 
-            const param = 'badge_desc_' + badge.badgeId.replace(/[0-9]/g, '') + newLevel.toString();
-
-            const param2 = 'badge_desc_' + badge.badgeId.replace(/[0-9]/g, '');
-    
-            str = Nitro.instance.localization.getValueWithParameter(param, 'limit', badge._Str_25209.toString());
-    
-            if(str == param)
-            {
-                str = Nitro.instance.localization.getValueWithParameter(param2, 'limit', badge._Str_25209.toString());
-            }   
+        else 
+        {
+            charReplaced = this.getText(['badge_name_' + str, 'badge_name_' + badgeBAse.base]); 
         }
-
-        return str;
+            
+        return charReplaced
+            .replace('%roman%', this.getRomanNumeral(badgeBAse.level))
+            .replace('%limit%',badge._Str_24142.toString());
     }
 
     private getRomanNumeral(k: number): string

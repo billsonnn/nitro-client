@@ -1,9 +1,17 @@
-<div class="achievement-category-grid">
-    <div *ngFor="let ob of categories" class="rounded achievement-category-button px-1 py-2" (click)="selectCat(ob)" [ngClass]="[selectedCategory == ob.name ? 'bg-warning' : 'bg-secondary']">
-        <div class="align-self-center position-relative">
-            <img [src]="getCategoryImage(ob.name,ob.achievements)">
-            <div class="achievement-category-progress">{{ getCategoryProgress(ob.achievements) }}</div>
+<div class="nitro-achievement-categories-component">
+    <div class="achievement-category-grid">
+        <div *ngFor="let ob of categories" class="rounded achievement-category-button px-1 py-2" (click)="selectCat(ob)" [ngClass]="[selectedCategory == ob.name ? 'bg-warning' : 'bg-secondary']">
+            <div class="align-self-center position-relative">
+                <img [src]="getCategoryImage(ob.name,ob.achievements)">
+                <div class="achievement-category-progress">{{ getCategoryProgress(ob.achievements) }}</div>
+            </div>
         </div>
-        <div class="text-center small d-none">{{ 'quests.' + ob.key + '.name' | translate }}</div>
+    </div>
+    <div class="d-block">
+        <div class="achievement-progress-bar">
+            <div class="achievement-progress-bar-inner" [ngStyle]="{width: getProgress()}">
+            </div>
+            <div class="achievement-progress-bar-content">{{ getProgress(true) }}</div>
+        </div>
     </div>
 </div>
