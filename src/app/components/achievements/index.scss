@@ -23,4 +23,20 @@
             
         }
     }
+
+    .achievement-category-badge-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 52px);
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+    }
+
+    .badge_preview {
+        width:100px;
+        height:100px;
+
+        img {
+            transform: scale(2);
+        }
+    }
 }

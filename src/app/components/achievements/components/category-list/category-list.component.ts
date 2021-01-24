@@ -32,31 +32,29 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
     {
-        if (icon) return Nitro.instance.core.configuration.getValue("c.images.url") + `/quests/achicon_${cat}.png`;
+        if(icon) return Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achicon_${cat}.png`;
         
-        let k: number = 0;
+        let k = 0;
 
-        let loc: Achievement;
-        
-        for (loc of achievements)
+        for(const loc of achievements)
         { 
             k = k + ((loc._Str_7518) ? loc.level : (loc.level - 1));
         }
 
-        let isActive = ((k > 0) ? "active" : "inactive");
+        const isActive = ((k > 0) ? 'active' : 'inactive');
 
-        return Nitro.instance.core.configuration.getValue("c.images.url") + `/quests/achcategory_${cat}_${isActive}.png`;
+        return Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}_${isActive}.png`;
     }
 
     public getCategoryProgress(achievements: Achievement[]): string
     {
-        let completed: number = 0;
+        let completed = 0;
 
-        let total: number = 0;
+        let total = 0;
 
-        for (let loc of achievements)
+        for(const loc of achievements)
         { 
-            if (loc._Str_7518)
+            if(loc._Str_7518)
             { 
                 completed = completed + 1 + loc.level;
             }
@@ -64,11 +62,16 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
             total = total + loc.totalLevels;
         }
 
-        return completed + "/" + total;
+        return completed + '/' + total;
     }
 
     public get categories(): Object
     {   
         return this._achivementsService.achievements;
+    }
+
+    public get selectedCategory(): string
+    { 
+        return this._achivementsService.selected['name'];
     }
 }

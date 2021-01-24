@@ -13,9 +13,9 @@ export class AchievementsService implements OnDestroy
 
     private _achievements: Object = [];
 
-    private _selectedCategory: Achievement[];
+    private _selectedCategory: Object = [];
 
-    private _categories: Array<string> = [];
+    private _categories: Map<string,Achievement[]> = new Map<string,Achievement[]>();
 
     constructor(
         private _settingsService: SettingsService,
@@ -38,7 +38,7 @@ export class AchievementsService implements OnDestroy
                 new AchievementsEvent(this.onAchievementsMessageEvent.bind(this))
             ];
 
-            for (const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
             
         });
         
@@ -61,25 +61,26 @@ export class AchievementsService implements OnDestroy
 
     public onAchievementsMessageEvent(event: AchievementsEvent): void
     { 
-        if (!event) return;
+        if(!event) return;
 
         const parser = event.getParser();
 
-        const catList: Achievement[] = [];
+        const arr = [];
 
         parser.achievements.forEach(el =>
-        { 
-            if (this._categories.indexOf(el.category) == -1) this._categories.push(el.category);
+        {
+            let ind = arr.findIndex(e => e.name === el.category);
 
-            if (!catList[el.category]) catList[el.category] = [];
+            if(ind == -1) arr.push({ name: el.category, achievements: [] }); 
+            
+            ind = arr.findIndex(e => e.name === el.category);
 
-            catList[el.category].push(el);
-
-        })
+            arr[ind].achievements.push(el);
+        });
         
-        this._achievements = catList;
+        this._achievements = arr;
 
-        this._selectedCategory = this.achievements[Object.keys(this.achievements)[0]];
+        this._selectedCategory = arr[0];
     }
 
     public get achievements(): Object
@@ -87,14 +88,14 @@ export class AchievementsService implements OnDestroy
         return this._achievements;
     }
 
-    public set selected(select: Achievement[])
+    public set selected(select: Object)
     {
         this._selectedCategory = select;
     }
 
-    public get selected(): Achievement[]
+    public get selected(): Object
     { 
-        if (!this._achievements) return null;
+        if(!this._achievements) return null;
 
         return this._selectedCategory;
     }

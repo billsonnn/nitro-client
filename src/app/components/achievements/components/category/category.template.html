@@ -1,1 +1,19 @@
-<div *ngFor="let ob of category" class="rounded" [ngClass]="[selectedBadge == ob.badgeId ? 'bg-emperor' : 'bg-secondary']" (click)="selectBadge(ob.badgeId)">{{ ob.badgeId }}</div>
+<div class="achievement-category d-flex flex-column h-100">
+    <div class="text-center small">{{ 'quests.' + categoryTitle + '.name' | translate }}</div>
+    <perfect-scrollbar class="results-container position-relative w-100 pr-1" style="min-height: 155px;max-height: 155px;height: 155px;">
+        <div class="achievement-category-badge-grid">
+            <div *ngFor="let ob of category" class="rounded d-flex justify-content-center" [ngClass]="[selectedBadge.badgeId == ob.badgeId ? 'bg-warning' : 'bg-secondary']" (click)="selectBadge(ob)">
+                <img class="d-block align-self-center m-1"[src]="getBadgeImageUrl(ob)"/>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <div class="bg-secondary w-100 p-1 rounded h-100 d-flex flex-row" *ngIf="selectedBadge">
+        <div class="badge_preview flex-shrink-0 justify-content-center d-flex">
+            <img class="badge_preview_image align-self-center" [src]="getBadgeImageUrl(selectedBadge)"/>
+        </div>
+        <div class="badge_info w-100 small">
+            <h5 class="mb-0">{{ getBadgeText(selectedBadge) }}</h5>
+            <span>{{ getBadgeText(selectedBadge,true) }}</span>
+        </div>
+    </div>
+</div>
