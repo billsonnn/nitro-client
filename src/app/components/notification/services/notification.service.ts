@@ -31,24 +31,29 @@ export class NotificationService implements OnDestroy
 
     private registerMessages(): void
     {
-        if(this._messages) this.unregisterMessages();
+        this._ngZone.runOutsideAngular(() =>
+        {
+            if(this._messages) this.unregisterMessages();
 
-        this._messages = [
-            new HabboBroadcastMessageEvent(this.onHabboBroadcastMessageEvent.bind(this)),
-            new ModeratorMessageEvent(this.onModeratorMessageEvent.bind(this)),
-            new MOTDNotificationEvent(this.onMOTDNotificationEvent.bind(this)),
-            new NotificationDialogMessageEvent(this.onNotificationDialogMessageEvent.bind(this))
-        ];
+            this._messages = [
+                new HabboBroadcastMessageEvent(this.onHabboBroadcastMessageEvent.bind(this)),
+                new ModeratorMessageEvent(this.onModeratorMessageEvent.bind(this)),
+                new MOTDNotificationEvent(this.onMOTDNotificationEvent.bind(this)),
+                new NotificationDialogMessageEvent(this.onNotificationDialogMessageEvent.bind(this))
+            ];
 
-        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        });
     }
 
     private unregisterMessages(): void
     {
-        if(this._messages && this._messages.length)
+        this._ngZone.runOutsideAngular(() =>
         {
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
-        }
+
+            this._messages = [];
+        });
     }
 
     private onHabboBroadcastMessageEvent(event: HabboBroadcastMessageEvent): void

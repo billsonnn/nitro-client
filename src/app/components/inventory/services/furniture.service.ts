@@ -39,6 +39,8 @@ export class InventoryFurnitureService implements OnDestroy
         private _inventoryService: InventoryService,
         private _ngZone: NgZone)
     {
+        this.onRoomEngineObjectPlacedEvent = this.onRoomEngineObjectPlacedEvent.bind(this);
+
         this.registerMessages();
     }
 
@@ -51,7 +53,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             this._messages = [
                 new FurnitureListAddOrUpdateEvent(this.onFurnitureListAddOrUpdateEvent.bind(this)),
@@ -69,7 +71,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 

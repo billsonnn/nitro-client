@@ -12,6 +12,8 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         super();
 
         this._definitions = new AdvancedMap();
+
+        this.onConfigurationLoaded = this.onConfigurationLoaded.bind(this);
     }
 
     protected onInit(): void
@@ -35,8 +37,8 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         {
             request.open('GET', url);
 
-            request.onloadend   = this.onConfigurationLoaded.bind(this);
-            request.onerror     = this.onConfigurationFailed.bind(this);
+            request.onloadend   = this.onConfigurationLoaded;
+            request.onerror     = this.onConfigurationFailed;
 
             request.send();
         }

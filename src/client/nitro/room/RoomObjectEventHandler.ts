@@ -13,8 +13,8 @@ import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from '../communication/messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { PlaceBotComposer } from '../communication/messages/outgoing/room/engine/PlaceBotComposer';
+import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -89,7 +89,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this._whereYouClickIsWhereYouGo = true;
         this._objectPlacementSource     = null;
 
-        this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
+        this.onRoomEngineObjectEvent = this.onRoomEngineObjectEvent.bind(this);
+
+        this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
     }
 
     public dispose(): void
@@ -99,7 +101,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             this._eventIds = null;
         }
 
-        this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
+        this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
 
         this._roomEngine = null;
     }

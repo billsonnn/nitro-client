@@ -196,6 +196,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomDraggingAlwaysCenters         = false;
         this._roomAllowsDragging                = true;
         this._badgeListenerObjects              = new Map();
+
+        this.runVisibilityUpdate    = this.runVisibilityUpdate.bind(this);
+        this.processRoomObjectEvent = this.processRoomObjectEvent.bind(this);
+        this.onRoomSessionEvent     = this.onRoomSessionEvent.bind(this);
+        this.onBadgeImageReadyEvent = this.onBadgeImageReadyEvent.bind(this);
     }
 
     public onInit(): void
@@ -205,7 +210,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._imageObjectIdBank     = new NumberBank(1000);
         this._thumbnailObjectIdBank = new NumberBank(1000);
 
-        this._logicFactory.registerEventFunction(this.processRoomObjectEvent.bind(this));
+        this._logicFactory.registerEventFunction(this.processRoomObjectEvent);
 
         if(this._roomManager)
         {
@@ -225,13 +230,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(this._roomSessionManager)
         {
-            this._roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            this._roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            this._roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            this._roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
         }
 
         Nitro.instance.ticker.add(this.update, this);
 
-        document.addEventListener('visibilitychange', this.runVisibilityUpdate.bind(this));
+        document.addEventListener('visibilitychange', this.runVisibilityUpdate);
     }
 
     public onDispose(): void
@@ -243,7 +248,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             this.removeRoomInstance(key);
         }
 
-        document.removeEventListener('visibilitychange', this.runVisibilityUpdate.bind(this));
+        document.removeEventListener('visibilitychange', this.runVisibilityUpdate);
 
         Nitro.instance.ticker.remove(this.update, this);
 
@@ -253,8 +258,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         
         if(this._roomSessionManager)
         {
-            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            this._roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
         }
     }
 
@@ -2302,7 +2307,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
             if(!this._badgeListenerObjects.size)
             {
-                this._sessionDataManager.events.addEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent.bind(this));
+                this._sessionDataManager.events.addEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
             }
 
             let listeners = this._badgeListenerObjects.get(badgeId);
@@ -2344,7 +2349,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(!this._badgeListenerObjects.size)
         {
-            this._sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent.bind(this));
+            this._sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
         }
     }
 

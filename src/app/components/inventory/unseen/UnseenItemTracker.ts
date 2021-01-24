@@ -9,7 +9,6 @@ export class UnseenItemTracker implements IUnseenItemTracker
     private _communication: INitroCommunicationManager;
     private _inventoryService: InventoryService;
     private _unseenItems: number[][];
-
     private _messages: IMessageEvent[];
 
     constructor(k: INitroCommunicationManager, inventoryService: InventoryService)
@@ -17,10 +16,9 @@ export class UnseenItemTracker implements IUnseenItemTracker
         this._communication     = k;
         this._inventoryService  = inventoryService;
         this._unseenItems       = [];
+        this._messages          = [];
 
         this.registerMessages();
-
-        this._communication.registerMessageEvent(new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this)));
     }
 
     public dispose(): void
@@ -33,6 +31,8 @@ export class UnseenItemTracker implements IUnseenItemTracker
 
     private registerMessages(): void
     {
+        this.unregisterMessages();
+
         this._messages = [
             new UnseenItemsEvent(this.onUnseenItemsEvent.bind(this))
         ];
@@ -43,6 +43,8 @@ export class UnseenItemTracker implements IUnseenItemTracker
     private unregisterMessages(): void
     {
         for(const message of this._messages) this._communication.removeMessageEvent(message);
+
+        this._messages = [];
     }
 
     public _Str_8813(k: number): boolean

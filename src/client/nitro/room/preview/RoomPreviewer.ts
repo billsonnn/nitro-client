@@ -51,11 +51,14 @@ export class RoomPreviewer
         this._previewRoomId = RoomId.makeRoomPreviewerId(roomId);
         this._addViewOffset = new Point(0, 0);
 
+        this.onRoomObjectAdded                  = this.onRoomObjectAdded.bind(this);
+        this.onRoomInitializedonRoomInitialized = this.onRoomInitializedonRoomInitialized.bind(this);
+
         if(this.isRoomEngineReady && this._roomEngine.events)
         {
-            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized.bind(this));
+            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded);
+            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded);
+            this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized);
         }
 
         this.createRoomForPreview();
@@ -67,9 +70,9 @@ export class RoomPreviewer
 
         if(this.isRoomEngineReady && this._roomEngine.events)
         {
-            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized.bind(this));
+            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded);
+            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded);
+            this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized);
         }
     }
 

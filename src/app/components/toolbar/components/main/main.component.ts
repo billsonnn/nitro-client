@@ -38,14 +38,16 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private sessionService: SessionService,
         private settingsService: SettingsService,
         private ngZone: NgZone) 
-    {}
+    {
+        this.onNitroToolbarEvent = this.onNitroToolbarEvent.bind(this);
+    }
 
     public ngOnInit(): void
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
-            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent);
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent);
         });
     }
 
@@ -53,8 +55,8 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
-            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent);
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent);
         });
     }
 
