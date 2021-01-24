@@ -6,6 +6,7 @@ import { RoomEngineEvent } from '../../client/nitro/room/events/RoomEngineEvent'
 import { RoomEngineObjectEvent } from '../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectHSLColorEnabledEvent } from '../../client/nitro/room/events/RoomObjectHSLColorEnabledEvent';
+import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
 import { RoomZoomEvent } from '../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSessionChatEvent';
 import { RoomSessionDanceEvent } from '../../client/nitro/session/events/RoomSessionDanceEvent';
@@ -95,6 +96,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -136,6 +138,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.CLOSE_WIDGET, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)

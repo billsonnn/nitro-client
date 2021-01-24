@@ -12,6 +12,8 @@ import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
+import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
+import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
@@ -136,6 +138,18 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                             {
                                 this._container.sessionDataManager.sendSpecialCommandMessage(':pickall');
                             });
+                            return null;
+                        case ':furni':
+                            if(this._container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964)
+                            {
+                                this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_FURNI_CHOOSER));
+                            }
+                            return null;
+                        case ':chooser':
+                            if(this.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964 && this._container.roomSession.controllerLevel >= RoomControllerLevel.GUEST)
+                            {
+                                this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_USER_CHOOSER));
+                            }
                             return null;
                         case ':client':
                         case ':nitro':
