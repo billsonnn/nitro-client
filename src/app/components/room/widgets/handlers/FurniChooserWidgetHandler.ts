@@ -1,17 +1,17 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
+import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomObjectItem } from '../events/RoomObjectItem';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
-import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import * as sorting from '../../../../../utils/sorting';
+import { RoomObjectItem } from '../events/RoomObjectItem';
+import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
+import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 
 export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 {
@@ -68,8 +68,6 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 
         this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_FURNI_CHOOSER_CONTENT, furniInRoom, false));
     }
-
-
 
     private processWallFurni(roomId: number, furniInRoom: any[])
     {

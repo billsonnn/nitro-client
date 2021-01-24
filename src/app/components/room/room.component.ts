@@ -43,13 +43,13 @@ import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomVi
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
+import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
-import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 
 @Component({
