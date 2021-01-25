@@ -45,6 +45,11 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._pendingServerMessages = [];
 
         this._isAuthenticated       = false;
+
+        this.onOpen     = this.onOpen.bind(this);
+        this.onClose    = this.onClose.bind(this);
+        this.onError    = this.onError.bind(this);
+        this.onMessage  = this.onMessage.bind(this);
     }
 
     public init(socketUrl: string): void
@@ -93,20 +98,20 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._dataBuffer    = new ArrayBuffer(0);
         this._socket        = new WebSocket(socketUrl);
 
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage.bind(this));
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage);
     }
 
     private destroySocket(): void
     {
         if(!this._socket) return;
 
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage.bind(this));
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage);
 
         if(this._socket.readyState === WebSocket.OPEN) this._socket.close();
 

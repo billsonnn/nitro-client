@@ -12,12 +12,12 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
 
     private _state: number;
     private _libraryName: string;
-    private _revision: number;
+    private _revision: string;
     private _downloadUrl: string;
     private _assets: IAssetManager;
     private _animation: any;
 
-    constructor(id: string, revision: number, assets: IAssetManager, assetUrl: string)
+    constructor(id: string, revision: string, assets: IAssetManager, assetUrl: string)
     {
         super();
 
@@ -29,7 +29,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
         this._animation     = null;
 
         this._downloadUrl = this._downloadUrl.replace(/%libname%/gi, this._libraryName);
-        //this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision.toString());
+        this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision);
 
         const asset = this._assets.getCollection(this._libraryName);
 

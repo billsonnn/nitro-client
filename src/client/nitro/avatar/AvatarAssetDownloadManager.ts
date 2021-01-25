@@ -47,9 +47,12 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._libraryNames          = [];
         this._isReady               = false;
 
+        this.onLibraryLoaded        = this.onLibraryLoaded.bind(this);
+        this.onAvatarRenderReady    = this.onAvatarRenderReady.bind(this);
+
         this.loadFigureMap();
 
-        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady.bind(this));
+        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady);
     }
 
     private loadFigureMap(): void
@@ -99,7 +102,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
             if(!library) continue;
 
             const id        = (library.id as string);
-            const revision  = (library.revision as number);
+            const revision  = (library.revision || '');
 
             if(this._libraryNames.indexOf(id) >= 0) continue;
 
@@ -107,7 +110,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, Nitro.instance.getConfiguration<string>('avatar.asset.url'));
 
-            downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
+            downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded);
 
             for(const part of library.parts)
             {
