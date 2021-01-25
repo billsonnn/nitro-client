@@ -89,7 +89,9 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this._whereYouClickIsWhereYouGo = true;
         this._objectPlacementSource     = null;
 
-        this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
+        this.onRoomEngineObjectEvent = this.onRoomEngineObjectEvent.bind(this);
+
+        this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
     }
 
     public dispose(): void
@@ -99,7 +101,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             this._eventIds = null;
         }
 
-        this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent.bind(this));
+        this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
 
         this._roomEngine = null;
     }

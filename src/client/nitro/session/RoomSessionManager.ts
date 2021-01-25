@@ -40,6 +40,8 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this._sessionStarting   = false;
         this._viewerSession     = null;
+
+        this.onRoomEngineEvent = this.onRoomEngineEvent.bind(this);
     }
 
     protected onInit(): void
@@ -48,12 +50,12 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this.processPendingSession();
 
-        this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
+        this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent);
     }
 
     protected onDispose(): void
     {
-        this._roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
+        this._roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent);
 
         super.onDispose();
     }

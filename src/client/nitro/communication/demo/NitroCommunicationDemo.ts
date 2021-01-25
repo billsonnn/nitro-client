@@ -33,6 +33,11 @@ export class NitroCommunicationDemo extends NitroManager
         this._didConnect    = false;
 
         this._pongInterval  = null;
+
+        this.onConnectionOpenedEvent    = this.onConnectionOpenedEvent.bind(this);
+        this.onConnectionClosedEvent    = this.onConnectionClosedEvent.bind(this);
+        this.onConnectionErrorEvent     = this.onConnectionErrorEvent.bind(this);
+        this.sendPong                   = this.sendPong.bind(this);
     }
 
     protected onInit(): void
@@ -41,9 +46,9 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(connection)
         {
-            connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-            connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
-            connection.addEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent);
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent);
+            connection.addEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent);
         }
 
         this._communication.registerMessageEvent(new ClientPingEvent(this.onClientPingEvent.bind(this)));
@@ -56,9 +61,9 @@ export class NitroCommunicationDemo extends NitroManager
 
         if(connection)
         {
-            connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-            connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
-            connection.removeEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent);
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent);
+            connection.removeEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent);
         }
 
         this._sso           = null;
@@ -172,7 +177,7 @@ export class NitroCommunicationDemo extends NitroManager
     {
         this.stopPonging();
 
-        this._pongInterval = setInterval(this.sendPong.bind(this), Nitro.instance.getConfiguration<number>('communication.pong.interval.ms', 20000));
+        this._pongInterval = setInterval(this.sendPong, Nitro.instance.getConfiguration<number>('communication.pong.interval.ms', 20000));
     }
 
     private stopPonging(): void

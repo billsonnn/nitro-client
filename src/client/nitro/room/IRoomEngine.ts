@@ -45,6 +45,7 @@ export interface IRoomEngine extends INitroManager
     removeRoomObjectFloor(roomId: number, objectId: number, userId?: number, _arg_4?: boolean): void;
     removeRoomObjectWall(roomId: number, objectId: number, userId?: number): void;
     removeRoomObjectUser(roomId: number, objectId: number): void;
+    getRoomObjectCount(roomId: number, categoryId: number): number;
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): Point;
     getGenericRoomObjectImage(type: string, value: string, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, objectData?: IObjectData, state?: number, frameCount?: number, posture?: string, originalId?: number): ImageResult;

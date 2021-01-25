@@ -5,16 +5,23 @@ import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureChangeStateWhenStepOnLogic extends FurnitureLogic
 {
+    constructor()
+    {
+        super();
+
+        this.onRoomToObjectOwnAvatarMoveEvent = this.onRoomToObjectOwnAvatarMoveEvent.bind(this);
+    }
+
     public initialize(asset: IAssetData): void
     {
         super.initialize(asset);
 
-        if(this.eventDispatcher) this.eventDispatcher.addEventListener(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, this.onRoomToObjectOwnAvatarMoveEvent.bind(this));
+        if(this.eventDispatcher) this.eventDispatcher.addEventListener(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, this.onRoomToObjectOwnAvatarMoveEvent);
     }
 
     public tearDown(): void
     {
-        if(this.eventDispatcher) this.eventDispatcher.removeEventListener(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, this.onRoomToObjectOwnAvatarMoveEvent.bind(this));
+        if(this.eventDispatcher) this.eventDispatcher.removeEventListener(RoomToObjectOwnAvatarMoveEvent.ROAME_MOVE_TO, this.onRoomToObjectOwnAvatarMoveEvent);
 
         super.tearDown();
     }

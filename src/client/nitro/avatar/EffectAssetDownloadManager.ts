@@ -46,9 +46,12 @@ export class EffectAssetDownloadManager extends EventDispatcher
         this._libraryNames          = [];
         this._isReady               = false;
 
+        this.onLibraryLoaded        = this.onLibraryLoaded.bind(this);
+        this.onAvatarRenderReady    = this.onAvatarRenderReady.bind(this);
+
         this.loadEffectMap();
 
-        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady.bind(this));
+        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady);
     }
 
     private loadEffectMap(): void
@@ -99,7 +102,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
             const id        = (effect.id as string);
             const lib       = (effect.lib as string);
-            const revision  = (effect.revision as number);
+            const revision  = (effect.revision || '');
 
             if(this._libraryNames.indexOf(lib) >= 0) continue;
 
@@ -107,7 +110,7 @@ export class EffectAssetDownloadManager extends EventDispatcher
 
             const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, Nitro.instance.getConfiguration<string>('avatar.asset.effect.url'));
 
-            downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
+            downloadLibrary.addEventListener(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded);
 
             let existing = this._effectMap.get(id);
 
