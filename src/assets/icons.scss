@@ -339,5 +339,16 @@ i {
                 transform: rotate(360deg);
             }
         }
+
+        &.icon-catalogue-hc_small {
+            height:17px;
+            width:31px;
+            background-image: url('^assets/images/catalog/hc_small.png');
+        }
+        &.icon-catalogue-hc_big {
+            width:68px;
+            height:40px;
+            background: url('^assets/images/catalog/hc_big.png');
+        }
     }
 }
