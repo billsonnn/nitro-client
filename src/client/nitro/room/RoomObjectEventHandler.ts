@@ -13,8 +13,8 @@ import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from '../communication/messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { PlaceBotComposer } from '../communication/messages/outgoing/room/engine/PlaceBotComposer';
+import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
 import { FurniturePlaceComposer } from '../communication/messages/outgoing/room/furniture/FurniturePlaceComposer';
@@ -1022,7 +1022,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         let _local_11   = sizeX;
         let _local_12   = sizeY;
         let _local_13   = 0;
-        let _local_14   = Math.floor(((_local_6.x + 45) % 360) / 90);
+        let _local_14   = (Math.trunc((Math.trunc(_local_6.x + 45) % 360) / 90));
 
         if((_local_14 === 1) || (_local_14 === 3))
         {
@@ -1032,7 +1032,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             sizeY = _local_13;
         }
 
-        _local_14 = Math.floor(((_arg_4.x + 45) % 360) / 90);
+        _local_14 = Math.trunc((Math.trunc(_arg_4.x + 45) % 360) / 90);
 
         if((_local_14 === 1) || (_local_14 === 3))
         {
@@ -1615,18 +1615,18 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         let sizeX = object.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_X);
         let sizeY = object.model.getValue<number>(RoomObjectVariable.FURNITURE_SIZE_Y);
 
-        let _local_8    = sizeX;
-        let _local_9    = sizeY;
-
         if(sizeX < 1) sizeX = 1;
 
         if(sizeY < 1) sizeY = 1;
+        
+        let _local_8    = sizeX;
+        let _local_9    = sizeY;
 
-        let _local_11 = ((Math.trunc((goalDirection.x + 45)) % 360) / 90);
+        let _local_11 = (Math.trunc((Math.trunc((goalDirection.x + 45)) % 360) / 90));
 
         if((_local_11 === 1) || (_local_11 === 3)) [ sizeX, sizeY ] = [ sizeY, sizeX ];
 
-        _local_11 = ((Math.trunc((direction.x + 45)) % 360) / 90);
+        _local_11 = (Math.trunc((Math.trunc((direction.x + 45)) % 360) / 90));
 
         if(((_local_11 === 1) || (_local_11 === 3))) [ _local_8, _local_9 ] = [ _local_9, _local_8 ];
 
@@ -1635,8 +1635,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             const alwaysStackable = (object.model.getValue<number>(RoomObjectVariable.FURNITURE_ALWAYS_STACKABLE) === 1);
 
             if(stackingHeightMap.validateLocation(location.x, location.y, sizeX, sizeY, location.x, location.y, _local_8, _local_9, alwaysStackable, location.z)) return true;
-
-            return false;
         }
 
         return false;
