@@ -102,4 +102,9 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
     { 
         return this._achivementsService.selected['name'];
     }
+
+    public get achievementScore(): number
+    { 
+        return this._achivementsService.achievementScore;
+    }
 }

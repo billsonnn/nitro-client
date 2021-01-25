@@ -7,7 +7,7 @@
             </div>
         </div>
     </perfect-scrollbar>
-    <div class="bg-secondary w-100 p-1 rounded h-100 d-flex flex-row" *ngIf="selectedBadge">
+    <div class="bg-secondary mb-auto w-100 p-1 rounded d-flex flex-row" *ngIf="selectedBadge">
         <div class="badge_preview flex-shrink-0 justify-content-center d-flex">
             <img class="badge_preview_image align-self-center" [ngClass]="[selectedBadge._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(selectedBadge)"/>
         </div>
