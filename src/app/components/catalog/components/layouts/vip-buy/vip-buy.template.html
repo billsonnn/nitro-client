@@ -14,7 +14,7 @@
                         <i class="icon icon-catalogue-hc_small mr-2 d-block align-self-center"></i>
                         <span>{{ getOfferText(vipItem.productCode) }}</span>
                     </div>
-                    <div class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row justify-content-between px-2 py-1">
                         <div class="align-self-center">
                             <b *ngIf="vipItem.priceCredits">{{ vipItem.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)"></b>
                             <b *ngIf="vipItem.priceActivityPoints"> + {{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>
