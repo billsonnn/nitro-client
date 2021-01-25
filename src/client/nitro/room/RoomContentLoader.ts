@@ -578,20 +578,18 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
                 {
+                    const name = this.getAssetAliasName(type);
+
+                    let assetUrl = (icon ? this.getAssetUrlWithFurniIconBase(name) : this.getAssetUrlWithFurniBase(type));
+
                     if(icon)
                     {
-                        const name = this.getAssetAliasName(type);
-
-                        let assetUrl = this.getAssetUrlWithFurniIconBase(name);
-
                         const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null));
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
-
-                        return [ assetUrl ];
                     }
 
-                    return [ this.getAssetUrlWithFurniBase(type) ];
+                    return [ assetUrl ];
                 }
 
                 if(category === RoomObjectCategory.UNIT)

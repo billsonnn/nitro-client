@@ -36,9 +36,9 @@
                 style="z-index: 1;">
                 <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedGroup.name }}</div>
                 <div class="btn-group-vertical w-100">
-                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-primary w-100"
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
-                    <button *ngIf="tradeRunning" type="button" class="btn btn-primary w-100"
+                    <button *ngIf="tradeRunning" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{
                         ('inventory.trading.offer') | translate }}</button>
                 </div>
