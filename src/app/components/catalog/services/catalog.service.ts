@@ -7,6 +7,7 @@ import { CatalogPagesEvent } from '../../../../client/nitro/communication/messag
 import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
 import { CatalogPurchaseFailedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseFailedEvent';
 import { CatalogPurchaseUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRedeemVoucherComposer';
 import { CatalogSearchEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSearchEvent';
 import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
@@ -205,7 +206,7 @@ export class CatalogService implements OnDestroy
             this._catalogRoot       = null;
             this._activePage        = null;
             this._activePageData    = null;
-    
+
             if(this._component) this._component.reset();
 
             if(this._settingsService.catalogVisible)
@@ -234,7 +235,7 @@ export class CatalogService implements OnDestroy
     public requestPage(page: CatalogPageData): void
     {
         if(!page || !this.canSelectPage(page)) return;
-        
+
         this._activePageData = page;
 
         if(page.pageId === -1) return;
@@ -299,12 +300,19 @@ export class CatalogService implements OnDestroy
 
         return ((assetUrl && assetUrl[0]) || null);
     }
-    
+
     public purchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number, extra: string = null): void
     {
         if(!page || !offer || !quantity) return;
 
         Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(page.pageId, offer.offerId, extra, quantity));
+    }
+
+    public redeemVoucher(voucherCode: string)
+    {
+        if(!voucherCode || voucherCode.trim().length === 0) return;
+
+        Nitro.instance.communication.connection.send(new CatalogRedeemVoucherComposer(voucherCode));
     }
 
     public manuallyCollapsePage(page: CatalogPageData): void
