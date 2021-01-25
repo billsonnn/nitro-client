@@ -7,6 +7,9 @@ import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/name/component
 import { RoomAvatarInfoOwnAvatarComponent } from './widgets/avatarinfo/ownavatar/component';
 import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
+import { ChooserWidgetBaseComponent } from './widgets/choosers/base/component';
+import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component';
+import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
@@ -17,9 +20,7 @@ import { RoomInfoStandRentableBotComponent } from './widgets/infostand/component
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import { ChooserWidgetBaseComponent } from './widgets/choosers/base/component';
-import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component';
-import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
+import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
         FurniChooserWidgetComponent,
-        UserChooserWidgetComponent
+        UserChooserWidgetComponent,
+        RoomToolsMainComponent
     ],
     declarations: [
         RoomComponent,
@@ -67,7 +69,8 @@ import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
         FurniChooserWidgetComponent,
-        UserChooserWidgetComponent
+        UserChooserWidgetComponent,
+        RoomToolsMainComponent
     ]
 })
 export class RoomModule

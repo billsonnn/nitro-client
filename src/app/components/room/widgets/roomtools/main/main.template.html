@@ -1,0 +1,14 @@
+<div class="nitro-room-tools-component">
+    <h1>TEST</h1>
+    <!-- <ng-template #componentContainer></ng-template> -->
+</div>
+
+<div class="nitro-room-tools-bar-component" [ngClass]="{'open' : open}">
+    <div class="room-tools-bar-container">
+        <div>{{ roomName }}</div>
+        <div class="room-owner">{{ roomOwner }}</div>
+    </div>
+    <div class="room-tools-bar-handle" (click)="toggle()">
+        <i class="fas" [ngClass]="open ? 'fa-chevron-left' : 'fa-chevron-right'"></i>
+    </div>
+</div>
