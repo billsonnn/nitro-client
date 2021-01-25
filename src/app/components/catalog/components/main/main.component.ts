@@ -12,6 +12,7 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -34,6 +35,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _purchaseOfferPage: CatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
+    private _purchaseVipSubscription: CatalogClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
@@ -109,6 +111,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = null;
         this._purchaseOfferQuantity = 1;
         this._purchaseOfferExtra    = null;
+        this._purchaseVipSubscription = null;
+
     }
 
     private prepareCatalog(): void
@@ -320,6 +324,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOfferExtra    = extra;
     }
 
+    public confirmVipSubscription(subscription: CatalogClubOfferData): void
+    {
+        this._purchaseVipSubscription = subscription;
+    }
+
     public get roomPreviewer(): RoomPreviewer
     {
         return this._roomPreviewer;
@@ -373,5 +382,10 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseCompleted(): boolean
     {
         return this._purchaseCompleted;
+    }
+
+    public get purchaseVipSubscription(): CatalogClubOfferData
+    {
+        return this._purchaseVipSubscription;
     }
 }

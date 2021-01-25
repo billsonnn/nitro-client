@@ -15,6 +15,7 @@ import { CatalogNavigationSetComponent } from './components/navigation-set/navig
 import { CatalogNavigationComponent } from './components/navigation/navigation.component';
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip-subscription/confirm-vip-subscription.component';
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import { CatalogService } from './services/catalog.service';
     ],
     exports: [
         CatalogConfirmPurchaseComponent,
+        CatalogConfirmVipSubscriptionComponent,
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,
@@ -41,6 +43,7 @@ import { CatalogService } from './services/catalog.service';
     ],
     declarations: [
         CatalogConfirmPurchaseComponent,
+        CatalogConfirmVipSubscriptionComponent,
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,
@@ -56,5 +59,5 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutVipBuyComponent
     ]
 })
-export class CatalogModule 
+export class CatalogModule
 {}
