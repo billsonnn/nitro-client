@@ -8,10 +8,12 @@ import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/Room
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomToolsMainComponent } from '../roomtools/main/main.component';
+import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
     private _container: IRoomWidgetHandlerContainer;
+    private _communicationManager: INitroCommunicationManager;
     private _widget: RoomToolsMainComponent;
     private _messages: IMessageEvent[];
 
@@ -21,9 +23,14 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     {
         this._container  = null;
         this._widget     = null;
-        this._messages   = [];
+
+        this._communicationManager = Nitro.instance.communication;
+        this._messages = [
+            new RoomInfoEvent(this.onRoomInfoEvent.bind(this))
+        ];
+
+        this.registerMessages();
         this._disposed   = false;
-        Nitro.instance.communication.registerMessageEvent(new RoomInfoEvent(this.onRoomInfoEvent.bind(this)));
     }
 
     public set widget(widget: RoomToolsMainComponent)
@@ -41,9 +48,16 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(this._disposed) return;
 
         this._container  = null;
+        this._communicationManager = null;
         this._widget     = null;
-        this._messages   = [];
-        this._disposed   = false;
+
+        for(const message of this._messages)
+        {
+            Nitro.instance.communication.removeMessageEvent(message);
+        }
+        this._messages = [];
+
+        this._disposed   = true;
     }
 
     public update(): void
@@ -117,12 +131,23 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         {
             this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
 
-            for(const message of this._messages) container.connection.addMessageEvent(message);
+            for(const message of this._messages)
+            {
+                container.connection.addMessageEvent(message);
+            }
         }
     }
 
     public get disposed(): boolean
     {
         return this._disposed;
+    }
+
+    private registerMessages(): void
+    {
+        for(const message of this._messages)
+        {
+            this._communicationManager.registerMessageEvent(message);
+        }
     }
 }
