@@ -13,6 +13,9 @@ install:dependencies:
         key: ${CI_COMMIT_BRANCH}
         paths:
             - node_modules
+    artifacts:
+        paths:
+            - node_modules
 
 ESLinter:
     stage: test
