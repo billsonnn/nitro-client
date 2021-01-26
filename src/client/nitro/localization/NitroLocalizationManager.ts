@@ -7,6 +7,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 {
     private _definitions: Map<string, string>;
     private _parameters: Map<string, Map<string, string>>;
+    private _romanNumerals: string[];
 
     constructor()
     {
@@ -14,6 +15,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         this._definitions   = new Map();
         this._parameters    = new Map();
+        this._romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX'];
     }
 
     protected onInit(): void
@@ -64,6 +66,11 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
         data = JSON.parse(data);
 
         for(const key in data) this._definitions.set(key, data[key]);
+    }
+
+    public getRomanNumeral(number: number): string
+    {
+        return this._romanNumerals[Math.max(0, (number - 1))];
     }
 
     public getValue(key: string, doParams: boolean = true): string
