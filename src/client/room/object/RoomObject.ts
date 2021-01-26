@@ -32,7 +32,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
     constructor(id: number, stateCount: number, type: string)
     {
         super();
-        
+
         this._id                    = id;
         this._instanceId            = RoomObject.OBJECT_COUNTER++;
         this._type                  = type;
@@ -45,7 +45,7 @@ export class RoomObject extends Disposable implements IRoomObjectController
         this._visualization         = null;
         this._logic                 = null;
         this._pendingLogicMessages  = [];
-        
+
         this._updateCounter         = 0;
         this._isReady               = false;
 

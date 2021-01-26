@@ -26,5 +26,5 @@ import { AvatarEditorService } from './services/avatar-editor.service';
         AvatarEditorSetViewerComponent
     ]
 })
-export class AvatarEditorModule 
+export class AvatarEditorModule
 {}

@@ -3,7 +3,7 @@ import { IGraphicAsset } from '../../../../../../../room/object/visualization/ut
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneTexture } from './PlaneTexture';
 
-export class PlaneMaterialCell 
+export class PlaneMaterialCell
 {
     private _cachedBitmapData: Graphics;
     private _texture: PlaneTexture;
@@ -160,7 +160,7 @@ export class PlaneMaterialCell
             //             const bitmapTexture = TextureUtils.generateTexture(bitmap, new Rectangle(0, 0, bitmap.width, bitmap.height));
 
             //             RoomVisualization.RENDER_TEXTURES.push(bitmapTexture);
-                        
+
             //             if(bitmapTexture)
             //             {
             //                 this._cachedBitmapData
@@ -209,7 +209,7 @@ export class PlaneMaterialCell
             //                     y           = -1;
             //                     translateY  = assetTexture.height;
             //                 }
-                            
+
             //                 let offsetX = (offsetFinal.x + translateX);
             //                 offsetX = ((offsetX >> 1) << 1);
 

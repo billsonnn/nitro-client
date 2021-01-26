@@ -81,7 +81,7 @@ export class NotificationService implements OnDestroy
         {
             ob.push(el);
         });
-        
+
         if(ob[1] === 'BUBBLE')
         {
             this._ngZone.run(() => this._notificationCentre.publish(ob, parser.type));

@@ -228,7 +228,7 @@ export class InventoryTradingService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-        
+
         this._ngZone.run(() =>
         {
             const firstUserItems: AdvancedMap<string, GroupItem>    = new AdvancedMap();
@@ -260,7 +260,7 @@ export class InventoryTradingService implements OnDestroy
         if(!sessionDataManager || !roomSession) return;
 
         let ownUserId = parser._Str_4963;
-        
+
         const ownUserData = roomSession.userDataManager.getUserData(ownUserId);
 
         if(!ownUserData) return;
@@ -388,7 +388,7 @@ export class InventoryTradingService implements OnDestroy
     private parseItems(k: TradingListItem[], _arg_2: AdvancedMap<string, GroupItem>): void
     {
         if(!this.controller) return;
-        
+
         const totalItems = k.length;
 
         let i = 0;
@@ -589,7 +589,7 @@ export class InventoryTradingService implements OnDestroy
     public sendTradingConfirmComposer(): void
     {
         this.state = InventoryTradingService.TRADING_STATE_CONFIRMED;
-        
+
         Nitro.instance.communication.connection.send(new TradingConfirmationComposer());
     }
 

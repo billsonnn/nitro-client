@@ -15,7 +15,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
     constructor()
     {
         super();
-        
+
         this._Str_22237 = null;
         this._Str_10040 = null;
         this._Str_21698 = -1;

@@ -35,7 +35,7 @@ export class FigureSetIdsMessageParser implements IMessageParser
 
             totalFurnitureNames--;
         }
-        
+
         return true;
     }
 

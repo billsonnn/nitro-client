@@ -9,10 +9,10 @@ import { FriendListService } from '../../services/friendlist.service';
 export class FriendListThreadListComponent
 {
     public static THREAD_SELECTED: string = 'FLTLC_THREAD_SELECTED';
-    
+
     @Input()
     public currentThread: MessengerThread = null;
-    
+
     @Input()
     public threadSelector: (thread: MessengerThread) => void = null;
 

@@ -202,4 +202,4 @@ export class NitroCommunicationDemo extends NitroManager
     {
         Nitro.instance.events.dispatchEvent(new NitroCommunicationDemoEvent(type, connection));
     }
-} 
+}

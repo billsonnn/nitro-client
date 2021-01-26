@@ -56,5 +56,5 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutVipBuyComponent
     ]
 })
-export class CatalogModule 
+export class CatalogModule
 {}

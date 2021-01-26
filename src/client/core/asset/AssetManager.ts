@@ -145,13 +145,13 @@ export class AssetManager extends Disposable implements IAssetManager
 
         return true;
     }
-    
+
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error)
         {
             if(resource && resource.texture) resource.texture.destroy(true);
-            
+
             onDownloaded(loader, resource, false);
 
             return;
@@ -162,7 +162,7 @@ export class AssetManager extends Disposable implements IAssetManager
             const assetData = (resource.data as IAssetData);
 
             if(!assetData.type) return;
-            
+
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
                 const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
@@ -214,7 +214,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
                 return;
             }
-                
+
             this.createCollection(assetData, null);
 
             onDownloaded(loader, resource, true);

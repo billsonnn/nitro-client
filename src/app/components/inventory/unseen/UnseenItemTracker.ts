@@ -24,7 +24,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
     public dispose(): void
     {
         this.unregisterMessages();
-        
+
         this._communication = null;
         this._unseenItems   = null;
     }
@@ -68,7 +68,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
         {
             existing.splice(existing.indexOf(itemId), 1);
         }
-        
+
         this._Str_23994(category, itemIds);
 
         return true;
@@ -79,9 +79,9 @@ export class UnseenItemTracker implements IUnseenItemTracker
         if(this._Str_5621(k)) return false;
 
         delete this._unseenItems[k];
-        
+
         this._Str_20981(k);
-        
+
         return true;
     }
 
@@ -104,7 +104,7 @@ export class UnseenItemTracker implements IUnseenItemTracker
         if(index === -1) return false;
 
         items.splice(index, 1);
-        
+
         return true;
     }
 

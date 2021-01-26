@@ -1,4 +1,4 @@
-﻿export interface IAnimation 
+﻿export interface IAnimation
 {
     _Str_872(): boolean;
     _Str_776(): boolean;

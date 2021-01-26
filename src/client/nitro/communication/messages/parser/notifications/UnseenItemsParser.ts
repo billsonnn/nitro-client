@@ -12,7 +12,7 @@ export class UnseenItemsParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -37,7 +37,7 @@ export class UnseenItemsParser implements IMessageParser
 
             totalUnseen--;
         }
-        
+
         return true;
     }
 

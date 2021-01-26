@@ -1,6 +1,6 @@
 ﻿import { RoomEngineObjectEvent } from './RoomEngineObjectEvent';
 
-export class RoomEngineObjectPlacedOnUserEvent extends RoomEngineObjectEvent 
+export class RoomEngineObjectPlacedOnUserEvent extends RoomEngineObjectEvent
 {
     private _droppedObjectId: number;
     private _droppedObjectCategory: number;

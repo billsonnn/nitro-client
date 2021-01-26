@@ -1,6 +1,6 @@
 ﻿import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 
-export interface IFurnitureItem 
+export interface IFurnitureItem
 {
     id: number;
     ref: number;

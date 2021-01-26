@@ -2,7 +2,7 @@
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 import { _Str_7446 } from './_Str_7446';
 
-export class _Str_7305 implements IMessageParser 
+export class _Str_7305 implements IMessageParser
 {
     private _data: _Str_7446[];
 

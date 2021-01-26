@@ -11,7 +11,7 @@ export class RoomSessionPetFigureUpdateEvent extends RoomSessionEvent
     constructor(k: IRoomSession, id: number, figure: string)
     {
         super(RoomSessionPetFigureUpdateEvent.PET_FIGURE_UPDATE, k);
-        
+
         this._petId = id;
         this._figure = figure;
     }

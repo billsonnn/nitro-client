@@ -11,7 +11,7 @@ export class RoomWidgetDanceMessage extends RoomWidgetMessage
     constructor(k: number)
     {
         super(RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE);
-        
+
         this._style = k;
     }
 

@@ -77,7 +77,7 @@ export class BadgeImageManager
                 if(!this._requestedGroupBadges.get(badgeName))
                 {
                     url = (Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', k);
-                    
+
                     this._requestedGroupBadges.set(badgeName, true);
                 }
                 break;
@@ -95,7 +95,7 @@ export class BadgeImageManager
                 }
             });
         }
-        
+
         return null;
     }
 

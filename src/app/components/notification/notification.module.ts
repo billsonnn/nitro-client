@@ -35,5 +35,5 @@ import { NotificationCentreComponent } from './components/notification-centre/nc
         NotificationCentreComponent
     ]
 })
-export class NotificationModule 
+export class NotificationModule
 { }

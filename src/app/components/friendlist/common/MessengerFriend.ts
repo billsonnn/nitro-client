@@ -186,7 +186,7 @@ export class MessengerFriend
     }
 
     public set unread(unread: number)
-    { 
+    {
         this._unread = unread;
     }
 }

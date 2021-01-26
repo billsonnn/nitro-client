@@ -2,5 +2,5 @@ import { RoomObjectSpriteVisualization } from '../../../../../room/object/visual
 
 export class FurnitureCuboidVisualization extends RoomObjectSpriteVisualization
 {
-    
+
 }

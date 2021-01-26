@@ -11,7 +11,7 @@ export class RoomWidgetUseProductMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number, _arg_3: number=-1)
     {
         super(k);
-        
+
         this._roomObjectId = _arg_2;
         this._petId = _arg_3;
     }

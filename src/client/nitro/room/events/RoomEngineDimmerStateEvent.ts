@@ -1,6 +1,6 @@
 ﻿import { RoomEngineEvent } from './RoomEngineEvent';
 
-export class RoomEngineDimmerStateEvent extends RoomEngineEvent 
+export class RoomEngineDimmerStateEvent extends RoomEngineEvent
 {
     public static ROOM_COLOR: string = 'REDSE_ROOM_COLOR';
 

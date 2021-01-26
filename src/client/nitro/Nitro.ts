@@ -110,7 +110,7 @@ export class Nitro extends Application implements INitro
 
         canvas.id           = 'client-wrapper';
         canvas.className    = 'client-canvas';
-        
+
         const instance = new this(new NitroCore(), {
             transparent: true,
             autoDensity: true,
@@ -169,7 +169,7 @@ export class Nitro extends Application implements INitro
 
             this._roomManager = null;
         }
-        
+
         if(this._roomSessionManager)
         {
             this._roomSessionManager.dispose();
@@ -187,7 +187,7 @@ export class Nitro extends Application implements INitro
         if(this._roomEngine)
         {
             this._roomEngine.dispose();
-            
+
             this._roomEngine = null;
         }
 
@@ -197,7 +197,7 @@ export class Nitro extends Application implements INitro
 
             this._avatar = null;
         }
-        
+
         if(this._communication)
         {
             this._communication.dispose();

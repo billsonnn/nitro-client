@@ -4,7 +4,7 @@ import { IRoomObjectSprite } from '../../object/visualization/IRoomObjectSprite'
 import { SortableSprite } from '../utils/SortableSprite';
 import { RoomObjectCacheItem } from './RoomObjectCacheItem';
 
-export class RoomObjectCache 
+export class RoomObjectCache
 {
     private static MAX_SIZE_FOR_AVG_COLOR: number = 200;
 
@@ -94,7 +94,7 @@ export class RoomObjectCache
                     data.posture    = sprite.sprite.posture;
 
                     const isSkewed = this.isSkewedSprite(sprite.sprite);
-                    
+
                     if(isSkewed)
                     {
                         data.skew = (((sprite.sprite.direction % 4) === 0) ? -0.5 : 0.5);
@@ -103,13 +103,13 @@ export class RoomObjectCache
                     if(((((isSkewed || (sprite.name.indexOf('%image.library.url%') >= 0)) || (sprite.name.indexOf('%group.badge.url%') >= 0)) && (data.width <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)) && (data.height <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)))
                     {
                         //data.color = Canvas._Str_23439(sprite.sprite.texture).toString();
-                        
+
                         if(sprite.sprite.name.indexOf('external_image_wallitem') === 0)
                         {
                             data.frame = true;
                         }
                     }
-                    
+
                     spriteData.push(data);
                 }
             }
@@ -127,7 +127,7 @@ export class RoomObjectCache
         if((k.type.indexOf('external_image_wallitem') === 0) && (k.tag === 'THUMBNAIL')) return true;
 
         if((k.type.indexOf('guild_forum') === 0) && (k.tag === 'THUMBNAIL')) return true;
-        
+
         return false;
     }
 

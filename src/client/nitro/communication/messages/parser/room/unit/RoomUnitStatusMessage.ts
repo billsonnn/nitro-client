@@ -67,7 +67,7 @@ export class RoomUnitStatusMessage
     {
         return this._direction;
     }
-    
+
     public get targetX(): number
     {
         return this._targetX;

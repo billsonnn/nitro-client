@@ -1,7 +1,7 @@
 ﻿import { Node3D } from './Node3D';
 import { Vector3D } from './Vector3D';
 
-export class GeometryItem extends Node3D 
+export class GeometryItem extends Node3D
 {
     private _id: string;
     private _radius: number;

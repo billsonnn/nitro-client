@@ -7,7 +7,7 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy
     private _time: number = 0;
     private _timer: ReturnType<typeof setInterval> = null;
 
-    constructor(private changeDetector: ChangeDetectorRef) 
+    constructor(private changeDetector: ChangeDetectorRef)
     {
         this.updateTime = this.updateTime.bind(this);
     }
@@ -22,7 +22,7 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy
         this._time = time;
 
         this.setupInterval();
-        
+
         return FriendlyTime.format((Date.now() - this._time));
     }
 

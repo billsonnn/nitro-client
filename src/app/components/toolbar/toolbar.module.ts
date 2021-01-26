@@ -15,5 +15,5 @@ import { ToolbarMainComponent } from './components/main/main.component';
         ToolbarMainComponent
     ]
 })
-export class ToolbarModule 
+export class ToolbarModule
 {}

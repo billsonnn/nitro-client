@@ -55,7 +55,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
     public static setup(view: RoomAvatarInfoAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
         view.avatarData = avatarData;
-        
+
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
         view.setupButtons();
@@ -67,7 +67,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 
         const handler       = this.widget.handler;
         const roomObject    = handler.container.roomEngine.getRoomObject(handler.roomSession.roomId, handler.container.roomSession.ownRoomIndex, RoomObjectCategory.UNIT);
-        
+
         if(roomObject)
         {
             const carryId = roomObject.model.getValue<number>(RoomObjectVariable.FIGURE_CARRY_OBJECT);

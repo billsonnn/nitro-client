@@ -97,7 +97,7 @@ export class FriendListService implements OnDestroy
                 new RoomInviteErrorEvent(this.onRoomInviteErrorEvent.bind(this)),
                 new RoomInviteEvent(this.onRoomInviteEvent.bind(this))
             ];
-    
+
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
@@ -177,7 +177,7 @@ export class FriendListService implements OnDestroy
             for(const friend of parser.addedFriends) this.updateFriend(friend);
 
             for(const friend of parser.updatedFriends) this.updateFriend(friend);
-    
+
             for(const id of parser.removedFriendIds) this.removeFriend(id);
         });
     }
@@ -236,11 +236,11 @@ export class FriendListService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-        
+
         let message = '';
 
         switch(parser.errorCode)
-        { 
+        {
             case 1:
                 message = '${friendlist.error.friendlistownlimit}';
                 break;
@@ -256,7 +256,7 @@ export class FriendListService implements OnDestroy
             default:
                 message = (`Received messenger error: msg: ${ parser.clientMessageId }, errorCode: ${ parser.errorCode }`);
                 break;
-            
+
         }
 
         this._ngZone.run(() => this._notificationService.alert(message, '${friendlist.alert.title}'));

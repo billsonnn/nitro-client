@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 
-export class AvatarInfoData 
+export class AvatarInfoData
 {
     private _isIgnored: boolean = false;
     private _canTrade: boolean = false;

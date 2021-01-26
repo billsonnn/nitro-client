@@ -20,7 +20,7 @@ export class NavigatorSearchItemComponent
 
     constructor(
         private _navigatorService: NavigatorService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public visit(): void
@@ -74,9 +74,9 @@ export class NavigatorSearchItemComponent
         thumbnailUrl = thumbnailUrl.replace('%thumbnail%', this.room.roomId.toString());
 
         const request = new XMLHttpRequest();
-        
+
         request.open('GET', thumbnailUrl, true);
-        
+
         request.onreadystatechange = () =>
         {
             if((request.readyState === 4) && (request.status === 200)) this._thumbnailUrl = thumbnailUrl;
@@ -89,7 +89,7 @@ export class NavigatorSearchItemComponent
         return null;
     }
 
-    public get entryBg(): string 
+    public get entryBg(): string
     {
         const num: number = (100 * (this.room.userCount / this.room.maxUserCount));
 
@@ -107,7 +107,7 @@ export class NavigatorSearchItemComponent
         {
             bg = 'badge-success';
         }
-        
+
         return bg;
     }
 }

@@ -11,13 +11,13 @@ export class HabboBroadcastMessageParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._message = wrapper.readString();
-        
+
         return true;
     }
 
