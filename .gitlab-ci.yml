@@ -19,6 +19,8 @@ ESLinter:
     dependencies:
         - install:dependencies
     script:
+        - ls
+        - ls node_modules
         - node ./node_modules/eslint/bin/eslint.js src/
 
 
