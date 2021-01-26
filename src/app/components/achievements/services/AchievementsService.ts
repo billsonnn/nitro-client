@@ -116,6 +116,14 @@ export class AchievementsService implements OnDestroy
 
                 el.reset(parser.achievement);
 
+                const ignored = Array.from(Nitro.instance.getConfiguration('achievements.unseen.ignored'));
+
+                const badge = el.badgeId.replace(/[0-9]/g, '');
+
+                if(ignored.map(e => e).indexOf(badge) != -1 ) return;
+                
+                if(this.selected == el) return;
+
                 el.unseen = unseen;
                 
             });

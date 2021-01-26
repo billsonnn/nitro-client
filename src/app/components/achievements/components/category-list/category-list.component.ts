@@ -61,7 +61,7 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
     {
-        if(icon) return Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achicon_${cat}.png`;
+        if(icon) return Nitro.instance.getConfiguration('achievements.images.url',Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
         
         let k = 0;
 
@@ -72,7 +72,7 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
 
         const isActive = ((k > 0) ? 'active' : 'inactive');
 
-        return Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}_${isActive}.png`;
+        return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}_${isActive}.png`).toString().replace('%image%',`achcategory_${cat}_${isActive}`);
     }
 
     public getCategoryProgress(achievements: Achievement[]): string

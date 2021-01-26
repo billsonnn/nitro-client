@@ -44,13 +44,19 @@
         filter: grayscale(1);
     }
 
-    .achievement-progress-bar-content {
-        position: absolute;
-        top:0;
-        bottom:0;
-        margin:auto;
-        left:0;
-        right:0;
+    .achievement-progress-bar {
+        .achievement-progress-bar-content {
+            position: absolute;
+            top:0;
+            bottom:0;
+            margin:auto;
+            left:0;
+            right:0;
+        }
+
+        .achievement-progress-bar-inner {
+            transition: width 0.7s;
+        }
     }
 
     .achievement-unseen {

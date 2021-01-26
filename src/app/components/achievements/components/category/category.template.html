@@ -1,6 +1,6 @@
 <div class="achievement-category d-flex flex-column h-100">
     <div class="text-center small">{{ 'quests.' + categoryTitle + '.name' | translate }}</div>
-    <perfect-scrollbar class="results-container position-relative w-100 pr-1" style="min-height: 155px;max-height: 155px;height: 155px;">
+    <perfect-scrollbar class="results-container position-relative w-100 pr-1 mb-1" style="min-height: 155px;max-height: 155px;height: 155px;">
         <div class="achievement-category-badge-grid">
             <div *ngFor="let ob of category" class="rounded d-flex justify-content-center position-relative" [ngClass]="[selectedBadge.badgeId == ob.badgeId ? 'bg-warning' : 'bg-secondary']" (click)="selectBadge(ob)">
                 <img class="d-block align-self-center m-1" [ngClass]="[ob._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(ob)"/>
