@@ -304,7 +304,6 @@ export class MainComponent implements OnInit, OnDestroy
 
     public get achievementsVisible(): boolean 
     {
-        return true;
-        //return this._settingsService.achievementsVisible;
+        return this._settingsService.achievementsVisible;
     }
 }
