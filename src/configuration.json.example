@@ -2,6 +2,7 @@
     "socket.url": "WS/WSS_URL",
     "asset.url": "https://ASSET_URL",
     "c.images.url": "https://ASSETS_URL/c_images",
+    "achievements.images.url": "%c.images.url%/quests/%image%.png",
     "thumbnails.url": "%c.images.url%/camera/thumbnails/%thumbnail%.png",
     "images.url": "%asset.url%/images",
     "gamedata.url": "%asset.url%/gamedata",
@@ -32,6 +33,7 @@
             "roomId": 203
         }
     ],
+    "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,

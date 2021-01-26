@@ -21,6 +21,8 @@ export class Achievement
     private _Str_20339: number;
     private _Str_19099: number;
 
+    private _unseen: number = 0;
+
     constructor(wrapper: IMessageDataWrapper)
     {
         if(!wrapper) throw new Error('invalid_parser');
@@ -65,12 +67,12 @@ export class Achievement
         return (this._Str_18274 - this._Str_6791);
     }
 
-    public get _Str_20874(): number
+    public get rewardAmount(): number
     {
         return this._Str_10280;
     }
 
-    public get _Str_21187(): number
+    public get rewardType(): number
     {
         return this._Str_12282;
     }
@@ -95,7 +97,7 @@ export class Achievement
         return this._Str_21707;
     }
 
-    public get _Str_20475(): number
+    public get totalLevels(): number
     {
         return this._Str_20339;
     }
@@ -113,5 +115,42 @@ export class Achievement
     public get _Str_24874(): number
     {
         return this._Str_19099;
+    }
+
+    public get progress(): number
+    {
+        return this._Str_19007;
+    }
+
+    public get toNextProgress(): number
+    {
+        return this._Str_18274;
+    }
+
+    public set unseen(unseen: number)
+    {
+        this._unseen = unseen;
+    }
+    
+    public get unseen(): number
+    { 
+        return this._unseen;
+    }
+
+    public reset(badge: Achievement)
+    {
+        this._achievementId = badge._achievementId;
+        this._level         = badge._level;
+        this._badgeId       = badge._badgeId;
+        this._Str_6791      = badge._Str_6791;
+        this._Str_18274     = badge._Str_18274;
+        this._Str_10280     = badge._Str_10280;
+        this._Str_12282     = badge._Str_12282;
+        this._Str_19007     = badge._Str_19007;
+        this._Str_16081     = badge._Str_16081;
+        this._category      = badge.category;
+        this._Str_21707     = badge._Str_21707;
+        this._Str_20339     = badge._Str_20339;
+        this._Str_19099     = badge._Str_19099;
     }
 }

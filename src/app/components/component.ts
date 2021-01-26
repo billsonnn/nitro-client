@@ -37,6 +37,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
                 <nitro-notification-centre-component></nitro-notification-centre-component>
             </div>
         </div>
+        <nitro-achievements-main-component [visible]="achievementsVisible"></nitro-achievements-main-component>
         <nitro-call-for-help-main-component></nitro-call-for-help-main-component>
         <nitro-pedia-main-component></nitro-pedia-main-component>
         <nitro-avatar-editor-main-component [visible]="avatarEditorVisible"></nitro-avatar-editor-main-component>
@@ -311,5 +312,10 @@ export class MainComponent implements OnInit, OnDestroy
     public get friendListVisible(): boolean 
     {
         return this._settingsService.friendListVisible;
+    }
+
+    public get achievementsVisible(): boolean 
+    {
+        return this._settingsService.achievementsVisible;
     }
 }

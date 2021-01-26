@@ -1,0 +1,68 @@
+.nitro-achievements-main-component {
+    width: $achievements-width;
+    position: absolute;
+    
+    .achievement-category-grid {
+        display: grid;
+        grid-template-columns: repeat(3,94px);
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+
+        .achievement-category-button {
+            display:flex;
+            flex-direction: column;
+    
+            .achievement-category-progress {
+                position: absolute;
+                bottom: 1px;
+                text-align: center;
+                font-size: 12px;
+                left: 0;
+                right: 0;
+            }
+            
+        }
+    }
+
+    .achievement-category-badge-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 52px);
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+    }
+
+    .badge_preview {
+        width:100px;
+        height:100px;
+
+        img {
+            transform: scale(2);
+        }
+    }
+    
+    .greyscale {
+        filter: grayscale(1);
+    }
+
+    .achievement-progress-bar {
+        .achievement-progress-bar-content {
+            position: absolute;
+            top:0;
+            bottom:0;
+            margin:auto;
+            left:0;
+            right:0;
+        }
+
+        .achievement-progress-bar-inner {
+            transition: width 0.7s;
+        }
+    }
+
+    .achievement-unseen {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        font-size: 10px;
+    }
+}

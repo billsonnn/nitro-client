@@ -13,6 +13,7 @@ import { Queue } from '../../../../../client/nitro/window/motion/Queue';
 import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
+import { AchievementsService } from '../../../achievements/services/AchievementsService';
 import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
@@ -35,6 +36,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _inventoryService: InventoryService,
         private _navigatorService: NavigatorService,
         private _friendListService: FriendListService,
+        private _achievementService: AchievementsService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
         private ngZone: NgZone) 
@@ -227,5 +229,10 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     public get unseenFriendListCount(): number
     {
         return this._friendListService.notificationCount;
+    }
+
+    public get unseenAchievementsCount(): number
+    {
+        return this._achievementService.unseen;
     }
 }

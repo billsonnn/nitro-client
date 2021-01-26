@@ -11,6 +11,7 @@
                 <li class="list-group-item splitter"></li>
                 <li class="list-group-item avatar-image" (click)="clickIcon('me_menu')">
                     <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+                    <div class="position-absolute btn btn-sm btn-danger px-1 py-0 rounded unseenCount" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
                 </li>
             </ul>
         </div>
