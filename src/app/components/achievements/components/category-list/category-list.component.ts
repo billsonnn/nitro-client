@@ -3,6 +3,7 @@ import { Achievement } from '../../../../../client/nitro/communication/messages/
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
 import { AchievementsService } from '../../services/AchievementsService';
+import { Category } from '../../utils/category';
 
 @Component({
     selector: 'nitro-achievements-category-list-component',
@@ -55,7 +56,7 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
 
         if(stringify) return completed + '/' + total;
         
-        return '';
+        return Math.trunc(completed / total * 100) + '%';
     }
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
@@ -91,6 +92,20 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
         }
 
         return completed + '/' + total;
+    }
+
+    public getUnseenCategory(category: Category): number
+    {
+        let unseen = 0;
+        
+        category.achievements.forEach(el =>
+        { 
+            if(el.unseen == 0) return;
+
+            unseen = unseen + el.unseen;
+        });
+        
+        return unseen;
     }
 
     public get categories(): Object

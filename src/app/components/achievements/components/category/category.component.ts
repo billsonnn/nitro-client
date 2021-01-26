@@ -26,7 +26,10 @@ export class AchievementsCategoryComponent implements OnInit, OnDestroy
 
     public selectBadge(badge: Achievement)
     { 
+        badge.unseen = 0;
+
         console.log(badge);
+        
         this._selectedBadge = badge;
     }
 
@@ -73,27 +76,52 @@ export class AchievementsCategoryComponent implements OnInit, OnDestroy
     {
         const str: string = this._Str_16394(badge);
 
-        const badgeBAse = new BadgeBaseAndLevel(str);
+        const badgeBase = new BadgeBaseAndLevel(str);
 
         let charReplaced: string;
 
         if(desc) 
         {
-            charReplaced = this.getText(['badge_desc_' + str, 'badge_desc_' + badgeBAse.base]); 
+            charReplaced = this.getText(['badge_desc_' + str, 'badge_desc_' + badgeBase.base]); 
         }
         else 
         {
-            charReplaced = this.getText(['badge_name_' + str, 'badge_name_' + badgeBAse.base]); 
+            charReplaced = this.getText(['badge_name_' + str, 'badge_name_' + badgeBase.base]); 
         }
             
         return charReplaced
-            .replace('%roman%', this.getRomanNumeral(badgeBAse.level))
+            .replace('%roman%', this.getRomanNumeral(badgeBase.level))
             .replace('%limit%',badge._Str_24142.toString());
     }
 
     private getRomanNumeral(k: number): string
     {
         return this._romanNumerals[Math.max(0, (k - 1))];
+    }
+
+    public getProgress(badge:Achievement, stringify = false): string
+    { 
+        if(!badge) return;
+        
+        if(stringify) return badge.progress + '/' + badge.toNextProgress;
+        
+        return Math.trunc(badge.progress / badge.toNextProgress * 100) + '%';
+    }
+
+    public getCurrencyUrl(type: number): string
+    {
+        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
+
+        return url.replace('%type%', type.toString());
+    }
+
+    public getBadgeLevelString(badge: Achievement): string
+    {
+        if(!badge) return;
+
+        const str = Nitro.instance.getLocalization('achievements.details.level');
+
+        return str.replace('%level%', Math.max(1,badge.level - 1).toString()).replace('%limit%',badge.totalLevels.toString());
     }
     
     public get category(): Object
@@ -110,6 +138,8 @@ export class AchievementsCategoryComponent implements OnInit, OnDestroy
     {
         if(!this._achivementsService.selected['achievements']) return;
         
-        return (this._selectedBadge || this._achivementsService.selected['achievements'][0]);
+        if(!this._selectedBadge) this._selectedBadge = this._achivementsService.selected['achievements'][0];
+        
+        return this._selectedBadge;
     }
 }

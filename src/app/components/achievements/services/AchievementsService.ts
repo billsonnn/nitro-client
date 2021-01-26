@@ -1,22 +1,21 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { Achievement } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
+import { AchievementEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementEvent';
 import { AchievementsEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsEvent';
 import { AchievementsScoreEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsScoreEvent';
 import { RequestAchievementsMessageComposer } from '../../../../client/nitro/communication/messages/outgoing/achievements/RequestAchievementsMessageComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../core/settings/service';
+import { Category } from '../utils/category';
 
 @Injectable()
 export class AchievementsService implements OnDestroy
 {
     private _messages: IMessageEvent[] = [];
 
-    private _achievements: Object = [];
+    private _achievements: Category[] = [];
 
     private _selectedCategory: Object = [];
-
-    private _categories: Map<string, Achievement[]> = new Map<string, Achievement[]>();
     
     private _achievementScore: number = 0;
 
@@ -39,7 +38,8 @@ export class AchievementsService implements OnDestroy
         {
             this._messages = [
                 new AchievementsEvent(this.onAchievementsMessageEvent.bind(this)),
-                new AchievementsScoreEvent(this.onAchievementsScoreEvent.bind(this))
+                new AchievementsScoreEvent(this.onAchievementsScoreEvent.bind(this)),
+                new AchievementEvent(this.onAchievementEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -66,8 +66,6 @@ export class AchievementsService implements OnDestroy
     public onAchievementsScoreEvent(event: AchievementsScoreEvent): void
     { 
         if(!event) return;
-        
-        console.log(event);
 
         const parser = event.getParser();
 
@@ -80,13 +78,13 @@ export class AchievementsService implements OnDestroy
 
         const parser = event.getParser();
 
-        const arr = [];
+        const arr: Category[] = [];
 
         parser.achievements.forEach(el =>
         {
             let ind = arr.findIndex(e => e.name === el.category);
 
-            if(ind == -1) arr.push({ name: el.category, achievements: [] }); 
+            if(ind == -1) arr.push(new Category(el.category,[])); 
             
             ind = arr.findIndex(e => e.name === el.category);
 
@@ -96,6 +94,33 @@ export class AchievementsService implements OnDestroy
         this._achievements = arr;
 
         this._selectedCategory = arr[0];
+    }
+
+    public onAchievementEvent(event: AchievementEvent)
+    { 
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        this._achievements.forEach(el =>
+        { 
+            if(el.name != parser.achievement.category) return;
+        
+            el.achievements.forEach(el =>
+            { 
+                if(el.achievementId != parser.achievement.achievementId) return;
+                
+                if(el.progress == parser.achievement.progress) return;
+
+                const unseen = el.unseen + 1;
+
+                el.reset(parser.achievement);
+
+                el.unseen = unseen;
+                
+            });
+        });
+
     }
 
     public get achievements(): Object
@@ -118,5 +143,22 @@ export class AchievementsService implements OnDestroy
     public get achievementScore(): number
     {
         return this._achievementScore;
+    }
+
+    public get unseen(): number
+    {
+        let unseen = 0;
+
+        this._achievements.forEach(el =>
+        { 
+            el.achievements.forEach(el =>
+            { 
+                if(el.unseen == 0) return;
+
+                unseen++;
+            });
+        });
+        
+        return unseen;
     }
 }

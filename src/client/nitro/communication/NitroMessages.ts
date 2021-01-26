@@ -33,6 +33,7 @@ import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent'
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
 import { AchievementsEvent } from './messages/incoming/inventory/achievements/AchievementsEvent';
 import { AchievementsScoreEvent } from './messages/incoming/inventory/achievements/AchievementsScoreEvent';
 import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
@@ -487,6 +488,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
 
         // ACHIEVEMENTS
+        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
         this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
         this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
     }

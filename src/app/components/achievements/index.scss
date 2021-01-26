@@ -43,4 +43,20 @@
     .greyscale {
         filter: grayscale(1);
     }
+
+    .achievement-progress-bar-content {
+        position: absolute;
+        top:0;
+        bottom:0;
+        margin:auto;
+        left:0;
+        right:0;
+    }
+
+    .achievement-unseen {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        font-size: 10px;
+    }
 }

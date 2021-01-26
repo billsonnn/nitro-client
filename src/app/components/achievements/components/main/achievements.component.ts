@@ -21,5 +21,10 @@ export class AchievementsComponent implements OnInit, OnDestroy
     {}
 
     public ngOnDestroy(): void
-    {}
+    { }
+    
+    public hide(): void
+    {
+        this._settingsService.hideAchievements();
+    }
 }
