@@ -5,7 +5,7 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
 @Component({
     template: `
     <div class="bubble-container" #chatContainer>
-        <div class="user-container-bg" [ngStyle]="{'background-color': senderColorString}"></div>
+        <div *ngIf="chatStyle === 0" class="user-container-bg" [ngStyle]="{'background-color': senderColorString}"></div>
         <div class="chat-bubble bubble-{{ chatStyle }} type-{{ chatType }}" (click)="selectUser()">
             <div class="user-container">
                 <div *ngIf="senderImageUrl" class="user-image" [ngStyle]="(petType >= 0) ? { 'background-image': 'url(' + senderImageUrl + ')', 'transform': 'scale(1)', 'top': '-53px' } : { 'background-image': 'url(' + senderImageUrl + ')' }"></div>
