@@ -23,7 +23,11 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._widget     = null;
         this._messages   = [];
         this._disposed   = false;
-        Nitro.instance.communication.registerMessageEvent(new RoomInfoEvent(this.onRoomInfoEvent.bind(this)));
+        this._messages = [
+            new RoomInfoEvent(this.onRoomInfoEvent.bind(this))
+        ];
+
+        for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
     }
 
     public set widget(widget: RoomToolsMainComponent)
@@ -40,6 +44,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     {
         if(this._disposed) return;
 
+        for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
         this._container  = null;
         this._widget     = null;
         this._messages   = [];
@@ -103,21 +108,21 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     {
         if(container !== this._container)
         {
-            if(this._container)
-            {
-                for(const message of this._messages) this._container.connection.removeMessageEvent(message);
-
-                this._messages = [];
-            }
+            // if(this._container)
+            // {
+            //     for(const message of this._messages) this._container.connection.removeMessageEvent(message);
+            //
+            //     this._messages = [];
+            // }
         }
 
         this._container = container;
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
-
-            for(const message of this._messages) container.connection.addMessageEvent(message);
+            // this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
+            //
+            // for(const message of this._messages) container.connection.addMessageEvent(message);
         }
     }
 

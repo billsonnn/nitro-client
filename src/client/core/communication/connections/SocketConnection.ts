@@ -65,7 +65,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     protected onDispose(): void
     {
         super.onDispose();
-        
+
         this.destroySocket();
 
         this._communicationManager  = null;
@@ -78,7 +78,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     public onReady(): void
     {
         if(this._isReady) return;
-        
+
         this._isReady = true;
 
         if(this._pendingServerMessages && this._pendingServerMessages.length) this.processWrappers(...this._pendingServerMessages);
@@ -164,7 +164,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     public send(...composers: IMessageComposer<unknown[]>[]): boolean
     {
         if(this.disposed || !composers) return false;
-        
+
         composers = [ ...composers ];
 
         if(this._isAuthenticated && !this._isReady)
@@ -175,7 +175,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             return false;
         }
-        
+
         for(const composer of composers)
         {
             if(!composer) continue;
@@ -257,7 +257,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             if(!messages || !messages.length) continue;
 
             if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
-            
+
             this.handleMessages(...messages);
         }
     }
@@ -272,10 +272,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private concatArrayBuffers(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer
     {
         const array = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
-        
+
         array.set(new Uint8Array(buffer1), 0);
         array.set(new Uint8Array(buffer2), buffer1.byteLength);
-        
+
         return array.buffer;
     }
 
@@ -334,7 +334,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     public removeMessageEvent(event: IMessageEvent): void
     {
-        if(this._messages) return;
+        if(!event) return;
 
         this._messages.removeMessageEvent(event);
     }
