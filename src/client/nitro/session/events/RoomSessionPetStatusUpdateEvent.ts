@@ -14,7 +14,7 @@ export class RoomSessionPetStatusUpdateEvent extends RoomSessionEvent
     constructor(k: IRoomSession, _arg_2: number, _arg_3: boolean, _arg_4: boolean, _arg_5: boolean, _arg_6: boolean)
     {
         super(RoomSessionPetStatusUpdateEvent.RSPFUE_PET_STATUS_UPDATE, k);
-        
+
         this._petId = _arg_2;
         this._canBreed = _arg_3;
         this._canHarvest = _arg_4;

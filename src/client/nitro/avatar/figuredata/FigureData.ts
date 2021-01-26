@@ -79,7 +79,7 @@ export class FigureData implements IAvatarImageListener
             const parts = set.split('-');
 
             if(!parts.length) continue;
-            
+
             const setType               = parts[0];
             const setId                 = parseInt(parts[1]);
             const colorIds: number[]    = [];
@@ -232,7 +232,7 @@ export class FigureData implements IAvatarImageListener
             const colors = this._colors.get(setType);
 
             if(colors === undefined) continue;
-            
+
             let setId = this._data.get(setType);
 
             if((setType === FigureData.FACE) && override) setId = k;
@@ -264,7 +264,7 @@ export class FigureData implements IAvatarImageListener
 
             i++;
         }
-        
+
         return figureString;
     }
 

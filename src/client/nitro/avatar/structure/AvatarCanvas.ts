@@ -1,7 +1,7 @@
 ﻿import { Point } from 'pixi.js';
 import { AvatarScaleType } from '../enum/AvatarScaleType';
 
-export class AvatarCanvas 
+export class AvatarCanvas
 {
     private _id: string;
     private _width: number;

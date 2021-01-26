@@ -36,14 +36,14 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     public update(time: number): void
     {
         this._time = time;
-        
+
         return;
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
         if(!message || !this._object) return;
-        
+
         this._object.setLocation(message.location);
         this._object.setDirection(message.direction);
     }
@@ -103,7 +103,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     {
         return;
     }
-    
+
     public get object(): IRoomObjectController
     {
         return this._object;

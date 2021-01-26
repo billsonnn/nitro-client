@@ -4,7 +4,7 @@ import { AvatarEditorMainComponent } from '../components/main/main.component';
 import { AvatarEditorModelViewerComponent } from '../components/model-viewer/model-viewer.component';
 import { CategoryData } from './CategoryData';
 
-export interface IAvatarEditorCategoryModel 
+export interface IAvatarEditorCategoryModel
 {
     init(): void;
     dispose(): void;

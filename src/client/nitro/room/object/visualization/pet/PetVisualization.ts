@@ -156,7 +156,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
         let alphaMultiplier = (model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER) || null);
 
         if(alphaMultiplier === null || isNaN(alphaMultiplier)) alphaMultiplier = 1;
-        
+
         if(this._alphaMultiplier !== alphaMultiplier)
         {
             this._alphaMultiplier = alphaMultiplier;
@@ -407,7 +407,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     private getDirection(scale: number, layerId: number): number
     {
         if(!this._Str_23973(layerId)) return this._direction;
-        
+
         return this._data.getValidDirection(scale, this._headDirection);
     }
 

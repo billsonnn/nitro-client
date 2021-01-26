@@ -44,7 +44,7 @@ export class ContextInfoView
 
                 this.fadeStartTimer = null;
             }
-            
+
             this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
     }
@@ -139,7 +139,7 @@ export class ContextInfoView
     private onTimerComplete(): void
     {
         this.fadingOut = true;
-        
+
         this.hide(true);
     }
 

@@ -11,7 +11,7 @@ export class RoomWidgetSettingsUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number, _arg_3: number, _arg_4: number)
     {
         super(k);
-        
+
         this._Str_9898 = _arg_4;
         this._Str_2909 = _arg_3;
         this._Str_2933 = _arg_2;

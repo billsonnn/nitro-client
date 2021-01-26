@@ -14,7 +14,7 @@ export class _Str_9135 implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._Str_10244 = wrapper.readString();
         this._Str_22220 = wrapper.readBoolean();
 

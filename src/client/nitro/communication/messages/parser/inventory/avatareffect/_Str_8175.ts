@@ -19,7 +19,7 @@ export class _Str_8175 implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._type      = wrapper.readInt();
         this._duration  = wrapper.readInt();
         this._Str_5145  = wrapper.readBoolean();

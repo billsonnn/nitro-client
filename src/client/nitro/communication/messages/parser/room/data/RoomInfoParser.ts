@@ -30,11 +30,11 @@ export class RoomInfoParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._roomEnter     = wrapper.readBoolean();
         this._data          = new RoomDataParser(wrapper);
         this._roomForward   = wrapper.readBoolean();
@@ -44,7 +44,7 @@ export class RoomInfoParser implements IMessageParser
         this._moderation    = new RoomModerationParser(wrapper);
         this._allowMuteAll  = wrapper.readBoolean();
         this._chat          = new RoomChatParser(wrapper);
-        
+
         return true;
     }
 

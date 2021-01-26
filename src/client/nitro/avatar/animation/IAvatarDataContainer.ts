@@ -1,6 +1,6 @@
 ﻿import { AdjustmentFilter } from '@pixi/filter-adjustment';
 
-export interface IAvatarDataContainer 
+export interface IAvatarDataContainer
 {
     ink: number;
     colorTransform: AdjustmentFilter;

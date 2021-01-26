@@ -23,14 +23,14 @@ export class RoomWidgetRoomViewUpdateEvent extends RoomWidgetUpdateEvent
     public get roomViewRectangle(): Rectangle
     {
         if(!this._roomViewRectangle) return null;
-        
+
         return this._roomViewRectangle.clone();
     }
 
     public get positionDelta(): Point
     {
         if(!this._positionDelta) return null;
-        
+
         return this._positionDelta.clone();
     }
 

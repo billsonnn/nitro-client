@@ -11,7 +11,7 @@ export class NavigatorCollapsedParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -24,7 +24,7 @@ export class NavigatorCollapsedParser implements IMessageParser
 
             totalCategories--;
         }
-        
+
         return true;
     }
 

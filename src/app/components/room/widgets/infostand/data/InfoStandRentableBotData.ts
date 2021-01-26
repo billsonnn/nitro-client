@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetRentableBotInfostandUpdateEvent } from '../../events/RoomWidgetRentableBotInfostandUpdateEvent';
 
-export class InfoStandRentableBotData 
+export class InfoStandRentableBotData
 {
     private _id: number = 0;
     private _name: string = '';

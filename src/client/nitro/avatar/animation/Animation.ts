@@ -80,7 +80,7 @@ export class Animation implements IAnimation
                 this._overrideFrames.set(name, frames);
             }
         }
-        
+
         this._Str_1031(this._frames, _arg_2.frames, k);
     }
 
@@ -171,7 +171,7 @@ export class Animation implements IAnimation
     private _Str_2259(frameCount: number, _arg_2: string = null): AnimationLayerData[]
     {
         if(frameCount < 0) frameCount = 0;
-        
+
         let layers: AnimationLayerData[] = [];
 
         if(!_arg_2)
@@ -204,7 +204,7 @@ export class Animation implements IAnimation
             {
                 _local_3.push(layer.id);
             }
-            
+
             else if(layer.type === AnimationLayerData.FX)
             {
                 if(this._addData && this._addData.length)
@@ -225,7 +225,7 @@ export class Animation implements IAnimation
         for(const layer of this._Str_2259(frameCount, _arg_3))
         {
             if(layer.id === spriteId) return layer;
-            
+
             if(layer.type === AnimationLayerData.FX)
             {
                 if(this._addData && this._addData.length)

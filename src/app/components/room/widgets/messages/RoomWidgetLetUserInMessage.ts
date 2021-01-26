@@ -10,7 +10,7 @@ export class RoomWidgetLetUserInMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: boolean)
     {
         super(RoomWidgetLetUserInMessage.RWLUIM_LET_USER_IN);
-        
+
         this._userName = k;
         this._canEnter = _arg_2;
     }

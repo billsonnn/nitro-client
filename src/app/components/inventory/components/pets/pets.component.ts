@@ -12,7 +12,7 @@ export class InventoryPetsComponent implements OnInit, OnDestroy
 
     constructor(
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void

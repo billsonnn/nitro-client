@@ -4,7 +4,7 @@ import { IObjectData } from '../../../../../room/object/data/IObjectData';
 import { FurnitureDataParser } from '../../../parser/room/furniture/FurnitureDataParser';
 import { IFurnitureItemData } from '../furni/IFurnitureItemData';
 
-export class TradingListItem implements IFurnitureItemData 
+export class TradingListItem implements IFurnitureItemData
 {
     private _Str_5390: number;
     private _isWallItem: boolean;

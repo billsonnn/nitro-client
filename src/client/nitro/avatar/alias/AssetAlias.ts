@@ -1,6 +1,6 @@
 ﻿import { IAssetAlias } from '../../../core/asset/interfaces';
 
-export class AssetAlias 
+export class AssetAlias
 {
     private _name: string;
     private _link: string;

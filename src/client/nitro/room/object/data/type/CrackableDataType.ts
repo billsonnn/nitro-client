@@ -8,7 +8,7 @@ import { ObjectDataKey } from '../ObjectDataKey';
 export class CrackableDataType extends ObjectDataBase implements IObjectData
 {
     public static FORMAT_KEY = ObjectDataKey.CRACKABLE_KEY;
-    
+
     private _state: string;
     private _hits: number;
     private _target: number;

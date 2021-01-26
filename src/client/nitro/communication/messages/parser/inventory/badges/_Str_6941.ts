@@ -25,7 +25,7 @@ export class _Str_6941 implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._Str_13713 = [];
         this._Str_13962 = [];
         this._Str_4833  = new AdvancedMap();

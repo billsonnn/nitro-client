@@ -1,4 +1,4 @@
-﻿export class Motion 
+﻿export class Motion
 {
     protected _target: HTMLElement;
     protected _running: boolean;

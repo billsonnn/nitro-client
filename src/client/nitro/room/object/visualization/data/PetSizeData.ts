@@ -117,7 +117,7 @@ export class PetSizeData extends AnimationSizeData
                 --index;
             }
         }
-        
+
         return null;
     }
 

@@ -13,14 +13,14 @@ export class RespectReceivedParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._userId            = wrapper.readInt();
         this._respectsReceived  = wrapper.readInt();
-        
+
         return true;
     }
 

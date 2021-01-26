@@ -86,7 +86,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(!roomMap || !this.object) return;
 
         if(!(roomMap instanceof RoomMapData)) return;
-        
+
         if(!this._planeParser.initializeFromMapData(roomMap)) return;
 
         this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, roomMap);
@@ -145,7 +145,7 @@ export class RoomLogic extends RoomObjectLogicBase
             const _local_11 = ((this._Str_11287 >> 8) & 0xFF);
             const _local_12 = (this._Str_11287 & 0xFF);
             const _local_13 = ((k - this._Str_9785) / this._Str_17191);
-            
+
             _local_7 = (_local_7 + ((_local_10 - _local_7) * _local_13));
             _local_8 = (_local_8 + ((_local_11 - _local_8) * _local_13));
             _local_9 = (_local_9 + ((_local_12 - _local_9) * _local_13));
@@ -183,7 +183,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(message instanceof ObjectRoomMaskUpdateMessage)
         {
             this.onObjectRoomMaskUpdateMessage(message, model);
-            
+
             return;
         }
 
@@ -251,7 +251,7 @@ export class RoomLogic extends RoomObjectLogicBase
             case ObjectRoomMaskUpdateMessage._Str_10260:
                 update = this._planeBitmapMaskParser._Str_23574(message.maskId);
                 break;
-                
+
         }
 
         if(update) _arg_2.setValue(RoomObjectVariable.ROOM_PLANE_MASK_XML, this._planeBitmapMaskParser._Str_5598());
@@ -389,7 +389,7 @@ export class RoomLogic extends RoomObjectLogicBase
         else
         {
             this.object.model.setValue(RoomObjectVariable.ROOM_SELECTED_PLANE, 0);
-            
+
             return;
         }
 
@@ -428,7 +428,7 @@ export class RoomLogic extends RoomObjectLogicBase
                 }
 
                 if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(newEvent);
-                
+
                 return;
             }
         }

@@ -146,7 +146,7 @@ export class FigureSetData implements IFigureSetData, IStructureData
 
             return partSet;
         }
-        
+
         return null;
     }
 }

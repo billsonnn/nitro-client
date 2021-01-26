@@ -8,7 +8,7 @@ export class AchievementsScoreParser implements IMessageParser
     public flush(): boolean
     {
         this._score = 0;
-        
+
         return true;
     }
 
@@ -17,7 +17,7 @@ export class AchievementsScoreParser implements IMessageParser
         if(!k) return false;
 
         this._score = k.readInt();
-        
+
         return true;
     }
 

@@ -7,7 +7,7 @@ import { NotificationDialogComponent } from '../notificationdialog/notificationd
     selector: 'nitro-notification-centre-component',
     templateUrl: './nc.template.html'
 })
-export class NotificationCentreComponent implements OnInit, OnDestroy 
+export class NotificationCentreComponent implements OnInit, OnDestroy
 {
     @ViewChild('alertsContainer', { read: ViewContainerRef })
     public alertsContainer: ViewContainerRef;
@@ -17,20 +17,20 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     { }
 
-    public ngOnInit(): void 
+    public ngOnInit(): void
     {
         this._notificationService.notificationCentre = this;
     }
 
-    public ngOnDestroy(): void 
+    public ngOnDestroy(): void
     {
         this._notificationService.notificationCentre = null;
     }
 
-    public publish(params: Array<string>, type: string): NotificationDialogComponent 
+    public publish(params: Array<string>, type: string): NotificationDialogComponent
     {
         const asset = params[0].split('}');
 
@@ -43,11 +43,11 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
     {
         let component: NotificationDialogComponent = null;
 
-        this._ngZone.run(() => 
+        this._ngZone.run(() =>
         {
             component = this.createComponent(NotificationDialogComponent);
 
-            if(message) 
+            if(message)
             {
                 if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
 
@@ -64,7 +64,7 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
         return component;
     }
 
-    private createComponent(type: typeof NotificationDialogComponent): NotificationDialogComponent 
+    private createComponent(type: typeof NotificationDialogComponent): NotificationDialogComponent
     {
         if(!type) return null;
 
@@ -74,7 +74,7 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
 
         let ref: ComponentRef<NotificationDialogComponent> = null;
 
-        if(factory) 
+        if(factory)
         {
             ref = this.alertsContainer.createComponent(factory);
 
@@ -86,7 +86,7 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
         return instance;
     }
 
-    public close(component: NotificationDialogComponent): void 
+    public close(component: NotificationDialogComponent): void
     {
         if(!component) return;
 
@@ -99,7 +99,7 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
         this.removeView(ref.hostView);
     }
 
-    public removeView(view: ViewRef): void 
+    public removeView(view: ViewRef): void
     {
         if(!view) return;
 
@@ -110,7 +110,7 @@ export class NotificationCentreComponent implements OnInit, OnDestroy
         this.alertsContainer.remove(index);
     }
 
-    public get alerts(): Map<NotificationDialogComponent, ComponentRef<NotificationDialogComponent>> 
+    public get alerts(): Map<NotificationDialogComponent, ComponentRef<NotificationDialogComponent>>
     {
         return this._alerts;
     }

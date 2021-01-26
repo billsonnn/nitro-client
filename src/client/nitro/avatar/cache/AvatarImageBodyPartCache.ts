@@ -1,7 +1,7 @@
 ﻿import { Nitro } from '../../Nitro';
 import { AvatarImageDirectionCache } from './AvatarImageDirectionCache';
 
-export class AvatarImageBodyPartCache 
+export class AvatarImageBodyPartCache
 {
     private _Str_586: Map<string, AvatarImageDirectionCache>;
     private _Str_1509: number;

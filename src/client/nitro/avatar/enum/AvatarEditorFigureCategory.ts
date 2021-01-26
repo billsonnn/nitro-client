@@ -1,4 +1,4 @@
-﻿export class AvatarEditorFigureCategory 
+﻿export class AvatarEditorFigureCategory
 {
     public static GENERIC: string   = 'hd';
     public static HEAD: string      = 'head';

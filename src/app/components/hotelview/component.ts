@@ -12,7 +12,7 @@ import { SessionService } from '../../security/services/session.service';
 export class HotelViewComponent
 {
     constructor(
-        private sessionService: SessionService) 
+        private sessionService: SessionService)
     {}
 
     public get figure(): string

@@ -10,7 +10,7 @@ export class NumberDataType extends ObjectDataBase
     public static FORMAT_KEY = ObjectDataKey.NUMBER_KEY;
 
     private static STATE: number = 0;
-    
+
     private _data: number[];
 
     constructor()
@@ -51,7 +51,7 @@ export class NumberDataType extends ObjectDataBase
     public getLegacyString(): string
     {
         if(!this._data || !this._data.length) return '';
-        
+
         return this._data[NumberDataType.STATE].toString();
     }
 
@@ -85,7 +85,7 @@ export class NumberDataType extends ObjectDataBase
         const value = this._data[index];
 
         if(value === undefined || value === null) return -1;
-        
+
         return value;
     }
 }

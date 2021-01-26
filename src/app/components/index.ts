@@ -39,5 +39,5 @@ import { WiredModule } from './wired/wired.module';
         MainComponent
     ]
 })
-export class ComponentsModule 
-{ } 
+export class ComponentsModule
+{ }

@@ -3,7 +3,7 @@ import { AnimationFrame } from './AnimationFrame';
 import { AnimationLayerData } from './AnimationLayerData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
 
-export class AnimationData 
+export class AnimationData
 {
     private static TRANSITION_TO_ANIMATION_OFFSET: number   = 1000000;
     private static TRANSITION_FROM_ANIMATION_OFFSET: number = 2000000;
@@ -72,7 +72,7 @@ export class AnimationData
     public getStartFrame(direction: number): number
     {
         if(!this._randomStart) return 0;
-        
+
         return Math.random() * this._frameCount;
     }
 
@@ -143,7 +143,7 @@ export class AnimationData
                 frame.initialize();
             }
         }
-        
+
         layerData.calculateLength();
 
         this._layers.set(animationId, layerData);
@@ -181,7 +181,7 @@ export class AnimationData
         const layer = this._layers.get(layerId);
 
         if(!layer) return null;
-        
+
         return layer.getFrame(direction, frameCount);
     }
 
@@ -190,7 +190,7 @@ export class AnimationData
         const layer = this._layers.get(layerId);
 
         if(!layer) return null;
-        
+
         return layer.getFrameFromSequence(direction, sequenceId, offset, frameCount);
     }
 }

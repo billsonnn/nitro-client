@@ -1,7 +1,7 @@
 ﻿import { Point } from 'pixi.js';
 import { IGraphicAsset } from '../../../../../../../room/object/visualization/utils/IGraphicAsset';
 
-export class AnimationItem 
+export class AnimationItem
 {
     private _x: number;
     private _y: number;

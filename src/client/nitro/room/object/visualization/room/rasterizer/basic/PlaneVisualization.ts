@@ -9,7 +9,7 @@ import { PlaneVisualizationAnimationLayer } from '../animated/PlaneVisualization
 import { PlaneMaterial } from './PlaneMaterial';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
 
-export class PlaneVisualization 
+export class PlaneVisualization
 {
     private _layers: IDisposable[];
     private _geometry: IRoomGeometry;
@@ -62,7 +62,7 @@ export class PlaneVisualization
 
             this._layers = null;
         }
-        
+
         this._geometry = null;
 
         if(this._cachedBitmapData)
@@ -226,7 +226,7 @@ export class PlaneVisualization
         if(canvas && (canvas !== this._cachedBitmapData))
         {
             const texture = TextureUtils.generateTexture(canvas, new Rectangle(0, 0, canvas.width, canvas.height));
-            
+
             this._cachedBitmapData
                 .beginTextureFill({ texture })
                 .drawRect(0, 0, canvas.width, canvas.height)
@@ -234,7 +234,7 @@ export class PlaneVisualization
 
             return canvas;
         }
-        
+
         return this._cachedBitmapData;
     }
 }

@@ -1,4 +1,4 @@
-﻿export class _Str_6094 
+﻿export class _Str_6094
 {
     private _id: number = 0;
     private _type: number = 0;

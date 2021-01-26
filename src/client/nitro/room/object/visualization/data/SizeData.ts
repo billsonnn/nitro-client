@@ -21,7 +21,7 @@ export class SizeData
     {
         this._layerCount        = ((layerCount < 0) ? 0 : ((layerCount > SizeData.MAX_LAYERS) ? SizeData.MAX_LAYERS : layerCount));
         this._angle             = angle < 1 ? 1 : angle > 360 ? 360 : angle;
-        
+
         this._defaultDirection  = new DirectionData(this._layerCount);
         this._directions        = new Map();
         this._colors            = [];
@@ -231,7 +231,7 @@ export class SizeData
 
         return directionData.getLayerAlpha(layerId);
     }
-    
+
     public getLayerColor(layerId: number, colorId: number): number
     {
         const existing = this._colors[colorId] as ColorData;

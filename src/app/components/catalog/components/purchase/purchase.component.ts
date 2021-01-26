@@ -23,7 +23,7 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public quantity: number = 1;
 
-    constructor(private _catalogService: CatalogService) 
+    constructor(private _catalogService: CatalogService)
     {}
 
     public ngOnChanges(changes: SimpleChanges): void

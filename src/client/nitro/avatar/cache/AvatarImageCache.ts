@@ -18,7 +18,7 @@ import { AvatarImageBodyPartCache } from './AvatarImageBodyPartCache';
 import { AvatarImageDirectionCache } from './AvatarImageDirectionCache';
 import { ImageData } from './ImageData';
 
-export class AvatarImageCache 
+export class AvatarImageCache
 {
     private static _Str_2189: number = 60000;
 
@@ -264,7 +264,7 @@ export class AvatarImageCache
         if(!_local_13 || _arg_3)
         {
             const _local_19 = this._structure._Str_713(k, this._avatar.getFigure(), _local_8, this._geometryType, _local_5, _local_9, this._avatar, _local_10);
-            
+
             _local_13 = new AvatarImageDirectionCache(_local_19);
 
             _local_12._Str_2168(_local_5, _local_13);
@@ -457,7 +457,7 @@ export class AvatarImageCache
 
             imageIndex--;
         }
-        
+
         return new AvatarImageBodyPartContainer(imageData.container, offset, isCacheable);
     }
 

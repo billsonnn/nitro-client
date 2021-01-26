@@ -14,7 +14,7 @@ export class FriendRequestsParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -29,7 +29,7 @@ export class FriendRequestsParser implements IMessageParser
 
             totalRequests--;
         }
-        
+
         return true;
     }
 
