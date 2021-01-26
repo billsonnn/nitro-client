@@ -18,7 +18,7 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
     {
         super(_catalogService, _ngZone);
         _catalogService.registerVipBuyTemplate(this);
-        
+
         _catalogService.requestOffers(6);
     }
 
@@ -57,9 +57,7 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
     }
 
     public getOfferText(code: string)
-    { 
-        const str = Nitro.instance.getLocalizationWithParameter('friendlytime.months.short', 'amount', code.replace(/[^\d.]/g, ''));
-        
-        return str;
+    {
+        return Nitro.instance.getLocalizationWithParameter('friendlytime.months.short', 'amount', code.replace(/[^\d.]/g, ''));
     }
 }

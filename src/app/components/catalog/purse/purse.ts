@@ -1,6 +1,4 @@
-import { IPurse } from './ipurse';
-
-export class Purse implements IPurse
+export class Purse
 {
     Str_14389: boolean;
     clubDays: number;
@@ -9,7 +7,4 @@ export class Purse implements IPurse
     isVip: boolean;
     pastClubDays: number;
     minutesUntilExpiration: number;
-
-
-
 }

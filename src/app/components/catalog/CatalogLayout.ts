@@ -1,4 +1,4 @@
-import {Directive, NgZone} from '@angular/core';
+import { Directive, NgZone } from '@angular/core';
 import { CatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from '../../../client/nitro/Nitro';

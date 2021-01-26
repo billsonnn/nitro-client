@@ -1,11 +1,7 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
-import {CatalogPurchaseComposer} from "../../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer";
 @Component({
     selector: 'nitro-catalog-confirm-vip-subscription-component',
     templateUrl: './confirm-vip-subscription.template.html'
