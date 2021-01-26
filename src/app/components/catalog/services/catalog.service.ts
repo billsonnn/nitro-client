@@ -342,7 +342,13 @@ export class CatalogService implements OnDestroy
     {
         if(!page || !offer || !quantity) return;
 
-        Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(page.pageId, offer.offerId, extra, quantity));
+        this.purchaseById(page.pageId, offer.offerId, quantity, extra);
+    }
+
+    public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)
+    {
+        if(!pageId || !offerId || !quantity) return;
+        Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(pageId, offerId, extra, quantity));
     }
 
     public requestOffers(i: number): void
