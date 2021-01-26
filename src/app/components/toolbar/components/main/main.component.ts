@@ -29,17 +29,17 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
                 transition(
                     ':enter', 
                     [
-                        style({ bottom: '-100%' }),
+                        style({ left: '-100%' }),
                         animate('1s 500ms ease-out', 
-                            style({ bottom: 10 }))
+                            style({ left: 10 }))
                     ]
                 ),
                 transition(
                     ':leave', 
                     [
-                        style({ bottom: 10 }),
+                        style({ left: 10 }),
                         animate('1s 500ms ease-in', 
-                            style({ bottom: '-100%' }))
+                            style({ left: '-100%' }))
                     ]
                 )
             ]
