@@ -334,7 +334,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     public removeMessageEvent(event: IMessageEvent): void
     {
-        if(!this._messages) return;
+        if(!event) return;
 
         this._messages.removeMessageEvent(event);
     }
