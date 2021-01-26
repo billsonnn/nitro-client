@@ -5,7 +5,7 @@ stages:
   - test
   - build
 
-Install Dependencies:
+install:dependencies:
     stage: install_dependencies
     script:
         - npm i
@@ -16,12 +16,16 @@ Install Dependencies:
 
 ESLinter:
     stage: test
+    dependencies:
+        - install:dependencies
     script:
         - node ./node_modules/eslint/bin/eslint.js src/
 
 
 Build Nitro:
   stage: build
+  dependencies:
+      - install:dependencies
   script:
     - npm i
     - cp src/index.html.example src/index.html
