@@ -2,5 +2,5 @@ import { FurnitureFireworksVisualization } from './FurnitureFireworksVisualizati
 
 export class FurnitureGiftWrappedFireworksVisualization extends FurnitureFireworksVisualization
 {
-    
+
 }

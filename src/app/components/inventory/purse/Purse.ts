@@ -1,6 +1,6 @@
 import { Nitro } from '../../../../client/nitro/Nitro';
 
-export class Purse 
+export class Purse
 {
     private _isExpiring: boolean = false;
     private _isCitizenshipVipExpiring: boolean = false;

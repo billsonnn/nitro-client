@@ -17,7 +17,7 @@ import { FriendListService } from '../../services/friendlist.service';
     selector: '[nitro-friendlist-thread-viewer-component]',
     templateUrl: './thread-viewer.template.html'
 })
-    
+
 export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
 {
     @Input()
@@ -91,7 +91,7 @@ export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
 
             this.thread.setRead();
         });
-        
+
         Nitro.instance.communication.connection.send(new SendMessageComposer(this.participant.id, message));
     }
 

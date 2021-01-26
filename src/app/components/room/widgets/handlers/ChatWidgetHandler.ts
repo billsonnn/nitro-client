@@ -167,7 +167,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                     if(roomGeometry)
                     {
                         this._Str_20006();
-                        
+
                         let x   = 0;
                         let y   = 0;
 
@@ -261,7 +261,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const avatarImage = this._container.avatarRenderManager.createAvatarImage(figure, AvatarScaleType.LARGE, null, this);
 
         if(!avatarImage) return;
-        
+
         const image = avatarImage.getCroppedImage(AvatarSetType.HEAD);
         const color = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 

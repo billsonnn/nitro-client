@@ -1,7 +1,7 @@
 ﻿import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { LegacyExternalInterface } from '../externalInterface/LegacyExternalInterface';
 
-export class HabboWebTools 
+export class HabboWebTools
 {
     public static ADVERTISEMENT: string = 'advertisement';
     public static OPENLINK: string      = 'openlink';

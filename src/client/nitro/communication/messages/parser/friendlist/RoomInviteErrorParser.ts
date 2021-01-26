@@ -13,7 +13,7 @@ export class RoomInviteErrorParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -28,7 +28,7 @@ export class RoomInviteErrorParser implements IMessageParser
 
             totalFailed--;
         }
-        
+
         return true;
     }
 

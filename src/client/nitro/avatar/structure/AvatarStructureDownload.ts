@@ -43,9 +43,9 @@ export class AvatarStructureDownload extends EventDispatcher
                 });
             };
 
-            request.onerror = e => 
+            request.onerror = e =>
             {
-                throw new Error('invalid_avatar_figure_data'); 
+                throw new Error('invalid_avatar_figure_data');
             };
         }
 

@@ -1,4 +1,4 @@
-﻿export class ActionTypeCodes 
+﻿export class ActionTypeCodes
 {
     public static TOGGLE_FURNI_STATE: number            = 0;
     public static RESET: number                         = 1;

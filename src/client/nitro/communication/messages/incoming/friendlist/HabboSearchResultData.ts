@@ -36,7 +36,7 @@ export class HabboSearchResultData
     {
         return this._avatarName;
     }
-    
+
     public get avatarMotto(): string
     {
         return this._avatarMotto;
@@ -51,7 +51,7 @@ export class HabboSearchResultData
     {
         return this._canFollow;
     }
-    
+
     public get avatarGender(): number
     {
         return this._avatarGender;

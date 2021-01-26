@@ -18,5 +18,5 @@ import { HabbopediaService } from './services/habbopedia.service';
         HabbopediaPageComponent
     ]
 })
-export class HabbopediaModule 
+export class HabbopediaModule
 {}

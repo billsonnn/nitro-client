@@ -1,4 +1,4 @@
-﻿export class AvatarEditorInstanceId 
+﻿export class AvatarEditorInstanceId
 {
     public static _Str_3350: number     = 0;
     public static _Str_7195: number     = 1;

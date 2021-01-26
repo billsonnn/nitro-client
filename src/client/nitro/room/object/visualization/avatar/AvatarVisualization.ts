@@ -146,7 +146,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     public initialize(data: IObjectVisualizationData): boolean
     {
         if(!(data instanceof AvatarVisualizationData)) return false;
-        
+
         this._data  = data;
 
         this.setSpriteCount(AvatarVisualization._Str_11587);
@@ -517,7 +517,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         direction       = (((direction % 360) + 360) % 360);
         headDirection   = (((headDirection % 360) + 360) % 360);
-        
+
         if((this._posture === 'sit') && this._canStandUp)
         {
             direction      -= ((direction % 90) - 45);
@@ -903,7 +903,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                 }
             }
         }
-        
+
         if(this._effect > 0) this._avatarImage.appendAction(AvatarAction.EFFECT, this._effect);
 
         avatar.endActionAppends();
@@ -956,11 +956,11 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
         this._cachedAvatars.reset();
         this._cachedAvatarEffects.reset();
-        
+
         this._avatarImage = null;
 
         const sprite = this.getSprite(AvatarVisualization.AVATAR_LAYER_ID);
-        
+
         if(sprite)
         {
             sprite.texture  = Texture.EMPTY;
@@ -1036,11 +1036,11 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
                     sprite._Str_3582 = 'h_std_sd_1_0_0';
 
                     this._shadow = this._avatarImage.getAsset(sprite._Str_3582);
-                    
+
                     offsetX = -17;
                     offsetY = ((this._canStandUp) ? 10 : -7);
                 }
-            
+
                 if(this._shadow)
                 {
                     sprite.texture          = this._shadow.texture;
@@ -1058,7 +1058,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
         else
         {
             this._shadow = null;
-            
+
             sprite.visible = false;
         }
     }

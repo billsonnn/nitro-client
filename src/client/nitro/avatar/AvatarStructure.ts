@@ -110,14 +110,14 @@ export class AvatarStructure extends EventDispatcher
     public _Str_2229(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._animationData.parse(k);
     }
 
     public _Str_1569(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._figureData.parse(k);
     }
 
@@ -251,7 +251,7 @@ export class AvatarStructure extends EventDispatcher
 
         const _local_4: string[]    = [];
         const _local_5              = k._Str_742._Str_868;
-        
+
         if(k._Str_742._Str_861)
         {
             const _local_7 = ((k._Str_742.state + '.') + k._Str_727);

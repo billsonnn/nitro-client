@@ -8,7 +8,7 @@ import { CatalogService } from '../../services/catalog.service';
 })
 export class CatalogNavigationComponent
 {
-    constructor(private _catalogService: CatalogService) 
+    constructor(private _catalogService: CatalogService)
     {}
 
     public get catalogPage(): CatalogPageData

@@ -9,7 +9,7 @@ export class RoomWidgetGetBadgeImageMessage extends RoomWidgetMessage
     constructor(k: string)
     {
         super(RoomWidgetGetBadgeImageMessage.RWGOI_MESSAGE_GET_BADGE_IMAGE);
-        
+
         this._badgeId = k;
     }
 

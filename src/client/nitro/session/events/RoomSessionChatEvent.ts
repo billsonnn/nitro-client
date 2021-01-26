@@ -5,7 +5,7 @@ export class RoomSessionChatEvent extends RoomSessionEvent
 {
     public static CHAT_EVENT: string   = 'RSCE_CHAT_EVENT';
     public static FLOOD_EVENT: string  = 'RSCE_FLOOD_EVENT';
-    
+
     public static CHAT_NORMAL: number       = 0;
     public static CHAT_WHISPER: number      = 1;
     public static CHAT_SHOUT: number        = 2;

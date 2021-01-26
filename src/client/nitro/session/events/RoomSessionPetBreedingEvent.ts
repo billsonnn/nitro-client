@@ -12,7 +12,7 @@ export class RoomSessionPetBreedingEvent extends RoomSessionEvent
     constructor(k: IRoomSession, _arg_2: number, _arg_3: number, _arg_4: number)
     {
         super(RoomSessionPetBreedingEvent.RSPFUE_PET_BREEDING, k);
-        
+
         this._state = _arg_2;
         this._ownPetId = _arg_3;
         this._otherPetId = _arg_4;

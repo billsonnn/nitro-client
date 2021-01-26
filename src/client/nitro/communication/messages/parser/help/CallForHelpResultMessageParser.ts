@@ -13,14 +13,14 @@ export class CallForHelpResultMessageParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._resultType    = wrapper.readInt();
         this._messageText   = wrapper.readString();
-        
+
         return true;
     }
 

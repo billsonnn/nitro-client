@@ -59,8 +59,8 @@ export class FurnitureEditableRoomLinkLogic extends FurnitureLogic
 
             this._timer = null;
         }
-        
-        this._timer = setTimeout(() => 
+
+        this._timer = setTimeout(() =>
         {
             this.setAutomaticStateIndex(0);
 
@@ -68,7 +68,7 @@ export class FurnitureEditableRoomLinkLogic extends FurnitureLogic
         }, 2500);
 
         if(!this.eventDispatcher || !this.object) return;
-        
+
         this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.ROOM_LINK, this.object));
     }
 }

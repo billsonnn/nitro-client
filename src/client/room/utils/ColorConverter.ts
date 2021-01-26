@@ -1,7 +1,7 @@
 ﻿import { IVector3D } from './IVector3D';
 import { Vector3d } from './Vector3d';
 
-export class ColorConverter 
+export class ColorConverter
 {
     public static int2rgb(color: number): string
     {
@@ -10,7 +10,7 @@ export class ColorConverter
         const g = (color & 0xFF00) >>> 8;
         const r = (color & 0xFF0000) >>> 16;
         const a = ( (color & 0xFF000000) >>> 24 ) / 255;
-        
+
         return 'rgba(' + [r, g, b, 1].join(',') + ')';
     }
 

@@ -13,7 +13,7 @@ export class RoomWidgetDimmerStateUpdateEvent extends RoomWidgetUpdateEvent
     constructor(state: number, presetId: number, effectId: number, color: number, brightness: number)
     {
         super(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE);
-        
+
         this._state         = state;
         this._presetId      = presetId;
         this._effectId      = effectId;

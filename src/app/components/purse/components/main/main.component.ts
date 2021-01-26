@@ -9,7 +9,7 @@ import { PurseService } from '../../services/purse.service';
 })
 export class PurseMainComponent implements OnInit
 {
-    constructor(private _purseService: PurseService) 
+    constructor(private _purseService: PurseService)
     {}
 
     public ngOnInit(): void

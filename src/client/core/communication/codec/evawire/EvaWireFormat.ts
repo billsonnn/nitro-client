@@ -69,7 +69,7 @@ export class EvaWireFormat implements ICodec
         while(connection.dataBuffer.byteLength)
         {
             if(connection.dataBuffer.byteLength < 4) break;
-            
+
             const container = new BinaryReader(connection.dataBuffer);
             const length    = container.readInt();
 

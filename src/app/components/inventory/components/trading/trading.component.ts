@@ -28,7 +28,7 @@ export class InventoryTradingComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void

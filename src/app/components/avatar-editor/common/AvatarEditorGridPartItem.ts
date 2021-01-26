@@ -87,7 +87,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     public init(): void
     {
         if(this._isInitalized) return;
-        
+
         this._isInitalized = true;
 
         this.update();

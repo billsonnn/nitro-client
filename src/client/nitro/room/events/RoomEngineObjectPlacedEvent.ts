@@ -15,7 +15,7 @@ export class RoomEngineObjectPlacedEvent extends RoomEngineObjectEvent
     constructor(type: string, roomId: number, objectId: number, category: number, wallLocation: string, x: number, y: number, z: number, direction: number, placedInRoom: boolean, placedOnFloor: boolean, placedOnWall: boolean, instanceData: string)
     {
         super(type, roomId, objectId, category);
-        
+
         this._wallLocation  = wallLocation;
         this._x             = x;
         this._y             = y;

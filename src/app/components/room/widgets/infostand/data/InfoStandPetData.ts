@@ -1,7 +1,7 @@
 ﻿import { Texture } from 'pixi.js';
 import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
 
-export class InfoStandPetData 
+export class InfoStandPetData
 {
     private _level: number;
     private _levelMax: number;

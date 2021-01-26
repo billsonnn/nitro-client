@@ -69,7 +69,7 @@ export class RoomManager extends NitroManager implements IRoomManager, IRoomInst
         if(this._state >= RoomManager._Str_13904 || !this._contentLoader) return;
 
         const mandatoryLibraries = RoomContentLoader.MANDATORY_LIBRARIES;
-        
+
         for(const library of mandatoryLibraries)
         {
             if(!library) continue;

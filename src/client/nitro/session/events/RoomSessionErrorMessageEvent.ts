@@ -21,7 +21,7 @@ export class RoomSessionErrorMessageEvent extends RoomSessionEvent
     constructor(k: string, _arg_2: IRoomSession, _arg_3: string=null)
     {
         super(k, _arg_2);
-        
+
         this._message = _arg_3;
     }
 

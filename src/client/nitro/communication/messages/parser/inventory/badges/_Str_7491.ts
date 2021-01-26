@@ -17,7 +17,7 @@ export class _Str_7491 implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._badgeId   = wrapper.readInt();
         this._Str_2722  = wrapper.readString();
 

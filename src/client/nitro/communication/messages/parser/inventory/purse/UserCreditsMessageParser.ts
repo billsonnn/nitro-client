@@ -10,7 +10,7 @@ export class UserCreditsMessageParser implements IMessageParser
         if(!wrapper) return false;
 
         this._balance = parseFloat(wrapper.readString());
-        
+
         return true;
     }
 

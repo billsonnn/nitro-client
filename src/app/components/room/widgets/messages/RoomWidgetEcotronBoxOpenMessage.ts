@@ -9,7 +9,7 @@ export class RoomWidgetEcotronBoxOpenMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number)
     {
         super(k);
-        
+
         this._objectId = _arg_2;
     }
 

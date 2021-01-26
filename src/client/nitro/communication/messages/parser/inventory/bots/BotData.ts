@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class BotData 
+export class BotData
 {
     private _id: number;
     private _name: string;

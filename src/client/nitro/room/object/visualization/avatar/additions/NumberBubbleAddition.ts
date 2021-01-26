@@ -153,7 +153,7 @@ export class NumberBubbleAddition implements IAvatarAddition
 
             return true;
         }
-        
+
         if(this._numberValueFadeDirection < 0)
         {
             if(alpha >= 0) alpha -= 32;
@@ -169,7 +169,7 @@ export class NumberBubbleAddition implements IAvatarAddition
             }
 
             sprite.alpha = alpha;
-            
+
             return true;
         }
 

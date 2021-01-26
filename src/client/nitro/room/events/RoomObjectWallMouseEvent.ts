@@ -3,7 +3,7 @@ import { IRoomObject } from '../../../room/object/IRoomObject';
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class RoomObjectWallMouseEvent extends RoomObjectMouseEvent 
+export class RoomObjectWallMouseEvent extends RoomObjectMouseEvent
 {
     private _wallLocation: Vector3d;
     private _wallWd: Vector3d;

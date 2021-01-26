@@ -11,7 +11,7 @@ export class RoomWidgetPurseUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number)
     {
         super(k);
-        
+
         this._balance = _arg_2;
     }
 

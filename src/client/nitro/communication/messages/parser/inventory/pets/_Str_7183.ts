@@ -16,7 +16,7 @@ export class _Str_7183 implements IMessageParser
         if(!wrapper) return false;
 
         this._Str_2388 = wrapper.readInt();
-        
+
         return true;
     }
 

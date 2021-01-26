@@ -1,6 +1,6 @@
 ﻿import { Vector3D } from './Vector3D';
 
-export class Matrix4x4 
+export class Matrix4x4
 {
     public static IDENTITY:Matrix4x4    = new Matrix4x4(1, 0, 0, 0, 1, 0, 0, 0, 1);
     private static TOLERANS: number     = 1E-18;
