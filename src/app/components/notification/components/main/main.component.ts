@@ -11,7 +11,7 @@ import { NotificationDialogComponent } from '../notificationdialog/notificationd
     selector: 'nitro-notification-main-component',
     templateUrl: './main.template.html'
 })
-export class NotificationMainComponent implements OnInit, OnDestroy 
+export class NotificationMainComponent implements OnInit, OnDestroy
 {
     @ViewChild('alertsContainer', { read: ViewContainerRef })
     public alertsContainer: ViewContainerRef;
@@ -21,25 +21,25 @@ export class NotificationMainComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     { }
 
-    public ngOnInit(): void 
+    public ngOnInit(): void
     {
         this._notificationService.component = this;
     }
 
-    public ngOnDestroy(): void 
+    public ngOnDestroy(): void
     {
         this._notificationService.component = null;
     }
 
-    public alert(message: string, title: string = null): NotificationBroadcastMessageComponent 
+    public alert(message: string, title: string = null): NotificationBroadcastMessageComponent
     {
         return this.buildAlert(NotificationBroadcastMessageComponent, message, title);
     }
 
-    public alertWithLink(message: string, link: string = null, title: string = null): NotificationBroadcastMessageComponent 
+    public alertWithLink(message: string, link: string = null, title: string = null): NotificationBroadcastMessageComponent
     {
         const component = (this.buildAlert(NotificationModeratorMessageComponent, message, title) as NotificationModeratorMessageComponent);
 
@@ -50,7 +50,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    public alertWithConfirm(message: string, title: string = null, callback: Function = null): NotificationBroadcastMessageComponent 
+    public alertWithConfirm(message: string, title: string = null, callback: Function = null): NotificationBroadcastMessageComponent
     {
         const component = (this.buildAlert(NotificationConfirmComponent, message, title) as NotificationConfirmComponent);
 
@@ -61,7 +61,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    public alertWithScrollableMessages(messages: string[], title: string = null): NotificationBroadcastMessageComponent 
+    public alertWithScrollableMessages(messages: string[], title: string = null): NotificationBroadcastMessageComponent
     {
         const component = (this.buildAlert(NotificationMultipleMessagesComponent, null, title) as NotificationMultipleMessagesComponent);
 
@@ -69,7 +69,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
         const transformedMessages: string[] = [];
 
-        for(const message of messages) 
+        for(const message of messages)
         {
             if(!message) continue;
 
@@ -81,24 +81,24 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    public buildAlert(type: typeof NotificationBroadcastMessageComponent, message: string, title: string = null): NotificationBroadcastMessageComponent 
+    public buildAlert(type: typeof NotificationBroadcastMessageComponent, message: string, title: string = null): NotificationBroadcastMessageComponent
     {
         let component: NotificationBroadcastMessageComponent = null;
 
-        this._ngZone.run(() => 
+        this._ngZone.run(() =>
         {
             component = this.createComponent(type);
 
-            if(title) 
+            if(title)
             {
                 if(title.startsWith('${')) title = Nitro.instance.getLocalization(title);
             }
-            else 
+            else
             {
                 title = Nitro.instance.getLocalization('${mod.alert.title}');
             }
 
-            if(message) 
+            if(message)
             {
                 if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
 
@@ -114,7 +114,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    private createComponent(type: typeof NotificationBroadcastMessageComponent): NotificationBroadcastMessageComponent 
+    private createComponent(type: typeof NotificationBroadcastMessageComponent): NotificationBroadcastMessageComponent
     {
         if(!type) return null;
 
@@ -124,7 +124,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
         let ref: ComponentRef<NotificationBroadcastMessageComponent> = null;
 
-        if(factory) 
+        if(factory)
         {
             ref = this.alertsContainer.createComponent(factory);
 
@@ -136,7 +136,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return instance;
     }
 
-    public close(component: NotificationBroadcastMessageComponent): void 
+    public close(component: NotificationBroadcastMessageComponent): void
     {
         if(!component) return;
 
@@ -149,12 +149,12 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         this.removeView(ref.hostView);
     }
 
-    public closeAll(): void 
+    public closeAll(): void
     {
         for(const component of this._alerts.keys()) this.close(component);
     }
 
-    private removeView(view: ViewRef): void 
+    private removeView(view: ViewRef): void
     {
         if(!view) return;
 

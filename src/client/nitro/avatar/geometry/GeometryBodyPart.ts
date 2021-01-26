@@ -170,7 +170,7 @@ export class GeometryBodyPart extends Node3D
 
             partIds.push(part[1].id);
         }
-        
+
         return partIds;
     }
 

@@ -259,7 +259,7 @@ export class NitroMessages implements IMessageConfiguration
         this.registerEvents();
         this.registerComposers();
     }
-    
+
     private registerEvents(): void
     {
         // AVAILABILITY
@@ -620,7 +620,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
 
-                
+
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 

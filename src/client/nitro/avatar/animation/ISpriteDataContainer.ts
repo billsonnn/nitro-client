@@ -1,6 +1,6 @@
 ﻿import { IAnimation } from './IAnimation';
 
-export interface ISpriteDataContainer 
+export interface ISpriteDataContainer
 {
     animation: IAnimation;
     id: string;

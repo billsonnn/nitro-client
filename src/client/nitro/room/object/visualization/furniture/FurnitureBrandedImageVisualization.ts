@@ -10,7 +10,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     protected _imageUrl: string;
     protected _shortUrl: string;
     protected _imageReady: boolean;
-    
+
     protected _offsetX: number;
     protected _offsetY: number;
     protected _offsetZ: number;
@@ -40,7 +40,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     protected updateModel(scale: number): boolean
     {
         const flag = super.updateModel(scale);
-        
+
         if(flag)
         {
             this._offsetX   = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_X);
@@ -115,7 +115,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
             const texture   = Nitro.instance.core.asset.getTexture(url);
 
             if(!texture) return false;
-            
+
             this.imageReady(texture, imageUrl);
 
             return true;

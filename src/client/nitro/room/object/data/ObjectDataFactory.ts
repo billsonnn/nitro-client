@@ -43,7 +43,7 @@ export class ObjectDataFactory
         }
 
         if(!objectData) return null;
-        
+
         objectData.flags = (flags & 0xFF00);
 
         return objectData;

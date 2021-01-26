@@ -17,5 +17,5 @@ import { CallForHelpService } from './services/call-for-help.service';
         CallForHelpMainComponent
     ]
 })
-export class CallForHelpModule 
+export class CallForHelpModule
 {}

@@ -3,7 +3,7 @@ import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { Plane } from './Plane';
 
-export class FloorPlane extends Plane 
+export class FloorPlane extends Plane
 {
     public static _Str_2531: number = 0xFFFFFF;
     public static _Str_5433: number = 45;

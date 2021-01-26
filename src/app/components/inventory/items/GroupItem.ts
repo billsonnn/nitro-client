@@ -58,7 +58,7 @@ export class GroupItem implements IGetImageListener
 
     public dispose(): void
     {
-        
+
     }
 
     public getItemByIndex(index: number): FurnitureItem
@@ -153,11 +153,11 @@ export class GroupItem implements IGetImageListener
         {
             let count   = 0;
             let i       = 0;
-            
+
             while(i < this._items.length)
             {
                 const item = this._items.getWithIndex(i);
-                
+
                 count = (count + parseInt(item.stuffData.getLegacyString()));
 
                 i++;
@@ -236,7 +236,7 @@ export class GroupItem implements IGetImageListener
         }
 
         let key = '';
-        
+
         switch(this._category)
         {
             case FurniCategory._Str_5186:
@@ -295,7 +295,7 @@ export class GroupItem implements IGetImageListener
     private setIconUrl(url: string): void
     {
         if(!url) return;
-        
+
         this._iconUrl = url;
     }
 
@@ -312,7 +312,7 @@ export class GroupItem implements IGetImageListener
 
     public imageFailed(id: number): void
     {
-        
+
     }
 
     public get type(): number

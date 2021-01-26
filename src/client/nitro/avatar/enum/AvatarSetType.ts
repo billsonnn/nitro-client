@@ -1,4 +1,4 @@
-﻿export class AvatarSetType 
+﻿export class AvatarSetType
 {
     public static FULL: string = 'full';
     public static HEAD: string = 'head';

@@ -29,7 +29,7 @@ export class FigurePartSet implements IFigurePartSet
         this._hiddenLayers      = [];
         this._isPreSelectable   = parseInt(data['$'].preselectable) === 1;
         this._isSellable        = parseInt(data['$'].sellable) === 1;
-        
+
         for(const part of data.part)
         {
             const newPart   = new FigurePart(part);

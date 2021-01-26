@@ -13,7 +13,7 @@ export class RoomWidgetOpenInventoryMessage extends RoomWidgetMessage
     constructor(k: string)
     {
         super(RoomWidgetOpenInventoryMessage. RWGOI_MESSAGE_OPEN_INVENTORY);
-        
+
         this._inventoryType = k;
     }
 

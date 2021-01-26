@@ -30,7 +30,7 @@ export class Palette implements IPalette
     public _Str_751(id: number): IPartColor
     {
         if((id === undefined) || id < 0) return null;
-        
+
         return (this._colors.get(id.toString()) || null);
     }
 

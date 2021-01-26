@@ -1,4 +1,4 @@
-﻿export class RenderMode 
+﻿export class RenderMode
 {
     public static TOOL: string          = 'tool';
     public static COMPONENT: string     = 'component';

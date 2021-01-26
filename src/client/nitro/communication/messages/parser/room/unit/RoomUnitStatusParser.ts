@@ -13,7 +13,7 @@ export class RoomUnitStatusParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -42,7 +42,7 @@ export class RoomUnitStatusParser implements IMessageParser
     public parseStatus(wrapper: IMessageDataWrapper): RoomUnitStatusMessage
     {
         if(!wrapper) return null;
-        
+
         const unitId        = wrapper.readInt();
         const x               = wrapper.readInt();
         const y               = wrapper.readInt();

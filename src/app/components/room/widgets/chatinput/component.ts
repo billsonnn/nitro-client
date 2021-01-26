@@ -99,7 +99,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
+
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent);
         eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent);
         eventDispatcher.addEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent);
@@ -111,7 +111,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
+
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent);
         eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent);
         eventDispatcher.removeEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent);
@@ -155,14 +155,14 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
-        
+
         this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = '';
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
     }
 
     public onChange(event: KeyboardEvent): void
-    { 
+    {
         if(!event) return;
 
         //this._chatViewInput.parentElement.dataset.value = this._chatViewInput.value
@@ -255,7 +255,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         let chatType        = (shiftKey ? RoomWidgetChatMessage.CHAT_SHOUT : RoomWidgetChatMessage.CHAT_DEFAULT);
         let text            = this.inputView.value;
-        
+
         const parts         = text.split(' ');
 
         let recipientName   = '';
@@ -286,7 +286,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         text = parts.join(' ');
 
         const chatStyle = SystemChatStyleEnum.NORMAL;
-        
+
         if(this.typingTimer) this.resetTypingTimer();
 
         if(this.idleTimer) this.resetIdleTimer();
@@ -326,9 +326,9 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private setInputFocus(): void
     {
         const input = this.chatInputView && this.chatInputView.nativeElement;
-        
+
         if(!input) return;
-        
+
         input.focus();
 
         input.setSelectionRange((input.value.length * 2), (input.value.length * 2));

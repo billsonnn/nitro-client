@@ -117,7 +117,7 @@ export class InventoryFurnitureService implements OnDestroy
                     if(furnitureItem)
                     {
                         furnitureItem.update(item);
-                        
+
                         groupItem.hasUnseenItems = true;
                     }
                 }
@@ -180,7 +180,7 @@ export class InventoryFurnitureService implements OnDestroy
         this._ngZone.run(() =>
         {
             const groupItem = this.removeItemById(parser.itemId);
-        
+
             if(groupItem) this.setAllFurnitureSeen();
         });
     }
@@ -391,7 +391,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
-        
+
         existingGroup.push(item, unseen);
 
         if(unseen)
@@ -499,7 +499,7 @@ export class InventoryFurnitureService implements OnDestroy
     public setAllFurnitureSeen(): void
     {
         this._inventoryService.unseenTracker._Str_8813(UnseenItemCategory.FURNI);
-        
+
         for(const groupItem of this._groupItems)
         {
             if(groupItem.hasUnseenItems) groupItem.hasUnseenItems = false;
@@ -632,7 +632,7 @@ export class InventoryFurnitureService implements OnDestroy
     public requestLoad(): void
     {
         this._needsUpdate = false;
-        
+
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
     }
 

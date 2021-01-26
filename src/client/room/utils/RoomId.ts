@@ -1,4 +1,4 @@
-﻿export class RoomId 
+﻿export class RoomId
 {
     private static PREVIEW_ROOM_ID_BASE: number = 0x7FFF0000;
 

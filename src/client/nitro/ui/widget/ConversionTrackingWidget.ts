@@ -3,7 +3,7 @@ import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidget } from './IRoomWidget';
 import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';
 
-export class ConversionTrackingWidget implements IRoomWidget 
+export class ConversionTrackingWidget implements IRoomWidget
 {
     private _widgetHandler: IRoomWidgetHandler;
     private _messageListener: IRoomWidgetMessageListener;

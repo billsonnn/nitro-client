@@ -90,7 +90,7 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
     private setHeight(height: number, fromServer: boolean = false): void
     {
         height = Math.abs(height);
-        
+
         if(!fromServer) ((height > CustomStackHeightComponent.MAX_HEIGHT) && (height = CustomStackHeightComponent.MAX_HEIGHT));
 
         this._height = parseFloat(height.toFixed(2));

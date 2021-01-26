@@ -3,7 +3,7 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 export class RoomWidgetTrophyUpdateEvent extends RoomWidgetUpdateEvent
 {
     public static TROPHY_DATA: string = 'RWTUE_TROPHY_DATA';
-    
+
     private _name: string;
     private _date: string;
     private _message: string;

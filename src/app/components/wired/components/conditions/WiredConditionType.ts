@@ -1,4 +1,4 @@
-﻿export class WiredConditionType 
+﻿export class WiredConditionType
 {
     public static STATES_MATCH: number              = 0;
     public static FURNIS_HAVE_AVATARS: number       = 1;

@@ -19,7 +19,7 @@ export class CommunicationManager extends Disposable implements ICommunicationMa
     protected onDispose(): void
     {
         if(!this._connections || !this._connections.length) return;
-        
+
         for(const connection of this._connections.values()) connection && connection.dispose();
     }
 

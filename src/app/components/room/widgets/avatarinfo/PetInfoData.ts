@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfostandUpdateEvent';
 
-export class PetInfoData 
+export class PetInfoData
 {
     public age: number = 0;
     public rarityLevel: number = 0;

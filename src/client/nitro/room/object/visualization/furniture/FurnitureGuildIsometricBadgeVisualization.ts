@@ -2,5 +2,5 @@ import { FurnitureThumbnailVisualization } from './FurnitureThumbnailVisualizati
 
 export class FurnitureGuildIsometricBadgeVisualization extends FurnitureThumbnailVisualization
 {
-    
+
 }

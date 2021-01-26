@@ -29,7 +29,7 @@ export class AchievementsParser implements IMessageParser
 
             totalCount--;
         }
-        
+
         this._Str_19269 = k.readString();
 
         return true;

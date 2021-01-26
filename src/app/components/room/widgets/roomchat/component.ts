@@ -61,7 +61,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
+
         eventDispatcher.addEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage);
         eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate);
         eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate);
@@ -73,7 +73,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
+
         eventDispatcher.removeEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage);
         eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate);
         eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate);
@@ -142,7 +142,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
             return;
         }
-        
+
         let chatRef: ComponentRef<RoomChatItemComponent>    = null;
         let chat: RoomChatItemComponent                     = null;
 

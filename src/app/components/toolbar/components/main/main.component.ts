@@ -37,7 +37,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _friendListService: FriendListService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
-        private ngZone: NgZone) 
+        private ngZone: NgZone)
     {
         this.onNitroToolbarEvent = this.onNitroToolbarEvent.bind(this);
     }
@@ -104,7 +104,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 return;
             case ToolbarIconEnum.ME_MENU:
                 this.toggleAvatarEditor();
-                
+
                 Nitro.instance.roomEngine.events.dispatchEvent(new NitroToolbarEvent(NitroToolbarEvent.SELECT_OWN_AVATAR));
                 return;
         }
@@ -117,7 +117,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         iconName  = this.getIconName(iconName);
 
         if(iconName === '') return;
-        
+
         const target = (this.navigationListElement.getElementsByClassName(iconName)[0] as HTMLElement);
 
         if(target)
@@ -146,7 +146,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
             }
 
             const _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
-            
+
             Motions._Str_4598(_local_19);
         }
     }

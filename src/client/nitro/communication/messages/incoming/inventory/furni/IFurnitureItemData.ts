@@ -1,6 +1,6 @@
 ﻿import { IObjectData } from '../../../../../room/object/data/IObjectData';
 
-export interface IFurnitureItemData 
+export interface IFurnitureItemData
 {
     itemId: number;
     furniType: string;

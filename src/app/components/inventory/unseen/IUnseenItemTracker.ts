@@ -1,4 +1,4 @@
-﻿export interface IUnseenItemTracker 
+﻿export interface IUnseenItemTracker
 {
     dispose(): void;
     _Str_8813(_arg_1: number): boolean;

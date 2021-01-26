@@ -9,7 +9,7 @@ export class RoomWidgetUpdateEffectsUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: number[] = null)
     {
         super(RoomWidgetUpdateEffectsUpdateEvent.RWUEUE_UPDATE_EFFECTS);
-        
+
         this._effects = k;
     }
 

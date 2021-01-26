@@ -47,7 +47,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
     public dispose(): void
     {
         if(this.disposed) return;
-        
+
         this.container  = null;
 
         this._widget    = null;

@@ -86,7 +86,7 @@ export class FurnitureLogic extends MovingObjectLogic
         this._sizeX = dimensions.x;
         this._sizeY = dimensions.y;
         this._sizeZ = dimensions.z;
-        
+
         this._centerX   = (this._sizeX / 2);
         this._centerY   = (this._sizeY / 2);
         this._centerZ   = (this._sizeZ / 2);
@@ -97,9 +97,9 @@ export class FurnitureLogic extends MovingObjectLogic
         {
             for(const direction of directions) this._directions.push(direction);
 
-            this._directions.sort((a, b) => 
+            this._directions.sort((a, b) =>
             {
-                return a - b; 
+                return a - b;
             });
         }
 
@@ -210,7 +210,7 @@ export class FurnitureLogic extends MovingObjectLogic
         if(!message) return;
 
         this.object.setState(message.state, 0);
-        
+
         if(message.data) message.data.writeRoomObjectModel(this.object.model);
 
         this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra);
@@ -220,7 +220,7 @@ export class FurnitureLogic extends MovingObjectLogic
     private processObjectHeightUpdateMessage(message: ObjectHeightUpdateMessage): void
     {
         if(!message) return;
-        
+
         this.object.model.setValue(RoomObjectVariable.FURNITURE_SIZE_Z, message.height);
     }
 
@@ -356,7 +356,7 @@ export class FurnitureLogic extends MovingObjectLogic
         if(this.eventDispatcher)
         {
             if(this.widget) this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.OPEN_WIDGET, this.object));
-            
+
             this.eventDispatcher.dispatchEvent(new RoomObjectStateChangedEvent(RoomObjectStateChangedEvent.STATE_CHANGE, this.object));
         }
     }
@@ -367,7 +367,7 @@ export class FurnitureLogic extends MovingObjectLogic
         {
             this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.CLOSE_WIDGET, this.object));
         }
-        
+
         super.tearDown();
     }
 }

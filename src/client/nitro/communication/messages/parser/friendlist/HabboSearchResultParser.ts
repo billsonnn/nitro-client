@@ -14,7 +14,7 @@ export class HabboSearchResultParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -33,10 +33,10 @@ export class HabboSearchResultParser implements IMessageParser
         while(totalOthers > 0)
         {
             this._others.push(new HabboSearchResultData(wrapper));
-            
+
             totalOthers--;
         }
-        
+
         return true;
     }
 

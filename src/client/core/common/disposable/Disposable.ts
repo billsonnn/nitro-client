@@ -14,9 +14,9 @@ export class Disposable implements IDisposable
     public dispose(): void
     {
         if(this._isDisposed || this._isDisposing) return;
-        
+
         this._isDisposing   = true;
-        
+
         this.onDispose();
 
         this._isDisposed    = true;

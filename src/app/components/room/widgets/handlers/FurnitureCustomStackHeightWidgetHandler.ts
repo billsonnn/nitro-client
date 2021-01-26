@@ -11,7 +11,7 @@ import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/message
 import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
 import { CustomStackHeightComponent } from '../furniture/customstackheight/component';
 
-export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler 
+export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler
 {
     private _container: IRoomWidgetHandlerContainer = null;
     private _widget: CustomStackHeightComponent     = null;

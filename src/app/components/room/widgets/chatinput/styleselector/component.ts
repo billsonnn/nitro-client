@@ -34,7 +34,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     constructor(
         private changeDetector: ChangeDetectorRef,
-        private ngZone: NgZone) 
+        private ngZone: NgZone)
     {}
 
     public ngOnInit(): void
@@ -87,7 +87,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
     private hideSelector(): void
     {
         this.showStyles = false;
-        
+
         //this.ngZone.runOutsideAngular(() => document.body.removeEventListener('click', this.onOutsideClick.bind(this)));
     }
 

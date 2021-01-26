@@ -81,5 +81,5 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe
     ]
 })
-export class SharedModule 
+export class SharedModule
 {}

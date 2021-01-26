@@ -13,14 +13,14 @@ export class FurnitureStackHeightParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._furniId   = wrapper.readInt();
         this._height    = (wrapper.readInt() / 100);
-        
+
         return true;
     }
 

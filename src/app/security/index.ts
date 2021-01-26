@@ -6,5 +6,5 @@ import { SessionService } from './services/session.service';
         SessionService
     ]
 })
-export class SecurityModule 
+export class SecurityModule
 {}

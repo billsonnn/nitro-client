@@ -28,7 +28,7 @@ export class FurnitureDiceLogic extends FurnitureLogic
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         if(!event || !geometry || !this.object) return;
-        
+
         let objectEvent: RoomObjectEvent = null;
 
         switch(event.type)
@@ -55,7 +55,7 @@ export class FurnitureDiceLogic extends FurnitureLogic
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_ACTIVATE, this.object);
                     }
-                    
+
                     else if(event.spriteTag === 'deactivate')
                     {
                         objectEvent = new RoomObjectFurnitureActionEvent(RoomObjectFurnitureActionEvent.DICE_OFF, this.object);

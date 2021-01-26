@@ -1,4 +1,4 @@
-﻿export class RoomVariableEnum 
+﻿export class RoomVariableEnum
 {
     public static ROOM_MIN_X: string            = 'room_min_x';
     public static ROOM_MAX_X: string            = 'room_max_x';

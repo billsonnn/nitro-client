@@ -1,6 +1,6 @@
 ﻿import { IGraphicAsset } from '../../../../../../room/object/visualization/utils/IGraphicAsset';
 
-export class PlaneMaskBitmap 
+export class PlaneMaskBitmap
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;

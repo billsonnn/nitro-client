@@ -15,7 +15,7 @@ export class FriendNotificationParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -23,7 +23,7 @@ export class FriendNotificationParser implements IMessageParser
         this._typeCode  = wrapper.readInt();
         this._avatarId  = wrapper.readInt();
         this._message   = wrapper.readString();
-        
+
         return true;
     }
 

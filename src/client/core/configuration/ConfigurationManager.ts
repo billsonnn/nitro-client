@@ -30,7 +30,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
             return;
         }
-        
+
         const request = new XMLHttpRequest();
 
         try

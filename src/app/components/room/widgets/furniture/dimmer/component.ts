@@ -49,7 +49,7 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         this.onDimmerHideEvent      = this.onDimmerHideEvent.bind(this);
         this.onDimmerStateEvent     = this.onDimmerStateEvent.bind(this);
     }
-    
+
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;

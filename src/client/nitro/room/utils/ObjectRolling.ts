@@ -4,7 +4,7 @@ export class ObjectRolling
 {
     public static MOVE: string  = 'mv';
     public static SLIDE: string = 'sld';
-    
+
     private _id: number;
     private _location: IVector3D;
     private _targetLocation: IVector3D;

@@ -21,7 +21,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _settingsService: SettingsService,
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
-        private _inventoryTradingService: InventoryTradingService) 
+        private _inventoryTradingService: InventoryTradingService)
     {}
 
     public ngOnInit(): void
@@ -70,7 +70,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public showFurniture(): void
-    {        
+    {
         this._inventoryService.furnitureVisible = true;
     }
 

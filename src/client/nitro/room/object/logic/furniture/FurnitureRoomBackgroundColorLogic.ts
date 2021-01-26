@@ -11,7 +11,7 @@ import { FurnitureMultiStateLogic } from './FurnitureMultiStateLogic';
 
 export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
 {
-    
+
     private _roomColorUpdated: boolean;
 
     constructor()

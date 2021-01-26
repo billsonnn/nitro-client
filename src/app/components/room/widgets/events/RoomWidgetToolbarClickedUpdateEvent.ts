@@ -12,7 +12,7 @@ export class RoomWidgetToolbarClickedUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: boolean = false)
     {
         super(RoomWidgetToolbarClickedUpdateEvent.RWUE_REQUEST_ME_MENU_TOOLBAR_CLICKED);
-        
+
         this._Str_22092 = k;
         this._active = _arg_2;
     }
