@@ -1,7 +1,24 @@
 image: node:15.6
 
 stages:
+  - install_dependencies
+  - test
   - build
+
+Install Dependencies:
+    stage: install_dependencies
+    script:
+        - npm i
+    cache:
+        key: ${CI_COMMIT_BRANCH}
+        paths:
+            - node_modules
+
+ESLinter:
+    stage: test
+    script:
+        - node ./node_modules/eslint/bin/eslint.js src/
+
 
 Build Nitro:
   stage: build
