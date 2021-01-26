@@ -21,16 +21,11 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     constructor()
     {
-        this._container  = null;
-        this._widget     = null;
-
         this._communicationManager = Nitro.instance.communication;
-        this._messages = [
-            new RoomInfoEvent(this.onRoomInfoEvent.bind(this))
-        ];
-
-        this.registerMessages();
-        this._disposed   = false;
+        this._container = null;
+        this._widget = null;
+        this._messages = [];
+        this._disposed = false;
     }
 
     public set widget(widget: RoomToolsMainComponent)
