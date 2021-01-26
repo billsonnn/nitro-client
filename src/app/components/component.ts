@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Nitro } from '../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBackgroundColorEvent';
@@ -31,7 +32,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
     template: `
     <div class="nitro-main-component">
         <nitro-notification-main-component></nitro-notification-main-component>
-        <div class="nitro-right-side">
+        <div class="nitro-right-side" *ngIf="isReady" [@inOutAnimation]>
             <div class="d-flex flex-column">
                 <nitro-purse-main-component></nitro-purse-main-component>
                 <nitro-notification-centre-component></nitro-notification-centre-component>
@@ -49,7 +50,22 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
         <nitro-inventory-main-component [visible]="inventoryVisible"></nitro-inventory-main-component>
         <nitro-wired-main-component></nitro-wired-main-component>
         <nitro-room-component></nitro-room-component>
-    </div>`
+    </div>`,
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter', 
+                    [
+                        style({ top: '-100%' }),
+                        animate('1s ease-out', 
+                            style({ top: 0 }))
+                    ]
+                )
+            ]
+        )
+    ]
 })
 export class MainComponent implements OnInit, OnDestroy 
 {

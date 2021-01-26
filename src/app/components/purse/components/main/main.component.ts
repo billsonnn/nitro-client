@@ -46,4 +46,9 @@ export class PurseMainComponent implements OnInit
 
         return days;
     }
+
+    public get isReady(): boolean
+    { 
+        return this._purseService.isReady;
+    }
 }

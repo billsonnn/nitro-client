@@ -6,7 +6,7 @@ import { SessionService } from '../../security/services/session.service';
     selector: 'nitro-hotelview-component',
     template: `
     <div class="nitro-hotelview-component" [ngStyle]="{background: backgroundColour}">
-        <img [src]="background" class="background position-absolute">
+        <div [ngStyle]="{backgroundImage: 'url('+background+')'}" class="background position-absolute"></div>
         <img [src]="sun" class="sun position-absolute">
         <img [src]="drape" class="drape position-absolute">
         <img [src]="left" class="left position-absolute">

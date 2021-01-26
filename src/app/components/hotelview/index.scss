@@ -14,7 +14,9 @@
 
 	.background {
 		height:100%;
-		width:331px;
+		width:100%;
+		background-position: left;
+		background-repeat: repeat-y;
 	}
 
 	.drape {
@@ -35,16 +37,27 @@
 	.left {
 		bottom:0;
 		left:0;
+		animation-iteration-count: 1;
+		animation-name: slideUp;
+		animation-duration: 1s;
 	}
 
 	.right {
 		right:0;
 		bottom:0;
+		animation-iteration-count: 1;
+		animation-name: slideUp;
+		animation-duration: 1s;
+		animation-delay: 100ms;
 	}
 
 	.rightRepeat {
 		right:0;
 		top:0;
+		animation-iteration-count: 1;
+		animation-name: slideRight;
+		animation-duration: 1s;
+		animation-delay: 200ms;
 	}
 }
 
@@ -54,5 +67,23 @@
     }
     to {
         top:0;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        bottom: -100%;
+    }
+    to {
+        bottom:0;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        right: -100%;
+    }
+    to {
+        right:0;
     }
 }
