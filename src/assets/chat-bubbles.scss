@@ -14,12 +14,12 @@
         left: 1px;
         width: 30px;
         height: calc(100% - 0.5px);
-        border-radius: 5px;
+        border-radius: 7px;
         z-index: 1;
     }
 
-    .chat-bubble {   
-        position: relative;   
+    .chat-bubble {
+        position: relative;
         z-index: 1;
         box-shadow: inset 0px -2px 0px 0px rgba(0,0,0,0.1);
         word-break: break-all;
@@ -69,7 +69,7 @@
 
         &.bubble-2, &.bubble-31 {
             border-image-source: url('./images/chatbubbles/bubble_2.png');
-            
+
             .user-container {
                 display: none;
             }
@@ -321,7 +321,7 @@
 
         &.bubble-30 {
             border-image-source: url('./images/chatbubbles/bubble_30.png');
-            
+
             .user-container {
                 display: none;
             }
