@@ -8,6 +8,7 @@ import { NitroLocalizationEvent } from '../../../client/nitro/localization/Nitro
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
 import { WebGL } from '../../../client/nitro/utils/WebGL';
+import { SettingsService } from '../../core/settings/service';
 
 @Component({
     selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppMainComponent implements OnInit, OnDestroy
     private _connectionTimeout: NodeJS.Timeout;
 
     constructor(
+        private _settingsService: SettingsService,
         private _ngZone: NgZone) 
     {
         this.onNitroEvent = this.onNitroEvent.bind(this);
@@ -219,7 +221,7 @@ export class AppMainComponent implements OnInit, OnDestroy
                 {
                     this.isAvatarRenderReady    = true;
                     this.percentage             = (this.percentage + 20);
-                    this.hideProgress           = false;
+                    this.hideProgress = false;
                 });
                 break;
         }
@@ -227,6 +229,8 @@ export class AppMainComponent implements OnInit, OnDestroy
 
     public get isReady(): boolean
     {
+        this._settingsService.isReady = (this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady);
+        
         return ((this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady) || false);
     }
 

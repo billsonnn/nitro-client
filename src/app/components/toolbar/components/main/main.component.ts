@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
 import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
@@ -14,14 +15,36 @@ import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/AchievementsService';
-import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
 
 @Component({
     selector: 'nitro-toolbar-component',
-    templateUrl: './main.template.html'
+    templateUrl: './main.template.html',
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter', 
+                    [
+                        style({ bottom: '-100%' }),
+                        animate('1s 500ms ease-out', 
+                            style({ bottom: 10 }))
+                    ]
+                ),
+                transition(
+                    ':leave', 
+                    [
+                        style({ bottom: 10 }),
+                        animate('1s 500ms ease-in', 
+                            style({ bottom: '-100%' }))
+                    ]
+                )
+            ]
+        )
+    ]
 })
 export class ToolbarMainComponent implements OnInit, OnDestroy
 {
@@ -32,7 +55,6 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     public navigationList: ElementRef<HTMLElement>;
 
     constructor(
-        private _avatarEditorService: AvatarEditorService,
         private _inventoryService: InventoryService,
         private _navigatorService: NavigatorService,
         private _friendListService: FriendListService,
@@ -105,7 +127,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 this.toggleFriendList();
                 return;
             case ToolbarIconEnum.ME_MENU:
-                this.toggleAvatarEditor();
+                this.toggleMeMenu();
                 
                 Nitro.instance.roomEngine.events.dispatchEvent(new NitroToolbarEvent(NitroToolbarEvent.SELECT_OWN_AVATAR));
                 return;
@@ -190,10 +212,9 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         this.settingsService.toggleNavigator();
     }
 
-    public toggleAvatarEditor(): void
-    {
-        this._avatarEditorService.loadOwnAvatarInEditor();
-        this.settingsService.toggleAvatarEditor();
+    public toggleMeMenu(): void
+    { 
+        this.settingsService.toggleMeMenu();
     }
 
     public visitDesktop(): void

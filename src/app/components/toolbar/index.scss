@@ -6,6 +6,10 @@
     z-index: 0;
     pointer-events: none;
 
+    .nitro-toolbar-component-body {
+        z-index: 2;
+    }
+
     .btn-primary  {
         pointer-events: none;
     }
@@ -21,10 +25,7 @@
             padding: unset;
             pointer-events: all;
             width:100%;
-
-            &:not(:last-child) {
-                padding-top:1rem;
-            }
+            padding-top:1rem;
 
             &:active {
                 -webkit-transform: translate(0, 1px);
@@ -33,12 +34,12 @@
 
             &.avatar-image {
                 width: 65px;
-                height: 70px;
+                height: 65px;
                 overflow: hidden;
 
                 img {
                     position: relative;
-                    top: 10px;
+                    top: 0px;
                 }
             }
 
@@ -58,6 +59,42 @@
                 top:.8rem;
                 right:10px;
                 font-size:10px;
+            }
+        }
+    }
+
+    .nitro-toolbar-me-menu {
+        bottom: 60px;
+        left: 72px;
+        position: absolute;
+        font-size: 12px;
+        z-index: 1;
+
+        .list-group {
+            .list-group-item {
+                min-width: 70px;
+                transition: all .3s;
+                font-size: 10px;
+                text-align: center;
+
+                i {
+                    filter: grayscale(1);
+                }
+
+                &:hover {
+                    color: $cyan;
+                    text-decoration: underline;
+
+                    i {
+                        filter: grayscale(0);
+                    }
+                }
+
+                .unseenCount {
+                    top: 5px;
+                    right: 5px;
+                    font-size: 10px;
+                }
             }
         }
     }

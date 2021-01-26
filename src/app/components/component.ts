@@ -42,7 +42,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
         <nitro-pedia-main-component></nitro-pedia-main-component>
         <nitro-avatar-editor-main-component [visible]="avatarEditorVisible"></nitro-avatar-editor-main-component>
         <nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
-        <nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
+        <nitro-toolbar-component [isInRoom]="!landingViewVisible" *ngIf="isReady"></nitro-toolbar-component>
         <nitro-friendlist-main-component [visible]="friendListVisible"></nitro-friendlist-main-component>
         <nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
         <nitro-navigator-main-component [visible]="navigatorVisible"></nitro-navigator-main-component>
@@ -317,5 +317,10 @@ export class MainComponent implements OnInit, OnDestroy
     public get achievementsVisible(): boolean 
     {
         return this._settingsService.achievementsVisible;
+    }
+
+    public get isReady(): boolean 
+    {
+        return this._settingsService.isReady;
     }
 }

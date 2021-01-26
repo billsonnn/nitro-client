@@ -33,6 +33,15 @@
             "roomId": 203
         }
     ],
+    "hotelview.images": {
+        "background": "%asset.url%/images/reception/stretch_blue.png",
+        "background.colour": "#6eadc8",
+        "sun": "%asset.url%/images/reception/sun.png",
+        "drape": "%asset.url%/images/reception/drape.png",
+        "left": "%asset.url%/images/reception/ts.png",
+        "right": "%asset.url%/images/reception/us_right.png",
+        "right.repeat": "%asset.url%/images/reception/us_top_right.png"
+    },
     "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
     "animation.fps": 24,
     "limits.fps": true,
