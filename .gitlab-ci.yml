@@ -17,8 +17,6 @@ ESLinter:
 
 Build Nitro:
   stage: build
-  dependencies:
-      - install:dependencies
   script:
     - npm i
     - cp src/index.html.example src/index.html
