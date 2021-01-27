@@ -13,11 +13,11 @@ export class AchievementsCategoryComponent
 {
     @Input()
     public category: AchievementCategory = null;
-    
+
     private _selectedAchievement: Achievement = null;
-    
+
     constructor(
-        private _achivementsService: AchievementsService) 
+        private _achivementsService: AchievementsService)
     { }
 
     public selectAchievement(achievement: Achievement)
@@ -40,15 +40,15 @@ export class AchievementsCategoryComponent
 
         let charReplaced: string;
 
-        if(desc) 
+        if(desc)
         {
-            charReplaced = this.getText(['badge_desc_' + str, 'badge_desc_' + badgeBase.base]); 
+            charReplaced = this.getText(['badge_desc_' + str, 'badge_desc_' + badgeBase.base]);
         }
-        else 
+        else
         {
-            charReplaced = this.getText(['badge_name_' + str, 'badge_name_' + badgeBase.base]); 
+            charReplaced = this.getText(['badge_name_' + str, 'badge_name_' + badgeBase.base]);
         }
-            
+
         return charReplaced
             .replace('%roman%', this.getRomanNumeral(badgeBase.level))
             .replace('%limit%',badge._Str_24142.toString());
@@ -75,11 +75,11 @@ export class AchievementsCategoryComponent
     }
 
     public getProgress(badge: Achievement, stringify = false): string
-    { 
+    {
         if(!badge) return;
-        
+
         if(stringify) return badge.progress + '/' + badge.toNextProgress;
-        
+
         return Math.trunc(badge.progress / badge.toNextProgress * 100) + '%';
     }
 

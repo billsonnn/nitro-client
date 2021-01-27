@@ -44,7 +44,7 @@ export class ContextInfoView
 
                 this.fadeStartTimer = null;
             }
-            
+
             this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
     }

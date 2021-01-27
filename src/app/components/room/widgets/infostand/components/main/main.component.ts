@@ -70,7 +70,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this.furniInfostandUpdateHandler);
         eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this.rentableBotInfostandUpdateHandler);
         eventDispatcher.addEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this.petInfostandUpdateHandler);
-        
+
         super.registerUpdateEvents(eventDispatcher);
     }
 

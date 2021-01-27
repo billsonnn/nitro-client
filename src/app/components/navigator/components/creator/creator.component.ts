@@ -62,7 +62,7 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
         const category = this.categories[0];
 
         if(category) categoryId = category.id;
-    
+
         this._form = this._formBuilder.group({
             roomName: [ '', Validators.required ],
             roomDesc: [ '' ],

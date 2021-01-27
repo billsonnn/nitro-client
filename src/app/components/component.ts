@@ -56,10 +56,10 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
             'inOutAnimation',
             [
                 transition(
-                    ':enter', 
+                    ':enter',
                     [
                         style({ top: '-100%' }),
-                        animate('1s ease-out', 
+                        animate('1s ease-out',
                             style({ top: 0 }))
                     ]
                 )
@@ -77,7 +77,7 @@ export class MainComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {
         this.onRoomEngineEvent          = this.onRoomEngineEvent.bind(this);
         this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
@@ -330,12 +330,12 @@ export class MainComponent implements OnInit, OnDestroy
         return this._settingsService.friendListVisible;
     }
 
-    public get achievementsVisible(): boolean 
+    public get achievementsVisible(): boolean
     {
         return this._settingsService.achievementsVisible;
     }
 
-    public get isReady(): boolean 
+    public get isReady(): boolean
     {
         return this._settingsService.isReady;
     }

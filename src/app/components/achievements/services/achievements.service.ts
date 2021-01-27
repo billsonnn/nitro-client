@@ -56,7 +56,7 @@ export class AchievementsService implements OnDestroy
     }
 
     public onAchievementsScoreEvent(event: AchievementsScoreEvent): void
-    { 
+    {
         if(!event) return;
 
         const parser = event.getParser();
@@ -67,7 +67,7 @@ export class AchievementsService implements OnDestroy
     }
 
     public onAchievementsMessageEvent(event: AchievementsEvent): void
-    { 
+    {
         if(!event) return;
 
         const parser = event.getParser();
@@ -111,7 +111,7 @@ export class AchievementsService implements OnDestroy
     }
 
     public onAchievementEvent(event: AchievementEvent)
-    { 
+    {
         if(!event) return;
 
         const parser = event.getParser();
@@ -168,17 +168,17 @@ export class AchievementsService implements OnDestroy
     }
 
     public loadAchievements(): void
-    { 
+    {
         Nitro.instance.communication.connection.send(new RequestAchievementsMessageComposer());
     }
 
     public get categories(): AchievementCategory[]
-    { 
+    {
         return this._categories;
     }
 
     public get selectedCategory(): AchievementCategory
-    { 
+    {
         return this._selectedCategory;
     }
 
@@ -212,7 +212,7 @@ export class AchievementsService implements OnDestroy
                 if(achievement.unseen) unseen++;
             }
         }
-        
+
         return unseen;
     }
 }
