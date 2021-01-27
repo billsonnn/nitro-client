@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { RoomWidgetEnumItemExtradataParameter } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
 import { RoomWidgetFurniInfoUsagePolicyEnum } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetFurniInfoUsagePolicyEnum';
@@ -28,8 +27,6 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
 
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
-        Nitro.instance.localization.registerParameter('furni.owner', 'name', this.furniData.ownerName);
-
         let canMove     = false;
         let canRotate   = false;
         let canUse      = false;
