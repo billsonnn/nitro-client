@@ -23,7 +23,7 @@ export class AchievementsCategoryListComponent
         private _ngZone: NgZone)
     {}
 
-    public selectCategoriy(category: AchievementCategory): void
+    public selectCategory(category: AchievementCategory): void
     {
         this._achivementsService.selectedCategory = category;
     }

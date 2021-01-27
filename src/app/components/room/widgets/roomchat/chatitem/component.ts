@@ -13,6 +13,7 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
             <div class="chat-content">
                 <b [innerHTML]="decoratedUsername"></b> <span class="message"> {{ message }}</span>
             </div>
+            <div class="pointer"></div>
         </div>
     </div>`
 })
