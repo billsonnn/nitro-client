@@ -319,8 +319,31 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
     }
 
+    private hasSufficientFunds(offerCredits: number, offerCurrencyType: number, offerCurrencyPoints: number, quantity: number = 1): boolean
+    {
+        if(!this._purseService) return false;
+
+        const purseCurrencies = this._purseService.currencies;
+
+        const currentCredits = purseCurrencies.get(-1);
+        const currentCurrencyAmount = purseCurrencies.get(offerCurrencyType);
+
+        const requiredCredits = offerCredits * quantity;
+        const requiredCurrency = offerCurrencyPoints * quantity;
+
+        if(currentCredits < requiredCredits || currentCurrencyAmount < requiredCurrency) return false;
+
+        return true;
+    }
+
     public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
     {
+        if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
         this._purchaseOfferPage     = page;
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
@@ -329,14 +352,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     public confirmVipSubscription(subscription: CatalogClubOfferData): void
     {
-        if(!this._purseService) return;
-
-        const purse = this._purseService.currencies;
-
-        const currentCredits = purse.get(-1);
-        const currentCurrency = purse.get(subscription.priceActivityPointsType);
-
-        if(currentCredits < subscription.priceCredits || currentCurrency < subscription.priceActivityPoints)
+        if(!this.hasSufficientFunds(subscription.priceCredits, subscription.priceActivityPointsType, subscription.priceActivityPoints, 1))
         {
             this.setInsufficientFunds(true);
             return;
