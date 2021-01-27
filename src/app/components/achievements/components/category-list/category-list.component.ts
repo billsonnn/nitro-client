@@ -6,7 +6,7 @@ import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';
 
 @Component({
-    selector: 'nitro-achievements-category-list-component',
+    selector: '[nitro-achievements-category-list-component]',
     templateUrl: './category-list.template.html'
 })
 export class AchievementsCategoryListComponent
@@ -28,76 +28,87 @@ export class AchievementsCategoryListComponent
         this._achivementsService.selectedCategory = category;
     }
 
-    public getProgress(stringify:boolean = false): string
+    public getProgressNumbers(): [ number, number ]
     {
-        if(!this.categories) return;
+        let completed   = 0;
+        let total       = 0;
 
-        const cats: any = this.categories;
-
-        let total = 0;
-
-        let completed = 0;
-
-        for(const loc of cats)
+        for(const category of this.categories)
         {
-            for(const loc2 of loc['achievements'])
-            {
-                completed += (loc2._Str_7518) ? loc2.level : (loc2.level - 1);
+            if(!category) continue;
 
-                total += loc2.totalLevels;
+            for(const achievement of category.achievements)
+            {
+                if(!achievement) continue;
+
+                completed += (achievement._Str_7518) ? achievement.level : (achievement.level - 1);
+                total += achievement.totalLevels;
             }
         }
 
-        if(stringify) return completed + '/' + total;
+        return [ completed, total ];
+    }
 
-        return Math.trunc(completed / total * 100) + '%';
+    public getProgressPercentageString(): string
+    {
+        const [ completed, total ] = this.getProgressNumbers();
+
+        return (Math.trunc(completed / total * 100) + '%');
+    }
+
+    public getProgressString(): string
+    {
+        const [ completed, total ] = this.getProgressNumbers();
+
+        return (completed + '/' + total);
     }
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
     {
-        if(icon) return Nitro.instance.getConfiguration('achievements.images.url',Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
+        if(icon) return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
 
-        let k = 0;
+        let level = 0;
 
-        for(const loc of achievements)
+        for(const achievement of achievements)
         {
-            k = k + ((loc._Str_7518) ? loc.level : (loc.level - 1));
+            level = (level + ((achievement._Str_7518) ? achievement.level : (achievement.level - 1)));
         }
 
-        const isActive = ((k > 0) ? 'active' : 'inactive');
+        const isActive = ((level > 0) ? 'active' : 'inactive');
 
         return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}_${isActive}.png`).toString().replace('%image%',`achcategory_${cat}_${isActive}`);
     }
 
     public getCategoryProgress(achievements: Achievement[]): string
     {
-        let completed = 0;
+        let completed   = 0;
+        let total       = 0;
 
-        let total = 0;
-
-        for(const loc of achievements)
+        for(const achievement of achievements)
         {
-            if(loc._Str_7518)
-            {
-                completed = completed + 1 + loc.level;
-            }
+            if(!achievement) continue;
 
-            total = total + loc.totalLevels;
+            if(achievement._Str_7518) completed = completed + 1 + achievement.level;
+
+            total = (total + achievement.totalLevels);
         }
 
-        return completed + '/' + total;
+        return (completed + '/' + total);
     }
 
-    public getUnseenCategory(category: AchievementCategory): number
+    public getUnseenCount(category: AchievementCategory): number
     {
         let unseen = 0;
 
-        category.achievements.forEach(el =>
+        if(category)
         {
-            if(el.unseen == 0) return;
+            for(const achievement of category.achievements)
+            {
+                if(!achievement) continue;
 
-            unseen = unseen + el.unseen;
-        });
+                unseen = (unseen + achievement.unseen);
+            }
+        }
 
         return unseen;
     }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Achievement } from '../../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { AchievementCategory } from '../../common/AchievementCategory';
@@ -6,10 +6,10 @@ import { AchievementsService } from '../../services/achievements.service';
 import { BadgeBaseAndLevel } from '../../utils/badge-base-and-level';
 
 @Component({
-    selector: 'nitro-achievements-category-component',
+    selector: '[nitro-achievements-category-component]',
     templateUrl: './category.template.html'
 })
-export class AchievementsCategoryComponent
+export class AchievementsCategoryComponent implements OnChanges
 {
     @Input()
     public category: AchievementCategory = null;
@@ -18,7 +18,15 @@ export class AchievementsCategoryComponent
 
     constructor(
         private _achivementsService: AchievementsService)
-    { }
+    {}
+
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        const prev = changes.category.previousValue;
+        const next = changes.category.currentValue;
+
+        if(next && (next !== prev)) this._selectedAchievement = null;
+    }
 
     public selectAchievement(achievement: Achievement)
     {

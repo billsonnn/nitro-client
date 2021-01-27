@@ -15,7 +15,6 @@ import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
-import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
@@ -247,6 +246,6 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
 
     public get unseenAchievementsCount(): number
     {
-        return this._achievementService.unseen;
+        return this._achievementService.unseenCount;
     }
 }

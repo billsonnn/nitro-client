@@ -74,6 +74,6 @@ export class MeMenuComponent implements OnInit, OnDestroy
 
     public get unseenAchievementsCount(): number
     {
-        return this._achievementService.unseen;
+        return this._achievementService.unseenCount;
     }
 }

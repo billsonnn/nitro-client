@@ -197,9 +197,9 @@ export class AchievementsService implements OnDestroy
         return this._isInitalized;
     }
 
-    public get unseen(): number
+    public get unseenCount(): number
     {
-        let unseen = 0;
+        let unseenCount = 0;
 
         for(const category of this._categories)
         {
@@ -209,10 +209,10 @@ export class AchievementsService implements OnDestroy
             {
                 if(!achievement) continue;
 
-                if(achievement.unseen) unseen++;
+                unseenCount = (unseenCount + achievement.unseen);
             }
         }
 
-        return unseen;
+        return unseenCount;
     }
 }
