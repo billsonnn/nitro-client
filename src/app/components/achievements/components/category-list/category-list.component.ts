@@ -1,15 +1,15 @@
-import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
 import { Achievement } from '../../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
-import { AchievementsService } from '../../services/AchievementsService';
-import { Category } from '../../utils/category';
+import { AchievementCategory } from '../../common/AchievementCategory';
+import { AchievementsService } from '../../services/achievements.service';
 
 @Component({
     selector: 'nitro-achievements-category-list-component',
     templateUrl: './category-list.template.html'
 })
-export class AchievementsCategoryListComponent implements OnInit, OnDestroy
+export class AchievementsCategoryListComponent
 {
     @Input()
     public visible: boolean = false;
@@ -21,17 +21,11 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
         private _settingsService: SettingsService,
         private _achivementsService: AchievementsService,
         private _ngZone: NgZone) 
-    { }
-    
-    public ngOnInit(): void
     {}
 
-    public ngOnDestroy(): void
-    {}
-
-    public selectCat(selected: Achievement[]): void
+    public selectCategoriy(category: AchievementCategory): void
     { 
-        this._achivementsService.selected = selected;
+        this._achivementsService.selectedCategory = category;
     }
 
     public getProgress(stringify:boolean = false): string
@@ -94,7 +88,7 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
         return completed + '/' + total;
     }
 
-    public getUnseenCategory(category: Category): number
+    public getUnseenCategory(category: AchievementCategory): number
     {
         let unseen = 0;
         
@@ -108,14 +102,14 @@ export class AchievementsCategoryListComponent implements OnInit, OnDestroy
         return unseen;
     }
 
-    public get categories(): Object
+    public get categories(): AchievementCategory[]
     {   
-        return this._achivementsService.achievements;
+        return this._achivementsService.categories;
     }
 
-    public get selectedCategory(): string
+    public get selectedCategory(): AchievementCategory
     { 
-        return this._achivementsService.selected['name'];
+        return this._achivementsService.selectedCategory;
     }
 
     public get achievementScore(): number
