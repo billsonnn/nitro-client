@@ -1,5 +1,6 @@
 ﻿import { NitroManager } from '../../core/common/NitroManager';
 import { Nitro } from '../Nitro';
+import { BadgeBaseAndLevel } from './BadgeBaseAndLevel';
 import { INitroLocalizationManager } from './INitroLocalizationManager';
 import { NitroLocalizationEvent } from './NitroLocalizationEvent';
 
@@ -71,6 +72,15 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
     public getRomanNumeral(number: number): string
     {
         return this._romanNumerals[Math.max(0, (number - 1))];
+    }
+
+    public getBadgeBaseAndLevel(badgeName: string): string
+    {
+        const badge = new BadgeBaseAndLevel(badgeName);
+        
+        badge.level--;
+
+        return badge.getBadgeId;
     }
 
     public getValue(key: string, doParams: boolean = true): string
