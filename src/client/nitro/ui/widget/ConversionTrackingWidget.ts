@@ -31,7 +31,6 @@ export class ConversionTrackingWidget implements IRoomWidget
 
         if(this._events && !this._events.disposed)
         {
-            console.log('un register');
             this.unregisterUpdateEvents(this._events);
         }
 

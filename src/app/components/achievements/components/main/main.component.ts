@@ -1,5 +1,6 @@
 import { Component, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { SettingsService } from '../../../../core/settings/service';
+import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';
 
 @Component({
@@ -33,5 +34,10 @@ export class AchievementsMainComponent implements OnChanges
     public hide(): void
     {
         this._settingsService.hideAchievements();
+    }
+
+    public get selectedCategory(): AchievementCategory
+    {
+        return this._achivementsService.selectedCategory;
     }
 }

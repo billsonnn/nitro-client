@@ -2,7 +2,7 @@
     <div class="text-center small">{{ ('quests.' + category.name + '.name') | translate }}</div>
     <perfect-scrollbar class="results-container position-relative w-100 pr-1 mb-1" style="min-height: 155px;max-height: 155px;height: 155px;">
         <div class="achievement-category-badge-grid">
-            <div *ngFor="let achievement of category" class="rounded d-flex justify-content-center position-relative" [ngClass]="[ selectedAchievement === achievement ? 'bg-warning' : 'bg-secondary']" (click)="selectAchievement(achievement)">
+            <div *ngFor="let achievement of category.achievements" class="rounded d-flex justify-content-center position-relative" [ngClass]="[ selectedAchievement === achievement ? 'bg-warning' : 'bg-secondary']" (click)="selectAchievement(achievement)">
                 <img class="d-block align-self-center m-1" [ngClass]="[achievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(achievement)"/>
                 <div class="achievement-unseen px-1 py-0 btn btn-danger rounded position-absolute" *ngIf="achievement.unseen">{{ achievement.unseen }}</div>
             </div>

@@ -9,7 +9,7 @@
                 <nitro-achievements-category-list-component></nitro-achievements-category-list-component>
             </div>
             <div class="col-6">
-                <nitro-achievements-category-component></nitro-achievements-category-component>
+                <nitro-achievements-category-component *ngIf="selectedCategory" [category]="selectedCategory"></nitro-achievements-category-component>
             </div>
         </div>
     </div>

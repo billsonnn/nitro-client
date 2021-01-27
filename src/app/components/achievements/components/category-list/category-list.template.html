@@ -1,10 +1,10 @@
 <div class="nitro-achievement-categories-component">
     <div class="achievement-category-grid mb-1">
-        <div *ngFor="let category of categories" class="rounded achievement-category-button px-1 py-2" (click)="selectCat(ob)" [ngClass]="[selectedCategory == ob.name ? 'bg-warning' : 'bg-secondary']">
+        <div *ngFor="let category of categories" class="rounded achievement-category-button px-1 py-2" (click)="selectCategory(category)" [ngClass]="[selectedCategory == category.name ? 'bg-warning' : 'bg-secondary']">
             <div class="align-self-center position-relative">
-                <img [src]="getCategoryImage(ob.name,ob.achievements)">
-                <div class="achievement-category-progress">{{ getCategoryProgress(ob.achievements) }}</div>
-                <div class="achievement-unseen px-1 py-0 btn btn-danger rounded position-absolute" *ngIf="getUnseenCategory(ob)">{{ getUnseenCategory(ob) }}</div>
+                <img [src]="getCategoryImage(category.name, category.achievements)">
+                <div class="achievement-category-progress">{{ getCategoryProgress(category.achievements) }}</div>
+                <div class="achievement-unseen px-1 py-0 btn btn-danger rounded position-absolute" *ngIf="getUnseenCategory(category)">{{ getUnseenCategory(category) }}</div>
             </div>
         </div>
     </div>
