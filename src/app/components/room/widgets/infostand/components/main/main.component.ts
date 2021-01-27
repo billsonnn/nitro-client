@@ -269,6 +269,11 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
         return null;
     }
 
+    public get furniData(): InfoStandFurniData
+    {
+        return this._furniData;
+    }
+
     private getInfoStandComponentType(event: RoomWidgetUpdateEvent): typeof RoomInfoStandBaseComponent
     {
         if(!event) return null;

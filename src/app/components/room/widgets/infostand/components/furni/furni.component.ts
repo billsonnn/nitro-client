@@ -7,6 +7,8 @@ import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniA
 import { InfoStandFurniData } from '../../data/InfoStandFurniData';
 import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
+import { MapDataType } from '../../../../../../../client/nitro/room/object/data/type/MapDataType';
+import { FurnitureRoomBrandingLogic } from '../../../../../../../client/nitro/room/object/logic/furniture/FurnitureRoomBrandingLogic';
 
 @Component({
     templateUrl: './furni.template.html'
@@ -24,6 +26,9 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
     public canRotate    = false;
     public canUse       = false;
     public updateCount  = 0;
+    public isGodMode: boolean = false;
+
+    public furniSettings: SettingsRow[] = [];
 
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
@@ -44,6 +49,33 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             canUse = true;
         }
 
+        if(event.isGodMode && event.stuffData instanceof MapDataType)
+        {
+            const mappedData = <MapDataType> event.stuffData;
+
+            const localSettings = [];
+            const adSettings =
+            [
+                FurnitureRoomBrandingLogic.IMAGEURL_KEY,
+                FurnitureRoomBrandingLogic.OFFSETX_KEY,
+                FurnitureRoomBrandingLogic.OFFSETY_KEY,
+                FurnitureRoomBrandingLogic.OFFSETZ_KEY
+            ];
+
+            adSettings.forEach(function(item)
+            {
+                const value = mappedData.getValue(item);
+
+                if(value)
+                {
+                    localSettings.push({ name: item, value });
+                }
+            });
+
+            this.furniSettings = localSettings;
+        }
+
+        this.isGodMode  = event.isGodMode;
         this.canMove    = canMove;
         this.canRotate  = canRotate;
         this.canUse     = canUse;
@@ -72,11 +104,14 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         if(event.isStickie) this.pickupMode = RoomInfoStandFurniComponent.PICKUP_MODE_NONE;
     }
 
+    // see _Str_2608
     public processButtonAction(action: string): void
     {
         if(!action || (action === '')) return;
 
         let messageType: string = null;
+
+        let objectData = null;
 
         switch(action)
         {
@@ -99,15 +134,40 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             case 'use':
                 messageType = RoomWidgetFurniActionMessage.RWFAM_USE;
                 break;
+            case 'save_branding_configuration':
+                messageType = RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA;
+                objectData = this.getConfig();
+                break;
+
         }
 
         if(!messageType) return;
 
-        this.widget.messageListener.processWidgetMessage(new RoomWidgetFurniActionMessage(messageType, this.furniData.id, this.furniData.category, this.furniData.purchaseOfferId, null));
+        this.widget.messageListener.processWidgetMessage(new RoomWidgetFurniActionMessage(messageType, this.furniData.id, this.furniData.category, this.furniData.purchaseOfferId, objectData));
+    }
+
+    private getConfig(): string
+    {
+        const settings = this.furniSettings;
+        let content = '';
+        for(let index = 0; index < settings.length; index++ )
+        {
+            const setting = settings[index];
+            let { name, value } = setting;
+            name = name.replace('\t', '');
+            value = value.replace('\t', '');
+            content = content + name + '=' + value + '\t';
+        }
+        return content;
     }
 
     public get type(): number
     {
         return InfoStandType.FURNI;
     }
+}
+
+export interface SettingsRow {
+    name: string;
+    value: string;
 }
