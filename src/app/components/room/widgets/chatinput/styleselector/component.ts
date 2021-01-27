@@ -8,14 +8,11 @@ import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/Habbo
     <div class="nitro-room-chatinput-styleselector-component">
         <i class="icon chatstyles-icon" (click)="toggleSelector()"></i>
         <div class="component-styles-container" [ngClass]="{ 'active': showStyles }">
-            <div class="card">
-                <div class="card-body">
-                    <div class="container-items">
+            <div class="d-flex" style="width: 300px">
+                <div class="grid-container">
+                    <div class="grid-items grid-4">
                         <div *ngFor="let styleId of styleIds" class="item-detail" [ngClass]="{ 'selected': (lastSelectedId === styleId)}">
-                            <div class="nitro-room-chat-item-component chat-style-{{ styleId }}" (click)="selectStyle(styleId)">
-                                <div class="chat-left"></div>
-                                <div class="chat-right"></div>
-                            </div>
+                            <div class="chat-bubble-icon bubble-{{ styleId }}" (click)="selectStyle(styleId)"></div>
                         </div>
                     </div>
                 </div>
