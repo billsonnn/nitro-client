@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '../../../../core/settings/service';
-import { AchievementsService } from '../../../achievements/services/AchievementsService';
+import { AchievementsService } from '../../../achievements/services/achievements.service';
 import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
 
