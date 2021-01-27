@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
 import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
@@ -21,7 +22,22 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
 
 @Component({
     selector: 'nitro-toolbar-component',
-    templateUrl: './main.template.html'
+    templateUrl: './main.template.html',
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter', 
+                    [
+                        style({ left: '-100%' }),
+                        animate('1s ease-out', 
+                            style({ left: 10 }))
+                    ]
+                ),
+            ]
+        )
+    ]
 })
 export class ToolbarMainComponent implements OnInit, OnDestroy
 {
@@ -32,7 +48,6 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     public navigationList: ElementRef<HTMLElement>;
 
     constructor(
-        private _avatarEditorService: AvatarEditorService,
         private _inventoryService: InventoryService,
         private _navigatorService: NavigatorService,
         private _friendListService: FriendListService,
@@ -105,7 +120,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 this.toggleFriendList();
                 return;
             case ToolbarIconEnum.ME_MENU:
-                this.toggleAvatarEditor();
+                this.toggleMeMenu();
                 
                 Nitro.instance.roomEngine.events.dispatchEvent(new NitroToolbarEvent(NitroToolbarEvent.SELECT_OWN_AVATAR));
                 return;
@@ -190,10 +205,9 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         this.settingsService.toggleNavigator();
     }
 
-    public toggleAvatarEditor(): void
-    {
-        this._avatarEditorService.loadOwnAvatarInEditor();
-        this.settingsService.toggleAvatarEditor();
+    public toggleMeMenu(): void
+    { 
+        this.settingsService.toggleMeMenu();
     }
 
     public visitDesktop(): void

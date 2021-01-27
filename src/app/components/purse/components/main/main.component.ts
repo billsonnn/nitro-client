@@ -40,10 +40,15 @@ export class PurseMainComponent implements OnInit
     {
         if(!this._purseService.hcSub) return;
         
-        const days = (this._purseService.hcSub.totalSeconds * 60);
+        const days = FriendlyTime.shortFormat((this._purseService.hcSub.totalSeconds * 60));
 
         if(!this._purseService.hcSub.totalSeconds) return Nitro.instance.localization.getValue('purse.clubdays.zero.amount.text');
 
-        return FriendlyTime.shortFormat(days,'',0.1);
+        return days;
+    }
+
+    public get isReady(): boolean
+    { 
+        return this._purseService.isReady;
     }
 }
