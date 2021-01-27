@@ -16,11 +16,11 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
 
     constructor(
         private elementRef: ElementRef,
-        private ngZone: NgZone)
+        private ngZone: NgZone) 
     {
         this.bringToFront = this.bringToFront.bind(this);
     }
-
+  
     public ngAfterViewInit(): void
     {
         const element = (this.elementRef.nativeElement as HTMLElement);

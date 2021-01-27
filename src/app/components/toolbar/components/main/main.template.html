@@ -1,5 +1,5 @@
-<div class="nitro-toolbar-component d-flex flex-row">
-    <div class="btn btn-primary rounded p-0 nohover">
+<div class="nitro-toolbar-component d-flex flex-row" [@inOutAnimation]>
+    <div class="card nitro-toolbar-component-body">
         <div #navigationList class="d-flex justify-content-between p-0 w-100">
             <ul class="list-group list-group-vertical">
                 <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-light"></i></li>
@@ -11,8 +11,10 @@
                 <li class="list-group-item splitter"></li>
                 <li class="list-group-item avatar-image" (click)="clickIcon('me_menu')">
                     <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+                    <div class="position-absolute btn btn-sm btn-danger px-1 py-0 rounded unseenCount" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
                 </li>
             </ul>
         </div>
     </div>
+    <nitro-toolbar-me-menu-component></nitro-toolbar-me-menu-component>
 </div>

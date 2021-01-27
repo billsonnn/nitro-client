@@ -3,19 +3,25 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SettingsService
 {
+    private _isReady: boolean;
     private _avatarEditorVisible: boolean;
     private _navigatorVisible: boolean;
     private _catalogVisible: boolean;
     private _inventoryVisible: boolean;
     private _friendlistVisible: boolean;
+    private _achievementsVisible: boolean;
+    private _meMenuVisible: boolean;
 
     constructor()
     {
+        this._isReady               = false;
         this._avatarEditorVisible   = false;
         this._navigatorVisible      = false;
         this._catalogVisible        = false;
         this._inventoryVisible      = false;
         this._friendlistVisible     = false;
+        this._achievementsVisible   = false;
+        this._meMenuVisible         = false;
     }
 
     public showAvatarEditor(): void
@@ -93,6 +99,36 @@ export class SettingsService
         this._friendlistVisible = !this._friendlistVisible;
     }
 
+    public showAchievements(): void
+    {
+        this._achievementsVisible = true;
+    }
+
+    public hideAchievements(): void
+    {
+        this._achievementsVisible = false;
+    }
+
+    public toggleAchievements(): void
+    {
+        this._achievementsVisible = !this._achievementsVisible;
+    }
+
+    public showMeMenu(): void
+    {
+        this._meMenuVisible = true;
+    }
+
+    public hideMeMenu(): void
+    {
+        this._meMenuVisible = false;
+    }
+
+    public toggleMeMenu(): void
+    {
+        this._meMenuVisible = !this._meMenuVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -116,5 +152,25 @@ export class SettingsService
     public get friendListVisible(): boolean
     {
         return this._friendlistVisible;
+    }
+
+    public get achievementsVisible(): boolean
+    {
+        return this._achievementsVisible;
+    }
+
+    public get meMenuVisible(): boolean
+    {
+        return this._meMenuVisible;
+    }
+
+    public set isReady(isReady: boolean)
+    { 
+        this._isReady = isReady;
+    }
+
+    public get isReady(): boolean
+    { 
+        return this._isReady;
     }
 }

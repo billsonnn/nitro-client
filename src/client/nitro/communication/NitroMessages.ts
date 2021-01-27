@@ -33,6 +33,9 @@ import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent'
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
+import { AchievementsEvent } from './messages/incoming/inventory/achievements/AchievementsEvent';
+import { AchievementsScoreEvent } from './messages/incoming/inventory/achievements/AchievementsScoreEvent';
 import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
 import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
 import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
@@ -143,6 +146,7 @@ import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/Us
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
@@ -197,9 +201,9 @@ import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTake
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
 import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -482,6 +486,11 @@ export class NitroMessages implements IMessageConfiguration
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
+
+        // ACHIEVEMENTS
+        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
+        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
+        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
     }
 
     private registerComposers(): void
@@ -542,6 +551,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.TRADE_ITEM_REMOVE, TradingListItemRemoveComposer);
         this._composers.set(OutgoingHeader.TRADE, TradingOpenComposer);
         this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
+
+        // ACHIVEMENTS
+        this._composers.set(OutgoingHeader.ACHIEVEMENT_LIST, RequestAchievementsMessageComposer);
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared';
+import { AchievementsModule } from './achievements/achievements.module';
 import { AvatarEditorModule } from './avatar-editor/avatar-editor.module';
 import { CallForHelpModule } from './call-for-help/call-for-help.module';
 import { CatalogModule } from './catalog/catalog.module';
@@ -30,7 +31,8 @@ import { WiredModule } from './wired/wired.module';
         PurseModule,
         RoomModule,
         ToolbarModule,
-        WiredModule
+        WiredModule,
+        AchievementsModule
     ],
     exports: [
         MainComponent

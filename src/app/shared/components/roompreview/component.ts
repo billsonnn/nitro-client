@@ -29,7 +29,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
     constructor(
         private _elementRef: ElementRef<HTMLDivElement>,
-        private ngZone: NgZone)
+        private ngZone: NgZone) 
     {
         this.onClick = this.onClick.bind(this);
     }

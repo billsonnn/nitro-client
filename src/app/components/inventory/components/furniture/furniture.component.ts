@@ -27,7 +27,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public paginateConfig: PaginationInstance = {
         id: 'custom',
-        itemsPerPage: 250,
+        itemsPerPage: 25,
         currentPage: 1
     };
 
