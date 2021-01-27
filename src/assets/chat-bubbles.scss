@@ -663,3 +663,201 @@
         }
     }
 }
+
+.chat-bubble-icon {
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &.bubble-0 {
+        background-image: url('./images/chatbubbles/bubble_0.png');
+    }
+
+    &.bubble-1 {
+        background-image: url('./images/chatbubbles/bubble_1.png');
+        height: 25px;
+    }
+
+    &.bubble-2, &.bubble-31 {
+        background-image: url('./images/chatbubbles/bubble_2.png');
+    }
+
+    &.bubble-3 {
+        background-image: url('./images/chatbubbles/bubble_3.png');
+    }
+
+    &.bubble-4 {
+        background-image: url('./images/chatbubbles/bubble_4.png');
+    }
+
+    &.bubble-5 {
+        background-image: url('./images/chatbubbles/bubble_5.png');
+    }
+
+    &.bubble-6 {
+        background-image: url('./images/chatbubbles/bubble_6.png');
+    }
+
+    &.bubble-7 {
+        background-image: url('./images/chatbubbles/bubble_7.png');
+    }
+
+    &.bubble-8 {
+        background-image: url('./images/chatbubbles/bubble_8.png');
+    }
+
+    &.bubble-9 {
+        background-image: url('./images/chatbubbles/bubble_9.png');
+    }
+
+    &.bubble-10 {
+        background-image: url('./images/chatbubbles/bubble_10.png');
+    }
+
+    &.bubble-11 {
+        background-image: url('./images/chatbubbles/bubble_11.png');
+    }
+
+    &.bubble-12 {
+        background-image: url('./images/chatbubbles/bubble_12.png');
+    }
+
+    &.bubble-13 {
+        background-image: url('./images/chatbubbles/bubble_13.png');
+    }
+
+    &.bubble-14 {
+        background-image: url('./images/chatbubbles/bubble_14.png');
+    }
+
+    &.bubble-15 {
+        background-image: url('./images/chatbubbles/bubble_15.png');
+    }
+
+    &.bubble-16 {
+        background-image: url('./images/chatbubbles/bubble_16.png');
+    }
+
+    &.bubble-17 {
+        background-image: url('./images/chatbubbles/bubble_17.png');
+    }
+
+    &.bubble-18 {
+        background-image: url('./images/chatbubbles/bubble_18.png');
+    }
+
+    &.bubble-19 {
+        background-image: url('./images/chatbubbles/bubble_19.png');
+    }
+
+    &.bubble-20 {
+        background-image: url('./images/chatbubbles/bubble_20.png');
+    }
+
+    &.bubble-21 {
+        background-image: url('./images/chatbubbles/bubble_21.png');
+    }
+
+    &.bubble-22 {
+        background-image: url('./images/chatbubbles/bubble_22.png');
+    }
+
+    &.bubble-23 {
+        background-image: url('./images/chatbubbles/bubble_23.png');
+    }
+
+    &.bubble-24 {
+        background-image: url('./images/chatbubbles/bubble_24.png');
+    }
+
+    &.bubble-25 {
+        background-image: url('./images/chatbubbles/bubble_25.png');
+    }
+
+    &.bubble-26 {
+        background-image: url('./images/chatbubbles/bubble_26.png');
+    }
+
+    &.bubble-27 {
+        background-image: url('./images/chatbubbles/bubble_27.png');
+    }
+
+    &.bubble-28 {
+        background-image: url('./images/chatbubbles/bubble_28.png');
+    }
+
+    &.bubble-29 {
+        background-image: url('./images/chatbubbles/bubble_29.png');
+    }
+
+    &.bubble-30 {
+        background-image: url('./images/chatbubbles/bubble_30.png');
+    }
+
+    &.bubble-32 {
+        background-image: url('./images/chatbubbles/bubble_32.png');
+    }
+
+    &.bubble-33 {
+        background-image: url('./images/chatbubbles/bubble_33_34.png');
+
+        &::before {
+            content: ' ';
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            left: 11px;
+            top: 10px;
+            background: url('./images/chatbubbles/bubble_33_extra.png');
+        }
+    }
+
+    &.bubble-34 {
+        background-image: url('./images/chatbubbles/bubble_33_34.png');
+
+        &::before {
+            content: ' ';
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            left: 11px;
+            top: 10px;
+            background: url('./images/chatbubbles/bubble_34_extra.png');
+        }
+    }
+
+    &.bubble-35 {
+        background-image: url('./images/chatbubbles/bubble_35.png');
+    }
+
+    &.bubble-36 {
+        background-image: url('./images/chatbubbles/bubble_36.png');
+
+        &::before {
+            content: ' ';
+            position: absolute;
+            width: 13px;
+            height: 18px;
+            left: 13px;
+            top: 10px;
+            background: url('./images/chatbubbles/bubble_36_extra.png');
+        }
+    }
+
+    &.bubble-37 {
+        background-image: url('./images/chatbubbles/bubble_35.png');
+    }
+
+    &.bubble-38 {
+        background-image: url('./images/chatbubbles/bubble_38.png');
+
+        &::before {
+            content: ' ';
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            left: 11px;
+            top: 10px;
+            background: url('./images/chatbubbles/bubble_38_extra.png');
+        }
+    }
+}
