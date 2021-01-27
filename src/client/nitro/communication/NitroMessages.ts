@@ -249,6 +249,8 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import {RoomWidgetFurniActionMessage} from "../../../app/components/room/widgets/messages/RoomWidgetFurniActionMessage";
+import {RoomAdsUpdateComposer} from "./messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer";
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -540,6 +542,7 @@ export class NitroMessages implements IMessageConfiguration
         // FURNI
         this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
         this._composers.set(OutgoingHeader.USER_FURNITURE2, FurnitureList2Composer);
+        this._composers.set(OutgoingHeader.ITEM_SAVE_BACKGROUND, RoomAdsUpdateComposer);
 
         // TRADING
         this._composers.set(OutgoingHeader.TRADE_ACCEPT, TradingAcceptComposer);

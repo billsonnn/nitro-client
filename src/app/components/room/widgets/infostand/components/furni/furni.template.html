@@ -12,6 +12,12 @@
                 <p class="badge badge-secondary mb-0">{{ furniData.description }}</p>
                 <p class="badge badge-secondary mt-2 mb-0">{{ ('furni.owner') | translate: 'name': furniData.ownerName }}</p>
             </div>
+            <div>
+                <div *ngFor="let setting of furniSettings;">
+                    <p>{{ setting.name}}</p>
+                    <input type="text"  [(ngModel)]="setting.value">
+                </div>
+            </div>
         </div>
     </div>
     <div class="button-container btn-group mt-2">
@@ -19,5 +25,6 @@
         <button *ngIf="canRotate" type="button" class="btn btn-primary" (click)="processButtonAction('rotate')">{{ 'infostand.button.rotate' | translate }}</button>
         <button *ngIf="(pickupMode !== 0)" type="button" class="btn btn-primary" (click)="processButtonAction('pickup')">{{ (pickupMode === 1 ? 'infostand.button.eject' : 'infostand.button.pickup') | translate }}</button>
         <button *ngIf="canUse" type="button" class="btn btn-primary" (click)="processButtonAction('use')">{{ 'infostand.button.use' | translate }}</button>
+        <button class="btn btn-primary" (click)="processButtonAction('save_branding_configuration')">{{ 'save' | translate }}</button>
     </div>
 </div>
