@@ -13,6 +13,7 @@ import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
 import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { PurseService } from '../../../purse/services/purse.service';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -39,12 +40,14 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
+    private _showInsufficientFunds: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _componentFactoryResolver: ComponentFactoryResolver,
+        private _purseService: PurseService,
         private _ngZone: NgZone)
     {}
 
@@ -326,6 +329,19 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     public confirmVipSubscription(subscription: CatalogClubOfferData): void
     {
+        if(!this._purseService) return;
+
+        const purse = this._purseService.currencies;
+
+        const currentCredits = purse.get(-1);
+        const currentCurrency = purse.get(subscription.priceActivityPointsType);
+
+        if(currentCredits < subscription.priceCredits || currentCurrency < subscription.priceActivityPoints)
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
         this._purchaseVipSubscription = subscription;
     }
 
@@ -387,5 +403,15 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseVipSubscription(): CatalogClubOfferData
     {
         return this._purchaseVipSubscription;
+    }
+
+    public setInsufficientFunds(show: boolean): void
+    {
+        this._showInsufficientFunds = show;
+    }
+
+    public get showInsufficientFunds(): boolean
+    {
+        return this._showInsufficientFunds;
     }
 }
