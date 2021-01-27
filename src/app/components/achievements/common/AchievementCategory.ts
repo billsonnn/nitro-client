@@ -1,20 +1,14 @@
 import { Achievement } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
 
-export class Category
+export class AchievementCategory
 { 
     private _name: string;
-
     private _achievements: Achievement[];
 
-    public constructor(name: string, achievements: Achievement[])
+    constructor(name: string)
     { 
-        this._name = name;
-        this._achievements = achievements;
-    }
-
-    public set name(name: string)
-    { 
-        this._name = name;
+        this._name          = name;
+        this._achievements  = [];
     }
 
     public get name(): string
@@ -22,13 +16,18 @@ export class Category
         return this._name;
     }
 
-    public set achievements(achievements: Achievement[])
+    public set name(name: string)
     { 
-        this._achievements = achievements;
+        this._name = name;
     }
 
     public get achievements(): Achievement[]
     {
         return this._achievements;
+    }
+
+    public set achievements(achievements: Achievement[])
+    { 
+        this._achievements = achievements;
     }
 }

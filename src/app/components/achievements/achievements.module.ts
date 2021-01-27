@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { AchievementsCategoryListComponent } from './components/category-list/category-list.component';
 import { AchievementsCategoryComponent } from './components/category/category.component';
-import { AchievementsComponent } from './components/main/achievements.component';
-import { AchievementsService } from './services/AchievementsService';
+import { AchievementsMainComponent } from './components/main/main.component';
+import { AchievementsService } from './services/achievements.service';
 
 
 @NgModule({
@@ -11,7 +11,7 @@ import { AchievementsService } from './services/AchievementsService';
         SharedModule
     ],
     exports: [
-        AchievementsComponent,
+        AchievementsMainComponent,
         AchievementsCategoryComponent,
         AchievementsCategoryListComponent
     ],
@@ -19,7 +19,7 @@ import { AchievementsService } from './services/AchievementsService';
         AchievementsService
     ],
     declarations: [
-        AchievementsComponent,
+        AchievementsMainComponent,
         AchievementsCategoryComponent,
         AchievementsCategoryListComponent
     ]
