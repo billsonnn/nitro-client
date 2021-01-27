@@ -3,7 +3,7 @@ import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 
-export class PlaneMaterialCellColumn 
+export class PlaneMaterialCellColumn
 {
     public static _Str_9685: number = 0;
     public static _Str_7916: number = 1;
@@ -287,7 +287,7 @@ export class PlaneMaterialCellColumn
     private _Str_18711(k: IVector3D, _arg_2: number, _arg_3: number): void
     {
         if(!this._cells.length || !this._cachedBitmapData) return;
-        
+
         let index = 0;
 
         while(index < this._cachedBitmapData.height)
@@ -467,7 +467,7 @@ export class PlaneMaterialCellColumn
     // {
     //     if(!this._cells.length || !this._cachedBitmapData) return;
 
-        
+
     //     var _local_4:Array;
     //     var _local_2:PlaneMaterialCell;
     //     var _local_3: number;

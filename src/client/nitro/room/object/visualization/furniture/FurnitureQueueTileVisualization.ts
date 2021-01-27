@@ -39,7 +39,7 @@ export class FurnitureQueueTileVisualization extends FurnitureAnimatedVisualizat
         {
             if(this._stateQueue.length) super.setAnimation(this._stateQueue.shift());
         }
-        
+
         return super.updateAnimation(scale);
     }
 

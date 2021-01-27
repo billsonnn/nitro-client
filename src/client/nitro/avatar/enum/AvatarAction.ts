@@ -54,7 +54,7 @@ export class AvatarAction
     public static getExpressionTimeout(expressionId: number): number
     {
         expressionId = parseInt(expressionId as any);
-        
+
         switch(expressionId)
         {
             case 1:
@@ -90,7 +90,7 @@ export class AvatarAction
     public static getExpression(expressionId: number): string
     {
         if(expressionId > AvatarAction.EXPRESSION_MAP.length) return null;
-        
+
         return AvatarAction.EXPRESSION_MAP[expressionId];
     }
 
@@ -102,7 +102,7 @@ export class AvatarAction
     public static getGesture(gestureId: number): string
     {
         if(gestureId > AvatarAction.GESTURE_MAP.length) return null;
-        
+
         return AvatarAction.GESTURE_MAP[gestureId];
     }
 

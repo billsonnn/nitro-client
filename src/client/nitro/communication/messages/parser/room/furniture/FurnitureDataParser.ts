@@ -16,7 +16,7 @@ export class FurnitureDataParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -30,7 +30,7 @@ export class FurnitureDataParser implements IMessageParser
     public static parseObjectData(wrapper: IMessageDataWrapper): IObjectData
     {
         if(!wrapper) return null;
-        
+
         const data = ObjectDataFactory.getData(wrapper.readInt());
 
         if(!data) return null;

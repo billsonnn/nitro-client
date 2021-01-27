@@ -27,7 +27,7 @@ export class NavigatorTopLevelContext
         if(!wrapper) return false;
 
         this._code  = wrapper.readString();
-        
+
         let totalSavedSearches = wrapper.readInt();
 
         while(totalSavedSearches > 0)

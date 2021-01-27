@@ -100,13 +100,13 @@ export class PurseService implements OnDestroy
     private onUserSubscriptionEvent(event: UserSubscriptionEvent): void
     {
         if(!event) return;
-        
+
         const parser = event.getParser();
 
         if(!parser) return;
 
         switch(parser.name)
-        { 
+        {
             case 'habbo_club':
                 this._habboClubSubscription = parser;
                 return;

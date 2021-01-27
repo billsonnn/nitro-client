@@ -255,7 +255,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         let chatType        = (shiftKey ? RoomWidgetChatMessage.CHAT_SHOUT : RoomWidgetChatMessage.CHAT_DEFAULT);
         let text            = this.inputView.value;
-        
+
         const parts         = text.split(' ');
 
         let recipientName   = '';
@@ -286,7 +286,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         text = parts.join(' ');
 
         const chatStyle = SystemChatStyleEnum.NORMAL;
-        
+
         if(this.typingTimer) this.resetTypingTimer();
 
         if(this.idleTimer) this.resetIdleTimer();
@@ -326,9 +326,9 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private setInputFocus(): void
     {
         const input = this.chatInputView && this.chatInputView.nativeElement;
-        
+
         if(!input) return;
-        
+
         input.focus();
 
         input.setSelectionRange((input.value.length * 2), (input.value.length * 2));

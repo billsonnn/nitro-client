@@ -2,7 +2,7 @@
 import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
 import { CategoryBaseModel } from './CategoryBaseModel';
 
-export class AvatarEditorGridColorItem 
+export class AvatarEditorGridColorItem
 {
     private _model: CategoryBaseModel;
     private _partColor: IPartColor;

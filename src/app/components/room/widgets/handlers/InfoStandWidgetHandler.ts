@@ -53,7 +53,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(this.disposed) return;
 
         this.container = null;
-        
+
         this._disposed  = true;
     }
 
@@ -95,7 +95,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 userData = this._container.roomSession.userDataManager.getUserData(userId);
             }
-            
+
             if(!userData) return null;
         }
 
@@ -480,7 +480,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         infostandEvent.expiration = ((expiryTime < 0) ? expiryTime : Math.max(0, (expiryTime - ((Nitro.instance.time - expiryTimestamp) / 1000))));
 
         let roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 64, null);
-        
+
         if(!roomObjectImage.data || (roomObjectImage.data.width > 140) || (roomObjectImage.data.height > 200))
         {
             roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 1, null);
@@ -492,7 +492,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(image) infostandEvent.image = image;
         }
-        
+
         infostandEvent.isWallItem           = (k.category === RoomObjectCategory.WALL);
         infostandEvent.isRoomOwner          = this._container.roomSession.isRoomOwner;
         infostandEvent.roomControllerLevel  = this._container.roomSession.controllerLevel;
@@ -652,7 +652,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_18400;
 
             if(isShuttingDown) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_14161;
-            
+
             if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
 
             // const _local_12 = this._container.sessionDataManager.userId;
@@ -792,7 +792,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         const moderationSettings = this._container.roomSession.moderationSettings;
 
         let flag = false;
-        
+
         if(moderationSettings) flag = _arg_2(event, moderationSettings);
 
         return (flag && (event.flatControl < RoomControllerLevel.ROOM_OWNER));

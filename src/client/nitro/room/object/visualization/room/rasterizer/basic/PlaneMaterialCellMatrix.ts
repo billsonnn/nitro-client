@@ -7,7 +7,7 @@ import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 import { PlaneMaterialCellColumn } from './PlaneMaterialCellColumn';
 
-export class PlaneMaterialCellMatrix 
+export class PlaneMaterialCellMatrix
 {
     public static _Str_7916: number     = 1;
     public static _Str_6087: number     = 2;
@@ -134,7 +134,7 @@ export class PlaneMaterialCellMatrix
                 column._Str_3355();
             }
         }
-        
+
         this._isCached = false;
     }
 
@@ -159,7 +159,7 @@ export class PlaneMaterialCellMatrix
         if(width < 1) width = 1;
 
         if(height < 1) height = 1;
-        
+
         if(!canvas || (canvas.width !== width) || (canvas.height !== height)) canvas = null;
 
         if(!this._cachedBitmapNormal) this._cachedBitmapNormal = new Vector3d();
@@ -258,7 +258,7 @@ export class PlaneMaterialCellMatrix
         while(columnIndex < this._columns.length)
         {
             const column = this._columns[columnIndex];
-            
+
             if(column)
             {
                 const columnBitmapData = column.render(height, normal, offsetX, offsetY);
@@ -394,7 +394,7 @@ export class PlaneMaterialCellMatrix
 
                     RoomVisualization.addTextureCache(_local_6, texture);
                 }
-                
+
                 k.beginTextureFill({ texture });
                 k.drawRect(_arg_3, _local_8, texture.width, texture.height);
                 k.endFill();

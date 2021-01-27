@@ -1,7 +1,7 @@
 ﻿import { RoomObjectLocationCacheItem } from './RoomObjectLocationCacheItem';
 import { RoomObjectSortableSpriteCacheItem } from './RoomObjectSortableSpriteCacheItem';
 
-export class RoomObjectCacheItem 
+export class RoomObjectCacheItem
 {
     private _objectId: number;
     private _location: RoomObjectLocationCacheItem;

@@ -1,4 +1,4 @@
-﻿export class PetType 
+﻿export class PetType
 {
     public static DOG: number            = 0;
     public static CAT: number            = 1;

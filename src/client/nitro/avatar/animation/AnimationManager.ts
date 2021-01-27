@@ -16,7 +16,7 @@ export class AnimationManager implements IAnimationManager
     public _Str_2061(structure: AvatarStructure, _arg_2: any): boolean
     {
         const animationData = _arg_2[Object.keys(_arg_2)[0]];
-        
+
         const animation = new Animation(structure, animationData);
 
         this._animations.set(animationData.name, animation);

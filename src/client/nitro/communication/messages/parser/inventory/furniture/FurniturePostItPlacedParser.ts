@@ -13,14 +13,14 @@ export class FurniturePostItPlacedParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._itemId    = wrapper.readInt();
         this._itemsLeft = wrapper.readInt();
-        
+
         return true;
     }
 

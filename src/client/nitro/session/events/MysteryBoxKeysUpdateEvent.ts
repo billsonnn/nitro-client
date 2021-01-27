@@ -10,7 +10,7 @@ export class MysteryBoxKeysUpdateEvent extends NitroEvent
     constructor(k: string, _arg_2: string)
     {
         super(MysteryBoxKeysUpdateEvent.MBKE_UPDATE);
-        
+
         this._boxColor = k;
         this._keyColor = _arg_2;
     }

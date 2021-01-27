@@ -23,7 +23,7 @@ export class RoomObjectEvent extends NitroEvent
 
         return this._object.id;
     }
-    
+
     public get objectType(): string
     {
         if(!this._object) return null;

@@ -1,7 +1,7 @@
 ﻿import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import { IAvatarDataContainer } from './IAvatarDataContainer';
 
-export class AvatarDataContainer implements IAvatarDataContainer 
+export class AvatarDataContainer implements IAvatarDataContainer
 {
     private _ink: number;
     private _foreGround: number;

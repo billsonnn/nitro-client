@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class Achievement 
+export class Achievement
 {
     public static _Str_21736: number = -1;
     public static _Str_21318: number = 0;

@@ -35,7 +35,7 @@ export class TradingListItemParser implements IMessageParser
         this._firstUserItemArray = [];
 
         if(!this.parseItems(wrapper, this._firstUserItemArray)) return false;
-        
+
         this._firstUserNumItems     = wrapper.readInt();
         this._firstUserNumCredits   = wrapper.readInt();
 

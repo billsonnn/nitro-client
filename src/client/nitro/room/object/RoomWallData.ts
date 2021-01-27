@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class RoomWallData 
+export class RoomWallData
 {
     public static WALL_DIRECTION_VECTORS: Vector3d[] = [
         new Vector3d(1, 0, 0),
@@ -64,7 +64,7 @@ export class RoomWallData
     private _Str_22484(k: Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): boolean
     {
         let _local_6 = 0;
-        
+
         while(_local_6 < this._count)
         {
             if(((((((this._corners[_local_6].x == k.x) && (this._corners[_local_6].y == k.y)) && (this._directions[_local_6] == _arg_2)) && (this._lengths[_local_6] == _arg_3)) && (this._borders[_local_6] == _arg_4)) && (this._leftTurns[_local_6] == _arg_5)))

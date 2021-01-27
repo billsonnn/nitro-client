@@ -20,7 +20,7 @@ export class RoomInstance extends Disposable implements IRoomInstance
     constructor(id: string, container: IRoomInstanceContainer)
     {
         super();
-        
+
         this._id                = id;
         this._container         = container;
         this._renderer          = null;

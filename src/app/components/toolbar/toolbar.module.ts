@@ -18,5 +18,5 @@ import { MeMenuComponent } from './components/me-menu/me-menu.component';
         MeMenuComponent
     ]
 })
-export class ToolbarModule 
+export class ToolbarModule
 {}

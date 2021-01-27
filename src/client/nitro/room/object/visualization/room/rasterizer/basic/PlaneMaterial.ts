@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneMaterialCellMatrix } from './PlaneMaterialCellMatrix';
 
-export class PlaneMaterial 
+export class PlaneMaterial
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;
@@ -72,7 +72,7 @@ export class PlaneMaterial
                 if((((k.x >= item.normalMinX) && (k.x <= item.normalMaxX)) && (k.y >= item.normalMinY)) && (k.y <= item.normalMaxY)) return item;
             }
         }
-        
+
         return null;
     }
 

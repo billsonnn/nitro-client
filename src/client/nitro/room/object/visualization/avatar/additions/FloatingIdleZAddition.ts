@@ -108,7 +108,7 @@ export class FloatingIdleZAddition implements IAvatarAddition
     public animate(sprite: IRoomObjectSprite): boolean
     {
         if(!sprite) return false;
-        
+
         const totalTimeRunning = Nitro.instance.time;
 
         if(this._state === FloatingIdleZAddition.STATE_DELAY)

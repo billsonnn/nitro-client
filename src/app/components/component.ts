@@ -67,7 +67,7 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
         )
     ]
 })
-export class MainComponent implements OnInit, OnDestroy 
+export class MainComponent implements OnInit, OnDestroy
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
@@ -233,7 +233,7 @@ export class MainComponent implements OnInit, OnDestroy
                     {
                         this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
                     }
-                    else 
+                    else
                     {
                         this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
                     }
@@ -289,7 +289,7 @@ export class MainComponent implements OnInit, OnDestroy
             case RoomSessionEvent.ENDED:
                 if(this.roomComponent) this.roomComponent.endRoom();
 
-                this._ngZone.run(() => 
+                this._ngZone.run(() =>
                 {
                     this._landingViewVisible = event.openLandingView;
                 });
@@ -300,32 +300,32 @@ export class MainComponent implements OnInit, OnDestroy
         }
     }
 
-    public get landingViewVisible(): boolean 
+    public get landingViewVisible(): boolean
     {
         return this._landingViewVisible;
     }
 
-    public get avatarEditorVisible(): boolean 
+    public get avatarEditorVisible(): boolean
     {
         return this._settingsService.avatarEditorVisible;
     }
 
-    public get catalogVisible(): boolean 
+    public get catalogVisible(): boolean
     {
         return this._settingsService.catalogVisible;
     }
 
-    public get navigatorVisible(): boolean 
+    public get navigatorVisible(): boolean
     {
         return this._settingsService.navigatorVisible;
     }
 
-    public get inventoryVisible(): boolean 
+    public get inventoryVisible(): boolean
     {
         return this._settingsService.inventoryVisible;
     }
 
-    public get friendListVisible(): boolean 
+    public get friendListVisible(): boolean
     {
         return this._settingsService.friendListVisible;
     }

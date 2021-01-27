@@ -13,14 +13,14 @@ export class MessageErrorParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._clientMessageId   = wrapper.readInt();
         this._errorCode         = wrapper.readInt();
-        
+
         return true;
     }
 

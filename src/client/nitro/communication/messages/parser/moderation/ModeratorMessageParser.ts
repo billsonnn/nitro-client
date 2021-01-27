@@ -13,14 +13,14 @@ export class ModeratorMessageParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._message   = wrapper.readString();
         this._link      = wrapper.readString();
-        
+
         return true;
     }
 

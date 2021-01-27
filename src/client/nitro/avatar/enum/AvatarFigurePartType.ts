@@ -1,4 +1,4 @@
-﻿export class AvatarFigurePartType 
+﻿export class AvatarFigurePartType
 {
     public static BODY: string                 = 'bd';
     public static SHOES: string                = 'sh';

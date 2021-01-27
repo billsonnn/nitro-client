@@ -1,5 +1,5 @@
 export class RelationshipStatusEnum
-{ 
+{
     public static NONE: number  = 0;
     public static HEART: number = 1;
     public static SMILE: number = 2;

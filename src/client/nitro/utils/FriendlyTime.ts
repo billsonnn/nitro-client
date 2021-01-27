@@ -1,6 +1,6 @@
 ﻿import { Nitro } from '../Nitro';
 
-export class FriendlyTime 
+export class FriendlyTime
 {
     private static MINUTE: number   = 60;
     private static HOUR: number     = (60 * FriendlyTime.MINUTE);

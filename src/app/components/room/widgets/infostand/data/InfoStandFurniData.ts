@@ -1,7 +1,7 @@
 ﻿import { IObjectData } from '../../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../events/RoomWidgetFurniInfostandUpdateEvent';
 
-export class InfoStandFurniData 
+export class InfoStandFurniData
 {
     private _id: number = 0;
     private _category: number = 0;

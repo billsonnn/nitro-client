@@ -12,7 +12,7 @@ export class RoomWidgetFriendRequestUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number, _arg_3: number = 0, _arg_4: string = null)
     {
         super(k);
-        
+
         this._Str_2914 = _arg_2;
         this._userId = _arg_3;
         this._userName = _arg_4;

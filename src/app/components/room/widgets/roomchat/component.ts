@@ -142,7 +142,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
             return;
         }
-        
+
         let chatRef: ComponentRef<RoomChatItemComponent>    = null;
         let chat: RoomChatItemComponent                     = null;
 

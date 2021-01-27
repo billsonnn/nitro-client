@@ -13,7 +13,7 @@ export class RoomWidgetAvatarInfoEvent extends RoomWidgetUpdateEvent
     constructor(k: number, _arg_2: string, _arg_3: number, _arg_4: number, _arg_5: boolean)
     {
         super(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO);
-        
+
         this._userId = k;
         this._userName = _arg_2;
         this._Str_3021 = _arg_3;

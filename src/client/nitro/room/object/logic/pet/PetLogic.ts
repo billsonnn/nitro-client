@@ -69,9 +69,9 @@ export class PetLogic extends MovingObjectLogic
         {
             for(const direction of directions) this._directions.push(direction);
 
-            this._directions.sort((a, b) => 
+            this._directions.sort((a, b) =>
             {
-                return a - b; 
+                return a - b;
             });
         }
 
@@ -160,7 +160,7 @@ export class PetLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarFigureUpdateMessage)
         {
             const petFigureData = new PetFigureData(message.figure);
-            
+
             model.setValue(RoomObjectVariable.FIGURE, message.figure);
             model.setValue(RoomObjectVariable.RACE, message.subType);
             model.setValue(RoomObjectVariable.PET_PALETTE_INDEX, petFigureData.paletteId);

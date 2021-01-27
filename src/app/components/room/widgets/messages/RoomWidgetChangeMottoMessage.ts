@@ -9,7 +9,7 @@ export class RoomWidgetChangeMottoMessage extends RoomWidgetMessage
     constructor(k: string)
     {
         super(RoomWidgetChangeMottoMessage.RWVM_CHANGE_MOTTO_MESSAGE);
-        
+
         this._motto = k;
     }
 

@@ -547,7 +547,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public clearSearch(): void
     {
         this.setCurrentFilter(NavigatorService.SEARCH_FILTERS[0]);
-        
+
         this._lastSearch = null;
 
         (this.isLoaded && this.search());

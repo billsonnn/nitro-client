@@ -1,4 +1,4 @@
-﻿export class RoomPlaneBitmapMask 
+﻿export class RoomPlaneBitmapMask
 {
     private _type: string;
     private _leftSideLoc: number;

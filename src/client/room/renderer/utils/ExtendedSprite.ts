@@ -16,7 +16,7 @@ export class ExtendedSprite extends Sprite
     constructor(texture: Texture = null)
     {
         super(texture);
-        
+
         this._offsetX                   = 0;
         this._offsetY                   = 0;
         this._tag                       = '';
@@ -50,14 +50,14 @@ export class ExtendedSprite extends Sprite
         {
             return;
         }
-        
+
         super.render(renderer);
     }
 
     public setTexture(texture: Texture): void
     {
         if(!texture) texture = Texture.EMPTY;
-        
+
         if(texture === this.texture) return;
 
         if(texture === Texture.EMPTY)
@@ -70,7 +70,7 @@ export class ExtendedSprite extends Sprite
     }
 
     public containsPoint(point: Point): boolean
-    {        
+    {
         return ExtendedSprite.containsPoint(this, point);
     }
 
@@ -128,7 +128,7 @@ export class ExtendedSprite extends Sprite
 
         return ((hitMap[index + 3] !== undefined) && (hitMap[index + 3] > sprite.alphaTolerance));
     }
-    
+
     private static generateHitMap(baseTexture: BaseTexture, tempCanvas: HTMLCanvasElement = null): boolean
     {
         let canvas: HTMLCanvasElement           = null;
@@ -153,7 +153,7 @@ export class ExtendedSprite extends Sprite
                 canvas  = source;
                 context = canvas.getContext('2d');
             }
-            
+
             else if(source instanceof Image)
             {
                 canvas          = document.createElement('canvas');

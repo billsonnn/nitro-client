@@ -11,7 +11,7 @@ export class RoomWidgetDoorbellEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: string)
     {
         super(k);
-        
+
         this._userName = _arg_2;
     }
 

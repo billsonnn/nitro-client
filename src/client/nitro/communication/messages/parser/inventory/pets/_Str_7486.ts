@@ -15,7 +15,7 @@ export class _Str_7486 implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         this._reason = wrapper.readInt();
-        
+
         return true;
     }
 

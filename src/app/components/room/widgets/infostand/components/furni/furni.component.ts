@@ -29,7 +29,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
         Nitro.instance.localization.registerParameter('furni.owner', 'name', this.furniData.ownerName);
-        
+
         let canMove     = false;
         let canRotate   = false;
         let canUse      = false;
@@ -39,7 +39,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             canMove     = true;
             canRotate   = (!event.isWallItem);
         }
-        
+
         const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
 
         if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))

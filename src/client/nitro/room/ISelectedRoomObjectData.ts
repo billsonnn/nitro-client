@@ -1,6 +1,6 @@
 ﻿import { IObjectData } from './object/data/IObjectData';
 
-export interface ISelectedRoomObjectData 
+export interface ISelectedRoomObjectData
 {
     id: number;
     category: number;

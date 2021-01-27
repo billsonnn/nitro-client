@@ -41,7 +41,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
         if(this._connection) return;
 
         Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent);
-        
+
         this._connection = this._communication.createConnection(this);
 
         this._connection.registerMessages(this._messages);
@@ -58,7 +58,7 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
     protected onDispose(): void
     {
         if(this._demo) this._demo.dispose();
-        
+
         if(this._connection)
         {
             this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent);

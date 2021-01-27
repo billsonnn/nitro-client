@@ -226,7 +226,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 this._isGameMode = true;
                 break;
         }
-        
+
         this.toggleUpdateReceiver();
     }
 
@@ -338,7 +338,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         this._ngZone.run(() =>
         {
             const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-            
+
             viewRef = this.contextsContainer.createComponent(componentFactory);
             view    = viewRef.instance;
         });
@@ -359,13 +359,13 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public removeView(view: ComponentRef<ContextInfoView>, flag: boolean): void
     {
         this._isRoomEnteredOwnAvatarHighlight = false;
-        
+
         if(!view) return;
 
         const componentIndex = this.contextsContainer.indexOf(view.hostView);
 
         if(componentIndex === -1) return;
-        
+
         this.cachedNameView             = null;
         this.cachedOwnAvatarMenuView    = null;
         this.cachedAvatarMenuView       = null;
@@ -395,7 +395,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     }
 
     public update(time: number): void
-    {        
+    {
         if(this.view)
         {
             const viewInstance = this.view.instance;

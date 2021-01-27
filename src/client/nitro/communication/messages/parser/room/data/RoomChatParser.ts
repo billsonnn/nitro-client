@@ -38,7 +38,7 @@ export class RoomChatParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -48,7 +48,7 @@ export class RoomChatParser
         this._speed         = wrapper.readInt();
         this._distance      = wrapper.readInt();
         this._protection    = wrapper.readInt();
-        
+
         return true;
     }
 

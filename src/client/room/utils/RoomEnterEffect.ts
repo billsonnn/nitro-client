@@ -1,6 +1,6 @@
 ﻿import { Nitro } from '../../nitro/Nitro';
 
-export class RoomEnterEffect 
+export class RoomEnterEffect
 {
     public static STATE_NOT_INITIALIZED: number     = 0;
     public static STATE_START_DELAY: number         = 1;

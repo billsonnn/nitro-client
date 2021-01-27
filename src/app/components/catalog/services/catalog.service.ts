@@ -205,7 +205,7 @@ export class CatalogService implements OnDestroy
             this._catalogRoot       = null;
             this._activePage        = null;
             this._activePageData    = null;
-    
+
             if(this._component) this._component.reset();
 
             if(this._settingsService.catalogVisible)
@@ -234,7 +234,7 @@ export class CatalogService implements OnDestroy
     public requestPage(page: CatalogPageData): void
     {
         if(!page || !this.canSelectPage(page)) return;
-        
+
         this._activePageData = page;
 
         if(page.pageId === -1) return;
@@ -299,7 +299,7 @@ export class CatalogService implements OnDestroy
 
         return ((assetUrl && assetUrl[0]) || null);
     }
-    
+
     public purchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number, extra: string = null): void
     {
         if(!page || !offer || !quantity) return;

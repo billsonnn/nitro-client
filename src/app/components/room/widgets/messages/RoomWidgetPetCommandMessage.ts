@@ -12,7 +12,7 @@ export class RoomWidgetPetCommandMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number, _arg_3: string = null)
     {
         super(k);
-        
+
         this._petId = _arg_2;
         this._value = _arg_3;
     }

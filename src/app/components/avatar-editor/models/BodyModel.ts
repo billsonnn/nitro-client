@@ -22,7 +22,7 @@ export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
     public selectColor(k: string, _arg_2: number, _arg_3: number): void
     {
         super.selectColor(k, _arg_2, _arg_3);
-        
+
         this.updateSelectionsFromFigure(FigureData.FACE);
     }
 
@@ -66,7 +66,7 @@ export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
     public resetFigure(figure: string): void
     {
         if(this._imageCallBackHandled) return;
-        
+
         this._imageCallBackHandled = true;
 
         this.updateSelectionsFromFigure(FigureData.FACE);

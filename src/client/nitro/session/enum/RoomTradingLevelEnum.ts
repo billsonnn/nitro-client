@@ -1,4 +1,4 @@
-﻿export class RoomTradingLevelEnum 
+﻿export class RoomTradingLevelEnum
 {
     public static _Str_12752: number = 0;
     public static _Str_14475: number = 1;

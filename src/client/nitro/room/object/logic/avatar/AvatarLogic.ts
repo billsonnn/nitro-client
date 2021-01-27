@@ -156,7 +156,7 @@ export class AvatarLogic extends MovingObjectLogic
                         if((this._talkingPauseEndTimestamp > 0) && (time > this._talkingPauseEndTimestamp))
                         {
                             model.setValue(RoomObjectVariable.FIGURE_TALK, 1);
-                            
+
                             this._talkingPauseEndTimestamp = 0;
                         }
                     }
@@ -238,7 +238,7 @@ export class AvatarLogic extends MovingObjectLogic
         if((this._numberValueEndTimestamp > 0) && (time > this._numberValueEndTimestamp))
         {
             model.setValue(RoomObjectVariable.FIGURE_NUMBER_VALUE, 0);
-            
+
             this._numberValueEndTimestamp = 0;
         }
     }
@@ -455,7 +455,7 @@ export class AvatarLogic extends MovingObjectLogic
         {
             this._effectChangeTimeStamp = (Nitro.instance.time + delay);
             this._newEffect             = effect;
-            
+
             return;
         }
 

@@ -8,12 +8,12 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
     private static TOP_TARGETS: HTMLElement[] = [];
     private static Z_INDEX_START: number = 400;
     private static Z_INDEX_INCREASE: number = 1;
-  
+
     private target: HTMLElement = null;
 
     @Input()
     public bringToTop: string;
-  
+
     constructor(
         private elementRef: ElementRef,
         private ngZone: NgZone) 
@@ -33,7 +33,7 @@ export class BringToTopDirective implements AfterViewInit, OnDestroy
         this.registerEvents();
         this.bringToFront();
     }
-  
+
     public ngOnDestroy(): void
     {
         this.unregisterEvents();

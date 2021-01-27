@@ -30,7 +30,7 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
     constructor(
         private _navigatorService: NavigatorService,
         private _activeModal: NgbActiveModal,
-        private _formBuilder: FormBuilder) 
+        private _formBuilder: FormBuilder)
     {}
 
     public ngOnInit(): void

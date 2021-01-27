@@ -17,7 +17,7 @@ export class _Str_7054 implements IMessageParser
         if(!wrapper) return false;
 
         this._type = wrapper.readInt();
-        
+
         return true;
     }
 

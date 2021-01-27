@@ -39,14 +39,14 @@ export class AppMainComponent implements OnInit, OnDestroy
         {
             //@ts-ignore
             if(!NitroConfig) throw new Error('NitroConfig is not defined!');
-            
+
             if(!WebGL.isWebGLAvailable())
             {
                 this.onNitroEvent(new NitroEvent(Nitro.WEBGL_UNAVAILABLE));
 
                 return;
             }
-            
+
             if(!Nitro.instance) Nitro.bootstrap();
 
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, this.onNitroEvent);
@@ -168,7 +168,7 @@ export class AppMainComponent implements OnInit, OnDestroy
                     this.percentage     = (this.percentage + 20);
                     this.hideProgress   = false;
                 });
-                
+
                 Nitro.instance.init();
                 clearTimeout(this._connectionTimeout);
                 break;

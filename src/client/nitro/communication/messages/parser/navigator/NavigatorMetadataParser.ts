@@ -12,7 +12,7 @@ export class NavigatorMetadataParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -22,10 +22,10 @@ export class NavigatorMetadataParser implements IMessageParser
         while(totalContexts > 0)
         {
             this._topLevelContexts.push(new NavigatorTopLevelContext(wrapper));
-            
+
             totalContexts--;
         }
-        
+
         return true;
     }
 

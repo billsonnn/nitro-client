@@ -1,6 +1,6 @@
 ﻿import { INitroManager } from '../../core/common/INitroManager';
 
-export interface INitroLocalizationManager extends INitroManager 
+export interface INitroLocalizationManager extends INitroManager
 {
     getRomanNumeral(number: number): string;
     getBadgeBaseAndLevel(badgeName: string): string;

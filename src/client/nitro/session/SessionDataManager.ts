@@ -60,7 +60,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     constructor(communication: INitroCommunicationManager)
     {
         super();
-        
+
         this._communication                 = communication;
 
         this.resetUserInfo();
@@ -418,7 +418,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if((petId < 0) || (this._respectsPetLeft <= 0)) return;
 
         this.send(new PetRespectComposer(petId));
-        
+
         this._respectsPetLeft--;
     }
 

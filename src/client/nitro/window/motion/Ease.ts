@@ -7,7 +7,7 @@ export class Ease extends Interval
     constructor(k: Interval)
     {
         super(k.target, k.duration);
-        
+
         this._interval = k;
     }
 

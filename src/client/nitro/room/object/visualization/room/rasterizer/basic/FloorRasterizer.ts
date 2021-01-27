@@ -4,7 +4,7 @@ import { PlaneBitmapData } from '../../utils/PlaneBitmapData';
 import { FloorPlane } from './FloorPlane';
 import { PlaneRasterizer } from './PlaneRasterizer';
 
-export class FloorRasterizer extends PlaneRasterizer 
+export class FloorRasterizer extends PlaneRasterizer
 {
     protected initializePlanes(): void
     {

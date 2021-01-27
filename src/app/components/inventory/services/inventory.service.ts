@@ -126,11 +126,11 @@ export class InventoryService implements OnDestroy
             let count = 0;
 
             const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
-    
+
             count += furniCount;
-    
+
             this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
-    
+
             this._unseenCount = count;
         }
 
