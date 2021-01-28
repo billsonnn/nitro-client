@@ -20,6 +20,7 @@ import { RoomInfoStandRentableBotComponent } from './widgets/infostand/component
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
+import { TrophyFurniComponent } from './widgets/furniture/trophies/component';
 
 @NgModule({
     imports: [
@@ -43,6 +44,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
+        TrophyFurniComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent
@@ -65,6 +67,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
+        TrophyFurniComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent

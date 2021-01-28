@@ -51,6 +51,7 @@ import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHa
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
+import {FurnitureTrophyWidgetHandler} from "./widgets/handlers/FurnitureTrophyWidgetHandler";
 
 @Component({
     selector: 'nitro-room-component',
@@ -367,9 +368,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.USER_CHOOSER:
                 widgetHandler = new UserChooserWidgetHandler();
-            // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
-            //     widgetHandler = new FurnitureTrophyWidgetHandler();
-            //     break;
+                break;
+            case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
+                widgetHandler = new FurnitureTrophyWidgetHandler();
+                break;
         }
 
         if(widgetHandler)

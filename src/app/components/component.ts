@@ -26,6 +26,7 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
+import { TrophyFurniComponent } from './room/widgets/furniture/trophies/component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -200,6 +201,8 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_LINK, null);
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, TrophyFurniComponent);
+
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
