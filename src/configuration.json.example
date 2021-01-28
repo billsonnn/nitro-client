@@ -2,6 +2,7 @@
     "socket.url": "WS/WSS_URL",
     "asset.url": "https://ASSET_URL",
     "c.images.url": "https://ASSETS_URL/c_images",
+    "achievements.images.url": "%c.images.url%/Quests/%image%.png",
     "thumbnails.url": "%c.images.url%/camera/thumbnails/%thumbnail%.png",
     "images.url": "%asset.url%/images",
     "gamedata.url": "%asset.url%/gamedata",
@@ -32,6 +33,18 @@
             "roomId": 203
         }
     ],
+    "hotelview.images": {
+        "background": "%asset.url%/images/reception/stretch_blue.png",
+        "background.colour": "#6eadc8",
+        "sun": "%asset.url%/images/reception/sun.png",
+        "drape": "%asset.url%/images/reception/drape.png",
+        "left": "%asset.url%/images/reception/ts.png",
+        "right": "%asset.url%/images/reception/us_right.png",
+        "right.repeat": "%asset.url%/images/reception/us_top_right.png"
+    },
+    "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
+    "avatareditor.show.clubitems.dimmed": true,
+    "avatareditor.show.clubitems.first": true
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,
@@ -235,6 +248,13 @@
             "isAmbassadorOnly": false
         },
         {
+            "styleId": 18,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
             "styleId": 19,
             "minRank": 0,
             "isSystemStyle": false,
@@ -264,9 +284,114 @@
         },
         {
             "styleId": 23,
-            "minRank": 4,
+            "minRank": 5,
             "isSystemStyle": false,
             "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 24,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 25,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 26,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 27,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 28,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 29,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 30,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 31,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 32,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 33,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 34,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 35,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 36,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 37,
+            "minRank": 5,
+            "isSystemStyle": false,
+            "isHcOnly": false,
+            "isAmbassadorOnly": true
+        },
+        {
+            "styleId": 38,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
             "isAmbassadorOnly": false
         }
     ],

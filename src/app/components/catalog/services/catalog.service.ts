@@ -13,6 +13,7 @@ import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/mess
 import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
@@ -354,6 +355,13 @@ export class CatalogService implements OnDestroy
     public requestOffers(i: number): void
     {
         Nitro.instance.communication.connection.send(new CatalogRequestVipOffersComposer(i));
+    }
+
+    public redeemVoucher(voucherCode: string)
+    {
+        if(!voucherCode || voucherCode.trim().length === 0) return;
+
+        Nitro.instance.communication.connection.send(new CatalogRedeemVoucherComposer(voucherCode));
     }
 
     public manuallyCollapsePage(page: CatalogPageData): void

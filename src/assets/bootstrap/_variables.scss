@@ -187,7 +187,7 @@ $body-color:                $white !default;
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $white !default;
 $link-decoration:                         none !default;
 $link-hover-color:                        darken($link-color, 15%) !default;
 $link-hover-decoration:                   underline !default;
@@ -249,7 +249,7 @@ $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
 $border-width:                1px !default;
-$border-color:                $gray-300 !default;
+$border-color:                $black !default;
 
 $border-radius:               7px !default;
 $border-radius-lg:            7px !default;
@@ -258,7 +258,7 @@ $border-radius-sm:            7px !default;
 $rounded-pill:                50rem !default;
 
 $box-shadow-sm:               0 .125rem .25rem rgba($black, .075) !default;
-$box-shadow:                  0 .5rem 1rem rgba($black, .15) !default;
+$box-shadow:                  0px 2px 0px rgba($black, 0.45), inset 0px 0px 0px 2px rgba($white, 0.1) !default;
 $box-shadow-lg:               0 1rem 3rem rgba($black, .175) !default;
 
 $component-active-color:      $white !default;
@@ -842,16 +842,16 @@ $jumbotron-bg:                      $gray-200 !default;
 
 $card-spacer-y:                     .75rem !default;
 $card-spacer-x:                     1rem !default;
-$card-border-width:                 0 !default;
+$card-border-width:                 1px !default;
 $card-border-radius:                $border-radius !default;
-$card-border-color:                 rgba($black, .125) !default;
+$card-border-color:                 rgba($black, 1) !default;
 $card-inner-border-radius:          subtract($card-border-radius, $card-border-width) !default;
 $card-cap-bg:                       rgba($black, .03) !default;
 $card-cap-color:                    null !default;
 $card-height:                       null !default;
 $card-color:                        null !default;
-$card-bg:                           rgba($cod-gray, .97) !default;
-$card-shadow:                       0 .25rem .5rem rgba($black, .5) !default;
+$card-bg:                           rgba($primary, 1) !default;
+$card-shadow:                       $box-shadow !default;
 
 $card-cap-border-width:             .97px !default;
 $card-cap-border-color:             rgba($emperor, .3) !default;
@@ -967,13 +967,13 @@ $modal-dialog-margin-y-sm-up:       1.75rem !default;
 $modal-title-line-height:           $line-height-base !default;
 
 $modal-content-color:               $card-color !default;
-$modal-content-bg:                  rgba($cod-gray, 1) !default;
+$modal-content-bg:                  $card-bg !default;
 $modal-content-border-color:        $card-border-color !default;
-$modal-content-border-width:        $border-width !default;
-$modal-content-border-radius:       $border-radius !default;
+$modal-content-border-width:        $card-border-width !default;
+$modal-content-border-radius:       $card-border-radius !default;
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width) !default;
 $modal-content-box-shadow-xs:       $card-shadow !default;
-$modal-content-box-shadow-sm-up:    0 .5rem 1rem rgba($black, .5) !default;
+$modal-content-box-shadow-sm-up:    $card-shadow !default;
 
 $modal-backdrop-bg:                 $black !default;
 $modal-backdrop-opacity:            .5 !default;

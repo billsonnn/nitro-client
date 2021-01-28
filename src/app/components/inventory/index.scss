@@ -1,1 +1,22 @@
-@import './components';
+.nitro-inventory {
+    position: absolute;
+    width: $inventory-width;
+    max-width: $inventory-width;
+
+    .grid-container {
+    
+        .grid-items {
+    
+            .item-detail {
+                height: 50px;
+                max-height: 50px;
+
+                .count {
+                    top: 0.16rem;
+                    right: 3px;
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+}

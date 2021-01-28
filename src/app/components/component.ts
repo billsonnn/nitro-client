@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Nitro } from '../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../client/nitro/room/events/RoomBackgroundColorEvent';
@@ -19,8 +20,8 @@ import { NotificationService } from './notification/services/notification.servic
 import { RoomComponent } from './room/room.component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
-import { FurniChooserWidgetComponent } from './room/widgets/choosers/furni/component';
-import { UserChooserWidgetComponent } from './room/widgets/choosers/user/component';
+import { ChooserWidgetFurniComponent } from './room/widgets/choosers/furni/furni.component';
+import { ChooserWidgetUserComponent } from './room/widgets/choosers/user/user.component';
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
@@ -31,24 +32,40 @@ import { RoomChatComponent } from './room/widgets/roomchat/component';
     template: `
     <div class="nitro-main-component">
         <nitro-notification-main-component></nitro-notification-main-component>
-        <div class="nitro-right-side">
+        <div class="nitro-right-side" *ngIf="isReady" [@inOutAnimation]>
             <div class="d-flex flex-column">
                 <nitro-purse-main-component></nitro-purse-main-component>
                 <nitro-notification-centre-component></nitro-notification-centre-component>
             </div>
         </div>
+        <nitro-achievements-main-component [visible]="achievementsVisible"></nitro-achievements-main-component>
         <nitro-call-for-help-main-component></nitro-call-for-help-main-component>
         <nitro-pedia-main-component></nitro-pedia-main-component>
         <nitro-avatar-editor-main-component [visible]="avatarEditorVisible"></nitro-avatar-editor-main-component>
         <nitro-hotelview-component *ngIf="landingViewVisible"></nitro-hotelview-component>
-        <nitro-toolbar-component [isInRoom]="!landingViewVisible"></nitro-toolbar-component>
+        <nitro-toolbar-component [isInRoom]="!landingViewVisible" *ngIf="isReady"></nitro-toolbar-component>
         <nitro-friendlist-main-component [visible]="friendListVisible"></nitro-friendlist-main-component>
         <nitro-catalog-main-component [visible]="catalogVisible"></nitro-catalog-main-component>
         <nitro-navigator-main-component [visible]="navigatorVisible"></nitro-navigator-main-component>
         <nitro-inventory-main-component [visible]="inventoryVisible"></nitro-inventory-main-component>
         <nitro-wired-main-component></nitro-wired-main-component>
         <nitro-room-component></nitro-room-component>
-    </div>`
+    </div>`,
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter',
+                    [
+                        style({ top: '-100%' }),
+                        animate('1s ease-out',
+                            style({ top: 0 }))
+                    ]
+                )
+            ]
+        )
+    ]
 })
 export class MainComponent implements OnInit, OnDestroy
 {
@@ -188,8 +205,8 @@ export class MainComponent implements OnInit, OnDestroy
                     {
                         this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
                         this.roomComponent.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
-                        this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, FurniChooserWidgetComponent);
-                        this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, UserChooserWidgetComponent);
+                        this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, ChooserWidgetFurniComponent);
+                        this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, ChooserWidgetUserComponent);
                     }
                 }
                 return;
@@ -311,5 +328,15 @@ export class MainComponent implements OnInit, OnDestroy
     public get friendListVisible(): boolean
     {
         return this._settingsService.friendListVisible;
+    }
+
+    public get achievementsVisible(): boolean
+    {
+        return this._settingsService.achievementsVisible;
+    }
+
+    public get isReady(): boolean
+    {
+        return this._settingsService.isReady;
     }
 }

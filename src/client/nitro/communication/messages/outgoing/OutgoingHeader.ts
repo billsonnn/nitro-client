@@ -185,4 +185,5 @@ export class OutgoingHeader
     public static ONE_WAY_DOOR_CLICK             = 2765;
     public static REMOVE_WALL_ITEM               = 3336;
     public static MODIFY_WALL_ITEM_DATA          = 3666;
+    public static CATALOG_REDEEM_VOUCHER         = 339;
 }

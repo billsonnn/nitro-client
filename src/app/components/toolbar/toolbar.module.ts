@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
 import { ToolbarMainComponent } from './components/main/main.component';
+import { MeMenuComponent } from './components/me-menu/me-menu.component';
 
 @NgModule({
     imports: [
         SharedModule
     ],
     exports: [
-        ToolbarMainComponent
+        ToolbarMainComponent,
+        MeMenuComponent
     ],
     providers: [
     ],
     declarations: [
-        ToolbarMainComponent
+        ToolbarMainComponent,
+        MeMenuComponent
     ]
 })
 export class ToolbarModule

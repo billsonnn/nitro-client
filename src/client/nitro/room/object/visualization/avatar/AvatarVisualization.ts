@@ -13,6 +13,7 @@ import { AvatarSetType } from '../../../../avatar/enum/AvatarSetType';
 import { IAvatarEffectListener } from '../../../../avatar/IAvatarEffectListener';
 import { IAvatarImage } from '../../../../avatar/IAvatarImage';
 import { IAvatarImageListener } from '../../../../avatar/IAvatarImageListener';
+import { Nitro } from '../../../../Nitro';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
@@ -1065,7 +1066,9 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
 
     public getAvatarRenderAsset(name: string): Texture
     {
-        return this._data ? this._data.getAvatarRendererAsset(name) : null;
+        const url = (Nitro.instance.getConfiguration<string>('images.url') + '/additions/' + name + '.png');
+
+        return this._data ? this._data.getAvatarRendererAsset(url) : null;
     }
 
     public get direction(): number

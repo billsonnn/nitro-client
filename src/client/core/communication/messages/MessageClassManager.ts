@@ -54,6 +54,8 @@ export class MessageClassManager
 
     public registerMessageEvent(event: IMessageEvent): void
     {
+        if(!event) return;
+
         const header = this.getEventId(event);
 
         if(!header) return;
@@ -79,6 +81,8 @@ export class MessageClassManager
 
     public removeMessageEvent(event: IMessageEvent): void
     {
+        if(!event) return;
+
         const header = this.getEventId(event);
 
         if(!header) return;

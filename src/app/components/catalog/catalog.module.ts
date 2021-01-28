@@ -14,6 +14,7 @@ import { CatalogNavigationItemComponent } from './components/navigation-item/nav
 import { CatalogNavigationSetComponent } from './components/navigation-set/navigation-set.component';
 import { CatalogNavigationComponent } from './components/navigation/navigation.component';
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
+import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
 import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip-subscription/confirm-vip-subscription.component';
 import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/confirm-purchase-insufficient-funds/confirm-purchase-insufficient-funds.component';
@@ -33,12 +34,13 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutPets2Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
+        CatalogLayoutVipBuyComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogLayoutVipBuyComponent
+        CatalogRedeemVoucherComponent
     ],
     providers: [
         CatalogService
@@ -54,12 +56,13 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutPets2Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
+        CatalogLayoutVipBuyComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogLayoutVipBuyComponent
+        CatalogRedeemVoucherComponent,
     ]
 })
 export class CatalogModule

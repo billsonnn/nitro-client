@@ -136,7 +136,12 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
     {
         let existing = this._definitions.getValue(key);
 
-        if(existing === undefined) existing = value;
+        if(existing === undefined)
+        {
+            this.logger.warn(`Missing configuration key: ${ key }`);
+
+            existing = value;
+        }
 
         return (existing as T);
     }

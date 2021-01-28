@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentsModule } from './components';
 import { AppMainComponent } from './components/main/main.component';
 import { CoreModule } from './core';
@@ -10,7 +12,9 @@ import { SharedModule } from './shared';
         SharedModule,
         CoreModule,
         SecurityModule,
-        ComponentsModule
+        ComponentsModule,
+        BrowserModule,
+        BrowserAnimationsModule
     ],
     declarations: [
         AppMainComponent
