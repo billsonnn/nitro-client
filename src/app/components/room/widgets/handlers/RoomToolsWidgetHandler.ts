@@ -9,15 +9,18 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
+import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
+import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer;
-    private _communicationManager: INitroCommunicationManager;
-    private _widget: RoomToolsMainComponent;
-    private _messages: IMessageEvent[];
-
-    private _disposed: boolean;
+    private _container: IRoomWidgetHandlerContainer; // private var _container:IRoomWidgetHandlerContainer;
+    private _communicationManager: INitroCommunicationManager; // private var _communicationManager:IHabboCommunicationManager;
+    private _widget: RoomToolsMainComponent; //private var _widget:RoomToolsWidget;
+    private _messages: IMessageEvent[]; //private var _communicationManagerMessageEvents:Vector.<IMessageEvent>;
+    // Dont need IHabboNavigator;
+    private _disposed: boolean; //private var _disposed:Boolean;
+    private _zoomed: boolean = false;
 
     constructor()
     {
@@ -61,6 +64,13 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
+        // This doesnt even work, fix it \_o_/
+        if(message instanceof RoomWidgetZoomToggleMessage)
+        {
+            this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, this._zoomed ? 1 : 0, false));
+            this._zoomed = !this._zoomed;
+
+        }
         return null;
     }
 
@@ -69,6 +79,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(!event || this._disposed) return;
     }
 
+    // _Str_4428
     private onRoomInfoEvent(event: RoomInfoEvent): void
     {
         if(!event) return;
@@ -85,9 +96,10 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
             Nitro.instance.localization.getValue('room.tool.public.room')
             : Nitro.instance.localization.getValue('room.tool.room.owner.prefix') + ' ' + roomData.ownerName;
 
-        this._widget.loadRoomData(roomData.roomId, roomData.roomName, roomOwner);
+        this._widget.loadRoomData(roomData, roomOwner);
     }
 
+    // Done
     public get type(): string
     {
         return RoomWidgetEnum.ROOM_TOOLS;
@@ -114,7 +126,10 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         {
             if(this._container)
             {
-                for(const message of this._messages) this._container.connection.removeMessageEvent(message);
+                for(const message of this._messages)
+                {
+                    this._container.connection.removeMessageEvent(message);
+                }
 
                 this._messages = [];
             }
@@ -136,13 +151,5 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     public get disposed(): boolean
     {
         return this._disposed;
-    }
-
-    private registerMessages(): void
-    {
-        for(const message of this._messages)
-        {
-            this._communicationManager.registerMessageEvent(message);
-        }
     }
 }

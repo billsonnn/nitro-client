@@ -1,14 +1,19 @@
-<div class="nitro-room-tools-component">
-    <h1>TEST</h1>
-    <!-- <ng-template #componentContainer></ng-template> -->
+<div id="nitro-room-tools" class="d-flex flex-row">
+    <div id="nitro-room-tools-menu" class="d-flex flex-row">
+        <div id="nitro-room-tools-room-info" [ngClass]="{'open' : open}">
+            <p>{{ roomName }}</p>
+            <p class="room-owner">{{ formattedRoomOwner }}</p>
+        </div>
+        <div id="nitro-room-tools-menu-container" [ngClass]="{'open' : open}">
+            <span (click)="toggleRoomEventView()">{{ ('room.settings.button.text') | translate }}</span><br>
+            <span (click)="toggleZoom()">{{ ('room.zoom.button.text') | translate }}</span><br>
+            <span>{{ ('room.chathistory.button.text') | translate }}</span><br>
+            <span>{{ ('navigator.embed.caption') | translate }}</span>
+        </div>
+    </div>
+    <div id="nitro-room-tools-handle" class="d-flex flex-column justify-content-center" (click)="toggle()">
+        <i class="fas" [ngClass]="open ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+    </div>
 </div>
 
-<div class="nitro-room-tools-bar-component" [ngClass]="{'open' : open}">
-    <div class="room-tools-bar-container">
-        <div>{{ roomName }}</div>
-        <div class="room-owner">{{ roomOwner }}</div>
-    </div>
-    <div class="room-tools-bar-handle" (click)="toggle()">
-        <i class="fas" [ngClass]="open ? 'fa-chevron-left' : 'fa-chevron-right'"></i>
-    </div>
-</div>
+<nitro-room-event-view-component [isVisible]="roomEventViewVisible" [roomData]="roomData" (roomEventViewClosed)="toggleRoomEventView()"></nitro-room-event-view-component>
