@@ -16,6 +16,7 @@ import { CatalogNavigationComponent } from './components/navigation/navigation.c
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip-subscription/confirm-vip-subscription.component';
 import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/confirm-purchase-insufficient-funds/confirm-purchase-insufficient-funds.component';
 
@@ -32,6 +33,7 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutFrontPage4Component,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
+        CatalogLayoutPets3Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,
@@ -54,6 +56,7 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutFrontPage4Component,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
+        CatalogLayoutPets3Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,

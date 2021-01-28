@@ -17,7 +17,11 @@ export class CatalogLayout
 
     public getText(index: number = 0): string
     {
-        return (this._catalogService.activePage.localization.texts[index] || null);
+        let message = (this._catalogService.activePage.localization.texts[index] || null);
+
+        message = message.replace(/\r\n|\r|\n/g, '<br />');
+
+        return message;
     }
 
     public getImage(index: number = 0): string
@@ -25,6 +29,8 @@ export class CatalogLayout
         let imageUrl = Nitro.instance.getConfiguration<string>('catalog.asset.image.url');
 
         imageUrl = imageUrl.replace('%name%', this._catalogService.activePage.localization.images[index]);
+
+        console.log(this._catalogService.activePage);
 
         return imageUrl;
     }
