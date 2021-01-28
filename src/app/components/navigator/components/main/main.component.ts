@@ -142,7 +142,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
         this._lastRoom = null;
     }
 
-    public openRoomPassword(room: RoomDataParser): void
+    public openRoomPassword(room: RoomDataParser, isWrongPassword: boolean = false): void
     {
         if(this._roomDoorbellModal) this._roomDoorbellModal.close();
 
@@ -171,6 +171,11 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
         if(this._roomPasswordModal)
         {
             const instance = (modal.componentInstance as NavigatorPasswordComponent);
+
+            if(!instance) return;
+
+            instance.room = room;
+            instance.isWrongPassword = isWrongPassword;
         }
     }
 
