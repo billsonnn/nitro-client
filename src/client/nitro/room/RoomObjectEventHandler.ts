@@ -1115,7 +1115,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
     private useObject(roomId: number, objectId: number, type: string, action: string): void
     {
         if(!this._roomEngine || !this._roomEngine.connection) return;
-
         switch(action)
         {
             case RoomObjectFurnitureActionEvent.DICE_ACTIVATE:

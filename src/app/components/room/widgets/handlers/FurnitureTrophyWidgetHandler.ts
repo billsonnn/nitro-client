@@ -4,7 +4,10 @@ import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/message
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import {RoomWidgetEnum} from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
+import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
+import { RoomWidgetTrophyUpdateEvent } from '../events/RoomWidgetTrophyUpdateEvent';
 
 
 export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
@@ -18,43 +21,40 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
         this._container = null;
     }
 
-    public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
+    public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
+
+        if(!message || !this._container) return;
+
+        if(message.type != RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY) return;
+
+        const rwtwMessage = <RoomWidgetFurniToWidgetMessage>message;
+
+        const trophy = this._container.roomEngine.getRoomObject(rwtwMessage.roomId, rwtwMessage.objectId, rwtwMessage.category);
+
+        if(!trophy || !trophy.model) return;
+
+        const model = trophy.model;
+
+        const color = <string>model.getValue(RoomObjectVariable.FURNITURE_COLOR);
+        let data = <string>model.getValue(RoomObjectVariable.FURNITURE_DATA);
+        let _local_7 = <number>model.getValue(RoomObjectVariable.FURNITURE_EXTRAS);
+        if(!_local_7)
+        {
+            _local_7 = 0;
+        }
+        const ownerName = data.substring(0, data.indexOf('\t'));
+        data = data.substring((ownerName.length + 1), data.length);
+        const trophyDate = data.substring(0, data.indexOf('\t'));
+        const trophyText = data.substr(trophyDate.length + 1, data.length);
+
+        this._container.events.dispatchEvent(new RoomWidgetTrophyUpdateEvent(RoomWidgetTrophyUpdateEvent.TROPHY_DATA, ownerName, trophyDate, trophyText, Number.parseInt(color), _local_7));
         return null;
     }
 
     public processEvent(event: NitroEvent): void
     {
-        if(!event) return;
-
-        let widgetEvent: RoomEngineTriggerWidgetEvent = null;
-
-        // switch(event.type)
-        // {
-        //     case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
-        //         widgetEvent = (event as RoomEngineTriggerWidgetEvent);
-        //
-        //         if(widgetEvent && this._container.roomEngine)
-        //         {
-        //             const roomObject = this._container.roomEngine.getRoomObject(widgetEvent.roomId, widgetEvent.objectId, widgetEvent.category);
-        //
-        //             if(roomObject && roomObject.model)
-        //             {
-        //                 let link = roomObject.model.getValue<{ [index: string]: string }>(RoomObjectVariable.FURNITURE_DATA)[FurnitureInternalLinkHandler.INTERNALLINK];
-        //
-        //                 if(!link || (link === '') || (link.length === 0))
-        //                 {
-        //                     link = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_INTERNAL_LINK);
-        //                 }
-        //
-        //                 if(!link || (link.length === 0)) return;
-        //
-        //                 Nitro.instance.createLinkEvent(link);
-        //             }
-        //         }
-        //
-        //         return;
-        // }
+        return;
     }
 
     public update(): void
@@ -83,11 +83,11 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 
     public get messageTypes(): string[]
     {
-        return [];
+        return [ RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY ];
     }
 
     public get eventTypes(): string[]
     {
-        return [ RoomEngineTriggerWidgetEvent.REQUEST_TROPHY ];
+        return [ RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY ];
     }
 }

@@ -117,6 +117,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_TROPHY, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)

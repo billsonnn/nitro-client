@@ -51,7 +51,8 @@ import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHa
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
-import {FurnitureTrophyWidgetHandler} from "./widgets/handlers/FurnitureTrophyWidgetHandler";
+import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
+import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
 
 @Component({
     selector: 'nitro-room-component',
@@ -584,6 +585,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 {
                     Nitro.instance.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
                 break;
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
