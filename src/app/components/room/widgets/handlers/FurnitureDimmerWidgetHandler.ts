@@ -37,7 +37,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 }
                 break;
             case RoomWidgetDimmerSavePresetMessage.RWSDPM_SAVE_PRESET:
-                if (this._Str_6826())
+                if(this._Str_6826())
                 {
                     const _local_4 = (k as RoomWidgetDimmerSavePresetMessage);
 
@@ -45,12 +45,12 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 }
                 break;
             case RoomWidgetDimmerChangeStateMessage.RWCDSM_CHANGE_STATE:
-                if (this._Str_6826())
+                if(this._Str_6826())
                 {
                     //this._container.roomSession._Str_20755();
                 }
                 break;
-            case RoomWidgetDimmerPreviewMessage.RWDPM_PREVIEW_DIMMER_PRESET:
+            case RoomWidgetDimmerPreviewMessage.RWDPM_PREVIEW_DIMMER_PRESET: {
                 const roomId            = this._container.roomSession.roomId;
                 const previewMessage    = (k as RoomWidgetDimmerPreviewMessage);
 
@@ -58,6 +58,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
                 this._container.roomEngine._Str_17804(roomId, previewMessage.color, previewMessage._Str_5123, previewMessage._Str_11464);
                 break;
+            }
         }
 
         return null;
@@ -67,7 +68,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
     {
         switch(event.type)
         {
-            case RoomSessionDimmerPresetsEvent.RSDPE_PRESETS:
+            case RoomSessionDimmerPresetsEvent.RSDPE_PRESETS: {
                 const presetsEvent  = (event as RoomSessionDimmerPresetsEvent);
                 const updateEvent   = new RoomWidgetDimmerUpdateEvent(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS);
 
@@ -75,7 +76,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
                 let i = 0;
 
-                while (i < presetsEvent._Str_10888)
+                while(i < presetsEvent._Str_10888)
                 {
                     const _local_7 = presetsEvent._Str_14989(i);
 
@@ -87,11 +88,13 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 this._container.events.dispatchEvent(updateEvent);
 
                 return;
-            case RoomEngineDimmerStateEvent.ROOM_COLOR:
+            }
+            case RoomEngineDimmerStateEvent.ROOM_COLOR: {
                 const stateEvent = (event as RoomEngineDimmerStateEvent);
-                
+
                 this._container.events.dispatchEvent(new RoomWidgetDimmerStateUpdateEvent(stateEvent.state, stateEvent._Str_14686, stateEvent._Str_6815, stateEvent.color, stateEvent._Str_5123));
                 return;
+            }
             case RoomEngineTriggerWidgetEvent.REMOVE_DIMMER:
                 this._container.events.dispatchEvent(new RoomWidgetDimmerUpdateEvent(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE));
                 return;

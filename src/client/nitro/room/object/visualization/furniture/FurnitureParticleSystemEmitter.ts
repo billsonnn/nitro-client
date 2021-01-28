@@ -2,11 +2,11 @@
 import { Vector3D } from '../../../../avatar/geometry/Vector3D';
 import { FurnitureParticleSystemParticle } from './FurnitureParticleSystemParticle';
 
-export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParticle 
+export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParticle
 {
-    public static CONE: string = "cone";
-    public static PLANE: string = "plane";
-    public static SPHERE: string = "sphere";
+    public static CONE: string = 'cone';
+    public static PLANE: string = 'plane';
+    public static SPHERE: string = 'sphere';
 
     private _name: string;
     private _roomObjectSpriteId: number = -1;
@@ -25,7 +25,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
     private _hasIgnited: boolean = false;
     private _burstPulse: number = 1;
 
-    constructor(k: string="", _arg_2: number=-1)
+    constructor(k: string='', _arg_2: number=-1)
     {
         super();
 
@@ -37,7 +37,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     public dispose(): void
     {
-        for(let k of this._particles) k.dispose();
+        for(const k of this._particles) k.dispose();
 
         this._particles                 = null;
         this._direction                 = null;
@@ -64,8 +64,8 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     public reset(): void
     {
-        var k:FurnitureParticleSystemParticle;
-        for(let k of this._particles) k.dispose();
+        let k:FurnitureParticleSystemParticle;
+        for(const k of this._particles) k.dispose();
         this._particles = [];
         this._emittedParticles = 0;
         this._hasIgnited = false;
@@ -89,20 +89,20 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     public _Str_24892(k: number, _arg_2: boolean, _arg_3: GraphicAsset[], _arg_4: boolean): void
     {
-        let _local_5 = [];
-        _local_5["lifeTime"] = k;
-        _local_5["isEmitter"] = _arg_2;
-        _local_5["frames"] = _arg_3;
-        _local_5["fade"] = _arg_4;
+        const _local_5 = [];
+        _local_5['lifeTime'] = k;
+        _local_5['isEmitter'] = _arg_2;
+        _local_5['frames'] = _arg_3;
+        _local_5['fade'] = _arg_4;
         this._particleConfigurations.push(_local_5);
     }
 
     protected ignite(): void
     {
         this._hasIgnited = true;
-        if ((this._emittedParticles < this._maxNumberOfParticles))
+        if((this._emittedParticles < this._maxNumberOfParticles))
         {
-            if (this.age > 1)
+            if(this.age > 1)
             {
                 this._Str_19068(this, this.direction);
             }
@@ -120,7 +120,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
         while(_local_10 < this._particlesPerFrame)
         {
-            switch (this._explosionShape)
+            switch(this._explosionShape)
             {
                 case FurnitureParticleSystemEmitter.CONE:
                     _local_3.x = ((this._Str_7471(0.5)) ? Math.random() : -(Math.random()));
@@ -150,10 +150,10 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
             if(_local_5)
             {
-                _local_6 = Math.floor(((Math.random() * _local_5["lifeTime"]) + 10));
-                _local_7 = _local_5["isEmitter"];
-                _local_9 = _local_5["frames"];
-                _local_8 = _local_5["fade"];
+                _local_6 = Math.floor(((Math.random() * _local_5['lifeTime']) + 10));
+                _local_7 = _local_5['isEmitter'];
+                _local_9 = _local_5['frames'];
+                _local_8 = _local_5['fade'];
             }
             else
             {
@@ -173,7 +173,7 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     private _Str_23904()
     {
-        var k: number = Math.trunc(Math.floor((Math.random() * this._particleConfigurations.length)));
+        const k: number = Math.trunc(Math.floor((Math.random() * this._particleConfigurations.length)));
         return this._particleConfigurations[k];
     }
 
@@ -183,9 +183,9 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
         this._Str_25039();
         this._Str_25400();
         this._Str_23140();
-        if (((!(this._Str_16034)) && (this._emittedParticles < this._maxNumberOfParticles)))
+        if(((!(this._Str_16034)) && (this._emittedParticles < this._maxNumberOfParticles)))
         {
-            if ((this.age % this._burstPulse) == 0)
+            if((this.age % this._burstPulse) == 0)
             {
                 this._Str_19068(this, this.direction);
             }
@@ -194,11 +194,11 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     public _Str_25400(): void
     {
-        var _local_2:FurnitureParticleSystemParticle;
-        var _local_3: number;
-        var _local_4: number;
-        var _local_5: number;
-        if (((this._Str_16034) || (this._emittedParticles < this._maxNumberOfParticles)))
+        let _local_2:FurnitureParticleSystemParticle;
+        let _local_3: number;
+        let _local_4: number;
+        let _local_5: number;
+        if(((this._Str_16034) || (this._emittedParticles < this._maxNumberOfParticles)))
         {
             _local_3 = this.x;
             _local_4 = this.y;
@@ -210,9 +210,9 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
             this._Str_12459 = _local_4;
             this._Str_11680 = _local_5;
         }
-        var k: FurnitureParticleSystemParticle[] = [];
+        const k: FurnitureParticleSystemParticle[] = [];
 
-        for(let _local_2 of this._particles)
+        for(const _local_2 of this._particles)
         {
             _local_2.update();
             _local_3 = _local_2.x;
@@ -224,17 +224,20 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
             _local_2._Str_10744 = _local_3;
             _local_2._Str_12459 = _local_4;
             _local_2._Str_11680 = _local_5;
-            if (((_local_2.y > 10) || (!(_local_2._Str_16034))))
+            if(((_local_2.y > 10) || (!(_local_2._Str_16034))))
             {
                 k.push(_local_2);
             }
         }
-        for(let _local_2 of k)
+        for(const _local_2 of k)
         {
-            if (_local_2.isEmitter)
+            if(_local_2.isEmitter)
             {
+                //
             }
+
             this._particles.splice(this._particles.indexOf(_local_2), 1);
+
             _local_2.dispose();
         }
     }
@@ -245,9 +248,9 @@ export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParti
 
     private _Str_25039(): void
     {
-        var k:FurnitureParticleSystemParticle;
-        for(let k in this._particles)
+        for(const k of this._particles)
         {
+            //
         }
     }
 

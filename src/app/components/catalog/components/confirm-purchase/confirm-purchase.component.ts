@@ -6,7 +6,7 @@ import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
-  
+
 @Component({
     selector: 'nitro-catalog-confirm-purchase-component',
     templateUrl: './confirm-purchase.template.html'
@@ -29,14 +29,15 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     public completed: boolean = false;
 
     @ViewChild('imageElement')
-    public imageElement: ElementRef<HTMLDivElement>;;
+    public imageElement: ElementRef<HTMLDivElement>;
 
     private _imageUrl: string = '';
 
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
-    ) {}
+    )
+    {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -87,7 +88,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     }
 
     private completePurchase(): void
-    {        
+    {
         this._ngZone.runOutsideAngular(() =>
         {
             const element = new HTMLImageElement();
@@ -106,7 +107,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
             const event = new NitroToolbarAnimateIconEvent(element, bounds.x, bounds.y);
 
             event.iconName = ToolbarIconEnum.INVENTORY;
-            
+
             Nitro.instance.roomEngine.events.dispatchEvent(event);
         });
     }

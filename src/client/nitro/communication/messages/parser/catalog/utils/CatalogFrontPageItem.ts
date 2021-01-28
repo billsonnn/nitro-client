@@ -60,7 +60,7 @@ export class CatalogFrontPageItem
                 break;
         }
 
-        let time = wrapper.readInt();
+        const time = wrapper.readInt();
 
         this._expirationTime = ((time > 0) ? ((time * 1000) + Nitro.instance.time) : 0);
 

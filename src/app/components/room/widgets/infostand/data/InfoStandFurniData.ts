@@ -1,7 +1,7 @@
 ﻿import { IObjectData } from '../../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../events/RoomWidgetFurniInfostandUpdateEvent';
 
-export class InfoStandFurniData 
+export class InfoStandFurniData
 {
     private _id: number = 0;
     private _category: number = 0;
@@ -9,7 +9,7 @@ export class InfoStandFurniData
     private _description: string = '';
     private _imageUrl: string = '';
     private _purchaseOfferId: number = -1;
-    private _extraParam: string = "";
+    private _extraParam: string = '';
     private _stuffData: IObjectData = null;
     private _groupId: number;
     private _ownerId: number = 0;

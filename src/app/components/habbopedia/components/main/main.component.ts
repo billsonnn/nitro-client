@@ -5,7 +5,7 @@ import { HabbopediaService } from '../../services/habbopedia.service';
 import { HabbopediaPageComponent } from '../page/page.component';
 
 @Component({
-	selector: 'nitro-pedia-main-component',
+    selector: 'nitro-pedia-main-component',
     templateUrl: './main.template.html'
 })
 export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTracker
@@ -18,7 +18,8 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
     constructor(
         private _habbopediaService: HabbopediaService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {
@@ -83,7 +84,7 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
 
     public closeAll(): void
     {
-        for(let component of this._pages.keys()) this.close(component);
+        for(const component of this._pages.keys()) this.close(component);
     }
 
     private removeView(view: ViewRef): void
@@ -105,7 +106,7 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
 
         parts.shift();
 
-        this.openPage(parts.join("/"));
+        this.openPage(parts.join('/'));
     }
 
     public get eventUrlPrefix(): string

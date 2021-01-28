@@ -4,7 +4,7 @@ import { CallForHelpMainComponent } from './components/main/main.component';
 import { CallForHelpService } from './services/call-for-help.service';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -17,4 +17,5 @@ import { CallForHelpService } from './services/call-for-help.service';
         CallForHelpMainComponent
     ]
 })
-export class CallForHelpModule {}
+export class CallForHelpModule
+{}

@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class _Str_5753 
+export class _Str_5753
 {
     private _Str_16211: number;
     private _breeds: number[];
@@ -14,7 +14,7 @@ export class _Str_5753
 
         let totalCount = wrapper.readInt();
 
-        while (totalCount > 0)
+        while(totalCount > 0)
         {
             this._breeds.push(wrapper.readInt());
 

@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 
-export class AvatarInfoData 
+export class AvatarInfoData
 {
     private _isIgnored: boolean = false;
     private _canTrade: boolean = false;
@@ -26,79 +26,14 @@ export class AvatarInfoData
         return this._isIgnored;
     }
 
-    public get _Str_5751(): boolean
-    {
-        return this._canTrade;
-    }
-
-    public get _Str_6622(): number
-    {
-        return this._canTradeReason;
-    }
-
-    public get _Str_5990(): boolean
-    {
-        return this._canBeKicked;
-    }
-
-    public get _Str_6701(): boolean
-    {
-        return this._canBeBanned;
-    }
-
-    public get canBeAskedForAFriend(): boolean
-    {
-        return this._canBeAskedAsFriend;
-    }
-
-    public get _Str_3246(): boolean
-    {
-        return this._amIOwner;
-    }
-
-    public get _Str_3529(): boolean
-    {
-        return this._amIAnyRoomController;
-    }
-
-    public get _Str_3577(): number
-    {
-        return this._respectLeft;
-    }
-
-    public get _Str_11453(): boolean
-    {
-        return this._isOwnUser;
-    }
-
-    public get allowNameChange(): boolean
-    {
-        return this._allowNameChange;
-    }
-
-    public get _Str_3672(): boolean
-    {
-        return this._isGuildRoom;
-    }
-
-    public get _Str_8826(): number
-    {
-        return this._carryItemType;
-    }
-
-    public get roomControllerLevel(): number
-    {
-        return this._myRoomControllerLevel;
-    }
-
-    public get _Str_5599(): number
-    {
-        return this._targetRoomControllerLevel;
-    }
-
     public set _Str_3655(k: boolean)
     {
         this._isIgnored = k;
+    }
+
+    public get _Str_5751(): boolean
+    {
+        return this._canTrade;
     }
 
     public set _Str_5751(k: boolean)
@@ -106,14 +41,29 @@ export class AvatarInfoData
         this._canTrade = k;
     }
 
+    public get _Str_6622(): number
+    {
+        return this._canTradeReason;
+    }
+
     public set _Str_6622(k: number)
     {
         this._canTradeReason = k;
     }
 
+    public get _Str_5990(): boolean
+    {
+        return this._canBeKicked;
+    }
+
     public set _Str_5990(k: boolean)
     {
         this._canBeKicked = k;
+    }
+
+    public get _Str_6701(): boolean
+    {
+        return this._canBeBanned;
     }
 
     public set _Str_6701(k: boolean)
@@ -131,9 +81,19 @@ export class AvatarInfoData
         this._canBeMuted = k;
     }
 
+    public get canBeAskedForAFriend(): boolean
+    {
+        return this._canBeAskedAsFriend;
+    }
+
     public set canBeAskedForAFriend(k: boolean)
     {
         this._canBeAskedAsFriend = k;
+    }
+
+    public get _Str_3246(): boolean
+    {
+        return this._amIOwner;
     }
 
     public set _Str_3246(k: boolean)
@@ -141,9 +101,19 @@ export class AvatarInfoData
         this._amIOwner = k;
     }
 
+    public get _Str_3529(): boolean
+    {
+        return this._amIAnyRoomController;
+    }
+
     public set _Str_3529(k: boolean)
     {
         this._amIAnyRoomController = k;
+    }
+
+    public get _Str_3577(): number
+    {
+        return this._respectLeft;
     }
 
     public set _Str_3577(k: number)
@@ -151,9 +121,19 @@ export class AvatarInfoData
         this._respectLeft = k;
     }
 
+    public get _Str_11453(): boolean
+    {
+        return this._isOwnUser;
+    }
+
     public set _Str_11453(k: boolean)
     {
         this._isOwnUser = k;
+    }
+
+    public get allowNameChange(): boolean
+    {
+        return this._allowNameChange;
     }
 
     public set allowNameChange(k: boolean)
@@ -161,9 +141,19 @@ export class AvatarInfoData
         this._allowNameChange = k;
     }
 
+    public get _Str_3672(): boolean
+    {
+        return this._isGuildRoom;
+    }
+
     public set _Str_3672(k: boolean)
     {
         this._isGuildRoom = k;
+    }
+
+    public get _Str_8826(): number
+    {
+        return this._carryItemType;
     }
 
     public set _Str_8826(k: number)
@@ -171,9 +161,19 @@ export class AvatarInfoData
         this._carryItemType = k;
     }
 
+    public get roomControllerLevel(): number
+    {
+        return this._myRoomControllerLevel;
+    }
+
     public set roomControllerLevel(k: number)
     {
         this._myRoomControllerLevel = k;
+    }
+
+    public get _Str_5599(): number
+    {
+        return this._targetRoomControllerLevel;
     }
 
     public set _Str_5599(k: number)

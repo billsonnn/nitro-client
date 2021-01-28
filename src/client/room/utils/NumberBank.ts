@@ -1,4 +1,4 @@
-﻿export class NumberBank 
+﻿export class NumberBank
 {
     private _reservedNumbers: number[];
     private _freeNumbers: number[];
@@ -28,9 +28,9 @@
 
     public _Str_19709(): number
     {
-        if (this._freeNumbers.length > 0)
+        if(this._freeNumbers.length > 0)
         {
-            let k = this._freeNumbers.pop();
+            const k = this._freeNumbers.pop();
 
             this._reservedNumbers.push(k);
 
@@ -42,7 +42,7 @@
 
     public _Str_15187(k: number): void
     {
-        let i = this._reservedNumbers.indexOf(k);
+        const i = this._reservedNumbers.indexOf(k);
 
         if(i >= 0)
         {

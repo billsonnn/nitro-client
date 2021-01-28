@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class UserCurrentBadgesComposer implements IMessageComposer
+export class UserCurrentBadgesComposer implements IMessageComposer<ConstructorParameters<typeof UserCurrentBadgesComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof UserCurrentBadgesComposer>;
 
     constructor(userId: number)
     {
         this._data = [ userId ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

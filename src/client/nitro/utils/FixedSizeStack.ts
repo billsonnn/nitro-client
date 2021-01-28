@@ -1,4 +1,4 @@
-﻿export class FixedSizeStack 
+﻿export class FixedSizeStack
 {
     private _data: number[];
     private _maxSize: number;
@@ -37,7 +37,7 @@
 
         let _local_2 = 0;
 
-        while (_local_2 < this._maxSize)
+        while(_local_2 < this._maxSize)
         {
             if(this._data[_local_2] > k) k = this._data[_local_2];
 

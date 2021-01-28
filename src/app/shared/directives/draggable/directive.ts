@@ -10,7 +10,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     private static POS_MEMORY = new Map();
 
     @Input()
-    public dragHandle: string;
+    public dragHandle: string = '.drag-handler';
 
     @Input()
     public dragTarget: string;
@@ -20,23 +20,24 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
     @Input()
     public noMemory: boolean = false;
-  
+
     private _name: string           = null;
     private _target: HTMLElement    = null;
     private _handle: HTMLElement    = null;
-    private _delta                  = {x: 0, y: 0};
-    private _offset                 = {x: 0, y: 0};
+    private _delta                  = { x: 0, y: 0 };
+    private _offset                 = { x: 0, y: 0 };
     private _destroy                = new Subject<void>();
-  
+
     constructor(
         private _viewContainerRef: ViewContainerRef,
         private _elementRef: ElementRef,
-        private _ngZone: NgZone) {}
-  
+        private _ngZone: NgZone)
+    {}
+
     public ngAfterViewInit(): void
     {
         this._name = this._viewContainerRef['_hostTNode']['classesWithoutHost'];
-        
+
         const element = (this._elementRef.nativeElement as HTMLElement);
 
         if(!element) return;
@@ -71,7 +72,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
         this.setupEvents();
     }
-  
+
     public ngOnDestroy(): void
     {
         if(this._handle)
@@ -80,7 +81,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
             this._handle.parentElement.classList.remove('header-draggable');
         }
-        
+
         this._destroy.next();
     }
 
@@ -88,20 +89,21 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            let mousedown$  = fromEvent(this._handle, 'mousedown');
-            let mousemove$  = fromEvent(document, 'mousemove');
-            let mouseup$    = fromEvent(document, 'mouseup');
-    
-            let mousedrag$ = mousedown$
+            const mousedown$  = fromEvent(this._handle, 'mousedown');
+            const mousemove$  = fromEvent(document, 'mousemove');
+            const mouseup$    = fromEvent(document, 'mouseup');
+
+            const mousedrag$ = mousedown$
                 .pipe(
                     switchMap((event: MouseEvent) =>
                     {
-                        let startX = event.clientX;
-                        let startY = event.clientY;
-            
+                        const startX = event.clientX;
+                        const startY = event.clientY;
+
                         return mousemove$
                             .pipe(
-                                map((event: MouseEvent) => {
+                                map((event: MouseEvent) =>
+                                {
                                     event.preventDefault();
 
                                     this._delta = {
@@ -114,24 +116,24 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
                     }),
                     takeUntil(this._destroy)
                 );
-    
+
             mousedrag$.subscribe(() =>
             {
                 if(this._delta.x === 0 && this._delta.y === 0) return;
-        
+
                 this.translate();
             });
-    
+
             mouseup$
                 .pipe(
                     takeUntil(this._destroy)
                 );
-                
+
             mouseup$.subscribe(() =>
             {
                 this._offset.x  += this._delta.x;
                 this._offset.y  += this._delta.y;
-                this._delta      = {x: 0, y: 0};
+                this._delta      = { x: 0, y: 0 };
 
                 if(!this.noMemory)
                 {
@@ -149,7 +151,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
             });
         });
     }
-  
+
     private translate(): void
     {
         this._target.style.transform = `translate(${this._offset.x + this._delta.x}px, ${this._offset.y + this._delta.y}px)`;

@@ -2,7 +2,7 @@
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 import { _Str_7446 } from './_Str_7446';
 
-export class _Str_7305 implements IMessageParser 
+export class _Str_7305 implements IMessageParser
 {
     private _data: _Str_7446[];
 
@@ -26,7 +26,7 @@ export class _Str_7305 implements IMessageParser
 
             let _local_6 = 0;
 
-            while (_local_6 < _local_5)
+            while(_local_6 < _local_5)
             {
                 this._data.push(new _Str_7446(_local_4, wrapper));
 

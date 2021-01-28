@@ -10,7 +10,8 @@ export class HabbopediaPageComponent
 
     constructor(
         private _habbopediaService: HabbopediaService
-    ) {}
+    )
+    {}
 
     public close(): void
     {

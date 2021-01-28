@@ -8,7 +8,7 @@ import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/Room
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 
-export class FurnitureInternalLinkHandler implements IRoomWidgetHandler 
+export class FurnitureInternalLinkHandler implements IRoomWidgetHandler
 {
     private static INTERNALLINK: string = 'internalLink';
 
@@ -30,7 +30,7 @@ export class FurnitureInternalLinkHandler implements IRoomWidgetHandler
 
         let widgetEvent: RoomEngineTriggerWidgetEvent = null;
 
-        switch (event.type)
+        switch(event.type)
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);

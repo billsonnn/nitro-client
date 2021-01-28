@@ -1,7 +1,7 @@
 ﻿import { RoomObjectEvent } from '../../../room/events/RoomObjectEvent';
 import { IRoomObject } from '../../../room/object/IRoomObject';
 
-export class RoomObjectWidgetRequestEvent extends RoomObjectEvent 
+export class RoomObjectWidgetRequestEvent extends RoomObjectEvent
 {
     public static OPEN_WIDGET: string                                 = 'ROWRE_OPEN_WIDGET';
     public static CLOSE_WIDGET: string                                = 'ROWRE_CLOSE_WIDGET';

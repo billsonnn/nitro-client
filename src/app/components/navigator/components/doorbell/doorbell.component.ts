@@ -22,7 +22,8 @@ export class NavigatorDoorbellComponent
 
     constructor(
         private _navigatorService: NavigatorService,
-        private _activeModal: NgbActiveModal) {}
+        private _activeModal: NgbActiveModal)
+    {}
 
     public ring(): void
     {

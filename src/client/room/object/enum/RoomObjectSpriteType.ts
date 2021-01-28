@@ -1,4 +1,4 @@
-﻿export class RoomObjectSpriteType 
+﻿export class RoomObjectSpriteType
 {
     public static DEFAULT: number       = 1;
     public static _Str_8616: number     = 2;

@@ -3,7 +3,7 @@ import { SharedModule } from '../../shared';
 import { HotelViewComponent } from './component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -13,4 +13,5 @@ import { HotelViewComponent } from './component';
         HotelViewComponent
     ]
 })
-export class HotelViewModule {} 
+export class HotelViewModule
+{}

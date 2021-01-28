@@ -3,16 +3,16 @@ import { RoomSessionEvent } from './RoomSessionEvent';
 
 export class _Str_3051 extends RoomSessionEvent
 {
-    public static RSPE_POLL_OFFER: string = "RSPE_POLL_OFFER";
-    public static ERROR: string = "RSPE_POLL_ERROR";
-    public static RSPE_POLL_CONTENT: string = "RSPE_POLL_CONTENT";
+    public static RSPE_POLL_OFFER: string = 'RSPE_POLL_OFFER';
+    public static ERROR: string = 'RSPE_POLL_ERROR';
+    public static RSPE_POLL_CONTENT: string = 'RSPE_POLL_CONTENT';
 
     private _id: number = -1;
     private _headline: string;
     private _summary: string;
     private _Str_5366: number = 0;
-    private _Str_5879: string = "";
-    private _Str_4781: string = "";
+    private _Str_5879: string = '';
+    private _Str_4781: string = '';
     private _Str_5432: string[] = null;
     private _Str_4353: boolean = false;
 

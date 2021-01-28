@@ -102,6 +102,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._isLoaded          = false;
         this._isLoading         = false;
 
+        this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
+
         this.registerMessages();
 
         Nitro.instance.addLinkEventTracker(this);
@@ -118,7 +120,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
 
             this._messages = [
                 new UserInfoEvent(this.onUserInfoEvent.bind(this)),
@@ -142,7 +144,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new NavigatorHomeRoomEvent(this.onNavigatorHomeRoomEvent.bind(this)),
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -150,9 +152,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
 
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -163,10 +165,10 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         if(!event) return;
 
         switch(event.type)
-		{
-			case RoomSessionEvent.CREATED:
-				this._ngZone.run(() => this._settingsService.hideNavigator());
-				return;
+        {
+            case RoomSessionEvent.CREATED:
+                this._ngZone.run(() => this._settingsService.hideNavigator());
+                return;
         }
     }
 
@@ -490,7 +492,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         if(!code) return null;
 
-        for(let context of this._topLevelContexts)
+        for(const context of this._topLevelContexts)
         {
             if(!context || (context.code !== code)) continue;
 
@@ -545,7 +547,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public clearSearch(): void
     {
         this.setCurrentFilter(NavigatorService.SEARCH_FILTERS[0]);
-        
+
         this._lastSearch = null;
 
         (this.isLoaded && this.search());
@@ -591,18 +593,19 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         switch(parts[1])
         {
-            case "goto":
+            case 'goto':
                 if(parts.length > 2)
                 {
-                    switch (parts[2])
+                    switch(parts[2])
                     {
-                        case "home":
+                        case 'home':
                             this.goToHomeRoom();
                             break;
-                        default:
+                        default: {
                             const roomId = parseInt(parts[2]);
 
                             if(roomId > 0) this.goToPrivateRoom(roomId);
+                        }
                     }
                 }
                 return;

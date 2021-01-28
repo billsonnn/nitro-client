@@ -2,7 +2,7 @@
 import { IRoomObject } from '../../../room/object/IRoomObject';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 
-export class TileObjectMap 
+export class TileObjectMap
 {
     private _tileObjectMap: Map<number, Map<number, IRoomObject>>;
     private _width: number;
@@ -17,7 +17,7 @@ export class TileObjectMap
         while(index < _arg_2)
         {
             this._tileObjectMap.set(index, new Map());
-            
+
             index++;
         }
 
@@ -27,7 +27,7 @@ export class TileObjectMap
 
     public clear(): void
     {
-        for(let k of this._tileObjectMap.values())
+        for(const k of this._tileObjectMap.values())
         {
             if(!k) continue;
 
@@ -41,7 +41,7 @@ export class TileObjectMap
     {
         this.clear();
 
-        for(let _local_2 of k) this._Str_21192(_local_2);
+        for(const _local_2 of k) this._Str_21192(_local_2);
     }
 
     public dispose(): void
@@ -65,9 +65,9 @@ export class TileObjectMap
 
     public _Str_23932(k: number, _arg_2: number, _arg_3:IRoomObject): void
     {
-        if (!_arg_3.isReady)
+        if(!_arg_3.isReady)
         {
-            NitroLogger.log("Assigning non initialized object to tile object map!");
+            NitroLogger.log('Assigning non initialized object to tile object map!');
 
             return;
         }

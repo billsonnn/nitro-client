@@ -147,16 +147,16 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
 
 
-        let posture     = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
-        let gesture     = model.getValue<string>(RoomObjectVariable.FIGURE_GESTURE);
-        let tempPosture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
+        const posture     = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
+        const gesture     = model.getValue<string>(RoomObjectVariable.FIGURE_GESTURE);
+        const tempPosture = model.getValue<string>(RoomObjectVariable.FIGURE_POSTURE);
 
         this.setPostureAndGesture(posture, gesture);
 
         let alphaMultiplier = (model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER) || null);
 
         if(alphaMultiplier === null || isNaN(alphaMultiplier)) alphaMultiplier = 1;
-        
+
         if(this._alphaMultiplier !== alphaMultiplier)
         {
             this._alphaMultiplier = alphaMultiplier;
@@ -407,7 +407,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     private getDirection(scale: number, layerId: number): number
     {
         if(!this._Str_23973(layerId)) return this._direction;
-        
+
         return this._data.getValidDirection(scale, this._headDirection);
     }
 
@@ -476,7 +476,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     {
         if(this._saddleSprites[layerId] === undefined)
         {
-            if (this._data.getLayerTag(this._scale, DirectionData._Str_9471, layerId) === PetVisualization.SADDLE)
+            if(this._data.getLayerTag(this._scale, DirectionData._Str_9471, layerId) === PetVisualization.SADDLE)
             {
                 this._saddleSprites[layerId] = true;
             }
@@ -493,7 +493,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
     {
         if(!this.asset) return null;
 
-        let layerIndex  = this._customLayerIds.indexOf(layerId);
+        const layerIndex  = this._customLayerIds.indexOf(layerId);
         let paletteName = this._paletteName;
         let partId      = -1;
         let paletteId   = -1;
@@ -527,7 +527,7 @@ export class PetVisualization extends FurnitureAnimatedVisualization
 
     protected getPostureForAsset(scale: number, name: string): string
     {
-        let parts   = name.split('_');
+        const parts   = name.split('_');
         let length  = parts.length;
         let i       = 0;
 

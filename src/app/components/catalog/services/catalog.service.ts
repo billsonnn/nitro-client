@@ -13,6 +13,7 @@ import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/mess
 import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
@@ -23,6 +24,12 @@ import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurn
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogMainComponent } from '../components/main/main.component';
+import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { Purse } from '../purse/purse';
+import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
+import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
+import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -37,6 +44,9 @@ export class CatalogService implements OnDestroy
     private _activePageData: CatalogPageData = null;
     private _manuallyCollapsed: CatalogPageData[] = [];
     private _isLoading: boolean = false;
+    private _purse: Purse = new Purse();
+    private _clubOffers: CatalogClubOfferData[] = [];
+    private _vipTemplate: CatalogLayoutVipBuyComponent = null;
 
     constructor(
         private _settingsService: SettingsService,
@@ -49,6 +59,8 @@ export class CatalogService implements OnDestroy
     public ngOnDestroy(): void
     {
         this.unregisterMessages();
+
+        this._vipTemplate = null;
     }
 
     private registerMessages(): void
@@ -65,10 +77,11 @@ export class CatalogService implements OnDestroy
                 new CatalogPurchaseUnavailableEvent(this.onCatalogPurchaseUnavailableEvent.bind(this)),
                 new CatalogSearchEvent(this.onCatalogSearchEvent.bind(this)),
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
-                new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this))
+                new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -76,7 +89,7 @@ export class CatalogService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -84,7 +97,16 @@ export class CatalogService implements OnDestroy
 
     private onCatalogClubEvent(event: CatalogClubEvent): void
     {
-        console.log(event);
+        if(!event || !event.getParser() || !this._vipTemplate) return;
+
+        const offerFromEvent = event.getParser().offers;
+        this._clubOffers = offerFromEvent;
+        this._vipTemplate.setOffers(offerFromEvent);
+    }
+
+    public registerVipBuyTemplate(template: CatalogLayoutVipBuyComponent)
+    {
+        this._vipTemplate = template;
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void
@@ -190,6 +212,23 @@ export class CatalogService implements OnDestroy
         if(!parser) return;
     }
 
+    private onUserSubscriptionEvent(event: UserSubscriptionEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        // TODO: Is this even right? 1 day too less?
+        this._purse.clubDays = Math.max(0, parser.days);
+        this._purse.clubPeriods = Math.max(0, parser.months);
+        this._purse.isVip = parser.isVip;
+        this._purse.pastClubDays = parser.pastClubDays;
+        this._purse.Str_14389 = parser.years == UserSubscriptionParser._Str_14729;
+        this._purse.minutesUntilExpiration = parser.totalSeconds;
+    }
+
     private onCatalogUpdatedEvent(event: CatalogUpdatedEvent): void
     {
         if(!event) return;
@@ -205,7 +244,7 @@ export class CatalogService implements OnDestroy
             this._catalogRoot       = null;
             this._activePage        = null;
             this._activePageData    = null;
-    
+
             if(this._component) this._component.reset();
 
             if(this._settingsService.catalogVisible)
@@ -234,7 +273,7 @@ export class CatalogService implements OnDestroy
     public requestPage(page: CatalogPageData): void
     {
         if(!page || !this.canSelectPage(page)) return;
-        
+
         this._activePageData = page;
 
         if(page.pageId === -1) return;
@@ -257,7 +296,7 @@ export class CatalogService implements OnDestroy
 
         if(page.children.length)
         {
-            for(let child of page.children)
+            for(const child of page.children)
             {
                 if(!child) continue;
 
@@ -299,12 +338,30 @@ export class CatalogService implements OnDestroy
 
         return ((assetUrl && assetUrl[0]) || null);
     }
-    
+
     public purchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number, extra: string = null): void
     {
         if(!page || !offer || !quantity) return;
 
-        Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(page.pageId, offer.offerId, extra, quantity));
+        this.purchaseById(page.pageId, offer.offerId, quantity, extra);
+    }
+
+    public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)
+    {
+        if(!pageId || !offerId || !quantity) return;
+        Nitro.instance.communication.connection.send(new CatalogPurchaseComposer(pageId, offerId, extra, quantity));
+    }
+
+    public requestOffers(i: number): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogRequestVipOffersComposer(i));
+    }
+
+    public redeemVoucher(voucherCode: string)
+    {
+        if(!voucherCode || voucherCode.trim().length === 0) return;
+
+        Nitro.instance.communication.connection.send(new CatalogRedeemVoucherComposer(voucherCode));
     }
 
     public manuallyCollapsePage(page: CatalogPageData): void
@@ -355,5 +412,15 @@ export class CatalogService implements OnDestroy
     public get manuallyCollapsed(): CatalogPageData[]
     {
         return this._manuallyCollapsed;
+    }
+
+    public get purse(): Purse
+    {
+        return this._purse;
+    }
+
+    public get vipOffers(): CatalogClubOfferData[]
+    {
+        return this._clubOffers;
     }
 }

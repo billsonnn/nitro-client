@@ -10,5 +10,6 @@ export class NavigatorPasswordComponent
 {
     constructor(
         private _navigatorService: NavigatorService,
-        private _activeModal: NgbActiveModal) {}
+        private _activeModal: NgbActiveModal)
+    {}
 }

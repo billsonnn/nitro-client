@@ -2,9 +2,11 @@
     position: absolute;
     width: 350px;
     max-width: 350px;
+
+    &.multiple-messages {
+        width: 430px;
+        max-width: 430px;
+    }
 }
 
-.nitro-alert-multiple-messages-component {
-    width: 430px;
-    max-width: 430px;
-}
+@import './components/notificationdialog/index.scss'

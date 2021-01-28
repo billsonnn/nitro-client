@@ -7,6 +7,9 @@ import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/name/component
 import { RoomAvatarInfoOwnAvatarComponent } from './widgets/avatarinfo/ownavatar/component';
 import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
+import { ChooserWidgetBaseComponent } from './widgets/choosers/base/base.component';
+import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.component';
+import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
@@ -19,7 +22,7 @@ import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -39,7 +42,10 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
-        DimmerFurniComponent
+        DimmerFurniComponent,
+        ChooserWidgetBaseComponent,
+        ChooserWidgetFurniComponent,
+        ChooserWidgetUserComponent
     ],
     declarations: [
         RoomComponent,
@@ -58,7 +64,11 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
-        DimmerFurniComponent
+        DimmerFurniComponent,
+        ChooserWidgetBaseComponent,
+        ChooserWidgetFurniComponent,
+        ChooserWidgetUserComponent
     ]
 })
-export class RoomModule {}
+export class RoomModule
+{}

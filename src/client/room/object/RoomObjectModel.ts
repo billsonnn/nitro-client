@@ -2,7 +2,7 @@ import { IRoomObjectModel } from './IRoomObjectModel';
 
 export class RoomObjectModel implements IRoomObjectModel
 {
-    private _map: Map<string, any>;
+    private _map: Map<string, unknown>;
     private _updateCounter: number;
 
     constructor()

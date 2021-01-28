@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class _Str_7446 
+export class _Str_7446
 {
     private _badgeId: string;
     private _limit: number;
@@ -8,8 +8,8 @@ export class _Str_7446
     constructor(k: string, _arg_2: IMessageDataWrapper)
     {
         if(!_arg_2) throw new Error('invalid_parser');
-        
-        this._badgeId   = (("ACH_" + k) + _arg_2.readInt());
+
+        this._badgeId   = (('ACH_' + k) + _arg_2.readInt());
         this._limit     = _arg_2.readInt();
     }
 

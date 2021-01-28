@@ -41,7 +41,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     {
         if(this._palettes)
         {
-            for(let palette of this._palettes.values()) palette.dispose();
+            for(const palette of this._palettes.values()) palette.dispose();
 
             this._palettes.clear();
         }
@@ -55,7 +55,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
 
         if(this._assets)
         {
-            for(let asset of this._assets.values()) asset.recycle();
+            for(const asset of this._assets.values()) asset.recycle();
 
             this._assets.clear();
         }
@@ -94,17 +94,17 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     {
         if(!assets) return;
 
-        for(let name in assets)
+        for(const name in assets)
         {
             const asset = assets[name];
 
             if(!asset) continue;
 
-            let x           = (-(asset.x) || 0);
-            let y           = (-(asset.y) || 0);
+            const x           = (-(asset.x) || 0);
+            const y           = (-(asset.y) || 0);
             let flipH       = false;
-            let flipV       = false;
-            let usesPalette = (asset.usesPalette || false);
+            const flipV       = false;
+            const usesPalette = (asset.usesPalette || false);
             let source      = (asset.source || '');
 
             if(asset.flipH && source.length) flipH = true;
@@ -135,7 +135,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     {
         if(!palettes) return;
 
-        for(let name in palettes)
+        for(const name in palettes)
         {
             const palette = palettes[name];
 
@@ -198,7 +198,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
 
     public getAssetWithPalette(name: string, paletteName: string): IGraphicAsset
     {
-        let saveName = (name + '@' + paletteName);
+        const saveName = (name + '@' + paletteName);
 
         let asset = this.getAsset(saveName);
 
@@ -317,15 +317,13 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
     {
         if(!textures) return;
 
-        for(let name in textures)
+        for(const name in textures)
         {
             const texture = textures[name];
 
             if(!texture) continue;
 
-            name = AssetManager.removeFileExtension(name);
-
-            this._textures.set(name, texture);
+            this._textures.set(AssetManager.removeFileExtension(name), texture);
         }
     }
 
@@ -335,7 +333,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         {
             if(disposeAll || (this._paletteAssetNames.length > GraphicAssetCollection.PALETTE_ASSET_DISPOSE_THRESHOLD))
             {
-                for(let name of this._paletteAssetNames) this.disposeAsset(name);
+                for(const name of this._paletteAssetNames) this.disposeAsset(name);
 
                 this._paletteAssetNames = [];
             }

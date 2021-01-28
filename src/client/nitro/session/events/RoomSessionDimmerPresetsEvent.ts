@@ -16,14 +16,14 @@ export class RoomSessionDimmerPresetsEvent extends RoomSessionEvent
         this._presets = [];
     }
 
-    public get _Str_6226(): number
-    {
-        return this._selectedPresetId;
-    }
-
     public get _Str_10888(): number
     {
         return this._presets.length;
+    }
+
+    public get _Str_6226(): number
+    {
+        return this._selectedPresetId;
     }
 
     public set _Str_6226(k: number)
@@ -33,13 +33,13 @@ export class RoomSessionDimmerPresetsEvent extends RoomSessionEvent
 
     public _Str_17287(k: number, _arg_2: number, _arg_3: number, _arg_4: number): void
     {
-        var _local_5:RoomSessionDimmerPresetsEventPresetItem = new RoomSessionDimmerPresetsEventPresetItem(k, _arg_2, _arg_3, _arg_4);
+        const _local_5:RoomSessionDimmerPresetsEventPresetItem = new RoomSessionDimmerPresetsEventPresetItem(k, _arg_2, _arg_3, _arg_4);
         this._presets[(k - 1)] = _local_5;
     }
 
     public _Str_14989(k: number):RoomSessionDimmerPresetsEventPresetItem
     {
-        if (((k < 0) || (k >= this._presets.length)))
+        if(((k < 0) || (k >= this._presets.length)))
         {
             return null;
         }

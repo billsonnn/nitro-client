@@ -12,7 +12,7 @@ export class UnseenItemsParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -24,7 +24,7 @@ export class UnseenItemsParser implements IMessageParser
             const category = wrapper.readInt();
 
             let totalItems          = wrapper.readInt();
-            let itemIds: number[]   = [];
+            const itemIds: number[]   = [];
 
             while(totalItems > 0)
             {
@@ -37,7 +37,7 @@ export class UnseenItemsParser implements IMessageParser
 
             totalUnseen--;
         }
-        
+
         return true;
     }
 

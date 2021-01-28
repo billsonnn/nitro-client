@@ -5,9 +5,10 @@ import { NotificationBroadcastMessageComponent } from '../broadcast-message/broa
 import { NotificationConfirmComponent } from '../confirm/confirm.component';
 import { NotificationModeratorMessageComponent } from '../moderator-message/moderator-message.component';
 import { NotificationMultipleMessagesComponent } from '../motd/motd.component';
+import { NotificationDialogComponent } from '../notificationdialog/notificationdialog.component';
 
 @Component({
-	selector: 'nitro-notification-main-component',
+    selector: 'nitro-notification-main-component',
     templateUrl: './main.template.html'
 })
 export class NotificationMainComponent implements OnInit, OnDestroy
@@ -15,12 +16,13 @@ export class NotificationMainComponent implements OnInit, OnDestroy
     @ViewChild('alertsContainer', { read: ViewContainerRef })
     public alertsContainer: ViewContainerRef;
 
-    private _alerts: Map<NotificationBroadcastMessageComponent, ComponentRef<NotificationBroadcastMessageComponent>> = new Map();
+    public _alerts: Map<NotificationBroadcastMessageComponent, ComponentRef<NotificationBroadcastMessageComponent>> = new Map();
 
     constructor(
         private _notificationService: NotificationService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    { }
 
     public ngOnInit(): void
     {
@@ -67,7 +69,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
         const transformedMessages: string[] = [];
 
-        for(let message of messages)
+        for(const message of messages)
         {
             if(!message) continue;
 
@@ -95,20 +97,20 @@ export class NotificationMainComponent implements OnInit, OnDestroy
             {
                 title = Nitro.instance.getLocalization('${mod.alert.title}');
             }
-            
+
             if(message)
             {
                 if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
-                
+
                 message = message.replace(/\r\n|\r|\n/g, '<br />');
             }
 
-            component.title     = title;
-            component.message   = message;
+            component.title = title;
+            component.message = message;
         });
 
         if(!component) return null;
-        
+
         return component;
     }
 
@@ -149,7 +151,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
     public closeAll(): void
     {
-        for(let component of this._alerts.keys()) this.close(component);
+        for(const component of this._alerts.keys()) this.close(component);
     }
 
     private removeView(view: ViewRef): void

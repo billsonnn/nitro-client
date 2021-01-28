@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class _Str_3763 
+export class _Str_3763
 {
     private _Str_7992: number;
     private _name: string;
@@ -22,10 +22,10 @@ export class _Str_3763
     public dispose():void
     {
         this._Str_7992  = 0;
-        this._name      = "";
+        this._name      = '';
         this._level     = 0;
-        this._figure    = "";
-        this._owner     = "";
+        this._figure    = '';
+        this._owner     = '';
     }
 
     public get _Str_5277(): number

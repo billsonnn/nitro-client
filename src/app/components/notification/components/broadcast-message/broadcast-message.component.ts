@@ -11,7 +11,8 @@ export class NotificationBroadcastMessageComponent
 
     constructor(
         private _notificationService: NotificationService
-    ) {}
+    )
+    {}
 
     public close(): void
     {

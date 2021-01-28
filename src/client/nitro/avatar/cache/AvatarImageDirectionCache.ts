@@ -1,7 +1,7 @@
 ﻿import { AvatarImageBodyPartContainer } from '../AvatarImageBodyPartContainer';
 import { AvatarImagePartContainer } from '../AvatarImagePartContainer';
 
-export class AvatarImageDirectionCache 
+export class AvatarImageDirectionCache
 {
     private _partList: AvatarImagePartContainer[];
     private _images: Map<string, AvatarImageBodyPartContainer>;
@@ -14,7 +14,7 @@ export class AvatarImageDirectionCache
 
     public dispose(): void
     {
-        for(let image of this._images.values()) image && image.dispose();
+        for(const image of this._images.values()) image && image.dispose();
 
         this._images = null;
     }
@@ -37,7 +37,7 @@ export class AvatarImageDirectionCache
     {
         const name = this._Str_2219(_arg_2);
 
-        let existing = this._images.get(name);
+        const existing = this._images.get(name);
 
         if(existing) existing.dispose();
 
@@ -48,7 +48,7 @@ export class AvatarImageDirectionCache
     {
         let name = '';
 
-        for(let part of this._partList) name += (part._Str_1206(k) + '/');
+        for(const part of this._partList) name += (part._Str_1206(k) + '/');
 
         return name;
     }

@@ -1,5 +1,5 @@
 ﻿
-export class AnimationFrame 
+export class AnimationFrame
 {
     public static FRAME_REPEAT_FOREVER: number = -1;
     public static SEQUENCE_NOT_DEFINED: number = -1;
@@ -110,9 +110,9 @@ export class AnimationFrame
     public recycle(): void
     {
         if(this._isRecycled) return;
-        
+
         this._isRecycled = true;
-        
+
         if(AnimationFrame.POOL.length < AnimationFrame.POOL_SIZE_LIMIT) AnimationFrame.POOL.push(this);
     }
 }

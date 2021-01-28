@@ -7,7 +7,7 @@ import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidg
 import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
 
 @Component({
-	selector: 'nitro-room-furniture-dimmer-component',
+    selector: 'nitro-room-furniture-dimmer-component',
     template: `
     <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-dimmer-component">
         <div *ngIf="isLoading" class="card-loading-overlay"></div>
@@ -44,15 +44,19 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         private _ngZone: NgZone)
     {
         super();
+
+        this.onDimmerPresetsEvent   = this.onDimmerPresetsEvent.bind(this);
+        this.onDimmerHideEvent      = this.onDimmerHideEvent.bind(this);
+        this.onDimmerStateEvent     = this.onDimmerStateEvent.bind(this);
     }
-    
+
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent);
+        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent);
+        eventDispatcher.addEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent);
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -61,9 +65,9 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent);
+        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent);
+        eventDispatcher.removeEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent);
 
         super.unregisterUpdateEvents(eventDispatcher);
     }

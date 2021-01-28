@@ -98,8 +98,8 @@ export class AvatarStructure extends EventDispatcher
 
         if(this._partSetsData.parse(k))
         {
-            this._partSetsData._Str_1102("ri")._Str_1583 = true;
-            this._partSetsData._Str_1102("li")._Str_1583 = true;
+            this._partSetsData._Str_1102('ri')._Str_1583 = true;
+            this._partSetsData._Str_1102('li')._Str_1583 = true;
 
             return true;
         }
@@ -110,14 +110,14 @@ export class AvatarStructure extends EventDispatcher
     public _Str_2229(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._animationData.parse(k);
     }
 
     public _Str_1569(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._figureData.parse(k);
     }
 
@@ -201,7 +201,7 @@ export class AvatarStructure extends EventDispatcher
     {
         let _local_2 = 0;
 
-        for(let _local_3 of k)
+        for(const _local_3 of k)
         {
             _local_2 = Math.max(_local_2, this._animationData._Str_1408(_local_3._Str_742));
         }
@@ -251,10 +251,10 @@ export class AvatarStructure extends EventDispatcher
 
         const _local_4: string[]    = [];
         const _local_5              = k._Str_742._Str_868;
-        
+
         if(k._Str_742._Str_861)
         {
-            const _local_7 = ((k._Str_742.state + ".") + k._Str_727);
+            const _local_7 = ((k._Str_742.state + '.') + k._Str_727);
             const _local_8 = this._animationManager._Str_720(_local_7);
 
             if(_local_8)
@@ -279,7 +279,7 @@ export class AvatarStructure extends EventDispatcher
                         setType: ''
                     };
 
-                    for(let _local_13 of _local_8._Str_687)
+                    for(const _local_13 of _local_8._Str_687)
                     {
                         const _local_6 = this._geometry._Str_1919(_local_5, _local_13.align);
 
@@ -301,7 +301,7 @@ export class AvatarStructure extends EventDispatcher
                 }
             }
 
-            for(let _local_9 of _local_3)
+            for(const _local_9 of _local_3)
             {
                 const _local_6 = this._geometry._Str_1919(_local_5, _local_9);
 
@@ -312,7 +312,7 @@ export class AvatarStructure extends EventDispatcher
         {
             _local_3 = this._partSetsData._Str_1795(k._Str_742);
 
-            for(let _local_14 of _local_3)
+            for(const _local_14 of _local_3)
             {
                 const _local_6 = this._geometry._Str_1701(_local_5, _local_14, _arg_2);
 
@@ -346,29 +346,29 @@ export class AvatarStructure extends EventDispatcher
 
     public _Str_713(k: string, _arg_2:IAvatarFigureContainer, _arg_3:IActiveActionData, _arg_4: string, _arg_5: number, removes: string[], _arg_7: IAvatarImage, _arg_8: Map<string, string> = null): AvatarImagePartContainer[]
     {
-        let _local_10: Animation = null;
+        const _local_10: Animation = null;
         let _local_34: IActionDefinition = null;
 
         let _local_20: AnimationFrame[] = [];
-        var _local_36:IPartColor = null;
+        let _local_36:IPartColor = null;
 
         if(!_arg_3 == null) return [];
 
-        var _local_9                                = this._partSetsData._Str_1795(_arg_3._Str_742);
-        var _local_11: AvatarImagePartContainer[]   = [];
+        const _local_9                                = this._partSetsData._Str_1795(_arg_3._Str_742);
+        const _local_11: AvatarImagePartContainer[]   = [];
         let _local_14: any[]                     = [ 0 ];
-        var _local_15                               = this._animationData._Str_2244(_arg_3._Str_742);
+        const _local_15                               = this._animationData._Str_2244(_arg_3._Str_742);
 
         if(_arg_3._Str_742._Str_861)
         {
-            const _local_24 = ((_arg_3._Str_742.state + ".") + _arg_3._Str_727);
+            const _local_24 = ((_arg_3._Str_742.state + '.') + _arg_3._Str_727);
             const _local_10 = this._animationManager._Str_720(_local_24);
 
             if(_local_10)
             {
                 _local_14 = this._Str_1768(_local_10._Str_2185(_arg_3._Str_707));
 
-                for(let _local_25 of _local_10._Str_1065(0, _arg_3._Str_707))
+                for(const _local_25 of _local_10._Str_1065(0, _arg_3._Str_707))
                 {
                     if(_local_25 === k)
                     {
@@ -376,7 +376,7 @@ export class AvatarStructure extends EventDispatcher
 
                         if(_local_26)
                         {
-                            for(let _local_27 of _local_26._Str_1883(_arg_7))
+                            for(const _local_27 of _local_26._Str_1883(_arg_7))
                             {
                                 _local_9.push(_local_27.id);
                             }
@@ -389,7 +389,7 @@ export class AvatarStructure extends EventDispatcher
         const _local_16     = this._geometry._Str_713(_arg_4, k, _arg_5, _local_9, _arg_7);
         const  _local_21    = _arg_2._Str_1016();
 
-        for(let _local_17 of _local_21)
+        for(const _local_17 of _local_21)
         {
             if(_arg_8)
             {
@@ -414,7 +414,7 @@ export class AvatarStructure extends EventDispatcher
                     {
                         removes = removes.concat(_local_32._Str_790);
 
-                        for(let _local_33 of _local_32._Str_806)
+                        for(const _local_33 of _local_32._Str_806)
                         {
                             if(_local_16.indexOf(_local_33.type) > -1)
                             {
@@ -464,18 +464,18 @@ export class AvatarStructure extends EventDispatcher
 
         const _local_22: AvatarImagePartContainer[] = [];
 
-        for(let _local_12 of _local_16)
+        for(const _local_12 of _local_16)
         {
             let _local_39: IPartColor = null;
             let _local_38             = false;
 
             const _local_40 = ((_arg_8) && (_arg_8.get(_local_12)));
 
-            for(let _local_23 of _local_11)
+            for(const _local_23 of _local_11)
             {
-                if (_local_23._Str_1669 === _local_12)
+                if(_local_23._Str_1669 === _local_12)
                 {
-                    if (_local_40)
+                    if(_local_40)
                     {
                         _local_39 = _local_23.color;
                     }
@@ -488,16 +488,16 @@ export class AvatarStructure extends EventDispatcher
                 }
             }
 
-            if (!_local_38)
+            if(!_local_38)
             {
-                if (_local_40)
+                if(_local_40)
                 {
                     const _local_41 = _arg_8.get(_local_12);
 
                     let _local_42 = 0;
                     let _local_43 = 0;
 
-                    while (_local_43 < _local_41.length)
+                    while(_local_43 < _local_41.length)
                     {
                         _local_42 = (_local_42 + _local_41.charCodeAt(_local_43));
                         _local_43++;
@@ -531,8 +531,9 @@ export class AvatarStructure extends EventDispatcher
                     {
                         const _local_44 = this._geometry._Str_1701(_arg_4, _local_12, _arg_7);
 
-                        if (k !== _local_44.id)
+                        if(k !== _local_44.id)
                         {
+                            //
                         }
                         else
                         {
@@ -621,7 +622,7 @@ export class AvatarStructure extends EventDispatcher
 
             const _local_2 = [];
 
-            for(let _local_3 of k.values()) _local_2.push(_local_3);
+            for(const _local_3 of k.values()) _local_2.push(_local_3);
 
             return _local_2;
         }

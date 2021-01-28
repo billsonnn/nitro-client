@@ -6,7 +6,7 @@ import { DefaultActionType } from './DefaultActionType';
 
 export class BotChangeFigure extends DefaultActionType
 {
-    private static _Str_4332: string = "\t";
+    private static _Str_4332: string = '\t';
 
     private _component: WiredService;
     private _figureString: string;
@@ -36,12 +36,12 @@ export class BotChangeFigure extends DefaultActionType
 
     public onEditStart(k: WiredMainComponent, _arg_2: Triggerable): void
     {
-        var _local_3 = _arg_2.stringData.split(BotChangeFigure._Str_4332);
-        if (_local_3.length > 0)
+        const _local_3 = _arg_2.stringData.split(BotChangeFigure._Str_4332);
+        if(_local_3.length > 0)
         {
             this._botName = _local_3[0];
         }
-        if (_local_3.length > 1)
+        if(_local_3.length > 1)
         {
             this._figureString = _local_3[1];
         }

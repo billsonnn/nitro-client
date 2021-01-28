@@ -2,7 +2,7 @@
 import { RoomMapMaskData } from './RoomMapMaskData';
 import { RoomPlaneBitmapMaskData } from './RoomPlaneBitmapMaskData';
 
-export class RoomPlaneBitmapMaskParser 
+export class RoomPlaneBitmapMaskParser
 {
     private _masks: Map<string, RoomPlaneBitmapMaskData>;
 
@@ -34,7 +34,7 @@ export class RoomPlaneBitmapMaskParser
 
         if(k.masks.length)
         {
-            for(let mask of k.masks)
+            for(const mask of k.masks)
             {
                 if(!mask) continue;
 
@@ -42,16 +42,16 @@ export class RoomPlaneBitmapMaskParser
 
                 if(!location) continue;
 
-                this._masks.set(mask.id, new RoomPlaneBitmapMaskData(mask.type, location, mask.category))
+                this._masks.set(mask.id, new RoomPlaneBitmapMaskData(mask.type, location, mask.category));
             }
         }
-        
+
         return true;
     }
 
     public reset(): void
     {
-        for(let mask of this._masks.values())
+        for(const mask of this._masks.values())
         {
             if(!mask) continue;
 
@@ -89,7 +89,7 @@ export class RoomPlaneBitmapMaskParser
     {
         const data = new RoomMapMaskData();
 
-        for(let [ key, mask ] of this._masks.entries())
+        for(const [ key, mask ] of this._masks.entries())
         {
             if(!mask) continue;
 

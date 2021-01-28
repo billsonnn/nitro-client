@@ -22,7 +22,7 @@ export class PetSizeData extends AnimationSizeData
     {
         if(!postures) return false;
 
-        for(let key in postures)
+        for(const key in postures)
         {
             const posture = postures[key];
 
@@ -44,7 +44,7 @@ export class PetSizeData extends AnimationSizeData
     {
         if(!gestures) return false;
 
-        for(let key in gestures)
+        for(const key in gestures)
         {
             const gesture = gestures[key];
 
@@ -117,13 +117,13 @@ export class PetSizeData extends AnimationSizeData
                 --index;
             }
         }
-        
+
         return null;
     }
 
     public _Str_17976(k: number): string
     {
-        for(let _local_2 of this._gesturesToAnimations.keys())
+        for(const _local_2 of this._gesturesToAnimations.keys())
         {
             if(this._gesturesToAnimations.get(_local_2) === k) return _local_2;
         }

@@ -60,7 +60,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     constructor(communication: INitroCommunicationManager)
     {
         super();
-        
+
         this._communication                 = communication;
 
         this.resetUserInfo();
@@ -84,6 +84,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._pendingFurnitureListeners     = [];
 
         this._badgeImageManager             = null;
+
+        this.onFurnitureDataReadyEvent = this.onFurnitureDataReadyEvent.bind(this);
     }
 
     protected onInit(): void
@@ -124,9 +126,9 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureData = new FurnitureDataParser(this._floorItems, this._wallItems, Nitro.instance.localization);
 
-        this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent);
 
-        this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>("furnidata.url"));
+        this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>('furnidata.url'));
     }
 
     private loadBadgeImageManager(): void
@@ -147,14 +149,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         const furnitureData: IFurnitureData[] = [];
 
-        for(let data of this._floorItems.values())
+        for(const data of this._floorItems.values())
         {
             if(!data) continue;
 
             furnitureData.push(data);
         }
 
-        for(let data of this._wallItems.values())
+        for(const data of this._wallItems.values())
         {
             if(!data) continue;
 
@@ -235,7 +237,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
             {
-                for(let listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
+                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
     }
@@ -296,7 +298,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     private onFurnitureDataReadyEvent(event: Event): void
     {
-        this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent);
 
         this._furnitureReady = true;
 
@@ -306,7 +308,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
             {
-                for(let listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
+                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
     }
@@ -333,7 +335,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         if(!name || !this._floorItems || !this._floorItems.size) return null;
 
-        for(let item of this._floorItems.values())
+        for(const item of this._floorItems.values())
         {
             if(!item || (item.className !== name)) continue;
 
@@ -354,12 +356,22 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     {
         if(!name || !this._wallItems || !this._wallItems.size) return null;
 
-        for(let item of this._wallItems.values())
+        for(const item of this._wallItems.values())
         {
             if(!item || (item.className !== name)) continue;
 
             return item;
         }
+    }
+
+    public getBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name);
+    }
+
+    public getGroupBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name, BadgeImageManager.GROUP_BADGE);
     }
 
     public getBadgeImage(name: string): Texture
@@ -374,12 +386,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     public loadBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name);
+        return this._badgeImageManager.loadBadgeImage(name);
     }
 
     public loadGroupBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name, BadgeImageManager.GROUP_BADGE);
+        return this._badgeImageManager.loadBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }
 
     public isUserIgnored(userName: string): boolean
@@ -406,7 +418,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if((petId < 0) || (this._respectsPetLeft <= 0)) return;
 
         this.send(new PetRespectComposer(petId));
-        
+
         this._respectsPetLeft--;
     }
 
@@ -415,7 +427,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new RoomUnitChatComposer(text));
     }
 
-    private send(composer: IMessageComposer): void
+    private send(composer: IMessageComposer<unknown[]>): void
     {
         this._communication.connection.send(composer);
     }

@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AvatarContextInfoView } from '../AvatarContextInfoView';
 
 @Component({
-	selector: 'nitro-room-avatarinfo-name-component',
+    selector: 'nitro-room-avatarinfo-name-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-name-component context-menu">
         <div class="card align-items-center">
@@ -19,7 +19,7 @@ export class RoomAvatarInfoNameComponent extends AvatarContextInfoView
     public static setup(view: RoomAvatarInfoNameComponent, userId: number, userName: string, userType: number, roomIndex: number, willFade: boolean = false): void
     {
         view.willFade = willFade;
-        
+
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
     }
 }

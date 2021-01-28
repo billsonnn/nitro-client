@@ -184,7 +184,7 @@ export class RoomInstanceData
 
             return true;
         }
-        
+
         return false;
     }
 

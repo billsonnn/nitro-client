@@ -15,7 +15,7 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
     constructor()
     {
         super();
-        
+
         this._Str_22237 = null;
         this._Str_10040 = null;
         this._Str_21698 = -1;
@@ -145,6 +145,6 @@ export class FurnitureThumbnailVisualization extends FurnitureAnimatedVisualizat
 
     protected _Str_12961(k: number, _arg_2: number): string
     {
-        return [this._type, k, "thumb", _arg_2].join("_");
+        return [this._type, k, 'thumb', _arg_2].join('_');
     }
 }

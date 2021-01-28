@@ -86,7 +86,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(!roomMap || !this.object) return;
 
         if(!(roomMap instanceof RoomMapData)) return;
-        
+
         if(!this._planeParser.initializeFromMapData(roomMap)) return;
 
         this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, roomMap);
@@ -145,7 +145,7 @@ export class RoomLogic extends RoomObjectLogicBase
             const _local_11 = ((this._Str_11287 >> 8) & 0xFF);
             const _local_12 = (this._Str_11287 & 0xFF);
             const _local_13 = ((k - this._Str_9785) / this._Str_17191);
-            
+
             _local_7 = (_local_7 + ((_local_10 - _local_7) * _local_13));
             _local_8 = (_local_8 + ((_local_11 - _local_8) * _local_13));
             _local_9 = (_local_9 + ((_local_12 - _local_9) * _local_13));
@@ -183,7 +183,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(message instanceof ObjectRoomMaskUpdateMessage)
         {
             this.onObjectRoomMaskUpdateMessage(message, model);
-            
+
             return;
         }
 
@@ -218,7 +218,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
     private onObjectRoomUpdateMessage(message: ObjectRoomUpdateMessage, model: IRoomObjectModel): void
     {
-        switch (message.type)
+        switch(message.type)
         {
             case ObjectRoomUpdateMessage.ROOM_FLOOR_UPDATE:
                 model.setValue(RoomObjectVariable.ROOM_FLOOR_TYPE, message.value);
@@ -251,7 +251,7 @@ export class RoomLogic extends RoomObjectLogicBase
             case ObjectRoomMaskUpdateMessage._Str_10260:
                 update = this._planeBitmapMaskParser._Str_23574(message.maskId);
                 break;
-                
+
         }
 
         if(update) _arg_2.setValue(RoomObjectVariable.ROOM_PLANE_MASK_XML, this._planeBitmapMaskParser._Str_5598());
@@ -277,7 +277,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
     private onObjectRoomPlanePropertyUpdateMessage(message: ObjectRoomPlanePropertyUpdateMessage, model: IRoomObjectModel): void
     {
-        switch (message.type)
+        switch(message.type)
         {
             case ObjectRoomPlanePropertyUpdateMessage.FLOOR_THICKNESS:
                 model.setValue(RoomObjectVariable.ROOM_FLOOR_THICKNESS, message.value);
@@ -290,7 +290,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
     private onObjectRoomFloorHoleUpdateMessage(message: ObjectRoomFloorHoleUpdateMessage, model: IRoomObjectModel): void
     {
-        switch (message.type)
+        switch(message.type)
         {
             case ObjectRoomFloorHoleUpdateMessage.ADD:
                 this._planeParser.addFloorHole(message.id, message.x, message.y, message.width, message.height);
@@ -323,7 +323,7 @@ export class RoomLogic extends RoomObjectLogicBase
 
         const tag = event.spriteTag;
 
-        let planeId: number = 0;
+        let planeId = 0;
 
         if(tag && (tag.indexOf('@') >= 0))
         {
@@ -350,12 +350,12 @@ export class RoomLogic extends RoomObjectLogicBase
         const _local_11 = this._planeParser.getPlaneNormalDirection(planeId);
         const _local_12 = this._planeParser.getPlaneType(planeId);
 
-        if (((((_local_8 == null) || (_local_9 == null)) || (_local_10 == null)) || (_local_11 == null))) return;
+        if(((((_local_8 == null) || (_local_9 == null)) || (_local_10 == null)) || (_local_11 == null))) return;
 
         const _local_13 = _local_9.length;
         const _local_14 = _local_10.length;
 
-        if (((_local_13 == 0) || (_local_14 == 0))) return;
+        if(((_local_13 == 0) || (_local_14 == 0))) return;
 
         const _local_15 = event.screenX;
         const _local_16 = event.screenY;
@@ -389,7 +389,7 @@ export class RoomLogic extends RoomObjectLogicBase
         else
         {
             this.object.model.setValue(RoomObjectVariable.ROOM_SELECTED_PLANE, 0);
-            
+
             return;
         }
 
@@ -402,7 +402,7 @@ export class RoomLogic extends RoomObjectLogicBase
         {
             case MouseEventType.MOUSE_MOVE:
             case MouseEventType.ROLL_OVER:
-            case MouseEventType.MOUSE_CLICK:
+            case MouseEventType.MOUSE_CLICK: {
                 let newEvent: RoomObjectEvent = null;
 
                 if(_local_12 === RoomPlaneData.PLANE_FLOOR)
@@ -428,8 +428,9 @@ export class RoomLogic extends RoomObjectLogicBase
                 }
 
                 if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(newEvent);
-                
+
                 return;
+            }
         }
     }
 }

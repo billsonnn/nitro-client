@@ -7,6 +7,7 @@ import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.co
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
+import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
 
 export class CatalogLayoutFactory {
     public getLayoutForType(type: string): typeof CatalogLayout {
@@ -25,6 +26,8 @@ export class CatalogLayoutFactory {
                 return CatalogLayoutSpacesNewComponent;
             case CatalogLayoutDefaultComponent.CODE:
                 return CatalogLayoutDefaultComponent;
+            case CatalogLayoutVipBuyComponent.CODE:
+                return CatalogLayoutVipBuyComponent;
             default:
                 return CatalogLayoutUnsupportedComponent;
         }

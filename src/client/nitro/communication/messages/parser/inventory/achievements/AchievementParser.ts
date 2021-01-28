@@ -18,7 +18,7 @@ export class AchievementParser implements IMessageParser
         if(!k) return false;
 
         this._achievement = new Achievement(k);
-        
+
         return true;
     }
 

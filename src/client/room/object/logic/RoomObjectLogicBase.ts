@@ -23,7 +23,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         this._time      = 0;
     }
 
-    public initialize(data: any): void
+    public initialize(data: unknown): void
     {
         return;
     }
@@ -36,14 +36,14 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     public update(time: number): void
     {
         this._time = time;
-        
+
         return;
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
         if(!message || !this._object) return;
-        
+
         this._object.setLocation(message.location);
         this._object.setDirection(message.direction);
     }
@@ -57,7 +57,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     {
         const types = k.concat();
 
-        for(let type of _arg_2)
+        for(const type of _arg_2)
         {
             if(!type || (types.indexOf(type) >= 0)) continue;
 
@@ -67,7 +67,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
         return types;
     }
 
-    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry)
+    public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         return;
     }
@@ -103,7 +103,7 @@ export class RoomObjectLogicBase extends Disposable implements IRoomObjectEventH
     {
         return;
     }
-    
+
     public get object(): IRoomObjectController
     {
         return this._object;

@@ -1,6 +1,6 @@
 import { Point } from 'pixi.js';
 
-export class PointMath 
+export class PointMath
 {
     public static sum(k: Point, _arg_2: Point): Point
     {

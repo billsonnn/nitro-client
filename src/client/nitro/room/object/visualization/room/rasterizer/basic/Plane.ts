@@ -2,7 +2,7 @@
 import { PlaneVisualization } from './PlaneVisualization';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
 
-export class Plane 
+export class Plane
 {
     private _planeVisualizations: Map<string, PlaneVisualization>;
     private _sizes: number[];
@@ -24,7 +24,7 @@ export class Plane
 
     public dispose(): void
     {
-        for(let visualization of this._planeVisualizations.values())
+        for(const visualization of this._planeVisualizations.values())
         {
             if(!visualization) continue;
 
@@ -39,7 +39,7 @@ export class Plane
 
     public _Str_3355(): void
     {
-        for(let visualization of this._planeVisualizations.values())
+        for(const visualization of this._planeVisualizations.values())
         {
             if(!visualization) continue;
 

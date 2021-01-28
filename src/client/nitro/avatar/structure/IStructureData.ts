@@ -2,7 +2,7 @@
 import { IPalette } from './figure/IPalette';
 import { ISetType } from './figure/ISetType';
 
-export interface IStructureData 
+export interface IStructureData
 {
     parse(data: any): boolean;
     _Str_1017(k: any): boolean;

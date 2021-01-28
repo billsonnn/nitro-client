@@ -29,7 +29,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
 
         if(directions && directions.length)
         {
-            for(let direction of directions)
+            for(const direction of directions)
             {
                 const id = direction.id;
 
@@ -44,7 +44,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
 
     public _Str_809(k: number): number
     {
-        if(k < this._dx.length) return this._dx[k]
+        if(k < this._dx.length) return this._dx[k];
 
         return 0;
     }
@@ -59,7 +59,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
     public _Str_839(k: number): number
     {
         if(k < this._dz.length) return this._dz[k];
-        
+
         return 0;
     }
 

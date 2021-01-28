@@ -11,7 +11,7 @@ export class RoomSessionConfirmPetBreedingResultEvent extends RoomSessionEvent
     constructor(k: IRoomSession, _arg_2: number, _arg_3: number)
     {
         super(RoomSessionConfirmPetBreedingResultEvent.RSPFUE_CONFIRM_PET_BREEDING_RESULT, k);
-        
+
         this._breedingNestStuffId = _arg_2;
         this._result = _arg_3;
     }

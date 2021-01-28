@@ -1,49 +1,99 @@
 .nitro-toolbar-component {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 10px;
+    right: 0px;
+    bottom: 10px;
     z-index: 0;
     pointer-events: none;
 
-    .card {
-        width: 100%;
+    .nitro-toolbar-component-body {
+        z-index: 2;
+    }
+
+    .btn-primary  {
+        pointer-events: none;
+    }
+
+    .list-group {
         align-items: center;
 
-        .card-body {
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: unset;
+            pointer-events: all;
+            width:100%;
+            padding-top:1rem;
 
-            .list-group {
-                align-items: center;
+            &:active {
+                -webkit-transform: translate(0, 1px);
+                transform: translate(0, 1px);
+            }
 
-                .list-group-item {
-                    display: flex;
-                    width: 65px;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    padding: unset;
-                    pointer-events: all;
+            &.avatar-image {
+                width: 65px;
+                height: 65px;
+                overflow: hidden;
 
-                    &:active {
-                        -webkit-transform: translate(0, 1px);
-                        transform: translate(0, 1px);
+                img {
+                    position: relative;
+                    top: 0px;
+                }
+            }
+
+            .icon,
+            .avatar-image {
+                position: relative;
+                filter: drop-shadow(0px 2px 0px black);
+            }
+
+            &.splitter {
+                border-bottom: $card-cap-border-width solid $card-cap-border-color;
+                width: 100%;
+                height: 2px;
+            }
+
+            .count {
+                top: 0.8rem;
+                right: 10px;
+                font-size: 10px;
+            }
+        }
+    }
+
+    .nitro-toolbar-me-menu {
+        bottom: 60px;
+        left: 72px;
+        position: absolute;
+        font-size: 12px;
+        z-index: 1;
+
+        .list-group {
+            .list-group-item {
+                min-width: 70px;
+                transition: all .3s;
+                font-size: 10px;
+                text-align: center;
+
+                i {
+                    filter: grayscale(1);
+                }
+
+                &:hover {
+                    color: $cyan;
+                    text-decoration: underline;
+
+                    i {
+                        filter: grayscale(0);
                     }
+                }
 
-                    &.avatar-image {
-                        width: 65px;
-                        height: 70px;
-
-                        img {
-                            position: relative;
-                            top: 10px;
-                        }
-                    }
-
-                    .icon,
-                    .avatar-image {
-                        position: relative;
-                        filter: drop-shadow(2px 1px 0 rgba($white, 1)) drop-shadow(-2px 1px 0 rgba($white, 1)) drop-shadow(0 -2px 0 rgba($white, 1));
-                    }
+                .count {
+                    top: 5px;
+                    right: 5px;
+                    font-size: 10px;
                 }
             }
         }

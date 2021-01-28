@@ -36,10 +36,10 @@ $grays: map-merge(
 $blue:      #007bff !default;
 $indigo:    #6610f2 !default;
 $purple:    #6f42c1 !default;
-$pink:      #e83e8c !default;
+$pink:      #AB4BA9 !default;
 $red:       #dc3545 !default;
-$orange:    #fd7e14 !default;
-$yellow:    #ffc107 !default;
+$orange:    #A46614 !default;
+$yellow:    #E2AE1D !default;
 $green:     #28a745 !default;
 $teal:      #20c997 !default;
 $cyan:      #17a2b8 !default;
@@ -47,6 +47,7 @@ $cod-gray:  #181818 !default;
 $mine-shaft:#2B2B2B !default;
 $tundora:   #494949 !default;
 $emperor:   #555555 !default;
+$skyBlue:   #5A8689 !default;
 
 $colors: () !default;
 $colors: map-merge(
@@ -67,7 +68,7 @@ $colors: map-merge(
     "emperor":    $emperor,
     "white":      $white,
     "gray":       $gray-600,
-    "gray-dark":  $gray-800
+    "gray-dark":  $gray-800,
   ),
   $colors
 );
@@ -93,7 +94,10 @@ $theme-colors: map-merge(
     "light":      $light,
     "dark":       $dark,
     "black":      $black,
-    "emperor":    $emperor
+    "emperor":    $emperor,
+    "pink":       $pink,
+    "skyBlue":    $skyBlue,
+    "orange":     $orange
   ),
   $theme-colors
 );
@@ -183,7 +187,7 @@ $body-color:                $white !default;
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $white !default;
 $link-decoration:                         none !default;
 $link-hover-color:                        darken($link-color, 15%) !default;
 $link-hover-decoration:                   underline !default;
@@ -245,7 +249,7 @@ $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
 $border-width:                1px !default;
-$border-color:                $gray-300 !default;
+$border-color:                $black !default;
 
 $border-radius:               7px !default;
 $border-radius-lg:            7px !default;
@@ -254,7 +258,7 @@ $border-radius-sm:            7px !default;
 $rounded-pill:                50rem !default;
 
 $box-shadow-sm:               0 .125rem .25rem rgba($black, .075) !default;
-$box-shadow:                  0 .5rem 1rem rgba($black, .15) !default;
+$box-shadow:                  0px 2px 0px rgba($black, 0.45), inset 0px 0px 0px 2px rgba($white, 0.1) !default;
 $box-shadow-lg:               0 1rem 3rem rgba($black, .175) !default;
 
 $component-active-color:      $white !default;
@@ -289,7 +293,7 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
-$font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
+$font-size-base:              1.1rem !default; // Assumes the browser default, typically `16px`
 $font-size-lg:                $font-size-base * 1.25 !default;
 $font-size-sm:                $font-size-base * .875 !default;
 
@@ -484,18 +488,18 @@ $input-bg:                              $white !default;
 $input-disabled-bg:                     $gray-200 !default;
 
 $input-color:                           $gray-700 !default;
-$input-border-color:                    $gray-400 !default;
+$input-border-color:                    rgba($black, 1) !default;
 $input-border-width:                    $input-btn-border-width !default;
 $input-box-shadow:                      $btn-box-shadow !default;
 
-$input-border-radius:                   $border-radius !default;
-$input-border-radius-lg:                $border-radius-lg !default;
-$input-border-radius-sm:                $border-radius-sm !default;
+$input-border-radius:                   0 !default;
+$input-border-radius-lg:                0 !default;
+$input-border-radius-sm:                0!default;
 
 $input-focus-bg:                        $input-bg !default;
 $input-focus-border-color:              lighten($component-active-bg, 25%) !default;
 $input-focus-color:                     $input-color !default;
-$input-focus-width:                     $input-btn-focus-width !default;
+$input-focus-width:                     $input-btn-border-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
 
 $input-placeholder-color:               $gray-600 !default;
@@ -838,16 +842,16 @@ $jumbotron-bg:                      $gray-200 !default;
 
 $card-spacer-y:                     .75rem !default;
 $card-spacer-x:                     1rem !default;
-$card-border-width:                 0 !default;
+$card-border-width:                 1px !default;
 $card-border-radius:                $border-radius !default;
-$card-border-color:                 rgba($black, .125) !default;
+$card-border-color:                 rgba($black, 1) !default;
 $card-inner-border-radius:          subtract($card-border-radius, $card-border-width) !default;
 $card-cap-bg:                       rgba($black, .03) !default;
 $card-cap-color:                    null !default;
 $card-height:                       null !default;
 $card-color:                        null !default;
-$card-bg:                           rgba($cod-gray, .97) !default;
-$card-shadow:                       0 .25rem .5rem rgba($black, .5) !default;
+$card-bg:                           rgba($primary, 1) !default;
+$card-shadow:                       $box-shadow !default;
 
 $card-cap-border-width:             .97px !default;
 $card-cap-border-color:             rgba($emperor, .3) !default;
@@ -963,13 +967,13 @@ $modal-dialog-margin-y-sm-up:       1.75rem !default;
 $modal-title-line-height:           $line-height-base !default;
 
 $modal-content-color:               $card-color !default;
-$modal-content-bg:                  rgba($cod-gray, 1) !default;
+$modal-content-bg:                  $card-bg !default;
 $modal-content-border-color:        $card-border-color !default;
-$modal-content-border-width:        $border-width !default;
-$modal-content-border-radius:       $border-radius !default;
+$modal-content-border-width:        $card-border-width !default;
+$modal-content-border-radius:       $card-border-radius !default;
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width) !default;
 $modal-content-box-shadow-xs:       $card-shadow !default;
-$modal-content-box-shadow-sm-up:    0 .5rem 1rem rgba($black, .5) !default;
+$modal-content-box-shadow-sm-up:    $card-shadow !default;
 
 $modal-backdrop-bg:                 $black !default;
 $modal-backdrop-opacity:            .5 !default;
@@ -1121,7 +1125,7 @@ $spinner-border-width-sm: .2em !default;
 
 // Close
 
-$close-font-size:                   $font-size-base * 1.5 !default;
+$close-font-size:                   $font-size-base * 1.1 !default;
 $close-font-weight:                 $font-weight-bold !default;
 $close-color:                       $white !default;
 $close-text-shadow:                 0 1px 0 $white !default;

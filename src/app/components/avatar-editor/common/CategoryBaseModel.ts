@@ -1,4 +1,5 @@
 ﻿import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorMainComponent } from '../components/main/main.component';
 import { AvatarEditorModelViewerComponent } from '../components/model-viewer/model-viewer.component';
 import { CategoryData } from './CategoryData';
@@ -7,23 +8,23 @@ import { IAvatarEditorCategoryModel } from './IAvatarEditorCategoryModel';
 export class CategoryBaseModel implements IAvatarEditorCategoryModel
 {
     protected _categories: AdvancedMap<string, CategoryData>;
-    protected _Str_2278: AvatarEditorMainComponent;
-    protected _Str_2271: AvatarEditorModelViewerComponent;
-    protected _Str_2367: boolean;
+    protected _editor: AvatarEditorMainComponent;
+    protected _viewer: AvatarEditorModelViewerComponent;
+    protected _isInitalized: boolean;
     protected _maxPaletteCount: number;
     private _disposed: boolean;
 
     constructor(k: AvatarEditorMainComponent)
     {
-        this._Str_2278  = k;
-        this._Str_2367  = false;
+        this._editor  = k;
+        this._isInitalized  = false;
         this._maxPaletteCount = 0;
     }
 
     public dispose(): void
     {
         this._categories    = null;
-        this._Str_2278      = null;
+        this._editor      = null;
         this._disposed      = true;
     }
 
@@ -34,19 +35,16 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
     public init(): void
     {
-        if (!this._categories)
-        {
-            this._categories = new AdvancedMap();
-        }
+        if(!this._categories) this._categories = new AdvancedMap();
     }
 
     public reset(): void
     {
-        this._Str_2367 = false;
+        this._isInitalized = false;
 
         if(this._categories)
         {
-            for(let k of this._categories.getValues())
+            for(const k of this._categories.getValues())
             {
                 if(k) k.dispose();
             }
@@ -54,80 +52,71 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         this._categories = new AdvancedMap();
 
-        // if(this._Str_2271) this._Str_2271.reset();
+        (this._viewer && this._viewer.prepareModel());
     }
 
     public setViewer(viewer: AvatarEditorModelViewerComponent): void
     {
-        this._Str_2271 = viewer;
+        this._viewer = viewer;
     }
 
-    protected _Str_3130(k: string): void
+    protected addCategory(name: string): void
     {
-        let existing = this._categories.getValue(k);
+        let existing = this._categories.getValue(name);
 
         if(existing) return;
 
-        existing = this._Str_2278._Str_24037(this, k);
+        existing = this._editor._Str_24037(this, name);
 
         if(!existing) return;
 
-        this._categories.add(k, existing);
-        
-        this.updateSelectionsFromFigure(k);
+        this._categories.add(name, existing);
+
+        this.updateSelectionsFromFigure(name);
     }
 
-    public switchCategory(k: string = ''): void
+    protected updateSelectionsFromFigure(figure: string): void
     {
-        if(!this._Str_2367) this.init();
+        if(!this._categories || !this._editor || !this._editor.figureData) return;
 
-        // if(this._Str_2271) this._Str_2271.switchCategory(k);
-    }
-
-    protected updateSelectionsFromFigure(k: string): void
-    {
-        if(!this._categories || !this._Str_2278 || !this._Str_2278.figureData) return;
-
-        const category = this._categories.getValue(k);
+        const category = this._categories.getValue(figure);
 
         if(!category) return;
 
-        const setId = this._Str_2278.figureData.getPartSetId(k);
+        const setId = this._editor.figureData.getPartSetId(figure);
 
-        let colorIds = this._Str_2278.figureData.getColourIds(k);
+        let colorIds = this._editor.figureData.getColourIds(figure);
 
         if(!colorIds) colorIds = [];
 
-        category._Str_20245(setId);
-        category._Str_17669(colorIds);
-
-        // if (this._Str_2271) this._Str_2271._Str_5614(k, _local_4.length);
+        category.selectPartId(setId);
+        category.selectColorIds(colorIds);
     }
 
-    public _Str_20411(k: number): boolean
+    public hasClubSelectionsOverLevel(k: number): boolean
     {
         if(!this._categories) return false;
 
-        for(let category of this._categories.getValues())
+        for(const category of this._categories.getValues())
         {
             if(!category) continue;
 
-            if(category._Str_23352(k)) return true;
+            if(category.hasClubSelectionsOverLevel(k)) return true;
         }
 
         return false;
     }
 
-    public _Str_7960(k: any): boolean // inventory
+    public hasInvalidSelectedItems(inventory: InventoryService): boolean
     {
         if(!this._categories) return false;
 
-        // for(let category of this._categories.values())
-        // {
-        //     if(!category) continue;
+        for(const category of this._categories.getValues())
+        {
+            if(!category) continue;
 
-        //     if(category._Str_7960(k)) return true;
-        // }
+            if(category.hasInvalidSelectedItems(inventory)) return true;
+        }
 
         return false;
     }
@@ -138,7 +127,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         let _local_2 = false;
 
-        for(let name of this._categories.getKeys())
+        for(const name of this._categories.getKeys())
         {
             const category = this._categories.getValue(name);
 
@@ -146,17 +135,17 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
             let _local_7 = false;
 
-            if(category._Str_15298(k)) _local_7 = true;
+            if(category.stripClubItemsOverLevel(k)) _local_7 = true;
 
-            if(category._Str_23810(k)) _local_7 = true;
+            if(category.stripClubColorsOverLevel(k)) _local_7 = true;
 
             if(_local_7)
             {
-                const _local_8 = category._Str_6315();
+                const _local_8 = category.getCurrentPart();
 
-                if(_local_8 && this._Str_2278 && this._Str_2278.figureData && category)
+                if(_local_8 && this._editor && this._editor.figureData && category)
                 {
-                    this._Str_2278.figureData._Str_2088(name, _local_8.id, category._Str_11211(), true);
+                    this._editor.figureData.savePartData(name, _local_8.id, category.getSelectedColorIds(), true);
                 }
 
                 _local_2 = true;
@@ -172,23 +161,23 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         let _local_2 = false;
 
-        for(let name of this._categories.getKeys())
+        for(const name of this._categories.getKeys())
         {
             const category = this._categories.getValue(name);
 
             if(!category) continue;
 
-            let _local_6 = false;
+            const _local_6 = false;
 
             // if(category._Str_8360(this._Str_2278.manager.inventory)) _local_6 = true;
 
             if(_local_6)
             {
-                const _local_7 = category._Str_6315();
+                const _local_7 = category.getCurrentPart();
 
-                if (_local_7 && this._Str_2278 && this._Str_2278.figureData && category)
+                if(_local_7 && this._editor && this._editor.figureData && category)
                 {
-                    this._Str_2278.figureData._Str_2088(name, _local_7.id, category._Str_11211(), true);
+                    this._editor.figureData.savePartData(name, _local_7.id, category.getSelectedColorIds(), true);
                 }
 
                 _local_2 = true;
@@ -200,32 +189,32 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
     public selectPart(k: string, _arg_2: number): void
     {
-        var categoryData = this._categories.getValue(k);
+        const categoryData = this._categories.getValue(k);
 
         if(!categoryData) return;
 
-        const partIndex = categoryData._Str_22359;
+        const partIndex = categoryData.selectedPartIndex;
 
-        categoryData._Str_8066(_arg_2);
+        categoryData.selectPartIndex(_arg_2);
 
-        const partItem = categoryData._Str_6315();
+        const partItem = categoryData.getCurrentPart();
 
         if(!partItem) return;
 
         if(partItem.isDisabledForWearing)
         {
-            categoryData._Str_8066(partIndex);
+            categoryData.selectPartIndex(partIndex);
 
-            this._Str_2278.openHabboClubAdWindow();
+            this._editor.openHabboClubAdWindow();
 
             return;
         }
 
         this._maxPaletteCount = partItem.colorLayerCount;
 
-        if(this._Str_2278 && this._Str_2278.figureData)
+        if(this._editor && this._editor.figureData)
         {
-            this._Str_2278.figureData._Str_2088(k, partItem.id, categoryData._Str_11211(), true);
+            this._editor.figureData.savePartData(k, partItem.id, categoryData.getSelectedColorIds(), true);
         }
     }
 
@@ -235,35 +224,35 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
 
         if(!categoryData) return;
 
-        const paletteIndex = categoryData._Str_24480(_arg_3);
+        const paletteIndex = categoryData.getCurrentColorIndex(_arg_3);
 
-        categoryData._Str_17959(_arg_2, _arg_3);
+        categoryData.selectColorIndex(_arg_2, _arg_3);
 
-        if(this._Str_2278 && this._Str_2278.figureData)
+        if(this._editor && this._editor.figureData)
         {
-            const colorItem = categoryData._Str_13355(_arg_3);
+            const colorItem = categoryData.getSelectedColor(_arg_3);
 
             if(colorItem._Str_14863)
             {
-                categoryData._Str_17959(paletteIndex, _arg_3);
+                categoryData.selectColorIndex(paletteIndex, _arg_3);
 
-                this._Str_2278.openHabboClubAdWindow();
+                this._editor.openHabboClubAdWindow();
 
                 return;
             }
 
-            this._Str_2278.figureData.savePartSetColourId(k, categoryData._Str_11211(), true);
+            this._editor.figureData.savePartSetColourId(k, categoryData.getSelectedColorIds(), true);
         }
     }
 
     public get controller(): AvatarEditorMainComponent
     {
-        return this._Str_2278;
+        return this._editor;
     }
 
     public getCategoryData(k: string): CategoryData
     {
-        if(!this._Str_2367) this.init();
+        if(!this._isInitalized) this.init();
 
         if(!this._categories) return null;
 

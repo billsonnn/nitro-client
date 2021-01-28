@@ -4,7 +4,7 @@ import { IRoomObjectSprite } from '../../object/visualization/IRoomObjectSprite'
 import { SortableSprite } from '../utils/SortableSprite';
 import { RoomObjectCacheItem } from './RoomObjectCacheItem';
 
-export class RoomObjectCache 
+export class RoomObjectCache
 {
     private static MAX_SIZE_FOR_AVG_COLOR: number = 200;
 
@@ -21,7 +21,7 @@ export class RoomObjectCache
     {
         if(this._data)
         {
-            for(let [ key, item ] of this._data.entries())
+            for(const [ key, item ] of this._data.entries())
             {
                 if(!item) continue;
 
@@ -63,7 +63,7 @@ export class RoomObjectCache
     {
         const spriteData: RoomObjectSpriteData[] = [];
 
-        for(let item of this._data.values())
+        for(const item of this._data.values())
         {
             if(!item) continue;
 
@@ -71,7 +71,7 @@ export class RoomObjectCache
 
             if(!sprites || !sprites.length) continue;
 
-            for(let sprite of sprites)
+            for(const sprite of sprites)
             {
                 if(!sprite) continue;
 
@@ -94,22 +94,22 @@ export class RoomObjectCache
                     data.posture    = sprite.sprite.posture;
 
                     const isSkewed = this.isSkewedSprite(sprite.sprite);
-                    
+
                     if(isSkewed)
                     {
                         data.skew = (((sprite.sprite.direction % 4) === 0) ? -0.5 : 0.5);
                     }
 
-                    if(((((isSkewed || (sprite.name.indexOf("%image.library.url%") >= 0)) || (sprite.name.indexOf("%group.badge.url%") >= 0)) && (data.width <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)) && (data.height <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)))
+                    if(((((isSkewed || (sprite.name.indexOf('%image.library.url%') >= 0)) || (sprite.name.indexOf('%group.badge.url%') >= 0)) && (data.width <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)) && (data.height <= RoomObjectCache.MAX_SIZE_FOR_AVG_COLOR)))
                     {
                         //data.color = Canvas._Str_23439(sprite.sprite.texture).toString();
-                        
-                        if(sprite.sprite.name.indexOf("external_image_wallitem") === 0)
+
+                        if(sprite.sprite.name.indexOf('external_image_wallitem') === 0)
                         {
                             data.frame = true;
                         }
                     }
-                    
+
                     spriteData.push(data);
                 }
             }
@@ -124,10 +124,10 @@ export class RoomObjectCache
     {
         if(!k.type) return false;
 
-        if((k.type.indexOf("external_image_wallitem") === 0) && (k.tag === "THUMBNAIL")) return true;
+        if((k.type.indexOf('external_image_wallitem') === 0) && (k.tag === 'THUMBNAIL')) return true;
 
-        if((k.type.indexOf("guild_forum") === 0) && (k.tag === "THUMBNAIL")) return true;
-        
+        if((k.type.indexOf('guild_forum') === 0) && (k.tag === 'THUMBNAIL')) return true;
+
         return false;
     }
 
@@ -135,9 +135,9 @@ export class RoomObjectCache
     {
         const sprites: SortableSprite[] = [];
 
-        for(let item of this._data.values())
+        for(const item of this._data.values())
         {
-            for(let sprite of item.sprites._Str_9272)
+            for(const sprite of item.sprites._Str_9272)
             {
                 if(sprite.sprite.spriteType === RoomObjectSpriteType._Str_8616) sprites.push(sprite);
             }

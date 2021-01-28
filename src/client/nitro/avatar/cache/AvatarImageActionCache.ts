@@ -1,7 +1,7 @@
 ﻿import { IActiveActionData } from '../actions/IActiveActionData';
 import { AvatarImageBodyPartCache } from './AvatarImageBodyPartCache';
 
-export class AvatarImageActionCache 
+export class AvatarImageActionCache
 {
     private _Str_586: Map<string, AvatarImageBodyPartCache>;
     private _Str_1233: IActiveActionData;
@@ -16,7 +16,7 @@ export class AvatarImageActionCache
     public _Str_1565(k: IActiveActionData, _arg_2: number): void
     {
         if(!this._Str_1233) this._Str_1233 = k;
-        
+
         const _local_3 = this._Str_1961(this._Str_1233);
 
         if(_local_3) _local_3._Str_1108(_arg_2);
@@ -43,7 +43,7 @@ export class AvatarImageActionCache
     {
         if(!this._Str_586 || this._disposed) return;
 
-        for(let [ key, cache ] of this._Str_586.entries())
+        for(const [ key, cache ] of this._Str_586.entries())
         {
             if(!cache) continue;
 

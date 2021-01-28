@@ -10,7 +10,7 @@ export class RoomWidgetRoomEngineUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number)
     {
         super(k);
-        
+
         this._roomId = _arg_2;
     }
 

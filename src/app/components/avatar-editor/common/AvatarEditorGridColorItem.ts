@@ -2,7 +2,7 @@
 import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
 import { CategoryBaseModel } from './CategoryBaseModel';
 
-export class AvatarEditorGridColorItem 
+export class AvatarEditorGridColorItem
 {
     private _model: CategoryBaseModel;
     private _partColor: IPartColor;
@@ -55,7 +55,7 @@ export class AvatarEditorGridColorItem
 
     public get color(): string
     {
-        return ColorConverter.int2rgb(this._partColor._Str_915)
+        return ColorConverter.int2rgb(this._partColor._Str_915);
     }
 
     public get _Str_14863(): boolean

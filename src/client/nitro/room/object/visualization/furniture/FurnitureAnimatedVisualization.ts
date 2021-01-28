@@ -45,7 +45,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     public dispose(): void
     {
         super.dispose();
-        
+
         if(this._animationData)
         {
             this._animationData.dispose();
@@ -146,13 +146,13 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected setAnimation(animationId: number): void
     {
         if(!this._data) return;
-        
+
         this.setSubAnimation(this._animationData, animationId, (this._state >= 0));
     }
 
     protected setSubAnimation(animationData: AnimationStateData, animationId: number, _arg_3: boolean = true): boolean
     {
-        let currentAnimation = animationData.animationId;
+        const currentAnimation = animationData.animationId;
 
         if(_arg_3)
         {
@@ -195,7 +195,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                         animationId = transition;
                     }
                 }
-                
+
                 else if(!AnimationData.isTransitionToAnimation(animationData.animationId))
                 {
                     if(this.usesAnimationResetting())
@@ -240,7 +240,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected resetAllAnimationFrames(): void
     {
         if(!this._animationData) return;
-        
+
         this._animationData.setLayerCount(this._animatedLayerCount);
     }
 
@@ -285,7 +285,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     {
         if(animationData.animationOver && !this._directionChanged) return 0;
 
-        let animationId = this.getAnimationId(animationData);
+        const animationId = this.getAnimationId(animationData);
         let frameCount  = animationData.frameCounter;
 
         if(!frameCount) frameCount = this._data.getStartFrame(scale, animationId, this._direction);
@@ -299,9 +299,9 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         let update          = 0;
         let layerUpdate     = (1 << (this._animatedLayerCount - 1));
 
-        while (layerId >= 0)
+        while(layerId >= 0)
         {
-            let sequenceId: number = 0;
+            let sequenceId = 0;
 
             animationPlayed = animationData.getAnimationPlayed(layerId);
 
@@ -356,7 +356,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
             layerId--;
         }
-        
+
         return update;
     }
 
@@ -401,7 +401,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         if(this._direction === direction) return;
 
         super.setDirection(direction);
-        
+
         this._directionChanged  = true;
     }
 }

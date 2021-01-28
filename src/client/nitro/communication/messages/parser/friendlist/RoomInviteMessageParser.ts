@@ -13,14 +13,14 @@ export class RoomInviteParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._senderId      = wrapper.readInt();
         this._messageText   = wrapper.readString();
-        
+
         return true;
     }
 

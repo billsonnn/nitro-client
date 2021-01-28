@@ -1,7 +1,7 @@
 ﻿import { RoomObjectEvent } from '../../../room/events/RoomObjectEvent';
 import { IRoomObject } from '../../../room/object/IRoomObject';
 
-export class RoomObjectFloorHoleEvent extends RoomObjectEvent 
+export class RoomObjectFloorHoleEvent extends RoomObjectEvent
 {
     public static ADD_HOLE: string    = 'ROFHO_ADD_HOLE';
     public static REMOVE_HOLE: string = 'ROFHO_REMOVE_HOLE';

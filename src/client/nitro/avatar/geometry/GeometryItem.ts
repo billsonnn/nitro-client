@@ -1,7 +1,7 @@
 ﻿import { Node3D } from './Node3D';
 import { Vector3D } from './Vector3D';
 
-export class GeometryItem extends Node3D 
+export class GeometryItem extends Node3D
 {
     private _id: string;
     private _radius: number;
@@ -45,7 +45,7 @@ export class GeometryItem extends Node3D
 
     public toString(): string
     {
-        return ((((this._id + ": ") + this.location) + " - ") + this._Str_1604);
+        return ((((this._id + ': ') + this.location) + ' - ') + this._Str_1604);
     }
 
     public get _Str_1457(): boolean

@@ -22,13 +22,14 @@ export class InventoryTradingComponent implements OnInit, OnDestroy
 
     public indexs: number[] = [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ];
 
-    private _timer: any;
+    private _timer: ReturnType<typeof setTimeout>;
     private _timerTick: number = 3;
 
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {

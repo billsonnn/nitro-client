@@ -5,7 +5,7 @@ import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widg
 import { FurnitureCustomStackHeightWidgetHandler } from '../../handlers/FurnitureCustomStackHeightWidgetHandler';
 
 @Component({
-	selector: 'nitro-room-furniture-customstackheight-component',
+    selector: 'nitro-room-furniture-customstackheight-component',
     template: `
     <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-customstackheight-component">
         <div *ngIf="isLoading" class="card-loading-overlay"></div>
@@ -78,7 +78,7 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
 
     public onHeightChange(): void
     {
-        let stringValue = this._heightInput;
+        const stringValue = this._heightInput;
         let numberValue = 0;
 
         if((stringValue === null) || (stringValue === '')) numberValue = this._height;
@@ -90,7 +90,7 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
     private setHeight(height: number, fromServer: boolean = false): void
     {
         height = Math.abs(height);
-        
+
         if(!fromServer) ((height > CustomStackHeightComponent.MAX_HEIGHT) && (height = CustomStackHeightComponent.MAX_HEIGHT));
 
         this._height = parseFloat(height.toFixed(2));

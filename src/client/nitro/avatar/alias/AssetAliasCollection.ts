@@ -3,7 +3,7 @@ import { IGraphicAsset } from '../../../room/object/visualization/utils/IGraphic
 import { AvatarRenderManager } from '../AvatarRenderManager';
 import { AssetAlias } from './AssetAlias';
 
-export class AssetAliasCollection 
+export class AssetAliasCollection
 {
     private _assets: IAssetManager;
     private _aliases: Map<string, AssetAlias>;
@@ -31,7 +31,7 @@ export class AssetAliasCollection
 
     public init(): void
     {
-        for(let collection of this._assets.collections.values())
+        for(const collection of this._assets.collections.values())
         {
             if(!collection) continue;
 
@@ -39,13 +39,13 @@ export class AssetAliasCollection
 
             if(!aliases) continue;
 
-            for(let name in aliases)
+            for(const name in aliases)
             {
                 const alias = aliases[name];
 
                 if(!alias) continue;
 
-                this._aliases.set(name, new AssetAlias(name, alias))
+                this._aliases.set(name, new AssetAlias(name, alias));
             }
         }
     }
@@ -78,7 +78,7 @@ export class AssetAliasCollection
     public getAsset(name: string): IGraphicAsset
     {
         if(!this._assets) return null;
-        
+
         name = this._Str_2125(name);
 
         const asset = this._assets.getAsset(name);

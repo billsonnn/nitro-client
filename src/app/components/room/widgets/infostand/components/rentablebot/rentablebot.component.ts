@@ -6,7 +6,7 @@ import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
 
 @Component({
-	templateUrl: './rentablebot.template.html'
+    templateUrl: './rentablebot.template.html'
 })
 export class RoomInfoStandRentableBotComponent extends RoomInfoStandBaseComponent
 {

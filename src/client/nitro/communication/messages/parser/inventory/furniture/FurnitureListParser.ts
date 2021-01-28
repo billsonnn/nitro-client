@@ -16,7 +16,7 @@ export class FurnitureListParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -34,7 +34,7 @@ export class FurnitureListParser implements IMessageParser
 
             totalItems--;
         }
-        
+
         return true;
     }
 

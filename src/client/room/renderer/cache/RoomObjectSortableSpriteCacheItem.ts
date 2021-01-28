@@ -1,6 +1,6 @@
 ﻿import { SortableSprite } from '../utils/SortableSprite';
 
-export class RoomObjectSortableSpriteCacheItem 
+export class RoomObjectSortableSpriteCacheItem
 {
     private _sprites: SortableSprite[];
     private _updateId1: number;
@@ -48,20 +48,20 @@ export class RoomObjectSortableSpriteCacheItem
     public _Str_17574(k: number, _arg_2: number): boolean
     {
         if((k === this._updateId1) && (_arg_2 === this._updateId2)) return false;
-        
+
         this._updateId1 = k;
         this._updateId2 = _arg_2;
-        
+
         return true;
     }
 
     public _Str_20276(k: number): void
     {
-        if (k < this._sprites.length)
+        if(k < this._sprites.length)
         {
             let iterator = k;
 
-            while (iterator < this._sprites.length)
+            while(iterator < this._sprites.length)
             {
                 const sprite = this._sprites[iterator];
 

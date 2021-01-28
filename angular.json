@@ -25,6 +25,7 @@
               "replaceDuplicatePlugins": true
             },
             "outputPath": "dist",
+            "resourcesOutputPath": "assets",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -33,6 +34,15 @@
             "aot": true,
             "vendorChunk": true,
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets/",
+                "ignore": [
+                  "**/*.scss"
+                ],
+                "output": "/assets/"
+              },
+              "src/configuration.json"
             ],
             "styles": [
               "src/styles.scss"
@@ -51,13 +61,13 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "10mb"
                 },
                 {
@@ -76,7 +86,9 @@
             "host": "localhost",
             "port": 8080,
             "disableHostCheck": true,
-            "allowedHosts": [ "" ]
+            "allowedHosts": [
+              ""
+            ]
           },
           "configurations": {
             "production": {
@@ -85,6 +97,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "nitro"
+    }
+  },
+  "defaultProject": "nitro",
+  "cli": {
+    "analytics": false
+  }
 }

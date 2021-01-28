@@ -21,7 +21,7 @@ export class AnimationAction
 
         if(data.parts && (data.parts.length > 0))
         {
-            for(let part of data.parts)
+            for(const part of data.parts)
             {
                 if(!part) continue;
 
@@ -35,7 +35,7 @@ export class AnimationAction
 
         if(data.offsets && data.offsets.frames && (data.offsets.frames.length > 0))
         {
-            for(let frame of data.offsets.frames)
+            for(const frame of data.offsets.frames)
             {
                 if(!frame) continue;
 
@@ -49,7 +49,7 @@ export class AnimationAction
 
                 if(frame.directions && (frame.directions.length > 0))
                 {
-                    for(let direction of frame.directions)
+                    for(const direction of frame.directions)
                     {
                         if(!direction) continue;
 
@@ -61,7 +61,7 @@ export class AnimationAction
 
                         if(direction.bodyParts && (direction.bodyParts.length > 0))
                         {
-                            for(let part of direction.bodyParts)
+                            for(const part of direction.bodyParts)
                             {
                                 if(!part) continue;
 

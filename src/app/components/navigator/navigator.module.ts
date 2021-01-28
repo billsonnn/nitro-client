@@ -8,9 +8,10 @@ import { NavigatorSearchComponent } from './components/search/search.component';
 import { NavigatorSearchItemComponent } from './components/searchitem/searchitem.component';
 import { NavigatorSearchResultComponent } from './components/searchresult/searchresult.component';
 import { NavigatorService } from './services/navigator.service';
+import { NavigatorSliderComponent } from './components/slider/slider.component';
 
 @NgModule({
-	imports: [
+    imports: [
         SharedModule
     ],
     exports: [
@@ -20,7 +21,8 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorPasswordComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
-        NavigatorSearchResultComponent
+        NavigatorSearchResultComponent,
+        NavigatorSliderComponent
     ],
     providers: [
         NavigatorService
@@ -32,8 +34,10 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorPasswordComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
-        NavigatorSearchResultComponent
+        NavigatorSearchResultComponent,
+        NavigatorSliderComponent
     ],
     entryComponents: [ NavigatorCreatorComponent, NavigatorDoorbellComponent, NavigatorPasswordComponent ]
 })
-export class NavigatorModule {}
+export class NavigatorModule
+{}

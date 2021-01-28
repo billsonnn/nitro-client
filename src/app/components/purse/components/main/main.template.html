@@ -1,14 +1,25 @@
-<div class="nitro-purse-component">
-    <div class="grid-container position-relative">
-        <div class="grid-items grid-2">
+<div class="nitro-purse-component float-right">
+    <div class="position-relative mb-1">
+        <div class="row px-0 mx-0">
             <ng-container *ngFor="let currency of currencies | keyvalue">
-                <div class="d-flex item-detail" *ngIf="isVisible(currency.key)">
-                    <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">{{ currency.value | number }}</div>
-                    <div class="detail-icon bg-primary">
-                        <div class="currency-icon" [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key) + ')' }"></div>
+                <div class="col item-detail btn btn-primary rounded d-flex nohover" *ngIf="isVisible(currency.key)">
+                    <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">
+                        {{ currency.value | shortNumber }}</div>
+                    <div class="detail-icon bg-secondary" 
+                    [ngClass]="{ 'bg-pink' : currency.key == 0, 'bg-warning': currency.key == -1, 'bg-skyBlue': currency.key == 5 }">
+                        <div class="currency-icon"
+                            [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key.toString()) + ')' }"></div>
                     </div>
                 </div>
             </ng-container>
+            <div class="col item-detail btn btn-primary rounded d-flex nohover">
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end detail-value">
+                    {{ hcDay }}
+                </div>
+                <div class="detail-icon bg-orange">
+                    <div class="currency-icon" [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl('hc') + ')' }"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

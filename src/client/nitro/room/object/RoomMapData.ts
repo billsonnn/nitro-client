@@ -107,7 +107,7 @@ export class RoomMapData
     {
         return this._restrictsScaling;
     }
-    
+
     public set restrictsScaling(flag: boolean)
     {
         this._restrictsScaling = flag;

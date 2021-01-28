@@ -4,7 +4,7 @@ import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMask } from './PlaneMask';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
-export class PlaneMaskManager 
+export class PlaneMaskManager
 {
     private _assetCollection: IGraphicAssetCollection;
     private _masks: Map<string, PlaneMask>;
@@ -29,7 +29,7 @@ export class PlaneMaskManager
 
         if(this._masks && this._masks.size)
         {
-            for(let mask of this._masks.values())
+            for(const mask of this._masks.values())
             {
                 if(!mask) continue;
 
@@ -48,7 +48,7 @@ export class PlaneMaskManager
     public _Str_6703(k: IGraphicAssetCollection): void
     {
         if(!this.data) return;
-        
+
         this._assetCollection = k;
 
         this._Str_22834(this.data, k);
@@ -114,7 +114,7 @@ export class PlaneMaskManager
 
         let graphicName: string = null;
 
-        for(let bitmap of k)
+        for(const bitmap of k)
         {
             if(!bitmap) continue;
 
@@ -173,7 +173,7 @@ export class PlaneMaskManager
         if(asset.flipV)
         {
             b = -1;
-            d = -(texture.height)
+            d = -(texture.height);
         }
 
         matrix.scale(a, b);

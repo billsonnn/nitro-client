@@ -118,12 +118,12 @@ export class FurnitureItem implements IFurnitureItem
     {
         if(this._secondsToExpiration === -1) return -1;
 
-        let time: number = -1;
+        let time = -1;
 
         if(this._hasRentPeriodStarted)
         {
             time = (this._secondsToExpiration - ((Nitro.instance.time - this._expirationTimeStamp) / 1000));
-            
+
             if(time < 0) time = 0;
         }
         else

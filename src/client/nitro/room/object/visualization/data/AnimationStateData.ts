@@ -1,6 +1,6 @@
 ﻿import { AnimationFrame } from './AnimationFrame';
 
-export class AnimationStateData 
+export class AnimationStateData
 {
     private _animationId: number;
     private _animationAfterTransitionId: number;
@@ -51,7 +51,7 @@ export class AnimationStateData
     public set animationId(animationId: number)
     {
         if(animationId === this._animationId) return;
-        
+
         this._animationId = animationId;
 
         this.resetAnimationFrames(false);
@@ -128,7 +128,7 @@ export class AnimationStateData
     {
         if(!this._frames || !this._frames.length) return;
 
-        for(let frame of this._frames)
+        for(const frame of this._frames)
         {
             if(!frame) continue;
 
@@ -139,7 +139,7 @@ export class AnimationStateData
     public getFrame(layerId: number): AnimationFrame
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return null;
-        
+
         return this._frames[layerId];
     }
 
@@ -164,21 +164,21 @@ export class AnimationStateData
     public setAnimationPlayed(layerId: number, flag: boolean): void
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return;
-        
+
         this._animationPlayed[layerId] = flag;
     }
 
     public getLastFramePlayed(layerId: number): boolean
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return true;
-        
+
         return this._lastFramePlayed[layerId];
     }
 
     public setLastFramePlayed(layerId: number, flag: boolean): void
     {
         if((layerId < 0) || (layerId >= this._layerCount)) return;
-        
+
         this._lastFramePlayed[layerId] = flag;
     }
 }

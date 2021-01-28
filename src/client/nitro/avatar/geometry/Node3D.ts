@@ -1,7 +1,7 @@
 ﻿import { Matrix4x4 } from './Matrix4x4';
 import { Vector3D } from './Vector3D';
 
-export class Node3D 
+export class Node3D
 {
     private _location: Vector3D;
     private _transformedLocation: Vector3D;

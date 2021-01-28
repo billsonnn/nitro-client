@@ -1,4 +1,4 @@
-﻿export class RoomObjectSpriteData 
+﻿export class RoomObjectSpriteData
 {
     public objectId: number;
     public x: number;

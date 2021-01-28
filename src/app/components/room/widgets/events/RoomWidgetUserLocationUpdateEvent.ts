@@ -11,7 +11,7 @@ export class RoomWidgetUserLocationUpdateEvent extends RoomWidgetUpdateEvent
 
     constructor(k: number, _arg_2: Rectangle, _arg_3: Point)
     {
-        super(RoomWidgetUserLocationUpdateEvent.RWULUE_USER_LOCATION_UPDATE)
+        super(RoomWidgetUserLocationUpdateEvent.RWULUE_USER_LOCATION_UPDATE);
 
         this._userId = k;
         this._rectangle = _arg_2;

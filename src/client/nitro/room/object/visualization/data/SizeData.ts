@@ -21,7 +21,7 @@ export class SizeData
     {
         this._layerCount        = ((layerCount < 0) ? 0 : ((layerCount > SizeData.MAX_LAYERS) ? SizeData.MAX_LAYERS : layerCount));
         this._angle             = angle < 1 ? 1 : angle > 360 ? 360 : angle;
-        
+
         this._defaultDirection  = new DirectionData(this._layerCount);
         this._directions        = new Map();
         this._colors            = [];
@@ -33,14 +33,14 @@ export class SizeData
     {
         if(this._defaultDirection) this._defaultDirection.dispose();
 
-        for(let direction of this._directions.values())
+        for(const direction of this._directions.values())
         {
             if(!direction) continue;
 
             direction.dispose();
         }
 
-        for(let color of this._colors)
+        for(const color of this._colors)
         {
             if(!color) continue;
 
@@ -71,7 +71,7 @@ export class SizeData
     {
         if(!directions) return false;
 
-        for(let key in directions)
+        for(const key in directions)
         {
             const direction = directions[key];
 
@@ -100,7 +100,7 @@ export class SizeData
     {
         if(!colors) return false;
 
-        for(let key in colors)
+        for(const key in colors)
         {
             const color = colors[key];
 
@@ -112,7 +112,7 @@ export class SizeData
 
             const colorData = new ColorData(this._layerCount);
 
-            for(let layer in color.layers)
+            for(const layer in color.layers)
             {
                 const colorLayer = color.layers[layer];
 
@@ -134,7 +134,7 @@ export class SizeData
     {
         if(!directionData || !layers) return false;
 
-        for(let key in layers)
+        for(const key in layers)
         {
             const layer = layers[key];
 
@@ -173,7 +173,7 @@ export class SizeData
         let currentAngle    = -1;
         let validDirection  = -1;
 
-        for(let key of this._directions.keys())
+        for(const key of this._directions.keys())
         {
             let angle = ((((key * this._angle) - direction) + 360) % 360);
 
@@ -231,7 +231,7 @@ export class SizeData
 
         return directionData.getLayerAlpha(layerId);
     }
-    
+
     public getLayerColor(layerId: number, colorId: number): number
     {
         const existing = this._colors[colorId] as ColorData;

@@ -67,9 +67,12 @@ export class PetLogic extends MovingObjectLogic
 
         if(directions && directions.length)
         {
-            for(let direction of directions) this._directions.push(direction);
+            for(const direction of directions) this._directions.push(direction);
 
-            this._directions.sort((a, b) => { return a - b });
+            this._directions.sort((a, b) =>
+            {
+                return a - b;
+            });
         }
 
         model.setValue(RoomObjectVariable.PET_ALLOWED_DIRECTIONS, this._directions);
@@ -157,7 +160,7 @@ export class PetLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarFigureUpdateMessage)
         {
             const petFigureData = new PetFigureData(message.figure);
-            
+
             model.setValue(RoomObjectVariable.FIGURE, message.figure);
             model.setValue(RoomObjectVariable.RACE, message.subType);
             model.setValue(RoomObjectVariable.PET_PALETTE_INDEX, petFigureData.paletteId);
@@ -223,7 +226,7 @@ export class PetLogic extends MovingObjectLogic
                 break;
             case MouseEventType.DOUBLE_CLICK:
                 break;
-            case MouseEventType.MOUSE_DOWN:
+            case MouseEventType.MOUSE_DOWN: {
                 const petType = this.object.model.getValue<number>(RoomObjectVariable.PET_TYPE);
 
                 if(petType == PetType.MONSTERPLANT)
@@ -231,6 +234,7 @@ export class PetLogic extends MovingObjectLogic
                     if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMouseEvent(RoomObjectMouseEvent.MOUSE_DOWN, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown));
                 }
                 break;
+            }
         }
 
         if(eventType && this.eventDispatcher) this.eventDispatcher.dispatchEvent(new RoomObjectMouseEvent(eventType, this.object, event._Str_3463, event.altKey, event.ctrlKey, event.shiftKey, event.buttonDown));

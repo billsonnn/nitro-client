@@ -110,7 +110,7 @@ export class Nitro extends Application implements INitro
 
         canvas.id           = 'client-wrapper';
         canvas.className    = 'client-canvas';
-        
+
         const instance = new this(new NitroCore(), {
             transparent: true,
             autoDensity: true,
@@ -125,7 +125,7 @@ export class Nitro extends Application implements INitro
         canvas.addEventListener('webglcontextlost', () => instance.events.dispatchEvent(new NitroEvent(Nitro.WEBGL_CONTEXT_LOST)));
 
         //@ts-ignore
-        let sso = (NitroConfig.sso as string);
+        const sso = (NitroConfig.sso as string);
 
         instance.communication.demo.setSSO(sso);
     }
@@ -169,7 +169,7 @@ export class Nitro extends Application implements INitro
 
             this._roomManager = null;
         }
-        
+
         if(this._roomSessionManager)
         {
             this._roomSessionManager.dispose();
@@ -187,7 +187,7 @@ export class Nitro extends Application implements INitro
         if(this._roomEngine)
         {
             this._roomEngine.dispose();
-            
+
             this._roomEngine = null;
         }
 
@@ -197,7 +197,7 @@ export class Nitro extends Application implements INitro
 
             this._avatar = null;
         }
-        
+
         if(this._communication)
         {
             this._communication.dispose();
@@ -213,8 +213,8 @@ export class Nitro extends Application implements INitro
 
     private onConfigurationLoadedEvent(event: ConfigurationEvent): void
     {
-        const animationFPS  = this.getConfiguration<number>("animation.fps", 24);
-        const limitsFPS     = this.getConfiguration<boolean>("limits.fps", true);
+        const animationFPS  = this.getConfiguration<number>('animation.fps', 24);
+        const limitsFPS     = this.getConfiguration<boolean>('limits.fps', true);
 
         Nitro.instance.ticker.maxFPS = animationFPS;
     }
@@ -259,7 +259,7 @@ export class Nitro extends Application implements INitro
     {
         if(!link || (link === '')) return;
 
-        for(let tracker of this._linkTrackers)
+        for(const tracker of this._linkTrackers)
         {
             if(!tracker) continue;
 

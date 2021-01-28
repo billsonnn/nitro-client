@@ -4,7 +4,7 @@ import { IRoomRenderingCanvas } from './IRoomRenderingCanvas';
 import { IRoomSpriteCanvasContainer } from './IRoomSpriteCanvasContainer';
 import { RoomSpriteCanvas } from './RoomSpriteCanvas';
 
-export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer 
+export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
 {
     private _objects: Map<number, IRoomObject>;
     private _canvases: Map<number, IRoomRenderingCanvas>;
@@ -27,7 +27,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
 
         if(this._canvases)
         {
-            for(let [ key, canvas ] of this._canvases.entries())
+            for(const [ key, canvas ] of this._canvases.entries())
             {
                 this._canvases.delete(key);
 
@@ -47,7 +47,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         this._disposed = true;
     }
 
-    public reset(): void 
+    public reset(): void
     {
         this._objects.clear();
     }
@@ -67,7 +67,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
     public addObject(object: IRoomObject): void
     {
         if(!object) return;
-        
+
         this._objects.set(this.getInstanceId(object), object);
     }
 
@@ -77,7 +77,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
 
         this._objects.delete(instanceId);
 
-        for(let canvas of this._canvases.values())
+        for(const canvas of this._canvases.values())
         {
             if(!canvas) continue;
 
@@ -91,7 +91,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
     {
         if(!this._canvases || !this._canvases.size) return;
 
-        for(let canvas of this._canvases.values()) canvas && canvas.render(time, update);
+        for(const canvas of this._canvases.values()) canvas && canvas.render(time, update);
     }
 
     public update(time: number, update: boolean = false): void
@@ -99,8 +99,8 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         if(!this._canvases || !this._canvases.size) return;
 
         this.render(time, update);
-        
-        for(let canvas of this._canvases.values()) canvas && canvas.update();
+
+        for(const canvas of this._canvases.values()) canvas && canvas.update();
     }
 
     public getCanvas(id: number): IRoomRenderingCanvas

@@ -11,21 +11,21 @@ export class ContextInfoView
     private static BUBBLE_DROP_SPEED: number    = 3;
     private static SPACE_AROUND_EDGES: number   = 5;
 
-    public parent: IContextMenuParentWidget             = null;
-    public componentRef: ComponentRef<ContextInfoView>  = null;
-    public activeView: ElementRef<HTMLDivElement>       = null;
-    public stack: FixedSizeStack                        = new FixedSizeStack(ContextInfoView.LOCATION_STACK_SIZE);
-    public opacity: number                              = 0;
-    public currentDeltaY: number                        = -1000000;
+    public parent: IContextMenuParentWidget                 = null;
+    public componentRef: ComponentRef<ContextInfoView>      = null;
+    public activeView: ElementRef<HTMLDivElement>           = null;
+    public stack: FixedSizeStack                            = new FixedSizeStack(ContextInfoView.LOCATION_STACK_SIZE);
+    public opacity: number                                  = 0;
+    public currentDeltaY: number                            = -1000000;
 
-    public willFade: boolean                            = false;
-    public firstFadeStarted: boolean                    = false;
-    public fadeAfterDelay: boolean                      = true;
-    public fadeLength: number                           = 500;
-    public fadeTime: number                             = 0;
-    public fadeStartDelay: number                       = 3000;
-    public fadingOut: boolean                           = false;
-    public fadeStartTimer: any                          = null;
+    public willFade: boolean                                = false;
+    public firstFadeStarted: boolean                        = false;
+    public fadeAfterDelay: boolean                          = true;
+    public fadeLength: number                               = 500;
+    public fadeTime: number                                 = 0;
+    public fadeStartDelay: number                           = 3000;
+    public fadingOut: boolean                               = false;
+    public fadeStartTimer: ReturnType<typeof setTimeout>    = null;
 
     public completeSetup(): void
     {
@@ -33,6 +33,8 @@ export class ContextInfoView
         this.fadeLength        = 75;
         this.fadingOut         = false;
         this.opacity           = 1;
+
+        this.onTimerComplete = this.onTimerComplete.bind(this);
 
         if(this.fadeAfterDelay && this.willFade)
         {
@@ -42,8 +44,8 @@ export class ContextInfoView
 
                 this.fadeStartTimer = null;
             }
-            
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
     }
 
@@ -90,7 +92,7 @@ export class ContextInfoView
             deltaY = (this.currentDeltaY - ContextInfoView.BUBBLE_DROP_SPEED);
         }
 
-        let _local_7 = (point.y - deltaY);
+        const _local_7 = (point.y - deltaY);
 
         this.currentDeltaY = deltaY;
 
@@ -126,7 +128,7 @@ export class ContextInfoView
                 this.fadeStartTimer = null;
             }
 
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
         else
         {
@@ -137,7 +139,7 @@ export class ContextInfoView
     private onTimerComplete(): void
     {
         this.fadingOut = true;
-        
+
         this.hide(true);
     }
 

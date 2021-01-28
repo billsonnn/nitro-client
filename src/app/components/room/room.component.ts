@@ -8,6 +8,7 @@ import { NitroEvent } from '../../../client/core/events/NitroEvent';
 import { IAvatarRenderManager } from '../../../client/nitro/avatar/IAvatarRenderManager';
 import { LegacyExternalInterface } from '../../../client/nitro/externalInterface/LegacyExternalInterface';
 import { Nitro } from '../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from '../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
@@ -33,22 +34,26 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
+import { RoomWidgetRoomEngineUpdateEvent } from './widgets/events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
+import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
+import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 
 @Component({
-	selector: 'nitro-room-component',
+    selector: 'nitro-room-component',
     template: `
     <div class="nitro-room-component">
         <div #roomCanvas class="room-view"></div>
@@ -68,28 +73,31 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _roomSession: IRoomSession;
 
     private _events: IEventDispatcher                                   = new EventDispatcher();
+    private _handlers: IRoomWidgetHandler[]                             = [];
     private _widgets: Map<string, ComponentRef<IRoomWidget>>            = new Map();
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]> = new Map();
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
 
-    private _roomColorAdjustor: AdjustmentFilter    = null;
-    private _roomBackground: Sprite                 = null;
-    private _roomBackgroundColor: number            = 0;
-    private _roomColorizerColor: number             = 0;
+    private _roomColorAdjustor: AdjustmentFilter        = null;
+    private _roomBackground: Sprite                     = null;
+    private _roomBackgroundColor: number                = 0;
+    private _roomColorizerColor: number                 = 0;
 
-    private _resizeTimer: any 		= null;
-    private _didMouseMove: boolean  = false;
-    private _lastClick: number      = 0;
-    private _clickCount: number     = 0;
-    private _lastMouseMove: number  = 0;
-    private _isMouseMove: boolean   = false;
+    private _resizeTimer: ReturnType<typeof setTimeout> = null;
+    private _didMouseMove: boolean                      = false;
+    private _lastClick: number                          = 0;
+    private _clickCount: number                         = 0;
+    private _lastMouseMove: number                      = 0;
+    private _isMouseMove: boolean                       = false;
 
     constructor(
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
+        private _friendService: FriendListService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
-    ) {}
+    )
+    {}
 
     public ngOnDestroy(): void
     {
@@ -115,20 +123,20 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(geometry)
         {
-            let minX = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MIN_X) || 0);
-            let maxX = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MAX_X) || 0);
-            let minY = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MIN_Y) || 0);
-            let maxY = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MAX_Y) || 0);
+            const minX = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MIN_X) || 0);
+            const maxX = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MAX_X) || 0);
+            const minY = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MIN_Y) || 0);
+            const maxY = (Nitro.instance.roomEngine.getRoomInstanceVariable<number>(session.roomId, RoomVariableEnum.ROOM_MAX_Y) || 0);
 
             let x = ((minX + maxX) / 2);
             let y = ((minY + maxY) / 2);
 
-            let offset = 20;
+            const offset = 20;
 
             x = (x + (offset - 1));
             y = (y + (offset - 1));
 
-            let z = (Math.sqrt(((offset * offset) + (offset * offset))) * Math.tan(((30 / 180) * Math.PI)));
+            const z = (Math.sqrt(((offset * offset) + (offset * offset))) * Math.tan(((30 / 180) * Math.PI)));
 
             geometry.location = new Vector3d(x, y, z);
         }
@@ -157,7 +165,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             this._resizeTimer = null;
         }
 
-        for(let widget of this._widgets.values())
+        for(const widget of this._widgets.values())
         {
             if(!widget) continue;
 
@@ -166,7 +174,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             this._ngZone.run(() => widget.destroy());
         }
 
-        this._roomColorAdjustor       = null;
+        for(const handler of this._handlers) (handler && handler.dispose());
+
+        this._roomColorAdjustor     = null;
         this._roomBackground        = null;
         this._roomBackgroundColor   = 0;
         this._roomColorizerColor    = 0;
@@ -174,7 +184,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         RoomComponent.COLOR_ADJUSTMENT.red      = 1;
         RoomComponent.COLOR_ADJUSTMENT.green    = 1;
         RoomComponent.COLOR_ADJUSTMENT.blue     = 1;
-        
+
+        this._handlers = [];
         this._widgets.clear();
         this._widgetHandlerMessageMap.clear();
         this._widgetHandlerEventMap.clear();
@@ -222,7 +233,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private onMouseEvent(event: MouseEvent): void
     {
         if(!event || !this._roomSession) return;
-        
+
         const x = event.clientX;
         const y = event.clientY;
 
@@ -233,7 +244,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             if(this._lastClick)
             {
                 this._clickCount = 1;
-                    
+
                 if(this._lastClick >= Date.now() - 300) this._clickCount++;
             }
 
@@ -301,7 +312,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     public update(): void
     {
-        for(let widget of this._widgets.values()) (widget.instance.widgetHandler && widget.instance.widgetHandler.update());
+        for(const widget of this._widgets.values()) (widget.instance.widgetHandler && widget.instance.widgetHandler.update());
     }
 
     public createWidget(type: string, component: Type<IRoomWidget>): void
@@ -316,15 +327,16 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         switch(type)
         {
-            case RoomWidgetEnum.CHAT_WIDGET:
+            case RoomWidgetEnum.CHAT_WIDGET: {
                 sendSizeUpdate = true;
 
-                const chathandler = new ChatWidgetHandler();
+                const handler = new ChatWidgetHandler();
 
-                chathandler.connection = Nitro.instance.communication.connection;
+                handler.connection = Nitro.instance.communication.connection;
 
-                widgetHandler = chathandler;
+                widgetHandler = handler;
                 break;
+            }
             case RoomWidgetEnum.CHAT_INPUT_WIDGET:
                 sendSizeUpdate = true;
                 widgetHandler = new ChatInputWidgetHandler();
@@ -342,9 +354,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 widgetHandler = new FurnitureInternalLinkHandler();
                 break;
             case RoomWidgetEnum.ROOM_LINK:
-                const linkHandler = new FurnitureRoomLinkHandler();
-
-                widgetHandler = linkHandler;
+                widgetHandler = new FurnitureRoomLinkHandler();
                 break;
             case RoomWidgetEnum.ROOM_DIMMER:
                 widgetHandler = new FurnitureDimmerWidgetHandler();
@@ -352,6 +362,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.CUSTOM_STACK_HEIGHT:
                 widgetHandler = new FurnitureCustomStackHeightWidgetHandler();
                 break;
+            case RoomWidgetEnum.FURNI_CHOOSER:
+                widgetHandler = new FurniChooserWidgetHandler();
+                break;
+            case RoomWidgetEnum.USER_CHOOSER:
+                widgetHandler = new UserChooserWidgetHandler();
             // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
             //     widgetHandler = new FurnitureTrophyWidgetHandler();
             //     break;
@@ -359,13 +374,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(widgetHandler)
         {
-            widgetHandler.container = this;
-
             const messageTypes = widgetHandler.messageTypes;
 
             if(messageTypes && messageTypes.length)
             {
-                for(let name of messageTypes)
+                for(const name of messageTypes)
                 {
                     if(!name) continue;
 
@@ -388,7 +401,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
             if(eventTypes && eventTypes.length)
             {
-                for(let name of eventTypes)
+                for(const name of eventTypes)
                 {
                     if(!name) continue;
 
@@ -404,29 +417,34 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                     events.push(widgetHandler);
                 }
             }
+
+            this._handlers.push(widgetHandler);
+
+            if(component)
+            {
+                let widgetRef: ComponentRef<IRoomWidget>    = null;
+                let widget: IRoomWidget                     = null;
+
+                this._ngZone.run(() =>
+                {
+                    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
+
+                    widgetRef   = this.widgetContainer.createComponent(componentFactory);
+                    widget      = (widgetRef.instance as IRoomWidget);
+                });
+
+                if(!widget) return;
+
+                widget.widgetHandler    = widgetHandler;
+                widget.messageListener  = this;
+
+                widget.registerUpdateEvents(this._events);
+
+                this._widgets.set(type, widgetRef);
+            }
+
+            widgetHandler.container = this;
         }
-
-        if(!component) return;
-
-        let widgetRef: ComponentRef<IRoomWidget>    = null;
-        let widget: IRoomWidget                     = null;
-
-        this._ngZone.run(() =>
-        {
-            const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-
-            widgetRef   = this.widgetContainer.createComponent(componentFactory);
-            widget      = (widgetRef.instance as IRoomWidget);
-        });
-
-        if(!widget) return;
-
-        widget.widgetHandler    = widgetHandler;
-        widget.messageListener  = this;
-
-        widget.registerUpdateEvents(this._events);
-
-        this._widgets.set(type, widgetRef);
 
         if(sendSizeUpdate) this._events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
     }
@@ -441,7 +459,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         let dispatchEvent = false;
 
-        for(let existing of events)
+        for(const existing of events)
         {
             if(!existing) continue;
 
@@ -467,7 +485,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(!handlers || !handlers.length) return null;
 
-        for(let handler of handlers)
+        for(const handler of handlers)
         {
             if(!handler) continue;
 
@@ -479,6 +497,21 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         }
 
         return null;
+    }
+
+    public onRoomEngineEvent(event: RoomEngineEvent): void
+    {
+        if(!event) return;
+
+        switch(event.type)
+        {
+            case RoomEngineEvent.NORMAL_MODE:
+                this._events.dispatchEvent(new RoomWidgetRoomEngineUpdateEvent(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, event.roomId));
+                return;
+            case RoomEngineEvent.GAME_MODE:
+                this._events.dispatchEvent(new RoomWidgetRoomEngineUpdateEvent(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, event.roomId));
+                return;
+        }
     }
 
     public onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
@@ -498,7 +531,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomEngineObjectEvent.DESELECTED:
                 updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, objectId, category, event.roomId);
                 break;
-            case RoomEngineObjectEvent.ADDED:
+            case RoomEngineObjectEvent.ADDED: {
                 let addedEventType: string = null;
 
                 switch(category)
@@ -514,7 +547,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
                 if(addedEventType) updateEvent = new RoomWidgetRoomObjectUpdateEvent(addedEventType, objectId, category, event.roomId);
                 break;
-            case RoomEngineObjectEvent.REMOVED:
+            }
+            case RoomEngineObjectEvent.REMOVED: {
                 let removedEventType: string = null;
 
                 switch(category)
@@ -527,9 +561,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                         removedEventType = RoomWidgetRoomObjectUpdateEvent.USER_REMOVED;
                         break;
                 }
-                
+
                 if(removedEventType) updateEvent = new RoomWidgetRoomObjectUpdateEvent(removedEventType, objectId, category, event.roomId);
                 break;
+            }
             case RoomEngineObjectEvent.MOUSE_ENTER:
                 updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, objectId, category, event.roomId);
                 break;
@@ -548,14 +583,14 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                     Nitro.instance.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
                 break;
+            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
+            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
             case RoomEngineTriggerWidgetEvent.OPEN_WIDGET:
             case RoomEngineTriggerWidgetEvent.CLOSE_WIDGET:
             case RoomEngineTriggerWidgetEvent.OPEN_FURNI_CONTEXT_MENU:
             case RoomEngineTriggerWidgetEvent.CLOSE_FURNI_CONTEXT_MENU:
             case RoomEngineTriggerWidgetEvent.REMOVE_DIMMER:
             case RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN:
-            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
-            //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
             case RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR:
             case RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING:
             case RoomEngineTriggerWidgetEvent.REQUEST_HIGH_SCORE_DISPLAY:
@@ -622,7 +657,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         {
             let processEvent = true;
 
-            for(let widgetEvent of events)
+            for(const widgetEvent of events)
             {
                 if((event.type === RoomEngineTriggerWidgetEvent.OPEN_WIDGET) || (RoomEngineTriggerWidgetEvent.CLOSE_WIDGET))
                 {
@@ -782,5 +817,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get wiredService(): WiredService
     {
         return this._wiredService;
+    }
+
+    public get friendService(): FriendListService
+    {
+        return this._friendService;
     }
 }

@@ -25,9 +25,9 @@ export class MessageClassManager
 
     public registerMessages(configuration: IMessageConfiguration): void
     {
-        for(let [ header, handler ] of configuration.events) this.registerMessageEventClass(header, handler);
+        for(const [ header, handler ] of configuration.events) this.registerMessageEventClass(header, handler);
 
-        for(let [ header, handler ] of configuration.composers) this.registerMessageComposerClass(header, handler);
+        for(const [ header, handler ] of configuration.composers) this.registerMessageComposerClass(header, handler);
     }
 
     private registerMessageEventClass(header: number, handler: Function): void
@@ -54,6 +54,8 @@ export class MessageClassManager
 
     public registerMessageEvent(event: IMessageEvent): void
     {
+        if(!event) return;
+
         const header = this.getEventId(event);
 
         if(!header) return;
@@ -79,6 +81,8 @@ export class MessageClassManager
 
     public removeMessageEvent(event: IMessageEvent): void
     {
+        if(!event) return;
+
         const header = this.getEventId(event);
 
         if(!header) return;
@@ -87,7 +91,7 @@ export class MessageClassManager
 
         if(!existing) return;
 
-        for(let [ index, message ] of existing.entries())
+        for(const [ index, message ] of existing.entries())
         {
             if(!message) continue;
 
@@ -128,7 +132,7 @@ export class MessageClassManager
         return existing;
     }
 
-    public getComposerId(composer: IMessageComposer): number
+    public getComposerId(composer: IMessageComposer<unknown[]>): number
     {
         if(!composer) return -1;
 

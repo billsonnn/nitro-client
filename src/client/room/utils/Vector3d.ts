@@ -1,6 +1,6 @@
 ﻿import { IVector3D } from './IVector3D';
 
-export class Vector3d implements IVector3D 
+export class Vector3d implements IVector3D
 {
     private _x: number;
     private _y: number;
@@ -71,7 +71,7 @@ export class Vector3d implements IVector3D
         const totalLength = (vector1.length * vector2.length);
 
         if(!totalLength) return 0;
-        
+
         return (Vector3d.dotProduct(vector1, vector2) / totalLength);
     }
 
@@ -182,6 +182,6 @@ export class Vector3d implements IVector3D
 
     public toString(): string
     {
-        return `[Vector3d: ${ this._x }, ${ this._y }, ${ this._z }]`
+        return `[Vector3d: ${ this._x }, ${ this._y }, ${ this._z }]`;
     }
 }

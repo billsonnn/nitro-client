@@ -6,7 +6,7 @@ import { IRoomObjectSpriteVisualization } from '../../../client/room/object/visu
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredSelectionFilter } from './WiredSelectionFilter';
 
-export class WiredSelectionVisualizer 
+export class WiredSelectionVisualizer
 {
     private _component: WiredMainComponent;
     private _selectionShader: Filter;
@@ -16,7 +16,7 @@ export class WiredSelectionVisualizer
         this._component = component;
 
         const shader = new WiredSelectionFilter([ 1, 1, 1 ], [ 0.6, 0.6, 0.6 ]);
-        
+
         this._selectionShader = shader;
     }
 
@@ -32,7 +32,7 @@ export class WiredSelectionVisualizer
 
     public clearSelectionShaderFromFurni(furniIds: number[]): void
     {
-        for(let furniId of furniIds)
+        for(const furniId of furniIds)
         {
             this.clearSelectionShader(this.getRoomObject(furniId));
         }
@@ -40,7 +40,7 @@ export class WiredSelectionVisualizer
 
     public applySelectionShaderToFurni(furniIds: number[]): void
     {
-        for(let furniId of furniIds)
+        for(const furniId of furniIds)
         {
             this.applySelectionShader(this.getRoomObject(furniId));
         }
@@ -61,7 +61,7 @@ export class WiredSelectionVisualizer
 
         if(!visualization) return;
 
-        for(let sprite of visualization.sprites)
+        for(const sprite of visualization.sprites)
         {
             if(sprite.blendMode === BLEND_MODES.ADD) continue;
 
@@ -77,7 +77,7 @@ export class WiredSelectionVisualizer
 
         if(!visualization) return;
 
-        for(let sprite of visualization.sprites)
+        for(const sprite of visualization.sprites)
         {
             sprite.filters = [];
         }

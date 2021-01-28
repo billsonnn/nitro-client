@@ -1,7 +1,7 @@
 import { AnimationFrame } from './AnimationFrame';
 import { AnimationFrameSequenceData } from './AnimationFrameSequenceData';
 
-export class AnimationLayerData 
+export class AnimationLayerData
 {
     private _frameSequences: AnimationFrameSequenceData[];
     private _frameCount: number;
@@ -29,7 +29,7 @@ export class AnimationLayerData
     {
         if(!this._frameSequences || !this._frameSequences.length) return;
 
-        for(let sequence of this._frameSequences)
+        for(const sequence of this._frameSequences)
         {
             if(!sequence) continue;
 
@@ -52,7 +52,7 @@ export class AnimationLayerData
     {
         this._frameCount = 0;
 
-        for(let sequence of this._frameSequences)
+        for(const sequence of this._frameSequences)
         {
             if(!sequence) continue;
 
@@ -104,7 +104,7 @@ export class AnimationLayerData
         const sequence      = this._frameSequences[sequenceId];
 
         if(sequence.frameCount < 1) return null;
-        
+
         return this.getFrameFromSpecificSequence(direction, sequence, sequenceId, 0, false);
     }
 
@@ -115,9 +115,9 @@ export class AnimationLayerData
         const sequence = this._frameSequences[sequenceId];
 
         if(!sequence) return null;
-        
+
         if(offset >= sequence.frameCount) return this.getFrame(direction, frameCount);
-        
+
         return this.getFrameFromSpecificSequence(direction, sequence, sequenceId, offset, false);
     }
 
@@ -132,25 +132,25 @@ export class AnimationLayerData
 
         let x           = frame.getX(direction);
         let y           = frame.getY(direction);
-        let randomX     = frame.randomX;
-        let randomY     = frame.randomY;
+        const randomX     = frame.randomX;
+        const randomY     = frame.randomY;
         let repeats     = frame.repeats;
         let isLastFrame = false;
 
         if(randomX) x = Math.trunc(x + randomX * Math.random());
         if(randomY) y = Math.trunc(y + randomY * Math.random());
-        
+
         if(repeats > 1) repeats = sequence.getRepeats(frameIndex);
 
         let frameRepeats = (this._frameRepeat * repeats);
-        
+
         if(doesRepeat) frameRepeats = AnimationFrame.FRAME_REPEAT_FOREVER;
 
         if(!this._isRandom && !sequence.isRandom)
         {
             if((sequenceId === (this._frameSequences.length - 1)) && (offset === (sequence.frameCount - 1))) isLastFrame = true;
         }
-        
+
         return AnimationFrame.allocate(frame.id, x, y, repeats, frameRepeats, isLastFrame, sequenceId, offset);
     }
 }

@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class RoomWallData 
+export class RoomWallData
 {
     public static WALL_DIRECTION_VECTORS: Vector3d[] = [
         new Vector3d(1, 0, 0),
@@ -47,7 +47,7 @@ export class RoomWallData
 
     public _Str_17862(k: Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): void
     {
-        if (((this._addDuplicates) || (this._Str_22484(k, _arg_2, _arg_3, _arg_4, _arg_5))))
+        if(((this._addDuplicates) || (this._Str_22484(k, _arg_2, _arg_3, _arg_4, _arg_5))))
         {
             this._corners.push(k);
             this._directions.push(_arg_2);
@@ -64,7 +64,7 @@ export class RoomWallData
     private _Str_22484(k: Point, _arg_2: number, _arg_3: number, _arg_4: boolean, _arg_5: boolean): boolean
     {
         let _local_6 = 0;
-        
+
         while(_local_6 < this._count)
         {
             if(((((((this._corners[_local_6].x == k.x) && (this._corners[_local_6].y == k.y)) && (this._directions[_local_6] == _arg_2)) && (this._lengths[_local_6] == _arg_3)) && (this._borders[_local_6] == _arg_4)) && (this._leftTurns[_local_6] == _arg_5)))
@@ -134,7 +134,7 @@ export class RoomWallData
 
     public _Str_24531(k: number, _arg_2: number): void
     {
-        if (_arg_2 < this._lengths[k])
+        if(_arg_2 < this._lengths[k])
         {
             this._lengths[k] = _arg_2;
             this._manuallyRightCut[k] = true;
@@ -143,8 +143,8 @@ export class RoomWallData
 
     public _Str_23976(k: number, _arg_2: number): void
     {
-        var _local_3: IVector3D;
-        if (((_arg_2 > 0) && (_arg_2 < this._lengths[k])))
+        let _local_3: IVector3D;
+        if(((_arg_2 > 0) && (_arg_2 < this._lengths[k])))
         {
             const corner = this._corners[k];
 
@@ -157,16 +157,16 @@ export class RoomWallData
 
     private _Str_23674(): void
     {
-        var k: number;
-        var _local_2: Point;
-        var _local_3: Point;
-        var _local_4:IVector3D;
-        var _local_5: number;
-        if (this._endPoints.length != this.count)
+        let k: number;
+        let _local_2: Point;
+        let _local_3: Point;
+        let _local_4:IVector3D;
+        let _local_5: number;
+        if(this._endPoints.length != this.count)
         {
             this._endPoints = [];
             k = 0;
-            while (k < this.count)
+            while(k < this.count)
             {
                 _local_2 = this._Str_10778(k);
                 _local_3 = new Point(_local_2.x, _local_2.y);

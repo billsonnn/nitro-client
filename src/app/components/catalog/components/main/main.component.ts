@@ -12,9 +12,11 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { PurseService } from '../../../purse/services/purse.service';
 
 @Component({
-	selector: 'nitro-catalog-main-component',
+    selector: 'nitro-catalog-main-component',
     templateUrl: './main.template.html'
 })
 export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
@@ -24,7 +26,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     @ViewChild('layoutsContainer', { read: ViewContainerRef })
     public layoutsContainer: ViewContainerRef;
-    
+
     private _roomPreviewer: RoomPreviewer = null;
     private _lastComponent: ComponentRef<CatalogLayout> = null;
     private _layoutFactory: CatalogLayoutFactory = null;
@@ -34,16 +36,20 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _purchaseOfferPage: CatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
+    private _purchaseVipSubscription: CatalogClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
+    private _showInsufficientFunds: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _purseService: PurseService,
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {
@@ -82,7 +88,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
 
         this.reset();
-        
+
         this._catalogService.component  = null;
         this._layoutFactory             = null;
     }
@@ -108,6 +114,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = null;
         this._purchaseOfferQuantity = 1;
         this._purchaseOfferExtra    = null;
+        this._purchaseVipSubscription = null;
+
     }
 
     private prepareCatalog(): void
@@ -202,7 +210,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public selectPage(page: CatalogPageData): void
     {
         if(!page) return;
-        
+
         this._catalogService.requestPage(page);
     }
 
@@ -210,7 +218,14 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     {
         if(!page) return;
 
-        this.selectPage((page.children && page.children[0]));
+        if(page.children.length === 0)
+        {
+            this.selectPage(page);
+        }
+        else
+        {
+            this.selectPage((page.children && page.children[0]));
+        }
     }
 
     public selectFirstTab(): void
@@ -228,7 +243,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
         if(this._activeOffer)
         {
-            let product = this._activeOffer.products[0];
+            const product = this._activeOffer.products[0];
 
             if(!product) return;
 
@@ -250,7 +265,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                             const setIds: number[]  = [];
                             const sets              = furniData.customParams.split(',');
 
-                            for(let set of sets)
+                            for(const set of sets)
                             {
                                 const setId = parseInt(set);
 
@@ -267,7 +282,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                         }
                         return;
                     case ProductTypeEnum.WALL:
-                        
+
                         switch(furniData.className)
                         {
                             case 'floor':
@@ -304,12 +319,46 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
     }
 
+    private hasSufficientFunds(offerCredits: number, offerCurrencyType: number, offerCurrencyPoints: number, quantity: number = 1): boolean
+    {
+        if(!this._purseService) return false;
+
+        const purseCurrencies = this._purseService.currencies;
+
+        const currentCredits = purseCurrencies.get(-1);
+        const currentCurrencyAmount = purseCurrencies.get(offerCurrencyType);
+
+        const requiredCredits = offerCredits * quantity;
+        const requiredCurrency = offerCurrencyPoints * quantity;
+
+        if(currentCredits < requiredCredits || currentCurrencyAmount < requiredCurrency) return false;
+
+        return true;
+    }
+
     public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
     {
+        if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
         this._purchaseOfferPage     = page;
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
         this._purchaseOfferExtra    = extra;
+    }
+
+    public confirmVipSubscription(subscription: CatalogClubOfferData): void
+    {
+        if(!this.hasSufficientFunds(subscription.priceCredits, subscription.priceActivityPointsType, subscription.priceActivityPoints, 1))
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
+        this._purchaseVipSubscription = subscription;
     }
 
     public get roomPreviewer(): RoomPreviewer
@@ -337,6 +386,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._catalogService.activePage;
     }
 
+    public get activePageData(): CatalogPageData
+    {
+        return this._catalogService.activePageData;
+    }
+
     public get purchaseOfferPage(): CatalogPageParser
     {
         return this._purchaseOfferPage;
@@ -360,5 +414,20 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseCompleted(): boolean
     {
         return this._purchaseCompleted;
+    }
+
+    public get purchaseVipSubscription(): CatalogClubOfferData
+    {
+        return this._purchaseVipSubscription;
+    }
+
+    public setInsufficientFunds(show: boolean): void
+    {
+        this._showInsufficientFunds = show;
+    }
+
+    public get showInsufficientFunds(): boolean
+    {
+        return this._showInsufficientFunds;
     }
 }

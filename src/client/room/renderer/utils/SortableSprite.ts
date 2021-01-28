@@ -1,9 +1,9 @@
 ﻿import { IRoomObjectSprite } from '../../object/visualization/IRoomObjectSprite';
 import { ISortableSprite } from '../../object/visualization/ISortableSprite';
 
-export class SortableSprite implements ISortableSprite 
+export class SortableSprite implements ISortableSprite
 {
-    public static _Str_17154:Number = 100000000;
+    public static _Str_17154: number = 100000000;
 
     private _name: string;
     private _sprite: IRoomObjectSprite;

@@ -24,9 +24,8 @@ export class SocketConnection extends EventDispatcher implements IConnection
     private _dataBuffer: ArrayBuffer;
     private _isReady: boolean;
 
-    private _pendingClientMessages: IMessageComposer[];
+    private _pendingClientMessages: IMessageComposer<unknown[]>[];
     private _pendingServerMessages: IMessageDataWrapper[];
-
 
     private _isAuthenticated: boolean;
 
@@ -46,6 +45,11 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._pendingServerMessages = [];
 
         this._isAuthenticated       = false;
+
+        this.onOpen     = this.onOpen.bind(this);
+        this.onClose    = this.onClose.bind(this);
+        this.onError    = this.onError.bind(this);
+        this.onMessage  = this.onMessage.bind(this);
     }
 
     public init(socketUrl: string): void
@@ -61,7 +65,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     protected onDispose(): void
     {
         super.onDispose();
-        
+
         this.destroySocket();
 
         this._communicationManager  = null;
@@ -74,7 +78,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     public onReady(): void
     {
         if(this._isReady) return;
-        
+
         this._isReady = true;
 
         if(this._pendingServerMessages && this._pendingServerMessages.length) this.processWrappers(...this._pendingServerMessages);
@@ -94,20 +98,20 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._dataBuffer    = new ArrayBuffer(0);
         this._socket        = new WebSocket(socketUrl);
 
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError.bind(this));
-        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage.bind(this));
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError);
+        this._socket.addEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage);
     }
 
     private destroySocket(): void
     {
         if(!this._socket) return;
 
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError.bind(this));
-        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage.bind(this));
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_OPENED, this.onOpen);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_CLOSED, this.onClose);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_ERROR, this.onError);
+        this._socket.removeEventListener(WebSocketEventEnum.CONNECTION_MESSAGE, this.onMessage);
 
         if(this._socket.readyState === WebSocket.OPEN) this._socket.close();
 
@@ -141,10 +145,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         reader.onloadend = () =>
         {
-            this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, <ArrayBuffer> reader.result);
+            this._dataBuffer = this.concatArrayBuffers(this._dataBuffer, (reader.result as ArrayBuffer));
 
             this.processReceivedData();
-        }
+        };
     }
 
     private dispatchConnectionEvent(type: string, event: Event): void
@@ -157,10 +161,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
         this._isAuthenticated = true;
     }
 
-    public send(...composers: IMessageComposer[]): boolean
+    public send(...composers: IMessageComposer<unknown[]>[]): boolean
     {
         if(this.disposed || !composers) return false;
-        
+
         composers = [ ...composers ];
 
         if(this._isAuthenticated && !this._isReady)
@@ -171,8 +175,8 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             return false;
         }
-        
-        for(let composer of composers)
+
+        for(const composer of composers)
         {
             if(!composer) continue;
 
@@ -189,20 +193,20 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!encoded)
             {
-                if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
 
-            this.write(encoded.toBuffer());
+            this.write(encoded.getBuffer());
         }
 
         return true;
     }
 
-    private write(buffer: Buffer): void
+    private write(buffer: ArrayBuffer): void
     {
         if(this._socket.readyState !== WebSocket.OPEN) return;
 
@@ -216,7 +220,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             this.processData();
         }
 
-        catch(err)
+        catch (err)
         {
             NitroLogger.log(err);
         }
@@ -244,7 +248,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         if(!wrappers || !wrappers.length) return;
 
-        for(let wrapper of wrappers)
+        for(const wrapper of wrappers)
         {
             if(!wrapper) continue;
 
@@ -252,8 +256,8 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            if(Nitro.instance.getConfiguration<boolean>("communication.packet.log")) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
-            
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+
             this.handleMessages(...messages);
         }
     }
@@ -267,12 +271,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     private concatArrayBuffers(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer
     {
-        const newBuffer = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
-        
-        newBuffer.set(new Uint8Array(buffer1), 0);
-        newBuffer.set(new Uint8Array(buffer2), buffer1.byteLength);
-        
-        return newBuffer.buffer;
+        const array = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+
+        array.set(new Uint8Array(buffer1), 0);
+        array.set(new Uint8Array(buffer2), buffer1.byteLength);
+
+        return array.buffer;
     }
 
     private getMessagesForWrapper(wrapper: IMessageDataWrapper): IMessageEvent[]
@@ -290,7 +294,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
             if(!parser || !parser.flush() || !parser.parse(wrapper)) return null;
         }
 
-        catch(e)
+        catch (e)
         {
             NitroLogger.log(`Error parsing message: ${ e }`, events[0].constructor.name);
 
@@ -304,7 +308,7 @@ export class SocketConnection extends EventDispatcher implements IConnection
     {
         messages = [ ...messages ];
 
-        for(let message of messages)
+        for(const message of messages)
         {
             if(!message) continue;
 
@@ -323,14 +327,14 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
     public addMessageEvent(event: IMessageEvent): void
     {
-        if(!this._messages) return;
+        if(!event || !this._messages) return;
 
         this._messages.registerMessageEvent(event);
     }
 
     public removeMessageEvent(event: IMessageEvent): void
     {
-        if(this._messages) return;
+        if(!event || !this._messages) return;
 
         this._messages.removeMessageEvent(event);
     }

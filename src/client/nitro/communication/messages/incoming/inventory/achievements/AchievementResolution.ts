@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class AchievementResolution 
+export class AchievementResolution
 {
     public static _Str_16945: number = 0;
 
@@ -23,7 +23,7 @@ export class AchievementResolution
     {
         this._achievementId = 0;
         this._level         = 0;
-        this._badgeId       = "";
+        this._badgeId       = '';
         this._Str_8741      = 0;
     }
 

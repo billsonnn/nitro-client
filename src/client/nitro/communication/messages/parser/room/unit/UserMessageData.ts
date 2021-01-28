@@ -1,4 +1,4 @@
-export class UserMessageData 
+export class UserMessageData
 {
     public static M: string = 'M';
     public static F: string = 'F';
@@ -56,7 +56,7 @@ export class UserMessageData
 
     public set x(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._x = k;
         }
@@ -69,7 +69,7 @@ export class UserMessageData
 
     public set y(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._y = k;
         }
@@ -82,7 +82,7 @@ export class UserMessageData
 
     public set z(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._z = k;
         }
@@ -95,7 +95,7 @@ export class UserMessageData
 
     public set dir(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._dir = k;
         }
@@ -108,7 +108,7 @@ export class UserMessageData
 
     public set name(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._name = k;
         }
@@ -121,7 +121,7 @@ export class UserMessageData
 
     public set userType(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._userType = k;
         }
@@ -134,7 +134,7 @@ export class UserMessageData
 
     public set sex(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._sex = k;
         }
@@ -147,7 +147,7 @@ export class UserMessageData
 
     public set figure(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._figure = k;
         }
@@ -160,7 +160,7 @@ export class UserMessageData
 
     public set custom(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._custom = k;
         }
@@ -173,7 +173,7 @@ export class UserMessageData
 
     public set activityPoints(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._activityPoints = k;
         }
@@ -186,7 +186,7 @@ export class UserMessageData
 
     public set webID(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._webID = k;
         }
@@ -199,7 +199,7 @@ export class UserMessageData
 
     public set groupID(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._groupID = k;
         }
@@ -212,7 +212,7 @@ export class UserMessageData
 
     public set groupName(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._groupName = k;
         }
@@ -225,7 +225,7 @@ export class UserMessageData
 
     public set groupStatus(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._groupStatus = k;
         }
@@ -238,7 +238,7 @@ export class UserMessageData
 
     public set subType(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._subType = k;
         }
@@ -251,7 +251,7 @@ export class UserMessageData
 
     public set ownerId(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._ownerId = k;
         }
@@ -264,7 +264,7 @@ export class UserMessageData
 
     public set ownerName(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._ownerName = k;
         }
@@ -277,7 +277,7 @@ export class UserMessageData
 
     public set rarityLevel(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._rarityLevel = k;
         }
@@ -290,7 +290,7 @@ export class UserMessageData
 
     public set hasSaddle(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._hasSaddle = k;
         }
@@ -303,7 +303,7 @@ export class UserMessageData
 
     public set isRiding(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._isRiding = k;
         }
@@ -316,7 +316,7 @@ export class UserMessageData
 
     public set canBreed(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._canBreed = k;
         }
@@ -329,7 +329,7 @@ export class UserMessageData
 
     public set canHarvest(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._canHarvest = k;
         }
@@ -342,7 +342,7 @@ export class UserMessageData
 
     public set canRevive(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._canRevive = k;
         }
@@ -355,7 +355,7 @@ export class UserMessageData
 
     public set hasBreedingPermission(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._hasBreedingPermission = k;
         }
@@ -368,7 +368,7 @@ export class UserMessageData
 
     public set petLevel(k: number)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._petLevel = k;
         }
@@ -381,7 +381,7 @@ export class UserMessageData
 
     public set petPosture(k: string)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._petPosture = k;
         }
@@ -404,7 +404,7 @@ export class UserMessageData
 
     public set isModerator(k: boolean)
     {
-        if (!this._isReadOnly)
+        if(!this._isReadOnly)
         {
             this._isModerator = k;
         }

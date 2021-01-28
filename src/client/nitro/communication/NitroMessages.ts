@@ -33,6 +33,12 @@ import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent'
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
+import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
+import { AchievementsEvent } from './messages/incoming/inventory/achievements/AchievementsEvent';
+import { AchievementsScoreEvent } from './messages/incoming/inventory/achievements/AchievementsScoreEvent';
+import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
+import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
+import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
 import { FigureSetIdsMessageEvent } from './messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
 import { FurnitureListAddOrUpdateEvent } from './messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
 import { FurnitureListEvent } from './messages/incoming/inventory/furni/FurnitureListEvent';
@@ -92,6 +98,7 @@ import { FurnitureAliasesEvent } from './messages/incoming/room/furniture/Furnit
 import { FurnitureDataEvent } from './messages/incoming/room/furniture/FurnitureDataEvent';
 import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/FurnitureItemDataEvent';
 import { FurnitureStackHeightEvent } from './messages/incoming/room/furniture/FurnitureStackHeightEvent';
+import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
 import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
@@ -105,6 +112,7 @@ import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNa
 import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { PetFigureUpdateEvent } from './messages/incoming/room/pet/PetFigureUpdateEvent';
+import { YouArePlayingGameEvent } from './messages/incoming/room/session/YouArePlayingGameEvent';
 import { RoomUnitChatEvent } from './messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from './messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from './messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -138,10 +146,12 @@ import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/Us
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
@@ -159,6 +169,7 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
 import { TradingAcceptComposer } from './messages/outgoing/inventory/trading/TradingAcceptComposer';
@@ -171,6 +182,7 @@ import { TradingListItemRemoveComposer } from './messages/outgoing/inventory/tra
 import { TradingOpenComposer } from './messages/outgoing/inventory/trading/TradingOpenComposer';
 import { TradingUnacceptComposer } from './messages/outgoing/inventory/trading/TradingUnacceptComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
+import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
 import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchCloseComposer } from './messages/outgoing/navigator/NavigatorSearchCloseComposer';
 import { NavigatorSearchComposer } from './messages/outgoing/navigator/NavigatorSearchComposer';
@@ -188,6 +200,12 @@ import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUs
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
+import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
+import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
+import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
+import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
+import { RoomAdsUpdateComposer } from './messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -198,6 +216,7 @@ import { FurnitureColorWheelComposer } from './messages/outgoing/room/furniture/
 import { FurnitureDiceActivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceActivateComposer';
 import { FurnitureDiceDeactivateComposer } from './messages/outgoing/room/furniture/logic/FurnitureDiceDeactivateComposer';
 import { FurnitureMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { FurnitureOneWayDoorComposer } from './messages/outgoing/room/furniture/logic/FurnitureOneWayDoorComposer';
 import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureRandomStateComposer';
 import { FurnitureStackHeightComposer } from './messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
@@ -232,6 +251,7 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -246,7 +266,7 @@ export class NitroMessages implements IMessageConfiguration
         this.registerEvents();
         this.registerComposers();
     }
-    
+
     private registerEvents(): void
     {
         // AVAILABILITY
@@ -298,27 +318,27 @@ export class NitroMessages implements IMessageConfiguration
 
         // INVENTORY
 
-            // CLOTHES
-            this._events.set(IncomingHeader.USER_CLOTHING, FigureSetIdsMessageEvent);
+        // CLOTHES
+        this._events.set(IncomingHeader.USER_CLOTHING, FigureSetIdsMessageEvent);
 
-            // FURNITURE
-            this._events.set(IncomingHeader.USER_FURNITURE_ADD, FurnitureListAddOrUpdateEvent);
-            this._events.set(IncomingHeader.USER_FURNITURE, FurnitureListEvent);
-            this._events.set(IncomingHeader.USER_FURNITURE_REFRESH, FurnitureListInvalidateEvent);
-            this._events.set(IncomingHeader.USER_FURNITURE_REMOVE, FurnitureListRemovedEvent);
-            this._events.set(IncomingHeader.USER_FURNITURE_POSTIT_PLACED, FurniturePostItPlacedEvent);
+        // FURNITURE
+        this._events.set(IncomingHeader.USER_FURNITURE_ADD, FurnitureListAddOrUpdateEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE, FurnitureListEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_REFRESH, FurnitureListInvalidateEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_REMOVE, FurnitureListRemovedEvent);
+        this._events.set(IncomingHeader.USER_FURNITURE_POSTIT_PLACED, FurniturePostItPlacedEvent);
 
-            // TRADING
-            this._events.set(IncomingHeader.TRADE_ACCEPTED, TradingAcceptEvent);
-            this._events.set(IncomingHeader.TRADE_CLOSED, TradingCloseEvent);
-            this._events.set(IncomingHeader.TRADE_COMPLETED, TradingCompletedEvent);
-            this._events.set(IncomingHeader.TRADE_CONFIRMATION, TradingConfirmationEvent);
-            this._events.set(IncomingHeader.TRADE_LIST_ITEM, TradingListItemEvent);
-            this._events.set(IncomingHeader.TRADE_NOT_OPEN, TradingNotOpenEvent);
-            this._events.set(IncomingHeader.TRADE_OPEN_FAILED, TradingOpenFailedEvent);
-            this._events.set(IncomingHeader.TRADE_OPEN, TradingOpenEvent);
-            this._events.set(IncomingHeader.TRADE_OTHER_NOT_ALLOWED, TradingOtherNotAllowedEvent);
-            this._events.set(IncomingHeader.TRADE_YOU_NOT_ALLOWED, TradingYouAreNotAllowedEvent);
+        // TRADING
+        this._events.set(IncomingHeader.TRADE_ACCEPTED, TradingAcceptEvent);
+        this._events.set(IncomingHeader.TRADE_CLOSED, TradingCloseEvent);
+        this._events.set(IncomingHeader.TRADE_COMPLETED, TradingCompletedEvent);
+        this._events.set(IncomingHeader.TRADE_CONFIRMATION, TradingConfirmationEvent);
+        this._events.set(IncomingHeader.TRADE_LIST_ITEM, TradingListItemEvent);
+        this._events.set(IncomingHeader.TRADE_NOT_OPEN, TradingNotOpenEvent);
+        this._events.set(IncomingHeader.TRADE_OPEN_FAILED, TradingOpenFailedEvent);
+        this._events.set(IncomingHeader.TRADE_OPEN, TradingOpenEvent);
+        this._events.set(IncomingHeader.TRADE_OTHER_NOT_ALLOWED, TradingOtherNotAllowedEvent);
+        this._events.set(IncomingHeader.TRADE_YOU_NOT_ALLOWED, TradingYouAreNotAllowedEvent);
 
         // MODERATION
         this._events.set(IncomingHeader.GENERIC_ALERT_LINK, ModeratorMessageEvent);
@@ -344,84 +364,88 @@ export class NitroMessages implements IMessageConfiguration
 
         // ROOM
 
-            // ACCESS
-            this._events.set(IncomingHeader.ROOM_ENTER_ERROR, RoomEnterErrorEvent);
-            this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
-            this._events.set(IncomingHeader.ROOM_FORWARD, RoomForwardEvent);
+        // ACCESS
+        this._events.set(IncomingHeader.ROOM_ENTER_ERROR, RoomEnterErrorEvent);
+        this._events.set(IncomingHeader.ROOM_ENTER, RoomEnterEvent);
+        this._events.set(IncomingHeader.ROOM_FORWARD, RoomForwardEvent);
 
-                // DOORBELL
-                this._events.set(IncomingHeader.ROOM_DOORBELL, RoomDoorbellEvent);
-                this._events.set(IncomingHeader.ROOM_DOORBELL_ACCEPTED, RoomDoorbellAcceptedEvent);
-                this._events.set(IncomingHeader.ROOM_DOORBELL_REJECTED, RoomDoorbellRejectedEvent);
+        // DOORBELL
+        this._events.set(IncomingHeader.ROOM_DOORBELL, RoomDoorbellEvent);
+        this._events.set(IncomingHeader.ROOM_DOORBELL_ACCEPTED, RoomDoorbellAcceptedEvent);
+        this._events.set(IncomingHeader.ROOM_DOORBELL_REJECTED, RoomDoorbellRejectedEvent);
 
-                // RIGHTS
-                this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
-                this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
-                this._events.set(IncomingHeader.ROOM_RIGHTS, RoomRightsEvent);
+        // RIGHTS
+        this._events.set(IncomingHeader.ROOM_RIGHTS_CLEAR, RoomRightsClearEvent);
+        this._events.set(IncomingHeader.ROOM_RIGHTS_OWNER, RoomRightsOwnerEvent);
+        this._events.set(IncomingHeader.ROOM_RIGHTS, RoomRightsEvent);
 
-            // DATA
-            this._events.set(IncomingHeader.ROOM_SETTINGS_CHAT, RoomChatSettingsEvent);
-            this._events.set(IncomingHeader.ROOM_INFO, RoomInfoEvent);
-            this._events.set(IncomingHeader.ROOM_INFO_OWNER, RoomInfoOwnerEvent);
-            this._events.set(IncomingHeader.ROOM_SCORE, RoomScoreEvent);
-            this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE_ERROR, RoomSettingsErrorEvent);
-            this._events.set(IncomingHeader.ROOM_SETTINGS, RoomSettingsEvent);
-            this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE, RoomSettingsSavedEvent);
-            this._events.set(IncomingHeader.ROOM_SETTINGS_UPDATED, RoomSettingsUpdatedEvent);
+        // DATA
+        this._events.set(IncomingHeader.ROOM_SETTINGS_CHAT, RoomChatSettingsEvent);
+        this._events.set(IncomingHeader.ROOM_INFO, RoomInfoEvent);
+        this._events.set(IncomingHeader.ROOM_INFO_OWNER, RoomInfoOwnerEvent);
+        this._events.set(IncomingHeader.ROOM_SCORE, RoomScoreEvent);
+        this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE_ERROR, RoomSettingsErrorEvent);
+        this._events.set(IncomingHeader.ROOM_SETTINGS, RoomSettingsEvent);
+        this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE, RoomSettingsSavedEvent);
+        this._events.set(IncomingHeader.ROOM_SETTINGS_UPDATED, RoomSettingsUpdatedEvent);
 
-            // ENGINE
-            this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
-            this._events.set(IncomingHeader.ROOM_CREATED, RoomCreatedEvent);
+        // ENGINE
+        this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
+        this._events.set(IncomingHeader.ROOM_CREATED, RoomCreatedEvent);
 
-            // FURNITURE
-            this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
-            this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
-            this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
-            this._events.set(IncomingHeader.ITEM_STACK_HELPER, FurnitureStackHeightEvent);
-            this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
-            this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
+        // FURNITURE
+        this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
+        this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
+        this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
+        this._events.set(IncomingHeader.ITEM_STACK_HELPER, FurnitureStackHeightEvent);
+        this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
+        this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
+        this._events.set(IncomingHeader.FURNITURE_STATE_2, FurnitureState2Event);
 
-                // FLOOR
-                this._events.set(IncomingHeader.FURNITURE_FLOOR_ADD, FurnitureFloorAddEvent);
-                this._events.set(IncomingHeader.FURNITURE_FLOOR, FurnitureFloorEvent);
-                this._events.set(IncomingHeader.FURNITURE_FLOOR_REMOVE, FurnitureFloorRemoveEvent);
-                this._events.set(IncomingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateEvent);
+        // FLOOR
+        this._events.set(IncomingHeader.FURNITURE_FLOOR_ADD, FurnitureFloorAddEvent);
+        this._events.set(IncomingHeader.FURNITURE_FLOOR, FurnitureFloorEvent);
+        this._events.set(IncomingHeader.FURNITURE_FLOOR_REMOVE, FurnitureFloorRemoveEvent);
+        this._events.set(IncomingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateEvent);
 
-                // WALL
-                this._events.set(IncomingHeader.ITEM_WALL_ADD, FurnitureWallAddEvent);
-                this._events.set(IncomingHeader.ITEM_WALL, FurnitureWallEvent);
-                this._events.set(IncomingHeader.ITEM_WALL_REMOVE, FurnitureWallRemoveEvent);
-                this._events.set(IncomingHeader.ITEM_WALL_UPDATE, FurnitureWallUpdateEvent);
+        // WALL
+        this._events.set(IncomingHeader.ITEM_WALL_ADD, FurnitureWallAddEvent);
+        this._events.set(IncomingHeader.ITEM_WALL, FurnitureWallEvent);
+        this._events.set(IncomingHeader.ITEM_WALL_REMOVE, FurnitureWallRemoveEvent);
+        this._events.set(IncomingHeader.ITEM_WALL_UPDATE, FurnitureWallUpdateEvent);
 
-            // MAPPING
-            this._events.set(IncomingHeader.ROOM_MODEL_DOOR, RoomDoorEvent);
-            this._events.set(IncomingHeader.ROOM_HEIGHT_MAP, RoomHeightMapEvent);
-            this._events.set(IncomingHeader.ROOM_HEIGHT_MAP_UPDATE, RoomHeightMapUpdateEvent);
-            this._events.set(IncomingHeader.ROOM_MODEL, RoomModelEvent);
-            this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
-            this._events.set(IncomingHeader.ROOM_PAINT, RoomPaintEvent);
-            this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
+        // MAPPING
+        this._events.set(IncomingHeader.ROOM_MODEL_DOOR, RoomDoorEvent);
+        this._events.set(IncomingHeader.ROOM_HEIGHT_MAP, RoomHeightMapEvent);
+        this._events.set(IncomingHeader.ROOM_HEIGHT_MAP_UPDATE, RoomHeightMapUpdateEvent);
+        this._events.set(IncomingHeader.ROOM_MODEL, RoomModelEvent);
+        this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
+        this._events.set(IncomingHeader.ROOM_PAINT, RoomPaintEvent);
+        this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
 
-            // PET
-            this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
+        // PET
+        this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
 
-            // UNIT
-            this._events.set(IncomingHeader.UNIT_DANCE, RoomUnitDanceEvent);
-            this._events.set(IncomingHeader.UNIT_EFFECT, RoomUnitEffectEvent);
-            this._events.set(IncomingHeader.UNIT, RoomUnitEvent);
-            this._events.set(IncomingHeader.UNIT_EXPRESSION, RoomUnitExpressionEvent);
-            this._events.set(IncomingHeader.UNIT_HAND_ITEM, RoomUnitHandItemEvent);
-            this._events.set(IncomingHeader.UNIT_IDLE, RoomUnitIdleEvent);
-            this._events.set(IncomingHeader.UNIT_INFO, RoomUnitInfoEvent);
-            this._events.set(IncomingHeader.UNIT_NUMBER, RoomUnitNumberEvent);
-            this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
-            this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
+        // SESSION
+        this._events.set(IncomingHeader.PLAYING_GAME, YouArePlayingGameEvent);
 
-                // CHAT
-                this._events.set(IncomingHeader.UNIT_CHAT, RoomUnitChatEvent);
-                this._events.set(IncomingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutEvent);
-                this._events.set(IncomingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperEvent);
-                this._events.set(IncomingHeader.UNIT_TYPING, RoomUnitTypingEvent);
+        // UNIT
+        this._events.set(IncomingHeader.UNIT_DANCE, RoomUnitDanceEvent);
+        this._events.set(IncomingHeader.UNIT_EFFECT, RoomUnitEffectEvent);
+        this._events.set(IncomingHeader.UNIT, RoomUnitEvent);
+        this._events.set(IncomingHeader.UNIT_EXPRESSION, RoomUnitExpressionEvent);
+        this._events.set(IncomingHeader.UNIT_HAND_ITEM, RoomUnitHandItemEvent);
+        this._events.set(IncomingHeader.UNIT_IDLE, RoomUnitIdleEvent);
+        this._events.set(IncomingHeader.UNIT_INFO, RoomUnitInfoEvent);
+        this._events.set(IncomingHeader.UNIT_NUMBER, RoomUnitNumberEvent);
+        this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
+        this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
+
+        // CHAT
+        this._events.set(IncomingHeader.UNIT_CHAT, RoomUnitChatEvent);
+        this._events.set(IncomingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutEvent);
+        this._events.set(IncomingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperEvent);
+        this._events.set(IncomingHeader.UNIT_TYPING, RoomUnitTypingEvent);
 
         // ROOM EVENTS
         this._events.set(IncomingHeader.WIRED_ACTION, WiredFurniActionEvent);
@@ -437,29 +461,39 @@ export class NitroMessages implements IMessageConfiguration
 
         // USER
 
-            // ACCESS
-            this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);
-            this._events.set(IncomingHeader.USER_PERMISSIONS, UserPermissionsEvent);
+        // ACCESS
+        this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);
+        this._events.set(IncomingHeader.USER_PERMISSIONS, UserPermissionsEvent);
 
-            // DATA
-            this._events.set(IncomingHeader.USER_BADGES_CURRENT, UserCurrentBadgesEvent);
-            this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);
-            this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
-            this._events.set(IncomingHeader.UNIT_CHANGE_NAME, UserNameChangeMessageEvent);
-            this._events.set(IncomingHeader.USER_SETTINGS, UserSettingsEvent);
+        // DATA
+        this._events.set(IncomingHeader.USER_BADGES_CURRENT, UserCurrentBadgesEvent);
+        this._events.set(IncomingHeader.USER_FIGURE, UserFigureEvent);
+        this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
+        this._events.set(IncomingHeader.UNIT_CHANGE_NAME, UserNameChangeMessageEvent);
+        this._events.set(IncomingHeader.USER_SETTINGS, UserSettingsEvent);
 
-            // INVENTORY
+        // INVENTORY
 
-                // CURRENCY
-                this._events.set(IncomingHeader.USER_CREDITS, UserCreditsEvent);
-                this._events.set(IncomingHeader.USER_CURRENCY, UserCurrencyEvent);
-                this._events.set(IncomingHeader.USER_CURRENCY_UPDATE, UserCurrencyUpdateEvent);
+        // BOTS
+        this._events.set(IncomingHeader.USER_BOTS, BotInventoryMessageEvent);
+        this._events.set(IncomingHeader.REMOVE_BOT_FROM_INVENTORY, BotRemovedFromInventoryEvent);
+        this._events.set(IncomingHeader.ADD_BOT_TO_INVENTORY, BotAddedToInventoryEvent);
 
-                // SUBSCRIPTION
-                this._events.set(IncomingHeader.USER_SUBSCRIPTION, UserSubscriptionEvent);
+        // CURRENCY
+        this._events.set(IncomingHeader.USER_CREDITS, UserCreditsEvent);
+        this._events.set(IncomingHeader.USER_CURRENCY, UserCurrencyEvent);
+        this._events.set(IncomingHeader.USER_CURRENCY_UPDATE, UserCurrencyUpdateEvent);
+
+        // SUBSCRIPTION
+        this._events.set(IncomingHeader.USER_SUBSCRIPTION, UserSubscriptionEvent);
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
+
+        // ACHIEVEMENTS
+        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
+        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
+        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
     }
 
     private registerComposers(): void
@@ -469,6 +503,8 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_PAGE, CatalogPageComposer);
         this._composers.set(OutgoingHeader.CATALOG_PURCHASE, CatalogPurchaseComposer);
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
+        this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
+        this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
 
         // CLIENT
         this._composers.set(OutgoingHeader.CLIENT_PONG, ClientPongComposer);
@@ -502,23 +538,28 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.NAVIGATOR_SEARCH_SAVE, NavigatorSearchSaveComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS_SAVE, NavigatorSettingsSaveComposer);
+        this._composers.set(OutgoingHeader.NAVIGATOR_CATEGORY_LIST_MODE, NavigatorCategoryListModeComposer);
 
         // INVENTORY
 
-            // FURNI
-            this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
-            this._composers.set(OutgoingHeader.USER_FURNITURE2, FurnitureList2Composer);
+        // FURNI
+        this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
+        this._composers.set(OutgoingHeader.USER_FURNITURE2, FurnitureList2Composer);
+        this._composers.set(OutgoingHeader.ITEM_SAVE_BACKGROUND, RoomAdsUpdateComposer);
 
-            // TRADING
-            this._composers.set(OutgoingHeader.TRADE_ACCEPT, TradingAcceptComposer);
-            this._composers.set(OutgoingHeader.TRADE_CANCEL, TradingCancelComposer);
-            this._composers.set(OutgoingHeader.TRADE_CLOSE, TradingCloseComposer);
-            this._composers.set(OutgoingHeader.TRADE_CONFIRM, TradingConfirmationComposer);
-            this._composers.set(OutgoingHeader.TRADE_ITEM, TradingListAddItemComposer);
-            this._composers.set(OutgoingHeader.TRADE_ITEMS, TradingListAddItemsComposer);
-            this._composers.set(OutgoingHeader.TRADE_ITEM_REMOVE, TradingListItemRemoveComposer);
-            this._composers.set(OutgoingHeader.TRADE, TradingOpenComposer);
-            this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
+        // TRADING
+        this._composers.set(OutgoingHeader.TRADE_ACCEPT, TradingAcceptComposer);
+        this._composers.set(OutgoingHeader.TRADE_CANCEL, TradingCancelComposer);
+        this._composers.set(OutgoingHeader.TRADE_CLOSE, TradingCloseComposer);
+        this._composers.set(OutgoingHeader.TRADE_CONFIRM, TradingConfirmationComposer);
+        this._composers.set(OutgoingHeader.TRADE_ITEM, TradingListAddItemComposer);
+        this._composers.set(OutgoingHeader.TRADE_ITEMS, TradingListAddItemsComposer);
+        this._composers.set(OutgoingHeader.TRADE_ITEM_REMOVE, TradingListItemRemoveComposer);
+        this._composers.set(OutgoingHeader.TRADE, TradingOpenComposer);
+        this._composers.set(OutgoingHeader.TRADE_UNACCEPT, TradingUnacceptComposer);
+
+        // ACHIVEMENTS
+        this._composers.set(OutgoingHeader.ACHIEVEMENT_LIST, RequestAchievementsMessageComposer);
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
@@ -526,61 +567,69 @@ export class NitroMessages implements IMessageConfiguration
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
 
-            // ACCESS
-            this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);
+        // ACCESS
+        this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);
 
-            // ACTION
-            this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);
-            this._composers.set(OutgoingHeader.ROOM_BAN_GIVE, RoomBanUserComposer);
-            this._composers.set(OutgoingHeader.ROOM_RIGHTS_GIVE, RoomGiveRightsComposer);
-            this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
-            this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
-            this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
+        // ACTION
+        this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);
+        this._composers.set(OutgoingHeader.ROOM_BAN_GIVE, RoomBanUserComposer);
+        this._composers.set(OutgoingHeader.ROOM_RIGHTS_GIVE, RoomGiveRightsComposer);
+        this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
+        this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
+        this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
 
-            // DATA
-            this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
+        // DATA
+        this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
 
-            // FURNITURE
-            this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
-            this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
-            this._composers.set(OutgoingHeader.FURNITURE_PLACE, FurniturePlaceComposer);
-            this._composers.set(OutgoingHeader.ITEM_PAINT, FurniturePlacePaintComposer);
-            this._composers.set(OutgoingHeader.FURNITURE_POSTIT_PLACE, FurniturePostItPlaceComposer);
+        // ENGINE
+        this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
+        this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
+        this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
+        this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
+        this._composers.set(OutgoingHeader.BOT_PICKUP, RemoveBotFromFlatComposer);
 
-                // FLOOR
-                this._composers.set(OutgoingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateComposer);
+        // FURNITURE
+        this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_PICKUP, FurniturePickupComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_PLACE, FurniturePlaceComposer);
+        this._composers.set(OutgoingHeader.ITEM_PAINT, FurniturePlacePaintComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_POSTIT_PLACE, FurniturePostItPlaceComposer);
 
-                // WALL
-                this._composers.set(OutgoingHeader.FURNITURE_WALL_UPDATE, FurnitureWallUpdateComposer);
+        // FLOOR
+        this._composers.set(OutgoingHeader.FURNITURE_FLOOR_UPDATE, FurnitureFloorUpdateComposer);
 
-                // LOGIC
-                this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);
-                this._composers.set(OutgoingHeader.ITEM_DICE_CLICK, FurnitureDiceActivateComposer);
-                this._composers.set(OutgoingHeader.ITEM_DICE_CLOSE, FurnitureDiceDeactivateComposer);
-                this._composers.set(OutgoingHeader.FURNITURE_MULTISTATE, FurnitureMultiStateComposer);
-                this._composers.set(OutgoingHeader.FURNITURE_RANDOMSTATE, FurnitureRandomStateComposer);
-                this._composers.set(OutgoingHeader.ITEM_STACK_HELPER, FurnitureStackHeightComposer);
-                this._composers.set(OutgoingHeader.FURNITURE_WALL_MULTISTATE, FurnitureWallMultiStateComposer);
+        // WALL
+        this._composers.set(OutgoingHeader.FURNITURE_WALL_UPDATE, FurnitureWallUpdateComposer);
 
-            // MAPPING
-            this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
+        // LOGIC
+        this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);
+        this._composers.set(OutgoingHeader.ITEM_DICE_CLICK, FurnitureDiceActivateComposer);
+        this._composers.set(OutgoingHeader.ITEM_DICE_CLOSE, FurnitureDiceDeactivateComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_MULTISTATE, FurnitureMultiStateComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_RANDOMSTATE, FurnitureRandomStateComposer);
+        this._composers.set(OutgoingHeader.ITEM_STACK_HELPER, FurnitureStackHeightComposer);
+        this._composers.set(OutgoingHeader.FURNITURE_WALL_MULTISTATE, FurnitureWallMultiStateComposer);
+        this._composers.set(OutgoingHeader.ONE_WAY_DOOR_CLICK, FurnitureOneWayDoorComposer);
 
-            // UNIT
-            this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);
-            this._composers.set(OutgoingHeader.UNIT_DANCE, RoomUnitDanceComposer);
-            this._composers.set(OutgoingHeader.UNIT_DROP_HAND_ITEM, RoomUnitDropHandItemComposer);
-            this._composers.set(OutgoingHeader.UNIT_GIVE_HANDITEM, RoomUnitGiveHandItemComposer);
-            this._composers.set(OutgoingHeader.UNIT_LOOK, RoomUnitLookComposer);
-            this._composers.set(OutgoingHeader.UNIT_SIGN, RoomUnitSignComposer);
-            this._composers.set(OutgoingHeader.UNIT_POSTURE, RoomUnitPostureComposer);
-            this._composers.set(OutgoingHeader.UNIT_WALK, RoomUnitWalkComposer);
+        // MAPPING
+        this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
 
-                // CHAT
-                this._composers.set(OutgoingHeader.UNIT_CHAT, RoomUnitChatComposer);
-                this._composers.set(OutgoingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutComposer);
-                this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
-                this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
-                this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
+        // UNIT
+        this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);
+        this._composers.set(OutgoingHeader.UNIT_DANCE, RoomUnitDanceComposer);
+        this._composers.set(OutgoingHeader.UNIT_DROP_HAND_ITEM, RoomUnitDropHandItemComposer);
+        this._composers.set(OutgoingHeader.UNIT_GIVE_HANDITEM, RoomUnitGiveHandItemComposer);
+        this._composers.set(OutgoingHeader.UNIT_LOOK, RoomUnitLookComposer);
+        this._composers.set(OutgoingHeader.UNIT_SIGN, RoomUnitSignComposer);
+        this._composers.set(OutgoingHeader.UNIT_POSTURE, RoomUnitPostureComposer);
+        this._composers.set(OutgoingHeader.UNIT_WALK, RoomUnitWalkComposer);
+
+        // CHAT
+        this._composers.set(OutgoingHeader.UNIT_CHAT, RoomUnitChatComposer);
+        this._composers.set(OutgoingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutComposer);
+        this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
+        this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
+        this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
 
         // ROOM EVENTS
         this._composers.set(OutgoingHeader.WIRED_APPLY_SNAPSHOT, ApplySnapshotMessageComposer);
@@ -589,27 +638,30 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
 
-                
+
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 
         // USER
         this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);
 
-            // DATA
-            this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
-            this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
-            this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
-            this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
-            this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
+        // DATA
+        this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
+        this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
+        this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
+        this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
+        this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
 
-            // INVENTORY
+        // INVENTORY
 
-                // CURRENCY
-                this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);
+        // BOTS
+        this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);
 
-                // SUBSCRIPTION
-                this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
+        // CURRENCY
+        this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);
+
+        // SUBSCRIPTION
+        this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
     }
 
     public get events(): Map<number, Function>

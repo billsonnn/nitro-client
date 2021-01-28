@@ -1,6 +1,6 @@
 import { PetCustomPart } from './PetCustomPart';
 
-export class PetFigureData 
+export class PetFigureData
 {
     private _typeId: number;
     private _paletteId: number;
@@ -28,10 +28,10 @@ export class PetFigureData
 
         let i = 0;
 
-        while (i < this._customLayerIds.length)
+        while(i < this._customLayerIds.length)
         {
             this._customParts.push(new PetCustomPart(this._customLayerIds[i], this._customPartIds[i], this._customPaletteIds[i]));
-            
+
             i++;
         }
     }
@@ -75,7 +75,7 @@ export class PetFigureData
     {
         if(this._customParts)
         {
-            for(let _local_2 of this._customParts)
+            for(const _local_2 of this._customParts)
             {
                 if(_local_2.layerId === k) return _local_2;
             }
@@ -100,7 +100,7 @@ export class PetFigureData
 
         figure = (figure + (' ' + this.customParts.length));
 
-        for(let _local_2 of this.customParts)
+        for(const _local_2 of this.customParts)
         {
             figure = (figure + (((((' ' + _local_2.layerId) + ' ') + _local_2.partId) + ' ') + _local_2.paletteId));
         }
@@ -122,7 +122,7 @@ export class PetFigureData
             {
                 const _local_6  = (3 + _local_4);
                 const _local_7  = parseInt(_local_3[_local_6]);
-                
+
                 _local_2  = _local_3.slice(_local_5, (_local_5 + (_local_7 * 3)));
             }
         }
@@ -166,7 +166,7 @@ export class PetFigureData
     {
         const paletteIds: number[] = [];
 
-        let i: number = 0;
+        let i = 0;
 
         while(i < data.length)
         {

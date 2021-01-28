@@ -1,6 +1,6 @@
 ﻿import { Container, Point, Rectangle, Texture } from 'pixi.js';
 
-export class ImageData 
+export class ImageData
 {
     private _texture: Texture;
     private _container: Container;

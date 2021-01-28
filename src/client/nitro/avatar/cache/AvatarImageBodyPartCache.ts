@@ -1,7 +1,7 @@
 ﻿import { Nitro } from '../../Nitro';
 import { AvatarImageDirectionCache } from './AvatarImageDirectionCache';
 
-export class AvatarImageBodyPartCache 
+export class AvatarImageBodyPartCache
 {
     private _Str_586: Map<string, AvatarImageDirectionCache>;
     private _Str_1509: number;
@@ -15,11 +15,11 @@ export class AvatarImageBodyPartCache
 
     public dispose(): void
     {
-        this._Str_587("[dispose]");
+        this._Str_587('[dispose]');
 
         if(!this._Str_586) return;
 
-        for(let direction of this._Str_586.values())
+        for(const direction of this._Str_586.values())
         {
             if(direction) direction.dispose();
         }

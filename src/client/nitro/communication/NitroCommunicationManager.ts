@@ -29,54 +29,61 @@ export class NitroCommunicationManager extends NitroManager implements INitroCom
         this._messages      = new NitroMessages();
 
         this._demo          = new NitroCommunicationDemo(this);
+
+        this.onConnectionOpenedEvent        = this.onConnectionOpenedEvent.bind(this);
+        this.onConnectionClosedEvent        = this.onConnectionClosedEvent.bind(this);
+        this.onConnectionErrorEvent         = this.onConnectionErrorEvent.bind(this);
+        this.onConnectionAuthenticatedEvent = this.onConnectionAuthenticatedEvent.bind(this);
     }
 
     protected onInit(): void
     {
         if(this._connection) return;
 
-        Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent.bind(this));
-        
+        Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent);
+
         this._connection = this._communication.createConnection(this);
 
         this._connection.registerMessages(this._messages);
 
-        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
-        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
+        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent);
+        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent);
+        this._connection.addEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent);
 
         if(this._demo) this._demo.init();
 
-        this._connection.init(Nitro.instance.getConfiguration<string>("socket.url"));
+        this._connection.init(Nitro.instance.getConfiguration<string>('socket.url'));
     }
 
     protected onDispose(): void
     {
         if(this._demo) this._demo.dispose();
-        
+
         if(this._connection)
         {
-            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent.bind(this));
-            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent.bind(this));
-            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent.bind(this));
+            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_OPENED, this.onConnectionOpenedEvent);
+            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_CLOSED, this.onConnectionClosedEvent);
+            this._connection.removeEventListener(SocketConnectionEvent.CONNECTION_ERROR, this.onConnectionErrorEvent);
         }
+
+        Nitro.instance.events.removeEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onConnectionAuthenticatedEvent);
 
         super.onDispose();
     }
 
     private onConnectionOpenedEvent(event: Event): void
     {
-        this.logger.log(`Connection Initialized`);
+        this.logger.log('Connection Initialized');
     }
 
     private onConnectionClosedEvent(event: CloseEvent): void
     {
-        this.logger.log(`Connection Closed`);
+        this.logger.log('Connection Closed');
     }
 
     private onConnectionErrorEvent(event: Event): void
     {
-        this.logger.log(`Connection Error`);
+        this.logger.log('Connection Error');
     }
 
     private onConnectionAuthenticatedEvent(event: NitroEvent): void

@@ -1,7 +1,7 @@
 ﻿import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class RoomPlaneBitmapMaskData 
+export class RoomPlaneBitmapMaskData
 {
     public static WINDOW: string    = 'window';
     public static HOLE:string       = 'hole';

@@ -9,12 +9,12 @@ export class RoomWidgetEcotronBoxDataUpdateEvent extends RoomWidgetUpdateEvent
     private _text: string;
     private _Str_6880: string;
     private _controller: boolean;
-    private _Str_12168: any;
+    private _Str_12168: string;
 
-    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: string, _arg_5: boolean = false, _arg_6: any = null)
+    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: string, _arg_5: boolean = false, _arg_6: string = null)
     {
         super(k);
-        
+
         this._Str_2319 = _arg_2;
         this._text = _arg_3;
         this._Str_6880 = _arg_4;
@@ -37,7 +37,7 @@ export class RoomWidgetEcotronBoxDataUpdateEvent extends RoomWidgetUpdateEvent
         return this._controller;
     }
 
-    public get _Str_11625(): any
+    public get _Str_11625(): string
     {
         return this._Str_12168;
     }

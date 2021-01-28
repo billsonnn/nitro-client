@@ -1,6 +1,6 @@
 ﻿import { RoomEngineObjectEvent } from './RoomEngineObjectEvent';
 
-export class RoomEngineTriggerWidgetEvent extends RoomEngineObjectEvent 
+export class RoomEngineTriggerWidgetEvent extends RoomEngineObjectEvent
 {
     public static OPEN_WIDGET: string                                         = 'RETWE_OPEN_WIDGET';
     public static CLOSE_WIDGET: string                                        = 'RETWE_CLOSE_WIDGET';

@@ -1,9 +1,22 @@
-.nitro-navigator-component {
+.nitro-navigator {
     position: absolute;
     width: $navigator-width;
     max-width: $navigator-width;
+
+    .search-result-item {
+        cursor: pointer;
+    }
+    
+    .grid-container {
+    
+        .grid-items {
+    
+            .item-detail {
+                height: 40px;
+                max-height: 40px;
+            }
+        }
+    }
 }
 
-.search-result-item {
-    cursor: pointer;
-}
+@import './components/slider/index.scss';

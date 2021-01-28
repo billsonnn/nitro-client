@@ -39,6 +39,8 @@ export class InventoryFurnitureService implements OnDestroy
         private _inventoryService: InventoryService,
         private _ngZone: NgZone)
     {
+        this.onRoomEngineObjectPlacedEvent = this.onRoomEngineObjectPlacedEvent.bind(this);
+
         this.registerMessages();
     }
 
@@ -51,7 +53,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             this._messages = [
                 new FurnitureListAddOrUpdateEvent(this.onFurnitureListAddOrUpdateEvent.bind(this)),
@@ -61,7 +63,7 @@ export class InventoryFurnitureService implements OnDestroy
                 new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this))
             ];
 
-            for(let message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
         });
     }
 
@@ -69,9 +71,9 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
-            for(let message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
             this._messages = [];
         });
@@ -104,7 +106,7 @@ export class InventoryFurnitureService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            for(let item of items)
+            for(const item of items)
             {
                 const groupItem = this.getGroupItemForFurnitureId(item.itemId);
 
@@ -115,7 +117,7 @@ export class InventoryFurnitureService implements OnDestroy
                     if(furnitureItem)
                     {
                         furnitureItem.update(item);
-                        
+
                         groupItem.hasUnseenItems = true;
                     }
                 }
@@ -178,7 +180,7 @@ export class InventoryFurnitureService implements OnDestroy
         this._ngZone.run(() =>
         {
             const groupItem = this.removeItemById(parser.itemId);
-        
+
             if(groupItem) this.setAllFurnitureSeen();
         });
     }
@@ -198,16 +200,16 @@ export class InventoryFurnitureService implements OnDestroy
 
         fragments[fragmentNumber] = fragment;
 
-        for(let frag of fragments)
+        for(const frag of fragments)
         {
             if(!frag) return null;
         }
 
         const mergedFragment: Map<number, FurnitureListItemParser> = new Map();
 
-        for(let frag of fragments)
+        for(const frag of fragments)
         {
-            for(let [ key, value ] of frag) mergedFragment.set(key, value);
+            for(const [ key, value ] of frag) mergedFragment.set(key, value);
 
             frag.clear();
         }
@@ -223,24 +225,24 @@ export class InventoryFurnitureService implements OnDestroy
         const addedSet: number[]    = [];
         const removedSet: number[]  = [];
 
-        for(let key of fragment.keys())
+        for(const key of fragment.keys())
         {
             if(existingSet.indexOf(key) === -1) addedSet.push(key);
         }
 
-        for(let itemId of existingSet)
+        for(const itemId of existingSet)
         {
             if(!fragment.get(itemId)) removedSet.push(itemId);
         }
 
         const emptyExistingSet = (existingSet.length === 0);
 
-        for(let itemId of removedSet)
+        for(const itemId of removedSet)
         {
             this.removeItemById(itemId);
         }
 
-        for(let itemId of addedSet)
+        for(const itemId of addedSet)
         {
             const parser = fragment.get(itemId);
 
@@ -267,7 +269,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         const itemIds: number[] = [];
 
-        for(let groupItem of this._groupItems)
+        for(const groupItem of this._groupItems)
         {
             let totalCount = groupItem.getTotalCount();
 
@@ -306,12 +308,12 @@ export class InventoryFurnitureService implements OnDestroy
     {
         const groupItems: GroupItem[] = [];
 
-        for(let groupItem of this._groupItems)
+        for(const groupItem of this._groupItems)
         {
             if(groupItem.type === item.type) groupItems.push(groupItem);
         }
 
-        for(let groupItem of groupItems)
+        for(const groupItem of groupItems)
         {
             if(groupItem.getItemById(item.id)) return groupItem;
         }
@@ -339,7 +341,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         let existingGroup: GroupItem = null;
 
-        for(let groupItem of this._groupItems)
+        for(const groupItem of this._groupItems)
         {
             if((groupItem.type === item.type) && (groupItem.isWallItem == item.isWallItem) && groupItem.isGroupable)
             {
@@ -389,7 +391,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
-        
+
         existingGroup.push(item, unseen);
 
         if(unseen)
@@ -408,7 +410,7 @@ export class InventoryFurnitureService implements OnDestroy
 
     public createGroupItem(type: number, category: number, stuffData: IObjectData, extra: number = NaN, flag: boolean = false): GroupItem
     {
-        let iconImage: HTMLImageElement = null;
+        // const iconImage: HTMLImageElement = null;
 
         if(category === FurniCategory._Str_3639)
         {
@@ -497,8 +499,8 @@ export class InventoryFurnitureService implements OnDestroy
     public setAllFurnitureSeen(): void
     {
         this._inventoryService.unseenTracker._Str_8813(UnseenItemCategory.FURNI);
-        
-        for(let groupItem of this._groupItems)
+
+        for(const groupItem of this._groupItems)
         {
             if(groupItem.hasUnseenItems) groupItem.hasUnseenItems = false;
         }
@@ -571,7 +573,7 @@ export class InventoryFurnitureService implements OnDestroy
 
     public getGroupItemForFurnitureId(id: number): GroupItem
     {
-        for(let groupItem of this._groupItems)
+        for(const groupItem of this._groupItems)
         {
             const item = groupItem.getItemById(id);
 
@@ -583,7 +585,7 @@ export class InventoryFurnitureService implements OnDestroy
 
     public getSelectedGroup(): GroupItem
     {
-        for(let groupItem of this._groupItems)
+        for(const groupItem of this._groupItems)
         {
             if(groupItem && groupItem.selected) return groupItem;
         }
@@ -616,7 +618,7 @@ export class InventoryFurnitureService implements OnDestroy
 
     public unlockAllItems(): void
     {
-        for(let item of this._groupItems)
+        for(const item of this._groupItems)
         {
             item.unlockAllItems();
         }
@@ -624,13 +626,13 @@ export class InventoryFurnitureService implements OnDestroy
 
     public unselectAllGroupItems(): void
     {
-        for(let groupItem of this._groupItems) groupItem.selected = false;
+        for(const groupItem of this._groupItems) groupItem.selected = false;
     }
 
     public requestLoad(): void
     {
         this._needsUpdate = false;
-        
+
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
     }
 

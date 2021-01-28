@@ -2,13 +2,13 @@
 
 export class RoomWidgetRentableBotInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {
-    public static RENTABLE_BOT: string = "RWRBIUE_RENTABLE_BOT";
-    public static _Str_7492: string = "RENTABLE_BOT";
+    public static RENTABLE_BOT: string = 'RWRBIUE_RENTABLE_BOT';
+    public static _Str_7492: string = 'RENTABLE_BOT';
 
-    private _name: string = "";
-    private _motto: string = "";
+    private _name: string = '';
+    private _motto: string = '';
     private _Str_4900: number = 0;
-    private _figure: string = "";
+    private _figure: string = '';
     private _badges: string[];
     private _caryId: number = 0;
     private _Str_5131: number = 0;

@@ -3,7 +3,7 @@ import { AnimationFrame } from './AnimationFrame';
 import { AnimationLayerData } from './AnimationLayerData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
 
-export class AnimationData 
+export class AnimationData
 {
     private static TRANSITION_TO_ANIMATION_OFFSET: number   = 1000000;
     private static TRANSITION_FROM_ANIMATION_OFFSET: number = 2000000;
@@ -45,7 +45,7 @@ export class AnimationData
 
     public dispose(): void
     {
-        for(let layer of this._layers.values())
+        for(const layer of this._layers.values())
         {
             if(!layer) continue;
 
@@ -72,7 +72,7 @@ export class AnimationData
     public getStartFrame(direction: number): number
     {
         if(!this._randomStart) return 0;
-        
+
         return Math.random() * this._frameCount;
     }
 
@@ -87,7 +87,7 @@ export class AnimationData
 
         if(k.layers)
         {
-            for(let key in k.layers)
+            for(const key in k.layers)
             {
                 const layer = k.layers[key];
 
@@ -95,9 +95,9 @@ export class AnimationData
 
                 const animationId = parseInt(key);
 
-                let loopCount   = (layer.loopCount !== undefined) ? layer.loopCount : 1;
-                let frameRepeat = (layer.frameRepeat !== undefined) ? layer.frameRepeat : 1;
-                let isRandom    = ((layer.random !== undefined) && (layer.random !== 0)) ? true : false;
+                const loopCount   = (layer.loopCount !== undefined) ? layer.loopCount : 1;
+                const frameRepeat = (layer.frameRepeat !== undefined) ? layer.frameRepeat : 1;
+                const isRandom    = ((layer.random !== undefined) && (layer.random !== 0)) ? true : false;
 
                 if(!this.addLayer(animationId, loopCount, frameRepeat, isRandom, layer)) return false;
             }
@@ -112,20 +112,20 @@ export class AnimationData
 
         if(layer.frameSequences)
         {
-            for(let key in layer.frameSequences)
+            for(const key in layer.frameSequences)
             {
                 const animationSequence = layer.frameSequences[key];
 
                 if(!animationSequence) continue;
 
-                let loopCount        = (animationSequence.loopCount !== undefined) ? animationSequence.loopCount : 1;
-                let isSequenceRandom = ((animationSequence.random !== undefined) && (animationSequence.random !== 0)) ? true : false;
+                const loopCount        = (animationSequence.loopCount !== undefined) ? animationSequence.loopCount : 1;
+                const isSequenceRandom = ((animationSequence.random !== undefined) && (animationSequence.random !== 0)) ? true : false;
 
                 const frame = layerData.addFrameSequence(loopCount, isSequenceRandom);
 
                 if(animationSequence.frames)
                 {
-                    for(let key in animationSequence.frames)
+                    for(const key in animationSequence.frames)
                     {
                         const animationFrame = animationSequence.frames[key];
 
@@ -143,7 +143,7 @@ export class AnimationData
                 frame.initialize();
             }
         }
-        
+
         layerData.calculateLength();
 
         this._layers.set(animationId, layerData);
@@ -161,7 +161,7 @@ export class AnimationData
 
         if(frame && frame.offsets)
         {
-            for(let directionId in frame.offsets)
+            for(const directionId in frame.offsets)
             {
                 const offset = frame.offsets[directionId];
 
@@ -181,7 +181,7 @@ export class AnimationData
         const layer = this._layers.get(layerId);
 
         if(!layer) return null;
-        
+
         return layer.getFrame(direction, frameCount);
     }
 
@@ -190,7 +190,7 @@ export class AnimationData
         const layer = this._layers.get(layerId);
 
         if(!layer) return null;
-        
+
         return layer.getFrameFromSequence(direction, sequenceId, offset, frameCount);
     }
 }

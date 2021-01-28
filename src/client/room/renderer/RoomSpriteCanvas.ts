@@ -54,7 +54,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _eventCache: Map<string, RoomSpriteMouseEvent>;
     private _eventId: number;
     private _scale: number;
-    
+
     private _restrictsScaling: boolean;
     private _noSpriteVisibilityChecking: boolean;
     private _usesExclusionRectangles: boolean;
@@ -183,7 +183,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(this._spritePool)
         {
-            for(let sprite of this._spritePool)
+            for(const sprite of this._spritePool)
             {
                 this._Str_21974(sprite, true);
             }
@@ -312,7 +312,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         {
             this._scale = scale;
         }
-        
+
         this.screenOffsetX  = (offsetPoint.x - (point.x * this._scale));
         this.screenOffsetY  = (offsetPoint.y - (point.y * this._scale));
     }
@@ -350,7 +350,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if(objects.size)
         {
-            for(let object of objects.values())
+            for(const object of objects.values())
             {
                 if(!object) continue;
 
@@ -464,7 +464,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         let spriteCount = 0;
 
-        for(let sprite of visualization.sprites.values())
+        for(const sprite of visualization.sprites.values())
         {
             if(!sprite || !sprite.visible) continue;
 
@@ -473,19 +473,19 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             if(!texture || !baseTexture) continue;
 
-            let spriteX = ((x + sprite.offsetX) + this._screenOffsetX);
-            let spriteY = ((y + sprite.offsetY) + this._screenOffsetY);
+            const spriteX = ((x + sprite.offsetX) + this._screenOffsetX);
+            const spriteY = ((y + sprite.offsetY) + this._screenOffsetY);
 
             if(sprite.flipH)
             {
-                let checkX = ((x + (-(texture.width + (-(sprite.offsetX))))) + this._screenOffsetX);
+                const checkX = ((x + (-(texture.width + (-(sprite.offsetX))))) + this._screenOffsetX);
 
                 if(!this.isSpriteVisible(checkX, spriteY, texture.width, texture.height)) continue;
             }
 
             else if(sprite.flipV)
             {
-                let checkY = ((y + (-(texture.height + (-(sprite.offsetY))))) + this._screenOffsetY);
+                const checkY = ((y + (-(texture.height + (-(sprite.offsetY))))) + this._screenOffsetY);
 
                 if(!this.isSpriteVisible(spriteX, checkY, texture.width, texture.height)) continue;
             }
@@ -630,7 +630,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
             this._Str_21914(extendedSprite, objectSprite);
         }
-        
+
         if(extendedSprite.x !== sprite.x) extendedSprite.x = ~~(sprite.x);
         if(extendedSprite.y !== sprite.y) extendedSprite.y = ~~(sprite.y);
 
@@ -714,7 +714,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                 iterator--;
             }
         }
-        
+
         this._activeSpriteCount = spriteCount;
     }
 
@@ -798,12 +798,12 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         x = (x - this._screenOffsetX);
         y = (y - this._screenOffsetY);
-        
+
         this._mouseLocation.x = (x / this._scale);
         this._mouseLocation.y = (y / this._scale);
 
         if((this._mouseCheckCount > 0) && (type == MouseEventType.MOUSE_MOVE)) return this._mouseSpriteWasHit;
-        
+
         this._mouseSpriteWasHit = this._Str_19207((x / this._scale), (y / this._scale), type, altKey, ctrlKey, shiftKey, buttonDown);
 
         this._mouseCheckCount++;
@@ -814,7 +814,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     private _Str_19207(x: number, y: number, type: string, altKey: boolean = false, ctrlKey: boolean = false, shiftKey: boolean = false, buttonDown: boolean = false): boolean
     {
         const checkedSprites: string[] = [];
-        
+
         let didHitSprite                        = false;
         let mouseEvent: RoomSpriteMouseEvent    = null;
         let spriteId                            = (this._activeSpriteCount - 1);
@@ -827,7 +827,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             {
                 if(extendedSprite.clickHandling && ((type === MouseEventType.MOUSE_CLICK) || (type === MouseEventType.DOUBLE_CLICK)))
                 {
-
+                    //
                 }
                 else
                 {
@@ -856,7 +856,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                         else
                         {
                             mouseEvent = this._Str_11609(x, y, (x - extendedSprite.x), (y - extendedSprite.y), type, tag, altKey, ctrlKey, shiftKey, buttonDown);
-                            
+
                             mouseEvent.spriteOffsetX = extendedSprite.offsetX;
                             mouseEvent.spriteOffsetY = extendedSprite.offsetY;
                         }
@@ -888,7 +888,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         const keys: string[] = [];
 
-        for(let key of this._mouseActiveObjects.keys()) key && keys.push(key);
+        for(const key of this._mouseActiveObjects.keys()) key && keys.push(key);
 
         let index = 0;
 
@@ -914,13 +914,13 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
                 if(existing) this._mouseActiveObjects.delete(key);
 
                 const mouseEvent = this._Str_11609(0, 0, 0, 0, MouseEventType.ROLL_OUT, existing.spriteTag, altKey, ctrlKey, shiftKey, buttonDown);
-                
+
                 this._Str_14715(mouseEvent, key);
             }
 
             index++;
         }
-        
+
         this._Str_20604();
         this._mouseOldX = x;
         this._mouseOldY = y;
@@ -932,9 +932,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         const screenX: number       = (x - (this._width / 2));
         const screenY: number       = (y - (this._height / 2));
-        const canvasName: string    = `canvas_${ this._id }`;
+        const canvasName            = `canvas_${ this._id }`;
 
-        return new RoomSpriteMouseEvent(type, ((canvasName + "_") + this._eventId), canvasName, _arg_6, screenX, screenY, _arg_3, _arg_4, _arg_8, _arg_7, _arg_9, _arg_10);
+        return new RoomSpriteMouseEvent(type, ((canvasName + '_') + this._eventId), canvasName, _arg_6, screenX, screenY, _arg_3, _arg_4, _arg_8, _arg_7, _arg_9, _arg_10);
     }
 
     protected _Str_14715(k: RoomSpriteMouseEvent, _arg_2: string): void
@@ -949,7 +949,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     {
         if(!this._container || !this._eventCache) return;
 
-        for(let [ key, event ] of this._eventCache.entries())
+        for(const [ key, event ] of this._eventCache.entries())
         {
             if(!this._eventCache) return;
 
@@ -980,9 +980,9 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
     public getDisplayAsTexture(): RenderTexture
     {
         this._noSpriteVisibilityChecking = true;
-        var k = this._scale;
-        var _local_2 = this._screenOffsetX;
-        var _local_3 = this._screenOffsetY;
+        const k = this._scale;
+        const _local_2 = this._screenOffsetX;
+        const _local_3 = this._screenOffsetY;
         this.setScale(1, null, null, true);
         this._screenOffsetX = 0;
         this._screenOffsetY = 0;

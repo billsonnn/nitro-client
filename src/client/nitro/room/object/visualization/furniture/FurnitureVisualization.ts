@@ -13,7 +13,7 @@ import { FurnitureVisualizationData } from './FurnitureVisualizationData';
 export class FurnitureVisualization extends RoomObjectSpriteVisualization
 {
     protected static DEPTH_MULTIPLIER: number = Math.sqrt(0.5);
-    
+
     public static TYPE: string = RoomObjectVisualizationType.FURNITURE_STATIC;
 
     protected _data: FurnitureVisualizationData;
@@ -115,7 +115,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         super.reset();
 
         this.setDirection(-1);
-        
+
         this._data                  = null;
         this._updatedLayers         = [];
         this._assetNames            = [];
@@ -157,7 +157,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     {
         if(!geometry) return;
 
-        let scale           = geometry.scale;
+        const scale           = geometry.scale;
         let updateSprites   = false;
 
         if(this.updateObject(scale, geometry.direction.x)) updateSprites = true;
@@ -206,7 +206,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
         this._lastCameraAngle   = direction;
         this._scale             = scale;
-        
+
         this.updateObjectCounter = this.object.updateCounter;
 
         this.resetLayers(scale, this._direction);
@@ -229,7 +229,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
         let alphaMultiplier = model.getValue<number>(RoomObjectVariable.FURNITURE_ALPHA_MULTIPLIER);
 
         if(isNaN(alphaMultiplier)) alphaMultiplier = 1;
-        
+
         if(this._alphaMultiplier !== alphaMultiplier)
         {
             this._alphaMultiplier = alphaMultiplier;
@@ -312,7 +312,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
                     sprite.offsetY          = (assetData.offsetY + this.getLayerYOffset(scale, this._direction, layerId));
                     sprite.alpha            = (48 * this._alphaMultiplier);
                     sprite.alphaTolerance   = AlphaTolerance._Str_9268;
-                    
+
                     relativeDepth = 1;
                 }
 
@@ -375,10 +375,10 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
 
     protected cacheSpriteAssetName(scale: number, layerId: number, cache: boolean): string
     {
-        let type        = this._type;
-        let size        = (cache) ? this._cacheSize : this.getValidSize(scale);
+        const type        = this._type;
+        const size        = (cache) ? this._cacheSize : this.getValidSize(scale);
         let layerCode   = '';
-        let isntIcon    = (size !== 1);
+        const isntIcon    = (size !== 1);
 
         if(layerId !== this._shadowLayerIndex)
         {
@@ -453,7 +453,7 @@ export class FurnitureVisualization extends RoomObjectSpriteVisualization
     }
 
     protected getLayerColor(scale: number, layerId: number, colorId: number): number
-    {        
+    {
         const existing = this._spriteColors[layerId];
 
         if(existing !== undefined) return existing;

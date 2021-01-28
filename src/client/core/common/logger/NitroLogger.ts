@@ -7,30 +7,30 @@ export class NitroLogger implements INitroLogger
     private _name: string;
     private _description: string | number;
     private _print: boolean;
-    
+
     constructor(name: string, description: string | number = null)
     {
         this._name          = name;
         this._description   = description;
         this._print         = true;
     }
-    
-    public log(message: any): void
+
+    public log(message: string): void
     {
         this.printMessage(message);
     }
-    
-    public error(message: any, trace?: any): void
+
+    public error(message: string, trace?: string): void
     {
         this.printMessage(trace || message);
     }
-    
-    public warn(message: any): void
+
+    public warn(message: string): void
     {
         this.printMessage(message);
     }
-    
-    public printMessage(message: any): void
+
+    public printMessage(message: string): void
     {
         if(!this._print) return;
 
@@ -47,7 +47,7 @@ export class NitroLogger implements INitroLogger
         const now = Date.now();
 
         const result = ` +${ now - NitroLogger.LAST_TIMESTAMP || 0 }ms`;
-        
+
         this.LAST_TIMESTAMP = now;
 
         return result;

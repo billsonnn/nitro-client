@@ -8,30 +8,31 @@ export class WebGL
         {
             if(!window.WebGLRenderingContext) return false;
 
-            var contextOptions = {
+            const contextOptions = {
                 stencil: true,
                 failIfMajorPerformanceCaveat: settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT
             };
-            
-            let canvas  = document.createElement('canvas');
+
+            const canvas  = document.createElement('canvas');
             let gl      = (canvas.getContext('webgl', contextOptions) || canvas.getContext('experimental-webgl', contextOptions));
 
             //@ts-ignore
             const success = !!(gl && gl.getContextAttributes().stencil);
 
-            if(gl) {
+            if(gl)
+            {
                 //@ts-ignore
                 const loseContext = gl.getExtension('WEBGL_lose_context');
 
                 if(loseContext) loseContext.loseContext();
             }
-            
+
             gl = null;
-            
+
             return success;
         }
-        
-        catch(e)
+
+        catch (e)
         {
             return false;
         }

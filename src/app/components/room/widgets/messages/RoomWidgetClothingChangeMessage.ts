@@ -12,7 +12,7 @@ export class RoomWidgetClothingChangeMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: string, _arg_3: number, _arg_4: number, _arg_5: number)
     {
         super(k);
-        
+
         this._gender = _arg_2;
         this._objectId = _arg_3;
         this._objectCategory = _arg_4;

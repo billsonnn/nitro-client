@@ -4,7 +4,7 @@ import { PlaneBitmapData } from '../../utils/PlaneBitmapData';
 import { FloorPlane } from './FloorPlane';
 import { PlaneRasterizer } from './PlaneRasterizer';
 
-export class FloorRasterizer extends PlaneRasterizer 
+export class FloorRasterizer extends PlaneRasterizer
 {
     protected initializePlanes(): void
     {
@@ -19,7 +19,7 @@ export class FloorRasterizer extends PlaneRasterizer
     {
         if(!k) return;
 
-        for(let floorIndex in k)
+        for(const floorIndex in k)
         {
             const floor = k[floorIndex];
 

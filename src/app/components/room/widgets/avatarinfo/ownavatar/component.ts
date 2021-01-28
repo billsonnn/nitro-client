@@ -12,7 +12,7 @@ import { AvatarInfoData } from '../AvatarInfoData';
 import { RoomAvatarInfoComponent } from '../component';
 
 @Component({
-	selector: 'nitro-room-avatarinfo-ownavatar-component',
+    selector: 'nitro-room-avatarinfo-ownavatar-component',
     template: `
     <div #activeView class="nitro-room-avatarinfo-ownavatar-component context-menu">
         <div class="card align-items-center">
@@ -41,7 +41,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
 
     @ViewChild('activeView')
     public activeView: ElementRef<HTMLDivElement>;
-    
+
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
 
@@ -52,7 +52,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
         view.avatarData = avatarData;
 
         if(view.widget.isDancing && view.widget.hasClub) view.mode = RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES;
-        
+
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
         view.setupButtons();
@@ -284,7 +284,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
     public processAction(name: string): void
     {
         let message: RoomWidgetMessage  = null;
-        let hideMenu: boolean           = true;
+        let hideMenu           = true;
 
         if(name)
         {

@@ -27,14 +27,15 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public paginateConfig: PaginationInstance = {
         id: 'custom',
-        itemsPerPage: 250,
+        itemsPerPage: 25,
         currentPage: 1
     };
 
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {
@@ -91,7 +92,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                 return;
             }
         }
-        
+
         this.selectFirstGroup();
     }
 
@@ -99,7 +100,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     {
         let group: GroupItem = null;
 
-        for(let groupItem of this.groupItems)
+        for(const groupItem of this.groupItems)
         {
             if(!groupItem || groupItem.locked) continue;
 
@@ -123,7 +124,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
             if(this.selectedGroup.hasUnseenItems) this.selectedGroup.hasUnseenItems = false;
 
-            let furnitureItem = this.selectedGroup.getItemByIndex(0);
+            const furnitureItem = this.selectedGroup.getItemByIndex(0);
 
             if(!furnitureItem) return;
 
@@ -134,7 +135,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                     let wallType        = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_WALL_TYPE);
                     let floorType       = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_FLOOR_TYPE);
                     let landscapeType   = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_LANDSCAPE_TYPE);
-                    
+
                     wallType        = (wallType && wallType.length) ? wallType : '101';
                     floorType       = (floorType && floorType.length) ? floorType : '101';
                     landscapeType   = (landscapeType && landscapeType.length) ? landscapeType : '1.1';
@@ -169,7 +170,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                         else
                         {
                             this.roomPreviewer.updateRoomWallsAndFloorVisibility(false, true);
-                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (this.selectedGroup.extra.toString()))
+                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (this.selectedGroup.extra.toString()));
                         }
                     }
                 }
@@ -226,9 +227,9 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         if(!itemsInTrade || !itemsInTrade.length) return;
 
         let coreItem: IFurnitureItem    = null;
-        let itemIds: number[]           = [];
+        const itemIds: number[]           = [];
 
-        for(let item of itemsInTrade)
+        for(const item of itemsInTrade)
         {
             itemIds.push(item.id);
 

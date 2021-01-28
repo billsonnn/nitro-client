@@ -1,18 +1,18 @@
 export class RoomUserData
 {
     private _roomIndex: number = -1;
-    private _name: string = "";
+    private _name: string = '';
     private _type: number = 0;
-    private _sex: string = "";
-    private _figure: string = "";
-    private _custom: string = "";
+    private _sex: string = '';
+    private _figure: string = '';
+    private _custom: string = '';
     private _activityPoints: number;
     private _webID: number = 0;
-    private _groupID: string = "";
+    private _groupID: string = '';
     private _groupStatus: number = 0;
-    private _groupName: string = "";
+    private _groupName: string = '';
     private _ownerId: number = 0;
-    private _ownerName: string = "";
+    private _ownerName: string = '';
     private _petLevel: number = 0;
     private _rarityLevel: number = 0;
     private _hasSaddle: boolean;
@@ -243,7 +243,7 @@ export class RoomUserData
     {
         this._botSkills = k;
     }
-    
+
     public get isModerator(): boolean
     {
         return this._Str_9831;

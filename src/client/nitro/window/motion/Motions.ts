@@ -1,13 +1,13 @@
 ﻿import { Nitro } from '../../Nitro';
 import { Motion } from './Motion';
 
-export class Motions 
+export class Motions
 {
-    private static _Str_5358: Motion[]      = [];
-    private static _Str_3932: Motion[]      = [];
-    private static _Str_10731: Motion[]     = [];
-    private static _Str_5307: any           = null;
-    private static _Str_7507: boolean       = false;
+    private static _Str_5358: Motion[]                          = [];
+    private static _Str_3932: Motion[]                          = [];
+    private static _Str_10731: Motion[]                         = [];
+    private static _Str_5307: ReturnType<typeof setInterval>    = null;
+    private static _Str_7507: boolean                           = false;
 
     public static get TIMER_TIME(): number
     {
@@ -16,7 +16,7 @@ export class Motions
 
     public static _Str_4598(k: Motion): Motion
     {
-        if (((Motions._Str_3932.indexOf(k) === -1) && (Motions._Str_5358.indexOf(k) === -1)))
+        if(((Motions._Str_3932.indexOf(k) === -1) && (Motions._Str_5358.indexOf(k) === -1)))
         {
             if(Motions._Str_7507)
             {
@@ -66,12 +66,12 @@ export class Motions
 
     public static _Str_19320(k: string):Motion
     {
-        for(let _local_2 of Motions._Str_3932)
+        for(const _local_2 of Motions._Str_3932)
         {
             if(_local_2.tag == k) return _local_2;
         }
 
-        for(let _local_2 of Motions._Str_5358)
+        for(const _local_2 of Motions._Str_5358)
         {
             if(_local_2.tag == k) return _local_2;
         }
@@ -81,12 +81,12 @@ export class Motions
 
     public static _Str_9810(k: HTMLElement):Motion
     {
-        for(let _local_2 of Motions._Str_3932)
+        for(const _local_2 of Motions._Str_3932)
         {
             if(_local_2.target == k) return _local_2;
         }
 
-        for(let _local_2 of Motions._Str_5358)
+        for(const _local_2 of Motions._Str_5358)
         {
             if(_local_2.target == k) return _local_2;
         }
@@ -96,16 +96,16 @@ export class Motions
 
     public static _Str_26365(k: string, _arg_2: HTMLElement):Motion
     {
-        for(let _local_3 of Motions._Str_3932)
+        for(const _local_3 of Motions._Str_3932)
         {
             if(((_local_3.tag == k) && (_local_3.target == _arg_2))) return _local_3;
         }
 
-        for(let _local_3 of Motions._Str_5358)
+        for(const _local_3 of Motions._Str_5358)
         {
             if(((_local_3.tag == k) && (_local_3.target == _arg_2))) return _local_3;
         }
-        
+
         return null;
     }
 
@@ -119,17 +119,19 @@ export class Motions
         return Motions._Str_7507;
     }
 
-    private static _Str_21055(k: any): void
+    private static _Str_21055(): void
     {
         Motions._Str_7507 = true;
 
-        let _local_2: number = Nitro.instance.time;
+        const _local_2: number = Nitro.instance.time;
 
         let _local_3: Motion = null;
 
-        while(!!(_local_3 = Motions._Str_5358.pop())) Motions._Str_3932.push(_local_3);
+        // eslint-disable-next-line no-cond-assign
+        while(_local_3 = Motions._Str_5358.pop()) Motions._Str_3932.push(_local_3);
 
-        while(!!(_local_3 = Motions._Str_10731.pop()))
+        // eslint-disable-next-line no-cond-assign
+        while(_local_3 = Motions._Str_10731.pop())
         {
             Motions._Str_3932.splice(Motions._Str_3932.indexOf(_local_3), 1);
 
@@ -154,7 +156,7 @@ export class Motions
         }
 
         if(!Motions._Str_3932.length) Motions._Str_7465();
-        
+
         Motions._Str_7507 = false;
     }
 
@@ -181,7 +183,7 @@ export class Motions
     {
         let _local_2 = 0;
 
-        for(let _local_3 of Motions._Str_3932)
+        for(const _local_3 of Motions._Str_3932)
         {
             if(_local_3.target === k) _local_2++;
         }

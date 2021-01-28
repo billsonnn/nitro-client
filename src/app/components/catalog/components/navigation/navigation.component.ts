@@ -3,12 +3,13 @@ import { CatalogPageData } from '../../../../../client/nitro/communication/messa
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-	selector: '[nitro-catalog-navigation-component]',
+    selector: '[nitro-catalog-navigation-component]',
     templateUrl: './navigation.template.html'
 })
 export class CatalogNavigationComponent
 {
-    constructor(private _catalogService: CatalogService) {}
+    constructor(private _catalogService: CatalogService)
+    {}
 
     public get catalogPage(): CatalogPageData
     {

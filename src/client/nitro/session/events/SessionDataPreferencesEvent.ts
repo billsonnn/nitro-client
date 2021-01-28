@@ -1,6 +1,6 @@
 ﻿import { NitroEvent } from '../../../core/events/NitroEvent';
 
-export class SessionDataPreferencesEvent extends NitroEvent 
+export class SessionDataPreferencesEvent extends NitroEvent
 {
     public static APUE_UPDATED: string = 'APUE_UPDATED';
 

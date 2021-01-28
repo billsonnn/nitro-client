@@ -37,7 +37,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._assets                = assets;
         this._structure             = structure;
 
-        this._missingMandatoryLibs  = Nitro.instance.getConfiguration<string[]>("avatar.mandatory.libraries");
+        this._missingMandatoryLibs  = Nitro.instance.getConfiguration<string[]>('avatar.mandatory.libraries');
         this._figureMap             = new Map();
         this._pendingContainers     = [];
         this._figureListeners       = new Map();
@@ -47,9 +47,12 @@ export class AvatarAssetDownloadManager extends EventDispatcher
         this._libraryNames          = [];
         this._isReady               = false;
 
+        this.onLibraryLoaded        = this.onLibraryLoaded.bind(this);
+        this.onAvatarRenderReady    = this.onAvatarRenderReady.bind(this);
+
         this.loadFigureMap();
 
-        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady.bind(this));
+        this._structure.renderManager.events.addEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onAvatarRenderReady);
     }
 
     private loadFigureMap(): void
@@ -58,7 +61,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         try
         {
-            request.open('GET', Nitro.instance.getConfiguration<string>("avatar.figuremap.url"));
+            request.open('GET', Nitro.instance.getConfiguration<string>('avatar.figuremap.url'));
 
             request.send();
 
@@ -76,12 +79,15 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
                     this.dispatchEvent(new NitroEvent(AvatarAssetDownloadManager.DOWNLOADER_READY));
                 }
-            }
+            };
 
-            request.onerror = e => { throw new Error('invalid_avatar_figure_map'); };
+            request.onerror = e =>
+            {
+                throw new Error('invalid_avatar_figure_map');
+            };
         }
 
-        catch(e)
+        catch (e)
         {
             NitroLogger.log(e);
         }
@@ -91,22 +97,22 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     {
         if(!data) return;
 
-        for(let library of data)
+        for(const library of data)
         {
             if(!library) continue;
 
             const id        = (library.id as string);
-            const revision  = (library.revision as number);
+            const revision  = (library.revision || '');
 
             if(this._libraryNames.indexOf(id) >= 0) continue;
 
             this._libraryNames.push(id);
 
-            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, Nitro.instance.getConfiguration<string>("avatar.asset.url"));
+            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, Nitro.instance.getConfiguration<string>('avatar.asset.url'));
 
-            downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded.bind(this));
+            downloadLibrary.addEventListener(AvatarRenderLibraryEvent.DOWNLOAD_COMPLETE, this.onLibraryLoaded);
 
-            for(let part of library.parts)
+            for(const part of library.parts)
             {
                 const id            = (part.id as string);
                 const type          = (part.type as string);
@@ -115,7 +121,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                 let existing = this._figureMap.get(partString);
 
                 if(!existing) existing = [];
-                
+
                 existing.push(downloadLibrary);
 
                 this._figureMap.set(partString, existing);
@@ -127,7 +133,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     {
         if(!event) return;
 
-        for(let [ container, listener ] of this._pendingContainers)
+        for(const [ container, listener ] of this._pendingContainers)
         {
             this.downloadAvatarFigure(container, listener);
         }
@@ -141,11 +147,11 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         const loadedFigures: string[] = [];
 
-        for(let [ figure, libraries ] of this._incompleteFigures.entries())
+        for(const [ figure, libraries ] of this._incompleteFigures.entries())
         {
             let isReady = true;
 
-            for(let library of libraries)
+            for(const library of libraries)
             {
                 if(!library || library.isLoaded) continue;
 
@@ -162,7 +168,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
                 if(listeners)
                 {
-                    for(let listener of listeners)
+                    for(const listener of listeners)
                     {
                         if(!listener || listener.disposed) continue;
 
@@ -176,7 +182,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
             }
         }
 
-        for(let figure of loadedFigures)
+        for(const figure of loadedFigures)
         {
             if(!figure) continue;
 
@@ -202,13 +208,13 @@ export class AvatarAssetDownloadManager extends EventDispatcher
     {
         const libraries = this._missingMandatoryLibs.slice();
 
-        for(let library of libraries)
+        for(const library of libraries)
         {
             if(!library) continue;
 
             const map = this._figureMap.get(library);
 
-            if(map) for(let avatar of map) avatar && this.downloadLibrary(avatar);
+            if(map) for(const avatar of map) avatar && this.downloadLibrary(avatar);
         }
     }
 
@@ -236,7 +242,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
         const setKeys = container._Str_1016();
 
-        for(let key of setKeys)
+        for(const key of setKeys)
         {
             const set = figureData._Str_740(key);
 
@@ -246,7 +252,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             if(!figurePartSet) continue;
 
-            for(let part of figurePartSet._Str_806)
+            for(const part of figurePartSet._Str_806)
             {
                 if(!part) continue;
 
@@ -255,7 +261,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
                 if(existing === undefined) continue;
 
-                for(let library of existing)
+                for(const library of existing)
                 {
                     if(!library || library.isLoaded) continue;
 
@@ -299,7 +305,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
 
             this._incompleteFigures.set(figure, pendingLibraries);
 
-            for(let library of pendingLibraries)
+            for(const library of pendingLibraries)
             {
                 if(!library) continue;
 

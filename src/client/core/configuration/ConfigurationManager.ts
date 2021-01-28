@@ -5,13 +5,15 @@ import { IConfigurationManager } from './IConfigurationManager';
 
 export class ConfigurationManager extends NitroManager implements IConfigurationManager
 {
-    private _definitions: AdvancedMap<string, any>;
+    private _definitions: AdvancedMap<string, unknown>;
 
     constructor()
     {
         super();
 
         this._definitions = new AdvancedMap();
+
+        this.onConfigurationLoaded = this.onConfigurationLoaded.bind(this);
     }
 
     protected onInit(): void
@@ -28,20 +30,20 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
             return;
         }
-        
+
         const request = new XMLHttpRequest();
 
         try
         {
             request.open('GET', url);
 
-            request.onloadend   = this.onConfigurationLoaded.bind(this);
-            request.onerror     = this.onConfigurationFailed.bind(this);
+            request.onloadend   = this.onConfigurationLoaded;
+            request.onerror     = this.onConfigurationFailed;
 
             request.send();
         }
 
-        catch(e)
+        catch (e)
         {
             this.logger.error(e);
         }
@@ -73,27 +75,37 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         this.events && this.events.dispatchEvent(new ConfigurationEvent(type));
     }
 
-    private parseConfiguration(data: any): boolean
+    private parseConfiguration(data: string): boolean
     {
         if(!data || (data === '')) return false;
 
-        data = JSON.parse(data);
-
-        const regex = new RegExp(/%(.*?)%/g);
-
-        for(let key in data)
+        try
         {
-            let value = data[key];
+            const configObject = JSON.parse(data);
 
-            if(typeof value === 'string')
+            const regex = new RegExp(/%(.*?)%/g);
+
+            for(const key in configObject)
             {
-                value = this.interpolate((value as string), regex);
+                let value = configObject[key];
+
+                if(typeof value === 'string')
+                {
+                    value = this.interpolate((value as string), regex);
+                }
+
+                this._definitions.add(key, value);
             }
 
-            this._definitions.add(key, value);
+            return true;
         }
 
-        return true;
+        catch (e)
+        {
+            this.logger.error(e.stack);
+
+            return false;
+        }
     }
 
     public interpolate(value: string, regex: RegExp = null): string
@@ -104,9 +116,9 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
         if(pieces && pieces.length)
         {
-            for(let piece of pieces)
+            for(const piece of pieces)
             {
-                const existing = this._definitions.getValue(this.removeInterpolateKey(piece));
+                const existing = (this._definitions.getValue(this.removeInterpolateKey(piece)) as string);
 
                 if(existing) (value = value.replace(piece, existing));
             }
@@ -124,12 +136,17 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
     {
         let existing = this._definitions.getValue(key);
 
-        if(existing === undefined) existing = value;
+        if(existing === undefined)
+        {
+            this.logger.warn(`Missing configuration key: ${ key }`);
+
+            existing = value;
+        }
 
         return (existing as T);
     }
 
-    public setValue(key: string, value: any): void
+    public setValue(key: string, value: string): void
     {
         this._definitions.add(key, value);
     }

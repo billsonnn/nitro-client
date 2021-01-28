@@ -15,11 +15,13 @@ import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredService } from '../../services/wired.service';
 import { WiredFurniture } from '../../WiredFurniture';
 import { WiredSelectionVisualizer } from '../../WiredSelectionVisualizer';
+import { WiredAction } from '../actions/WiredAction';
 import { WiredConditionFactory } from '../conditions/WiredConditionFactory';
 import { WiredTriggerFactory } from '../triggers/WiredTriggerFactory';
+import { WiredActionFactory } from './../actions/WiredActionFactory';
 
 @Component({
-	selector: 'nitro-wired-main-component',
+    selector: 'nitro-wired-main-component',
     templateUrl: './main.template.html'
 })
 export class WiredMainComponent implements OnInit, OnDestroy
@@ -31,9 +33,9 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     @ViewChild('inputsContainer', { read: ViewContainerRef })
     public inputsContainer: ViewContainerRef;
-    
+
     private _triggerConfs: WiredTriggerFactory;
-    //private _actionTypes: ActionTypes;
+    private _actionTypes: WiredActionFactory;
     private _conditionTypes: WiredConditionFactory;
     private _selectionVisualizer: WiredSelectionVisualizer;
 
@@ -46,14 +48,15 @@ export class WiredMainComponent implements OnInit, OnDestroy
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) {}
+        private _ngZone: NgZone)
+    {}
 
     public ngOnInit(): void
     {
         this._wiredService.component = this;
 
         this._triggerConfs          = new WiredTriggerFactory();
-        //this._actionTypes           = new ActionTypes();
+        this._actionTypes           = new WiredActionFactory();
         this._conditionTypes        = new WiredConditionFactory();
         this._selectionVisualizer   = new WiredSelectionVisualizer(this);
     }
@@ -78,20 +81,13 @@ export class WiredMainComponent implements OnInit, OnDestroy
         wired.onEditStart(this._updated);
 
         this._selectionVisualizer.applySelectionShaderToFurni(this._furniSelectedIds);
-
-        if(this._updated instanceof ActionDefinition)
-        {
-        //     _local_5 = ActionDefinition(this._updated);
-        //     _local_6 = _local_5._Str_25459;
-        //     this._delaySlider._Str_2526(_local_6);
-        }
     }
 
     public _Str_19071(): IUserDefinedRoomEventsCtrl
     {
         if(this._updated instanceof TriggerDefinition) return this._triggerConfs;
 
-        //if(this._updated instanceof ActionDefinition) return this._actionTypes;
+        if(this._updated instanceof ActionDefinition) return this._actionTypes;
 
         if(this._updated instanceof ConditionDefinition) return this._conditionTypes;
 
@@ -159,12 +155,12 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         const wired = this._Str_3959();
 
-        const _local_2 = wired.validate();
+        const validateError = wired.validate();
 
-        if(_local_2)
+        if(validateError)
         {
-            this._notificationService.alert('Update failed' + _local_2);
-            
+            this._notificationService.alert(validateError, 'Update failed');
+
             return;
         }
 
@@ -177,7 +173,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
         if(this._updated instanceof ActionDefinition)
         {
-            Nitro.instance.communication.connection.send(new UpdateActionMessageComposer(this._updated.id, this.readIntegerParams(), this.readStringParam(), this.readFurniSelectionIds(), this.readFurniSelectionCode()));
+            Nitro.instance.communication.connection.send(new UpdateActionMessageComposer(this._updated.id, this.readIntegerParams(), this.readStringParam(), this.readFurniSelectionIds(), this.getActionDelay(), this.readFurniSelectionCode()));
 
             return;
         }
@@ -188,6 +184,16 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
             return;
         }
+    }
+
+    private getActionDelay(): number
+    {
+        const wired = this._Str_3959();
+        if(wired && wired instanceof WiredAction)
+        {
+            return (<WiredAction>wired).delay;
+        }
+        return 0;
     }
 
     private readIntegerParams(): number[]
@@ -235,7 +241,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     public getFurniName(): string
     {
-        let spriteId = ((this._updated && this._updated.spriteId) || -1);
+        const spriteId = ((this._updated && this._updated.spriteId) || -1);
 
         const furniData = Nitro.instance.sessionDataManager.getFloorItemData(spriteId);
 
@@ -249,7 +255,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     public getFurniDescription(): string
     {
-        let spriteId = ((this._updated && this._updated.spriteId) || -1);
+        const spriteId = ((this._updated && this._updated.spriteId) || -1);
 
         const furniData = Nitro.instance.sessionDataManager.getFloorItemData(spriteId);
 

@@ -1,6 +1,6 @@
 ﻿import { NitroEvent } from '../../../core/events/NitroEvent';
 
-export class UserNameUpdateEvent extends NitroEvent 
+export class UserNameUpdateEvent extends NitroEvent
 {
     public static UNUE_NAME_UPDATED: string = 'unue_name_updated';
 

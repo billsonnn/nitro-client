@@ -1,6 +1,6 @@
 import { Nitro } from '../../../../client/nitro/Nitro';
 
-export class Purse 
+export class Purse
 {
     private _isExpiring: boolean = false;
     private _isCitizenshipVipExpiring: boolean = false;
@@ -70,8 +70,8 @@ export class Purse
 
     public get _Str_4458(): number
     {
-        var k: number = ((Nitro.instance.time - this._lastUpdated) / (1000 * 60));
-        var _local_2: number = (this._minutesUntilExpiration - k);
+        const k: number = ((Nitro.instance.time - this._lastUpdated) / (1000 * 60));
+        const _local_2: number = (this._minutesUntilExpiration - k);
         return (_local_2 > 0) ? _local_2 : 0;
     }
 

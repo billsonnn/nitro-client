@@ -1,3 +1,4 @@
+import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectLogicBase } from '../../../../../room/object/logic/RoomObjectLogicBase';
 import { ObjectVisibilityUpdateMessage } from '../../../messages/ObjectVisibilityUpdateMessage';
@@ -5,7 +6,7 @@ import { RoomObjectVariable } from '../../RoomObjectVariable';
 
 export class SelectionArrowLogic extends RoomObjectLogicBase
 {
-    public initialize(data: any): void
+    public initialize(data: IAssetData): void
     {
         if(!this.object) return;
 

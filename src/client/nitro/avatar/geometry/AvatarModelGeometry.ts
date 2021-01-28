@@ -5,7 +5,7 @@ import { GeometryBodyPart } from './GeometryBodyPart';
 import { Matrix4x4 } from './Matrix4x4';
 import { Vector3D } from './Vector3D';
 
-export class AvatarModelGeometry 
+export class AvatarModelGeometry
 {
     private _camera: Vector3D;
     private _avatarSet: AvatarSet;
@@ -34,7 +34,7 @@ export class AvatarModelGeometry
 
         if(k.canvases && (k.canvases.length > 0))
         {
-            for(let canvas of k.canvases)
+            for(const canvas of k.canvases)
             {
                 if(!canvas) continue;
 
@@ -43,7 +43,7 @@ export class AvatarModelGeometry
 
                 if(canvas.geometries && (canvas.geometries.length > 0))
                 {
-                    for(let geometry of canvas.geometries)
+                    for(const geometry of canvas.geometries)
                     {
                         if(!geometry) continue;
 
@@ -59,7 +59,7 @@ export class AvatarModelGeometry
 
         if(k.types && (k.types.length > 0))
         {
-            for(let type of k.types)
+            for(const type of k.types)
             {
                 if(!type) continue;
 
@@ -68,15 +68,15 @@ export class AvatarModelGeometry
 
                 if(type.bodyParts && (type.bodyParts.length > 0))
                 {
-                    for(let bodyPart of type.bodyParts)
+                    for(const bodyPart of type.bodyParts)
                     {
                         if(!bodyPart) continue;
 
                         const geometryBodyPart = new GeometryBodyPart(bodyPart);
 
                         bodyParts.set(geometryBodyPart.id, geometryBodyPart);
-                        
-                        for(let part of geometryBodyPart._Str_1456(null))
+
+                        for(const part of geometryBodyPart._Str_1456(null))
                         {
                             itemIds.set(part, geometryBodyPart);
                         }
@@ -91,11 +91,11 @@ export class AvatarModelGeometry
 
     public _Str_2101(k: IAvatarImage): void
     {
-        for(let geometry of this._geometryTypes.values())
+        for(const geometry of this._geometryTypes.values())
         {
             if(!geometry) continue;
 
-            for(let part of geometry.values())
+            for(const part of geometry.values())
             {
                 if(!part) continue;
 
@@ -109,7 +109,7 @@ export class AvatarModelGeometry
         const avatarSet = this._avatarSet._Str_1498(k);
 
         if(!avatarSet) return [];
-        
+
         return avatarSet._Str_755();
     }
 
@@ -160,7 +160,7 @@ export class AvatarModelGeometry
 
         if(parts)
         {
-            for(let part of parts.values())
+            for(const part of parts.values())
             {
                 if(!part) continue;
 
@@ -197,7 +197,7 @@ export class AvatarModelGeometry
 
             if(parts)
             {
-                for(let part of parts.values())
+                for(const part of parts.values())
                 {
                     if(!part) continue;
 
@@ -214,7 +214,7 @@ export class AvatarModelGeometry
         const parts         = this._Str_1307(_arg_2);
         const geometryParts = [];
 
-        for(let part of parts)
+        for(const part of parts)
         {
             if(!part) continue;
 
@@ -240,7 +240,7 @@ export class AvatarModelGeometry
 
         this._transformation = Matrix4x4._Str_1560(_arg_2);
 
-        for(let part of parts.values())
+        for(const part of parts.values())
         {
             if(!part) continue;
 
@@ -261,7 +261,7 @@ export class AvatarModelGeometry
             return 0;
         });
 
-        for(let set of sets)
+        for(const set of sets)
         {
             if(!set) continue;
 
@@ -279,7 +279,7 @@ export class AvatarModelGeometry
 
             this._transformation = Matrix4x4._Str_1560(_arg_3);
 
-            return part._Str_713(this._transformation, this._camera, _arg_4, _arg_5)
+            return part._Str_713(this._transformation, this._camera, _arg_4, _arg_5);
         }
 
         return [];

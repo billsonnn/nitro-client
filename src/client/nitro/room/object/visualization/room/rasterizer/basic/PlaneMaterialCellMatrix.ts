@@ -7,7 +7,7 @@ import { Randomizer } from '../../utils/Randomizer';
 import { PlaneMaterialCell } from './PlaneMaterialCell';
 import { PlaneMaterialCellColumn } from './PlaneMaterialCellColumn';
 
-export class PlaneMaterialCellMatrix 
+export class PlaneMaterialCellMatrix
 {
     public static _Str_7916: number     = 1;
     public static _Str_6087: number     = 2;
@@ -38,12 +38,12 @@ export class PlaneMaterialCellMatrix
     constructor(k: number, _arg_2: number=1, _arg_3: number=1, _arg_4: number=-1, _arg_5: number=1, _arg_6: number=-1, _arg_7: number=1)
     {
         this._columns = [];
-        if (k < 1)
+        if(k < 1)
         {
             k = 1;
         }
-        let _local_8: number = 0;
-        while (_local_8 < k)
+        let _local_8 = 0;
+        while(_local_8 < k)
         {
             this._columns.push(null);
             _local_8++;
@@ -54,7 +54,7 @@ export class PlaneMaterialCellMatrix
         this._normalMaxX = _arg_5;
         this._normalMinY = _arg_6;
         this._normalMaxY = _arg_7;
-        if (this._repeatMode == PlaneMaterialCellMatrix._Str_9127)
+        if(this._repeatMode == PlaneMaterialCellMatrix._Str_9127)
         {
             this._isStatic = false;
         }
@@ -127,14 +127,14 @@ export class PlaneMaterialCellMatrix
 
         if(this._columns && this._columns.length)
         {
-            for(let column of this._columns)
+            for(const column of this._columns)
             {
                 if(!column) continue;
 
                 column._Str_3355();
             }
         }
-        
+
         this._isCached = false;
     }
 
@@ -159,7 +159,7 @@ export class PlaneMaterialCellMatrix
         if(width < 1) width = 1;
 
         if(height < 1) height = 1;
-        
+
         if(!canvas || (canvas.width !== width) || (canvas.height !== height)) canvas = null;
 
         if(!this._cachedBitmapNormal) this._cachedBitmapNormal = new Vector3d();
@@ -253,12 +253,12 @@ export class PlaneMaterialCellMatrix
 
         const columns: Graphics[] = [];
 
-        var columnIndex = 0;
+        let columnIndex = 0;
 
-        while (columnIndex < this._columns.length)
+        while(columnIndex < this._columns.length)
         {
             const column = this._columns[columnIndex];
-            
+
             if(column)
             {
                 const columnBitmapData = column.render(height, normal, offsetX, offsetY);
@@ -278,7 +278,7 @@ export class PlaneMaterialCellMatrix
 
         let maxColumnHeight = 0;
 
-        switch (this._repeatMode)
+        switch(this._repeatMode)
         {
             case PlaneMaterialCellMatrix._Str_6087:
             //     maxColumnHeight = this._Str_18476(this._cachedBitmapData, columns);
@@ -346,7 +346,7 @@ export class PlaneMaterialCellMatrix
 
         let width = 0;
 
-        for(let graphic of k)
+        for(const graphic of k)
         {
             if(!graphic) continue;
 
@@ -360,13 +360,13 @@ export class PlaneMaterialCellMatrix
     {
         if(!k || !_arg_2 || !_arg_2.length) return new Point(_arg_3, 0);
 
-        var height: number = 0;
-        var _local_6: Graphics = null;
-        var _local_7 = 0;
+        let height = 0;
+        let _local_6: Graphics = null;
+        let _local_7 = 0;
 
-        while (_local_7 < _arg_2.length)
+        while(_local_7 < _arg_2.length)
         {
-            if (_arg_4)
+            if(_arg_4)
             {
                 _local_6 = _arg_2[_local_7];
             }
@@ -374,14 +374,14 @@ export class PlaneMaterialCellMatrix
             {
                 _local_6 = _arg_2[((_arg_2.length - 1) - _local_7)];
             }
-            if (_local_6 != null)
+            if(_local_6 != null)
             {
-                if (!_arg_4)
+                if(!_arg_4)
                 {
                     _arg_3 = (_arg_3 - _local_6.width);
                 }
                 let _local_8 = 0;
-                if (this._align == PlaneMaterialCellMatrix._Str_3606)
+                if(this._align == PlaneMaterialCellMatrix._Str_3606)
                 {
                     _local_8 = (k.height - _local_6.height);
                 }
@@ -394,20 +394,20 @@ export class PlaneMaterialCellMatrix
 
                     RoomVisualization.addTextureCache(_local_6, texture);
                 }
-                
+
                 k.beginTextureFill({ texture });
                 k.drawRect(_arg_3, _local_8, texture.width, texture.height);
                 k.endFill();
 
-                if (_local_6.height > height)
+                if(_local_6.height > height)
                 {
                     height = _local_6.height;
                 }
-                if (_arg_4)
+                if(_arg_4)
                 {
                     _arg_3 = (_arg_3 + _local_6.width);
                 }
-                if ((((_arg_4) && (_arg_3 >= k.width)) || ((!(_arg_4)) && (_arg_3 <= 0))))
+                if((((_arg_4) && (_arg_3 >= k.width)) || ((!(_arg_4)) && (_arg_3 <= 0))))
                 {
                     return new Point(_arg_3, height);
                 }

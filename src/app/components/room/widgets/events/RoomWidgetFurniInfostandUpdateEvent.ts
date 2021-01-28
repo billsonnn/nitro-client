@@ -3,12 +3,12 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 
 export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {
-    public static FURNI: string = "RWFIUE_FURNI";
+    public static FURNI: string = 'RWFIUE_FURNI';
 
     private _id: number = 0;
     private _category: number = 0;
-    private _name: string = "";
-    private _description: string = "";
+    private _name: string = '';
+    private _description: string = '';
     private _image: HTMLImageElement = null;
     private _isWallItem: boolean = false;
     private _isStickie: boolean = false;
@@ -18,12 +18,12 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _expiration: number = -1;
     private _purchaseCatalogPageId: number = -1;
     private _purchaseOfferId: number = -1;
-    private _extraParam: string = "";
+    private _extraParam: string = '';
     private _isOwner: boolean = false;
     private _stuffData: IObjectData = null;
     private _groupId: number = 0;
     private _ownerId: number = 0;
-    private _ownerName: string = "";
+    private _ownerName: string = '';
     private _usagePolicy: number = 0;
     private _rentCatalogPageId: number = -1;
     private _rentOfferId: number = -1;

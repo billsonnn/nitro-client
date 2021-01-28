@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../core/communication/messages/IMessageComposer';
 
-export class OpenMessageComposer implements IMessageComposer
+export class OpenMessageComposer implements IMessageComposer<ConstructorParameters<typeof OpenMessageComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof OpenMessageComposer>;
 
     constructor(id: number)
     {
         this._data = [ id ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

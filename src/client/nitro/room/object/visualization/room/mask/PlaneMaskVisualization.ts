@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMaskBitmap } from './PlaneMaskBitmap';
 
-export class PlaneMaskVisualization 
+export class PlaneMaskVisualization
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;
@@ -16,7 +16,7 @@ export class PlaneMaskVisualization
 
     public dispose(): void
     {
-        for(let mask of this._bitmaps)
+        for(const mask of this._bitmaps)
         {
             if(!mask) continue;
 
@@ -35,7 +35,7 @@ export class PlaneMaskVisualization
     {
         if(!k) return null;
 
-        for(let mask of this._bitmaps)
+        for(const mask of this._bitmaps)
         {
             if(!mask) continue;
 
@@ -44,7 +44,7 @@ export class PlaneMaskVisualization
                 return mask.asset;
             }
         }
-        
+
         return null;
     }
 }

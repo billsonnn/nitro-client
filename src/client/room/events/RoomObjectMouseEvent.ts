@@ -10,8 +10,8 @@ export class RoomObjectMouseEvent extends RoomObjectEvent
     public static MOUSE_UP: string      = 'ROE_MOUSE_UP';
     public static MOUSE_ENTER: string   = 'ROE_MOUSE_ENTER';
     public static MOUSE_LEAVE: string   = 'ROE_MOUSE_LEAVE';
-    
-    private _eventId: string = "";
+
+    private _eventId: string = '';
     private _altKey: boolean;
     private _ctrlKey: boolean;
     private _shiftKey: boolean;

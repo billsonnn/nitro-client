@@ -1,0 +1,19 @@
+<div *ngIf="isVisible" [@inOutAnimation] class="card bg-secondary nitro-toolbar-me-menu">
+    <div class="d-flex justify-content-between w-100">
+        <ul class="list-group py-2">
+            <li class="list-group-item py-1 flex-column" (click)="toggleAvatarEditor()">
+                <i class="icon icon-me-clothing d-block"></i>
+                <span>{{ 'widget.memenu.editavatar' | translate }}</span>
+            </li>
+            <li class="list-group-item py-1 flex-column" (click)="toggleAchievements()">
+                <i class="icon icon-me-achievements d-block"></i>
+                <div class="position-absolute bg-danger px-1 py-0 rounded shadow count" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
+                <span>{{ 'widget.memenu.achievements' | translate }}</span>
+            </li>
+            <li class="list-group-item py-1 flex-column" (click)="toggleNavigator()">
+                <i class="icon icon-me-rooms d-block"></i>
+                <span>{{ 'widget.memenu.myrooms' | translate }}</span>
+            </li>
+        </ul>
+    </div>
+</div>

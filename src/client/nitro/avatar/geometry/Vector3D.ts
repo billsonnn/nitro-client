@@ -1,4 +1,4 @@
-﻿export class Vector3D 
+﻿export class Vector3D
 {
     private _x: number;
     private _y: number;
@@ -78,7 +78,7 @@
 
     public toString(): string
     {
-        return (((((("Vector3D: (" + this._x) + ",") + this._y) + ",") + this._z) + ")");
+        return (((((('Vector3D: (' + this._x) + ',') + this._y) + ',') + this._z) + ')');
     }
 
     public get x(): number

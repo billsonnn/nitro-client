@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class PetFigureData 
+export class PetFigureData
 {
     private _typeId: number;
     private _paletteId: number;
@@ -20,7 +20,7 @@ export class PetFigureData
 
         let i = 0;
 
-        while (i < this._customPartCount)
+        while(i < this._customPartCount)
         {
             this._customParts.push(wrapper.readInt());
             this._customParts.push(wrapper.readInt());
@@ -52,11 +52,11 @@ export class PetFigureData
 
     public get figuredata(): string
     {
-        let figure = ((((this.typeId + " ") + this.paletteId) + " ") + this.color);
+        let figure = ((((this.typeId + ' ') + this.paletteId) + ' ') + this.color);
 
-        figure = (figure + (" " + this.custompartCount));
+        figure = (figure + (' ' + this.custompartCount));
 
-        for(let _local_2 of this.customParts) figure = (figure + (" " + _local_2));
+        for(const _local_2 of this.customParts) figure = (figure + (' ' + _local_2));
 
         return figure;
     }

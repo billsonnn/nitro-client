@@ -10,7 +10,7 @@ export class RoomWidgetFriendRequestMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number=0)
     {
         super(k);
-        
+
         this._requestId = _arg_2;
     }
 

@@ -19,7 +19,7 @@ export class Palette implements IPalette
 
     public _Str_2015(data: any): void
     {
-        for(let color of data.color)
+        for(const color of data.color)
         {
             const newColor = new PartColor(color);
 
@@ -30,7 +30,7 @@ export class Palette implements IPalette
     public _Str_751(id: number): IPartColor
     {
         if((id === undefined) || id < 0) return null;
-        
+
         return (this._colors.get(id.toString()) || null);
     }
 

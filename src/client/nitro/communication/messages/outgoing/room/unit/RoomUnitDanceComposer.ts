@@ -1,15 +1,15 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RoomUnitDanceComposer implements IMessageComposer
+export class RoomUnitDanceComposer implements IMessageComposer<ConstructorParameters<typeof RoomUnitDanceComposer>>
 {
-    private _data: any[];
+    private _data: ConstructorParameters<typeof RoomUnitDanceComposer>;
 
     constructor(danceType: number)
     {
         this._data = [ danceType ];
     }
 
-    public getMessageArray(): any[]
+    public getMessageArray()
     {
         return this._data;
     }

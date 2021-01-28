@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneTextureBitmap } from './PlaneTextureBitmap';
 
-export class PlaneTexture 
+export class PlaneTexture
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;
@@ -18,7 +18,7 @@ export class PlaneTexture
     {
         if(this._bitmaps)
         {
-            for(let bitmap of this._bitmaps)
+            for(const bitmap of this._bitmaps)
             {
                 if(!bitmap) continue;
 
@@ -47,7 +47,7 @@ export class PlaneTexture
     {
         if(!k) return null;
 
-        for(let bitmap of this._bitmaps)
+        for(const bitmap of this._bitmaps)
         {
             if(!bitmap) continue;
 

@@ -51,13 +51,13 @@ export class RoomHeightMapParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._width     = wrapper.readInt();
-        let totalTiles  = wrapper.readInt();
+        const totalTiles  = wrapper.readInt();
         this._height    = totalTiles / this._width;
 
         let i = 0;

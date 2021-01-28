@@ -16,10 +16,10 @@ export class TradingCloseParser implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         this._userId = wrapper.readInt();
         this._reason = wrapper.readInt();
-        
+
         return true;
     }
 

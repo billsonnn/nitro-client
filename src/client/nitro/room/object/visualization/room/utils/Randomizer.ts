@@ -1,8 +1,8 @@
-﻿export class Randomizer 
+﻿export class Randomizer
 {
     public static _Str_21045: number    = 1;
     public static _Str_20078: number    = 16777216;
-    
+
     private static _Str_3699:Randomizer = null;
 
     private _Str_16737: number = 1;
@@ -58,7 +58,7 @@
     {
         const _local_4: number[] = [];
 
-        let _local_5: number = 0;
+        let _local_5 = 0;
 
         while(_local_5 < k)
         {
@@ -75,9 +75,9 @@
 
         const _local_3: number[] = [];
 
-        let _local_4: number = 0;
+        let _local_4 = 0;
 
-        while (_local_4 <= _arg_2)
+        while(_local_4 <= _arg_2)
         {
             _local_3.push(_local_4);
             _local_4++;
@@ -85,7 +85,7 @@
 
         const _local_5: number[] = [];
 
-        let _local_6: number = 0;
+        let _local_6 = 0;
 
         while(_local_6 < k)
         {

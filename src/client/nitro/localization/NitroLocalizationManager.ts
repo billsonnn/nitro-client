@@ -1,5 +1,6 @@
 ﻿import { NitroManager } from '../../core/common/NitroManager';
 import { Nitro } from '../Nitro';
+import { BadgeBaseAndLevel } from './BadgeBaseAndLevel';
 import { INitroLocalizationManager } from './INitroLocalizationManager';
 import { NitroLocalizationEvent } from './NitroLocalizationEvent';
 
@@ -7,6 +8,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 {
     private _definitions: Map<string, string>;
     private _parameters: Map<string, Map<string, string>>;
+    private _romanNumerals: string[];
 
     constructor()
     {
@@ -14,11 +16,12 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         this._definitions   = new Map();
         this._parameters    = new Map();
+        this._romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX'];
     }
 
     protected onInit(): void
     {
-        this.loadLocalizationFromURL(Nitro.instance.getConfiguration<string>("external.texts.url"));
+        this.loadLocalizationFromURL(Nitro.instance.getConfiguration<string>('external.texts.url'));
     }
 
     public loadLocalizationFromURL(url: string): void
@@ -35,7 +38,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
             request.send();
         }
 
-        catch(e)
+        catch (e)
         {
             this.logger.error(e);
         }
@@ -63,7 +66,21 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         data = JSON.parse(data);
 
-        for(let key in data) this._definitions.set(key, data[key]);
+        for(const key in data) this._definitions.set(key, data[key]);
+    }
+
+    public getRomanNumeral(number: number): string
+    {
+        return this._romanNumerals[Math.max(0, (number - 1))];
+    }
+
+    public getBadgeBaseAndLevel(badgeName: string): string
+    {
+        const badge = new BadgeBaseAndLevel(badgeName);
+
+        badge.level--;
+
+        return badge.getBadgeId;
     }
 
     public getValue(key: string, doParams: boolean = true): string
@@ -78,7 +95,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
             if(parameters)
             {
-                for(let [ parameter, replacement ] of parameters)
+                for(const [ parameter, replacement ] of parameters)
                 {
                     value = value.replace('%' + parameter + '%', replacement);
                 }
