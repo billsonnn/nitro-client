@@ -14,5 +14,6 @@
         <div *ngIf="activePage.frontPageItems[3]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[3].itemPromoImage + ')'}">
             <div class="front-page-item-caption">{{activePage.frontPageItems[3].itemName}}</div>
         </div>
+        <redeem-voucher-component [localization]="activePage.localization"></redeem-voucher-component>
     </div>
 </div>
