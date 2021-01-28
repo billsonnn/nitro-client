@@ -20,7 +20,7 @@ import { RoomInfoStandRentableBotComponent } from './widgets/infostand/component
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import {StickieFurniComponent} from "./widgets/furniture/stickies/component";
+import { StickieFurniComponent } from './widgets/furniture/stickies/component';
 
 @NgModule({
     imports: [

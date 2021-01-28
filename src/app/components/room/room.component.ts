@@ -51,8 +51,8 @@ import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHa
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
-import {FurnitureStickieHandler} from "./widgets/handlers/FurnitureStickieHandler";
-import {RoomWidgetFurniToWidgetMessage} from "./widgets/messages/RoomWidgetFurniToWidgetMessage";
+import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
+import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
 
 @Component({
     selector: 'nitro-room-component',

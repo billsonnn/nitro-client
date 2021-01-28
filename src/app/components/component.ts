@@ -26,7 +26,7 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
-import {StickieFurniComponent} from "./room/widgets/furniture/stickies/component";
+import { StickieFurniComponent } from './room/widgets/furniture/stickies/component';
 
 @Component({
     selector: 'nitro-main-component',
