@@ -60,7 +60,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        if(!message) return;
+        if(!message) return null;
 
         let userId = 0;
 

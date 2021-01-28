@@ -1,19 +1,15 @@
+import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
+import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomWidgetTrophyUpdateEvent } from '../events/RoomWidgetTrophyUpdateEvent';
-
+import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 
 export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 {
-    private static INTERNALLINK: string = 'internalLink';
-
     private _container: IRoomWidgetHandlerContainer = null;
 
     public dispose(): void
@@ -23,32 +19,37 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
+        if(!message || !this.container) return null;
 
-        if(!message || !this._container) return;
-
-        if(message.type != RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY) return;
-
-        const rwtwMessage = <RoomWidgetFurniToWidgetMessage>message;
-
-        const trophy = this._container.roomEngine.getRoomObject(rwtwMessage.roomId, rwtwMessage.objectId, rwtwMessage.category);
-
-        if(!trophy || !trophy.model) return;
-
-        const model = trophy.model;
-
-        const color = <string>model.getValue(RoomObjectVariable.FURNITURE_COLOR);
-        let data = <string>model.getValue(RoomObjectVariable.FURNITURE_DATA);
-        let _local_7 = <number>model.getValue(RoomObjectVariable.FURNITURE_EXTRAS);
-        if(!_local_7)
+        switch(message.type)
         {
-            _local_7 = 0;
-        }
-        const ownerName = data.substring(0, data.indexOf('\t'));
-        data = data.substring((ownerName.length + 1), data.length);
-        const trophyDate = data.substring(0, data.indexOf('\t'));
-        const trophyText = data.substr(trophyDate.length + 1, data.length);
+            case RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY: {
+                const trophyMessage = (message as RoomWidgetFurniToWidgetMessage);
 
-        this._container.events.dispatchEvent(new RoomWidgetTrophyUpdateEvent(RoomWidgetTrophyUpdateEvent.TROPHY_DATA, ownerName, trophyDate, trophyText, Number.parseInt(color), _local_7));
+                const roomObject = this._container.roomEngine.getRoomObject(trophyMessage.roomId, trophyMessage.objectId, trophyMessage.category);
+
+                if(roomObject)
+                {
+                    let data  = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
+                    let extra = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_EXTRAS);
+
+                    if(!extra) extra = '0';
+
+                    const color     = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_COLOR);
+                    const ownerName = data.substring(0, data.indexOf('\t'));
+
+                    data = data.substring((ownerName.length + 1), data.length);
+
+                    const trophyDate    = data.substring(0, data.indexOf('\t'));
+                    const trophyText    = data.substr((trophyDate.length + 1), data.length);
+
+                    this._container.events.dispatchEvent(new RoomWidgetTrophyUpdateEvent(RoomWidgetTrophyUpdateEvent.TROPHY_DATA, ownerName, trophyDate, trophyText, parseInt(color), parseInt(extra)));
+                }
+
+                break;
+            }
+        }
+
         return null;
     }
 
@@ -88,6 +89,6 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 
     public get eventTypes(): string[]
     {
-        return [ RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY ];
+        return [ ];
     }
 }

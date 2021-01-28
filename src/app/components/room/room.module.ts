@@ -12,6 +12,7 @@ import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.comp
 import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
+import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
 import { RoomInfoStandFurniComponent } from './widgets/infostand/components/furni/furni.component';
 import { RoomInfoStandMainComponent } from './widgets/infostand/components/main/main.component';
@@ -20,7 +21,6 @@ import { RoomInfoStandRentableBotComponent } from './widgets/infostand/component
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import { TrophyFurniComponent } from './widgets/furniture/trophies/component';
 
 @NgModule({
     imports: [
@@ -44,7 +44,7 @@ import { TrophyFurniComponent } from './widgets/furniture/trophies/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
-        TrophyFurniComponent,
+        FurnitureWidgetTrophyComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent
@@ -67,7 +67,7 @@ import { TrophyFurniComponent } from './widgets/furniture/trophies/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
-        TrophyFurniComponent,
+        FurnitureWidgetTrophyComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent
