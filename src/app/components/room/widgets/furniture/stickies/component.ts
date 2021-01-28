@@ -19,6 +19,7 @@ export class StickieFurniComponent extends ConversionTrackingWidget
     public  _text:string;
     public _colorHex:string;
     protected  _Str_2278:boolean;
+    public isController: boolean = false;
 
     public readonly availableColors: string[] = ['9CCEFF','FF9CFF', '9CFF9C','FFFF33'];
 
@@ -73,7 +74,7 @@ export class StickieFurniComponent extends ConversionTrackingWidget
         this._text = stickieEvent.text;
         this._colorHex = stickieEvent._Str_10471;
         this._Str_2278 = stickieEvent.controller;
-
+        this.isController = stickieEvent.controller;
         this._ngZone.run(() =>
         {
             this._visible = true;
@@ -105,6 +106,12 @@ export class StickieFurniComponent extends ConversionTrackingWidget
 
     public handleButton(button: string): void
     {
+        if(!this.isController)
+        {
+            this._visible = false;
+            return;
+        }
+
         if(this.availableColors.includes(button))
         {
             this._colorHex = button;

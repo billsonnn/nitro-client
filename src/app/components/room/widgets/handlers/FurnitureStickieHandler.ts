@@ -44,25 +44,23 @@ export class FurnitureStickieHandler implements IRoomWidgetHandler
                 const model = furni.model;
                 if(!model) return null;
 
-                const local7 = <string>model.getValue(RoomObjectVariable.FURNITURE_ITEMDATA);
-                if(local7.length < 6) return null;
+                const stickyData = <string>model.getValue(RoomObjectVariable.FURNITURE_ITEMDATA);
+                if(stickyData.length < 6) return null;
 
-                let local8 = null;
-                let local9 = '';
-                if(local7.indexOf(' ' ) > 0)
+                let stickyColor = null;
+                let stickyText = '';
+                if(stickyData.indexOf(' ' ) > 0)
                 {
-                    local8 = local7.slice(0, local7.indexOf(' '));
-                    local9 = local7.slice((local7.indexOf(' ') + 1), local7.length);
+                    stickyColor = stickyData.slice(0, stickyData.indexOf(' '));
+                    stickyText = stickyData.slice((stickyData.indexOf(' ') + 1), stickyData.length);
                 }
                 else
                 {
-                    local8 = local7;
+                    stickyColor = stickyData;
                 }
 
-                // TODO: is this level? god mode?
-
-                const local10 = this._container.roomSession.isRoomOwner || this._container.sessionDataManager.securityLevel == 5;
-                this._container.events.dispatchEvent(new RoomWidgetStickieDataUpdateEvent(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, event.objectId, furni.type, local9, local8, local10));
+                const canChangeSticky = this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isGodMode;
+                this._container.events.dispatchEvent(new RoomWidgetStickieDataUpdateEvent(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, event.objectId, furni.type, stickyText, stickyColor, canChangeSticky));
 
             }
                 break;
