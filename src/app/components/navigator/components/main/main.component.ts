@@ -85,7 +85,8 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
         this._roomCreatorModal = this._modalService.open(NavigatorCreatorComponent, {
             backdrop: 'static',
             size: 'lg',
-            centered: true
+            centered: true,
+            keyboard: false
         });
 
         if(this._roomCreatorModal)
@@ -112,7 +113,8 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
             modal = this._roomDoorbellModal = this._modalService.open(NavigatorDoorbellComponent, {
                 backdrop: 'static',
                 size: 'sm',
-                centered: true
+                centered: true,
+                keyboard: false
             });
 
             modal.result.then(() => (this._roomDoorbellModal = null));
@@ -142,7 +144,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
         this._lastRoom = null;
     }
 
-    public openRoomPassword(room: RoomDataParser): void
+    public openRoomPassword(room: RoomDataParser, isWrongPassword: boolean = false): void
     {
         if(this._roomDoorbellModal) this._roomDoorbellModal.close();
 
@@ -160,7 +162,8 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
             modal = this._roomPasswordModal = this._modalService.open(NavigatorPasswordComponent, {
                 backdrop: 'static',
                 size: 'sm',
-                centered: true
+                centered: true,
+                keyboard: false
             });
 
             modal.result.then(() => (this._roomPasswordModal = null));
@@ -171,6 +174,11 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
         if(this._roomPasswordModal)
         {
             const instance = (modal.componentInstance as NavigatorPasswordComponent);
+
+            if(!instance) return;
+
+            instance.room = room;
+            instance.isWrongPassword = isWrongPassword;
         }
     }
 

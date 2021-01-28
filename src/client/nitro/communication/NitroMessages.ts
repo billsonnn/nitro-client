@@ -253,6 +253,7 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
+import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -272,7 +273,7 @@ export class NitroMessages implements IMessageConfiguration
     {
         // AVAILABILITY
         this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
-
+        this._events.set(IncomingHeader.GENERIC_ERROR, GenericErrorEvent);
         // AVATAR
         this._events.set(IncomingHeader.USER_CHANGE_NAME, ChangeNameUpdateEvent);
 
