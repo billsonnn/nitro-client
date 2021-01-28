@@ -205,7 +205,8 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendBanMessage(userId: number, type: string): void
     {
-        this._connection.send(new RoomBanUserComposer(userId, type, this._roomId));
+        debugger;
+        this._connection.send(new RoomBanUserComposer(userId, this._roomId, type));
     }
 
     public sendGiveRightsMessage(userId: number): void

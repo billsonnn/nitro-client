@@ -1,4 +1,5 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
@@ -149,6 +150,9 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':billsonnn':
                             this._container.notificationService.alertWithScrollableMessages([
                                 '<div class="d-flex flex-column justify-content-center align-items-center"><div style="width: 350px; height: 120px; margin: 10px; background: transparent url(\'https://assets-1.nitrots.co/nitro-dark.svg\') no-repeat center; filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
+                            return null;
+                        case ':settings':
+                            Nitro.instance.communication.connection.send(new RoomSettingsComposer(this._container.roomSession.roomId));
                             return null;
                     }
                 }
