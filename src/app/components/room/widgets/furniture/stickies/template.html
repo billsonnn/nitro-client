@@ -1,9 +1,9 @@
 <div *ngIf="visible" [bringToTop] [draggable] [ngStyle]="{'background-color': getHex(), color: _colorHex}" class="nitro-stickie-component card">
     <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
-        <ng-template *ngIf="isController">
+        <ng-container *ngIf="isController">
             <button  type="button" class="btn btn-danger" (click)="handleButton('delete')">X</button>
             <button  type="button" *ngFor="let color of availableColors" [ngStyle]="{'background-color': getHexFromHtml(color)}" (click)="handleButton(color)">A</button>
-        </ng-template>
+        </ng-container>
         <button type="button" class="close" (click)="handleButton('close')"><i class="fas fa-times"></i></button>
     </div>
     <div class="d-flex p-3">

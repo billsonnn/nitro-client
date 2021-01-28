@@ -75,6 +75,7 @@ export class StickieFurniComponent extends ConversionTrackingWidget
         this._colorHex = stickieEvent._Str_10471;
         this._Str_2278 = stickieEvent.controller;
         this.isController = stickieEvent.controller;
+        debugger;
         this._ngZone.run(() =>
         {
             this._visible = true;
