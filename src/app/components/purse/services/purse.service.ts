@@ -13,7 +13,7 @@ export class PurseService implements OnDestroy
 {
     private _messages: IMessageEvent[];
     private _currencies: Map<number, number>;
-    private _habboClubSubscription: UserSubscriptionParser; 
+    private _habboClubSubscription: UserSubscriptionParser;
     private _isReady: boolean = false;
 
     constructor(
@@ -72,7 +72,7 @@ export class PurseService implements OnDestroy
         const parser = event.getParser();
 
         this._isReady = true;
-        
+
         this._ngZone.run(() => this.setCurrency(-1, parseFloat(parser.credits)));
     }
 
@@ -136,7 +136,7 @@ export class PurseService implements OnDestroy
     }
 
     public get isReady(): boolean
-    { 
+    {
         return this._isReady;
     }
 }

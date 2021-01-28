@@ -1,29 +1,28 @@
-<div class="achievement-category d-flex flex-column h-100">
-    <div class="text-center small">{{ ('quests.' + category.name + '.name') | translate }}</div>
-    <perfect-scrollbar class="results-container position-relative w-100 pr-1 mb-1" style="min-height: 155px;max-height: 155px;height: 155px;">
-        <div class="achievement-category-badge-grid">
-            <div *ngFor="let achievement of category" class="rounded d-flex justify-content-center position-relative" [ngClass]="[ selectedAchievement === achievement ? 'bg-warning' : 'bg-secondary']" (click)="selectAchievement(achievement)">
-                <img class="d-block align-self-center m-1" [ngClass]="[achievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(achievement)"/>
-                <div class="achievement-unseen px-1 py-0 btn btn-danger rounded position-absolute" *ngIf="achievement.unseen">{{ achievement.unseen }}</div>
+<div class="text-center bg-secondary rounded px-2 mb-2">{{ ('quests.' + category.name + '.name') | translate }}</div>
+<perfect-scrollbar class="grid-container w-100 mb-2" style="min-height:156px;max-height:156px;height: 156px;">
+    <div class="grid-items grid-5">
+        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let achievement of category.achievements" (click)="selectAchievement(achievement)">
+            <div class="detail-info has-image rounded" [ngClass]="[ ((selectedAchievement === achievement) ? 'bg-primary' : 'bg-secondary' ), ((achievement && achievement._Str_10438) ? '' : 'greyscale') ]" [ngStyle]="{ 'background-image': 'url(' + getBadgeImageUrl(achievement) + ')' }">
+                <div class="position-absolute btn btn-sm btn-danger px-1 py-0 rounded count" *ngIf="achievement.count">{{ achievement.count }}</div>
             </div>
         </div>
-    </perfect-scrollbar>
-    <div class="bg-secondary mb-auto w-100 p-1 rounded d-flex flex-row" *ngIf="selectedAchievement">
-        <div class="text-center">
-            <div class="badge_preview flex-shrink-0 justify-content-center d-flex">
-                <img class="badge_preview_image align-self-center" [ngClass]="[selectedAchievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(selectedAchievement)"/>
-            </div>
-            <span class="font-weight-bolder text-center small">{{ getBadgeLevelString(selectedAchievement) }}</span>
+    </div>
+</perfect-scrollbar>
+<div class="bg-secondary mb-auto w-100 p-1 rounded d-flex flex-row" *ngIf="selectedAchievement">
+    <div class="text-center">
+        <div class="badge_preview flex-shrink-0 justify-content-center d-flex">
+            <img class="badge_preview_image align-self-center" [ngClass]="[selectedAchievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(selectedAchievement)"/>
         </div>
-        <div class="badge_info w-100 small">
-            <span class="mb-1 font-weight-bolder">{{ getBadgeText(selectedAchievement) }}</span>
-            <span class="mb-1 d-block" style="min-height:42px;">{{ getBadgeText(selectedAchievement,true) }}</span>
-            <span *ngIf="!selectedAchievement._Str_7518" class="mb-1 d-block">{{'achievements.details.reward' | translate}} <b>{{selectedAchievement.rewardAmount}}</b> <img class="pl-1" [src]="getCurrencyUrl(selectedAchievement.rewardType)"/></span>
-            <div *ngIf="!selectedAchievement._Str_7518" class="achievement-progress-bar bg-primary rounded p-1 position-relative">
-                <div class="achievement-progress-bar-inner bg-success rounded py-3" [ngStyle]="{width: getProgress(selectedAchievement)}">
-                </div>
-                <div class="achievement-progress-bar-content text-center d-flex justify-content-center"><span class="align-self-center">{{ getProgress(selectedAchievement,true) }}</span></div>
+        <span class="font-weight-bolder text-center small">{{ getBadgeLevelString(selectedAchievement) }}</span>
+    </div>
+    <div class="badge_info w-100 small">
+        <span class="mb-1 font-weight-bolder">{{ getBadgeText(selectedAchievement) }}</span>
+        <span class="mb-1 d-block" style="min-height:42px;">{{ getBadgeText(selectedAchievement,true) }}</span>
+        <span *ngIf="!selectedAchievement._Str_7518" class="mb-1 d-block">{{'achievements.details.reward' | translate}} <b>{{selectedAchievement.rewardAmount}}</b> <img class="pl-1" [src]="getCurrencyUrl(selectedAchievement.rewardType)"/></span>
+        <div *ngIf="!selectedAchievement._Str_7518" class="achievement-progress-bar bg-primary rounded p-1 position-relative">
+            <div class="achievement-progress-bar-inner bg-success rounded py-3" [ngStyle]="{width: getProgress(selectedAchievement)}">
             </div>
+            <div class="achievement-progress-bar-content text-center d-flex justify-content-center"><span class="align-self-center">{{ getProgress(selectedAchievement,true) }}</span></div>
         </div>
     </div>
 </div>

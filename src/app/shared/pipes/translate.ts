@@ -7,7 +7,7 @@ export class TranslatePipe implements PipeTransform
     public transform(key: string, parameter: string = null, replacement: string = null): string
     {
         if(parameter) return Nitro.instance.getLocalizationWithParameter(key, parameter, (replacement && replacement.toString()));
-        
+
         return Nitro.instance.getLocalization(key);
     }
 }

@@ -382,9 +382,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         this._ngZone.run(() =>
         {
-            this._topLevelContexts  = parser.topLevelContexts;
-            this._isLoaded          = true;
-            this._isLoading         = false;
+            this._topLevelContexts = parser.topLevelContexts;
 
             if(this._topLevelContexts.length > 0) this.setCurrentContext(this._topLevelContexts[0]);
 
@@ -564,11 +562,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
     public loadNavigator(): void
     {
-        if(this._isLoaded || this._isLoading) return;
-
-        this._isLoading = true;
-
         this._ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorInitComposer()));
+
+        this._isLoaded = true;
     }
 
     public openRoomDoorbell(room: RoomDataParser): void

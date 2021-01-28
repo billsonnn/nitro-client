@@ -204,7 +204,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public get sliderVisible(): boolean
-    { 
+    {
         return Nitro.instance.core.configuration.getValue<boolean>('navigator.slider.enabled');
     }
 }

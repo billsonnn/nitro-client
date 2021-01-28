@@ -321,7 +321,7 @@ i {
         }
 
         &.chatstyles-icon {
-            background-image: url('^assets/images/chatstyles/styles-icon.png');
+            background-image: url('^assets/images/chat/styles-icon.png');
             width: 17px;
             height: 19px;
         }
@@ -356,6 +356,17 @@ i {
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        &.icon-catalogue-hc_small {
+            height:17px;
+            width:31px;
+            background-image: url('^assets/images/catalog/hc_small.png');
+        }
+        &.icon-catalogue-hc_big {
+            width:68px;
+            height:40px;
+            background: url('^assets/images/catalog/hc_big.png');
         }
     }
 }

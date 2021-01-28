@@ -15,7 +15,6 @@ import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
-import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
@@ -28,10 +27,10 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
             'inOutAnimation',
             [
                 transition(
-                    ':enter', 
+                    ':enter',
                     [
                         style({ left: '-100%' }),
-                        animate('1s ease-out', 
+                        animate('1s ease-out',
                             style({ left: 10 }))
                     ]
                 ),
@@ -54,7 +53,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _achievementService: AchievementsService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
-        private ngZone: NgZone) 
+        private ngZone: NgZone)
     {
         this.onNitroToolbarEvent = this.onNitroToolbarEvent.bind(this);
     }
@@ -121,7 +120,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 return;
             case ToolbarIconEnum.ME_MENU:
                 this.toggleMeMenu();
-                
+
                 Nitro.instance.roomEngine.events.dispatchEvent(new NitroToolbarEvent(NitroToolbarEvent.SELECT_OWN_AVATAR));
                 return;
         }
@@ -206,7 +205,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     }
 
     public toggleMeMenu(): void
-    { 
+    {
         this.settingsService.toggleMeMenu();
     }
 
@@ -247,6 +246,6 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
 
     public get unseenAchievementsCount(): number
     {
-        return this._achievementService.unseen;
+        return this._achievementService.unseenCount;
     }
 }

@@ -1,6 +1,6 @@
-import { AssetManager } from '../../../../../core/asset/AssetManager';
 import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { Nitro } from '../../../../Nitro';
+import { RoomWidgetEnumItemExtradataParameter } from '../../../../ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
 import { ObjectAdUpdateMessage } from '../../../messages/ObjectAdUpdateMessage';
 import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
 import { MapDataType } from '../../data/type/MapDataType';
@@ -15,6 +15,15 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
     public static OFFSETX_KEY: string   = 'offsetX';
     public static OFFSETY_KEY: string   = 'offsetY';
     public static OFFSETZ_KEY: string   = 'offsetZ';
+
+    protected _hasClickUrl: boolean;
+
+    constructor()
+    {
+        super();
+
+        this._hasClickUrl = false;
+    }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
@@ -37,19 +46,15 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
 
         if(!isNaN(state) && (this.object.getState(0) !== state)) this.object.setState(state, 0);
 
-        const imageUrl = objectData.getValue(FurnitureRoomBrandingLogic.IMAGEURL_KEY);
+        const imageUrl      = objectData.getValue(FurnitureRoomBrandingLogic.IMAGEURL_KEY);
+        const existingUrl   = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
 
-        if(imageUrl)
+        if(!existingUrl || (existingUrl !== imageUrl))
         {
-            const existingUrl = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL, imageUrl);
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS, 0);
 
-            if(!existingUrl || (existingUrl !== imageUrl))
-            {
-                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL, imageUrl);
-                this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS, 0);
-
-                this.downloadBackground();
-            }
+            this.downloadBackground();
         }
 
         const clickUrl = objectData.getValue(FurnitureRoomBrandingLogic.CLICKURL_KEY);
@@ -71,6 +76,19 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
         if(!isNaN(offsetX)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_X, offsetX);
         if(!isNaN(offsetY)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Y, offsetY);
         if(!isNaN(offsetZ)) this.object.model.setValue(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_Z, offsetZ);
+
+        let options = (((FurnitureRoomBrandingLogic.IMAGEURL_KEY + '=') + ((imageUrl !== null) ? imageUrl : '')) + '\t');
+
+        if(this._hasClickUrl)
+        {
+            options = (options + (((FurnitureRoomBrandingLogic.CLICKURL_KEY + '=') + ((clickUrl !== null) ? clickUrl : '')) + '\t'));
+        }
+
+        options = (options + (((FurnitureRoomBrandingLogic.OFFSETX_KEY + '=') + offsetX) + '\t'));
+        options = (options + (((FurnitureRoomBrandingLogic.OFFSETY_KEY + '=') + offsetY) + '\t'));
+        options = (options + (((FurnitureRoomBrandingLogic.OFFSETZ_KEY + '=') + offsetZ) + '\t'));
+
+        this.object.model.setValue(RoomWidgetEnumItemExtradataParameter.INFOSTAND_EXTRA_PARAM, (RoomWidgetEnumItemExtradataParameter.BRANDING_OPTIONS + options));
     }
 
     private processAdUpdate(message: ObjectAdUpdateMessage): void
@@ -97,15 +115,13 @@ export class FurnitureRoomBrandingLogic extends FurnitureLogic
         const imageUrl      = model.getValue<string>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_URL);
         const imageStatus   = model.getValue<number>(RoomObjectVariable.FURNITURE_BRANDING_IMAGE_STATUS);
 
-        if(!imageUrl || imageStatus === 1) return;
+        if(!imageUrl || (imageUrl === '') || (imageStatus === 1)) return;
 
         const asset = Nitro.instance.core && Nitro.instance.core.asset;
 
         if(!asset) return;
 
-        const split     = imageUrl.split('/');
-        const name      = AssetManager.removeFileExtension(split[(split.length - 1)]);
-        const texture   = asset.getTexture(AssetManager.removeFileExtension(name));
+        const texture = asset.getTexture(imageUrl);
 
         if(!texture)
         {

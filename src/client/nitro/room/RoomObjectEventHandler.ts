@@ -1620,7 +1620,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(sizeX < 1) sizeX = 1;
 
         if(sizeY < 1) sizeY = 1;
-        
+
         let _local_8    = sizeX;
         let _local_9    = sizeY;
 

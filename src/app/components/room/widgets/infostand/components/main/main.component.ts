@@ -70,7 +70,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this.furniInfostandUpdateHandler);
         eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this.rentableBotInfostandUpdateHandler);
         eventDispatcher.addEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this.petInfostandUpdateHandler);
-        
+
         super.registerUpdateEvents(eventDispatcher);
     }
 
@@ -267,6 +267,11 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
         }
 
         return null;
+    }
+
+    public get furniData(): InfoStandFurniData
+    {
+        return this._furniData;
     }
 
     private getInfoStandComponentType(event: RoomWidgetUpdateEvent): typeof RoomInfoStandBaseComponent

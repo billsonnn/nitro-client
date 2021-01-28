@@ -31,7 +31,6 @@ export class ConversionTrackingWidget implements IRoomWidget
 
         if(this._events && !this._events.disposed)
         {
-            console.log('un register');
             this.unregisterUpdateEvents(this._events);
         }
 
@@ -71,7 +70,7 @@ export class ConversionTrackingWidget implements IRoomWidget
         this._widgetHandler = handler;
 
         //@ts-ignore
-        if(this._widgetHandler.widget !== undefined) this._widgetHandler.widget = this;
+        if(!this._widgetHandler.widget) this._widgetHandler.widget = this;
     }
 
     public get messageListener(): IRoomWidgetMessageListener

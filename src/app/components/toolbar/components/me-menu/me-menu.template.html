@@ -7,7 +7,7 @@
             </li>
             <li class="list-group-item py-1 flex-column" (click)="toggleAchievements()">
                 <i class="icon icon-me-achievements d-block"></i>
-                <div class="position-absolute btn btn-sm btn-danger px-1 py-0 rounded unseenCount" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
+                <div class="position-absolute bg-danger px-1 py-0 rounded shadow count" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
                 <span>{{ 'widget.memenu.achievements' | translate }}</span>
             </li>
             <li class="list-group-item py-1 flex-column" (click)="toggleNavigator()">

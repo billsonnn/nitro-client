@@ -4,7 +4,7 @@ import { CatalogPageOfferData } from '../../../../../client/nitro/communication/
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-    selector: 'nitro-catalog-purchase-component',
+    selector: '[nitro-catalog-purchase-component]',
     templateUrl: './purchase.template.html'
 })
 export class CatalogPurchaseComponent implements OnChanges

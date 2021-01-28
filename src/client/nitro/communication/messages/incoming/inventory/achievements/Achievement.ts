@@ -131,9 +131,9 @@ export class Achievement
     {
         this._unseen = unseen;
     }
-    
+
     public get unseen(): number
-    { 
+    {
         return this._unseen;
     }
 

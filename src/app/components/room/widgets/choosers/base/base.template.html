@@ -1,0 +1,16 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-chooser-component card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ (title) | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex p-3">
+        <perfect-scrollbar style="min-height:180px;max-height:180px;height:180px;">
+            <ul class="list-group">
+                <li class="d-flex justify-content-between align-items-center bg-secondary rounded mb-1 px-2 py-1 chooser-item" *ngFor="let item of items" (click)="selectItem(item)">
+                    <p class="mb-0">{{ item.name }}</p>
+                    <p class="mb-0" *ngIf="(title === 'widget.chooser.furni.title')">{{ item.id }}</p>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+    </div>
+</div>

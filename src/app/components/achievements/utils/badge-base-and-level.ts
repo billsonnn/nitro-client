@@ -22,7 +22,7 @@ export class BadgeBaseAndLevel
 
         const level = this.badgeId.substr((length + 1), this.badgeId.length);
 
-        if(level && level != '') 
+        if(level && level != '')
         {
             this._level = Number.parseInt(level);
         }

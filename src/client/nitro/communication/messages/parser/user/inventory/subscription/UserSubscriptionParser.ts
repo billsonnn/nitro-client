@@ -3,14 +3,16 @@ import { IMessageParser } from '../../../../../../../core/communication/messages
 
 export class UserSubscriptionParser implements IMessageParser
 {
+    public static _Str_14729: number = 3;
+
     private _name: string;
     private _days: number;
     private _int1: number;
     private _months: number;
     private _years: number;
     private _bool1: boolean;
-    private _bool2: boolean;
-    private _int2: number;
+    private _isVip: boolean;
+    private _pastClubDays: number;
     private _int3: number;
     private _totalSeconds: number;
 
@@ -22,8 +24,8 @@ export class UserSubscriptionParser implements IMessageParser
         this._months        = 0;
         this._years         = 0;
         this._bool1         = false;
-        this._bool2         = false;
-        this._int2          = 0;
+        this._isVip         = false;
+        this._pastClubDays  = 0;
         this._int3          = 0;
         this._totalSeconds  = 0;
 
@@ -40,8 +42,8 @@ export class UserSubscriptionParser implements IMessageParser
         this._months        = wrapper.readInt();
         this._years         = wrapper.readInt();
         this._bool1         = wrapper.readBoolean();
-        this._bool2         = wrapper.readBoolean();
-        this._int2          = wrapper.readInt();
+        this._isVip         = wrapper.readBoolean();
+        this._pastClubDays  = wrapper.readInt();
         this._int3          = wrapper.readInt();
         this._totalSeconds  = wrapper.readInt();
 
@@ -78,14 +80,14 @@ export class UserSubscriptionParser implements IMessageParser
         return this._bool1;
     }
 
-    public get bool2(): boolean
+    public get isVip(): boolean
     {
-        return this._bool2;
+        return this._isVip;
     }
 
-    public get int2(): number
+    public get pastClubDays(): number
     {
-        return this._int2;
+        return this._pastClubDays;
     }
 
     public get int3(): number

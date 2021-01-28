@@ -1,3 +1,31 @@
-<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100 nitro-catalog-layout-unsupported-component">
-    This layout is not yet implemented
+<div class="w-100 h-100 nitro-catalog-layout-default-component">
+    <div class="row">
+        <div class="col-5">
+            <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
+        </div>
+        <div class="col-7">
+            <h6>{{ ('catalog.vip.extend.title') | translate }}</h6>
+            <p class="small" [innerHtml]="getPurseContent()"></p>
+        </div>
+        <div class="col-12 mt-1">
+            <ng-container *ngFor="let vipItem of vipOffers">
+                <div class="bg-secondary rounded mb-2 p-1">
+                    <div *ngIf="vipItem.productCode" class="bg-primary rounded p-1 w-100 mb-1 d-flex flex-row">
+                        <i class="icon icon-catalogue-hc_small mr-2 d-block align-self-center"></i>
+                        <span>{{ getOfferText(vipItem.productCode) }}</span>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between px-2 py-1">
+                        <div class="align-self-center">
+                            <b *ngIf="vipItem.priceCredits">{{ vipItem.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)"></b>
+                            <b *ngIf="vipItem.priceActivityPoints"> + {{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <button *ngIf="vipItem.giftable" type="button" class="btn btn-success btn-sm mr-1" (click)="buyVip(vipItem)">{{'catalog.purchase_confirmation.gift' | translate}}</button>
+                            <button type="button" class="btn btn-success btn-sm" (click)="buyVip(vipItem)">{{'buy' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
 </div>

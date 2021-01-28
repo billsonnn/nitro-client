@@ -2,7 +2,7 @@
     "socket.url": "WS/WSS_URL",
     "asset.url": "https://ASSET_URL",
     "c.images.url": "https://ASSETS_URL/c_images",
-    "achievements.images.url": "%c.images.url%/quests/%image%.png",
+    "achievements.images.url": "%c.images.url%/Quests/%image%.png",
     "thumbnails.url": "%c.images.url%/camera/thumbnails/%thumbnail%.png",
     "images.url": "%asset.url%/images",
     "gamedata.url": "%asset.url%/gamedata",
@@ -43,6 +43,8 @@
         "right.repeat": "%asset.url%/images/reception/us_top_right.png"
     },
     "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
+    "avatareditor.show.clubitems.dimmed": true,
+    "avatareditor.show.clubitems.first": true
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,

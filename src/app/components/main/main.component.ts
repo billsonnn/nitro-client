@@ -28,7 +28,7 @@ export class AppMainComponent implements OnInit, OnDestroy
 
     constructor(
         private _settingsService: SettingsService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {
         this.onNitroEvent = this.onNitroEvent.bind(this);
     }
@@ -61,7 +61,7 @@ export class AppMainComponent implements OnInit, OnDestroy
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.FAILED, this.onNitroEvent);
 
-            Nitro.instance.core.configuration.init(); 
+            Nitro.instance.core.configuration.init();
 
             this._connectionTimeout = setTimeout(this.onConnectionTimeout, 15 * 1000);
         });
@@ -82,7 +82,7 @@ export class AppMainComponent implements OnInit, OnDestroy
             Nitro.instance.avatar.events.removeEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent);
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.FAILED, this.onNitroEvent);
-        
+
             clearTimeout(this._connectionTimeout);
         });
     }
@@ -230,7 +230,7 @@ export class AppMainComponent implements OnInit, OnDestroy
     public get isReady(): boolean
     {
         this._settingsService.isReady = (this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady);
-        
+
         return ((this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady) || false);
     }
 

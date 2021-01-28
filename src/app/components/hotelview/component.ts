@@ -31,22 +31,22 @@ export class HotelViewComponent
     private _rightRepeat: string;
 
     constructor(
-        private sessionService: SessionService) 
+        private sessionService: SessionService)
     {
         const assetUrl = Nitro.instance.getConfiguration('asset.url');
 
         this._background = Nitro.instance.getConfiguration('hotelview.images')['background'].replace('%asset.url%', assetUrl);
 
         this._backgroundColour = Nitro.instance.getConfiguration('hotelview.images')['background.colour'];
-        
+
         this._sun = Nitro.instance.getConfiguration('hotelview.images')['sun'].replace('%asset.url%',assetUrl);
 
         this._drape = Nitro.instance.getConfiguration('hotelview.images')['drape'].replace('%asset.url%', assetUrl);
-        
+
         this._left = Nitro.instance.getConfiguration('hotelview.images')['left'].replace('%asset.url%', assetUrl);
-        
+
         this._right = Nitro.instance.getConfiguration('hotelview.images')['right'].replace('%asset.url%', assetUrl);
-        
+
         this._rightRepeat = Nitro.instance.getConfiguration('hotelview.images')['right.repeat'].replace('%asset.url%', assetUrl);
     }
 
@@ -56,37 +56,37 @@ export class HotelViewComponent
     }
 
     public get background(): string
-    { 
+    {
         return (this._background || null);
     }
 
     public get backgroundColour(): string
-    { 
+    {
         return (this._backgroundColour || null);
     }
 
     public get sun(): string
-    { 
+    {
         return (this._sun || null);
     }
 
     public get drape(): string
-    { 
+    {
         return (this._drape || null);
     }
 
     public get left(): string
-    { 
+    {
         return (this._left || null);
     }
 
     public get right(): string
-    { 
+    {
         return (this._right || null);
     }
 
     public get rightRepeat(): string
-    { 
+    {
         return (this._rightRepeat || null);
     }
 }

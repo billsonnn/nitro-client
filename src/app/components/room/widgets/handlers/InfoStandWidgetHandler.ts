@@ -1,4 +1,5 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomAdsUpdateComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
 import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
 import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
@@ -217,10 +218,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA: {
                 const _local_10 = (message as RoomWidgetFurniActionMessage).objectData;
-
                 if(_local_10)
                 {
-                    const _local_19 = new Map();
+                    const _local_19 = new Map<string,string>();
 
                     const _local_20 = _local_10.split('\t');
 
@@ -241,7 +241,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                     }
 
                     this._container.roomEngine.processRoomObjectWallOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
-
+                    this._Str_23922(_local_19);
                     _local_19.clear();
                 }
                 break;
@@ -796,6 +796,18 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(moderationSettings) flag = _arg_2(event, moderationSettings);
 
         return (flag && (event.flatControl < RoomControllerLevel.ROOM_OWNER));
+    }
+
+    // public  _Str_23922(k:Map):void
+    public  _Str_23922(k:Map<string,string>):void
+    {
+        if(!this._widget) return;
+
+        if(this._container.sessionDataManager.hasSecurity(5))
+        {
+            // TODO: Map should be `k`
+            this._container.connection.send(new RoomAdsUpdateComposer(this._widget.furniData.id, k));
+        }
     }
 
     public get type(): string

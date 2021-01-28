@@ -28,7 +28,7 @@ export class BadgeBaseAndLevel
     {
         const char = text.charCodeAt(0);
 
-        return (char >= 49 && char <= 57);
+        return (char >= 48 && char <= 57);
     }
 
     public get level(): number

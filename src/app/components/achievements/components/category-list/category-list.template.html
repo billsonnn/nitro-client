@@ -1,18 +1,19 @@
-<div class="nitro-achievement-categories-component">
-    <div class="achievement-category-grid mb-1">
-        <div *ngFor="let category of categories" class="rounded achievement-category-button px-1 py-2" (click)="selectCat(ob)" [ngClass]="[selectedCategory == ob.name ? 'bg-warning' : 'bg-secondary']">
-            <div class="align-self-center position-relative">
-                <img [src]="getCategoryImage(ob.name,ob.achievements)">
-                <div class="achievement-category-progress">{{ getCategoryProgress(ob.achievements) }}</div>
-                <div class="achievement-unseen px-1 py-0 btn btn-danger rounded position-absolute" *ngIf="getUnseenCategory(ob)">{{ getUnseenCategory(ob) }}</div>
+<div class="grid-container achievement-category-container w-100 mb-2">
+    <div class="grid-items grid-3">
+        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let category of categories" (click)="selectCategory(category)">
+            <div class="detail-info has-image rounded" [ngClass]="[ ((selectedCategory === category) ? 'bg-primary' : 'bg-secondary' ) ]" [ngStyle]="{ 'background-image': 'url(' + getCategoryImage(category.name, category.achievements) + ')' }">
+                <div *ngIf="getUnseenCount(category)" class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ getUnseenCount(category) }}</div>
+                <div class="achievement-progress">{{ getCategoryProgress(category.achievements) }}</div>
             </div>
         </div>
     </div>
-    <div class="d-block mt-1 d-flex flex-column">
-        <div class="achievement-progress-bar bg-secondary rounded p-1 position-relative">
-            <div class="achievement-progress-bar-inner bg-success rounded py-3" [ngStyle]="{width: getProgress()}"></div>
-            <div class="achievement-progress-bar-content text-center d-flex justify-content-center"><span class="align-self-center">{{ getProgress(true) }}</span></div>
+</div>
+<div class="d-flex flex-column w-100">
+    <div class="achievement-progress-bar bg-secondary rounded p-1 position-relative">
+        <div class="achievement-progress-bar-inner bg-success rounded py-3" [ngStyle]="{ width: getProgressPercentageString() }"></div>
+        <div class="achievement-progress-bar-content text-center d-flex justify-content-center">
+            <span class="align-self-center">{{ getProgressString() }}</span>
         </div>
-        <div class="text-center bg-secondary rounded-bottom mx-auto px-2">{{ 'achievements.categories.score' | translate: 'score': achievementScore }}</div>
     </div>
+    <div class="text-center bg-secondary rounded px-2 mt-2">{{ ('achievements.categories.score') | translate: 'score': achievementScore }}</div>
 </div>

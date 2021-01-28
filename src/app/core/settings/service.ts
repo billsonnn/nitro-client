@@ -165,12 +165,12 @@ export class SettingsService
     }
 
     public set isReady(isReady: boolean)
-    { 
+    {
         this._isReady = isReady;
     }
 
     public get isReady(): boolean
-    { 
+    {
         return this._isReady;
     }
 }

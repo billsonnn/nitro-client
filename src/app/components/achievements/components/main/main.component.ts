@@ -1,5 +1,6 @@
 import { Component, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { SettingsService } from '../../../../core/settings/service';
+import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';
 
 @Component({
@@ -10,11 +11,11 @@ export class AchievementsMainComponent implements OnChanges
 {
     @Input()
     public visible: boolean = false;
-    
+
     constructor(
         private _settingsService: SettingsService,
         private _achivementsService: AchievementsService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -29,9 +30,14 @@ export class AchievementsMainComponent implements OnChanges
     {
         if(!this._achivementsService.isInitalized) this._achivementsService.loadAchievements();
     }
-    
+
     public hide(): void
     {
         this._settingsService.hideAchievements();
+    }
+
+    public get selectedCategory(): AchievementCategory
+    {
+        return this._achivementsService.selectedCategory;
     }
 }

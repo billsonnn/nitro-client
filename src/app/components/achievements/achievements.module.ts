@@ -25,4 +25,4 @@ import { AchievementsService } from './services/achievements.service';
     ]
 })
 export class AchievementsModule
-{} 
+{}

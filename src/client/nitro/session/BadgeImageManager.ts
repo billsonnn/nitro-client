@@ -59,22 +59,7 @@ export class BadgeImageManager
 
         if(this._requestedBadges.get(badgeName)) return null;
 
-        let url = null;
-
-        switch(_arg_2)
-        {
-            case BadgeImageManager.NORMAL_BADGE:
-                url = (Nitro.instance.getConfiguration<string>('badge.asset.url')).replace('%badgename%', k);
-                break;
-            case BadgeImageManager.GROUP_BADGE:
-                if(!this._requestedGroupBadges.get(badgeName))
-                {
-                    url = (Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', k);
-
-                    this._requestedGroupBadges.set(badgeName, true);
-                }
-                break;
-        }
+        const url = this.getBadgeUrl(badgeName, type);
 
         if(url)
         {

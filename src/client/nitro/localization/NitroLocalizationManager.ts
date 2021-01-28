@@ -77,7 +77,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
     public getBadgeBaseAndLevel(badgeName: string): string
     {
         const badge = new BadgeBaseAndLevel(badgeName);
-        
+
         badge.level--;
 
         return badge.getBadgeId;
