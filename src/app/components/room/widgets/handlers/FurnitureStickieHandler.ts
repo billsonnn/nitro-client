@@ -14,6 +14,7 @@ import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWid
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetStickieSendUpdateMessage } from '../messages/RoomWidgetStickieSendUpdateMessage';
+import { RoomWidgetStickieDataUpdateEvent } from '../events/RoomWidgetStickieDataUpdateEvent';
 
 export class FurnitureStickieHandler implements IRoomWidgetHandler
 {
@@ -30,7 +31,55 @@ export class FurnitureStickieHandler implements IRoomWidgetHandler
     {
         if(!k) return null;
 
-        debugger;
+        switch(k.type)
+        {
+            case RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE: {
+
+                const event = <RoomWidgetFurniToWidgetMessage>k;
+                if(!event) return null;
+
+                const furni = this._container.roomEngine.getRoomObject(event.roomId, event.objectId, event.category);
+                if(!furni) return null;
+
+                const model = furni.model;
+                if(!model) return null;
+
+                const local7 = <string>model.getValue(RoomObjectVariable.FURNITURE_ITEMDATA);
+                if(local7.length < 6) return null;
+
+                let local8 = null;
+                let local9 = '';
+                if(local7.indexOf(' ' ) > 0)
+                {
+                    local8 = local7.slice(0, local7.indexOf(' '));
+                    local9 = local7.slice((local7.indexOf(' ' + 1)), local7.length);
+                }
+                else
+                {
+                    local8 = local7;
+                }
+                // TODO: is this level? god mode?
+
+                const local10 = this._container.roomSession.isRoomOwner || this._container.sessionDataManager.securityLevel == 5;
+                this._container.events.dispatchEvent(new RoomWidgetStickieDataUpdateEvent(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, event.objectId, furni.type, local9, local8, local10));
+
+            }
+                break;
+            case RoomWidgetStickieSendUpdateMessage.SEND_UPDATE: {
+                const event = <RoomWidgetStickieSendUpdateMessage>k;
+                if(!event) return null;
+
+                this._container.roomEngine.modifyRoomObjectData(event.objectId, RoomObjectCategory.WALL, event.colorHex, event.text);
+            }
+                break;
+            case RoomWidgetStickieSendUpdateMessage.SEND_DELETE: {
+                const event = <RoomWidgetStickieSendUpdateMessage>k;
+                if(!event) return null;
+
+                this._container.roomEngine.deleteRoomObject(event.objectId, RoomObjectCategory.WALL);
+            }
+                break;
+        }
 
         return null;
     }

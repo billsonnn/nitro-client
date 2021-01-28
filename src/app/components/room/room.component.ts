@@ -371,7 +371,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 widgetHandler = new UserChooserWidgetHandler();
                 break;
             case RoomWidgetEnum.FURNI_STICKIE_WIDGET:
-                debugger;
                 widgetHandler = new FurnitureStickieHandler();
             // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
             //     widgetHandler = new FurnitureTrophyWidgetHandler();
@@ -590,8 +589,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 }
                 break;
             case RoomEngineTriggerWidgetEvent.REQUEST_STICKIE:
-                debugger;
-                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, objectId, category, event.roomId));
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE, objectId, category, event.roomId));
                 break;
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:

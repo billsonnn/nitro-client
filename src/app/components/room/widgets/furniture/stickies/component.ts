@@ -27,13 +27,15 @@ export class StickieFurniComponent extends ConversionTrackingWidget
         private _ngZone: NgZone)
     {
         super();
+
+        this.stickieUpdateHandler = this.stickieUpdateHandler.bind(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.addEventListener(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, this.stickieUpdateHandler.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, this.stickieUpdateHandler);
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -50,7 +52,6 @@ export class StickieFurniComponent extends ConversionTrackingWidget
 
     private stickieUpdateHandler(event: RoomWidgetUpdateEvent): void
     {
-        debugger;
         if(!event) return;
 
         const stickieEvent = <RoomWidgetStickieDataUpdateEvent>event;
@@ -63,6 +64,7 @@ export class StickieFurniComponent extends ConversionTrackingWidget
         this._text = stickieEvent.text;
         this._Str_3062 = stickieEvent._Str_10471;
         this._Str_2278 = stickieEvent.controller;
+        debugger;
         //this._Str_3030();
     }
 
