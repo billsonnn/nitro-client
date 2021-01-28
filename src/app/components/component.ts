@@ -11,6 +11,7 @@ import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/Roo
 import { RoomZoomEvent } from '../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSessionChatEvent';
 import { RoomSessionDanceEvent } from '../../client/nitro/session/events/RoomSessionDanceEvent';
+import { RoomSessionDoorbellEvent } from '../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../client/nitro/session/events/RoomSessionEvent';
 import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
@@ -26,6 +27,7 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { FurnitureWidgetTrophyComponent } from './room/widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
+import { DoorbellWidgetComponent } from './room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
 
 @Component({
@@ -129,6 +131,9 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
             }
         });
     }
@@ -172,6 +177,9 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionChatEvent.CHAT_EVENT, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDanceEvent.RSDE_DANCE, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionUserBadgesEvent.RSUBE_BADGES, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
             }
         });
     }
@@ -203,8 +211,8 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_LINK, null);
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.DOORBELL, DoorbellWidgetComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, FurnitureWidgetTrophyComponent);
-
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {

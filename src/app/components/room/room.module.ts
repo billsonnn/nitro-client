@@ -19,6 +19,7 @@ import { RoomInfoStandMainComponent } from './widgets/infostand/components/main/
 import { RoomInfoStandPetComponent } from './widgets/infostand/components/pet/pet.component';
 import { RoomInfoStandRentableBotComponent } from './widgets/infostand/components/rentablebot/rentablebot.component';
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
+import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 
@@ -47,7 +48,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         FurnitureWidgetTrophyComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
-        ChooserWidgetUserComponent
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent
     ],
     declarations: [
         RoomComponent,
@@ -70,7 +72,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         FurnitureWidgetTrophyComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
-        ChooserWidgetUserComponent
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent
     ]
 })
 export class RoomModule
