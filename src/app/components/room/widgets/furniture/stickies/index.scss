@@ -1,10 +1,50 @@
 .nitro-stickie-component {
     position: absolute;
-    width: 275px;
-    max-width: 275px;
+    width: 250px;
+    max-width: 250px;
+    height:250px;
+    max-height: 250px;
     color: black;
+    border:1px solid #000;
+    transition: background 0.3s ease 0s;
+    
+    .drag-handler {
+        background:rgba($black,.3);
+        font-size: 14px;
+    }
+
+    .sticky-trash {
+        border:0;
+        background:transparent;
+        color:$primary;
+    }
+
+    .sticky-button {
+        border:0;
+    }
+
+    .sticky-text {
+        border:0;
+        background-color: transparent;
+        width: 100%;
+        resize: none;
+        font-size: 12px;
+        overflow: hidden;
+        font-weight: lighter;
+        outline:0;
+
+        &:focus {
+            font-style: italic;
+            font-weight: 900;
+        }
+    }
+    * {
+        &:focus {
+            outline: 0;
+        }
+    }
 
     button.close {
-        color: black;
+        color: $black;
     }
 }
