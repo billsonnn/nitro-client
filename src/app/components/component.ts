@@ -26,6 +26,7 @@ import { CustomStackHeightComponent } from './room/widgets/furniture/customstack
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
+import {StickieFurniComponent} from "./room/widgets/furniture/stickies/component";
 
 @Component({
     selector: 'nitro-main-component',
@@ -116,6 +117,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -158,6 +160,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_INTERNAL_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_ROOM_LINK, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -200,6 +203,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_LINK, null);
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FURNI_STICKIE_WIDGET, StickieFurniComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
