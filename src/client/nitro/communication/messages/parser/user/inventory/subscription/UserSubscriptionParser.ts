@@ -3,6 +3,8 @@ import { IMessageParser } from '../../../../../../../core/communication/messages
 
 export class UserSubscriptionParser implements IMessageParser
 {
+    public static _Str_14729: number = 3;
+
     private _name: string;
     private _days: number;
     private _int1: number;
@@ -14,8 +16,6 @@ export class UserSubscriptionParser implements IMessageParser
     private _int3: number;
     private _totalSeconds: number;
 
-    public static readonly _Str_14729: number = 3;
-
     public flush(): boolean
     {
         this._name          = null;
@@ -25,28 +25,17 @@ export class UserSubscriptionParser implements IMessageParser
         this._years         = 0;
         this._bool1         = false;
         this._isVip         = false;
-        this._pastClubDays          = 0;
+        this._pastClubDays  = 0;
         this._int3          = 0;
         this._totalSeconds  = 0;
 
         return true;
     }
 
-    // see class _Str_4007
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        /*
-            this._Str_19265 = k.readInteger();
-            this._Str_19345 = k.readInteger();
-            this._Str_19583 = k.readInteger();
-            this._Str_22116 = k.readInteger();
-            this._Str_19758 = k.readBoolean();
-            this._Str_6923 = k.readBoolean();
-            this._Str_11060 = k.readInteger();
-            this._Str_11826 = k.readInteger();
-            this._Str_6262 = k.readInteger();
-         */
+
         this._name          = wrapper.readString();
         this._days          = wrapper.readInt();
         this._int1          = wrapper.readInt();
@@ -57,6 +46,7 @@ export class UserSubscriptionParser implements IMessageParser
         this._pastClubDays  = wrapper.readInt();
         this._int3          = wrapper.readInt();
         this._totalSeconds  = wrapper.readInt();
+
         return true;
     }
 
