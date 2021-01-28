@@ -9,9 +9,12 @@ import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
 
-export class CatalogLayoutFactory {
-    public getLayoutForType(type: string): typeof CatalogLayout {
-        switch (type) {
+export class CatalogLayoutFactory
+{
+    public getLayoutForType(type: string): typeof CatalogLayout
+    {
+        switch(type)
+        {
             case CatalogLayoutFrontPageFeaturedComponent.CODE:
                 return CatalogLayoutFrontPageFeaturedComponent;
             case CatalogLayoutFrontPage4Component.CODE:
