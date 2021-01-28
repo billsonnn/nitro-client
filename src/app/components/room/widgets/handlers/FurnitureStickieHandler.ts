@@ -52,12 +52,13 @@ export class FurnitureStickieHandler implements IRoomWidgetHandler
                 if(local7.indexOf(' ' ) > 0)
                 {
                     local8 = local7.slice(0, local7.indexOf(' '));
-                    local9 = local7.slice((local7.indexOf(' ' + 1)), local7.length);
+                    local9 = local7.slice((local7.indexOf(' ') + 1), local7.length);
                 }
                 else
                 {
                     local8 = local7;
                 }
+
                 // TODO: is this level? god mode?
 
                 const local10 = this._container.roomSession.isRoomOwner || this._container.sessionDataManager.securityLevel == 5;
@@ -87,7 +88,7 @@ export class FurnitureStickieHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
-        debugger;
+        return;
     }
 
     public update(): void

@@ -15,13 +15,13 @@ export class StickieFurniComponent extends ConversionTrackingWidget
 {
     private _visible: boolean       = false;
 
-    protected  _Str_2319:number = -1;
-    protected  _Str_3796:string;
-    protected  _text:string;
-    protected  _Str_3062:string;
+    protected  _objectId:number = -1;
+    public  _text:string;
+    public _colorHex:string;
     protected  _Str_2278:boolean;
-    private  _Str_14561:object; //BitmapData;
-    protected  _Str_18958:string = 'stickieui_container';
+
+    public readonly availableColors: string[] = ['9CCEFF','FF9CFF', '9CFF9C','FFFF33'];
+
 
     constructor(
         private _ngZone: NgZone)
@@ -49,6 +49,16 @@ export class StickieFurniComponent extends ConversionTrackingWidget
         super.unregisterUpdateEvents(eventDispatcher);
     }
 
+    public getHex(): string
+    {
+        return '#' + this._colorHex;
+    }
+
+    public getHexFromHtml(hex): string
+    {
+        return '#' + hex;
+    }
+
 
     private stickieUpdateHandler(event: RoomWidgetUpdateEvent): void
     {
@@ -59,31 +69,69 @@ export class StickieFurniComponent extends ConversionTrackingWidget
 
 
         this._Str_2718(false);
-        this._Str_2319 = stickieEvent._Str_1577;
-        this._Str_3796 = stickieEvent.type;
+        this._objectId = stickieEvent._Str_1577;
         this._text = stickieEvent.text;
-        this._Str_3062 = stickieEvent._Str_10471;
+        this._colorHex = stickieEvent._Str_10471;
         this._Str_2278 = stickieEvent.controller;
-        debugger;
-        //this._Str_3030();
+
+        this._ngZone.run(() =>
+        {
+            this._visible = true;
+        });
     }
 
     private  _Str_2718(k: boolean = true): void
     {
         if(k) this.sendUpdate();
 
-        this._Str_2319 = -1;
+        this._objectId = -1;
         this._text = null;
         this._Str_2278 = false;
     }
 
-
     private sendUpdate(): void
     {
-        if(this._Str_2319 == -1) return;
+        if(this._objectId == -1) return;
 
-        this.messageListener.processWidgetMessage(new RoomWidgetStickieSendUpdateMessage(RoomWidgetStickieSendUpdateMessage.SEND_UPDATE, this._Str_2319, this._text, this._Str_3062));
+        this.messageListener.processWidgetMessage(new RoomWidgetStickieSendUpdateMessage(RoomWidgetStickieSendUpdateMessage.SEND_UPDATE, this._objectId, this._text, this._colorHex));
     }
+
+    private sendDelete(): void
+    {
+        if(this._objectId == -1) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetStickieSendUpdateMessage(RoomWidgetStickieSendUpdateMessage.SEND_DELETE, this._objectId));
+    }
+
+    public handleButton(button: string): void
+    {
+        if(this.availableColors.includes(button))
+        {
+            this._colorHex = button;
+            this.sendSetColor();
+            return;
+        }
+
+        if(button == 'close')
+        {
+            this._visible = false;
+            this._Str_2718(true);
+            return;
+        }
+
+        if(button == 'delete')
+        {
+            this.sendDelete();
+            this.visible = false;
+            this._Str_2718(false);
+        }
+    }
+
+    private sendSetColor(): void
+    {
+        this.messageListener.processWidgetMessage(new RoomWidgetStickieSendUpdateMessage(RoomWidgetStickieSendUpdateMessage.SEND_UPDATE, this._objectId, this._text, this._colorHex));
+    }
+
     public get handler(): FurnitureStickieHandler
     {
         return (this.widgetHandler as FurnitureStickieHandler);
@@ -93,6 +141,7 @@ export class StickieFurniComponent extends ConversionTrackingWidget
     {
         return this._visible;
     }
+
 
     public set visible(flag: boolean)
     {
