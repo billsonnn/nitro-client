@@ -204,6 +204,7 @@ import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/Modi
 import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
 import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
+import { RoomAdsUpdateComposer } from './messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -249,9 +250,6 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/CatalogRedeemVoucherComposer';
-import {RoomWidgetFurniActionMessage} from "../../../app/components/room/widgets/messages/RoomWidgetFurniActionMessage";
-import {RoomAdsUpdateComposer} from "./messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer";
 
 export class NitroMessages implements IMessageConfiguration
 {
