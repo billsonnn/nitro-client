@@ -209,4 +209,5 @@ export class IncomingHeader
     public static FURNITURE_STATE_2                = 3431;
     public static REMOVE_BOT_FROM_INVENTORY        = 233;
     public static ADD_BOT_TO_INVENTORY             = 1352;
+    public static ACHIEVEMENT_PROGRESSED           = 2107
 }

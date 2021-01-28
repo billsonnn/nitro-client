@@ -71,7 +71,7 @@ export class CategoryBaseModel implements IAvatarEditorCategoryModel
         if(!existing) return;
 
         this._categories.add(name, existing);
-        
+
         this.updateSelectionsFromFigure(name);
     }
 

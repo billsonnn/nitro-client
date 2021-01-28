@@ -1,4 +1,4 @@
-﻿export class AvatarGuideStatus 
+﻿export class AvatarGuideStatus
 {
     public static NONE: number      = 0;
     public static GUIDE: number     = 1;

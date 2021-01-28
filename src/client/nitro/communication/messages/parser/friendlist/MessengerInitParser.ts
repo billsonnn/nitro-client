@@ -17,7 +17,7 @@ export class MessengerInitParser implements IMessageParser
         this._categories            = [];
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -32,7 +32,7 @@ export class MessengerInitParser implements IMessageParser
         {
             this._categories.push(new FriendCategoryData(wrapper));
         }
-        
+
         return true;
     }
 

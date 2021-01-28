@@ -2,7 +2,7 @@
 import { Vector3D } from '../../../../avatar/geometry/Vector3D';
 import { FurnitureParticleSystemParticle } from './FurnitureParticleSystemParticle';
 
-export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParticle 
+export class FurnitureParticleSystemEmitter extends FurnitureParticleSystemParticle
 {
     public static CONE: string = 'cone';
     public static PLANE: string = 'plane';

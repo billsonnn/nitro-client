@@ -1,8 +1,8 @@
-﻿export class Randomizer 
+﻿export class Randomizer
 {
     public static _Str_21045: number    = 1;
     public static _Str_20078: number    = 16777216;
-    
+
     private static _Str_3699:Randomizer = null;
 
     private _Str_16737: number = 1;

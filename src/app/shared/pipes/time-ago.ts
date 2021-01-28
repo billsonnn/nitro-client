@@ -7,8 +7,10 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy
     private _time: number = 0;
     private _timer: ReturnType<typeof setInterval> = null;
 
-    constructor(private changeDetector: ChangeDetectorRef) 
-    {}
+    constructor(private changeDetector: ChangeDetectorRef)
+    {
+        this.updateTime = this.updateTime.bind(this);
+    }
 
     public ngOnDestroy(): void
     {
@@ -21,8 +23,6 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy
 
         this.setupInterval();
 
-        console.log(Date.now(), this._time);
-        
         return FriendlyTime.format((Date.now() - this._time));
     }
 
@@ -40,7 +40,7 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy
     {
         if(this._timer) return;
 
-        this._timer = setInterval(this.updateTime.bind(this), 30000);
+        this._timer = setInterval(this.updateTime, 30000);
     }
 
     private updateTime(): void

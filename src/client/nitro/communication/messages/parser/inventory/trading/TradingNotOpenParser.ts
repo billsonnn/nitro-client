@@ -11,7 +11,7 @@ export class TradingNotOpenParser implements IMessageParser
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
-        
+
         return true;
     }
 }

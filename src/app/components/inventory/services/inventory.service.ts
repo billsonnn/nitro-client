@@ -42,6 +42,8 @@ export class InventoryService implements OnDestroy
         this._unseenTracker     = new UnseenItemTracker(Nitro.instance.communication, this);
         this._unseenCounts      = new Map();
 
+        this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
+
         this.registerMessages();
     }
 
@@ -61,8 +63,8 @@ export class InventoryService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             this._messages = [
                 new FigureSetIdsMessageEvent(this.onFigureSetIdsMessageEvent.bind(this))
@@ -76,8 +78,8 @@ export class InventoryService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
@@ -124,11 +126,11 @@ export class InventoryService implements OnDestroy
             let count = 0;
 
             const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
-    
+
             count += furniCount;
-    
+
             this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
-    
+
             this._unseenCount = count;
         }
 

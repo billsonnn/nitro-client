@@ -314,6 +314,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
     {
+        console.log('????');
         this._purchaseOfferPage     = page;
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;

@@ -33,5 +33,5 @@ import { InventoryTradingService } from './services/trading.service';
         InventoryTradingComponent
     ]
 })
-export class InventoryModule 
+export class InventoryModule
 {}

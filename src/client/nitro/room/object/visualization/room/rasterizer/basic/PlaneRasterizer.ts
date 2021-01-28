@@ -383,7 +383,7 @@ export class PlaneRasterizer implements IPlaneRasterizer
                 repeatMode = PlaneMaterialCellColumn._Str_7916;
                 break;
         }
-        
+
         _arg_2._Str_22372(_arg_3, width, cells, repeatMode);
     }
 

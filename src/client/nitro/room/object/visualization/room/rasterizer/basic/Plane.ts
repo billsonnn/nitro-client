@@ -2,7 +2,7 @@
 import { PlaneVisualization } from './PlaneVisualization';
 import { PlaneVisualizationLayer } from './PlaneVisualizationLayer';
 
-export class Plane 
+export class Plane
 {
     private _planeVisualizations: Map<string, PlaneVisualization>;
     private _sizes: number[];

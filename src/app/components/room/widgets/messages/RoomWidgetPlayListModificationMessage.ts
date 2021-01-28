@@ -11,7 +11,7 @@ export class RoomWidgetPlayListModificationMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number=-1, _arg_3: number=-1)
     {
         super(k);
-        
+
         this._slotNumber = _arg_2;
         this._diskId = _arg_3;
     }

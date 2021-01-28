@@ -3,7 +3,7 @@ import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { Vector3d } from '../../../../../../../room/utils/Vector3d';
 import { Plane } from '../basic/Plane';
 
-export class LandscapePlane extends Plane 
+export class LandscapePlane extends Plane
 {
     public static _Str_2531: number = 0xFFFFFF;
     public static _Str_5433: number = 45;
@@ -43,7 +43,7 @@ export class LandscapePlane extends Plane
         const _local_13 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 0));
         const _local_14 = visualization.geometry.getScreenPoint(new Vector3d(0, 0, 1));
         const _local_15 = visualization.geometry.getScreenPoint(new Vector3d(0, 1, 0));
-        
+
         if(_local_13 && _local_14 && _local_15)
         {
             _arg_2 = Math.round(Math.abs((((_local_13.x - _local_15.x) * _arg_2) / visualization.geometry.scale)));

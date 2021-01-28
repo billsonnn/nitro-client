@@ -41,7 +41,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
 
     @ViewChild('activeView')
     public activeView: ElementRef<HTMLDivElement>;
-    
+
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
 
@@ -52,7 +52,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
         view.avatarData = avatarData;
 
         if(view.widget.isDancing && view.widget.hasClub) view.mode = RoomAvatarInfoOwnAvatarComponent.MODE_CLUB_DANCES;
-        
+
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
         view.setupButtons();

@@ -13,5 +13,5 @@ import { HotelViewComponent } from './component';
         HotelViewComponent
     ]
 })
-export class HotelViewModule 
-{} 
+export class HotelViewModule
+{}

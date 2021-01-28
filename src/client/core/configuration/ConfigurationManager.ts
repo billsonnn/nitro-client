@@ -12,6 +12,8 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         super();
 
         this._definitions = new AdvancedMap();
+
+        this.onConfigurationLoaded = this.onConfigurationLoaded.bind(this);
     }
 
     protected onInit(): void
@@ -28,15 +30,15 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
             return;
         }
-        
+
         const request = new XMLHttpRequest();
 
         try
         {
             request.open('GET', url);
 
-            request.onloadend   = this.onConfigurationLoaded.bind(this);
-            request.onerror     = this.onConfigurationFailed.bind(this);
+            request.onloadend   = this.onConfigurationLoaded;
+            request.onerror     = this.onConfigurationFailed;
 
             request.send();
         }
@@ -134,7 +136,12 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
     {
         let existing = this._definitions.getValue(key);
 
-        if(existing === undefined) existing = value;
+        if(existing === undefined)
+        {
+            this.logger.warn(`Missing configuration key: ${ key }`);
+
+            existing = value;
+        }
 
         return (existing as T);
     }

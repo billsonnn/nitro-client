@@ -22,14 +22,14 @@ export class TextureUtils
     public static generateImage(target: DisplayObject | RenderTexture): HTMLImageElement
     {
         if(!target) return null;
-        
+
         return TextureUtils.getRenderer().extract.image(target);
     }
 
     public static generateImageUrl(target: DisplayObject | RenderTexture): string
     {
         if(!target) return null;
-        
+
         return TextureUtils.getRenderer().extract.base64(target);
     }
 

@@ -102,6 +102,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._isLoaded          = false;
         this._isLoading         = false;
 
+        this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
+
         this.registerMessages();
 
         Nitro.instance.addLinkEventTracker(this);
@@ -118,7 +120,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
 
             this._messages = [
                 new UserInfoEvent(this.onUserInfoEvent.bind(this)),
@@ -150,7 +152,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
 
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
@@ -545,7 +547,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public clearSearch(): void
     {
         this.setCurrentFilter(NavigatorService.SEARCH_FILTERS[0]);
-        
+
         this._lastSearch = null;
 
         (this.isLoaded && this.search());

@@ -6,7 +6,7 @@ import { RoomMapData } from './RoomMapData';
 import { RoomPlaneData } from './RoomPlaneData';
 import { RoomWallData } from './RoomWallData';
 
-export class RoomPlaneParser 
+export class RoomPlaneParser
 {
     private static FLOOR_THICKNESS: number              = 0.25;
     private static WALL_THICKNESS: number               = 0.25;
@@ -168,7 +168,7 @@ export class RoomPlaneParser
                         while(_local_7 < 4)
                         {
                             if(_local_4[(_local_9 + _local_8)] === undefined) _local_4[(_local_9 + _local_8)] = [];
-                            
+
                             _local_4[(_local_9 + _local_8)][(_local_10 + _local_7)] = ((_local_11 < 0) ? _local_11 : (_local_11 * 4));
                             _local_7++;
                         }
@@ -437,7 +437,7 @@ export class RoomPlaneParser
 
                 x++;
             }
-            
+
             this._tileMatrix.push(tileMatrix);
             this._tileMatrixOriginal.push(tileMatrixOriginal);
             this._floorHoleMatrix.push(floorHoleMatrix);
@@ -451,7 +451,7 @@ export class RoomPlaneParser
         this._maxX      = -1;
         this._minY      = this._height;
         this._maxY      = -1;
-        
+
         return true;
     }
 
@@ -465,7 +465,7 @@ export class RoomPlaneParser
         if(((((k >= 0) && (k < this._width)) && (_arg_2 >= 0)) && (_arg_2 < this._height)))
         {
             _local_4 = this._tileMatrix[_arg_2];
-            
+
             _local_4[k] = _arg_3;
             if(_arg_3 >= 0)
             {
@@ -644,7 +644,7 @@ export class RoomPlaneParser
             this.setTileHeight(k.x, k.y, _local_2);
             this.addFloor(new Vector3d((k.x + 0.5), (k.y + 0.5), _local_2), new Vector3d(-1, 0, 0), new Vector3d(0, -1, 0), false, false, false, false);
         }
-        
+
         return true;
     }
 
@@ -711,7 +711,7 @@ export class RoomPlaneParser
         while(_local_2 < _local_3)
         {
             const _local_4 = _local_2;
-            
+
             _local_5 = _local_2;
             _local_6 = 0;
             _local_7 = false;
@@ -914,7 +914,7 @@ export class RoomPlaneParser
                 while(_local_14 < _local_10)
                 {
                     const _local_27 = this.getTileHeightInternal(((_local_8.x + (_local_14 * _local_11.x)) + _local_12.x), ((_local_8.y + (_local_14 * _local_11.y)) + _local_12.y));
-                    
+
                     if(((_local_27 >= 0) && ((_local_27 < _local_13) || (_local_13 < 0))))
                     {
                         _local_13 = _local_27;
@@ -932,7 +932,7 @@ export class RoomPlaneParser
                 const _local_17 = ((this.wallHeight + Math.min(RoomPlaneParser.MAX_WALL_ADDITIONAL_HEIGHT, this.floorHeight)) - _local_13);
                 const _local_18 = Vector3d.product(_local_11, -(_local_10));
                 const _local_19 = new Vector3d(0, 0, _local_17);
-                
+
                 _local_16 = Vector3d.dif(_local_16, _local_18);
 
                 const _local_20 = this.resolveOriginalWallIndex(_local_8, k._Str_19138(_local_7), _arg_2);
@@ -1285,7 +1285,7 @@ export class RoomPlaneParser
         this.restrictedScale    = data.restrictedScale;
 
         this.initializeFromTileData(fixedWallsHeight);
-        
+
         return true;
     }
 
@@ -1502,7 +1502,7 @@ export class RoomPlaneParser
     public addFloorHole(k: number, _arg_2: number, _arg_3: number, _arg_4: number, _arg_5: number): void
     {
         this.removeFloorHole(k);
-        
+
         this._floorHoles.set(k, new RoomFloorHole(_arg_2, _arg_3, _arg_4, _arg_5));
     }
 

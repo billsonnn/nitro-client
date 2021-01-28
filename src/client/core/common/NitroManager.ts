@@ -29,7 +29,7 @@ export class NitroManager extends Disposable implements INitroManager
     public init(): void
     {
         if(this._isLoaded || this._isLoading || this.isDisposing) return;
-        
+
         this._isLoading     = true;
 
         this.onInit();

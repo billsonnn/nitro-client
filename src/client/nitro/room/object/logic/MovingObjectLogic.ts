@@ -34,7 +34,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
     public dispose(): void
     {
         this._liftAmount = 0;
-        
+
         super.dispose();
     }
 
@@ -52,7 +52,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 if(this._liftAmount !== locationOffset.z)
                 {
                     this._liftAmount = locationOffset.z;
-    
+
                     model.setValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT, this._liftAmount);
                 }
             }
@@ -61,7 +61,7 @@ export class MovingObjectLogic extends RoomObjectLogicBase
                 if(this._liftAmount !== 0)
                 {
                     this._liftAmount = 0;
-    
+
                     model.setValue(RoomObjectVariable.FURNITURE_LIFT_AMOUNT, this._liftAmount);
                 }
             }

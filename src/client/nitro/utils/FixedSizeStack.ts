@@ -1,4 +1,4 @@
-﻿export class FixedSizeStack 
+﻿export class FixedSizeStack
 {
     private _data: number[];
     private _maxSize: number;

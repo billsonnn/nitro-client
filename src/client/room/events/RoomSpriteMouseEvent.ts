@@ -1,4 +1,4 @@
-export class RoomSpriteMouseEvent 
+export class RoomSpriteMouseEvent
 {
     private _type: string;
     private _eventId: string;

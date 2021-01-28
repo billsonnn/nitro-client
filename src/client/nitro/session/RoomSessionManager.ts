@@ -30,7 +30,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     constructor(communication: INitroCommunicationManager, roomEngine: IRoomEngine)
     {
         super();
-        
+
         this._communication     = communication;
         this._roomEngine        = roomEngine;
 
@@ -40,6 +40,8 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this._sessionStarting   = false;
         this._viewerSession     = null;
+
+        this.onRoomEngineEvent = this.onRoomEngineEvent.bind(this);
     }
 
     protected onInit(): void
@@ -48,12 +50,12 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
 
         this.processPendingSession();
 
-        this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
+        this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent);
     }
 
     protected onDispose(): void
     {
-        this._roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent.bind(this));
+        this._roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineEvent);
 
         super.onDispose();
     }
@@ -77,7 +79,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
     private setHandlers(session: IRoomSession): void
     {
         if(!this._handlers || !this._handlers.length) return;
-        
+
         for(const handler of this._handlers)
         {
             if(!handler) continue;
@@ -105,7 +107,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         const existing = this._sessions.get(this.getRoomId(id));
 
         if(!existing) return null;
-        
+
         return existing;
     }
 
@@ -204,7 +206,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
         const existing = this.getSession(fromRoomId);
 
         if(!existing) return;
-        
+
         this._sessions.delete(this.getRoomId(fromRoomId));
 
         existing.reset(toRoomId);

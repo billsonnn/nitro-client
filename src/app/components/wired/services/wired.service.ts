@@ -30,6 +30,8 @@ export class WiredService implements OnDestroy
         this._component     = null;
         this._roomSession   = null;
 
+        this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
+
         this.registerMessages();
     }
 
@@ -42,9 +44,9 @@ export class WiredService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             this._messages = [
                 new WiredFurniActionEvent(this.onWiredFurniActionEvent.bind(this)),
@@ -65,9 +67,9 @@ export class WiredService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent.bind(this));
-            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent.bind(this));
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.CREATED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
+            Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 

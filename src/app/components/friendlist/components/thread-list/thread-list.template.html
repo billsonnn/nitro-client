@@ -1,2 +1,1 @@
-<h6 class="mt-2 mb-1"><span class="badge text-uppercase">{{ ('toolbar.icon.label.messenger') | translate }}</span></h6>
-<button *ngFor="let thread of threads" type="button" class="btn btn-primary w-100 mb-1" [ngClass]="{ 'active': (currentThread === thread) }" (click)="selectThread(thread)">{{ thread.participant.name }}</button>
+<button *ngFor="let thread of threads" type="button" class="btn btn-secondary w-100 mb-1" [ngClass]="{ 'active': (currentThread === thread) }" (click)="selectThread(thread)">{{ thread.participant.name }}</button>

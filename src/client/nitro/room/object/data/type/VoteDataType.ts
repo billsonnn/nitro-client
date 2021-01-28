@@ -53,7 +53,7 @@ export class VoteDataType extends ObjectDataBase
     {
         return true;
     }
-    
+
     public setString(state: string): void
     {
         this._state = state;

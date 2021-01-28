@@ -1,7 +1,7 @@
 ﻿import { RoomObjectEvent } from '../../../room/events/RoomObjectEvent';
 import { IRoomObject } from '../../../room/object/IRoomObject';
 
-export class RoomObjectBadgeAssetEvent extends RoomObjectEvent 
+export class RoomObjectBadgeAssetEvent extends RoomObjectEvent
 {
     public static LOAD_BADGE: string = 'ROBAE_LOAD_BADGE';
 

@@ -1,7 +1,7 @@
 ﻿import { Triggerable } from '../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredFurniture } from './WiredFurniture';
 
-export interface IUserDefinedRoomEventsCtrl 
+export interface IUserDefinedRoomEventsCtrl
 {
     _Str_15652(_arg_1: number): typeof WiredFurniture;
     _Str_1196(): string;

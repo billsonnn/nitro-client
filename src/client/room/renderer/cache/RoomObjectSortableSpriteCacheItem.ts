@@ -1,6 +1,6 @@
 ﻿import { SortableSprite } from '../utils/SortableSprite';
 
-export class RoomObjectSortableSpriteCacheItem 
+export class RoomObjectSortableSpriteCacheItem
 {
     private _sprites: SortableSprite[];
     private _updateId1: number;
@@ -48,10 +48,10 @@ export class RoomObjectSortableSpriteCacheItem
     public _Str_17574(k: number, _arg_2: number): boolean
     {
         if((k === this._updateId1) && (_arg_2 === this._updateId2)) return false;
-        
+
         this._updateId1 = k;
         this._updateId2 = _arg_2;
-        
+
         return true;
     }
 

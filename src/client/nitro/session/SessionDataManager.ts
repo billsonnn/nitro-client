@@ -60,7 +60,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     constructor(communication: INitroCommunicationManager)
     {
         super();
-        
+
         this._communication                 = communication;
 
         this.resetUserInfo();
@@ -84,6 +84,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._pendingFurnitureListeners     = [];
 
         this._badgeImageManager             = null;
+
+        this.onFurnitureDataReadyEvent = this.onFurnitureDataReadyEvent.bind(this);
     }
 
     protected onInit(): void
@@ -124,7 +126,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureData = new FurnitureDataParser(this._floorItems, this._wallItems, Nitro.instance.localization);
 
-        this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.addEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent);
 
         this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>('furnidata.url'));
     }
@@ -296,7 +298,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     private onFurnitureDataReadyEvent(event: Event): void
     {
-        this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent.bind(this));
+        this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent);
 
         this._furnitureReady = true;
 
@@ -362,6 +364,16 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
+    public getBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name);
+    }
+
+    public getGroupBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name, BadgeImageManager.GROUP_BADGE);
+    }
+
     public getBadgeImage(name: string): Texture
     {
         return this._badgeImageManager.getBadgeImage(name);
@@ -374,12 +386,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     public loadBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name);
+        return this._badgeImageManager.loadBadgeImage(name);
     }
 
     public loadGroupBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name, BadgeImageManager.GROUP_BADGE);
+        return this._badgeImageManager.loadBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }
 
     public isUserIgnored(userName: string): boolean
@@ -406,7 +418,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if((petId < 0) || (this._respectsPetLeft <= 0)) return;
 
         this.send(new PetRespectComposer(petId));
-        
+
         this._respectsPetLeft--;
     }
 

@@ -1,4 +1,4 @@
-﻿export class WiredTriggerType 
+﻿export class WiredTriggerType
 {
     public static AVATAR_SAYS_SOMETHING: number     = 0;
     public static AVATAR_WALKS_ON_FURNI: number     = 1;

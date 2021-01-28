@@ -11,7 +11,7 @@ export class RoomWidgetGetObjectLocationMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number, _arg_3: number)
     {
         super(k);
-        
+
         this._objectId = _arg_2;
         this._objectType = _arg_3;
     }

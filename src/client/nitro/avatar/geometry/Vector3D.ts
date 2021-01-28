@@ -1,4 +1,4 @@
-﻿export class Vector3D 
+﻿export class Vector3D
 {
     private _x: number;
     private _y: number;

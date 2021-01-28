@@ -27,7 +27,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private _settingsService: SettingsService,
         private _navigatorService: NavigatorService,
-        private _modalService: NgbModal) 
+        private _modalService: NgbModal)
     {}
 
     public ngOnInit(): void
@@ -81,7 +81,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     public openRoomCreator(): void
     {
         if(this._roomCreatorModal) return;
-        
+
         this._roomCreatorModal = this._modalService.open(NavigatorCreatorComponent, {
             backdrop: 'static',
             size: 'lg',
@@ -204,7 +204,7 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public get sliderVisible(): boolean
-    { 
-        return (Nitro.instance.core.configuration.getValue("navigator.slider.enabled"))
+    {
+        return Nitro.instance.core.configuration.getValue<boolean>('navigator.slider.enabled');
     }
 }
