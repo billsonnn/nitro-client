@@ -3,25 +3,27 @@ import { CatalogLocalizationData } from '../../../../../client/nitro/communicati
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-  selector: 'redeem-voucher-component',
-  templateUrl: './redeem-voucher.component.html'
+    selector: 'redeem-voucher-component',
+    templateUrl: './redeem-voucher.component.html'
 })
-export class CatalogRedeemVoucherComponent implements OnInit {
+export class CatalogRedeemVoucherComponent implements OnInit
+{
+    @Input()
+    public localization: CatalogLocalizationData = null;
 
-  @Input()
-  public localization: CatalogLocalizationData = null;
+    public voucherCode: string = '';
 
-  public voucherCode: string = "";
+    constructor(private _catalogService: CatalogService)
+    {}
 
-  constructor(private _catalogService: CatalogService)
-  {}
+    public ngOnInit(): void
+    {
+    }
 
-  ngOnInit(): void {
-  }
+    public redeem(): void
+    {
+        this._catalogService.redeemVoucher(this.voucherCode);
 
-  public redeem(): void
-  {
-    this._catalogService.redeemVoucher(this.voucherCode);
-    this.voucherCode = "";
-  }
+        this.voucherCode = '';
+    }
 }

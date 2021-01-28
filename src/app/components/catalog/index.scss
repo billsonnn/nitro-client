@@ -2,8 +2,7 @@
     position: absolute;
     width: 600px;
     max-width: 600px;
-    height: 595px;
-    max-height: 595px;
+    min-height: 595px;
 
     .grid-container {
     
@@ -127,16 +126,11 @@
     }
 
     .front-page-item.tall {
-        height: 450px;
+        height: 100%;
     }
 
     .front-page-item.wide {
-        height: 130px;
-        margin-bottom: 30px;
-    }
-
-    .front-page-item.wide:last-child {
-        margin-bottom: 0px;
+        height: 123px;
     }
 }
 

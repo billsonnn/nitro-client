@@ -14,6 +14,7 @@ import { CatalogNavigationItemComponent } from './components/navigation-item/nav
 import { CatalogNavigationSetComponent } from './components/navigation-set/navigation-set.component';
 import { CatalogNavigationComponent } from './components/navigation/navigation.component';
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
+import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
 
 @NgModule({
@@ -29,12 +30,13 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutPets2Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
+        CatalogLayoutVipBuyComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogLayoutVipBuyComponent
+        CatalogRedeemVoucherComponent
     ],
     providers: [
         CatalogService
@@ -48,12 +50,13 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutPets2Component,
         CatalogLayoutSpacesNewComponent,
         CatalogLayoutUnsupportedComponent,
+        CatalogLayoutVipBuyComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogLayoutVipBuyComponent
+        CatalogRedeemVoucherComponent,
     ]
 })
 export class CatalogModule

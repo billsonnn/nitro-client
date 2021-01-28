@@ -151,6 +151,7 @@ import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComp
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
 import { DesktopViewComposer } from './messages/outgoing/desktop/DesktopViewComposer';
