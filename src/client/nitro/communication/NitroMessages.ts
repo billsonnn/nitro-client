@@ -31,6 +31,7 @@ import { NewFriendRequestEvent } from './messages/incoming/friendlist/NewFriendR
 import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteErrorEvent';
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
+import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -195,6 +196,7 @@ import { NavigatorSettingsComposer } from './messages/outgoing/navigator/Navigat
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
+import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
@@ -278,7 +280,7 @@ export class NitroMessages implements IMessageConfiguration
     {
         // AVAILABILITY
         this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
-
+        this._events.set(IncomingHeader.GENERIC_ERROR, GenericErrorEvent);
         // AVATAR
         this._events.set(IncomingHeader.USER_CHANGE_NAME, ChangeNameUpdateEvent);
 
@@ -578,6 +580,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // ACCESS
         this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);
+        this._composers.set(OutgoingHeader.ROOM_DOORBELL, RoomDoorbellAccessComposer);
 
         // ACTION
         this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);

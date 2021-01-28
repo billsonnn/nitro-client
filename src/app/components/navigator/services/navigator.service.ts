@@ -1,6 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
+import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
 import { NavigatorCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCategoriesEvent';
 import { NavigatorCollapsedEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorEventCategoriesEvent';
@@ -140,6 +141,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
                 new RoomDoorbellAcceptedEvent(this.onRoomDoorbellAcceptedEvent.bind(this)),
+                new GenericErrorEvent(this.onGenericErrorEvent.bind(this)),
                 new RoomDoorbellRejectedEvent(this.onRoomDoorbellRejectedEvent.bind(this)),
                 new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)),
                 new NavigatorCollapsedEvent(this.onNavigatorCollapsedEvent.bind(this)),
@@ -328,6 +330,21 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
             this._ngZone.run(() => (this._component && this._component.closeRoomDoorbell()));
         }
     }
+
+    private onGenericErrorEvent(event: GenericErrorEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(parser.errorCode === -100002)
+        {
+            this._ngZone.run(() => (this._component && this._component.openRoomPassword(null, true)));
+        }
+    }
+
 
     private onRoomDoorbellRejectedEvent(event: RoomDoorbellRejectedEvent): void
     {
