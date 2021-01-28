@@ -11,6 +11,7 @@ import { RoomObjectWidgetRequestEvent } from '../../client/nitro/room/events/Roo
 import { RoomZoomEvent } from '../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../client/nitro/session/events/RoomSessionChatEvent';
 import { RoomSessionDanceEvent } from '../../client/nitro/session/events/RoomSessionDanceEvent';
+import { RoomSessionDoorbellEvent } from '../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../client/nitro/session/events/RoomSessionEvent';
 import { RoomSessionUserBadgesEvent } from '../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../client/nitro/ui/widget/enums/RoomWidgetEnum';
@@ -25,9 +26,8 @@ import { ChooserWidgetUserComponent } from './room/widgets/choosers/user/user.co
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
+import { DoorbellWidgetComponent } from './room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
-import { DoorbellWidgetComponent } from './room/widgets/navigator/doorbell/component';
-import { RoomSessionDoorbellEvent } from '../../client/nitro/session/events/RoomSessionDoorbellEvent';
 
 @Component({
     selector: 'nitro-main-component',
