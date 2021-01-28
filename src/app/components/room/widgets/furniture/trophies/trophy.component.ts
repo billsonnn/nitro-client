@@ -47,8 +47,6 @@ export class FurnitureWidgetTrophyComponent extends ConversionTrackingWidget
     {
         if(!event) return;
 
-        console.log('???');
-
         this._ngZone.run(() =>
         {
             this._visible   = true;
