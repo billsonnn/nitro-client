@@ -7,7 +7,7 @@
         <perfect-scrollbar class="position-relative w-100" style="min-height:200px;max-height:200px;height:200px;">
             <ng-container *ngFor="let user of users">
                 <div class="btn-group w-100 mb-1">
-                    <button type="button" class="btn btn-primary w-100">{{ user }}</button>
+                    <button type="button" class="btn btn-secondary w-100">{{ user }}</button>
                     <button type="button" class="btn btn-success" (click)="accept(user)"><i class="fas fa-check"></i></button>
                     <button type="button" class="btn btn-danger" (click)="deny(user)"><i class="fas fa-times"></i></button>
                 </div>
