@@ -12,6 +12,8 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { PurseService } from '../../../purse/services/purse.service';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -34,15 +36,18 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _purchaseOfferPage: CatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
+    private _purchaseVipSubscription: CatalogClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
+    private _showInsufficientFunds: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _componentFactoryResolver: ComponentFactoryResolver,
+        private _purseService: PurseService,
         private _ngZone: NgZone)
     {}
 
@@ -109,6 +114,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = null;
         this._purchaseOfferQuantity = 1;
         this._purchaseOfferExtra    = null;
+        this._purchaseVipSubscription = null;
+
     }
 
     private prepareCatalog(): void
@@ -312,13 +319,46 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
     }
 
+    private hasSufficientFunds(offerCredits: number, offerCurrencyType: number, offerCurrencyPoints: number, quantity: number = 1): boolean
+    {
+        if(!this._purseService) return false;
+
+        const purseCurrencies = this._purseService.currencies;
+
+        const currentCredits = purseCurrencies.get(-1);
+        const currentCurrencyAmount = purseCurrencies.get(offerCurrencyType);
+
+        const requiredCredits = offerCredits * quantity;
+        const requiredCurrency = offerCurrencyPoints * quantity;
+
+        if(currentCredits < requiredCredits || currentCurrencyAmount < requiredCurrency) return false;
+
+        return true;
+    }
+
     public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
     {
-        console.log('????');
+        if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
         this._purchaseOfferPage     = page;
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
         this._purchaseOfferExtra    = extra;
+    }
+
+    public confirmVipSubscription(subscription: CatalogClubOfferData): void
+    {
+        if(!this.hasSufficientFunds(subscription.priceCredits, subscription.priceActivityPointsType, subscription.priceActivityPoints, 1))
+        {
+            this.setInsufficientFunds(true);
+            return;
+        }
+
+        this._purchaseVipSubscription = subscription;
     }
 
     public get roomPreviewer(): RoomPreviewer
@@ -374,5 +414,20 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseCompleted(): boolean
     {
         return this._purchaseCompleted;
+    }
+
+    public get purchaseVipSubscription(): CatalogClubOfferData
+    {
+        return this._purchaseVipSubscription;
+    }
+
+    public setInsufficientFunds(show: boolean): void
+    {
+        this._showInsufficientFunds = show;
+    }
+
+    public get showInsufficientFunds(): boolean
+    {
+        return this._showInsufficientFunds;
     }
 }

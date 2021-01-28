@@ -16,6 +16,8 @@ import { CatalogNavigationComponent } from './components/navigation/navigation.c
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip-subscription/confirm-vip-subscription.component';
+import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/confirm-purchase-insufficient-funds/confirm-purchase-insufficient-funds.component';
 
 @NgModule({
     imports: [
@@ -23,6 +25,8 @@ import { CatalogService } from './services/catalog.service';
     ],
     exports: [
         CatalogConfirmPurchaseComponent,
+        CatalogConfirmVipSubscriptionComponent,
+        CatalogConfirmPurchaseInsufficientFundsComponent,
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,
@@ -43,6 +47,8 @@ import { CatalogService } from './services/catalog.service';
     ],
     declarations: [
         CatalogConfirmPurchaseComponent,
+        CatalogConfirmVipSubscriptionComponent,
+        CatalogConfirmPurchaseInsufficientFundsComponent,
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,

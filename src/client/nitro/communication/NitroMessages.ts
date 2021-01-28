@@ -251,6 +251,7 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -502,6 +503,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_PAGE, CatalogPageComposer);
         this._composers.set(OutgoingHeader.CATALOG_PURCHASE, CatalogPurchaseComposer);
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
+        this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
 
         // CLIENT
