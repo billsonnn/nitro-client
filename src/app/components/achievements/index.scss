@@ -86,6 +86,7 @@
     }
 
     .achievement-progress-bar {
+
         .achievement-progress-bar-content {
             position: absolute;
             top:0;
@@ -97,6 +98,7 @@
 
         .achievement-progress-bar-inner {
             transition: width 0.7s;
+            max-width: 100%;
         }
     }
 
