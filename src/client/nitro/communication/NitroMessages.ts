@@ -252,6 +252,7 @@ import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/sub
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
+import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -569,6 +570,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // ACCESS
         this._composers.set(OutgoingHeader.ROOM_ENTER, RoomEnterComposer);
+        this._composers.set(OutgoingHeader.ROOM_DOORBELL, RoomDoorbellAccessComposer);
 
         // ACTION
         this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);

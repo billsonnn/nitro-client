@@ -20,6 +20,7 @@ import { RoomInfoStandRentableBotComponent } from './widgets/infostand/component
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
+import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/component';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
-        ChooserWidgetUserComponent
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent
     ],
     declarations: [
         RoomComponent,
@@ -67,7 +69,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
-        ChooserWidgetUserComponent
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent
     ]
 })
 export class RoomModule
