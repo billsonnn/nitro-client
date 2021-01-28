@@ -1,4 +1,5 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomAdsUpdateComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
 import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
 import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
@@ -30,7 +31,6 @@ import { RoomWidgetChangeMottoMessage } from '../messages/RoomWidgetChangeMottoM
 import { RoomWidgetFurniActionMessage } from '../messages/RoomWidgetFurniActionMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMessage';
-import {RoomAdsUpdateComposer} from "../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer";
 
 export class InfoStandWidgetHandler implements IRoomWidgetHandler
 {

@@ -30,8 +30,6 @@ export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _purchaseCouldBeUsedForBuyout: boolean = false;
     private _rentCouldBeUsedForBuyout: boolean = false;
     private _availableForBuildersClub: boolean = false;
-    // TODO: Fetch GodMode
-    public isGodMode: boolean = true;
 
     constructor(k: string)
     {

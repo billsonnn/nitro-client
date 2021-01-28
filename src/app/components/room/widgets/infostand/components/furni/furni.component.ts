@@ -7,8 +7,6 @@ import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniA
 import { InfoStandFurniData } from '../../data/InfoStandFurniData';
 import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
-import { MapDataType } from '../../../../../../../client/nitro/room/object/data/type/MapDataType';
-import { FurnitureRoomBrandingLogic } from '../../../../../../../client/nitro/room/object/logic/furniture/FurnitureRoomBrandingLogic';
 
 @Component({
     templateUrl: './furni.template.html'
@@ -26,56 +24,56 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
     public canRotate    = false;
     public canUse       = false;
     public updateCount  = 0;
-    public isGodMode: boolean = false;
 
-    public furniSettings: SettingsRow[] = [];
+    public furniSettingsKeys: string[]      = [];
+    public furniSettingsValues: string[]    = [];
 
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
+        this.furniSettingsKeys      = [];
+        this.furniSettingsValues    = [];
+
         let canMove     = false;
         let canRotate   = false;
         let canUse      = false;
+        let godMode     = false;
 
-        if((event.roomControllerLevel >= RoomControllerLevel.GUEST) || event.isOwner || event.isRoomOwner || event.isAnyRoomOwner)
+        const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
+
+        if(isValidController || event.isOwner || event.isRoomOwner || event.isAnyRoomOwner)
         {
             canMove     = true;
             canRotate   = (!event.isWallItem);
-        }
 
-        const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
+            if(event.roomControllerLevel >= RoomControllerLevel.MODERATOR) godMode = true;
+        }
 
         if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
         {
             canUse = true;
         }
 
-        if(event.isGodMode && event.stuffData instanceof MapDataType)
+        if(godMode && event.extraParam)
         {
-            const mappedData = <MapDataType> event.stuffData;
+            const extraParam = event.extraParam.substr(RoomWidgetEnumItemExtradataParameter.BRANDING_OPTIONS.length);
 
-            const localSettings = [];
-            const adSettings =
-            [
-                FurnitureRoomBrandingLogic.IMAGEURL_KEY,
-                FurnitureRoomBrandingLogic.OFFSETX_KEY,
-                FurnitureRoomBrandingLogic.OFFSETY_KEY,
-                FurnitureRoomBrandingLogic.OFFSETZ_KEY
-            ];
-
-            adSettings.forEach(function(item)
+            if(extraParam)
             {
-                const value = mappedData.getValue(item);
+                const parts = extraParam.split('\t');
 
-                if(value)
+                for(const part of parts)
                 {
-                    localSettings.push({ name: item, value });
-                }
-            });
+                    const value = part.split('=');
 
-            this.furniSettings = localSettings;
+                    if(value && (value.length === 2))
+                    {
+                        this.furniSettingsKeys.push(value[0]);
+                        this.furniSettingsValues.push(value[1]);
+                    }
+                }
+            }
         }
 
-        this.isGodMode  = event.isGodMode;
         this.canMove    = canMove;
         this.canRotate  = canRotate;
         this.canUse     = canUse;
@@ -104,14 +102,12 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         if(event.isStickie) this.pickupMode = RoomInfoStandFurniComponent.PICKUP_MODE_NONE;
     }
 
-    // see _Str_2608
     public processButtonAction(action: string): void
     {
         if(!action || (action === '')) return;
 
         let messageType: string = null;
-
-        let objectData = null;
+        let objectData: string  = null;
 
         switch(action)
         {
@@ -136,7 +132,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
                 break;
             case 'save_branding_configuration':
                 messageType = RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA;
-                objectData = this.getConfig();
+                objectData = this.getSettingsAsString();
                 break;
 
         }
@@ -146,28 +142,29 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         this.widget.messageListener.processWidgetMessage(new RoomWidgetFurniActionMessage(messageType, this.furniData.id, this.furniData.category, this.furniData.purchaseOfferId, objectData));
     }
 
-    private getConfig(): string
+    private getSettingsAsString(): string
     {
-        const settings = this.furniSettings;
-        let content = '';
-        for(let index = 0; index < settings.length; index++ )
+        if(!this.furniSettingsKeys.length || !this.furniSettingsValues.length) return '';
+
+        let data = '';
+
+        let i = 0;
+
+        while(i < this.furniSettingsKeys.length)
         {
-            const setting = settings[index];
-            let { name, value } = setting;
-            name = name.replace('\t', '');
-            value = value.replace('\t', '');
-            content = content + name + '=' + value + '\t';
+            const key   = this.furniSettingsKeys[i];
+            const value = this.furniSettingsValues[i];
+
+            data = (data + (key + '=' + value + '\t'));
+
+            i++;
         }
-        return content;
+
+        return data;
     }
 
     public get type(): number
     {
         return InfoStandType.FURNI;
     }
-}
-
-export interface SettingsRow {
-    name: string;
-    value: string;
 }

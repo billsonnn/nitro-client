@@ -12,11 +12,11 @@
                 <p class="badge badge-secondary mb-0">{{ furniData.description }}</p>
                 <p class="badge badge-secondary mt-2 mb-0">{{ ('furni.owner') | translate: 'name': furniData.ownerName }}</p>
             </div>
-            <div>
-                <div *ngFor="let setting of furniSettings;">
-                    <p>{{ setting.name}}</p>
-                    <input type="text"  [(ngModel)]="setting.value">
-                </div>
+            <div class="mt-3" *ngIf="((furniSettingsKeys.length && furniSettingsValues.length) && (furniSettingsKeys.length === furniSettingsValues.length))">
+                <ng-container *ngFor="let setting of furniSettingsKeys; let i = index">
+                    <p class="badge badge-secondary mb-2">{{ furniSettingsKeys[i] }}</p>
+                    <input type="text" class="form-control rounded mb-2" [(ngModel)]="furniSettingsValues[i]">
+                </ng-container>
             </div>
         </div>
     </div>
@@ -25,6 +25,6 @@
         <button *ngIf="canRotate" type="button" class="btn btn-primary" (click)="processButtonAction('rotate')">{{ 'infostand.button.rotate' | translate }}</button>
         <button *ngIf="(pickupMode !== 0)" type="button" class="btn btn-primary" (click)="processButtonAction('pickup')">{{ (pickupMode === 1 ? 'infostand.button.eject' : 'infostand.button.pickup') | translate }}</button>
         <button *ngIf="canUse" type="button" class="btn btn-primary" (click)="processButtonAction('use')">{{ 'infostand.button.use' | translate }}</button>
-        <button class="btn btn-primary" (click)="processButtonAction('save_branding_configuration')">{{ 'save' | translate }}</button>
+        <button *ngIf="((furniSettingsKeys.length && furniSettingsValues.length) && (furniSettingsKeys.length === furniSettingsValues.length))" class="btn btn-primary" (click)="processButtonAction('save_branding_configuration')">{{ 'save' | translate }}</button>
     </div>
 </div>
