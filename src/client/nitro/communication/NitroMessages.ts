@@ -256,6 +256,8 @@ import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/Room
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
 import {MoodlightSettingsComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer";
 import {RoomDimmerPresetsEvent} from "./messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent";
+import {MoodlightSettingsSaveComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer";
+import {MoodlightTogggleStateComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer";
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -608,6 +610,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // Dimmers
         this._composers.set(OutgoingHeader.ITEM_DIMMER_SETTINGS, MoodlightSettingsComposer);
+        this._composers.set(OutgoingHeader.ITEM_DIMMER_SAVE, MoodlightSettingsSaveComposer);
+        this._composers.set(OutgoingHeader.ITEM_DIMMER_TOGGLE, MoodlightTogggleStateComposer);
 
         // LOGIC
         this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);

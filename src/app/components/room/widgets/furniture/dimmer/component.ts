@@ -5,8 +5,9 @@ import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerS
 import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
-import { RoomDimmerPreset } from '../../events/roomDimmerPreset';
-import {Options} from "@angular-slider/ngx-slider";
+import { Options } from '@angular-slider/ngx-slider';
+import {RoomWidgetDimmerSavePresetMessage} from "../../messages/RoomWidgetDimmerSavePresetMessage";
+import {RoomWidgetDimmerChangeStateMessage} from "../../messages/RoomWidgetDimmerChangeStateMessage";
 
 @Component({
     selector: 'nitro-room-furniture-dimmer-component',
@@ -21,6 +22,7 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     private _brightness: number     = 0xFF;
     public presets: MoodlightItem[] = [];
     public selectedPresetId: number = 0;
+    public isOn: boolean = true;
 
     public  readonly availableColors: number[] = [7665141, 21495, 15161822, 15353138, 15923281, 8581961, 0];
     public  readonly htmlColors: string[] = ['#74F5F5', '#0053F7', '#E759DE', '#EA4532', '#F2F851', '#82F349', '#000000'];
@@ -81,7 +83,8 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
                 id: number;
                 backgroundOnly: boolean
          */
-        this.presets = event.presets.map(item => {
+        this.presets = event.presets.map(item =>
+        {
             return {
                 color: item.color,
                 id: item.id,
@@ -105,7 +108,7 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
 
     private onDimmerStateEvent(event: RoomWidgetDimmerStateUpdateEvent): void
     {
-        this._dimmerState   = event.state;
+        this.isOn           = event.state == 1;
         this._effectId      = event._Str_6815;
         this._color         = event.color;
         this._brightness    = event._Str_5123;
@@ -154,11 +157,41 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         this.messageListener.processWidgetMessage(new RoomWidgetDimmerPreviewMessage(currentItem.color, currentItem.intensity, currentItem.backgroundOnly));
     }
 
+    public handleButton(button: string): void
+    {
+        switch(button)
+        {
+            case 'on_off':
+                this.toggleState();
+                break;
+            case 'apply':
+                this.apply();
+                break;
+        }
+    }
+
+    private toggleState(): void
+    {
+        if(!this.messageListener) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerChangeStateMessage());
+    }
+
+    private apply(): void
+    {
+        if(!this.isOn || !this.messageListener || this.presets == null || this.presets.length == 0) return;
+
+        const preset = this.getSelectedPreset();
+
+        if(!preset) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerSavePresetMessage(preset.id,(preset.backgroundOnly) ? 2 : 1, preset.color, preset.intensity, true));
+    }
 
     public get delaySliderOptions(): Options
     {
         return {
-            floor:0,
+            floor:75,
             ceil:255,
             step:1,
             hidePointerLabels: true,

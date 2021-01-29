@@ -40,14 +40,13 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 if(this.canOpenWidget())
                 {
                     const _local_4 = (k as RoomWidgetDimmerSavePresetMessage);
-
-                    //this._container.roomSession._Str_21317(_local_4._Str_25037, _local_4._Str_24446, _local_4.color, _local_4._Str_5123, _local_4.apply);
+                    this._container.roomSession.updateMoodlightData(_local_4._Str_25037, _local_4._Str_24446, _local_4.color, _local_4._Str_5123, _local_4.apply);
                 }
                 break;
             case RoomWidgetDimmerChangeStateMessage.RWCDSM_CHANGE_STATE:
                 if(this.canOpenWidget())
                 {
-                    //this._container.roomSession._Str_20755();
+                    this._container.roomSession.toggleMoodlightState();
                 }
                 break;
             case RoomWidgetDimmerPreviewMessage.RWDPM_PREVIEW_DIMMER_PRESET: {

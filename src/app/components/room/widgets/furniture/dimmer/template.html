@@ -22,8 +22,9 @@
             <input type="checkbox" (change)="changeCheckbox($event)" [ngModel]="getSelectedPreset().backgroundOnly" />
         </div>
         <div class="row">
-            <div class="col-12 justify-space-between">
-                <button type="button" class="btn btn-primary">{{ 'widget.dimmer.button.apply' | translate }}</button>
+            <div class="col-12 justify-space-between">'
+                <button type="button" class="btn btn-primary" (click)="handleButton('on_off')">{{ (isOn ? 'widget.dimmer.button.off' : 'widget.dimmer.button.on') | translate}}</button>
+                <button type="button" class="btn btn-primary" (click)="handleButton('apply')">{{ 'widget.dimmer.button.apply' | translate }}</button>
             </div>
         </div>
     </div>
