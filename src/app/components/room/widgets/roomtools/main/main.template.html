@@ -7,8 +7,8 @@
         <div id="nitro-room-tools-menu-container" [ngClass]="{'open' : open}">
             <span (click)="toggleRoomEventView()">{{ ('room.settings.button.text') | translate }}</span><br>
             <span (click)="toggleZoom()">{{ ('room.zoom.button.text') | translate }}</span><br>
-            <span>{{ ('room.chathistory.button.text') | translate }}</span><br>
-            <span>{{ ('navigator.embed.caption') | translate }}</span>
+<!--            <span>{{ ('room.chathistory.button.text') | translate }}</span><br>-->
+
         </div>
     </div>
     <div id="nitro-room-tools-handle" class="d-flex flex-column justify-content-center" (click)="toggle()">
@@ -17,3 +17,4 @@
 </div>
 
 <nitro-room-event-view-component [isVisible]="roomEventViewVisible" [roomData]="roomData" (roomEventViewClosed)="toggleRoomEventView()"></nitro-room-event-view-component>
+

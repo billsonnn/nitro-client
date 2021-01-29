@@ -11,6 +11,7 @@ import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
+import {RoomDataParser} from "../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser";
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
@@ -30,6 +31,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._messages = [];
         this._disposed = false;
     }
+
 
     public set widget(widget: RoomToolsMainComponent)
     {

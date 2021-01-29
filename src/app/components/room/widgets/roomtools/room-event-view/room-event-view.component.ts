@@ -5,7 +5,7 @@ import { NavigatorDataService } from '../../../../navigator/services/navigator-d
 import { SecurityLevel } from '../../../../../../client/nitro/session/enum/SecurityLevel';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import {RoomSettingsComposer} from "../../../../../../client/nitro/communication/messages/outgoing/room/settings/RoomSettingsComposer";
+import { RoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/settings/RoomSettingsComposer';
 
 @Component({
     selector: 'nitro-room-event-view-component',

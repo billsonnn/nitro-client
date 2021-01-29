@@ -68,6 +68,16 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         return this._roomEventViewVisible;
     }
 
+    public get shareRoomViewVisible(): boolean
+    {
+        return true;
+    }
+
+    public toggleRoomShareVisible(): void
+    {
+
+    }
+
     public get roomData(): RoomDataParser
     {
         return this._roomData;
