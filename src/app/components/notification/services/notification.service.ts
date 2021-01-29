@@ -6,6 +6,7 @@ import { HabboBroadcastMessageEvent } from '../../../../client/nitro/communicati
 import { MOTDNotificationEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/MOTDNotificationEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
+import { NotificationChoice } from '../components/choices/choices.component';
 import { NotificationMainComponent } from '../components/main/main.component';
 import { NotificationCentreComponent } from '../components/notification-centre/nc.component';
 
@@ -127,6 +128,13 @@ export class NotificationService implements OnDestroy
         if(!this._component) return null;
 
         return this._component.alertWithConfirm(message, title, callback);
+    }
+
+    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent
+    {
+        if(!this._component) return null;
+
+        return this._component.alertWithChoices(message, choices, title);
     }
 
     public alertWithScrollableMessages(messages: string[], title: string = null): NotificationBroadcastMessageComponent

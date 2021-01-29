@@ -200,6 +200,7 @@ import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/Room
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
+import { RoomDeleteComposer } from './messages/outgoing/room/action/RoomDeleteComposer';
 import { RoomGiveRightsComposer } from './messages/outgoing/room/action/RoomGiveRightsComposer';
 import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
@@ -590,6 +591,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
         this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
+        this._composers.set(OutgoingHeader.ROOM_DELETE, RoomDeleteComposer);
 
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);

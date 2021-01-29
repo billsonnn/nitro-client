@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/index';
 import { NotificationBroadcastMessageComponent } from './components/broadcast-message/broadcast-message.component';
+import { NotificationChoicesComponent } from './components/choices/choices.component';
 import { NotificationConfirmComponent } from './components/confirm/confirm.component';
 import { NotificationMainComponent } from './components/main/main.component';
 import { NotificationModeratorMessageComponent } from './components/moderator-message/moderator-message.component';
 import { NotificationMultipleMessagesComponent } from './components/motd/motd.component';
-import { NotificationService } from './services/notification.service';
-import { NotificationDialogComponent } from './components/notificationdialog/notificationdialog.component';
 import { NotificationCentreComponent } from './components/notification-centre/nc.component';
+import { NotificationDialogComponent } from './components/notificationdialog/notificationdialog.component';
+import { NotificationService } from './services/notification.service';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { NotificationCentreComponent } from './components/notification-centre/nc
     ],
     exports: [
         NotificationConfirmComponent,
+        NotificationChoicesComponent,
         NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
         NotificationMainComponent,
@@ -27,6 +29,7 @@ import { NotificationCentreComponent } from './components/notification-centre/nc
     ],
     declarations: [
         NotificationConfirmComponent,
+        NotificationChoicesComponent,
         NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
         NotificationMainComponent,

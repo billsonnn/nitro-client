@@ -3,6 +3,7 @@ import { IMessageEvent } from '../../../../../client/core/communication/messages
 import { RoomBannedUsersEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomBannedUsersEvent';
 import { RoomSettingsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomSettingsEvent';
 import { RoomUsersWithRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomUsersWithRightsEvent';
+import { RoomDeleteComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomDeleteComposer';
 import { RoomGiveRightsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomGiveRightsComposer';
 import { RoomTakeRightsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnbanUserComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomUnbanUserComposer';
@@ -13,6 +14,8 @@ import { NavigatorCategoryDataParser } from '../../../../../client/nitro/communi
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { MessengerFriend } from '../../../friendlist/common/MessengerFriend';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
+import { NotificationChoice } from '../../../notification/components/choices/choices.component';
+import { NotificationService } from '../../../notification/services/notification.service';
 import { NavigatorService } from '../../services/navigator.service';
 
 
@@ -67,6 +70,7 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     constructor(
         private _navigatorService: NavigatorService,
         private _friendListService: FriendListService,
+        private _notificationService: NotificationService,
         private _ngZone: NgZone) 
     {
         this.onRoomSettingsEvent         = this.onRoomSettingsEvent.bind(this);
@@ -231,6 +235,24 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this._currentTab = tab;
     }
 
+    public deleteRoom(): void
+    {
+        const title = Nitro.instance.localization.getValue('navigator.roomsettings.deleteroom.confirm.title');
+        const message = Nitro.instance.localization.getValueWithParameter('navigator.roomsettings.deleteroom.confirm.message', 'room_name', '<b>' + this.roomName + '</b>');
+
+        const choices = [
+            new NotificationChoice('navigator.roomsettings.delete', () => {
+
+                Nitro.instance.communication.connection.send(new RoomDeleteComposer(this._roomId));
+                this.hide();
+
+            }, ['btn-danger']),
+            new NotificationChoice('generic.close', () => {}, ['btn-primary'])
+        ];
+
+        this._notificationService.alertWithChoices(message, choices, title);
+    }
+
     public openProfile(userId: number): void
     {
         //Nitro.instance.communication.connection.send(new UserProfileByIdComposer(userId));
@@ -299,7 +321,10 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     public save(): void
     {
         if(!this.isValidPassword)
-            return;
+        {
+            this.lockState = this._oldLockState.toString();
+            this.password = null;
+        }
 
         if(this.roomName.length < 1)
             this.roomName = this._oldRoomName;
