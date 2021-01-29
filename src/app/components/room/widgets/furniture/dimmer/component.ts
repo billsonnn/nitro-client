@@ -131,6 +131,13 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         this._visible = flag;
     }
 
+
+    public onSliderChange(): void
+    {
+
+    }
+
+
     public get delaySliderOptions(): Options
     {
         return {

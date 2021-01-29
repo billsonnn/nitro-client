@@ -17,7 +17,7 @@
             Color: {{ getSelectedPreset().color }}
             <button type="button" class="btn" (click)="selectColor(color)" [ngClass]="{'color-selected': getSelectedPreset().color == color}" *ngFor="let color of  availableColors; let i = index" [ngStyle]="{'background-color': htmlColors[i]}">{{ htmlColors[i]}}</button>
             <br /><br /><br />
-            <ngx-slider  [options]="delaySliderOptions" [(value)]="getSelectedPreset().intensity"></ngx-slider><br />
+            <ngx-slider (valueChange)="onSliderChange()"  [options]="delaySliderOptions" [(value)]="getSelectedPreset().intensity"></ngx-slider><br />
             <br />
             <input type="checkbox" [ngModel]="getSelectedPreset().backgroundOnly" />
         </div>
