@@ -41,6 +41,7 @@ import { NotificationService } from '../../notification/services/notification.se
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
 import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
+import { NavigatorDataService } from './navigator-data.service';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker
@@ -87,6 +88,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
+        private _navigatorDataService: NavigatorDataService,
         private _ngZone: NgZone)
     {
         this._component         = null;
@@ -204,6 +206,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._navigatorDataService.currentRoomOwner = parser.isOwner;
 
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, true, false));
 

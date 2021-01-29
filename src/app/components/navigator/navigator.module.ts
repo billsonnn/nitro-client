@@ -9,6 +9,7 @@ import { NavigatorSearchItemComponent } from './components/searchitem/searchitem
 import { NavigatorSearchResultComponent } from './components/searchresult/searchresult.component';
 import { NavigatorService } from './services/navigator.service';
 import { NavigatorSliderComponent } from './components/slider/slider.component';
+import { NavigatorDataService } from './services/navigator-data.service';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { NavigatorSliderComponent } from './components/slider/slider.component';
         NavigatorSliderComponent
     ],
     providers: [
-        NavigatorService
+        NavigatorService,
+        NavigatorDataService
     ],
     declarations: [
         NavigatorCreatorComponent,

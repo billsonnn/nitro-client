@@ -2,6 +2,7 @@ import { Component, ComponentFactoryResolver, NgZone, ViewChild, ViewContainerRe
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
+import {RoomZoomEvent} from "../../../../../../client/nitro/room/events/RoomZoomEvent";
 
 @Component({
     selector: 'nitro-room-tools-component',
@@ -13,7 +14,7 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public componentContainer: ViewContainerRef;
 
     // Widget
-    private _open: boolean = false;
+    private _open: boolean = true;
 
     // Roomtools
     private _roomEventViewVisible: boolean = false;
@@ -79,6 +80,6 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
 
     public toggleZoom(): void
     {
-        this.messageListener.processWidgetMessage(new RoomWidgetZoomToggleMessage());
+        this.widgetHandler.processWidgetMessage(new RoomWidgetZoomToggleMessage());
     }
 }

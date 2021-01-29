@@ -11,14 +11,14 @@
         <div class="room-thumbnail"><img src=""></div>
 
         <div class="btn-group-vertical w-100 mt-2">
-            <button type="button" class="btn btn-secondary mb-1" disabled>{{ ('navigator.room.popup.info.room.settings') | translate }}</button>
-            <button type="button" class="btn btn-secondary mb-1" disabled>{{ ('navigator.roomsettings.roomfilter') | translate }}</button>
-            <button type="button" class="btn btn-secondary mb-1" disabled>{{ ('open.floor.plan.editor') | translate }}</button>
-            <button type="button" class="btn btn-secondary" disabled>{{ ('navigator.staffpicks.pick') | translate }}</button>
+            <button type="button" *ngIf="roomSettingsVisible" class="btn btn-secondary mb-1" (click)="handleButtonClick('room_settings_button')">{{ ('navigator.room.popup.info.room.settings') | translate }}</button>
+            <button type="button" *ngIf="roomFilterVisible" class="btn btn-secondary mb-1" disabled>{{ ('navigator.roomsettings.roomfilter') | translate }}</button>
+            <button type="button" *ngIf="floorPlanVisible" class="btn btn-secondary mb-1" disabled>{{ ('open.floor.plan.editor') | translate }}</button>
+            <button type="button" *ngIf="addStaffPickedVisible" class="btn btn-secondary" disabled>{{ ('navigator.staffpicks.pick') | translate }}</button>
         </div>
 
         <div class="btn-group-vertical w-100 mt-2">
-            <button type="button" class="btn btn-danger" disabled>{{ ('help.emergency.main.report.room') | translate }}</button>
+            <button type="button" class="btn btn-danger" (click)="handleButtonClick('room_report_button')">{{ ('help.emergency.main.report.room') | translate }}</button>
         </div>
 
         <div class="btn-group-vertical w-100 mt-2">
