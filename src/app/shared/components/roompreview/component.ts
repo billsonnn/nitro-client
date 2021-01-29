@@ -29,7 +29,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
     constructor(
         private _elementRef: ElementRef<HTMLDivElement>,
-        private ngZone: NgZone) 
+        private ngZone: NgZone)
     {
         this.onClick = this.onClick.bind(this);
     }
@@ -37,9 +37,9 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
     public ngOnInit(): void
     {
         if(!this.roomPreviewer) return;
-        
-        if(this.width === 1) this.width 	= this._elementRef.nativeElement.offsetWidth;
-        if(this.height === 1) this.height	= this._elementRef.nativeElement.offsetHeight;
+
+        if(this.width === 1) this.width 	= (Math.trunc(this._elementRef.nativeElement.offsetWidth));
+        if(this.height === 1) this.height	= (Math.trunc(this._elementRef.nativeElement.offsetHeight));
 
         this._elementRef.nativeElement.style.minWidth = (this._elementRef.nativeElement.offsetWidth + 'px');
         this._elementRef.nativeElement.style.minHeight = (this._elementRef.nativeElement.offsetHeight + 'px');
@@ -94,7 +94,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         if(this.roomPreviewer && this.renderingCanvas && this.displayObject)
         {
             this.roomPreviewer.updatePreviewRoomView();
-            
+
             if(this.renderingCanvas.canvasUpdated)
             {
                 const imageUrl = Nitro.instance.renderer.extract.base64(this.displayObject);

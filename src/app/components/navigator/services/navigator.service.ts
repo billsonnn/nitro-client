@@ -40,6 +40,7 @@ import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
+import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker
@@ -131,6 +132,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
                 new RoomDoorbellAcceptedEvent(this.onRoomDoorbellAcceptedEvent.bind(this)),
+                new GenericErrorEvent(this.onGenericErrorEvent.bind(this)),
                 new RoomDoorbellRejectedEvent(this.onRoomDoorbellRejectedEvent.bind(this)),
                 new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)),
                 new NavigatorCollapsedEvent(this.onNavigatorCollapsedEvent.bind(this)),
@@ -320,6 +322,21 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         }
     }
 
+    private onGenericErrorEvent(event: GenericErrorEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(parser.errorCode === -100002)
+        {
+            this._ngZone.run(() => (this._component && this._component.openRoomPassword(null, true)));
+        }
+    }
+
+
     private onRoomDoorbellRejectedEvent(event: RoomDoorbellRejectedEvent): void
     {
         if(!event) return;
@@ -382,9 +399,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         this._ngZone.run(() =>
         {
-            this._topLevelContexts  = parser.topLevelContexts;
-            this._isLoaded          = true;
-            this._isLoading         = false;
+            this._topLevelContexts = parser.topLevelContexts;
 
             if(this._topLevelContexts.length > 0) this.setCurrentContext(this._topLevelContexts[0]);
 
@@ -547,7 +562,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public clearSearch(): void
     {
         this.setCurrentFilter(NavigatorService.SEARCH_FILTERS[0]);
-        
+
         this._lastSearch = null;
 
         (this.isLoaded && this.search());
@@ -564,11 +579,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
     public loadNavigator(): void
     {
-        if(this._isLoaded || this._isLoading) return;
-
-        this._isLoading = true;
-
         this._ngZone.runOutsideAngular(() => Nitro.instance.communication.connection.send(new NavigatorInitComposer()));
+
+        this._isLoaded = true;
     }
 
     public openRoomDoorbell(room: RoomDataParser): void

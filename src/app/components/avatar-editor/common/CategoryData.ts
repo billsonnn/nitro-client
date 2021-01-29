@@ -3,7 +3,7 @@ import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorGridColorItem } from './AvatarEditorGridColorItem';
 import { AvatarEditorGridPartItem } from './AvatarEditorGridPartItem';
 
-export class CategoryData 
+export class CategoryData
 {
     private MAX_PALETTES: number = 2;
 
@@ -192,7 +192,7 @@ export class CategoryData
         this._paletteIndexes[paletteId] = colorIndex;
 
         const colorItem = palette[colorIndex];
-       
+
         if(!colorItem) return null;
 
         colorItem.isSelected = true;
@@ -362,7 +362,7 @@ export class CategoryData
             while(_local_6 < _local_3.length)
             {
                 const _local_7 = _local_3[_local_6];
-                
+
                 if(_local_7 && (_local_7.clubLevel > k)) _local_2 = true;
 
                 _local_6++;

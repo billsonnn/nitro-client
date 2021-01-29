@@ -10,7 +10,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     protected _imageUrl: string;
     protected _shortUrl: string;
     protected _imageReady: boolean;
-    
+
     protected _offsetX: number;
     protected _offsetY: number;
     protected _offsetZ: number;
@@ -28,6 +28,13 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
         this._offsetZ       = 0;
     }
 
+    public dispose(): void
+    {
+        super.dispose();
+
+        if(this._imageUrl) (this.asset && this.asset.disposeAsset(this._imageUrl));
+    }
+
     protected updateObject(scale: number, direction: number): boolean
     {
         if(!super.updateObject(scale, direction)) return false;
@@ -40,7 +47,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     protected updateModel(scale: number): boolean
     {
         const flag = super.updateModel(scale);
-        
+
         if(flag)
         {
             this._offsetX   = this.object.model.getValue<number>(RoomObjectVariable.FURNITURE_BRANDING_OFFSET_X);
@@ -91,6 +98,8 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         if(imageUrl && (imageUrl === this._imageUrl)) return false;
 
+        (this.asset && this.asset.disposeAsset(this._imageUrl));
+
         return true;
     }
 
@@ -110,12 +119,10 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
 
         if(imageStatus === 1)
         {
-            const urlParts  = imageUrl.split('/');
-            const url       = urlParts[urlParts.length - 1];
-            const texture   = Nitro.instance.core.asset.getTexture(url);
+            const texture   = Nitro.instance.core.asset.getTexture(imageUrl);
 
             if(!texture) return false;
-            
+
             this.imageReady(texture, imageUrl);
 
             return true;
@@ -128,9 +135,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     {
         if(!this._imageUrl) return;
 
-        const urlParts  = this._imageUrl.split('/');
-        const url       = urlParts[urlParts.length - 1];
-        const texture   = Nitro.instance.core.asset.getTexture(url);
+        const texture   = Nitro.instance.core.asset.getTexture(this._imageUrl);
 
         if(!texture) return;
 
@@ -141,7 +146,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization
     {
         const tag = this.getLayerTag(scale, this._direction, layerId);
 
-        if(tag === FurnitureBrandedImageVisualization.BRANDED_IMAGE) return this._imageUrl;
+        if((tag === FurnitureBrandedImageVisualization.BRANDED_IMAGE) && this._imageUrl) return this._imageUrl;
 
         return super.getSpriteAssetName(scale, layerId);
     }

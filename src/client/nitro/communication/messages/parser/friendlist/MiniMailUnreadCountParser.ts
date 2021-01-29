@@ -8,16 +8,16 @@ export class MiniMailUnreadCountParser implements IMessageParser
     public flush(): boolean
     {
         this._count = 0;
-        
+
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._count = wrapper.readInt();
-        
+
         return true;
     }
 

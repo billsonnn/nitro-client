@@ -1,6 +1,6 @@
 ﻿import { IRoomObjectSprite } from './IRoomObjectSprite';
 
-export interface ISortableSprite 
+export interface ISortableSprite
 {
     x: number;
     y: number;

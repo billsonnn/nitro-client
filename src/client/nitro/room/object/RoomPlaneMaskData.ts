@@ -1,4 +1,4 @@
-﻿export class RoomPlaneMaskData 
+﻿export class RoomPlaneMaskData
 {
     private _leftSideLoc: number = 0;
     private _rightSideLoc: number = 0;

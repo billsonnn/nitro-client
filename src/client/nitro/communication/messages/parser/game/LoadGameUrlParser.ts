@@ -15,7 +15,7 @@ export class LoadGameUrlParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -23,7 +23,7 @@ export class LoadGameUrlParser implements IMessageParser
         this._gameTypeId   = wrapper.readInt();
         this._gameClientId = wrapper.readString();
         this._url          = wrapper.readString();
-        
+
         return true;
     }
 

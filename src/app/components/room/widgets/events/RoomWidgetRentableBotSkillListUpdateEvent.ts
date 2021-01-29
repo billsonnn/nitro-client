@@ -10,7 +10,7 @@ export class RoomWidgetRentableBotSkillListUpdateEvent extends RoomWidgetUpdateE
     constructor(k: number, _arg_2: string[])
     {
         super(RoomWidgetRentableBotSkillListUpdateEvent.RWRBSLUE_SKILL_LIST);
-        
+
         this._Str_2753 = k;
         this._Str_6548 = _arg_2;
     }

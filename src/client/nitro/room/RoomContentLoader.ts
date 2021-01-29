@@ -88,7 +88,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public dispose(): void
     {
-        
+
     }
 
     public setSessionDataManager(sessionData: ISessionDataManager): void
@@ -135,7 +135,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             if(!furniture) continue;
 
             const id = furniture.id;
-            
+
             let name        = furniture.className;
             let className   = furniture.className;
 
@@ -178,7 +178,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     public getFurnitureFloorNameForTypeId(typeId: number): string
     {
         const type = this._activeObjectTypes.get(typeId);
-        
+
         return this.removeColorIndex(type);
     }
 
@@ -294,7 +294,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         if(this._wallItems[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_WALL;
 
         if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
-        
+
         return RoomContentLoader.PLACE_HOLDER_DEFAULT;
     }
 
@@ -364,7 +364,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             const url = assetUrls[0];
 
             const image = new Image();
-            
+
             image.src = url;
 
             image.onload = () =>
@@ -372,7 +372,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                 image.onerror = null;
 
                 this._images.set(([ type, param ].join('_')), image);
-                
+
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), true);
             };
 
@@ -412,12 +412,12 @@ export class RoomContentLoader implements IFurnitureDataListener
             if(!flag)
             {
                 this._logger.error('Failed to download asset: ' + resource.url);
-                
+
                 events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_FAILURE, type));
 
                 return;
             }
-            
+
             totalDownloaded++;
 
             if(totalDownloaded === totalToDownload)
@@ -448,13 +448,13 @@ export class RoomContentLoader implements IFurnitureDataListener
 
         return true;
     }
-    
+
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error)
         {
             if(resource && resource.texture) resource.texture.destroy(true);
-            
+
             onDownloaded(loader, resource, false);
 
             return;
@@ -470,7 +470,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 return;
             }
-            
+
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
                 const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
@@ -522,7 +522,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 return;
             }
-                
+
             this.createCollection(assetData, null);
 
             onDownloaded(loader, resource, true);
@@ -578,20 +578,18 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
                 {
+                    const name = this.getAssetAliasName(type);
+
+                    let assetUrl = (icon ? this.getAssetUrlWithFurniIconBase(name) : this.getAssetUrlWithFurniBase(type));
+
                     if(icon)
                     {
-                        const name = this.getAssetAliasName(type);
-
-                        let assetUrl = this.getAssetUrlWithFurniIconBase(name);
-
                         const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null));
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
-
-                        return [ assetUrl ];
                     }
 
-                    return [ this.getAssetUrlWithFurniBase(type) ];
+                    return [ assetUrl ];
                 }
 
                 if(category === RoomObjectCategory.UNIT)

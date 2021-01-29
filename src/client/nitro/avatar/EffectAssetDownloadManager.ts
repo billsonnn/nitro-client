@@ -80,9 +80,9 @@ export class EffectAssetDownloadManager extends EventDispatcher
                 }
             };
 
-            request.onerror = e => 
+            request.onerror = e =>
             {
-                throw new Error('invalid_avatar_effect_map'); 
+                throw new Error('invalid_avatar_effect_map');
             };
         }
 

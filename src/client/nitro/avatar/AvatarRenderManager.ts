@@ -168,9 +168,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
                 this.checkReady();
             };
 
-            request.onerror = e => 
+            request.onerror = e =>
             {
-                throw new Error('invalid_avatar_actions'); 
+                throw new Error('invalid_avatar_actions');
             };
         }
 
@@ -395,7 +395,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     public _Str_838(k: string, _arg_2: number): string[]
     {
         if(!this._structure) return null;
-        
+
         return this._structure._Str_1733(k, _arg_2);
     }
 

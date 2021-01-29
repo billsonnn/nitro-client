@@ -6,5 +6,5 @@ import { SettingsService } from './settings/service';
         SettingsService
     ]
 })
-export class CoreModule 
+export class CoreModule
 {}

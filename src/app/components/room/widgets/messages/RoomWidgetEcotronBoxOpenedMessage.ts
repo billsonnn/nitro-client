@@ -10,7 +10,7 @@ export class RoomWidgetEcotronBoxOpenedMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: string, _arg_3: number)
     {
         super(k);
-        
+
         this._itemType = _arg_2;
         this._classId = _arg_3;
     }

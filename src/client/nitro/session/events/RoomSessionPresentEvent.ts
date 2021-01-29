@@ -16,7 +16,7 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
     constructor(k: string, _arg_2: IRoomSession, _arg_3: number, _arg_4: string, _arg_5: string, _arg_6: number, _arg_7: string, _arg_8: boolean, _arg_9: string)
     {
         super(k, _arg_2);
-        
+
         this._classId = _arg_3;
         this._itemType = _arg_4;
         this._productCode = _arg_5;

@@ -1,4 +1,4 @@
-﻿export class _Str_5511 
+﻿export class _Str_5511
 {
     private _type: number;
     private _Str_4653: number;

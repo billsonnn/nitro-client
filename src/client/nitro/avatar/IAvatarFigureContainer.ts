@@ -1,4 +1,4 @@
-﻿export interface IAvatarFigureContainer 
+﻿export interface IAvatarFigureContainer
 {
     _Str_1016(): IterableIterator<string>;
     _Str_744(_arg_1: string): boolean;

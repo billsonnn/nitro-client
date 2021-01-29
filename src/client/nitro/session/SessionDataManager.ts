@@ -60,7 +60,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     constructor(communication: INitroCommunicationManager)
     {
         super();
-        
+
         this._communication                 = communication;
 
         this.resetUserInfo();
@@ -364,6 +364,16 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
+    public getBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name);
+    }
+
+    public getGroupBadgeUrl(name: string): string
+    {
+        return this._badgeImageManager.getBadgeUrl(name, BadgeImageManager.GROUP_BADGE);
+    }
+
     public getBadgeImage(name: string): Texture
     {
         return this._badgeImageManager.getBadgeImage(name);
@@ -376,12 +386,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
     public loadBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name);
+        return this._badgeImageManager.loadBadgeImage(name);
     }
 
     public loadGroupBadgeImage(name: string): string
     {
-        return this._badgeImageManager._Str_5831(name, BadgeImageManager.GROUP_BADGE);
+        return this._badgeImageManager.loadBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }
 
     public isUserIgnored(userName: string): boolean
@@ -408,7 +418,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if((petId < 0) || (this._respectsPetLeft <= 0)) return;
 
         this.send(new PetRespectComposer(petId));
-        
+
         this._respectsPetLeft--;
     }
 

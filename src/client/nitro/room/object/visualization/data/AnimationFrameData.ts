@@ -1,4 +1,4 @@
-export class AnimationFrameData 
+export class AnimationFrameData
 {
     private _id: number = 0;
     private _x: number = 0;

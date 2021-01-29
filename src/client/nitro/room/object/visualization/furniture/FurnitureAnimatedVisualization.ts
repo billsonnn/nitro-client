@@ -45,7 +45,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     public dispose(): void
     {
         super.dispose();
-        
+
         if(this._animationData)
         {
             this._animationData.dispose();
@@ -146,7 +146,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected setAnimation(animationId: number): void
     {
         if(!this._data) return;
-        
+
         this.setSubAnimation(this._animationData, animationId, (this._state >= 0));
     }
 
@@ -195,7 +195,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
                         animationId = transition;
                     }
                 }
-                
+
                 else if(!AnimationData.isTransitionToAnimation(animationData.animationId))
                 {
                     if(this.usesAnimationResetting())
@@ -240,7 +240,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
     protected resetAllAnimationFrames(): void
     {
         if(!this._animationData) return;
-        
+
         this._animationData.setLayerCount(this._animatedLayerCount);
     }
 
@@ -356,7 +356,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
             layerId--;
         }
-        
+
         return update;
     }
 
@@ -401,7 +401,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
         if(this._direction === direction) return;
 
         super.setDirection(direction);
-        
+
         this._directionChanged  = true;
     }
 }

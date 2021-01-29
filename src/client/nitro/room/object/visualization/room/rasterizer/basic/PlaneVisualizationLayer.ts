@@ -4,7 +4,7 @@ import { TextureUtils } from '../../../../../../../room/utils/TextureUtils';
 import { RoomVisualization } from '../../RoomVisualization';
 import { PlaneMaterial } from './PlaneMaterial';
 
-export class PlaneVisualizationLayer 
+export class PlaneVisualizationLayer
 {
     public static _Str_1934: number = 0;
     public static ALIGN_TOP: number = 1;
@@ -74,7 +74,7 @@ export class PlaneVisualizationLayer
             if(bitmapData && (bitmapData !== canvas))
             {
                 if(this._bitmapData) this._bitmapData.destroy();
-                
+
                 this._bitmapData = bitmapData.clone();
 
                 bitmapData = this._bitmapData;
@@ -122,16 +122,16 @@ export class PlaneVisualizationLayer
 
                     RoomVisualization.addTextureCache(bitmapData, texture);
                 }
-                
+
                 canvas
                     .beginTextureFill({ texture })
                     .drawRect(0, 0, width, height)
                     .endFill();
-                
+
                 bitmapData = canvas;
             }
         }
-    
+
         return bitmapData;
     }
 

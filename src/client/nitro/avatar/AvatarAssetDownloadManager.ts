@@ -81,9 +81,9 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                 }
             };
 
-            request.onerror = e => 
+            request.onerror = e =>
             {
-                throw new Error('invalid_avatar_figure_map'); 
+                throw new Error('invalid_avatar_figure_map');
             };
         }
 
@@ -121,7 +121,7 @@ export class AvatarAssetDownloadManager extends EventDispatcher
                 let existing = this._figureMap.get(partString);
 
                 if(!existing) existing = [];
-                
+
                 existing.push(downloadLibrary);
 
                 this._figureMap.set(partString, existing);

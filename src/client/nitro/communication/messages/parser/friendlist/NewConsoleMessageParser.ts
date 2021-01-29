@@ -17,7 +17,7 @@ export class NewConsoleMessageParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -30,7 +30,7 @@ export class NewConsoleMessageParser implements IMessageParser
         {
             this._extraData = wrapper.readString();
         }
-        
+
         return true;
     }
 

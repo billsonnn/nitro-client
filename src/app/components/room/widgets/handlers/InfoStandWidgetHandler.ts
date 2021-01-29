@@ -1,4 +1,5 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomAdsUpdateComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
 import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
 import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
@@ -53,7 +54,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(this.disposed) return;
 
         this.container = null;
-        
+
         this._disposed  = true;
     }
 
@@ -95,7 +96,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 userData = this._container.roomSession.userDataManager.getUserData(userId);
             }
-            
+
             if(!userData) return null;
         }
 
@@ -217,10 +218,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 return;
             case RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA: {
                 const _local_10 = (message as RoomWidgetFurniActionMessage).objectData;
-
                 if(_local_10)
                 {
-                    const _local_19 = new Map();
+                    const _local_19 = new Map<string,string>();
 
                     const _local_20 = _local_10.split('\t');
 
@@ -241,7 +241,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                     }
 
                     this._container.roomEngine.processRoomObjectWallOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
-
+                    this._Str_23922(_local_19);
                     _local_19.clear();
                 }
                 break;
@@ -480,7 +480,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         infostandEvent.expiration = ((expiryTime < 0) ? expiryTime : Math.max(0, (expiryTime - ((Nitro.instance.time - expiryTimestamp) / 1000))));
 
         let roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 64, null);
-        
+
         if(!roomObjectImage.data || (roomObjectImage.data.width > 140) || (roomObjectImage.data.height > 200))
         {
             roomObjectImage = this._container.roomEngine.getRoomObjectImage(_arg_2, k.id, k.category, new Vector3d(180), 1, null);
@@ -492,7 +492,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(image) infostandEvent.image = image;
         }
-        
+
         infostandEvent.isWallItem           = (k.category === RoomObjectCategory.WALL);
         infostandEvent.isRoomOwner          = this._container.roomSession.isRoomOwner;
         infostandEvent.roomControllerLevel  = this._container.roomSession.controllerLevel;
@@ -652,7 +652,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_18400;
 
             if(isShuttingDown) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_14161;
-            
+
             if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
 
             // const _local_12 = this._container.sessionDataManager.userId;
@@ -792,10 +792,22 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         const moderationSettings = this._container.roomSession.moderationSettings;
 
         let flag = false;
-        
+
         if(moderationSettings) flag = _arg_2(event, moderationSettings);
 
         return (flag && (event.flatControl < RoomControllerLevel.ROOM_OWNER));
+    }
+
+    // public  _Str_23922(k:Map):void
+    public  _Str_23922(k:Map<string,string>):void
+    {
+        if(!this._widget) return;
+
+        if(this._container.sessionDataManager.hasSecurity(5))
+        {
+            // TODO: Map should be `k`
+            this._container.connection.send(new RoomAdsUpdateComposer(this._widget.furniData.id, k));
+        }
     }
 
     public get type(): string

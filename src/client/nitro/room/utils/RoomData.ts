@@ -1,6 +1,6 @@
 import { RoomMapData } from '../object/RoomMapData';
 
-export class RoomData 
+export class RoomData
 {
     private _roomId: number;
     private _data: RoomMapData;

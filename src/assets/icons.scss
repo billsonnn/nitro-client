@@ -86,10 +86,28 @@ i {
             height: 21px;
         }
 
-        &.icon-profile {
-            background-image: url('^assets/images/toolbar/icons/profile.png');
+        &.icon-me-profile {
+            background-image: url('^assets/images/toolbar/icons/me-menu/profile.png');
             width: 21px;
             height: 21px;
+        }
+
+        &.icon-me-rooms {
+            background-image: url('^assets/images/toolbar/icons/me-menu/my-rooms.png');
+            width: 30px;
+            height: 30px;
+        }
+
+        &.icon-me-achievements {
+            background-image: url('^assets/images/toolbar/icons/me-menu/achievements.png');
+            width: 31px;
+            height: 30px;
+        }
+
+        &.icon-me-clothing {
+            background-image: url('^assets/images/toolbar/icons/me-menu/clothing.png');
+            width: 27px;
+            height: 30px;
         }
             
         &.icon-joinroom {
@@ -303,7 +321,7 @@ i {
         }
 
         &.chatstyles-icon {
-            background-image: url('^assets/images/chatstyles/styles-icon.png');
+            background-image: url('^assets/images/chat/styles-icon.png');
             width: 17px;
             height: 19px;
         }
@@ -338,6 +356,17 @@ i {
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        &.icon-catalogue-hc_small {
+            height:17px;
+            width:31px;
+            background-image: url('^assets/images/catalog/hc_small.png');
+        }
+        &.icon-catalogue-hc_big {
+            width:68px;
+            height:40px;
+            background: url('^assets/images/catalog/hc_big.png');
         }
     }
 }

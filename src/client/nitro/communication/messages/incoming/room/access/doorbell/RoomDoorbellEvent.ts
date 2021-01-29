@@ -13,4 +13,9 @@ export class RoomDoorbellEvent extends MessageEvent implements IMessageEvent
     {
         return this.parser as RoomDoorbellParser;
     }
+
+    public get userName(): string
+    {
+        return this.getParser().userName;
+    }
 }

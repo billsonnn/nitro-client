@@ -1,4 +1,4 @@
 <div class="btn-group w-100 mb-1" *ngFor="let friend of friends">
-    <button type="button" class="btn btn-primary w-100" (click)="selectThread(friend)">{{ friend.name }}</button>
+    <button type="button" class="btn btn-secondary w-100" (click)="selectThread(friend)">{{ friend.name }}</button>
     <button type="button" class="btn btn-danger" (click)="removeFriend(friend)"><i class="fas fa-times"></i></button>
 </div>

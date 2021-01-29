@@ -1,4 +1,4 @@
-﻿export class HighScoreData 
+﻿export class HighScoreData
 {
     private _score: number;
     private _users: string[];

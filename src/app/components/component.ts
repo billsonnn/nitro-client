@@ -19,13 +19,15 @@ import { NotificationService } from './notification/services/notification.servic
 import { RoomComponent } from './room/room.component';
 import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
-import { FurniChooserWidgetComponent } from './room/widgets/choosers/furni/component';
-import { UserChooserWidgetComponent } from './room/widgets/choosers/user/component';
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { RoomInfoStandMainComponent } from './room/widgets/infostand/components/main/main.component';
 import { RoomChatComponent } from './room/widgets/roomchat/component';
 import { RoomToolsMainComponent } from './room/widgets/roomtools/main/main.component';
+import { DoorbellWidgetComponent } from './room/widgets/navigator/doorbell/doorbell.component';
+import { FurnitureWidgetTrophyComponent } from './room/widgets/furniture/trophies/trophy.component';
+import { ChooserWidgetFurniComponent } from './room/widgets/choosers/furni/furni.component';
+import { ChooserWidgetUserComponent } from './room/widgets/choosers/user/user.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -185,13 +187,15 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.CUSTOM_STACK_HEIGHT, CustomStackHeightComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_DIMMER, DimmerFurniComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.DOORBELL, DoorbellWidgetComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, FurnitureWidgetTrophyComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
                         this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
                         this.roomComponent.createWidget(RoomWidgetEnum.AVATAR_INFO, RoomAvatarInfoComponent);
-                        this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, FurniChooserWidgetComponent);
-                        this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, UserChooserWidgetComponent);
+                        this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CHOOSER, ChooserWidgetFurniComponent);
+                        this.roomComponent.createWidget(RoomWidgetEnum.USER_CHOOSER, ChooserWidgetUserComponent);
                     }
                 }
                 return;

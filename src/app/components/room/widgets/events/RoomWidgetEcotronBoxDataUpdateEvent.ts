@@ -14,7 +14,7 @@ export class RoomWidgetEcotronBoxDataUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: string, _arg_5: boolean = false, _arg_6: string = null)
     {
         super(k);
-        
+
         this._Str_2319 = _arg_2;
         this._text = _arg_3;
         this._Str_6880 = _arg_4;

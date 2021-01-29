@@ -8,6 +8,7 @@ import { NitroLocalizationEvent } from '../../../client/nitro/localization/Nitro
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
 import { WebGL } from '../../../client/nitro/utils/WebGL';
+import { SettingsService } from '../../core/settings/service';
 
 @Component({
     selector: 'app-root',
@@ -26,7 +27,8 @@ export class AppMainComponent implements OnInit, OnDestroy
     private _connectionTimeout: NodeJS.Timeout;
 
     constructor(
-        private _ngZone: NgZone) 
+        private _settingsService: SettingsService,
+        private _ngZone: NgZone)
     {
         this.onNitroEvent = this.onNitroEvent.bind(this);
     }
@@ -37,14 +39,14 @@ export class AppMainComponent implements OnInit, OnDestroy
         {
             //@ts-ignore
             if(!NitroConfig) throw new Error('NitroConfig is not defined!');
-            
+
             if(!WebGL.isWebGLAvailable())
             {
                 this.onNitroEvent(new NitroEvent(Nitro.WEBGL_UNAVAILABLE));
 
                 return;
             }
-            
+
             if(!Nitro.instance) Nitro.bootstrap();
 
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ESTABLISHED, this.onNitroEvent);
@@ -59,7 +61,7 @@ export class AppMainComponent implements OnInit, OnDestroy
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.FAILED, this.onNitroEvent);
 
-            Nitro.instance.core.configuration.init(); 
+            Nitro.instance.core.configuration.init();
 
             this._connectionTimeout = setTimeout(this.onConnectionTimeout, 15 * 1000);
         });
@@ -80,7 +82,7 @@ export class AppMainComponent implements OnInit, OnDestroy
             Nitro.instance.avatar.events.removeEventListener(AvatarRenderEvent.AVATAR_RENDER_READY, this.onNitroEvent);
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.removeEventListener(ConfigurationEvent.FAILED, this.onNitroEvent);
-        
+
             clearTimeout(this._connectionTimeout);
         });
     }
@@ -166,7 +168,7 @@ export class AppMainComponent implements OnInit, OnDestroy
                     this.percentage     = (this.percentage + 20);
                     this.hideProgress   = false;
                 });
-                
+
                 Nitro.instance.init();
                 clearTimeout(this._connectionTimeout);
                 break;
@@ -219,7 +221,7 @@ export class AppMainComponent implements OnInit, OnDestroy
                 {
                     this.isAvatarRenderReady    = true;
                     this.percentage             = (this.percentage + 20);
-                    this.hideProgress           = false;
+                    this.hideProgress = false;
                 });
                 break;
         }
@@ -227,6 +229,8 @@ export class AppMainComponent implements OnInit, OnDestroy
 
     public get isReady(): boolean
     {
+        this._settingsService.isReady = (this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady);
+
         return ((this.isLocalizationReady && this.isRoomEngineReady && this.isAvatarRenderReady) || false);
     }
 

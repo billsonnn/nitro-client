@@ -1,4 +1,4 @@
-﻿export class AddDataContainer 
+﻿export class AddDataContainer
 {
     private _id: string;
     private _align: string;

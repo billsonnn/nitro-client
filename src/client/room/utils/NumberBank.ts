@@ -1,4 +1,4 @@
-﻿export class NumberBank 
+﻿export class NumberBank
 {
     private _reservedNumbers: number[];
     private _freeNumbers: number[];

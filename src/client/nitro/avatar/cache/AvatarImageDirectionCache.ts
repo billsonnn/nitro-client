@@ -1,7 +1,7 @@
 ﻿import { AvatarImageBodyPartContainer } from '../AvatarImageBodyPartContainer';
 import { AvatarImagePartContainer } from '../AvatarImagePartContainer';
 
-export class AvatarImageDirectionCache 
+export class AvatarImageDirectionCache
 {
     private _partList: AvatarImagePartContainer[];
     private _images: Map<string, AvatarImageBodyPartContainer>;

@@ -69,4 +69,11 @@ export class MapDataType extends ObjectDataBase
     {
         return this._data[key];
     }
+
+    // TODO: How to get the keys?
+    public get data()
+    {
+        return this._data;
+    }
+
 }

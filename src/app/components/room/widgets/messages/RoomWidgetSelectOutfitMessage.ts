@@ -9,7 +9,7 @@ export class RoomWidgetSelectOutfitMessage extends RoomWidgetMessage
     constructor(k: number)
     {
         super(RoomWidgetSelectOutfitMessage.SELECT_OUTFIT);
-        
+
         this._outfitId = k;
     }
 

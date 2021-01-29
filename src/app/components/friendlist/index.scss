@@ -1,10 +1,6 @@
-.nitro-friendlist-component {
+.nitro-friendlist {
     position: absolute;
     width: $friendlist-width;
-
-    .card-body {
-        background:url('^assets/images/bgs/chat.png');
-    }
 }
 
 .nitro-friend-list {

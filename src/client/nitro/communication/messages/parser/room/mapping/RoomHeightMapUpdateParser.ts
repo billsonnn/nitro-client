@@ -48,7 +48,7 @@ export class RoomHeightMapUpdateParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -68,7 +68,7 @@ export class RoomHeightMapUpdateParser implements IMessageParser
     {
         return this._y;
     }
-    
+
     public get height(): number
     {
         return this._value;

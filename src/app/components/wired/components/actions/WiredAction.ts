@@ -6,7 +6,7 @@ import { WiredFurniture } from '../../WiredFurniture';
 
 export class WiredAction extends WiredFurniture
 {
-    private static DELAY_MINIMUM_VALUE: number = 1;
+    private static DELAY_MINIMUM_VALUE: number = 0;
     private static DELAY_MAXIMUM_VALUE: number = 20;
     private static DELAY_STEPPER_VALUE: number = 1;
 

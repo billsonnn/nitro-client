@@ -12,7 +12,7 @@ export class AcceptFriendResultParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -25,7 +25,7 @@ export class AcceptFriendResultParser implements IMessageParser
 
             totalFailures--;
         }
-        
+
         return true;
     }
 

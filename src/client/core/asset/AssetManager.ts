@@ -34,7 +34,7 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!name) return null;
 
-        const existing = this._textures.get(AssetManager.removeFileExtension(name));
+        const existing = this._textures.get(name);
 
         if(!existing) return null;
 
@@ -44,8 +44,6 @@ export class AssetManager extends Disposable implements IAssetManager
     public setTexture(name: string, texture: Texture): void
     {
         if(!name || !texture) return;
-
-        name = AssetManager.removeFileExtension(name);
 
         this._textures.set(name, texture);
     }
@@ -145,13 +143,13 @@ export class AssetManager extends Disposable implements IAssetManager
 
         return true;
     }
-    
+
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error)
         {
             if(resource && resource.texture) resource.texture.destroy(true);
-            
+
             onDownloaded(loader, resource, false);
 
             return;
@@ -162,7 +160,7 @@ export class AssetManager extends Disposable implements IAssetManager
             const assetData = (resource.data as IAssetData);
 
             if(!assetData.type) return;
-            
+
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
                 const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
@@ -214,7 +212,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
                 return;
             }
-                
+
             this.createCollection(assetData, null);
 
             onDownloaded(loader, resource, true);
@@ -224,12 +222,9 @@ export class AssetManager extends Disposable implements IAssetManager
 
         if(resource.type === LoaderResource.TYPE.IMAGE)
         {
-            const split = resource.name.split('/');
-            const name  = split[(split.length - 1)];
-
             if(resource.texture.valid)
             {
-                this.setTexture(name, resource.texture);
+                this.setTexture(resource.name, resource.texture);
 
                 onDownloaded(loader, resource, true);
             }

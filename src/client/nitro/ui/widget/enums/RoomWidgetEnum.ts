@@ -1,4 +1,4 @@
-﻿export class RoomWidgetEnum 
+﻿export class RoomWidgetEnum
 {
     public static CHAT_WIDGET: string                            = 'RWE_CHAT_WIDGET';
     public static INFOSTAND: string                              = 'RWE_INFOSTAND';

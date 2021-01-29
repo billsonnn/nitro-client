@@ -1,7 +1,7 @@
 ﻿import { IAnimation } from './IAnimation';
 import { IAnimationLayerData } from './IAnimationLayerData';
 
-export interface IAnimationManager 
+export interface IAnimationManager
 {
     animations: Map<any, any>;
     _Str_720(_arg_1: string): IAnimation;

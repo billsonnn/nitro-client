@@ -7,9 +7,9 @@ import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/name/component
 import { RoomAvatarInfoOwnAvatarComponent } from './widgets/avatarinfo/ownavatar/component';
 import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
-import { ChooserWidgetBaseComponent } from './widgets/choosers/base/component';
-import { FurniChooserWidgetComponent } from './widgets/choosers/furni/component';
-import { UserChooserWidgetComponent } from './widgets/choosers/user/component';
+import { ChooserWidgetBaseComponent } from './widgets/choosers/base/base.component';
+import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.component';
+import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
@@ -18,6 +18,7 @@ import { RoomInfoStandMainComponent } from './widgets/infostand/components/main/
 import { RoomInfoStandPetComponent } from './widgets/infostand/components/pet/pet.component';
 import { RoomInfoStandRentableBotComponent } from './widgets/infostand/components/rentablebot/rentablebot.component';
 import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/user.component';
+import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
@@ -46,8 +47,9 @@ import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room
         CustomStackHeightComponent,
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
-        FurniChooserWidgetComponent,
-        UserChooserWidgetComponent,
+        ChooserWidgetFurniComponent,
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent,
         RoomToolsMainComponent,
         RoomEventViewComponent
     ],
@@ -70,8 +72,9 @@ import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room
         CustomStackHeightComponent,
         DimmerFurniComponent,
         ChooserWidgetBaseComponent,
-        FurniChooserWidgetComponent,
-        UserChooserWidgetComponent,
+        ChooserWidgetFurniComponent,
+        ChooserWidgetUserComponent,
+        DoorbellWidgetComponent,
         RoomToolsMainComponent,
         RoomEventViewComponent
     ]

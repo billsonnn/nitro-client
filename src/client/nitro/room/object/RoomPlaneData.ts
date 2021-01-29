@@ -2,7 +2,7 @@
 import { Vector3d } from '../../../room/utils/Vector3d';
 import { RoomPlaneMaskData } from './RoomPlaneMaskData';
 
-export class RoomPlaneData 
+export class RoomPlaneData
 {
     public static PLANE_UNDEFINED: number   = 0;
     public static PLANE_FLOOR: number       = 1;

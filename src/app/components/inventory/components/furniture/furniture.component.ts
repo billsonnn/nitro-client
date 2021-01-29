@@ -27,14 +27,14 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public paginateConfig: PaginationInstance = {
         id: 'custom',
-        itemsPerPage: 250,
+        itemsPerPage: 25,
         currentPage: 1
     };
 
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void
@@ -92,7 +92,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                 return;
             }
         }
-        
+
         this.selectFirstGroup();
     }
 
@@ -135,7 +135,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                     let wallType        = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_WALL_TYPE);
                     let floorType       = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_FLOOR_TYPE);
                     let landscapeType   = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_LANDSCAPE_TYPE);
-                    
+
                     wallType        = (wallType && wallType.length) ? wallType : '101';
                     floorType       = (floorType && floorType.length) ? floorType : '101';
                     landscapeType   = (landscapeType && landscapeType.length) ? landscapeType : '1.1';

@@ -24,6 +24,7 @@ import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
+import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -185,7 +186,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendDoorbellApprovalMessage(userName: string, flag: boolean): void
     {
-        // send doorbell
+        this._connection.send(new RoomDoorbellAccessComposer(userName,flag));
     }
 
     public sendAmbassadorAlertMessage(userId: number): void
