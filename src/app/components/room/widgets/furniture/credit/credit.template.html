@@ -1,0 +1,14 @@
+<div  *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-chooser-component">
+    <div class="card-header">
+        {{ ('purse_voucherbutton') | translate }}
+        <button type="button" class="close" (click)="hide()"></button>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">{{ ('widgets.furniture.credit.redeem.value') | translate:'value':value }}</div>
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-primary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
+            <button class="btn btn-success" (click)="sendRedeem()">{{ ('redeem') | translate }}</button>
+        </div>
+       
+    </div>
+</div>
