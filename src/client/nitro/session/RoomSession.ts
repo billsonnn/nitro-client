@@ -25,6 +25,7 @@ import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
 import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
+import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -232,6 +233,14 @@ export class RoomSession extends Disposable implements IRoomSession
 
         this._connection.send(new RemoveBotFromFlatComposer(id));
     }
+
+    public requestMoodlightSettings(): void
+    {
+        if(!this._connection) return;
+
+        this._connection.send(new MoodlightSettingsComposer());
+    }
+
 
     public get connection(): IConnection
     {

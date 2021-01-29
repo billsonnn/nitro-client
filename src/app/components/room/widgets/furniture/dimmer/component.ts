@@ -5,32 +5,12 @@ import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerS
 import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
+import { RoomDimmerPreset } from '../../events/roomDimmerPreset';
+import {Options} from "@angular-slider/ngx-slider";
 
 @Component({
     selector: 'nitro-room-furniture-dimmer-component',
-    template: `
-    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-dimmer-component">
-        <div *ngIf="isLoading" class="card-loading-overlay"></div>
-        <div class="card-header-container">
-            <div class="card-header-overlay"></div>
-            <div class="card-header">
-                <div class="header-title">{{ ('widget.dimmer.title') | translate }}</div>
-                <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12">
-                    data
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 justify-space-between">
-                    <button type="button" class="btn btn-primary">{{ 'widget.dimmer.button.apply' | translate }}</button>
-                </div>
-            </div>
-        </div>
-    </div>`
+    templateUrl: './template.html'
 })
 export class DimmerFurniComponent extends ConversionTrackingWidget
 {
@@ -39,6 +19,11 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     private _effectId: number       = 0;
     private _color: number          = 0xFFFFFF;
     private _brightness: number     = 0xFF;
+    public presets: MoodlightItem[] = [];
+    public selectedPresetId: number = 0;
+
+    public  readonly availableColors: number[] = [7665141, 21495, 15161822, 15353138, 15923281, 8581961, 0];
+    public  readonly htmlColors: string[] = ['#74F5F5', '#0053F7', '#E759DE', '#EA4532', '#F2F851', '#82F349', '#000000'];
 
     constructor(
         private _ngZone: NgZone)
@@ -72,9 +57,44 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         super.unregisterUpdateEvents(eventDispatcher);
     }
 
+    public getSelectedPreset(): MoodlightItem
+    {
+        return this.presets[this.selectedPresetId -1];
+    }
+
+    public selectPreset(index: number): void
+    {
+        this.selectedPresetId = index;
+    }
+
+    public selectColor(color: number): void
+    {
+        this.getSelectedPreset().color = color;
+    }
+
     private onDimmerPresetsEvent(event: RoomWidgetDimmerUpdateEvent): void
     {
+        /*
+            color: number;
+                intensity: number;
+                id: number;
+                backgroundOnly: boolean
+         */
+        this.presets = event.presets.map(item => {
+            return {
+                color: item.color,
+                id: item.id,
+                intensity: item._Str_4272,
+                backgroundOnly: item.type == 2
+            };
+        });
 
+
+        this.selectedPresetId = event.selectedPresetId;
+        this._ngZone.run(() =>
+        {
+            this._visible = true;
+        });
     }
 
     private onDimmerHideEvent(event: RoomWidgetDimmerUpdateEvent): void
@@ -97,13 +117,35 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         return (this.widgetHandler as FurnitureDimmerWidgetHandler);
     }
 
+    public hide(): void
+    {
+        this._visible = false;
+    }
     public get visible(): boolean
     {
-        return this._visible;
+        return this._visible && this.selectedPresetId > 0 && this.presets.length > 0;
     }
 
     public set visible(flag: boolean)
     {
         this._visible = flag;
     }
+
+    public get delaySliderOptions(): Options
+    {
+        return {
+            floor:0,
+            ceil:255,
+            step:1,
+            hidePointerLabels: true,
+            hideLimitLabels: true,
+        };
+    }
+}
+
+interface MoodlightItem {
+    color: number;
+    intensity: number;
+    id: number;
+    backgroundOnly: boolean
 }

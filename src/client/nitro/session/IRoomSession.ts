@@ -29,6 +29,7 @@ export interface IRoomSession extends IDisposable
     sendTakeRightsMessage(userId: number): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
+    requestMoodlightSettings(): void;
     connection: IConnection;
     userDataManager: UserDataManager;
     roomId: number;

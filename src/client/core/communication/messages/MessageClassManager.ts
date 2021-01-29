@@ -33,7 +33,7 @@ export class MessageClassManager
     private registerMessageEventClass(header: number, handler: Function): void
     {
         if(!header || !handler) return;
-
+   
         const existing = this._messageIdByEvent.get(handler);
 
         if(existing) return;

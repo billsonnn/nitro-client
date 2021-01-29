@@ -254,6 +254,8 @@ import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMail
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
+import {MoodlightSettingsComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer";
+import {RoomDimmerPresetsEvent} from "./messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent";
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -401,7 +403,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.FURNITURE_ITEMDATA, FurnitureItemDataEvent);
         this._events.set(IncomingHeader.ITEM_STACK_HELPER, FurnitureStackHeightEvent);
         this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
-        this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomSessionDimmerPresetsEvent);
+        this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomDimmerPresetsEvent);
         this._events.set(IncomingHeader.FURNITURE_STATE_2, FurnitureState2Event);
 
         // FLOOR
@@ -603,6 +605,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // WALL
         this._composers.set(OutgoingHeader.FURNITURE_WALL_UPDATE, FurnitureWallUpdateComposer);
+
+        // Dimmers
+        this._composers.set(OutgoingHeader.ITEM_DIMMER_SETTINGS, MoodlightSettingsComposer);
 
         // LOGIC
         this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);

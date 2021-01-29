@@ -1,0 +1,30 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-dimmer-component">
+    <div class="card-header-container">
+        <div class="card-header-overlay"></div>
+        <div class="card-header">
+            <div class="header-title">{{ ('widget.dimmer.title') | translate }}</div>
+            <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-sm" (click)="selectPreset((i + 1))" *ngFor="let preset of presets; let i = index;">{{ ('widget.dimmer.tab.' + (i + 1)) | translate}}</button>
+            </div>
+        </div>
+        <div class="row">
+            Selected Preset: {{ selectedPresetId }}<br />
+            Color: {{ getSelectedPreset().color }}
+            <button type="button" class="btn" (click)="selectColor(color)" [ngClass]="{'color-selected': getSelectedPreset().color == color}" *ngFor="let color of  availableColors; let i = index" [ngStyle]="{'background-color': htmlColors[i]}">{{ htmlColors[i]}}</button>
+            <br /><br /><br />
+            <ngx-slider  [options]="delaySliderOptions" [(value)]="getSelectedPreset().intensity"></ngx-slider><br />
+            <br />
+            <input type="checkbox" [ngModel]="getSelectedPreset().backgroundOnly" />
+        </div>
+        <div class="row">
+            <div class="col-12 justify-space-between">
+                <button type="button" class="btn btn-primary">{{ 'widget.dimmer.button.apply' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

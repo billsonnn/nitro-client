@@ -21,12 +21,12 @@ export class RoomSessionDimmerPresetsEvent extends RoomSessionEvent
         return this._presets.length;
     }
 
-    public get _Str_6226(): number
+    public get selectedPresetId(): number
     {
         return this._selectedPresetId;
     }
 
-    public set _Str_6226(k: number)
+    public set selectedPresetId(k: number)
     {
         this._selectedPresetId = k;
     }
