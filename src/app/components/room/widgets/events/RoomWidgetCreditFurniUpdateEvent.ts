@@ -11,7 +11,7 @@ export class RoomWidgetCreditFurniUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, furniType: string, _arg_2: number, _arg_3: number)
     {
         super(k);
-        
+
         this._value = _arg_3;
         this._objectId = _arg_2;
         this._furniType = furniType;
