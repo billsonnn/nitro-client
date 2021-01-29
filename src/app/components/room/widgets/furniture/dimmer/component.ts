@@ -70,6 +70,7 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     public selectColor(color: number): void
     {
         this.getSelectedPreset().color = color;
+        this.previewSettings();
     }
 
     private onDimmerPresetsEvent(event: RoomWidgetDimmerUpdateEvent): void
@@ -134,7 +135,23 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
 
     public onSliderChange(): void
     {
+        this.previewSettings();
+    }
 
+    public changeCheckbox(event): void
+    {
+
+        this.getSelectedPreset().backgroundOnly = event.target.checked;
+        this.previewSettings();
+    }
+
+    private previewSettings(): void
+    {
+        if(!this.messageListener) return;
+
+        const currentItem = this.getSelectedPreset();
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerPreviewMessage(currentItem.color, currentItem.intensity, currentItem.backgroundOnly));
     }
 
 

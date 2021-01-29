@@ -19,7 +19,7 @@
             <br /><br /><br />
             <ngx-slider (valueChange)="onSliderChange()"  [options]="delaySliderOptions" [(value)]="getSelectedPreset().intensity"></ngx-slider><br />
             <br />
-            <input type="checkbox" [ngModel]="getSelectedPreset().backgroundOnly" />
+            <input type="checkbox" (change)="changeCheckbox($event)" [ngModel]="getSelectedPreset().backgroundOnly" />
         </div>
         <div class="row">
             <div class="col-12 justify-space-between">
