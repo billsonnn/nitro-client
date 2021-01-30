@@ -25,6 +25,9 @@ import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
 import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
+import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
+import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
+import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -219,6 +222,18 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new RoomTakeRightsComposer(userId));
     }
 
+    public updateMoodlightData(id: number, _Str_24446: number, color: number, _Str_5123: number, apply: boolean): void
+    {
+        const local6 = '000000' + color.toString(16).toUpperCase();
+        const local7 = '#' + local6.substring((local6.length - 6));
+        this.connection.send(new MoodlightSettingsSaveComposer(id, _Str_24446, local7, _Str_5123, apply));
+    }
+
+    public toggleMoodlightState(): void
+    {
+        this.connection.send(new MoodlightTogggleStateComposer());
+    }
+
     public pickupPet(id: number): void
     {
         if(!this._connection) return;
@@ -232,6 +247,14 @@ export class RoomSession extends Disposable implements IRoomSession
 
         this._connection.send(new RemoveBotFromFlatComposer(id));
     }
+
+    public requestMoodlightSettings(): void
+    {
+        if(!this._connection) return;
+
+        this._connection.send(new MoodlightSettingsComposer());
+    }
+
 
     public get connection(): IConnection
     {
