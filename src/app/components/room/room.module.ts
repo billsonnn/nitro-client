@@ -13,6 +13,7 @@ import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.compone
 import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
+import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
 import { RoomInfoStandFurniComponent } from './widgets/infostand/components/furni/furni.component';
@@ -46,6 +47,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
+        StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
         ChooserWidgetBaseComponent,
@@ -71,6 +73,7 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoOwnAvatarComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
+        StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
         ChooserWidgetBaseComponent,

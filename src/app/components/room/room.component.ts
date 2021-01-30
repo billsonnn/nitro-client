@@ -51,6 +51,7 @@ import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmer
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
+import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
@@ -372,6 +373,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.USER_CHOOSER:
                 widgetHandler = new UserChooserWidgetHandler();
                 break;
+            case RoomWidgetEnum.FURNI_STICKIE_WIDGET:
+                widgetHandler = new FurnitureStickieHandler();
+                break;
             case RoomWidgetEnum.DOORBELL:
                 widgetHandler = new DoorbellWidgetHandler();
                 break;
@@ -593,6 +597,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 {
                     Nitro.instance.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_STICKIE:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE, objectId, category, event.roomId));
                 break;
             case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
