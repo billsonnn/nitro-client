@@ -129,7 +129,7 @@ export class NitroCommunicationDemo extends NitroManager
             return;
         }
 
-        connection.send(new SecurityTicketComposer(this._sso));
+        connection.send(new SecurityTicketComposer(this._sso, Nitro.instance.time));
     }
 
     private onClientPingEvent(event: ClientPingEvent): void
