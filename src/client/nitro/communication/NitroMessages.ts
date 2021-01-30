@@ -255,10 +255,10 @@ import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMail
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
-import {MoodlightSettingsComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer";
-import {RoomDimmerPresetsEvent} from "./messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent";
-import {MoodlightSettingsSaveComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer";
-import {MoodlightTogggleStateComposer} from "./messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer";
+import { MoodlightSettingsComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
+import { RoomDimmerPresetsEvent } from './messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent';
+import { MoodlightSettingsSaveComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
+import { MoodlightTogggleStateComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
