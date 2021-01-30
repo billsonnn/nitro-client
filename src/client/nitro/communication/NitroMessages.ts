@@ -1,5 +1,4 @@
 import { IMessageConfiguration } from '../../core/communication/messages/IMessageConfiguration';
-import { RoomSessionDimmerPresetsEvent } from '../session/events/RoomSessionDimmerPresetsEvent';
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ChangeNameUpdateEvent } from './messages/incoming/avatar/ChangeNameUpdateEvent';
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
@@ -31,6 +30,7 @@ import { NewFriendRequestEvent } from './messages/incoming/friendlist/NewFriendR
 import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteErrorEvent';
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
+import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -100,6 +100,7 @@ import { FurnitureItemDataEvent } from './messages/incoming/room/furniture/Furni
 import { FurnitureStackHeightEvent } from './messages/incoming/room/furniture/FurnitureStackHeightEvent';
 import { FurnitureState2Event } from './messages/incoming/room/furniture/FurnitureState2Event';
 import { FurnitureStateEvent } from './messages/incoming/room/furniture/FurnitureStateEvent';
+import { RoomDimmerPresetsEvent } from './messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent';
 import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/FurnitureWallAddEvent';
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
 import { FurnitureWallRemoveEvent } from './messages/incoming/room/furniture/wall/FurnitureWallRemoveEvent';
@@ -150,7 +151,9 @@ import { RequestAchievementsMessageComposer } from './messages/outgoing/achievem
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { RedeemItemClothingComposer } from './messages/outgoing/catalog/RedeemItemClothingComposer';
 import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
@@ -192,6 +195,7 @@ import { NavigatorSettingsComposer } from './messages/outgoing/navigator/Navigat
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
+import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
@@ -206,6 +210,9 @@ import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotCompos
 import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { RoomAdsUpdateComposer } from './messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
+import { MoodlightSettingsComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
+import { MoodlightSettingsSaveComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
+import { MoodlightTogggleStateComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 import { FurnitureFloorUpdateComposer } from './messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurnitureAliasesComposer } from './messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { FurniturePickupComposer } from './messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -252,13 +259,6 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
-import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
-import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
-import { MoodlightSettingsComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
-import { RoomDimmerPresetsEvent } from './messages/incoming/room/furniture/RoomDimmerPresetsMessageEvent';
-import { MoodlightSettingsSaveComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
-import { MoodlightTogggleStateComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -624,6 +624,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.FURNITURE_WALL_MULTISTATE, FurnitureWallMultiStateComposer);
         this._composers.set(OutgoingHeader.ONE_WAY_DOOR_CLICK, FurnitureOneWayDoorComposer);
         this._composers.set(OutgoingHeader.ITEM_EXCHANGE_REDEEM, FurnitureExchangeComposer);
+        this._composers.set(OutgoingHeader.ITEM_CLOTHING_REDEEM, RedeemItemClothingComposer);
 
         // MAPPING
         this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);

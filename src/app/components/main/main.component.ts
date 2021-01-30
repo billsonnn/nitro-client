@@ -11,6 +11,7 @@ import { RoomObjectWidgetRequestEvent } from '../../../client/nitro/room/events/
 import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomSessionChatEvent } from '../../../client/nitro/session/events/RoomSessionChatEvent';
 import { RoomSessionDanceEvent } from '../../../client/nitro/session/events/RoomSessionDanceEvent';
+import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
@@ -22,6 +23,7 @@ import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';
+import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from '../room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/component';
@@ -30,7 +32,6 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 
 @Component({
     selector: 'nitro-main-component',
@@ -202,6 +203,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.DOORBELL, DoorbellWidgetComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, FurnitureWidgetTrophyComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CREDIT_WIDGET, FurnitureWidgetCreditComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
