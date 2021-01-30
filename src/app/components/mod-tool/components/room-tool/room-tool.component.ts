@@ -1,15 +1,9 @@
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { ModTool } from '../tool.component';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { UserFigureComposer } from '../../../../../client/nitro/communication/messages/outgoing/user/data/UserFigureComposer';
-import { ModtoolRequestRoomInfoComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
-import { RoomSessionEvent } from '../../../../../client/nitro/session/events/RoomSessionEvent';
-import { NavigatorHomeRoomEvent } from '../../../../../client/nitro/communication/messages/incoming/navigator/NavigatorHomeRoomEvent';
-import { ModtoolRoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { UserInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { NavigatorCategoriesComposer } from '../../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
-import { NavigatorSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSettingsComposer';
 import { ModToolService } from '../../services/mod-tool.service';
+import { RoomToolRoom } from './room-tool-room';
+import { Nitro } from '../../../../../client/nitro/Nitro';
+import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',
@@ -17,9 +11,15 @@ import { ModToolService } from '../../services/mod-tool.service';
 })
 export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 {
+    public lockDoor: boolean = false;
+    public changeTitle: boolean = false;
+    public kickUsers: boolean = false;
+    private _housekeepingUrl: string;
+
     constructor(private _modToolService: ModToolService)
     {
         super();
+        this._housekeepingUrl = Nitro.instance.getConfiguration<string>('modtools.housekeeping.url', 'http://localhost');
     }
 
     public ngOnInit(): void
@@ -30,24 +30,27 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     {
     }
 
+    public saveRoom(): void
+    {
+        const roomId = Nitro.instance.roomSessionManager.viewerSession.roomId;
+        const lockDoor = this.lockDoor ? 1 : 0;
+        const changeTitle = this.changeTitle ? 1 : 0;
+        const kickUsers = this.kickUsers ? 1 : 0;
+        Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers ));
+    }
+
     public get inRoom(): boolean
 	{
 		return this._modToolService.isInRoom;
 	}
 
-	public get roomId(): number
+	public get room(): RoomToolRoom
 	{
-		return this._modToolService.roomId;
+		return this._modToolService.room;
 	}
 
-    public get roomName(): string
+	public get housekepingUrl(): string
     {
-        return this._modToolService.roomName;
+        return this._housekeepingUrl;
     }
-
-    public get roomOwnerName(): string
-    {
-        return this._modToolService.roomOwnerName;
-    }
-
 }

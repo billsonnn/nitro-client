@@ -7,6 +7,26 @@
 		<button type="button" class="close" (click)="hideTool()"><i class="fas fa-times"></i></button>
 	</div>
 	<div class="card-body">
-		Not implemented yet
+        <div class="row" *ngFor="let visit of visits">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <span style="font-size: 13px">
+                        [{{visit.roomId}}]{{visit.roomName}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="badge badge-secondary badge-block" style="width:100%; text-align:left;">
+                            <div *ngFor="let chatlog of visit.chatlogs">
+                                {{chatlog.timestamp}} - {{chatlog.userName}} - {{chatlog.message}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 	</div>
 </div>

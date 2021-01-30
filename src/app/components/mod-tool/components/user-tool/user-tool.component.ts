@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { ModTool } from '../tool.component';
+import {ModToolService} from "../../services/mod-tool.service";
+import {RoomToolRoom} from "../room-tool/room-tool-room";
+import {UserToolUser} from "./user-tool-user";
 
 @Component({
     selector: 'nitro-mod-tool-user-component',
@@ -8,7 +11,7 @@ import { ModTool } from '../tool.component';
 export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 {
 
-    constructor()
+    constructor(private _modToolService: ModToolService)
     {
 	    super();
     }
@@ -19,5 +22,10 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 
     public ngOnDestroy(): void
     {
+    }
+
+    public get user(): UserToolUser
+    {
+        return this._modToolService.user;
     }
 }

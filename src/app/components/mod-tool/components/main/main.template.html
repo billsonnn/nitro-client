@@ -15,7 +15,7 @@
 				</button>
 				<button (click)="toggleUserTool()" class="btn btn-sm btn-primary btn-block">
 					<i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
-					User: Damien
+                    User: <span class="username" *ngIf="user">{{user.username}}</span>
 				</button>
 				<button (click)="toggleReportsTool()" class="btn btn-sm btn-primary btn-block">
 					<i class="icon modtool-reports-icon" style="margin-right: 5px;"></i>

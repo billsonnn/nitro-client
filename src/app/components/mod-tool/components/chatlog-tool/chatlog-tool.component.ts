@@ -1,5 +1,7 @@
 import { Component, Input, NgZone, OnDestroy, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModTool } from '../tool.component';
+import { ModToolService } from '../../services/mod-tool.service';
+import { ModtoolUserChatlogParserVisit } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 
 @Component({
     selector: 'nitro-mod-tool-chatlog-component',
@@ -8,7 +10,7 @@ import { ModTool } from '../tool.component';
 export class ModToolChatlogComponent extends ModTool implements OnInit, OnDestroy
 {
 
-    constructor()
+    constructor(private _modToolService: ModToolService)
     {
         super();
     }
@@ -19,6 +21,11 @@ export class ModToolChatlogComponent extends ModTool implements OnInit, OnDestro
 
     public ngOnDestroy(): void
     {
+    }
+
+    public get visits(): ModtoolUserChatlogParserVisit[]
+    {
+        return this._modToolService.roomVisits;
     }
 
 }

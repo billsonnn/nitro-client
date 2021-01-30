@@ -2,32 +2,81 @@
 	<div class="card-header">
 			<span>
 			<i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
-			Room Tool
+			Room Tool    {{inRoom}}
+
 			</span>
 		<button type="button" class="close" (click)="hideTool()"><i class="fas fa-times"></i></button>
 	</div>
-	<div class="card-body" *ngIf="inRoom">
-		<div class="row">
-			<div class="col">
-				<div class="badge badge-secondary mb-1">
-					Name: {{roomName}}
-				</div>
-			</div>
-			<div class="col">
-				<div class="badge badge-secondary mb-1">
-					Id: {{roomId}}
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="badge badge-secondary mb-1">
-					Owner: {{roomOwnerName}}
-				</div>
-			</div>
-		</div>
-
-
+	<div class="card-body pl-3 pr-3" *ngIf="inRoom">
+        <div class="row">
+            <div class="col pr-2">
+                <div class="row">
+                    <div class="col">
+                        <div class="badge badge-secondary mb-1">
+                            <div>
+                                <span class="font-weight-bold mr-2">Name:</span> {{room.name}}
+                            </div>
+                            <div>
+                                <span class="font-weight-bold mr-2">Description:</span> {{room.description}}
+                            </div>
+                            <div>
+                                <span class="font-weight-bold mr-2">Owner:</span> {{room.ownerName}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="badge badge-secondary mb-1">
+                            <div>
+                                <span class="font-weight-bold mr-2">Players in room:</span> {{room.playerAmount + 1}}
+                            </div>
+                            <div>
+                                <span class="font-weight-bold mr-2">Owner in room:</span> {{room.owner ? 'yes' : 'no'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col pl-2">
+                <div class="row">
+                    <div class="col">
+                        <div class="badge badge-secondary mb-1">
+                            <div class="btn-group btn-group-vertical w-100">
+                                    <a href="{{housekepingUrl}}/housekeeping/rooms/1" target="_blank" class="btn btn-sm btn-primary btn-block">
+                                        <i class="icon modtool-wrench-icon" style="margin-right: 5px;"></i>
+                                        Open in housekeeping
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="badge badge-secondary mb-1">
+                            <div class="btn-group btn-group-vertical w-100">
+                                <div class="mb-1">
+                                    <input [(ngModel)]="changeTitle" class="form-check-input" id="change-title" type="checkbox">
+                                    <label for="change-title" class="form-check-label">Change title to inappropriate</label>
+                                </div>
+                                <div class="mb-1">
+                                    <input [(ngModel)]="kickUsers" class="form-check-input" id="kick-users" type="checkbox">
+                                    <label for="kick-users" class="form-check-label">Kick users(stops event)</label>
+                                </div>
+                                <div class="mb-1">
+                                    <input [(ngModel)]="lockDoor" class="form-check-input" id="lock-room" type="checkbox">
+                                    <label for="lock-room" class="form-check-label">Lock room</label>
+                                </div>
+                                <button (click)="saveRoom()" class="btn btn-sm btn-primary btn-block">
+                                    <i class="icon modtool-key-icon" style="margin-right: 5px;"></i>
+                                    Save room
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 	<div class="card-body" *ngIf="!inRoom">
 		Not in a room

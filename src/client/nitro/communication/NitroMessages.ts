@@ -247,6 +247,9 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInfoEvent';
 import { ModtoolRequestRoomInfoComposer } from './messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
+import { ModtoolChangeRoomSettingsComposer } from './messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolRequestUserChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUserChatlogEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -261,7 +264,7 @@ export class NitroMessages implements IMessageConfiguration
         this.registerEvents();
         this.registerComposers();
     }
-    
+
     private registerEvents(): void
     {
         // AVAILABILITY
@@ -340,6 +343,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // MODTOOL
         this._events.set(IncomingHeader.MODTOOL_ROOM_INFO, ModtoolRoomInfoEvent);
+        this._events.set(IncomingHeader.MODTOOL_USER_CHATLOG, ModtoolUserChatlogEvent);
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);
@@ -625,7 +629,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
 
-                
+
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
 
@@ -652,6 +656,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // MODTOOL
         this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_INFO, ModtoolRequestRoomInfoComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_CHANGE_ROOM_SETTINGS, ModtoolChangeRoomSettingsComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_CHATLOG, ModtoolRequestUserChatlogComposer);
     }
 
     public get events(): Map<number, Function>

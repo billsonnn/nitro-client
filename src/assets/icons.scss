@@ -350,6 +350,18 @@ i {
 			height:15px;
 		}
 
+        &.modtool-wrench-icon {
+            background-image: url('./images/modtool/wrench.gif');
+            width:20px;
+            height:15px;
+        }
+
+        &.modtool-key-icon {
+            background-image: url('./images/modtool/key.gif');
+            width:20px;
+            height:15px;
+        }
+
         &.spin {
             animation: rotating 1s linear infinite;
         }

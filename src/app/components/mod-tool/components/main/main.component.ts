@@ -1,6 +1,7 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ModToolService } from '../../services/mod-tool.service';
 import { SettingsService } from '../../../../core/settings/service';
+import {UserToolUser} from "../user-tool/user-tool-user";
 
 @Component({
     selector: 'nitro-mod-tool-main-component',
@@ -49,6 +50,11 @@ export class ModToolMainComponent implements OnInit, OnDestroy
 
 	public toggleReportsTool(): void
 	{
-		this.reportsToolVisible = !this.reportsToolVisible;
+	    this.reportsToolVisible = !this.reportsToolVisible;
+	}
+
+	public get user(): UserToolUser
+	{
+	    return this._modToolService.user;
 	}
 }

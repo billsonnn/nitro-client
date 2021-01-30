@@ -4,7 +4,7 @@ import { IMessageParser } from '../../../../../core/communication/messages/IMess
 export class ModtoolRoomInfoParser implements IMessageParser
 {
 	private _id: number;
-	private _size: number;
+	private _playerAmount: number;
 	private _owner: boolean;
 	private _ownerId: number;
 	private _ownerName: string;
@@ -25,7 +25,7 @@ export class ModtoolRoomInfoParser implements IMessageParser
 	    if(!wrapper) return false;
 
 	    this._id   = wrapper.readInt();
-	    this._size = wrapper.readInt();
+	    this._playerAmount = wrapper.readInt();
 	    this._owner = wrapper.readBoolean();
 	    this._ownerId = wrapper.readInt();
 	    this._ownerName = wrapper.readString();
@@ -42,9 +42,9 @@ export class ModtoolRoomInfoParser implements IMessageParser
 	    return this._id;
 	}
 
-	public get size(): number
+	public get playerAmount(): number
 	{
-	    return this._size;
+	    return this._playerAmount;
 	}
 
 	public get owner(): boolean
