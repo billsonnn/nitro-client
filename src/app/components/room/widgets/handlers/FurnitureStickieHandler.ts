@@ -1,5 +1,4 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
@@ -7,77 +6,72 @@ import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoo
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import * as sorting from '../../../../../utils/sorting';
-import { RoomObjectItem } from '../events/RoomObjectItem';
-import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
-import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetStickieDataUpdateEvent } from '../events/RoomWidgetStickieDataUpdateEvent';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetStickieSendUpdateMessage } from '../messages/RoomWidgetStickieSendUpdateMessage';
-import { RoomWidgetStickieDataUpdateEvent } from '../events/RoomWidgetStickieDataUpdateEvent';
 
 export class FurnitureStickieHandler implements IRoomWidgetHandler
 {
-    private _isDisposed: boolean = false;
     private _container: IRoomWidgetHandlerContainer = null;
+    private _isDisposed: boolean                    = false;
 
     public dispose(): void
     {
-        this._isDisposed = true;
-        this._container = null;
+        this._container     = null;
+        this._isDisposed    = true;
     }
 
-    public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
+    public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        if(!k) return null;
+        if(!message) return null;
 
-        switch(k.type)
+        switch(message.type)
         {
             case RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE: {
+                const widgetMessage = (message as RoomWidgetFurniToWidgetMessage);
 
-                const event = <RoomWidgetFurniToWidgetMessage>k;
-                if(!event) return null;
+                const roomObject = this._container.roomEngine.getRoomObject(widgetMessage.roomId, widgetMessage.objectId, widgetMessage.category);
 
-                const furni = this._container.roomEngine.getRoomObject(event.roomId, event.objectId, event.category);
-                if(!furni) return null;
-
-                const model = furni.model;
-                if(!model) return null;
-
-                const stickyData = <string>model.getValue(RoomObjectVariable.FURNITURE_ITEMDATA);
-                if(stickyData.length < 6) return null;
-
-                let stickyColor = null;
-                let stickyText = '';
-                if(stickyData.indexOf(' ' ) > 0)
+                if(roomObject)
                 {
-                    stickyColor = stickyData.slice(0, stickyData.indexOf(' '));
-                    stickyText = stickyData.slice((stickyData.indexOf(' ') + 1), stickyData.length);
-                }
-                else
-                {
-                    stickyColor = stickyData;
+                    const data = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_ITEMDATA);
+
+                    if(data.length < 6) return null;
+
+                    let color: string   = null;
+                    let text: string    = null;
+
+                    if(data.indexOf(' ' ) > 0)
+                    {
+                        color   = data.slice(0, data.indexOf(' '));
+                        text    = data.slice((data.indexOf(' ') + 1), data.length);
+                    }
+                    else
+                    {
+                        color = data;
+                    }
+
+                    const canModify = (this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isModerator);
+
+                    this._container.events.dispatchEvent(new RoomWidgetStickieDataUpdateEvent(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, widgetMessage.objectId, roomObject.type, text, color, canModify));
                 }
 
-                const canChangeSticky = this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isGodMode;
-                this._container.events.dispatchEvent(new RoomWidgetStickieDataUpdateEvent(RoomWidgetStickieDataUpdateEvent.RWSDUE_STICKIE_DATA, event.objectId, furni.type, stickyText, stickyColor, canChangeSticky));
-
-            }
                 break;
+            }
             case RoomWidgetStickieSendUpdateMessage.SEND_UPDATE: {
-                const event = <RoomWidgetStickieSendUpdateMessage>k;
-                if(!event) return null;
+                const stickieUpdateMessage = (message as RoomWidgetStickieSendUpdateMessage);
 
-                this._container.roomEngine.modifyRoomObjectData(event.objectId, RoomObjectCategory.WALL, event.colorHex, event.text);
-            }
+                this._container.roomEngine.modifyRoomObjectData(stickieUpdateMessage.objectId, RoomObjectCategory.WALL, stickieUpdateMessage.colorHex, stickieUpdateMessage.text);
+
                 break;
+            }
             case RoomWidgetStickieSendUpdateMessage.SEND_DELETE: {
-                const event = <RoomWidgetStickieSendUpdateMessage>k;
-                if(!event) return null;
+                const stickieUpdateMessage = (message as RoomWidgetStickieSendUpdateMessage);
 
-                this._container.roomEngine.deleteRoomObject(event.objectId, RoomObjectCategory.WALL);
-            }
+                this._container.roomEngine.deleteRoomObject(stickieUpdateMessage.objectId, RoomObjectCategory.WALL);
+
                 break;
+            }
         }
 
         return null;
