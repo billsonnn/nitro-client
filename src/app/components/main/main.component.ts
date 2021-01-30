@@ -30,6 +30,7 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
+import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 
 @Component({
     selector: 'nitro-main-component',
@@ -116,6 +117,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
             }
         });
     }
@@ -165,6 +167,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
             }
         });
     }
