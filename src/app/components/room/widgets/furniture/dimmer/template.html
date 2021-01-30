@@ -5,7 +5,7 @@
     </div>
     <div class="p-3">
         <div class="dimmer-inner bg-secondary p-2">
-            <ng-container *ngIf="!isOn">
+            <ng-container *ngIf="isOn">
                 <div class="d-flex flex-row justify-content-between">
                     <button type="button" class="btn btn-sm btn-primary w-100" (click)="selectPreset((i + 1))"
                         *ngFor="let preset of presets; let i = index;">{{ ('widget.dimmer.tab.' + (i + 1)) |
@@ -37,7 +37,7 @@
                         'widget.dimmer.button.apply' | translate }}</button>
                 </div>
             </ng-container>
-            <ng-container *ngIf="isOn">
+            <ng-container *ngIf="!isOn">
                 {{ 'widget.dimmer.info.off' | translate }}
                 <button type="button" class="btn btn-primary btn-sm w-100" (click)="handleButton('on_off')">{{ (isOn ?
                     'widget.dimmer.button.off' : 'widget.dimmer.button.on') | translate}}</button>
