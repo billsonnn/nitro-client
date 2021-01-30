@@ -1,10 +1,27 @@
 
 .nitro-room-furniture-dimmer-component {
     position: absolute;
-    width: 275px;
-    max-width: 275px;
+    width: 350px;
+    max-width: 350px;
 
-    .color-selected {
-       color: black;
+    .dimmer-inner {
+        border-radius: $border-radius;
+
+        .dimmer-colour-list {
+
+            .dimmer-colour {
+                width: 100%;
+
+                &:not(:last-child) {
+                    margin-right: 5px;
+                }
+
+                &.color-selected {
+                    color: black;
+                    border: 2px solid $white;
+                 }
+            }
+        }
     }
+
 }
