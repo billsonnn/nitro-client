@@ -32,7 +32,7 @@ export class FurnitureCreditWidgetHandler implements IRoomWidgetHandler
 
                 if(roomObject && this._container.isOwnerOfFurniture(roomObject))
                 {
-                    const value  = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_CREDIT_VALUE);
+                    const value = roomObject.model.getValue<number>(RoomObjectVariable.FURNITURE_CREDIT_VALUE);
 
                     this._container.events.dispatchEvent(
                         new RoomWidgetCreditFurniUpdateEvent(RoomWidgetCreditFurniUpdateEvent.RWCFUE_CREDIT_FURNI_UPDATE,

@@ -23,7 +23,7 @@ import { RoomAvatarInfoComponent } from './room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from './room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from './room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from './room/widgets/choosers/user/user.component';
-import { FurnitureWidgetCreditComponent } from './room/widgets/furniture/credit/component';
+import { FurnitureWidgetCreditComponent } from './room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from './room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './room/widgets/furniture/dimmer/component';
 import { FurnitureWidgetTrophyComponent } from './room/widgets/furniture/trophies/trophy.component';

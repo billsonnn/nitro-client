@@ -10,7 +10,7 @@ import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/stylese
 import { ChooserWidgetBaseComponent } from './widgets/choosers/base/base.component';
 import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
-import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/component';
+import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';

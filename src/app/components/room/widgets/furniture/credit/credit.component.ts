@@ -1,7 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetUpdateEvent } from '../../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetCreditFurniUpdateEvent } from '../../events/RoomWidgetCreditFurniUpdateEvent';
 import { FurnitureCreditWidgetHandler } from '../../handlers/FurnitureCreditWidgetHandler';
 import { RoomWidgetCreditFurniRedeemMessage } from '../../messages/RoomWidgetCreditFurniRedeemMessage';
@@ -13,8 +12,8 @@ import { RoomWidgetCreditFurniRedeemMessage } from '../../messages/RoomWidgetCre
 export class FurnitureWidgetCreditComponent extends ConversionTrackingWidget
 {
     private _objectId: number   = -1;
-    private _visible: boolean   = false;
     private _value: string      = '0';
+    private _visible: boolean   = false;
 
     constructor(
         private _ngZone: NgZone)
@@ -42,28 +41,25 @@ export class FurnitureWidgetCreditComponent extends ConversionTrackingWidget
         super.unregisterUpdateEvents(eventDispatcher);
     }
 
-    private onRoomWidgetCreditFurniUpdateEvent(event: RoomWidgetUpdateEvent): void
+    private onRoomWidgetCreditFurniUpdateEvent(event: RoomWidgetCreditFurniUpdateEvent): void
     {
         if(!event) return;
 
-        const creditEvent = <RoomWidgetCreditFurniUpdateEvent> event;
-
-        if(!creditEvent) return;
-
-        this._objectId  = creditEvent.objectId;
+        this._objectId  = event.objectId;
 
         this._ngZone.run(() =>
         {
+            this._value     = event.value.toString();
             this._visible   = true;
-            this._value     = creditEvent.value.toString();
         });
     }
 
     public sendRedeem(): void
     {
-        if(this._objectId == -1) return;
+        if(this._objectId === -1) return;
 
         this.messageListener.processWidgetMessage(new RoomWidgetCreditFurniRedeemMessage(RoomWidgetCreditFurniRedeemMessage.RWFCRM_REDEEM, this._objectId));
+
         this.hide();
     }
 
