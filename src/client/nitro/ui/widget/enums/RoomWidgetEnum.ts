@@ -8,6 +8,7 @@
     public static FURNI_CREDIT_WIDGET: string                    = 'RWE_FURNI_CREDIT_WIDGET';
     public static FURNI_STICKIE_WIDGET: string                   = 'RWE_FURNI_STICKIE_WIDGET';
     public static FURNI_TROPHY_WIDGET: string                    = 'RWE_FURNI_TROPHY_WIDGET';
+    public static FURNI_LOVELOCK_WIDGET: string                  = 'RWE_FURNI_LOVELOCK_WIDGET';
     public static FURNI_PRESENT_WIDGET: string                   = 'RWE_FURNI_PRESENT_WIDGET';
     public static FURNI_ECOTRONBOX_WIDGET: string                = 'RWE_FURNI_ECOTRONBOX_WIDGET';
     public static FURNI_PET_PACKAGE_WIDGET: string               = 'RWE_FURNI_PET_PACKAGE_WIDGET';
