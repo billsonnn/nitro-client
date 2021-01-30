@@ -68,12 +68,9 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
 
     public hide(): void
     {
-        this._ngZone.run(() =>
-        {
-            this._visible   = false;
-            this._furniId   = -1;
-            this._height    = 0;
-        });
+        this._visible   = false;
+        this._furniId   = -1;
+        this._height    = 0;
     }
 
     public onHeightChange(): void

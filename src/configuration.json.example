@@ -44,7 +44,7 @@
     },
     "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
     "avatareditor.show.clubitems.dimmed": true,
-    "avatareditor.show.clubitems.first": true
+    "avatareditor.show.clubitems.first": true,
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,

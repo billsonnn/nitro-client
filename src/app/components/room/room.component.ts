@@ -52,6 +52,8 @@ import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHand
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
+import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
+import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
 
 @Component({
@@ -372,9 +374,13 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNI_STICKIE_WIDGET:
                 widgetHandler = new FurnitureStickieHandler();
-            // case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
-            //     widgetHandler = new FurnitureTrophyWidgetHandler();
-            //     break;
+                break;
+            case RoomWidgetEnum.DOORBELL:
+                widgetHandler = new DoorbellWidgetHandler();
+                break;
+            case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
+                widgetHandler = new FurnitureTrophyWidgetHandler();
+                break;
         }
 
         if(widgetHandler)
@@ -590,6 +596,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomEngineTriggerWidgetEvent.REQUEST_STICKIE:
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE, objectId, category, event.roomId));
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
                 break;
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
