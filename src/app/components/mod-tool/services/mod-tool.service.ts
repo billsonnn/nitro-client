@@ -13,6 +13,8 @@ import { UserToolUser } from '../components/user-tool/user-tool-user';
 import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
 import { ModtoolRequestUserChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
 import { ModtoolUserChatlogParserVisit } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
+import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -47,7 +49,8 @@ export class ModToolService implements OnDestroy
             new RoomEnterEvent(this.onRoomEnterEvent.bind(this)),
             new ModtoolRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
             new UserInfoEvent(this.onUserInfoEvent.bind(this)),
-            new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this))
+            new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
+            new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this))
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -100,14 +103,20 @@ export class ModToolService implements OnDestroy
     {
         if(!Nitro.instance.sessionDataManager.isModerator) return;
 
+        const roomId = Nitro.instance.roomSessionManager.viewerSession.roomId;
         Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(1));
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(Nitro.instance.roomSessionManager.viewerSession.roomId));
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(roomId));
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(roomId));
     }
 
     private onModtoolUserChatlogEvent(event: ModtoolUserChatlogEvent): void
     {
-        console.log(event.getParser());
         this._roomVisits = event.getParser().roomVisits;
+    }
+
+    private onModtoolRoomChatlogEvent(event: ModtoolRoomChatlogEvent): void
+    {
+        console.log(event.getParser());
     }
 
     public get room(): RoomToolRoom

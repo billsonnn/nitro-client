@@ -189,4 +189,5 @@ export class OutgoingHeader
 	public static MODTOOL_REQUEST_ROOM_INFO      = 707;
     public static MODTOOL_CHANGE_ROOM_SETTINGS = 3260;
     public static MODTOOL_REQUEST_USER_CHATLOG = 1391;
+    public static MODTOOL_REQUEST_ROOM_CHATLOG = 2587;
 }
