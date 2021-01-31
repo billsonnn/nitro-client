@@ -9,6 +9,7 @@ export class SettingsService
     private _catalogVisible: boolean;
     private _inventoryVisible: boolean;
     private _friendlistVisible: boolean;
+    private _userProfileVisible: boolean;
     private _achievementsVisible: boolean;
     private _meMenuVisible: boolean;
 
@@ -20,6 +21,7 @@ export class SettingsService
         this._catalogVisible        = false;
         this._inventoryVisible      = false;
         this._friendlistVisible     = false;
+        this._userProfileVisible    = false;
         this._achievementsVisible   = false;
         this._meMenuVisible         = false;
     }
@@ -99,6 +101,21 @@ export class SettingsService
         this._friendlistVisible = !this._friendlistVisible;
     }
 
+    public showUserProfile(): void
+    {
+        this._userProfileVisible = true;
+    }
+
+    public hideUserProfile(): void
+    {
+        this._userProfileVisible = false;
+    }
+
+    public toggleUserProfile(): void
+    {
+        this._userProfileVisible = !this._userProfileVisible;
+    }
+
     public showAchievements(): void
     {
         this._achievementsVisible = true;
@@ -152,6 +169,11 @@ export class SettingsService
     public get friendListVisible(): boolean
     {
         return this._friendlistVisible;
+    }
+
+    public get userProfileVisible(): boolean
+    {
+        return this._userProfileVisible;
     }
 
     public get achievementsVisible(): boolean
