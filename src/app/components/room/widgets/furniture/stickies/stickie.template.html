@@ -1,4 +1,4 @@
-<div *ngIf="visible" [bringToTop] [draggable] class="nitro-stickie-component" [ngStyle]="{ 'background-color': ('#' + colorHex), color: colorHex }">
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-furniture-stickie" [ngStyle]="{ 'background-color': ('#' + colorHex), color: colorHex }">
     <div class="drag-handler d-flex justify-content-between align-items-center py-1 px-2">
         <div *ngIf="isController" class=" d-flex align-items-center">
             <button type="button" class="sticky-trash mr-2" (click)="processAction('delete')">

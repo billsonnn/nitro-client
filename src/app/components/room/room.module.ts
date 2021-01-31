@@ -10,9 +10,11 @@ import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/stylese
 import { ChooserWidgetBaseComponent } from './widgets/choosers/base/base.component';
 import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
+import { FurnitureContextMenuWidget } from './widgets/furniture/context-menu/components/main/main.component';
+import { PurchaseClothingComponent } from './widgets/furniture/context-menu/components/purchasable-clothing/purchasable-clothing.component';
 import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
-import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
+import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.component';
 import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
@@ -45,6 +47,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoAvatarComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        FurnitureContextMenuWidget,
+        PurchaseClothingComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
         StickieFurniComponent,
@@ -71,6 +75,8 @@ import { RoomChatComponent } from './widgets/roomchat/component';
         RoomAvatarInfoAvatarComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        FurnitureContextMenuWidget,
+        PurchaseClothingComponent,
         CustomStackHeightComponent,
         DimmerFurniComponent,
         StickieFurniComponent,

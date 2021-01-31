@@ -45,13 +45,14 @@ import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandle
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
+import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
-import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
+import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
@@ -384,6 +385,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNI_CREDIT_WIDGET:
                 widgetHandler = new FurnitureCreditWidgetHandler();
+                break;
+            case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
+                widgetHandler = new FurnitureContextMenuWidgetHandler();
                 break;
         }
 
