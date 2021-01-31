@@ -65,7 +65,7 @@ export class AchievementsCategoryListComponent
 
     public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
     {
-        if(icon) return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
+        if(icon) return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('image.library.url') + `quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
 
         let level = 0;
 
@@ -76,7 +76,7 @@ export class AchievementsCategoryListComponent
 
         const isActive = ((level > 0) ? 'active' : 'inactive');
 
-        return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('c.images.url') + `/quests/achcategory_${cat}_${isActive}.png`).toString().replace('%image%',`achcategory_${cat}_${isActive}`);
+        return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('image.library.url') + `quests/achcategory_${cat}_${isActive}.png`).toString().replace('%image%',`achcategory_${cat}_${isActive}`);
     }
 
     public getCategoryProgress(achievements: Achievement[]): string

@@ -43,16 +43,19 @@ import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomVi
 import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHandler';
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
+import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
+import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
+import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
+import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
+import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
-import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
-import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
 
 @Component({
@@ -371,11 +374,20 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.USER_CHOOSER:
                 widgetHandler = new UserChooserWidgetHandler();
                 break;
+            case RoomWidgetEnum.FURNI_STICKIE_WIDGET:
+                widgetHandler = new FurnitureStickieHandler();
+                break;
             case RoomWidgetEnum.DOORBELL:
                 widgetHandler = new DoorbellWidgetHandler();
                 break;
             case RoomWidgetEnum.FURNI_TROPHY_WIDGET:
                 widgetHandler = new FurnitureTrophyWidgetHandler();
+                break;
+            case RoomWidgetEnum.FURNI_CREDIT_WIDGET:
+                widgetHandler = new FurnitureCreditWidgetHandler();
+                break;
+            case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
+                widgetHandler = new FurnitureContextMenuWidgetHandler();
                 break;
         }
 
@@ -590,8 +602,17 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                     Nitro.instance.roomEngine.processRoomObjectOperation(objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                 }
                 break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_STICKIE:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_STICKIE, objectId, category, event.roomId));
+                break;
             case RoomEngineTriggerWidgetEvent.REQUEST_TROPHY:
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_TROPHY, objectId, category, event.roomId));
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_CREDITFURNI:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_CREDITFURNI, objectId, category, event.roomId));
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_DIMMER:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_DIMMER, objectId, category, event.roomId));
                 break;
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:
