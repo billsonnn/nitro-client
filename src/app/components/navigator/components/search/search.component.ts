@@ -13,7 +13,7 @@ export class NavigatorSearchComponent implements OnInit
 
     constructor(
         private _formBuilder: FormBuilder,
-        private _navigatorService: NavigatorService) 
+        private _navigatorService: NavigatorService)
     {}
 
     public ngOnInit(): void

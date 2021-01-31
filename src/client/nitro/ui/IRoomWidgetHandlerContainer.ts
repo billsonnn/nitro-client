@@ -10,6 +10,8 @@ import { IRoomEngine } from '../room/IRoomEngine';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
 
 export interface IRoomWidgetHandlerContainer
 {
@@ -17,6 +19,7 @@ export interface IRoomWidgetHandlerContainer
     getRoomViewRect(): Rectangle;
     checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean;
     isOwnerOfFurniture(roomObject: IRoomObject): boolean;
+    processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent;
     events: IEventDispatcher;
     connection: IConnection;
     roomEngine: IRoomEngine;

@@ -2,7 +2,7 @@
 import { IRoomObject } from '../../../room/object/IRoomObject';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 
-export class TileObjectMap 
+export class TileObjectMap
 {
     private _tileObjectMap: Map<number, Map<number, IRoomObject>>;
     private _width: number;
@@ -17,7 +17,7 @@ export class TileObjectMap
         while(index < _arg_2)
         {
             this._tileObjectMap.set(index, new Map());
-            
+
             index++;
         }
 

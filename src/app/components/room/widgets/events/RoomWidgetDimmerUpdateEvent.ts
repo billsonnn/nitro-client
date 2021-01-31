@@ -46,7 +46,7 @@ export class RoomWidgetDimmerUpdateEvent extends RoomWidgetUpdateEvent
     public _Str_14989(k: number): _Str_6094
     {
         if(((k < 0) || (k >= this._presets.length))) return null;
-        
+
         return this._presets[k];
     }
 }

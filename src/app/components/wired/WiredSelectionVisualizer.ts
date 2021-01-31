@@ -6,7 +6,7 @@ import { IRoomObjectSpriteVisualization } from '../../../client/room/object/visu
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredSelectionFilter } from './WiredSelectionFilter';
 
-export class WiredSelectionVisualizer 
+export class WiredSelectionVisualizer
 {
     private _component: WiredMainComponent;
     private _selectionShader: Filter;
@@ -16,7 +16,7 @@ export class WiredSelectionVisualizer
         this._component = component;
 
         const shader = new WiredSelectionFilter([ 1, 1, 1 ], [ 0.6, 0.6, 0.6 ]);
-        
+
         this._selectionShader = shader;
     }
 

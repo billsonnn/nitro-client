@@ -19,7 +19,7 @@ export class RoomAvatarInfoNameComponent extends AvatarContextInfoView
     public static setup(view: RoomAvatarInfoNameComponent, userId: number, userName: string, userType: number, roomIndex: number, willFade: boolean = false): void
     {
         view.willFade = willFade;
-        
+
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
     }
 }

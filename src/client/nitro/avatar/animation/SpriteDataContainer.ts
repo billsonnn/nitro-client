@@ -59,7 +59,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
     public _Str_839(k: number): number
     {
         if(k < this._dz.length) return this._dz[k];
-        
+
         return 0;
     }
 

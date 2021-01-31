@@ -1,5 +1,6 @@
 ﻿import { NitroManager } from '../../core/common/NitroManager';
 import { Nitro } from '../Nitro';
+import { BadgeBaseAndLevel } from './BadgeBaseAndLevel';
 import { INitroLocalizationManager } from './INitroLocalizationManager';
 import { NitroLocalizationEvent } from './NitroLocalizationEvent';
 
@@ -7,6 +8,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 {
     private _definitions: Map<string, string>;
     private _parameters: Map<string, Map<string, string>>;
+    private _romanNumerals: string[];
 
     constructor()
     {
@@ -14,6 +16,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         this._definitions   = new Map();
         this._parameters    = new Map();
+        this._romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX'];
     }
 
     protected onInit(): void
@@ -66,13 +69,27 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
         for(const key in data) this._definitions.set(key, data[key]);
     }
 
+    public getRomanNumeral(number: number): string
+    {
+        return this._romanNumerals[Math.max(0, (number - 1))];
+    }
+
+    public getBadgeBaseAndLevel(badgeName: string): string
+    {
+        const badge = new BadgeBaseAndLevel(badgeName);
+
+        badge.level--;
+
+        return badge.getBadgeId;
+    }
+
     public getValue(key: string, doParams: boolean = true): string
     {
         if(key.startsWith('${')) key = key.substr(2, (key.length - 3));
 
-        let value = (this._definitions.get(key) || key);
+        let value = (this._definitions.get(key) || null);
 
-        if(doParams)
+        if(value && doParams)
         {
             const parameters = this._parameters.get(key);
 
@@ -85,7 +102,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
             }
         }
 
-        return value;
+        return (value || key);
     }
 
     public getValueWithParameter(key: string, parameter: string, replacement: string): string

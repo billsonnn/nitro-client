@@ -94,7 +94,7 @@ export class SetType implements ISetType
     public _Str_1002(k: string): number
     {
         const _local_2 = this._isMandatory[k.toUpperCase()];
-        
+
         return _local_2.indexOf(false);
     }
 

@@ -5,14 +5,17 @@
         </div>
     </div>
     <div class="col-8">
-        <div *ngIf="activePage.frontPageItems[1]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[1].itemPromoImage + ')'}">
-            <div class="front-page-item-caption">{{activePage.frontPageItems[1].itemName}}</div>
+        <div class="d-flex flex-column w-100 mb-3">
+            <div *ngIf="activePage.frontPageItems[1]" class="front-page-item wide mb-3" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[1].itemPromoImage + ')'}">
+                <div class="front-page-item-caption">{{activePage.frontPageItems[1].itemName}}</div>
+            </div>
+            <div *ngIf="activePage.frontPageItems[2]" class="front-page-item wide mb-3" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[2].itemPromoImage + ')'}">
+                <div class="front-page-item-caption">{{activePage.frontPageItems[2].itemName}}</div>
+            </div>
+            <div *ngIf="activePage.frontPageItems[3]" class="front-page-item wide mb-0" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[3].itemPromoImage + ')'}">
+                <div class="front-page-item-caption">{{activePage.frontPageItems[3].itemName}}</div>
+            </div>
         </div>
-        <div *ngIf="activePage.frontPageItems[2]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[2].itemPromoImage + ')'}">
-            <div class="front-page-item-caption">{{activePage.frontPageItems[2].itemName}}</div>
-        </div>
-        <div *ngIf="activePage.frontPageItems[3]" class="front-page-item wide" [ngStyle]="{'background-image':'url(' + getImagesUrl() + activePage.frontPageItems[3].itemPromoImage + ')'}">
-            <div class="front-page-item-caption">{{activePage.frontPageItems[3].itemName}}</div>
-        </div>
+        <redeem-voucher-component [localization]="activePage.localization"></redeem-voucher-component>
     </div>
 </div>

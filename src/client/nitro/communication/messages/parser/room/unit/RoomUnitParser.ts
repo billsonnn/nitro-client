@@ -13,7 +13,7 @@ export class RoomUnitParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -174,7 +174,7 @@ export class RoomUnitParser implements IMessageParser
             else _local_7 = 10011;
 
             const _local_19 = _local_10.indexOf(_local_18);
-            
+
             _local_6 = ((_local_8 + _local_19) + 1);
         }
 

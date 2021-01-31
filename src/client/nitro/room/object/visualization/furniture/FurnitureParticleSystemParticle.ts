@@ -1,7 +1,7 @@
 ﻿import { GraphicAsset } from '../../../../../room/object/visualization/utils/GraphicAsset';
 import { Vector3D } from '../../../../avatar/geometry/Vector3D';
 
-export class FurnitureParticleSystemParticle 
+export class FurnitureParticleSystemParticle
 {
     private _x: number;
     private _y: number;

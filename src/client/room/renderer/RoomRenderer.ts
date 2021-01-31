@@ -4,7 +4,7 @@ import { IRoomRenderingCanvas } from './IRoomRenderingCanvas';
 import { IRoomSpriteCanvasContainer } from './IRoomSpriteCanvasContainer';
 import { RoomSpriteCanvas } from './RoomSpriteCanvas';
 
-export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer 
+export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
 {
     private _objects: Map<number, IRoomObject>;
     private _canvases: Map<number, IRoomRenderingCanvas>;
@@ -47,7 +47,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         this._disposed = true;
     }
 
-    public reset(): void 
+    public reset(): void
     {
         this._objects.clear();
     }
@@ -67,7 +67,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
     public addObject(object: IRoomObject): void
     {
         if(!object) return;
-        
+
         this._objects.set(this.getInstanceId(object), object);
     }
 
@@ -99,7 +99,7 @@ export class RoomRenderer implements IRoomRenderer, IRoomSpriteCanvasContainer
         if(!this._canvases || !this._canvases.size) return;
 
         this.render(time, update);
-        
+
         for(const canvas of this._canvases.values()) canvas && canvas.update();
     }
 

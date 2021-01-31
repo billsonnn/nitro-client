@@ -48,7 +48,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     constructor(
         private _inventoryService: InventoryService,
         private _settingsService: SettingsService,
-        private _avatarEditorService: AvatarEditorService) 
+        private _avatarEditorService: AvatarEditorService)
     {}
 
     public ngOnInit(): void

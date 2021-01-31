@@ -1,4 +1,4 @@
-﻿export class RoomPlaneRectangleMask 
+﻿export class RoomPlaneRectangleMask
 {
     private _leftSideLoc: number;
     private _rightSideLoc: number;

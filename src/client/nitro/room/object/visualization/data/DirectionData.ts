@@ -87,7 +87,7 @@ export class DirectionData
         if(!existing) return;
 
         if(isNaN(ink)) return;
-        
+
         existing.ink = ink;
     }
 

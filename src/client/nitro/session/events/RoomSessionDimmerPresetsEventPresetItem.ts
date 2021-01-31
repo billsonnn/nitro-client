@@ -1,4 +1,4 @@
-﻿export class RoomSessionDimmerPresetsEventPresetItem 
+﻿export class RoomSessionDimmerPresetsEventPresetItem
 {
     private _id: number;
     private _type: number;

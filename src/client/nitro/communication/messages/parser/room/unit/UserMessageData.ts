@@ -1,4 +1,4 @@
-export class UserMessageData 
+export class UserMessageData
 {
     public static M: string = 'M';
     public static F: string = 'F';

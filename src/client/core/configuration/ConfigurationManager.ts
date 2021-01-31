@@ -12,6 +12,8 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         super();
 
         this._definitions = new AdvancedMap();
+
+        this.onConfigurationLoaded = this.onConfigurationLoaded.bind(this);
     }
 
     protected onInit(): void
@@ -28,15 +30,15 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
             return;
         }
-        
+
         const request = new XMLHttpRequest();
 
         try
         {
             request.open('GET', url);
 
-            request.onloadend   = this.onConfigurationLoaded.bind(this);
-            request.onerror     = this.onConfigurationFailed.bind(this);
+            request.onloadend   = this.onConfigurationLoaded;
+            request.onerror     = this.onConfigurationFailed;
 
             request.send();
         }
@@ -81,7 +83,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         {
             const configObject = JSON.parse(data);
 
-            const regex = new RegExp(/%(.*?)%/g);
+            const regex = new RegExp(/\${(.*?)}/g);
 
             for(const key in configObject)
             {
@@ -108,7 +110,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
     public interpolate(value: string, regex: RegExp = null): string
     {
-        if(!regex) regex = new RegExp(/%(.*?)%/g);
+        if(!regex) regex = new RegExp(/\${(.*?)}/g);
 
         const pieces = value.match(regex);
 
@@ -127,14 +129,19 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
     private removeInterpolateKey(value: string): string
     {
-        return value.replace(/%/g, '');
+        return value.replace('${', '').replace('}', '');
     }
 
     public getValue<T>(key: string, value: T = null): T
     {
         let existing = this._definitions.getValue(key);
 
-        if(existing === undefined) existing = value;
+        if(existing === undefined)
+        {
+            this.logger.warn(`Missing configuration key: ${ key }`);
+
+            existing = value;
+        }
 
         return (existing as T);
     }

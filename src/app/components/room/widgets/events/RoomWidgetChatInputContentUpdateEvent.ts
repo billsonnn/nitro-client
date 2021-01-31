@@ -12,7 +12,7 @@ export class RoomWidgetChatInputContentUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: string)
     {
         super(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT);
-        
+
         this._Str_21134 = k;
         this._userName = _arg_2;
     }

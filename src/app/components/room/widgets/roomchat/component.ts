@@ -43,6 +43,9 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         private componentFactoryResolver: ComponentFactoryResolver)
     {
         super();
+
+        this.onChatMessage      = this.onChatMessage.bind(this);
+        this.onRoomViewUpdate   = this.onRoomViewUpdate.bind(this);
     }
 
     public ngOnInit(): void
@@ -58,11 +61,11 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
-        eventDispatcher.addEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED, this.onRoomViewUpdate.bind(this));
+
+        eventDispatcher.addEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage);
+        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate);
+        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate);
+        eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED, this.onRoomViewUpdate);
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -70,11 +73,11 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
-        eventDispatcher.removeEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED, this.onRoomViewUpdate.bind(this));
+
+        eventDispatcher.removeEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage);
+        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate);
+        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.POSITION_CHANGED, this.onRoomViewUpdate);
+        eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED, this.onRoomViewUpdate);
     }
 
     public update(time: number): void
@@ -139,7 +142,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
             return;
         }
-        
+
         let chatRef: ComponentRef<RoomChatItemComponent>    = null;
         let chat: RoomChatItemComponent                     = null;
 

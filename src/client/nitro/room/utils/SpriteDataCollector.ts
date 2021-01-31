@@ -11,7 +11,7 @@ import { RoomObjectCategory } from '../object/RoomObjectCategory';
 import { PlaneDrawingData } from '../object/visualization/room/PlaneDrawingData';
 import { RoomEngine } from '../RoomEngine';
 
-export class SpriteDataCollector 
+export class SpriteDataCollector
 {
     private static _Str_16967: number   = 1;
     private static _Str_18197: number   = -16;
@@ -128,7 +128,7 @@ export class SpriteDataCollector
             points[1] = points[3];
             points[3] = _local_6;
         }
-        
+
         return points;
     }
 
@@ -185,7 +185,7 @@ export class SpriteDataCollector
                 }
             }
         }
-        
+
         _local_6 = SpriteDataCollector._Str_22230(_local_6, _arg_3);
         _local_6.sort(SpriteDataCollector._Str_22564);
 
@@ -289,7 +289,7 @@ export class SpriteDataCollector
             _local_5.height = k.height;
 
             this._Str_18433++;
-            
+
             if(this._Str_18433 > SpriteDataCollector._Str_17558) _local_5.name = 'box';
         }
 
@@ -426,7 +426,7 @@ export class SpriteDataCollector
                     _local_21.y += -(k.y);
 
                     if(_local_21.x < 0) _local_19--;
-                    
+
                     else if(_local_21.x >= k.width) _local_19++;
 
                     if(_local_21.y < 0) _local_20--;

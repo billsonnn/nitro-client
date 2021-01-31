@@ -1,4 +1,4 @@
-﻿export class AvatarExpressionEnum 
+﻿export class AvatarExpressionEnum
 {
     public static NONE: AvatarExpressionEnum = new AvatarExpressionEnum(0);
     public static _Str_6268: AvatarExpressionEnum = new AvatarExpressionEnum(1);

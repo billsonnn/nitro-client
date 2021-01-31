@@ -10,18 +10,15 @@ export class BadgeImageManager
     public static GROUP_BADGE: string   = 'group_badge';
     public static NORMAL_BADGE: string  = 'normal_badge';
 
-    private _Str_9663: string = 'badge_';
-    private _Str_23071: string = '_32';
-
     private _assets: IAssetManager;
     private _events: IEventDispatcher;
-    private _requestedGroupBadges: Map<string, boolean>;
+    private _requestedBadges: Map<string, boolean>;
 
-    constructor(k: IAssetManager, _arg_2: IEventDispatcher)
+    constructor(assetManager: IAssetManager, eventDispatcher: IEventDispatcher)
     {
-        this._assets                = k;
-        this._events                = _arg_2;
-        this._requestedGroupBadges  = new Map();
+        this._assets            = assetManager;
+        this._events            = eventDispatcher;
+        this._requestedBadges   = new Map();
     }
 
     public dispose(): void
@@ -29,93 +26,82 @@ export class BadgeImageManager
         this._assets = null;
     }
 
-    public getBadgeImage(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = true, _arg_4: boolean = false): Texture
+    public getBadgeImage(badgeName: string, type: string = 'normal_badge', load: boolean = true): Texture
     {
-        let badge = this._Str_10735(k, _arg_2, _arg_4);
+        let badge = this.getBadgeTexture(badgeName, type);
 
-        if(!badge && _arg_3) badge = this._Str_20965();
+        if(!badge && load) badge = this.getBadgePlaceholder();
 
         return badge;
     }
 
-    public _Str_15979(k: string): BadgeInfo
+    public getBadgeInfo(k: string): BadgeInfo
     {
-        const badge = this._Str_10735(k);
+        const badge = this.getBadgeTexture(k);
 
-        return (badge) ? new BadgeInfo(badge, false) : new BadgeInfo(this._Str_20965(), true);
+        return (badge) ? new BadgeInfo(badge, false) : new BadgeInfo(this.getBadgePlaceholder(), true);
     }
 
-    public _Str_5831(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): string
+    public loadBadgeImage(badgeName: string, type: string = 'normal_badge'): string
     {
-        const badgeName = this.getBadgeAssetName(k, _arg_3);
-
         if(this._assets.getTexture(badgeName)) return badgeName;
 
-        this._Str_10735(k, _arg_2, _arg_3);
+        this.getBadgeTexture(badgeName, type);
 
         return null;
     }
 
-    private _Str_10735(k: string, _arg_2: string = 'normal_badge', _arg_3: boolean = false): Texture
+    private getBadgeTexture(badgeName: string, type: string = 'normal_badge'): Texture
     {
-        const badgeName = this.getBadgeAssetName(k, _arg_3);
-
         const existing = this._assets.getTexture(badgeName);
 
         if(existing) return existing.clone();
 
-        if(_arg_3) return null;
+        if(this._requestedBadges.get(badgeName)) return null;
 
-        let url = null;
-
-        switch(_arg_2)
-        {
-            case BadgeImageManager.NORMAL_BADGE:
-                url = (Nitro.instance.getConfiguration<string>('badge.asset.url')).replace('%badgename%', k);
-                break;
-            case BadgeImageManager.GROUP_BADGE:
-                if(!this._requestedGroupBadges.get(badgeName))
-                {
-                    url = (Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', k);
-                    
-                    this._requestedGroupBadges.set(badgeName, true);
-                }
-                break;
-        }
+        const url = this.getBadgeUrl(badgeName, type);
 
         if(url)
         {
+            this._requestedBadges.set(badgeName, true);
+
             this._assets.downloadAsset(url, (flag: boolean) =>
             {
                 if(flag)
                 {
-                    const texture = this._assets.getTexture(k);
+                    const texture = this._assets.getTexture(badgeName);
 
-                    if(texture && this._events) this._events.dispatchEvent(new BadgeImageReadyEvent(k, texture.clone()));
+                    if(texture && this._events) this._events.dispatchEvent(new BadgeImageReadyEvent(badgeName, texture.clone()));
                 }
             });
         }
-        
+
         return null;
     }
 
-    private _Str_20965(): Texture
+    private getBadgePlaceholder(): Texture
     {
         const existing = this._assets.getTexture('loading_icon');
-
-        console.log(existing);
 
         if(!existing) return null;
 
         return existing.clone();
     }
 
-    private getBadgeAssetName(badgeName: string, zoomedOut: boolean = false): string
+    public getBadgeUrl(badge: string, type: string = 'normal_badge'): string
     {
-        if(!badgeName) return null;
+        let url = null;
 
-        //return ((this._Str_9663 + badgeName) + ((zoomedOut) ? '_32' : ''));
+        switch(type)
+        {
+            case BadgeImageManager.NORMAL_BADGE:
+                url = (Nitro.instance.getConfiguration<string>('badge.asset.url')).replace('%badgename%', badge);
+                break;
+            case BadgeImageManager.GROUP_BADGE:
+                url = (Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', badge);
+                break;
+        }
 
-        return badgeName;
+        return url;
     }
 }

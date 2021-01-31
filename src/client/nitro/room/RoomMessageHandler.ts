@@ -276,10 +276,10 @@ export class RoomMessageHandler extends Disposable
 
                 x++;
             }
-            
+
             y++;
         }
-        
+
         this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), doorZ);
         this._planeParser.initializeFromTileData(parser.wallHeight);
         this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), (doorZ + this._planeParser.wallHeight));
@@ -356,7 +356,7 @@ export class RoomMessageHandler extends Disposable
 
             y++;
         }
-        
+
         this._roomCreator.setFurnitureStackingHeightMap(this._currentRoomId, heightMap);
     }
 
@@ -391,7 +391,7 @@ export class RoomMessageHandler extends Disposable
         if(!parser) return;
 
         const visibleWall       = !parser.hideWalls;
-        const visibleFloor      = true; 
+        const visibleFloor      = true;
         const thicknessWall     = parser.thicknessWall;
         const thicknessFloor    = parser.thicknessFloor;
 
@@ -426,7 +426,7 @@ export class RoomMessageHandler extends Disposable
             {
                 if(!rollData) continue;
 
-                this._roomCreator.rollRoomObjectFloor(this._currentRoomId, rollData.id, rollData.location, rollData.targetLocation); 
+                this._roomCreator.rollRoomObjectFloor(this._currentRoomId, rollData.id, rollData.location, rollData.targetLocation);
             }
         }
 
@@ -451,7 +451,7 @@ export class RoomMessageHandler extends Disposable
                         posture = 'std';
                         break;
                 }
-                
+
                 this._roomCreator.updateRoomObjectUserPosture(this._currentRoomId, unitRollData.id, posture);
             }
         }

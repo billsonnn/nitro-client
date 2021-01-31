@@ -121,7 +121,7 @@ export class CatalogClubOfferData
     {
         return this._month;
     }
-    
+
     public get day(): number
     {
         return this._day;

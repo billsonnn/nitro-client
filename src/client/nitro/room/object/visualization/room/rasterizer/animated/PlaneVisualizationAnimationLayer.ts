@@ -112,7 +112,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
 
                     if(_local_13.bitmapData)
                     {
-                        if(_local_14.x > 0 && (_local_14.x + _local_13.bitmapData.width < k.width)) 
+                        if(_local_14.x > 0 && (_local_14.x + _local_13.bitmapData.width < k.width))
                         {
                             k
                                 .beginFill(0x00FF00)
@@ -120,7 +120,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                                 .drawRect(_local_14.x, _local_14.y, _local_13.bitmapData.width, _local_13.bitmapData.height)
                                 .endFill();
                         }
-                        else if(_local_14.x > 0) 
+                        else if(_local_14.x > 0)
                         {
                             const difference = k.width - _local_14.x;
                             k
@@ -129,7 +129,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                                 .drawRect(_local_14.x, _local_14.y, difference, _local_13.bitmapData.height)
                                 .endFill();
                         }
-                        else 
+                        else
                         {
                             //if(_local_14.x > -_local_13.bitmapData.width) 
                             const difference = _local_13.bitmapData.width + _local_14.x;
@@ -145,7 +145,7 @@ export class PlaneVisualizationAnimationLayer implements IDisposable
                 _local_12++;
             }
         }
-        
+
         return k;
     }
 }

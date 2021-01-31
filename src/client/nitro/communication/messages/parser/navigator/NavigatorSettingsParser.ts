@@ -21,7 +21,7 @@ export class NavigatorSettingsParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -32,7 +32,7 @@ export class NavigatorSettingsParser implements IMessageParser
         this._windowHeight      = wrapper.readInt();
         this._leftPanelHidden   = wrapper.readBoolean();
         this._resultsMode       = wrapper.readInt();
-        
+
         return true;
     }
 

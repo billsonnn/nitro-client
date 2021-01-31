@@ -1,15 +1,15 @@
 .nitro-main-component {
 }
 
-$catalog-width: 600px;
-$catalog-min-height: 658px;
-
 $navigator-width: 515px;
 $navigator-height: 600px;
 
 $inventory-width: 515px;
 $friendlist-width: 645px;
 
+$achievements-width: 645px;
+
+@import './achievements';
 @import './avatar-editor';
 @import './catalog';
 @import './friendlist';

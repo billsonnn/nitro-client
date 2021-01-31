@@ -72,6 +72,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     )
     {
         super();
+
+        this._Str_2557 = this._Str_2557.bind(this);
     }
 
     public ngOnDestroy(): void
@@ -83,19 +85,19 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
+        eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
+        eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557);
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -104,19 +106,19 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557.bind(this));
+        eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OUT, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_NORMAL_MODE, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557);
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
@@ -224,7 +226,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 this._isGameMode = true;
                 break;
         }
-        
+
         this.toggleUpdateReceiver();
     }
 
@@ -336,7 +338,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         this._ngZone.run(() =>
         {
             const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-            
+
             viewRef = this.contextsContainer.createComponent(componentFactory);
             view    = viewRef.instance;
         });
@@ -357,13 +359,13 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public removeView(view: ComponentRef<ContextInfoView>, flag: boolean): void
     {
         this._isRoomEnteredOwnAvatarHighlight = false;
-        
+
         if(!view) return;
 
         const componentIndex = this.contextsContainer.indexOf(view.hostView);
 
         if(componentIndex === -1) return;
-        
+
         this.cachedNameView             = null;
         this.cachedOwnAvatarMenuView    = null;
         this.cachedAvatarMenuView       = null;
@@ -393,7 +395,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     }
 
     public update(time: number): void
-    {        
+    {
         if(this.view)
         {
             const viewInstance = this.view.instance;

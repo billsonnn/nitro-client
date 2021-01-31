@@ -12,6 +12,8 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): IFurnitureData;
     getWallItemData(id: number): IFurnitureData;
     getWallItemDataByName(name: string): IFurnitureData;
+    getBadgeUrl(name: string): string;
+    getGroupBadgeUrl(name: string): string;
     getBadgeImage(name: string): Texture;
     loadBadgeImage(name: string): string;
     getGroupBadgeImage(name: string): Texture;
@@ -26,6 +28,7 @@ export interface ISessionDataManager extends INitroManager
     userName: string;
     figure: string;
     gender: string;
+    isGodMode: boolean;
     realName: string;
     respectsReceived: number;
     respectsLeft: number;

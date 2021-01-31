@@ -48,6 +48,16 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     )
     {
         super();
+
+        this.onKeyDownEvent                             = this.onKeyDownEvent.bind(this);
+        this.onInputMouseDownEvent                      = this.onInputMouseDownEvent.bind(this);
+        this.onInputChangeEvent                         = this.onInputChangeEvent.bind(this);
+        this.onRoomWidgetRoomObjectUpdateEvent          = this.onRoomWidgetRoomObjectUpdateEvent.bind(this);
+        this.onRoomWidgetUpdateInfostandUserEvent       = this.onRoomWidgetUpdateInfostandUserEvent.bind(this);
+        this.onRoomWidgetChatInputContentUpdateEvent    = this.onRoomWidgetChatInputContentUpdateEvent.bind(this);
+        this.onRoomWidgetFloodControlEvent              = this.onRoomWidgetFloodControlEvent.bind(this);
+        this.onIdleTimerComplete                        = this.onIdleTimerComplete.bind(this);
+        this.onTypingTimerComplete                      = this.onTypingTimerComplete.bind(this);
     }
 
     public ngOnInit(): void
@@ -62,12 +72,12 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            document.body.addEventListener('keydown', this.onKeyDownEvent.bind(this));
+            document.body.addEventListener('keydown', this.onKeyDownEvent);
 
             if(this.inputView)
             {
-                this.inputView.addEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
-                this.inputView.addEventListener('input', this.onInputChangeEvent.bind(this));
+                this.inputView.addEventListener('mousedown', this.onInputMouseDownEvent);
+                this.inputView.addEventListener('input', this.onInputChangeEvent);
             }
         });
     }
@@ -76,12 +86,12 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            document.body.removeEventListener('keydown', this.onKeyDownEvent.bind(this));
+            document.body.removeEventListener('keydown', this.onKeyDownEvent);
 
             if(this.inputView)
             {
-                this.inputView.removeEventListener('mousedown', this.onInputMouseDownEvent.bind(this));
-                this.inputView.removeEventListener('input', this.onInputChangeEvent.bind(this));
+                this.inputView.removeEventListener('mousedown', this.onInputMouseDownEvent);
+                this.inputView.removeEventListener('input', this.onInputChangeEvent);
             }
         });
     }
@@ -89,11 +99,11 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent.bind(this));
-        eventDispatcher.addEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent.bind(this));
+
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent);
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent);
+        eventDispatcher.addEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent);
+        eventDispatcher.addEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent);
 
         super.registerUpdateEvents(eventDispatcher);
     }
@@ -101,11 +111,11 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-        
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent.bind(this));
-        eventDispatcher.removeEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent.bind(this));
+
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this.onRoomWidgetRoomObjectUpdateEvent);
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.PEER, this.onRoomWidgetUpdateInfostandUserEvent);
+        eventDispatcher.removeEventListener(RoomWidgetChatInputContentUpdateEvent.RWWCIDE_CHAT_INPUT_CONTENT, this.onRoomWidgetChatInputContentUpdateEvent);
+        eventDispatcher.removeEventListener(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL, this.onRoomWidgetFloodControlEvent);
     }
 
     private onRoomWidgetRoomObjectUpdateEvent(event: RoomWidgetRoomObjectUpdateEvent): void
@@ -145,15 +155,15 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
-        
-        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = "";
+
+        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = '';
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
     }
 
     public onChange(event: KeyboardEvent): void
-    { 
-        if (!event) return;
+    {
+        if(!event) return;
 
         //this._chatViewInput.parentElement.dataset.value = this._chatViewInput.value
     }
@@ -245,7 +255,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         let chatType        = (shiftKey ? RoomWidgetChatMessage.CHAT_SHOUT : RoomWidgetChatMessage.CHAT_DEFAULT);
         let text            = this.inputView.value;
-        
+
         const parts         = text.split(' ');
 
         let recipientName   = '';
@@ -276,7 +286,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         text = parts.join(' ');
 
         const chatStyle = SystemChatStyleEnum.NORMAL;
-        
+
         if(this.typingTimer) this.resetTypingTimer();
 
         if(this.idleTimer) this.resetIdleTimer();
@@ -316,9 +326,9 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private setInputFocus(): void
     {
         const input = this.chatInputView && this.chatInputView.nativeElement;
-        
+
         if(!input) return;
-        
+
         input.focus();
 
         input.setSelectionRange((input.value.length * 2), (input.value.length * 2));
@@ -342,7 +352,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         this.resetIdleTimer();
 
-        this.idleTimer = setTimeout(this.onIdleTimerComplete.bind(this), 10000);
+        this.idleTimer = setTimeout(this.onIdleTimerComplete, 10000);
     }
 
     private resetIdleTimer(): void
@@ -368,7 +378,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         this.resetTypingTimer();
 
-        this.typingTimer = setTimeout(this.onTypingTimerComplete.bind(this), 1000);
+        this.typingTimer = setTimeout(this.onTypingTimerComplete, 1000);
     }
 
     private resetTypingTimer(): void

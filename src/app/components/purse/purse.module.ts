@@ -20,5 +20,5 @@ import { PurseService } from './services/purse.service';
         PurseCurrencyComponent
     ]
 })
-export class PurseModule 
+export class PurseModule
 {}

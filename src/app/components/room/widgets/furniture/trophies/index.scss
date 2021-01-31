@@ -1,0 +1,89 @@
+.nitro-trophy {
+    position: absolute;
+    width: 338px;
+    max-width: 338px;
+    color:#000;
+    font-weight: bolder;
+    text-shadow: 1px 1px rgba($white,.5);
+    overflow: hidden;
+    background-image:url('^assets/images/trophies/shine.png');
+
+    hr {
+        margin:0;
+        padding:0;
+        width:100%;
+        height:1px;
+        border:0;
+        box-shadow: 1px 1px rgba($white,.5);
+    }
+
+    .close {
+        i {
+            color:#000;
+            text-shadow: 1px 1px rgba($white,.5);
+        }
+    }
+
+    .trophy-message {
+        min-height: 100px;
+    }
+
+    &.trophy-0 {
+        background-color:#ECC547;
+        box-shadow: inset -1px -1px #B17039, inset 2px 2px #FEF3B7;
+        hr {
+            background:#B17039;
+        }
+        &:after {
+            background: rgba($white, 0.4);
+        }
+    }
+
+    &.trophy-1 {
+        background-color: #C9BDCC;
+        box-shadow: inset -1px -1px #84564F, inset 2px 2px #E6DAED;
+        hr {
+            background:#84564F;
+        }
+        &:after {
+            background: rgba($white, 0.5);
+        }
+    }
+
+    &.trophy-2 {
+        background-color: #B87834;
+        box-shadow: inset -1px -1px #B26435, inset 2px 2px #EBA453;
+        hr {
+            background:#B26435;
+            box-shadow: 1px 1px rgba($white,.3);
+        }
+    }
+
+    &::after {
+        content: "";
+        width: 10px;
+        height: calc(100% + 90px);
+        background: rgba($white, 0.3);
+        transform: rotate(45deg);
+        top: -45px;
+        left: -100%;
+        bottom: 0;
+        position: absolute;
+        animation-name: slideLeft;
+        animation-delay: 3s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+    }
+}
+
+@keyframes slideLeft {
+    0% {
+        left: -100%;
+    }
+    50% {
+        left:190%;
+    }
+    100% {
+        left:190%;
+    }
+}

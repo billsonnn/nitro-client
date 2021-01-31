@@ -13,7 +13,7 @@ export class RoomWidgetRoomQueueUpdateEvent extends RoomWidgetUpdateEvent
     constructor(k: string, _arg_2: number, _arg_3: boolean, _arg_4: boolean, _arg_5: boolean)
     {
         super(k);
-        
+
         this._position = _arg_2;
         this._Str_19946 = _arg_3;
         this._isActive = _arg_4;

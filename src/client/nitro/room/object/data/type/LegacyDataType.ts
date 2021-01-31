@@ -8,7 +8,7 @@ import { ObjectDataKey } from '../ObjectDataKey';
 export class LegacyDataType extends ObjectDataBase implements IObjectData
 {
     public static FORMAT_KEY = ObjectDataKey.LEGACY_KEY;
-    
+
     private _data: string;
 
     constructor()

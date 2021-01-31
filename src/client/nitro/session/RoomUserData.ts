@@ -243,7 +243,7 @@ export class RoomUserData
     {
         this._botSkills = k;
     }
-    
+
     public get isModerator(): boolean
     {
         return this._Str_9831;

@@ -1,6 +1,6 @@
 ﻿import { RoomEngineEvent } from './RoomEngineEvent';
 
-export class RoomZoomEvent extends RoomEngineEvent 
+export class RoomZoomEvent extends RoomEngineEvent
 {
     public static ROOM_ZOOM: string = 'REE_ROOM_ZOOM';
 

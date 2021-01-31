@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
-import { ComponentsModule } from './components';
-import { AppMainComponent } from './components/main/main.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppComponent } from './app.component';
+import { ComponentsModule } from './components/components.module';
 import { CoreModule } from './core';
 import { SecurityModule } from './security';
 import { SharedModule } from './shared';
@@ -10,12 +12,14 @@ import { SharedModule } from './shared';
         SharedModule,
         CoreModule,
         SecurityModule,
-        ComponentsModule
+        ComponentsModule,
+        BrowserModule,
+        BrowserAnimationsModule
     ],
     declarations: [
-        AppMainComponent
+        AppComponent
     ],
-    bootstrap: [ AppMainComponent ]
+    bootstrap: [ AppComponent ]
 })
-export class AppModule 
+export class AppModule
 {}

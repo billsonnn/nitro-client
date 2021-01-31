@@ -1,6 +1,6 @@
 ﻿import { NitroEvent } from '../../../core/events/NitroEvent';
 
-export class RoomSessionUserTagsEvent extends NitroEvent 
+export class RoomSessionUserTagsEvent extends NitroEvent
 {
     public static UTRE_USER_TAGS_RECEIVED: string = 'UTRE_USER_TAGS_RECEIVED';
 

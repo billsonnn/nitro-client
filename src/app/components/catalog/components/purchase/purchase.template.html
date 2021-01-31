@@ -1,7 +1,7 @@
-<div class="d-flex h-100" [ngClass]="{ 'flex-column ml-2': vertical, 'justify-content-center': (!vertical && !quantityEnabled), 'justify-content-between': (!vertical && quantityEnabled) }">
-    <div *ngIf="quantityEnabled" class="d-flex flex-column justify-content-center quantity-area">
+<div class="d-flex w-100" [ngClass]="{ 'flex-column': vertical, 'justify-content-between': quantityEnabled }">
+    <div *ngIf="quantityEnabled" class="d-flex flex-column justify-content-center mr-3 quantity-area">
         <p class="mb-1">{{ ('catalog.bundlewidget.quantity') | translate }}</p>
-        <div class="input-group">
+        <div class="d-flex input-group">
             <div class="input-group-prepend">
                 <button type="button" class="btn btn-primary btn-sm" (click)="decrease()"><i class="fas fa-arrow-left"></i></button>
             </div>
@@ -11,18 +11,18 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center purchase-area" [ngClass]="{ 'flex-column': vertical }">
-        <div class="d-flex flex-column justify-content-center align-items-end price-area" [ngClass]="{ 'mr-2': !vertical, 'mb-2': vertical }">
-            <p class="mb-1">{{ ('catalog.bundlewidget.price') | translate }}</p>
-            <div class="d-flex">
+    <div class="d-flex" [ngClass]="[ (quantityEnabled ? 'flex-column': 'justify-content-between') ]">
+        <div class="d-flex flex-column justify-content-center align-items-end price-area">
+            <p class="mb-0">{{ ('catalog.bundlewidget.price') | translate }}</p>
+            <div class="d-flex mb-1">
                 <p *ngIf="costCredits" class="d-flex align-items-center mb-0"><i class="icon icon-currency--1 mr-1"></i> {{ costCredits }}</p>
                 <p *ngIf="costCredits && costPoints" class="mx-2 mb-0">+</p>
                 <p *ngIf="costPoints" class="d-flex align-items-center mb-0"><i class="icon icon-currency-{{ pointsType }} mr-1"></i>{{ costPoints }}</p>
             </div>
         </div>
-        <div class="d-flex justify-content-center" [ngClass]="{ 'flex-column': (vertical || quantityEnabled) }">
-            <button type="button" class="btn btn-success btn-sm w-100" (click)="purchase()">{{ ('buy') | translate }}</button>
-            <button type="button" class="btn btn-secondary btn-sm w-100">{{ ('catalog.purchase_confirmation.gift') | translate }}</button>
+        <div class="btn-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="purchase()">{{ ('buy') | translate }}</button>
+            <button type="button" class="btn btn-secondary btn-sm">{{ ('catalog.purchase_confirmation.gift') | translate }}</button>
         </div>
     </div>
 </div>

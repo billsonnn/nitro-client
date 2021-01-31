@@ -42,7 +42,7 @@ export class RoomInfoStandUserComponent extends RoomInfoStandBaseComponent
         const target = (event.target as HTMLInputElement);
 
         target.blur();
-        
+
         this.widget.messageListener.processWidgetMessage(new RoomWidgetChangeMottoMessage(this.userData.motto));
     }
 

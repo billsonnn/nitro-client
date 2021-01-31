@@ -1,6 +1,6 @@
 ﻿import { RoomWidgetUpdateInfostandUserEvent } from '../../events/RoomWidgetUpdateInfostandUserEvent';
 
-export class InfoStandUserData 
+export class InfoStandUserData
 {
     private _id: number = 0;
     private _name: string = '';

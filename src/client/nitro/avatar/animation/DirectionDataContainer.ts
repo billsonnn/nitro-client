@@ -1,4 +1,4 @@
-﻿export class DirectionDataContainer 
+﻿export class DirectionDataContainer
 {
     private _offset: number;
 

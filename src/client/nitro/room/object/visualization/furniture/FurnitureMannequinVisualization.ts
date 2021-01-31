@@ -154,7 +154,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         const tag = this.getLayerTag(scale, direction, layerId);
 
         if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this.avatarExists()) return (-(this.getSprite(layerId).width) / 2);
-        
+
         return super.getLayerXOffset(scale, direction, layerId);
     }
 
@@ -163,7 +163,7 @@ export class FurnitureMannequinVisualization extends FurnitureVisualization impl
         const tag = this.getLayerTag(scale, direction, layerId);
 
         if((tag === FurnitureMannequinVisualization.AVATAR_IMAGE_SPRITE_TAG) && this.avatarExists()) return -(this.getSprite(layerId).height);
-        
+
         return super.getLayerYOffset(scale, direction, layerId);
     }
 

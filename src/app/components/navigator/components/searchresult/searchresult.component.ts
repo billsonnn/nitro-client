@@ -30,7 +30,7 @@ export class NavigatorSearchResultComponent implements OnInit
 
             return;
         }
-        
+
         this._displayMode = NavigatorDisplayMode.LIST;
     }
 

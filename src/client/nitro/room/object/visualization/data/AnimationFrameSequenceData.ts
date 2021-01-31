@@ -2,7 +2,7 @@ import { AnimationFrameData } from './AnimationFrameData';
 import { AnimationFrameDirectionalData } from './AnimationFrameDirectionalData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
 
-export class AnimationFrameSequenceData 
+export class AnimationFrameSequenceData
 {
     private _frames: AnimationFrameData[];
     private _frameIndexes: number[];
@@ -105,7 +105,7 @@ export class AnimationFrameSequenceData
     public getRepeats(frameCount: number): number
     {
         if(((frameCount < 0) || (frameCount >= this.frameCount))) return 0;
-        
+
         return this._frameRepeats[(frameCount % this._frameRepeats.length)];
     }
 }

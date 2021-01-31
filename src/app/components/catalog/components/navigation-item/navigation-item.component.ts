@@ -13,7 +13,7 @@ export class CatalogNavigationItemComponent
     @Input()
     public catalogPage: CatalogPageData = null;
 
-    constructor(private _catalogService: CatalogService) 
+    constructor(private _catalogService: CatalogService)
     {}
 
     public selectPage(): void

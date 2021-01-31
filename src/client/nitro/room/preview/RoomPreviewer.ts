@@ -16,7 +16,7 @@ import { RoomObjectCategory } from '../object/RoomObjectCategory';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 import { RoomPlaneParser } from '../object/RoomPlaneParser';
 
-export class RoomPreviewer 
+export class RoomPreviewer
 {
     public static SCALE_NORMAL: number                      = 64;
     public static SCALE_SMALL: number                       = 32;
@@ -51,11 +51,14 @@ export class RoomPreviewer
         this._previewRoomId = RoomId.makeRoomPreviewerId(roomId);
         this._addViewOffset = new Point(0, 0);
 
+        this.onRoomObjectAdded                  = this.onRoomObjectAdded.bind(this);
+        this.onRoomInitializedonRoomInitialized = this.onRoomInitializedonRoomInitialized.bind(this);
+
         if(this.isRoomEngineReady && this._roomEngine.events)
         {
-            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized.bind(this));
+            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded);
+            this._roomEngine.events.addEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded);
+            this._roomEngine.events.addEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized);
         }
 
         this.createRoomForPreview();
@@ -67,9 +70,9 @@ export class RoomPreviewer
 
         if(this.isRoomEngineReady && this._roomEngine.events)
         {
-            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded.bind(this));
-            this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized.bind(this));
+            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomObjectAdded);
+            this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded);
+            this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized);
         }
     }
 
@@ -174,7 +177,7 @@ export class RoomPreviewer
                 this._automaticStateChange              = true;
 
                 this.updatePreviewRoomView();
-                
+
                 return RoomPreviewer.PREVIEW_OBJECT_ID;
             }
         }
@@ -196,7 +199,7 @@ export class RoomPreviewer
             {
                 this._previousAutomaticStateChangeTime  = Nitro.instance.time;
                 this._automaticStateChange              = true;
-                
+
                 this.updateUserGesture(1);
                 this.updateUserEffect(effect);
                 this.updateUserPosture('std');
@@ -248,7 +251,7 @@ export class RoomPreviewer
     }
 
     public changeRoomObjectDirection(): void
-    { 
+    {
         if(this.isRoomEngineReady)
         {
             const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
@@ -262,7 +265,7 @@ export class RoomPreviewer
                 case RoomObjectCategory.FLOOR: {
                     const floorLocation   = new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y);
                     const floorDirection  = new Vector3d(direction, direction, direction);
-                    
+
                     this._roomEngine.updateRoomObjectFloor(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, floorLocation, floorDirection, null, null);
                     return;
                 }
@@ -559,7 +562,7 @@ export class RoomPreviewer
                     const scale = this._currentPreviewScale;
 
                     offset = this.validatePreviewSize(offset);
-                    
+
                     const canvasOffset = this.getCanvasOffset(offset);
 
                     if(canvasOffset)

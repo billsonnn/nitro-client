@@ -1,4 +1,4 @@
-﻿export class AvatarSet 
+﻿export class AvatarSet
 {
     private _id: string;
     private _isMain: boolean;
@@ -44,7 +44,7 @@
 
             bodyParts = bodyParts.concat(avatarSet._Str_755());
         }
-        
+
         this._allBodyParts = bodyParts;
     }
 
@@ -86,7 +86,7 @@
 
             return true;
         }
-        
+
         return false;
     }
 }

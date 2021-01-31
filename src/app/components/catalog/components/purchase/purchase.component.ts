@@ -4,7 +4,7 @@ import { CatalogPageOfferData } from '../../../../../client/nitro/communication/
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
-    selector: 'nitro-catalog-purchase-component',
+    selector: '[nitro-catalog-purchase-component]',
     templateUrl: './purchase.template.html'
 })
 export class CatalogPurchaseComponent implements OnChanges
@@ -23,7 +23,7 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public quantity: number = 1;
 
-    constructor(private _catalogService: CatalogService) 
+    constructor(private _catalogService: CatalogService)
     {}
 
     public ngOnChanges(changes: SimpleChanges): void

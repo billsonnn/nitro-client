@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, NgZone } from '@angular/core';
 import { CatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from '../../../client/nitro/Nitro';
@@ -9,21 +9,26 @@ import { CatalogService } from './services/catalog.service';
 export class CatalogLayout
 {
     public activePage: CatalogPageParser = null;
-    
+
     constructor(
-        protected _catalogService: CatalogService) 
+        protected _catalogService: CatalogService,
+        protected _ngZone: NgZone)
     {}
 
     public getText(index: number = 0): string
     {
-        return (this._catalogService.activePage.localization.texts[index] || null);
+        let message = (this.activePage.localization.texts[index] || null);
+
+        message = message.replace(/\r\n|\r|\n/g, '<br />');
+
+        return message;
     }
 
     public getImage(index: number = 0): string
     {
         let imageUrl = Nitro.instance.getConfiguration<string>('catalog.asset.image.url');
 
-        imageUrl = imageUrl.replace('%name%', this._catalogService.activePage.localization.images[index]);
+        imageUrl = imageUrl.replace('%name%', this.activePage.localization.images[index]);
 
         return imageUrl;
     }

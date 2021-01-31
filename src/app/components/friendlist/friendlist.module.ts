@@ -32,5 +32,5 @@ import { FriendListService } from './services/friendlist.service';
         FriendListThreadViewerComponent
     ]
 })
-export class FriendListModule 
+export class FriendListModule
 {}

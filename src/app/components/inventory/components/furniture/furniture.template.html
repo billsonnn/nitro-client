@@ -5,20 +5,17 @@
     </div>
     <ng-container *ngIf="groupItems.length">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
-            <perfect-scrollbar class="grid-container position-relative w-100 px-1"
-                style="min-height: 205px;max-height: 205px;height:205px;">
+            <perfect-scrollbar class="grid-container w-100" style="min-height: 209px;max-height: 209px;height:209px;">
                 <div class="grid-items grid-5">
                     <div class="d-flex flex-column item-detail justify-content-center align-items-center"
                         *ngFor="let groupItem of groupItems | paginate: paginateConfig"
                         [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (groupItem === selectedGroup) }"
                         [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }"
                         (mousedown)="onMouseDown(groupItem)" (mouseout)="onMouseOut(groupItem)">
-                        <div class="d-flex flex-grow-1 align-items-center detail-image"
-                            [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }"></div>
-                        <div class="badge badge-secondary" *ngIf="!groupItem.stuffData.uniqueNumber">x{{
-                            groupItem.getUnlockedCount() }}</div>
-                        <div class="badge badge-secondary" *ngIf="groupItem.stuffData.uniqueNumber">{{
-                            groupItem.stuffData.uniqueNumber }}</div>
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedGroup === groupItem) }" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }">
+                            <div class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count" *ngIf="!groupItem.stuffData.uniqueNumber">{{ groupItem.getUnlockedCount() }}</div>
+                            <div *ngIf="groupItem.stuffData.uniqueNumber" class="badge badge-primary w-100">{{ groupItem.stuffData.uniqueNumber }}</div>
+                        </button>
                     </div>
                 </div>
             </perfect-scrollbar>
@@ -39,9 +36,9 @@
                 style="z-index: 1;">
                 <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedGroup.name }}</div>
                 <div class="btn-group-vertical w-100">
-                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-primary w-100"
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
-                    <button *ngIf="tradeRunning" type="button" class="btn btn-primary w-100"
+                    <button *ngIf="tradeRunning" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{
                         ('inventory.trading.offer') | translate }}</button>
                 </div>

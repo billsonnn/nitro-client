@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class _Str_3763 
+export class _Str_3763
 {
     private _Str_7992: number;
     private _name: string;

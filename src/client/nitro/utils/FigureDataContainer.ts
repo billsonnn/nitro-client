@@ -1,4 +1,4 @@
-﻿export class FigureDataContainer 
+﻿export class FigureDataContainer
 {
     private static M: string            = 'M';
     private static F: string            = 'F';

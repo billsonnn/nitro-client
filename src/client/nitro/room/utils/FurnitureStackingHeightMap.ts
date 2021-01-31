@@ -87,7 +87,7 @@ export class FurnitureStackingHeightMap
                 if(((((_local_12 < _arg_5) || (_local_12 >= (_arg_5 + _arg_7))) || (_local_11 < _arg_6)) || (_local_11 >= (_arg_6 + _arg_8))))
                 {
                     _local_13 = ((_local_11 * this._width) + _local_12);
-                    
+
                     if(_arg_9)
                     {
                         if(!this._isRoomTile[_local_13]) return false;

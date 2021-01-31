@@ -1,4 +1,4 @@
-﻿export class _Str_3858 
+﻿export class _Str_3858
 {
     private _id: number;
     private _category: number;

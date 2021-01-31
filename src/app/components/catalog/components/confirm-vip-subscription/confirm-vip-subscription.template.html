@@ -1,0 +1,25 @@
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-catalog-confirm-vip-subscription-component">
+    <div class="card-header">
+        {{ ('catalog.club.buy.confirm') | translate }}
+        <button type="button" class="close" (click)="hide()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="d-flex card-body flex-row">
+        <i class="icon icon-catalogue-hc_big"></i>
+        <div class="ml-3">
+            <h6>{{ getSubscriptionHeader() }}</h6>
+            <p>{{ getSubscriptionText() }}</p>
+            <div class="d-flex align-items-center justify-content-center bg-secondary rounded p-1">
+                <p class="mb-0" *ngIf="subscription.priceCredits">{{ subscription.priceCredits }} <img class="px-1" [src]="getCurrencyUrl(-1)"></p>
+                <p class="mb-0" *ngIf="subscription.priceActivityPoints"> + {{ subscription.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(subscription.priceActivityPointsType)"></p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-space-between button-container btn-group">
+            <button type="button" class="btn btn-primary" (click)="hide()">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
+            <button type="button" class="btn btn-success" (click)="purchase()">{{ ('catalog.club.buy.subscribe') | translate }}</button>
+        </div>
+    </div>
+</div>

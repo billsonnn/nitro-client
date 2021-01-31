@@ -1,7 +1,7 @@
 ﻿import { Nitro } from '../../Nitro';
 import { Motion } from './Motion';
 
-export class Motions 
+export class Motions
 {
     private static _Str_5358: Motion[]                          = [];
     private static _Str_3932: Motion[]                          = [];
@@ -105,7 +105,7 @@ export class Motions
         {
             if(((_local_3.tag == k) && (_local_3.target == _arg_2))) return _local_3;
         }
-        
+
         return null;
     }
 
@@ -156,7 +156,7 @@ export class Motions
         }
 
         if(!Motions._Str_3932.length) Motions._Str_7465();
-        
+
         Motions._Str_7507 = false;
     }
 

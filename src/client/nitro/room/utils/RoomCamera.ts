@@ -1,7 +1,7 @@
 ﻿import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class RoomCamera 
+export class RoomCamera
 {
     private static MOVE_SPEED_DENOMINATOR: number = 12;
 
