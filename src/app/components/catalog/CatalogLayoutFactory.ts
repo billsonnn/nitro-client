@@ -6,9 +6,9 @@ import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.compo
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
+import { CatalogLayoutTrophiesComponent } from './components/layouts/trophies/trophies.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
-import {CatalogLayoutTrophiesComponent} from "./components/layouts/tropies/trophies.component";
 
 export class CatalogLayoutFactory
 {

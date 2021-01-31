@@ -1,0 +1,15 @@
+<div class="w-100 h-100 nitro-catalog-layout-default-component">
+    <div class="row">
+        <div class="col-5">
+            <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
+        </div>
+        <div class="col-7">
+            <h6>{{ ('catalog.vip.extend.title') | translate }}</h6>
+            <p class="small"></p>
+        </div>
+        <div class="col-12 mt-1">
+            <img [src]="imageUrl" />
+            {{ getText() }}
+        </div>
+    </div>
+</div>
