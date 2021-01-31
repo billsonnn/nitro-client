@@ -14,19 +14,29 @@ import { LoveLockFurniStartEvent } from '../../../../../client/nitro/communicati
 import { LoveLockFurniFriendConfirmedEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
 import { LoveLockFurniFinishedEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
 
+import { FriendsFurniConfirmWidget } from '../furniture/friendfurni/confirm.component';
+
 export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 {
     private _container: IRoomWidgetHandlerContainer = null;
     private _disposed: boolean = false;
     private _messages: IMessageEvent[];
+    private _widget: FriendsFurniConfirmWidget;
+    private _roomId  =0;
     // private _widget:FriendFurniConfirmWidget;
 
     constructor()
     {
+        this._roomId = Math.floor(Math.random() * 11);
+        this.onLoveLockFurniFinishedEvent = this.onLoveLockFurniFinishedEvent.bind(this);
+        this.onLoveLockFurniFriendConfirmedEvent = this.onLoveLockFurniFriendConfirmedEvent.bind(this);
+        this.onLoveLockFurniStartEvent = this.onLoveLockFurniStartEvent.bind(this);
     }
 
     public dispose(): void
     {
+        for(const message of this._messages) this._container.connection.removeMessageEvent(message);
+        this._messages = [];
         this._container = null;
         this._disposed = true;
     }
@@ -44,7 +54,8 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public _Str_17138(furniId: number, confirmed: boolean): void
     {
-        if(this._container == null || this._disposed) {
+        if(this._container == null || this._disposed)
+        {
             return;
         }
         this._container.connection.send(new LoveLockStartConfirmComposer(furniId, confirmed));
@@ -71,52 +82,45 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
-        if(container !== this._container)
-        {
-            if(this._container)
-            {
-                for(const message of this._messages) this._container.connection.removeMessageEvent(message);
-
-                this._messages = [];
-            }
-        }
-
         this._container = container;
 
         if(this._container)
         {
             this._messages = [
-                new LoveLockFurniStartEvent(this.onLoveLockFurniStartEvent.bind(this)),
-                new LoveLockFurniFriendConfirmedEvent(this.onLoveLockFurniFriendConfirmedEvent.bind(this)),
-                new LoveLockFurniFinishedEvent(this.onLoveLockFurniFinishedEvent.bind(this))
+                new LoveLockFurniStartEvent(this.onLoveLockFurniStartEvent),
+                new LoveLockFurniFriendConfirmedEvent(this.onLoveLockFurniFriendConfirmedEvent),
+                new LoveLockFurniFinishedEvent(this.onLoveLockFurniFinishedEvent)
             ];
 
             for(const message of this._messages) container.connection.addMessageEvent(message);
         }
     }
 
-    public startConfirmation(furniId: number, confirmed: boolean): void
-    {
-        debugger;
-        this._container.connection.send(new LoveLockStartConfirmComposer(furniId, confirmed));
-    }
+
 
     private onLoveLockFurniStartEvent(event: LoveLockFurniStartEvent)
     {
-        debugger;
-        // do things
+        if(!this._widget || !event || !event.getParser()) return;
+
+        const parser = event.getParser();
+        this._widget.open(parser.furniId, parser.start);
     }
 
     private onLoveLockFurniFinishedEvent(event: LoveLockFurniFinishedEvent)
     {
-        debugger;
-        // do things
+        if(!this._widget || !event || !event.getParser()) return;
+
+        const parser = event.getParser();
+
     }
 
     private onLoveLockFurniFriendConfirmedEvent(event: LoveLockFurniFriendConfirmedEvent)
     {
-        debugger;
-        // do things
+    }
+
+    public sendStart(furniId: number, start: boolean): void
+    {
+        this._container.connection.send(new LoveLockStartConfirmComposer(furniId, start));
     }
 
     public get messageTypes(): string[]
@@ -128,4 +132,15 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
     {
         return [ ];
     }
+
+    public get widget(): FriendsFurniConfirmWidget
+    {
+        return this._widget;
+    }
+
+    public set widget(widget: FriendsFurniConfirmWidget)
+    {
+        this._widget = widget;
+    }
+
 }
