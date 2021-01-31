@@ -31,23 +31,22 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
         switch(k.type)
         {
             case RoomWidgetFurniToWidgetMessage.REQUEST_DIMMER:
-                if(this._Str_6826())
+                if(this.canOpenWidget())
                 {
-                    //this._container.roomSession._Str_21175();
+                    this._container.roomSession.requestMoodlightSettings();
                 }
                 break;
             case RoomWidgetDimmerSavePresetMessage.RWSDPM_SAVE_PRESET:
-                if(this._Str_6826())
+                if(this.canOpenWidget())
                 {
                     const _local_4 = (k as RoomWidgetDimmerSavePresetMessage);
-
-                    //this._container.roomSession._Str_21317(_local_4._Str_25037, _local_4._Str_24446, _local_4.color, _local_4._Str_5123, _local_4.apply);
+                    this._container.roomSession.updateMoodlightData(_local_4._Str_25037, _local_4._Str_24446, _local_4.color, _local_4._Str_5123, _local_4.apply);
                 }
                 break;
             case RoomWidgetDimmerChangeStateMessage.RWCDSM_CHANGE_STATE:
-                if(this._Str_6826())
+                if(this.canOpenWidget())
                 {
-                    //this._container.roomSession._Str_20755();
+                    this._container.roomSession.toggleMoodlightState();
                 }
                 break;
             case RoomWidgetDimmerPreviewMessage.RWDPM_PREVIEW_DIMMER_PRESET: {
@@ -66,13 +65,15 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
+
         switch(event.type)
         {
             case RoomSessionDimmerPresetsEvent.RSDPE_PRESETS: {
+
                 const presetsEvent  = (event as RoomSessionDimmerPresetsEvent);
                 const updateEvent   = new RoomWidgetDimmerUpdateEvent(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS);
 
-                updateEvent._Str_6226 = presetsEvent._Str_6226;
+                updateEvent.selectedPresetId = presetsEvent.selectedPresetId;
 
                 let i = 0;
 
@@ -80,7 +81,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 {
                     const _local_7 = presetsEvent._Str_14989(i);
 
-                    if(_local_7) updateEvent._Str_17287(_local_7.id, _local_7.type, _local_7.color, _local_7._Str_4272);
+                    if(_local_7) updateEvent.setPresetValues(_local_7.id, _local_7.type, _local_7.color, _local_7._Str_4272);
 
                     i++;
                 }
@@ -105,7 +106,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
     {
     }
 
-    private _Str_6826(): boolean
+    private canOpenWidget(): boolean
     {
         return (this._container.roomSession.isRoomOwner || (this._container.roomSession.controllerLevel >= RoomControllerLevel.GUEST) || this._container.sessionDataManager.isModerator);
     }

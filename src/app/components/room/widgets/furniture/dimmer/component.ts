@@ -5,32 +5,13 @@ import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerS
 import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
+import { Options } from '@angular-slider/ngx-slider';
+import { RoomWidgetDimmerSavePresetMessage } from '../../messages/RoomWidgetDimmerSavePresetMessage';
+import { RoomWidgetDimmerChangeStateMessage } from '../../messages/RoomWidgetDimmerChangeStateMessage';
 
 @Component({
     selector: 'nitro-room-furniture-dimmer-component',
-    template: `
-    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-dimmer-component">
-        <div *ngIf="isLoading" class="card-loading-overlay"></div>
-        <div class="card-header-container">
-            <div class="card-header-overlay"></div>
-            <div class="card-header">
-                <div class="header-title">{{ ('widget.dimmer.title') | translate }}</div>
-                <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12">
-                    data
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 justify-space-between">
-                    <button type="button" class="btn btn-primary">{{ 'widget.dimmer.button.apply' | translate }}</button>
-                </div>
-            </div>
-        </div>
-    </div>`
+    templateUrl: './template.html'
 })
 export class DimmerFurniComponent extends ConversionTrackingWidget
 {
@@ -39,6 +20,12 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
     private _effectId: number       = 0;
     private _color: number          = 0xFFFFFF;
     private _brightness: number     = 0xFF;
+    public presets: MoodlightItem[] = [];
+    public selectedPresetId: number = 0;
+    public isOn: boolean            = false;
+
+    public  readonly availableColors: number[] = [7665141, 21495, 15161822, 15353138, 15923281, 8581961, 0];
+    public  readonly htmlColors: string[] = ['#74F5F5', '#0053F7', '#E759DE', '#EA4532', '#F2F851', '#82F349', '#000000'];
 
     constructor(
         private _ngZone: NgZone)
@@ -46,7 +33,6 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         super();
 
         this.onDimmerPresetsEvent   = this.onDimmerPresetsEvent.bind(this);
-        this.onDimmerHideEvent      = this.onDimmerHideEvent.bind(this);
         this.onDimmerStateEvent     = this.onDimmerStateEvent.bind(this);
     }
 
@@ -55,7 +41,6 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         if(!eventDispatcher) return;
 
         eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent);
-        eventDispatcher.addEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent);
         eventDispatcher.addEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent);
 
         super.registerUpdateEvents(eventDispatcher);
@@ -66,29 +51,56 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         if(!eventDispatcher) return;
 
         eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS, this.onDimmerPresetsEvent);
-        eventDispatcher.removeEventListener(RoomWidgetDimmerUpdateEvent.RWDUE_HIDE, this.onDimmerHideEvent);
         eventDispatcher.removeEventListener(RoomWidgetDimmerStateUpdateEvent.RWDSUE_DIMMER_STATE, this.onDimmerStateEvent);
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
 
-    private onDimmerPresetsEvent(event: RoomWidgetDimmerUpdateEvent): void
+    public getSelectedPreset(): MoodlightItem
     {
-
+        return this.presets[this.selectedPresetId -1];
     }
 
-    private onDimmerHideEvent(event: RoomWidgetDimmerUpdateEvent): void
+    public selectPreset(index: number): void
     {
+        this.selectedPresetId = index;
+    }
 
+    public selectColor(color: number): void
+    {
+        this.getSelectedPreset().color = color;
+        this.previewSettings();
+    }
+
+    private onDimmerPresetsEvent(event: RoomWidgetDimmerUpdateEvent): void
+    {
+        this.presets = event.presets.map(item =>
+        {
+            return {
+                color: item.color,
+                id: item.id,
+                intensity: item._Str_4272,
+                backgroundOnly: item.type == 2
+            };
+        });
+
+
+        this.selectedPresetId = event.selectedPresetId;
+        this._ngZone.run(() =>
+        {
+            this._visible = true;
+        });
     }
 
     private onDimmerStateEvent(event: RoomWidgetDimmerStateUpdateEvent): void
     {
-        this._dimmerState   = event.state;
-        this._effectId      = event._Str_6815;
-        this._color         = event.color;
-        this._brightness    = event._Str_5123;
-
+        this._ngZone.run(() =>
+        {
+            this.isOn           = event.state == 1;
+            this._effectId      = event._Str_6815;
+            this._color         = event.color;
+            this._brightness    = event._Str_5123;
+        });
         this.messageListener.processWidgetMessage(new RoomWidgetDimmerPreviewMessage(this._color, this._brightness, (this._effectId === 2)));
     }
 
@@ -97,13 +109,88 @@ export class DimmerFurniComponent extends ConversionTrackingWidget
         return (this.widgetHandler as FurnitureDimmerWidgetHandler);
     }
 
+    public hide(): void
+    {
+        this._visible = false;
+    }
     public get visible(): boolean
     {
-        return this._visible;
+        return this._visible && this.selectedPresetId > 0 && this.presets.length > 0;
     }
 
     public set visible(flag: boolean)
     {
         this._visible = flag;
     }
+
+
+    public onSliderChange(): void
+    {
+        this.previewSettings();
+    }
+
+    public changeCheckbox(event): void
+    {
+
+        this.getSelectedPreset().backgroundOnly = event.target.checked;
+        this.previewSettings();
+    }
+
+    private previewSettings(): void
+    {
+        if(!this.messageListener) return;
+
+        const currentItem = this.getSelectedPreset();
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerPreviewMessage(currentItem.color, currentItem.intensity, currentItem.backgroundOnly));
+    }
+
+    public handleButton(button: string): void
+    {
+        switch(button)
+        {
+            case 'on_off':
+                this.toggleState();
+                break;
+            case 'apply':
+                this.apply();
+                break;
+        }
+    }
+
+    private toggleState(): void
+    {
+        if(!this.messageListener) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerChangeStateMessage());
+    }
+
+    private apply(): void
+    {
+        if(!this.isOn || !this.messageListener || this.presets == null || this.presets.length == 0) return;
+
+        const preset = this.getSelectedPreset();
+
+        if(!preset) return;
+
+        this.messageListener.processWidgetMessage(new RoomWidgetDimmerSavePresetMessage(preset.id,(preset.backgroundOnly) ? 2 : 1, preset.color, preset.intensity, true));
+    }
+
+    public get delaySliderOptions(): Options
+    {
+        return {
+            floor:75,
+            ceil:255,
+            step:1,
+            hidePointerLabels: true,
+            hideLimitLabels: true,
+        };
+    }
+}
+
+interface MoodlightItem {
+    color: number;
+    intensity: number;
+    id: number;
+    backgroundOnly: boolean
 }

@@ -27,8 +27,11 @@ export interface IRoomSession extends IDisposable
     sendBanMessage(userId: number, type: string): void;
     sendGiveRightsMessage(userId: number): void;
     sendTakeRightsMessage(userId: number): void;
+    updateMoodlightData(_Str_25037: number, _Str_24446: number, color: number, _Str_5123: number, apply: boolean): void;
+    toggleMoodlightState(): void;
     pickupPet(id: number): void;
     pickupBot(id: number): void;
+    requestMoodlightSettings(): void;
     connection: IConnection;
     userDataManager: UserDataManager;
     roomId: number;
