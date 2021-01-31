@@ -33,6 +33,7 @@ import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -105,6 +106,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_DIMMER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -155,6 +157,7 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.removeEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_DIMMER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -206,6 +209,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CREDIT_WIDGET, FurnitureWidgetCreditComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {

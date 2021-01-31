@@ -1,25 +1,34 @@
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FriendFurniEngravingWidgetType } from '../../../../../../client/nitro/room/enums/FriendFurniEngravingWidgetType';
+import { StringDataType } from '../../../../../../client/nitro/room/object/data/type/StringDataType';
 
 @Component({
     templateUrl: './engraving.template.html'
 })
 export class FriendFurniEngravingWidget extends ConversionTrackingWidget
 {
-    private _furniId: number = -1;
     public engravingView: string = null;
     public visible: boolean = false;
-    constructor()
+
+    public firstFigure: string = null;
+    public firstName: string = null;
+
+    public secondFigure: string = null;
+    public secondName: string = null;
+
+    public engravedDate: string = null;
+
+    constructor(
+        private _ngZone: NgZone
+    )
     {
         super();
     }
 
 
-    public open(furniId: number, _arg_2:number, _arg_3:object):void
+    public open(furniId: number, _arg_2:number, _arg_3:StringDataType):void
     {
-        this.close(this._furniId);
-        this._furniId = furniId;
         switch(_arg_2)
         {
             case FriendFurniEngravingWidgetType._Str_13451:
@@ -30,22 +39,31 @@ export class FriendFurniEngravingWidget extends ConversionTrackingWidget
             case FriendFurniEngravingWidgetType._Str_18746:
                 break;
             case FriendFurniEngravingWidgetType._Str_15230:
-                this.engravingView = 'wild-west';
+                //this.engravingView = 'wild-west';
                 break;
             case FriendFurniEngravingWidgetType._Str_15778:
-                this.engravingView = 'habboween';
+                //this.engravingView = 'habboween';
                 break;
         }
 
+        // Only supported views
+        if(this.engravingView)
+        {
+            this._ngZone.run(() =>
+            {
+                this.firstName = _arg_3.getValue(1);
+                this.secondName = _arg_3.getValue(2);
+                this.firstFigure = _arg_3.getValue(3);
+                this.secondFigure = _arg_3.getValue(4);
+                this.engravedDate = _arg_3.getValue(5);
+                this.visible = true;
+            });
+
+        }
     }
 
-    public close(furniId: number): void
+    public hide(): void
     {
-        // if(((furniId == this._furniId) && (this._engravingView)))
-        // {
-        //     this._engravingView.dispose();
-        //     this._engravingView = null;
-        //     this._furniId = -1;
-        // }
+        this.visible = false;
     }
 }

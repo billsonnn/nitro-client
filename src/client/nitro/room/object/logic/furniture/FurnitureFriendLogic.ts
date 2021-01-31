@@ -28,8 +28,9 @@ export class FurnitureFriendLogic extends FurnitureMultiStateLogic
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
+        // chheck if not ObjectSelectedMessage
         const dataMessage = <ObjectDataUpdateMessage>message;
-        if(dataMessage)
+        if(message instanceof ObjectDataUpdateMessage)
         {
             const local4 = <StringDataType>dataMessage.data;
             if(local4)

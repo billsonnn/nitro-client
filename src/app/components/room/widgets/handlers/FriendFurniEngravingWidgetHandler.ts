@@ -6,6 +6,8 @@ import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/e
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { StringDataType } from '../../../../../client/nitro/room/object/data/type/StringDataType';
+import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 
 export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
 {
@@ -55,16 +57,18 @@ export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);
-                debugger;
                 if(widgetEvent && this._container.roomEngine && this._widget)
                 {
                     const roomObject = this._container.roomEngine.getRoomObject(widgetEvent.roomId, widgetEvent.objectId, widgetEvent.category);
 
-                    if(roomObject != null)
+                    if(roomObject)
                     {
                         const model = roomObject.model; // local_4
-                        if(model != null)
+                        if(model)
                         {
+                            const local5 = new StringDataType();
+                            local5.initializeFromRoomObjectModel(model);
+                            this._widget.open(roomObject.id, <number>model.getValue(RoomObjectVariable.FURNITURE_FRIENDFURNI_ENGRAVING), local5);
                             // _local_5 = new StringArrayStuffData();
                             // _local_5.initializeFromRoomObjectModel(model);
                             // this._widget.open(roomObject.id, _local_4.getNumber(RoomObjectVariableEnum.FURNITURE_FRIENDFURNI_ENGRAVING_TYPE), _local_5);

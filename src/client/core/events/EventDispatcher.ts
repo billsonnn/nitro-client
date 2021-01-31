@@ -5,6 +5,7 @@ import { INitroLogger } from '../common/logger/INitroLogger';
 import { NitroLogger } from '../common/logger/NitroLogger';
 import { IEventDispatcher } from './IEventDispatcher';
 import { RoomSessionDimmerPresetsEvent } from '../../nitro/session/events/RoomSessionDimmerPresetsEvent';
+import { RoomEngineTriggerWidgetEvent } from '../../nitro/room/events/RoomEngineTriggerWidgetEvent';
 
 export class EventDispatcher extends Disposable implements IEventDispatcher, IDisposable
 {

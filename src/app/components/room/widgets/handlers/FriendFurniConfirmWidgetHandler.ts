@@ -43,7 +43,6 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
-        debugger;
         return;
     }
 

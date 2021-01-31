@@ -717,7 +717,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_MONSTERPLANT_SEED_PLANT_CONFIRMATION_DIALOG, roomId, objectId, objectCategory));
                 break;
             case RoomObjectWidgetRequestEvent.FRIEND_FURNITURE_ENGRAVING:
-                debugger;
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, roomId, objectId, objectCategory));
                 break;
         }
