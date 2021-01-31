@@ -4,9 +4,9 @@ export class SecurityTicketComposer implements IMessageComposer<ConstructorParam
 {
     private _data: ConstructorParameters<typeof SecurityTicketComposer>;
 
-    constructor(ticket: string)
+    constructor(ticket: string, time: number)
     {
-        this._data = [ ticket ];
+        this._data = [ ticket, time ];
     }
 
     public getMessageArray()

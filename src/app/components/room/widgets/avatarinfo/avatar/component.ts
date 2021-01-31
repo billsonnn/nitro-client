@@ -89,7 +89,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                     {
                         name: 'trade',
                         localization: 'infostand.button.trade',
-                        visible: this.avatarData._Str_5751
+                        visible: true
                     },
                     {
                         name: 'whisper',

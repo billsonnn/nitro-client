@@ -27,7 +27,7 @@ export class RoomDimmerPresetsHandler extends BaseHandler
 
         const event = new RoomSessionDimmerPresetsEvent(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, session);
 
-        event._Str_6226 = parser._Str_6226;
+        event.selectedPresetId = parser._Str_6226;
 
         let i = 0;
 
@@ -37,7 +37,7 @@ export class RoomDimmerPresetsHandler extends BaseHandler
 
             if(preset)
             {
-                event._Str_17287(preset.id, preset.type, preset.color, preset._Str_4272);
+                event._Str_17287(preset.id, preset.type, preset.color, preset.intensity);
             }
 
             i++;
