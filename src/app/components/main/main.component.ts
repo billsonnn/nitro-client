@@ -26,7 +26,7 @@ import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.c
 import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from '../room/widgets/furniture/customstackheight/component';
-import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/component';
+import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/dimmer.component';
 import { StickieFurniComponent } from '../room/widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';

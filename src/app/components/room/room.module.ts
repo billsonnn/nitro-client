@@ -14,7 +14,7 @@ import { FurnitureContextMenuWidget } from './widgets/furniture/context-menu/com
 import { PurchaseClothingComponent } from './widgets/furniture/context-menu/components/purchasable-clothing/purchasable-clothing.component';
 import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
-import { DimmerFurniComponent } from './widgets/furniture/dimmer/component';
+import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.component';
 import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';

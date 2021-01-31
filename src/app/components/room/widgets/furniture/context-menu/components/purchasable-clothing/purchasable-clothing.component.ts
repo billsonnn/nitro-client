@@ -8,21 +8,7 @@ import { FurniCategory } from '../../../../../../catalog/enums/FurniCategory';
 import { FurnitureContextMenuWidget } from '../main/main.component';
 
 @Component({
-    template:`
-    <div  *ngIf="visible" [bringToTop] [draggable] class="card nitro-chooser-component">
-        <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
-            <h6 class="m-0">{{ 'useproduct.widget.title.bind_clothing' | translate }}</h6>
-            <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="d-flex flex-column p-3">
-            <div nitro-avatar-image [figure]="newFigureString" [direction]="2"></div>
-            <p>{{ caption }}</p>
-        </div>
-        <div class="d-flex flex-column p-3">
-            <button type="button" class="btn btn-primary" (click)="handleButton('cancel')">{{ 'useproduct.widget.cancel' | translate }}</button>
-            <button type="button" class="btn btn-primary" (click)="handleButton('use')">{{ 'useproduct.widget.bind_clothing' | translate }}</button>
-        </div>
-    </div>`
+    templateUrl: './purchasable-clothing.template.html'
 })
 export class PurchaseClothingComponent
 {

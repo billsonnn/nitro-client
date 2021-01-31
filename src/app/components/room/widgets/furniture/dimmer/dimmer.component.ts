@@ -1,17 +1,17 @@
+import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
 import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerStateUpdateEvent';
 import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
-import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
-import { Options } from '@angular-slider/ngx-slider';
-import { RoomWidgetDimmerSavePresetMessage } from '../../messages/RoomWidgetDimmerSavePresetMessage';
 import { RoomWidgetDimmerChangeStateMessage } from '../../messages/RoomWidgetDimmerChangeStateMessage';
+import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
+import { RoomWidgetDimmerSavePresetMessage } from '../../messages/RoomWidgetDimmerSavePresetMessage';
 
 @Component({
     selector: 'nitro-room-furniture-dimmer-component',
-    templateUrl: './template.html'
+    templateUrl: './dimmer.template.html'
 })
 export class DimmerFurniComponent extends ConversionTrackingWidget
 {
