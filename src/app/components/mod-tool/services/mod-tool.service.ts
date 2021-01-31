@@ -15,6 +15,7 @@ import { ModtoolRequestUserChatlogComposer } from '../../../../client/nitro/comm
 import { ModtoolUserChatlogParserVisit } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
 import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModtoolRoomChatlogLine } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -24,7 +25,8 @@ export class ModToolService implements OnDestroy
 
     private _room: RoomToolRoom = null;
     private _user: UserToolUser = null;
-    private _roomVisits: ModtoolUserChatlogParserVisit[] = [];
+    private _roomVisits: ModtoolUserChatlogParserVisit[];
+    private _roomChatlogs: ModtoolRoomChatlogLine[];
 
     constructor(
         private _notificationService: NotificationService,
@@ -116,7 +118,7 @@ export class ModToolService implements OnDestroy
 
     private onModtoolRoomChatlogEvent(event: ModtoolRoomChatlogEvent): void
     {
-        console.log(event.getParser());
+        this._roomChatlogs = event.getParser().chatlogs;
     }
 
     public get room(): RoomToolRoom
@@ -132,6 +134,11 @@ export class ModToolService implements OnDestroy
     public get roomVisits(): ModtoolUserChatlogParserVisit[]
     {
         return this._roomVisits;
+    }
+
+    public get roomChatlogs(): ModtoolRoomChatlogLine[]
+    {
+        return this._roomChatlogs;
     }
 
     public get isInRoom(): boolean

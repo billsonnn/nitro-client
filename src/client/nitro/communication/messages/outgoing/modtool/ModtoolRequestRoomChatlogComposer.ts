@@ -4,9 +4,9 @@ export class ModtoolRequestRoomChatlogComposer implements IMessageComposer<Const
 {
     private _data: ConstructorParameters<typeof ModtoolRequestRoomChatlogComposer>;
 
-    constructor(roomId: number, test: number = 0)
+    constructor(roomId: number, useless: number = 0)
     {
-        this._data = [ test, roomId ];
+        this._data = [ useless, roomId ];
     }
 
     public getMessageArray()

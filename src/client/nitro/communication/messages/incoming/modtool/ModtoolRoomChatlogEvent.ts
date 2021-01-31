@@ -1,6 +1,5 @@
 import { IMessageEvent } from '../../../../../core/communication/messages/IMessageEvent';
 import { MessageEvent } from '../../../../../core/communication/messages/MessageEvent';
-import { ModtoolUserChatlogParser } from '../../parser/modtool/ModtoolUserChatlogParser';
 import { ModtoolRoomChatlogParser } from '../../parser/modtool/ModtoolRoomChatlogParser';
 
 export class ModtoolRoomChatlogEvent extends MessageEvent implements IMessageEvent
@@ -10,8 +9,8 @@ export class ModtoolRoomChatlogEvent extends MessageEvent implements IMessageEve
         super(callBack, ModtoolRoomChatlogParser);
     }
 
-    public getParser(): ModtoolUserChatlogParser
+    public getParser(): ModtoolRoomChatlogParser
     {
-        return this.parser as ModtoolUserChatlogParser;
+        return this.parser as ModtoolRoomChatlogParser;
     }
 }
