@@ -32,7 +32,7 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import {FriendsFurniConfirmWidget} from "../room/widgets/furniture/friendfurni/confirm.component";
+import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 
 @Component({
     selector: 'nitro-main-component',

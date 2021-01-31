@@ -26,7 +26,8 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import {FriendsFurniConfirmWidget} from "./widgets/furniture/friendfurni/confirm.component";
+import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
 
 @NgModule({
     imports: [
@@ -56,6 +57,7 @@ import {FriendsFurniConfirmWidget} from "./widgets/furniture/friendfurni/confirm
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
         FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
@@ -85,6 +87,7 @@ import {FriendsFurniConfirmWidget} from "./widgets/furniture/friendfurni/confirm
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
         FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,

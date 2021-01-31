@@ -55,7 +55,7 @@ export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING:
                 widgetEvent = (event as RoomEngineTriggerWidgetEvent);
-
+                debugger;
                 if(widgetEvent && this._container.roomEngine && this._widget)
                 {
                     const roomObject = this._container.roomEngine.getRoomObject(widgetEvent.roomId, widgetEvent.objectId, widgetEvent.category);
@@ -65,9 +65,9 @@ export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
                         const model = roomObject.model; // local_4
                         if(model != null)
                         {
-                            _local_5 = new StringArrayStuffData();
-                            _local_5.initializeFromRoomObjectModel(model);
-                            this._widget.open(roomObject.id, _local_4.getNumber(RoomObjectVariableEnum.FURNITURE_FRIENDFURNI_ENGRAVING_TYPE), _local_5);
+                            // _local_5 = new StringArrayStuffData();
+                            // _local_5.initializeFromRoomObjectModel(model);
+                            // this._widget.open(roomObject.id, _local_4.getNumber(RoomObjectVariableEnum.FURNITURE_FRIENDFURNI_ENGRAVING_TYPE), _local_5);
                         }
                     }
                 }

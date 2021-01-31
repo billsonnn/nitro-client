@@ -13,6 +13,7 @@ export class FriendsFurniConfirmWidget extends ConversionTrackingWidget
     protected _visible: boolean                         = false;
     private _furniId: number = -1;
 
+
     constructor(
         protected _ngZone: NgZone)
     {
