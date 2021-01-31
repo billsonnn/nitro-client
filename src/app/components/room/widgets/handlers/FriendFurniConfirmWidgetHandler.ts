@@ -33,6 +33,7 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
+        debugger;
         return;
     }
 
@@ -96,21 +97,25 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public startConfirmation(furniId: number, confirmed: boolean): void
     {
+        debugger;
         this._container.connection.send(new LoveLockStartConfirmComposer(furniId, confirmed));
     }
 
     private onLoveLockFurniStartEvent(event: LoveLockFurniStartEvent)
     {
+        debugger;
         // do things
     }
 
     private onLoveLockFurniFinishedEvent(event: LoveLockFurniFinishedEvent)
     {
+        debugger;
         // do things
     }
 
     private onLoveLockFurniFriendConfirmedEvent(event: LoveLockFurniFriendConfirmedEvent)
     {
+        debugger;
         // do things
     }
 
