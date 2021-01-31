@@ -83,7 +83,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
         {
             const configObject = JSON.parse(data);
 
-            const regex = new RegExp(/%(.*?)%/g);
+            const regex = new RegExp(/\${(.*?)}/g);
 
             for(const key in configObject)
             {
@@ -110,7 +110,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
     public interpolate(value: string, regex: RegExp = null): string
     {
-        if(!regex) regex = new RegExp(/%(.*?)%/g);
+        if(!regex) regex = new RegExp(/\${(.*?)}/g);
 
         const pieces = value.match(regex);
 
@@ -129,7 +129,7 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
     private removeInterpolateKey(value: string): string
     {
-        return value.replace(/%/g, '');
+        return value.replace('${', '').replace('}', '');
     }
 
     public getValue<T>(key: string, value: T = null): T
