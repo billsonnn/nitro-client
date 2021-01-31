@@ -26,12 +26,14 @@ export class NotificationChoicesComponent extends NotificationBroadcastMessageCo
     }
 }
 
-export class NotificationChoice {
+export class NotificationChoice
+{
     private _localizationKey: string;
     private _callback: Function;
     private _classes: string[];
 
-    constructor(localizationKey: string, callback: Function, classes: string[] = []) {
+    constructor(localizationKey: string, callback: Function, classes: string[] = [])
+    {
         this._localizationKey = localizationKey;
         this._callback = callback;
         this._classes = classes;

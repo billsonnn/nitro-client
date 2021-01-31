@@ -1,0 +1,4 @@
+<div id="nitro">
+    <nitro-loading *ngIf="!isReady || isError" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
+    <nitro-main-component *ngIf="isReady && !isError"></nitro-main-component>
+</div>

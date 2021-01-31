@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/index';
+import { AlertCenterComponent } from './components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from './components/broadcast-message/broadcast-message.component';
 import { NotificationChoicesComponent } from './components/choices/choices.component';
 import { NotificationConfirmComponent } from './components/confirm/confirm.component';
-import { NotificationMainComponent } from './components/main/main.component';
 import { NotificationModeratorMessageComponent } from './components/moderator-message/moderator-message.component';
-import { NotificationMultipleMessagesComponent } from './components/motd/motd.component';
-import { NotificationCentreComponent } from './components/notification-centre/nc.component';
-import { NotificationDialogComponent } from './components/notificationdialog/notificationdialog.component';
+import { NotificationMultipleMessagesComponent } from './components/multiple-messages/multiple-messages.component';
+import { NotificationBubbleComponent } from './components/notification-bubble/notification-bubble.component';
+import { NotificationCenterComponent } from './components/notification-center/notification-center.component';
+import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
+import { NotificationEventComponent } from './components/notification-event/notification-event.component';
 import { NotificationService } from './services/notification.service';
 
 @NgModule({
@@ -15,27 +17,31 @@ import { NotificationService } from './services/notification.service';
         SharedModule
     ],
     exports: [
+        AlertCenterComponent,
+        NotificationBroadcastMessageComponent,
         NotificationConfirmComponent,
         NotificationChoicesComponent,
-        NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
-        NotificationMainComponent,
         NotificationMultipleMessagesComponent,
+        NotificationBubbleComponent,
+        NotificationCenterComponent,
         NotificationDialogComponent,
-        NotificationCentreComponent,
+        NotificationEventComponent
     ],
     providers: [
         NotificationService
     ],
     declarations: [
+        AlertCenterComponent,
+        NotificationBroadcastMessageComponent,
         NotificationConfirmComponent,
         NotificationChoicesComponent,
-        NotificationBroadcastMessageComponent,
         NotificationModeratorMessageComponent,
-        NotificationMainComponent,
         NotificationMultipleMessagesComponent,
+        NotificationBubbleComponent,
+        NotificationCenterComponent,
         NotificationDialogComponent,
-        NotificationCentreComponent
+        NotificationEventComponent
     ]
 })
 export class NotificationModule

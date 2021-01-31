@@ -27,13 +27,13 @@ export class InventoryFurnitureService implements OnDestroy
     public static SELECT_FIRST_GROUP: string            = 'IFS_SELECT_FIRST_GROUP';
     public static SELECT_EXISTING_GROUP_DEFAULT: string = 'IFS_SELECT_EXISTING_GROUP_DEFAULT';
 
-    private _messages: IMessageEvent[] = [];
-    private _furniMsgFragments: Map<number, FurnitureListItemParser>[] = [];
-    private _groupItems: GroupItem[] = [];
-    private _itemIdInFurniPlacing: number = -1;
-    private _isObjectMoverRequested: boolean = false;
-    private _isInitialized: boolean = false;
-    private _needsUpdate: boolean = false;
+    private _messages: IMessageEvent[]                                  = [];
+    private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
+    private _groupItems: GroupItem[]                                    = [];
+    private _itemIdInFurniPlacing: number                               = -1;
+    private _isObjectMoverRequested: boolean                            = false;
+    private _isInitialized: boolean                                     = false;
+    private _needsUpdate: boolean                                       = false;
 
     constructor(
         private _inventoryService: InventoryService,

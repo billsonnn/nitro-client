@@ -1,0 +1,4 @@
+<div class="d-flex justify-content-center align-items-center nitro-notification-bubble bg-primary rounded border shadow" [class.removing]="removing" (click)="clickNotification()">
+    <p class="bubble-message text-center w-100 mb-0" [innerHTML]="getDefaultMessage()"></p>
+    <div *ngIf="getDefaultImage()" class="bubble-image bg-secondary rounded" [ngStyle]="{ 'background-image': 'url(' + getDefaultImage() + ')' }"></div>
+</div>

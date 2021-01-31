@@ -10,6 +10,7 @@ $friendlist-width: 645px;
 
 $achievements-width: 645px;
 
+@import './achievements';
 @import './avatar-editor';
 @import './catalog';
 @import './friendlist';
@@ -21,4 +22,3 @@ $achievements-width: 645px;
 @import './room';
 @import './toolbar';
 @import './wired';
-@import './achievements'

@@ -5,13 +5,13 @@ import { NotificationBroadcastMessageComponent } from '../broadcast-message/broa
 import { NotificationChoice, NotificationChoicesComponent } from '../choices/choices.component';
 import { NotificationConfirmComponent } from '../confirm/confirm.component';
 import { NotificationModeratorMessageComponent } from '../moderator-message/moderator-message.component';
-import { NotificationMultipleMessagesComponent } from '../motd/motd.component';
+import { NotificationMultipleMessagesComponent } from '../multiple-messages/multiple-messages.component';
 
 @Component({
-    selector: 'nitro-notification-main-component',
-    templateUrl: './main.template.html'
+    selector: 'nitro-alert-center-component',
+    templateUrl: './alert-center.template.html'
 })
-export class NotificationMainComponent implements OnInit, OnDestroy
+export class AlertCenterComponent implements OnInit, OnDestroy
 {
     @ViewChild('alertsContainer', { read: ViewContainerRef })
     public alertsContainer: ViewContainerRef;
@@ -26,12 +26,14 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
     public ngOnInit(): void
     {
-        this._notificationService.component = this;
+        this._notificationService.alertCenter = this;
     }
 
     public ngOnDestroy(): void
     {
-        this._notificationService.component = null;
+        this.closeAllAlerts();
+
+        this._notificationService.alertCenter = null;
     }
 
     public alert(message: string, title: string = null): NotificationBroadcastMessageComponent
@@ -61,25 +63,25 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent 
+    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent
     {
-        
+
         let component: NotificationBroadcastMessageComponent = null;
 
-        this._ngZone.run(() => 
+        this._ngZone.run(() =>
         {
-            component = this.createComponent(NotificationChoicesComponent);
+            component = this.createAlertComponent(NotificationChoicesComponent);
 
-            if(title) 
+            if(title)
             {
                 if(title.startsWith('${')) title = Nitro.instance.getLocalization(title);
             }
-            else 
+            else
             {
                 title = Nitro.instance.getLocalization('${mod.alert.title}');
             }
 
-            if(message) 
+            if(message)
             {
                 if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
 
@@ -122,7 +124,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
         this._ngZone.run(() =>
         {
-            component = this.createComponent(type);
+            component = this.createAlertComponent(type);
 
             if(title)
             {
@@ -149,7 +151,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return component;
     }
 
-    private createComponent(type: typeof NotificationBroadcastMessageComponent): NotificationBroadcastMessageComponent
+    private createAlertComponent(type: typeof NotificationBroadcastMessageComponent): NotificationBroadcastMessageComponent
     {
         if(!type) return null;
 
@@ -171,7 +173,7 @@ export class NotificationMainComponent implements OnInit, OnDestroy
         return instance;
     }
 
-    public close(component: NotificationBroadcastMessageComponent): void
+    public closeAlert(component: NotificationBroadcastMessageComponent): void
     {
         if(!component) return;
 
@@ -181,15 +183,15 @@ export class NotificationMainComponent implements OnInit, OnDestroy
 
         this._alerts.delete(component);
 
-        this.removeView(ref.hostView);
+        this.removeAlertView(ref.hostView);
     }
 
-    public closeAll(): void
+    public closeAllAlerts(): void
     {
-        for(const component of this._alerts.keys()) this.close(component);
+        for(const component of this._alerts.keys()) this.closeAlert(component);
     }
 
-    private removeView(view: ViewRef): void
+    private removeAlertView(view: ViewRef): void
     {
         if(!view) return;
 
