@@ -67,8 +67,6 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
 
         this._navigatorDataService.addRoomToVisitedRooms(data);
 
-        this.isLikable = !this._navigatorDataService.currentRoomOwner;
-
     }
 
     public _Str_23696(k: number): void
