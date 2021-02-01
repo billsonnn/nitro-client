@@ -1,40 +1,33 @@
-import { settings } from 'pixi.js';
-
 export class WebGL
 {
     public static isWebGLAvailable(): boolean
     {
-        try
+        if(window.WebGLRenderingContext)
         {
-            if(!window.WebGLRenderingContext) return false;
+            const canvas = document.createElement('canvas');
+            const names = ['webgl2', 'webgl', 'experimental-webgl', 'moz-webgl', 'webkit-3d'];
 
-            const contextOptions = {
-                stencil: true,
-                failIfMajorPerformanceCaveat: settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT
-            };
-
-            const canvas  = document.createElement('canvas');
-            let gl      = (canvas.getContext('webgl', contextOptions) || canvas.getContext('experimental-webgl', contextOptions));
-
-            //@ts-ignore
-            const success = !!(gl && gl.getContextAttributes().stencil);
-
-            if(gl)
+            for(const name of names)
             {
-                //@ts-ignore
-                const loseContext = gl.getExtension('WEBGL_lose_context');
+                try
+                {
+                    const context = canvas.getContext(name);
 
-                if(loseContext) loseContext.loseContext();
+                    // @ts-ignore
+                    if(context && typeof context.getParameter == 'function') return true;
+                }
+
+                catch (e)
+                {
+                    continue;
+                }
             }
 
-            gl = null;
-
-            return success;
-        }
-
-        catch (e)
-        {
+            // WebGL is supported, but disabled
             return false;
         }
+
+        // WebGL not supported
+        return false;
     }
 }
