@@ -1,23 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Component } from '@angular/core';
 import { WiredService } from '../../services/wired.service';
 
 @Component({
     selector: 'nitro-wired-base-component',
     templateUrl: './base.template.html'
 })
-export class WiredBaseComponent implements OnInit
+export class WiredBaseComponent
 {
-    constructor(
-        private _wiredService: WiredService
-    )
+    constructor(private _wiredService: WiredService)
     {}
-
-    public ngOnInit(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.pickfurnis.caption', 'count', this.furniSelectionCount.toString());
-        Nitro.instance.localization.registerParameter('wiredfurni.pickfurnis.caption', 'limit', this.maximumFurniSelectionCount.toString());
-    }
 
     public save(): void
     {

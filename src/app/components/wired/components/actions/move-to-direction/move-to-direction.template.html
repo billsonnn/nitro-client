@@ -1,4 +1,4 @@
-<nitro-wired-base-component>
+<nitro-wired-action-base-component [(delay)]="delay">
 	{{ ('wiredfurni.params.startdir') | translate }}
 	<div class="form-row mb-2">
 		<div class="form-check">
@@ -48,11 +48,4 @@
 		<input class="form-check-input" type="radio" name="rotation" value="6" [(ngModel)]="rotation">
 		<label class="form-check-label">{{ ('wiredfurni.params.turn.6') | translate }}</label>
 	</div>
-
-	<p class="w-100 text-center mt-2 mb-1">{{ ('wiredfurni.params.delay') | translate:updateCount }}</p>
-    <div class="d-flex align-items-center justify-content-center my-2 custom-slider">
-        <button type="button" class="btn btn-primary btn-sm" (click)="decreaseDelay()"><i class="fas fa-arrow-left"></i></button>
-        <ngx-slider name="delay" [options]="delaySliderOptions" [(value)]="delay" (valueChange)="onSliderChange()"></ngx-slider>
-        <button type="button" class="btn btn-primary btn-sm" (click)="increaseDelay()"><i class="fas fa-arrow-right"></i></button>
-    </div>
-</nitro-wired-base-component>
+</nitro-wired-action-base-component>

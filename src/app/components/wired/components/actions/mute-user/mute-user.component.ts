@@ -70,12 +70,6 @@ export class MuteUserComponent extends WiredAction
         if(this.length > MuteUserComponent.LENGTH_MAXIMUM_VALUE) this.length = MuteUserComponent.LENGTH_MAXIMUM_VALUE;
     }
 
-    protected updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.length.minutes', 'minutes', this.length.toString());
-        super.updateLocaleParameter();
-    }
-
     public get lengthSliderOptions(): Options
     {
         return {

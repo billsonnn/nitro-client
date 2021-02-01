@@ -9,7 +9,7 @@
         </div>
         <ng-content></ng-content>
         <div *ngIf="requiresFurni" class="select-furni mt-2 pt-2">
-            <p class="font-weight-bold mb-0">{{ ('wiredfurni.pickfurnis.caption') | translate:furniSelectionCount }}</p>
+            <p class="font-weight-bold mb-0">{{ ('wiredfurni.pickfurnis.caption') | translate:['count','limit']:[ furniSelectionCount,maximumFurniSelectionCount ] }}</p>
             <p class="mb-0">{{ ('wiredfurni.pickfurnis.desc') | translate }}</p>
         </div>
         <div class="btn-group w-100 mt-2">

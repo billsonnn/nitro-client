@@ -18,8 +18,6 @@ export class TriggerPeriodicallyLongComponent extends TriggerPeriodicallyCompone
 
     protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.setlongtime', 'time', FriendlyTime.format(this.time * 5));
-
-        this.updateCount++;
+        this.timeLocale = Nitro.instance.getLocalizationWithParameter('wiredfurni.params.setlongtime', 'time', FriendlyTime.format(this.time * 5));
     }
 }
