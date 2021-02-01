@@ -5,9 +5,9 @@
     min-height: 595px;
 
     .grid-container {
-    
+
         .grid-items {
-    
+
             .item-detail {
                 height: 50px;
                 max-height: 50px;
@@ -167,4 +167,18 @@
         background: url('^assets/images/catalog/hc_big.png');
     }
 
+}
+
+.nitro-catalog-layout-trophies-component {
+    .color-gold {
+        background-color: #CBA200;
+    }
+
+    .color-silver {
+        background-color: #A2A2A2;
+    }
+
+    .color-bronze {
+        background-color: #A25100;
+    }
 }

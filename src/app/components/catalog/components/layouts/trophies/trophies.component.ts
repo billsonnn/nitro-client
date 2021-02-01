@@ -8,6 +8,8 @@ import { IGetImageListener } from '../../../../../../client/nitro/room/IGetImage
 import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../client/room/utils/Vector3d';
 import { CatalogLayout } from '../../../CatalogLayout';
+import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+
 
 @Component({
     templateUrl: './trophies.template.html'
@@ -16,15 +18,26 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 {
     public static CODE: string = 'trophies';
 
-    private _trophyOffers                       = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
-    private _vipOffers: CatalogClubOfferData[]  = [];
+    public textPages: string[]                          = [];
 
-    private _imageUrl: string                   = null;
+    private _trophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
+    public currentTrophyOffer: CatalogPageOfferData          = null;
+
+    private _imageUrl: string                           = null;
+
+    private _currentTrophy: CatalogProductOfferData        = null;
+    private _availableColorsForCurrentTrophy: string[] = null;
+    private _currentIndex: number                       = 0;
+    private readonly _orderOfColors = ['g','s','b'];
+    public enteredText: string = '';
 
 
     public ngOnInit(): void
     {
         const offers = this.activePage.offers;
+
+        this.textPages = this.activePage.localization.texts.filter(item => item && item.length > 0);
+
 
         if(offers && offers.length)
         {
@@ -32,8 +45,8 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
             {
                 if(!offer) continue;
 
-                const local4 = this._Str_23368(offer.localizationId);
-                const local5 = this._Str_19039(offer.localizationId);
+                const local4 = this.getTrophyNameWithoutColors(offer.localizationId);
+                const trophyColorCharacter = this.getTrophyColorCharacter(offer.localizationId);
 
                 let existing = this._trophyOffers.getValue(local4);
 
@@ -44,21 +57,44 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
                     this._trophyOffers.add(local4, existing);
                 }
 
-                existing.add(local5, offer);
+                existing.add(trophyColorCharacter, offer);
             }
         }
 
-        const firstOffer    = this._trophyOffers.getWithIndex(0);
-        const product       = (firstOffer && firstOffer.getWithIndex(0));
+        this.selectOfferByIndex(this._currentIndex);
 
-        if(product) this.selectOffer(product);
     }
 
-    public selectOffer(offer: CatalogPageOfferData): void
+    private selectOfferByIndex(index: number): void
     {
-        if(!offer) return;
+        const firstOffer    = this._trophyOffers.getWithIndex(this._currentIndex);
+        if(firstOffer) this.selectOffer(firstOffer);
+    }
 
-        const product = offer.products[0];
+    private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageOfferData>): void
+    {
+
+        if(!availaleOffers) return;
+
+        let firstAvailableTrophyColor:CatalogPageOfferData = null;
+        const availableColorsForTrophy:string[] = [];
+        this._orderOfColors.map((color) =>
+        {
+            const colorIsAvailableForTrophy = availaleOffers.getValue(color);
+            if(colorIsAvailableForTrophy) {
+                availableColorsForTrophy.push(color);
+            }
+            if(!firstAvailableTrophyColor)
+            {
+                firstAvailableTrophyColor = colorIsAvailableForTrophy;
+            }
+        });
+
+        if(!firstAvailableTrophyColor) firstAvailableTrophyColor = availaleOffers.getWithIndex(0); // Some trophies don't have a color. We want to show then either way.
+
+        if(!firstAvailableTrophyColor) return;
+        this.currentTrophyOffer = firstAvailableTrophyColor;
+        const product = firstAvailableTrophyColor.products[0];
 
         if(!product) return;
 
@@ -70,6 +106,11 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
             if(image) this._imageUrl = image.src;
         }
+
+
+        this._currentTrophy = product;
+        this._availableColorsForCurrentTrophy = availableColorsForTrophy;
+
     }
 
     public imageReady(id: number, texture: RenderTexture, image?: HTMLImageElement): void
@@ -85,21 +126,61 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         }
     }
 
+    public handleButton(button: string)
+    {
+
+        switch(button)
+        {
+            case 'next':
+                if((this._trophyOffers.length -1) == (this._currentIndex))
+                {
+                    this._currentIndex = 0;
+                }
+                else
+                {
+                    this._currentIndex++;
+                }
+                break;
+            case 'previous':
+                if(this._currentIndex == 0)
+                {
+                    this._currentIndex = this._trophyOffers.length -1;
+                }
+                else
+                {
+                    this._currentIndex--;
+                }
+                break;
+        }
+
+        this.selectOfferByIndex(this._currentIndex);
+    }
+
     public imageFailed(id: number): void
     {
         console.log('failed');
     }
 
-    private _Str_23368(k: string): string
+    public hasMultipleOffers(): boolean
     {
-        const local2 = this._Str_19039(k);
+        return this._trophyOffers && this._trophyOffers.length > 0;
+    }
+
+    public trophyHasColor(color: string): boolean
+    {
+        return this._availableColorsForCurrentTrophy.indexOf(color) > -1;
+    }
+
+    private getTrophyNameWithoutColors(k: string): string
+    {
+        const local2 = this.getTrophyColorCharacter(k);
 
         if(local2.length > 0) return k.slice(0, ((k.length - 1) - local2.length));
 
         return k;
     }
 
-    private _Str_19039(k: string): string
+    private getTrophyColorCharacter(k: string): string
     {
         const indexTrophy = k.indexOf('prizetrophy_2011_');
 
@@ -115,6 +196,11 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
         return local4;
 
+    }
+
+    public buyCurrentItem(): void
+    {
+        this._catalogService.component && this._catalogService.component.confirmPurchase(this.activePage, this.currentTrophyOffer, 1, this.enteredText);
     }
 
     public getText(): string

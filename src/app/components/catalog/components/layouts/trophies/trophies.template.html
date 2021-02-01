@@ -1,15 +1,45 @@
-<div class="w-100 h-100 nitro-catalog-layout-default-component">
+<div class="w-100 h-100 nitro-catalog-layout-trophies-component">
     <div class="row">
-        <div class="col-5">
-            <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
+        <div class="col-12">
+            <p *ngFor="let text of textPages;"  [innerHtml]="text"></p>
         </div>
-        <div class="col-7">
-            <h6>{{ ('catalog.vip.extend.title') | translate }}</h6>
-            <p class="small"></p>
+    </div>
+    <div class="row">
+
+            <div class="col-sm">
+                <button type="button" (click)="handleButton('previous')" class="btn btn-sm">Previous</button>
+            </div>
+            <div class="col-sm">
+                <img [src]="imageUrl" />
+            </div>
+            <div class="col-sm">
+                <button type="button" (click)="handleButton('next')" class="btn btn-sm">Next</button>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm" *ngIf="trophyHasColor('g')">
+            <button type="button" class="btn btn-sm color-gold" [disabled]="!trophyHasColor('g')">Gold</button>
         </div>
-        <div class="col-12 mt-1">
-            <img [src]="imageUrl" />
-            {{ getText() }}
+        <div class="col-sm" *ngIf="trophyHasColor('s')">
+            <button type="button" class="btn btn-sm color-silver" [disabled]="!trophyHasColor('s')">Silver</button>
+        </div>
+        <div class="col-sm" *ngIf="trophyHasColor('b')">
+            <button type="button" class="btn btn-sm color-bronze" [disabled]="!trophyHasColor('b')">Bronze</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <textarea name="trophie"  maxlength="300"  [(ngModel)]="enteredText">{{ enteredText }}</textarea>
+        </div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between px-2 py-1">
+        <div class="align-self-center">
+            <b *ngIf="currentTrophyOffer.priceCredits">{{ currentTrophyOffer.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)"></b>
+            <b *ngIf="currentTrophyOffer.priceActivityPoints"> + {{ currentTrophyOffer.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(currentTrophyOffer.priceActivityPointsType)"></b>
+        </div>
+        <div class="d-flex flex-row">
+            <button type="button" class="btn btn-success btn-sm" (click)="buyCurrentItem()">{{'buy' | translate}}</button>
         </div>
     </div>
 </div>
