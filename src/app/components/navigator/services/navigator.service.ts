@@ -716,6 +716,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
     public set canRate(canRate: boolean)
     {
-        this._canRate = rate;
+        this._canRate = canRate;
     }
 }
