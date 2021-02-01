@@ -495,7 +495,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
     public getMaxVisitors(count: number): number[]
     {
-        let maxVisitors = [];
+        const maxVisitors = [];
 
         let i = NavigatorService.MAX_VISITOR_STEPPER;
 
@@ -505,7 +505,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
             i += NavigatorService.MAX_VISITOR_INCREMENTOR;
         }
-        
+
         return maxVisitors;
     }
 

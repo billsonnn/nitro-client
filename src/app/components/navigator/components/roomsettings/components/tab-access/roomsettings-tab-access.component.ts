@@ -13,7 +13,8 @@ export class NavigatorRoomSettingsTabAccessComponent
     @Output()
     onSave: EventEmitter<any> = new EventEmitter();
 
-    constructor(){}
+    constructor()
+    {}
 
     save(): void
     {

@@ -37,12 +37,12 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     private _oldRoomName: string;
     private _oldLockState: string;
     private _visible: boolean;
-    
+
     constructor(
         private _navigatorService: NavigatorService,
         private _friendListService: FriendListService,
         private _notificationService: NotificationService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {
         this.onRoomSettingsEvent         = this.onRoomSettingsEvent.bind(this);
         this.onRoomUsersWithRightsEvent  = this.onRoomUsersWithRightsEvent.bind(this);
@@ -102,10 +102,11 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         if(!parser) return;
 
         this.clear();
-        
+
         this._roomId = parser.roomId;
 
-        this._ngZone.run(() => {            
+        this._ngZone.run(() =>
+        {
             this.roomSettings.roomName               = parser.name;
             this.roomSettings.roomDescription        = parser.description;
             this.roomSettings.categoryId             = parser.categoryId.toString();
@@ -115,7 +116,7 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
             this.roomSettings.lockState              = parser.state.toString();
             this.roomSettings.allowPets              = parser.allowPets;
-            
+
             this.roomSettings.hideWalls              = parser.hideWalls;
             this.roomSettings.wallThickness          = parser.thicknessWall.toString();
             this.roomSettings.floorThickness         = parser.thicknessFloor.toString();
@@ -130,12 +131,12 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
             this.roomSettings.banState               = parser.moderationSettings.allowBan.toString();
 
             this._maxVisitors           = this._navigatorService.getMaxVisitors(50);
-            
+
             this._oldRoomName           = parser.name;
             this._oldLockState          = parser.state.toString();
             this._visible               = true;
         });
-        
+
         Nitro.instance.communication.connection.send(new RoomUsersWithRightsComposer(this._roomId));
         Nitro.instance.communication.connection.send(new RoomBannedUsersComposer(this._roomId));
     }
@@ -165,7 +166,8 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
     public getFriendsWithoutRights(): void
     {
-        this._friendListService.friends.forEach((friend: MessengerFriend, id: number) => {
+        this._friendListService.friends.forEach((friend: MessengerFriend, id: number) =>
+        {
             if(!this.roomSettings.usersWithRights.has(id))
             {
                 this.roomSettings.friendsWithoutRights.set(id, friend.name);
@@ -184,13 +186,15 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         const message = Nitro.instance.localization.getValueWithParameter('navigator.roomsettings.deleteroom.confirm.message', 'room_name', '<b>' + this.roomSettings.roomName + '</b>');
 
         const choices = [
-            new NotificationChoice('navigator.roomsettings.delete', () => {
+            new NotificationChoice('navigator.roomsettings.delete', () =>
+            {
 
                 Nitro.instance.communication.connection.send(new RoomDeleteComposer(this._roomId));
                 this.hide();
 
             }, ['btn-danger']),
-            new NotificationChoice('generic.close', () => {}, ['btn-primary'])
+            new NotificationChoice('generic.close', () =>
+            {}, ['btn-primary'])
         ];
 
         this._notificationService.alertWithChoices(message, choices, title);
@@ -205,7 +209,8 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     {
         if(!this.roomSettings.friendsWithoutRights.has(userId)) return;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this.roomSettings.usersWithRights.set(userId, this.roomSettings.friendsWithoutRights.get(userId));
             this.roomSettings.friendsWithoutRights.delete(userId);
         });
@@ -217,7 +222,8 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     {
         if(!this.roomSettings.usersWithRights.has(userId)) return;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this.roomSettings.friendsWithoutRights.set(userId, this.roomSettings.usersWithRights.get(userId));
             this.roomSettings.usersWithRights.delete(userId);
         });
@@ -233,13 +239,14 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
         const userId = this.roomSettings.selectedUserToUnban;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this.roomSettings.bannedUsers.delete(this.roomSettings.selectedUserToUnban);
             this.roomSettings.selectedUserToUnban = 0;
         });
 
         Nitro.instance.communication.connection.send(new RoomUnbanUserComposer(userId, this._roomId));
-    }  
+    }
 
     public hide(): void
     {
@@ -249,13 +256,14 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
     public onSave(roomSettings: RoomSettings): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this.roomSettings = roomSettings;
         });
 
         let lockState = roomSettings.lockState;
         let password = roomSettings.password;
-        
+
         if(!roomSettings.isValidPassword)
         {
             lockState = this._oldLockState;

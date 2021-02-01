@@ -1,6 +1,7 @@
 import { NgZone } from '@angular/core';
 
-export default class RoomSettings {
+export default class RoomSettings
+{
 
     public roomName: string;
     public roomDescription: string;
@@ -37,7 +38,7 @@ export default class RoomSettings {
     constructor(private _ngZone: NgZone)
     {
         this.roomName               = null;
-        this.roomDescription        = null;    
+        this.roomDescription        = null;
         this.categoryId             = '0';
         this.userCount              = '0';
         this.tags                   = [];
@@ -52,7 +53,7 @@ export default class RoomSettings {
 
         this.usersWithRights       = new Map<number, string>();
         this.friendsWithoutRights  = new Map<number, string>();
-        
+
         this.hideWalls              = false;
         this.wallThickness          = '0';
         this.floorThickness         = '0';
@@ -71,7 +72,8 @@ export default class RoomSettings {
 
     public selectUserToUnban(userId: number): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             if(this.selectedUserToUnban === userId)
             {
                 this.selectedUserToUnban = 0;

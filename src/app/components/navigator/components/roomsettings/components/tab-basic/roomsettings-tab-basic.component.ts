@@ -26,7 +26,8 @@ export class NavigatorRoomSettingsTabBasicComponent
     @Output()
     onDeleteRoom: EventEmitter<any> = new EventEmitter();
 
-    constructor(){}
+    constructor()
+    {}
 
     save(): void
     {

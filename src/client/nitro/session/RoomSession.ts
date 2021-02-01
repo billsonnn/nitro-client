@@ -1,5 +1,6 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from '../communication/messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from '../communication/messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from '../communication/messages/outgoing/room/action/RoomBanUserComposer';
@@ -8,6 +9,9 @@ import { RoomKickUserComposer } from '../communication/messages/outgoing/room/ac
 import { RoomMuteUserComposer } from '../communication/messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from '../communication/messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RemoveBotFromFlatComposer } from '../communication/messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
+import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
+import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -24,10 +28,6 @@ import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
-import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
-import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
-import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
-import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -209,7 +209,6 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendBanMessage(userId: number, type: string): void
     {
-        debugger;
         this._connection.send(new RoomBanUserComposer(userId, this._roomId, type));
     }
 

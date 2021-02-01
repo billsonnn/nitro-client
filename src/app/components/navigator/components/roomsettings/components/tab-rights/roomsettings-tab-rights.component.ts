@@ -22,7 +22,8 @@ export class NavigatorRoomSettingsTabRightsComponent
     @Output()
     onOpenProfile: EventEmitter<any> = new EventEmitter();
 
-    constructor(){}
+    constructor()
+    {}
 
     save(): void
     {

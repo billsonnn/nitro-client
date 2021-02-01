@@ -19,7 +19,8 @@ export class NavigatorRoomSettingsTabModComponent
     @Output()
     onOpenProfile: EventEmitter<any> = new EventEmitter();
 
-    constructor(){}
+    constructor()
+    {}
 
     save(): void
     {
