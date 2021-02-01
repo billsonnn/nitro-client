@@ -39,6 +39,53 @@ export class NavigatorDataService
 
         // This might break
         this._currentVisitedRoomIndex = NavigatorDataService._visitedRooms.length > 0 ? NavigatorDataService._visitedRooms.length - 1 : 0;
+
+    }
+
+    public setCurrentIndexToRoomId(roomId: number): void
+    {
+        const visitedRooms = NavigatorDataService._visitedRooms;
+        for(let i = 0; i < visitedRooms.length; i++)
+        {
+            const room = visitedRooms[i];
+            if(room && room.roomId == roomId) {
+                this._currentVisitedRoomIndex = i;
+            }
+        }
+    }
+
+    public canGoBack(): boolean
+    {
+        return this._currentVisitedRoomIndex != 0;
+    }
+
+    public canGoForward(): boolean
+    {
+        return this._currentVisitedRoomIndex < (NavigatorDataService._visitedRooms.length - 1);
+    }
+
+    public getPreviousRoomId(): number
+    {
+        const indexToGoTo = (this._currentVisitedRoomIndex - 1 < 0) ? 0 : (this._currentVisitedRoomIndex - 1);
+
+        const room = NavigatorDataService._visitedRooms[indexToGoTo];
+
+        if(!room) return null;
+
+        return room.roomId;
+    }
+
+    public getNextRoomId(): number
+    {
+        if(this._currentVisitedRoomIndex == (NavigatorDataService._visitedRooms.length - 1)) return null;
+
+        const indexToGoTo = this._currentVisitedRoomIndex + 1;
+
+        const room = NavigatorDataService._visitedRooms[indexToGoTo];
+
+        if(!room) return null;
+
+        return room.roomId;
     }
 
 }

@@ -3,6 +3,7 @@ import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widg
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
+import {NavigatorService} from "../../../../navigator/services/navigator.service";
 
 @Component({
     selector: 'nitro-room-tools-component',
@@ -32,7 +33,8 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone,
-        private _navigatorDataService: NavigatorDataService
+        private _navigatorDataService: NavigatorDataService,
+        private _navigatorService: NavigatorService
     )
     {
         super();
@@ -69,7 +71,7 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
 
     public _Str_23696(k: number): void
     {
-
+        this._navigatorDataService.setCurrentIndexToRoomId(k);
     }
 
     public toggle(): void
@@ -115,5 +117,41 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public toggleZoom(): void
     {
         this.widgetHandler.processWidgetMessage(new RoomWidgetZoomToggleMessage());
+    }
+
+    public canGo(direction: string): boolean
+    {
+        switch(direction)
+        {
+            case 'back':
+                return this._navigatorDataService.canGoBack();
+            case 'forward':
+                return this._navigatorDataService.canGoForward();
+        }
+
+        return false;
+    }
+
+    public goInDirection(direction: string): void
+    {
+        if(!this.canGo(direction)) return;
+
+        let roomId: number = null;
+        switch(direction)
+        {
+            case 'back': {
+                roomId = this._navigatorDataService.getPreviousRoomId();
+            }
+                break;
+            case 'forward': {
+                roomId = this._navigatorDataService.getNextRoomId();
+            }
+
+                break;
+        }
+
+        if(!roomId) return;
+
+        this._navigatorService.goToPrivateRoom(roomId);
     }
 }

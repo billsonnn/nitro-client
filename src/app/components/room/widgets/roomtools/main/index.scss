@@ -34,7 +34,7 @@ $room-tools-handle-width: 20px;
         #nitro-room-tools-menu-container {
             background-color: rgba(29, 30, 33, 0.9);
             width: 0;
-            transition: width 2s ease-out;
+            transition: width 1s ease-out;
 
             &.open {
                 width: 100px;

@@ -103,6 +103,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         this._widget.loadRoomData(roomData, roomOwner);
         this._widget._Str_22970(roomData);
+        this._widget._Str_23696(roomData.roomId);
     }
 
     // Done
