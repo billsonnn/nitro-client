@@ -41,8 +41,8 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         if(this.width === 1) this.width 	= (Math.trunc(this._elementRef.nativeElement.offsetWidth));
         if(this.height === 1) this.height	= (Math.trunc(this._elementRef.nativeElement.offsetHeight));
 
-        this._elementRef.nativeElement.style.minWidth = (this._elementRef.nativeElement.offsetWidth + 'px');
-        this._elementRef.nativeElement.style.minHeight = (this._elementRef.nativeElement.offsetHeight + 'px');
+        this._elementRef.nativeElement.style.minWidth = (this.width + 'px');
+        this._elementRef.nativeElement.style.minHeight = (this.height + 'px');
     }
 
     public ngOnDestroy(): void
