@@ -11,6 +11,6 @@ export class CatalogLayoutFrontPage4Component extends CatalogLayout
 
     public getImagesUrl(): string
     {
-        return Nitro.instance.core.configuration.getValue('c.images.url') + '/';
+        return Nitro.instance.core.configuration.getValue('image.library.url');
     }
 }

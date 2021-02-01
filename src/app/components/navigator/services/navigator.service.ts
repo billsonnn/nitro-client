@@ -1,6 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
+import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
 import { NavigatorCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCategoriesEvent';
 import { NavigatorCollapsedEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorEventCategoriesEvent';
@@ -40,7 +41,6 @@ import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
-import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
 import { NavigatorDataService } from './navigator-data.service';
 
 @Injectable()
@@ -236,10 +236,10 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                     switch(parser.data.doorMode)
                     {
                         case RoomDataParser.DOORBELL_STATE:
-                            console.log('DOORBELL');
+                            this.openRoomDoorbell(parser.data);
                             return;
                         case RoomDataParser.PASSWORD_STATE:
-                            console.log('PASSWORD');
+                            this.openRoomPassword(parser.data);
                             return;
                     }
                 }

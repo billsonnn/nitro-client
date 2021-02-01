@@ -517,6 +517,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return (this._securityLevel >= SecurityLevel.MODERATOR);
     }
 
+    public get isGodMode(): boolean
+    {
+        return this.securityLevel >= SecurityLevel.MODERATOR;
+    }
+
+
     public get isCameraFollowDisabled(): boolean
     {
         return this._isRoomCameraFollowDisabled;

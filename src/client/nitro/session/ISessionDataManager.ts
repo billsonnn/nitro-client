@@ -28,6 +28,7 @@ export interface ISessionDataManager extends INitroManager
     userName: string;
     figure: string;
     gender: string;
+    isGodMode: boolean;
     realName: string;
     respectsReceived: number;
     respectsLeft: number;

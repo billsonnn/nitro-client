@@ -87,9 +87,9 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
     {
         if(key.startsWith('${')) key = key.substr(2, (key.length - 3));
 
-        let value = (this._definitions.get(key) || key);
+        let value = (this._definitions.get(key) || null);
 
-        if(doParams)
+        if(value && doParams)
         {
             const parameters = this._parameters.get(key);
 
@@ -102,7 +102,7 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
             }
         }
 
-        return value;
+        return (value || key);
     }
 
     public getValueWithParameter(key: string, parameter: string, replacement: string): string
@@ -110,6 +110,18 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
         let value = this.getValue(key, false);
 
         value = value.replace('%' + parameter + '%', replacement);
+
+        return value;
+    }
+
+    public getValueWithParameters(key: string, parameters: string[], replacements: string[]): string
+    {
+        let value = this.getValue(key, false);
+
+        for(let i = 0; i < parameters.length; i++)
+        {
+            value = value.replace('%' + parameters[i] + '%', replacements[i]);
+        }
 
         return value;
     }

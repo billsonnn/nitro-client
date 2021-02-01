@@ -1,44 +1,20 @@
-﻿import { WiredFurniture } from './../../../WiredFurniture';
-import { Options } from '@angular-slider/ngx-slider';
+﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Nitro } from 'src/client/nitro/Nitro';
-import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { WiredCondition } from '../WiredCondition';
+import { TimeElapsedLessComponent } from '../time-elapsed-less/time-elapsed-less.component';
 import { WiredConditionType } from '../WiredConditionType';
+import { WiredFurniture } from './../../../WiredFurniture';
 
 @Component({
     templateUrl: './time-elapsed-more.template.html'
 })
-export class TimeElapsedMoreComponent extends WiredCondition
+export class TimeElapsedMoreComponent extends TimeElapsedLessComponent
 {
     public static CODE: number = WiredConditionType.TIME_ELAPSED_MORE;
-
-    private static MINIMUM_VALUE: number = 1;
-    private static MAXIMUM_VALUE: number = 1200;
-    private static STEPPER_VALUE: number = 1;
-
-    public time: number = 0;
 
     public get code(): number
     {
         return TimeElapsedMoreComponent.CODE;
-    }
-
-    public onEditStart(trigger: Triggerable): void
-    {
-        this.time = (trigger.intData[0] || 1);
-
-        this.updateLocaleParameter();
-    }
-
-    public readIntegerParamsFromForm(): number[]
-    {
-        return [ this.time ];
-    }
-
-    public onSliderChange(): void
-    {
-        this.updateLocaleParameter();
     }
 
     public decrease(): void
@@ -57,9 +33,7 @@ export class TimeElapsedMoreComponent extends WiredCondition
 
     protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.allowafter', 'seconds', WiredFurniture.getLocaleName(this.time));
-
-        this.updateCount++;
+        this.timeLocale = Nitro.instance.getLocalizationWithParameter('wiredfurni.params.allowafter', 'seconds', WiredFurniture.getLocaleName(this.time));
     }
 
     public get hasSpecialInputs(): boolean

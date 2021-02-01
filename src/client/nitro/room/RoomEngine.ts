@@ -3450,28 +3450,16 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
     public modifyRoomObjectData(objectId: number, objectCategory: number, colorHex: string, text: string): boolean
     {
-        if(this._roomObjectEventHandler)
-        {
-            if(objectCategory == RoomObjectCategory.WALL)
-            {
-                return (this._roomObjectEventHandler.modifyWallItemData(this._activeRoomId, objectId, colorHex, text));
-            }
-        }
+        if(!this._roomObjectEventHandler || (objectCategory !== RoomObjectCategory.WALL)) return false;
 
-        return false;
+        return (this._roomObjectEventHandler.modifyWallItemData(this._activeRoomId, objectId, colorHex, text));
     }
 
     public deleteRoomObject(objectId: number, objectCategory: number): boolean
     {
-        if(this._roomObjectEventHandler)
-        {
-            if(objectCategory == RoomObjectCategory.WALL)
-            {
-                return this._roomObjectEventHandler.deleteWallItem(this._activeRoomId, objectId);
-            }
-        }
+        if(!this._roomObjectEventHandler || (objectCategory !== RoomObjectCategory.WALL)) return false;
 
-        return false;
+        return this._roomObjectEventHandler.deleteWallItem(this._activeRoomId, objectId);
     }
 
     public get connection(): IConnection

@@ -625,7 +625,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;
 
-            if(!isShuttingDown)
+            if(isShuttingDown)
             {
                 event.canTrade = false;
             }

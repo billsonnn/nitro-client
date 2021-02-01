@@ -239,6 +239,11 @@ export class Nitro extends Application implements INitro
         return this._localization.getValueWithParameter(key, parameter, replacement);
     }
 
+    public getLocalizationWithParameters(key: string, parameters: string[], replacements: string[]): string
+    {
+        return this._localization.getValueWithParameters(key, parameters, replacements);
+    }
+
     public addLinkEventTracker(tracker: ILinkEventTracker): void
     {
         if(this._linkTrackers.indexOf(tracker) >= 0) return;
