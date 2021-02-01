@@ -18,16 +18,16 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 {
     public static CODE: string = 'trophies';
 
-    public textPages: string[]                          = [];
+    public textPages: string[]                            = [];
 
-    private _trophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
-    public currentTrophyOffer: CatalogPageOfferData          = null;
+    private _allTrophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
+    public currentTrophyOffer: CatalogPageOfferData        = null;
 
     private _imageUrl: string                           = null;
 
     private _currentTrophy: CatalogProductOfferData        = null;
     private _availableColorsForCurrentTrophy: string[] = null;
-    private _currentIndex: number                       = 0;
+    private _currentTrophyIndex: number                       = 0;
     private readonly _orderOfColors = ['g','s','b'];
     public enteredText: string = '';
 
@@ -48,26 +48,26 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
                 const local4 = this.getTrophyNameWithoutColors(offer.localizationId);
                 const trophyColorCharacter = this.getTrophyColorCharacter(offer.localizationId);
 
-                let existing = this._trophyOffers.getValue(local4);
+                let existing = this._allTrophyOffers.getValue(local4);
 
                 if(!existing)
                 {
                     existing = new AdvancedMap();
 
-                    this._trophyOffers.add(local4, existing);
+                    this._allTrophyOffers.add(local4, existing);
                 }
 
                 existing.add(trophyColorCharacter, offer);
             }
         }
 
-        this.selectOfferByIndex(this._currentIndex);
+        this.selectOfferByIndex(this._currentTrophyIndex);
 
     }
 
     private selectOfferByIndex(index: number): void
     {
-        const firstOffer    = this._trophyOffers.getWithIndex(this._currentIndex);
+        const firstOffer    = this._allTrophyOffers.getWithIndex(this._currentTrophyIndex);
         if(firstOffer) this.selectOffer(firstOffer);
     }
 
@@ -81,7 +81,8 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         this._orderOfColors.map((color) =>
         {
             const colorIsAvailableForTrophy = availaleOffers.getValue(color);
-            if(colorIsAvailableForTrophy) {
+            if(colorIsAvailableForTrophy)
+            {
                 availableColorsForTrophy.push(color);
             }
             if(!firstAvailableTrophyColor)
@@ -92,6 +93,13 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
         if(!firstAvailableTrophyColor) firstAvailableTrophyColor = availaleOffers.getWithIndex(0); // Some trophies don't have a color. We want to show then either way.
 
+        this._availableColorsForCurrentTrophy = availableColorsForTrophy;
+        this.selectTrophyColor(firstAvailableTrophyColor);
+    }
+
+
+    private selectTrophyColor(firstAvailableTrophyColor: CatalogPageOfferData)
+    {
         if(!firstAvailableTrophyColor) return;
         this.currentTrophyOffer = firstAvailableTrophyColor;
         const product = firstAvailableTrophyColor.products[0];
@@ -107,10 +115,17 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
             if(image) this._imageUrl = image.src;
         }
 
-
         this._currentTrophy = product;
-        this._availableColorsForCurrentTrophy = availableColorsForTrophy;
+    }
 
+    public handleTrophyColor(color: string): void
+    {
+        if(this._availableColorsForCurrentTrophy.indexOf(color) < 0) return;
+
+        const trophyColor =  this._allTrophyOffers.getWithIndex(this._currentTrophyIndex).getValue(color);
+        if(!trophyColor) return;
+
+        this.selectTrophyColor(trophyColor);
     }
 
     public imageReady(id: number, texture: RenderTexture, image?: HTMLImageElement): void
@@ -132,28 +147,28 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         switch(button)
         {
             case 'next':
-                if((this._trophyOffers.length -1) == (this._currentIndex))
+                if((this._allTrophyOffers.length -1) == (this._currentTrophyIndex))
                 {
-                    this._currentIndex = 0;
+                    this._currentTrophyIndex = 0;
                 }
                 else
                 {
-                    this._currentIndex++;
+                    this._currentTrophyIndex++;
                 }
                 break;
             case 'previous':
-                if(this._currentIndex == 0)
+                if(this._currentTrophyIndex == 0)
                 {
-                    this._currentIndex = this._trophyOffers.length -1;
+                    this._currentTrophyIndex = this._allTrophyOffers.length -1;
                 }
                 else
                 {
-                    this._currentIndex--;
+                    this._currentTrophyIndex--;
                 }
                 break;
         }
 
-        this.selectOfferByIndex(this._currentIndex);
+        this.selectOfferByIndex(this._currentTrophyIndex);
     }
 
     public imageFailed(id: number): void
@@ -163,7 +178,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
     public hasMultipleOffers(): boolean
     {
-        return this._trophyOffers && this._trophyOffers.length > 0;
+        return this._allTrophyOffers && this._allTrophyOffers.length > 0;
     }
 
     public trophyHasColor(color: string): boolean

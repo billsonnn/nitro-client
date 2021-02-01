@@ -18,13 +18,13 @@
     </div>
     <div class="row">
         <div class="col-sm" *ngIf="trophyHasColor('g')">
-            <button type="button" class="btn btn-sm color-gold" [disabled]="!trophyHasColor('g')">Gold</button>
+            <button type="button" class="btn btn-sm color-gold" (click)="handleTrophyColor('g')"  [disabled]="!trophyHasColor('g')">Gold</button>
         </div>
         <div class="col-sm" *ngIf="trophyHasColor('s')">
-            <button type="button" class="btn btn-sm color-silver" [disabled]="!trophyHasColor('s')">Silver</button>
+            <button type="button" class="btn btn-sm color-silver" (click)="handleTrophyColor('s')" [disabled]="!trophyHasColor('s')">Silver</button>
         </div>
         <div class="col-sm" *ngIf="trophyHasColor('b')">
-            <button type="button" class="btn btn-sm color-bronze" [disabled]="!trophyHasColor('b')">Bronze</button>
+            <button type="button" class="btn btn-sm color-bronze" (click)="handleTrophyColor('b')" [disabled]="!trophyHasColor('b')">Bronze</button>
         </div>
     </div>
     <div class="row">
