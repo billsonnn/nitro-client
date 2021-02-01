@@ -1,8 +1,8 @@
-<nitro-wired-base-component>
-	<p class="w-100 text-center mb-1">{{ ('wiredfurni.params.emptytiles') | translate:updateCount }}</p>
+<nitro-wired-action-base-component [(delay)]="delay">
+	<p class="w-100 text-center mb-1">{{ ('wiredfurni.params.emptytiles') | translate:'tiles':spacing }}</p>
     <div class="d-flex align-items-center justify-content-center my-2 custom-slider">
         <button type="button" class="btn btn-primary btn-sm" (click)="decreaseSpacing()"><i class="fas fa-arrow-left"></i></button>
-        <ngx-slider name="spacing" [options]="spacingSliderOptions" [(value)]="spacing" (valueChange)="onSliderChange()"></ngx-slider>
+        <ngx-slider name="spacing" [options]="spacingSliderOptions" [(value)]="spacing"></ngx-slider>
         <button type="button" class="btn btn-primary btn-sm" (click)="increaseSpacing()"><i class="fas fa-arrow-right"></i></button>
     </div>
 	{{ ('wiredfurni.params.startdir') | translate }}
@@ -24,10 +24,4 @@
 			<label class="form-check-label"><i class="icon icon-nw"></i></label>
 		</div>
 	</div>
-	<p class="w-100 text-center mt-2 mb-1">{{ ('wiredfurni.params.delay') | translate:updateCount }}</p>
-    <div class="d-flex align-items-center justify-content-center my-2 custom-slider">
-        <button type="button" class="btn btn-primary btn-sm" (click)="decreaseDelay()"><i class="fas fa-arrow-left"></i></button>
-        <ngx-slider name="delay" [options]="delaySliderOptions" [(value)]="delay" (valueChange)="onSliderChange()"></ngx-slider>
-        <button type="button" class="btn btn-primary btn-sm" (click)="increaseDelay()"><i class="fas fa-arrow-right"></i></button>
-    </div>
-</nitro-wired-base-component>
+</nitro-wired-action-base-component>

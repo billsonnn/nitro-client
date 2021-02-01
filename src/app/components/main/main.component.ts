@@ -291,7 +291,6 @@ export class MainComponent implements OnInit, OnDestroy
             case RoomSessionEvent.ROOM_DATA:
                 return;
             case RoomSessionEvent.ENDED:
-                console.log('session end');
                 if(this.roomComponent) this.roomComponent.endRoom();
 
                 this._ngZone.run(() =>

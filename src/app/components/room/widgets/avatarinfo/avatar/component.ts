@@ -1,5 +1,4 @@
 import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
@@ -19,7 +18,10 @@ import { RoomAvatarInfoComponent } from '../component';
                 <ng-container *ngFor="let entry of menu">
                     <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush">
                         <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate:fakeValue }}</li>
+                            <ng-container *ngIf="item.visible" [ngSwitch]="item.name">
+                                <li *ngSwitchCase="respect" (click)="processAction(item.name)" class="list-group-item">{{ ('item.localization') | translate:'count':avatarData._Str_3577 }}</li>
+                                <li *ngSwitchDefault (click)="processAction(item.name)" class="list-group-item">{{ ('item.localization') | translate }}</li>
+                            </ng-container>
                         </ng-container>
                     </ul>
                 </ng-container>
@@ -42,7 +44,6 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 
     public avatarData: AvatarInfoData = null;
     public mode: number = 0;
-    public fakeValue: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
 
@@ -74,8 +75,6 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 
             if((carryId > 0) && (carryId < 999999)) giveHandItem = true;
         }
-
-        Nitro.instance.localization.registerParameter('infostand.button.respect', 'count', this.avatarData._Str_3577.toString());
 
         this.menu = [
             {
@@ -328,16 +327,9 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
                 case 'respect':
                     this.avatarData._Str_3577--;
 
-                    Nitro.instance.localization.registerParameter('infostand.button.respect', 'count', this.avatarData._Str_3577.toString());
-
                     messageType = RoomWidgetUserActionMessage.RWUAM_RESPECT_USER;
 
-                    if(this.avatarData._Str_3577 > 0)
-                    {
-                        hideMenu = false;
-
-                        this.fakeValue++;
-                    }
+                    if(this.avatarData._Str_3577 > 0) hideMenu = false;
                     break;
                 case 'ignore':
                     this.avatarData._Str_3655 = true;
