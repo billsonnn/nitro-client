@@ -12,6 +12,7 @@ import { INitroCommunicationManager } from '../../../../../client/nitro/communic
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
 import {RoomDataParser} from "../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser";
+import {RoomLikeRoomComposer} from "../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer";
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
@@ -104,6 +105,13 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._widget.loadRoomData(roomData, roomOwner);
         this._widget._Str_22970(roomData);
         this._widget._Str_23696(roomData.roomId);
+    }
+
+    public rateRoom(): void
+    {
+        if(!this._container) return;
+
+        this._container.connection.send(new RoomLikeRoomComposer(1));
     }
 
     // Done

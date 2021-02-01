@@ -259,6 +259,7 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -589,6 +590,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
         this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
+        this._composers.set(OutgoingHeader.ROOM_LIKE, RoomLikeRoomComposer);
 
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);

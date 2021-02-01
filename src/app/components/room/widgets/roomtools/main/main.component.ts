@@ -4,6 +4,8 @@ import { RoomDataParser } from '../../../../../../client/nitro/communication/mes
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 import {NavigatorService} from "../../../../navigator/services/navigator.service";
+import {FurnitureCreditWidgetHandler} from "../../handlers/FurnitureCreditWidgetHandler";
+import {RoomToolsWidgetHandler} from "../../handlers/RoomToolsWidgetHandler";
 
 @Component({
     selector: 'nitro-room-tools-component',
@@ -28,7 +30,7 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public roomOwner: string;
     public ranking: number;
     public tags: string[] = [];
-    public isLikable: boolean = false;
+
 
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
@@ -153,5 +155,20 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         if(!roomId) return;
 
         this._navigatorService.goToPrivateRoom(roomId);
+    }
+
+    public isLikeable(): boolean
+    {
+        return this._navigatorService.canRate;
+    }
+
+    public get handler(): RoomToolsWidgetHandler
+    {
+        return (this.widgetHandler as RoomToolsWidgetHandler);
+    }
+
+    public likeRoom(): void
+    {
+        this.handler.rateRoom();
     }
 }
