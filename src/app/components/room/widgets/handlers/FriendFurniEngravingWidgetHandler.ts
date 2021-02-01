@@ -69,9 +69,6 @@ export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
                             const local5 = new StringDataType();
                             local5.initializeFromRoomObjectModel(model);
                             this._widget.open(roomObject.id, <number>model.getValue(RoomObjectVariable.FURNITURE_FRIENDFURNI_ENGRAVING), local5);
-                            // _local_5 = new StringArrayStuffData();
-                            // _local_5.initializeFromRoomObjectModel(model);
-                            // this._widget.open(roomObject.id, _local_4.getNumber(RoomObjectVariableEnum.FURNITURE_FRIENDFURNI_ENGRAVING_TYPE), _local_5);
                         }
                     }
                 }
