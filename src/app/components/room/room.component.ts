@@ -57,15 +57,15 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
+import {RoomToolsWidgetHandler} from "./widgets/handlers/RoomToolsWidgetHandler";
 
 @Component({
     selector: 'nitro-room-component',
     template: `
-    <div class="nitro-room-component">
-        <div #roomCanvas class="room-view"></div>
-        <ng-template #widgetContainer></ng-template>
-    </div>`
+        <div class="nitro-room-component">
+            <div #roomCanvas class="room-view"></div>
+            <ng-template #widgetContainer></ng-template>
+        </div>`
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
@@ -80,6 +80,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _roomSession: IRoomSession;
 
     private _events: IEventDispatcher                                   = new EventDispatcher();
+    private _handlers: IRoomWidgetHandler[]                             = [];
     private _widgets: Map<string, ComponentRef<IRoomWidget>>            = new Map();
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]> = new Map();
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
@@ -182,7 +183,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             this._ngZone.run(() => widget.destroy());
         }
 
-        this._roomColorAdjustor       = null;
+        for(const handler of this._handlers) (handler && handler.dispose());
+
+        this._roomColorAdjustor     = null;
         this._roomBackground        = null;
         this._roomBackgroundColor   = 0;
         this._roomColorizerColor    = 0;
@@ -191,6 +194,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         RoomComponent.COLOR_ADJUSTMENT.green    = 1;
         RoomComponent.COLOR_ADJUSTMENT.blue     = 1;
 
+        this._handlers = [];
         this._widgets.clear();
         this._widgetHandlerMessageMap.clear();
         this._widgetHandlerEventMap.clear();
@@ -374,9 +378,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.USER_CHOOSER:
                 widgetHandler = new UserChooserWidgetHandler();
                 break;
-            case RoomWidgetEnum.ROOM_TOOLS:
-                widgetHandler = new RoomToolsWidgetHandler();
-                break;
             case RoomWidgetEnum.FURNI_STICKIE_WIDGET:
                 widgetHandler = new FurnitureStickieHandler();
                 break;
@@ -392,12 +393,13 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
                 break;
+            case RoomWidgetEnum.ROOM_TOOLS:
+                widgetHandler = new RoomToolsWidgetHandler();
+                break;
         }
 
         if(widgetHandler)
         {
-            widgetHandler.container = this;
-
             const messageTypes = widgetHandler.messageTypes;
 
             if(messageTypes && messageTypes.length)
@@ -441,29 +443,34 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                     events.push(widgetHandler);
                 }
             }
+
+            this._handlers.push(widgetHandler);
+
+            if(component)
+            {
+                let widgetRef: ComponentRef<IRoomWidget>    = null;
+                let widget: IRoomWidget                     = null;
+
+                this._ngZone.run(() =>
+                {
+                    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
+
+                    widgetRef   = this.widgetContainer.createComponent(componentFactory);
+                    widget      = (widgetRef.instance as IRoomWidget);
+                });
+
+                if(!widget) return;
+
+                widget.widgetHandler    = widgetHandler;
+                widget.messageListener  = this;
+
+                widget.registerUpdateEvents(this._events);
+
+                this._widgets.set(type, widgetRef);
+            }
+
+            widgetHandler.container = this;
         }
-
-        if(!component) return;
-
-        let widgetRef: ComponentRef<IRoomWidget>    = null;
-        let widget: IRoomWidget                     = null;
-
-        this._ngZone.run(() =>
-        {
-            const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-
-            widgetRef   = this.widgetContainer.createComponent(componentFactory);
-            widget      = (widgetRef.instance as IRoomWidget);
-        });
-
-        if(!widget) return;
-
-        widget.widgetHandler    = widgetHandler;
-        widget.messageListener  = this;
-
-        widget.registerUpdateEvents(this._events);
-
-        this._widgets.set(type, widgetRef);
 
         if(sendSizeUpdate) this._events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
     }
