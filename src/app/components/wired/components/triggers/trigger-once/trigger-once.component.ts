@@ -1,23 +1,24 @@
-﻿import { WiredFurniture } from './../../../WiredFurniture';
-import { Options } from '@angular-slider/ngx-slider';
+﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { WiredTrigger } from '../WiredTrigger';
 import { WiredTriggerType } from '../WiredTriggerType';
+import { WiredFurniture } from './../../../WiredFurniture';
 
 @Component({
     templateUrl: './trigger-once.template.html'
 })
 export class TriggerOnceComponent extends WiredTrigger
 {
-    private static MINIMUM_VALUE: number = 1;
-    private static MAXIMUM_VALUE: number = 1200;
-    private static STEPPER_VALUE: number = 1;
+    protected static MINIMUM_VALUE: number = 1;
+    protected static MAXIMUM_VALUE: number = 1200;
+    protected static STEPPER_VALUE: number = 1;
 
     public static CODE: number = WiredTriggerType.TRIGGER_ONCE;
 
-    public time: number = 0;
+    public time: number         = 0;
+    public timeLocale: string   = '';
 
     public get code(): number
     {
@@ -55,11 +56,9 @@ export class TriggerOnceComponent extends WiredTrigger
         if(this.time > TriggerOnceComponent.MAXIMUM_VALUE) this.time = TriggerOnceComponent.MAXIMUM_VALUE;
     }
 
-    private updateLocaleParameter(): void
+    protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.settime', 'seconds', WiredFurniture.getLocaleName(this.time));
-
-        this.updateCount++;
+        this.timeLocale = Nitro.instance.getLocalizationWithParameter('wiredfurni.params.settime', 'seconds', WiredFurniture.getLocaleName(this.time));
     }
 
     public get hasSpecialInputs(): boolean

@@ -164,6 +164,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     public endRoom(): void
     {
+        if(!this._roomSession) return;
+
         Nitro.instance.ticker.remove(this.update, this);
 
         if(this._resizeTimer)
@@ -198,6 +200,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this._widgetHandlerMessageMap.clear();
         this._widgetHandlerEventMap.clear();
         this._events.removeAllListeners();
+        this._roomSession = null;
 
         this.removeCanvas();
 
