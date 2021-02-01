@@ -42,7 +42,7 @@ import { NotificationService } from '../../notification/services/notification.se
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
 import { NavigatorDataService } from './navigator-data.service';
-import {RoomScoreEvent} from "../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent";
+import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker

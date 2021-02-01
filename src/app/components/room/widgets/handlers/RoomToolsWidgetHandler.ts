@@ -11,8 +11,8 @@ import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
-import {RoomDataParser} from "../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser";
-import {RoomLikeRoomComposer} from "../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer";
+import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {

@@ -57,7 +57,7 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import {RoomToolsWidgetHandler} from "./widgets/handlers/RoomToolsWidgetHandler";
+import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',

@@ -3,9 +3,9 @@ import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widg
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
-import {NavigatorService} from "../../../../navigator/services/navigator.service";
-import {FurnitureCreditWidgetHandler} from "../../handlers/FurnitureCreditWidgetHandler";
-import {RoomToolsWidgetHandler} from "../../handlers/RoomToolsWidgetHandler";
+import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { FurnitureCreditWidgetHandler } from '../../handlers/FurnitureCreditWidgetHandler';
+import { RoomToolsWidgetHandler } from '../../handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-tools-component',

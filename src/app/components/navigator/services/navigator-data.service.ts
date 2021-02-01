@@ -48,7 +48,8 @@ export class NavigatorDataService
         for(let i = 0; i < visitedRooms.length; i++)
         {
             const room = visitedRooms[i];
-            if(room && room.roomId == roomId) {
+            if(room && room.roomId == roomId)
+            {
                 this._currentVisitedRoomIndex = i;
             }
         }
