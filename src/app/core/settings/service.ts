@@ -11,6 +11,7 @@ export class SettingsService
     private _friendlistVisible: boolean;
     private _achievementsVisible: boolean;
     private _meMenuVisible: boolean;
+    private _floorPlanVisible: boolean;
 
     constructor()
     {
@@ -22,6 +23,7 @@ export class SettingsService
         this._friendlistVisible     = false;
         this._achievementsVisible   = false;
         this._meMenuVisible         = false;
+        this._floorPlanVisible      = false;
     }
 
     public showAvatarEditor(): void
@@ -172,5 +174,10 @@ export class SettingsService
     public get isReady(): boolean
     {
         return this._isReady;
+    }
+
+    public set floorPlanVisible(visible: boolean)
+    {
+        this._floorPlanVisible = visible;
     }
 }

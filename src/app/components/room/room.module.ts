@@ -26,10 +26,12 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
+import { FloorplanModule } from './floorplan/floorplan.module';
 
 @NgModule({
     imports: [
-        SharedModule
+        SharedModule,
+        FloorplanModule
     ],
     exports: [
         RoomComponent,

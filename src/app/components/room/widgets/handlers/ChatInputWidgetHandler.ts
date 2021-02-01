@@ -13,6 +13,7 @@ import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
+import {RoomControllerLevel} from "../../../../../client/nitro/session/enum/RoomControllerLevel";
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
@@ -144,6 +145,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':chooser':
                             this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_USER_CHOOSER));
                             return null;
+                        case ':floor':
+                        case ':bcfloor':
+                            if(this._container.roomSession.controllerLevel >= RoomControllerLevel.ROOM_OWNER)
+                            {
+                                this._container.settingsService.floorPlanVisible = true;
+                            }
                         case ':client':
                         case ':nitro':
                         case ':billsonnn':

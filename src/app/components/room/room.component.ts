@@ -57,6 +57,7 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { SettingsService } from '../../core/settings/service';
 
 @Component({
     selector: 'nitro-room-component',
@@ -101,6 +102,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _wiredService: WiredService,
         private _friendService: FriendListService,
         private _componentFactoryResolver: ComponentFactoryResolver,
+        private _settingsService: SettingsService,
         private _ngZone: NgZone
     )
     {}
@@ -856,5 +858,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get friendService(): FriendListService
     {
         return this._friendService;
+    }
+
+    public get settingsService(): SettingsService
+    {
+        return this._settingsService;
     }
 }

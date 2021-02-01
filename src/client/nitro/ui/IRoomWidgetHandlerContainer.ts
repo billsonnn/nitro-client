@@ -12,6 +12,7 @@ import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
 import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../app/core/settings/service';
 
 export interface IRoomWidgetHandlerContainer
 {
@@ -30,4 +31,5 @@ export interface IRoomWidgetHandlerContainer
     notificationService: NotificationService;
     wiredService: WiredService;
     friendService: FriendListService;
+    settingsService: SettingsService
 }
