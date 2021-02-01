@@ -31,8 +31,7 @@ export class NavigatorDataService
     {
         NavigatorDataService._visitedRooms.push(room);
 
-        // TODO: 10
-        if(NavigatorDataService._visitedRooms.length > 3)
+        if(NavigatorDataService._visitedRooms.length > 10)
         {
             NavigatorDataService._visitedRooms.shift();
         }
