@@ -1,6 +1,5 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
-import { Nitro } from 'src/client/nitro/Nitro';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredMainComponent } from '../../main/main.component';
 import { WiredActionType } from '../WiredActionType';
@@ -59,12 +58,6 @@ export class MoveFurniToComponent extends WiredAction
         this.spacing += 1;
 
         if(this.spacing > MoveFurniToComponent.SPACING_MAXIMUM_VALUE) this.spacing = MoveFurniToComponent.SPACING_MAXIMUM_VALUE;
-    }
-
-    protected updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.emptytiles', 'tiles', this.spacing.toString());
-        super.updateLocaleParameter();
     }
 
     public get spacingSliderOptions(): Options

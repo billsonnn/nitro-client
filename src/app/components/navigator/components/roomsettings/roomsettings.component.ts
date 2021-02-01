@@ -17,6 +17,7 @@ import { FriendListService } from '../../../friendlist/services/friendlist.servi
 import { NotificationChoice } from '../../../notification/components/choices/choices.component';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { NavigatorService } from '../../services/navigator.service';
+import RoomSettings from './common/RoomSettings';
 
 
 @Component({
@@ -30,41 +31,11 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
     private _messages: IMessageEvent[] = [];
     private _maxVisitors: number[] = [];
 
-    public roomName: string;
-    public roomDescription: string;
-    public categoryId: string;
-    public userCount: string;
-    public tags: string[];
-    public tradeState: string;
-    public allowWalkthrough: boolean;
-
-    public lockState: string;
-    public password: string;
-    public confirmPassword: string;
-    public allowPets: boolean;
-    public allowPetsEat: boolean;
-
-    private _usersWithRights: Map<number, string>;
-    private _friendsWithoutRights: Map<number, string>;
-
-    public hideWalls: boolean;
-    public wallThickness: string;
-    public floorThickness: string;
-    public chatBubbleMode: string;
-    public chatBubbleWeight: string;
-    public chatBubbleSpeed: string;
-    public chatFloodProtection: string;
-    public chatDistance: number;
-
-    public muteState: string;
-    public kickState: string;
-    public banState: string;
-    private _bannedUsers: Map<number, string>;
-    private _selectedUserToUnban: number;
+    public roomSettings: RoomSettings;
 
     private _roomId: number;
     private _oldRoomName: string;
-    private _oldLockState: number;
+    private _oldLockState: string;
     private _visible: boolean;
     
     constructor(
@@ -77,48 +48,19 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this.onRoomUsersWithRightsEvent  = this.onRoomUsersWithRightsEvent.bind(this);
         this.onRoomBannedUsersEvent      = this.onRoomBannedUsersEvent.bind(this);
 
+        this.clear();
         this.registerMessages();
     }
 
     private clear(): void
     {
-        this._currentTab            = 1;
+        this._currentTab     = 1;
 
-        this.roomName               = null;
-        this.roomDescription        = null;    
-        this.categoryId             = '0';
-        this.userCount              = '0';
-        this.tags                   = [];
-        this.tradeState             = '0';
-        this.allowWalkthrough       = false;
+        this.roomSettings    = new RoomSettings(this._ngZone);
 
-        this.lockState              = '0';
-        this.password               = null;
-        this.confirmPassword        = null;
-        this.allowPets              = false;
-        this.allowPetsEat           = false;
-
-        this._usersWithRights       = new Map<number, string>();
-        this._friendsWithoutRights  = new Map<number, string>();
-        
-        this.hideWalls              = false;
-        this.wallThickness          = '0';
-        this.floorThickness         = '0';
-        this.chatBubbleMode         = '0';
-        this.chatBubbleWeight       = '0';
-        this.chatBubbleSpeed        = '0';
-        this.chatFloodProtection    = '0';
-        this.chatDistance           = 0;
-
-        this.muteState              = '0';
-        this.kickState              = '0';
-        this.banState               = '0';
-        this._bannedUsers           = new Map<number, string>();
-        this._selectedUserToUnban   = 0;
-
-        this._roomId                = 0;
-        this._oldRoomName           = null;
-        this._visible               = false;
+        this._roomId         = 0;
+        this._oldRoomName    = null;
+        this._visible        = false;
     }
 
     public ngOnDestroy(): void
@@ -164,32 +106,33 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this._roomId = parser.roomId;
 
         this._ngZone.run(() => {            
-            this.roomName               = parser.name;
-            this.roomDescription        = parser.description;
-            this.categoryId             = parser.categoryId.toString();
-            this.userCount              = parser.userCount.toString();
-            this.tradeState             = parser.tradeMode.toString();
-            this.allowWalkthrough       = parser.allowWalkthrough;
+            this.roomSettings.roomName               = parser.name;
+            this.roomSettings.roomDescription        = parser.description;
+            this.roomSettings.categoryId             = parser.categoryId.toString();
+            this.roomSettings.userCount              = parser.userCount.toString();
+            this.roomSettings.tradeState             = parser.tradeMode.toString();
+            this.roomSettings.allowWalkthrough       = parser.allowWalkthrough;
 
-            this.lockState              = parser.state.toString();
-            this.allowPets              = parser.allowPets;
+            this.roomSettings.lockState              = parser.state.toString();
+            this.roomSettings.allowPets              = parser.allowPets;
             
-            this.hideWalls              = parser.hideWalls;
-            this.wallThickness          = parser.thicknessWall.toString();
-            this.floorThickness         = parser.thicknessFloor.toString();
-            this.chatBubbleMode         = parser.chatSettings.mode.toString();
-            this.chatBubbleWeight       = parser.chatSettings.weight.toString();
-            this.chatBubbleSpeed        = parser.chatSettings.speed.toString();
-            this.chatFloodProtection    = parser.chatSettings.protection.toString();
-            this.chatDistance           = parser.chatSettings.distance;
+            this.roomSettings.hideWalls              = parser.hideWalls;
+            this.roomSettings.wallThickness          = parser.thicknessWall.toString();
+            this.roomSettings.floorThickness         = parser.thicknessFloor.toString();
+            this.roomSettings.chatBubbleMode         = parser.chatSettings.mode.toString();
+            this.roomSettings.chatBubbleWeight       = parser.chatSettings.weight.toString();
+            this.roomSettings.chatBubbleSpeed        = parser.chatSettings.speed.toString();
+            this.roomSettings.chatFloodProtection    = parser.chatSettings.protection.toString();
+            this.roomSettings.chatDistance           = parser.chatSettings.distance;
 
-            this.muteState              = parser.moderationSettings.allowMute.toString();
-            this.kickState              = parser.moderationSettings.allowKick.toString();
-            this.banState               = parser.moderationSettings.allowBan.toString();
+            this.roomSettings.muteState              = parser.moderationSettings.allowMute.toString();
+            this.roomSettings.kickState              = parser.moderationSettings.allowKick.toString();
+            this.roomSettings.banState               = parser.moderationSettings.allowBan.toString();
 
-            this._maxVisitors           = this._navigatorService.getMaxVisitors(parser.maxUserCount);
+            this._maxVisitors           = this._navigatorService.getMaxVisitors(50);
             
             this._oldRoomName           = parser.name;
+            this._oldLockState          = parser.state.toString();
             this._visible               = true;
         });
         
@@ -205,7 +148,7 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
         if(!parser) return;
 
-        this._usersWithRights = new Map(parser.users);
+        this.roomSettings.usersWithRights = new Map(parser.users);
         this.getFriendsWithoutRights();
     }
 
@@ -217,15 +160,15 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
 
         if(!parser) return;
 
-        this._bannedUsers = new Map(parser.users);
+        this.roomSettings.bannedUsers = new Map(parser.users);
     }
 
     public getFriendsWithoutRights(): void
     {
         this._friendListService.friends.forEach((friend: MessengerFriend, id: number) => {
-            if(!this._usersWithRights.has(id))
+            if(!this.roomSettings.usersWithRights.has(id))
             {
-                this._friendsWithoutRights.set(id, friend.name);
+                this.roomSettings.friendsWithoutRights.set(id, friend.name);
             }
         });
     }
@@ -235,10 +178,10 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this._currentTab = tab;
     }
 
-    public deleteRoom(): void
+    public onDeleteRoom(): void
     {
         const title = Nitro.instance.localization.getValue('navigator.roomsettings.deleteroom.confirm.title');
-        const message = Nitro.instance.localization.getValueWithParameter('navigator.roomsettings.deleteroom.confirm.message', 'room_name', '<b>' + this.roomName + '</b>');
+        const message = Nitro.instance.localization.getValueWithParameter('navigator.roomsettings.deleteroom.confirm.message', 'room_name', '<b>' + this.roomSettings.roomName + '</b>');
 
         const choices = [
             new NotificationChoice('navigator.roomsettings.delete', () => {
@@ -253,64 +196,50 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this._notificationService.alertWithChoices(message, choices, title);
     }
 
-    public openProfile(userId: number): void
+    public onOpenProfile(userId: number): void
     {
         //Nitro.instance.communication.connection.send(new UserProfileByIdComposer(userId));
     }
 
-    public giveRights(userId: number): void
+    public onGiveRights(userId: number): void
     {
-        if(!this._friendsWithoutRights.has(userId)) return;
+        if(!this.roomSettings.friendsWithoutRights.has(userId)) return;
 
         this._ngZone.run(() => {
-            this._usersWithRights.set(userId, this._friendsWithoutRights.get(userId));
-            this._friendsWithoutRights.delete(userId);
+            this.roomSettings.usersWithRights.set(userId, this.roomSettings.friendsWithoutRights.get(userId));
+            this.roomSettings.friendsWithoutRights.delete(userId);
         });
 
         Nitro.instance.communication.connection.send(new RoomGiveRightsComposer(userId));
     }
 
-    public takeRights(userId: number): void
+    public onTakeRights(userId: number): void
     {
-        if(!this._usersWithRights.has(userId)) return;
+        if(!this.roomSettings.usersWithRights.has(userId)) return;
 
         this._ngZone.run(() => {
-            this._friendsWithoutRights.set(userId, this._usersWithRights.get(userId));
-            this._usersWithRights.delete(userId);
+            this.roomSettings.friendsWithoutRights.set(userId, this.roomSettings.usersWithRights.get(userId));
+            this.roomSettings.usersWithRights.delete(userId);
         });
 
         Nitro.instance.communication.connection.send(new RoomTakeRightsComposer(userId));
     }
 
-    public unban(): void
+    public onUnban(): void
     {
-        if(this._selectedUserToUnban === 0) return;
+        if(this.roomSettings.selectedUserToUnban === 0) return;
 
-        if(!this._bannedUsers.has(this._selectedUserToUnban)) return;
+        if(!this.roomSettings.bannedUsers.has(this.roomSettings.selectedUserToUnban)) return;
 
-        const userId = this._selectedUserToUnban;
+        const userId = this.roomSettings.selectedUserToUnban;
 
         this._ngZone.run(() => {
-            this._bannedUsers.delete(this._selectedUserToUnban);
-            this._selectedUserToUnban = 0;
+            this.roomSettings.bannedUsers.delete(this.roomSettings.selectedUserToUnban);
+            this.roomSettings.selectedUserToUnban = 0;
         });
 
         Nitro.instance.communication.connection.send(new RoomUnbanUserComposer(userId, this._roomId));
-    }
-
-    public selectUserToUnban(userId: number): void
-    {
-        this._ngZone.run(() => {
-            if(this._selectedUserToUnban === userId)
-            {
-                this._selectedUserToUnban = 0;
-            }
-            else
-            {
-                this._selectedUserToUnban = userId;
-            }
-        });
-    }
+    }  
 
     public hide(): void
     {
@@ -318,45 +247,56 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         this.clear();
     }
 
-    public save(): void
+    public onSave(roomSettings: RoomSettings): void
     {
-        if(!this.isValidPassword)
+        this._ngZone.run(() => {
+            this.roomSettings = roomSettings;
+        });
+
+        let lockState = roomSettings.lockState;
+        let password = roomSettings.password;
+        
+        if(!roomSettings.isValidPassword)
         {
-            this.lockState = this._oldLockState.toString();
-            this.password = null;
+            lockState = this._oldLockState;
+            password = null;
+        }
+        else
+        {
+            this._oldLockState = lockState;
         }
 
-        if(this.roomName.length < 1)
-            this.roomName = this._oldRoomName;
+        if(roomSettings.roomName.length < 1)
+            roomSettings.roomName = this._oldRoomName;
 
-        if(parseInt(this.userCount) < 0)
-            this.userCount = '0';
+        if(parseInt(roomSettings.userCount) < 0)
+            roomSettings.userCount = '10';
 
         const event = new SaveRoomSettingsComposer(
             this._roomId,
-            this.roomName,
-            this.roomDescription,
-            parseInt(this.lockState),
-            this.password,
-            parseInt(this.userCount),
-            parseInt(this.categoryId),
-            this.tags.length,
-            this.tags,
-            parseInt(this.tradeState),
-            this.allowPets,
-            this.allowPetsEat,
-            this.allowWalkthrough,
-            this.hideWalls,
-            parseInt(this.wallThickness),
-            parseInt(this.floorThickness),
-            parseInt(this.muteState),
-            parseInt(this.kickState),
-            parseInt(this.banState),
-            parseInt(this.chatBubbleMode),
-            parseInt(this.chatBubbleWeight),
-            parseInt(this.chatBubbleSpeed),
-            this.chatDistance,
-            parseInt(this.chatFloodProtection)
+            roomSettings.roomName,
+            roomSettings.roomDescription,
+            parseInt(lockState),
+            password,
+            parseInt(roomSettings.userCount),
+            parseInt(roomSettings.categoryId),
+            roomSettings.tags.length,
+            roomSettings.tags,
+            parseInt(roomSettings.tradeState),
+            roomSettings.allowPets,
+            roomSettings.allowPetsEat,
+            roomSettings.allowWalkthrough,
+            roomSettings.hideWalls,
+            parseInt(roomSettings.wallThickness),
+            parseInt(roomSettings.floorThickness),
+            parseInt(roomSettings.muteState),
+            parseInt(roomSettings.kickState),
+            parseInt(roomSettings.banState),
+            parseInt(roomSettings.chatBubbleMode),
+            parseInt(roomSettings.chatBubbleWeight),
+            parseInt(roomSettings.chatBubbleSpeed),
+            roomSettings.chatDistance,
+            parseInt(roomSettings.chatFloodProtection)
         );
 
         Nitro.instance.communication.connection.send(event);
@@ -387,39 +327,8 @@ export class NavigatorRoomSettingsComponent implements OnDestroy
         return this._visible;
     }
 
-    public get isValidPassword(): boolean
-    {
-        if(this.lockState !== '3')
-            return true;
-
-        return this.password && this.password.length > 0 && this.password === this.confirmPassword;
-    }
-
     public get usersWithRights(): Map<number, string>
     {
-        return this._usersWithRights;
-    }
-
-    public get friendsWithoutRights(): Map<number, string>
-    {
-        return this._friendsWithoutRights;
-    }
-
-    public get bannedUsers(): Map<number, string>
-    {
-        return this._bannedUsers;
-    }
-
-    public get selectedUserToUnban(): number
-    {
-        return this._selectedUserToUnban;
-    }
-
-    public get selectedUsernameToUnban(): string
-    {
-        if(this._selectedUserToUnban > 0)
-            return this._bannedUsers.get(this._selectedUserToUnban);
-
-        return null;
+        return this.roomSettings.usersWithRights;
     }
 }

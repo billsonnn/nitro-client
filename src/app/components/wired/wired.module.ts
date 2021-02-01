@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared';
+import { WiredActionBaseComponent } from './components/actions/action-base/action-base.component';
 import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
 import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';
 import { BotGiveHandItemComponent } from './components/actions/bot-give-hand-item/bot-give-hand-item.component';
@@ -68,6 +69,7 @@ import { WiredService } from './services/wired.service';
     exports: [
         WiredMainComponent,
         WiredBaseComponent,
+        WiredActionBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,
@@ -130,6 +132,7 @@ import { WiredService } from './services/wired.service';
     declarations: [
         WiredMainComponent,
         WiredBaseComponent,
+        WiredActionBaseComponent,
         ActorHasHandItemComponent,
         ActorIsInGroupComponent,
         ActorIsInTeamComponent,

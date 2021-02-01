@@ -8,8 +8,8 @@ import { ClientPingEvent } from '../messages/incoming/client/ClientPingEvent';
 import { AuthenticatedEvent } from '../messages/incoming/security/AuthenticatedEvent';
 import { ClientPongComposer } from '../messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from '../messages/outgoing/client/ClientReleaseVersionComposer';
-import { SecurityTicketComposer } from '../messages/outgoing/security/SecurityTicketComposer';
-import { UserInfoComposer } from '../messages/outgoing/user/data/UserInfoComposer';
+import { InfoRetrieveBaseMessageComposer } from '../messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
+import { SecurityTicketComposer } from '../messages/outgoing/handshake/SecurityTicketComposer';
 import { NitroCommunicationDemoEvent } from './NitroCommunicationDemoEvent';
 
 export class NitroCommunicationDemo extends NitroManager
@@ -129,7 +129,7 @@ export class NitroCommunicationDemo extends NitroManager
             return;
         }
 
-        connection.send(new SecurityTicketComposer(this._sso));
+        connection.send(new SecurityTicketComposer(this._sso, Nitro.instance.time));
     }
 
     private onClientPingEvent(event: ClientPingEvent): void
@@ -149,7 +149,7 @@ export class NitroCommunicationDemo extends NitroManager
 
         //event.connection.send(new UserHomeRoomComposer(555));
 
-        event.connection.send(new UserInfoComposer());
+        event.connection.send(new InfoRetrieveBaseMessageComposer());
     }
 
     public setSSO(sso: string): void

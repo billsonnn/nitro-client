@@ -155,6 +155,7 @@ import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComp
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { RedeemItemClothingComposer } from './messages/outgoing/catalog/RedeemItemClothingComposer';
 import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
 import { ClientReleaseVersionComposer } from './messages/outgoing/client/ClientReleaseVersionComposer';
@@ -173,6 +174,8 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
+import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
@@ -256,11 +259,9 @@ import { OpenMessageComposer } from './messages/outgoing/roomevents/OpenMessageC
 import { UpdateActionMessageComposer } from './messages/outgoing/roomevents/UpdateActionMessageComposer';
 import { UpdateConditionMessageComposer } from './messages/outgoing/roomevents/UpdateConditionMessageComposer';
 import { UpdateTriggerMessageComposer } from './messages/outgoing/roomevents/UpdateTriggerMessageComposer';
-import { SecurityTicketComposer } from './messages/outgoing/security/SecurityTicketComposer';
 import { UserCurrentBadgesComposer } from './messages/outgoing/user/data/UserCurrentBadgesComposer';
 import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
-import { UserInfoComposer } from './messages/outgoing/user/data/UserInfoComposer';
 import { UserMottoComposer } from './messages/outgoing/user/data/UserMottoComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
@@ -545,6 +546,10 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS_UPDATE, SetRelationshipStatusComposer);
         this._composers.set(OutgoingHeader.USER_VISIT, VisitUserComposer);
 
+        // SECURITY
+        this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
+        this._composers.set(OutgoingHeader.USER_INFO, InfoRetrieveBaseMessageComposer);
+
         // NAVIGATOR
         this._composers.set(OutgoingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_INIT, NavigatorInitComposer);
@@ -639,6 +644,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.FURNITURE_WALL_MULTISTATE, FurnitureWallMultiStateComposer);
         this._composers.set(OutgoingHeader.ONE_WAY_DOOR_CLICK, FurnitureOneWayDoorComposer);
         this._composers.set(OutgoingHeader.ITEM_EXCHANGE_REDEEM, FurnitureExchangeComposer);
+        this._composers.set(OutgoingHeader.ITEM_CLOTHING_REDEEM, RedeemItemClothingComposer);
 
         // MAPPING
         this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
@@ -667,10 +673,6 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
 
-
-        // SECURITY
-        this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
-
         // USER
         this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);
 
@@ -678,7 +680,6 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
         this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
-        this._composers.set(OutgoingHeader.USER_INFO, UserInfoComposer);
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
 
         // INVENTORY

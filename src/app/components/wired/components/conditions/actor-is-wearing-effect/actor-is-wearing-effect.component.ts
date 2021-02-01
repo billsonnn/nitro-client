@@ -26,6 +26,7 @@ export class ActorIsWearingEffectComponent extends WiredCondition
     public readIntegerParamsFromForm(): number[]
     {
         const effectId = parseInt(this.effectId);
+
         return isNaN(effectId) ? [] : [ effectId ];
     }
 

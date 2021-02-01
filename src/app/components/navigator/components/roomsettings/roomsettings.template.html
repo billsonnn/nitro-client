@@ -11,203 +11,38 @@
             <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 4}" (click)="changeTab(4)">{{ ('navigator.roomsettings.tab.4') | translate }}</button>
             <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 5}" (click)="changeTab(5)">{{ ('navigator.roomsettings.tab.5') | translate }}</button>
         </div>
-        <div *ngIf="currentTab === 1">
-            <div class="form-group mb-2">
-                <label>{{ ('navigator.roomname') | translate }}</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="roomName" (blur)="save()">
-            </div>
-            <div class="form-group mb-2">
-                <label>{{ ('navigator.roomsettings.desc') | translate }}</label>
-                <textarea class="form-control form-control-sm" [(ngModel)]="roomDescription" (blur)="save()"></textarea>
-            </div>
-            <div class="form-group mb-2">
-                <label>{{ ('navigator.category') | translate }}</label>
-                <select class="form-control form-control-sm" [(ngModel)]="categoryId" (ngModelChange)="save()">
-                    <option *ngFor="let category of categories" [value]="category.id">{{ (category.name) | translate }}</option>
-                </select>
-            </div>
-            <div class="form-group mb-2">
-                <label>{{ ('navigator.maxvisitors') | translate }}</label>
-                <select class="form-control form-control-sm" [(ngModel)]="userCount" (ngModelChange)="save()">
-                    <option *ngFor="let amount of maxVisitors" [value]="amount">{{ amount }}</option>
-                </select>
-            </div>
-            <div class="form-group mb-2">
-                <label>{{ ('navigator.tradesettings') | translate }}</label>
-                <select class="form-control form-control-sm" [(ngModel)]="tradeState" (ngModelChange)="save()">
-                    <option *ngFor="let type of tradeSettings | keyvalue" [value]="type.key">{{ (type.value) | translate }}</option>
-                </select>
-            </div>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="allowWalkthrough" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.allow_walk_through') | translate }}</label>
-            </div>
-            <button class="btn btn-danger btn-block" (click)="deleteRoom()">{{ ('navigator.roomsettings.delete') | translate }}</button>
-        </div>
-        <div *ngIf="currentTab === 2">
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.roomaccess.caption') | translate }}</div>
-            <div class="mb-3">{{ ('navigator.roomsettings.roomaccess.info') | translate }}</div>
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.doormode') | translate }}</div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="lockState" (ngModelChange)="save()" value="0">
-                <label class="form-check-label">{{ ('navigator.roomsettings.doormode.open') | translate }}</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="lockState" (ngModelChange)="save()" value="1">
-                <label class="form-check-label">{{ ('navigator.roomsettings.doormode.doorbell') | translate }}</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="lockState" (ngModelChange)="save()" value="2">
-                <label class="form-check-label">{{ ('navigator.roomsettings.doormode.invisible') | translate }}</label>
-            </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="lockState" value="3">
-                <label class="form-check-label">{{ ('navigator.roomsettings.doormode.password') | translate }}</label>
-            </div>
-            <div *ngIf="lockState == '3'">
-                <div class="form-group mb-2">
-                    <label>{{ ('navigator.roomsettings.password') | translate }}</label>
-                    <input type="password" class="form-control form-control-sm" placeholder="*****" [(ngModel)]="password" (blur)="save()">
-                </div>
-                <div class="form-group mb-3">
-                    <label>{{ ('navigator.roomsettings.passwordconfirm') | translate }}</label>
-                    <input type="password" class="form-control form-control-sm" placeholder="*****" [(ngModel)]="confirmPassword" (blur)="save()">
-                    <small *ngIf="!isValidPassword" class="form-text text-muted font-weight-bold" style="color: red !important">
-                        {{ ('navigator.roomsettings.invalidconfirm') | translate }}
-                    </small>
-                </div>
-            </div>
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.pets') | translate }}</div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="allowPets" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.allowpets') | translate }}</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="allowPetsEat" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.allowfoodconsume') | translate }}</label>
-            </div>
-        </div>
-        <div *ngIf="currentTab === 3">
-            <div class="row">
-                <div class="col-6">
-                    <div class="font-weight-bold mb-2">{{ ('navigator.flatctrls.userswithrights') | translate:null:null:['displayed','total']:[usersWithRights.size.toString(), usersWithRights.size.toString()] }}</div>
-                </div>
-                <div class="col-6">
-                    <div class="font-weight-bold mb-2">{{ ('navigator.flatctrls.friends') | translate:null:null:['displayed','total']:[friendsWithoutRights.size.toString(), friendsWithoutRights.size.toString()] }}</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <perfect-scrollbar class="grid-container position-relativ mb-1" style="min-height: 400px;max-height: 400px;">
-                        <div *ngFor="let item of usersWithRights | keyvalue" class="btn-group mb-1 w-100">
-                            <button class="btn btn-primary btn-sm w-100" (click)="openProfile(item.key)">{{ item.value }}</button>
-                            <button class="btn btn-primary btn-sm" (click)="takeRights(item.key)"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </perfect-scrollbar>
-                </div>
-                <div class="col-6">
-                    <perfect-scrollbar class="grid-container position-relative mb-1" style="min-height: 400px;max-height: 400px;">
-                        <div *ngFor="let item of friendsWithoutRights | keyvalue" class="btn-group mb-1 w-100">
-                            <button class="btn btn-primary btn-sm" (click)="giveRights(item.key)"><i class="fas fa-chevron-left"></i></button>
-                            <button class="btn btn-primary btn-sm w-100" (click)="openProfile(item.key)">{{ item.value }}</button>
-                        </div>
-                    </perfect-scrollbar>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="currentTab === 4">
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.vip.caption') | translate }}</div>
-            <div class="mb-3">{{ ('navigator.roomsettings.vip.info') | translate }}</div>
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.vip_settings') | translate }}</div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="hideWalls" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.hide_walls') | translate }}</label>
-            </div>
-            <select class="form-control form-control-sm mb-3" [(ngModel)]="wallThickness" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
-                <option value="-1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
-                <option value="-2">{{ ('navigator.roomsettings.wall_thickness.thinnest') | translate }}</option>
-            </select>
-            <select class="form-control form-control-sm mb-3" [(ngModel)]="floorThickness" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.floor_thickness.normal') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.floor_thickness.thick') | translate }}</option>
-                <option value="-1">{{ ('navigator.roomsettings.floor_thickness.thin') | translate }}</option>
-                <option value="-2">{{ ('navigator.roomsettings.floor_thickness.thinnest') | translate }}</option>
-            </select>
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.chat_settings') | translate }}</div>
-            <div class="mb-2">{{ ('navigator.roomsettings.chat_settings.info') | translate }}</div>
-            <select class="form-control form-control-sm mb-2" [(ngModel)]="chatBubbleMode" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.chat.mode.free.flow') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.chat.mode.line.by.line') | translate }}</option>
-            </select>
-            <select class="form-control form-control-sm mb-2" [(ngModel)]="chatBubbleWeight" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.chat.bubbles.width.normal') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.chat.bubbles.width.thin') | translate }}</option>
-                <option value="2">{{ ('navigator.roomsettings.chat.bubbles.width.wide') | translate }}</option>
-            </select>
-            <select class="form-control form-control-sm mb-2" [(ngModel)]="chatBubbleSpeed" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.chat.speed.fast') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.chat.speed.normal') | translate }}</option>
-                <option value="2">{{ ('navigator.roomsettings.chat.speed.slow') | translate }}</option>
-            </select>
-            <select class="form-control form-control-sm mb-2" [(ngModel)]="chatFloodProtection" (ngModelChange)="save()">
-                <option value="0">{{ ('navigator.roomsettings.chat.flood.loose') | translate }}</option>
-                <option value="1">{{ ('navigator.roomsettings.chat.flood.normal') | translate }}</option>
-                <option value="2">{{ ('navigator.roomsettings.chat.flood.strict') | translate }}</option>
-            </select>
-            <div class="form-group mb-0">
-                <label>{{ ('navigator.roomsettings.chat_settings.hearing.distance') | translate }}</label>
-                <input type="number" min="0" class="form-control form-control-sm" [(ngModel)]="chatDistance" (blur)="save()">
-            </div>
-        </div>
-        <div *ngIf="currentTab === 5">
-            <div class="mb-3">{{ ('navigator.roomsettings.moderation.header') | translate }}</div>
-            <div class="font-weight-bold">{{ ('navigator.roomsettings.moderation.mute.header') | translate }}</div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_mute" value="0" [(ngModel)]="muteState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.none') | translate }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_mute" value="1" [(ngModel)]="muteState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.rights') | translate }}</label>
-            </div>
-            <div class="font-weight-bold mt-2">{{ ('navigator.roomsettings.moderation.kick.header') | translate }}</div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_kick" value="0" [(ngModel)]="kickState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.all') | translate }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_kick" value="1" [(ngModel)]="kickState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.rights') | translate }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_kick" value="2" [(ngModel)]="kickState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.none') | translate }}</label>
-            </div>
-            <div class="font-weight-bold mt-2">{{ ('navigator.roomsettings.moderation.ban.header') | translate }}</div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_ban" value="0" [(ngModel)]="banState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.none') | translate }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="moderation_ban" value="1" [(ngModel)]="banState" (ngModelChange)="save()">
-                <label class="form-check-label">{{ ('navigator.roomsettings.moderation.rights') | translate }}</label>
-            </div>
-            <div class="font-weight-bold mt-3 mb-1">{{ ('navigator.roomsettings.moderation.banned.users') | translate }}</div>
-            <div class="row">
-                <div class="col-6">
-                    <perfect-scrollbar class="grid-container position-relativ mb-1" style="min-height: 150px;max-height: 150px;">
-                        <div *ngFor="let item of bannedUsers | keyvalue" class="btn-group mb-1 w-100">
-                            <button class="btn btn-primary btn-sm w-100" (click)="openProfile(item.key)">{{ item.value }}</button>
-                            <button class="btn btn-primary btn-sm" (click)="selectUserToUnban(item.key)"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </perfect-scrollbar>
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-primary btn-sm w-100" [ngClass]="{'disabled' : selectedUserToUnban === 0}" (click)="unban()">{{ ('navigator.roomsettings.moderation.unban') | translate }} {{selectedUsernameToUnban }}</button>
-                </div>
-            </div>
-        </div>
+        <nitro-navigator-roomsettings-tab-basic-component *ngIf="currentTab === 1"
+            [roomSettings]="roomSettings"
+            [categories]="categories"
+            [maxVisitors]="maxVisitors"
+            [tradeSettings]="tradeSettings"
+            (onSave)="onSave($event)"
+            (onDeleteRoom)="onDeleteRoom()"
+        ></nitro-navigator-roomsettings-tab-basic-component>
+
+        <nitro-navigator-roomsettings-tab-access-component *ngIf="currentTab === 2"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+        ></nitro-navigator-roomsettings-tab-access-component>
+
+        <nitro-navigator-roomsettings-tab-rights-component *ngIf="currentTab === 3"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+            (onGiveRights)="onGiveRights($event)"
+            (onTakeRights)="onTakeRights($event)"
+            (onOpenProfile)="onOpenProfile($event)"
+        ></nitro-navigator-roomsettings-tab-rights-component>
+
+        <nitro-navigator-roomsettings-tab-vipchat-component *ngIf="currentTab === 4"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+        ></nitro-navigator-roomsettings-tab-vipchat-component>
+
+        <nitro-navigator-roomsettings-tab-mod-component *ngIf="currentTab === 5"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+            (onUnban)="onUnban($event)"
+            (onOpenProfile)="onOpenProfile($event)"
+        ></nitro-navigator-roomsettings-tab-mod-component>
     </div>
 </div>

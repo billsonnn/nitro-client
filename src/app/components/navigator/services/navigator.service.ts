@@ -241,10 +241,10 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                     switch(parser.data.doorMode)
                     {
                         case RoomDataParser.DOORBELL_STATE:
-                            console.log('DOORBELL');
+                            this.openRoomDoorbell(parser.data);
                             return;
                         case RoomDataParser.PASSWORD_STATE:
-                            console.log('PASSWORD');
+                            this.openRoomPassword(parser.data);
                             return;
                     }
                 }

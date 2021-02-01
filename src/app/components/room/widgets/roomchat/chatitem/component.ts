@@ -11,7 +11,7 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
                 <div *ngIf="senderImageUrl" class="user-image" [ngStyle]="(petType >= 0) ? { 'background-image': 'url(' + senderImageUrl + ')', 'transform': 'scale(1)', 'top': '-53px' } : { 'background-image': 'url(' + senderImageUrl + ')' }"></div>
             </div>
             <div class="chat-content">
-                <b [innerHTML]="decoratedUsername"></b> <span class="message"> {{ message }}</span>
+                <b class="username" [innerHTML]="decoratedUsername"></b><span class="message">  {{ message }}</span>
             </div>
             <div class="pointer"></div>
         </div>
