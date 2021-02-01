@@ -1,11 +1,11 @@
-<nitro-wired-base-component>
+<nitro-wired-action-base-component [(delay)]="delay">
 	<div class="form-check">
         <input class="form-check-input" type="checkbox" [(ngModel)]="limitEnabled">
-        <label class="form-check-label">{{ ('wiredfurni.params.prizelimit') | translate:updateCount }}</label>
+        <label class="form-check-label">{{ ('wiredfurni.params.prizelimit') | translate:'amount':((rewardsLimit > 0) ? rewardsLimit : '') }}</label>
     </div>
     <div *ngIf="limitEnabled" class="d-flex align-items-center justify-content-center my-2 custom-slider mb-2">
         <button type="button" class="btn btn-primary btn-sm" (click)="decreaseLimit()"><i class="fas fa-arrow-left"></i></button>
-        <ngx-slider name="limit" [options]="limitSliderOptions" [(value)]="rewardsLimit" (valueChange)="onSliderChange()"></ngx-slider>
+        <ngx-slider name="limit" [options]="limitSliderOptions" [(value)]="rewardsLimit"></ngx-slider>
         <button type="button" class="btn btn-primary btn-sm" (click)="increaseLimit()"><i class="fas fa-arrow-right"></i></button>
 	</div>
 
@@ -46,11 +46,4 @@
 		</perfect-scrollbar>
 	</div>
 	<button type="button" class="btn btn-primary btn-sm mb-2" (click)="increaseRewardsCount()"><i class="fas fa-plus"></i></button>
-
-	<p class="w-100 text-center mb-1">{{ ('wiredfurni.params.delay') | translate:updateCount }}</p>
-    <div class="d-flex align-items-center justify-content-center my-2 custom-slider">
-        <button type="button" class="btn btn-primary btn-sm" (click)="decreaseDelay()"><i class="fas fa-arrow-left"></i></button>
-        <ngx-slider name="delay" [options]="delaySliderOptions" [(value)]="delay" (valueChange)="onSliderChange()"></ngx-slider>
-        <button type="button" class="btn btn-primary btn-sm" (click)="increaseDelay()"><i class="fas fa-arrow-right"></i></button>
-    </div>
-</nitro-wired-base-component>
+</nitro-wired-action-base-component>

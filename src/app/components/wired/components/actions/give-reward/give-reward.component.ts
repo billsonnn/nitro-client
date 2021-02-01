@@ -1,7 +1,6 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { WiredActionType } from '../WiredActionType';
 import { WiredAction } from './../WiredAction';
 
@@ -119,12 +118,6 @@ export class GiveRewardComponent extends WiredAction
     public increaseRewardsCount(): void
     {
         this.rewardRows.push({ badge: false, itemCode: '', probability: '' });
-    }
-
-    protected updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.prizelimit', 'amount', this.rewardsLimit > 0 ? this.rewardsLimit.toString() : '');
-        super.updateLocaleParameter();
     }
 
     public get limitSliderOptions(): Options

@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { FriendListService } from '../../services/friendlist.service';
     templateUrl: './thread-viewer.template.html'
 })
 
-export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
+export class FriendListThreadViewerComponent implements OnChanges, OnDestroy, AfterViewInit
 {
     @Input()
     public thread: MessengerThread = null;
@@ -48,6 +48,11 @@ export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
         this.unsubscribe();
     }
 
+    public ngAfterViewInit(): void
+    {
+        this.scrollToBottom();
+    }
+
     private unsubscribe(): void
     {
         if(this._subscription)
@@ -75,10 +80,7 @@ export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
 
     private messageReceived(): void
     {
-        if(this.threadScroller)
-        {
-            this.threadScroller.directiveRef.scrollToBottom(0, 200);
-        }
+        this.scrollToBottom();
     }
 
     public sendMessage(message: string): void
@@ -129,6 +131,13 @@ export class FriendListThreadViewerComponent implements OnChanges, OnDestroy
                 target.value = '';
                 return;
         }
+    }
+
+    private scrollToBottom(): void
+    {
+        if(!this.threadScroller) return;
+
+        this.threadScroller.directiveRef.scrollToBottom(0, 200);
     }
 
     public get participant(): MessengerFriend

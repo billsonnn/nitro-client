@@ -1,6 +1,5 @@
 ﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
-import { Nitro } from 'src/client/nitro/Nitro';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredCondition } from '../WiredCondition';
 import { WiredConditionType } from '../WiredConditionType';
@@ -34,18 +33,11 @@ export class UserCountInComponent extends WiredCondition
     {
         this.minUsers = (trigger.intData[0] || 1);
         this.maxUsers = (trigger.intData[1] || 50);
-
-        this.updateLocaleParameter();
     }
 
     public readIntegerParamsFromForm(): number[]
     {
         return [ this.minUsers, this.maxUsers ];
-    }
-
-    public onSliderChange(): void
-    {
-        this.updateLocaleParameter();
     }
 
     public decreaseMin(): void
@@ -74,14 +66,6 @@ export class UserCountInComponent extends WiredCondition
         this.maxUsers += 1;
 
         if(this.maxUsers > UserCountInComponent.MAXIMUM_VALUE) this.maxUsers = UserCountInComponent.MAXIMUM_VALUE;
-    }
-
-    protected updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmin', 'value', this.minUsers.toString());
-        Nitro.instance.localization.registerParameter('wiredfurni.params.usercountmax', 'value', this.maxUsers.toString());
-
-        this.updateCount++;
     }
 
     public get hasSpecialInputs(): boolean
