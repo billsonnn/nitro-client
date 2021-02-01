@@ -15,7 +15,7 @@ export class WiredBaseComponent
         this._wiredService.component.save();
     }
 
-    public cancel(): void
+    public hide(): void
     {
         this._wiredService.component.close();
     }
