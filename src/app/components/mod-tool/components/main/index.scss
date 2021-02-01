@@ -49,6 +49,22 @@
 		left: 230px;
 		min-width: 250px;
 	}
+    .reports-tool-card{
+        position:fixed;
+        top: 20px;
+        left:230px;
+        width:450px;
+        .table{
+            tr{
+                th{
+                    font-size:15px;
+                }
+                td{
+                    font-size:12px;
+                }
+            }
+        }
+    }
 	.card-header{
 		display:flex;
 		justify-content: start;

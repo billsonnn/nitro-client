@@ -8,9 +8,12 @@ import { ModTool } from '../tool.component';
 export class ModToolReportsComponent extends ModTool implements OnInit, OnDestroy
 {
 
+    private _tab: number;
+
     constructor()
     {
 	    super();
+	    this._tab = 0;
     }
 
     public ngOnInit(): void
@@ -19,6 +22,21 @@ export class ModToolReportsComponent extends ModTool implements OnInit, OnDestro
 
     public ngOnDestroy(): void
     {
+    }
+
+    public get tab(): number
+    {
+        return this._tab;
+    }
+
+    public set tab(tab: number)
+    {
+        this._tab = tab;
+    }
+
+    public setTab(tab: number): void
+    {
+        this.tab = tab;
     }
 
 }
