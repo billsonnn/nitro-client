@@ -30,6 +30,8 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._widget = null;
         this._messages = [];
         this._disposed = false;
+
+        this.onRoomInfoEvent = this.onRoomInfoEvent.bind(this);
     }
 
 
@@ -47,14 +49,16 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     {
         if(this._disposed) return;
 
-        this._container  = null;
         this._communicationManager = null;
         this._widget     = null;
 
         for(const message of this._messages)
         {
-            Nitro.instance.communication.removeMessageEvent(message);
+            this._container.connection.removeMessageEvent(message);
         }
+        this._container  = null;
+
+
         this._messages = [];
 
         this._disposed   = true;
@@ -66,7 +70,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        // This doesnt even work, fix it \_o_/
         if(message instanceof RoomWidgetZoomToggleMessage)
         {
             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, this._zoomed ? 1 : 0, false));
@@ -99,6 +102,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
             : Nitro.instance.localization.getValue('room.tool.room.owner.prefix') + ' ' + roomData.ownerName;
 
         this._widget.loadRoomData(roomData, roomOwner);
+        this._widget._Str_22970(roomData);
     }
 
     // Done
@@ -124,24 +128,12 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
-        if(container !== this._container)
-        {
-            if(this._container)
-            {
-                for(const message of this._messages)
-                {
-                    this._container.connection.removeMessageEvent(message);
-                }
-
-                this._messages = [];
-            }
-        }
 
         this._container = container;
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
+            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent) ];
 
             for(const message of this._messages)
             {

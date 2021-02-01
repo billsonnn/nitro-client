@@ -2,7 +2,7 @@ import { Component, ComponentFactoryResolver, NgZone, ViewChild, ViewContainerRe
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
-import {RoomZoomEvent} from "../../../../../../client/nitro/room/events/RoomZoomEvent";
+import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 
 @Component({
     selector: 'nitro-room-tools-component',
@@ -27,10 +27,12 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public roomOwner: string;
     public ranking: number;
     public tags: string[] = [];
+    public isLikable: boolean = false;
 
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone
+        private _ngZone: NgZone,
+        private _navigatorDataService: NavigatorDataService
     )
     {
         super();
@@ -46,6 +48,28 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
             this.ranking = roomData.ranking;
             this.tags = roomData.tags;
         });
+    }
+
+    public _Str_22970(data: RoomDataParser): void
+    {
+        const visitedRooms = this._navigatorDataService.getVisitedRooms();
+        for(const visitedRoom of visitedRooms)
+        {
+            if(visitedRoom.roomId == data.roomId)
+            {
+                return;
+            }
+        }
+
+        this._navigatorDataService.addRoomToVisitedRooms(data);
+
+        this.isLikable = !this._navigatorDataService.currentRoomOwner;
+
+    }
+
+    public _Str_23696(k: number): void
+    {
+
     }
 
     public toggle(): void
