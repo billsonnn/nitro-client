@@ -11,6 +11,12 @@ import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/c
 })
 export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 {
+    @Input()
+    public index: number = null;
+
+    @Input()
+    public room: RoomToolRoom = null;
+
     public lockDoor: boolean = false;
     public changeTitle: boolean = false;
     public kickUsers: boolean = false;
@@ -30,6 +36,11 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     {
     }
 
+    public close(): void
+    {
+        this._modToolService.closeRoomTool(this.index);
+    }
+
     public saveRoom(): void
     {
         const roomId = Nitro.instance.roomSessionManager.viewerSession.roomId;
@@ -41,15 +52,10 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public get inRoom(): boolean
 	{
-		return this._modToolService.isInRoom;
+		return Nitro.instance.roomSessionManager.viewerSession !== null;
 	}
 
-	public get room(): RoomToolRoom
-	{
-		return this._modToolService.room;
-	}
-
-	public get housekepingUrl(): string
+	public get housekeepingUrl(): string
     {
         return this._housekeepingUrl;
     }

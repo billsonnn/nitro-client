@@ -1,10 +1,10 @@
-<div *ngIf="visible" [draggable] [center]="false" dragHandle=".card-header" class="card room-tool-card">
+<div [draggable] [center]="false" dragHandle=".card-header" class="card room-tool-card">
 	<div class="card-header">
 			<span>
 			<i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
 			Room Tool
 			</span>
-		<button type="button" class="close" (click)="hideTool()"><i class="fas fa-times"></i></button>
+		<button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
 	</div>
 	<div class="card-body pl-3 pr-3" *ngIf="inRoom">
         <div class="row">
@@ -42,7 +42,7 @@
                     <div class="col">
                         <div class="badge badge-secondary mb-1">
                             <div class="btn-group btn-group-vertical w-100">
-                                    <a href="{{housekepingUrl}}/housekeeping/rooms/1" target="_blank" class="btn btn-sm btn-primary btn-block">
+                                    <a href="{{housekeepingUrl}}/housekeeping/rooms/1" target="_blank" class="btn btn-sm btn-primary btn-block">
                                         <i class="icon modtool-wrench-icon" style="margin-right: 5px;"></i>
                                         Open in housekeeping
                                     </a>

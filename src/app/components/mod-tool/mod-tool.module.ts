@@ -7,10 +7,12 @@ import { ModToolChatlogComponent } from './components/chatlog-tool/chatlog-tool.
 import { ModToolUserComponent } from './components/user-tool/user-tool.component';
 import { ModToolReportsComponent } from './components/reports-tool/reports-tool.component';
 import { ModTool } from './components/tool.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
     imports: [
-        SharedModule
+        SharedModule,
+        BrowserModule
     ],
     exports: [
         ModToolMainComponent,
