@@ -1,16 +1,24 @@
-import { FurnitureLogic } from './FurnitureLogic';
-import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
 import { IAssetData } from '../../../../../core/asset/interfaces';
 import { RoomSpriteMouseEvent } from '../../../../../room/events/RoomSpriteMouseEvent';
+import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { IRoomGeometry } from '../../../../../room/utils/IRoomGeometry';
 import { MouseEventType } from '../../../../ui/MouseEventType';
-import { RoomObjectUpdateMessage } from '../../../../../room/messages/RoomObjectUpdateMessage';
 import { RoomObjectFurnitureActionEvent } from '../../../events/RoomObjectFurnitureActionEvent';
-import {ObjectDataUpdateMessage} from "../../../messages/ObjectDataUpdateMessage";
-import {ObjectItemDataUpdateMessage} from "../../../messages/ObjectItemDataUpdateMessage";
+import { RoomObjectWidgetRequestEvent } from '../../../events/RoomObjectWidgetRequestEvent';
+import { ObjectDataUpdateMessage } from '../../../messages/ObjectDataUpdateMessage';
+import { ObjectModelDataUpdateMessage } from '../../../messages/ObjectModelDataUpdateMessage';
+import { MapDataType } from '../../data/type/MapDataType';
+import { RoomObjectVariable } from '../../RoomObjectVariable';
+import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurniturePresentLogic extends FurnitureLogic
 {
+    private static MESSAGE: string          = 'MESSAGE';
+    private static PRODUCT_CODE: string     = 'PRODUCT_CODE';
+    private static EXTRA_PARAM: string      = 'EXTRA_PARAM';
+    private static PURCHASER_NAME: string   = 'PURCHASER_NAME';
+    private static PURCHASER_FIGURE: string = 'PURCHASER_FIGURE';
+
     public getEventTypes(): string[]
     {
         const types = [
@@ -24,21 +32,59 @@ export class FurniturePresentLogic extends FurnitureLogic
     {
         super.initialize(asset);
 
+        // particle system etc
     }
 
     public processUpdateMessage(message: RoomObjectUpdateMessage): void
     {
         super.processUpdateMessage(message);
 
-        const dataUpdate = <ObjectDataUpdateMessage>message;
-
-        if(dataUpdate && dataUpdate.data)
+        if(message instanceof ObjectDataUpdateMessage)
         {
-            dataUpdate.data.writeRoomObjectModel(this.object.model);
+            message.data.writeRoomObjectModel(this.object.model);
+
+            this.updateStuffData();
         }
 
-        const modelUpdate =<ObjectItemDataUpdateMessage>message;
+        if(message instanceof ObjectModelDataUpdateMessage)
+        {
+            if(message.numberKey === RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION)
+            {
+                this.object.model.setValue(RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION, message.numberValue);
+            }
+        }
+    }
 
+    private updateStuffData(): void
+    {
+        if(!this.object || !this.object.model) return;
+
+        const stuffData = new MapDataType();
+
+        stuffData.initializeFromRoomObjectModel(this.object.model);
+
+        const message   = stuffData.getValue(FurniturePresentLogic.MESSAGE);
+        const data      = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
+
+        if(!message && data)
+        {
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_DATA, data.substr(1));
+        }
+        else
+        {
+            this.object.model.setValue(RoomObjectVariable.FURNITURE_DATA, stuffData.getValue(FurniturePresentLogic.MESSAGE));
+        }
+
+        this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PRODUCT_CODE));
+        this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PURCHASER_NAME));
+        this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PURCHASER_FIGURE));
+    }
+
+    private writeToModel(key: string, value: string): void
+    {
+        if(!value) return;
+
+        this.object.model.setValue(key, value);
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
