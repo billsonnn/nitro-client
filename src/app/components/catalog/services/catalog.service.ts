@@ -30,6 +30,9 @@ import { UserSubscriptionParser } from '../../../../client/nitro/communication/m
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
+import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
+import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -47,6 +50,7 @@ export class CatalogService implements OnDestroy
     private _purse: Purse = new Purse();
     private _clubOffers: CatalogClubOfferData[] = [];
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
+    private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
 
     constructor(
         private _settingsService: SettingsService,
@@ -79,9 +83,12 @@ export class CatalogService implements OnDestroy
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
+                new CatalogGiftConfigurationEvent(this.onGiftConfigurationEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+
+            Nitro.instance.communication.connection.send(new CatalogRequestGiftConfigurationComposer());
         });
     }
 
@@ -107,6 +114,11 @@ export class CatalogService implements OnDestroy
     public registerVipBuyTemplate(template: CatalogLayoutVipBuyComponent)
     {
         this._vipTemplate = template;
+    }
+
+    private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
+    {
+        this._giftWrappingConfiguration = new GiftWrappingConfiguration(event);
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void

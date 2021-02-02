@@ -28,6 +28,9 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     @Input()
     public completed: boolean = false;
 
+    @Input()
+    public isGift: boolean = false;
+
     @ViewChild('imageElement')
     public imageElement: ElementRef<HTMLDivElement>;
 

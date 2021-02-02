@@ -41,6 +41,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
     private _showInsufficientFunds: boolean = false;
+    private _isGiftOffer: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
@@ -336,7 +337,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
+    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -348,6 +349,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
         this._purchaseOfferExtra    = extra;
+        this._isGiftOffer           = isGift;
     }
 
     public confirmVipSubscription(subscription: CatalogClubOfferData): void
@@ -399,6 +401,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseOffer(): CatalogPageOfferData
     {
         return this._purchaseOffer;
+    }
+
+    public get isGift(): boolean
+    {
+        return this._isGiftOffer;
     }
 
     public get purchaseOfferQuantity(): number
