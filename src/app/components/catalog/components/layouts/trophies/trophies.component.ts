@@ -29,6 +29,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
     private _currentTrophyIndex: number                       = 0;
     private readonly _orderOfColors = ['g','s','b'];
     public enteredText: string = '';
+    private _currentTrophyColor: string;
 
 
     public ngOnInit(): void
@@ -72,7 +73,6 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
     private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageOfferData>): void
     {
-
         if(!availaleOffers) return;
 
         let firstAvailableTrophyColor:CatalogPageOfferData = null;
@@ -92,6 +92,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
         if(!firstAvailableTrophyColor) firstAvailableTrophyColor = availaleOffers.getWithIndex(0); // Some trophies don't have a color. We want to show then either way.
 
+        if(firstAvailableTrophyColor) this._currentTrophyColor = this.getTrophyColorCharacter(firstAvailableTrophyColor.localizationId);
         this._availableColorsForCurrentTrophy = availableColorsForTrophy;
         this.selectTrophyColor(firstAvailableTrophyColor);
     }
@@ -126,7 +127,14 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         const trophyColor =  this._allTrophyOffers.getWithIndex(this._currentTrophyIndex).getValue(color);
         if(!trophyColor) return;
 
+        this._currentTrophyColor = color;
+
         this.selectTrophyColor(trophyColor);
+    }
+
+    public getActiveClass(color: string): string
+    {
+        return this._availableColorsForCurrentTrophy.indexOf(color) >= 0 &&  this._currentTrophyColor == color ? 'selected' : '';
     }
 
     public imageReady(id: number, texture: RenderTexture, image?: HTMLImageElement): void

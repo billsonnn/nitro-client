@@ -15,14 +15,14 @@
             </div>
         </div>
         <div class="d-flex flex-row nitro-catalog-layout-trophies-types mb-2">
-            <button type="button" class="btn btn-sm color-gold p-0 w-100 rounded mr-2" (click)="handleTrophyColor('g')"
-                [disabled]="!trophyHasColor('g')"></button>
-            <button type="button" class="btn btn-sm color-silver p-0 w-100 rounded mr-2"
+            <button type="button" [ngClass]="'btn btn-sm color-gold p-0 w-100 rounded mr-2 ' + getActiveClass('g')"
+                    (click)="handleTrophyColor('g')"  [disabled]="!trophyHasColor('g')"></button>
+            <button type="button" [ngClass]="'btn btn-sm color-silver p-0 w-100 rounded mr-2 ' + getActiveClass('s')"
                 (click)="handleTrophyColor('s')" [disabled]="!trophyHasColor('s')"></button>
-            <button type="button" class="btn btn-sm color-bronze p-0 w-100 rounded" (click)="handleTrophyColor('b')"
-                [disabled]="!trophyHasColor('b')"></button>
+            <button type="button" [ngClass]="'btn btn-sm color-bronze p-0 w-100 rounded mr-2 ' + getActiveClass('b')"
+                    (click)="handleTrophyColor('b')"  [disabled]="!trophyHasColor('b')"></button>
         </div>
-        <textarea name="trophie" class="w-100 bg-secondary rounded mb-2" maxlength="300"
+        <textarea autofocus name="trophie" class="w-100 bg-secondary rounded mb-2" maxlength="300"
             [(ngModel)]="enteredText">{{ enteredText }}</textarea>
         <div class="d-flex flex-row justify-content-between px-2 py-1 bg-emperor rounded mt-auto">
             <div class="align-self-center">
