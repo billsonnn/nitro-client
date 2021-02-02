@@ -1,7 +1,8 @@
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { Component, NgZone } from '@angular/core';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { FriendFurniEngravingWidgetType } from '../../../../../../client/nitro/room/enums/FriendFurniEngravingWidgetType';
 import { StringDataType } from '../../../../../../client/nitro/room/object/data/type/StringDataType';
+import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 
 @Component({
     templateUrl: './engraving.template.html'
@@ -32,17 +33,17 @@ export class FriendFurniEngravingWidget extends ConversionTrackingWidget
         switch(_arg_2)
         {
             case FriendFurniEngravingWidgetType._Str_13451:
-                this.engravingView = 'love';
+                this.engravingView = 'engraving';
                 break;
             case FriendFurniEngravingWidgetType._Str_17498:
                 break;
             case FriendFurniEngravingWidgetType._Str_18746:
                 break;
             case FriendFurniEngravingWidgetType._Str_15230:
-                //this.engravingView = 'wild-west';
+                this.engravingView = 'wildwest';
                 break;
             case FriendFurniEngravingWidgetType._Str_15778:
-                //this.engravingView = 'habboween';
+                this.engravingView = 'hween14';
                 break;
         }
 
@@ -65,5 +66,10 @@ export class FriendFurniEngravingWidget extends ConversionTrackingWidget
     public hide(): void
     {
         this.visible = false;
+    }
+
+    public get image(): string
+    {
+        return Nitro.instance.getConfiguration('furni.extras.url').toString().replace('%image%', `loveLock_${this.engravingView}`);
     }
 }

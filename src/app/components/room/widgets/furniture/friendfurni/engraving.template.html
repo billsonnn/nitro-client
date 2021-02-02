@@ -1,23 +1,16 @@
-<div *ngIf="visible" [bringToTop] [draggable] [ngClass]="'nitro-furniture-friends-engraving card ' + engravingView" >
-    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
-        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="row p-12">
-        <div class="col-4 d-flex align-items-center justify-content-center">
-            <p>{{ 'lovelock.engraving.caption' | translate }}</p>
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-furniture-friends-engraving"
+    [ngStyle]="{backgroundImage:'url(' + image + ')'}">
+    <div class="drag-handler d-flex flex-column small h-100">
+        <div class="friend-close position-absolute" (click)="hide()"></div>
+        <div class="row justify-content-center">
+            <div class="col-2 d-flex justify-content-center">
+                <div nitro-avatar-image [figure]="firstFigure" [direction]="2"></div>
+            </div>
+            <div class="col-2 d-flex justify-content-center">
+                <div nitro-avatar-image [figure]="secondFigure" [direction]="4"></div>
+            </div>
         </div>
-    </div>
-    <div class="row p-12">
-        <div class="col-3 d-flex align-items-center justify-content-center">
-            <div class="bg-secondary rounded" nitro-avatar-image [figure]="firstFigure" [direction]="2"></div>
-        </div>
-
-        <div class="col-3 d-flex align-items-center justify-content-center">
-            <div class="bg-secondary rounded" nitro-avatar-image [figure]="secondFigure" [direction]="4"></div>
-        </div>
-    </div>
-
-    <div class="row p-12">
-        <p>{{ firstName}} | {{ secondName }} | {{ engravedDate }}</p>
+        <p class="w-100 text-center">{{ 'lovelock.engraving.caption' | translate }}</p>
+        <p class="w-100 text-center mt-auto">{{ firstName}} | {{ secondName }} | {{ engravedDate }}</p>
     </div>
 </div>
