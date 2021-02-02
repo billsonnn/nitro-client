@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RenderTexture } from 'pixi.js';
 import { AdvancedMap } from '../../../../../../client/core/utils/AdvancedMap';
-import { CatalogClubOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { IGetImageListener } from '../../../../../../client/nitro/room/IGetImageListener';
 import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
 import { Vector3d } from '../../../../../../client/room/utils/Vector3d';
 import { CatalogLayout } from '../../../CatalogLayout';
-import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
 
 
 @Component({
@@ -101,7 +100,9 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
     private selectTrophyColor(firstAvailableTrophyColor: CatalogPageOfferData)
     {
         if(!firstAvailableTrophyColor) return;
+
         this.currentTrophyOffer = firstAvailableTrophyColor;
+
         const product = firstAvailableTrophyColor.products[0];
 
         if(!product) return;

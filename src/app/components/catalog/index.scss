@@ -170,6 +170,15 @@
 }
 
 .nitro-catalog-layout-trophies-component {
+
+    .nitro-catalog-layout-trophies-selector {
+        min-height: 130px;
+    }
+
+    .nitro-catalog-layout-trophies-types {
+        min-height: 50px;
+    }
+
     .color-gold {
         background-color: #CBA200;
     }
@@ -180,5 +189,20 @@
 
     .color-bronze {
         background-color: #A25100;
+    }
+
+    .selected {
+        border:1px solid #000;
+        box-shadow: inset 0 0 0 2px $white;
+    }
+
+    textarea {
+        color: #fff;
+        resize: none;
+
+        &:focus {
+            outline:0;
+            box-shadow: 0;
+        }
     }
 }
