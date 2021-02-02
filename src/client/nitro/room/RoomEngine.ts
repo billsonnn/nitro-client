@@ -2268,6 +2268,15 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(roomId !== RoomEngine.TEMPORARY_ROOM) this._Str_21543(id, object);
     }
 
+    public changeObjectModelData(k: number, arg2: number, arg3: number, arg4: string, arg5: number): boolean
+    {
+        const roomObject = this.getRoomObject(k, arg2, arg3);
+        if(!roomObject) return false;
+
+        roomObject.get
+    }
+
+    private getObject(k: string, arg2: number, )
     public changeObjectState(roomId: number, objectId: number, category: number): void
     {
         const roomObject = this.getRoomObject(roomId, objectId, category);

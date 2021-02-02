@@ -1,0 +1,11 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-furniture-gift-opening card">
+    <div class="drag-handler d-flex align-items-center justify-content-between pt-3 px-3 w-100">
+        <h6 class="m-0">{{ ('widget.dimmer.title') | translate }}</h6>
+        <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="p-3">
+        <div class="dimmer-inner bg-secondary p-2">
+            <h1>H1</h1>
+        </div>
+    </div>
+</div>
