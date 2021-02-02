@@ -1,12 +1,11 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
+import { ColorEvent } from 'ngx-color';
+import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { ApplyTonerComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { ColorConverter } from '../../../../../../client/room/utils/ColorConverter';
 import { FurnitureBackgroundColorWidgetHandler } from '../../handlers/FurnitureBackgroundColorWidgetHandler';
-import { ApplyTonerComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
-import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-
 
 @Component({
     selector: 'nitro-room-furniture-backgroundcolor-component',
@@ -14,15 +13,15 @@ import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/comm
 })
 export class BackgroundColorFurniWidget extends ConversionTrackingWidget
 {
-    private _visible: boolean       = false;
-    private _furniId: number;
-    public saturation: number;
-    public hue: number;
-    public lightness: number;
-    public rgbColor: string = '';
+    private _furniId: number    = -1;
+    private _visible: boolean   = false;
 
-    constructor(
-        private _ngZone: NgZone)
+    public saturation: number = 0;
+    public hue: number        = 0;
+    public lightness: number  = 0;
+    public hsl: { h?: number, s?: number, l?: number } = {};
+
+    constructor(private _ngZone: NgZone)
     {
         super();
     }
@@ -31,47 +30,30 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
     {
         this._ngZone.run(() =>
         {
-            this._furniId = objectId;
-            this.hue = Math.max(hue, 0);
+            this._furniId   = objectId;
+            this._visible   = true;
+
+            this.hue        = Math.max(hue, 0);
             this.saturation = Math.max(sat, 0);
-            this.lightness = Math.max(light, 0);
-            this._visible = true;
-            this.onSliderChange();
+            this.lightness  = Math.max(light, 0);
         });
     }
 
-
-    public get handler(): FurnitureBackgroundColorWidgetHandler
-    {
-        return (this.widgetHandler as FurnitureBackgroundColorWidgetHandler);
-    }
-
-
     public hide(): void
     {
-        this._visible = false;
-    }
-    public get visible(): boolean
-    {
-        return this._visible;
+        this._visible   = false;
+        this._furniId   = -1;
     }
 
-    public set visible(flag: boolean)
+    public handleChangeComplete(event: ColorEvent): void
     {
-        this._visible = flag;
-    }
+        if(!event) return;
 
+        const hsl = ColorConverter._Str_22130(parseInt(event.color.hex.replace('#', ''), 16));
 
-    public onSliderChange(): void
-    {
-        const color = ColorConverter._Str_13949(((((this.hue & 0xFF) << 16) + ((this.saturation & 0xFF) << 8)) + (this.lightness & 0xFF)));
-
-        const r = (color >> 16 & 0xFF);
-        const g = (color >> 8 & 0xFF);
-        const b = (color & 0xFF);
-
-
-        this.rgbColor = `rgb(${r}, ${g}, ${b})`;
+        this.hue        = (((hsl >> 16) & 0xFF));
+        this.saturation = (((hsl >> 8) & 0xFF));
+        this.lightness  = ((hsl & 0xFF));
     }
 
     public handleButton(button: string): void
@@ -79,12 +61,23 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
         switch(button)
         {
             case 'apply':
+                //console.log(ColorConverter._Str_13949(((((this.hue & 0xFF) << 16) + ((this.saturation & 0xFF) << 8)) + (this.lightness & 0xFF))));
                 this.handler.container.connection.send(new ApplyTonerComposer(this._furniId, this.hue, this.saturation, this.lightness));
                 break;
             case 'on_off':
                 this.handler.container.connection.send(new FurnitureMultiStateComposer(this._furniId));
                 break;
         }
+    }
+
+    public get handler(): FurnitureBackgroundColorWidgetHandler
+    {
+        return (this.widgetHandler as FurnitureBackgroundColorWidgetHandler);
+    }
+
+    public get visible(): boolean
+    {
+        return this._visible;
     }
 
     public get delaySliderOptions(): Options
