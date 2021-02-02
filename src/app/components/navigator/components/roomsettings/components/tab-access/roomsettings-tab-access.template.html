@@ -1,0 +1,41 @@
+<div class="font-weight-bold">{{ ('navigator.roomsettings.roomaccess.caption') | translate }}</div>
+<div class="mb-3">{{ ('navigator.roomsettings.roomaccess.info') | translate }}</div>
+<div class="font-weight-bold">{{ ('navigator.roomsettings.doormode') | translate }}</div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="roomSettings.lockState" (ngModelChange)="save()" value="0">
+    <label class="form-check-label">{{ ('navigator.roomsettings.doormode.open') | translate }}</label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="roomSettings.lockState" (ngModelChange)="save()" value="1">
+    <label class="form-check-label">{{ ('navigator.roomsettings.doormode.doorbell') | translate }}</label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="roomSettings.lockState" (ngModelChange)="save()" value="3">
+    <label class="form-check-label">{{ ('navigator.roomsettings.doormode.invisible') | translate }}</label>
+</div>
+<div class="form-check mb-2">
+    <input class="form-check-input" type="radio" name="doormode" [(ngModel)]="roomSettings.lockState" value="2">
+    <label class="form-check-label">{{ ('navigator.roomsettings.doormode.password') | translate }}</label>
+</div>
+<div *ngIf="roomSettings.lockState == '2'">
+    <div class="form-group mb-2">
+        <label>{{ ('navigator.roomsettings.password') | translate }}</label>
+        <input type="password" class="form-control form-control-sm" placeholder="*****" [(ngModel)]="roomSettings.password" (blur)="save()">
+    </div>
+    <div class="form-group mb-3">
+        <label>{{ ('navigator.roomsettings.passwordconfirm') | translate }}</label>
+        <input type="password" class="form-control form-control-sm" placeholder="*****" [(ngModel)]="roomSettings.confirmPassword" (blur)="save()">
+        <small *ngIf="!roomSettings.isValidPassword" class="form-text text-muted font-weight-bold" style="color: red !important">
+            {{ ('navigator.roomsettings.invalidconfirm') | translate }}
+        </small>
+    </div>
+</div>
+<div class="font-weight-bold">{{ ('navigator.roomsettings.pets') | translate }}</div>
+<div class="form-check mb-2">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="roomSettings.allowPets" (ngModelChange)="save()">
+    <label class="form-check-label">{{ ('navigator.roomsettings.allowpets') | translate }}</label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="roomSettings.allowPetsEat" (ngModelChange)="save()">
+    <label class="form-check-label">{{ ('navigator.roomsettings.allowfoodconsume') | translate }}</label>
+</div>

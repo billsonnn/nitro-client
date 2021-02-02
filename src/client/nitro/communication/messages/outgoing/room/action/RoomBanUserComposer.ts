@@ -4,9 +4,9 @@ export class RoomBanUserComposer implements IMessageComposer<ConstructorParamete
 {
     private _data: ConstructorParameters<typeof RoomBanUserComposer>;
 
-    constructor(userId: number, type: string, roomId: number = 0)
+    constructor(userId: number, roomId: number = 0, type: string)
     {
-        this._data = [ userId, type, roomId ];
+        this._data = [ userId, roomId, type ];
     }
 
     public getMessageArray()
