@@ -131,6 +131,4 @@ export class RoomObjectVariable
     public static ROOM_SELECTED_Z: string                            = 'room_selected_z';
     public static ROOM_SELECTED_PLANE: string                        = 'room_selected_plane';
     public static IMAGE_QUERY_SCALE: string                          = 'image_query_scale';
-    public static FURNITURE_PURCHASER_NAME: string                   = 'furniture_purchaser_name';
-    public static FURNITURE_PURCHASER_FIGURE: string                 = 'furniture_purchaser_figure';
 }

@@ -259,6 +259,7 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -665,6 +666,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
+
+        // GIFSTS
+        this._composers.set(OutgoingHeader.PRESENT_OPEN_PRESENT, OpenPresentComposer);
 
         // INVENTORY
 

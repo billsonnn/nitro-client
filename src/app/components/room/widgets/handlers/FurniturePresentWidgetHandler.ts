@@ -32,7 +32,6 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        debugger;
         if(!k) return null;
 
         switch(k.type)
@@ -77,8 +76,11 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
                 if(openMessage._Str_1577 != this._objectId) return null;
 
+                if(!this._container) return null;
 
+                this._container.roomSession.openGift(openMessage._Str_1577);
 
+                this._container.roomEngine.changeObjectModelData(this._container.roomEngine.activeRoomId, openMessage._Str_1577, RoomObjectCategory.FLOOR, RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION, 1);
             }
             break;
 
@@ -89,7 +91,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
-        debugger;
+
     }
 
     public update(): void

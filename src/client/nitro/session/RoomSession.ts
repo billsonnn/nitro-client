@@ -28,6 +28,7 @@ import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/r
 import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
 import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
 import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
+import {OpenPresentComposer} from "../communication/messages/outgoing/room/furniture/presents/OpenPresentComposer";
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -255,6 +256,10 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new MoodlightSettingsComposer());
     }
 
+    public openGift(_Str_1577: number): void
+    {
+        this._connection.send(new OpenPresentComposer(_Str_1577));
+    }
 
     public get connection(): IConnection
     {

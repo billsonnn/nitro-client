@@ -8,6 +8,9 @@ import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidg
 import { RoomWidgetPresentDataUpdateEvent } from '../../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcotronBoxDataUpdateEvent';
+import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
+import { RenderTexture } from 'pixi.js';
+import {RoomWidgetPresentOpenMessage} from "../../messages/RoomWidgetPresentOpenMessage";
 
 
 @Component({
@@ -17,6 +20,13 @@ import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcot
 export class PresentFurniWidget extends ConversionTrackingWidget
 {
     private _visible: boolean       = false;
+    private _openedRequest: boolean;
+    private _objectId: number;
+    private _text: string;
+    private _controller: boolean;
+    private _senderName: string;
+    private _senderFigure: string;
+    private _image: HTMLImageElement;
     constructor(
         private _ngZone: NgZone)
     {
@@ -58,6 +68,15 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
+    public get figure(): string
+    {
+        return this._senderFigure;
+    }
+
+    public get senderText(): string
+    {
+        return this._text;
+    }
 
     private _Str_4159(k:RoomWidgetRoomObjectUpdateEvent):void
     {
@@ -87,7 +106,38 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
     {
-        debugger;
+
+        switch(event.type)
+        {
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
+                this._ngZone.run(() =>
+                {
+                    this._openedRequest = false;
+                    this._objectId = event._Str_1577;
+                    this._text = event.text;
+                    this._controller = event.controller;
+                    this._senderName = event._Str_22956;
+                    this._senderFigure = event._Str_23105;
+                    this._visible = true;
+                });
+
+            }
+                break;
+        }
+    }
+
+    public handleButton(button: string): void
+    {
+        switch(button)
+        {
+            case 'accept': {
+                this._visible = false;
+                this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._objectId));
+            }
+            break;
+            case 'return':
+                break;
+        }
     }
 
 

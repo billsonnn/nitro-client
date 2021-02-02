@@ -6,6 +6,13 @@
     <div class="p-3">
         <div class="dimmer-inner bg-secondary p-2">
             <h1>H1</h1>
+            <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+            <p>{{ senderText }}
+            </p>
         </div>
+    </div>
+    <div class="p-3">
+        <button type="button" class="btn btn-primary" (click)="handleButton('accept')">Accept</button>
+        <button type="button" class="btn btn-primary" (click)="handleButton('return')">Return</button>
     </div>
 </div>
