@@ -68,6 +68,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         }
     ];
 
+    private static MAX_VISITOR_STEPPER: number = 10;
+    private static MAX_VISITOR_INCREMENTOR: number = 5;
+
     private _component: NavigatorMainComponent;
     private _topLevelContexts: NavigatorTopLevelContext[];
     private _topLevelContext: NavigatorTopLevelContext;
@@ -75,6 +78,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     private _filter: INavigatorSearchFilter;
     private _lastSearchResults: NavigatorSearchResultList[];
     private _lastSearch: string;
+
+    private _tradeSettings: string[];
 
     private _homeRoomId: number;
 
@@ -97,6 +102,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._lastSearchResults = [];
         this._lastSearch        = '';
 
+        this._tradeSettings     = [];
+
         this._homeRoomId        = -1;
 
         this._isSearching       = false;
@@ -104,6 +111,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._isLoading         = false;
 
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
+
+        this.setTradeSettings();
 
         this.registerMessages();
 
@@ -484,6 +493,33 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         // }
     }
 
+    public getMaxVisitors(count: number): number[]
+    {
+        const maxVisitors = [];
+
+        let i = NavigatorService.MAX_VISITOR_STEPPER;
+
+        while(i <= count)
+        {
+            maxVisitors.push(i);
+
+            i += NavigatorService.MAX_VISITOR_INCREMENTOR;
+        }
+
+        return maxVisitors;
+    }
+
+    private setTradeSettings(): void
+    {
+        this._tradeSettings = [];
+
+        this._tradeSettings.push(...[
+            '${navigator.roomsettings.trade_not_allowed}',
+            '${navigator.roomsettings.trade_not_with_Controller}',
+            '${navigator.roomsettings.trade_allowed}'
+        ]);
+    }
+
     public goToRoom(roomId: number, password: string = null): void
     {
         Nitro.instance.roomSessionManager.createSession(roomId, password);
@@ -688,5 +724,10 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public get isLoading(): boolean
     {
         return this._isLoading;
+    }
+
+    public get tradeSettings(): string[]
+    {
+        return this._tradeSettings;
     }
 }
