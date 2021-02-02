@@ -66,7 +66,7 @@ export class FurniturePresentLogic extends FurnitureLogic
         const message   = stuffData.getValue(FurniturePresentLogic.MESSAGE);
         const data      = this.object.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA);
 
-        if(!message && data)
+        if(!message && (typeof data === 'string'))
         {
             this.object.model.setValue(RoomObjectVariable.FURNITURE_DATA, data.substr(1));
         }
@@ -76,8 +76,8 @@ export class FurniturePresentLogic extends FurnitureLogic
         }
 
         this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PRODUCT_CODE));
-        this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PURCHASER_NAME));
-        this.writeToModel(RoomObjectVariable.FURNITURE_TYPE_ID, stuffData.getValue(FurniturePresentLogic.PURCHASER_FIGURE));
+        this.writeToModel(RoomObjectVariable.FURNITURE_PURCHASER_NAME, stuffData.getValue(FurniturePresentLogic.PURCHASER_NAME));
+        this.writeToModel(RoomObjectVariable.FURNITURE_PURCHASER_FIGURE, stuffData.getValue(FurniturePresentLogic.PURCHASER_FIGURE));
     }
 
     private writeToModel(key: string, value: string): void
