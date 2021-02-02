@@ -57,14 +57,15 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
     template: `
-    <div class="nitro-room-component">
-        <div #roomCanvas class="room-view"></div>
-        <ng-template #widgetContainer></ng-template>
-    </div>`
+        <div class="nitro-room-component">
+            <div #roomCanvas class="room-view"></div>
+            <ng-template #widgetContainer></ng-template>
+        </div>`
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
@@ -391,6 +392,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
+                break;
+            case RoomWidgetEnum.ROOM_TOOLS:
+                widgetHandler = new RoomToolsWidgetHandler();
                 break;
         }
 

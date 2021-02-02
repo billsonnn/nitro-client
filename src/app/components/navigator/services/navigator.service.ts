@@ -41,6 +41,8 @@ import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
+import { NavigatorDataService } from './navigator-data.service';
+import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker
@@ -88,10 +90,12 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     private _isSearching: boolean;
     private _isLoaded: boolean;
     private _isLoading: boolean;
+    private _canRate: boolean;
 
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
+        private _navigatorDataService: NavigatorDataService,
         private _ngZone: NgZone)
     {
         this._component         = null;
@@ -109,6 +113,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._isSearching       = false;
         this._isLoaded          = false;
         this._isLoading         = false;
+        this._canRate           = false;
 
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
 
@@ -153,6 +158,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new NavigatorSearchEvent(this.onNavigatorSearchEvent.bind(this)),
                 new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this)),
                 new NavigatorHomeRoomEvent(this.onNavigatorHomeRoomEvent.bind(this)),
+                new RoomScoreEvent(this.onRoomScoreEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -213,6 +219,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._navigatorDataService.currentRoomOwner = parser.isOwner;
 
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, true, false));
 
@@ -493,6 +501,17 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         // }
     }
 
+    private onRoomScoreEvent(event: RoomScoreEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => this._canRate = parser.canLike);
+    }
+
     public getMaxVisitors(count: number): number[]
     {
         const maxVisitors = [];
@@ -724,6 +743,16 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     public get isLoading(): boolean
     {
         return this._isLoading;
+    }
+
+    public get canRate(): boolean
+    {
+        return this._canRate;
+    }
+
+    public set canRate(canRate: boolean)
+    {
+        this._canRate = canRate;
     }
 
     public get tradeSettings(): string[]
