@@ -28,8 +28,12 @@ export class FriendsFurniConfirmWidget extends ConversionTrackingWidget
             this.sendStart(this._furniId, false);
         }
 
-        this._furniId = furniId;
-        this._visible = true;
+        this._ngZone.run(() =>
+        {
+            this._furniId = furniId;
+            this._visible = true;
+        });
+
     }
 
     public handleButton(button: string): void
