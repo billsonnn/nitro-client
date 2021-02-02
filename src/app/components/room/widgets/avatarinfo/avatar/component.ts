@@ -19,8 +19,8 @@ import { RoomAvatarInfoComponent } from '../component';
                     <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush">
                         <ng-container *ngFor="let item of entry.items">
                             <ng-container *ngIf="item.visible" [ngSwitch]="item.name">
-                                <li *ngSwitchCase="respect" (click)="processAction(item.name)" class="list-group-item">{{ ('item.localization') | translate:'count':avatarData._Str_3577 }}</li>
-                                <li *ngSwitchDefault (click)="processAction(item.name)" class="list-group-item">{{ ('item.localization') | translate }}</li>
+                                <li *ngSwitchCase="'respect'" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate:'count':avatarData._Str_3577 }}</li>
+                                <li *ngSwitchDefault (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
                             </ng-container>
                         </ng-container>
                     </ul>
