@@ -75,6 +75,7 @@ import { ObjectDataUpdateMessage } from './messages/ObjectDataUpdateMessage';
 import { ObjectGroupBadgeUpdateMessage } from './messages/ObjectGroupBadgeUpdateMessage';
 import { ObjectHeightUpdateMessage } from './messages/ObjectHeightUpdateMessage';
 import { ObjectItemDataUpdateMessage } from './messages/ObjectItemDataUpdateMessage';
+import { ObjectModelDataUpdateMessage } from './messages/ObjectModelDataUpdateMessage';
 import { ObjectMoveUpdateMessage } from './messages/ObjectMoveUpdateMessage';
 import { ObjectRoomColorUpdateMessage } from './messages/ObjectRoomColorUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from './messages/ObjectRoomFloorHoleUpdateMessage';
@@ -2268,15 +2269,19 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         if(roomId !== RoomEngine.TEMPORARY_ROOM) this._Str_21543(id, object);
     }
 
-    public changeObjectModelData(k: number, arg2: number, arg3: number, arg4: string, arg5: number): boolean
+    public changeObjectModelData(roomId: number, objectId: number, category: number, numberKey: string, numberValue: number): boolean
     {
-        const roomObject = this.getRoomObject(k, arg2, arg3);
-        if(!roomObject) return false;
+        const roomObject = this.getRoomObject(roomId, objectId, category);
 
-        roomObject.get
+        if(!roomObject || !roomObject.logic) return false;
+
+        const message = new ObjectModelDataUpdateMessage(numberKey, numberValue);
+
+        roomObject.processUpdateMessage(new ObjectModelDataUpdateMessage(numberKey, numberValue));
+
+        return true;
     }
 
-    private getObject(k: string, arg2: number, )
     public changeObjectState(roomId: number, objectId: number, category: number): void
     {
         const roomObject = this.getRoomObject(roomId, objectId, category);

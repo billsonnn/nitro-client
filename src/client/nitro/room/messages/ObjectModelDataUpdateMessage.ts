@@ -9,8 +9,17 @@ export class ObjectModelDataUpdateMessage extends RoomObjectUpdateMessage
     {
         super(null, null);
 
-        this._numberKey = numberKey;
-        this._numberValue = numberValue;
+        this._numberKey     = numberKey;
+        this._numberValue   = numberValue;
     }
 
+    public get numberKey(): string
+    {
+        return this._numberKey;
+    }
+
+    public get numberValue(): number
+    {
+        return this._numberValue;
+    }
 }
