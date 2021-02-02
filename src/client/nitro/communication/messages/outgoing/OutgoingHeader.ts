@@ -186,4 +186,5 @@ export class OutgoingHeader
     public static REMOVE_WALL_ITEM               = 3336;
     public static MODIFY_WALL_ITEM_DATA          = 3666;
     public static CATALOG_REDEEM_VOUCHER         = 339;
+    public static PRESENT_OPEN_PRESENT           = 3558;
 }

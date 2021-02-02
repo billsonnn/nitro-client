@@ -70,6 +70,17 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
             }
                 break;
+            case RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT: {
+                const openMessage = <RoomWidgetPresentOpenMessage>k;
+
+                if(!openMessage) return;
+
+                if(openMessage._Str_1577 != this._objectId) return null;
+
+
+
+            }
+            break;
 
         }
 
