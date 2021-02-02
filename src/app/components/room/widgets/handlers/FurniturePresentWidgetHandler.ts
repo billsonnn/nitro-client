@@ -14,6 +14,8 @@ import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWid
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetPresentOpenMessage } from '../messages/RoomWidgetPresentOpenMessage';
+import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
 
 export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 {
@@ -47,18 +49,28 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
                 this._objectId = widgetMessage.objectId;
 
-                let data = model.getValue(RoomObjectVariable.FURNITURE_DATA);
+                let data = <string>model.getValue(RoomObjectVariable.FURNITURE_DATA);
                 if(!data) data = '';
 
-                const purchaserName = model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_NAME);
-                const purchaserFigure = model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_FIGURE);
-                const typeId = model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID);
-                const extras = model.getValue(RoomObjectVariable.FURNITURE_EXTRAS);
+                const purchaserName = <string>model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_NAME);
+                const purchaserFigure = <string>model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_FIGURE);
+                const typeId = <string>model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID);
+                const extras = <string>model.getValue(RoomObjectVariable.FURNITURE_EXTRAS);
 
-                console.log({purchaserName, purchaserFigure, typeId, extras});
+                const local11 = 32;
+                const furniImage = this._container.roomEngine.getFurnitureFloorImage(Number.parseInt(typeId), new Vector3d(180), local11, null, 0, extras);
+                this._container.events.dispatchEvent(new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO,
+                    widgetMessage.objectId,
+                    data,
+                    this._container.isOwnerOfFurniture(roomObject),
+                    furniImage.data,
+                    purchaserName,
+                    purchaserFigure
+                ));
 
             }
-            break;
+                break;
+
         }
 
         return null;

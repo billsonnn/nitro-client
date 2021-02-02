@@ -2277,7 +2277,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         const message = new ObjectModelDataUpdateMessage(numberKey, numberValue);
 
-        roomObject.processUpdateMessage(new ObjectModelDataUpdateMessage(numberKey, numberValue));
+        roomObject.processUpdateMessage(message);
 
         return true;
     }
