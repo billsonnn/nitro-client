@@ -30,7 +30,6 @@ export class FurnitureBackgroundColorWidgetHandler implements IRoomWidgetHandler
 
     public processEvent(event: NitroEvent): void
     {
-        debugger;
         switch(event.type)
         {
             case RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR: {
@@ -90,6 +89,11 @@ export class FurnitureBackgroundColorWidgetHandler implements IRoomWidgetHandler
     public set container(k: IRoomWidgetHandlerContainer)
     {
         this._container = k;
+    }
+
+    public get container(): IRoomWidgetHandlerContainer
+    {
+        return this._container;
     }
 
     public get messageTypes(): string[]
