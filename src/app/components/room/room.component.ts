@@ -45,6 +45,7 @@ import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandle
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
+import { FurnitureBackgroundColorWidgetHandler } from './widgets/handlers/FurnitureBackgroundColorWidgetHandler';
 import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
@@ -57,7 +58,6 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import {FurnitureBackgroundColorWidgetHandler} from "./widgets/handlers/FurnitureBackgroundColorWidgetHandler";
 
 @Component({
     selector: 'nitro-room-component',
@@ -755,7 +755,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(!background) return;
 
-        if(!hue || !saturation || !lightness)
+        if(!hue && !saturation && !lightness)
         {
             background.visible = false;
         }
