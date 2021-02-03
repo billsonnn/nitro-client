@@ -23,18 +23,18 @@ import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';
+import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from '../room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/dimmer.component';
+import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { StickieFurniComponent } from '../room/widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
-import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
-import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({
@@ -216,7 +216,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
-                    
+
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
                         this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);

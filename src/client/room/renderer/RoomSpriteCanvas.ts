@@ -1032,7 +1032,6 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetX(x: number)
     {
-        console.log(x);
         x = Math.trunc(x);
 
         this._mouseLocation.x   = (this._mouseLocation.x - (x - this._screenOffsetX));
@@ -1046,7 +1045,6 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetY(y: number)
     {
-        console.log(y);
         y = Math.trunc(y);
 
         this._mouseLocation.y   = (this._mouseLocation.y - (y - this._screenOffsetY));
