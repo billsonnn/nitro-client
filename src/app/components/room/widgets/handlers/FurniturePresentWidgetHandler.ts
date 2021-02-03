@@ -82,7 +82,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler
 
                 this._container.roomEngine.changeObjectModelData(this._container.roomEngine.activeRoomId, openMessage._Str_1577, RoomObjectCategory.FLOOR, RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION, 1);
             }
-            break;
+                break;
 
         }
 

@@ -32,7 +32,7 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import {PresentFurniWidget} from "../room/widgets/furniture/gift-opening/present.component";
+import { PresentFurniWidget } from '../room/widgets/furniture/gift-opening/present.component';
 import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';

@@ -62,7 +62,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
 import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
 import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
-import {FurniturePresentWidgetHandler} from "./widgets/handlers/FurniturePresentWidgetHandler";
+import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',

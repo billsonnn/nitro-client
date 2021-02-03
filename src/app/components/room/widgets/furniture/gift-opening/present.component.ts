@@ -10,7 +10,7 @@ import { RoomWidgetRoomObjectUpdateEvent } from '../../events/RoomWidgetRoomObje
 import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcotronBoxDataUpdateEvent';
 import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
 import { RenderTexture } from 'pixi.js';
-import {RoomWidgetPresentOpenMessage} from "../../messages/RoomWidgetPresentOpenMessage";
+import { RoomWidgetPresentOpenMessage } from '../../messages/RoomWidgetPresentOpenMessage';
 
 
 @Component({
@@ -134,7 +134,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._visible = false;
                 this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._objectId));
             }
-            break;
+                break;
             case 'return':
                 break;
         }

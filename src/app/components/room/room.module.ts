@@ -26,7 +26,7 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import {PresentFurniWidget} from "./widgets/furniture/gift-opening/present.component";
+import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
 import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
