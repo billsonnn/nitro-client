@@ -40,7 +40,7 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         return this._Str_2319;
     }
 
-    public get _Str_2706(): number
+    public get classId(): number
     {
         return this._Str_2825;
     }
@@ -85,7 +85,7 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         return this._Str_19510;
     }
 
-    public get _Str_5200(): number
+    public get placedItemId(): number
     {
         return this._Str_3054;
     }
@@ -105,7 +105,7 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         this._Str_3224 = k;
     }
 
-    public get _Str_5057(): string
+    public get placedItemType(): string
     {
         return this._Str_3970;
     }

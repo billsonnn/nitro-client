@@ -11,6 +11,7 @@ import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcot
 import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
 import { RenderTexture } from 'pixi.js';
 import { RoomWidgetPresentOpenMessage } from '../../messages/RoomWidgetPresentOpenMessage';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 
 
 @Component({
@@ -27,6 +28,11 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private _senderName: string;
     private _senderFigure: string;
     private _image: HTMLImageElement;
+    private _classId: number;
+    private _itemType: string;
+    private _placedItemId: number;
+    private _placedItemType: string;
+    private _placedInRoom: boolean;
     constructor(
         private _ngZone: NgZone)
     {
@@ -78,6 +84,11 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         return this._text;
     }
 
+    public get senderName(): string
+    {
+        return this._senderName;
+    }
+
     private _Str_4159(k:RoomWidgetRoomObjectUpdateEvent):void
     {
         // if(k.id == this._objectId)
@@ -106,6 +117,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
     {
+        debugger;
 
         switch(event.type)
         {
@@ -120,11 +132,70 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                     this._senderFigure = event._Str_23105;
                     this._visible = true;
                 });
-
             }
                 break;
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
+                //  if(!this._openedRequest) return;
+
+                this._objectId = event._Str_1577;
+                this._classId = event.classId;
+                this._itemType = event._Str_2887;
+                this._text = event.text;
+                this._controller = event.controller;
+                this._placedItemId = event.placedItemId;
+                this._placedItemType = event.placedItemType;
+                this._placedInRoom = event._Str_4057;
+
+                this._Str_10146();
+                //his._Str_12806('packagecard_icon_floor');
+            }
         }
     }
+
+    private _Str_10146(): void
+    {
+        if(this._objectId < 0) return;
+
+        if(this._text)
+        {
+            const message = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._text);
+        }
+    }
+
+
+    public getTitle(): string
+    {
+        if(!this.hasMissingSenderName())
+        {
+            return Nitro.instance.localization.getValueWithParameter('widget.furni.present.window.title_from', 'name', this._senderName);
+        }
+
+        return '';
+    }
+
+    // see _Str_4649
+    private hasMissingSenderName(): boolean
+    {
+        return this._senderName == null || this._senderName.length == 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public handleButton(button: string): void
     {
