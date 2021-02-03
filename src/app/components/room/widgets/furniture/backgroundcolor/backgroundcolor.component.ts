@@ -19,7 +19,7 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
     public saturation: number = 0;
     public hue: number        = 0;
     public lightness: number  = 0;
-    public hsl: { h?: number, s?: number, l?: number } = {};
+    public hsl?: { h?: number, s?: number, l?: number } = { h: 0, s: 0, l: 0 };
 
     constructor(private _ngZone: NgZone)
     {
@@ -36,6 +36,12 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
             this.hue        = Math.max(hue, 0);
             this.saturation = Math.max(sat, 0);
             this.lightness  = Math.max(light, 0);
+
+            console.log(this.hue, ((this.hue / 255) * 360), this.saturation, this.lightness);
+
+            this.hsl = { h: ((this.hue / 255) * 360), s: (this.saturation / 255), l: (this.lightness / 255) };
+
+            console.log(this.hsl);
         });
     }
 
@@ -61,7 +67,6 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
         switch(button)
         {
             case 'apply':
-                //console.log(ColorConverter._Str_13949(((((this.hue & 0xFF) << 16) + ((this.saturation & 0xFF) << 8)) + (this.lightness & 0xFF))));
                 this.handler.container.connection.send(new ApplyTonerComposer(this._furniId, this.hue, this.saturation, this.lightness));
                 break;
             case 'on_off':
