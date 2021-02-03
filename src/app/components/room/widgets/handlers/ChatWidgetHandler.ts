@@ -236,7 +236,19 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                                 break;
                         }
 
-                        this._chatHistoryService.addItem(new ChatHistoryItem(false, text, Date.now(), chatEvent.objectId, userData.name + ':', avatarColor, image, chatType, styleId));
+                        const historyEntry = new ChatHistoryItem();
+
+                        historyEntry.senderId       = chatEvent.objectId;
+                        historyEntry.senderName     = (userData.name + ':');
+                        historyEntry.senderColor    = avatarColor;
+
+                        if(image && image.src) historyEntry.senderImageUrl = image.src;
+
+                        historyEntry.content        = text;
+                        historyEntry.chatType       = chatType;
+                        historyEntry.chatStyle      = styleId;
+
+                        this._chatHistoryService.addItem(chatEvent.session.roomId, historyEntry);
 
                         if(this._container && this._container.events) this._container.events.dispatchEvent(new RoomWidgetChatUpdateEvent(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, userData.roomIndex, text, username, RoomObjectCategory.UNIT, userType, petType, x, y, image, avatarColor, chatEvent.session.roomId, chatType, styleId, []));
                     }
