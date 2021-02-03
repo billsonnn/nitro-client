@@ -187,4 +187,5 @@ export class OutgoingHeader
     public static MODIFY_WALL_ITEM_DATA          = 3666;
     public static CATALOG_REDEEM_VOUCHER         = 339;
     public static ROOM_TONER_APPLY               = 2880;
+    public static LOVELOCK_START_CONFIRM         = 3775;
 }

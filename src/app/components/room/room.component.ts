@@ -58,6 +58,8 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
+import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
@@ -396,6 +398,12 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.ROOM_BACKGROUND_COLOR:
                 widgetHandler = new FurnitureBackgroundColorWidgetHandler();
+                break;
+            case RoomWidgetEnum.FRIEND_FURNI_CONFIRM:
+                widgetHandler = new FriendFurniConfirmWidgetHandler();
+                break;
+            case RoomWidgetEnum.FRIEND_FURNI_ENGRAVING:
+                widgetHandler = new FriendFurniEngravingWidgetHandler();
                 break;
             case RoomWidgetEnum.ROOM_TOOLS:
                 widgetHandler = new RoomToolsWidgetHandler();

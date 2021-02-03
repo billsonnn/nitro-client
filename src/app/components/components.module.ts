@@ -14,6 +14,7 @@ import { NotificationModule } from './notification/notification.module';
 import { PurseModule } from './purse/purse.module';
 import { RoomModule } from './room/room.module';
 import { ToolbarModule } from './toolbar/toolbar.module';
+import { UserProfileModule } from './user-profile/user-profile.module';
 import { WiredModule } from './wired/wired.module';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { WiredModule } from './wired/wired.module';
         PurseModule,
         RoomModule,
         ToolbarModule,
+        UserProfileModule,
         WiredModule
     ],
     exports: [
