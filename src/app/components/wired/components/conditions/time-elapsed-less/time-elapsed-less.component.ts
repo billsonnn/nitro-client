@@ -1,10 +1,10 @@
-﻿import { WiredFurniture } from './../../../WiredFurniture';
-import { Options } from '@angular-slider/ngx-slider';
+﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Nitro } from 'src/client/nitro/Nitro';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredCondition } from '../WiredCondition';
 import { WiredConditionType } from '../WiredConditionType';
+import { WiredFurniture } from './../../../WiredFurniture';
 
 @Component({
     templateUrl: './time-elapsed-less.template.html'
@@ -13,11 +13,12 @@ export class TimeElapsedLessComponent extends WiredCondition
 {
     public static CODE: number = WiredConditionType.TIME_ELAPSED_LESS;
 
-    private static MINIMUM_VALUE: number = 1;
-    private static MAXIMUM_VALUE: number = 1200;
-    private static STEPPER_VALUE: number = 1;
+    protected static MINIMUM_VALUE: number = 1;
+    protected static MAXIMUM_VALUE: number = 1200;
+    protected static STEPPER_VALUE: number = 1;
 
-    public time: number = 0;
+    public time: number         = 0;
+    public timeLocale: string   = '';
 
     public get code(): number
     {
@@ -57,9 +58,7 @@ export class TimeElapsedLessComponent extends WiredCondition
 
     protected updateLocaleParameter(): void
     {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.allowbefore', 'seconds', WiredFurniture.getLocaleName(this.time));
-
-        this.updateCount++;
+        this.timeLocale = Nitro.instance.getLocalizationWithParameter('wiredfurni.params.allowbefore', 'seconds', WiredFurniture.getLocaleName(this.time));
     }
 
     public get hasSpecialInputs(): boolean

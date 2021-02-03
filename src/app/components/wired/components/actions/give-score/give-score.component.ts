@@ -1,19 +1,18 @@
+import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredActionType } from '../WiredActionType';
 import { WiredAction } from './../WiredAction';
-import { Nitro } from 'src/client/nitro/Nitro';
-import { Options } from '@angular-slider/ngx-slider';
 
 @Component({
     templateUrl: './give-score.template.html'
 })
 export class GiveScoreComponent extends WiredAction
 {
-    private static MINIMUM_VALUE: number = 1;
-    private static STEPPER_VALUE: number = 1;
-    private static POINTS_MAXIMUM_VALUE: number = 100;
-    private static TIMES_MAXIMUM_VALUE: number = 10;
+    protected static MINIMUM_VALUE: number = 1;
+    protected static STEPPER_VALUE: number = 1;
+    protected static POINTS_MAXIMUM_VALUE: number = 100;
+    protected static TIMES_MAXIMUM_VALUE: number = 10;
 
     public static CODE: number = WiredActionType.GIVE_SCORE;
 
@@ -68,13 +67,6 @@ export class GiveScoreComponent extends WiredAction
         this.times += 1;
 
         if(this.times > GiveScoreComponent.TIMES_MAXIMUM_VALUE) this.times = GiveScoreComponent.TIMES_MAXIMUM_VALUE;
-    }
-
-    protected updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.setpoints', 'points', this.points.toString());
-        Nitro.instance.localization.registerParameter('wiredfurni.params.settimesingame', 'times', this.times.toString());
-        super.updateLocaleParameter();
     }
 
     public get pointsSliderOptions(): Options

@@ -1,7 +1,6 @@
 ﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
 import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { WiredTrigger } from '../WiredTrigger';
 import { WiredTriggerType } from '../WiredTriggerType';
 
@@ -26,18 +25,11 @@ export class ScoreAchievedComponent extends WiredTrigger
     public onEditStart(trigger: Triggerable): void
     {
         this.score = (trigger.intData[0] || 0);
-
-        this.updateLocaleParameter();
     }
 
     public readIntegerParamsFromForm(): number[]
     {
         return [ this.score ];
-    }
-
-    public onSliderChange(): void
-    {
-        this.updateLocaleParameter();
     }
 
     public decrease(): void
@@ -52,13 +44,6 @@ export class ScoreAchievedComponent extends WiredTrigger
         this.score += 1;
 
         if(this.score > ScoreAchievedComponent.MAXIMUM_VALUE) this.score = ScoreAchievedComponent.MAXIMUM_VALUE;
-    }
-
-    private updateLocaleParameter(): void
-    {
-        Nitro.instance.localization.registerParameter('wiredfurni.params.setscore', 'points', this.score.toString());
-
-        this.updateCount++;
     }
 
     public get hasSpecialInputs(): boolean

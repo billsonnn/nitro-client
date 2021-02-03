@@ -32,6 +32,7 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
+import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -204,6 +205,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, FurnitureWidgetTrophyComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CREDIT_WIDGET, FurnitureWidgetCreditComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
@@ -215,7 +217,7 @@ export class MainComponent implements OnInit, OnDestroy
                 }
                 return;
             case RoomEngineEvent.DISPOSED:
-                //if(this.roomComponent) this.roomComponent.endRoom();
+                if(this.roomComponent) this.roomComponent.endRoom();
                 return;
             case RoomZoomEvent.ROOM_ZOOM: {
                 const zoomEvent = (event as RoomZoomEvent);
