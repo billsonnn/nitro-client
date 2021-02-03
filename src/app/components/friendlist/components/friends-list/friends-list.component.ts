@@ -1,5 +1,6 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { RemoveFriendComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
+import { UserProfileComposer } from '../../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { MessengerFriend } from '../../common/MessengerFriend';
 import { MessengerThread } from '../../common/MessengerThread';
@@ -40,6 +41,13 @@ export class FriendListFriendsListComponent
         Nitro.instance.communication.connection.send(new RemoveFriendComposer(friend.id));
 
         this._friendListService.friends.delete(friend.id);
+    }
+
+    public openFriendProfile(friend: MessengerFriend): void
+    {
+        if(!friend) return;
+
+        Nitro.instance.communication.connection.send(new UserProfileComposer(friend.id));
     }
 
     public get friends(): MessengerFriend[]

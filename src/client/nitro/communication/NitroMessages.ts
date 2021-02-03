@@ -31,6 +31,7 @@ import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteE
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
+import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -144,6 +145,8 @@ import { UserCurrentBadgesEvent } from './messages/incoming/user/data/UserCurren
 import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNameChangeMessageEvent';
+import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
+import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
@@ -174,6 +177,7 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
@@ -263,6 +267,8 @@ import { UserCurrentBadgesComposer } from './messages/outgoing/user/data/UserCur
 import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
 import { UserMottoComposer } from './messages/outgoing/user/data/UserMottoComposer';
+import { UserProfileComposer } from './messages/outgoing/user/data/UserProfileComposer';
+import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRelationshipsComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
@@ -292,6 +298,7 @@ export class NitroMessages implements IMessageConfiguration
         // AVAILABILITY
         this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
         this._events.set(IncomingHeader.GENERIC_ERROR, GenericErrorEvent);
+
         // AVATAR
         this._events.set(IncomingHeader.USER_CHANGE_NAME, ChangeNameUpdateEvent);
 
@@ -332,6 +339,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MESSENGER_INVITE_ERROR, RoomInviteErrorEvent);
         this._events.set(IncomingHeader.MESSENGER_INVITE, RoomInviteEvent);
 
+        // GROUP
+        this._events.set(IncomingHeader.GROUP_INFO, GroupInformationEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
@@ -496,6 +505,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
         this._events.set(IncomingHeader.UNIT_CHANGE_NAME, UserNameChangeMessageEvent);
         this._events.set(IncomingHeader.USER_SETTINGS, UserSettingsEvent);
+        this._events.set(IncomingHeader.USER_PROFILE, UserProfileEvent);
+        this._events.set(IncomingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsEvent);
 
         // INVENTORY
 
@@ -554,6 +565,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MESSENGER_ROOM_INVITE, SendRoomInviteComposer);
         this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS_UPDATE, SetRelationshipStatusComposer);
         this._composers.set(OutgoingHeader.USER_VISIT, VisitUserComposer);
+
+        // GROUP
+        this._composers.set(OutgoingHeader.GROUP_INFO, GroupInformationComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
@@ -692,6 +706,8 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
+        this._composers.set(OutgoingHeader.USER_PROFILE, UserProfileComposer);
+        this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsComposer);
 
         // INVENTORY
 

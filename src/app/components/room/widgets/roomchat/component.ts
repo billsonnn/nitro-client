@@ -55,12 +55,15 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
     public ngOnDestroy(): void
     {
+        console.log('destroy chat');
         this.ngZone.runOutsideAngular(() => Nitro.instance.ticker.remove(this.update, this));
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
+
+        console.log('call this');
 
         eventDispatcher.addEventListener(RoomWidgetChatUpdateEvent.RWCUE_EVENT_CHAT, this.onChatMessage);
         eventDispatcher.addEventListener(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.onRoomViewUpdate);
