@@ -45,6 +45,7 @@ import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandle
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
+import { FurnitureBackgroundColorWidgetHandler } from './widgets/handlers/FurnitureBackgroundColorWidgetHandler';
 import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
@@ -394,6 +395,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
+                break;
+            case RoomWidgetEnum.ROOM_BACKGROUND_COLOR:
+                widgetHandler = new FurnitureBackgroundColorWidgetHandler();
                 break;
             case RoomWidgetEnum.FRIEND_FURNI_CONFIRM:
                 widgetHandler = new FriendFurniConfirmWidgetHandler();
@@ -763,7 +767,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(!background) return;
 
-        if(!hue || !saturation || !lightness)
+        if(!hue && !saturation && !lightness)
         {
             background.visible = false;
         }
