@@ -151,7 +151,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         let category = this._roomEngine.getRoomObjectCategoryForType(type);
 
-        if(category !== RoomObjectCategory.ROOM && (!this._roomEngine.isPlayingGame() || category !== RoomObjectCategory.UNIT)) category = RoomObjectCategory.MINIMUM;
+        if((category !== RoomObjectCategory.ROOM) && (!this._roomEngine.isPlayingGame() || category !== RoomObjectCategory.UNIT)) category = RoomObjectCategory.MINIMUM;
 
         const _local_7 = this._Str_18648(category, event.type);
 
@@ -720,6 +720,12 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN, roomId, objectId, objectCategory));
                 break;
 
+            case RoomObjectWidgetRequestEvent.BACKGROUND_COLOR:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, roomId, objectId, objectCategory));
+                break;
+            case RoomObjectWidgetRequestEvent.FRIEND_FURNITURE_ENGRAVING:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, roomId, objectId, objectCategory));
+                break;
         }
     }
 
@@ -814,7 +820,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             const stackingHeightMap = this._roomEngine.getFurnitureStackingHeightMap(roomId);
 
-            if(!(((event instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, Math.floor(event.tileX + 0.5), Math.floor(event.tileY + 0.5), stackingHeightMap))))
+            if(!(((event instanceof RoomObjectTileMouseEvent)) && (this._Str_18155(roomObject, selectedData, Math.trunc(event.tileX + 0.5), Math.trunc(event.tileY + 0.5), stackingHeightMap))))
             {
                 this._Str_18155(roomObject, selectedData, selectedData.loc.x, selectedData.loc.y, stackingHeightMap);
 

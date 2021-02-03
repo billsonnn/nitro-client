@@ -49,13 +49,6 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
         this._catalogService.component && this._catalogService.component.confirmVipSubscription(offer);
     }
 
-    public getCurrencyUrl(type: number): string
-    {
-        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
-
-        return url.replace('%type%', type.toString());
-    }
-
     public getOfferText(code: string)
     {
         return Nitro.instance.getLocalizationWithParameter('friendlytime.months.short', 'amount', code.replace(/[^\d.]/g, ''));

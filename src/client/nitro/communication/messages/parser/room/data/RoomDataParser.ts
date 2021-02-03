@@ -1,5 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
+// see _Str_2370
 export class RoomDataParser
 {
     public static THUMBNAIL_BITMASK         = 1;

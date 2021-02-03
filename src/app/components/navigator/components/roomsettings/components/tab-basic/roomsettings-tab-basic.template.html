@@ -1,0 +1,31 @@
+<div class="form-group mb-2">
+    <label>{{ ('navigator.roomname') | translate }}</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="roomSettings.roomName" (blur)="save()">
+</div>
+<div class="form-group mb-2">
+    <label>{{ ('navigator.roomsettings.desc') | translate }}</label>
+    <textarea class="form-control form-control-sm" [(ngModel)]="roomSettings.roomDescription" (blur)="save()"></textarea>
+</div>
+<div class="form-group mb-2">
+    <label>{{ ('navigator.category') | translate }}</label>
+    <select class="form-control form-control-sm" [(ngModel)]="roomSettings.categoryId" (ngModelChange)="save()">
+        <option *ngFor="let category of categories" [value]="category.id">{{ (category.name) | translate }}</option>
+    </select>
+</div>
+<div class="form-group mb-2">
+    <label>{{ ('navigator.maxvisitors') | translate }}</label>
+    <select class="form-control form-control-sm" [(ngModel)]="roomSettings.userCount" (ngModelChange)="save()">
+        <option *ngFor="let amount of maxVisitors" [value]="amount">{{ amount }}</option>
+    </select>
+</div>
+<div class="form-group mb-2">
+    <label>{{ ('navigator.tradesettings') | translate }}</label>
+    <select class="form-control form-control-sm" [(ngModel)]="roomSettings.tradeState" (ngModelChange)="save()">
+        <option *ngFor="let type of tradeSettings | keyvalue" [value]="type.key">{{ (type.value) | translate }}</option>
+    </select>
+</div>
+<div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="roomSettings.allowWalkthrough" (ngModelChange)="save()">
+    <label class="form-check-label">{{ ('navigator.roomsettings.allow_walk_through') | translate }}</label>
+</div>
+<button class="btn btn-danger btn-block" (click)="deleteRoom()">{{ ('navigator.roomsettings.delete') | translate }}</button>

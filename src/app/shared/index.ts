@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { ColorChromeModule } from 'ngx-color/chrome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
@@ -18,8 +19,10 @@ import { DraggableDirective } from './directives/draggable/directive';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
+import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
 import { SoundService } from './services/sound.service';
+import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -39,7 +42,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule.forRoot()
+        MDBBootstrapModule.forRoot(),
+        ColorChromeModule
     ],
     exports: [
         CommonModule,
@@ -53,6 +57,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxSliderModule,
         PerfectScrollbarModule,
         MDBBootstrapModule,
+        ColorChromeModule,
         AvatarImageComponent,
         BadgeComponent,
         LoadingComponent,
@@ -62,7 +67,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
-        ShortNumberPipe
+        ShortNumberPipe,
+        TimeAgoPipe,
+        RoomObjectItemSearchPipe
     ],
     providers: [
         {
@@ -81,7 +88,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
-        ShortNumberPipe
+        ShortNumberPipe,
+        TimeAgoPipe,
+        RoomObjectItemSearchPipe
     ]
 })
 export class SharedModule
