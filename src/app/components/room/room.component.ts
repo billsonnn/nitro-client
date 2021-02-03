@@ -59,8 +59,8 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import {FurnitureMannequinWidgetHandler} from "./widgets/handlers/FurnitureMannequinWidgetHandler";
-import {RoomEngine} from "../../../client/nitro/room/RoomEngine";
+import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
+import { RoomEngine } from '../../../client/nitro/room/RoomEngine';
 import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
 import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';

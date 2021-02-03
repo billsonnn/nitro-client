@@ -24,8 +24,6 @@ export class FurnitureMannequinWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        debugger;
-
         return null;
     }
 
