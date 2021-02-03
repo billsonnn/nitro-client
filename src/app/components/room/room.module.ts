@@ -26,6 +26,8 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
+import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
 import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room-event-view.component';
 
@@ -56,6 +58,8 @@ import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room
         StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
+        FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
@@ -86,6 +90,8 @@ import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room
         StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
+        FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
