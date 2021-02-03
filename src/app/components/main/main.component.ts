@@ -216,7 +216,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
-                    
+
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
                         this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);
