@@ -13,6 +13,8 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget impleme
     protected _items: RoomObjectItem[]                  = [];
     protected _title: string                            = null;
     protected _timeout: ReturnType<typeof setTimeout>   = null;
+    private _selectedItemIndex                          = -1;
+    private _searchValue: string;
 
     constructor(
         protected _ngZone: NgZone)
@@ -30,10 +32,11 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget impleme
         this._visible = false;
     }
 
-    public selectItem(item: RoomObjectItem): void
+    public selectItem(item: RoomObjectItem, index: number): void
     {
         if(!item || !this.items || !this.items.length) return;
 
+        this._selectedItemIndex = index;
         this._ngZone.runOutsideAngular(() => this.messageListener.processWidgetMessage(new RoomWidgetRoomObjectMessage(RoomWidgetRoomObjectMessage.SELECT_OBJECT, item.id, item.category)));
     }
 
@@ -74,5 +77,21 @@ export class ChooserWidgetBaseComponent extends ConversionTrackingWidget impleme
     public set items(items: RoomObjectItem[])
     {
         this._items = items;
+    }
+
+    public get selectedItemIndex()
+    {
+        return this._selectedItemIndex;
+    }
+
+    public get searchValue()
+    {
+        return this._searchValue;
+    }
+
+    public set searchValue(value: string)
+    {
+        this._selectedItemIndex = -1;
+        this._searchValue = value;
     }
 }

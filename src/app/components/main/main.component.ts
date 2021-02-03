@@ -32,7 +32,8 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import {BackgroundColorFurniWidget} from "../room/widgets/furniture/backgroundcolor/backgroundcolor.component";
+import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
+import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -208,7 +209,8 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CREDIT_WIDGET, FurnitureWidgetCreditComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_BACKGROUND_COLOR, BackgroundColorFurniWidget);
-
+                    this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
+                    
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
                         this.roomComponent.createWidget(RoomWidgetEnum.CHAT_INPUT_WIDGET, RoomChatInputComponent);

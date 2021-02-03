@@ -27,6 +27,8 @@ import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.c
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/backgroundcolor.component';
+import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
+import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room-event-view.component';
 
 @NgModule({
     imports: [
@@ -59,7 +61,9 @@ import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
         DoorbellWidgetComponent,
-        BackgroundColorFurniWidget
+        BackgroundColorFurniWidget,
+        RoomToolsMainComponent,
+        RoomEventViewComponent
     ],
     declarations: [
         RoomComponent,
@@ -88,7 +92,9 @@ import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
         DoorbellWidgetComponent,
-        BackgroundColorFurniWidget
+        BackgroundColorFurniWidget,
+        RoomToolsMainComponent,
+        RoomEventViewComponent
     ]
 })
 export class RoomModule
