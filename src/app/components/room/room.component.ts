@@ -34,6 +34,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
@@ -103,6 +104,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
         private _friendService: FriendListService,
+        private _chatHistoryService: ChatHistoryService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     )
@@ -342,7 +344,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.CHAT_WIDGET: {
                 sendSizeUpdate = true;
 
-                const handler = new ChatWidgetHandler();
+                const handler = new ChatWidgetHandler(this._chatHistoryService);
 
                 handler.connection = Nitro.instance.communication.connection;
 

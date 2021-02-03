@@ -347,6 +347,11 @@ export class MainComponent implements OnInit, OnDestroy
         return this._settingsService.achievementsVisible;
     }
 
+    public get chatHistoryVisible(): boolean
+    {
+        return this._settingsService.chatHistoryVisible;
+    }
+
     public get isReady(): boolean
     {
         return this._settingsService.isReady;

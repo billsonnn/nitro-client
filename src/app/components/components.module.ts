@@ -4,6 +4,7 @@ import { AchievementsModule } from './achievements/achievements.module';
 import { AvatarEditorModule } from './avatar-editor/avatar-editor.module';
 import { CallForHelpModule } from './call-for-help/call-for-help.module';
 import { CatalogModule } from './catalog/catalog.module';
+import { ChatHistoryModule } from './chat-history/chat-history.module';
 import { FriendListModule } from './friendlist/friendlist.module';
 import { HabbopediaModule } from './habbopedia/habbopedia.module';
 import { HotelViewModule } from './hotelview';
@@ -34,7 +35,8 @@ import { WiredModule } from './wired/wired.module';
         RoomModule,
         ToolbarModule,
         UserProfileModule,
-        WiredModule
+        WiredModule,
+        ChatHistoryModule
     ],
     exports: [
         MainComponent

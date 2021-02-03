@@ -9,6 +9,7 @@
             <span (click)="toggleZoom()">{{ ('room.zoom.button.text') | translate }}</span><br>
 <!--            <span>{{ ('room.chathistory.button.text') | translate }}</span><br>-->
             <button *ngIf="isLikeable()" (click)="likeRoom()" type="button" class="btn btn-primary">Like</button>
+            <button (click)="toggleChatHistory()" type="button" class="btn btn-primary">History</button>
             <div>
                 <button [disabled]="!canGo('back')" (click)="goInDirection('back')" type="button" class="btn btn-primary">Back</button>
                 <button [disabled]="!canGo('forward')" (click)="goInDirection('forward')" type="button" class="btn btn-primary">Next</button>
