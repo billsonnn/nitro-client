@@ -13,7 +13,7 @@ export class ChatHistoryComponent
 {
     @ViewChild('threadScroller')
     public historyScroller: PerfectScrollbarComponent;
-    
+
     @Input()
     public visible: boolean;
 
@@ -24,11 +24,11 @@ export class ChatHistoryComponent
     public selectUser(userId: number | null): void
     {
         if(!userId) return;
-        
+
         const currentRoomId = Nitro.instance.roomEngine.activeRoomId;
         Nitro.instance.roomEngine.selectRoomObject(currentRoomId, userId, RoomObjectCategory.UNIT);
     }
-    
+
     public get items(): ChatHistoryItem[]
     {
         return this._chatHistoryService.historyItems;

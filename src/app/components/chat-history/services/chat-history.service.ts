@@ -6,7 +6,7 @@ import { ChatHistoryItem } from '../common/ChatHistoryItem';
 
 @Injectable()
 export class ChatHistoryService implements OnDestroy
-{   
+{
     private _messages: IMessageEvent[];
 
     private _lastRoomId: number;
@@ -69,7 +69,7 @@ export class ChatHistoryService implements OnDestroy
         if(!parser) return;
 
         this._queuedRoomId = 0;
-        
+
         this.addItem(new ChatHistoryItem(true, parser.data.roomName, Date.now()));
 
         this._lastRoomId = Nitro.instance.roomEngine.activeRoomId;
@@ -91,7 +91,7 @@ export class ChatHistoryService implements OnDestroy
             console.log(currentRoomId, this._lastRoomId)
             return;
         }*/
-            
+
         if(currentRoomId !== this._lastRoomId)
         {
             if(currentRoomId !== this._queuedRoomId)
@@ -104,10 +104,11 @@ export class ChatHistoryService implements OnDestroy
         }
         else
         {
-            this._ngZone.run(() => {
+            this._ngZone.run(() =>
+            {
                 this._historyItems.push(chatHistoryItem);
             });
-        }        
+        }
     }
 
     public get historyItems(): ChatHistoryItem[]

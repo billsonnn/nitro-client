@@ -3,7 +3,7 @@ export class ChatHistoryItem
     private _isRoomName: boolean;
     private _content: string;
     private _timestamp: number;
-    
+
     private _senderId: number;
     private _senderName: string;
     private _senderColor: number;
@@ -36,9 +36,9 @@ export class ChatHistoryItem
 
     public get timestamp(): string
     {
-        let date = new Date(this._timestamp);
-        const formattedTimestamp = ( (date.getHours() <= 9 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() <= 9 ? "0" + date.getSeconds() : date.getSeconds()) ).toString();
-        
+        const date = new Date(this._timestamp);
+        const formattedTimestamp = ( (date.getHours() <= 9 ? '0' + date.getHours() : date.getHours()) + ':' + (date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes()) + ':' + (date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds()) ).toString();
+
         return formattedTimestamp;
     }
 

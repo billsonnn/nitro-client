@@ -17,5 +17,5 @@ import { ChatHistoryService } from './services/chat-history.service';
         ChatHistoryComponent
     ]
 })
-export class ChatHistoryModule 
+export class ChatHistoryModule
 {}
