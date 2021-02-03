@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { RoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
-import { SecurityLevel } from '../../../../../../client/nitro/session/enum/SecurityLevel';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/settings/RoomSettingsComposer';
+import { SecurityLevel } from '../../../../../../client/nitro/session/enum/SecurityLevel';
+import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 
 @Component({
     selector: 'nitro-room-event-view-component',
