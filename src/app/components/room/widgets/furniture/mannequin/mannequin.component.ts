@@ -49,6 +49,7 @@ export class MannequinWidget extends ConversionTrackingWidget
     public outfitName: string;
     private _mannequinClubLevel: number;
     private _view: string;
+    public hasHabboClub: boolean = false;
 
     constructor(
         private _ngZone: NgZone)
@@ -127,17 +128,10 @@ export class MannequinWidget extends ConversionTrackingWidget
 
         switch(viewType)
         {
+            case MannequinWidget.PreviewAndSave:
+            case MannequinWidget.WrongClubLevel:
             case MannequinWidget.WrongGender:{
                 avatarFigureContainer = avatarRenderManager.createFigureContainer(this._figure);
-                this.removeSectionsFromAvatar(avatarFigureContainer);
-                this._renderedFigure = avatarFigureContainer._Str_1008();
-                // create avatar image
-
-
-            }
-                break;
-            case MannequinWidget.PreviewAndSave: {
-                avatarFigureContainer = avatarRenderManager.createFigureContainer(currentFigure);
                 this.removeSectionsFromAvatar(avatarFigureContainer);
                 this._renderedFigure = avatarFigureContainer._Str_1008();
             }
@@ -150,7 +144,7 @@ export class MannequinWidget extends ConversionTrackingWidget
                 avatarFigureContainer = avatarRenderManager.createFigureContainer(this._figure);
                 this.removeSectionsFromAvatar(avatarFigureContainer);
                 this._renderedFigure = avatarFigureContainer._Str_1008();
-                // create avatar image
+
 
             }
                 break;
@@ -164,20 +158,25 @@ export class MannequinWidget extends ConversionTrackingWidget
         });
     }
 
-    private removeSectionsFromAvatar(k:IAvatarFigureContainer): void
+    public saveName(): void
+    {
+        this.changeOutfitName();
+    }
+
+    private removeSectionsFromAvatar(avatar:IAvatarFigureContainer): void
     {
 
-        for(const item of k._Str_1016())
+        for(const item of avatar._Str_1016())
         {
 
             if(MannequinWidget.parts.indexOf(item) == -1)
             {
 
-                k._Str_923(item);
+                avatar._Str_923(item);
             }
         }
 
-        k._Str_830(<string>MannequinWidget._Str_10597[0], <number>MannequinWidget._Str_10597[1], <number[]>MannequinWidget._Str_10597[2]);
+        avatar._Str_830(<string>MannequinWidget._Str_10597[0], <number>MannequinWidget._Str_10597[1], <number[]>MannequinWidget._Str_10597[2]);
     }
 
 
@@ -225,20 +224,14 @@ export class MannequinWidget extends ConversionTrackingWidget
         switch(clubLevel)
         {
             case HabboClubLevelEnum._Str_3159:
-                // visible = false;
+                this.hasHabboClub = false;
                 break;
             case HabboClubLevelEnum._Str_2964:
-                // style = 13
-                // visible =true
-                break;
             case HabboClubLevelEnum._Str_2575:
-                // style = 14
-                // visible = true;
+                this.hasHabboClub = true;
                 break;
         }
     }
-
-
 
     public handleButton(button: string): void
     {
@@ -248,11 +241,14 @@ export class MannequinWidget extends ConversionTrackingWidget
                 this.wearOutfit();
                 break;
             case 're_style':
-                this._Str_20994();
+                this.changeOutfitName();
                 this.setView(MannequinWidget.PreviewAndSave);
                 break;
             case 'save_outfit':
                 this.handler.container.connection.send(new FurnitureMannequinSaveLookComposer(this._furniId));
+                this._visible = false;
+                break;
+            case 'close':
                 this._visible = false;
                 break;
         }
@@ -277,7 +273,7 @@ export class MannequinWidget extends ConversionTrackingWidget
         this._visible = false;
     }
 
-    private _Str_20994(): void
+    private changeOutfitName(): void
     {
         this.handler.container.connection.send(new FurnitureMannequinSaveNameComposer(this._furniId, this.outfitName));
     }

@@ -11,18 +11,21 @@
         <ng-container [ngSwitch]="view">
             <div *ngSwitchCase="'wrong-gender'" class="col-8">
                 {{ 'mannequin.widget.wronggender' | translate }}
+                <button type="button" (click)="handleButton('close')" class="btn btn-primary">{{ 'generic.ok' | translate}}</button><br />
             </div>
 
             <div *ngSwitchCase="'no-club'" class="col-8">
                 {{ 'mannequin.widget.clubnotification' | translate}}
+                <button type="button" (click)="handleButton('close')" class="btn btn-primary">{{ 'generic.ok' | translate}}</button><br />
 
             </div>
             <div *ngSwitchCase="'peer-main'" class="col-8">
                 <i>{{ outfitName}}</i><br /><br />
                 {{ 'mannequin.widget.weartext' | translate }}
+                <button type="button" (click)="handleButton('wear')" class="btn btn-primary">{{ 'mannequin.widget.wear' | translate}}</button><br />
             </div>
             <div *ngSwitchCase="'main'" class="col-8">
-                <input type="text" [(ngModel)]="outfitName"><br />
+                <input type="text" [(ngModel)]="outfitName" (keyup.enter)="saveName()"><br />
                 <button type="button" (click)="handleButton('re_style')" class="btn btn-primary">{{ 'mannequin.widget.style' | translate}}</button><br />
                 <button type="button" (click)="handleButton('wear')" class="btn btn-primary">{{ 'mannequin.widget.wear' | translate}}</button><br />
             </div>
