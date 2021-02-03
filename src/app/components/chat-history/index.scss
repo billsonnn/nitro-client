@@ -1,0 +1,43 @@
+.nitro-chat-history-component {
+    position: fixed;
+    z-index: 100;
+    bottom: 210px;
+    left: 90px;
+    width: 450px;
+    height: calc(100% - 270px);
+    background:rgba(29, 30, 33, 0.9);
+    padding: 10px;
+    border-radius: 10px;
+
+    .chat-history-item {
+        overflow: auto;
+
+        &.room-item {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .chat-history-item-timestamp {
+            float: left;
+            width: 100px;
+            width: 60px;
+            font-size: 15px;
+        }
+
+        .chat-history-item-content {
+            float: left;
+            margin-left: 5px;
+            width: calc(100% - 65px);
+            overflow: hidden;
+
+            .bubble-container {
+                position: relative;
+                visibility: visible;
+            }
+
+            .room-name {
+                font-size: 15px;
+            }
+        }
+    }
+}

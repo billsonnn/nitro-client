@@ -1,11 +1,11 @@
 import { Component, ComponentFactoryResolver, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
+import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { SettingsService } from '../../../../../core/settings/service';
 import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
-import { FurnitureCreditWidgetHandler } from '../../handlers/FurnitureCreditWidgetHandler';
 import { RoomToolsWidgetHandler } from '../../handlers/RoomToolsWidgetHandler';
+import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 
 @Component({
     selector: 'nitro-room-tools-component',
@@ -36,6 +36,7 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone,
         private _navigatorDataService: NavigatorDataService,
+        private _settingsService: SettingsService,
         private _navigatorService: NavigatorService
     )
     {
@@ -168,5 +169,10 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public likeRoom(): void
     {
         this.handler.rateRoom();
+    }
+
+    public toggleChatHistory(): void
+    {
+        this._settingsService.toggleChatHistory();
     }
 }

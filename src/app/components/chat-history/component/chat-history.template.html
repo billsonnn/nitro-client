@@ -1,0 +1,23 @@
+<div *ngIf="visible" class="nitro-chat-history-component">
+    <perfect-scrollbar style="height: 100%; max-height: 100%; min-height: 100%;" #historyScroller>
+        <div *ngFor="let item of items" class="chat-history-item" [ngClass]="{'room-item': item.isRoomName}">
+            <div class="chat-history-item-timestamp">
+                {{ item.timestamp }}
+            </div>
+            <div class="chat-history-item-content">
+                <div *ngIf="!item.isRoomName" class="bubble-container" (click)="selectUser(item.senderId)">
+                    <div *ngIf="item.chatStyle === 0" class="user-container-bg" [ngStyle]="{'background-color': item.senderColorString}"></div>
+                    <div class="chat-bubble bubble-{{ item.chatStyle }} type-{{ item.chatType }}">
+                        <div class="user-container">
+                            <div *ngIf="item.senderImage && item.senderImage.src" class="user-image" [ngStyle]="{ 'background-image': 'url(' + item.senderImage.src + ')' }"></div>
+                        </div>
+                        <div class="chat-content">
+                            <b class="username-container" [innerHTML]="item.senderName"></b> <span class="message"> {{ item.content }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="item.isRoomName" class="room-name">{{ item.content }}</div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>
