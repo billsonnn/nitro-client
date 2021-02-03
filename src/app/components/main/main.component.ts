@@ -33,6 +33,10 @@ import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
 import {PresentFurniWidget} from "../room/widgets/furniture/gift-opening/present.component";
+import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
+import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
+import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -105,6 +109,8 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.addEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_DIMMER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, this.onRoomEngineObjectEvent);
             }
 
@@ -156,6 +162,8 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomEngine.events.removeEventListener(RoomObjectWidgetRequestEvent.OPEN_FURNI_CONTEXT_MENU, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_STICKIE, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_DIMMER, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, this.onRoomEngineObjectEvent);
             }
 
@@ -207,6 +215,10 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_TROPHY_WIDGET, FurnitureWidgetTrophyComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_CREDIT_WIDGET, FurnitureWidgetCreditComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.ROOM_BACKGROUND_COLOR, BackgroundColorFurniWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_PRESENT_WIDGET, PresentFurniWidget);
 
                     if(!this.roomComponent.roomSession.isSpectator)
@@ -341,6 +353,11 @@ export class MainComponent implements OnInit, OnDestroy
     public get achievementsVisible(): boolean
     {
         return this._settingsService.achievementsVisible;
+    }
+
+    public get chatHistoryVisible(): boolean
+    {
+        return this._settingsService.chatHistoryVisible;
     }
 
     public get isReady(): boolean

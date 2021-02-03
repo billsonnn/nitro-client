@@ -34,6 +34,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
@@ -45,6 +46,7 @@ import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandle
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
+import { FurnitureBackgroundColorWidgetHandler } from './widgets/handlers/FurnitureBackgroundColorWidgetHandler';
 import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
@@ -57,15 +59,18 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
+import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
+import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import {FurniturePresentWidgetHandler} from "./widgets/handlers/FurniturePresentWidgetHandler";
 
 @Component({
     selector: 'nitro-room-component',
     template: `
-    <div class="nitro-room-component">
-        <div #roomCanvas class="room-view"></div>
-        <ng-template #widgetContainer></ng-template>
-    </div>`
+        <div class="nitro-room-component">
+            <div #roomCanvas class="room-view"></div>
+            <ng-template #widgetContainer></ng-template>
+        </div>`
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
@@ -101,6 +106,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
         private _friendService: FriendListService,
+        private _chatHistoryService: ChatHistoryService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     )
@@ -340,7 +346,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.CHAT_WIDGET: {
                 sendSizeUpdate = true;
 
-                const handler = new ChatWidgetHandler();
+                const handler = new ChatWidgetHandler(this._chatHistoryService);
 
                 handler.connection = Nitro.instance.communication.connection;
 
@@ -392,6 +398,18 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
+                break;
+            case RoomWidgetEnum.ROOM_BACKGROUND_COLOR:
+                widgetHandler = new FurnitureBackgroundColorWidgetHandler();
+                break;
+            case RoomWidgetEnum.FRIEND_FURNI_CONFIRM:
+                widgetHandler = new FriendFurniConfirmWidgetHandler();
+                break;
+            case RoomWidgetEnum.FRIEND_FURNI_ENGRAVING:
+                widgetHandler = new FriendFurniEngravingWidgetHandler();
+                break;
+            case RoomWidgetEnum.ROOM_TOOLS:
+                widgetHandler = new RoomToolsWidgetHandler();
                 break;
             case RoomWidgetEnum.FURNI_PRESENT_WIDGET:
                 widgetHandler = new FurniturePresentWidgetHandler();
@@ -758,7 +776,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         if(!background) return;
 
-        if(!hue || !saturation || !lightness)
+        if(!hue && !saturation && !lightness)
         {
             background.visible = false;
         }

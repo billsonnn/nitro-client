@@ -27,6 +27,11 @@ import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.c
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import {PresentFurniWidget} from "./widgets/furniture/gift-opening/present.component";
+import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/backgroundcolor.component';
+import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
+import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
+import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room-event-view.component';
 
 @NgModule({
     imports: [
@@ -55,11 +60,17 @@ import {PresentFurniWidget} from "./widgets/furniture/gift-opening/present.compo
         StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
+        FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
         DoorbellWidgetComponent,
-        PresentFurniWidget
+        PresentFurniWidget,
+        DoorbellWidgetComponent,
+        BackgroundColorFurniWidget,
+        RoomToolsMainComponent,
+        RoomEventViewComponent
     ],
     declarations: [
         RoomComponent,
@@ -84,9 +95,15 @@ import {PresentFurniWidget} from "./widgets/furniture/gift-opening/present.compo
         StickieFurniComponent,
         FurnitureWidgetTrophyComponent,
         FurnitureWidgetCreditComponent,
+        FriendsFurniConfirmWidget,
+        FriendFurniEngravingWidget,
         ChooserWidgetBaseComponent,
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
+        DoorbellWidgetComponent,
+        BackgroundColorFurniWidget,
+        RoomToolsMainComponent,
+        RoomEventViewComponent,
         DoorbellWidgetComponent,
         PresentFurniWidget
     ]

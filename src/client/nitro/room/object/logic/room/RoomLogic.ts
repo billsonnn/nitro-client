@@ -36,6 +36,7 @@ export class RoomLogic extends RoomObjectLogicBase
     private _Str_16460: number;
     private _Str_9785: number;
     private _Str_17191: number;
+    private _lastHoleUpdate: number;
     private _needsMapUpdate: boolean;
 
     constructor()
@@ -52,7 +53,8 @@ export class RoomLogic extends RoomObjectLogicBase
         this._Str_16460             = 0xFF;
         this._Str_9785              = 0;
         this._Str_17191             = 1500;
-        this._needsMapUpdate             = false;
+        this._lastHoleUpdate        = 0;
+        this._needsMapUpdate        = false;
     }
 
     public getEventTypes(): string[]
@@ -104,6 +106,8 @@ export class RoomLogic extends RoomObjectLogicBase
 
         if(this._needsMapUpdate)
         {
+            if(this._lastHoleUpdate && (time - this._lastHoleUpdate) < 5) return;
+
             const model = this.object && this.object.model;
 
             if(model)
@@ -116,7 +120,8 @@ export class RoomLogic extends RoomObjectLogicBase
                 this._planeParser.initializeFromMapData(mapData);
             }
 
-            this._needsMapUpdate = false;
+            this._lastHoleUpdate    = 0;
+            this._needsMapUpdate    = false;
         }
 
     }
@@ -301,6 +306,8 @@ export class RoomLogic extends RoomObjectLogicBase
                 this._needsMapUpdate = true;
                 return;
         }
+
+        this._lastHoleUpdate = this.time;
     }
 
     private onObjectRoomColorUpdateMessage(message: ObjectRoomColorUpdateMessage, model: IRoomObjectModel): void

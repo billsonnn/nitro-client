@@ -2,6 +2,7 @@ import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, O
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationBroadcastMessageComponent } from '../broadcast-message/broadcast-message.component';
+import { NotificationChoice, NotificationChoicesComponent } from '../choices/choices.component';
 import { NotificationConfirmComponent } from '../confirm/confirm.component';
 import { NotificationModeratorMessageComponent } from '../moderator-message/moderator-message.component';
 import { NotificationMultipleMessagesComponent } from '../multiple-messages/multiple-messages.component';
@@ -58,6 +59,41 @@ export class AlertCenterComponent implements OnInit, OnDestroy
         if(!component) return null;
 
         component.callback = callback;
+
+        return component;
+    }
+
+    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent
+    {
+
+        let component: NotificationBroadcastMessageComponent = null;
+
+        this._ngZone.run(() =>
+        {
+            component = this.createAlertComponent(NotificationChoicesComponent);
+
+            if(title)
+            {
+                if(title.startsWith('${')) title = Nitro.instance.getLocalization(title);
+            }
+            else
+            {
+                title = Nitro.instance.getLocalization('${mod.alert.title}');
+            }
+
+            if(message)
+            {
+                if(message.startsWith('${')) message = Nitro.instance.getLocalization(message);
+
+                message = message.replace(/\r\n|\r|\n/g, '<br />');
+            }
+
+            component.title = title;
+            component.message = message;
+            component.choices = choices;
+        });
+
+        if(!component) return null;
 
         return component;
     }

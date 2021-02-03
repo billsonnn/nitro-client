@@ -7,6 +7,7 @@ import { MOTDNotificationEvent } from '../../../../client/nitro/communication/me
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { AlertCenterComponent } from '../components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
+import { NotificationChoice } from '../components/choices/choices.component';
 import { NotificationCenterComponent } from '../components/notification-center/notification-center.component';
 import { NotificationDialogComponent } from '../components/notification-dialog/notification-dialog.component';
 
@@ -121,6 +122,13 @@ export class NotificationService implements OnDestroy
         if(!this._alertCenter) return null;
 
         return this._alertCenter.alertWithConfirm(message, title, callback);
+    }
+
+    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent
+    {
+        if(!this._alertCenter) return null;
+
+        return this._alertCenter.alertWithChoices(message, choices, title);
     }
 
     public alertWithScrollableMessages(messages: string[], title: string = null): NotificationBroadcastMessageComponent
