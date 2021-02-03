@@ -1,27 +1,7 @@
 
-.nitro-furniture-dimmer {
+.nitro-furniture-mannequin {
     position: absolute;
-    width: 350px;
-    max-width: 350px;
-
-    .dimmer-inner {
-        border-radius: $border-radius;
-
-        .dimmer-colour-list {
-
-            .dimmer-colour {
-                width: 100%;
-
-                &:not(:last-child) {
-                    margin-right: 5px;
-                }
-
-                &.color-selected {
-                    color: black;
-                    border: 2px solid $white;
-                 }
-            }
-        }
-    }
+    width: 450px;
+    max-width: 450px;
 
 }

@@ -32,11 +32,11 @@ import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophi
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import {MannequinWidget} from "../room/widgets/furniture/mannequin/dimmer.component";
 import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
+import { MannequinWidget } from '../room/widgets/furniture/mannequin/mannequin.component';
 
 @Component({
     selector: 'nitro-main-component',

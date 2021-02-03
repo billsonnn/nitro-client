@@ -7,7 +7,7 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomEngineObjectEvent } from '../../../../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { MannequinWidget } from '../furniture/mannequin/dimmer.component';
+import { MannequinWidget } from '../furniture/mannequin/mannequin.component';
 
 
 export class FurnitureMannequinWidgetHandler implements IRoomWidgetHandler

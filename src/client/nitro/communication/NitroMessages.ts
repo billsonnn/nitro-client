@@ -279,6 +279,8 @@ import { LoveLockFurniFriendConfirmedEvent } from './messages/incoming/room/furn
 import { LoveLockFurniStartEvent } from './messages/incoming/room/furniture/LoveLockFurniStartEvent';
 import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
+import { FurnitureMannequinSaveNameComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
+import { FurnitureMannequinSaveLookComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -712,6 +714,10 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
         this._composers.set(OutgoingHeader.USER_PROFILE, UserProfileComposer);
         this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsComposer);
+
+        // MANNEQUIN
+        this._composers.set(OutgoingHeader.MANNEQUIN_SAVE_NAME, FurnitureMannequinSaveNameComposer);
+        this._composers.set(OutgoingHeader.MANNEQUIN_SAVE_LOOK, FurnitureMannequinSaveLookComposer);
 
         // INVENTORY
 
