@@ -52,4 +52,11 @@ export class CatalogLayout
     {
         return ((this._catalogService.component && this._catalogService.component.roomPreviewer) || null);
     }
+
+    public getCurrencyUrl(type: number): string
+    {
+        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
+
+        return url.replace('%type%', type.toString());
+    }
 }
