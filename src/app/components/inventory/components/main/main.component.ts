@@ -72,6 +72,13 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public showFurniture(): void
     {
         this._inventoryService.furnitureVisible = true;
+        this._inventoryService.botsVisible = false;
+    }
+
+    public showBots(): void
+    {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.botsVisible = true;
     }
 
     public updateItemLocking(): void
@@ -108,6 +115,11 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public get tradingVisible(): boolean
     {
         return this._inventoryService.tradingVisible;
+    }
+
+    public get botsVisible(): boolean
+    {
+        return this._inventoryService.botsVisible;
     }
 
     public get furnitureService(): InventoryFurnitureService

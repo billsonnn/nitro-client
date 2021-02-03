@@ -19,6 +19,7 @@ import { CatalogService } from './services/catalog.service';
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
 import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip-subscription/confirm-vip-subscription.component';
 import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/confirm-purchase-insufficient-funds/confirm-purchase-insufficient-funds.component';
+import { CatalogLayoutBotsComponent } from './components/layouts/bots/bots.component';
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,
+        CatalogLayoutBotsComponent,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
         CatalogLayoutPets3Component,
@@ -54,6 +56,7 @@ import { CatalogConfirmPurchaseInsufficientFundsComponent } from './components/c
         CatalogLayoutDefaultComponent,
         CatalogLayoutFrontPageFeaturedComponent,
         CatalogLayoutFrontPage4Component,
+        CatalogLayoutBotsComponent,
         CatalogLayoutPetsComponent,
         CatalogLayoutPets2Component,
         CatalogLayoutPets3Component,

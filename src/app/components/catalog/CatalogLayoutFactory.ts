@@ -8,6 +8,7 @@ import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.co
 import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new/spaces-new.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
+import { CatalogLayoutBotsComponent } from './components/layouts/bots/bots.component';
 
 export class CatalogLayoutFactory
 {
@@ -19,6 +20,8 @@ export class CatalogLayoutFactory
                 return CatalogLayoutFrontPageFeaturedComponent;
             case CatalogLayoutFrontPage4Component.CODE:
                 return CatalogLayoutFrontPage4Component;
+            case CatalogLayoutBotsComponent.CODE:
+                return CatalogLayoutBotsComponent;
             case CatalogLayoutPetsComponent.CODE:
                 return CatalogLayoutPetsComponent;
             case CatalogLayoutPets2Component.CODE:
