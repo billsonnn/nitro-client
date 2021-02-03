@@ -9,5 +9,4 @@ export interface INitroLocalizationManager extends INitroManager
     getValueWithParameters(key: string, parameters: string[], replacements: string[]): string;
     setValue(key: string, value: string): void;
     registerParameter(key: string, parameter: string, value: string): void;
-    getValueWithParameters(key: string, parameters: string[], replacements: string[]): string;
 }
