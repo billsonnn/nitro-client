@@ -59,14 +59,15 @@ import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHa
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
 import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
 import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
+import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
     template: `
-    <div class="nitro-room-component">
-        <div #roomCanvas class="room-view"></div>
-        <ng-template #widgetContainer></ng-template>
-    </div>`
+        <div class="nitro-room-component">
+            <div #roomCanvas class="room-view"></div>
+            <ng-template #widgetContainer></ng-template>
+        </div>`
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
 {
@@ -399,6 +400,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FRIEND_FURNI_ENGRAVING:
                 widgetHandler = new FriendFurniEngravingWidgetHandler();
+                break;
+            case RoomWidgetEnum.ROOM_TOOLS:
+                widgetHandler = new RoomToolsWidgetHandler();
                 break;
         }
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/index';
 import { AlertCenterComponent } from './components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from './components/broadcast-message/broadcast-message.component';
+import { NotificationChoicesComponent } from './components/choices/choices.component';
 import { NotificationConfirmComponent } from './components/confirm/confirm.component';
 import { NotificationModeratorMessageComponent } from './components/moderator-message/moderator-message.component';
 import { NotificationMultipleMessagesComponent } from './components/multiple-messages/multiple-messages.component';
@@ -19,6 +20,7 @@ import { NotificationService } from './services/notification.service';
         AlertCenterComponent,
         NotificationBroadcastMessageComponent,
         NotificationConfirmComponent,
+        NotificationChoicesComponent,
         NotificationModeratorMessageComponent,
         NotificationMultipleMessagesComponent,
         NotificationBubbleComponent,
@@ -33,6 +35,7 @@ import { NotificationService } from './services/notification.service';
         AlertCenterComponent,
         NotificationBroadcastMessageComponent,
         NotificationConfirmComponent,
+        NotificationChoicesComponent,
         NotificationModeratorMessageComponent,
         NotificationMultipleMessagesComponent,
         NotificationBubbleComponent,

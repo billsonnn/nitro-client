@@ -34,6 +34,7 @@ import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/door
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
+import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -210,6 +211,7 @@ export class MainComponent implements OnInit, OnDestroy
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNITURE_CONTEXT_MENU, FurnitureContextMenuWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
