@@ -439,7 +439,7 @@ export class RoomPreviewer
             {
                 const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
 
-                geometry.performZoomIn();    
+                geometry.performZoomIn();
             }
         }
 
