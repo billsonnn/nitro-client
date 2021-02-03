@@ -98,11 +98,10 @@ export class FurnitureRoomBackgroundColorLogic extends FurnitureMultiStateLogic
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
     {
         if(!event || !geometry || !this.object) return;
-
         switch(event.type)
         {
             case MouseEventType.DOUBLE_CLICK:
-                (this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.STICKIE, this.object)));
+                (this.eventDispatcher && this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.BACKGROUND_COLOR, this.object)));
                 return;
             default:
                 super.mouseEvent(event, geometry);
