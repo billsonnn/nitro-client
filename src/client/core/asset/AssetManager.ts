@@ -173,14 +173,19 @@ export class AssetManager extends Disposable implements IAssetManager
             {
                 const imageData = nitroBundle.image;
 
-                if(!imageData || !imageData.length)
+                let baseTexture = nitroBundle.baseTexture;
+
+                if(!baseTexture)
                 {
-                    onDownloaded(loader, resource, false);
+                    if(imageData) baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
 
-                    return;
+                    if(!baseTexture)
+                    {
+                        onDownloaded(loader, resource, false);
+
+                        return;
+                    }
                 }
-
-                const baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
 
                 if(baseTexture.valid)
                 {

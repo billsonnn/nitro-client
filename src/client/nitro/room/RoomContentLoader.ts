@@ -476,25 +476,21 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const baseTexture = nitroBundle.baseTexture;
+                const imageData = nitroBundle.image;
+
+                let baseTexture = nitroBundle.baseTexture;
 
                 if(!baseTexture)
                 {
-                    onDownloaded(loader, resource, false);
+                    if(imageData) baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
 
-                    return;
+                    if(!baseTexture)
+                    {
+                        onDownloaded(loader, resource, false);
+
+                        return;
+                    }
                 }
-
-                // const imageData = nitroBundle.image;
-
-                // if(!imageData || !imageData.length)
-                // {
-                //     onDownloaded(loader, resource, false);
-
-                //     return;
-                // }
-
-                // const baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
 
                 if(baseTexture.valid)
                 {
