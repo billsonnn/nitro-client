@@ -4,7 +4,41 @@
         <button type="button" class="close" ><i class="fas fa-times"></i></button>
     </div>
     <div class="row p-3">
-        <div nitro-furni-floor-image [spriteId]="boxSpriteId"></div>
+        <input type="text" class="form-control form-control-sm"  placeholder="{{ 'catalog.gift_wrapping.receiver' | translate }}">
+    </div>
+
+    <div class="row p-3">
+        <div nitro-avatar-image [headOnly]="true" [direction]="2" [figure]="habboFigure" ></div>
+        <div class="col-sm-8">
+          <textarea class="form-control w-200"></textarea>
+        </div>
+    </div>
+    <div class="row p-3">
+        <div nitro-furni-floor-image class="col-lg-3" [spriteId]="boxSpriteId"></div>
+        <div class="col-lg-6">
+            <div class="row md-3">
+                <div class="btn-group">
+                    <button type="button" (click)="handleButton('previous_box')" class="btn btn-primary"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" (click)="handleButton('next_box')" class="btn btn-primary"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="col-md-auto">
+                    <div class="row">
+                        <div class="col-md-auto">{{ boxText}}</div>
+                    </div>
+                    <div *ngIf="priceText && priceText.length > 0" class="row">
+                        <div class="col-md-auto">{{ priceText }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-primary"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="col-md-auto">{{ boxText}}</div>
+            </div>
+        </div>
+
     </div>
     <div class="row align-items-end pt-0 px-3 pb-3">
         <div class="col btn-group">
