@@ -43,14 +43,17 @@ export class NitroBundle
             const fileName          = binaryReader.readBytes(fileNameLength).toString();
             const fileLength        = binaryReader.readInt();
             const buffer            = binaryReader.readBytes(fileLength);
-            const decompressed      = inflate((buffer.toArrayBuffer() as Data));
 
             if(fileName.endsWith('.json'))
             {
+                const decompressed = inflate((buffer.toArrayBuffer() as Data));
+
                 this._jsonFile = JSON.parse(NitroBundle.TEXT_DECODER.decode(decompressed));
             }
             else
             {
+                const decompressed = inflate((buffer.toArrayBuffer() as Data));
+
                 this._imageData = decompressed;
 
                 this._image = NitroBundle.arrayBufferToBase64(this._imageData);
@@ -72,12 +75,17 @@ export class NitroBundle
 
         if(!json) return;
 
+        console.log(json.spritesheet);
+
         const width = json.spritesheet.meta.size.w;
         const height = json.spritesheet.meta.size.h;
 
+        console.log(width, height);
+
         try
         {
-            const baseTexture = BaseTexture.fromBuffer(this._imageData, width, height);
+            //@ts-ignore
+            const baseTexture = BaseTexture.fromBuffer(this._imageData, 1, 1);
 
             this._baseTexture = baseTexture;
         }
