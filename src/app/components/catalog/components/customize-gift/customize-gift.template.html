@@ -1,0 +1,15 @@
+<div [bringToTop] [draggable] class="nitro-catalog-customize-gift-component card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ 'catalog.gift_wrapping.title' | translate }}</h6>
+        <button type="button" class="close" ><i class="fas fa-times"></i></button>
+    </div>
+    <div class="row p-3">
+        <img [src]="boxImage" />
+    </div>
+    <div class="row align-items-end pt-0 px-3 pb-3">
+        <div class="col btn-group">
+            <button type="button" class="btn btn-primary">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
+            <button type="button" class="btn btn-success">{{ 'catalog.purchase_confirmation.gift' | translate }}</button>
+        </div>
+    </div>
+</div>

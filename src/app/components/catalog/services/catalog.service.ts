@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
 import { CatalogModeEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogModeEvent';
@@ -51,6 +51,8 @@ export class CatalogService implements OnDestroy
     private _clubOffers: CatalogClubOfferData[] = [];
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
+
+    public giftsLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private _settingsService: SettingsService,
@@ -119,6 +121,7 @@ export class CatalogService implements OnDestroy
     private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
     {
         this._giftWrappingConfiguration = new GiftWrappingConfiguration(event);
+        this.giftsLoaded.emit(true);
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void
@@ -434,5 +437,10 @@ export class CatalogService implements OnDestroy
     public get vipOffers(): CatalogClubOfferData[]
     {
         return this._clubOffers;
+    }
+
+    public get giftWrapperConfiguration(): GiftWrappingConfiguration
+    {
+        return this._giftWrappingConfiguration;
     }
 }
