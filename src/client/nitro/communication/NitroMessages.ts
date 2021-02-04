@@ -31,6 +31,7 @@ import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteE
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
+import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -80,6 +81,7 @@ import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/Roo
 import { RoomEnterErrorEvent } from './messages/incoming/room/access/RoomEnterErrorEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
 import { RoomForwardEvent } from './messages/incoming/room/access/RoomForwardEvent';
+import { RoomBannedUsersEvent } from './messages/incoming/room/data/RoomBannedUsersEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
 import { RoomInfoEvent } from './messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from './messages/incoming/room/data/RoomInfoOwnerEvent';
@@ -88,6 +90,7 @@ import { RoomSettingsErrorEvent } from './messages/incoming/room/data/RoomSettin
 import { RoomSettingsEvent } from './messages/incoming/room/data/RoomSettingsEvent';
 import { RoomSettingsSavedEvent } from './messages/incoming/room/data/RoomSettingsSavedEvent';
 import { RoomSettingsUpdatedEvent } from './messages/incoming/room/data/RoomSettingsUpdatedEvent';
+import { RoomUsersWithRightsEvent } from './messages/incoming/room/data/RoomUsersWithRightsEvent';
 import { ObjectsRollingEvent } from './messages/incoming/room/engine/ObjectsRollingEvent';
 import { RoomCreatedEvent } from './messages/incoming/room/engine/RoomCreatedEvent';
 import { FurnitureFloorAddEvent } from './messages/incoming/room/furniture/floor/FurnitureFloorAddEvent';
@@ -142,6 +145,8 @@ import { UserCurrentBadgesEvent } from './messages/incoming/user/data/UserCurren
 import { UserFigureEvent } from './messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from './messages/incoming/user/data/UserInfoEvent';
 import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNameChangeMessageEvent';
+import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
+import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
@@ -172,6 +177,7 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
@@ -201,11 +207,17 @@ import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/Room
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from './messages/outgoing/room/action/RoomBanUserComposer';
+import { RoomDeleteComposer } from './messages/outgoing/room/action/RoomDeleteComposer';
 import { RoomGiveRightsComposer } from './messages/outgoing/room/action/RoomGiveRightsComposer';
 import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
+import { RoomUnbanUserComposer } from './messages/outgoing/room/action/RoomUnbanUserComposer';
+import { RoomBannedUsersComposer } from './messages/outgoing/room/data/RoomBannedUsersComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
+import { RoomSettingsComposer } from './messages/outgoing/room/data/RoomSettingsComposer';
+import { RoomUsersWithRightsComposer } from './messages/outgoing/room/data/RoomUsersWithRightsComposer';
+import { SaveRoomSettingsComposer } from './messages/outgoing/room/data/SaveRoomSettingsComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
 import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
@@ -255,10 +267,18 @@ import { UserCurrentBadgesComposer } from './messages/outgoing/user/data/UserCur
 import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
 import { UserMottoComposer } from './messages/outgoing/user/data/UserMottoComposer';
+import { UserProfileComposer } from './messages/outgoing/user/data/UserProfileComposer';
+import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRelationshipsComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { ApplyTonerComposer } from './messages/outgoing/room/furniture/toner/ApplyTonerComposer';
+import { LoveLockFurniFinishedEvent } from './messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
+import { LoveLockFurniFriendConfirmedEvent } from './messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
+import { LoveLockFurniStartEvent } from './messages/incoming/room/furniture/LoveLockFurniStartEvent';
+import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
+import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogRequestGiftConfigurationComposer } from './messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 
@@ -281,6 +301,7 @@ export class NitroMessages implements IMessageConfiguration
         // AVAILABILITY
         this._events.set(IncomingHeader.AVAILABILITY_STATUS, AvailabilityStatusMessageEvent);
         this._events.set(IncomingHeader.GENERIC_ERROR, GenericErrorEvent);
+
         // AVATAR
         this._events.set(IncomingHeader.USER_CHANGE_NAME, ChangeNameUpdateEvent);
 
@@ -322,6 +343,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MESSENGER_INVITE_ERROR, RoomInviteErrorEvent);
         this._events.set(IncomingHeader.MESSENGER_INVITE, RoomInviteEvent);
 
+        // GROUP
+        this._events.set(IncomingHeader.GROUP_INFO, GroupInformationEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
@@ -398,6 +421,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.ROOM_SETTINGS, RoomSettingsEvent);
         this._events.set(IncomingHeader.ROOM_SETTINGS_SAVE, RoomSettingsSavedEvent);
         this._events.set(IncomingHeader.ROOM_SETTINGS_UPDATED, RoomSettingsUpdatedEvent);
+        this._events.set(IncomingHeader.ROOM_RIGHTS_LIST, RoomUsersWithRightsEvent);
+        this._events.set(IncomingHeader.ROOM_BAN_LIST, RoomBannedUsersEvent);
 
         // ENGINE
         this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
@@ -411,6 +436,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.FURNITURE_STATE, FurnitureStateEvent);
         this._events.set(IncomingHeader.ITEM_DIMMER_SETTINGS, RoomDimmerPresetsEvent);
         this._events.set(IncomingHeader.FURNITURE_STATE_2, FurnitureState2Event);
+        this._events.set(IncomingHeader.LOVELOCK_FURNI_FINISHED, LoveLockFurniFinishedEvent);
+        this._events.set(IncomingHeader.LOVELOCK_FURNI_FRIEND_COMFIRMED, LoveLockFurniFriendConfirmedEvent);
+        this._events.set(IncomingHeader.LOVELOCK_FURNI_START, LoveLockFurniStartEvent);
 
         // FLOOR
         this._events.set(IncomingHeader.FURNITURE_FLOOR_ADD, FurnitureFloorAddEvent);
@@ -481,6 +509,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_INFO, UserInfoEvent);
         this._events.set(IncomingHeader.UNIT_CHANGE_NAME, UserNameChangeMessageEvent);
         this._events.set(IncomingHeader.USER_SETTINGS, UserSettingsEvent);
+        this._events.set(IncomingHeader.USER_PROFILE, UserProfileEvent);
+        this._events.set(IncomingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsEvent);
 
         // INVENTORY
 
@@ -515,6 +545,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
         this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
+        this._composers.set(OutgoingHeader.LOVELOCK_START_CONFIRM, LoveLockStartConfirmComposer);
         this._composers.set(OutgoingHeader.GIFT_CONFIG, CatalogRequestGiftConfigurationComposer);
 
         // CLIENT
@@ -539,6 +570,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MESSENGER_ROOM_INVITE, SendRoomInviteComposer);
         this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS_UPDATE, SetRelationshipStatusComposer);
         this._composers.set(OutgoingHeader.USER_VISIT, VisitUserComposer);
+
+        // GROUP
+        this._composers.set(OutgoingHeader.GROUP_INFO, GroupInformationComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
@@ -589,13 +623,21 @@ export class NitroMessages implements IMessageConfiguration
         // ACTION
         this._composers.set(OutgoingHeader.ROOM_AMBASSADOR_ALERT, RoomAmbassadorAlertComposer);
         this._composers.set(OutgoingHeader.ROOM_BAN_GIVE, RoomBanUserComposer);
+        this._composers.set(OutgoingHeader.ROOM_BAN_REMOVE, RoomUnbanUserComposer);
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_GIVE, RoomGiveRightsComposer);
         this._composers.set(OutgoingHeader.ROOM_KICK, RoomKickUserComposer);
         this._composers.set(OutgoingHeader.ROOM_MUTE_USER, RoomMuteUserComposer);
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_REMOVE, RoomTakeRightsComposer);
 
+        this._composers.set(OutgoingHeader.ROOM_LIKE, RoomLikeRoomComposer);
+        this._composers.set(OutgoingHeader.ROOM_DELETE, RoomDeleteComposer);
+
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
+        this._composers.set(OutgoingHeader.ROOM_SETTINGS, RoomSettingsComposer);
+        this._composers.set(OutgoingHeader.ROOM_SETTINGS_SAVE, SaveRoomSettingsComposer);
+        this._composers.set(OutgoingHeader.ROOM_RIGHTS_LIST, RoomUsersWithRightsComposer);
+        this._composers.set(OutgoingHeader.ROOM_BAN_LIST, RoomBannedUsersComposer);
 
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
@@ -621,6 +663,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ITEM_DIMMER_SETTINGS, MoodlightSettingsComposer);
         this._composers.set(OutgoingHeader.ITEM_DIMMER_SAVE, MoodlightSettingsSaveComposer);
         this._composers.set(OutgoingHeader.ITEM_DIMMER_TOGGLE, MoodlightTogggleStateComposer);
+
+        // Toners
+        this._composers.set(OutgoingHeader.ROOM_TONER_APPLY, ApplyTonerComposer);
 
         // LOGIC
         this._composers.set(OutgoingHeader.ITEM_COLOR_WHEEL_CLICK, FurnitureColorWheelComposer);
@@ -669,6 +714,8 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
         this._composers.set(OutgoingHeader.USER_MOTTO, UserMottoComposer);
+        this._composers.set(OutgoingHeader.USER_PROFILE, UserProfileComposer);
+        this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsComposer);
 
         // INVENTORY
 

@@ -46,6 +46,11 @@ export class RoomInfoStandUserComponent extends RoomInfoStandBaseComponent
         this.widget.messageListener.processWidgetMessage(new RoomWidgetChangeMottoMessage(this.userData.motto));
     }
 
+    public visitProfile(): void
+    {
+        Nitro.instance.createLinkEvent('profile/goto/' + this.userData.id);
+    }
+
     public get isOwnProfile(): boolean
     {
         return (this.userData.type === RoomWidgetUpdateInfostandUserEvent.OWN_USER);

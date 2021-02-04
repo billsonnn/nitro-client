@@ -1,0 +1,48 @@
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-navigator-roomsettings-component">
+    <div class="card-header">
+        {{ ('navigator.roomsettings') | translate }}
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <div class="btn-group w-100 mb-3">
+            <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 1}" (click)="changeTab(1)">{{ ('navigator.roomsettings.tab.1') | translate }}</button>
+            <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 2}" (click)="changeTab(2)">{{ ('navigator.roomsettings.tab.2') | translate }}</button>
+            <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 3}" (click)="changeTab(3)">{{ ('navigator.roomsettings.tab.3') | translate }}</button>
+            <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 4}" (click)="changeTab(4)">{{ ('navigator.roomsettings.tab.4') | translate }}</button>
+            <button type="button" class="btn btn-sm btn-primary" [ngClass]="{'active': currentTab === 5}" (click)="changeTab(5)">{{ ('navigator.roomsettings.tab.5') | translate }}</button>
+        </div>
+        <nitro-navigator-roomsettings-tab-basic-component *ngIf="currentTab === 1"
+            [roomSettings]="roomSettings"
+            [categories]="categories"
+            [maxVisitors]="maxVisitors"
+            [tradeSettings]="tradeSettings"
+            (onSave)="onSave($event)"
+            (onDeleteRoom)="onDeleteRoom()"
+        ></nitro-navigator-roomsettings-tab-basic-component>
+
+        <nitro-navigator-roomsettings-tab-access-component *ngIf="currentTab === 2"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+        ></nitro-navigator-roomsettings-tab-access-component>
+
+        <nitro-navigator-roomsettings-tab-rights-component *ngIf="currentTab === 3"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+            (onGiveRights)="onGiveRights($event)"
+            (onTakeRights)="onTakeRights($event)"
+            (onOpenProfile)="onOpenProfile($event)"
+        ></nitro-navigator-roomsettings-tab-rights-component>
+
+        <nitro-navigator-roomsettings-tab-vipchat-component *ngIf="currentTab === 4"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+        ></nitro-navigator-roomsettings-tab-vipchat-component>
+
+        <nitro-navigator-roomsettings-tab-mod-component *ngIf="currentTab === 5"
+            [roomSettings]="roomSettings"
+            (onSave)="onSave($event)"
+            (onUnban)="onUnban($event)"
+            (onOpenProfile)="onOpenProfile($event)"
+        ></nitro-navigator-roomsettings-tab-mod-component>
+    </div>
+</div>
