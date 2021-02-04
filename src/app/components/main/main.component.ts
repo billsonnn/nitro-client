@@ -27,6 +27,8 @@ import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-me
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from '../room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/dimmer.component';
+import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
+import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { StickieFurniComponent } from '../room/widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
@@ -34,8 +36,6 @@ import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/door
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
 import { PresentFurniWidget } from '../room/widgets/furniture/gift-opening/present.component';
 import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
-import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
-import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
 
 @Component({

@@ -1,5 +1,6 @@
 import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
+import { NitroBundle } from '../../core/asset/NitroBundle';
 import { INitroLogger } from '../../core/common/logger/INitroLogger';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
@@ -437,12 +438,13 @@ export class RoomContentLoader implements IFurnitureDataListener
             const loader = new Loader();
 
             const options: ILoaderOptions = {
-                crossOrigin: false
+                crossOrigin: false,
+                xhrType: url.endsWith('.nitro') ? 'arraybuffer' : 'json'
             };
 
             loader
                 .use((resource: LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
-                .add(assetUrls, options)
+                .add(url, options)
                 .load();
         }
 
@@ -460,7 +462,80 @@ export class RoomContentLoader implements IFurnitureDataListener
             return;
         }
 
-        if(resource.type === LoaderResource.TYPE.JSON)
+        if(resource.extension === 'nitro')
+        {
+            const nitroBundle   = new NitroBundle(resource.data);
+            const assetData     = (nitroBundle.jsonFile as IAssetData);
+
+            if(!assetData.type)
+            {
+                onDownloaded(loader, resource, false);
+
+                return;
+            }
+
+            if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
+            {
+                const imageData = nitroBundle.image;
+
+                let baseTexture = nitroBundle.baseTexture;
+
+                if(!baseTexture)
+                {
+                    if(imageData) baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
+
+                    if(!baseTexture)
+                    {
+                        onDownloaded(loader, resource, false);
+
+                        return;
+                    }
+                }
+
+                if(baseTexture.valid)
+                {
+                    const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                    spritesheet.parse(textures =>
+                    {
+                        this.createCollection(assetData, spritesheet);
+
+                        onDownloaded(loader, resource, true);
+                    });
+                }
+                else
+                {
+                    baseTexture.once('loaded', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                        spritesheet.parse(textures =>
+                        {
+                            this.createCollection(assetData, spritesheet);
+
+                            onDownloaded(loader, resource, true);
+                        });
+                    });
+
+                    baseTexture.once('error', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        onDownloaded(loader, resource, false);
+                    });
+                }
+
+                return;
+            }
+
+            this.createCollection(assetData, null);
+
+            onDownloaded(loader, true);
+        }
+
+        else if(resource.type === LoaderResource.TYPE.JSON)
         {
             const assetData = (resource.data as IAssetData);
 
