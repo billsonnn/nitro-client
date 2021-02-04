@@ -24,13 +24,6 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
 
     // Shared
     private _roomData: RoomDataParser;
-    private _formattedRoomOwner: string;
-
-    public roomName: string;
-    public roomOwner: string;
-    public ranking: number;
-    public tags: string[] = [];
-
 
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
@@ -43,16 +36,11 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         super();
     }
 
-    public loadRoomData(roomData: RoomDataParser, formattedRoomOwner: string)
+    public loadRoomData(roomData: RoomDataParser)
     {
-        this._ngZone.run(() =>
-        {
-            this._formattedRoomOwner = formattedRoomOwner;
-            this._roomData = roomData;
-            this.roomName = roomData.roomName;
-            this.ranking = roomData.ranking;
-            this.tags = roomData.tags;
-        });
+        if(!roomData) return;
+
+        this._ngZone.run(() => (this._roomData = roomData));
     }
 
     public _Str_22970(data: RoomDataParser): void
@@ -108,11 +96,6 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
     public get roomData(): RoomDataParser
     {
         return this._roomData;
-    }
-
-    public get formattedRoomOwner(): string
-    {
-        return this._formattedRoomOwner;
     }
 
     public toggleZoom(): void
