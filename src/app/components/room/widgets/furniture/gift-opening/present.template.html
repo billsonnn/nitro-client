@@ -3,14 +3,34 @@
         <h6 class="m-0">{{ ('widget.furni.present.window.title_from') | translate:'name':senderName}}</h6>
         <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
     </div>
-    <div class="p-3">
-        <div class="dimmer-inner bg-secondary p-2">
-            <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
-            <p>{{ senderText }}
-            </p>
-        </div>
-    </div>
-    <div class="p-3">
-        <button type="button" class="btn btn-primary" (click)="handleButton('accept')">Accept</button>
-    </div>
+    <ng-container [ngSwitch]="view">
+        <ng-container *ngSwitchCase="'open_present'">
+            <div class="p-3">
+                <div class="dimmer-inner bg-secondary p-2">
+                    <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+                    <p>{{ senderText }}
+
+                    </p>
+                </div>
+            </div>
+            <div class="p-3">
+                <button type="button" class="btn btn-primary" (click)="handleButton('accept')">Accept</button>
+            </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'present_opened'">
+            <div class="p-3">
+                <div class="dimmer-inner bg-secondary p-2">
+
+                    <p>{{ openedText }}
+
+                    </p>
+                </div>
+            </div>
+            <div class="p-3">
+                <button type="button" class="btn btn-primary" (click)="handleButton('furni_place_in_room')">{{ 'widget.furni.present.place_in_room' | translate}}</button>
+                <button type="button" class="btn btn-primary" (click)="handleButton('furni_place_in_inventory')">{{ 'widget.furni.present.put_in_inventory' | translate}}</button>
+            </div>
+        </ng-container>
+    </ng-container>
 </div>

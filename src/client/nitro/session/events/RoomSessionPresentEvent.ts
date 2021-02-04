@@ -26,6 +26,11 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
         this._petFigureString = _arg_9;
     }
 
+    public get classId(): number
+    {
+        return this._classId;
+    }
+
     public get _Str_2706(): number
     {
         return this._classId;
@@ -36,12 +41,12 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
         return this._itemType;
     }
 
-    public get _Str_2716(): string
+    public get productCode(): string
     {
         return this._productCode;
     }
 
-    public get _Str_5200(): number
+    public get placedItemId(): number
     {
         return this._placedItemId;
     }
@@ -51,12 +56,12 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
         return this._placedInRoom;
     }
 
-    public get _Str_5057(): string
+    public get placedItemType(): string
     {
         return this._placedItemType;
     }
 
-    public get _Str_17075(): string
+    public get petFigureString(): string
     {
         return this._petFigureString;
     }

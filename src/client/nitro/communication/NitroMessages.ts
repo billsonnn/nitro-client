@@ -280,6 +280,8 @@ import { LoveLockFurniStartEvent } from './messages/incoming/room/furniture/Love
 import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
+import { FurnitureGiftOpenedEvent } from './messages/incoming/inventory/furni/gifts/FurnitureGiftOpenedEvent';
+import { PetPickUpComposer } from './messages/outgoing/pet/PetPickUpComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -510,6 +512,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_PROFILE, UserProfileEvent);
         this._events.set(IncomingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsEvent);
 
+        // GIFTS
+        this._events.set(IncomingHeader.GIFT_OPENED, FurnitureGiftOpenedEvent);
+
         // INVENTORY
 
         // BOTS
@@ -609,6 +614,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
+        this._composers.set(OutgoingHeader.PET_PICKUP, PetPickUpComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
@@ -714,7 +720,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_PROFILE, UserProfileComposer);
         this._composers.set(OutgoingHeader.MESSENGER_RELATIONSHIPS, UserRelationshipsComposer);
 
-        // GIFSTS
+        // GIFTS
         this._composers.set(OutgoingHeader.PRESENT_OPEN_PRESENT, OpenPresentComposer);
 
         // INVENTORY
