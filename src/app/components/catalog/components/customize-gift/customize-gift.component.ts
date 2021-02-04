@@ -20,6 +20,7 @@ export class CatalogCustomizeGiftComponent
     private _selectedTypeId: number;
 
     public boxSpriteId: number = -1;
+    public extras: string = '';
     private _boxPrice: number;
     public boxText: string;
     public priceText: string;
@@ -45,10 +46,9 @@ export class CatalogCustomizeGiftComponent
             this._boxTypes = configuration.boxTypes;
             this._ribbonTypes = configuration.ribbonTypes;
             this._boxPrice = configuration.price;
-            this._selectedTypeId = this._stuffTypes[0];
+            this._selectedTypeId = this._stuffTypes[2];
             this._ribbonIndex = this._ribbonTypes[0];
             this._boxIndex = 0;
-
             this._Str_3190();
         });
     }
@@ -88,7 +88,7 @@ export class CatalogCustomizeGiftComponent
             }
         }
 
-        this._ribbonIndex = 1;
+
         const local2 = ((k * 1000) + this._ribbonTypes[this._ribbonIndex]);
 
         let local3 = local2.toString();
@@ -100,8 +100,8 @@ export class CatalogCustomizeGiftComponent
             local3 = '';
         }
 
+        this.extras = local3;
         this.boxSpriteId = local4;
-
         this.setBoxTitles();
     }
 
@@ -132,7 +132,12 @@ export class CatalogCustomizeGiftComponent
                 this._Str_3190();
                 break;
             case 'previous_ribbon':
+                this._ribbonIndex--;
+                this._Str_3190();
+                break;
             case 'next_ribbon':
+                this._ribbonIndex++;
+                this._Str_3190();
                 break;
         }
     }

@@ -2953,6 +2953,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             case RoomObjectCategory.FLOOR:
             case RoomObjectCategory.WALL:
                 model.setValue(RoomObjectVariable.FURNITURE_COLOR, parseInt(value));
+                model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, extras);
                 break;
             case RoomObjectCategory.UNIT:
                 if((type === RoomObjectUserType.USER) || (type === RoomObjectUserType.BOT) || (type === RoomObjectUserType.RENTABLE_BOT) || (type === RoomObjectUserType.PET))

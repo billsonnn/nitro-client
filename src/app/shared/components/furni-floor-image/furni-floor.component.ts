@@ -18,6 +18,12 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
     @Input()
     public direction: Vector3d = new Vector3d(0);
 
+    @Input()
+    public extras = '';
+
+    @Input()
+    public backgroundColor = 0;
+
     public imageUrl: string     = null;
     public needsUpdate: boolean = true;
 
@@ -38,6 +44,13 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
             if(spriteIdChange.previousValue !== spriteIdChange.currentValue) this.needsUpdate = true;
         }
 
+        const extrasChange = changes.extras;
+
+        if(extrasChange)
+        {
+            if(extrasChange.previousValue !== extrasChange.currentValue) this.needsUpdate = true;
+        }
+
         const directionChange = changes.direction;
 
         if(directionChange)
@@ -54,12 +67,11 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
         {
             this.needsUpdate = false;
 
-            const imageResult = Nitro.instance.roomEngine.getFurnitureFloorImage(this.spriteId, this.direction, 64, this);
+            const imageResult = Nitro.instance.roomEngine.getFurnitureFloorImage(this.spriteId, this.direction, 64, this, this.backgroundColor, this.extras);
 
             if(imageResult)
             {
                 const image = imageResult.getImage();
-
                 if(image) this._ngZone.run(() => (this.imageUrl = image.src));
             }
         });
@@ -79,13 +91,13 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
         if(texture)
         {
             const imageUrl = TextureUtils.generateImageUrl(texture);
-
             if(imageUrl) this._ngZone.run(() => this.imageUrl = imageUrl);
         }
     }
 
     public imageFailed(id: number): void
     {
+
         return;
     }
 }

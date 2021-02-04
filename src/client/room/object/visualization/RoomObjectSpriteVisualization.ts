@@ -301,4 +301,9 @@ export class RoomObjectSpriteVisualization implements IRoomObjectSpriteVisualiza
     {
         this._updateSpriteCounter = count;
     }
+
+    public get spriteCount(): number
+    {
+        return this._sprites.length;
+    }
 }
