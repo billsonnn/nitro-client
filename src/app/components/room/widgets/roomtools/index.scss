@@ -1,1 +1,12 @@
-@import './main';
+.nitro-room-tools {
+    position: absolute;
+    left: 10px;
+    bottom: 87px;
+    min-width: 315px;
+    z-index: $roomtools-zindex;
+}
+
+.nitro-room-tools-room-info-component {
+    position: absolute;
+    max-width: 400px;
+}

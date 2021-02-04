@@ -1,6 +1,6 @@
-<div class="nitro-toolbar-component card p-0" [@inOutAnimation]>
-    <div #navigationList class="d-flex justify-content-between">
-        <ul class="list-group list-group-horizontal">
+<div class="nitro-toolbar-component">
+    <div class="card p-0" [@inOutAnimation]>
+        <ul #navigationList class="list-group list-group-horizontal p-1">
             <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-light"></i></li>
             <li class="list-group-item" *ngIf="!isInRoom" (click)="clickIcon('home_room')"><i class="icon icon-house"></i></li>
             <li class="list-group-item" (click)="clickIcon('navigator')"><i class="icon icon-rooms"></i></li>
@@ -13,5 +13,5 @@
             </li>
         </ul>
     </div>
+    <nitro-toolbar-me-menu-component></nitro-toolbar-me-menu-component>
 </div>
-<nitro-toolbar-me-menu-component></nitro-toolbar-me-menu-component>

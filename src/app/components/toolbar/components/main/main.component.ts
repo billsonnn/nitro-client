@@ -29,9 +29,9 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
                 transition(
                     ':enter',
                     [
-                        style({ left: '-100%' }),
+                        style({ bottom: '-100%' }),
                         animate('1s ease-out',
-                            style({ left: 10 }))
+                            style({ bottom: 10 }))
                     ]
                 ),
             ]

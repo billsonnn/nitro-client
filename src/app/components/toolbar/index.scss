@@ -2,16 +2,8 @@
     position: absolute;
     left: 10px;
     bottom: 10px;
-    z-index: 0;
-    pointer-events: none;
-
-    .nitro-toolbar-component-body {
-        z-index: 2;
-    }
-
-    .btn-primary  {
-        pointer-events: none;
-    }
+    z-index: $toolbar-zindex;
+    pointer-events: all;
 
     .list-group {
         align-items: center;
@@ -22,7 +14,6 @@
             justify-content: center;
             cursor: pointer;
             padding: unset;
-            pointer-events: all;
             min-width: 50px;
             width: 50px;
             margin: 0 5px;
@@ -35,8 +26,7 @@
 
             &.avatar-image {
                 width: 65px;
-                height: 65px;
-                overflow: hidden;
+                height: 60px;
 
                 img {
                     position: relative;
@@ -60,32 +50,33 @@
     }
 
     .nitro-toolbar-me-menu {
-        bottom: 60px;
-        left: 72px;
+        bottom: 87px;
+        left: 300px;
         position: absolute;
         font-size: 12px;
-        z-index: 1;
-
+        z-index: $toolbar-memenu-zindex;
+    
         .list-group {
+    
             .list-group-item {
                 min-width: 70px;
                 transition: all .3s;
                 font-size: 10px;
                 text-align: center;
-
+    
                 i {
                     filter: grayscale(1);
                 }
-
+    
                 &:hover {
                     color: $cyan;
                     text-decoration: underline;
-
+    
                     i {
                         filter: grayscale(0);
                     }
                 }
-
+    
                 .count {
                     top: 0px;
                     right: 5px;
