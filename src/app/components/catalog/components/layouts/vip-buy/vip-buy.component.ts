@@ -49,8 +49,14 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
         this._catalogService.component && this._catalogService.component.confirmVipSubscription(offer);
     }
 
-    public getOfferText(code: string)
+    public getOfferText(offer: CatalogClubOfferData)
     {
-        return Nitro.instance.getLocalizationWithParameter('friendlytime.months.short', 'amount', code.replace(/[^\d.]/g, ''));
+        if(offer.months > 0)
+        {
+            return Nitro.instance.getLocalizationWithParameter('catalog.vip.item.header.months', 'num_months', offer.months.toString());
+        }
+
+        return Nitro.instance.getLocalizationWithParameter('catalog.vip.item.header.days', 'num_days', offer.extraDays.toString());
+
     }
 }

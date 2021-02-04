@@ -1,18 +1,17 @@
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
 import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomToolsMainComponent } from '../roomtools/main/main.component';
-import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
+import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
@@ -98,11 +97,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         if(!roomData) return;
 
-        const roomOwner = parser.staffPick || parser.data.officialRoomPicRef ?
-            Nitro.instance.localization.getValue('room.tool.public.room')
-            : Nitro.instance.localization.getValue('room.tool.room.owner.prefix') + ' ' + roomData.ownerName;
-
-        this._widget.loadRoomData(roomData, roomOwner);
+        this._widget.loadRoomData(roomData);
         this._widget._Str_22970(roomData);
         this._widget._Str_23696(roomData.roomId);
     }
