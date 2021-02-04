@@ -213,4 +213,7 @@ export class IncomingHeader
     public static MODTOOL_ROOM_INFO                = 1333;
     public static MODTOOL_USER_CHATLOG             = 3377;
     public static MODTOOL_ROOM_CHATLOG             = 3434;
+    public static LOVELOCK_FURNI_START             = 3753;
+    public static LOVELOCK_FURNI_FRIEND_COMFIRMED  = 382;
+    public static LOVELOCK_FURNI_FINISHED          = 770;
 }

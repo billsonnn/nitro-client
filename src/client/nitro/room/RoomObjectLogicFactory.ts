@@ -45,6 +45,7 @@ import { RoomLogic } from './object/logic/room/RoomLogic';
 import { SelectionArrowLogic } from './object/logic/room/SelectionArrowLogic';
 import { TileCursorLogic } from './object/logic/room/TileCursorLogic';
 import { RoomObjectLogicType } from './object/RoomObjectLogicType';
+import { FurnitureFriendLogic } from './object/logic/furniture/FurnitureFriendLogic';
 
 export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 {
@@ -269,6 +270,9 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_WINDOW:
                 logic = FurnitureWindowLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_LOVELOCK:
+                logic = FurnitureFriendLogic;
                 break;
             default:
                 logic = FurnitureLogic;

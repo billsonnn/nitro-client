@@ -3,11 +3,15 @@
 
 $navigator-width: 515px;
 $navigator-height: 600px;
+$navigator-roomsettings-width: 400px;
 
 $inventory-width: 515px;
 $friendlist-width: 645px;
 
 $achievements-width: 645px;
+
+
+$user-profile-width: 620px;
 
 @import './achievements';
 @import './avatar-editor';
@@ -20,5 +24,7 @@ $achievements-width: 645px;
 @import './purse';
 @import './room';
 @import './toolbar';
+@import './user-profile';
 @import './wired';
 @import './mod-tool';
+@import './chat-history';

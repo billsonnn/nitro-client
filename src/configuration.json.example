@@ -17,6 +17,7 @@
     "avatar.asset.url": "${asset.url}/figure/%libname%/%libname%.json",
     "avatar.asset.effect.url": "${asset.url}/effect/%libname%/%libname%.json",
     "navigator.slider.enabled": true,
+    "furni.extras.url": "${asset.url}/images/furniextras/%image%.png",
     "navigator.slider.content": [
         {
             "title": "Games Hub",

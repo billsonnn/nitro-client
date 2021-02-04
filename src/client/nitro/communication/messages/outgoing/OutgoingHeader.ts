@@ -186,8 +186,10 @@ export class OutgoingHeader
     public static REMOVE_WALL_ITEM               = 3336;
     public static MODIFY_WALL_ITEM_DATA          = 3666;
     public static CATALOG_REDEEM_VOUCHER         = 339;
+    public static ROOM_TONER_APPLY               = 2880;
+    public static LOVELOCK_START_CONFIRM         = 3775;
 	public static MODTOOL_REQUEST_ROOM_INFO      = 707;
-    public static MODTOOL_CHANGE_ROOM_SETTINGS = 3260;
-    public static MODTOOL_REQUEST_USER_CHATLOG = 1391;
-    public static MODTOOL_REQUEST_ROOM_CHATLOG = 2587;
+    public static MODTOOL_CHANGE_ROOM_SETTINGS   = 3260;
+    public static MODTOOL_REQUEST_USER_CHATLOG   = 1391;
+    public static MODTOOL_REQUEST_ROOM_CHATLOG   = 2587;
 }
