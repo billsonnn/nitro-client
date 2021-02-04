@@ -13,14 +13,14 @@ export class ChatHistoryService implements OnDestroy
 
     private _messages: IMessageEvent[];
 
-    private _lastRoomId: number  = -1;
-    private _historySets: AdvancedMap<number, ChatHistorySet>;
+    private _lastRoomId: number = -1;
+    private _currentSet: ChatHistorySet = null;
+    private _historySets: ChatHistorySet[] = [];
     private _queuedItems: AdvancedMap<number, ChatHistoryItem[]>;
 
     constructor(private _ngZone: NgZone)
     {
-        this._historySets   = new AdvancedMap();
-        this._queuedItems   = new AdvancedMap();
+        this._queuedItems = new AdvancedMap();
 
         this.registerMessages();
     }
@@ -71,7 +71,8 @@ export class ChatHistoryService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            this._lastRoomId = data.roomId;
+            this._lastRoomId    = data.roomId;
+            this._currentSet    = null;
 
             const entryItem = new ChatHistoryItem();
 
@@ -106,14 +107,21 @@ export class ChatHistoryService implements OnDestroy
 
     public getHistorySet(roomId: number): ChatHistorySet
     {
-        let existing = this._historySets.getValue(roomId);
+        let existing: ChatHistorySet = null;
+
+        if(this._currentSet)
+        {
+            if(this._currentSet.roomId === roomId) existing = this._currentSet;
+        }
 
         if(!existing)
         {
             existing = new ChatHistorySet(roomId);
 
-            this._historySets.add(roomId, existing);
+            this._historySets.push(existing);
         }
+
+        this._currentSet = existing;
 
         return existing;
     }
@@ -143,7 +151,7 @@ export class ChatHistoryService implements OnDestroy
         this._queuedItems.remove(roomId);
     }
 
-    public get historySets(): AdvancedMap<number, ChatHistorySet>
+    public get historySets(): ChatHistorySet[]
     {
         return this._historySets;
     }

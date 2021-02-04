@@ -14,21 +14,23 @@ import { NavigatorDataService } from '../../../../navigator/services/navigator-d
 export class RoomEventViewComponent extends ConversionTrackingWidget
 {
     @Input()
-    roomData: RoomDataParser;
-    // _enteredGuestRoom
+    public roomData: RoomDataParser;
 
     @Input()
-    @Output()
-    isVisible: boolean;
+    public visible: boolean = false;
 
     @Output()
-    roomEventViewClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(
-        private _navigatorDataService: NavigatorDataService
+    constructor(private _navigatorDataService: NavigatorDataService
     )
     {
         super();
+    }
+
+    public hide(): void
+    {
+        this.visibleChange.emit(false);
     }
 
     public get roomSettingsVisible(): boolean
@@ -124,11 +126,5 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
     private reportRoom(): void
     {
         // _Str_24254
-    }
-
-
-    public close()
-    {
-        this.roomEventViewClosed.emit(true);
     }
 }

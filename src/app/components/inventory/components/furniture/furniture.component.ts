@@ -25,12 +25,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     public selectedGroup: GroupItem = null;
     public mouseDown: boolean = false;
 
-    public paginateConfig: PaginationInstance = {
-        id: 'custom',
-        itemsPerPage: 150,
-        currentPage: 1
-    };
-
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
@@ -264,6 +258,11 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         // return null;
     }
 
+    public trackByType(index: number, item: GroupItem): number
+    {
+        return item.type;
+    }
+
     public get groupItems(): GroupItem[]
     {
         return this._inventoryService.controller.furnitureService.groupItems;
@@ -277,5 +276,14 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     public get canPlace(): boolean
     {
         return !!this._inventoryService.roomSession;
+    }
+
+    public get paginateConfig(): PaginationInstance
+    {
+        return {
+            id: 'custom',
+            itemsPerPage: 5,
+            currentPage: 1
+        };
     }
 }

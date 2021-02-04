@@ -1,7 +1,7 @@
-<div *ngIf="isVisible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-tools-room-info-component">
+<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-tools-room-info-component">
     <div class="card-header">
         {{ ('navigator.room.info.popup.title') | translate }}
-        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body">
         {{ roomData.roomName }}<br>
