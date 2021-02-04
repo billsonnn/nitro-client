@@ -1,19 +1,11 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
+import { Component, Input, NgZone } from '@angular/core';
 import { CatalogService } from '../../services/catalog.service';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
 
 @Component({
     selector: 'nitro-catalog-customize-gift-component',
     templateUrl: './customize-gift.template.html'
 })
-export class CatalogCustomizeGiftComponent implements IGetImageListener
+export class CatalogCustomizeGiftComponent
 {
     @Input()
     public visible:boolean = false;
@@ -26,7 +18,7 @@ export class CatalogCustomizeGiftComponent implements IGetImageListener
     private _ribbonTypes: number[];
     private _selectedTypeId: number;
 
-    public boxImage: string;
+    public boxSpriteId: number = -1;
 
     constructor(
         private _catalogService: CatalogService,
@@ -102,14 +94,7 @@ export class CatalogCustomizeGiftComponent implements IGetImageListener
             local3 = '';
         }
 
-        const local6 = Nitro.instance.roomEngine.getFurnitureFloorImage(local4, new Vector3d(180), 64, this, 0, local3);
-        if(local6)
-        {
-            const image = local6.getImage();
-
-            if(image) this.boxImage = image.src;
-        }
-
+        this.boxSpriteId = local4;
     }
 
 
@@ -117,18 +102,4 @@ export class CatalogCustomizeGiftComponent implements IGetImageListener
     {
         return this._boxTypes[this._boxIndex] == this._defaultStuffType;
     }
-
-    imageFailed(id: number): void
-    {
-    }
-
-    imageReady(id: number, texture: PIXI.Texture, image?: HTMLImageElement): void
-    {
-
-    }
-
-
-
-
-
 }
