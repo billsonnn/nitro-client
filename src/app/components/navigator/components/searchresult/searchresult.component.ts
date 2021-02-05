@@ -43,6 +43,11 @@ export class NavigatorSearchResultComponent implements OnInit
     {
         let name = this.result.code;
 
+        if((!name || name.length == 0) && (this.result.data && this.result.data.length > 0))
+        {
+            return this.result.data;
+        }
+
         if(this.result.code.startsWith('${'))
         {
             name = name.substr(2, (name.length - 3));
