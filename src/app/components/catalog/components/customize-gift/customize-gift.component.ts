@@ -49,6 +49,7 @@ export class CatalogCustomizeGiftComponent
 
             this._stuffTypes = configuration.stuffTypes;
             this._boxTypes = configuration.boxTypes;
+            this._boxTypes.push(this._defaultStuffType);
             this._ribbonTypes = configuration.ribbonTypes;
             this._boxPrice = configuration.price;
             this._selectedTypeId = this._stuffTypes[2];
@@ -94,7 +95,6 @@ export class CatalogCustomizeGiftComponent
             }
         }
 
-
         const local2 = ((k * 1000) + this._ribbonTypes[this._ribbonIndex]);
 
         let local3 = local2.toString();
@@ -118,7 +118,7 @@ export class CatalogCustomizeGiftComponent
         const k = this._Str_18066();
 
         const boxKey = k ? 'catalog.gift_wrapping_new.box.default' : ('catalog.gift_wrapping_new.box.' + this._boxTypes[this._boxIndex]);
-        const priceKey = k ? 'caatlog.gift_wrapping_new.freeprice' : 'catalog.gift_wrapping_new.price';
+        const priceKey = k ? 'catalog.gift_wrapping_new.freeprice' : 'catalog.gift_wrapping_new.price';
         const ribbonKey = 'catalog.gift_wrapping_new.ribbon.' + this._ribbonIndex;
 
         this.boxText = Nitro.instance.localization.getValue(boxKey);
@@ -172,6 +172,11 @@ export class CatalogCustomizeGiftComponent
     public changeCheckbox(event): void
     {
         this._Str_3190();
+    }
+
+    public get isDefaultBox(): boolean
+    {
+        return this._Str_18066();
     }
 
     private _Str_18066(): boolean

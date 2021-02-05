@@ -20,7 +20,7 @@
     </div>
     <div class="row p-3">
         <div nitro-furni-floor-image class="col-lg-3" [spriteId]="boxSpriteId" [extras]="extras"></div>
-        <div class="col-lg-6">
+        <div class="col-lg-8">
             <div class="row md-3">
                 <div class="btn-group">
                     <button type="button" (click)="handleButton('previous_box')" class="btn btn-primary"><i class="fas fa-chevron-left"></i></button>
@@ -37,12 +37,12 @@
             </div>
             <div class="row md-3">
                 <div class="btn-group">
-                    <button type="button" (click)="handleButton('previous_ribbon')" class="btn btn-primary"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" (click)="handleButton('next_ribbon')" class="btn btn-primary"><i class="fas fa-chevron-right"></i></button>
+                    <button type="button" [disabled]="isDefaultBox" (click)="handleButton('previous_ribbon')" class="btn btn-primary"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" [disabled]="isDefaultBox" (click)="handleButton('next_ribbon')" class="btn btn-primary"><i class="fas fa-chevron-right"></i></button>
                 </div>
                 <div class="col-md-auto">
                     <div class="row">
-                        <div class="col-md-auto">{{ ribbonText }}</div>
+                        <div class="col-md-auto" [ngClass]="{'is-unavailable': isDefaultBox}">{{ ribbonText }}</div>
                     </div>
                 </div>
             </div>
