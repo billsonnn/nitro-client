@@ -16,13 +16,14 @@ import { LoadingComponent } from './components/loading/component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
+import { EmojiPipe } from './pipes/emoji.pipe';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
+import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
 import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
 import { SoundService } from './services/sound.service';
-import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -64,6 +65,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,
+        EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
@@ -85,6 +87,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,
+        EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
