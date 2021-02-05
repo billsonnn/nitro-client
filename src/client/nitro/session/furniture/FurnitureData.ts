@@ -31,6 +31,7 @@ export class FurnitureData implements IFurnitureData
         this._fullName          = className;
         this._className         = splitClass;
         this._colorId           = (parseInt(splitColor) || 0);
+        this._colors            = colors;
         this._name              = name;
         this._description       = description;
         this._furniLine         = furniLine;

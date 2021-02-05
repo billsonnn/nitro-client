@@ -33,6 +33,7 @@ import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-
 import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
+import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseGiftComposer';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -51,8 +52,6 @@ export class CatalogService implements OnDestroy
     private _clubOffers: CatalogClubOfferData[] = [];
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
-
-    public giftsLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private _settingsService: SettingsService,
@@ -121,7 +120,6 @@ export class CatalogService implements OnDestroy
     private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
     {
         this._giftWrappingConfiguration = new GiftWrappingConfiguration(event);
-        this.giftsLoaded.emit(true);
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void
@@ -361,6 +359,11 @@ export class CatalogService implements OnDestroy
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
     }
 
+    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, arg3: string, arg4: string, arg5: number, arg6: number, arg7: number, arg8: boolean): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, '', arg3, arg4, arg5, arg6, arg7, arg8 ));
+    }
+
     public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)
     {
         if(!pageId || !offerId || !quantity) return;
@@ -443,4 +446,6 @@ export class CatalogService implements OnDestroy
     {
         return this._giftWrappingConfiguration;
     }
+
+
 }

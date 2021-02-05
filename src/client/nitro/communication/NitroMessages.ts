@@ -281,6 +281,7 @@ import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogRequestGiftConfigurationComposer } from './messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { CatalogPurchaseGiftComposer } from './messages/outgoing/catalog/CatalogPurchaseGiftComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -542,6 +543,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_MODE, CatalogModeComposer);
         this._composers.set(OutgoingHeader.CATALOG_PAGE, CatalogPageComposer);
         this._composers.set(OutgoingHeader.CATALOG_PURCHASE, CatalogPurchaseComposer);
+        this._composers.set(OutgoingHeader.CATALOG_PURCHASE_GIFT, CatalogPurchaseGiftComposer);
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
         this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);

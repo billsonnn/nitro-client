@@ -213,4 +213,5 @@ export class IncomingHeader
     public static LOVELOCK_FURNI_START             = 3753;
     public static LOVELOCK_FURNI_FRIEND_COMFIRMED  = 382;
     public static LOVELOCK_FURNI_FINISHED          = 770;
+    public static GIFT_RECEIVER_NOT_FOUND          = 1517;
 }

@@ -13,6 +13,7 @@ export class CatalogCustomizeGiftComponent
 
     private _ribbonIndex: number;
     private _boxIndex: number;
+    private _stuffColors: Map<number, number> = new Map<number, number>();
     private _stuffTypes: number[];
     private _defaultStuffType: number;
     private _boxTypes: number[];
@@ -30,34 +31,49 @@ export class CatalogCustomizeGiftComponent
     public ribbonText: string;
     public showFace: boolean = true;
     public habboFace: string = '';
+    public hascolors: boolean = false;
 
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
     )
     {
-        _catalogService.giftsLoaded.subscribe((item) =>
+
+        const configuration = this._catalogService.giftWrapperConfiguration;
+        const defaultStuffTypes = configuration.defaultStuffTypes;
+
+        if(defaultStuffTypes.length > 0)
         {
-            const configuration = this._catalogService.giftWrapperConfiguration;
-            const defaultStuffTypes = configuration.defaultStuffTypes;
+            const local11 = Math.floor((Math.random() * defaultStuffTypes.length));
+            this._defaultStuffType = defaultStuffTypes[local11];
+        }
 
-            if(defaultStuffTypes.length > 0)
+        this._stuffTypes = configuration.stuffTypes;
+        this._boxTypes = configuration.boxTypes;
+        this._boxTypes.push(this._defaultStuffType);
+        this._ribbonTypes = configuration.ribbonTypes;
+        this._boxPrice = configuration.price;
+        this._selectedTypeId = this._stuffTypes[2];
+        this._ribbonIndex = this._ribbonTypes[0];
+        this._boxIndex = 0;
+
+        this._Str_3190();
+        this.setColors();
+    }
+
+    private setColors(): void
+    {
+        for(const stuffType of this._stuffTypes)
+        {
+            const local4 = Nitro.instance.sessionDataManager.getFloorItemData(stuffType);
+            if(!local4) continue;
+
+
+            if(local4.colors && local4.colors.length >0)
             {
-                const local11 = Math.floor((Math.random() * defaultStuffTypes.length));
-                this._defaultStuffType = defaultStuffTypes[local11];
+                this._stuffColors.set(stuffType, local4.colors[0]);
             }
-
-            this._stuffTypes = configuration.stuffTypes;
-            this._boxTypes = configuration.boxTypes;
-            this._boxTypes.push(this._defaultStuffType);
-            this._ribbonTypes = configuration.ribbonTypes;
-            this._boxPrice = configuration.price;
-            this._selectedTypeId = this._stuffTypes[2];
-            this._ribbonIndex = this._ribbonTypes[0];
-            this._boxIndex = 0;
-
-            this._Str_3190();
-        });
+        }
     }
 
     private _Str_3190(): void
@@ -83,6 +99,7 @@ export class CatalogCustomizeGiftComponent
         }
 
 
+
         const k = this._boxTypes[this._boxIndex];
         if(k == 8)
         {
@@ -95,6 +112,7 @@ export class CatalogCustomizeGiftComponent
             }
         }
 
+
         const local2 = ((k * 1000) + this._ribbonTypes[this._ribbonIndex]);
 
         let local3 = local2.toString();
@@ -102,15 +120,39 @@ export class CatalogCustomizeGiftComponent
         const local5 = this._Str_18066();
         if(local5)
         {
+            this._Str_17818(false);
             local4 = this._defaultStuffType;
             local3 = '';
         }
+        else
+        {
+            if(k == 8)
+            {
+                this._Str_17818(false);
+            }
+            else
+            {
+                this._Str_17818(true);
+                if(k >= 3 && k <=6)
+                {
+                    this._Str_17818(false);
+                }
+            }
+        }
+
+
+
 
         this.extras = local3;
         this.boxSpriteId = local4;
         this.setBoxTitles();
 
         this.habboFace = Nitro.instance.sessionDataManager.figure;
+    }
+
+    private  _Str_17818(k:boolean):void
+    {
+        this.hascolors = k;
     }
 
     private setBoxTitles(): void
@@ -167,6 +209,20 @@ export class CatalogCustomizeGiftComponent
         const local8 = local5 ? 0 : this._ribbonTypes[this._ribbonIndex];
         const local9 = this.showFace;
 
+
+        const activeOffer = this._catalogService.component.activeOffer;
+        const activePage = this._catalogService.component.activePage;
+        const extraData = this._catalogService.component.purchaseOfferExtra;
+
+
+
+        this._catalogService.purchaseGiftOffer(activePage,activeOffer,local2, local4, local6, local7, local8, local9);
+
+    }
+
+    public get colors(): number[]
+    {
+        return this._stuffTypes;
     }
 
     public changeCheckbox(event): void
@@ -184,4 +240,26 @@ export class CatalogCustomizeGiftComponent
         return this._boxTypes[this._boxIndex] == this._defaultStuffType;
     }
 
+    public hide(): void
+    {
+        this._catalogService.component && this._catalogService.component.hidePurchaseConfirmation();
+    }
+
+
+    public getColor(stuffType: number): string
+    {
+        const color = this._stuffColors.get(stuffType).toString(16);
+        return `#${color}`;
+    }
+
+    public typeHasColors(stuffType: number): boolean
+    {
+        return this._stuffColors.has(stuffType);
+    }
+
+    public selectTypeId(stuffType: number): void
+    {
+        this._selectedTypeId = stuffType;
+        this._Str_3190();
+    }
 }

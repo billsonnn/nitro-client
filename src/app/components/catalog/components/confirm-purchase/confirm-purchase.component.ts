@@ -20,6 +20,9 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     public offer: CatalogPageOfferData = null;
 
     @Input()
+    public giftOffer: CatalogPageOfferData = null;
+
+    @Input()
     public quantity: number = 1;
 
     @Input()
@@ -28,8 +31,6 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     @Input()
     public completed: boolean = false;
 
-    @Input()
-    public isGift: boolean = false;
 
     @ViewChild('imageElement')
     public imageElement: ElementRef<HTMLDivElement>;
@@ -87,7 +88,14 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     public purchase(): void
     {
-        this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        if(!this.giftOffer)
+        {
+            this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        }
+        else
+        {
+            this._catalogService.component && this._catalogService.component.makeGiftConfiguratorVisible();
+        }
     }
 
     private completePurchase(): void
@@ -134,4 +142,6 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     {
         return this._imageUrl;
     }
+
+
 }
