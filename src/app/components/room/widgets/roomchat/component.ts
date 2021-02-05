@@ -36,6 +36,8 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public pendingChats: RoomWidgetChatUpdateEvent[]            = [];
     public processingChats: boolean                             = false;
 
+    private _movingInterval: ReturnType<typeof setInterval> = null;
+
     constructor(
         private ngZone: NgZone,
         private componentFactoryResolver: ComponentFactoryResolver)
@@ -49,11 +51,15 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public ngOnInit(): void
     {
         this.ngZone.runOutsideAngular(() => Nitro.instance.ticker.add(this.update, this));
+
+        //this.startMovingInterval();
     }
 
     public ngOnDestroy(): void
     {
         this.ngZone.runOutsideAngular(() => Nitro.instance.ticker.remove(this.update, this));
+
+        //this.stopMovingInterval();
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -93,26 +99,57 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         this.timeoutTime = (Nitro.instance.time + RoomChatComponent.UPDATE_INTERVAL);
     }
 
+    private startMovingInterval(): void
+    {
+        this.stopMovingInterval();
+
+        this._movingInterval = setInterval(() => this.moveAllChatsUp(), 5000);
+    }
+
+    private stopMovingInterval(): void
+    {
+        if(!this._movingInterval) return;
+
+        clearInterval(this._movingInterval);
+
+        this._movingInterval = null;
+    }
+
+    private updateChatViewForDimensions(width: number, height: number): void
+    {
+        const element = this.chatViewElement;
+
+        if(!element) return;
+
+        const percentage = Nitro.instance.getConfiguration<number>('chat.viewer.height.percentage', 0.40);
+
+        element.style.height = ((height * percentage) + 'px');
+    }
+
     private onChatMessage(k: RoomWidgetChatUpdateEvent): void
     {
         if(!k || RoomEnterEffect.isRunning() && (k.chatType !== RoomWidgetChatUpdateEvent.CHAT_TYPE_WHISPER)) return;
 
         this.pendingChats.push(k);
 
+        this.processPendingChats();
+
         this.timeoutTime = 0;
 
-        this.processPendingChats();
+        //this.startMovingInterval();
     }
 
-    private onRoomViewUpdate(k: RoomWidgetRoomViewUpdateEvent): void
+    private onRoomViewUpdate(event: RoomWidgetRoomViewUpdateEvent): void
     {
-        if(k.positionDelta)
+        if(event.positionDelta)
         {
-            this.cameraOffset.x = (this.cameraOffset.x + k.positionDelta.x);
-            this.cameraOffset.y = (this.cameraOffset.y + k.positionDelta.y);
+            this.cameraOffset.x = (this.cameraOffset.x + event.positionDelta.x);
+            this.cameraOffset.y = (this.cameraOffset.y + event.positionDelta.y);
+
+            this.resetAllChatLocations();
         }
 
-        this.resetAllChatLocations();
+        if(event.roomViewRectangle) this.updateChatViewForDimensions(event.roomViewRectangle.width, event.roomViewRectangle.height);
     }
 
     private processPendingChats(skipCheck: boolean = false): void
