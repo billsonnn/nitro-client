@@ -34,6 +34,8 @@ import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communic
 import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseGiftComposer';
+import { CatalogGiftUsernameUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
+import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -42,6 +44,7 @@ export class CatalogService implements OnDestroy
 
     private _messages: IMessageEvent[] = [];
     private _component: CatalogMainComponent = null;
+    private _giftConfiguratorComponent: CatalogCustomizeGiftComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
     private _activePage: CatalogPageParser = null;
@@ -85,6 +88,7 @@ export class CatalogService implements OnDestroy
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
                 new CatalogGiftConfigurationEvent(this.onGiftConfigurationEvent.bind(this)),
+                new CatalogGiftUsernameUnavailableEvent(this.onGiftUsernameUnavailableEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -120,6 +124,11 @@ export class CatalogService implements OnDestroy
     private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
     {
         this._giftWrappingConfiguration = new GiftWrappingConfiguration(event);
+    }
+
+    private onGiftUsernameUnavailableEvent(event: CatalogGiftUsernameUnavailableEvent): void
+    {
+        this._giftConfiguratorComponent && this._giftConfiguratorComponent.showUsernameNotFoundDialog();
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void
@@ -405,6 +414,11 @@ export class CatalogService implements OnDestroy
     public set component(component: CatalogMainComponent)
     {
         this._component = component;
+    }
+
+    public set giftConfiguratorComponent(component: CatalogCustomizeGiftComponent)
+    {
+        this._giftConfiguratorComponent = component;
     }
 
     public get catalogMode(): number

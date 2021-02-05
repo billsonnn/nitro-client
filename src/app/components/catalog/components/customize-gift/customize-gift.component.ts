@@ -1,4 +1,10 @@
-import { Component, Input, NgZone } from '@angular/core';
+import {
+    Component,
+    Input,
+    NgZone,
+    OnDestroy,
+    ɵCompiler_compileModuleAndAllComponentsAsync__POST_R3__
+} from '@angular/core';
 import { CatalogService } from '../../services/catalog.service';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 
@@ -6,7 +12,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
     selector: 'nitro-catalog-customize-gift-component',
     templateUrl: './customize-gift.template.html'
 })
-export class CatalogCustomizeGiftComponent
+export class CatalogCustomizeGiftComponent implements OnDestroy
 {
     @Input()
     public visible: boolean = false;
@@ -38,6 +44,8 @@ export class CatalogCustomizeGiftComponent
         private _ngZone: NgZone
     )
     {
+
+        _catalogService.giftConfiguratorComponent = this;
 
         const configuration = this._catalogService.giftWrapperConfiguration;
         const defaultStuffTypes = configuration.defaultStuffTypes;
@@ -261,5 +269,15 @@ export class CatalogCustomizeGiftComponent
     {
         this._selectedTypeId = stuffType;
         this._Str_3190();
+    }
+
+    ngOnDestroy(): void
+    {
+        this._catalogService.giftConfiguratorComponent = null;
+    }
+
+    public showUsernameNotFoundDialog(): void
+    {
+        debugger;
     }
 }
