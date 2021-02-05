@@ -17,36 +17,36 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
     @Input()
     public visible: boolean = false;
 
-    private _ribbonIndex: number;
-    private _boxIndex: number;
-    private _stuffColors: Map<number, number> = new Map<number, number>();
-    private _stuffTypes: number[];
-    private _defaultStuffType: number;
-    private _boxTypes: number[];
-    private _ribbonTypes: number[];
-    private _selectedTypeId: number;
+    public showUsernameErrorDialog: boolean = false;
 
     public receiverName: string = '';
     public message: string = '';
+    public showFace: boolean = true;
 
-    public boxSpriteId: number = -1;
-    public extras: string = '';
-    private _boxPrice: number;
+    public habboFace: string = '';
+    public hasColors: boolean = false;
     public boxText: string;
     public priceText: string;
     public ribbonText: string;
-    public showFace: boolean = true;
-    public habboFace: string = '';
-    public hascolors: boolean = false;
+    public boxSpriteId: number = -1;
+    public extras: string = '';
 
-    public showUsernameErrorDialog: boolean = false;
+    private readonly _stuffTypes: number[];
+    private readonly _defaultStuffType: number;
+    private readonly _boxTypes: number[];
+    private readonly _ribbonTypes: number[];
+    private readonly _boxPrice: number;
+
+    private _ribbonIndex: number;
+    private _boxIndex: number;
+    private _selectedTypeId: number;
+    private _stuffColors: Map<number, number> = new Map<number, number>();
 
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
     )
     {
-
         _catalogService.giftConfiguratorComponent = this;
 
         const configuration = this._catalogService.giftWrapperConfiguration;
@@ -54,8 +54,8 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
 
         if(defaultStuffTypes.length > 0)
         {
-            const local11 = Math.floor((Math.random() * defaultStuffTypes.length));
-            this._defaultStuffType = defaultStuffTypes[local11];
+            const randomIndex = Math.floor((Math.random() * defaultStuffTypes.length));
+            this._defaultStuffType = defaultStuffTypes[randomIndex];
         }
 
         this._stuffTypes = configuration.stuffTypes;
@@ -67,117 +67,15 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
         this._ribbonIndex = this._ribbonTypes[0];
         this._boxIndex = 0;
 
-        this._Str_3190();
-        this.setColors();
+        this.updateIndexesAndSetUI();
+        this.loadColors();
     }
 
-    private setColors(): void
+    public get colors(): number[]
     {
-        for(const stuffType of this._stuffTypes)
-        {
-            const local4 = Nitro.instance.sessionDataManager.getFloorItemData(stuffType);
-            if(!local4) continue;
-
-
-            if(local4.colors && local4.colors.length >0)
-            {
-                this._stuffColors.set(stuffType, local4.colors[0]);
-            }
-        }
+        return this._stuffTypes;
     }
 
-    private _Str_3190(): void
-    {
-        if(this._ribbonIndex < 0)
-        {
-            this._ribbonIndex = (this._ribbonTypes.length - 1);
-        }
-
-        if(this._ribbonIndex > (this._ribbonTypes.length - 1))
-        {
-            this._ribbonIndex = 0;
-        }
-
-        if(this._boxIndex < 0)
-        {
-            this._boxIndex = (this._boxTypes.length - 1);
-        }
-
-        if(this._boxIndex > (this._boxTypes.length - 1))
-        {
-            this._boxIndex = 0;
-        }
-
-
-
-        const k = this._boxTypes[this._boxIndex];
-        if(k == 8)
-        {
-            // see _Str_13980
-            this._ribbonIndex = 10;
-
-            if(this._ribbonIndex > (this._ribbonTypes.length - 1))
-            {
-                this._ribbonIndex = 0;
-            }
-        }
-
-
-        const local2 = ((k * 1000) + this._ribbonTypes[this._ribbonIndex]);
-
-        let local3 = local2.toString();
-        let local4 = this._selectedTypeId;
-        const local5 = this._Str_18066();
-        if(local5)
-        {
-            this._Str_17818(false);
-            local4 = this._defaultStuffType;
-            local3 = '';
-        }
-        else
-        {
-            if(k == 8)
-            {
-                this._Str_17818(false);
-            }
-            else
-            {
-                this._Str_17818(true);
-                if(k >= 3 && k <=6)
-                {
-                    this._Str_17818(false);
-                }
-            }
-        }
-
-
-
-
-        this.extras = local3;
-        this.boxSpriteId = local4;
-        this.setBoxTitles();
-
-        this.habboFace = Nitro.instance.sessionDataManager.figure;
-    }
-
-    private  _Str_17818(k:boolean):void
-    {
-        this.hascolors = k;
-    }
-
-    private setBoxTitles(): void
-    {
-        const k = this._Str_18066();
-
-        const boxKey = k ? 'catalog.gift_wrapping_new.box.default' : ('catalog.gift_wrapping_new.box.' + this._boxTypes[this._boxIndex]);
-        const priceKey = k ? 'catalog.gift_wrapping_new.freeprice' : 'catalog.gift_wrapping_new.price';
-        const ribbonKey = 'catalog.gift_wrapping_new.ribbon.' + this._ribbonIndex;
-
-        this.boxText = Nitro.instance.localization.getValue(boxKey);
-        this.priceText = Nitro.instance.localization.getValueWithParameter(priceKey, 'price', this._boxPrice.toString());
-        this.ribbonText = Nitro.instance.localization.getValue(ribbonKey);
-
-    }
 
     public handleButton(button: string): void
     {
@@ -185,19 +83,19 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
         {
             case 'previous_box':
                 this._boxIndex--;
-                this._Str_3190();
+                this.updateIndexesAndSetUI();
                 break;
             case 'next_box':
                 this._boxIndex++;
-                this._Str_3190();
+                this.updateIndexesAndSetUI();
                 break;
             case 'previous_ribbon':
                 this._ribbonIndex--;
-                this._Str_3190();
+                this.updateIndexesAndSetUI();
                 break;
             case 'next_ribbon':
                 this._ribbonIndex++;
-                this._Str_3190();
+                this.updateIndexesAndSetUI();
                 break;
             case 'close':
                 break;
@@ -207,47 +105,14 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
         }
     }
 
-    private giveGift(): void
-    {
-        if(!this.receiverName || this.receiverName.trim().length == 0) return;
-
-        const local2 = this.receiverName;
-        const local4 = this.message;
-        const local5 = this._Str_18066();
-        const local6 = local5 ? this._defaultStuffType : this._selectedTypeId;
-        const local7 = local5 ? 0 : this._boxTypes[this._boxIndex];
-        const local8 = local5 ? 0 : this._ribbonTypes[this._ribbonIndex];
-        const local9 = this.showFace;
-
-
-        const activeOffer = this._catalogService.component.activeOffer;
-        const activePage = this._catalogService.component.activePage;
-        const extraData = this._catalogService.component.purchaseOfferExtra;
-
-
-
-        this._catalogService.purchaseGiftOffer(activePage,activeOffer,local2, local4, local6, local7, local8, local9);
-
-    }
-
-    public get colors(): number[]
-    {
-        return this._stuffTypes;
-    }
-
     public changeCheckbox(event): void
     {
-        this._Str_3190();
+        this.updateIndexesAndSetUI();
     }
 
     public get isDefaultBox(): boolean
     {
-        return this._Str_18066();
-    }
-
-    private _Str_18066(): boolean
-    {
-        return this._boxTypes[this._boxIndex] == this._defaultStuffType;
+        return this._isDefaultBox();
     }
 
     public hide(): void
@@ -270,12 +135,7 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
     public selectTypeId(stuffType: number): void
     {
         this._selectedTypeId = stuffType;
-        this._Str_3190();
-    }
-
-    ngOnDestroy(): void
-    {
-        this._catalogService.giftConfiguratorComponent = null;
+        this.updateIndexesAndSetUI();
     }
 
     public hideUsernameDialog(): void
@@ -286,4 +146,136 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
     {
         this._ngZone.run(() => this.showUsernameErrorDialog = true);
     }
+
+    private loadColors(): void
+    {
+        for(const stuffType of this._stuffTypes)
+        {
+            const giftData = Nitro.instance.sessionDataManager.getFloorItemData(stuffType);
+
+            if(!giftData) continue;
+
+            if(giftData.colors && giftData.colors.length >0)
+            {
+                this._stuffColors.set(stuffType, giftData.colors[0]);
+            }
+        }
+    }
+
+    // see _Str_3190
+    private updateIndexesAndSetUI(): void
+    {
+        if(this._ribbonIndex < 0)
+        {
+            this._ribbonIndex = (this._ribbonTypes.length - 1);
+        }
+
+        if(this._ribbonIndex > (this._ribbonTypes.length - 1))
+        {
+            this._ribbonIndex = 0;
+        }
+
+        if(this._boxIndex < 0)
+        {
+            this._boxIndex = (this._boxTypes.length - 1);
+        }
+
+        if(this._boxIndex > (this._boxTypes.length - 1))
+        {
+            this._boxIndex = 0;
+        }
+
+        const currentBoxType = this._boxTypes[this._boxIndex];
+        if(currentBoxType == 8)
+        {
+            // see _Str_13980
+            this._ribbonIndex = 10;
+
+            if(this._ribbonIndex > (this._ribbonTypes.length - 1))
+            {
+                this._ribbonIndex = 0;
+            }
+        }
+
+        let extras = ((currentBoxType * 1000) + this._ribbonTypes[this._ribbonIndex]).toString();
+        let boxSpriteId = this._selectedTypeId;
+        const isDefaultBox = this._isDefaultBox();
+        if(isDefaultBox)
+        {
+            this.setHasColors(false);
+            boxSpriteId = this._defaultStuffType;
+            extras = '';
+        }
+        else
+        {
+            if(currentBoxType == 8)
+            {
+                this.setHasColors(false);
+            }
+            else
+            {
+                this.setHasColors(true);
+                if(currentBoxType >= 3 && currentBoxType <=6)
+                {
+                    this.setHasColors(false);
+                }
+            }
+        }
+
+        this.extras = extras;
+        this.boxSpriteId = boxSpriteId;
+        this.setBoxTitles();
+
+        this.habboFace = Nitro.instance.sessionDataManager.figure;
+    }
+
+    private setHasColors(k:boolean):void
+    {
+        this.hasColors = k;
+    }
+
+    private setBoxTitles(): void
+    {
+        const k = this._isDefaultBox();
+
+        const boxKey = k ? 'catalog.gift_wrapping_new.box.default' : ('catalog.gift_wrapping_new.box.' + this._boxTypes[this._boxIndex]);
+        const priceKey = k ? 'catalog.gift_wrapping_new.freeprice' : 'catalog.gift_wrapping_new.price';
+        const ribbonKey = 'catalog.gift_wrapping_new.ribbon.' + this._ribbonIndex;
+
+        this.boxText = Nitro.instance.localization.getValue(boxKey);
+        this.priceText = Nitro.instance.localization.getValueWithParameter(priceKey, 'price', this._boxPrice.toString());
+        this.ribbonText = Nitro.instance.localization.getValue(ribbonKey);
+
+    }
+
+    private giveGift(): void
+    {
+        if(!this.receiverName || this.receiverName.trim().length == 0) return;
+
+        const receiverName = this.receiverName;
+        const giftMessage = this.message;
+        const isDefaultBox = this._isDefaultBox();
+        const spriteId = isDefaultBox ? this._defaultStuffType : this._selectedTypeId;
+        const color = isDefaultBox ? 0 : this._boxTypes[this._boxIndex];
+        const ribbonId = isDefaultBox ? 0 : this._ribbonTypes[this._ribbonIndex];
+        const anonymousGift = this.showFace;
+
+        const activeOffer = this._catalogService.component.activeOffer;
+        const activePage = this._catalogService.component.activePage;
+        const extraData = this._catalogService.component.purchaseOfferExtra;
+
+        this._catalogService.purchaseGiftOffer(activePage,activeOffer, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift);
+    }
+
+    // see _Str_18066
+    private _isDefaultBox(): boolean
+    {
+        return this._boxTypes[this._boxIndex] == this._defaultStuffType;
+    }
+
+    ngOnDestroy(): void
+    {
+        this._catalogService.giftConfiguratorComponent = null;
+    }
+
 }

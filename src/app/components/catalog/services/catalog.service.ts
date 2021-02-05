@@ -368,9 +368,9 @@ export class CatalogService implements OnDestroy
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
     }
 
-    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, arg3: string, arg4: string, arg5: number, arg6: number, arg7: number, arg8: boolean): void
+    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
     {
-        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, '', arg3, arg4, arg5, arg6, arg7, arg8 ));
+        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift ));
     }
 
     public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)

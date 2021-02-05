@@ -453,9 +453,4 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     {
         return this._showInsufficientFunds;
     }
-
-    public get showGiftWrapperConfigurator(): boolean
-    {
-        return true;
-    }
 }

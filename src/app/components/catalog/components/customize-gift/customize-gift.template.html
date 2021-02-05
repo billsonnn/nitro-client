@@ -51,7 +51,7 @@
     </div>
     <div  class="row p-3">
         <div class="btn-group w-100 mb-3">
-            <button *ngFor="let item of colors" class="btn btn-sm btn-primary floorplan-height-option" [disabled]="!hascolors" (click)="selectTypeId(item)" [ngStyle]="{'backgroundColor': getColor(item), 'height': '40px'}"></button>
+            <button *ngFor="let item of colors" class="btn btn-sm btn-primary floorplan-height-option" [disabled]="!hasColors" (click)="selectTypeId(item)" [ngStyle]="{'backgroundColor': getColor(item), 'height': '40px'}"></button>
         </div>
     </div>
     <div class="row align-items-end pt-0 px-3 pb-3">

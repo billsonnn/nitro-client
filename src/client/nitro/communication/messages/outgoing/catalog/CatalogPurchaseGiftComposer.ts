@@ -4,9 +4,9 @@ export class CatalogPurchaseGiftComposer implements IMessageComposer<Constructor
 {
     private _data: ConstructorParameters<typeof CatalogPurchaseGiftComposer>;
 
-    constructor(k:number, _arg_2:number, _arg_3:string, _arg_4:string, _arg_5:string, _arg_6:number, _arg_7:number, _arg_8:number, _arg_9:boolean)
+    constructor(pageId: number, itemId: number, extraData: string, receivingName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean)
     {
-        this._data = [ k, _arg_2, _arg_3, _arg_4, _arg_5, _arg_6, _arg_7, _arg_8,_arg_9];
+        this._data = [pageId, itemId, extraData, receivingName, giftMessage, spriteId, color, ribbonId, anonymousGift];
     }
 
     public getMessageArray()
