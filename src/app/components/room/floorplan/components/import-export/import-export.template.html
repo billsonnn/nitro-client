@@ -1,0 +1,45 @@
+<div class="modal-header">
+    {{ ('floor.plan.editor.import.export') | translate }}
+    <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Font Size</label>
+                <select class="form-control form-control-sm" [(ngModel)]="fontSize">
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Letter Spacing</label>
+                <select class="form-control form-control-sm" [(ngModel)]="letterSpacing">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <textarea class="form-control mb-3" style="font-family: 'Roboto Mono', monospace; height: 350px" [ngStyle]="{'fontSize': fontSize + 'px', 'letterSpacing': letterSpacing + 'px'}" [(ngModel)]="map" spellcheck="false"></textarea>
+    <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" (click)="revert()">{{ ('floor.plan.editor.revert.to.last.received.map') | translate }}</button>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Preview</button>
+            <button type="button" class="btn btn-success">{{ ('floor.plan.editor.save') | translate }}</button>
+        </div>       
+    </div>
+</div>

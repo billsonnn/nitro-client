@@ -1,8 +1,10 @@
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Application, Container, Graphics } from 'pixi.js';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
 import FloorMapTile from '../../common/FloorMapTile';
+import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
 
 @Component({
     selector: 'nitro-floorplan-main-component',
@@ -41,9 +43,11 @@ export class FloorplanMainComponent implements OnInit
     private _tileSize: number = 18;
 
     private _roomPreviewer: RoomPreviewer;
+    private _importExportModal: NgbModalRef;
 
     constructor(
-        private _ngZone: NgZone)
+        private _ngZone: NgZone,
+        private _modalService: NgbModal)
     {
         this._spriteMap     = [];
         this._heightMap     = [];
@@ -68,6 +72,8 @@ export class FloorplanMainComponent implements OnInit
         this._coloredTilesCount = 0;
         
         this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
+        this._importExportModal = null;
+        
         this._loadColorMap();
     }
 
@@ -174,23 +180,35 @@ export class FloorplanMainComponent implements OnInit
 
     private _generateTileMapString(): string
     {
-        firstFor:
-        for(let y = this._highestY; y >= 0; y--)
+        const highestTile = this._heightMap[this._highestY][this._highestX];
+
+        if(highestTile.height === 'x')
         {
-            for(let x = this._highestX; x >= 0; x--)
+            this._highestX = -1;
+            this._highestY = -1;
+
+            for(let y = this._maxFloorLength - 1; y >= 0; y--)
             {
-                const tile = this._heightMap[y][x];
+                if(!this._heightMap[y]) continue;
 
-                if(tile.height !== 'x')
+                for(let x = this._maxFloorLength - 1; x >= 0; x--)
                 {
-                    this._highestX = x;
-                    this._highestY = y;
+                    if(!this._heightMap[y][x]) continue;
+                    
+                    const tile = this._heightMap[y][x];
+    
+                    if(tile.height !== 'x')
+                    {
+                        if(x > this._highestX)
+                            this._highestX = x;
 
-                    break firstFor;
+                        if(y > this._highestY)
+                            this._highestY = y;
+                    }
                 }
             }
         }
-
+        
         let rows = [];
 
         for(let y = 0; y <= this._highestY; y++)
@@ -207,7 +225,7 @@ export class FloorplanMainComponent implements OnInit
             rows[y] = row.join("");
         }
 
-        return rows.join("\\r");
+        return rows.join("\r");
     }
 
     private _renderTileMap(): void
@@ -315,6 +333,7 @@ export class FloorplanMainComponent implements OnInit
         if(futureHeightIndex > 0)
         {
             if(x > this._highestX) this._highestX = x;
+
             if(y > this._highestY) this._highestY = y;
         }
 
@@ -443,6 +462,36 @@ export class FloorplanMainComponent implements OnInit
             this._wallHeight = 1;
         else
             this._wallHeight++;
+    }
+
+    public openImportExport(): void
+    {
+        this._currentModel = this._generateTileMapString();
+        
+        let modal = this._importExportModal;
+
+        if(!modal)
+        {
+            modal = this._importExportModal = this._modalService.open(FloorPlanImportExportComponent, {
+                backdrop: 'static',
+                centered: true,
+                keyboard: false
+            });
+
+            modal.result.then(() => (this._importExportModal = null));
+        }
+
+        this._importExportModal = modal;
+
+        if(this._importExportModal)
+        {
+            const instance = (modal.componentInstance as FloorPlanImportExportComponent);
+
+            if(instance)
+            {
+                instance.map = this.currentModel;
+            }
+        }
     }
 
     public get colorMap(): object
