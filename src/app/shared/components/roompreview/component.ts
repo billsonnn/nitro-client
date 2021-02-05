@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { DisplayObject } from 'pixi.js';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
@@ -8,7 +8,7 @@ import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRend
     selector: '[nitro-room-preview-component]',
     template: '<img class="room-preview-image" #previewImage />'
 })
-export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
+export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
 {
     @ViewChild('previewImage')
     public previewImage: ElementRef<HTMLImageElement>;
@@ -21,6 +21,15 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
     @Input()
     public height: number = 1;
+
+    @Input()
+    public model: string = null;
+
+    @Input()
+    public wallHeight: number = -1;
+
+    @Input()
+    public modelScale: boolean = true;
 
     public renderingCanvas: IRoomRenderingCanvas = null;
     public displayObject: DisplayObject = null;
@@ -41,13 +50,21 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         if(this.width === 1) this.width 	= (Math.trunc(this._elementRef.nativeElement.offsetWidth));
         if(this.height === 1) this.height	= (Math.trunc(this._elementRef.nativeElement.offsetHeight));
 
-        this._elementRef.nativeElement.style.minWidth = (this._elementRef.nativeElement.offsetWidth + 'px');
-        this._elementRef.nativeElement.style.minHeight = (this._elementRef.nativeElement.offsetHeight + 'px');
+        this._elementRef.nativeElement.style.minWidth = (this.width + 'px');
+        this._elementRef.nativeElement.style.minHeight = (this.height + 'px');
     }
 
     public ngOnDestroy(): void
     {
         this.stop();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        const prev = changes.model.previousValue;
+        const next = changes.model.currentValue;
+
+        if(next && (next !== prev)) this.updateModel();
     }
 
     public ngAfterViewInit(): void
@@ -59,6 +76,13 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         }
 
         this.start();
+    }
+
+    private updateModel(): void
+    {
+        if(!this.roomPreviewer) return;
+
+        this.roomPreviewer.updatePreviewModel(this.model, this.wallHeight, this.modelScale);
     }
 
     public start(): void

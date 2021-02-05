@@ -1,0 +1,81 @@
+<div [bringToTop] [draggable] class="card nitro-floorplan-editor-component" dragHandle=".card-header">
+    <div class="card-header">
+        {{ ('floor.plan.editor.title') | translate }}
+        <div class="close"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="card-body">
+        <!--<div class="mb-2">{{ ('floor.plan.editor.subtitle') | translate }}</div>-->
+        <div class="row">
+            <div class="col-7">
+                <div class="mb-1">{{ ('floor.plan.editor.draw.mode') | translate }}</div>
+                <div class="btn-group w-100 mb-3">
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'set'}" (click)="changeAction('set')"><i class="icon icon-floorplaneditor-tile-set"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'unset'}" (click)="changeAction('unset')"><i class="icon icon-floorplaneditor-tile-unset"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'up'}" (click)="changeAction('up')"><i class="icon icon-floorplaneditor-tile-up"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'down'}" (click)="changeAction('down')"><i class="icon icon-floorplaneditor-tile-down"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'door'}" (click)="changeAction('door')"><i class="icon icon-floorplaneditor-door"></i></button>
+                </div>
+                <div class="mb-1">{{ ('floor.plan.editor.tile.height') | translate }}</div>
+                <div class="btn-group w-100 mb-3">
+                    <button class="btn btn-primary btn-sm" (click)="decrementHeight()"><i class="fas fa-chevron-left"></i></button>
+                    <button *ngFor="let item of colorMap | keyvalue" class="btn btn-sm btn-primary floorplan-height-option" (click)="selectHeight(item.key)" [ngClass]="{'selected': currentHeight === item.key}" [ngStyle]="{'backgroundColor': getColor(item.value)}"></button>
+                    <button class="btn btn-primary btn-sm" (click)="incrementHeight()"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="text-right">
+                    {{ coloredTilesCount }} / {{ maxTilesCount }}
+                </div>
+                <div #floorplanElement class="editor-area"></div>
+            </div>
+            <div class="col-5">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="mb-1">{{ ('floor.plan.editor.enter.direction') | translate }}</div>
+                        <div class="btn-group w-100" style="height: 50px">
+                            <button class="btn btn-primary btn-sm" (click)="decrementDoorDirection()"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-primary btn-sm w-100">{{ doorDirection }}</button>
+                            <button class="btn btn-primary btn-sm" (click)="incrementDoorDirection()"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-1">{{ ('floor.editor.wall.height') | translate }}</div>
+                        <div class="btn-group w-100" style="height: 50px">
+                            <button class="btn btn-primary btn-sm" (click)="decrementWallheight()"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-primary btn-sm w-100">{{ wallHeight }}</button>
+                            <button class="btn btn-primary btn-sm" (click)="incrementWallheight()"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-1">{{ ('floor.plan.editor.room.options') | translate }}</div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <select class="form-control form-control-sm">
+                            <option value="0">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
+                            <option value="1">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
+                            <option value="-1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
+                            <option value="-2">{{ ('navigator.roomsettings.wall_thickness.thinnest') | translate }}</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control form-control-sm">
+                            <option value="0">{{ ('navigator.roomsettings.floor_thickness.normal') | translate }}</option>
+                            <option value="1">{{ ('navigator.roomsettings.floor_thickness.thick') | translate }}</option>
+                            <option value="-1">{{ ('navigator.roomsettings.floor_thickness.thin') | translate }}</option>
+                            <option value="-2">{{ ('navigator.roomsettings.floor_thickness.thinnest') | translate }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="editor-area" style="text-align: center">
+                    Room Preview was not implemented yet.
+                    <!--<div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="800" [height]="800" [model]="currentModel" [wallHeight]="1"></div>-->
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-end w-100">
+            <div class="btn-group">
+                <button class="btn btn-primary" disabled>{{ ('floor.plan.editor.reload') | translate }}</button>
+                <button class="btn btn-primary" disabled>{{ ('floor.plan.editor.import.export') | translate }}</button>
+                <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

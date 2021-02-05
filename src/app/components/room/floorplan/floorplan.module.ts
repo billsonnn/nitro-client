@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
-import { FloorplanMainWindowComponent } from './main/window/main.component';
+import { SharedModule } from '../../../shared';
+import { FloorplanMainComponent } from './components/main/main.component';
 
 @NgModule({
     imports: [
+        SharedModule
     ],
     exports: [
-        FloorplanMainWindowComponent,
+        FloorplanMainComponent,
 
     ],
     declarations: [
-        FloorplanMainWindowComponent,
+        FloorplanMainComponent,
     ]
 })
 export class FloorplanModule

@@ -34,6 +34,7 @@ import { ColorConverter } from '../../../client/room/utils/ColorConverter';
 import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
+import { SettingsService } from '../../core/settings/service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
@@ -57,12 +58,12 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { SettingsService } from '../../core/settings/service';
 
 @Component({
     selector: 'nitro-room-component',
     template: `
     <div class="nitro-room-component">
+        <nitro-floorplan-main-component></nitro-floorplan-main-component>
         <div #roomCanvas class="room-view"></div>
         <ng-template #widgetContainer></ng-template>
     </div>`

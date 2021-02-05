@@ -4,17 +4,22 @@ import { IRoomRenderingCanvas } from '../../../room/renderer/IRoomRenderingCanva
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { RoomId } from '../../../room/utils/RoomId';
 import { Vector3d } from '../../../room/utils/Vector3d';
+import { RoomDoorParser } from '../../communication/messages/parser/room/mapping/RoomDoorParser';
+import { RoomModelParser } from '../../communication/messages/parser/room/mapping/RoomModelParser';
 import { Nitro } from '../../Nitro';
 import { RoomEngineEvent } from '../events/RoomEngineEvent';
 import { RoomEngineObjectEvent } from '../events/RoomEngineObjectEvent';
 import { IGetImageListener } from '../IGetImageListener';
 import { ImageResult } from '../ImageResult';
+import { IRoomCreator } from '../IRoomCreator';
 import { IRoomEngine } from '../IRoomEngine';
+import { ObjectRoomUpdateMapMessage } from '../messages/ObjectRoomUpdateMapMessage';
 import { IObjectData } from '../object/data/IObjectData';
 import { LegacyDataType } from '../object/data/type/LegacyDataType';
 import { RoomObjectCategory } from '../object/RoomObjectCategory';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 import { RoomPlaneParser } from '../object/RoomPlaneParser';
+import { LegacyWallGeometry } from '../utils/LegacyWallGeometry';
 
 export class RoomPreviewer
 {
@@ -31,6 +36,7 @@ export class RoomPreviewer
     private static ZOOM_ENABLED: boolean                    = true;
 
     private _roomEngine: IRoomEngine;
+    private _planeParser: RoomPlaneParser;
     private _previewRoomId: number = 1;
     private _currentPreviewObjectType: number = 0;
     private _currentPreviewObjectCategory: number = 0;
@@ -48,6 +54,7 @@ export class RoomPreviewer
     constructor(roomEngine: IRoomEngine, roomId: number = 1)
     {
         this._roomEngine    = roomEngine;
+        this._planeParser   = new RoomPlaneParser();
         this._previewRoomId = RoomId.makeRoomPreviewerId(roomId);
         this._addViewOffset = new Point(0, 0);
 
@@ -74,6 +81,111 @@ export class RoomPreviewer
             this._roomEngine.events.removeEventListener(RoomEngineObjectEvent.CONTENT_UPDATED, this.onRoomObjectAdded);
             this._roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomInitializedonRoomInitialized);
         }
+
+        if(this._planeParser)
+        {
+            this._planeParser.dispose();
+
+            this._planeParser = null;
+        }
+    }
+
+    public updatePreviewModel(model: string, wallHeight: number, scale: boolean = true): void
+    {
+        const parser = new RoomModelParser();
+
+        parser.flush();
+        parser.parseModel(model, wallHeight, scale);
+
+        const wallGeometry = (<unknown> this._roomEngine as IRoomCreator).getLegacyWallGeometry(this._previewRoomId);
+
+        if(!wallGeometry) return;
+
+        this._planeParser.reset();
+
+        const width     = parser.width;
+        const height    = parser.height;
+
+        this._planeParser.initializeTileMap(width, height);
+
+        const entryTile: RoomDoorParser = null;
+
+        let doorX           = -1;
+        let doorY           = -1;
+        let doorZ           = 0;
+        let doorDirection   = 0;
+
+        let y = 0;
+
+        while(y < height)
+        {
+            let x = 0;
+
+            while(x < width)
+            {
+                const tileHeight = parser.getHeight(x, y);
+
+                if(((((y > 0) && (y < (height - 1))) || ((x > 0) && (x < (width - 1)))) && (!(tileHeight == RoomPlaneParser.TILE_BLOCKED))) && ((entryTile == null) || ((x == entryTile.x) && (y == entryTile.y))))
+                {
+                    if(((parser.getHeight(x, (y - 1)) == RoomPlaneParser.TILE_BLOCKED) && (parser.getHeight((x - 1), y) == RoomPlaneParser.TILE_BLOCKED)) && (parser.getHeight(x, (y + 1)) == RoomPlaneParser.TILE_BLOCKED))
+                    {
+                        doorX           = (x + 0.5);
+                        doorY           = y;
+                        doorZ           = tileHeight;
+                        doorDirection   = 90;
+                    }
+
+                    if(((parser.getHeight(x, (y - 1)) == RoomPlaneParser.TILE_BLOCKED) && (parser.getHeight((x - 1), y) == RoomPlaneParser.TILE_BLOCKED)) && (parser.getHeight((x + 1), y) == RoomPlaneParser.TILE_BLOCKED))
+                    {
+                        doorX           = x;
+                        doorY           = (y + 0.5);
+                        doorZ           = tileHeight;
+                        doorDirection   = 180;
+                    }
+                }
+
+                this._planeParser.setTileHeight(x, y, tileHeight);
+
+                x++;
+            }
+
+            y++;
+        }
+
+        this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), doorZ);
+        this._planeParser.initializeFromTileData(parser.wallHeight);
+        this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), (doorZ + this._planeParser.wallHeight));
+
+        wallGeometry.scale = LegacyWallGeometry.DEFAULT_SCALE;
+        wallGeometry.initialize(width, height, this._planeParser.floorHeight);
+
+        let heightIterator = (parser.height - 1);
+
+        while(heightIterator >= 0)
+        {
+            let widthIterator = (parser.width - 1);
+
+            while(widthIterator >= 0)
+            {
+                wallGeometry.setHeight(widthIterator, heightIterator, this._planeParser.getTileHeight(widthIterator, heightIterator));
+                widthIterator--;
+            }
+
+            heightIterator--;
+        }
+
+        const roomMap = this._planeParser.getMapData();
+
+        roomMap.doors.push({
+            x: doorX,
+            y: doorY,
+            z: doorZ,
+            dir: doorDirection
+        });
+
+        const roomObject = this.getRoomPreviewObject();
+
+        if(roomObject) roomObject.processUpdateMessage(new ObjectRoomUpdateMapMessage(roomMap));
     }
 
     private createRoomForPreview(): void
@@ -397,42 +509,28 @@ export class RoomPreviewer
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_SMALL;
                         this._currentPreviewNeedsZoomOut = true;
-
-                        point.x = (point.x >> 1);
-                        point.y = (point.y >> 1);
-
-                        this._currentPreviewRectangle.x         = (this._currentPreviewRectangle.x >> 2);
-                        this._currentPreviewRectangle.y         = (this._currentPreviewRectangle.y >> 2);
-                        this._currentPreviewRectangle.width     = (this._currentPreviewRectangle.width >> 2);
-                        this._currentPreviewRectangle.height    = (this._currentPreviewRectangle.height >> 2);
                     }
                 }
             }
 
-            else if((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
+            else if(!this._currentPreviewNeedsZoomOut)
             {
                 if(RoomPreviewer.ZOOM_ENABLED)
                 {
-                    if((this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) !== 1) && !this._currentPreviewNeedsZoomOut)
+                    if(this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) !== 1)
                     {
                         this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1, null, null);
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
-
-                        point.x = (point.x << 1);
-                        point.y = (point.y << 1);
                     }
                 }
                 else
                 {
-                    if(!geometry.isZoomedIn() && !this._currentPreviewNeedsZoomOut)
+                    if(!geometry.isZoomedIn())
                     {
                         geometry.performZoomIn();
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
-
-                        point.x = (point.x << 1);
-                        point.y = (point.y << 1);
                     }
                 }
             }
@@ -449,10 +547,12 @@ export class RoomPreviewer
             {
                 this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1);
             }
+            else
+            {
+                const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
 
-            const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
-
-            geometry.performZoomIn();
+                geometry.performZoomIn();
+            }
         }
 
         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
