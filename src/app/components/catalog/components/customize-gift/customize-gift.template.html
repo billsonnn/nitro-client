@@ -61,3 +61,19 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="showUsernameErrorDialog" [bringToTop] [draggable] class="nitro-catalog-customize-gift-component card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ 'catalog.gift_wrapping.receiver_not_found.title' | translate }}</h6>
+        <button type="button" class="close" (click)="hideUsernameDialog()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="row p-3">
+        <p>{{ 'catalog.gift_wrapping.receiver_not_found.info' | translate }}</p>
+    </div>
+
+    <div class="row align-items-end pt-0 px-3 pb-3">
+        <div class="col btn-group">
+            <button type="button" class="btn btn-primary" (click)="hideUsernameDialog()">{{ ('generic.ok') | translate }}</button>
+        </div>
+    </div>
+</div>

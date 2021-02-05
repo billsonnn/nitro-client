@@ -39,6 +39,8 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
     public habboFace: string = '';
     public hascolors: boolean = false;
 
+    public showUsernameErrorDialog: boolean = false;
+
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
@@ -276,8 +278,12 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
         this._catalogService.giftConfiguratorComponent = null;
     }
 
+    public hideUsernameDialog(): void
+    {
+        this.showUsernameErrorDialog = false;
+    }
     public showUsernameNotFoundDialog(): void
     {
-        debugger;
+        this._ngZone.run(() => this.showUsernameErrorDialog = true);
     }
 }
