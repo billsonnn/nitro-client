@@ -64,6 +64,8 @@ export class RoomChatItemComponent
     public ready(): void
     {
         this.makeVisible();
+
+        (this.chatContainerElement && (this.chatContainerElement.style.minWidth = this.width + 'px'));
     }
 
     public makeVisible(): void
