@@ -4,14 +4,19 @@
         <button type="button" class="close" ><i class="fas fa-times"></i></button>
     </div>
     <div class="row p-3">
-        <input type="text" class="form-control form-control-sm"  placeholder="{{ 'catalog.gift_wrapping.receiver' | translate }}">
+        <input type="text" class="form-control form-control-sm"  [(ngModel)]="receiverName" placeholder="{{ 'catalog.gift_wrapping.receiver' | translate }}">
     </div>
 
     <div class="row p-3">
-        <div nitro-avatar-image [headOnly]="true" [direction]="2" [figure]="habboFigure" ></div>
+        <div nitro-avatar-image *ngIf="showFace" [headOnly]="true" [direction]="2" [figure]="habboFace" ></div>
+        <div *ngIf="!showFace" class="ingognito"></div>
         <div class="col-sm-8">
-          <textarea class="form-control w-200"></textarea>
+          <textarea [(ngModel)]="message" class="form-control w-200"></textarea>
         </div>
+    </div>
+    <div class="row p-3">
+        <input id="showNameAndFace" class="form-check-input" type="checkbox"  (change)="changeCheckbox($event)" [(ngModel)]="showFace">
+        <label for="showNameAndFace" class="form-check-label">{{ ('catalog.gift_wrapping.show_face.title') | translate }}</label>
     </div>
     <div class="row p-3">
         <div nitro-furni-floor-image class="col-lg-3" [spriteId]="boxSpriteId" [extras]="extras"></div>
@@ -46,8 +51,8 @@
     </div>
     <div class="row align-items-end pt-0 px-3 pb-3">
         <div class="col btn-group">
-            <button type="button" class="btn btn-primary">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
-            <button type="button" class="btn btn-success">{{ 'catalog.purchase_confirmation.gift' | translate }}</button>
+            <button type="button" class="btn btn-primary" (click)="handleButton('close')">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
+            <button type="button" class="btn btn-success" (click)="handleButton('give_gift')">{{ 'catalog.gift_wrapping.give_gift' | translate }}</button>
         </div>
     </div>
 </div>

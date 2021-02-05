@@ -9,7 +9,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 export class CatalogCustomizeGiftComponent
 {
     @Input()
-    public visible:boolean = false;
+    public visible: boolean = false;
 
     private _ribbonIndex: number;
     private _boxIndex: number;
@@ -19,12 +19,17 @@ export class CatalogCustomizeGiftComponent
     private _ribbonTypes: number[];
     private _selectedTypeId: number;
 
+    public receiverName: string = '';
+    public message: string = '';
+
     public boxSpriteId: number = -1;
     public extras: string = '';
     private _boxPrice: number;
     public boxText: string;
     public priceText: string;
     public ribbonText: string;
+    public showFace: boolean = true;
+    public habboFace: string = '';
 
     constructor(
         private _catalogService: CatalogService,
@@ -49,6 +54,7 @@ export class CatalogCustomizeGiftComponent
             this._selectedTypeId = this._stuffTypes[2];
             this._ribbonIndex = this._ribbonTypes[0];
             this._boxIndex = 0;
+
             this._Str_3190();
         });
     }
@@ -103,19 +109,21 @@ export class CatalogCustomizeGiftComponent
         this.extras = local3;
         this.boxSpriteId = local4;
         this.setBoxTitles();
+
+        this.habboFace = Nitro.instance.sessionDataManager.figure;
     }
 
     private setBoxTitles(): void
     {
         const k = this._Str_18066();
 
-        const boxKey = k? 'catalog.gift_wrapping_new.box.default' : ('catalog.gift_wrapping_new.box.' +  this._boxTypes[this._boxIndex]);
+        const boxKey = k ? 'catalog.gift_wrapping_new.box.default' : ('catalog.gift_wrapping_new.box.' + this._boxTypes[this._boxIndex]);
         const priceKey = k ? 'caatlog.gift_wrapping_new.freeprice' : 'catalog.gift_wrapping_new.price';
         const ribbonKey = 'catalog.gift_wrapping_new.ribbon.' + this._ribbonIndex;
 
         this.boxText = Nitro.instance.localization.getValue(boxKey);
-        this.priceText = Nitro.instance.localization.getValueWithParameter(priceKey,'price', this._boxPrice.toString());
-        this.ribbonText  = Nitro.instance.localization.getValue(ribbonKey);
+        this.priceText = Nitro.instance.localization.getValueWithParameter(priceKey, 'price', this._boxPrice.toString());
+        this.ribbonText = Nitro.instance.localization.getValue(ribbonKey);
 
     }
 
@@ -139,16 +147,36 @@ export class CatalogCustomizeGiftComponent
                 this._ribbonIndex++;
                 this._Str_3190();
                 break;
+            case 'close':
+                break;
+            case 'give_gift':
+                this.giveGift();
+                break;
         }
     }
 
-    private  _Str_18066():boolean
+    private giveGift(): void
+    {
+        if(!this.receiverName || this.receiverName.trim().length == 0) return;
+
+        const local2 = this.receiverName;
+        const local4 = this.message;
+        const local5 = this._Str_18066();
+        const local6 = local5 ? this._defaultStuffType : this._selectedTypeId;
+        const local7 = local5 ? 0 : this._boxTypes[this._boxIndex];
+        const local8 = local5 ? 0 : this._ribbonTypes[this._ribbonIndex];
+        const local9 = this.showFace;
+
+    }
+
+    public changeCheckbox(event): void
+    {
+        this._Str_3190();
+    }
+
+    private _Str_18066(): boolean
     {
         return this._boxTypes[this._boxIndex] == this._defaultStuffType;
     }
 
-    public get habboFigure(): string
-    {
-        return Nitro.instance.sessionDataManager.figure;
-    }
 }
