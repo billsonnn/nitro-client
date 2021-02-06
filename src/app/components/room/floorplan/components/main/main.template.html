@@ -1,11 +1,11 @@
-<div [bringToTop] [draggable] class="card nitro-floorplan-editor-component" dragHandle=".card-header">
+<div [bringToTop] [draggable] class="card nitro-floorplan-editor-component" [ngClass]="{'minimized': minimize}" dragHandle=".card-header">
     <div class="card-header">
-        {{ ('floor.plan.editor.title') | translate }}
+        <i class="fas" [ngClass]="minimize ? 'fa-plus-square' : 'fa-minus-square'" (click)="toggleEditor()"></i> {{ ('floor.plan.editor.title') | translate }}
         <div class="close"><i class="fas fa-times"></i></div>
     </div>
-    <div class="card-body">
+    <div class="card-body" [ngStyle]="{'display': minimize ? 'none' : 'block'}">
         <!--<div class="mb-2">{{ ('floor.plan.editor.subtitle') | translate }}</div>-->
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-7">
                 <div class="mb-1">{{ ('floor.plan.editor.draw.mode') | translate }}</div>
                 <div class="btn-group w-100 mb-3">
@@ -70,10 +70,11 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-row justify-content-end w-100">
+        <div class="d-flex flex-row justify-content-between w-100">
+            <button class="btn btn-secondary" disabled>{{ ('floor.plan.editor.reload') | translate }}</button>
             <div class="btn-group">
-                <button class="btn btn-primary" disabled>{{ ('floor.plan.editor.reload') | translate }}</button>
                 <button class="btn btn-primary" (click)="openImportExport()">{{ ('floor.plan.editor.import.export') | translate }}</button>
+                <button class="btn btn-primary" (click)="livePreview()">Live Preview</button>
                 <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
             </div>
         </div>

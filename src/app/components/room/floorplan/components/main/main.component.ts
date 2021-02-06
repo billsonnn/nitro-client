@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Application, Container, Graphics } from 'pixi.js';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
+import FloorMapSettings from '../../common/FloorMapSettings';
 import FloorMapTile from '../../common/FloorMapTile';
 import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
@@ -17,29 +18,26 @@ export class FloorplanMainComponent implements OnInit
     @ViewChild('floorplanElement')
     public floorplanElement: ElementRef<HTMLDivElement>;
 
-    private _spriteMap: Graphics[][];
-    private _heightMap: FloorMapTile[][];
+    public minimize: boolean;
 
-    private _originalMap: FloorMapTile[][];
+    private _spriteMap: Graphics[][];
     private _blockedTilesMap: boolean[][];
-    private _doorX: number;
-    private _doorY: number;
-    private _doorDirection: number;
-    private _wallHeight: number;
-    private _currentModel: string;
+
+    private _floorMapSettings: FloorMapSettings;
+    private _originalFloorMapSettings: FloorMapSettings;
 
     private _app: Application;
     private _container: Container;
-    private _colorMap: object;
     private _extraX: number;
     private _currentAction: string;
     private _currentHeight: string;
     private _highestX: number;
     private _highestY: number;
-    private _isholding: boolean;
+    private _isHolding: boolean;
     private _coloredTilesCount: number;
 
     private _heightScheme: string = "x0123456789abcdefghijklmnopq";
+    private _colorMap: object = {"x": "0x101010","0": "0x0065ff","1": "0x0091ff","2": "0x00bcff","3": "0x00e8ff","4": "0x00ffea","5": "0x00ffbf","6": "0x00ff93","7": "0x00ff68","8": "0x00ff3d","9": "0x19ff00","a": "0x44ff00","b": "0x70ff00","c": "0x9bff00","d": "0xf2ff00","e": "0xffe000","f": "0xffb500","g": "0xff8900","h": "0xff5e00","i": "0xff3200","j": "0xff0700","k": "0xff0023","l": "0xff007a","m": "0xff00a5","n": "0xff00d1","o": "0xff00fc","p": "0xd600ff","q": "0xaa00ff"};
     private _maxFloorLength: number = 64;
     private _tileSize: number = 18;
 
@@ -54,7 +52,6 @@ export class FloorplanMainComponent implements OnInit
         this._floorPlanService.component = this;
         
         this._clear();
-        this._loadColorMap();
     }
 
     ngOnInit(): void
@@ -72,49 +69,52 @@ export class FloorplanMainComponent implements OnInit
     private _clear(): void
     {
         this._spriteMap         = [];
-        this._heightMap         = [];
-
-        this._originalMap       = [];
         this._blockedTilesMap   = [];
-        this._doorX             = -1;
-        this._doorY             = -1;
-        this._doorDirection     = 0;
-        this._wallHeight        = 1;
-        this._currentModel      = null;
-        
-        this._app               = null;
-        this._container         = null;
-        this._colorMap          = [];
+
+        this._floorMapSettings = new FloorMapSettings();
+        this._originalFloorMapSettings = new FloorMapSettings();
+
         this._extraX            = 0;
         this._currentAction     = 'set';
         this._currentHeight     = this._heightScheme[1];
         this._highestX          = 0;
         this._highestY          = 0;
-        this._isholding         = false;
+        this._isHolding         = false;
         this._coloredTilesCount = 0;
 
         this._roomPreviewer     = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
         this._importExportModal = null;
     }
 
-    public init(mapString: string, doorX: number, doorY: number, doorDirection: number, blockedTilesMap: boolean[][])
+    public preview(mapString: string)
     {
-        this._currentModel = mapString;
-        this._doorX = doorX;
-        this._doorY = doorY;
-        this._doorDirection = doorDirection;
-        this._blockedTilesMap = blockedTilesMap;
+        this.init(mapString, this._blockedTilesMap, this._floorMapSettings.doorX, this._floorMapSettings.doorY, this._floorMapSettings.doorDirection, this._floorMapSettings.thicknessWall, this._floorMapSettings.thicknessFloor);
+    }
+
+    public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
+    {
+        this._clear();
         
+        this._floorMapSettings.heightMapString   = mapString;
+        this._floorMapSettings.doorX             = doorX;
+        this._floorMapSettings.doorY             = doorY;
+        this._floorMapSettings.doorDirection     = doorDirection;
+        this._blockedTilesMap                    = blockedTilesMap;
+        this._floorMapSettings.thicknessWall     = thicknessWall;
+        this._floorMapSettings.thicknessFloor    = thicknessFloor;
+
         this._ngZone.run(() => {
-            this._doorDirection = doorDirection;
+            this._floorMapSettings.doorDirection = doorDirection;
         });
 
-        this._heightMap = this._originalMap = this._readTileMapString(mapString);
+        this._floorMapSettings.heightMap = this._readTileMapString(mapString);
 
-        const width = this._tileSize * this._heightMap.length + 20;
-        const height = (this._tileSize * this._heightMap.length) / 2 + 100;
+        const width = this._tileSize * this._floorMapSettings.heightMap.length + 20;
+        const height = (this._tileSize * this._floorMapSettings.heightMap.length) / 2 + 100;
 
-        this._extraX = this._tileSize /2 * this._heightMap.length;
+        this._extraX = this._tileSize /2 * this._floorMapSettings.heightMap.length;
+
+        this._originalFloorMapSettings = this._floorMapSettings;
 
         this._buildApp(width, height);
         this._renderTileMap();
@@ -134,7 +134,7 @@ export class FloorplanMainComponent implements OnInit
             this._app = new Application({
                 width: width,
                 height: height,
-                backgroundColor: 0x000000,
+                backgroundColor: 0x2b2b2b,
                 antialias: true,
                 autoDensity: true
             });
@@ -152,15 +152,15 @@ export class FloorplanMainComponent implements OnInit
         this.floorplanElement.nativeElement.scrollTo(width/3, 0);
        
         this._app.view.addEventListener("mousedown", () => {
-            this._isholding = true;
+            this._isHolding = true;
         });
 
         this._app.view.addEventListener("mouseup", () => {
-            this._isholding = false;
+            this._isHolding = false;
         });
 
         this._app.view.addEventListener("mouseout", () => {
-            this._isholding = false;
+            this._isHolding = false;
         });
     }
 
@@ -183,7 +183,7 @@ export class FloorplanMainComponent implements OnInit
             roomMap[y] = [];
 
             x = 0;
-            while(x < roomMapStringSplit[x].length)
+            while(x < originalRow.length)
             {
                 let blocked = false;
 
@@ -224,7 +224,7 @@ export class FloorplanMainComponent implements OnInit
 
     private _generateTileMapString(): string
     {
-        const highestTile = this._heightMap[this._highestY][this._highestX];
+        const highestTile = this._floorMapSettings.heightMap[this._highestY][this._highestX];
 
         if(highestTile.height === 'x')
         {
@@ -233,13 +233,13 @@ export class FloorplanMainComponent implements OnInit
 
             for(let y = this._maxFloorLength - 1; y >= 0; y--)
             {
-                if(!this._heightMap[y]) continue;
+                if(!this._floorMapSettings.heightMap[y]) continue;
 
                 for(let x = this._maxFloorLength - 1; x >= 0; x--)
                 {
-                    if(!this._heightMap[y][x]) continue;
+                    if(!this._floorMapSettings.heightMap[y][x]) continue;
                     
-                    const tile = this._heightMap[y][x];
+                    const tile = this._floorMapSettings.heightMap[y][x];
     
                     if(tile.height !== 'x')
                     {
@@ -261,7 +261,7 @@ export class FloorplanMainComponent implements OnInit
 
             for(let x = 0; x <= this._highestX; x++)
             {
-                const tile = this._heightMap[y][x];
+                const tile = this._floorMapSettings.heightMap[y][x];
 
                 row[x] = tile.height;
             }
@@ -274,17 +274,17 @@ export class FloorplanMainComponent implements OnInit
 
     private _renderTileMap(): void
     {
-        for(var y = 0; y < this._heightMap.length; y++)
+        for(var y = 0; y < this._floorMapSettings.heightMap.length; y++)
         {
             this._spriteMap[y] = [];
 
-            for(var x = 0; x < this._heightMap[y].length; x++)
+            for(var x = 0; x < this._floorMapSettings.heightMap[y].length; x++)
             {
-                const tile = this._heightMap[y][x];
+                const tile = this._floorMapSettings.heightMap[y][x];
 
                 let isDoor = false;
 
-                if(x === this._doorX && y === this._doorY) isDoor = true;
+                if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) isDoor = true;
                 
                 let positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
                 let positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y * 1;
@@ -331,7 +331,7 @@ export class FloorplanMainComponent implements OnInit
         });
 
         tile.on('mouseover', () => {
-            if(this._isholding)
+            if(this._isHolding)
                 this._handleTileClick(x, y);
         });
 
@@ -340,13 +340,13 @@ export class FloorplanMainComponent implements OnInit
 
     private _setDoor(x: number, y: number): void
     {
-        if(x === this._doorX && y === this._doorY) return;
+        if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) return;
         
-        if(!this._heightMap[this._doorY] || !this._spriteMap[this._doorY] || !this._heightMap[y] || !this._spriteMap[y]) return;
+        if(!this._floorMapSettings.heightMap[this._floorMapSettings.doorY] || !this._spriteMap[this._floorMapSettings.doorY] || !this._floorMapSettings.heightMap[y] || !this._spriteMap[y]) return;
 
-        const tile = this._heightMap[this._doorY][this._doorX];
-        const sprite = this._spriteMap[this._doorY][this._doorX];
-        const futureTile = this._heightMap[y][x];
+        const tile = this._floorMapSettings.heightMap[this._floorMapSettings.doorY][this._floorMapSettings.doorX];
+        const sprite = this._spriteMap[this._floorMapSettings.doorY][this._floorMapSettings.doorX];
+        const futureTile = this._floorMapSettings.heightMap[y][x];
         const futureSprite = this._spriteMap[y][x];
 
         if(!tile || !sprite || !futureTile || !futureSprite) return;
@@ -363,13 +363,13 @@ export class FloorplanMainComponent implements OnInit
         }
 
         futureSprite.tint = 0xffffff;
-        this._doorX = x;
-        this._doorY = y;
+        this._floorMapSettings.doorX = x;
+        this._floorMapSettings.doorY = y;
     }
 
     private _handleTileClick(x: number, y: number): void
     {
-        const tile = this._heightMap[y][x];
+        const tile = this._floorMapSettings.heightMap[y][x];
         let heightIndex = this._heightScheme.indexOf(tile.height);
         
         if(this._currentAction === 'door')
@@ -386,7 +386,7 @@ export class FloorplanMainComponent implements OnInit
             case 'down': futureHeightIndex = heightIndex - 1; break;
             case 'set': futureHeightIndex = this._heightScheme.indexOf(this._currentHeight); break;
             case 'unset': futureHeightIndex = 0; break;
-        }
+        }       
 
         if(futureHeightIndex === -1) return;
 
@@ -405,7 +405,7 @@ export class FloorplanMainComponent implements OnInit
 
         if(newHeight === 'x' && tile.blocked) return;
 
-        this._heightMap[y][x].height = newHeight;        
+        this._floorMapSettings.heightMap[y][x].height = newHeight;        
 
         this._ngZone.run(() => {
             if(newHeight === 'x')
@@ -420,44 +420,10 @@ export class FloorplanMainComponent implements OnInit
 
         let isDoor = false;
 
-        if(x === this._doorX && y === this._doorY) isDoor = true;
+        if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) isDoor = true;
 
         if(!isDoor)
             this._spriteMap[y][x].tint = this._colorMap[newHeight];
-    }
-
-    private _loadColorMap(): void
-    {
-        this._colorMap = {
-            "x": "0x101010",
-            "0": "0x0065ff",
-            "1": "0x0091ff",
-            "2": "0x00bcff",
-            "3": "0x00e8ff",
-            "4": "0x00ffea",
-            "5": "0x00ffbf",
-            "6": "0x00ff93",
-            "7": "0x00ff68",
-            "8": "0x00ff3d",
-            "9": "0x19ff00",
-            "a": "0x44ff00",
-            "b": "0x70ff00",
-            "c": "0x9bff00",
-            "d": "0xf2ff00",
-            "e": "0xffe000",
-            "f": "0xffb500",
-            "g": "0xff8900",
-            "h": "0xff5e00",
-            "i": "0xff3200",
-            "j": "0xff0700",
-            "k": "0xff0023",
-            "l": "0xff007a",
-            "m": "0xff00a5",
-            "n": "0xff00d1",
-            "o": "0xff00fc",
-            "p": "0xd600ff",
-            "q": "0xaa00ff"
-            };
     }
 
     public changeAction(action: string): void
@@ -468,6 +434,7 @@ export class FloorplanMainComponent implements OnInit
     public selectHeight(heightIndex: string): void
     {
         this._currentHeight = heightIndex;
+        this.changeAction('set');
     }
 
     public getColor(hex: string): string
@@ -477,7 +444,9 @@ export class FloorplanMainComponent implements OnInit
 
     public save(): void
     {
-        this._currentModel = this._generateTileMapString();
+        this._floorMapSettings.heightMapString = this._generateTileMapString();
+
+        this._floorPlanService.save(this._floorMapSettings);
     }
 
     public decrementHeight(): void
@@ -486,7 +455,7 @@ export class FloorplanMainComponent implements OnInit
 
         if(colorIndex === 1) return;
 
-        this._currentHeight = this._heightScheme[colorIndex - 1];
+        this.selectHeight(this._heightScheme[colorIndex - 1]);
     }
 
     public incrementHeight(): void
@@ -495,44 +464,44 @@ export class FloorplanMainComponent implements OnInit
 
         if(colorIndex === this._heightScheme.length - 1) return;
 
-        this._currentHeight = this._heightScheme[colorIndex + 1];
+        this.selectHeight(this._heightScheme[colorIndex + 1]);
     }
 
     public decrementDoorDirection(): void
     {
-        if(this._doorDirection === 0)
-            this._doorDirection = 7;
+        if(this._floorMapSettings.doorDirection === 0)
+            this._floorMapSettings.doorDirection = 7;
         else
-            this._doorDirection--;
+            this._floorMapSettings.doorDirection--;
     }
 
     public incrementDoorDirection(): void
     {
-        if(this._doorDirection === 7)
-            this._doorDirection = 0;
+        if(this._floorMapSettings.doorDirection === 7)
+            this._floorMapSettings.doorDirection = 0;
         else
-            this._doorDirection++;
+            this._floorMapSettings.doorDirection++;
     }
 
     public decrementWallheight(): void
     {
-        if(this._wallHeight === 1)
-            this._wallHeight = 16;
+        if(this._floorMapSettings.wallHeight === 1)
+            this._floorMapSettings.wallHeight = 16;
         else
-            this._wallHeight--;
+            this._floorMapSettings.wallHeight--;
     }
 
     public incrementWallheight(): void
     {
-        if(this._wallHeight === 16)
-            this._wallHeight = 1;
+        if(this._floorMapSettings.wallHeight === 16)
+            this._floorMapSettings.wallHeight = 1;
         else
-            this._wallHeight++;
+            this._floorMapSettings.wallHeight++;
     }
 
     public openImportExport(): void
     {
-        this._currentModel = this._generateTileMapString();
+        this._floorMapSettings.heightMapString = this._generateTileMapString();
         
         let modal = this._importExportModal;
 
@@ -558,6 +527,16 @@ export class FloorplanMainComponent implements OnInit
                 instance.map = this.currentModel;
             }
         }
+    }
+
+    public toggleEditor(): void
+    {
+        this.minimize = !this.minimize;
+    }
+    
+    public livePreview(): void
+    {
+        this.toggleEditor();
     }
 
     public get colorMap(): object
@@ -597,16 +576,16 @@ export class FloorplanMainComponent implements OnInit
 
     public get currentModel(): string
     {
-        return this._currentModel;
+        return this._floorMapSettings.heightMapString;
     }
 
     public get doorDirection(): number
     {
-        return this._doorDirection;
+        return this._floorMapSettings.doorDirection;
     }
 
     public get wallHeight(): number
     {
-        return this._wallHeight;
+        return this._floorMapSettings.wallHeight;
     }
 }

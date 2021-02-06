@@ -235,6 +235,7 @@ import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/
 import { RoomBlockedTilesComposer } from './messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from './messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
+import { RoomModelSaveComposer } from './messages/outgoing/room/mapping/RoomModelSaveComposer';
 import { RoomCreateComposer } from './messages/outgoing/room/RoomCreateComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
@@ -638,6 +639,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
         this._composers.set(OutgoingHeader.ROOM_MODEL_BLOCKED_TILES, RoomBlockedTilesComposer);
         this._composers.set(OutgoingHeader.ROOM_MODEL_DOOR, RoomDoorSettingsComposer);
+        this._composers.set(OutgoingHeader.ROOM_MODEL_SAVE, RoomModelSaveComposer);
 
         // UNIT
         this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);

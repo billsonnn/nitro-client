@@ -1,5 +1,6 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FloorPlanService } from '../../services/floorplan.service';
 
 @Component({
     selector: '[nitro-floorplan-import-export-component]',
@@ -15,6 +16,7 @@ export class FloorPlanImportExportComponent
 
     constructor(
         private _activeModal: NgbActiveModal,
+        private _floorPlanService: FloorPlanService,
         private _ngZone: NgZone)
     {}
     
@@ -23,6 +25,12 @@ export class FloorPlanImportExportComponent
         this._ngZone.run(() => {
             this._map = this._backupMap;
         });
+    }
+
+    public preview(): void
+    {
+        this._floorPlanService.importFloorPlan(this._map);
+        this.close();
     }
 
     public close(): void
@@ -34,7 +42,7 @@ export class FloorPlanImportExportComponent
     {
         this._map = map;
 
-        if(!this._backupMap) this._backupMap = map;
+        if(!this._backupMap) this._backupMap = map.replace(/\r\n|\r|\n/g, '\r').toLowerCase();
     }
 
     public get map(): string

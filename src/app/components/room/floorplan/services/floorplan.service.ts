@@ -3,9 +3,12 @@ import { IMessageEvent } from '../../../../../client/core/communication/messages
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
 import { RoomModelEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomModelEvent';
+import { RoomThicknessEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomThicknessEvent';
 import { RoomBlockedTilesComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
+import { RoomModelSaveComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomModelSaveComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import FloorMapSettings from '../common/FloorMapSettings';
 import { FloorplanMainComponent } from '../components/main/main.component';
 
 @Injectable()
@@ -20,24 +23,30 @@ export class FloorPlanService implements OnDestroy
     private _doorY: number;
     private _doorDirection: number;
     private _blockedTilesMap: boolean[][];
+    private _thicknessWall: number;
+    private _thicknessFloor: number;
 
     private _doorSettingsReceived: boolean;
     private _blockedTilesMapReceived: boolean;
+    private _RoomThicknessReceived: boolean;
 
     constructor(
         private _ngZone: NgZone)
     {
-        this.component = null;
-        this._messages = [];
+        this.component                  = null;
+        this._messages                  = [];
 
-        this._model = null;
-        this._doorX = 0;
-        this._doorY = 0;
-        this._doorDirection = 0;
-        this._blockedTilesMap = [];
+        this._model                     = null;
+        this._doorX                     = 0;
+        this._doorY                     = 0;
+        this._doorDirection             = 0;
+        this._blockedTilesMap           = [];
+        this._thicknessWall             = 0;
+        this._thicknessFloor            = 0;
         
-        this._doorSettingsReceived = false;
-        this._blockedTilesMapReceived = false;
+        this._doorSettingsReceived      = false;
+        this._blockedTilesMapReceived   = false;
+        this._RoomThicknessReceived     = false;
 
         this.registerMessages();
     }
@@ -56,7 +65,8 @@ export class FloorPlanService implements OnDestroy
             this._messages = [
                 new RoomModelEvent(this.onRoomModelEvent.bind(this)),
                 new RoomDoorEvent(this.onRoomDoorEvent.bind(this)),
-                new RoomBlockedTilesEvent(this.onRoomBlockedTilesEvent.bind(this))
+                new RoomBlockedTilesEvent(this.onRoomBlockedTilesEvent.bind(this)),
+                new RoomThicknessEvent(this.onRoomThicknessEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -122,11 +132,44 @@ export class FloorPlanService implements OnDestroy
         this.tryEmit();
     }
 
+    private onRoomThicknessEvent(event: RoomThicknessEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._thicknessFloor            = parser.thicknessFloor;
+        this._thicknessWall             = parser.thicknessWall;
+        this._RoomThicknessReceived   = true;
+
+        this.tryEmit();
+    }
+
     private tryEmit(): void
     {
         if(this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
         {
-            this.component.init(this._model, this._doorX, this._doorY, this._doorDirection, this._blockedTilesMap);
+            this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall, this._thicknessFloor);
         }
+    }
+
+    public importFloorPlan(model: string)
+    {
+        this.component.preview(model);
+    }
+
+    public save(settings: FloorMapSettings)
+    {
+        Nitro.instance.communication.connection.send(new RoomModelSaveComposer(
+            settings.heightMapString,
+            settings.doorX,
+            settings.doorY,
+            settings.doorDirection,
+            settings.thicknessWall,
+            settings.thicknessFloor,
+            settings.wallHeight
+            ));
     }
 }
