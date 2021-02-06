@@ -1,20 +1,22 @@
 <div *ngIf="visible" [bringToTop] [draggable] class="nitro-furniture-gift-opening card">
     <div class="drag-handler d-flex align-items-center justify-content-between pt-3 px-3 w-100">
-        <h6 class="m-0">{{ ('widget.furni.present.window.title_from') | translate:'name':senderName}}</h6>
+        <h6 class="m-0">{{ getGiftTitle() | translate:'name':senderName}}</h6>
         <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
     </div>
     <ng-container [ngSwitch]="view">
         <ng-container *ngSwitchCase="'open_present'">
             <div class="p-3">
                 <div class="dimmer-inner bg-secondary p-2">
-                    <div nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+
+                    <div *ngIf="!isAnonymousGift" nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
+                    <div *ngIf="isAnonymousGift" class="anonymous-face"></div>
                     <p>{{ senderText }}
 
                     </p>
                 </div>
             </div>
             <div class="p-3">
-                <button type="button" class="btn btn-primary" (click)="handleButton('accept')">Accept</button>
+                <button type="button" class="btn btn-primary" (click)="handleButton('accept')">{{ 'widget.furni.present.open_gift' | translate }}</button>
             </div>
         </ng-container>
 

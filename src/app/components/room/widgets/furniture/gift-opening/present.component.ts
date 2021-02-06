@@ -348,4 +348,19 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this._placedInRoom = false;
         this._Str_2718();
     }
+
+    public get isAnonymousGift(): boolean
+    {
+        return !this.senderName || this.senderName.length == 0;
+    }
+
+    public getGiftTitle(): string
+    {
+        if(this.isAnonymousGift)
+        {
+            return 'widget.furni.present.window.title';
+        }
+
+        return 'widget.furni.present.window.title_from';
+    }
 }

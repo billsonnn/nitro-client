@@ -3,4 +3,11 @@
     position: absolute;
     width: 350px;
     max-width: 350px;
+
+    .anonymous-face {
+        background-image: url('^assets/images/catalog/incognito.png');
+        height: 48px;
+        width: 48px;
+        background-repeat: no-repeat;
+    }
 }
