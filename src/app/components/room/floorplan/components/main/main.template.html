@@ -32,7 +32,7 @@
                         <div class="mb-1">{{ ('floor.plan.editor.enter.direction') | translate }}</div>
                         <div class="btn-group w-100" style="height: 50px">
                             <button class="btn btn-primary btn-sm" (click)="decrementDoorDirection()"><i class="fas fa-chevron-left"></i></button>
-                            <button class="btn btn-primary btn-sm w-100">{{ doorDirection }}</button>
+                            <button class="btn btn-primary btn-sm w-100"><img [src]="'/assets/images/floorplaneditor/door-direction-' + doorDirection + '.png'"></button>
                             <button class="btn btn-primary btn-sm" (click)="incrementDoorDirection()"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>

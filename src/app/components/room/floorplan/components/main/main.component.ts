@@ -4,6 +4,7 @@ import { Application, Container, Graphics } from 'pixi.js';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
 import FloorMapTile from '../../common/FloorMapTile';
+import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
 
 @Component({
@@ -16,19 +17,19 @@ export class FloorplanMainComponent implements OnInit
     @ViewChild('floorplanElement')
     public floorplanElement: ElementRef<HTMLDivElement>;
 
-    private _spriteMap: any[];
-    private _heightMap: any[];
-    
+    private _spriteMap: Graphics[][];
+    private _heightMap: FloorMapTile[][];
+
+    private _originalMap: FloorMapTile[][];
+    private _blockedTilesMap: boolean[][];
     private _doorX: number;
     private _doorY: number;
-    private _originalMap: any[];
     private _doorDirection: number;
     private _wallHeight: number;
     private _currentModel: string;
 
     private _app: Application;
     private _container: Container;
-    private _doorContainer: Container;
     private _colorMap: object;
     private _extraX: number;
     private _currentAction: string;
@@ -47,49 +48,69 @@ export class FloorplanMainComponent implements OnInit
 
     constructor(
         private _ngZone: NgZone,
+        private _floorPlanService: FloorPlanService,
         private _modalService: NgbModal)
     {
-        this._spriteMap     = [];
-        this._heightMap     = [];
-
-        this._doorX = -1;
-        this._doorY = -1;
-        this._originalMap   = [];
-        this._doorDirection = 0;
-        this._wallHeight = 1;
-        this._currentModel = null;
+        this._floorPlanService.component = this;
         
-        this._app           = null;
-        this._container     = null;
-        this._doorContainer = null;
-        this._colorMap      = [];
-        this._extraX        = 0;
-        this._currentAction     = 'set';
-        this._currentHeight     = this._heightScheme[1];
-        this._highestX          = 0;
-        this._highestY          = 0;
-        this._isholding     = false;
-        this._coloredTilesCount = 0;
-        
-        this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
-        this._importExportModal = null;
-        
+        this._clear();
         this._loadColorMap();
     }
 
     ngOnInit(): void
     {
-        this._doorX = 3;
-        this._doorY = 5;
+        /*const roomMapString = "xxxxxxxxxxxxx\rxxxxlllcccccx\rxxxx55555555x\rxxxx22222222x\rxxxxl00xxx22x\rxxx0000xxx22x\rxxxx000xxx22x\rxxxx000xxxppx\rxxxx000xxxppp\rxxxx000xxxppp\rxxxx000xxx2px\rxxxx000xxx2px\rxxxxh00xxx22x\rxxxxh00xxx22x\rxxxxxxxxxxxxx\rxxxxxxxxxxxxx";
 
-        const roomMapString = "xxxxxxxxxxxxx\rxxxxlllcccccx\rxxxx55555555x\rxxxx22222222x\rxxxxl00xxx22x\rxxx0000xxx22x\rxxxx000xxx22x\rxxxx000xxxppx\rxxxx000xxxppp\rxxxx000xxxppp\rxxxx000xxx2px\rxxxx000xxx2px\rxxxxh00xxx22x\rxxxxh00xxx22x\rxxxxxxxxxxxxx\rxxxxxxxxxxxxx";
-
-        this._currentModel = roomMapString;
-        this._heightMap = this._originalMap = this._readTileMapString(roomMapString);
+        this.init(roomMapString, 3, 5);*/
     }
 
     ngAfterViewInit(): void
     {
+        
+    }
+
+    private _clear(): void
+    {
+        this._spriteMap         = [];
+        this._heightMap         = [];
+
+        this._originalMap       = [];
+        this._blockedTilesMap   = [];
+        this._doorX             = -1;
+        this._doorY             = -1;
+        this._doorDirection     = 0;
+        this._wallHeight        = 1;
+        this._currentModel      = null;
+        
+        this._app               = null;
+        this._container         = null;
+        this._colorMap          = [];
+        this._extraX            = 0;
+        this._currentAction     = 'set';
+        this._currentHeight     = this._heightScheme[1];
+        this._highestX          = 0;
+        this._highestY          = 0;
+        this._isholding         = false;
+        this._coloredTilesCount = 0;
+
+        this._roomPreviewer     = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
+        this._importExportModal = null;
+    }
+
+    public init(mapString: string, doorX: number, doorY: number, doorDirection: number, blockedTilesMap: boolean[][])
+    {
+        this._currentModel = mapString;
+        this._doorX = doorX;
+        this._doorY = doorY;
+        this._doorDirection = doorDirection;
+        this._blockedTilesMap = blockedTilesMap;
+        
+        this._ngZone.run(() => {
+            this._doorDirection = doorDirection;
+        });
+
+        this._heightMap = this._originalMap = this._readTileMapString(mapString);
+
         const width = this._tileSize * this._heightMap.length + 20;
         const height = (this._tileSize * this._heightMap.length) / 2 + 100;
 
@@ -101,23 +122,35 @@ export class FloorplanMainComponent implements OnInit
 
     private _buildApp(width: number, height: number): void
     {
-        this._app = new Application({
-            width: width,
-            height: height,
-            backgroundColor: 0x000000,
-            antialias: true,
-            autoDensity: true
-        });
+        if(this._app && this._container)
+        {
+            for (var i = this._container.children.length - 1; i >= 0; i--)
+            {
+                this._container.removeChild(this._container.children[i]);
+            }
+        }
+        else
+        {
+            this._app = new Application({
+                width: width,
+                height: height,
+                backgroundColor: 0x000000,
+                antialias: true,
+                autoDensity: true
+            });
 
-        this.floorplanElement.nativeElement.append(this._app.view);
+            this.floorplanElement.nativeElement.append(this._app.view);
+
+            if(!this._container)
+            {
+                this._container = new Container();
+
+                this._app.stage.addChild(this._container);
+            }
+        }
+
         this.floorplanElement.nativeElement.scrollTo(width/3, 0);
-
-        this._container = new Container();
-        this._doorContainer = new Container();
-
-        this._app.stage.addChild(this._container);
-        this._app.stage.addChild(this._doorContainer);
-
+       
         this._app.view.addEventListener("mousedown", () => {
             this._isholding = true;
         });
@@ -139,19 +172,30 @@ export class FloorplanMainComponent implements OnInit
         let y = 0, x = 0;
         while(y < roomMapStringSplit.length)
         {
+            if(roomMapStringSplit[y].length === 0)
+            {
+                y--;
+                roomMapStringSplit = roomMapStringSplit.splice(y, 1);
+                continue;
+            }
+
             const originalRow = roomMapStringSplit[y].split("");
             roomMap[y] = [];
 
             x = 0;
             while(x < roomMapStringSplit[x].length)
             {
-                roomMap[y][x] = new FloorMapTile(originalRow[x]);
+                let blocked = false;
+
+                if(this._blockedTilesMap[y] && this._blockedTilesMap[y][x]) blocked = true;
+
+                roomMap[y][x] = new FloorMapTile(originalRow[x], blocked);
                 x++;
             }
 
             while(x < this._maxFloorLength)
             {
-                roomMap[y][x] = new FloorMapTile('x');
+                roomMap[y][x] = new FloorMapTile('x', false);
                 x++;
             }
             
@@ -165,7 +209,7 @@ export class FloorplanMainComponent implements OnInit
             x = 0;
             while(x < this._maxFloorLength)
             {
-                roomMap[y][x] = new FloorMapTile('x');
+                roomMap[y][x] = new FloorMapTile('x', false);
                 x++;
             }
             
@@ -247,7 +291,17 @@ export class FloorplanMainComponent implements OnInit
 
                 let color = this._colorMap[tile.height];
 
-                if(tile.height !== 'x') this._coloredTilesCount++;
+                if(tile.height !== 'x')
+                {
+                    this._ngZone.run(() => {
+                        this._coloredTilesCount++;
+                    });
+                }
+                
+                if(tile.blocked)
+                {
+                    color = '0x435e87';
+                }
 
                 if(isDoor)
                 {
@@ -299,7 +353,15 @@ export class FloorplanMainComponent implements OnInit
 
         if(futureTile.height === 'x') return;
 
-        sprite.tint = this._colorMap[tile.height];
+        if(tile.blocked)
+        {
+            sprite.tint = 0x435e87;
+        }
+        else
+        {
+            sprite.tint = this._colorMap[tile.height];
+        }
+
         futureSprite.tint = 0xffffff;
         this._doorX = x;
         this._doorY = y;
@@ -341,16 +403,20 @@ export class FloorplanMainComponent implements OnInit
 
         if(!newHeight) return;
 
-        this._heightMap[y][x].height = newHeight;
+        if(newHeight === 'x' && tile.blocked) return;
 
-        if(newHeight === 'x')
-        {
-            this._coloredTilesCount--;
-        }
-        else
-        {
-            this._coloredTilesCount++;
-        }
+        this._heightMap[y][x].height = newHeight;        
+
+        this._ngZone.run(() => {
+            if(newHeight === 'x')
+            {
+                this._coloredTilesCount--;
+            }
+            else
+            {
+                this._coloredTilesCount++;
+            }
+        });
 
         let isDoor = false;
 
