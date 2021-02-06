@@ -1,5 +1,6 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
+import { Subscription } from 'rxjs';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
@@ -8,6 +9,7 @@ import { NotificationService } from '../../../notification/services/notification
 import { FurniCategory } from '../../items/FurniCategory';
 import { GroupItem } from '../../items/GroupItem';
 import { IFurnitureItem } from '../../items/IFurnitureItem';
+import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
 
 @Component({
@@ -25,6 +27,12 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     public selectedGroup: GroupItem = null;
     public mouseDown: boolean = false;
 
+    private _filteredItems: GroupItem[] = [];
+    private _search: string = '';
+    private _searchType: string = '';
+    private _subscription: Subscription = null;
+    private _hasGroupItems: boolean = false;
+
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
@@ -36,6 +44,16 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         if(this._inventoryService.controller.furnitureService.isInitalized) this.selectExistingGroupOrDefault();
 
         this._inventoryService.furniController = this;
+
+        this._subscription = this._inventoryService.events.subscribe(event =>
+        {
+            switch(event)
+            {
+                case InventoryFurnitureService.INVENTORY_UPDATED:
+                    this.refreshInventory();
+                    return;
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -58,7 +76,46 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public ngOnDestroy(): void
     {
+        if(this._subscription)
+        {
+            this._subscription.unsubscribe();
+
+            this._subscription = null;
+        }
+
         this._inventoryService.furniController = null;
+    }
+
+    private refreshInventory(): void
+    {
+        let groupItems = this._inventoryService.controller.furnitureService.groupItems;
+
+        if(groupItems.length) this._hasGroupItems = true;
+
+        if((this._search && this._search.length) || (this._searchType && this._searchType.length))
+        {
+            const comparison = this._search.toLocaleLowerCase();
+
+            groupItems = groupItems.filter(item =>
+            {
+                let found = true;
+
+                if(comparison && comparison.length)
+                {
+                    found = (item.name.toLocaleLowerCase().includes(comparison));
+                }
+
+                if(this._searchType && this._searchType.length === 1)
+                {
+                    if(this._searchType === 's') found = !item.isWallItem;
+                    else if(this._searchType === 'i') found = item.isWallItem;
+                }
+
+                return found;
+            });
+        }
+
+        this._filteredItems = groupItems;
     }
 
     private prepareInventory(): void
@@ -69,6 +126,13 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         }
         else
         {
+            if(this._search && !this._filteredItems.length)
+            {
+                this._search = null;
+
+                this.refreshInventory();
+            }
+
             this.selectExistingGroupOrDefault();
         }
     }
@@ -265,7 +329,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public get groupItems(): GroupItem[]
     {
-        return this._inventoryService.controller.furnitureService.groupItems;
+        return this._filteredItems;
     }
 
     public get tradeRunning(): boolean
@@ -285,5 +349,34 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
             itemsPerPage: 5,
             currentPage: 1
         };
+    }
+
+    public get search(): string
+    {
+        return this._search;
+    }
+
+    public set search(search: string)
+    {
+        this._search = search;
+
+        this.refreshInventory();
+    }
+
+    public get searchType(): string
+    {
+        return this._searchType;
+    }
+
+    public set searchType(type: string)
+    {
+        this._searchType = type;
+
+        this.refreshInventory();
+    }
+
+    public get hasGroupItems(): boolean
+    {
+        return this._hasGroupItems;
     }
 }
