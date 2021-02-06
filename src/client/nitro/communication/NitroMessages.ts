@@ -279,6 +279,10 @@ import { LoveLockFurniFriendConfirmedEvent } from './messages/incoming/room/furn
 import { LoveLockFurniStartEvent } from './messages/incoming/room/furniture/LoveLockFurniStartEvent';
 import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
+import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
+import { CatalogRequestGiftConfigurationComposer } from './messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { CatalogPurchaseGiftComposer } from './messages/outgoing/catalog/CatalogPurchaseGiftComposer';
+import { CatalogGiftUsernameUnavailableEvent } from './messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
 import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { FurnitureGiftOpenedEvent } from './messages/incoming/inventory/furni/gifts/FurnitureGiftOpenedEvent';
 import { PetPickUpComposer } from './messages/outgoing/pet/PetPickUpComposer';
@@ -317,6 +321,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_SEARCH, CatalogSearchEvent);
         this._events.set(IncomingHeader.CATALOG_SOLD_OUT, CatalogSoldOutEvent);
         this._events.set(IncomingHeader.CATALOG_UPDATED, CatalogUpdatedEvent);
+        this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
@@ -516,7 +521,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GIFT_OPENED, FurnitureGiftOpenedEvent);
 
         // INVENTORY
-
+        this._events.set(IncomingHeader.GIFT_RECEIVER_NOT_FOUND, CatalogGiftUsernameUnavailableEvent);
         // BOTS
         this._events.set(IncomingHeader.USER_BOTS, BotInventoryMessageEvent);
         this._events.set(IncomingHeader.REMOVE_BOT_FROM_INVENTORY, BotRemovedFromInventoryEvent);
@@ -545,10 +550,12 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_MODE, CatalogModeComposer);
         this._composers.set(OutgoingHeader.CATALOG_PAGE, CatalogPageComposer);
         this._composers.set(OutgoingHeader.CATALOG_PURCHASE, CatalogPurchaseComposer);
+        this._composers.set(OutgoingHeader.CATALOG_PURCHASE_GIFT, CatalogPurchaseGiftComposer);
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
         this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
         this._composers.set(OutgoingHeader.LOVELOCK_START_CONFIRM, LoveLockStartConfirmComposer);
+        this._composers.set(OutgoingHeader.GIFT_CONFIG, CatalogRequestGiftConfigurationComposer);
 
         // CLIENT
         this._composers.set(OutgoingHeader.CLIENT_PONG, ClientPongComposer);
