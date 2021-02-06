@@ -15,17 +15,17 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
                 transition(
                     ':enter',
                     [
-                        style({ left: 0, opacity: 0 }),
+                        style({ bottom: 10, opacity: 0 }),
                         animate('.3s ease-out',
-                            style({ left: 72, opacity: 1 }))
+                            style({ bottom: 87, opacity: 1 }))
                     ]
                 ),
                 transition(
                     ':leave',
                     [
-                        style({ left: 72, opacity: 1 }),
+                        style({ bottom: 87, opacity: 1 }),
                         animate('.3s ease-in',
-                            style({ left: 0, opacity: 0 }))
+                            style({ bottom: 10, opacity: 0 }))
                     ]
                 )
             ]

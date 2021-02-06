@@ -4,6 +4,7 @@
     bottom: 19px;
     left: 375px;
     pointer-events: none;
+    z-index: $chatinput-zindex;
 
     .chatinput-container {
         position: relative;
