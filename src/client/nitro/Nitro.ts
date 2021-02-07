@@ -29,7 +29,8 @@ import { HabboWebTools } from './utils/HabboWebTools';
 
 LegacyExternalInterface.available;
 
-settings.SCALE_MODE = SCALE_MODES.NEAREST;
+settings.SCALE_MODE                         = SCALE_MODES.NEAREST;
+settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT   = false;
 
 export class Nitro extends Application implements INitro
 {
@@ -118,7 +119,6 @@ export class Nitro extends Application implements INitro
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
             height: window.innerHeight,
-            powerPreference: 'high-performance',
             view: canvas
         });
 
