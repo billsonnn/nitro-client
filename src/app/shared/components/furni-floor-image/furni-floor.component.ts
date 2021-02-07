@@ -4,6 +4,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { IGetImageListener } from '../../../../client/nitro/room/IGetImageListener';
 import { TextureUtils } from '../../../../client/room/utils/TextureUtils';
 import { Vector3d } from '../../../../client/room/utils/Vector3d';
+import { ImageResult } from '../../../../client/nitro/room/ImageResult';
 
 @Component({
     selector: '[nitro-furni-floor-image]',
@@ -23,6 +24,9 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
 
     @Input()
     public backgroundColor = 0;
+
+    @Input()
+    public isFloorItem = true;
 
     public imageUrl: string     = null;
     public needsUpdate: boolean = true;
@@ -67,8 +71,15 @@ export class FurniFloorImageComponent implements OnInit, OnChanges, IGetImageLis
         {
             this.needsUpdate = false;
 
-            const imageResult = Nitro.instance.roomEngine.getFurnitureFloorImage(this.spriteId, this.direction, 64, this, this.backgroundColor, this.extras);
-
+            let imageResult: ImageResult = null;
+            if(this.isFloorItem)
+            {
+                imageResult = Nitro.instance.roomEngine.getFurnitureFloorImage(this.spriteId, this.direction, 64, this, this.backgroundColor, this.extras);
+            }
+            else
+            {
+                imageResult = Nitro.instance.roomEngine.getFurnitureWallImage(this.spriteId, this.direction, 64, this, this.backgroundColor, this.extras);
+            }
             if(imageResult)
             {
                 const image = imageResult.getImage();

@@ -24,6 +24,11 @@ import { FurniturePlacePaintComposer } from '../../../../../../client/nitro/comm
 })
 export class PresentFurniWidget extends ConversionTrackingWidget
 {
+
+    private static readonly FLOOR:string = 'floor';
+    private static readonly WALLPAPER:string = 'wallpaper';
+    private static readonly LANDSCAPE:string = 'landscape';
+
     private _visible: boolean       = false;
     private _openedRequest: boolean;
     private _objectId: number;
@@ -39,6 +44,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private _placedInRoom: boolean;
     public openedText: string;
 
+    public isFloor = false;
+
     public view: string = '';
 
     constructor(
@@ -47,6 +54,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         super();
 
         this.onObjectUpdate   = this.onObjectUpdate.bind(this);
+        this._Str_4159        = this._Str_4159.bind(this);
+        this._Str_21234       = this._Str_21234.bind(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -144,7 +153,9 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
+                debugger;
                 if(!this._openedRequest) return;
+                this.isFloor = true;
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
                 this._itemType = event._Str_2887;
@@ -200,18 +211,26 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS: {
-                if(!this._openedRequest) return;
 
-                this._objectId = event._Str_1577;
-                this._classId = event.classId;
-                this._itemType = event._Str_2887;
-                this._text = event.text;
-                this._controller = event.controller;
-                this._placedItemId = event.placedItemId;
-                this._placedItemType = event.placedItemType;
-                this._placedInRoom = event._Str_4057;
-                this._Str_10146();
-                this._Str_9278(event._Str_11625);
+                if(!this._openedRequest) return;
+                try
+                {
+                    this.isFloor = true;
+                    this._objectId = event._Str_1577;
+                    this._classId = event.classId;
+                    this._itemType = event._Str_2887;
+                    this._text = event.text;
+                    this._controller = event.controller;
+                    this._placedItemId = event.placedItemId;
+                    this._placedItemType = event.placedItemType;
+                    this._placedInRoom = event._Str_4057;
+                    this._Str_10146();
+                    this._Str_9278(event._Str_11625);
+                }
+                catch (e)
+                {
+                    debugger;
+                }
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE: {
@@ -243,12 +262,32 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         if(this._text)
         {
             this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._text);
+            if(this._Str_20493())
+            {
+                this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._text);
+            }
         }
 
         this.view = 'present_opened';
         this._visible = true;
     }
 
+    private _Str_20493(): boolean
+    {
+        let k = false;
+        if(this._itemType == ProductTypeEnum.WALL)
+        {
+            const local2 = Nitro.instance.sessionDataManager.getWallItemData(this._classId);
+            if(local2)
+            {
+                const local3 = local2.className;
+                k = ((local3 == PresentFurniWidget.FLOOR) || (local3 == PresentFurniWidget.LANDSCAPE) || (local3 == PresentFurniWidget.WALLPAPER));
+            }
+        }
+
+        return k;
+
+    }
 
 
     // see _Str_4649
@@ -327,10 +366,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     {
         if(this._placedItemId > 0 && !this._placedInRoom)
         {
+            const local3 = null;
             switch(this._placedItemType)
             {
                 case ProductTypeEnum.FLOOR:
-                    // Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
+
+                    //   Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
                     // _local_3 = this._inventory._Str_18856(-(this._placedItemId));
                     // if (this._Str_5337(_local_3))
                     // {
