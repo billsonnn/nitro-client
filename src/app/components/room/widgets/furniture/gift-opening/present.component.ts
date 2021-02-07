@@ -15,6 +15,7 @@ import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
 import { FurniturePresentWidgetHandler } from '../../handlers/FurniturePresentWidgetHandler';
 import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
+import { FurniturePlacePaintComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/FurniturePlacePaintComposer';
 
 
 @Component({
@@ -98,28 +99,28 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private _Str_4159(k:RoomWidgetRoomObjectUpdateEvent):void
     {
-        // if(k.id == this._objectId)
-        // {
-        //     this._Str_2718();
-        // }
-        // if(k.id == this._placedItemId)
-        // {
-        //     if(this._placedInRoom)
-        //     {
-        //         this._placedInRoom = false;
-        //         this._Str_22179();
-        //     }
-        // }
+        if(k.id == this._objectId)
+        {
+            this._Str_2718();
+        }
+        if(k.id == this._placedItemId)
+        {
+            if(this._placedInRoom)
+            {
+                this._placedInRoom = false;
+                //.     this._Str_22179();
+            }
+        }
     }
 
     private  _Str_21234(k:RoomWidgetEcotronBoxDataUpdateEvent):void
     {
-    // switch (k.type)
-    // {
-    //     case _Str_3072.RWEBDUE_PACKAGEINFO:
-    //         this._Str_2718();
-    //         return;
-    // }
+        switch(k.type)
+        {
+            case RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO:
+                this._Str_2718();
+                return;
+        }
     }
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
@@ -143,8 +144,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
-                //  if(!this._openedRequest) return;
-
+                if(!this._openedRequest) return;
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
                 this._itemType = event._Str_2887;
@@ -156,6 +156,47 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
                 this._Str_10146();
                 //his._Str_12806('packagecard_icon_floor');
+            }
+                break;
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE: {
+                if(!this._openedRequest) return;
+
+                this._objectId = event._Str_1577;
+                this._classId = event.classId;
+                this._itemType = event._Str_2887;
+                this._text = event.text;
+                this._controller = event.controller;
+                this._placedItemId = event.placedItemId;
+                this._placedItemType = event.placedItemType;
+                this._placedInRoom = event._Str_4057;
+                this._Str_10146();
+                // this._Str_12806("packagecard_icon_landscape");
+            }
+                break;
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER: {
+                if(!this._openedRequest) return;
+                this._objectId = event._Str_1577;
+                this._classId = event.classId;
+                this._itemType = event._Str_2887;
+                this._text = event.text;
+                this._controller = event.controller;
+                this._placedItemId = event.placedItemId;
+                this._placedItemType = event.placedItemType;
+                this._placedInRoom = event._Str_4057;
+                this._Str_10146();
+                //this._Str_12806("packagecard_icon_wallpaper");
+            }
+                break;
+
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB: {
+                if(!this._openedRequest) return;
+                this._objectId = event._Str_1577;
+                this._classId = event.classId;
+                this._itemType = event._Str_2887;
+                this._text = event.text;
+                this._controller = event.controller;
+                this._Str_10146();
+                //this._Str_12806("packagecard_icon_hc");
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS: {
@@ -171,6 +212,13 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._placedInRoom = event._Str_4057;
                 this._Str_10146();
                 this._Str_9278(event._Str_11625);
+            }
+                break;
+            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE: {
+                if(!this._openedRequest) return;
+
+                this._Str_9278(event._Str_11625);
+
             }
                 break;
         }
@@ -202,15 +250,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     }
 
 
-    public getTitle(): string
-    {
-        if(!this.hasMissingSenderName())
-        {
-            return Nitro.instance.localization.getValueWithParameter('widget.furni.present.window.title_from', 'name', this._senderName);
-        }
-
-        return '';
-    }
 
     // see _Str_4649
     private hasMissingSenderName(): boolean
@@ -291,6 +330,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             switch(this._placedItemType)
             {
                 case ProductTypeEnum.FLOOR:
+                    // Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
                     // _local_3 = this._inventory._Str_18856(-(this._placedItemId));
                     // if (this._Str_5337(_local_3))
                     // {
@@ -362,5 +402,10 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         }
 
         return 'widget.furni.present.window.title_from';
+    }
+
+    public get classId(): number
+    {
+        return this._classId;
     }
 }
