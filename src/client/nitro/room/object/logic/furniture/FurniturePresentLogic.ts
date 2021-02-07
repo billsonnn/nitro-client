@@ -68,7 +68,6 @@ export class FurniturePresentLogic extends FurnitureLogic
 
         if(!message && (typeof data === 'string'))
         {
-
             this.object.model.setValue(RoomObjectVariable.FURNITURE_DATA, data.substr(1));
         }
         else
