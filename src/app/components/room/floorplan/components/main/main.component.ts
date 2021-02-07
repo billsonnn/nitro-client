@@ -91,7 +91,7 @@ export class FloorplanMainComponent implements OnInit
         this.init(mapString, this._blockedTilesMap, this._floorMapSettings.doorX, this._floorMapSettings.doorY, this._floorMapSettings.doorDirection, this._floorMapSettings.thicknessWall, this._floorMapSettings.thicknessFloor);
     }
 
-    public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
+    public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: string, thicknessFloor: string)
     {
         this._clear();
         
@@ -100,8 +100,8 @@ export class FloorplanMainComponent implements OnInit
         this._floorMapSettings.doorY             = doorY;
         this._floorMapSettings.doorDirection     = doorDirection;
         this._blockedTilesMap                    = blockedTilesMap;
-        this._floorMapSettings.thicknessWall     = thicknessWall;
-        this._floorMapSettings.thicknessFloor    = thicknessFloor;
+        this._floorMapSettings.thicknessWall     = thicknessWall.toString();
+        this._floorMapSettings.thicknessFloor    = thicknessFloor.toString();
 
         this._ngZone.run(() => {
             this._floorMapSettings.doorDirection = doorDirection;
@@ -587,5 +587,25 @@ export class FloorplanMainComponent implements OnInit
     public get wallHeight(): number
     {
         return this._floorMapSettings.wallHeight;
+    }
+
+    public get thicknessWall(): string
+    {
+        return this._floorMapSettings.thicknessWall;
+    }
+
+    public set thicknessWall(tickness: string)
+    {
+        this._floorMapSettings.thicknessWall = tickness;
+    }
+
+    public get thicknessFloor(): string
+    {
+        return this._floorMapSettings.thicknessFloor;
+    }
+
+    public set thicknessFloor(tickness: string)
+    {
+        this._floorMapSettings.thicknessFloor = tickness;
     }
 }

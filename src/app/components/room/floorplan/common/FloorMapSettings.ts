@@ -7,8 +7,8 @@ export default class FloorMapSettings {
     public doorY: number;
     public doorDirection: number;
     public wallHeight: number;
-    public thicknessWall: number;
-    public thicknessFloor: number;
+    public thicknessWall: string;
+    public thicknessFloor: string;
 
     constructor(){
         this.heightMap          = [];
@@ -17,7 +17,7 @@ export default class FloorMapSettings {
         this.doorY              = 0;
         this.doorDirection      = 0;
         this.wallHeight         = 1;
-        this.thicknessWall      = 0;
-        this.thicknessFloor     = 0;
+        this.thicknessWall      = '0';
+        this.thicknessFloor     = '0';
     }
 }

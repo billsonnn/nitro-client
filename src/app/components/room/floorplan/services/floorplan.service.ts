@@ -151,7 +151,7 @@ export class FloorPlanService implements OnDestroy
     {
         if(this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
         {
-            this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall, this._thicknessFloor);
+            this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall.toString(), this._thicknessFloor.toString());
         }
     }
 
@@ -162,13 +162,14 @@ export class FloorPlanService implements OnDestroy
 
     public save(settings: FloorMapSettings)
     {
+        console.log(settings, parseInt(settings.thicknessWall),parseInt(settings.thicknessFloor) )
         Nitro.instance.communication.connection.send(new RoomModelSaveComposer(
             settings.heightMapString,
             settings.doorX,
             settings.doorY,
             settings.doorDirection,
-            settings.thicknessWall,
-            settings.thicknessFloor,
+            parseInt(settings.thicknessWall),
+            parseInt(settings.thicknessFloor),
             settings.wallHeight
             ));
     }

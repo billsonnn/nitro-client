@@ -48,7 +48,7 @@
                 <div class="mb-1">{{ ('floor.plan.editor.room.options') | translate }}</div>
                 <div class="row mb-3">
                     <div class="col-6">
-                        <select class="form-control form-control-sm">
+                        <select class="form-control form-control-sm" [(ngModel)]="thicknessWall">
                             <option value="0">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
                             <option value="1">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
                             <option value="-1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
@@ -56,7 +56,7 @@
                         </select>
                     </div>
                     <div class="col-6">
-                        <select class="form-control form-control-sm">
+                        <select class="form-control form-control-sm" [(ngModel)]="thicknessFloor">
                             <option value="0">{{ ('navigator.roomsettings.floor_thickness.normal') | translate }}</option>
                             <option value="1">{{ ('navigator.roomsettings.floor_thickness.thick') | translate }}</option>
                             <option value="-1">{{ ('navigator.roomsettings.floor_thickness.thin') | translate }}</option>
@@ -73,7 +73,7 @@
         <div class="d-flex flex-row justify-content-between w-100">
             <button class="btn btn-secondary" disabled>{{ ('floor.plan.editor.reload') | translate }}</button>
             <div class="btn-group">
-                <button class="btn btn-primary" (click)="openImportExport()">{{ ('floor.plan.editor.import.export') | translate }}</button>
+                <button class="btn btn-primary" (click)="openImportExport()" disabled>{{ ('floor.plan.editor.import.export') | translate }}</button>
                 <button class="btn btn-primary" (click)="livePreview()">Live Preview</button>
                 <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
             </div>
