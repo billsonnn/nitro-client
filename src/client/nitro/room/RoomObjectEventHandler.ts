@@ -170,18 +170,18 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(object.mouseHandler) object.mouseHandler.mouseEvent(event, geometry);
     }
 
-    public processRoomObjectPlacement(placementSource: string, roomId: number, id: number, category: number, typeId: number, legacyString: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
+    public processRoomObjectPlacement(placementSource: string, roomId: number, id: number, category: number, typeId: number, extra: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
     {
         this._objectPlacementSource = placementSource;
 
         const location  = new Vector3d(-100, -100);
         const direction = new Vector3d(0);
 
-        this.setSelectedRoomObjectData(roomId, id, category, location, direction, RoomObjectOperationType.OBJECT_PLACE, typeId, legacyString, stuffData, state, frameNumber, posture);
+        this.setSelectedRoomObjectData(roomId, id, category, location, direction, RoomObjectOperationType.OBJECT_PLACE, typeId, extra, stuffData, state, frameNumber, posture);
 
         if(this._roomEngine)
         {
-            this._roomEngine._Str_16645(typeId, category, false, legacyString, stuffData, state, frameNumber, posture);
+            this._roomEngine._Str_16645(typeId, category, false, extra, stuffData, state, frameNumber, posture);
             this._roomEngine._Str_7972(false);
         }
 

@@ -319,7 +319,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         const unseen    = this.isFurnitureUnseen(item);
-        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
+        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
 
         groupItem.push(item, unseen);
 
@@ -390,7 +390,7 @@ export class InventoryFurnitureService implements OnDestroy
             return existingGroup;
         }
 
-        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
+        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
 
         existingGroup.push(item, unseen);
 
@@ -548,7 +548,8 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
-            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString(), item.stuffData);
+            console.log(item);
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.extra.toString(), item.stuffData);
         }
 
         if(isMoving)
