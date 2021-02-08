@@ -245,7 +245,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         this._ngZone.run(() =>
         {
-            console.log('ye');
             if(parser.roomEnter)
             {
                 this._data.enteredGuestRoom = parser.data;
