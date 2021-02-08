@@ -67,6 +67,8 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget implements 
 
     public ngOnDestroy(): void
     {
+        this._navigatorService.roomInfoShowing = false;
+
         this.stopRoomOptionsTimeout();
     }
 
