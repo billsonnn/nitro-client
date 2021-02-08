@@ -19,6 +19,7 @@ import { RoomEnterErrorEvent } from '../../../../client/nitro/communication/mess
 import { RoomForwardEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/RoomForwardEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
+import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
 import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { DesktopViewComposer } from '../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
@@ -39,10 +40,10 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
+import { NavigatorData } from '../common/NavigatorData';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
 import { NavigatorDataService } from './navigator-data.service';
-import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker
@@ -80,6 +81,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     private _filter: INavigatorSearchFilter;
     private _lastSearchResults: NavigatorSearchResultList[];
     private _lastSearch: string;
+    private _data: NavigatorData;
+
+    private _roomInfoShowing: boolean = false;
 
     private _tradeSettings: string[];
 
@@ -90,7 +94,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     private _isSearching: boolean;
     private _isLoaded: boolean;
     private _isLoading: boolean;
-    private _canRate: boolean;
 
     constructor(
         private _notificationService: NotificationService,
@@ -105,6 +108,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._filter            = NavigatorService.SEARCH_FILTERS[0];
         this._lastSearchResults = [];
         this._lastSearch        = '';
+        this._data              = new NavigatorData();
 
         this._tradeSettings     = [];
 
@@ -113,7 +117,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._isSearching       = false;
         this._isLoaded          = false;
         this._isLoading         = false;
-        this._canRate           = false;
 
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
 
@@ -220,7 +223,12 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        this._navigatorDataService.currentRoomOwner = parser.isOwner;
+        this._ngZone.run(() =>
+        {
+            this._data.currentRoomOwner = false;
+            this._data.currentRoomOwner = parser.isOwner;
+            this._data.currentRoomId    = parser.roomId;
+        });
 
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, true, false));
 
@@ -235,35 +243,49 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        if(parser.roomEnter)
+        this._ngZone.run(() =>
         {
-            // if an ad needs to display, do it here
-            // refresh the room info window / display it
-        }
-        else
-        {
-            if(parser.roomForward)
+            console.log('ye');
+            if(parser.roomEnter)
             {
-                if(parser.data.ownerName !== Nitro.instance.sessionDataManager.userName)
+                this._data.enteredGuestRoom = parser.data;
+                this._data.staffPick        = parser.staffPick;
+
+                const isCreatedRoom = (this._data.createdRoomId === parser.data.roomId);
+
+                if(!isCreatedRoom && parser.data.displayRoomEntryAd)
                 {
-                    switch(parser.data.doorMode)
-                    {
-                        case RoomDataParser.DOORBELL_STATE:
-                            this.openRoomDoorbell(parser.data);
-                            return;
-                        case RoomDataParser.PASSWORD_STATE:
-                            this.openRoomPassword(parser.data);
-                            return;
-                    }
+                    // display ad
                 }
 
-                this.goToRoom(parser.data.roomId);
+                this._data.createdRoomId = 0;
             }
             else
             {
-                // update room data with new data
+                if(parser.roomForward)
+                {
+                    if((parser.data.ownerName !== Nitro.instance.sessionDataManager.userName) && !parser.isGroupMember)
+                    {
+                        switch(parser.data.doorMode)
+                        {
+                            case RoomDataParser.DOORBELL_STATE:
+                                this.openRoomDoorbell(parser.data);
+                                return;
+                            case RoomDataParser.PASSWORD_STATE:
+                                this.openRoomPassword(parser.data);
+                                return;
+                        }
+                    }
+
+                    this.goToRoom(parser.data.roomId);
+                }
+                else
+                {
+                    this._data.enteredGuestRoom = parser.data;
+                    this._data.staffPick        = parser.staffPick;
+                }
             }
-        }
+        });
     }
 
     private onRoomEnterErrorEvent(event: RoomEnterErrorEvent): void
@@ -274,22 +296,24 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        switch(parser.reason)
+        this._ngZone.run(() =>
         {
-            case RoomEnterErrorParser.FULL_ERROR:
-                this._ngZone.run(() => this._notificationService.alert('${navigator.guestroomfull.text}', '${navigator.guestroomfull.title}'));
-                break;
-            case RoomEnterErrorParser.QUEUE_ERROR:
-                this._ngZone.run(() => this._notificationService.alert('${room.queue.error.title}', '${room.queue.error. ' + parser.parameter + '}'));
-                break;
-            case RoomEnterErrorParser.BANNED:
-                this._ngZone.run(() => this._notificationService.alert('${navigator.banned.title}', '${navigator.banned.text}'));
-                break;
-            default:
-                this._ngZone.run(() => this._notificationService.alert('${room.queue.error.title}', '${room.queue.error.title}'));
-                break;
-
-        }
+            switch(parser.reason)
+            {
+                case RoomEnterErrorParser.FULL_ERROR:
+                    this._notificationService.alert('${navigator.guestroomfull.text}', '${navigator.guestroomfull.title}');
+                    break;
+                case RoomEnterErrorParser.QUEUE_ERROR:
+                    this._notificationService.alert('${room.queue.error. ' + parser.parameter + '}', '${room.queue.error.title}');
+                    break;
+                case RoomEnterErrorParser.BANNED:
+                    this._notificationService.alert('${navigator.banned.text}', '${navigator.banned.title}');
+                    break;
+                default:
+                    this._notificationService.alert('${room.queue.error.title}', '${room.queue.error.title}');
+                    break;
+            }
+        });
 
         Nitro.instance.communication.connection.send(new DesktopViewComposer());
 
@@ -307,6 +331,12 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._data.createdRoomId    = parser.roomId;
+            this._roomInfoShowing       = false;
+        });
 
         this.goToRoom(parser.roomId);
     }
@@ -485,20 +515,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         if(!parser) return;
 
         this._homeRoomId = parser.homeRoomId;
-
-        // if(!(parser.roomIdToEnter <= 0))
-        // {
-        //     const roomId = parser.roomIdToEnter;
-
-        //     if(roomId !== this._homeRoomId)
-        //     {
-        //         this.goToPrivateRoom(this._homeRoomId);
-        //     }
-        //     else
-        //     {
-        //         this.goToHomeRoom();
-        //     }
-        // }
     }
 
     private onRoomScoreEvent(event: RoomScoreEvent): void
@@ -509,7 +525,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        this._ngZone.run(() => this._canRate = parser.canLike);
+        this._ngZone.run(() => (this._data.canRate = parser.canLike));
     }
 
     public getMaxVisitors(count: number): number[]
@@ -653,6 +669,11 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this._component.openRoomPassword(room);
     }
 
+    public toggleRoomInfo(): void
+    {
+        this._roomInfoShowing = !this._roomInfoShowing;
+    }
+
     public linkReceived(k: string):void
     {
         const parts = k.split('/');
@@ -745,18 +766,23 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         return this._isLoading;
     }
 
-    public get canRate(): boolean
-    {
-        return this._canRate;
-    }
-
-    public set canRate(canRate: boolean)
-    {
-        this._canRate = canRate;
-    }
-
     public get tradeSettings(): string[]
     {
         return this._tradeSettings;
+    }
+
+    public get data(): NavigatorData
+    {
+        return this._data;
+    }
+
+    public get roomInfoShowing(): boolean
+    {
+        return this._roomInfoShowing;
+    }
+
+    public set roomInfoShowing(flag: boolean)
+    {
+        this._roomInfoShowing = flag;
     }
 }

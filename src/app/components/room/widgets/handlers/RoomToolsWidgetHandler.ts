@@ -74,8 +74,8 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         {
             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, this._zoomed ? 1 : 0, false));
             this._zoomed = !this._zoomed;
-
         }
+
         return null;
     }
 
@@ -97,9 +97,16 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         if(!roomData) return;
 
-        this._widget.loadRoomData(roomData);
-        this._widget._Str_22970(roomData);
-        this._widget._Str_23696(roomData.roomId);
+        this._widget.updateRoomInfo(roomData);
+
+        if(parser.roomEnter)
+        {
+            const ownerName = (roomData.showOwner ? (Nitro.instance.getLocalization('room.tool.room.owner.prefix') + ' ' + roomData.ownerName) : Nitro.instance.getLocalization('room.tool.public.room'));
+
+            this._widget.updateRoomTools(roomData.roomName, ownerName, roomData.tags);
+            this._widget.addVisitedRoom(roomData);
+            this._widget.updateRoomCurrentIndex(roomData.roomId);
+        }
     }
 
     public rateRoom(): void
@@ -109,20 +116,14 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._container.connection.send(new RoomLikeRoomComposer(1));
     }
 
-    // Done
+    public get disposed(): boolean
+    {
+        return this._disposed;
+    }
+
     public get type(): string
     {
         return RoomWidgetEnum.ROOM_TOOLS;
-    }
-
-    public get messageTypes(): string[]
-    {
-        return [ ];
-    }
-
-    public get eventTypes(): string[]
-    {
-        return [ ];
     }
 
     public get container(): IRoomWidgetHandlerContainer
@@ -132,7 +133,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
-
         this._container = container;
 
         if(this._container)
@@ -146,8 +146,13 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         }
     }
 
-    public get disposed(): boolean
+    public get messageTypes(): string[]
     {
-        return this._disposed;
+        return [];
+    }
+
+    public get eventTypes(): string[]
+    {
+        return [];
     }
 }

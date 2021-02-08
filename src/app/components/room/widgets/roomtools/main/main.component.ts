@@ -1,9 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ComponentFactoryResolver, NgZone, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, NgZone, OnDestroy } from '@angular/core';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { SettingsService } from '../../../../../core/settings/service';
-import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { RoomToolsWidgetHandler } from '../../handlers/RoomToolsWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
@@ -18,17 +17,19 @@ import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggle
                 transition(
                     ':enter',
                     [
-                        style({ opacity: 0 }),
-                        animate('.3s ease-out',
-                            style({ opacity: 1 }))
+                        style({ transform: 'translateX(-50%)' }),
+                        animate('.1s ease-in',
+                            style({ transform: 'translateX(0%)' })
+                        )
                     ]
                 ),
                 transition(
                     ':leave',
                     [
-                        style({ opacity: 1 }),
-                        animate('.3s ease-in',
-                            style({ opacity: 0 }))
+                        style({ transform: 'translateX(0%)' }),
+                        animate('.1s ease-out',
+                            style({ transform: 'translateX(-50%)' })
+                        )
                     ]
                 )
             ]
@@ -37,72 +38,105 @@ import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggle
 })
 export class RoomToolsMainComponent extends ConversionTrackingWidget implements OnDestroy
 {
-    @ViewChild('componentContainer', { read: ViewContainerRef })
-    public componentContainer: ViewContainerRef;
+    private static VISITED_ROOMS: RoomDataParser[]  = [];
+    private static MAX_VISIT_HISTORY: number        = 10;
 
     private _lastRoomId: number = -1;
     private _roomData: RoomDataParser = null;
 
+    private _currentRoomIndex: number = -1;
+    private _roomName: string = '';
+    private _ownerName: string = '';
+    private _tags: string[] = [];
+    private _zoomed: boolean = true;
+
     private _roomOptionsVisible: boolean = false;
-    private _roomNameVisible: boolean = false;
     private _roomToolsVisible: boolean = false;
 
-    private _roomNameTimeout: ReturnType<typeof setTimeout> = null;
+    private _roomOptionsTimeout: ReturnType<typeof setTimeout> = null;
 
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone,
-        private _navigatorDataService: NavigatorDataService,
         private _settingsService: SettingsService,
         private _navigatorService: NavigatorService
     )
     {
         super();
-
-        this.toggleRoomTools = this.toggleRoomTools.bind(this);
     }
 
     public ngOnDestroy(): void
     {
-        this.stopRoomNameTimeout();
+        this.stopRoomOptionsTimeout();
     }
 
-    public loadRoomData(roomData: RoomDataParser)
+    public updateRoomInfo(roomData: RoomDataParser): void
     {
         if(!roomData) return;
 
         this._ngZone.run(() =>
         {
-            this._roomData = roomData;
-
-            if(this._lastRoomId !== this._roomData.roomId)
+            for(const visited of RoomToolsMainComponent.VISITED_ROOMS)
             {
-                this._lastRoomId = this._roomData.roomId;
-
-                setTimeout(() => this.showRoomName(), 1);
+                if(visited.roomId === roomData.roomId)
+                {
+                    visited.roomName = roomData.roomName;
+                }
             }
         });
     }
 
-    public _Str_22970(data: RoomDataParser): void
+    public updateRoomTools(roomName: string, ownerName: string, tags: string[]): void
     {
-        const visitedRooms = this._navigatorDataService.getVisitedRooms();
-
-        if(!visitedRooms) return;
-
-        for(const visitedRoom of visitedRooms)
+        this._ngZone.run(() =>
         {
-            if(!visitedRoom) continue;
+            this._roomName  = roomName;
+            this._ownerName = ownerName;
+            this._tags      = tags;
 
-            if(visitedRoom.roomId === data.roomId) return;
-        }
-
-        this._navigatorDataService.addRoomToVisitedRooms(data);
+            this.showRoomOptions();
+        });
     }
 
-    public _Str_23696(k: number): void
+    public addVisitedRoom(data: RoomDataParser): void
     {
-        this._navigatorDataService.setCurrentIndexToRoomId(k);
+        this._ngZone.run(() =>
+        {
+            for(const visited of RoomToolsMainComponent.VISITED_ROOMS)
+            {
+                if(!visited || (visited.roomId !== data.roomId)) continue;
+
+                return;
+            }
+
+            RoomToolsMainComponent.VISITED_ROOMS.push(data);
+
+            if(RoomToolsMainComponent.VISITED_ROOMS.length > RoomToolsMainComponent.MAX_VISIT_HISTORY) RoomToolsMainComponent.VISITED_ROOMS.shift();
+
+            this._currentRoomIndex = (RoomToolsMainComponent.VISITED_ROOMS.length - 1);
+        });
+    }
+
+    public updateRoomCurrentIndex(roomId: number): void
+    {
+        this._ngZone.run(() =>
+        {
+            let i = 0;
+
+            while(i < RoomToolsMainComponent.VISITED_ROOMS.length)
+            {
+                const roomData = RoomToolsMainComponent.VISITED_ROOMS[i];
+
+                if(roomData && roomData.roomId === roomId)
+                {
+                    this._currentRoomIndex = i;
+
+                    return;
+                }
+
+                i++;
+            }
+        });
     }
 
     public likeRoom(): void
@@ -110,40 +144,26 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget implements 
         this.handler.rateRoom();
     }
 
-    public canGo(direction: string): boolean
+    public hasDirection(direction: number): boolean
     {
-        switch(direction)
-        {
-            case 'back':
-                return this._navigatorDataService.canGoBack();
-            case 'forward':
-                return this._navigatorDataService.canGoForward();
-        }
+        const requestedIndex = (this._currentRoomIndex + direction);
+
+        if((requestedIndex >= 0) && (requestedIndex < RoomToolsMainComponent.VISITED_ROOMS.length)) return true;
 
         return false;
     }
 
-    public goInDirection(direction: string): void
+    public goInDirection(direction: number): void
     {
-        if(!this.canGo(direction)) return;
+        const requestedIndex = (this._currentRoomIndex + direction);
 
-        let roomId: number = null;
-        switch(direction)
-        {
-            case 'back': {
-                roomId = this._navigatorDataService.getPreviousRoomId();
-            }
-                break;
-            case 'forward': {
-                roomId = this._navigatorDataService.getNextRoomId();
-            }
+        if((requestedIndex < 0) || (requestedIndex > (RoomToolsMainComponent.VISITED_ROOMS.length - 1))) return;
 
-                break;
-        }
+        const roomData = RoomToolsMainComponent.VISITED_ROOMS[requestedIndex];
 
-        if(!roomId) return;
+        if(!roomData) return;
 
-        this._navigatorService.goToPrivateRoom(roomId);
+        this._navigatorService.goToPrivateRoom(roomData.roomId);
     }
 
     public toggleChatHistory(): void
@@ -154,41 +174,46 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget implements 
     public toggleZoom(): void
     {
         this.widgetHandler.processWidgetMessage(new RoomWidgetZoomToggleMessage());
+
+        this._zoomed = !this._zoomed;
     }
 
     public toggleRoomOptions(): void
     {
         this._roomOptionsVisible = !this._roomOptionsVisible;
 
-        if(this._roomOptionsVisible) this.showRoomName();
+        if(this._roomOptionsVisible) this.showRoomOptions(false);
     }
 
-    public showRoomName(): void
+    public showRoomOptions(autoHide: boolean = true): void
     {
-        this._roomNameVisible = true;
+        this._roomOptionsVisible = true;
 
-        this.stopRoomNameTimeout();
+        this.stopRoomOptionsTimeout();
 
-        this._roomNameTimeout = setTimeout(() =>
+        if(autoHide)
         {
-            this.stopRoomNameTimeout();
+            this._roomOptionsTimeout = setTimeout(() =>
+            {
+                this.stopRoomOptionsTimeout();
 
-            this._roomNameVisible = false;
-        }, 5000);
+                this._roomOptionsVisible = false;
+            }, 5000);
+        }
     }
 
-    private stopRoomNameTimeout(): void
+    private stopRoomOptionsTimeout(): void
     {
-        if(!this._roomNameTimeout) return;
+        if(!this._roomOptionsTimeout) return;
 
-        clearTimeout(this._roomNameTimeout);
+        clearTimeout(this._roomOptionsTimeout);
 
-        this._roomNameTimeout = null;
+        this._roomOptionsTimeout = null;
     }
 
     public toggleRoomTools(): void
     {
-        this._roomToolsVisible = !this._roomToolsVisible;
+        this._navigatorService.toggleRoomInfo();
     }
 
     public get handler(): RoomToolsWidgetHandler
@@ -196,14 +221,29 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget implements 
         return (this.widgetHandler as RoomToolsWidgetHandler);
     }
 
+    public get roomName(): string
+    {
+        return this._roomName;
+    }
+
+    public get ownerName(): string
+    {
+        return this._ownerName;
+    }
+
+    public get tags(): string[]
+    {
+        return this._tags;
+    }
+
+    public get zoomed(): boolean
+    {
+        return this._zoomed;
+    }
+
     public get roomOptionsVisible(): boolean
     {
         return this._roomOptionsVisible;
-    }
-
-    public get roomNameVisible(): boolean
-    {
-        return this._roomNameVisible;
     }
 
     public get roomToolsVisible(): boolean
@@ -223,6 +263,6 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget implements 
 
     public get canRate(): boolean
     {
-        return this._navigatorService.canRate;
+        return this._navigatorService.data.canRate;
     }
 }

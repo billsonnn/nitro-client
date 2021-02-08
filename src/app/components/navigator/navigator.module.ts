@@ -4,6 +4,7 @@ import { NavigatorCreatorComponent } from './components/creator/creator.componen
 import { NavigatorDoorbellComponent } from './components/doorbell/doorbell.component';
 import { NavigatorMainComponent } from './components/main/main.component';
 import { NavigatorPasswordComponent } from './components/password/password.component';
+import { NavigatorRoomInfoComponent } from './components/room-info/room-info.component';
 import { NavigatorRoomSettingsTabAccessComponent } from './components/roomsettings/components/tab-access/roomsettings-tab-access.component';
 import { NavigatorRoomSettingsTabBasicComponent } from './components/roomsettings/components/tab-basic/roomsettings-tab-basic.component';
 import { NavigatorRoomSettingsTabModComponent } from './components/roomsettings/components/tab-mod/roomsettings-tab-mod.component';
@@ -26,6 +27,7 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorDoorbellComponent,
         NavigatorMainComponent,
         NavigatorPasswordComponent,
+        NavigatorRoomInfoComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
         NavigatorSearchResultComponent,
@@ -46,6 +48,7 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorDoorbellComponent,
         NavigatorMainComponent,
         NavigatorPasswordComponent,
+        NavigatorRoomInfoComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
         NavigatorSearchResultComponent,
