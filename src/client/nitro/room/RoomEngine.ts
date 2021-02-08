@@ -2759,8 +2759,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 {
                     type        = this._roomContentLoader.getFurnitureFloorNameForTypeId(objectId);
                     colorIndex  = this._roomContentLoader.getFurnitureFloorColorIndex(objectId);
-
-                    console.log(type, colorIndex);
                 }
 
                 else if(category === RoomObjectCategory.WALL)
@@ -3000,7 +2998,6 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         {
             case RoomObjectCategory.FLOOR:
             case RoomObjectCategory.WALL:
-                console.log(value, extras);
                 model.setValue(RoomObjectVariable.FURNITURE_COLOR, parseInt(value));
                 model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, extras);
                 break;
