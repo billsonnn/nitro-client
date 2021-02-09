@@ -75,12 +75,8 @@ export class NitroBundle
 
         if(!json) return;
 
-        console.log(json.spritesheet);
-
         const width = json.spritesheet.meta.size.w;
         const height = json.spritesheet.meta.size.h;
-
-        console.log(width, height);
 
         try
         {
