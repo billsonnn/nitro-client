@@ -3,7 +3,6 @@ import {
     Input,
     NgZone,
     OnDestroy,
-    ɵCompiler_compileModuleAndAllComponentsAsync__POST_R3__
 } from '@angular/core';
 import { CatalogService } from '../../services/catalog.service';
 import { Nitro } from '../../../../../client/nitro/Nitro';
