@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Point } from 'pixi.js';
 import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
+import { IWorkerEventTracker } from '../../../../../client/core/events/IWorkerEventTracker';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomEnterEffect } from '../../../../../client/room/utils/RoomEnterEffect';
@@ -16,11 +17,10 @@ import { RoomChatItemComponent } from './chatitem/component';
         <ng-template #chatContainer></ng-template>
     </div>`
 })
-export class RoomChatComponent extends ConversionTrackingWidget implements OnInit, OnDestroy
+export class RoomChatComponent extends ConversionTrackingWidget implements OnInit, OnDestroy, IWorkerEventTracker
 {
+    private static TIMER_TRACKER: number    = 0;
     private static CHAT_COUNTER: number     = 0;
-    private static MAX_CHAT_HISTORY: number = 250;
-    private static UPDATE_INTERVAL: number  = 4000;
 
     @ViewChild('chatView')
     public chatViewReference: ElementRef<HTMLDivElement>;
@@ -28,7 +28,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     @ViewChild('chatContainer', { read: ViewContainerRef })
     public chatContainer: ViewContainerRef;
 
-    public timeoutTime: number  = 0;
+    public timerId: number = ++RoomChatComponent.TIMER_TRACKER;
     public cameraOffset: Point  = new Point();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];
@@ -36,7 +36,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public pendingChats: RoomWidgetChatUpdateEvent[]            = [];
     public processingChats: boolean                             = false;
 
-    private _movingInterval: ReturnType<typeof setInterval> = null;
+    private _skipNextMove: boolean = false;
 
     constructor(
         private ngZone: NgZone,
@@ -50,16 +50,30 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
     public ngOnInit(): void
     {
-        this.ngZone.runOutsideAngular(() => Nitro.instance.ticker.add(this.update, this));
+        Nitro.instance.addWorkerEventTracker(this);
 
-        //this.startMovingInterval();
+        this.ngZone.runOutsideAngular(() =>
+        {
+            Nitro.instance.sendWorkerEvent({
+                type: 'CREATE_INTERVAL',
+                time: 5000,
+                timerId: this.timerId,
+                response: { type: 'MOVE_CHATS' }
+            });
+        });
     }
 
     public ngOnDestroy(): void
     {
-        this.ngZone.runOutsideAngular(() => Nitro.instance.ticker.remove(this.update, this));
+        this.ngZone.runOutsideAngular(() =>
+        {
+            Nitro.instance.sendWorkerEvent({
+                type: 'REMOVE_INTERVAL',
+                timerId: this.timerId
+            });
+        });
 
-        //this.stopMovingInterval();
+        Nitro.instance.removeWorkerEventTracker(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -84,37 +98,6 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         eventDispatcher.removeEventListener(RoomWidgetRoomViewUpdateEvent.SCALE_CHANGED, this.onRoomViewUpdate);
     }
 
-    public update(time: number): void
-    {
-        if(Nitro.instance.time > this.timeoutTime)
-        {
-            if(this.timeoutTime > 0) this.moveAllChatsUp();
-
-            this.resetTimeout();
-        }
-    }
-
-    private resetTimeout(): void
-    {
-        this.timeoutTime = (Nitro.instance.time + RoomChatComponent.UPDATE_INTERVAL);
-    }
-
-    private startMovingInterval(): void
-    {
-        this.stopMovingInterval();
-
-        this._movingInterval = setInterval(() => this.moveAllChatsUp(), 5000);
-    }
-
-    private stopMovingInterval(): void
-    {
-        if(!this._movingInterval) return;
-
-        clearInterval(this._movingInterval);
-
-        this._movingInterval = null;
-    }
-
     private updateChatViewForDimensions(width: number, height: number): void
     {
         const element = this.chatViewElement;
@@ -133,10 +116,6 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         this.pendingChats.push(k);
 
         this.processPendingChats();
-
-        this.timeoutTime = 0;
-
-        //this.startMovingInterval();
     }
 
     private onRoomViewUpdate(event: RoomWidgetRoomViewUpdateEvent): void
@@ -165,8 +144,6 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         if(!pendingChat)
         {
-            this.resetTimeout();
-
             this.processingChats = false;
 
             return;
@@ -188,7 +165,9 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
             chat.update(pendingChat);
         });
 
-        setTimeout(() => this.addChat(chatRef), 0);
+        this.addChat(chatRef);
+
+        this._skipNextMove = true;
     }
 
     private getFreeItemId(): string
@@ -215,7 +194,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         RoomChatComponent.CHAT_COUNTER++;
 
-        setTimeout(() => this.processPendingChats(true), 0);
+        this.processPendingChats(true);
     }
 
     private hideChat(chat: ComponentRef<RoomChatItemComponent>): void
@@ -248,6 +227,13 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
     private moveAllChatsUp(): void
     {
+        if(this._skipNextMove)
+        {
+            this._skipNextMove = false;
+
+            return;
+        }
+
         let i = (this.chats.length - 1);
 
         while(i >= 0)
@@ -270,7 +256,6 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         if(!lastChatInstance) return;
 
         const lowestPoint   = ((lastChatInstance.getY() + lastChatInstance.height) - 1);
-        const highestPoint  = chatInstance.getY();
         const requiredSpace = (chatInstance.height + 1);
 
         const spaceAvailable = (this.chatViewElement.offsetHeight - lowestPoint);
@@ -307,6 +292,18 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
         x = (x - (chatInstance.width / 2));
 
         chatInstance.setX(x);
+    }
+
+    public workerMessageReceived(message: { [index: string]: any }): void
+    {
+        if(!message) return;
+
+        switch(message.type)
+        {
+            case 'MOVE_CHATS':
+                this.moveAllChatsUp();
+                return;
+        }
     }
 
     public get chatViewElement(): HTMLDivElement
