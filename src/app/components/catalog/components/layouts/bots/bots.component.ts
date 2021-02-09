@@ -27,6 +27,17 @@ export class CatalogLayoutBotsComponent extends CatalogLayout
         (this._catalogService.component && this._catalogService.component.selectOffer(offer));
     }
 
+    public getFigureForBot(offer: CatalogPageOfferData): string
+    {
+        if(!offer) return '';
+
+        const product = offer.products[0];
+
+        if(!product) return '';
+
+        return product.extraParam;
+    }
+
     public offerImage(offer: CatalogPageOfferData): string
     {
         // Todo: Make image work.
