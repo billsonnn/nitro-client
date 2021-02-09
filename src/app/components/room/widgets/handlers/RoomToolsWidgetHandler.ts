@@ -34,17 +34,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this.onRoomInfoEvent = this.onRoomInfoEvent.bind(this);
     }
 
-
-    public set widget(widget: RoomToolsMainComponent)
-    {
-        this._widget = widget;
-    }
-
-    public get widget(): RoomToolsMainComponent
-    {
-        return this._widget;
-    }
-
     public dispose(): void
     {
         if(this._disposed) return;
@@ -84,7 +73,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(!event || this._disposed) return;
     }
 
-    // _Str_4428
     private onRoomInfoEvent(event: RoomInfoEvent): void
     {
         if(!event) return;
@@ -97,10 +85,10 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         if(!roomData) return;
 
-        this._widget.updateRoomInfo(roomData);
-
         if(parser.roomEnter)
         {
+            this._widget.updateRoomInfo(roomData);
+
             const ownerName = (roomData.showOwner ? (Nitro.instance.getLocalization('room.tool.room.owner.prefix') + ' ' + roomData.ownerName) : Nitro.instance.getLocalization('room.tool.public.room'));
 
             this._widget.updateRoomTools(roomData.roomName, ownerName, roomData.tags);
@@ -124,6 +112,16 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
     public get type(): string
     {
         return RoomWidgetEnum.ROOM_TOOLS;
+    }
+
+    public get widget(): RoomToolsMainComponent
+    {
+        return this._widget;
+    }
+
+    public set widget(widget: RoomToolsMainComponent)
+    {
+        this._widget = widget;
     }
 
     public get container(): IRoomWidgetHandlerContainer

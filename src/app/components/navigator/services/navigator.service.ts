@@ -20,6 +20,7 @@ import { RoomForwardEvent } from '../../../../client/nitro/communication/message
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
 import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
+import { RoomSettingsUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomSettingsUpdatedEvent';
 import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { DesktopViewComposer } from '../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
@@ -43,7 +44,6 @@ import { NotificationService } from '../../notification/services/notification.se
 import { NavigatorData } from '../common/NavigatorData';
 import { NavigatorMainComponent } from '../components/main/main.component';
 import { INavigatorSearchFilter } from '../components/search/INavigatorSearchFilter';
-import { NavigatorDataService } from './navigator-data.service';
 
 @Injectable()
 export class NavigatorService implements OnDestroy, ILinkEventTracker
@@ -98,7 +98,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
     constructor(
         private _notificationService: NotificationService,
         private _settingsService: SettingsService,
-        private _navigatorDataService: NavigatorDataService,
         private _ngZone: NgZone)
     {
         this._component         = null;
@@ -149,6 +148,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
                 new RoomDoorbellAcceptedEvent(this.onRoomDoorbellAcceptedEvent.bind(this)),
+                new RoomScoreEvent(this.onRoomScoreEvent.bind(this)),
+                new RoomSettingsUpdatedEvent(this.onRoomSettingsUpdatedEvent.bind(this)),
                 new GenericErrorEvent(this.onGenericErrorEvent.bind(this)),
                 new RoomDoorbellRejectedEvent(this.onRoomDoorbellRejectedEvent.bind(this)),
                 new NavigatorCategoriesEvent(this.onNavigatorCategoriesEvent.bind(this)),
@@ -161,7 +162,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 new NavigatorSearchEvent(this.onNavigatorSearchEvent.bind(this)),
                 new NavigatorSettingsEvent(this.onNavigatorSettingsEvent.bind(this)),
                 new NavigatorHomeRoomEvent(this.onNavigatorHomeRoomEvent.bind(this)),
-                new RoomScoreEvent(this.onRoomScoreEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -368,6 +368,28 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         }
     }
 
+    private onRoomScoreEvent(event: RoomScoreEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => (this._data.canRate = parser.canLike));
+    }
+
+    private onRoomSettingsUpdatedEvent(event: RoomSettingsUpdatedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, false, false));
+    }
+
     private onGenericErrorEvent(event: GenericErrorEvent): void
     {
         if(!event) return;
@@ -514,17 +536,6 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         if(!parser) return;
 
         this._homeRoomId = parser.homeRoomId;
-    }
-
-    private onRoomScoreEvent(event: RoomScoreEvent): void
-    {
-        if(!event) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this._ngZone.run(() => (this._data.canRate = parser.canLike));
     }
 
     public getMaxVisitors(count: number): number[]

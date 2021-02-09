@@ -15,7 +15,6 @@ import { NavigatorSearchComponent } from './components/search/search.component';
 import { NavigatorSearchItemComponent } from './components/searchitem/searchitem.component';
 import { NavigatorSearchResultComponent } from './components/searchresult/searchresult.component';
 import { NavigatorSliderComponent } from './components/slider/slider.component';
-import { NavigatorDataService } from './services/navigator-data.service';
 import { NavigatorService } from './services/navigator.service';
 
 @NgModule({
@@ -40,8 +39,7 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorRoomSettingsTabModComponent
     ],
     providers: [
-        NavigatorService,
-        NavigatorDataService
+        NavigatorService
     ],
     declarations: [
         NavigatorCreatorComponent,
