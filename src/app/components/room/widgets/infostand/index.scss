@@ -7,7 +7,7 @@
     .infostand {
         min-width: 200px;
         max-width: 200px;
-        z-index: 300;
+        z-index: $infostand-zindex;
 	    pointer-events: auto;
 
         .body-image {

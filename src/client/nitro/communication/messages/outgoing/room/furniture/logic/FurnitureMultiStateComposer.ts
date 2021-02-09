@@ -4,7 +4,7 @@ export class FurnitureMultiStateComposer implements IMessageComposer<Constructor
 {
     private _data: ConstructorParameters<typeof FurnitureMultiStateComposer>;
 
-    constructor(itemId: number, state: number)
+    constructor(itemId: number, state: number = 0)
     {
         this._data = [ itemId, state ];
     }

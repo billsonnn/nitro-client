@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "ng build --prod --vendor-chunk"
+    "build-prod": "ng build --prod --vendor-chunk",
+    "eslint": "eslint ./src --fix"
   },
   "private": true,
   "dependencies": {
@@ -23,9 +24,11 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@pixi/filter-adjustment": "^3.1.1",
     "angular-bootstrap-md": "^10.1.1",
+    "ngx-color": "^6.2.0",
     "ngx-pagination": "^5.0.0",
     "ngx-perfect-scrollbar": "^10.0.1",
     "ngx-toastr": "^13.0.0",
+    "pako": "^2.0.3",
     "pixi.js": "^5.3.3",
     "rxjs": "~6.5.5",
     "stream": "0.0.2",
@@ -40,6 +43,7 @@
     "@angular/cli": "~11.0.7",
     "@angular/compiler-cli": "~11.0.9",
     "@types/node": "^12.11.1",
+    "@types/pako": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
     "eslint": "^7.17.0",

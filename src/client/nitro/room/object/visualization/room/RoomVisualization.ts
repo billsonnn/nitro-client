@@ -230,25 +230,25 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         if(this._Str_25732())
         {
-            // if(existing && removeCount)
-            // {
-            //     setTimeout(() =>
-            //     {
-            //         while(removeCount)
-            //         {
-            //             const texture = existing.getWithIndex(0);
+            if(existing && removeCount)
+            {
+                setTimeout(() =>
+                {
+                    while(removeCount)
+                    {
+                        const texture = existing.getWithIndex(0);
 
-            //             if(texture)
-            //             {
-            //                 texture.destroy(true);
+                        if(texture)
+                        {
+                            texture.destroy(true);
 
-            //                 existing.remove(existing.getKey(0));
-            //             }
+                            existing.remove(existing.getKey(0));
+                        }
 
-            //             removeCount--;
-            //         }
-            //     }, 0);
-            // }
+                        removeCount--;
+                    }
+                }, 0);
+            }
         }
 
         needsUpdate = this.updateMasks(objectModel);

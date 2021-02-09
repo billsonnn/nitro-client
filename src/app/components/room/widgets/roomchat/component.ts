@@ -28,10 +28,8 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     @ViewChild('chatContainer', { read: ViewContainerRef })
     public chatContainer: ViewContainerRef;
 
-    public timeoutTime: number      = 0;
-    public originalScale: number    = 0;
-    public scaleFactor: number      = 1;
-    public cameraOffset: Point      = new Point();
+    public timeoutTime: number  = 0;
+    public cameraOffset: Point  = new Point();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];
     public tempChats: ComponentRef<RoomChatItemComponent>[]     = [];
@@ -108,16 +106,10 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
     private onRoomViewUpdate(k: RoomWidgetRoomViewUpdateEvent): void
     {
-        if(k.scale > 0)
-        {
-            if(!this.originalScale) this.originalScale = k.scale;
-            else this.scaleFactor = (k.scale / this.originalScale);
-        }
-
         if(k.positionDelta)
         {
-            this.cameraOffset.x = (this.cameraOffset.x + (k.positionDelta.x / this.scaleFactor));
-            this.cameraOffset.y = (this.cameraOffset.y + (k.positionDelta.y / this.scaleFactor));
+            this.cameraOffset.x = (this.cameraOffset.x + k.positionDelta.x);
+            this.cameraOffset.y = (this.cameraOffset.y + k.positionDelta.y);
         }
 
         this.resetAllChatLocations();
@@ -173,7 +165,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         const chatInstance = chat.instance;
 
-        chatInstance.senderX = ((chatInstance.senderX / this.scaleFactor) - this.cameraOffset.x);
+        chatInstance.senderX = (chatInstance.senderX - this.cameraOffset.x);
 
         chatInstance.setY(this.chatViewElement.offsetHeight - chatInstance.height);
 
@@ -273,10 +265,9 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     {
         const chatInstance = chat.instance;
 
-        let x = ((chatInstance.senderX + this.cameraOffset.x) * this.scaleFactor);
+        let x = (chatInstance.senderX + this.cameraOffset.x);
 
         x = (x - (chatInstance.width / 2));
-        x = (x + (this.chatViewElement.offsetWidth / 2));
 
         chatInstance.setX(x);
     }

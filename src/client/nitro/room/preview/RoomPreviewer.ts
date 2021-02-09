@@ -397,42 +397,28 @@ export class RoomPreviewer
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_SMALL;
                         this._currentPreviewNeedsZoomOut = true;
-
-                        point.x = (point.x >> 1);
-                        point.y = (point.y >> 1);
-
-                        this._currentPreviewRectangle.x         = (this._currentPreviewRectangle.x >> 2);
-                        this._currentPreviewRectangle.y         = (this._currentPreviewRectangle.y >> 2);
-                        this._currentPreviewRectangle.width     = (this._currentPreviewRectangle.width >> 2);
-                        this._currentPreviewRectangle.height    = (this._currentPreviewRectangle.height >> 2);
                     }
                 }
             }
 
-            else if((((this._currentPreviewRectangle.width << 1) < ((this._currentPreviewCanvasWidth * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5)) && ((this._currentPreviewRectangle.height << 1) < ((this._currentPreviewCanvasHeight * (1 + RoomPreviewer.ALLOWED_IMAGE_CUT)) - 5))))
+            else if(!this._currentPreviewNeedsZoomOut)
             {
                 if(RoomPreviewer.ZOOM_ENABLED)
                 {
-                    if((this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) !== 1) && !this._currentPreviewNeedsZoomOut)
+                    if(this._roomEngine.getRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID) !== 1)
                     {
                         this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1, null, null);
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
-
-                        point.x = (point.x << 1);
-                        point.y = (point.y << 1);
                     }
                 }
                 else
                 {
-                    if(!geometry.isZoomedIn() && !this._currentPreviewNeedsZoomOut)
+                    if(!geometry.isZoomedIn())
                     {
                         geometry.performZoomIn();
 
                         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;
-
-                        point.x = (point.x << 1);
-                        point.y = (point.y << 1);
                     }
                 }
             }
@@ -449,10 +435,12 @@ export class RoomPreviewer
             {
                 this._roomEngine.setRoomInstanceRenderingCanvasScale(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID, 1);
             }
+            else
+            {
+                const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
 
-            const geometry = this._roomEngine.getRoomInstanceGeometry(this._previewRoomId, RoomPreviewer.PREVIEW_CANVAS_ID);
-
-            geometry.performZoomIn();
+                geometry.performZoomIn();
+            }
         }
 
         this._currentPreviewScale = RoomPreviewer.SCALE_NORMAL;

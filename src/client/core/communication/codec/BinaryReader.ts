@@ -54,4 +54,9 @@ export class BinaryReader
     {
         return new TextDecoder().decode(this._dataView.buffer);
     }
+
+    public toArrayBuffer(): ArrayBuffer
+    {
+        return this._dataView.buffer;
+    }
 }
