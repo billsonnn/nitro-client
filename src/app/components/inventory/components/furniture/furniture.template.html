@@ -6,8 +6,9 @@
     <ng-container *ngIf="hasGroupItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
             <div class="d-flex mb-2">
-                <input type="text" class="form-control form-control-sm w-100 flex-grow-1" [(ngModel)]="search" />
-                <select [(ngModel)]="searchType">
+                <div class="d-flex justify-content-center align-items-center bg-secondary border shadow px-2"><i class="fas fa-search"></i></div>
+                <input type="text" class="form-control form-control-sm flex-grow-1" [(ngModel)]="search" />
+                <select class="form-control form-control-sm w-auto" [(ngModel)]="searchType">
                     <option [value]="''">{{ ('inventory.filter.option.everything') | translate }}</option>
                     <option [value]="'s'">{{ ('inventory.furni.tab.floor') | translate }}</option>
                     <option [value]="'i'">{{ ('inventory.furni.tab.wall') | translate }}</option>

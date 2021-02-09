@@ -100,15 +100,15 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
             {
                 let found = true;
 
-                if(comparison && comparison.length)
-                {
-                    found = (item.name.toLocaleLowerCase().includes(comparison));
-                }
-
                 if(this._searchType && this._searchType.length === 1)
                 {
                     if(this._searchType === 's') found = !item.isWallItem;
                     else if(this._searchType === 'i') found = item.isWallItem;
+                }
+
+                if(comparison && comparison.length)
+                {
+                    found = (item.name.toLocaleLowerCase().includes(comparison));
                 }
 
                 return found;
@@ -126,12 +126,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         }
         else
         {
-            if(this._search && !this._filteredItems.length)
-            {
-                this._search = null;
-
-                this.refreshInventory();
-            }
+            this.refreshInventory();
 
             this.selectExistingGroupOrDefault();
         }
