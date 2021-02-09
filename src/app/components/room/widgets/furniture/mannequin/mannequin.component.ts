@@ -1,23 +1,15 @@
-import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerStateUpdateEvent';
-import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
-import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
-import { RoomWidgetDimmerChangeStateMessage } from '../../messages/RoomWidgetDimmerChangeStateMessage';
-import { RoomWidgetDimmerPreviewMessage } from '../../messages/RoomWidgetDimmerPreviewMessage';
-import { RoomWidgetDimmerSavePresetMessage } from '../../messages/RoomWidgetDimmerSavePresetMessage';
-import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
-import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { AvatarFigurePartType } from '../../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
 import { AvatarFigureContainer } from '../../../../../../client/nitro/avatar/AvatarFigureContainer';
-import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { AvatarFigurePartType } from '../../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
 import { IAvatarFigureContainer } from '../../../../../../client/nitro/avatar/IAvatarFigureContainer';
-import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
-import { FurnitureMannequinSaveNameComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
+import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { FurnitureMannequinSaveLookComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
+import { FurnitureMannequinSaveNameComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
+import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
+import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
 
 @Component({
     selector: 'nitro-room-furniture-mannequin-component',
