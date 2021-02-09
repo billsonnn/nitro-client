@@ -289,7 +289,12 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         const events = this._messages.getEvents(wrapper.header);
 
-        if(!events || !events.length) return null;
+        if(!events || !events.length)
+        {
+            console.log(`IncomingMessage: [${ wrapper.header }] UNREGISTERED`, wrapper);
+
+            return;
+        }
 
         try
         {
