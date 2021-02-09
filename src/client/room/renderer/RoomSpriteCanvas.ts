@@ -459,8 +459,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         if(x > 0) z = (z + (x * 1.2E-7));
         else z = (z + (-(x) * 1.2E-7));
 
-        x = (x + (this._width / 2));
-        y = (y + (this._height / 2));
+        x = (x + Math.trunc(this._width / 2));
+        y = (y + Math.trunc(this._height / 2));
 
         let spriteCount = 0;
 

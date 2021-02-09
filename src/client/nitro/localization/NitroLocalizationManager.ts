@@ -107,11 +107,58 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
     public getValueWithParameter(key: string, parameter: string, replacement: string): string
     {
-        let value = this.getValue(key, false);
+        const value = this.getValue(key, false);
 
-        value = value.replace('%' + parameter + '%', replacement);
+        const replacedValue =  value.replace('%' + parameter + '%', replacement);
 
-        return value;
+        if(value.startsWith('%{'))
+        {
+            // This adds support for multi-optioned texts like
+            // catalog.vip.item.header.months=%{NUM_MONTHS|0 months|1 month|%% months}
+            // It only checks for this multi-optioned thext if the value of the key starts with %{
+
+            // If it does, it will create a RegEx with the provided parameter, eg. NUM_DAYS or NUM_MONTS
+            // Then, based on the provided replacement it searches for the resultgroup based on the replacement.
+            // If the replacement is not either 0, 1 - it will be assumed it will be plural. (eg. Months)
+            const regex = new RegExp('%{' + parameter.toUpperCase() + '\\|([^|]*)\\|([^|]*)\\|([^|]*)}');
+            const result = value.match(regex);
+
+            if(!result) return replacedValue;
+
+            let indexKey =  -1;
+            const replacementAsNumber = Number.parseInt(replacement);
+            let replace = false;
+
+            switch(replacementAsNumber)
+            {
+                case 0:
+                    indexKey = 1;
+                    break;
+                case 1:
+                    indexKey = 2;
+                    break;
+                default:
+                case 2:
+                    indexKey = 3;
+                    replace = true;
+                    break;
+            }
+
+
+            if(indexKey == -1 || typeof result[indexKey] == 'undefined')
+            {
+                return replacedValue;
+            }
+
+            const valueFromResults = result[indexKey];
+
+            if(valueFromResults)
+            {
+                return valueFromResults.replace('%%', replacement);
+            }
+        }
+
+        return replacedValue;
     }
 
     public getValueWithParameters(key: string, parameters: string[], replacements: string[]): string

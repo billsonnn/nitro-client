@@ -8,7 +8,7 @@
             <perfect-scrollbar class="grid-container w-100" style="min-height: 209px;max-height: 209px;height:209px;">
                 <div class="grid-items grid-5">
                     <div class="d-flex flex-column item-detail justify-content-center align-items-center"
-                        *ngFor="let groupItem of groupItems | paginate: paginateConfig"
+                        *ngFor="let groupItem of groupItems;trackBy:trackByType | paginate: paginateConfig"
                         [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (groupItem === selectedGroup) }"
                         [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }"
                         (mousedown)="onMouseDown(groupItem)" (mouseout)="onMouseOut(groupItem)">

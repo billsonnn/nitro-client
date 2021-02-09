@@ -281,6 +281,7 @@ import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { FurnitureMannequinSaveNameComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
 import { FurnitureMannequinSaveLookComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
+import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -393,6 +394,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NOTIFICATION_LIST, NotificationDialogMessageEvent);
         this._events.set(IncomingHeader.USER_RESPECT, RespectReceivedEvent);
         this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
+        this._events.set(IncomingHeader.HOTEL_WILL_SHUTDOWN, HotelWillShutdownEvent);
 
         // ROOM
 
