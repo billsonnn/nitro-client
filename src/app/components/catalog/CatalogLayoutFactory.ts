@@ -9,6 +9,7 @@ import { CatalogLayoutSpacesNewComponent } from './components/layouts/spaces-new
 import { CatalogLayoutTrophiesComponent } from './components/layouts/trophies/trophies.component';
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
+import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 
 export class CatalogLayoutFactory
 {
@@ -34,6 +35,8 @@ export class CatalogLayoutFactory
                 return CatalogLayoutVipBuyComponent;
             case CatalogLayoutTrophiesComponent.CODE:
                 return CatalogLayoutTrophiesComponent;
+            case CatalogLayoutVipGiftsComponent.CODE:
+                return CatalogLayoutVipGiftsComponent;
             default:
                 return CatalogLayoutUnsupportedComponent;
         }

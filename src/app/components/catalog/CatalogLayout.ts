@@ -33,7 +33,7 @@ export class CatalogLayout
         return imageUrl;
     }
 
-    public get headerText(): string
+    protected get headerText(): string
     {
         return (this._catalogService.catalogRoot.localization || null);
     }

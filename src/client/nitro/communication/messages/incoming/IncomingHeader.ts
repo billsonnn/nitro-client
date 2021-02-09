@@ -214,4 +214,5 @@ export class IncomingHeader
     public static LOVELOCK_FURNI_FRIEND_COMFIRMED  = 382;
     public static LOVELOCK_FURNI_FINISHED          = 770;
     public static HOTEL_WILL_SHUTDOWN              = 1050;
+    public static CATALOG_CLUB_GIFTS               = 619;
 }

@@ -9,6 +9,7 @@ export class OutgoingHeader
     public static CAMERA_SAVE                    = 3226;
     public static CAMERA_THUMBNAIL               = 1982;
     public static CATALOG_CLUB                   = 3285;
+    public static CATALOG_CLUB_GIFTS             = 487;
     public static CATALOG_MODE                   = 1195;
     public static CATALOG_PAGE                   = 412;
     public static CATALOG_PURCHASE               = 3492;

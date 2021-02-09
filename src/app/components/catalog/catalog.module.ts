@@ -20,6 +20,7 @@ import { CatalogNavigationComponent } from './components/navigation/navigation.c
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { CatalogService } from './services/catalog.service';
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogRedeemVoucherComponent
+        CatalogRedeemVoucherComponent,
+        CatalogLayoutVipGiftsComponent
     ],
     providers: [
         CatalogService
@@ -68,7 +70,8 @@ import { CatalogService } from './services/catalog.service';
         CatalogNavigationItemComponent,
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
-        CatalogRedeemVoucherComponent
+        CatalogRedeemVoucherComponent,
+        CatalogLayoutVipGiftsComponent
     ]
 })
 export class CatalogModule

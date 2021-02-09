@@ -49,7 +49,9 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _purseService: PurseService,
         private _ngZone: NgZone)
-    {}
+    {
+        _catalogService.requestClubGifts();
+    }
 
     public ngOnInit(): void
     {

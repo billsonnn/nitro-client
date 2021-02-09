@@ -1,0 +1,28 @@
+<div *ngIf="visible" class="w-100 h-100 nitro-catalog-layout-default-component">
+    <div class="row">
+        <div class="col-12">
+            <p>{{ giftsAvailable}}</p>
+        </div>
+        <div class="col-12 mt-1">
+<!--            <ng-container *ngFor="let vipItem of vipOffers">-->
+<!--                <div class="bg-secondary rounded mb-2 p-1">-->
+<!--                    <div *ngIf="vipItem.productCode" class="bg-primary rounded p-1 w-100 mb-1 d-flex flex-row">-->
+<!--                        <i class="icon icon-catalogue-hc_small mr-2 d-block align-self-center"></i>-->
+<!--                        <span>{{ getOfferText(vipItem) }}</span>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex flex-row justify-content-between px-2 py-1">-->
+<!--                        <div class="align-self-center">-->
+<!--                            <b *ngIf="vipItem.priceCredits">{{ vipItem.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)"></b>-->
+<!--                            <b *ngIf="vipItem.priceActivityPoints && vipItem.priceCredits"> + {{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>-->
+<!--                            <b *ngIf="vipItem.priceActivityPoints && !vipItem.priceCredits">{{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex flex-row">-->
+<!--                            <button *ngIf="vipItem.giftable" type="button" class="btn btn-success btn-sm mr-1" (click)="buyVip(vipItem)">{{'catalog.purchase_confirmation.gift' | translate}}</button>-->
+<!--                            <button type="button" class="btn btn-success btn-sm" (click)="buyVip(vipItem)">{{'buy' | translate}}</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </ng-container>-->
+        </div>
+    </div>
+</div>

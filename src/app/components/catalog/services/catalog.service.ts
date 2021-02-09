@@ -30,6 +30,9 @@ import { UserSubscriptionParser } from '../../../../client/nitro/communication/m
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
+import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
+import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
+import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -40,6 +43,7 @@ export class CatalogService implements OnDestroy
     private _component: CatalogMainComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
+    private _clubGiftsParser: CatalogClubGiftsParser = null;
     private _activePage: CatalogPageParser = null;
     private _activePageData: CatalogPageData = null;
     private _manuallyCollapsed: CatalogPageData[] = [];
@@ -79,6 +83,7 @@ export class CatalogService implements OnDestroy
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
+                new CatalogClubGiftsEvent(this.onCatalogClubGiftsEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -102,6 +107,17 @@ export class CatalogService implements OnDestroy
         const offerFromEvent = event.getParser().offers;
         this._clubOffers = offerFromEvent;
         this._vipTemplate.setOffers(offerFromEvent);
+    }
+
+    private onCatalogClubGiftsEvent(event: CatalogClubGiftsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._clubGiftsParser = parser;
     }
 
     public registerVipBuyTemplate(template: CatalogLayoutVipBuyComponent)
@@ -357,6 +373,11 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogRequestVipOffersComposer(i));
     }
 
+    public requestClubGifts(): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogRequestVipGiftsComposer());
+    }
+
     public redeemVoucher(voucherCode: string)
     {
         if(!voucherCode || voucherCode.trim().length === 0) return;
@@ -422,5 +443,17 @@ export class CatalogService implements OnDestroy
     public get vipOffers(): CatalogClubOfferData[]
     {
         return this._clubOffers;
+    }
+
+    public get clubGiftsParser(): CatalogClubGiftsParser
+    {
+        return this._clubGiftsParser;
+    }
+
+    public hasClubDays(): boolean
+    {
+        if(!this._purse) return false;
+
+        return this._purse.clubDays > 0;
     }
 }
