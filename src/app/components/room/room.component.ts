@@ -307,11 +307,15 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         this._resizeTimer = setTimeout(() =>
         {
+            Nitro.instance.renderer.resize(window.innerWidth, window.innerHeight);
+
             Nitro.instance.roomEngine.initializeRoomInstanceRenderingCanvas(this._roomSession.roomId, this.getFirstCanvasId(), Nitro.instance.width, Nitro.instance.height);
 
             this._events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
             this.setRoomBackground();
+
+            Nitro.instance.render();
         }, 1);
     }
 

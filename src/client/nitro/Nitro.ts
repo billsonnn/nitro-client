@@ -115,7 +115,6 @@ export class Nitro extends Application implements INitro
         const instance = new this(new NitroCore(), {
             transparent: true,
             autoDensity: true,
-            resizeTo: window,
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
             height: window.innerHeight,
