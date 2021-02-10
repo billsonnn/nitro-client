@@ -6,8 +6,8 @@ import { _Str_5178 } from './utils/_Str_5178';
 
 export class CatalogClubGiftsParser implements IMessageParser
 {
-    private  _Str_10647:number;
-    private  _Str_5369:number;
+    private  _daysUntilNextGift:number;
+    private  _giftsAvailable:number;
     private _offers: CatalogPageOfferData[];
     private  _Str_5759:Map<number, _Str_5178>;
 
@@ -23,8 +23,8 @@ export class CatalogClubGiftsParser implements IMessageParser
 
         this._offers = [];
         this._Str_5759 = new Map<number, _Str_5178>();
-        this._Str_10647 = wrapper.readInt();
-        this._Str_5369 = wrapper.readInt();
+        this._daysUntilNextGift = wrapper.readInt();
+        this._giftsAvailable = wrapper.readInt();
 
         let local2 = wrapper.readInt();
 
@@ -54,14 +54,19 @@ export class CatalogClubGiftsParser implements IMessageParser
         return this._offers;
     }
 
-    public  get _Str_12860():number
+    public  get daysUntilNextGift():number
     {
-        return this._Str_10647;
+        return this._daysUntilNextGift;
     }
 
-    public  get _Str_7574():number
+    public get giftsAvailable():number
     {
-        return this._Str_5369;
+        return this._giftsAvailable;
+    }
+
+    public set giftsAvailable(gifts: number)
+    {
+        this._giftsAvailable = gifts;
     }
 
     public getOfferExtraData(offerId: number): _Str_5178
