@@ -68,6 +68,7 @@ import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorS
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
 import { HabboBroadcastMessageEvent } from './messages/incoming/notifications/HabboBroadcastMessageEvent';
+import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
 import { NotificationDialogMessageEvent } from './messages/incoming/notifications/NotificationDialogMessageEvent';
 import { RespectReceivedEvent } from './messages/incoming/notifications/RespectReceivedEvent';
@@ -393,6 +394,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NOTIFICATION_LIST, NotificationDialogMessageEvent);
         this._events.set(IncomingHeader.USER_RESPECT, RespectReceivedEvent);
         this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
+        this._events.set(IncomingHeader.HOTEL_WILL_SHUTDOWN, HotelWillShutdownEvent);
 
         // ROOM
 

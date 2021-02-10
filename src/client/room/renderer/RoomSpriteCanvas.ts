@@ -804,7 +804,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if((this._mouseCheckCount > 0) && (type == MouseEventType.MOUSE_MOVE)) return this._mouseSpriteWasHit;
 
-        this._mouseSpriteWasHit = this._Str_19207((x / this._scale), (y / this._scale), type, altKey, ctrlKey, shiftKey, buttonDown);
+        this._mouseSpriteWasHit = this._Str_19207(Math.trunc(x / this._scale), Math.trunc(y / this._scale), type, altKey, ctrlKey, shiftKey, buttonDown);
 
         this._mouseCheckCount++;
 

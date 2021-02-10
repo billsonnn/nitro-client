@@ -24,13 +24,5 @@ body {
     }
 }
 
-$chatinput-zindex: 8;
-$toolbar-zindex: 7;
-$toolbar-memenu-zindex: 6;
-$roomtools-zindex: 5;
-$context-menu-zindex: 4;
-$infostand-zindex: 3;
-$chat-zindex: 2;
-
 @import './shared';
 @import './components';

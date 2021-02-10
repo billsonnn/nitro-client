@@ -10,5 +10,7 @@
     },
     "emmet.showExpandedAbbreviation": "never",
 	"git.ignoreLimitWarning": true,
-	"files.eol": "\n"
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true
 }

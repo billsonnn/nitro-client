@@ -84,7 +84,7 @@ export class LegacyExternalInterface
         return typeof fn !== 'undefined' ? fn(...params) : undefined;
     }
 
-    public static addCallback(name: string, func : Function)
+    public static addCallback(name: string, func: Function)
     {
         (window as any)[name] = func;
     }
