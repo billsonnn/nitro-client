@@ -137,6 +137,9 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         if(!event) return;
 
         this.option = event.type;
+
+        this._objectId = event.objectId;
+
         switch(event.type)
         {
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
@@ -144,21 +147,19 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 {
                     this.closeView();
                     this._openedRequest = false;
-                    this._objectId = event._Str_1577;
+
                     this._text = event.text;
                     this._controller = event.controller;
-                    this._senderName = event._Str_22956;
-                    this._senderFigure = event._Str_23105;
-                    this._Str_3030();
-                    this._Str_9278(event._Str_11625);
-
+                    this._senderName = event.purchaserName;
+                    this._senderFigure = event.purchaserFigure;
+                    this.showOpeningPresent();
                 });
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
                 if(!this._openedRequest) return;
                 this.isFloor = true;
-                this._objectId = event._Str_1577;
+
                 this._classId = event.classId;
                 this._itemType = event.itemType;
                 this._text = event.text;
@@ -167,14 +168,14 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._placedItemType = event.placedItemType;
                 this._placedInRoom = event.placedInRoom;
 
-                this._Str_10146();
+                this.setOpenedText();
                 //his._Str_12806('packagecard_icon_floor');
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE: {
                 if(!this._openedRequest) return;
 
-                this._objectId = event._Str_1577;
+
                 this._classId = event.classId;
                 this._itemType = event.itemType;
                 this._text = event.text;
@@ -182,13 +183,13 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._placedItemId = event.placedItemId;
                 this._placedItemType = event.placedItemType;
                 this._placedInRoom = event.placedInRoom;
-                this._Str_10146();
+                this.setOpenedText();
                 // this._Str_12806("packagecard_icon_landscape");
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER: {
                 if(!this._openedRequest) return;
-                this._objectId = event._Str_1577;
+
                 this._classId = event.classId;
                 this._itemType = event.itemType;
                 this._text = event.text;
@@ -197,49 +198,39 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._placedItemType = event.placedItemType;
                 this._placedInRoom = event.placedInRoom;
                 this.isFloor = false;
-                this._Str_10146();
+                this.setOpenedText();
                 //this._Str_12806("packagecard_icon_wallpaper");
             }
                 break;
 
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB: {
                 if(!this._openedRequest) return;
-                this._objectId = event._Str_1577;
                 this._classId = event.classId;
                 this._itemType = event.itemType;
                 this._text = event.text;
                 this._controller = event.controller;
-                this._Str_10146();
+                this.setOpenedText();
                 //this._Str_12806("packagecard_icon_hc");
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS: {
 
                 if(!this._openedRequest) return;
-                try
-                {
-                    this.isFloor = true;
-                    this._objectId = event._Str_1577;
-                    this._classId = event.classId;
-                    this._itemType = event.itemType;
-                    this._text = event.text;
-                    this._controller = event.controller;
-                    this._placedItemId = event.placedItemId;
-                    this._placedItemType = event.placedItemType;
-                    this._placedInRoom = event.placedInRoom;
-                    this._Str_10146();
-                    this._Str_9278(event._Str_11625);
-                }
-                catch (e)
-                {
-                    debugger;
-                }
+
+                this.isFloor = true;
+                this._objectId = event.objectId;
+                this._classId = event.classId;
+                this._itemType = event.itemType;
+                this._text = event.text;
+                this._controller = event.controller;
+                this._placedItemId = event.placedItemId;
+                this._placedItemType = event.placedItemType;
+                this._placedInRoom = event.placedInRoom;
+                this.setOpenedText();
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE: {
                 if(!this._openedRequest) return;
-
-                this._Str_9278(event._Str_11625);
 
             }
                 break;
@@ -258,14 +249,14 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this._controller = false;
     }
 
-    private _Str_10146(): void
+    private setOpenedText(): void
     {
         if(this._objectId < 0) return;
 
         if(this._text)
         {
             this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._text);
-            if(this._Str_20493())
+            if(this.isSpacesFurniture())
             {
                 this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._text);
             }
@@ -275,20 +266,20 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this._visible = true;
     }
 
-    private _Str_20493(): boolean
+    private isSpacesFurniture(): boolean
     {
-        let k = false;
+        let isSpaces = false;
         if(this._itemType == ProductTypeEnum.WALL)
         {
-            const local2 = Nitro.instance.sessionDataManager.getWallItemData(this._classId);
-            if(local2)
+            const wallItemData = Nitro.instance.sessionDataManager.getWallItemData(this._classId);
+            if(wallItemData)
             {
-                const local3 = local2.className;
-                k = ((local3 == PresentFurniWidget.FLOOR) || (local3 == PresentFurniWidget.LANDSCAPE) || (local3 == PresentFurniWidget.WALLPAPER));
+                const className = wallItemData.className;
+                isSpaces = ((className == PresentFurniWidget.FLOOR) || (className == PresentFurniWidget.LANDSCAPE) || (className == PresentFurniWidget.WALLPAPER));
             }
         }
 
-        return k;
+        return isSpaces;
 
     }
 
@@ -315,7 +306,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         return this._senderName == null || this._senderName.length == 0;
     }
 
-    private _Str_16426(): void
+    private acceptAndOpenPresent(): void
     {
         if(this._openedRequest || this._objectId == -1 || !this._controller) return;
 
@@ -323,7 +314,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this.closeView();
         this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._objectId));
     }
-
 
 
 
@@ -346,15 +336,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this._visible = flag;
     }
 
-    private _Str_9278(furniImage: PIXI.Texture)
-    {
-        if(this._objectId < 0) return;
 
-        // furniImage.baseTexture.orig;
-
-    }
-
-    private _Str_3030(): void
+    private showOpeningPresent(): void
     {
 
         if(this._objectId < 0) return;
@@ -368,7 +351,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         switch(button)
         {
             case 'accept':
-                this._Str_16426();
+                this.acceptAndOpenPresent();
                 break;
             case 'return':
                 break;
@@ -414,7 +397,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
         }
 
-        this._Str_16305();
+        this.resetAndCloseView();
     }
 
     private placeFurniInInventory(): void
@@ -438,10 +421,10 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
         }
 
-        this._Str_16305();
+        this.resetAndCloseView();
     }
 
-    private _Str_16305(): void
+    private resetAndCloseView(): void
     {
         this._openedRequest = false;
         this._placedItemId = -1;

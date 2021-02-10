@@ -11,33 +11,33 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     public static RWPDUE_CONTENTS_WALLPAPER: string = 'RWPDUE_CONTENTS_WALLPAPER';
     public static RWPDUE_CONTENTS_IMAGE: string = 'RWPDUE_CONTENTS_IMAGE';
 
-    private _Str_2319: number = -1;
+    private _objectId: number = -1;
     private _classId: number = 0;
     private _itemType: string = '';
     private _text: string;
     private _controller: boolean;
-    private _Str_12168: Texture;
-    private _Str_19174: string;
-    private _Str_19510: string;
+    private _furniImage: Texture;
+    private _purchaserName: string;
+    private _purchaserFigure: string;
     private _placedItemId: number = -1;
     private _placedItemType: string = '';
     private _placedInRoom: boolean;
 
-    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: boolean = false, _arg_5: Texture = null, _arg_6: string = null, _arg_7: string = null)
+    constructor(type: string, objectId: number, furnitureData: string, isOwnerOfFurniture: boolean = false, furniImage: Texture = null, purchaserName: string = null, purchaserFigure: string = null)
     {
-        super(k);
+        super(type);
 
-        this._Str_2319 = _arg_2;
-        this._text = _arg_3;
-        this._controller = _arg_4;
-        this._Str_12168 = _arg_5;
-        this._Str_19174 = _arg_6;
-        this._Str_19510 = _arg_7;
+        this._objectId = objectId;
+        this._text = furnitureData;
+        this._controller = isOwnerOfFurniture;
+        this._furniImage = furniImage;
+        this._purchaserName = purchaserName;
+        this._purchaserFigure = purchaserFigure;
     }
 
-    public get _Str_1577(): number
+    public get objectId(): number
     {
-        return this._Str_2319;
+        return this._objectId;
     }
 
     public get classId(): number
@@ -70,19 +70,19 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         return this._controller;
     }
 
-    public get _Str_11625(): Texture
+    public get furniImage(): Texture
     {
-        return this._Str_12168;
+        return this._furniImage;
     }
 
-    public get _Str_22956(): string
+    public get purchaserName(): string
     {
-        return this._Str_19174;
+        return this._purchaserName;
     }
 
-    public get _Str_23105(): string
+    public get purchaserFigure(): string
     {
-        return this._Str_19510;
+        return this._purchaserFigure;
     }
 
     public get placedItemId(): number
