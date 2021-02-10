@@ -217,8 +217,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             furniData = Nitro.instance.sessionDataManager.getWallItemData(this.classId);
         }
 
-        debugger;
-
         return this._catalogService.getFurnitureDataIconUrl(furniData);
     }
 
