@@ -22,9 +22,9 @@ export class CatalogLayout
     {
         let message = (this.activePage.localization.texts[index] || null);
 
-        message = message.replace(/\r\n|\r|\n/g, '<br />');
+        if(message) message = message.replace(/\r\n|\r|\n/g, '<br />');
 
-        return message;
+        return (message || '');
     }
 
     public getImage(index: number = 0): string

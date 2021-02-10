@@ -24,6 +24,7 @@ import { InventoryService } from './inventory.service';
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
 {
+    public static INVENTORY_UPDATED: string             = 'IFS_INVENTORY_UPDATED';
     public static SELECT_FIRST_GROUP: string            = 'IFS_SELECT_FIRST_GROUP';
     public static SELECT_EXISTING_GROUP_DEFAULT: string = 'IFS_SELECT_EXISTING_GROUP_DEFAULT';
 
@@ -261,6 +262,8 @@ export class InventoryFurnitureService implements OnDestroy
         if(addedSet.length && this._inventoryService.furniController) this._inventoryService.furniController.paginateConfig.currentPage = 1;
 
         this._isInitialized = true;
+
+        this._inventoryService.events.next(InventoryFurnitureService.INVENTORY_UPDATED);
 
         if(this._inventoryService.furniController) this._inventoryService.furniController.selectExistingGroupOrDefault();
     }

@@ -40,7 +40,6 @@ export class NitroLogger implements INitroLogger
     public static log(message: string, name: string = 'Nitro', modus: string = null): void
     {
         const logString = `[Nitro] ${ new Date().toDateString() } [${ name }] ${ message } ${ this.getTimestamp() }`;
-        if(!modus) console.log(logString);
 
         switch(modus)
         {
@@ -50,8 +49,8 @@ export class NitroLogger implements INitroLogger
             case 'warn':
                 console.warn(logString);
                 break;
-            default:
             case 'log':
+            default:
                 console.log(logString);
                 break;
         }

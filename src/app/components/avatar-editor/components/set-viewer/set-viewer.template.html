@@ -4,7 +4,9 @@
             *ngFor="let part of partSet" (click)="selectPart(part)">
             <button type="button" class="btn btn-secondary detail-info has-image"
                 [ngClass]="{ 'active': part.isSelected }"
-                [ngStyle]="(part.imageUrl && { 'background-image': 'url(' + part.imageUrl + ')' })"></button>
+                [ngStyle]="(part.imageUrl && { 'background-image': 'url(' + part.imageUrl + ')' })">
+                <i *ngIf="part.isClear" class="fas fa-times h5 m-0"></i>
+            </button>
         </div>
     </div>
 </perfect-scrollbar>

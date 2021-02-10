@@ -61,9 +61,9 @@ export class FurnitureDataParser extends EventDispatcher
 
     private onFurnitureDataError(request: XMLHttpRequest): void
     {
-        if(!request)
+        if(!request) return;
 
-            request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
+        request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
         request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
