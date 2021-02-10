@@ -3,6 +3,9 @@
         <h6 class="m-0">{{ getGiftTitle() | translate:'name':senderName}}</h6>
         <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
     </div>
+    <p>{{ option }}</p>
+    <p>{{ view}}
+    </p>
     <ng-container [ngSwitch]="view">
         <ng-container *ngSwitchCase="'open_present'">
             <div class="p-3">
@@ -23,7 +26,7 @@
         <ng-container *ngSwitchCase="'present_opened'">
             <div class="p-3">
                 <div class="dimmer-inner bg-secondary p-2">
-                    <div nitro-furni-floor-image class="col-lg-3" [isFloorItem]="isFloor" [spriteId]="classId"></div>
+                    <img src="{{ getFurniPicture()}}" />
                     <p>{{ openedText }}
 
                     </p>

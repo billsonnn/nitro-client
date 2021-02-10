@@ -1,21 +1,17 @@
-import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
 import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerStateUpdateEvent';
-import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { RoomWidgetPresentDataUpdateEvent } from '../../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcotronBoxDataUpdateEvent';
-import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
-import { RenderTexture } from 'pixi.js';
 import { RoomWidgetPresentOpenMessage } from '../../messages/RoomWidgetPresentOpenMessage';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
 import { FurniturePresentWidgetHandler } from '../../handlers/FurniturePresentWidgetHandler';
 import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
-import { FurniturePlacePaintComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/FurniturePlacePaintComposer';
+import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
+import { CatalogService } from '../../../../catalog/services/catalog.service';
 
 
 @Component({
@@ -28,6 +24,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private static readonly FLOOR:string = 'floor';
     private static readonly WALLPAPER:string = 'wallpaper';
     private static readonly LANDSCAPE:string = 'landscape';
+
+    public option: string;
 
     private _visible: boolean       = false;
     private _openedRequest: boolean;
@@ -49,7 +47,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     public view: string = '';
 
     constructor(
-        private _ngZone: NgZone)
+        private _ngZone: NgZone,
+        private _catalogService: CatalogService)
     {
         super();
 
@@ -134,6 +133,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
     {
+        this.option = event.type;
         switch(event.type)
         {
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
@@ -153,7 +153,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
-                debugger;
                 if(!this._openedRequest) return;
                 this.isFloor = true;
                 this._objectId = event._Str_1577;
@@ -194,6 +193,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this._placedItemId = event.placedItemId;
                 this._placedItemType = event.placedItemType;
                 this._placedInRoom = event._Str_4057;
+                this.isFloor = false;
                 this._Str_10146();
                 //this._Str_12806("packagecard_icon_wallpaper");
             }
@@ -287,6 +287,22 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         return k;
 
+    }
+
+    public getFurniPicture(): string
+    {
+        let furniData: IFurnitureData = null;
+
+        if(this.option == RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS)
+        {
+            furniData = Nitro.instance.sessionDataManager.getFloorItemData(this.classId);
+        }
+        else
+        {
+            furniData = Nitro.instance.sessionDataManager.getWallItemData(this.classId);
+        }
+
+        return this._catalogService.getFurnitureDataIconUrl(furniData);
     }
 
 
