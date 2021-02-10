@@ -188,4 +188,5 @@ export class OutgoingHeader
     public static readonly CATALOG_REDEEM_VOUCHER         = 339;
     public static readonly ROOM_TONER_APPLY               = 2880;
     public static readonly LOVELOCK_START_CONFIRM         = 3775;
+    public static readonly CONVERT_GLOBAL_ROOM_ID         = 314;
 }

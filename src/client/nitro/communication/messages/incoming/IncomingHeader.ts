@@ -213,4 +213,5 @@ export class IncomingHeader
     public static readonly LOVELOCK_FURNI_START             = 3753;
     public static readonly LOVELOCK_FURNI_FRIEND_COMFIRMED  = 382;
     public static readonly LOVELOCK_FURNI_FINISHED          = 770;
+    public static readonly IN_CLIENT_LINK                   = 2023;
 }

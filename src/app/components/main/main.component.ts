@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ILinkEventTracker } from '../../../client/core/events/ILinkEventTracker';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../../client/nitro/room/events/RoomBackgroundColorEvent';
 import { RoomEngineDimmerStateEvent } from '../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
@@ -16,6 +17,7 @@ import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/R
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
 import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { HabboWebTools } from '../../../client/nitro/utils/HabboWebTools';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { SettingsService } from '../../core/settings/service';
 import { RoomComponent } from '../room/room.component';
@@ -56,7 +58,7 @@ import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.comp
         )
     ]
 })
-export class MainComponent implements OnInit, OnDestroy
+export class MainComponent implements OnInit, OnDestroy, ILinkEventTracker
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
@@ -71,6 +73,7 @@ export class MainComponent implements OnInit, OnDestroy
         this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
         this.onRoomEngineObjectEvent    = this.onRoomEngineObjectEvent.bind(this);
         this.onRoomSessionEvent         = this.onRoomSessionEvent.bind(this);
+        Nitro.instance.addLinkEventTracker(this);
     }
 
     public ngOnInit(): void
@@ -179,6 +182,8 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
             }
         });
+
+        Nitro.instance.removeLinkEventTracker(this);
     }
 
     private onRoomEngineEvent(event: RoomEngineEvent): void
@@ -314,6 +319,37 @@ export class MainComponent implements OnInit, OnDestroy
                 (this.roomComponent && this.roomComponent.processEvent(event));
                 return;
         }
+    }
+
+    linkReceived(link: string): void
+    {
+        const parts = link.split('/');
+
+        if(parts.length < 2) return;
+
+        switch(parts[1])
+        {
+            case 'open':
+                if(parts.length > 2)
+                {
+                    switch(parts[2])
+                    {
+                        case 'credits':
+                            //HabboWebTools.openWebPageAndMinimizeClient(this._windowManager.getProperty(ExternalVariables.WEB_SHOP_RELATIVE_URL));
+                            break;
+                        default: {
+                            const name = parts[2];
+                            HabboWebTools.openHabblet(name);
+                        }
+                    }
+                }
+                return;
+        }
+    }
+
+    public get eventUrlPrefix(): string
+    {
+        return 'habblet';
     }
 
     public get landingViewVisible(): boolean

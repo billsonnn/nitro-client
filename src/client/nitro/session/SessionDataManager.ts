@@ -15,6 +15,7 @@ import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/un
 import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
 import { Nitro } from '../Nitro';
 import { HabboWebTools } from '../utils/HabboWebTools';
+import { InClientLinkEvent } from './../communication/messages/incoming/user/InClientLinkEvent';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
 import { UserNameUpdateEvent } from './events/UserNameUpdateEvent';
@@ -101,6 +102,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._communication.registerMessageEvent(new ChangeNameUpdateEvent(this.onChangeNameUpdateEvent.bind(this)));
         this._communication.registerMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
         this._communication.registerMessageEvent(new RoomModelNameEvent(this.onRoomModelNameEvent.bind(this)));
+        this._communication.registerMessageEvent(new InClientLinkEvent(this.onInClientLinkEvent.bind(this)));
     }
 
     protected onDispose(): void
@@ -311,6 +313,17 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
                 for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
+    }
+
+    private onInClientLinkEvent(event: InClientLinkEvent):void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        Nitro.instance.createLinkEvent(parser.link);
     }
 
     private destroyFurnitureData(): void
