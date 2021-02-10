@@ -12,16 +12,16 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     public static RWPDUE_CONTENTS_IMAGE: string = 'RWPDUE_CONTENTS_IMAGE';
 
     private _Str_2319: number = -1;
-    private _Str_2825: number = 0;
-    private _Str_2625: string = '';
+    private _classId: number = 0;
+    private _itemType: string = '';
     private _text: string;
     private _controller: boolean;
     private _Str_12168: Texture;
     private _Str_19174: string;
     private _Str_19510: string;
-    private _Str_3054: number = -1;
-    private _Str_3970: string = '';
-    private _Str_3224: boolean;
+    private _placedItemId: number = -1;
+    private _placedItemType: string = '';
+    private _placedInRoom: boolean;
 
     constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: boolean = false, _arg_5: Texture = null, _arg_6: string = null, _arg_7: string = null)
     {
@@ -42,22 +42,22 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
 
     public get classId(): number
     {
-        return this._Str_2825;
+        return this._classId;
     }
 
     public set classId(k: number)
     {
-        this._Str_2825 = k;
+        this._classId = k;
     }
 
-    public get _Str_2887(): string
+    public get itemType(): string
     {
-        return this._Str_2625;
+        return this._itemType;
     }
 
-    public set _Str_2887(k: string)
+    public set itemType(k: string)
     {
-        this._Str_2625 = k;
+        this._itemType = k;
     }
 
     public get text(): string
@@ -87,31 +87,31 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
 
     public get placedItemId(): number
     {
-        return this._Str_3054;
+        return this._placedItemId;
     }
 
     public set placedItemId(k: number)
     {
-        this._Str_3054 = k;
+        this._placedItemId = k;
     }
 
-    public get _Str_4057(): boolean
+    public get placedInRoom(): boolean
     {
-        return this._Str_3224;
+        return this._placedInRoom;
     }
 
-    public set _Str_4057(k: boolean)
+    public set placedInRoom(k: boolean)
     {
-        this._Str_3224 = k;
+        this._placedInRoom = k;
     }
 
     public get placedItemType(): string
     {
-        return this._Str_3970;
+        return this._placedItemType;
     }
 
     public set placedItemType(k: string)
     {
-        this._Str_3970 = k;
+        this._placedItemType = k;
     }
 }

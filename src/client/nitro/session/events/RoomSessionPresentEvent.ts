@@ -13,17 +13,17 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
     private _placedInRoom: boolean;
     private _petFigureString: string;
 
-    constructor(k: string, _arg_2: IRoomSession, _arg_3: number, _arg_4: string, _arg_5: string, _arg_6: number, _arg_7: string, _arg_8: boolean, _arg_9: string)
+    constructor(k: string, _arg_2: IRoomSession, classId: number, itemType: string, productCode: string, placedItemId: number, placedItemType: string, placedInRoom: boolean, petFigureString: string)
     {
         super(k, _arg_2);
 
-        this._classId = _arg_3;
-        this._itemType = _arg_4;
-        this._productCode = _arg_5;
-        this._placedItemId = _arg_6;
-        this._placedItemType = _arg_7;
-        this._placedInRoom = _arg_8;
-        this._petFigureString = _arg_9;
+        this._classId = classId;
+        this._itemType = itemType;
+        this._productCode = productCode;
+        this._placedItemId = placedItemId;
+        this._placedItemType = placedItemType;
+        this._placedInRoom = placedInRoom;
+        this._petFigureString = petFigureString;
     }
 
     public get classId(): number
@@ -31,12 +31,8 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
         return this._classId;
     }
 
-    public get _Str_2706(): number
-    {
-        return this._classId;
-    }
 
-    public get _Str_2887(): string
+    public get itemType(): string
     {
         return this._itemType;
     }
@@ -51,7 +47,7 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
         return this._placedItemId;
     }
 
-    public get _Str_4057(): boolean
+    public get placedInRoom(): boolean
     {
         return this._placedInRoom;
     }

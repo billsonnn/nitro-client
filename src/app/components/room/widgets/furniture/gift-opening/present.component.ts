@@ -34,7 +34,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private _controller: boolean;
     private _senderName: string;
     private _senderFigure: string;
-    private _image: HTMLImageElement;
     private _classId: number;
     private _itemType: string;
     private _placedItemId: number;
@@ -53,8 +52,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         super();
 
         this.onObjectUpdate   = this.onObjectUpdate.bind(this);
-        this._Str_4159        = this._Str_4159.bind(this);
-        this._Str_21234       = this._Str_21234.bind(this);
+        this.onFurniRemoved        = this.onFurniRemoved.bind(this);
+        this.onPackageInfo       = this.onPackageInfo.bind(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -69,8 +68,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, this.onObjectUpdate);
-        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this._Str_4159);
-        eventDispatcher.addEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this._Str_21234);
+        eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.onFurniRemoved);
+        eventDispatcher.addEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this.onPackageInfo);
         super.registerUpdateEvents(eventDispatcher);
     }
 
@@ -85,8 +84,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, this.onObjectUpdate);
-        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this._Str_4159);
-        eventDispatcher.removeEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this._Str_21234);
+        eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.onFurniRemoved);
+        eventDispatcher.removeEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this.onPackageInfo);
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
@@ -105,11 +104,13 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         return this._senderName;
     }
 
-    private _Str_4159(k:RoomWidgetRoomObjectUpdateEvent):void
+    private onFurniRemoved(k:RoomWidgetRoomObjectUpdateEvent):void
     {
+        if(!k) return;
+
         if(k.id == this._objectId)
         {
-            this._Str_2718();
+            this.closeView();
         }
         if(k.id == this._placedItemId)
         {
@@ -121,25 +122,27 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         }
     }
 
-    private  _Str_21234(k:RoomWidgetEcotronBoxDataUpdateEvent):void
+    private  onPackageInfo(k:RoomWidgetEcotronBoxDataUpdateEvent):void
     {
         switch(k.type)
         {
             case RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO:
-                this._Str_2718();
+                this.closeView();
                 return;
         }
     }
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
     {
+        if(!event) return;
+
         this.option = event.type;
         switch(event.type)
         {
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
                 this._ngZone.run(() =>
                 {
-                    this._Str_2718();
+                    this.closeView();
                     this._openedRequest = false;
                     this._objectId = event._Str_1577;
                     this._text = event.text;
@@ -157,12 +160,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this.isFloor = true;
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
-                this._itemType = event._Str_2887;
+                this._itemType = event.itemType;
                 this._text = event.text;
                 this._controller = event.controller;
                 this._placedItemId = event.placedItemId;
                 this._placedItemType = event.placedItemType;
-                this._placedInRoom = event._Str_4057;
+                this._placedInRoom = event.placedInRoom;
 
                 this._Str_10146();
                 //his._Str_12806('packagecard_icon_floor');
@@ -173,12 +176,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
-                this._itemType = event._Str_2887;
+                this._itemType = event.itemType;
                 this._text = event.text;
                 this._controller = event.controller;
                 this._placedItemId = event.placedItemId;
                 this._placedItemType = event.placedItemType;
-                this._placedInRoom = event._Str_4057;
+                this._placedInRoom = event.placedInRoom;
                 this._Str_10146();
                 // this._Str_12806("packagecard_icon_landscape");
             }
@@ -187,12 +190,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 if(!this._openedRequest) return;
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
-                this._itemType = event._Str_2887;
+                this._itemType = event.itemType;
                 this._text = event.text;
                 this._controller = event.controller;
                 this._placedItemId = event.placedItemId;
                 this._placedItemType = event.placedItemType;
-                this._placedInRoom = event._Str_4057;
+                this._placedInRoom = event.placedInRoom;
                 this.isFloor = false;
                 this._Str_10146();
                 //this._Str_12806("packagecard_icon_wallpaper");
@@ -203,7 +206,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 if(!this._openedRequest) return;
                 this._objectId = event._Str_1577;
                 this._classId = event.classId;
-                this._itemType = event._Str_2887;
+                this._itemType = event.itemType;
                 this._text = event.text;
                 this._controller = event.controller;
                 this._Str_10146();
@@ -218,12 +221,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                     this.isFloor = true;
                     this._objectId = event._Str_1577;
                     this._classId = event.classId;
-                    this._itemType = event._Str_2887;
+                    this._itemType = event.itemType;
                     this._text = event.text;
                     this._controller = event.controller;
                     this._placedItemId = event.placedItemId;
                     this._placedItemType = event.placedItemType;
-                    this._placedInRoom = event._Str_4057;
+                    this._placedInRoom = event.placedInRoom;
                     this._Str_10146();
                     this._Str_9278(event._Str_11625);
                 }
@@ -243,7 +246,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         }
     }
 
-    private _Str_2718(): void
+    private closeView(): void
     {
         this._visible = false;
         if(!this._openedRequest)
@@ -317,7 +320,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         if(this._openedRequest || this._objectId == -1 || !this._controller) return;
 
         this._openedRequest = true;
-        this._Str_2718();
+        this.closeView();
         this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._objectId));
     }
 
@@ -443,7 +446,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         this._openedRequest = false;
         this._placedItemId = -1;
         this._placedInRoom = false;
-        this._Str_2718();
+        this.closeView();
     }
 
     public get isAnonymousGift(): boolean
