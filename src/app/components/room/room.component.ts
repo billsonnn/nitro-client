@@ -45,6 +45,8 @@ import { AvatarInfoWidgetHandler } from './widgets/handlers/AvatarInfoWidgetHand
 import { ChatInputWidgetHandler } from './widgets/handlers/ChatInputWidgetHandler';
 import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
+import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
+import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 import { FurnitureBackgroundColorWidgetHandler } from './widgets/handlers/FurnitureBackgroundColorWidgetHandler';
 import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
@@ -57,11 +59,9 @@ import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHand
 import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
 import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandler';
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
+import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
-import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
-import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
@@ -93,6 +93,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _roomBackground: Sprite                     = null;
     private _roomBackgroundColor: number                = 0;
     private _roomColorizerColor: number                 = 0;
+    private _roomScale: number                          = 1;
 
     private _resizeTimer: ReturnType<typeof setTimeout> = null;
     private _didMouseMove: boolean                      = false;
@@ -100,6 +101,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     private _clickCount: number                         = 0;
     private _lastMouseMove: number                      = 0;
     private _isMouseMove: boolean                       = false;
+    private _scrollCount: number                        = 0;
+    private _lastScrollTime: number                     = 0;
 
     constructor(
         private _notificationService: NotificationService,
@@ -194,6 +197,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this._roomBackground        = null;
         this._roomBackgroundColor   = 0;
         this._roomColorizerColor    = 0;
+        this._roomScale             = 1;
 
         RoomComponent.COLOR_ADJUSTMENT.red      = 1;
         RoomComponent.COLOR_ADJUSTMENT.green    = 1;
@@ -223,7 +227,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         canvas.onmouseup        = this.onMouseEvent.bind(this);
 
         window.onresize     = this.onWindowResizeEvent.bind(this);
-        //window.onmousewheel = this.onWindowMouseWheelEvent.bind(this);
+        window.onmousewheel = this.onWindowMouseWheelEvent.bind(this);
 
         this.roomCanvasReference.nativeElement.appendChild(canvas);
     }
@@ -303,11 +307,15 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         this._resizeTimer = setTimeout(() =>
         {
+            Nitro.instance.renderer.resize(window.innerWidth, window.innerHeight);
+
             Nitro.instance.roomEngine.initializeRoomInstanceRenderingCanvas(this._roomSession.roomId, this.getFirstCanvasId(), Nitro.instance.width, Nitro.instance.height);
 
             this._events.dispatchEvent(new RoomWidgetRoomViewUpdateEvent(RoomWidgetRoomViewUpdateEvent.SIZE_CHANGED, this.getRoomViewRect()));
 
             this.setRoomBackground();
+
+            Nitro.instance.render();
         }, 1);
     }
 
@@ -320,9 +328,37 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         //@ts-ignore
         const deltaY    = (-(1 / 40) * (event.wheelDeltaY || event.deltaY));
         const direction = ((deltaY < 0) ? 1 : -1);
-        const factor    = (1 + direction * 0.1);
 
-        Nitro.instance.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._roomSession.roomId, factor, false, true));
+        if(this._lastScrollTime)
+        {
+            if(this._lastScrollTime < Date.now() - 300) this._scrollCount = 0;
+
+            this._scrollCount++;
+        }
+
+        this._lastScrollTime = Date.now();
+
+        if(this._scrollCount !== 15) return;
+
+        this._scrollCount       = 0;
+        this._lastScrollTime    = null;
+
+        let scale = this._roomScale;
+
+        switch(direction)
+        {
+            case 1:
+                if(scale >= 0.5) (scale += 0.5);
+                break;
+            case -1:
+                if(scale <= 1) (scale = 0.5);
+                else (scale -= 0.5);
+                break;
+        }
+
+        this._roomScale = scale;
+
+        Nitro.instance.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._roomSession.roomId, scale, false));
     }
 
     public update(): void
