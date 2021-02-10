@@ -23,6 +23,7 @@ import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
 import { SoundService } from './services/sound.service';
 import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
+import { FurniFloorImageComponent } from './components/furni-floor-image/furni-floor.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -69,7 +70,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        FurniFloorImageComponent
     ],
     providers: [
         {
@@ -90,7 +92,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        FurniFloorImageComponent
     ]
 })
 export class SharedModule

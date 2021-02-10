@@ -64,6 +64,13 @@ export class CatalogClubGiftsParser implements IMessageParser
         return this._Str_5369;
     }
 
+    public getOfferExtraData(offerId: number): _Str_5178
+    {
+        if(!offerId) return null;
+
+        return this._Str_5759.get(offerId);
+    }
+
 
     public  get _Str_24398():Map<number, _Str_5178>
     {

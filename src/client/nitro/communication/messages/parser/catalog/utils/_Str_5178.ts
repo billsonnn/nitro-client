@@ -36,6 +36,10 @@ export class _Str_5178
         return this._Str_6052;
     }
 
+    public get isClubOnly(): boolean
+    {
+        return this._Str_6052;
+    }
     public  get isSelectable():boolean
     {
         return this._Str_693;
@@ -45,4 +49,16 @@ export class _Str_5178
     {
         return this._Str_19803;
     }
+
+    public get availableInDays(): number
+    {
+        return this._Str_19803;
+    }
+
+    public get isAvailable(): boolean
+    {
+        return this._Str_693;
+    }
+
+
 }

@@ -54,35 +54,6 @@ export class CatalogLayoutDefaultComponent extends CatalogLayout
         return Nitro.instance.getLocalization(key);
     }
 
-    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
-    {
-        if(!product) return null;
-
-        return this._catalogService.getFurnitureDataForProductOffer(product);
-    }
-
-    public offerImage(offer: CatalogPageOfferData): string
-    {
-        if(!offer) return '';
-
-        const product = offer.products[0];
-
-        if(!product) return '';
-
-        const furniData = this.getProductFurniData(product);
-
-        if(!furniData) return '';
-
-        switch(product.productType)
-        {
-            case ProductTypeEnum.FLOOR:
-                return this._catalogService.getFurnitureDataIconUrl(furniData);
-            case ProductTypeEnum.WALL:
-                return this._catalogService.getFurnitureDataIconUrl(furniData);
-        }
-
-        return '';
-    }
 
     public offerCount(offer: CatalogPageOfferData): number
     {

@@ -240,7 +240,7 @@ export class CatalogService implements OnDestroy
         this._purse.clubDays = Math.max(0, parser.days);
         this._purse.clubPeriods = Math.max(0, parser.months);
         this._purse.isVip = parser.isVip;
-        this._purse.pastClubDays = parser.pastClubDays;
+        this._purse.pastClubDays = parser.pastVIPDays;
         this._purse.Str_14389 = parser.years == UserSubscriptionParser._Str_14729;
         this._purse.minutesUntilExpiration = parser.totalSeconds;
     }
