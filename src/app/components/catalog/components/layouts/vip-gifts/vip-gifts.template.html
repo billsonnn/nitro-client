@@ -16,7 +16,7 @@
         </div>
         <div *ngIf="getAvailability(gift.offerId)" class="row">
             {{ 'catalog.club_gift.selectable' | translate }}
-            <button type="button" class="btn btn-sm btn-primary">{{ 'catalog.club_gift.select' | translate }}</button>
+            <button type="button" (click)="selectOffer(gift)" class="btn btn-sm btn-primary">{{ 'catalog.club_gift.select' | translate }}</button>
         </div>
 
         <div *ngIf="!getAvailability(gift.offerId)" class="row">
@@ -26,5 +26,28 @@
 
     <div class="row">
         {{ pastClubDays }}
+    </div>
+</div>
+
+
+<div *ngIf="showPopup" [bringToTop] [draggable] class="nitro-catalog-confirm-purchase-component card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ ('catalog.club_gift.confirm') | translate }}</h6>
+        <button type="button" class="close" (click)="hidePopup()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="row p-3">
+        <div class="col-6 d-flex flex-column">
+            <div class="product-preview bg-secondary rounded" [ngStyle]="{ 'background-image': 'url(' + getGiftImage() + ')'}"></div>
+        </div>
+        <div class="col-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="offer-name">{{ giftName() }}</div>
+
+        </div>
+    </div>
+    <div class="row align-items-end pt-0 px-3 pb-3">
+        <div class="col btn-group">
+            <button type="button" class="btn btn-success" (click)="confirmGift()">{{ ('catalog.club_gift.select') | translate }}</button>
+            <button type="button" class="btn btn-primary" (click)="hidePopup()">{{ ('cancel') | translate }}</button>
+        </div>
     </div>
 </div>
