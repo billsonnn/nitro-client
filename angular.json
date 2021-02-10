@@ -15,15 +15,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "customWebpackConfig": {
-              "path": "./webpack.config.js",
-              "mergeStrategies": {
-                "module.rules": "prepend"
-              },
-              "replaceDuplicatePlugins": true
-            },
             "outputPath": "dist",
             "resourcesOutputPath": "assets",
             "index": "src/index.html",
