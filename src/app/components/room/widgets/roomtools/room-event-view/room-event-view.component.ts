@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
+import { RoomMuteComposer } from '../../../../../../client/nitro/communication/messages/outgoing/roomevents/RoomMuteComposer';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
@@ -68,6 +69,20 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
         return this.roomData.showOwner;
     }
 
+    public get canMuteVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.canMute;
+    }
+
+    public get mutedVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.allInRoomMuted;
+    }
+
     public handleButtonClick(button: string): void
     {
         switch(button)
@@ -80,6 +95,9 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
                 this.openRoomSettings();
                 break;
 
+            case 'room_mute_all':
+                this.muteAll();
+                break;
         }
     }
 
@@ -106,6 +124,10 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
     private muteAll(): void
     {
         // _Str_25149
+
+        this.roomData.allInRoomMuted = !this.roomData.allInRoomMuted;
+
+        Nitro.instance.communication.connection.send(new RoomMuteComposer());
     }
 
     private makeHomeRoom(): void

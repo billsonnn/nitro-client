@@ -22,8 +22,7 @@
         </div>
 
         <div class="btn-group-vertical w-100 mt-2">
-            <button type="button" class="btn btn-secondary mb-1" disabled>{{ ('navigator.muteall_off') | translate }}</button>
-            <!--            Unmute all: navigator.muteall_on -->
+            <button type="button" *ngIf="canMuteVisible" class="btn btn-secondary mb-1" (click)="handleButtonClick('room_mute_all')"> {{ (mutedVisible ? 'navigator.muteall_on' : 'navigator.muteall_off') | translate }}</button>
         </div>
         <!--        navigator.staffpicks.unpick-->
     </div>
