@@ -29,16 +29,8 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private _visible: boolean       = false;
     private _openedRequest: boolean;
-    private _objectId: number;
-    private _text: string;
-    private _controller: boolean;
-    private _senderName: string;
-    private _senderFigure: string;
-    private _classId: number;
-    private _itemType: string;
-    private _placedItemId: number;
-    private _placedItemType: string;
-    private _placedInRoom: boolean;
+
+    private _currentEvent: RoomWidgetPresentDataUpdateEvent = null;
     public openedText: string;
 
     public isFloor = false;
@@ -53,7 +45,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         this.onObjectUpdate   = this.onObjectUpdate.bind(this);
         this.onFurniRemoved        = this.onFurniRemoved.bind(this);
-        this.onPackageInfo       = this.onPackageInfo.bind(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
@@ -63,13 +54,10 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, this.onObjectUpdate);
-        eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE, this.onObjectUpdate);
-        eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.onFurniRemoved);
-        eventDispatcher.addEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this.onPackageInfo);
         super.registerUpdateEvents(eventDispatcher);
     }
 
@@ -79,56 +67,35 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, this.onObjectUpdate);
-        eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE, this.onObjectUpdate);
-        eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, this.onObjectUpdate);
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.onFurniRemoved);
-        eventDispatcher.removeEventListener(RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO, this.onPackageInfo);
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
     public get figure(): string
     {
-        return this._senderFigure;
+        return this._currentEvent.purchaserFigure;
     }
 
     public get senderText(): string
     {
-        return this._text;
+        return this._currentEvent.furniName;
     }
 
     public get senderName(): string
     {
-        return this._senderName;
+        return this._currentEvent.purchaserName;
     }
 
     private onFurniRemoved(k:RoomWidgetRoomObjectUpdateEvent):void
     {
         if(!k) return;
 
-        if(k.id == this._objectId)
+        if(k.id == this._currentEvent.objectId)
         {
             this.closeView();
-        }
-        if(k.id == this._placedItemId)
-        {
-            if(this._placedInRoom)
-            {
-                this._placedInRoom = false;
-                //.     this._Str_22179();
-            }
-        }
-    }
-
-    private  onPackageInfo(k:RoomWidgetEcotronBoxDataUpdateEvent):void
-    {
-        switch(k.type)
-        {
-            case RoomWidgetEcotronBoxDataUpdateEvent.RWEBDUE_PACKAGEINFO:
-                this.closeView();
-                return;
         }
     }
 
@@ -138,7 +105,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         this.option = event.type;
 
-        this._objectId = event.objectId;
+        this._currentEvent = event;
 
         switch(event.type)
         {
@@ -148,10 +115,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                     this.closeView();
                     this._openedRequest = false;
 
-                    this._text = event.text;
-                    this._controller = event.controller;
-                    this._senderName = event.purchaserName;
-                    this._senderFigure = event.purchaserFigure;
                     this.showOpeningPresent();
                 });
             }
@@ -160,13 +123,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 if(!this._openedRequest) return;
                 this.isFloor = true;
 
-                this._classId = event.classId;
-                this._itemType = event.itemType;
-                this._text = event.text;
-                this._controller = event.controller;
-                this._placedItemId = event.placedItemId;
-                this._placedItemType = event.placedItemType;
-                this._placedInRoom = event.placedInRoom;
 
                 this.setOpenedText();
                 //his._Str_12806('packagecard_icon_floor');
@@ -174,30 +130,12 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE: {
                 if(!this._openedRequest) return;
-
-
-                this._classId = event.classId;
-                this._itemType = event.itemType;
-                this._text = event.text;
-                this._controller = event.controller;
-                this._placedItemId = event.placedItemId;
-                this._placedItemType = event.placedItemType;
-                this._placedInRoom = event.placedInRoom;
                 this.setOpenedText();
                 // this._Str_12806("packagecard_icon_landscape");
             }
                 break;
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER: {
                 if(!this._openedRequest) return;
-
-                this._classId = event.classId;
-                this._itemType = event.itemType;
-                this._text = event.text;
-                this._controller = event.controller;
-                this._placedItemId = event.placedItemId;
-                this._placedItemType = event.placedItemType;
-                this._placedInRoom = event.placedInRoom;
-                this.isFloor = false;
                 this.setOpenedText();
                 //this._Str_12806("packagecard_icon_wallpaper");
             }
@@ -205,10 +143,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
             case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB: {
                 if(!this._openedRequest) return;
-                this._classId = event.classId;
-                this._itemType = event.itemType;
-                this._text = event.text;
-                this._controller = event.controller;
                 this.setOpenedText();
                 //this._Str_12806("packagecard_icon_hc");
             }
@@ -218,20 +152,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 if(!this._openedRequest) return;
 
                 this.isFloor = true;
-                this._objectId = event.objectId;
-                this._classId = event.classId;
-                this._itemType = event.itemType;
-                this._text = event.text;
-                this._controller = event.controller;
-                this._placedItemId = event.placedItemId;
-                this._placedItemType = event.placedItemType;
-                this._placedInRoom = event.placedInRoom;
                 this.setOpenedText();
-            }
-                break;
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_IMAGE: {
-                if(!this._openedRequest) return;
-
             }
                 break;
         }
@@ -240,25 +161,25 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private closeView(): void
     {
         this._visible = false;
-        if(!this._openedRequest)
-        {
-            this._objectId = -1;
-        }
-
-        this._text = '';
-        this._controller = false;
+        // if(!this._openedRequest)
+        // {
+        //     this._objectId = -1;
+        // }
+        //
+        // this._text = '';
+        // this._controller = false;
     }
 
     private setOpenedText(): void
     {
-        if(this._objectId < 0) return;
+        if(this._currentEvent.objectId  < 0) return;
 
-        if(this._text)
+        if(this._currentEvent.furniName)
         {
-            this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._text);
+            this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._currentEvent.furniName);
             if(this.isSpacesFurniture())
             {
-                this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._text);
+                this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._currentEvent.furniName);
             }
         }
 
@@ -269,9 +190,9 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private isSpacesFurniture(): boolean
     {
         let isSpaces = false;
-        if(this._itemType == ProductTypeEnum.WALL)
+        if(this._currentEvent.itemType == ProductTypeEnum.WALL)
         {
-            const wallItemData = Nitro.instance.sessionDataManager.getWallItemData(this._classId);
+            const wallItemData = Nitro.instance.sessionDataManager.getWallItemData(this._currentEvent.classId);
             if(wallItemData)
             {
                 const className = wallItemData.className;
@@ -296,23 +217,20 @@ export class PresentFurniWidget extends ConversionTrackingWidget
             furniData = Nitro.instance.sessionDataManager.getWallItemData(this.classId);
         }
 
+        debugger;
+
         return this._catalogService.getFurnitureDataIconUrl(furniData);
     }
 
 
-    // see _Str_4649
-    private hasMissingSenderName(): boolean
-    {
-        return this._senderName == null || this._senderName.length == 0;
-    }
 
     private acceptAndOpenPresent(): void
     {
-        if(this._openedRequest || this._objectId == -1 || !this._controller) return;
+        if(this._openedRequest || this._currentEvent.objectId == -1 || !this._currentEvent.controller) return;
 
         this._openedRequest = true;
         this.closeView();
-        this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._objectId));
+        this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._currentEvent.objectId));
     }
 
 
@@ -340,7 +258,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
     private showOpeningPresent(): void
     {
 
-        if(this._objectId < 0) return;
+        if(this._currentEvent.objectId < 0) return;
 
         this.view = 'open_present';
         this._visible = true;
@@ -366,69 +284,48 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     private placeItemInRoom()
     {
-        if(this._placedItemId > 0 && !this._placedInRoom)
-        {
-            const local3 = null;
-            switch(this._placedItemType)
-            {
-                case ProductTypeEnum.FLOOR:
-
-                    //   Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
-                    // _local_3 = this._inventory._Str_18856(-(this._placedItemId));
-                    // if (this._Str_5337(_local_3))
-                    // {
-                    //     this._inventory._Str_7938(this._placedItemId);
-                    // }
-                    break;
-                case ProductTypeEnum.WALL:
-                    // _local_3 = this._inventory._Str_14082(this._placedItemId);
-                    // if (this._Str_5337(_local_3))
-                    // {
-                    //     this._inventory._Str_7938(this._placedItemId);
-                    // }
-                    break;
-                case ProductTypeEnum.PET:
-                    // if (this._inventory._Str_6675(this._placedItemId, false))
-                    // {
-                    //     this._inventory._Str_21312(this._placedItemId);
-                    // }
-                    break;
-
-            }
-        }
+        // if(this._placedItemId > 0 && !this._placedInRoom)
+        // {
+        //     const local3 = null;
+        //     switch(this._placedItemType)
+        //     {
+        //         case ProductTypeEnum.FLOOR:
+        //
+        //             //   Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
+        //             // _local_3 = this._inventory._Str_18856(-(this._placedItemId));
+        //             // if (this._Str_5337(_local_3))
+        //             // {
+        //             //     this._inventory._Str_7938(this._placedItemId);
+        //             // }
+        //             break;
+        //         case ProductTypeEnum.WALL:
+        //             // _local_3 = this._inventory._Str_14082(this._placedItemId);
+        //             // if (this._Str_5337(_local_3))
+        //             // {
+        //             //     this._inventory._Str_7938(this._placedItemId);
+        //             // }
+        //             break;
+        //         case ProductTypeEnum.PET:
+        //             // if (this._inventory._Str_6675(this._placedItemId, false))
+        //             // {
+        //             //     this._inventory._Str_21312(this._placedItemId);
+        //             // }
+        //             break;
+        //
+        //     }
+        // }
 
         this.resetAndCloseView();
     }
 
     private placeFurniInInventory(): void
     {
-        if(this._placedItemId > 0 && this._placedInRoom)
-        {
-            if(this._placedItemType == ProductTypeEnum.PET)
-            {
-                (this.widgetHandler as FurniturePresentWidgetHandler).container.roomSession.pickupPet(this._placedItemId);
-            }
-            else
-            {
-                const roomId = (this.widgetHandler as FurniturePresentWidgetHandler).container.roomSession.roomId;
-
-                const roomObject = (this.widgetHandler as FurniturePresentWidgetHandler).container.roomEngine.getRoomObject(roomId, this._placedItemId, RoomObjectCategory.FLOOR);
-
-                if(roomObject)
-                {
-                    //this._roomEngine.updateObjectWallItemData(_local_5.getId(), _local_4, RoomObjectOperationEnum.OBJECT_PICKUP);
-                }
-            }
-        }
-
         this.resetAndCloseView();
     }
 
     private resetAndCloseView(): void
     {
         this._openedRequest = false;
-        this._placedItemId = -1;
-        this._placedInRoom = false;
         this.closeView();
     }
 
@@ -449,6 +346,6 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
     public get classId(): number
     {
-        return this._classId;
+        return this._currentEvent.classId;
     }
 }

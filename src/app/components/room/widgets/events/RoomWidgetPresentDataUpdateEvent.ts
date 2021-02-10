@@ -14,7 +14,7 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     private _objectId: number = -1;
     private _classId: number = 0;
     private _itemType: string = '';
-    private _text: string;
+    private _furniName: string;
     private _controller: boolean;
     private _furniImage: Texture;
     private _purchaserName: string;
@@ -23,12 +23,12 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     private _placedItemType: string = '';
     private _placedInRoom: boolean;
 
-    constructor(type: string, objectId: number, furnitureData: string, isOwnerOfFurniture: boolean = false, furniImage: Texture = null, purchaserName: string = null, purchaserFigure: string = null)
+    constructor(type: string, objectId: number, furniName: string, isOwnerOfFurniture: boolean = false, furniImage: Texture = null, purchaserName: string = null, purchaserFigure: string = null)
     {
         super(type);
 
         this._objectId = objectId;
-        this._text = furnitureData;
+        this._furniName = furniName;
         this._controller = isOwnerOfFurniture;
         this._furniImage = furniImage;
         this._purchaserName = purchaserName;
@@ -60,9 +60,9 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         this._itemType = k;
     }
 
-    public get text(): string
+    public get furniName(): string
     {
-        return this._text;
+        return this._furniName;
     }
 
     public get controller(): boolean
