@@ -117,7 +117,8 @@ export class CatalogService implements OnDestroy
 
         if(!parser) return;
 
-        this._clubGiftsParser = parser;
+        // This needs to be done on the ngZone because the HC Gifts Page needs an update after buying a gift
+        this._ngZone.run(() => this._clubGiftsParser = parser);
     }
 
     public registerVipBuyTemplate(template: CatalogLayoutVipBuyComponent)

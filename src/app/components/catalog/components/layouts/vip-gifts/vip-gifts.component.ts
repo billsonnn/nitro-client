@@ -75,6 +75,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     public confirmGift(): void
     {
         Nitro.instance.communication.connection.send(new CatalogSelectClubGiftComposer(this._currentSelectedVipOffer.localizationId));
+        this._catalogService.requestClubGifts();
         this.showPopup = false;
     }
     public get pastClubDays(): string
