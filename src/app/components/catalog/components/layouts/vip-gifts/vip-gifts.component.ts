@@ -41,7 +41,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     {
         const test = this._catalogService.clubGiftsParser.getOfferExtraData(offerId);
 
-        return test.isSelectable && this._catalogService.clubGiftsParser._Str_7574 > 0;
+        return test.isSelectable && this._catalogService.clubGiftsParser.giftsAvailable > 0;
     }
 
     public get gifts(): CatalogPageOfferData[]
@@ -75,21 +75,21 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     public confirmGift(): void
     {
         Nitro.instance.communication.connection.send(new CatalogSelectClubGiftComposer(this._currentSelectedVipOffer.localizationId));
-        this._catalogService.requestClubGifts();
+        this._catalogService.clubGiftsParser.giftsAvailable--;
         this.showPopup = false;
     }
     public get pastClubDays(): string
     {
-        const local7 = this._catalogService.purse.pastClubDays;
+        const pastClubDays = this._catalogService.purse.pastClubDays;
         const month = 31;
 
-        const local2 = (local7 > month) ? 'catalog.club_gift.past_club.long': 'catalog.club_gift.past_club';
-        const local3 = Math.floor(local7 % month);
-        const local4 = Math.floor(local7 / month);
+        const textSelector = (pastClubDays > month) ? 'catalog.club_gift.past_club.long': 'catalog.club_gift.past_club';
+        const days = Math.floor(pastClubDays % month);
+        const months = Math.floor(pastClubDays / month);
 
-        let text = Nitro.instance.localization.getValue(local2);
-        text = text.replace('%days%', local3.toString());
-        text = text.replace('%months%', local4.toString());
+        let text = Nitro.instance.localization.getValue(textSelector);
+        text = text.replace('%days%', days.toString());
+        text = text.replace('%months%', months.toString());
         return text;
     }
 
@@ -97,41 +97,37 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     {
         const test = this._catalogService.clubGiftsParser.getOfferExtraData(offerId);
 
-        const local6 =  test.availableInDays - this._catalogService.purse.pastClubDays;
+        const giftAvailableInDays =  test.availableInDays - this._catalogService.purse.pastClubDays;
 
-        if(local6 <= 0) return '';
+        if(giftAvailableInDays <= 0) return '';
 
         const monthDays = 31;
 
-        let local7 = '';
+        let textSelector = '';
 
         if(test._Str_12313)
         {
-            local7 = 'catalog.club_gift.vip_missing';
+            textSelector = 'catalog.club_gift.vip_missing';
         }
         else
         {
-            local7 = 'catalog.club_gift.club_missing';
+            textSelector = 'catalog.club_gift.club_missing';
         }
 
-
-
-        if(local6 > monthDays)
+        if(giftAvailableInDays > monthDays)
         {
-            local7 += '.long';
+            textSelector += '.long';
         }
 
-        const local12 = local6 % monthDays;
-        const local13 = local6 / monthDays;
+        const days = giftAvailableInDays % monthDays;
+        const months = giftAvailableInDays / monthDays;
 
-        let text = Nitro.instance.localization.getValue(local7);
+        let text = Nitro.instance.localization.getValue(textSelector);
 
-        text = text.replace('%days%', local12.toString());
-        text = text.replace('%months%', local13.toString());
+        text = text.replace('%days%', days.toString());
+        text = text.replace('%months%', months.toString());
 
         return text;
-
-        return '';
     }
 
 
@@ -139,37 +135,25 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     {
         if(!this.visible) return '';
 
-        let translater: string;
-
         const parser = this._catalogService.clubGiftsParser;
 
-        if(parser._Str_7574 > 0)
+        if(parser.giftsAvailable > 0)
         {
-            translater = Nitro.instance.localization.getValueWithParameter('catalog.club_gift.available', 'amount', parser._Str_7574.toString());
-        }
-        else
-        {
-            if(parser._Str_12860 > 0)
-            {
-
-                translater = Nitro.instance.localization.getValueWithParameter('catalog.club_gift.days_until_next', 'days', parser._Str_12860.toString());
-            }
-            else
-            {
-                if(this._catalogService.hasClubDays())
-                {
-                    translater = Nitro.instance.localization.getValue('catalog.club_gift.not_available');
-                }
-                else
-                {
-                    translater = Nitro.instance.localization.getValue('catalog.club_gift.no_club');
-                }
-            }
+            return Nitro.instance.localization.getValueWithParameter('catalog.club_gift.available', 'amount', parser.giftsAvailable.toString());
         }
 
+        if(parser.daysUntilNextGift > 0)
+        {
+            return Nitro.instance.localization.getValueWithParameter('catalog.club_gift.days_until_next', 'days', parser.daysUntilNextGift.toString());
+        }
 
+        if(this._catalogService.hasClubDays())
+        {
+            return Nitro.instance.localization.getValue('catalog.club_gift.not_available');
+        }
 
-        return translater;
+        return Nitro.instance.localization.getValue('catalog.club_gift.no_club');
+
     }
 
 }
