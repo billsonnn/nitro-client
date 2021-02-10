@@ -7,29 +7,31 @@ import { CatalogPagesEvent } from '../../../../client/nitro/communication/messag
 import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
 import { CatalogPurchaseFailedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseFailedEvent';
 import { CatalogPurchaseUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogRedeemVoucherErrorEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherErrorEvent';
+import { CatalogRedeemVoucherOkEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherOkEvent';
 import { CatalogSearchEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSearchEvent';
 import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
+import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
+import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogProductOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
-import { CatalogMainComponent } from '../components/main/main.component';
-import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
-import { Purse } from '../purse/purse';
-import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
-import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
-import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
+import { CatalogMainComponent } from '../components/main/main.component';
+import { Purse } from '../purse/purse';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -79,6 +81,8 @@ export class CatalogService implements OnDestroy
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
+                new CatalogRedeemVoucherErrorEvent(this.onCatalogRedeemVoucherError.bind(this)),
+                new CatalogRedeemVoucherOkEvent(this.onCatalogRedeemVoucherOk.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -254,6 +258,43 @@ export class CatalogService implements OnDestroy
                 this._notificationService.alert('${catalog.alert.published.description}', '${catalog.alert.published.title}');
             }
         });
+    }
+
+    private onCatalogRedeemVoucherError(event: CatalogRedeemVoucherErrorEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._settingsService.catalogVisible)
+            this._notificationService.alert('${catalog.alert.voucherredeem.error.description.' + parser.errorCode + '}', '${catalog.alert.voucherredeem.error.title}');
+    }
+
+    private onCatalogRedeemVoucherOk(event: CatalogRedeemVoucherOkEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._settingsService.catalogVisible)
+        {
+            const description = '${catalog.alert.voucherredeem.ok.description}';
+            if(parser.productName !== '')
+            {
+                //TODO: Don't have any use (emulato-side is always empty, but left this code to in future)
+                /*description = 'catalog.alert.voucherredeem.ok.description.furni';
+
+                Nitro.instance.localization.registerParameter(description, 'productName', parser.productName);
+
+                description = '${' + description + '}';*/
+            }
+
+            this._notificationService.alert(description, '${catalog.alert.voucherredeem.ok.title}');
+        }
     }
 
     public setupCatalog(mode: string): void
