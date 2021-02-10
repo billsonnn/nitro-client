@@ -285,7 +285,7 @@ export class CatalogService implements OnDestroy
             const description = '${catalog.alert.voucherredeem.ok.description}';
             if(parser.productName !== '')
             {
-                //TODO: Don't have any use (emulato-side is always empty, but left this code to in future)
+                //TODO: Don't have any use (emulator-side is always empty, but leave this code to use in the future)
                 /*description = 'catalog.alert.voucherredeem.ok.description.furni';
 
                 Nitro.instance.localization.registerParameter(description, 'productName', parser.productName);
