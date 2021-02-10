@@ -1,34 +1,20 @@
-<div *ngIf="visible" class="w-100 h-100 nitro-catalog-layout-vip-gifts-component">
-    <div class="row">
-        <div class="col-12">
-            <p>{{ giftsAvailable}}</p>
-        </div>
-
-    </div>
-
-
-    <div class="row gift-item rounded bg-secondary mb-2 p-1 " *ngFor="let gift of gifts">
-        <div class="col-12">
-            <div class="row">
-                <div class="gift-image" [ngStyle]="{ 'background-image': 'url(' + offerImage(gift) + ')' }"></div>
-                <p>{{ getProductFurniData(gift.products[0]).name }}</p>
+<div *ngIf="visible" class="w-100 h-100 nitro-catalog-layout-vip-gifts-component px-1">
+    <p class="text-center w-100">{{ giftsAvailable}}</p>
+    <div class="gift-item rounded bg-secondary mb-2 d-flex flex-row" *ngFor="let gift of gifts">
+        <div class="gift-image align-self-center mr-2" [ngStyle]="{ 'background-image': 'url(' + offerImage(gift) + ')' }"></div>
+        <div class="w-100">
+            <p class="mb-1 d-block">{{ getProductFurniData(gift.products[0]).name }}</p>
+            <div *ngIf="getAvailability(gift.offerId)" class="w-100 d-flex flex-row justify-content-between">
+                <span class="w-100">{{ 'catalog.club_gift.selectable' | translate }}</span>
+                <button type="button" (click)="selectOffer(gift)" class="btn btn-sm btn-primary align-self-center">{{ 'catalog.club_gift.select' | translate }}</button>
+            </div>
+            <div *ngIf="!getAvailability(gift.offerId)" class="w-100">
+                {{ nonAvailableText(gift.offerId) }}
             </div>
         </div>
-        <div *ngIf="getAvailability(gift.offerId)" class="row">
-            {{ 'catalog.club_gift.selectable' | translate }}
-            <button type="button" (click)="selectOffer(gift)" class="btn btn-sm btn-primary">{{ 'catalog.club_gift.select' | translate }}</button>
-        </div>
-
-        <div *ngIf="!getAvailability(gift.offerId)" class="row">
-            {{ nonAvailableText(gift.offerId) }}
-        </div>
     </div>
-
-    <div class="row">
-        {{ pastClubDays }}
-    </div>
+    <p class="w-100 text-center p-0 m-0">{{ pastClubDays }}</p>
 </div>
-
 
 <div *ngIf="showPopup" [bringToTop] [draggable] class="nitro-catalog-confirm-purchase-component card">
     <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
