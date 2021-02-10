@@ -286,6 +286,7 @@ import { CatalogGiftUsernameUnavailableEvent } from './messages/incoming/catalog
 import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { FurnitureGiftOpenedEvent } from './messages/incoming/inventory/furni/gifts/FurnitureGiftOpenedEvent';
 import { PetPickUpComposer } from './messages/outgoing/pet/PetPickUpComposer';
+import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -399,6 +400,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.NOTIFICATION_LIST, NotificationDialogMessageEvent);
         this._events.set(IncomingHeader.USER_RESPECT, RespectReceivedEvent);
         this._events.set(IncomingHeader.UNSEEN_ITEMS, UnseenItemsEvent);
+        this._events.set(IncomingHeader.HOTEL_WILL_SHUTDOWN, HotelWillShutdownEvent);
 
         // ROOM
 

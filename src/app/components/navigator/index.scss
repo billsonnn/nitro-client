@@ -19,6 +19,12 @@
     }
 }
 
+.nitro-navigator-room-info {
+    position: absolute;
+    width: 250px;
+    max-width: 250px;
+}
+
 .nitro-navigator-roomsettings-component {
     position: absolute;
     width: $navigator-roomsettings-width;
