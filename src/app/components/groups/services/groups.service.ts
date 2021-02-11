@@ -158,7 +158,7 @@ export class GroupsService implements OnDestroy
             this._groupMembersComponent.admin               = parser.admin;
             this._groupMembersComponent.pageSize            = parser.pageSize;
             this._groupMembersComponent.pageIndex           = parser.pageIndex;
-            this._groupMembersComponent.level               = parser.level;
+            this._groupMembersComponent.level               = parser.level.toString();
         });
     }
 

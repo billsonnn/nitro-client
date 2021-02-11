@@ -19,8 +19,8 @@ export class GroupMembersComponent
     private _admin: boolean;
     private _pageSize: number;
     private _pageIndex: number;
-    private _level: number;
-    
+
+    public level: string;
     public query: string;
 
     constructor(
@@ -43,9 +43,41 @@ export class GroupMembersComponent
             this._admin             = false;
             this._pageSize          = 0;
             this._pageIndex         = 0;
-            this._level             = 0;
+            this.level              = '0';
             this.query              = null;
         });
+    }
+
+    public getMembers(): void
+    {
+        this._groupService.getMembers(this._groupId, this._pageIndex, this.query, parseInt(this.level));
+    }
+
+    public searchMembers(): void
+    {
+        this._ngZone.run(() => {
+            this._pageSize          = 0;
+            this._pageIndex         = 0;
+            this._totalMembersCount = 0;
+        });
+
+        this.getMembers();
+    }
+
+    public nextPage(): void
+    {
+        if(this._pageIndex + 1 === this.totalPages) return;
+
+        this._pageIndex++;
+        this.getMembers();
+    }
+
+    public previousPage(): void
+    {
+        if(this._pageIndex === 0) return;
+
+        this._pageIndex--;
+        this.getMembers();
     }
 
     public confirmRemove(userId: number, furnitureCount: number): [string, string, NotificationChoice[]]
@@ -158,18 +190,10 @@ export class GroupMembersComponent
         this._pageIndex = pageIndex;
     }
 
-    public get level(): number
-    {
-        return this._level;
-    }
-
-    public set level(level: number)
-    {
-        this._level = level;
-    }
-
     public get totalPages(): number
     {
+        if(!this._pageSize) return 0;
+        
         return Math.ceil(this._totalMembersCount / this._pageSize);
     }
 }
