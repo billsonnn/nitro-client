@@ -24,7 +24,7 @@
                         <div class="bg-emperor w-100 p-2 rounded">
                             <div class="d-flex flex-row justify-content-between">
                                 <div class="w-100" (click)="openProfile(member.id)"><i *ngIf="member.rank < 3" class="mr-2" [ngClass]="getRankIcon(member.rank)"></i>{{ member.name }}</div>
-                                <div *ngIf="member.rank > 0" (click)="removeOrDeclineMember(member.id, member.rank)"><i class="fas fa-times"></i></div>
+                                <div *ngIf="admin && member.rank > 0" (click)="removeOrDeclineMember(member.id, member.rank)"><i class="fas fa-times"></i></div>
                             </div>
                             <button *ngIf="member.rank === 0" class="btn btn-primary btn-sm w-100 mt-2">{{ ('group.members.owner') | translate }}</button>
                             <button *ngIf="admin && member.id !== myId && member.rank !== 0" class="btn btn-primary btn-sm w-100 mt-2">
