@@ -1,4 +1,27 @@
 .nitro-group-room-info-component {
     width: 200px;
     font-size: 14px;
+
+    nitro-badge, .group-name {
+        cursor: pointer;
+    }
+}
+
+.nitro-group-info-component {
+    position: absolute;
+    width: 360px;
+
+    nitro-badge {
+        img {
+            width: 78px;
+        }
+    }
+
+    .group-creation-date {
+        font-size: 13px;
+    }
+
+    .group-members-count {
+        font-size: 13px;
+    }
 }

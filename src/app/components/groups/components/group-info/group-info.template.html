@@ -1,0 +1,30 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-group-info-component" dragHandle=".drag-handler">
+    <div class="card">
+        <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+            <h6 class="m-0">{{ ('group.window.title') | translate }}</h6>
+            <button type="button" class="close" (click)="clear()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+            <div class="d-flex flex-row justify-content-between w-100 mb-2">
+                <div class="mr-3">
+                    <nitro-badge [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                    <div class="group-members-count mt-3 text-center">{{ ('group.members.members') | translate:'count':groupMembersCount }}</div>
+                </div>
+                <div class="w-100">
+                    <div><i class="fas mr-2" [ngClass]="{'fa-user-plus': groupType === 0, 'fa-key': groupType === 1, 'fa-ban': groupType === 2}"></i>{{ groupName }}</div>
+                    <div class="group-creation-date mb-2">{{ ('group.created') | translate:['date', 'owner']:[groupCreationDate, groupOwnerName] }}</div>
+                    <div class="mb-3">{{ groupDescription }}</div>
+                    <button class="btn btn-primary btn-sm" (click)="goToHomeRoom()">{{ ('group.linktobase') | translate }}</button>
+                </div>
+            </div>
+           <div class="mt-3">
+                <button *ngIf="groupMembershipType === 1" class="btn btn-danger btn-block" (click)="leave()">{{ ('group.leave') | translate }}</button>
+                <button *ngIf="groupType === 0 && groupMembershipType === 0" class="btn btn-success btn-block" (click)="join()">{{ ('group.join') | translate }}</button>
+                <div *ngIf="groupType === 1">
+                    <button *ngIf="groupMembershipType === 0" class="btn btn-success btn-block" (click)="join()">{{ ('group.requestmembership') | translate }}</button>
+                    <button *ngIf="groupMembershipType === 2" class="btn btn-primary disabled btn-block" disabled>{{ ('group.membershippending') | translate }}</button>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>

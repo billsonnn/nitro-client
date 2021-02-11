@@ -1,51 +1,38 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupJoinComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
+import { NotificationService } from '../../notification/services/notification.service';
+import { GroupInfoComponent } from '../components/group-info/group-info.component';
+import { GroupRoomInfoComponent } from '../components/room-info/room-info.component';
 
 @Injectable()
 export class GroupsService implements OnDestroy
 {
     private _messages: IMessageEvent[];
-    private _roomGroupId: number;
-    private _roomGroupName: string;
-    private _roomGroupBadgeCode: string;
-    private _roomGroupType: number;
-    private _roomGroupMembershipType: number;
-    private _isRoomGroupMember: boolean;
 
-    private _roomGroupInfoLoaded: boolean;
+    private _roomInfoComponent: GroupRoomInfoComponent;
+    private _groupInfoComponent: GroupInfoComponent;
 
     constructor(
+        private _notificationService: NotificationService,
         private _ngZone: NgZone)
     {
-        this._messages              = [];
-
-        this._clear();
+        this._messages = [];
 
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
 
         this.registerMessages();
     }
 
-    private _clear(): void
-    {
-        this._roomGroupId               = 0;
-        this._roomGroupName             = null;
-        this._roomGroupBadgeCode        = null;
-        this._roomGroupType             = 0;
-        this._roomGroupMembershipType   = 0;
-        this._isRoomGroupMember         = false;
-        this._roomGroupInfoLoaded       = false;
-    }
-
     public ngOnDestroy(): void
     {
-        this._clear();
         this.unregisterMessages();
     }
 
@@ -59,7 +46,8 @@ export class GroupsService implements OnDestroy
 
             this._messages = [
                 new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
-                new GroupInformationEvent(this.onGroupInformationEvent.bind(this))
+                new GroupInformationEvent(this.onGroupInformationEvent.bind(this)),
+                new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -90,7 +78,7 @@ export class GroupsService implements OnDestroy
             case RoomSessionEvent.ENDED:
                 this._ngZone.run(() =>
                 {
-                    this._clear();
+                    this._roomInfoComponent.clear();
                 });
                 return;
         }
@@ -105,14 +93,13 @@ export class GroupsService implements OnDestroy
         if(!parser) return;
        
         this._ngZone.run(() => {
-            this._roomGroupId           = parser.data.habboGroupId;
-            this._roomGroupName         = parser.data.groupName;
-            this._roomGroupBadgeCode    = parser.data.groupBadgeCode;
+            this._roomInfoComponent.groupId          = parser.data.habboGroupId;
+            this._roomInfoComponent.groupName        = parser.data.groupName;
+            this._roomInfoComponent.groupBadgeCode   = parser.data.groupBadgeCode;
+            this._roomInfoComponent.groupMember      = parser.isGroupMember;
         });
 
-        this._isRoomGroupMember = parser.isGroupMember;
-
-        Nitro.instance.communication.connection.send(new GroupInformationComposer(this._roomGroupId, false));
+        Nitro.instance.communication.connection.send(new GroupInformationComposer(parser.data.habboGroupId, false));
     }
 
     private onGroupInformationEvent(event: GroupInformationEvent): void
@@ -123,61 +110,79 @@ export class GroupsService implements OnDestroy
 
         if(!parser) return;
 
-        if(this._roomGroupId !== parser.id) return;
+        if(parser.flag || parser.id === this._groupInfoComponent.groupId)
+        {
+            this._ngZone.run(() => {
+                this._groupInfoComponent.groupId                = parser.id;
+                this._groupInfoComponent.groupName              = parser.title;
+                this._groupInfoComponent.groupBadgeCode         = parser.badge;
+                this._groupInfoComponent.groupDescription       = parser.description;
+                this._groupInfoComponent.groupType              = parser.type;
+                this._groupInfoComponent.groupMembershipType    = parser.membershipType;
+                this._groupInfoComponent.groupCreationDate      = parser.createdAt;
+                this._groupInfoComponent.groupOwnerName         = parser.ownerName;
+                this._groupInfoComponent.groupMembersCount      = parser.membersCount;
+                this._groupInfoComponent.groupHomeRoomId        = parser.roomId;
+            });
+        }
+        
+        if(this._roomInfoComponent.groupId !== parser.id) return;
 
         this._ngZone.run(() =>
         {
-            this._roomGroupType             = parser.type;
-            this._roomGroupMembershipType   = parser.membershipType;
-            this._roomGroupInfoLoaded       = true;
+            this._roomInfoComponent.groupType             = parser.type;
+            this._roomInfoComponent.groupMembershipType   = parser.membershipType;
         });
     }
 
-    public join(groupId: number)
+    private onGroupConfirmMemberRemoveEvent(event: GroupConfirmMemberRemoveEvent): void
     {
-        if(this._roomGroupType === 0)
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        let confirmationConfig = [];
+
+        if(parser.userId === Nitro.instance.sessionDataManager.userId)
+        {
+            confirmationConfig = this._groupInfoComponent.confirmLeave();
+        }
+        
+        this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[1]);
+    }
+
+    public getInfo(groupId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupInformationComposer(groupId, true));
+    }
+
+    public join(groupId: number): void
+    {
+        if(this._roomInfoComponent.groupType === 0)
         {
             this._ngZone.run(() =>
             {
-                this._isRoomGroupMember = true;
+                this._roomInfoComponent.groupMember = true;
             });
         }
         
         Nitro.instance.communication.connection.send(new GroupJoinComposer(groupId));
     }
 
-    public get groupId(): number
+    public removeMember(groupId: number, memberId: number): void
     {
-        return this._roomGroupId;
+        Nitro.instance.communication.connection.send(new GroupConfirmRemoveMemberComposer(groupId, memberId));
     }
 
-    public get groupName(): string
+    public set groupRoomInfoComponent(component: GroupRoomInfoComponent)
     {
-        return this._roomGroupName;
+        this._roomInfoComponent = component;
     }
 
-    public get groupBadgeCode(): string
+    public set groupInfoComponent(component: GroupInfoComponent)
     {
-        return this._roomGroupBadgeCode;
-    }
-
-    public get groupType(): number
-    {
-        return this._roomGroupType;
-    }
-
-    public get groupMembershipType(): number
-    {
-        return this._roomGroupMembershipType;
-    }
-
-    public get isGroupMember(): boolean
-    {
-        return this._isRoomGroupMember;
-    }
-
-    public get roomGroupInfoLoaded(): boolean
-    {
-        return this._roomGroupInfoLoaded;
+        this._groupInfoComponent = component;
     }
 }

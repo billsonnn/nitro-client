@@ -50,6 +50,7 @@ export class IncomingHeader
     public static GROUP_MEMBER                     = 265;
     public static GROUP_MEMBERS                    = 1200;
     public static GROUP_MEMBERS_REFRESH            = 2445;
+    public static GROUP_MEMBER_REMOVE_CONFIRM      = 1876;
     public static GROUP_SETTINGS                   = 3965;
     public static ITEM_DIMMER_SETTINGS             = 2710;
     public static ITEM_STACK_HELPER                = 2816;

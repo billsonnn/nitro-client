@@ -9,9 +9,30 @@ export class GroupRoomInfoComponent
 {
     private _open: boolean;
 
-    constructor(private _groupService: GroupsService)
+    private _groupId: number;
+    private _groupName: string;
+    private _groupBadgeCode: string;
+    private _groupType: number;
+    private _groupMembershipType: number;
+    private _groupMember: boolean;
+
+    constructor(
+        private _groupService: GroupsService)
     {
+        this._groupService.groupRoomInfoComponent = this;
         this._open = false;
+        
+        this.clear();
+    }
+
+    public clear(): void
+    {
+        this._groupId               = 0;
+        this._groupName             = null;
+        this._groupBadgeCode        = null;
+        this._groupType             = -1;
+        this._groupMembershipType   = -1;
+        this._groupMember           = false;
     }
 
     public toggleOpen(): void
@@ -21,14 +42,19 @@ export class GroupRoomInfoComponent
 
     public join(): void
     {
-        if(!this.groupId || this.isGroupMember) return;
+        if(!this._groupId || this._groupMembershipType !== 0) return;
 
         this._groupService.join(this.groupId);
     }
 
+    public openInfo(): void
+    {
+        this._groupService.getInfo(this._groupId);
+    }
+
     public get visible(): boolean
     {
-        return this._groupService.groupId > 0;
+        return this._groupId > 0;
     }
 
     public get open(): boolean
@@ -38,36 +64,61 @@ export class GroupRoomInfoComponent
 
     public get groupId(): number
     {
-        return this._groupService.groupId;
+        return this._groupId;
+    }
+
+    public set groupId(id: number)
+    {
+        this._groupId = id;
     }
 
     public get groupName(): string
     {
-        return this._groupService.groupName;
+        return this._groupName;
+    }
+
+    public set groupName(name: string)
+    {
+        this._groupName = name;
     }
 
     public get groupBadgeCode(): string
     {
-        return this._groupService.groupBadgeCode;
+        return this._groupBadgeCode;
+    }
+
+    public set groupBadgeCode(badgeCode: string)
+    {
+        this._groupBadgeCode = badgeCode;
     }
 
     public get groupType(): number
     {
-        return this._groupService.groupType;
+        return this._groupType;
+    }
+
+    public set groupType(type: number)
+    {
+        this._groupType = type;
     }
 
     public get groupMembershipType(): number
     {
-        return this._groupService.groupMembershipType;
+        return this._groupMembershipType;
+    }
+
+    public set groupMembershipType(membershipType: number)
+    {
+        this._groupMembershipType = membershipType;
     }
 
     public get isGroupMember(): boolean
     {
-        return this._groupService.isGroupMember;
+        return this._groupMember;
     }
 
-    public get roomGroupInfoLoaded(): boolean
+    public set groupMember(value: boolean)
     {
-        return this._groupService.roomGroupInfoLoaded;
+        this._groupMember = value;
     }
 }
