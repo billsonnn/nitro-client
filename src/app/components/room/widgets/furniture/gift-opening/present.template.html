@@ -3,38 +3,34 @@
         <h6 class="m-0">{{ getGiftTitle() | translate:'name':senderName}}</h6>
         <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
     </div>
-    <p>{{ option }}</p>
-    <p>{{ view}}
-    </p>
-    <ng-container [ngSwitch]="view">
+    <div class="d-flex flex-column p-3">
+    <ng-container [ngSwitch]="currentView">
         <ng-container *ngSwitchCase="'open_present'">
-            <div class="p-3">
-                <div class="dimmer-inner bg-secondary p-2">
-
-                    <div *ngIf="!isAnonymousGift" nitro-avatar-image [figure]="figure" [headOnly]="true" [direction]="2"></div>
-                    <div *ngIf="isAnonymousGift" class="anonymous-face"></div>
-                    <p>{{ senderText }}
-
-                    </p>
+            <div class="row">
+                <div class="col-5">
+                    <div *ngIf="!isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" nitro-avatar-image [figure]="figure" [direction]="2"></div>
+                    <div *ngIf="isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3"></div>
+                </div>
+                <div class="col-7 d-flex justify-content-center align-items-center">
+                    <p class="h5 m-0 p-0">{{ text }}</p>
                 </div>
             </div>
-            <div class="p-3">
-                <button type="button" class="btn btn-primary" (click)="handleButton('accept')">{{ 'widget.furni.present.open_gift' | translate }}</button>
+            <div class="d-flex align-items-center mt-2 btn-group">
+                <button type="button" class="btn btn-secondary" (click)="handleButton('accept')">{{ 'widget.furni.present.open_gift' | translate }}</button>
             </div>
         </ng-container>
-
         <ng-container *ngSwitchCase="'present_opened'">
-            <div class="p-3">
-                <div class="dimmer-inner bg-secondary p-2">
-                    <img src="{{ getFurniPicture() }}" />
-                    <p>{{ openedText }}
-
-                    </p>
+            <div class="row">
+                <div class="col-5">
+                    <div nitro-furniture-image class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [type]="type" [spriteId]="spriteId" [extras]="extras"></div>
+                </div>
+                <div class="col-7 d-flex justify-content-center align-items-center">
+                    <p class="h5 m-0 p-0">{{ text }}</p>
                 </div>
             </div>
-            <div class="p-3">
-                <button type="button" class="btn btn-primary" (click)="handleButton('furni_place_in_room')">{{ 'widget.furni.present.place_in_room' | translate}}</button>
-                <button type="button" class="btn btn-primary" (click)="handleButton('furni_place_in_inventory')">{{ 'widget.furni.present.put_in_inventory' | translate}}</button>
+            <div class="d-flex align-items-center mt-2 btn-group">
+                <button *ngIf="!isWallItem" type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_room')">{{ 'widget.furni.present.place_in_room' | translate}}</button>
+                <button type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_inventory')">{{ 'widget.furni.present.put_in_inventory' | translate}}</button>
             </div>
         </ng-container>
     </ng-container>

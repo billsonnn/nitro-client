@@ -1,5 +1,4 @@
-﻿import { Texture } from 'pixi.js';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -14,25 +13,25 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     private _objectId: number = -1;
     private _classId: number = 0;
     private _itemType: string = '';
-    private _furniName: string;
-    private _controller: boolean;
-    private _furniImage: Texture;
+    private _giftMessage: string = '';
+    private _extra: string = null;
+    private _isController: boolean;
     private _purchaserName: string;
     private _purchaserFigure: string;
     private _placedItemId: number = -1;
     private _placedItemType: string = '';
     private _placedInRoom: boolean;
 
-    constructor(type: string, objectId: number, furniName: string, isOwnerOfFurniture: boolean = false, furniImage: Texture = null, purchaserName: string = null, purchaserFigure: string = null)
+    constructor(type: string, objectId: number, giftMessage: string, isOwnerOfFurniture: boolean = false, extra: string = null, purchaserName: string = null, purchaserFigure: string = null)
     {
         super(type);
 
-        this._objectId = objectId;
-        this._furniName = furniName;
-        this._controller = isOwnerOfFurniture;
-        this._furniImage = furniImage;
-        this._purchaserName = purchaserName;
-        this._purchaserFigure = purchaserFigure;
+        this._objectId          = objectId;
+        this._giftMessage       = giftMessage;
+        this._extra             = extra;
+        this._isController      = isOwnerOfFurniture;
+        this._purchaserName     = purchaserName;
+        this._purchaserFigure   = purchaserFigure;
     }
 
     public get objectId(): number
@@ -60,19 +59,19 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
         this._itemType = k;
     }
 
-    public get furniName(): string
+    public get giftMessage(): string
     {
-        return this._furniName;
+        return this._giftMessage;
     }
 
-    public get controller(): boolean
+    public get extra(): string
     {
-        return this._controller;
+        return this._extra;
     }
 
-    public get furniImage(): Texture
+    public get isController(): boolean
     {
-        return this._furniImage;
+        return this._isController;
     }
 
     public get purchaserName(): string

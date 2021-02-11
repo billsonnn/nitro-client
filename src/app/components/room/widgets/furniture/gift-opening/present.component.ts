@@ -1,18 +1,16 @@
 import { Component, NgZone } from '@angular/core';
 import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
+import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
+import { CatalogService } from '../../../../catalog/services/catalog.service';
+import { FurniCategory } from '../../../../inventory/items/FurniCategory';
+import { IFurnitureItem } from '../../../../inventory/items/IFurnitureItem';
+import { InventoryService } from '../../../../inventory/services/inventory.service';
 import { RoomWidgetPresentDataUpdateEvent } from '../../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../../events/RoomWidgetRoomObjectUpdateEvent';
-import { RoomWidgetEcotronBoxDataUpdateEvent } from '../../events/RoomWidgetEcotronBoxDataUpdateEvent';
+import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';
 import { RoomWidgetPresentOpenMessage } from '../../messages/RoomWidgetPresentOpenMessage';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
-import { FurniturePresentWidgetHandler } from '../../handlers/FurniturePresentWidgetHandler';
-import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
-import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
-import { CatalogService } from '../../../../catalog/services/catalog.service';
-
 
 @Component({
     selector: 'nitro-room-furniture-gift-opening-component',
@@ -20,37 +18,36 @@ import { CatalogService } from '../../../../catalog/services/catalog.service';
 })
 export class PresentFurniWidget extends ConversionTrackingWidget
 {
+    private static FLOOR: string        = 'floor';
+    private static WALLPAPER: string    = 'wallpaper';
+    private static LANDSCAPE: string    = 'landscape';
 
-    private static readonly FLOOR:string = 'floor';
-    private static readonly WALLPAPER:string = 'wallpaper';
-    private static readonly LANDSCAPE:string = 'landscape';
+    private _lastEvent: RoomWidgetPresentDataUpdateEvent = null;
+    private _needsOpen: boolean = false;
+    private _currentView: string = '';
 
-    public option: string;
+    private _type: string = null;
+    private _spriteId: number = -1;
+    private _extras: string = null;
+    private _text: string = null;
+    private _isWallItem: boolean = false;
 
-    private _visible: boolean       = false;
-    private _openedRequest: boolean;
-
-    private _currentEvent: RoomWidgetPresentDataUpdateEvent = null;
-    public openedText: string;
-
-    public isFloor = false;
-
-    public view: string = '';
+    private _visible: boolean = false;
 
     constructor(
         private _ngZone: NgZone,
-        private _catalogService: CatalogService)
+        private _catalogService: CatalogService,
+        private _inventoryService: InventoryService)
     {
         super();
 
-        this.onObjectUpdate   = this.onObjectUpdate.bind(this);
-        this.onFurniRemoved        = this.onFurniRemoved.bind(this);
+        this.onObjectUpdate = this.onObjectUpdate.bind(this);
+        this.onFurniRemoved = this.onFurniRemoved.bind(this);
     }
 
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
-
 
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, this.onObjectUpdate);
@@ -58,6 +55,7 @@ export class PresentFurniWidget extends ConversionTrackingWidget
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, this.onObjectUpdate);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.FURNI_REMOVED, this.onFurniRemoved);
+
         super.registerUpdateEvents(eventDispatcher);
     }
 
@@ -74,196 +72,105 @@ export class PresentFurniWidget extends ConversionTrackingWidget
 
         super.unregisterUpdateEvents(eventDispatcher);
     }
-    public get figure(): string
-    {
-        return this._currentEvent.purchaserFigure;
-    }
-
-    public get senderText(): string
-    {
-        return this._currentEvent.furniName;
-    }
-
-    public get senderName(): string
-    {
-        return this._currentEvent.purchaserName;
-    }
-
-    private onFurniRemoved(k:RoomWidgetRoomObjectUpdateEvent):void
-    {
-        if(!k) return;
-
-        if(k.id == this._currentEvent.objectId)
-        {
-            this.closeView();
-        }
-    }
 
     private onObjectUpdate(event: RoomWidgetPresentDataUpdateEvent): void
     {
         if(!event) return;
 
-        this.option = event.type;
+        this.reset();
 
-        this._currentEvent = event;
-
-        switch(event.type)
+        this._ngZone.run(() =>
         {
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
-                this._ngZone.run(() =>
-                {
-                    this.closeView();
-                    this._openedRequest = false;
+            this._lastEvent = event;
 
+            switch(event.type)
+            {
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO: {
                     this.showOpeningPresent();
-                });
-            }
-                break;
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR: {
-                if(!this._openedRequest) return;
-                this.isFloor = true;
 
+                    break;
+                }
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS:
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR:
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE:
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER:
+                case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB: {
+                    this._type          = event.itemType;
+                    this._spriteId      = event.classId;
+                    this._isWallItem    = (event.itemType === 'i');
 
-                this.setOpenedText();
-                //his._Str_12806('packagecard_icon_floor');
-            }
-                break;
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE: {
-                if(!this._openedRequest) return;
-                this.setOpenedText();
-                // this._Str_12806("packagecard_icon_landscape");
-            }
-                break;
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER: {
-                if(!this._openedRequest) return;
-                this.setOpenedText();
-                //this._Str_12806("packagecard_icon_wallpaper");
-            }
-                break;
+                    this.showOpenPresent();
 
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB: {
-                if(!this._openedRequest) return;
-                this.setOpenedText();
-                //this._Str_12806("packagecard_icon_hc");
+                    break;
+                }
             }
-                break;
-            case RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS: {
-
-                if(!this._openedRequest) return;
-
-                this.isFloor = true;
-                this.setOpenedText();
-            }
-                break;
-        }
+        });
     }
 
-    private closeView(): void
+    private onFurniRemoved(k: RoomWidgetRoomObjectUpdateEvent):void
     {
-        this._visible = false;
-        // if(!this._openedRequest)
-        // {
-        //     this._objectId = -1;
-        // }
-        //
-        // this._text = '';
-        // this._controller = false;
-    }
+        if(!this._lastEvent) return;
 
-    private setOpenedText(): void
-    {
-        if(this._currentEvent.objectId  < 0) return;
-
-        if(this._currentEvent.furniName)
-        {
-            this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._currentEvent.furniName);
-            if(this.isSpacesFurniture())
-            {
-                this.openedText = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._currentEvent.furniName);
-            }
-        }
-
-        this.view = 'present_opened';
-        this._visible = true;
-    }
-
-    private isSpacesFurniture(): boolean
-    {
-        let isSpaces = false;
-        if(this._currentEvent.itemType == ProductTypeEnum.WALL)
-        {
-            const wallItemData = Nitro.instance.sessionDataManager.getWallItemData(this._currentEvent.classId);
-            if(wallItemData)
-            {
-                const className = wallItemData.className;
-                isSpaces = ((className == PresentFurniWidget.FLOOR) || (className == PresentFurniWidget.LANDSCAPE) || (className == PresentFurniWidget.WALLPAPER));
-            }
-        }
-
-        return isSpaces;
-
-    }
-
-    public getFurniPicture(): string
-    {
-        let furniData: IFurnitureData = null;
-
-        if(this.option == RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS)
-        {
-            furniData = Nitro.instance.sessionDataManager.getFloorItemData(this.classId);
-        }
-        else
-        {
-            furniData = Nitro.instance.sessionDataManager.getWallItemData(this.classId);
-        }
-
-        return this._catalogService.getFurnitureDataIconUrl(furniData);
-    }
-
-
-
-    private acceptAndOpenPresent(): void
-    {
-        if(this._openedRequest || this._currentEvent.objectId == -1 || !this._currentEvent.controller) return;
-
-        this._openedRequest = true;
-        this.closeView();
-        this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._currentEvent.objectId));
-    }
-
-
-
-    public get handler(): FurnitureDimmerWidgetHandler
-    {
-        return (this.widgetHandler as FurnitureDimmerWidgetHandler);
+        if(this._lastEvent.objectId === k.id) this.hide();
     }
 
     public hide(): void
     {
         this._visible = false;
-    }
-    public get visible(): boolean
-    {
-        return this._visible;
+
+        this.reset();
     }
 
-    public set visible(flag: boolean)
+    private reset(): void
     {
-        this._visible = flag;
+        this._type          = null;
+        this._spriteId      = -1;
+        this._extras        = null;
+        this._text          = null;
+        this._isWallItem    = false;
+        this._lastEvent     = null;
+        this._currentView   = null;
     }
-
 
     private showOpeningPresent(): void
     {
+        if(!this._lastEvent || (this._lastEvent.objectId < 0)) return;
 
-        if(this._currentEvent.objectId < 0) return;
+        this._text = (this._lastEvent.giftMessage || '');
 
-        this.view = 'open_present';
-        this._visible = true;
+        this._currentView   = 'open_present';
+        this._visible       = true;
+    }
+
+    private showOpenPresent(): void
+    {
+        if(!this._lastEvent || (this._lastEvent.objectId < 0)) return;
+
+        this._text = Nitro.instance.localization.getValueWithParameter('widget.furni.present.message_opened', 'product', this._lastEvent.giftMessage);
+
+        if(this.isSpacesFurniture()) this._text = Nitro.instance.localization.getValueWithParameter('widget.furni.present.spaces.message_opened', 'product', this._lastEvent.giftMessage);
+
+        this._currentView   = 'present_opened';
+        this._visible       = true;
+    }
+
+    private isSpacesFurniture(): boolean
+    {
+        if(!this._lastEvent || (this._lastEvent.itemType !== ProductTypeEnum.WALL)) return false;
+
+        const furniData = Nitro.instance.sessionDataManager.getWallItemData(this._lastEvent.classId);
+
+        if(!furniData) return false;
+
+        const className = furniData.className;
+
+        return ((className == PresentFurniWidget.FLOOR) || (className == PresentFurniWidget.LANDSCAPE) || (className == PresentFurniWidget.WALLPAPER));
     }
 
     public handleButton(button: string): void
     {
+        if(!button) return;
+
         switch(button)
         {
             case 'accept':
@@ -275,75 +182,146 @@ export class PresentFurniWidget extends ConversionTrackingWidget
                 this.placeItemInRoom();
                 break;
             case 'furni_place_in_inventory':
-                this.placeFurniInInventory();
+                this.hide();
                 break;
         }
     }
 
-    private placeItemInRoom()
+    private acceptAndOpenPresent(): void
     {
-        // if(this._placedItemId > 0 && !this._placedInRoom)
-        // {
-        //     const local3 = null;
-        //     switch(this._placedItemType)
-        //     {
-        //         case ProductTypeEnum.FLOOR:
-        //
-        //             //   Nitro.instance.communication.connection.send(new FurniturePlacePaintComposer(this._placedItemId));
-        //             // _local_3 = this._inventory._Str_18856(-(this._placedItemId));
-        //             // if (this._Str_5337(_local_3))
-        //             // {
-        //             //     this._inventory._Str_7938(this._placedItemId);
-        //             // }
-        //             break;
-        //         case ProductTypeEnum.WALL:
-        //             // _local_3 = this._inventory._Str_14082(this._placedItemId);
-        //             // if (this._Str_5337(_local_3))
-        //             // {
-        //             //     this._inventory._Str_7938(this._placedItemId);
-        //             // }
-        //             break;
-        //         case ProductTypeEnum.PET:
-        //             // if (this._inventory._Str_6675(this._placedItemId, false))
-        //             // {
-        //             //     this._inventory._Str_21312(this._placedItemId);
-        //             // }
-        //             break;
-        //
-        //     }
-        // }
+        this.messageListener.processWidgetMessage(new RoomWidgetPresentOpenMessage(RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT, this._lastEvent.objectId));
 
-        this.resetAndCloseView();
+        this.hide();
     }
 
-    private placeFurniInInventory(): void
+    private placeItemInRoom(): void
     {
-        this.resetAndCloseView();
+        const placedItemType    = (this._lastEvent && this._lastEvent.placedItemType);
+        const placedItemId      = (this._lastEvent && this._lastEvent.placedItemId);
+        const placedInRoom      = (this._lastEvent && this._lastEvent.placedInRoom);
+
+        if((placedItemId > 0) && !placedInRoom)
+        {
+            switch(placedItemType)
+            {
+                case ProductTypeEnum.FLOOR: {
+                    const furniture = this._inventoryService.controller.furnitureService.getFurnitureItem(-(placedItemId));
+
+                    if(this.canMoveItem(furniture))
+                    {
+                        // update unseen
+                    }
+                    break;
+                }
+                case ProductTypeEnum.WALL: {
+                    const furniture = this._inventoryService.controller.furnitureService.getFurnitureItem(placedItemId);
+
+                    if(this.canMoveItem(furniture))
+                    {
+                        // update unseen
+                    }
+                    break;
+                }
+                case ProductTypeEnum.PET: {
+                    // if (this._inventory._Str_6675(this._placedItemId, false))
+                    // {
+                    //     this._inventory._Str_21312(this._placedItemId);
+                    // }
+                    break;
+                }
+            }
+        }
+
+        this.hide();
     }
 
-    private resetAndCloseView(): void
+    private canMoveItem(item: IFurnitureItem): boolean
     {
-        this._openedRequest = false;
-        this.closeView();
+        if(!item) return false;
+
+        let canMove = true;
+
+        if(((item.category == FurniCategory._Str_3683) || (item.category == FurniCategory._Str_3639)) || (item.category == FurniCategory._Str_3432))
+        {
+            canMove = false;
+        }
+        else
+        {
+            canMove = this._inventoryService.controller.furnitureService.startRoomObjectPlacementWithoutRequest(item);
+        }
+
+        return canMove;
+    }
+
+    public getGiftTitle(): string
+    {
+        if(this.isAnonymousGift) return 'widget.furni.present.window.title';
+
+        return 'widget.furni.present.window.title_from';
+    }
+
+    public get handler(): FurnitureDimmerWidgetHandler
+    {
+        return (this.widgetHandler as FurnitureDimmerWidgetHandler);
+    }
+
+    public get visible(): boolean
+    {
+        return this._visible;
+    }
+
+    public set visible(flag: boolean)
+    {
+        this._visible = flag;
+    }
+
+    public get currentView(): string
+    {
+        return this._currentView;
+    }
+
+    public get figure(): string
+    {
+        return this._lastEvent.purchaserFigure;
+    }
+
+    public get senderText(): string
+    {
+        return this._lastEvent.giftMessage;
+    }
+
+    public get senderName(): string
+    {
+        return this._lastEvent.purchaserName;
+    }
+
+    public get type(): string
+    {
+        return this._type;
+    }
+
+    public get spriteId(): number
+    {
+        return this._spriteId;
+    }
+
+    public get extras(): string
+    {
+        return this._extras;
+    }
+
+    public get text(): string
+    {
+        return this._text;
+    }
+
+    public get isWallItem(): boolean
+    {
+        return this._isWallItem;
     }
 
     public get isAnonymousGift(): boolean
     {
         return !this.senderName || this.senderName.length == 0;
-    }
-
-    public getGiftTitle(): string
-    {
-        if(this.isAnonymousGift)
-        {
-            return 'widget.furni.present.window.title';
-        }
-
-        return 'widget.furni.present.window.title_from';
-    }
-
-    public get classId(): number
-    {
-        return this._currentEvent.classId;
     }
 }

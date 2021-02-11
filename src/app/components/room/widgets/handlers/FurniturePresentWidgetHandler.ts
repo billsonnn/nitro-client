@@ -1,105 +1,78 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
 import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
+import { RoomSessionPresentEvent } from '../../../../../client/nitro/session/events/RoomSessionPresentEvent';
+import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import * as sorting from '../../../../../utils/sorting';
-import { RoomObjectItem } from '../events/RoomObjectItem';
-import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
-import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
+import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetPresentOpenMessage } from '../messages/RoomWidgetPresentOpenMessage';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
-import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
-import { RoomSessionPresentEvent } from '../../../../../client/nitro/session/events/RoomSessionPresentEvent';
-import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
-import { PetType } from '../../../../../client/nitro/avatar/pets/PetType';
 
 export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetImageListener
 {
-    private static readonly FLOOR:string = 'floor';
-    private static readonly WALLPAPER:string = 'wallpaper';
-    private static readonly LANDSCAPE:string = 'landscape';
-    private static readonly POSTER:string = 'poster';
+    private static readonly FLOOR: string       = 'floor';
+    private static readonly WALLPAPER: string   = 'wallpaper';
+    private static readonly LANDSCAPE: string   = 'landscape';
+    private static readonly POSTER: string      = 'poster';
 
-    private _isDisposed: boolean = false;
+    private _name: string                           = null;
+    private _objectId: number                       = -1;
+    private _isDisposed: boolean                    = false;
     private _container: IRoomWidgetHandlerContainer = null;
-    private _name: string;
-    private _objectId: number = null;
 
     public dispose(): void
     {
-        this._isDisposed = true;
-        this._container = null;
+        this._name          = null;
+        this._objectId      = -1;
+        this._container     = null;
+        this._isDisposed    = true;
     }
 
-    public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent
+    public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        if(!k) return null;
+        if(!message) return null;
 
-        switch(k.type)
+        switch(message.type)
         {
             case RoomWidgetFurniToWidgetMessage.REQUEST_PRESENT: {
-
-                if(!(k instanceof RoomWidgetFurniToWidgetMessage)) return;
-
-                const widgetMessage = <RoomWidgetFurniToWidgetMessage>k;
-                if(!widgetMessage) return;
+                const widgetMessage = (message as RoomWidgetFurniToWidgetMessage);
 
                 const roomObject = this._container.roomEngine.getRoomObject(widgetMessage.roomId, widgetMessage.objectId, widgetMessage.category);
-                if(!roomObject) return;
 
-                const model = roomObject.model;
-                if(!model) return;
+                if(!roomObject) return null;
 
                 this._objectId = widgetMessage.objectId;
 
-                let data = <string>model.getValue(RoomObjectVariable.FURNITURE_DATA);
-                if(!data) data = '';
+                const giftMessage       = (roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_DATA) || '');
+                const purchaserName     = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_PURCHASER_NAME);
+                const purchaserFigure   = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_PURCHASER_FIGURE);
+                const typeId            = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_TYPE_ID);
+                const extras            = roomObject.model.getValue<string>(RoomObjectVariable.FURNITURE_EXTRAS);
 
-                const purchaserName = <string>model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_NAME);
-                const purchaserFigure = <string>model.getValue(RoomObjectVariable.FURNITURE_PURCHASER_FIGURE);
-                const typeId = <string>model.getValue(RoomObjectVariable.FURNITURE_TYPE_ID);
-                const extras = <string>model.getValue(RoomObjectVariable.FURNITURE_EXTRAS);
+                this._container.events.dispatchEvent(new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO, widgetMessage.objectId, giftMessage, this._container.isOwnerOfFurniture(roomObject), extras, purchaserName, purchaserFigure));
 
-                const local11 = 32;
-                const furniImage = this._container.roomEngine.getFurnitureFloorImage(Number.parseInt(typeId), new Vector3d(180), local11, null, 0, extras);
-                this._container.events.dispatchEvent(new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_PACKAGEINFO,
-                    widgetMessage.objectId,
-                    data,
-                    this._container.isOwnerOfFurniture(roomObject),
-                    furniImage.data,
-                    purchaserName,
-                    purchaserFigure
-                ));
-
-            }
                 break;
+            }
             case RoomWidgetPresentOpenMessage.RWPOM_OPEN_PRESENT: {
-                if(!(k instanceof RoomWidgetPresentOpenMessage)) return;
+                const openMessage = (message as RoomWidgetPresentOpenMessage);
 
-                const openMessage = <RoomWidgetPresentOpenMessage>k;
+                if(openMessage.objectId !== this._objectId) return null;
 
-                if(!openMessage) return;
+                if(this._container)
+                {
+                    this._container.roomSession.openGift(openMessage.objectId);
+                    this._container.roomEngine.changeObjectModelData(this._container.roomEngine.activeRoomId, openMessage.objectId, RoomObjectCategory.FLOOR, RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION, 1);
+                }
 
-                if(openMessage.objectId != this._objectId) return null;
-
-                if(!this._container) return null;
-
-                this._container.roomSession.openGift(openMessage.objectId);
-
-                this._container.roomEngine.changeObjectModelData(this._container.roomEngine.activeRoomId, openMessage.objectId, RoomObjectCategory.FLOOR, RoomObjectVariable.FURNITURE_DISABLE_PICKING_ANIMATION, 1);
-            }
                 break;
-
+            }
         }
 
         return null;
@@ -112,170 +85,122 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
         switch(event.type)
         {
             case RoomSessionPresentEvent.RSPE_PRESENT_OPENED: {
+                const presentEvent = (event as RoomSessionPresentEvent);
 
-                if(!(event instanceof RoomSessionPresentEvent)) return;
-
-                const sessionEvent = <RoomSessionPresentEvent>event;
-                let furnitureIcon = null;
-                let furniItemData;
                 let furniData: IFurnitureData = null;
 
-                if(sessionEvent.itemType == ProductTypeEnum.FLOOR)
+                if(presentEvent.itemType === ProductTypeEnum.FLOOR)
                 {
-                    furniData = this._container.sessionDataManager.getFloorItemData(sessionEvent.classId);
+                    furniData = this._container.sessionDataManager.getFloorItemData(presentEvent.classId);
                 }
-                else if(sessionEvent.itemType == ProductTypeEnum.WALL)
+                else if(presentEvent.itemType === ProductTypeEnum.WALL)
                 {
-                    furniData = this._container.sessionDataManager.getWallItemData(sessionEvent.classId);
+                    furniData = this._container.sessionDataManager.getWallItemData(presentEvent.classId);
                 }
 
                 let isOwnerOfFurni = false;
 
-                if(event.placedInRoom)
+                if(presentEvent.placedInRoom)
                 {
-                    const roomObject = this._container.roomEngine.getRoomObject(this._container.roomSession.roomId, event.placedItemId, RoomObjectCategory.FLOOR);
+                    const roomObject = this._container.roomEngine.getRoomObject(this._container.roomSession.roomId, presentEvent.placedItemId, RoomObjectCategory.FLOOR);
+
                     if(roomObject) isOwnerOfFurni = this._container.isOwnerOfFurniture(roomObject);
                 }
 
-                let dataUpdateEvent:RoomWidgetPresentDataUpdateEvent = null;
-                switch(sessionEvent.itemType)
+                let dataUpdateEvent: RoomWidgetPresentDataUpdateEvent = null;
+
+                switch(presentEvent.itemType)
                 {
                     case ProductTypeEnum.WALL: {
                         if(furniData)
                         {
                             switch(furniData.className)
                             {
-                                case FurniturePresentWidgetHandler.FLOOR:
-                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_FLOOR,
-                                        0, Nitro.instance.localization.getValue('inventory.furni.item.floor.name'), isOwnerOfFurni, null);
-                                    break;
                                 case FurniturePresentWidgetHandler.LANDSCAPE:
-                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE,
-                                        0, Nitro.instance.localization.getValue('inventory.furni.item.landscape.name'), isOwnerOfFurni, null);
+                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_LANDSCAPE, 0, Nitro.instance.localization.getValue('inventory.furni.item.landscape.name'), isOwnerOfFurni);
                                     break;
                                 case FurniturePresentWidgetHandler.WALLPAPER:
-                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER,
-                                        0, Nitro.instance.localization.getValue('inventory.furni.item.wallpaper.name'), isOwnerOfFurni, null);
+                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_WALLPAPER, 0, Nitro.instance.localization.getValue('inventory.furni.item.wallpaper.name'), isOwnerOfFurni);
                                     break;
                                 case FurniturePresentWidgetHandler.POSTER: {
-                                    const productCode = sessionEvent.productCode;
-                                    let extras= null;
-                                    let posterCode;
-                                    if(productCode.indexOf('poster') == 0)
-                                    {
-                                        posterCode = Number.parseInt(productCode.replace('poster', ''));
-                                        extras = <string>posterCode;
-                                    }
+                                    const productCode = presentEvent.productCode;
 
-                                    furnitureIcon = this._container.roomEngine.getFurnitureWallIcon(sessionEvent.classId, this, extras);
-                                    furniItemData = this._container.sessionDataManager.getWallItemData(posterCode); // was local9
-                                    if(furniItemData)
-                                    {
-                                        this._name = furniItemData.name;
-                                    }
-                                    else
-                                    {
-                                        if(furniData)
-                                        {
-                                            this._name = furniData.name;
-                                        }
-                                    }
+                                    let extras: string = null;
 
-                                    if(furnitureIcon)
-                                    {
-                                        dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, 0, this._name, isOwnerOfFurni,furnitureIcon.data);
-                                    }
-                                }
+                                    if(productCode.indexOf('poster') === 0) extras = productCode.replace('poster', '');
+
+                                    const productData = this._container.sessionDataManager.getProductData(productCode);
+
+                                    let name = '';
+
+                                    if(productData) name = productData.name;
+                                    else if(furniData) name = furniData.name;
+
+                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, 0, name, isOwnerOfFurni, extras);
+
                                     break;
+                                }
                                 default: {
-                                    furnitureIcon = this._container.roomEngine.getFurnitureWallIcon(sessionEvent.classId, this);
-                                    if(furniData)
-                                    {
-                                        this._name = furniData.name;
-                                    }
-                                    if(furnitureIcon)
-                                    {
-                                        dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, 0, this._name, isOwnerOfFurni, furnitureIcon.data);
-                                    }
-                                }
+                                    dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS, 0, ( furniData.name || ''), isOwnerOfFurni);
                                     break;
+                                }
                             }
                         }
-                    }
+
                         break;
+                    }
                     case ProductTypeEnum.HABBO_CLUB:
-                        dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB,
-                            0, Nitro.instance.localization.getValue('widget.furni.present.hc'), false, null);
+                        dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS_CLUB, 0, Nitro.instance.localization.getValue('widget.furni.present.hc'), false);
                         break;
                     default: {
-                        if(sessionEvent.placedItemType == ProductTypeEnum.PET)
+                        if(presentEvent.placedItemType == ProductTypeEnum.PET)
                         {
-                            const petfigureString = sessionEvent.petFigureString;
-                            if(petfigureString && petfigureString.trim().length > 0)
-                            {
-                                const petFigureData = new PetFigureData(petfigureString);
-                                let scale = 64;
-                                if(petFigureData.typeId == PetType.HORSE)
-                                {
-                                    scale = 32;
-                                }
-                                const petImage = this._container.roomEngine.getRoomObjectPetImage(petFigureData.typeId, petFigureData.paletteId, petFigureData.color,
-                                    new Vector3d(90), scale, this, true, 0, petFigureData.customParts);
+                            // const petfigureString = presentEvent.petFigureString;
 
-                                if(petImage)
-                                {
-                                    furnitureIcon = petImage;
-                                }
+                            // if(petfigureString && petfigureString.trim().length > 0)
+                            // {
+                            //     const petFigureData = new PetFigureData(petfigureString);
 
-                            }
+                            //     const scale = 64;
+
+                            //     const petImage = this._container.roomEngine.getRoomObjectPetImage(petFigureData.typeId, petFigureData.paletteId, petFigureData.color, new Vector3d(90), scale, this, true, 0, petFigureData.customParts);
+
+                            //     if(petImage) furnitureIcon = petImage;
+                            // }
                         }
 
-                        if(!furnitureIcon)
-                        {
-                            furnitureIcon = this._container.roomEngine.getFurnitureFloorImage(sessionEvent.classId, new Vector3d(90), 64, this);
-                        }
+                        const floorData = this._container.sessionDataManager.getFloorItemData(presentEvent.classId);
 
-                        furniItemData = this._container.sessionDataManager.getFloorItemData(sessionEvent.classId);
+                        let name = '';
 
-                        if(furniItemData)
-                        {
-                            this._name = furniItemData.name;
-                        }
-                        else
-                        {
-                            if(furniData)
-                            {
-                                this._name = furniData.name;
-                            }
-                        }
+                        if(floorData) name = floorData.name;
+                        else if(furniData) name = furniData.name;
 
-                        if(furnitureIcon)
-                        {
-                            dataUpdateEvent =  new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS,0, this._name, isOwnerOfFurni, furnitureIcon.data);
-                        }
-                    }
+                        dataUpdateEvent = new RoomWidgetPresentDataUpdateEvent(RoomWidgetPresentDataUpdateEvent.RWPDUE_CONTENTS,0, name, isOwnerOfFurni);
+
                         break;
+                    }
                 }
 
                 if(dataUpdateEvent)
                 {
-                    dataUpdateEvent.classId = sessionEvent.classId;
-                    dataUpdateEvent.itemType = sessionEvent.itemType;
-                    dataUpdateEvent.placedItemId = sessionEvent.placedItemId;
-                    dataUpdateEvent.placedInRoom = sessionEvent.placedInRoom;
-                    dataUpdateEvent.placedItemType = sessionEvent.placedItemType;
+                    dataUpdateEvent.classId         = presentEvent.classId;
+                    dataUpdateEvent.itemType        = presentEvent.itemType;
+                    dataUpdateEvent.placedItemId    = presentEvent.placedItemId;
+                    dataUpdateEvent.placedInRoom    = presentEvent.placedInRoom;
+                    dataUpdateEvent.placedItemType  = presentEvent.placedItemType;
+
                     this._container.events.dispatchEvent(dataUpdateEvent);
                 }
-            }
-                break;
 
+                break;
+            }
         }
     }
 
     public update(): void
     {
     }
-
 
     public get disposed(): boolean
     {
