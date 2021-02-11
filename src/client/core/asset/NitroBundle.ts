@@ -58,6 +58,8 @@ export class NitroBundle
 
                 this._image = NitroBundle.arrayBufferToBase64(this._imageData);
 
+                if(fileName.includes('holo_dragon')) console.log('data:image/png;base64,' + this._image);
+
                 this._imageData = null;
             }
 

@@ -27,44 +27,31 @@ export class FurnitureDataParser extends EventDispatcher
     {
         if(!url) return;
 
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.addEventListener('error', this.onFurnitureDataError.bind(this, request));
-
-        request.open('GET', url);
-
-        request.send();
+        fetch(url)
+            .then(response => response.json())
+            .then(data => this.onFurnitureDataLoaded(data))
+            .catch(err => this.onFurnitureDataError(err));
     }
 
-    private onFurnitureDataLoaded(request: XMLHttpRequest): void
+    private onFurnitureDataLoaded(data: { [index: string]: any }): void
     {
-        if(!request) return;
+        if(!data) return;
 
-        request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
-
-        if(request.responseText)
+        if(data.floorItems)
         {
-            const data = JSON.parse(request.responseText);
-
-            if(data.floorItems)
-            {
-                this.parseFloorItems(data.floorItems);
-            }
-
-            if(data.wallItems) this.parseWallItems(data.wallItems);
+            this.parseFloorItems(data.floorItems);
         }
+
+        if(data.wallItems) this.parseWallItems(data.wallItems);
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_READY));
     }
 
-    private onFurnitureDataError(request: XMLHttpRequest): void
+    private onFurnitureDataError(error: Error): void
     {
-        if(!request) return;
+        if(!error) return;
 
-        request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
+        console.error(error);
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
