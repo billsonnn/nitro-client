@@ -41,7 +41,7 @@ export class GroupMembersComponent
             this._totalMembersCount = 0;
             this._result            = [];
             this._admin             = false;
-            this._pageSize          = 0;
+            this._pageSize          = 1;
             this._pageIndex         = 0;
             this.level              = '0';
             this.query              = null;
@@ -56,7 +56,7 @@ export class GroupMembersComponent
     public searchMembers(): void
     {
         this._ngZone.run(() => {
-            this._pageSize          = 0;
+            this._pageSize          = 1;
             this._pageIndex         = 0;
             this._totalMembersCount = 0;
         });
@@ -78,6 +78,41 @@ export class GroupMembersComponent
 
         this._pageIndex--;
         this.getMembers();
+    }
+
+    public giveAdmin(userId: number): void
+    {
+        if(!this._groupId || !this._admin) return;
+
+        this._groupService.giveAdmin(this._groupId, userId);
+    }
+
+    public takeAdmin(userId: number): void
+    {
+        if(!this._groupId || !this._admin) return;
+
+        this._groupService.takeAdmin(this._groupId, userId);
+    }
+
+    public acceptMembership(userId: number): void
+    {
+        if(!this._groupId || !this._admin) return;
+
+        this._groupService.acceptMembership(this._groupId, userId);
+    }
+
+    public removeOrDeclineMember(userId: number, rank: number): void
+    {
+        if(!this._groupId || !this._admin) return;
+
+        if(rank === 3)
+        {
+            this._groupService.declineMembership(this._groupId, userId);
+        }
+        else
+        {
+            this._groupService.removeMember(this._groupId, userId);
+        }
     }
 
     public confirmRemove(userId: number, furnitureCount: number): [string, string, NotificationChoice[]]
@@ -105,6 +140,18 @@ export class GroupMembersComponent
         return [title, message, choices];
     }
 
+    public openProfile(userId: number): void
+    {
+        this._groupService.openProfile(userId);
+    }
+
+    public getRankIcon(rank: number): string
+    {
+        if(rank === 0) return 'fas fa-crown';
+        else if (rank === 1) return 'fas fa-star';
+        else return 'far fa-star';
+    }
+    
     public get visible(): boolean
     {
         return (this._groupId > 0);
@@ -191,9 +238,12 @@ export class GroupMembersComponent
     }
 
     public get totalPages(): number
-    {
-        if(!this._pageSize) return 0;
-        
+    {        
         return Math.ceil(this._totalMembersCount / this._pageSize);
+    }
+
+    public get myId(): number
+    {
+        return Nitro.instance.sessionDataManager.userId;
     }
 }

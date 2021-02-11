@@ -10,18 +10,29 @@
                     <nitro-badge [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
                 </div>
                 <div class="w-100">
-                    <input type="text" class="form-control form-control-sm mb-1" [(ngModel)]="query" (keyup.enter)="searchMembers()">
+                    <input type="text" class="form-control form-control-sm mb-1" [placeholder]="('group.members.searchinfo') | translate" [(ngModel)]="query" (keyup.enter)="searchMembers()">
                     <select class="form-control form-control-sm" [(ngModel)]="level" (ngModelChange)="searchMembers()">
                         <option value="0">{{ ('group.members.search.all') | translate }}</option>
                         <option value="1">{{ ('group.members.search.admins') | translate }}</option>
-                        <option value="2">{{ ('group.members.search.pending') | translate }}</option>
+                        <option *ngIf="admin" value="2">{{ ('group.members.search.pending') | translate }}</option>
                     </select>
                 </div>
             </div>
             <div class="grid-container mt-3">
                 <div class="grid-items grid-2">
                     <div *ngFor="let member of result" class="d-flex flex-row justify-content-between item-detail">
-                        <button class="btn btn-primary btn-block">{{ member.name }}</button>
+                        <div class="bg-emperor w-100 p-2 rounded">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="w-100" (click)="openProfile(member.id)"><i *ngIf="member.rank < 3" class="mr-2" [ngClass]="getRankIcon(member.rank)"></i>{{ member.name }}</div>
+                                <div *ngIf="member.rank > 0" (click)="removeOrDeclineMember(member.id, member.rank)"><i class="fas fa-times"></i></div>
+                            </div>
+                            <button *ngIf="member.rank === 0" class="btn btn-primary btn-sm w-100 mt-2">{{ ('group.members.owner') | translate }}</button>
+                            <button *ngIf="admin && member.id !== myId && member.rank !== 0" class="btn btn-primary btn-sm w-100 mt-2">
+                                <span *ngIf="member.rank === 1" (click)="takeAdmin(member.id)">{{ ('group.members.removerights') | translate }}</span>
+                                <span *ngIf="member.rank === 2" (click)="giveAdmin(member.id)">{{ ('group.members.giverights') | translate }}</span>
+                                <span *ngIf="member.rank === 3" (click)="acceptMembership(member.id)">{{ ('group.members.accept') | translate }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

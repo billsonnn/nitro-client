@@ -29,4 +29,9 @@
 .nitro-group-members-component {
     position: absolute;
     width: 350px;
+
+    .grid-container .grid-items .item-detail {
+        height: unset;
+        max-height: unset;
+    }
 }

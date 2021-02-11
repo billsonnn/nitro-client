@@ -4,10 +4,15 @@ import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communic
 import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
 import { GroupMembersEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupMembersEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
+import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupJoinComposer';
 import { GroupMembersComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembersComposer';
+import { GroupMembershipAcceptComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipAcceptComposer';
+import { GroupMembershipDeclineComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipDeclineComposer';
+import { UserProfileComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -176,6 +181,12 @@ export class GroupsService implements OnDestroy
         {
             confirmationConfig = this._groupInfoComponent.confirmLeave();
         }
+        else
+        {
+            if(!this._groupMembersComponent.admin) return;
+
+            confirmationConfig = this._groupMembersComponent.confirmRemove(parser.userId, parser.furnitureCount);
+        }
         
         this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[1]);
     }
@@ -203,9 +214,34 @@ export class GroupsService implements OnDestroy
         Nitro.instance.communication.connection.send(new GroupJoinComposer(groupId));
     }
 
+    public giveAdmin(groupId: number, memberId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupAdminGiveComposer(groupId, memberId));
+    }
+
+    public takeAdmin(groupId: number, memberId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupAdminTakeComposer(groupId, memberId));
+    }
+
+    public acceptMembership(groupId: number, memberId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupMembershipAcceptComposer(groupId, memberId));
+    }
+
+    public declineMembership(groupId: number, memberId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupMembershipDeclineComposer(groupId, memberId));
+    }
+
     public removeMember(groupId: number, memberId: number): void
     {
         Nitro.instance.communication.connection.send(new GroupConfirmRemoveMemberComposer(groupId, memberId));
+    }
+
+    public openProfile(userId: number): void
+    {
+        Nitro.instance.communication.connection.send(new UserProfileComposer(userId));
     }
 
     public set groupRoomInfoComponent(component: GroupRoomInfoComponent)
