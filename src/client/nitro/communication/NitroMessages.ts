@@ -33,6 +33,7 @@ import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
 import { GroupConfirmMemberRemoveEvent } from './messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
+import { GroupMembersEvent } from './messages/incoming/group/GroupMembersEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -184,6 +185,7 @@ import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserCompo
 import { GroupConfirmRemoveMemberComposer } from './messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from './messages/outgoing/group/GroupJoinComposer';
+import { GroupMembersComposer } from './messages/outgoing/group/GroupMembersComposer';
 import { GroupRemoveMemberComposer } from './messages/outgoing/group/GroupRemoveMemberComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
@@ -347,6 +349,7 @@ export class NitroMessages implements IMessageConfiguration
         // GROUP
         this._events.set(IncomingHeader.GROUP_INFO, GroupInformationEvent);
         this._events.set(IncomingHeader.GROUP_MEMBER_REMOVE_CONFIRM, GroupConfirmMemberRemoveEvent);
+        this._events.set(IncomingHeader.GROUP_MEMBERS, GroupMembersEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
@@ -577,6 +580,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GROUP_REQUEST, GroupJoinComposer);
         this._composers.set(OutgoingHeader.GROUP_MEMBER_REMOVE_CONFIRM, GroupConfirmRemoveMemberComposer);
         this._composers.set(OutgoingHeader.GROUP_MEMBER_REMOVE, GroupRemoveMemberComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBERS, GroupMembersComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);

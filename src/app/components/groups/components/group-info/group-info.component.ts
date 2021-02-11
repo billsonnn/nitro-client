@@ -53,6 +53,11 @@ export class GroupInfoComponent
         this._navigatorService.goToRoom(this._groupHomeRoomId);
     }
 
+    public getMembers(): void
+    {
+        this._groupService.getMembers(this._groupId, 0, null, 0);
+    }
+
     public join(): void
     {
         if(!this.groupId || this._groupMembershipType !== 0) return;

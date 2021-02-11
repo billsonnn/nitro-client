@@ -2,14 +2,17 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
+import { GroupMembersEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupMembersEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupJoinComposer';
+import { GroupMembersComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembersComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { NotificationService } from '../../notification/services/notification.service';
 import { GroupInfoComponent } from '../components/group-info/group-info.component';
+import { GroupMembersComponent } from '../components/group-members/group-members.component';
 import { GroupRoomInfoComponent } from '../components/room-info/room-info.component';
 
 @Injectable()
@@ -19,6 +22,7 @@ export class GroupsService implements OnDestroy
 
     private _roomInfoComponent: GroupRoomInfoComponent;
     private _groupInfoComponent: GroupInfoComponent;
+    private _groupMembersComponent: GroupMembersComponent;
 
     constructor(
         private _notificationService: NotificationService,
@@ -47,6 +51,7 @@ export class GroupsService implements OnDestroy
             this._messages = [
                 new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
                 new GroupInformationEvent(this.onGroupInformationEvent.bind(this)),
+                new GroupMembersEvent(this.onGroupMembersEvent.bind(this)),
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this))
             ];
 
@@ -135,6 +140,28 @@ export class GroupsService implements OnDestroy
         });
     }
 
+    private onGroupMembersEvent(event: GroupMembersEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._groupMembersComponent.groupId             = parser.groupId;
+            this._groupMembersComponent.groupName           = parser.groupTitle;
+            this._groupMembersComponent.groupBadgeCode      = parser.badge;
+            this._groupMembersComponent.totalMembersCount   = parser.totalMembersCount;
+            this._groupMembersComponent.result              = parser.result;
+            this._groupMembersComponent.admin               = parser.admin;
+            this._groupMembersComponent.pageSize            = parser.pageSize;
+            this._groupMembersComponent.pageIndex           = parser.pageIndex;
+            this._groupMembersComponent.level               = parser.level;
+        });
+    }
+
     private onGroupConfirmMemberRemoveEvent(event: GroupConfirmMemberRemoveEvent): void
     {
         if(!event) return;
@@ -156,6 +183,11 @@ export class GroupsService implements OnDestroy
     public getInfo(groupId: number): void
     {
         Nitro.instance.communication.connection.send(new GroupInformationComposer(groupId, true));
+    }
+
+    public getMembers(groupId: number, pageId: number, query: string, level: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupMembersComposer(groupId, pageId, query, level));
     }
 
     public join(groupId: number): void
@@ -184,5 +216,10 @@ export class GroupsService implements OnDestroy
     public set groupInfoComponent(component: GroupInfoComponent)
     {
         this._groupInfoComponent = component;
+    }
+
+    public set groupMembersComponent(component: GroupMembersComponent)
+    {
+        this._groupMembersComponent = component;
     }
 }

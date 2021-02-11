@@ -1,0 +1,26 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-group-members-component" dragHandle=".drag-handler">
+    <div class="card">
+        <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+            <h6 class="m-0">{{ ('group.members.title') | translate:'groupName':groupName }}</h6>
+            <button type="button" class="close" (click)="clear()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+            <div class="d-flex flex-row justify-content-between w-100 mb-2">
+                <div class="mr-3">
+                    <nitro-badge [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                </div>
+                <div class="w-100">
+                    a
+                </div>
+            </div>
+            <div class="grid-container">
+                <div class="grid-items grid-2">
+                    <div *ngFor="let member of result" class="d-flex flex-row justify-content-between item-detail">
+                        <button class="btn btn-primary btn-block">{{ member.name }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 text-center">{{ ('group.members.pageinfo') | translate:['amount', 'page', 'totalPages']:[result.length, pageIndex + 1, totalPages] }}</div>
+        </div>
+    </div>
+</div>
