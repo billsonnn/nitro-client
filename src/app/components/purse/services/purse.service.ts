@@ -111,7 +111,7 @@ export class PurseService implements OnDestroy
                 this._habboClubSubscription = parser;
                 return;
             default:
-                console.log('unknown');
+                return;
         }
     }
 

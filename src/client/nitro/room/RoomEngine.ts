@@ -5,6 +5,7 @@ import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { NitroManager } from '../../core/common/NitroManager';
 import { IConnection } from '../../core/communication/connections/IConnection';
 import { IMessageComposer } from '../../core/communication/messages/IMessageComposer';
+import { NitroEvent } from '../../core/events/NitroEvent';
 import { RoomObjectEvent } from '../../room/events/RoomObjectEvent';
 import { RoomObjectMouseEvent } from '../../room/events/RoomObjectMouseEvent';
 import { IRoomInstance } from '../../room/IRoomInstance';
@@ -136,6 +137,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     private _roomMessageHandler: RoomMessageHandler;
     private _roomContentLoader: RoomContentLoader;
     private _ready: boolean;
+    private _roomContentLoaderReady: boolean;
     private _imageObjectIdBank: NumberBank;
     private _imageCallbacks: Map<string, IGetImageListener[]>;
     private _thumbnailObjectIdBank: NumberBank;
@@ -171,6 +173,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomMessageHandler        = new RoomMessageHandler(this);
         this._roomContentLoader         = new RoomContentLoader();
         this._ready                     = false;
+        this._roomContentLoaderReady    = false;
 
         this._activeRoomId              = -1;
         this._activeRoomActiveCanvas    = -1;
@@ -198,10 +201,11 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomAllowsDragging                = true;
         this._badgeListenerObjects              = new Map();
 
-        this.runVisibilityUpdate    = this.runVisibilityUpdate.bind(this);
-        this.processRoomObjectEvent = this.processRoomObjectEvent.bind(this);
-        this.onRoomSessionEvent     = this.onRoomSessionEvent.bind(this);
-        this.onBadgeImageReadyEvent = this.onBadgeImageReadyEvent.bind(this);
+        this.runVisibilityUpdate            = this.runVisibilityUpdate.bind(this);
+        this.processRoomObjectEvent         = this.processRoomObjectEvent.bind(this);
+        this.onRoomSessionEvent             = this.onRoomSessionEvent.bind(this);
+        this.onRoomContentLoaderReadyEvent  = this.onRoomContentLoaderReadyEvent.bind(this);
+        this.onBadgeImageReadyEvent         = this.onBadgeImageReadyEvent.bind(this);
     }
 
     public onInit(): void
@@ -235,6 +239,8 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
             this._roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
         }
 
+        this.events.addEventListener(RoomContentLoader.LOADER_READY, this.onRoomContentLoaderReadyEvent);
+
         Nitro.instance.ticker.add(this.update, this);
 
         document.addEventListener('visibilitychange', this.runVisibilityUpdate);
@@ -257,11 +263,17 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         if(this._roomMessageHandler) this._roomMessageHandler.dispose();
 
+        if(this._roomContentLoader) this._roomContentLoader.dispose();
+
+        this.events.removeEventListener(RoomContentLoader.LOADER_READY, this.onRoomContentLoaderReadyEvent);
+
         if(this._roomSessionManager)
         {
             this._roomSessionManager.events.removeEventListener(RoomSessionEvent.STARTED, this.onRoomSessionEvent);
             this._roomSessionManager.events.removeEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
         }
+
+        super.onDispose();
     }
 
     private onRoomSessionEvent(event: RoomSessionEvent): void
@@ -281,6 +293,13 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                 }
                 return;
         }
+    }
+
+    private onRoomContentLoaderReadyEvent(event: NitroEvent): void
+    {
+        this._roomContentLoaderReady = true;
+
+        this._roomManager.init();
     }
 
     public setActiveRoomId(roomId: number): void

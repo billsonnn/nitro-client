@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../../client/nitro/room/events/RoomBackgroundColorEvent';
 import { RoomEngineDimmerStateEvent } from '../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
@@ -14,6 +14,7 @@ import { RoomSessionDanceEvent } from '../../../client/nitro/session/events/Room
 import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
+import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/RoomSessionPresentEvent';
 import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomId } from '../../../client/room/utils/RoomId';
@@ -23,21 +24,20 @@ import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/component';
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';
+import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
 import { CustomStackHeightComponent } from '../room/widgets/furniture/customstackheight/component';
 import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/dimmer.component';
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
+import { PresentFurniWidget } from '../room/widgets/furniture/gift-opening/present.component';
 import { StickieFurniComponent } from '../room/widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components/main/main.component';
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
-import { PresentFurniWidget } from '../room/widgets/furniture/gift-opening/present.component';
-import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
-import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/RoomSessionPresentEvent';
 
 @Component({
     selector: 'nitro-main-component',
@@ -58,11 +58,12 @@ import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/Ro
         )
     ]
 })
-export class MainComponent implements OnInit, OnDestroy
+export class MainComponent implements OnInit, OnDestroy, AfterContentInit
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
 
+    private _roomEngineReady: boolean = false;
     private _landingViewVisible: boolean = true;
 
     constructor(
@@ -141,6 +142,10 @@ export class MainComponent implements OnInit, OnDestroy
             {
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.INITIALIZED, this.onRoomEngineEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.OBJECTS_INITIALIZED, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.NORMAL_MODE, this.onInterstitialEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.GAME_MODE, this.onInterstitialEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomZoomEvent.ROOM_ZOOM, this.onRoomEngineEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, this.onRoomEngineEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomBackgroundColorEvent.ROOM_COLOR, this.onRoomEngineEvent);
@@ -185,6 +190,11 @@ export class MainComponent implements OnInit, OnDestroy
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
             }
         });
+    }
+
+    public ngAfterContentInit(): void
+    {
+        Nitro.instance.communication.connection.onReady();
     }
 
     private onRoomEngineEvent(event: RoomEngineEvent): void
@@ -281,6 +291,11 @@ export class MainComponent implements OnInit, OnDestroy
     {
         if(!event) return;
 
+        if(event.type === RoomEngineEvent.ENGINE_INITIALIZED)
+        {
+            this._ngZone.run(() => (this._roomEngineReady = true));
+        }
+
         if((event.type !== RoomEngineEvent.GAME_MODE) && (event.type !== RoomEngineEvent.NORMAL_MODE)) return;
 
         this.roomComponent && this.roomComponent.onRoomEngineEvent(event);
@@ -363,8 +378,8 @@ export class MainComponent implements OnInit, OnDestroy
         return this._settingsService.chatHistoryVisible;
     }
 
-    public get isReady(): boolean
+    public get roomEngineReady(): boolean
     {
-        return this._settingsService.isReady;
+        return this._roomEngineReady;
     }
 }

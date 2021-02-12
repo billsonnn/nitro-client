@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
+import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
@@ -7,13 +8,12 @@ import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPrev
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
+import { PurseService } from '../../../purse/services/purse.service';
 import { CatalogLayout } from '../../CatalogLayout';
 import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
-import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { PurseService } from '../../../purse/services/purse.service';
 
 @Component({
     selector: 'nitro-catalog-main-component',
