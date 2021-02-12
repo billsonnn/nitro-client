@@ -356,8 +356,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         for(const listener of this._pendingProductListeners) listener && listener.loadProductData();
 
-        console.log(this._products);
-
         this._pendingProductListeners = [];
     }
 

@@ -37,12 +37,9 @@ export class FurnitureDataParser extends EventDispatcher
     {
         if(!data) return;
 
-        if(data.floorItems)
-        {
-            this.parseFloorItems(data.floorItems);
-        }
+        if(data.roomitemtypes) this.parseFloorItems(data.roomitemtypes);
 
-        if(data.wallItems) this.parseWallItems(data.wallItems);
+        if(data.wallitemtypes) this.parseWallItems(data.wallitemtypes);
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_READY));
     }
@@ -56,15 +53,38 @@ export class FurnitureDataParser extends EventDispatcher
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
 
-    private parseFloorItems(data: IFurnitureData[]): void
+    private parseFloorItems(data: any): void
     {
-        if(!data || !data.length) return;
+        if(!data || !data.furnitype) return;
 
-        for(const furniture of data)
+        for(const furniture of data.furnitype)
         {
             if(!furniture) continue;
 
-            const furnitureData = new FurnitureData(FurnitureType.FLOOR, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams);
+            const colors: number[] = [];
+
+            for(const color of furniture.partcolors.color)
+            {
+                let colorCode = (color as string);
+
+                if(colorCode.charAt(0) === '#')
+                {
+                    colorCode = colorCode.replace('#', '');
+
+                    colors.push(parseInt(colorCode, 16));
+                }
+                else
+                {
+                    colors.push(-(parseInt(colorCode)));
+                }
+            }
+
+            const classSplit    = (furniture.classname as string).split('*');
+            const className     = classSplit[0];
+            const colorIndex    = ((classSplit.length > 1) ? parseInt(classSplit[1]) : 0);
+            const hasColorIndex = (classSplit.length > 1);
+
+            const furnitureData = new FurnitureData(FurnitureType.FLOOR, furniture.id, furniture.classname, className, furniture.category, furniture.name, furniture.description, furniture.revision, furniture.xdim, furniture.ydim, 0, colors, hasColorIndex, colorIndex, furniture.adurl, furniture.offerid, furniture.buyout, furniture.rentofferid, furniture.rentbuyout, furniture.bc, furniture.customparams, furniture.specialtype, furniture.canstandon, furniture.cansiton, furniture.canlayon, furniture.excludeddynamic, furniture.furniline, furniture.environment, furniture.rare);
 
             this._floorItems.set(furnitureData.id, furnitureData);
 
@@ -72,15 +92,15 @@ export class FurnitureDataParser extends EventDispatcher
         }
     }
 
-    private parseWallItems(data: IFurnitureData[]): void
+    private parseWallItems(data: any): void
     {
-        if(!data || !data.length) return;
+        if(!data || !data.furnitype) return;
 
-        for(const furniture of data)
+        for(const furniture of data.furnitype)
         {
             if(!furniture) continue;
 
-            const furnitureData = new FurnitureData(FurnitureType.WALL, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams);
+            const furnitureData = new FurnitureData(FurnitureType.WALL, furniture.id, furniture.classname, furniture.classname, furniture.category, furniture.name, furniture.description, furniture.revision, 0, 0, 0, null, false, 0, furniture.adurl, furniture.offerid, furniture.buyout, furniture.rentofferid, furniture.rentbuyout, furniture.bc, null, furniture.specialtype, false, false, false, furniture.excludeddynamic, furniture.furniline, furniture.environment, furniture.rare);
 
             this._wallItems.set(furnitureData.id, furnitureData);
 

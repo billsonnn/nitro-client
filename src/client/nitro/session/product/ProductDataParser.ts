@@ -35,8 +35,6 @@ export class ProductDataParser extends EventDispatcher
     {
         if(!data) return;
 
-        console.log(data);
-
         this.dispatchEvent(new NitroEvent(ProductDataParser.PDP_PRODUCT_DATA_READY));
     }
 
