@@ -216,4 +216,6 @@ export class IncomingHeader
     public static GIFT_RECEIVER_NOT_FOUND          = 1517;
     public static GIFT_OPENED                      = 56;
     public static HOTEL_WILL_SHUTDOWN              = 1050;
+    public static FLOOD_CONTROL                    = 566;
+    public static REMAINING_MUTE                   = 826;
 }
