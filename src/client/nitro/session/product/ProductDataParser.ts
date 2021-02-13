@@ -1,6 +1,7 @@
 ﻿import { EventDispatcher } from '../../../core/events/EventDispatcher';
 import { NitroEvent } from '../../../core/events/NitroEvent';
 import { IProductData } from './IProductData';
+import { ProductData } from './ProductData';
 
 export class ProductDataParser extends EventDispatcher
 {
@@ -35,6 +36,8 @@ export class ProductDataParser extends EventDispatcher
     {
         if(!data) return;
 
+        this.parseProducts(data.productdata);
+
         this.dispatchEvent(new NitroEvent(ProductDataParser.PDP_PRODUCT_DATA_READY));
     }
 
@@ -43,5 +46,12 @@ export class ProductDataParser extends EventDispatcher
         if(!error) return;
 
         this.dispatchEvent(new NitroEvent(ProductDataParser.PDP_PRODUCT_DATA_FAILED));
+    }
+
+    private parseProducts(data: { [index: string]: any }): void
+    {
+        if(!data) return;
+
+        for(const product of data.product) (product && this._products.set(product.code, new ProductData(product.code, product.name, product.description)));
     }
 }
