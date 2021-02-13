@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RoomStaffPickComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
@@ -61,6 +62,13 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
         return Nitro.instance.sessionDataManager.securityLevel >= SecurityLevel.COMMUNITY;
     }
 
+    public get staffPickVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.roomPicker;
+    }
+
     public get hoomRegionVisible(): boolean
     {
         if(!this.roomData) return false;
@@ -74,6 +82,10 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
         {
             case 'room_report_button':
                 this.reportRoom();
+                break;
+
+            case 'room_staff_pick':
+                this.staffPick();
                 break;
 
             case 'room_settings_button':
@@ -121,6 +133,10 @@ export class RoomEventViewComponent extends ConversionTrackingWidget
     private staffPick(): void
     {
         // _Str_22695
+
+        this.roomData.roomPicker = !this.roomData.roomPicker;
+
+        Nitro.instance.communication.connection.send(new RoomStaffPickComposer(this.roomData.roomId));
     }
 
     private reportRoom(): void
