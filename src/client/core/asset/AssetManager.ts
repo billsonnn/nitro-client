@@ -164,7 +164,7 @@ export class AssetManager extends Disposable implements IAssetManager
             const nitroBundle   = new NitroBundle(resource.data);
             const assetData     = (nitroBundle.jsonFile as IAssetData);
 
-            if(!assetData.type)
+            if(!assetData || !assetData.type)
             {
                 onDownloaded(loader, resource, false);
 
@@ -173,20 +173,13 @@ export class AssetManager extends Disposable implements IAssetManager
 
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageData = nitroBundle.image;
-
-                let baseTexture = nitroBundle.baseTexture;
+                const baseTexture = nitroBundle.baseTexture;
 
                 if(!baseTexture)
                 {
-                    if(imageData) baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
+                    onDownloaded(loader, resource, false);
 
-                    if(!baseTexture)
-                    {
-                        onDownloaded(loader, resource, false);
-
-                        return;
-                    }
+                    return;
                 }
 
                 if(baseTexture.valid)
