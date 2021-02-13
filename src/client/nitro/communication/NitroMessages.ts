@@ -185,6 +185,7 @@ import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserCompo
 import { GroupAdminGiveComposer } from './messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from './messages/outgoing/group/GroupAdminTakeComposer';
 import { GroupConfirmRemoveMemberComposer } from './messages/outgoing/group/GroupConfirmRemoveMemberComposer';
+import { GroupDeleteComposer } from './messages/outgoing/group/GroupDeleteComposer';
 import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from './messages/outgoing/group/GroupJoinComposer';
 import { GroupMembersComposer } from './messages/outgoing/group/GroupMembersComposer';
@@ -589,6 +590,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GROUP_ADMIN_REMOVE, GroupAdminTakeComposer);
         this._composers.set(OutgoingHeader.GROUP_REQUEST_ACCEPT, GroupMembershipAcceptComposer);
         this._composers.set(OutgoingHeader.GROUP_REQUEST_DECLINE, GroupMembershipDeclineComposer);
+        this._composers.set(OutgoingHeader.GROUP_DELETE, GroupDeleteComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);

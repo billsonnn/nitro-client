@@ -7,6 +7,7 @@ import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/i
 import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
+import { GroupDeleteComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupDeleteComposer';
 import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
 import { GroupJoinComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupJoinComposer';
 import { GroupMembersComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembersComposer';
@@ -123,16 +124,17 @@ export class GroupsService implements OnDestroy
         if(parser.flag || parser.id === this._groupInfoComponent.groupId)
         {
             this._ngZone.run(() => {
-                this._groupInfoComponent.groupId                = parser.id;
-                this._groupInfoComponent.groupName              = parser.title;
-                this._groupInfoComponent.groupBadgeCode         = parser.badge;
-                this._groupInfoComponent.groupDescription       = parser.description;
-                this._groupInfoComponent.groupType              = parser.type;
-                this._groupInfoComponent.groupMembershipType    = parser.membershipType;
-                this._groupInfoComponent.groupCreationDate      = parser.createdAt;
-                this._groupInfoComponent.groupOwnerName         = parser.ownerName;
-                this._groupInfoComponent.groupMembersCount      = parser.membersCount;
-                this._groupInfoComponent.groupHomeRoomId        = parser.roomId;
+                this._groupInfoComponent.groupId                        = parser.id;
+                this._groupInfoComponent.groupName                      = parser.title;
+                this._groupInfoComponent.groupBadgeCode                 = parser.badge;
+                this._groupInfoComponent.groupDescription               = parser.description;
+                this._groupInfoComponent.groupType                      = parser.type;
+                this._groupInfoComponent.groupMembershipType            = parser.membershipType;
+                this._groupInfoComponent.groupCreationDate              = parser.createdAt;
+                this._groupInfoComponent.groupOwnerName                 = parser.ownerName;
+                this._groupInfoComponent.groupMembersCount              = parser.membersCount;
+                this._groupInfoComponent.groupMembershipRequestsCount   = parser.pendingRequestsCount;
+                this._groupInfoComponent.groupHomeRoomId                = parser.roomId;
             });
         }
         
@@ -188,7 +190,7 @@ export class GroupsService implements OnDestroy
             confirmationConfig = this._groupMembersComponent.confirmRemove(parser.userId, parser.furnitureCount);
         }
         
-        this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[1]);
+        this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[0]);
     }
 
     public getInfo(groupId: number): void
@@ -237,6 +239,11 @@ export class GroupsService implements OnDestroy
     public removeMember(groupId: number, memberId: number): void
     {
         Nitro.instance.communication.connection.send(new GroupConfirmRemoveMemberComposer(groupId, memberId));
+    }
+
+    public deleteGroup(groupId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupDeleteComposer(groupId));
     }
 
     public openProfile(userId: number): void

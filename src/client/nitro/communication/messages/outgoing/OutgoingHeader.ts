@@ -44,6 +44,7 @@ export class OutgoingHeader
     public static GROUP_FORUM_LIST               = 873;
     public static GROUP_FORUM_THREADS            = 436;
     public static GROUP_INFO                     = 2991;
+    public static GROUP_DELETE                   = 1134;
     public static GROUP_MEMBER_REMOVE_CONFIRM    = 3593;
     public static GROUP_MEMBER_REMOVE            = 593;
     public static GROUP_MEMBERS                  = 312;

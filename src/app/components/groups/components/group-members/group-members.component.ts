@@ -85,6 +85,7 @@ export class GroupMembersComponent
         if(!this._groupId || !this._admin) return;
 
         this._groupService.giveAdmin(this._groupId, userId);
+        this.getMembers();
     }
 
     public takeAdmin(userId: number): void
@@ -92,6 +93,7 @@ export class GroupMembersComponent
         if(!this._groupId || !this._admin) return;
 
         this._groupService.takeAdmin(this._groupId, userId);
+        this.getMembers();
     }
 
     public acceptMembership(userId: number): void
@@ -99,6 +101,7 @@ export class GroupMembersComponent
         if(!this._groupId || !this._admin) return;
 
         this._groupService.acceptMembership(this._groupId, userId);
+        this.getMembers();
     }
 
     public removeOrDeclineMember(userId: number, rank: number): void
@@ -112,6 +115,7 @@ export class GroupMembersComponent
         else
         {
             this._groupService.removeMember(this._groupId, userId);
+            this.getMembers();
         }
     }
 
@@ -132,7 +136,8 @@ export class GroupMembersComponent
         
         const choices = [
             new NotificationChoice('group.kickconfirm.title', () => {
-                Nitro.instance.communication.connection.send(new GroupRemoveMemberComposer(this.groupId, Nitro.instance.sessionDataManager.userId));
+                Nitro.instance.communication.connection.send(new GroupRemoveMemberComposer(this.groupId, userId));
+                this.getMembers();
             }, ['btn-danger']),
             new NotificationChoice('generic.close', () => {}, ['btn-primary'])
         ];

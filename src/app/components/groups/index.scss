@@ -23,12 +23,13 @@
 
     .group-members-count {
         font-size: 13px;
+        cursor: pointer;
     }
 }
 
 .nitro-group-members-component {
     position: absolute;
-    width: 350px;
+    width: 500px;
 
     .grid-container .grid-items .item-detail {
         height: unset;

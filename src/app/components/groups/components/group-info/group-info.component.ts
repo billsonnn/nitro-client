@@ -20,6 +20,7 @@ export class GroupInfoComponent
     private _groupCreationDate: string;
     private _groupOwnerName: string;
     private _groupMembersCount: number;
+    private _groupMembershipRequestsCount: number;
     private _groupHomeRoomId: number;
 
     constructor(
@@ -35,16 +36,17 @@ export class GroupInfoComponent
     public clear(): void
     {
         this._ngZone.run(() => {
-            this._groupId               = 0;
-            this._groupName             = null;
-            this._groupBadgeCode        = null;
-            this._groupDescription      = null;
-            this._groupType             = -1;
-            this._groupMembershipType   = -1;
-            this._groupCreationDate     = null;
-            this._groupOwnerName        = null;
-            this._groupMembersCount     = 0;
-            this._groupHomeRoomId       = 0;
+            this._groupId                       = 0;
+            this._groupName                     = null;
+            this._groupBadgeCode                = null;
+            this._groupDescription              = null;
+            this._groupType                     = -1;
+            this._groupMembershipType           = -1;
+            this._groupCreationDate             = null;
+            this._groupOwnerName                = null;
+            this._groupMembersCount             = 0;
+            this._groupMembershipRequestsCount  = 0;
+            this._groupHomeRoomId               = 0;
         });
     }
 
@@ -53,9 +55,9 @@ export class GroupInfoComponent
         this._navigatorService.goToRoom(this._groupHomeRoomId);
     }
 
-    public getMembers(): void
+    public getMembers(pendingRequest: boolean): void
     {
-        this._groupService.getMembers(this._groupId, 0, null, 0);
+        this._groupService.getMembers(this._groupId, 0, null, pendingRequest ? 2 : 0);
     }
 
     public join(): void
@@ -180,6 +182,16 @@ export class GroupInfoComponent
     public set groupMembersCount(membersCount: number)
     {
         this._groupMembersCount = membersCount;
+    }
+
+    public get groupMembershipRequestsCount(): number
+    {
+        return this._groupMembershipRequestsCount;
+    }
+
+    public set groupMembershipRequestsCount(membershipRequestsCount: number)
+    {
+        this._groupMembershipRequestsCount = membershipRequestsCount;
     }
 
     public get groupHomeRoomId(): number
