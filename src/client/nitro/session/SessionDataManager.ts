@@ -263,16 +263,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemOpen        = parser.isOpen;
         this._systemShutdown    = parser.onShutdown;
         this._isAuthenticHabbo  = parser.isAuthenticUser;
-
-        if(this._isAuthenticHabbo && this._furnitureReady && !this._furnitureListenersNotified)
-        {
-            this._furnitureListenersNotified = true;
-
-            if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
-            {
-                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
-            }
-        }
     }
 
     private onUserSettingsEvent(event: UserSettingsEvent): void
@@ -335,7 +325,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this._furnitureReady = true;
 
-        if(this._isAuthenticHabbo && !this._furnitureListenersNotified)
+        if(!this._furnitureListenersNotified)
         {
             this._furnitureListenersNotified = true;
 
