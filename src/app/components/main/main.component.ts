@@ -63,7 +63,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
 
-    private _roomEngineReady: boolean = false;
     private _landingViewVisible: boolean = true;
 
     constructor(
@@ -291,11 +290,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
     {
         if(!event) return;
 
-        if(event.type === RoomEngineEvent.ENGINE_INITIALIZED)
-        {
-            this._ngZone.run(() => (this._roomEngineReady = true));
-        }
-
         if((event.type !== RoomEngineEvent.GAME_MODE) && (event.type !== RoomEngineEvent.NORMAL_MODE)) return;
 
         this.roomComponent && this.roomComponent.onRoomEngineEvent(event);
@@ -376,10 +370,5 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
     public get chatHistoryVisible(): boolean
     {
         return this._settingsService.chatHistoryVisible;
-    }
-
-    public get roomEngineReady(): boolean
-    {
-        return this._roomEngineReady;
     }
 }

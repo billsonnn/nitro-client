@@ -5,6 +5,7 @@ import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/
 import { LegacyExternalInterface } from '../client/nitro/externalInterface/LegacyExternalInterface';
 import { NitroLocalizationEvent } from '../client/nitro/localization/NitroLocalizationEvent';
 import { Nitro } from '../client/nitro/Nitro';
+import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
 import { WebGL } from '../client/nitro/utils/WebGL';
 import { SettingsService } from './core/settings/service';
 
@@ -14,11 +15,10 @@ import { SettingsService } from './core/settings/service';
 })
 export class AppComponent implements OnInit, OnDestroy
 {
-    public message: string              = 'Starting';
+    public message: string              = null;
     public percentage: number           = 0;
-    public hideProgress: boolean        = false;
+    public hideProgress: boolean        = true;
     public isLocalizationReady: boolean = false;
-    public isRoomEngineReady: boolean   = false;
     public isAvatarRenderReady: boolean = false;
     public isError: boolean             = false;
 
@@ -54,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED, this.onNitroEvent);
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_ERROR, this.onNitroEvent);
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_CLOSED, this.onNitroEvent);
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onNitroEvent);
             Nitro.instance.localization.events.addEventListener(NitroLocalizationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onNitroEvent);
             Nitro.instance.core.configuration.events.addEventListener(ConfigurationEvent.FAILED, this.onNitroEvent);
@@ -110,103 +111,83 @@ export class AppComponent implements OnInit, OnDestroy
             case ConfigurationEvent.FAILED:
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'Configuration Failed';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'Configuration Failed';
                 });
                 return;
             case Nitro.WEBGL_UNAVAILABLE:
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'WebGL Required';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'WebGL Required';
                 });
                 return;
             case Nitro.WEBGL_CONTEXT_LOST:
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'WebGL Context Lost - Reloading';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'WebGL Context Lost - Reloading';
                 });
 
                 setTimeout(() => location.reload(), 1500);
                 return;
             case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING:
-                this._ngZone.run(() =>
-                {
-                    this.message        = 'Handshaking';
-                    this.percentage     = (this.percentage + 20);
-                    this.hideProgress   = false;
-                });
-
                 clearTimeout(this._connectionTimeout);
 
                 this._connectionTimeout = null;
-                break;
+                return;
             case NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED:
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'Handshake Failed';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'Handshake Failed';
                 });
-                break;
+                return;
             case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
-                this._ngZone.run(() =>
-                {
-                    this.message        = 'Preparing Nitro';
-                    this.percentage     = (this.percentage + 20);
-                    this.hideProgress   = false;
-
-                    this._isReady = true;
-                });
-
                 Nitro.instance.init();
 
                 clearTimeout(this._connectionTimeout);
 
                 this._connectionTimeout = null;
-                break;
+                return;
             case NitroCommunicationDemoEvent.CONNECTION_ERROR:
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'Connection Error';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'Connection Error';
                 });
-                break;
+                return;
             case NitroCommunicationDemoEvent.CONNECTION_CLOSED:
                 if(Nitro.instance.roomEngine) Nitro.instance.roomEngine.dispose();
 
                 this._ngZone.run(() =>
                 {
-                    this.isError        = true;
-                    this.message        = 'Connection Closed';
-                    this.percentage     = 0;
-                    this.hideProgress   = true;
+                    this.isError    = true;
+                    this.message    = 'Connection Closed';
                 });
 
                 LegacyExternalInterface.call('disconnect', -1, 'client.init.handshake.fail');
-                break;
+                return;
+            case RoomEngineEvent.ENGINE_INITIALIZED:
+                this._ngZone.run(() => (this._isReady = true));
+                return;
             case NitroLocalizationEvent.LOADED:
-                this._ngZone.run(() =>
-                {
-                    this.percentage     = (this.percentage + 20);
-                    this.hideProgress   = false;
-                });
-
                 Nitro.instance.core.asset.downloadAssets(this.getPreloadAssetUrls(), (status: boolean) =>
                 {
-                    Nitro.instance.communication.init();
+                    if(status)
+                    {
+                        Nitro.instance.communication.init();
+                    }
+                    else
+                    {
+                        this._ngZone.run(() =>
+                        {
+                            this.isError    = true;
+                            this.message    = 'Assets Failed';
+                        });
+                    }
                 });
-                break;
+                return;
         }
     }
 
