@@ -75,7 +75,7 @@ export class FurnitureDataParser extends EventDispatcher
                 }
                 else
                 {
-                    colors.push(-(parseInt(colorCode)));
+                    colors.push((parseInt(colorCode, 16)));
                 }
             }
 
