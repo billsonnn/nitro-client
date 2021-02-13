@@ -8,7 +8,7 @@
         <ng-container *ngSwitchCase="'open_present'">
             <div class="row">
                 <div class="col-5">
-                    <div *ngIf="!isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" nitro-avatar-image [figure]="figure" [direction]="2"></div>
+                    <div *ngIf="!isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [headOnly]="true" nitro-avatar-image [figure]="figure" [direction]="2"></div>
                     <div *ngIf="isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3"></div>
                 </div>
                 <div class="col-7 d-flex justify-content-center align-items-center">
