@@ -255,7 +255,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
             const furniData = this._catalogService.getFurnitureDataForProductOffer(product);
 
-            if(!this._roomPreviewer) return;
+            if(!furniData) return;
 
             this._ngZone.runOutsideAngular(() =>
             {
