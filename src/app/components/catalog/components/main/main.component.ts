@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
+import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
@@ -7,13 +8,12 @@ import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPrev
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
+import { PurseService } from '../../../purse/services/purse.service';
 import { CatalogLayout } from '../../CatalogLayout';
 import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
-import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { PurseService } from '../../../purse/services/purse.service';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -36,11 +36,13 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _purchaseOfferPage: CatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
+    private _purchaseGiftOffer: CatalogPageOfferData = null;
     private _purchaseVipSubscription: CatalogClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
     private _showInsufficientFunds: boolean = false;
+    private _showGiftConfigurator: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
@@ -115,6 +117,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOfferQuantity = 1;
         this._purchaseOfferExtra    = null;
         this._purchaseVipSubscription = null;
+        this._purchaseGiftOffer     = null;
+        this._showGiftConfigurator = false;
 
     }
 
@@ -336,7 +340,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
+    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -348,6 +352,10 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
         this._purchaseOfferExtra    = extra;
+        if(isGift)
+        {
+            this._purchaseGiftOffer = offer;
+        }
     }
 
     public confirmVipSubscription(subscription: CatalogClubOfferData): void
@@ -399,6 +407,21 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseOffer(): CatalogPageOfferData
     {
         return this._purchaseOffer;
+    }
+
+    public get giftOffer(): CatalogPageOfferData
+    {
+        return this._purchaseGiftOffer;
+    }
+
+    public get showGiftConfigurator(): boolean
+    {
+        return this._showGiftConfigurator;
+    }
+
+    public makeGiftConfiguratorVisible(): void
+    {
+        this._showGiftConfigurator = true;
     }
 
     public get purchaseOfferQuantity(): number

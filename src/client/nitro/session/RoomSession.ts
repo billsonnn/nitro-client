@@ -28,6 +28,8 @@ import { RoomTradingLevelEnum } from './enum/RoomTradingLevelEnum';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { IRoomSession } from './IRoomSession';
 import { UserDataManager } from './UserDataManager';
+import { OpenPresentComposer } from '../communication/messages/outgoing/room/furniture/presents/OpenPresentComposer';
+import { PetPickUpComposer } from '../communication/messages/outgoing/pet/PetPickUpComposer';
 
 export class RoomSession extends Disposable implements IRoomSession
 {
@@ -238,7 +240,7 @@ export class RoomSession extends Disposable implements IRoomSession
     {
         if(!this._connection) return;
 
-        //this._connection.send();
+        this._connection.send(new PetPickUpComposer(id));
     }
 
     public pickupBot(id: number): void
@@ -255,6 +257,10 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new MoodlightSettingsComposer());
     }
 
+    public openGift(_Str_1577: number): void
+    {
+        this._connection.send(new OpenPresentComposer(_Str_1577));
+    }
 
     public get connection(): IConnection
     {
