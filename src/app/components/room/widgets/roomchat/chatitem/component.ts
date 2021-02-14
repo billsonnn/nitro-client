@@ -45,6 +45,7 @@ export class RoomChatItemComponent
 
     public update(k: RoomWidgetChatUpdateEvent): void
     {
+        console.log(k.styleId);
         this.chatType           = k.chatType;
         this.chatStyle          = k.styleId;
         this.senderId           = k.userId;
