@@ -347,10 +347,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case TouchEventType.TOUCH_START:
                 eventType = MouseEventType.MOUSE_DOWN;
+
                 this._didMouseMove = false;
                 break;
             case TouchEventType.TOUCH_MOVE:
-                console.log('fkin truuu');
                 eventType = MouseEventType.MOUSE_MOVE;
 
                 this._didMouseMove = true;
