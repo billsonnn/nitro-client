@@ -1,11 +1,6 @@
-import {
-    Component,
-    Input,
-    NgZone,
-    OnDestroy,
-} from '@angular/core';
-import { CatalogService } from '../../services/catalog.service';
+import { Component, Input, NgZone, OnDestroy } from '@angular/core';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { CatalogService } from '../../services/catalog.service';
 
 @Component({
     selector: 'nitro-catalog-customize-gift-component',
@@ -104,7 +99,7 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
         }
     }
 
-    public changeCheckbox(event): void
+    public changeCheckbox(event: InputEvent): void
     {
         this.updateIndexesAndSetUI();
     }
@@ -118,7 +113,6 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
     {
         this._catalogService.component && this._catalogService.component.hidePurchaseConfirmation();
     }
-
 
     public getColor(stuffType: number): string
     {

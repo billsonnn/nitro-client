@@ -4,34 +4,35 @@
         <div class="close" (click)="hide()"><i class="fas fa-times"></i></div>
     </div>
     <div class="d-flex flex-column p-3">
-    <ng-container [ngSwitch]="currentView">
-        <ng-container *ngSwitchCase="'open_present'">
-            <div class="row">
-                <div class="col-5">
-                    <div *ngIf="!isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [headOnly]="true" nitro-avatar-image [figure]="figure" [direction]="2"></div>
-                    <div *ngIf="isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3"></div>
+        <ng-container [ngSwitch]="currentView">
+            <ng-container *ngSwitchCase="'open_present'">
+                <div class="row">
+                    <div class="col-5">
+                        <div *ngIf="!isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [headOnly]="true" nitro-avatar-image [figure]="figure" [direction]="2"></div>
+                        <div *ngIf="isAnonymousGift" class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3"></div>
+                    </div>
+                    <div class="col-7 d-flex justify-content-center align-items-center">
+                        <p class="h5 m-0 p-0">{{ text }}</p>
+                    </div>
                 </div>
-                <div class="col-7 d-flex justify-content-center align-items-center">
-                    <p class="h5 m-0 p-0">{{ text }}</p>
+                <div class="d-flex align-items-center mt-2 btn-group">
+                    <button type="button" class="btn btn-secondary" (click)="handleButton('accept')">{{ 'widget.furni.present.open_gift' | translate }}</button>
                 </div>
-            </div>
-            <div class="d-flex align-items-center mt-2 btn-group">
-                <button type="button" class="btn btn-secondary" (click)="handleButton('accept')">{{ 'widget.furni.present.open_gift' | translate }}</button>
-            </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'present_opened'">
+                <div class="row">
+                    <div class="col-5">
+                        <div nitro-furniture-image class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [type]="type" [spriteId]="spriteId" [extras]="extras"></div>
+                    </div>
+                    <div class="col-7 d-flex justify-content-center align-items-center">
+                        <p class="h5 m-0 p-0">{{ text }}</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mt-2 btn-group">
+                    <button *ngIf="!isWallItem" type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_room')">{{ 'widget.furni.present.place_in_room' | translate}}</button>
+                    <button type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_inventory')">{{ 'widget.furni.present.put_in_inventory' | translate}}</button>
+                </div>
+            </ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'present_opened'">
-            <div class="row">
-                <div class="col-5">
-                    <div nitro-furniture-image class="d-flex justify-content-center align-items-center bg-secondary rounded h-100 overflow-hidden p-3" [type]="type" [spriteId]="spriteId" [extras]="extras"></div>
-                </div>
-                <div class="col-7 d-flex justify-content-center align-items-center">
-                    <p class="h5 m-0 p-0">{{ text }}</p>
-                </div>
-            </div>
-            <div class="d-flex align-items-center mt-2 btn-group">
-                <button *ngIf="!isWallItem" type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_room')">{{ 'widget.furni.present.place_in_room' | translate}}</button>
-                <button type="button" class="btn btn-secondary" (click)="handleButton('furni_place_in_inventory')">{{ 'widget.furni.present.put_in_inventory' | translate}}</button>
-            </div>
-        </ng-container>
-    </ng-container>
+    </div>
 </div>
