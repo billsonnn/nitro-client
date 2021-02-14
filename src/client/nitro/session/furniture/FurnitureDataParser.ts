@@ -63,19 +63,22 @@ export class FurnitureDataParser extends EventDispatcher
 
             const colors: number[] = [];
 
-            for(const color of furniture.partcolors.color)
+            if(furniture.partcolors)
             {
-                let colorCode = (color as string);
-
-                if(colorCode.charAt(0) === '#')
+                for(const color of furniture.partcolors.color)
                 {
-                    colorCode = colorCode.replace('#', '');
+                    let colorCode = (color as string);
 
-                    colors.push(parseInt(colorCode, 16));
-                }
-                else
-                {
-                    colors.push((parseInt(colorCode, 16)));
+                    if(colorCode.charAt(0) === '#')
+                    {
+                        colorCode = colorCode.replace('#', '');
+
+                        colors.push(parseInt(colorCode, 16));
+                    }
+                    else
+                    {
+                        colors.push((parseInt(colorCode, 16)));
+                    }
                 }
             }
 
