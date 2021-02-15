@@ -1,11 +1,15 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { GroupBadgePartsEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBadgePartsEvent';
+import { GroupBuyDataEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBuyDataEvent';
 import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
 import { GroupMembersEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupMembersEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBuyDataComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyDataComposer';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupDeleteComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupDeleteComposer';
 import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
@@ -17,6 +21,7 @@ import { UserProfileComposer } from '../../../../client/nitro/communication/mess
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { NotificationService } from '../../notification/services/notification.service';
+import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
 import { GroupInfoComponent } from '../components/group-info/group-info.component';
 import { GroupMembersComponent } from '../components/group-members/group-members.component';
 import { GroupRoomInfoComponent } from '../components/room-info/room-info.component';
@@ -30,8 +35,13 @@ export class GroupsService implements OnDestroy
     private _groupInfoComponent: GroupInfoComponent;
     private _groupMembersComponent: GroupMembersComponent;
 
+    private _groupCreatorModal: NgbModalRef;
+
+    private _leavingGroupId: number;
+
     constructor(
         private _notificationService: NotificationService,
+        private _modalService: NgbModal,
         private _ngZone: NgZone)
     {
         this._messages = [];
@@ -58,7 +68,9 @@ export class GroupsService implements OnDestroy
                 new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
                 new GroupInformationEvent(this.onGroupInformationEvent.bind(this)),
                 new GroupMembersEvent(this.onGroupMembersEvent.bind(this)),
-                new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this))
+                new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
+                new GroupBuyDataEvent(this.onGroupBuyDataEvent.bind(this)),
+                new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -193,6 +205,49 @@ export class GroupsService implements OnDestroy
         this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[0]);
     }
 
+    private onGroupBuyDataEvent(event: GroupBuyDataEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._groupCreatorModal)
+        {
+            const instance = (this._groupCreatorModal.componentInstance as GroupCreatorComponent);
+
+            if(instance)
+            {
+                instance.groupCost      = parser.groupCost;
+                instance.availableRooms = parser.availableRooms;
+            }
+        }
+    }
+
+    private onGroupBadgePartsEvent(event: GroupBadgePartsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._groupCreatorModal)
+        {
+            const instance = (this._groupCreatorModal.componentInstance as GroupCreatorComponent);
+
+            if(instance)
+            {
+                instance.badgeBases         = parser.bases;
+                instance.badgeSymbols       = parser.symbols;
+                instance.badgePartColors    = parser.baseColors;
+                instance.groupColorsA  = parser.symbolColors;
+                instance.groupColorsB   = parser.backgroundColors;
+            }
+        }
+    }
+
     public getInfo(groupId: number): void
     {
         Nitro.instance.communication.connection.send(new GroupInformationComposer(groupId, true));
@@ -249,6 +304,24 @@ export class GroupsService implements OnDestroy
     public openProfile(userId: number): void
     {
         Nitro.instance.communication.connection.send(new UserProfileComposer(userId));
+    }
+
+    public openGroupCreator(): void
+    {
+        if(this._groupCreatorModal) return;
+
+        this._groupCreatorModal = this._modalService.open(GroupCreatorComponent, {
+            backdrop: 'static',
+            centered: true,
+            keyboard: false
+        });
+
+        if(this._groupCreatorModal)
+        {
+            this._groupCreatorModal.result.then(() => (this._groupCreatorModal = null));
+        }
+
+        Nitro.instance.communication.connection.send(new GroupBuyDataComposer());
     }
 
     public set groupRoomInfoComponent(component: GroupRoomInfoComponent)

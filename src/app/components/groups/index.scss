@@ -35,4 +35,22 @@
         height: unset;
         max-height: unset;
     }
+
+    .pagination-counter {
+        font-size: 14px;
+    }
+}
+
+.nitro-group-creator-component {
+    .grid-container .grid-items .item-detail {
+        height: 20px;
+        max-height: 20px;
+    }
+}
+
+.nitro-group-image-selector-component {
+    .grid-container .grid-items .item-detail {
+        height: 41px;
+        max-height: 41px;
+    }
 }

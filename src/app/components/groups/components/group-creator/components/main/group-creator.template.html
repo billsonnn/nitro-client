@@ -1,0 +1,110 @@
+<div class="nitro-group-creator-component">
+    <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ ('group.window.title') | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="p-3">
+        <div class="btn-group mb-3 w-100">
+            <button class="btn btn-primary" [disabled]="currentStep !== 1">{{ ('group.create.steplabel.1') | translate }}</button>
+            <button class="btn btn-primary" [disabled]="currentStep !== 2">{{ ('group.create.steplabel.2') | translate }}</button>
+            <button class="btn btn-primary" [disabled]="currentStep !== 3">{{ ('group.create.steplabel.3') | translate }}</button>
+            <button class="btn btn-success" [disabled]="currentStep !== 4">{{ ('group.create.steplabel.4') | translate }}</button>
+        </div>
+        <div *ngIf="currentStep === 1">
+            <div class="mb-3">{{ ('group.edit.tabcaption.1') | translate }}</div>
+            <div class="form-group">
+                <label>{{ ('group.edit.name') | translate }}</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="groupSettings.name">
+            </div>
+            <div class="form-group">
+                <label>{{ ('group.edit.desc') | translate }}</label>
+                <textarea class="form-control form-control-sm" [(ngModel)]="groupSettings.description"></textarea>
+            </div>
+            <div class="form-group">
+                <label>{{ ('group.edit.base') | translate }}</label>
+                <select class="form-control form-control-sm" [(ngModel)]="groupSettings.roomId">
+                    <option selected disabled value="0">{{ ('group.edit.base.select.room') | translate }}</option>
+                    <option *ngFor="let room of availableRooms | keyvalue" [value]="room.key">{{ room.value }}</option>
+                </select>
+                <small class="form-text text-muted">{{ ('group.edit.base.warning') | translate }}</small>
+            </div>
+        </div>
+        <div *ngIf="currentStep === 2" class="row">
+            <div class="col-12">
+                <div class="mb-3">{{ ('group.edit.badge.badge') | translate }}</div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="width: 120px;height: 67px;">
+                    <nitro-badge [badge]="currentBadgeCode" [isGroup]="true"></nitro-badge>
+                </button>
+            </div>
+            <div class="col-9">
+                <div *ngIf="!selectorVisible">
+                    <div *ngFor="let part of groupSettings.badgeParts | keyvalue" class="d-flex flex-row justify-content-between mb-3">
+                        <button class="btn btn-primary" style="width: 120px;height: 67px;" (click)="openPartSelector(part.value)">
+                            <nitro-badge [badge]="part.value.code" [isGroup]="true"></nitro-badge>
+                        </button>
+                        <div class="grid-container ml-3" [ngStyle]="{opacity: part.value.isBase ? 0 : 1}">
+                            <div class="grid-items grid-3 pb-1">
+                                <button *ngFor="let position of positions" class="item-detail btn btn-sm"
+                                 [ngClass]="part.value.position === position ? 'btn-light' : 'btn-primary'" (click)="part.value.position = position;"></button>
+                            </div>
+                        </div>
+                        <div class="grid-container ml-3">
+                            <div class="grid-items grid-8 pb-1">
+                                <button *ngFor="let color of badgeBaseColors | keyvalue" class="item-detail btn btn-primary btn-sm"
+                                [style]="{backgroundColor: '#' + color.value}" (click)="part.value.color = color.key;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectorVisible" nitro-group-image-selector-component [items]="(badgePartBeingSelected && badgePartBeingSelected.isBase) ? badgeBases : badgeSymbols" [part]="badgePartBeingSelected" (onSelect)="onPartSelected($event)"></div>
+            </div>
+        </div>
+        <div *ngIf="currentStep === 3">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="mr-3">
+                    <div class="mb-1">{{ ('group.edit.color.guild.color') | translate }}</div>
+                    <div class="btn-group" style="height: 67px;width: 110px;">
+                        <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsA.get(groupSettings.colorA)}"></button>
+                        <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsB.get(groupSettings.colorB)}"></button>
+                    </div>
+                </div>
+                <div class="mr-3">
+                    <div class="mb-1">{{ ('group.edit.color.primary.color') | translate }}</div>
+                    <div class="grid-container">
+                        <div class="grid-items grid-9 pb-1">
+                            <button *ngFor="let color of groupColorsA | keyvalue" class="item-detail btn btn-primary btn-sm"
+                            [style]="{backgroundColor: '#' + color.value}" (click)="groupSettings.colorA = color.key;"></button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-1">{{ ('group.edit.color.secondary.color') | translate }}</div>
+                    <div class="grid-container">
+                        <div class="grid-items grid-6 pb-1">
+                            <button *ngFor="let color of groupColorsB | keyvalue" class="item-detail btn btn-primary btn-sm"
+                            [style]="{backgroundColor: '#' + color.value}" (click)="groupSettings.colorB  = color.key;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="currentStep === 4">
+            <div class="d-flex justify-content-between mb-3">
+                <div></div>
+                <div>
+                    <div>{{ groupSettings.name }}</div>
+                    <div class="small mb-3">{{ groupSettings.description }}</div>
+                    <div [innerHtml]="('group.create.confirm.info') | translate"></div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between">
+            <button *ngIf="currentStep === 1" class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
+            <button *ngIf="currentStep > 1" class="btn btn-primary" (click)="previousStep()">{{ ('group.create.previousstep') | translate }}</button>
+            <button *ngIf="currentStep < 4" class="btn btn-primary" (click)="nextStep()">{{ ('group.create.nextstep') | translate }}</button>
+            <button *ngIf="currentStep === 4" class="btn btn-success">{{ ('group.create.confirm.buy') | translate }}</button>
+        </div>
+    </div>    
+</div>

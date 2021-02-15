@@ -31,6 +31,8 @@ import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteE
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
+import { GroupBadgePartsEvent } from './messages/incoming/group/GroupBadgePartsEvent';
+import { GroupBuyDataEvent } from './messages/incoming/group/GroupBuyDataEvent';
 import { GroupConfirmMemberRemoveEvent } from './messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
 import { GroupMembersEvent } from './messages/incoming/group/GroupMembersEvent';
@@ -184,6 +186,7 @@ import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/Se
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
 import { GroupAdminGiveComposer } from './messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from './messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBuyDataComposer } from './messages/outgoing/group/GroupBuyDataComposer';
 import { GroupConfirmRemoveMemberComposer } from './messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupDeleteComposer } from './messages/outgoing/group/GroupDeleteComposer';
 import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
@@ -355,6 +358,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GROUP_INFO, GroupInformationEvent);
         this._events.set(IncomingHeader.GROUP_MEMBER_REMOVE_CONFIRM, GroupConfirmMemberRemoveEvent);
         this._events.set(IncomingHeader.GROUP_MEMBERS, GroupMembersEvent);
+        this._events.set(IncomingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataEvent);
+        this._events.set(IncomingHeader.GROUP_BADGE_PARTS, GroupBadgePartsEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
@@ -591,6 +596,8 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GROUP_REQUEST_ACCEPT, GroupMembershipAcceptComposer);
         this._composers.set(OutgoingHeader.GROUP_REQUEST_DECLINE, GroupMembershipDeclineComposer);
         this._composers.set(OutgoingHeader.GROUP_DELETE, GroupDeleteComposer);
+        this._composers.set(OutgoingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataComposer);
+
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
