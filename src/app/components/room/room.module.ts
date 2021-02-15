@@ -29,6 +29,7 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
+import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
 
 @NgModule({
@@ -64,6 +65,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         ChooserWidgetFurniComponent,
         ChooserWidgetUserComponent,
         DoorbellWidgetComponent,
+        PresentFurniWidget,
+        DoorbellWidgetComponent,
         BackgroundColorFurniWidget,
         RoomToolsMainComponent
     ],
@@ -97,6 +100,9 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         ChooserWidgetUserComponent,
         DoorbellWidgetComponent,
         BackgroundColorFurniWidget,
+        RoomToolsMainComponent,
+        DoorbellWidgetComponent,
+        PresentFurniWidget,
         RoomToolsMainComponent
     ]
 })

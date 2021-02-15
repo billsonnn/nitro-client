@@ -177,7 +177,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
             if(this.selectedGroup.hasUnseenItems) this.selectedGroup.hasUnseenItems = false;
 
-            const furnitureItem = this.selectedGroup.getItemByIndex(0);
+            const furnitureItem = this.selectedGroup.getLastItem();
 
             if(!furnitureItem) return;
 
@@ -223,7 +223,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                         else
                         {
                             this.roomPreviewer.updateRoomWallsAndFloorVisibility(false, true);
-                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (this.selectedGroup.extra.toString()));
+                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (furnitureItem.extra.toString()));
                         }
                     }
                 }

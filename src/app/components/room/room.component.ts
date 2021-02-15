@@ -62,6 +62,7 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
@@ -446,6 +447,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case RoomWidgetEnum.ROOM_TOOLS:
                 widgetHandler = new RoomToolsWidgetHandler();
                 break;
+            case RoomWidgetEnum.FURNI_PRESENT_WIDGET:
+                widgetHandler = new FurniturePresentWidgetHandler();
+                break;
         }
 
         if(widgetHandler)
@@ -670,6 +674,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomEngineTriggerWidgetEvent.REQUEST_DIMMER:
                 this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_DIMMER, objectId, category, event.roomId));
+                break;
+            case RoomEngineTriggerWidgetEvent.REQUEST_PRESENT:
+                this.processWidgetMessage(new RoomWidgetFurniToWidgetMessage(RoomWidgetFurniToWidgetMessage.REQUEST_PRESENT, objectId, category, event.roomId));
                 break;
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_INVENTORY:
             //case RoomEngineUseProductEvent.ROSM_USE_PRODUCT_FROM_ROOM:

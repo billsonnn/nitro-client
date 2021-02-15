@@ -12,7 +12,9 @@ import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLL
 import { ToastrModule } from 'ngx-toastr';
 import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
-import { LoadingComponent } from './components/loading/component';
+import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
+import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
+import { LoadingComponent } from './components/loading/loading.component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
@@ -61,6 +63,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ColorChromeModule,
         AvatarImageComponent,
         BadgeComponent,
+        CurrencyIconComponent,
+        FurnitureImageComponent,
         LoadingComponent,
         RoomPreviewComponent,
         DraggableDirective,
@@ -83,6 +87,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     declarations: [
         AvatarImageComponent,
         BadgeComponent,
+        CurrencyIconComponent,
+        FurnitureImageComponent,
         LoadingComponent,
         RoomPreviewComponent,
         DraggableDirective,

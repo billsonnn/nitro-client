@@ -16,7 +16,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization
 
     protected _data: FurnitureAnimatedVisualizationData;
 
-    private _state: number;
+    protected _state: number;
     private _animationData: AnimationStateData;
     private _animationScale: number;
     private _animationChangeTime: number;

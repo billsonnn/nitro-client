@@ -134,14 +134,14 @@ export class NitroCommunicationDemo extends NitroManager
 
     private onClientPingEvent(event: ClientPingEvent): void
     {
-        if(!(event instanceof ClientPingEvent) || !event.connection) return;
+        if(!event || !event.connection) return;
 
         this.sendPong(event.connection);
     }
 
     private onAuthenticatedEvent(event: AuthenticatedEvent): void
     {
-        if(!(event instanceof AuthenticatedEvent) || !event.connection) return;
+        if(!event || !event.connection) return;
 
         this.completeHandshake(event.connection);
 
