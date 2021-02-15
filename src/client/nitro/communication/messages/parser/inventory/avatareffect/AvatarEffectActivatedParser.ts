@@ -1,19 +1,17 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
-export class _Str_7398 implements IMessageParser
+export class AvatarEffectActivatedParser implements IMessageParser
 {
     private _type: number;
-    private _Str_4653: number;
     private _duration: number;
-    private _Str_5145: boolean;
+    private _isPermanent: boolean;
 
     public flush(): boolean
     {
-        this._type      = 0;
-        this._Str_4653  = 0;
-        this._duration  = 0;
-        this._Str_5145  = false;
+        this._type          = 0;
+        this._duration      = 0;
+        this._isPermanent   = false;
 
         return true;
     }
@@ -22,10 +20,9 @@ export class _Str_7398 implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._type      = wrapper.readInt();
-        this._Str_4653  = wrapper.readInt();
-        this._duration  = wrapper.readInt();
-        this._Str_5145  = wrapper.readBoolean();
+        this._type          = wrapper.readInt();
+        this._duration      = wrapper.readInt();
+        this._isPermanent  = wrapper.readBoolean();
 
         return true;
     }
@@ -35,18 +32,13 @@ export class _Str_7398 implements IMessageParser
         return this._type;
     }
 
-    public get _Str_3882(): number
-    {
-        return this._Str_4653;
-    }
-
     public get duration(): number
     {
         return this._duration;
     }
 
-    public get _Str_4010(): boolean
+    public get isPermanent(): boolean
     {
-        return this._Str_5145;
+        return this._isPermanent;
     }
 }

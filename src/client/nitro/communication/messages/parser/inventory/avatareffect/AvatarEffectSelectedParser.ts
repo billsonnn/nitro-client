@@ -1,7 +1,7 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
-export class _Str_9648 implements IMessageParser
+export class AvatarEffectSelectedParser implements IMessageParser
 {
     private _type: number;
 
