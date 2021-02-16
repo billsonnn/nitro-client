@@ -69,6 +69,23 @@ export class AnimationSizeData extends SizeData
                 return false;
             }
 
+            const immediateChangeFrom = animation.immediateChangeFrom;
+
+            if(immediateChangeFrom !== undefined)
+            {
+                const changes   = immediateChangeFrom.split(',');
+                const changeIds = [];
+
+                for(const change of changes)
+                {
+                    const changeId = parseInt(change);
+
+                    if(changeIds.indexOf(changeId) === -1) changeIds.push(changeId);
+                }
+
+                animationData.setImmediateChanges(changeIds);
+            }
+
             this._animations.set(animationId, animationData);
 
             if(!isTransition) this._animationIds.push(animationId);
