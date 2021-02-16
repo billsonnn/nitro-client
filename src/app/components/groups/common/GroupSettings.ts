@@ -90,4 +90,35 @@ export default class GroupSettings
     {
         this._colorB = id;
     }
+
+    public get currentBadgeCode(): string
+    {
+        let code = '';
+
+        this._badgeParts.forEach((part) => {
+            if(part.code)
+            {
+                code = code + part.code;
+            }
+        });
+
+        return code;
+    }
+
+    public get currentBadgeArray(): number[]
+    {
+        let badge = [];
+
+        this._badgeParts.forEach((part) => {
+            if(part.code)
+            {
+                badge.push(part.key);
+                badge.push(part.color);
+
+                if(!part.isBase) badge.push(part.position);
+            }
+        });
+
+        return badge;
+    }
 }

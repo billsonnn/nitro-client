@@ -6,6 +6,7 @@ import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip
 import { CatalogLayoutDefaultComponent } from './components/layouts/default/default.component';
 import { CatalogLayoutFrontPageFeaturedComponent } from './components/layouts/frontpage-featured/frontpage-featured.component';
 import { CatalogLayoutFrontPage4Component } from './components/layouts/frontpage4/frontpage4.component';
+import { CatalogLayoutGuildFrontPageComponent } from './components/layouts/guild-frontpage/guild-frontpage.component';
 import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.component';
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
@@ -39,6 +40,7 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutTrophiesComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,
+        CatalogLayoutGuildFrontPageComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
@@ -63,6 +65,7 @@ import { CatalogService } from './services/catalog.service';
         CatalogLayoutTrophiesComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,
+        CatalogLayoutGuildFrontPageComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,

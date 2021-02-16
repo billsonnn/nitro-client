@@ -186,6 +186,7 @@ import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/Se
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
 import { GroupAdminGiveComposer } from './messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from './messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBuyComposer } from './messages/outgoing/group/GroupBuyComposer';
 import { GroupBuyDataComposer } from './messages/outgoing/group/GroupBuyDataComposer';
 import { GroupConfirmRemoveMemberComposer } from './messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupDeleteComposer } from './messages/outgoing/group/GroupDeleteComposer';
@@ -597,7 +598,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GROUP_REQUEST_DECLINE, GroupMembershipDeclineComposer);
         this._composers.set(OutgoingHeader.GROUP_DELETE, GroupDeleteComposer);
         this._composers.set(OutgoingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataComposer);
-
+        this._composers.set(OutgoingHeader.GROUP_BUY, GroupBuyComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);

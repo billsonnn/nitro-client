@@ -10,8 +10,12 @@ import { GroupsService } from '../../../../services/groups.service';
 export class GroupCreatorComponent implements OnInit, OnDestroy
 {
     public groupSettings: GroupSettings;
-    public groupCost: number;
-    public availableRooms: Map<number, string>;
+    private _currentStep: number;
+    private _showNameError: boolean;
+    private _showDescriptionError: boolean;
+    private _showRoomError: boolean;
+
+    private _availableRooms: Map<number, string>;
     
     private _badgeBases: Map<number, string[]>;
     private _badgeSymbols: Map<number, string[]>;
@@ -20,7 +24,7 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     private _groupColorsA: Map<number, string>;
     private _groupColorsB: Map<number, string>;
 
-    private _currentStep: number;
+    private _groupCost: number;
     
     constructor(
         private _groupService: GroupsService,
@@ -31,17 +35,22 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
 
     private _clear(): void
     {
-        this.groupSettings = new GroupSettings();
-        this.availableRooms = new Map();
+        this.groupSettings          = new GroupSettings();
+        this._currentStep           = 1;
+        this._showNameError         = false;
+        this._showDescriptionError  = false;
+        this._showRoomError         = false;
 
-        this._badgeBases = new Map();
-        this._badgeSymbols = new Map();
-        this._badgePartColors = new Map();
+        this._availableRooms        = new Map();
+
+        this._badgeBases            = new Map();
+        this._badgeSymbols          = new Map();
+        this._badgePartColors       = new Map();
         
-        this._groupColorsA = new Map();
-        this._groupColorsB = new Map();
+        this._groupColorsA          = new Map();
+        this._groupColorsB          = new Map();
 
-        this._currentStep = 3;
+        this._groupCost             = 0;
     }
 
     public ngOnInit(): void
@@ -65,6 +74,38 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     {
         if(this._currentStep === 4) return;
 
+        if(this._currentStep === 1)
+        {
+            if(this.groupSettings.name.length === 0 || this.groupSettings.name.length > 29)
+            {
+                this._showNameError = true;
+            }
+            else
+            {
+                this._showNameError = false;
+            }
+
+            if(this.groupSettings.description.length > 254)
+            {
+                this._showDescriptionError = true;
+            }
+            else
+            {
+                this._showDescriptionError = false;
+            }
+
+            if(this.groupSettings.roomId === '0')
+            {
+                this._showRoomError = true;
+            }
+            else
+            {
+                this._showRoomError = false;
+            }
+
+            if(this._showNameError ||  this._showRoomError) return;
+        }
+
         this._currentStep++;
     }
 
@@ -73,23 +114,44 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this._activeModal.close();
     }
 
+    public buyGroup(): void
+    {
+        this._groupService.buyGroup(this.groupSettings);
+    }
+
     public get currentStep(): number
     {
         return this._currentStep;
     }
 
-    public get currentBadgeCode(): string
+    public get showNameError(): boolean
     {
-        let code = '';
+        return this._showNameError;
+    }
 
-        this.groupSettings.badgeParts.forEach((part) => {
-            if(part.code)
-            {
-                code = code + part.code;
-            }
-        });
+    public get showDescriptionError(): boolean
+    {
+        return this._showDescriptionError;
+    }
 
-        return code;
+    public get showRoomError(): boolean
+    {
+        return this._showRoomError;
+    }
+
+    public get availableRooms(): Map<number, string>
+    {
+        return this._availableRooms;
+    }
+
+    public set availableRooms(availableRooms: Map<number, string>)
+    {
+        this._availableRooms = availableRooms;
+    }
+    
+    public get badgeBases(): Map<number, string[]>
+    {
+        return this._badgeBases;
     }
 
     public set badgeBases(bases: Map<number, string[]>)
@@ -97,9 +159,9 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this._badgeBases = bases;
     }
 
-    public get badgeBases(): Map<number, string[]>
+    public get badgeSymbols(): Map<number, string[]>
     {
-        return this._badgeBases;
+        return this._badgeSymbols;
     }
 
     public set badgeSymbols(symbols: Map<number, string[]>)
@@ -108,9 +170,9 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this.groupSettings.getBadgePart(0).key = symbols.keys().next().value;
     }
 
-    public get badgeSymbols(): Map<number, string[]>
+    public get badgePartColors(): Map<number, string>
     {
-        return this._badgeSymbols;
+        return this._badgePartColors;
     }
 
     public set badgePartColors(colors: Map<number, string>)
@@ -119,15 +181,20 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this.groupSettings.setPartsColor(colors.keys().next().value);
     }
 
+    public get groupColorsA(): Map<number, string>
+    {
+        return this._groupColorsA;
+    }
+
     public set groupColorsA(colors: Map<number, string>)
     {
         this._groupColorsA = colors;
         this.groupSettings.colorA = colors.keys().next().value;
     }
 
-    public get groupColorsA(): Map<number, string>
+    public get groupColorsB(): Map<number, string>
     {
-        return this._groupColorsA;
+        return this._groupColorsB;
     }
 
     public set groupColorsB(colors: Map<number, string>)
@@ -136,13 +203,13 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this.groupSettings.colorB = colors.keys().next().value;
     }
 
-    public get groupColorsB(): Map<number, string>
+    public get groupCost(): number
     {
-        return this._groupColorsB;
+        return this._groupCost;
     }
 
-    public get badgePartColors(): Map<number, string>
+    public set groupCost(cost: number)
     {
-        return this._badgePartColors;
+        this._groupCost = cost;
     }
 }

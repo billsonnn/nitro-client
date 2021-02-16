@@ -12,6 +12,15 @@ export class GroupCreatorTabInfoComponent
     public groupSettings: GroupSettings;
 
     @Input()
+    public showNameError: boolean;
+
+    @Input()
+    public showDescriptionError: boolean;
+
+    @Input()
+    public showRoomError: boolean;
+
+    @Input()
     public availableRooms: Map<number, string>;
 
     constructor()

@@ -1,6 +1,8 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
+import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
 import { GroupBadgePartsEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBadgePartsEvent';
 import { GroupBuyDataEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBuyDataEvent';
 import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
@@ -9,6 +11,7 @@ import { GroupMembersEvent } from '../../../../client/nitro/communication/messag
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBuyComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyComposer';
 import { GroupBuyDataComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyDataComposer';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
 import { GroupDeleteComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupDeleteComposer';
@@ -21,13 +24,14 @@ import { UserProfileComposer } from '../../../../client/nitro/communication/mess
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { NotificationService } from '../../notification/services/notification.service';
+import GroupSettings from '../common/GroupSettings';
 import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
 import { GroupInfoComponent } from '../components/group-info/group-info.component';
 import { GroupMembersComponent } from '../components/group-members/group-members.component';
 import { GroupRoomInfoComponent } from '../components/room-info/room-info.component';
 
 @Injectable()
-export class GroupsService implements OnDestroy
+export class GroupsService implements OnDestroy, ILinkEventTracker
 {
     private _messages: IMessageEvent[];
 
@@ -49,8 +53,10 @@ export class GroupsService implements OnDestroy
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
 
         this.registerMessages();
-    }
 
+        Nitro.instance.addLinkEventTracker(this);
+    }
+    
     public ngOnDestroy(): void
     {
         this.unregisterMessages();
@@ -70,7 +76,8 @@ export class GroupsService implements OnDestroy
                 new GroupMembersEvent(this.onGroupMembersEvent.bind(this)),
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
                 new GroupBuyDataEvent(this.onGroupBuyDataEvent.bind(this)),
-                new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this))
+                new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this)),
+                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -244,9 +251,36 @@ export class GroupsService implements OnDestroy
                 instance.badgeBases         = parser.bases;
                 instance.badgeSymbols       = parser.symbols;
                 instance.badgePartColors    = parser.baseColors;
-                instance.groupColorsA  = parser.symbolColors;
-                instance.groupColorsB   = parser.backgroundColors;
+                instance.groupColorsA       = parser.symbolColors;
+                instance.groupColorsB       = parser.backgroundColors;
             }
+        }
+    }
+
+    private onCatalogPurchaseEvent(event: CatalogPurchaseEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => {
+            this.closeGroupCreator();
+        });
+    }
+
+    public linkReceived(k: string):void
+    {
+        const parts = k.split('/');
+
+        if(parts.length < 2) return;
+
+        switch(parts[1])
+        {
+            case 'create':
+                this.openGroupCreator();
+                return;
         }
     }
 
@@ -308,6 +342,17 @@ export class GroupsService implements OnDestroy
         Nitro.instance.communication.connection.send(new UserProfileComposer(userId));
     }
 
+    public buyGroup(groupSettings: GroupSettings): void
+    {
+        Nitro.instance.communication.connection.send(new GroupBuyComposer(
+            groupSettings.name,
+            groupSettings.description,
+            parseInt(groupSettings.roomId),
+            groupSettings.colorA,
+            groupSettings.colorB,
+            groupSettings.currentBadgeArray));
+    }
+
     public openGroupCreator(): void
     {
         if(this._groupCreatorModal) return;
@@ -324,6 +369,20 @@ export class GroupsService implements OnDestroy
         }
 
         Nitro.instance.communication.connection.send(new GroupBuyDataComposer());
+    }
+
+    public closeGroupCreator(): void
+    {
+        if(!this._groupCreatorModal) return;
+
+        this._groupCreatorModal.close();
+
+        this._groupCreatorModal = null;
+    }
+
+    public get eventUrlPrefix(): string
+    {
+        return 'groups';
     }
 
     public set groupRoomInfoComponent(component: GroupRoomInfoComponent)

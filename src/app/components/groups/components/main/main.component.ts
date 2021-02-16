@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { GroupsService } from '../../services/groups.service';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'nitro-group-main-component',
@@ -8,19 +7,5 @@ import { GroupsService } from '../../services/groups.service';
         <nitro-group-members-component></nitro-group-members-component>
     `
 })
-export class GroupMainComponent implements OnInit
-{
-    
-    
-    constructor(
-        private _groupsService: GroupsService
-    )
-    {}
-
-    public ngOnInit(): void
-    {
-        this._groupsService.openGroupCreator();
-    }
-
-    
-}
+export class GroupMainComponent
+{}

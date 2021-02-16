@@ -10,61 +10,36 @@
             <button class="btn btn-primary" [disabled]="currentStep !== 3">{{ ('group.create.steplabel.3') | translate }}</button>
             <button class="btn btn-success" [disabled]="currentStep !== 4">{{ ('group.create.steplabel.4') | translate }}</button>
         </div>
+
         <nitro-group-creator-tab-info-component *ngIf="currentStep === 1"
         [(groupSettings)]="groupSettings"
+        [showNameError]="showNameError"
+        [showDescriptionError]="showDescriptionError"
+        [showRoomError]="showRoomError"
         [availableRooms]="availableRooms"></nitro-group-creator-tab-info-component>
 
         <nitro-group-creator-tab-badge-component *ngIf="currentStep === 2"
         [(groupSettings)]="groupSettings"
-        [currentBadgeCode]="currentBadgeCode"
         [badgeBases]="badgeBases"
         [badgeSymbols]="badgeSymbols"
         [badgePartColors]="badgePartColors"></nitro-group-creator-tab-badge-component>
 
-        <div *ngIf="currentStep === 3">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="mr-3">
-                    <div class="mb-1">{{ ('group.edit.color.guild.color') | translate }}</div>
-                    <div class="btn-group" style="height: 67px;width: 110px;">
-                        <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsA.get(groupSettings.colorA)}"></button>
-                        <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsB.get(groupSettings.colorB)}"></button>
-                    </div>
-                </div>
-                <div class="mr-3">
-                    <div class="mb-1">{{ ('group.edit.color.primary.color') | translate }}</div>
-                    <div class="grid-container">
-                        <div class="grid-items grid-9 pb-1">
-                            <button *ngFor="let color of groupColorsA | keyvalue" class="item-detail btn btn-primary btn-sm"
-                            [style]="{backgroundColor: '#' + color.value}" (click)="groupSettings.colorA = color.key;"></button>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="mb-1">{{ ('group.edit.color.secondary.color') | translate }}</div>
-                    <div class="grid-container">
-                        <div class="grid-items grid-6 pb-1">
-                            <button *ngFor="let color of groupColorsB | keyvalue" class="item-detail btn btn-primary btn-sm"
-                            [style]="{backgroundColor: '#' + color.value}" (click)="groupSettings.colorB  = color.key;"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="currentStep === 4">
-            <div class="d-flex justify-content-between mb-3">
-                <div></div>
-                <div>
-                    <div>{{ groupSettings.name }}</div>
-                    <div class="small mb-3">{{ groupSettings.description }}</div>
-                    <div [innerHtml]="('group.create.confirm.info') | translate"></div>
-                </div>
-            </div>
-        </div>
+        <nitro-group-creator-tab-colors-component *ngIf="currentStep === 3"
+        [(groupSettings)]="groupSettings"
+        [groupColorsA]="groupColorsA"
+        [groupColorsB]="groupColorsB"></nitro-group-creator-tab-colors-component>
+
+        <nitro-group-creator-tab-confirmation-component *ngIf="currentStep === 4"
+        [groupSettings]="groupSettings"
+        [groupCost]="groupCost"
+        [groupColorsA]="groupColorsA"
+        [groupColorsB]="groupColorsB"></nitro-group-creator-tab-confirmation-component>
+
         <div class="d-flex flex-row justify-content-between">
             <button *ngIf="currentStep === 1" class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
             <button *ngIf="currentStep > 1" class="btn btn-primary" (click)="previousStep()">{{ ('group.create.previousstep') | translate }}</button>
             <button *ngIf="currentStep < 4" class="btn btn-primary" (click)="nextStep()">{{ ('group.create.nextstep') | translate }}</button>
-            <button *ngIf="currentStep === 4" class="btn btn-success">{{ ('group.create.confirm.buy') | translate }}</button>
+            <button *ngIf="currentStep === 4" class="btn btn-success" (click)="buyGroup()">{{ ('group.create.confirm.buy') | translate }}</button>
         </div>
     </div>    
 </div>

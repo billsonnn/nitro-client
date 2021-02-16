@@ -3,6 +3,8 @@ import { SharedModule } from '../../shared/index';
 import { GroupCreatorImageSelectorComponent } from './components/group-creator/components/image-selector/image-selector.component';
 import { GroupCreatorComponent } from './components/group-creator/components/main/group-creator.component';
 import { GroupCreatorTabBadgeComponent } from './components/group-creator/components/tab-badge/tab-badge.component';
+import { GroupCreatorTabColorsComponent } from './components/group-creator/components/tab-colors/tab-colors.component';
+import { GroupCreatorTabConfirmationComponent } from './components/group-creator/components/tab-confirmation/tab-confirmation.component';
 import { GroupCreatorTabInfoComponent } from './components/group-creator/components/tab-info/tab-info.component';
 import { GroupInfoComponent } from './components/group-info/group-info.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
@@ -22,7 +24,9 @@ import { GroupsService } from './services/groups.service';
         GroupCreatorComponent,
         GroupCreatorImageSelectorComponent,
         GroupCreatorTabInfoComponent,
-        GroupCreatorTabBadgeComponent
+        GroupCreatorTabBadgeComponent,
+        GroupCreatorTabColorsComponent,
+        GroupCreatorTabConfirmationComponent
 
     ],
     providers: [
@@ -36,7 +40,9 @@ import { GroupsService } from './services/groups.service';
         GroupCreatorComponent,
         GroupCreatorImageSelectorComponent,
         GroupCreatorTabInfoComponent,
-        GroupCreatorTabBadgeComponent
+        GroupCreatorTabBadgeComponent,
+        GroupCreatorTabColorsComponent,
+        GroupCreatorTabConfirmationComponent
     ],
     entryComponents: [GroupCreatorComponent]
 })
