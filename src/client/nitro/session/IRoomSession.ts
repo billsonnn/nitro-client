@@ -5,6 +5,7 @@ import { UserDataManager } from './UserDataManager';
 
 export interface IRoomSession extends IDisposable
 {
+    openGift(_Str_1577: number): void;
     setConnection(connection: IConnection): void;
     setControllerLevel(level: number): void;
     setOwnRoomIndex(roomIndex: number): void;

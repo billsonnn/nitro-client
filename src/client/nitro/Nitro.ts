@@ -148,11 +148,10 @@ export class Nitro extends Application implements INitro
             this._roomEngine.roomSessionManager = this._roomSessionManager;
             this._roomEngine.roomManager        = this._roomManager;
 
-            this._roomEngine.init();
-
             if(this._sessionDataManager) this._sessionDataManager.init();
-            if(this._roomManager) this._roomManager.init();
             if(this._roomSessionManager) this._roomSessionManager.init();
+
+            this._roomEngine.init();
         }
 
         new GameMessageHandler(this._communication.connection);

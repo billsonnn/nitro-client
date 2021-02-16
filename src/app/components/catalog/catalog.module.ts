@@ -20,6 +20,7 @@ import { CatalogNavigationComponent } from './components/navigation/navigation.c
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogCustomizeGiftComponent } from './components/customize-gift/customize-gift.component';
 import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 
 @NgModule({
@@ -46,6 +47,7 @@ import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/v
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
+        CatalogCustomizeGiftComponent,
         CatalogLayoutVipGiftsComponent
     ],
     providers: [
@@ -71,6 +73,7 @@ import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/v
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
+        CatalogCustomizeGiftComponent,
         CatalogLayoutVipGiftsComponent
     ]
 })

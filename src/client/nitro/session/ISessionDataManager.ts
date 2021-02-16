@@ -3,6 +3,7 @@ import { INitroManager } from '../../core/common/INitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
+import { IProductData } from './product/IProductData';
 
 export interface ISessionDataManager extends INitroManager
 {
@@ -12,6 +13,7 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): IFurnitureData;
     getWallItemData(id: number): IFurnitureData;
     getWallItemDataByName(name: string): IFurnitureData;
+    getProductData(type: string): IProductData;
     getBadgeUrl(name: string): string;
     getGroupBadgeUrl(name: string): string;
     getBadgeImage(name: string): Texture;

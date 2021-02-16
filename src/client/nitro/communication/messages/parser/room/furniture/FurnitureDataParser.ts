@@ -2,7 +2,6 @@ import { IMessageDataWrapper } from '../../../../../../core/communication/messag
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 import { IObjectData } from '../../../../../room/object/data/IObjectData';
 import { ObjectDataFactory } from '../../../../../room/object/data/ObjectDataFactory';
-import { LegacyDataType } from '../../../../../room/object/data/type/LegacyDataType';
 
 export class FurnitureDataParser implements IMessageParser
 {
@@ -38,17 +37,6 @@ export class FurnitureDataParser implements IMessageParser
         data.parseWrapper(wrapper);
 
         return data;
-    }
-
-    public static parseWallStuffData(wrapper: IMessageDataWrapper): IObjectData
-    {
-        if(!wrapper) return null;
-
-        const objectData = new LegacyDataType();
-
-        objectData.setString(wrapper.readString());
-
-        return objectData;
     }
 
     public get furnitureId(): number
