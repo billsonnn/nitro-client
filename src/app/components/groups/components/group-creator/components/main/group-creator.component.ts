@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import GroupBadgePart from '../../../../common/GroupBadgePart';
 import GroupSettings from '../../../../common/GroupSettings';
 import { GroupsService } from '../../../../services/groups.service';
 
@@ -17,13 +16,11 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     private _badgeBases: Map<number, string[]>;
     private _badgeSymbols: Map<number, string[]>;
     private _badgePartColors: Map<number, string>;
+    
     private _groupColorsA: Map<number, string>;
     private _groupColorsB: Map<number, string>;
 
     private _currentStep: number;
-    private _badgePartBeingSelected: GroupBadgePart;
-    private _selectorVisible: boolean;
-    private _positions: number[];
     
     constructor(
         private _groupService: GroupsService,
@@ -37,43 +34,24 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this.groupSettings = new GroupSettings();
         this.availableRooms = new Map();
 
+        this._badgeBases = new Map();
+        this._badgeSymbols = new Map();
+        this._badgePartColors = new Map();
+        
+        this._groupColorsA = new Map();
+        this._groupColorsB = new Map();
+
         this._currentStep = 3;
-        this._badgePartBeingSelected = null;
-        this._selectorVisible = false;
-        this._positions = [];
     }
 
     public ngOnInit(): void
     {
         this._clear();
-        this.loadPositionsArray();
     }
 
     public ngOnDestroy(): void
     {
-
-    }
-
-    public loadPositionsArray(): void
-    {
-        for(let i = 0; i < 9; i++)
-        {
-            this._positions.push(i);
-        }
-    }
-
-    public openPartSelector(part: GroupBadgePart): void
-    {
-        this._badgePartBeingSelected = part;
-        console.log(part)
-        this._selectorVisible = true;
-    }
-
-    public onPartSelected(id: number): void
-    {
-        this._badgePartBeingSelected.key = id;
-        this._badgePartBeingSelected = null;
-        this._selectorVisible = false;
+        this._clear();
     }
 
     public previousStep(): void
@@ -98,11 +76,6 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     public get currentStep(): number
     {
         return this._currentStep;
-    }
-
-    public get positions(): number[]
-    {
-        return this._positions;
     }
 
     public get currentBadgeCode(): string
@@ -168,18 +141,8 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         return this._groupColorsB;
     }
 
-    public get badgeBaseColors(): Map<number, string>
+    public get badgePartColors(): Map<number, string>
     {
         return this._badgePartColors;
-    }
-
-    public get badgePartBeingSelected(): GroupBadgePart
-    {
-        return this._badgePartBeingSelected;
-    }
-
-    public get selectorVisible(): boolean
-    {
-        return this._selectorVisible;
     }
 }

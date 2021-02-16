@@ -51,7 +51,7 @@ export default class GroupSettings
         return this._description;
     }
 
-    public set descritpion(description: string)
+    public set description(description: string)
     {
         this._description = description;
     }

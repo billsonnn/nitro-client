@@ -10,57 +10,17 @@
             <button class="btn btn-primary" [disabled]="currentStep !== 3">{{ ('group.create.steplabel.3') | translate }}</button>
             <button class="btn btn-success" [disabled]="currentStep !== 4">{{ ('group.create.steplabel.4') | translate }}</button>
         </div>
-        <div *ngIf="currentStep === 1">
-            <div class="mb-3">{{ ('group.edit.tabcaption.1') | translate }}</div>
-            <div class="form-group">
-                <label>{{ ('group.edit.name') | translate }}</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="groupSettings.name">
-            </div>
-            <div class="form-group">
-                <label>{{ ('group.edit.desc') | translate }}</label>
-                <textarea class="form-control form-control-sm" [(ngModel)]="groupSettings.description"></textarea>
-            </div>
-            <div class="form-group">
-                <label>{{ ('group.edit.base') | translate }}</label>
-                <select class="form-control form-control-sm" [(ngModel)]="groupSettings.roomId">
-                    <option selected disabled value="0">{{ ('group.edit.base.select.room') | translate }}</option>
-                    <option *ngFor="let room of availableRooms | keyvalue" [value]="room.key">{{ room.value }}</option>
-                </select>
-                <small class="form-text text-muted">{{ ('group.edit.base.warning') | translate }}</small>
-            </div>
-        </div>
-        <div *ngIf="currentStep === 2" class="row">
-            <div class="col-12">
-                <div class="mb-3">{{ ('group.edit.badge.badge') | translate }}</div>
-            </div>
-            <div class="col-3">
-                <button class="btn btn-primary" style="width: 120px;height: 67px;">
-                    <nitro-badge [badge]="currentBadgeCode" [isGroup]="true"></nitro-badge>
-                </button>
-            </div>
-            <div class="col-9">
-                <div *ngIf="!selectorVisible">
-                    <div *ngFor="let part of groupSettings.badgeParts | keyvalue" class="d-flex flex-row justify-content-between mb-3">
-                        <button class="btn btn-primary" style="width: 120px;height: 67px;" (click)="openPartSelector(part.value)">
-                            <nitro-badge [badge]="part.value.code" [isGroup]="true"></nitro-badge>
-                        </button>
-                        <div class="grid-container ml-3" [ngStyle]="{opacity: part.value.isBase ? 0 : 1}">
-                            <div class="grid-items grid-3 pb-1">
-                                <button *ngFor="let position of positions" class="item-detail btn btn-sm"
-                                 [ngClass]="part.value.position === position ? 'btn-light' : 'btn-primary'" (click)="part.value.position = position;"></button>
-                            </div>
-                        </div>
-                        <div class="grid-container ml-3">
-                            <div class="grid-items grid-8 pb-1">
-                                <button *ngFor="let color of badgeBaseColors | keyvalue" class="item-detail btn btn-primary btn-sm"
-                                [style]="{backgroundColor: '#' + color.value}" (click)="part.value.color = color.key;"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="selectorVisible" nitro-group-image-selector-component [items]="(badgePartBeingSelected && badgePartBeingSelected.isBase) ? badgeBases : badgeSymbols" [part]="badgePartBeingSelected" (onSelect)="onPartSelected($event)"></div>
-            </div>
-        </div>
+        <nitro-group-creator-tab-info-component *ngIf="currentStep === 1"
+        [(groupSettings)]="groupSettings"
+        [availableRooms]="availableRooms"></nitro-group-creator-tab-info-component>
+
+        <nitro-group-creator-tab-badge-component *ngIf="currentStep === 2"
+        [(groupSettings)]="groupSettings"
+        [currentBadgeCode]="currentBadgeCode"
+        [badgeBases]="badgeBases"
+        [badgeSymbols]="badgeSymbols"
+        [badgePartColors]="badgePartColors"></nitro-group-creator-tab-badge-component>
+
         <div *ngIf="currentStep === 3">
             <div class="d-flex justify-content-between mb-3">
                 <div class="mr-3">

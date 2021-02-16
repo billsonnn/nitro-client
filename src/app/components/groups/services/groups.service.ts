@@ -219,8 +219,10 @@ export class GroupsService implements OnDestroy
 
             if(instance)
             {
-                instance.groupCost      = parser.groupCost;
-                instance.availableRooms = parser.availableRooms;
+                this._ngZone.run(() => {
+                    instance.groupCost      = parser.groupCost;
+                    instance.availableRooms = parser.availableRooms;
+                });
             }
         }
     }
