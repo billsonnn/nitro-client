@@ -84,6 +84,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     public purchase(): void
     {
+        console.log(this.extra)
         this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
     }
 

@@ -2,6 +2,7 @@ import { IMessageConfiguration } from '../../core/communication/messages/IMessag
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ChangeNameUpdateEvent } from './messages/incoming/avatar/ChangeNameUpdateEvent';
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
+import { CatalogGroupsEvent } from './messages/incoming/catalog/CatalogGroupsEvent';
 import { CatalogModeEvent } from './messages/incoming/catalog/CatalogModeEvent';
 import { CatalogPageEvent } from './messages/incoming/catalog/CatalogPageEvent';
 import { CatalogPagesEvent } from './messages/incoming/catalog/CatalogPagesEvent';
@@ -160,6 +161,7 @@ import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/U
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
+import { CatalogGroupsComposer } from './messages/outgoing/catalog/CatalogGroupsComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
@@ -329,6 +331,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_SEARCH, CatalogSearchEvent);
         this._events.set(IncomingHeader.CATALOG_SOLD_OUT, CatalogSoldOutEvent);
         this._events.set(IncomingHeader.CATALOG_UPDATED, CatalogUpdatedEvent);
+        this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
@@ -562,6 +565,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
         this._composers.set(OutgoingHeader.LOVELOCK_START_CONFIRM, LoveLockStartConfirmComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBERSHIPS, CatalogGroupsComposer);
 
         // CLIENT
         this._composers.set(OutgoingHeader.CLIENT_PONG, ClientPongComposer);

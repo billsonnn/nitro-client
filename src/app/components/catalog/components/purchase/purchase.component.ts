@@ -23,11 +23,16 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public quantity: number = 1;
 
+    @Input()
+    public forcedExtra: string = null;
+
     constructor(private _catalogService: CatalogService)
     {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
+        if(!changes.activeOffer) return;
+        
         const prev = changes.activeOffer.previousValue;
         const next = changes.activeOffer.currentValue;
 
@@ -75,6 +80,8 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public get extra(): string
     {
+        if(this.forcedExtra) return this.forcedExtra;
+
         return (this.activeOffer.products[0] && this.activeOffer.products[0].extraParam);
     }
 
