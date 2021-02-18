@@ -1,4 +1,5 @@
 <div class="nitro-catalog-navigation-component bg-secondary rounded overflow-hidden">
+    <input type="text" placeholder="{{ 'catalog.search' | translate }}" class="form-control bg-secondary" #searchInput />
     <perfect-scrollbar style="min-height:450px;max-height:450px;height:450px;">
         <nitro-catalog-navigation-set-component *ngIf="catalogPage" [catalogPage]="catalogPage"></nitro-catalog-navigation-set-component>
     </perfect-scrollbar>

@@ -36,6 +36,7 @@ import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
+import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -55,6 +56,8 @@ export class CatalogService implements OnDestroy
     private _clubOffers: CatalogClubOfferData[] = [];
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
+
+    private _offersToRoots: AdvancedMap<number, CatalogPageData[]> = null;
 
     constructor(
         private _settingsService: SettingsService,
@@ -173,6 +176,7 @@ export class CatalogService implements OnDestroy
         this._ngZone.run(() =>
         {
             this._catalogRoot = parser.root;
+            this.setOffersToNodes(this._catalogRoot);
 
             this._isLoading = false;
 
@@ -461,5 +465,71 @@ export class CatalogService implements OnDestroy
         return this._giftWrappingConfiguration;
     }
 
+    public hasOffer(offerId: number, arg2: boolean = false)
+    {
+        if(!this._catalogRoot) return;
 
+        if(arg2)
+        {
+            const pages = [];
+            if(!this._offersToRoots.hasKey(offerId))
+            {
+                return null;
+            }
+
+            const pagesForOffer = this._offersToRoots.getValue(offerId);
+            for(const page of pagesForOffer)
+            {
+                if(page.visible)
+                {
+                    pages.push(page);
+                }
+            }
+
+            if(pages.length > 0)
+            {
+                return pages;
+            }
+
+            return null;
+        }
+
+        return this._offersToRoots.getValue(offerId);
+    }
+
+
+    private setOffersToNodes(_catalogRoot: CatalogPageData)
+    {
+        if(!_catalogRoot) return;
+        if(!this._offersToRoots) this._offersToRoots = new AdvancedMap<number, CatalogPageData[]>();
+
+
+        if(_catalogRoot.offerIds && _catalogRoot.offerIds.length > 0)
+        {
+            for(const offerId of _catalogRoot.offerIds)
+            {
+                if(this._offersToRoots.hasKey(offerId))
+                {
+                    const offerIdData = this._offersToRoots.getValue(offerId);
+
+                    if(!offerIdData.includes(_catalogRoot))
+                    {
+                        offerIdData.push(_catalogRoot);
+                    }
+                }
+                else
+                {
+                    this._offersToRoots.add(offerId, [_catalogRoot]);
+                }
+            }
+        }
+
+        if(_catalogRoot.children && _catalogRoot.children.length > 0)
+        {
+            for(const child of _catalogRoot.children)
+            {
+                this.setOffersToNodes(child);
+            }
+        }
+    }
 }
