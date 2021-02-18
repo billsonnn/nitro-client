@@ -56,11 +56,8 @@ export class CatalogNavigationComponent implements AfterViewInit, IFurnitureData
 
             const isPurchasable =  this._catalogService.hasOffer(furni.purchaseOfferId, true);
             const isRentable = this._catalogService.hasOffer(furni.rentOfferId, true);
-            const isFurni = this._catalogService.hasOffer(furni.id, true);
 
-            if(!isPurchasable && !isRentable && !isFurni) continue;
-
-
+            if(!isPurchasable && !isRentable) continue;
 
             if(foundFurni.length < 200 && searchProperties.indexOf(searchValue) >= 0)
             {
