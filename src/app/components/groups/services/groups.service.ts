@@ -12,6 +12,7 @@ import { GroupSettingsEvent } from '../../../../client/nitro/communication/messa
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBadgePartsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBadgePartsComposer';
 import { GroupBuyComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyComposer';
 import { GroupBuyDataComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyDataComposer';
 import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
@@ -298,6 +299,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         if(!this._groupManagerComponent) return;
 
         this._groupManagerComponent.load(parser);
+        Nitro.instance.communication.connection.send(new GroupBadgePartsComposer());
     }
 
     public linkReceived(k: string):void
@@ -431,6 +433,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         }
 
         Nitro.instance.communication.connection.send(new GroupBuyDataComposer());
+        Nitro.instance.communication.connection.send(new GroupBadgePartsComposer());
     }
 
     public closeGroupCreator(): void

@@ -55,6 +55,10 @@ export class OutgoingHeader
     public static GROUP_SETTINGS                 = 1004;
     public static GROUP_PARTS                    = 813;
     public static GROUP_BUY                      = 230;
+    public static GROUP_SAVE_INFORMATION         = 3137;
+    public static GROUP_SAVE_BADGE               = 1991;
+    public static GROUP_SAVE_COLORS              = 1764;
+    public static GROUP_SAVE_PREFERENCES         = 3435;
     public static INVENTORY_UNKNOWN              = 1371;
     public static ITEM_CLOTHING_REDEEM           = 3374;
     public static ITEM_COLOR_WHEEL_CLICK         = 2144;
