@@ -316,6 +316,11 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 
                 this.requestGroupSettings(parseInt(parts[2]));
                 return;
+            case 'info':
+                if(!parts[2]) return;
+                
+                this.getInfo(parseInt(parts[2]));
+                return;
         }
     }
 
