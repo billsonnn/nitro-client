@@ -11,8 +11,8 @@ export class AssetAlias
     {
         this._name  = name;
         this._link  = alias.link;
-        this._flipH = alias.fliph === 1;
-        this._flipV = alias.flipv === 1;
+        this._flipH = alias.flipH;
+        this._flipV = alias.flipV;
     }
 
     public get name(): string

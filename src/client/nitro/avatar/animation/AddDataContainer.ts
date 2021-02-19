@@ -1,12 +1,14 @@
-﻿export class AddDataContainer
+﻿import { IAssetAnimationAdd } from '../../../core/asset/interfaces';
+
+export class AddDataContainer
 {
     private _id: string;
     private _align: string;
     private _base: string;
-    private _ink: string;
+    private _ink: number;
     private _blend: number;
 
-    constructor(k: any)
+    constructor(k: IAssetAnimationAdd)
     {
         this._id    = k.id || '';
         this._align = k.align || '';
@@ -42,7 +44,7 @@
         return this._base;
     }
 
-    public get ink(): string
+    public get ink(): number
     {
         return this._ink;
     }

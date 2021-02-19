@@ -229,7 +229,12 @@ export class AssetManager extends Disposable implements IAssetManager
         {
             const assetData = (resource.data as IAssetData);
 
-            if(!assetData.type) return;
+            if(!assetData || !assetData.type)
+            {
+                onDownloaded(loader, resource, false);
+
+                return;
+            }
 
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
