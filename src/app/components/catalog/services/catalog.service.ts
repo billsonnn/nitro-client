@@ -37,6 +37,8 @@ import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { SearchResultsPage } from '../components/layouts/search-results/SearchResultsPage';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -48,7 +50,7 @@ export class CatalogService implements OnDestroy
     private _giftConfiguratorComponent: CatalogCustomizeGiftComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
-    private _activePage: CatalogPageParser = null;
+    private _activePage: ICatalogPageParser = null;
     private _activePageData: CatalogPageData = null;
     private _manuallyCollapsed: CatalogPageData[] = [];
     private _isLoading: boolean = false;
@@ -372,7 +374,7 @@ export class CatalogService implements OnDestroy
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
     }
 
-    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
+    public purchaseGiftOffer(activePage: ICatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
     {
         Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift ));
     }
@@ -435,7 +437,7 @@ export class CatalogService implements OnDestroy
         return this._catalogRoot;
     }
 
-    public get activePage(): CatalogPageParser
+    public get activePage(): ICatalogPageParser
     {
         return this._activePage;
     }
@@ -531,5 +533,10 @@ export class CatalogService implements OnDestroy
                 this.setOffersToNodes(child);
             }
         }
+    }
+
+    public setSearchPage(furni: IFurnitureData[]): void
+    {
+        this._activePage = new SearchResultsPage(furni);
     }
 }

@@ -14,6 +14,8 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -34,7 +36,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     private _activeTab: CatalogPageData = null;
     private _activeOffer: CatalogPageOfferData = null;
 
-    private _purchaseOfferPage: CatalogPageParser = null;
+    private _purchaseOfferPage: ICatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
     private _purchaseGiftOffer: CatalogPageOfferData = null;
     private _purchaseVipSubscription: CatalogClubOfferData = null;
@@ -340,7 +342,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
+    public confirmPurchase(page: ICatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -389,7 +391,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._activeOffer;
     }
 
-    public get activePage(): CatalogPageParser
+    public get activePage(): ICatalogPageParser
     {
         return this._catalogService.activePage;
     }
@@ -399,7 +401,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._catalogService.activePageData;
     }
 
-    public get purchaseOfferPage(): CatalogPageParser
+    public get purchaseOfferPage(): ICatalogPageParser
     {
         return this._purchaseOfferPage;
     }
@@ -452,5 +454,13 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get showInsufficientFunds(): boolean
     {
         return this._showInsufficientFunds;
+    }
+
+    public handleSearchResults(foundFurni: IFurnitureData[])
+    {
+        this._catalogService.setSearchPage(foundFurni);
+
+        this.setupLayout();
+
     }
 }

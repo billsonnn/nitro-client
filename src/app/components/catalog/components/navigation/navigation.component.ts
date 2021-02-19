@@ -53,7 +53,6 @@ export class CatalogNavigationComponent implements AfterViewInit, IFurnitureData
         for(const furni of furnitureData)
         {
             const searchProperties = [furni.className, furni.description, furni.name].join(' ').toLowerCase();
-
             const isPurchasable =  this._catalogService.hasOffer(furni.purchaseOfferId, true);
             const isRentable = this._catalogService.hasOffer(furni.rentOfferId, true);
 
@@ -65,7 +64,7 @@ export class CatalogNavigationComponent implements AfterViewInit, IFurnitureData
             }
         }
 
-        console.log({ foundFurni });
+        this._catalogService.component.handleSearchResults(foundFurni);
 
     }
 

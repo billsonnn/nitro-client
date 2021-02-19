@@ -21,6 +21,7 @@ import { CatalogPurchaseComponent } from './components/purchase/purchase.compone
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
 import { CatalogCustomizeGiftComponent } from './components/customize-gift/customize-gift.component';
+import { CatalogLayoutSearchResultsComponent } from './components/layouts/search-results/search-results.component';
 
 @NgModule({
     imports: [
@@ -46,7 +47,8 @@ import { CatalogCustomizeGiftComponent } from './components/customize-gift/custo
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
-        CatalogCustomizeGiftComponent
+        CatalogCustomizeGiftComponent,
+        CatalogLayoutSearchResultsComponent
     ],
     providers: [
         CatalogService
@@ -71,7 +73,8 @@ import { CatalogCustomizeGiftComponent } from './components/customize-gift/custo
         CatalogNavigationSetComponent,
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
-        CatalogCustomizeGiftComponent
+        CatalogCustomizeGiftComponent,
+        CatalogLayoutSearchResultsComponent
     ]
 })
 export class CatalogModule

@@ -3,6 +3,7 @@ import { CatalogPageParser } from '../../../../../client/nitro/communication/mes
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: 'nitro-catalog-navigation-item-component',
@@ -28,7 +29,7 @@ export class CatalogNavigationItemComponent
         (this._catalogService.component && this._catalogService.component.selectPage(this.catalogPage));
     }
 
-    public get activePage(): CatalogPageParser
+    public get activePage(): ICatalogPageParser
     {
         return this._catalogService.activePage;
     }

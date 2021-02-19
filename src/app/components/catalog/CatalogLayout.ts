@@ -4,11 +4,12 @@ import { CatalogPageOfferData } from '../../../client/nitro/communication/messag
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
 import { CatalogService } from './services/catalog.service';
+import { ICatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Directive()
 export class CatalogLayout
 {
-    public activePage: CatalogPageParser = null;
+    public activePage: ICatalogPageParser = null;
 
     constructor(
         protected _catalogService: CatalogService,
