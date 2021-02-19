@@ -10,7 +10,7 @@
     </div>
     <perfect-scrollbar class="grid-container w-100" style="min-height:156px;max-height:156px;height:156px;">
         <div class="grid-items grid-6">
-            <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let offer of searchItems">
+            <div class="d-flex flex-column item-detail justify-content-center align-items-center" (click)="requestOfferData(offer)" *ngFor="let offer of searchItems">
                 <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"  [ngStyle]="{ 'background-image': 'url(' + searchItemImage(offer) + ')' }">
 <!--                    <div class="position-absolute bg-danger px-1 py-0 rounded shadow count" *ngIf="(offerCount(offer) > 1)">{{ offerCount(offer) }}</div>-->
                 </button>

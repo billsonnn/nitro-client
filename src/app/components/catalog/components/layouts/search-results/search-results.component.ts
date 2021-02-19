@@ -20,8 +20,13 @@ export class CatalogLayoutSearchResultsComponent extends CatalogLayoutDefaultCom
         if(!(this._catalogService.activePage instanceof SearchResultsPage)) return [];
 
         const page = <SearchResultsPage> this._catalogService.activePage;
-
+        console.log('rendering furni amount: ', page.furni.length);
         return page.furni;
+    }
+
+    public requestOfferData(item: IFurnitureData): void
+    {
+        this._catalogService.requestOfferData(item.purchaseOfferId);
     }
 
     public searchItemImage(item: IFurnitureData): string

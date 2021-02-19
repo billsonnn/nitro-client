@@ -39,6 +39,8 @@ import { Purse } from '../purse/purse';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { SearchResultsPage } from '../components/layouts/search-results/SearchResultsPage';
+import { CatalogSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogSearchComposer';
+import { ProductTypeEnum } from '../enums/ProductTypeEnum';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -179,7 +181,7 @@ export class CatalogService implements OnDestroy
         {
             this._catalogRoot = parser.root;
             this.setOffersToNodes(this._catalogRoot);
-
+            console.log('done');
             this._isLoading = false;
 
             (this._component && this._component.selectFirstTab());
@@ -229,6 +231,44 @@ export class CatalogService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+
+        if(!parser.offer || !parser.offer.products || parser.offer.products.length == 0) return;
+
+        const product = parser.offer.products[0];
+
+        if(product.uniqueLimitedItem)
+        {
+            // this._catalogViewer._Str_3854._Str_19621(_local_3._Str_2451, _local_4.uniqueLimitedItemsLeft);
+        }
+        let local6;
+        const local5 = [];
+        switch(product.productType)
+        {
+            case ProductTypeEnum.FLOOR:
+                local6 = Nitro.instance.sessionDataManager.getFloorItemData(product.furniClassId);
+                break;
+            case ProductTypeEnum.WALL:
+                local6 = Nitro.instance.sessionDataManager.getWallItemData(product.furniClassId);
+                break;
+        }
+
+        for(const productItem of parser.offer.products)
+        {
+            let local8:IFurnitureData = null;
+            switch(productItem.productType)
+            {
+                case ProductTypeEnum.FLOOR:
+                    local8 = Nitro.instance.sessionDataManager.getFloorItemData(product.furniClassId);
+                    break;
+                case ProductTypeEnum.WALL:
+                    local8 = Nitro.instance.sessionDataManager.getWallItemData(product.furniClassId);
+                    break;
+            }
+            local5.push(local8);
+        }
+
+        debugger;
+
     }
 
     private onCatalogSoldOutEvent(event: CatalogSoldOutEvent): void
@@ -538,5 +578,10 @@ export class CatalogService implements OnDestroy
     public setSearchPage(furni: IFurnitureData[]): void
     {
         this._activePage = new SearchResultsPage(furni);
+    }
+
+    public requestOfferData(purchaseOfferId: number)
+    {
+        Nitro.instance.communication.connection.send(new CatalogSearchComposer(purchaseOfferId));
     }
 }

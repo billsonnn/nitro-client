@@ -30,7 +30,7 @@ export class CatalogNavigationComponent implements AfterViewInit, IFurnitureData
         fromEvent(this.searchInput.nativeElement, 'keyup')
             .pipe(
                 filter(Boolean),
-                debounceTime(1000),
+                debounceTime(500),
                 distinctUntilChanged(),
                 tap((text) =>
                 {
@@ -42,8 +42,9 @@ export class CatalogNavigationComponent implements AfterViewInit, IFurnitureData
 
     private doSearch()
     {
-        if(!this.searchInput.nativeElement.value || this.searchInput.nativeElement.value.trim().length < 3) return;
 
+        if(!this.searchInput.nativeElement.value || this.searchInput.nativeElement.value.trim().length < 3) return;
+        console.log('searching for ', this.searchInput.nativeElement.value);
         const searchValue = this.searchInput.nativeElement.value.toLowerCase();
 
         const furnitureData = Nitro.instance.sessionDataManager.getAllFurnitureData(this);

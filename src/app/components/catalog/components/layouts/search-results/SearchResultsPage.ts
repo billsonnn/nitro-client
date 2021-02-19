@@ -11,6 +11,7 @@ export class SearchResultsPage implements ICatalogPageParser
     private _furni: IFurnitureData[] = null;
     constructor(furni: IFurnitureData[])
     {
+        console.log('Constructor SearchResultsPage');
         this._furni = furni;
     }
 
