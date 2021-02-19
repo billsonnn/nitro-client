@@ -16,7 +16,7 @@
                     <div class="small mb-2">{{ ('group.created') | translate:['date', 'owner']:[groupCreationDate, groupOwnerName] }}</div>
                     <div class="small mb-3">{{ groupDescription }}</div>
                     <button class="btn btn-primary btn-sm mb-2" (click)="goToHomeRoom()">{{ ('group.linktobase') | translate }}</button>
-                    <button class="btn btn-primary btn-sm" (click)="manage()">{{ ('group.manage') | translate }}</button>
+                    <button *ngIf="isOwner" class="btn btn-primary btn-sm" (click)="manage()">{{ ('group.manage') | translate }}</button>
                 </div>
             </div>
            <div class="mt-3">

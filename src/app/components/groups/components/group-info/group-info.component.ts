@@ -22,6 +22,7 @@ export class GroupInfoComponent
     private _groupMembersCount: number;
     private _groupMembershipRequestsCount: number;
     private _groupHomeRoomId: number;
+    private _isOwner: boolean;
 
     constructor(
         private _ngZone: NgZone,
@@ -47,6 +48,7 @@ export class GroupInfoComponent
             this._groupMembersCount             = 0;
             this._groupMembershipRequestsCount  = 0;
             this._groupHomeRoomId               = 0;
+            this._isOwner                       = false;
         });
     }
 
@@ -207,5 +209,15 @@ export class GroupInfoComponent
     public set groupHomeRoomId(homeRoomId: number)
     {
         this._groupHomeRoomId = homeRoomId;
+    }
+
+    public get isOwner(): boolean
+    {
+        return this._isOwner;
+    }
+
+    public set isOwner(isOwner: boolean)
+    {
+        this._isOwner = isOwner;
     }
 }

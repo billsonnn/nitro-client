@@ -178,6 +178,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 this._groupInfoComponent.groupMembersCount              = parser.membersCount;
                 this._groupInfoComponent.groupMembershipRequestsCount   = parser.pendingRequestsCount;
                 this._groupInfoComponent.groupHomeRoomId                = parser.roomId;
+                this._groupInfoComponent.isOwner                        = parser.isOwner;
             });
         }
         
