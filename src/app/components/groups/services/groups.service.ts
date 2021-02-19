@@ -8,6 +8,7 @@ import { GroupBuyDataEvent } from '../../../../client/nitro/communication/messag
 import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
 import { GroupMembersEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupMembersEvent';
+import { GroupSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupSettingsEvent';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
 import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
@@ -20,6 +21,11 @@ import { GroupJoinComposer } from '../../../../client/nitro/communication/messag
 import { GroupMembersComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembersComposer';
 import { GroupMembershipAcceptComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipAcceptComposer';
 import { GroupMembershipDeclineComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipDeclineComposer';
+import { GroupSaveBadgeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveBadgeComposer';
+import { GroupSaveColorsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveColorsComposer';
+import { GroupSaveInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveInformationComposer';
+import { GroupSavePreferencesComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSavePreferencesComposer';
+import { GroupSettingsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSettingsComposer';
 import { UserProfileComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
@@ -27,6 +33,7 @@ import { NotificationService } from '../../notification/services/notification.se
 import GroupSettings from '../common/GroupSettings';
 import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
 import { GroupInfoComponent } from '../components/group-info/group-info.component';
+import { GroupManagerComponent } from '../components/group-manager/components/main/group-manager.component';
 import { GroupMembersComponent } from '../components/group-members/group-members.component';
 import { GroupRoomInfoComponent } from '../components/room-info/room-info.component';
 
@@ -38,8 +45,16 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
     private _roomInfoComponent: GroupRoomInfoComponent;
     private _groupInfoComponent: GroupInfoComponent;
     private _groupMembersComponent: GroupMembersComponent;
+    private _groupManagerComponent: GroupManagerComponent;
 
     private _groupCreatorModal: NgbModalRef;
+
+    private _badgeBases: Map<number, string[]>;
+    private _badgeSymbols: Map<number, string[]>;
+    private _badgePartColors: Map<number, string>;
+    
+    private _groupColorsA: Map<number, string>;
+    private _groupColorsB: Map<number, string>;
 
     private _leavingGroupId: number;
 
@@ -48,7 +63,15 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         private _modalService: NgbModal,
         private _ngZone: NgZone)
     {
-        this._messages = [];
+        this._messages          = [];
+
+        this._badgeBases         = new Map();
+        this._badgeSymbols       = new Map();
+        this._badgePartColors    = new Map();
+        this._groupColorsA       = new Map();
+        this._groupColorsB       = new Map();
+
+        this._leavingGroupId    = 0;
 
         this.onRoomSessionEvent = this.onRoomSessionEvent.bind(this);
 
@@ -77,7 +100,8 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
                 new GroupBuyDataEvent(this.onGroupBuyDataEvent.bind(this)),
                 new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this)),
-                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this))
+                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this)),
+                new GroupSettingsEvent(this.onGroupSettingsEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -242,19 +266,11 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        if(this._groupCreatorModal)
-        {
-            const instance = (this._groupCreatorModal.componentInstance as GroupCreatorComponent);
-
-            if(instance)
-            {
-                instance.badgeBases         = parser.bases;
-                instance.badgeSymbols       = parser.symbols;
-                instance.badgePartColors    = parser.baseColors;
-                instance.groupColorsA       = parser.symbolColors;
-                instance.groupColorsB       = parser.backgroundColors;
-            }
-        }
+        this._badgeBases         = parser.bases;
+        this._badgeSymbols       = parser.symbols;
+        this._badgePartColors    = parser.partColors;
+        this._groupColorsA       = parser.colorsA;
+        this._groupColorsB       = parser.colorsB;
     }
 
     private onCatalogPurchaseEvent(event: CatalogPurchaseEvent): void
@@ -270,6 +286,19 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         });
     }
 
+    private onGroupSettingsEvent(event: GroupSettingsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._groupManagerComponent) return;
+
+        this._groupManagerComponent.load(parser);
+    }
+
     public linkReceived(k: string):void
     {
         const parts = k.split('/');
@@ -280,6 +309,11 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         {
             case 'create':
                 this.openGroupCreator();
+                return;
+            case 'manage':
+                if(!parts[2]) return;
+                
+                this.requestGroupSettings(parseInt(parts[2]));
                 return;
         }
     }
@@ -342,6 +376,28 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         Nitro.instance.communication.connection.send(new UserProfileComposer(userId));
     }
 
+    public save(groupSettings: GroupSettings): void
+    {
+        Nitro.instance.communication.connection.send(new GroupSaveInformationComposer(
+            groupSettings.id,
+            groupSettings.name,
+            groupSettings.description));
+
+        Nitro.instance.communication.connection.send(new GroupSaveBadgeComposer(
+            groupSettings.id,
+            groupSettings.currentBadgeArray));
+            
+        Nitro.instance.communication.connection.send(new GroupSaveColorsComposer(
+            groupSettings.id,
+            groupSettings.colorA,
+            groupSettings.colorB));
+
+        Nitro.instance.communication.connection.send(new GroupSavePreferencesComposer(
+            groupSettings.id,
+            groupSettings.state,
+            groupSettings.canMembersDecorate ? 0 : 1));
+    }
+
     public buyGroup(groupSettings: GroupSettings): void
     {
         Nitro.instance.communication.connection.send(new GroupBuyComposer(
@@ -380,6 +436,11 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         this._groupCreatorModal = null;
     }
 
+    public requestGroupSettings(groupId: number): void
+    {
+        Nitro.instance.communication.connection.send(new GroupSettingsComposer(groupId));
+    }
+
     public get eventUrlPrefix(): string
     {
         return 'groups';
@@ -398,5 +459,35 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
     public set groupMembersComponent(component: GroupMembersComponent)
     {
         this._groupMembersComponent = component;
+    }
+
+    public set groupManagerComponent(component: GroupManagerComponent)
+    {
+        this._groupManagerComponent = component;
+    }
+
+    public get badgeBases(): Map<number, string[]>
+    {
+        return this._badgeBases;
+    }
+
+    public get badgeSymbols(): Map<number, string[]>
+    {
+        return this._badgeSymbols;
+    }
+
+    public get badgePartColors(): Map<number, string>
+    {
+        return this._badgePartColors;
+    }
+
+    public get groupColorsA(): Map<number, string>
+    {
+        return this._groupColorsA;
+    }
+
+    public get groupColorsB(): Map<number, string>
+    {
+        return this._groupColorsB;
     }
 }

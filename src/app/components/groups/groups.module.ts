@@ -7,6 +7,9 @@ import { GroupCreatorTabColorsComponent } from './components/group-creator/compo
 import { GroupCreatorTabConfirmationComponent } from './components/group-creator/components/tab-confirmation/tab-confirmation.component';
 import { GroupCreatorTabInfoComponent } from './components/group-creator/components/tab-info/tab-info.component';
 import { GroupInfoComponent } from './components/group-info/group-info.component';
+import { GroupManagerComponent } from './components/group-manager/components/main/group-manager.component';
+import { GroupManagerTabInfoComponent } from './components/group-manager/components/tab-info/tab-info.component';
+import { GroupManagerTabPreferencesComponent } from './components/group-manager/components/tab-preferences/tab-preferences.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
 import { GroupMainComponent } from './components/main/main.component';
 import { GroupRoomInfoComponent } from './components/room-info/room-info.component';
@@ -26,8 +29,10 @@ import { GroupsService } from './services/groups.service';
         GroupCreatorTabInfoComponent,
         GroupCreatorTabBadgeComponent,
         GroupCreatorTabColorsComponent,
-        GroupCreatorTabConfirmationComponent
-
+        GroupCreatorTabConfirmationComponent,
+        GroupManagerComponent,
+        GroupManagerTabInfoComponent,
+        GroupManagerTabPreferencesComponent
     ],
     providers: [
         GroupsService
@@ -42,7 +47,10 @@ import { GroupsService } from './services/groups.service';
         GroupCreatorTabInfoComponent,
         GroupCreatorTabBadgeComponent,
         GroupCreatorTabColorsComponent,
-        GroupCreatorTabConfirmationComponent
+        GroupCreatorTabConfirmationComponent,
+        GroupManagerComponent,
+        GroupManagerTabInfoComponent,
+        GroupManagerTabPreferencesComponent
     ],
     entryComponents: [GroupCreatorComponent]
 })

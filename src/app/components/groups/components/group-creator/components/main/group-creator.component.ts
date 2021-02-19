@@ -16,18 +16,11 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     private _showRoomError: boolean;
 
     private _availableRooms: Map<number, string>;
-    
-    private _badgeBases: Map<number, string[]>;
-    private _badgeSymbols: Map<number, string[]>;
-    private _badgePartColors: Map<number, string>;
-    
-    private _groupColorsA: Map<number, string>;
-    private _groupColorsB: Map<number, string>;
 
     private _groupCost: number;
     
     constructor(
-        private _groupService: GroupsService,
+        private _groupsService: GroupsService,
         private _activeModal: NgbActiveModal)
     {
         this._clear();
@@ -42,13 +35,6 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
         this._showRoomError         = false;
 
         this._availableRooms        = new Map();
-
-        this._badgeBases            = new Map();
-        this._badgeSymbols          = new Map();
-        this._badgePartColors       = new Map();
-        
-        this._groupColorsA          = new Map();
-        this._groupColorsB          = new Map();
 
         this._groupCost             = 0;
     }
@@ -103,7 +89,7 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
                 this._showRoomError = false;
             }
 
-            if(this._showNameError ||  this._showRoomError) return;
+            if(this._showNameError || this._showDescriptionError ||  this._showRoomError) return;
         }
 
         this._currentStep++;
@@ -116,7 +102,7 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
 
     public buyGroup(): void
     {
-        this._groupService.buyGroup(this.groupSettings);
+        this._groupsService.buyGroup(this.groupSettings);
     }
 
     public get currentStep(): number
@@ -147,60 +133,6 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     public set availableRooms(availableRooms: Map<number, string>)
     {
         this._availableRooms = availableRooms;
-    }
-    
-    public get badgeBases(): Map<number, string[]>
-    {
-        return this._badgeBases;
-    }
-
-    public set badgeBases(bases: Map<number, string[]>)
-    {
-        this._badgeBases = bases;
-    }
-
-    public get badgeSymbols(): Map<number, string[]>
-    {
-        return this._badgeSymbols;
-    }
-
-    public set badgeSymbols(symbols: Map<number, string[]>)
-    {
-        this._badgeSymbols = symbols;
-        this.groupSettings.getBadgePart(0).key = symbols.keys().next().value;
-    }
-
-    public get badgePartColors(): Map<number, string>
-    {
-        return this._badgePartColors;
-    }
-
-    public set badgePartColors(colors: Map<number, string>)
-    {
-        this._badgePartColors = colors;
-        this.groupSettings.setPartsColor(colors.keys().next().value);
-    }
-
-    public get groupColorsA(): Map<number, string>
-    {
-        return this._groupColorsA;
-    }
-
-    public set groupColorsA(colors: Map<number, string>)
-    {
-        this._groupColorsA = colors;
-        this.groupSettings.colorA = colors.keys().next().value;
-    }
-
-    public get groupColorsB(): Map<number, string>
-    {
-        return this._groupColorsB;
-    }
-
-    public set groupColorsB(colors: Map<number, string>)
-    {
-        this._groupColorsB = colors;
-        this.groupSettings.colorB = colors.keys().next().value;
     }
 
     public get groupCost(): number

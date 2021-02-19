@@ -48,6 +48,16 @@
     }
 }
 
+.nitro-group-manager-component {
+    position: absolute;
+    width: 498px;
+
+    .grid-container .grid-items .item-detail {
+        height: 20px;
+        max-height: 20px;
+    }
+}
+
 .nitro-group-image-selector-component {
     .grid-container .grid-items .item-detail {
         height: 41px;

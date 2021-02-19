@@ -5,17 +5,17 @@ export class GroupBadgePartsParser implements IMessageParser
 {
     private _bases: Map<number, string[]>;
     private _symbols: Map<number, string[]>;
-    private _baseColors: Map<number, string>;
-    private _symbolColors: Map<number, string>;
-    private _backgroundColors: Map<number, string>;
+    private _partColors: Map<number, string>;
+    private _colorsA: Map<number, string>;
+    private _colorsB: Map<number, string>;
 
     flush(): boolean
     {
         this._bases             = new Map();
         this._symbols           = new Map();
-        this._baseColors        = new Map();
-        this._symbolColors      = new Map();
-        this._backgroundColors  = new Map();
+        this._partColors        = new Map();
+        this._colorsA           = new Map();
+        this._colorsB           = new Map();
 
         return true;
     }
@@ -48,37 +48,37 @@ export class GroupBadgePartsParser implements IMessageParser
             symbolsCount--;
         }
 
-        let baseColorsCount = wrapper.readInt();
+        let partColorsCount = wrapper.readInt();
 
-        while(baseColorsCount > 0)
+        while(partColorsCount > 0)
         {
             const id    = wrapper.readInt();
             const color = wrapper.readString();
 
-            this._baseColors.set(id, color);
-            baseColorsCount--;
+            this._partColors.set(id, color);
+            partColorsCount--;
         }
 
-        let symbolColorsCount = wrapper.readInt();
+        let colorsACount = wrapper.readInt();
 
-        while(symbolColorsCount > 0)
+        while(colorsACount > 0)
         {
             const id    = wrapper.readInt();
             const color = wrapper.readString();
 
-            this._symbolColors.set(id, color);
-            symbolColorsCount--;
+            this._colorsA.set(id, color);
+            colorsACount--;
         }
 
-        let backgroundColorsCount = wrapper.readInt();
+        let colorsBCount = wrapper.readInt();
 
-        while(backgroundColorsCount > 0)
+        while(colorsBCount > 0)
         {
             const id    = wrapper.readInt();
             const color = wrapper.readString();
 
-            this._backgroundColors.set(id, color);
-            backgroundColorsCount--;
+            this._colorsB.set(id, color);
+            colorsBCount--;
         }
         return true;
     }
@@ -93,18 +93,18 @@ export class GroupBadgePartsParser implements IMessageParser
         return this._symbols;
     }
 
-    public get baseColors(): Map<number, string>
+    public get partColors(): Map<number, string>
     {
-        return this._baseColors;
+        return this._partColors;
     }
 
-    public get symbolColors(): Map<number, string>
+    public get colorsA(): Map<number, string>
     {
-        return this._symbolColors;
+        return this._colorsA;
     }
 
-    public get backgroundColors(): Map<number, string>
+    public get colorsB(): Map<number, string>
     {
-        return this._backgroundColors;
+        return this._colorsB;
     }
 }

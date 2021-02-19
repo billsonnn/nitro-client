@@ -20,20 +20,15 @@
 
         <nitro-group-creator-tab-badge-component *ngIf="currentStep === 2"
         [(groupSettings)]="groupSettings"
-        [badgeBases]="badgeBases"
-        [badgeSymbols]="badgeSymbols"
-        [badgePartColors]="badgePartColors"></nitro-group-creator-tab-badge-component>
+        [setDefaultValues]="true"></nitro-group-creator-tab-badge-component>
 
         <nitro-group-creator-tab-colors-component *ngIf="currentStep === 3"
         [(groupSettings)]="groupSettings"
-        [groupColorsA]="groupColorsA"
-        [groupColorsB]="groupColorsB"></nitro-group-creator-tab-colors-component>
+        [setDefaultValues]="true"></nitro-group-creator-tab-colors-component>
 
         <nitro-group-creator-tab-confirmation-component *ngIf="currentStep === 4"
         [groupSettings]="groupSettings"
-        [groupCost]="groupCost"
-        [groupColorsA]="groupColorsA"
-        [groupColorsB]="groupColorsB"></nitro-group-creator-tab-confirmation-component>
+        [groupCost]="groupCost"></nitro-group-creator-tab-confirmation-component>
 
         <div class="d-flex flex-row justify-content-between">
             <button *ngIf="currentStep === 1" class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>

@@ -2,6 +2,7 @@ import GroupBadgePart from './GroupBadgePart';
 
 export default class GroupSettings
 {
+    private _id: number;
     private _name: string;
     private _description: string;
     private _roomId: string;
@@ -9,14 +10,24 @@ export default class GroupSettings
     private _badgeParts: Map<number, GroupBadgePart>;
     private _colorA: number;
     private _colorB: number;
+
+    private _state: number;
+    private _canMembersDecorate: boolean;
     
     constructor()
     {
-        this._name = '';
-        this._description = '';
-        this._roomId = '0';
+        this._id                    = 0;
+        this._name                  = '';
+        this._description           = '';
+        this._roomId                = '0';
 
-        this._badgeParts = new Map();
+        this._badgeParts            = new Map();
+        this._colorA                = 0;
+        this.colorB                 = 0;
+        
+        this._state                 = 0;
+        this._canMembersDecorate    = false;
+
         this._badgeParts.set(0, new GroupBadgePart(true));
         this._badgeParts.set(1, new GroupBadgePart(false));
         this._badgeParts.set(2, new GroupBadgePart(false));
@@ -34,6 +45,16 @@ export default class GroupSettings
         this._badgeParts.forEach((symbol) => {
             symbol.color = color;
         });
+    }
+
+    public get id(): number
+    {
+        return this._id;
+    }
+
+    public set id(id: number)
+    {
+        this._id = id;
     }
 
     public get name(): string
@@ -69,6 +90,11 @@ export default class GroupSettings
     public get badgeParts(): Map<number, GroupBadgePart>
     {
         return this._badgeParts;
+    }
+
+    public set badgeParts(parts: Map<number, GroupBadgePart>)
+    {
+        this._badgeParts = parts;
     }
 
     public get colorA(): number
@@ -114,11 +140,30 @@ export default class GroupSettings
             {
                 badge.push(part.key);
                 badge.push(part.color);
-
-                if(!part.isBase) badge.push(part.position);
+                badge.push(part.position);
             }
         });
 
         return badge;
+    }
+
+    public get state(): number
+    {
+        return this._state;
+    }
+
+    public set state(state: number)
+    {
+        this._state = state;
+    }
+
+    public get canMembersDecorate(): boolean
+    {
+        return this._canMembersDecorate;
+    }
+
+    public set canMembersDecorate(value: boolean)
+    {
+        this._canMembersDecorate = value;
     }
 }

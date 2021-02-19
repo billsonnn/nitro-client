@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
     template: `
         <nitro-group-info-component></nitro-group-info-component>
         <nitro-group-members-component></nitro-group-members-component>
+        <nitro-group-manager-component></nitro-group-manager-component>
     `
 })
 export class GroupMainComponent

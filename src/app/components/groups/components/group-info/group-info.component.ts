@@ -54,6 +54,11 @@ export class GroupInfoComponent
     {
         this._navigatorService.goToRoom(this._groupHomeRoomId);
     }
+    
+    public manage(): void
+    {
+        Nitro.instance.createLinkEvent('groups/manage/' + this.groupId);
+    }
 
     public getMembers(pendingRequest: boolean): void
     {

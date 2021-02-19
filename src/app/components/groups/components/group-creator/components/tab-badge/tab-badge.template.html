@@ -9,7 +9,8 @@
         <div *ngIf="!selectorVisible">
             <div *ngFor="let part of groupSettings.badgeParts | keyvalue" class="d-flex flex-row justify-content-between mb-3">
                 <button class="btn btn-primary" style="width: 120px;height: 67px;" (click)="openPartSelector(part.value)">
-                    <nitro-badge [badge]="part.value.code" [isGroup]="true"></nitro-badge>
+                    <nitro-badge *ngIf="part.value.code" [badge]="part.value.code" [isGroup]="true"></nitro-badge>
+                    <i *ngIf="!part.value.code" class="fas fa-plus" style="width: 39px"></i>
                 </button>
                 <div class="grid-container ml-3" [ngStyle]="{opacity: part.value.isBase ? 0 : 1}">
                     <div class="grid-items grid-3 pb-1">

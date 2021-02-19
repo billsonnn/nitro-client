@@ -13,9 +13,10 @@
                 </div>
                 <div class="w-100">
                     <div><i class="fas mr-2" [ngClass]="{'fa-user-plus': groupType === 0, 'fa-key': groupType === 1, 'fa-ban': groupType === 2}"></i>{{ groupName }}</div>
-                    <div class="group-creation-date mb-2">{{ ('group.created') | translate:['date', 'owner']:[groupCreationDate, groupOwnerName] }}</div>
-                    <div class="mb-3">{{ groupDescription }}</div>
-                    <button class="btn btn-primary btn-sm" (click)="goToHomeRoom()">{{ ('group.linktobase') | translate }}</button>
+                    <div class="small mb-2">{{ ('group.created') | translate:['date', 'owner']:[groupCreationDate, groupOwnerName] }}</div>
+                    <div class="small mb-3">{{ groupDescription }}</div>
+                    <button class="btn btn-primary btn-sm mb-2" (click)="goToHomeRoom()">{{ ('group.linktobase') | translate }}</button>
+                    <button class="btn btn-primary btn-sm" (click)="manage()">{{ ('group.manage') | translate }}</button>
                 </div>
             </div>
            <div class="mt-3">

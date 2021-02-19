@@ -37,6 +37,7 @@ import { GroupBuyDataEvent } from './messages/incoming/group/GroupBuyDataEvent';
 import { GroupConfirmMemberRemoveEvent } from './messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
 import { GroupMembersEvent } from './messages/incoming/group/GroupMembersEvent';
+import { GroupSettingsEvent } from './messages/incoming/group/GroupSettingsEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
@@ -198,6 +199,11 @@ import { GroupMembersComposer } from './messages/outgoing/group/GroupMembersComp
 import { GroupMembershipAcceptComposer } from './messages/outgoing/group/GroupMembershipAcceptComposer';
 import { GroupMembershipDeclineComposer } from './messages/outgoing/group/GroupMembershipDeclineComposer';
 import { GroupRemoveMemberComposer } from './messages/outgoing/group/GroupRemoveMemberComposer';
+import { GroupSaveBadgeComposer } from './messages/outgoing/group/GroupSaveBadgeComposer';
+import { GroupSaveColorsComposer } from './messages/outgoing/group/GroupSaveColorsComposer';
+import { GroupSaveInformationComposer } from './messages/outgoing/group/GroupSaveInformationComposer';
+import { GroupSavePreferencesComposer } from './messages/outgoing/group/GroupSavePreferencesComposer';
+import { GroupSettingsComposer } from './messages/outgoing/group/GroupSettingsComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
@@ -364,6 +370,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GROUP_MEMBERS, GroupMembersEvent);
         this._events.set(IncomingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataEvent);
         this._events.set(IncomingHeader.GROUP_BADGE_PARTS, GroupBadgePartsEvent);
+        this._events.set(IncomingHeader.GROUP_SETTINGS, GroupSettingsEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
@@ -603,6 +610,11 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GROUP_DELETE, GroupDeleteComposer);
         this._composers.set(OutgoingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataComposer);
         this._composers.set(OutgoingHeader.GROUP_BUY, GroupBuyComposer);
+        this._composers.set(OutgoingHeader.GROUP_SETTINGS, GroupSettingsComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_BADGE, GroupSaveBadgeComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_COLORS, GroupSaveColorsComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_INFORMATION, GroupSaveInformationComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_PREFERENCES, GroupSavePreferencesComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);
