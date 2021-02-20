@@ -82,7 +82,7 @@ export class GroupBadgePartsParser implements IMessageParser
         }
         return true;
     }
-    
+
     public get bases(): Map<number, string[]>
     {
         return this._bases;

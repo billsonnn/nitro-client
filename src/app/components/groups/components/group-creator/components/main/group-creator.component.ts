@@ -18,7 +18,7 @@ export class GroupCreatorComponent implements OnInit, OnDestroy
     private _availableRooms: Map<number, string>;
 
     private _groupCost: number;
-    
+
     constructor(
         private _groupsService: GroupsService,
         private _activeModal: NgbActiveModal)

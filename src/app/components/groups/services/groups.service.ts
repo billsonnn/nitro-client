@@ -53,7 +53,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
     private _badgeBases: Map<number, string[]>;
     private _badgeSymbols: Map<number, string[]>;
     private _badgePartColors: Map<number, string>;
-    
+
     private _groupColorsA: Map<number, string>;
     private _groupColorsB: Map<number, string>;
 
@@ -80,7 +80,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
         Nitro.instance.addLinkEventTracker(this);
     }
-    
+
     public ngOnDestroy(): void
     {
         this.unregisterMessages();
@@ -146,8 +146,9 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         const parser = event.getParser();
 
         if(!parser) return;
-       
-        this._ngZone.run(() => {
+
+        this._ngZone.run(() =>
+        {
             this._roomInfoComponent.groupId          = parser.data.habboGroupId;
             this._roomInfoComponent.groupName        = parser.data.groupName;
             this._roomInfoComponent.groupBadgeCode   = parser.data.groupBadgeCode;
@@ -167,7 +168,8 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
         if(parser.flag || parser.id === this._groupInfoComponent.groupId)
         {
-            this._ngZone.run(() => {
+            this._ngZone.run(() =>
+            {
                 this._groupInfoComponent.groupId                        = parser.id;
                 this._groupInfoComponent.groupName                      = parser.title;
                 this._groupInfoComponent.groupBadgeCode                 = parser.badge;
@@ -182,7 +184,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 this._groupInfoComponent.isOwner                        = parser.isOwner;
             });
         }
-        
+
         if(this._roomInfoComponent.groupId !== parser.id) return;
 
         this._ngZone.run(() =>
@@ -234,7 +236,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
             confirmationConfig = this._groupMembersComponent.confirmRemove(parser.userId, parser.furnitureCount);
         }
-        
+
         this._notificationService.alertWithChoices(confirmationConfig[1], confirmationConfig[2], confirmationConfig[0]);
     }
 
@@ -252,7 +254,8 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
             if(instance)
             {
-                this._ngZone.run(() => {
+                this._ngZone.run(() =>
+                {
                     instance.groupCost      = parser.groupCost;
                     instance.availableRooms = parser.availableRooms;
                 });
@@ -283,7 +286,8 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this.closeGroupCreator();
         });
     }
@@ -315,12 +319,12 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 return;
             case 'manage':
                 if(!parts[2]) return;
-                
+
                 this.requestGroupSettings(parseInt(parts[2]));
                 return;
             case 'info':
                 if(!parts[2]) return;
-                
+
                 this.getInfo(parseInt(parts[2]));
                 return;
         }
@@ -345,7 +349,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 this._roomInfoComponent.groupMember = true;
             });
         }
-        
+
         Nitro.instance.communication.connection.send(new GroupJoinComposer(groupId));
     }
 
@@ -394,7 +398,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         Nitro.instance.communication.connection.send(new GroupSaveBadgeComposer(
             groupSettings.id,
             groupSettings.currentBadgeArray));
-            
+
         Nitro.instance.communication.connection.send(new GroupSaveColorsComposer(
             groupSettings.id,
             groupSettings.colorA,

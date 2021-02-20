@@ -21,7 +21,7 @@ export class GroupRoomInfoComponent
     {
         this._groupService.groupRoomInfoComponent = this;
         this._open = false;
-        
+
         this.clear();
     }
 

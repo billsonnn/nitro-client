@@ -59,7 +59,7 @@ export class CatalogService implements OnDestroy
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
     private _groupFurniTemplate: CatalogLayoutGuildCustomFurniComponent = null;
     private _loaded: boolean = false;
-    
+
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
 
     constructor(
@@ -256,7 +256,8 @@ export class CatalogService implements OnDestroy
 
         if(!parser) return;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._groupFurniTemplate.groups = parser.groups;
         });
     }

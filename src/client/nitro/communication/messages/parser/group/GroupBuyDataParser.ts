@@ -10,7 +10,7 @@ export class GroupBuyDataParser implements IMessageParser
     {
         this._groupCost         = 0;
         this._availableRooms    = new Map();
-        
+
         return true;
     }
 
@@ -33,7 +33,7 @@ export class GroupBuyDataParser implements IMessageParser
         }
         return true;
     }
-    
+
     public get groupCost(): number
     {
         return this._groupCost;

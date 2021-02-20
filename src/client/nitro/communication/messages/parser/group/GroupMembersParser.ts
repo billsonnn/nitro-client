@@ -48,7 +48,7 @@ export class GroupMembersParser implements IMessageParser
         while(resultCount > 0)
         {
             this._result.push(new GroupMemberParser(wrapper));
-            
+
             resultCount--;
         }
 

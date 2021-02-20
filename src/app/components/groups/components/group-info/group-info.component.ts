@@ -30,13 +30,14 @@ export class GroupInfoComponent
         private _groupService: GroupsService)
     {
         this._groupService.groupInfoComponent = this;
-        
+
         this.clear();
     }
 
     public clear(): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._groupId                       = 0;
             this._groupName                     = null;
             this._groupBadgeCode                = null;
@@ -56,7 +57,7 @@ export class GroupInfoComponent
     {
         this._navigatorService.goToRoom(this._groupHomeRoomId);
     }
-    
+
     public manage(): void
     {
         Nitro.instance.createLinkEvent('groups/manage/' + this.groupId);
@@ -87,10 +88,12 @@ export class GroupInfoComponent
         const message = Nitro.instance.localization.getValue('group.leaveconfirm.desc');
 
         const choices = [
-            new NotificationChoice('group.leave', () => {
+            new NotificationChoice('group.leave', () =>
+            {
                 Nitro.instance.communication.connection.send(new GroupRemoveMemberComposer(this.groupId, Nitro.instance.sessionDataManager.userId));
             }, ['btn-danger']),
-            new NotificationChoice('generic.close', () => {}, ['btn-primary'])
+            new NotificationChoice('generic.close', () =>
+            {}, ['btn-primary'])
         ];
 
         return [title, message, choices];

@@ -13,7 +13,7 @@ export default class GroupSettings
 
     private _state: number;
     private _canMembersDecorate: boolean;
-    
+
     constructor()
     {
         this._id                    = 0;
@@ -24,7 +24,7 @@ export default class GroupSettings
         this._badgeParts            = new Map();
         this._colorA                = 0;
         this.colorB                 = 0;
-        
+
         this._state                 = 0;
         this._canMembersDecorate    = false;
 
@@ -39,10 +39,11 @@ export default class GroupSettings
     {
         return this._badgeParts.get(id);
     }
-    
+
     public setPartsColor(color: number): void
     {
-        this._badgeParts.forEach((symbol) => {
+        this._badgeParts.forEach((symbol) =>
+        {
             symbol.color = color;
         });
     }
@@ -121,7 +122,8 @@ export default class GroupSettings
     {
         let code = '';
 
-        this._badgeParts.forEach((part) => {
+        this._badgeParts.forEach((part) =>
+        {
             if(part.code)
             {
                 code = code + part.code;
@@ -133,9 +135,10 @@ export default class GroupSettings
 
     public get currentBadgeArray(): number[]
     {
-        let badge = [];
+        const badge = [];
 
-        this._badgeParts.forEach((part) => {
+        this._badgeParts.forEach((part) =>
+        {
             if(part.code)
             {
                 badge.push(part.key);

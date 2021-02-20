@@ -10,7 +10,7 @@ export class GroupConfirmMemberRemoveParser implements IMessageParser
     {
         this._userId            = 0;
         this._furnitureCount    = 0;
-        
+
         return true;
     }
 
@@ -23,7 +23,7 @@ export class GroupConfirmMemberRemoveParser implements IMessageParser
 
         return true;
     }
-    
+
     public get userId(): number
     {
         return this._userId;

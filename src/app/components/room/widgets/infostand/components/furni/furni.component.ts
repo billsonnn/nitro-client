@@ -81,7 +81,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         this.canUse     = canUse;
 
         this.togglePickupButton(event);
-        
+
         this.updateCount++;
     }
 

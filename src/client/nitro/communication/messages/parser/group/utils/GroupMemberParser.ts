@@ -24,7 +24,7 @@ export default class GroupMemberParser
         this.flush();
         this.parse(wrapper);
     }
-    
+
     public flush(): boolean
     {
         this._rank      = -1;

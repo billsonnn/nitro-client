@@ -32,7 +32,7 @@ export class CatalogPurchaseComponent implements OnChanges
     public ngOnChanges(changes: SimpleChanges): void
     {
         if(!changes.activeOffer) return;
-        
+
         const prev = changes.activeOffer.previousValue;
         const next = changes.activeOffer.currentValue;
 

@@ -49,7 +49,7 @@ export class GroupSettingsParser implements IMessageParser
         }
 
         wrapper.readBoolean();
-        
+
         this._id                    = wrapper.readInt();
         this._title                 = wrapper.readString();
         this._description           = wrapper.readString();
@@ -78,13 +78,13 @@ export class GroupSettingsParser implements IMessageParser
             {
                 part.position = 4;
             }
-            
+
             this._badgeParts.set(i, part);
         }
 
         this._badgeCode             = wrapper.readString();
         this._membersCount          = wrapper.readInt();
-        
+
         return true;
     }
 

@@ -39,13 +39,13 @@ export class GroupCreatorTabBadgeComponent implements OnInit
         this._badgePartBeingSelected    = null;
         this._selectorVisible           = false;
         this._positions                 = [];
-        
+
         for(let i = 0; i < 9; i++)
         {
             this._positions.push(i);
         }
     }
-    
+
     ngOnInit(): void
     {
         this._clear();

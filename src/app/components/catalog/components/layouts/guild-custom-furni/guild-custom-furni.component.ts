@@ -21,7 +21,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
     private _selectedGroup: CatalogGroupData = null;
 
     private _lastOfferSelected: CatalogPageOfferData = null;
-    
+
     constructor(
         protected _catalogService: CatalogService,
         protected _ngZone: NgZone)
@@ -50,14 +50,14 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
 
         this._lastOfferSelected = offer;
 
-        let productData = [];
+        const productData = [];
         productData.push('0');
         productData.push(this.selectedGroupId);
         productData.push(this._selectedGroup.badge);
         productData.push(this.selectedGroupColorA);
         productData.push(this.selectedGroupColorB);
 
-        let stringDataType = new StringDataType();
+        const stringDataType = new StringDataType();
         stringDataType.setValue(productData);
 
         if(this._catalogService.component)
@@ -142,7 +142,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
 
         return 1;
     }
-    
+
     public get groups(): CatalogGroupData[]
     {
         return this._groups;
@@ -154,7 +154,8 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
 
         if(groups.length > 0)
         {
-            this._ngZone.run(() => {
+            this._ngZone.run(() =>
+            {
                 this.selectedGroupId = groups[0].id.toString();
             });
         }
@@ -181,14 +182,14 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
     public get selectedGroupColorA(): string
     {
         if(!this._selectedGroup) return 'fff';
-        
+
         return this._selectedGroup.colorA;
     }
 
     public get selectedGroupColorB(): string
     {
         if(!this._selectedGroup) return 'fff';
-        
+
         return this._selectedGroup.colorB;
     }
 }

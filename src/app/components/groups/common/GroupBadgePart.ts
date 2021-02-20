@@ -16,7 +16,7 @@ export default class GroupBadgePart
     public get code(): string
     {
         if(this.key === 0) return null;
-        
+
         return (this.isBase ? 'b' : 's') + (this.key < 100 ? '0' : '') + (this.key < 10 ? '0' : '') + this.key + (this.color < 10 ? '0' : '') + this.color + this.position;
     }
 }

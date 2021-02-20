@@ -11,17 +11,17 @@ export class GroupManagerComponent implements OnInit, OnDestroy
 {
     public groupSettings: GroupSettings;
     public visible: boolean;
-    
+
     private _currentTab: number;
     private _showNameError: boolean;
     private _showDescriptionError: boolean;
-    
+
     constructor(
         private _groupService: GroupsService,
         private _ngZone: NgZone)
     {
         this._groupService.groupManagerComponent = this;
-        
+
         this._clear();
     }
 
@@ -48,8 +48,9 @@ export class GroupManagerComponent implements OnInit, OnDestroy
     public load(settingsData: GroupSettingsParser): void
     {
         this._clear();
-        
-        this._ngZone.run(() => {
+
+        this._ngZone.run(() =>
+        {
             this.groupSettings.id                   = settingsData.id;
             this.groupSettings.name                 = settingsData.title;
             this.groupSettings.description          = settingsData.description;
@@ -99,7 +100,7 @@ export class GroupManagerComponent implements OnInit, OnDestroy
             this._currentTab = 1;
             return;
         }
-        
+
         this._groupService.save(this.groupSettings);
     }
 

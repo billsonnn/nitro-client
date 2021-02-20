@@ -28,13 +28,14 @@ export class GroupMembersComponent
         private _groupService: GroupsService)
     {
         this._groupService.groupMembersComponent = this;
-        
+
         this.clear();
     }
 
     public clear(): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._groupId           = 0;
             this._groupName         = null;
             this._groupBadgeCode    = null;
@@ -55,7 +56,8 @@ export class GroupMembersComponent
 
     public searchMembers(): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._pageSize          = 1;
             this._pageIndex         = 0;
             this._totalMembersCount = 0;
@@ -133,13 +135,15 @@ export class GroupMembersComponent
         {
             message = Nitro.instance.localization.getValueWithParameter('group.kickconfirm_nofurni.desc', 'user', '<b>' + userId + '</b>');
         }
-        
+
         const choices = [
-            new NotificationChoice('group.kickconfirm.title', () => {
+            new NotificationChoice('group.kickconfirm.title', () =>
+            {
                 Nitro.instance.communication.connection.send(new GroupRemoveMemberComposer(this.groupId, userId));
                 this.getMembers();
             }, ['btn-danger']),
-            new NotificationChoice('generic.close', () => {}, ['btn-primary'])
+            new NotificationChoice('generic.close', () =>
+            {}, ['btn-primary'])
         ];
 
         return [title, message, choices];
@@ -153,10 +157,10 @@ export class GroupMembersComponent
     public getRankIcon(rank: number): string
     {
         if(rank === 0) return 'fas fa-crown';
-        else if (rank === 1) return 'fas fa-star';
+        else if(rank === 1) return 'fas fa-star';
         else return 'far fa-star';
     }
-    
+
     public get visible(): boolean
     {
         return (this._groupId > 0);
@@ -243,7 +247,7 @@ export class GroupMembersComponent
     }
 
     public get totalPages(): number
-    {        
+    {
         return Math.ceil(this._totalMembersCount / this._pageSize);
     }
 

@@ -13,7 +13,7 @@ export class GroupCreatorTabConfirmationComponent
 
     @Input()
     public groupCost: number;
-    
+
     private _groupColorsA: Map<number, string>;
     private _groupColorsB: Map<number, string>;
 
