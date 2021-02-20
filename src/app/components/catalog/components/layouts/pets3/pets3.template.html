@@ -1,16 +1,16 @@
-<div class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets3-component small p-1">
-    <perfect-scrollbar class="position-relative w-100" style="min-height: 422px;max-height: 422px;height:422px;">
-        <div class="overflow-hidden d-flex flex-column" style="min-height:422px;">
-            <div class="row m-3">
-                <div class="col-sm-3 overflow-hidden d-flex justify-content-center px-1">
-                    <img class="align-self-center" [src]="getImage(1)">
+<div class="nitro-catalog-layout-pets3-component d-flex flex-column w-100 h-100">
+    <perfect-scrollbar class="position-relative w-100" style="min-height:422px;max-height: 422px;height:422px;">
+        <div class="d-flex flex-column">
+            <div class="d-flex mb-2">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img [src]="getImage(1)">
                 </div>
-                <div class="col-sm d-flex justify-content-center px-2">
-                    <h5 class="align-self-center" [innerHtml]="getText(1)"></h5>
+                <div class="d-flex justify-content-center align-items-center flex-grow-1">
+                    <p class="h5 m-0" [innerHtml]="getText(1)"></p>
                 </div>
             </div>
-            <div class="mx-3" [innerHtml]="getText(2)"></div>
-            <span class="mx-3 mt-auto mb-3" [innerHtml]="getText(3)"></span>
+            <p class="h6 m-0 mb-2" [innerHtml]="getText(2)"></p>
+            <p class="h6 m-0" [innerHtml]="getText(3)">sdfgsdfgsdfg</p>
         </div>
     </perfect-scrollbar>
 </div>

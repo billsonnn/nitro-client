@@ -38,11 +38,13 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _purchaseOfferPage: CatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
+    private _purchaseGiftOffer: CatalogPageOfferData = null;
     private _purchaseVipSubscription: CatalogClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
     private _showInsufficientFunds: boolean = false;
+    private _showGiftConfigurator: boolean = false;
 
     constructor(
         private _settingsService: SettingsService,
@@ -117,6 +119,9 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOfferQuantity = 1;
         this._purchaseOfferExtra    = null;
         this._purchaseVipSubscription = null;
+        this._purchaseGiftOffer     = null;
+        this._showGiftConfigurator = false;
+
     }
 
     private prepareCatalog(): void
@@ -252,7 +257,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
             const furniData = this._catalogService.getFurnitureDataForProductOffer(product);
 
-            if(!this._roomPreviewer) return;
+            if(!furniData) return;
 
             this._ngZone.runOutsideAngular(() =>
             {
@@ -337,7 +342,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null): void
+    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -349,6 +354,10 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._purchaseOffer         = offer;
         this._purchaseOfferQuantity = quantity;
         this._purchaseOfferExtra    = extra;
+        if(isGift)
+        {
+            this._purchaseGiftOffer = offer;
+        }
     }
 
     public confirmVipSubscription(subscription: CatalogClubOfferData): void
@@ -410,6 +419,21 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseOffer(): CatalogPageOfferData
     {
         return this._purchaseOffer;
+    }
+
+    public get giftOffer(): CatalogPageOfferData
+    {
+        return this._purchaseGiftOffer;
+    }
+
+    public get showGiftConfigurator(): boolean
+    {
+        return this._showGiftConfigurator;
+    }
+
+    public makeGiftConfiguratorVisible(): void
+    {
+        this._showGiftConfigurator = true;
     }
 
     public get purchaseOfferQuantity(): number

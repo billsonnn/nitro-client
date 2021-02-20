@@ -1,4 +1,5 @@
-﻿import { AvatarStructure } from '../AvatarStructure';
+﻿import { IAssetAnimation, IAssetAnimationFrame } from '../../../core/asset/interfaces';
+import { AvatarStructure } from '../AvatarStructure';
 import { AddDataContainer } from './AddDataContainer';
 import { AnimationLayerData } from './AnimationLayerData';
 import { AvatarDataContainer } from './AvatarDataContainer';
@@ -22,7 +23,7 @@ export class Animation implements IAnimation
     private _overrideFrames: Map<string, AnimationLayerData[][]>;
     private _resetOnToggle: boolean;
 
-    constructor(k: AvatarStructure, _arg_2: any)
+    constructor(k: AvatarStructure, _arg_2: IAssetAnimation)
     {
         this._id                = _arg_2.name;
         this._description       = this._id;
@@ -68,8 +69,8 @@ export class Animation implements IAnimation
 
             for(const override of _arg_2.overrides)
             {
-                const name  = override.name as string;
-                const value = override.override as string;
+                const name  = override.name;
+                const value = override.override;
 
                 this._overriddenActions.set(value, name);
 
@@ -84,7 +85,7 @@ export class Animation implements IAnimation
         this._Str_1031(this._frames, _arg_2.frames, k);
     }
 
-    private _Str_1031(frames: AnimationLayerData[][], _arg_2: any[], _arg_3: AvatarStructure): void
+    private _Str_1031(frames: AnimationLayerData[][], _arg_2: IAssetAnimationFrame[], _arg_3: AvatarStructure): void
     {
         if(!_arg_2 || !_arg_2.length) return;
 

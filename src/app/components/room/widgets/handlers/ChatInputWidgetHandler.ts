@@ -2,6 +2,7 @@ import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
 import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
+import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
 import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
@@ -10,6 +11,7 @@ import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/Room
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomChatInputComponent } from '../chatinput/component';
+import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
@@ -190,6 +192,18 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
     public processEvent(event: NitroEvent): void
     {
         if(!event || this._disposed) return;
+
+        switch(event.type)
+        {
+            case RoomSessionChatEvent.FLOOD_EVENT: {
+                const floodEvent = (event as RoomSessionChatEvent);
+
+                const seconds = parseInt(floodEvent.message);
+
+                this._container.events.dispatchEvent(new RoomWidgetFloodControlEvent(seconds));
+                return;
+            }
+        }
     }
 
     public get type(): string
@@ -204,7 +218,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
     public get eventTypes(): string[]
     {
-        return [ ];
+        return [ RoomSessionChatEvent.FLOOD_EVENT ];
     }
 
     public get container(): IRoomWidgetHandlerContainer

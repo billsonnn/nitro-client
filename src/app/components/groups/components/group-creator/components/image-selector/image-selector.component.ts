@@ -18,7 +18,7 @@ export class GroupCreatorImageSelectorComponent
 
     public getBadgeCode(id: number): string
     {
-        return ((this.part.isBase ? 'b' : 's') + (id <= 9 ? '0' + id : id) + (this.part.color <= 9 ? '0' + this.part.color : this.part.color) + (this.part.isBase ? '' : 4));
+        return ((this.part.isBase ? 'b' : 's') + (id < 100 ? '0' : '') + (id < 10 ? '0' : '') + id + (this.part.color < 10 ? '0' + this.part.color : this.part.color) + 4);
     }
 
     public selectPart(id: number): void

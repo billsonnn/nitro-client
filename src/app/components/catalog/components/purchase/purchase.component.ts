@@ -44,9 +44,9 @@ export class CatalogPurchaseComponent implements OnChanges
         this.quantity = 1;
     }
 
-    public purchase(): void
+    public purchase(asGift: boolean = false): void
     {
-        this._catalogService.component && this._catalogService.component.confirmPurchase(this.activePage, this.activeOffer, this.quantity, this.extra);
+        this._catalogService.component && this._catalogService.component.confirmPurchase(this.activePage, this.activeOffer, this.quantity, this.extra, asGift);
     }
 
     public increase(): void

@@ -1,4 +1,5 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { FigureSetIdsMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
@@ -17,6 +18,7 @@ import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
 export class InventoryService implements OnDestroy
 {
     private _messages: IMessageEvent[] = [];
+    private _events: Subject<string> = null;
 
     private _botsController: InventoryBotsComponent = null;
     private _furniController: InventoryFurnitureComponent = null;
@@ -39,6 +41,7 @@ export class InventoryService implements OnDestroy
         private _settingsService: SettingsService,
         private _ngZone: NgZone)
     {
+        this._events            = new EventEmitter();
         this._unseenTracker     = new UnseenItemTracker(Nitro.instance.communication, this);
         this._unseenCounts      = new Map();
 
@@ -171,6 +174,11 @@ export class InventoryService implements OnDestroy
     public hasBoundFigureSetFurniture(k: string): boolean
     {
         return (this._boundFurnitureNames.indexOf(k) > -1);
+    }
+
+    public get events(): Subject<string>
+    {
+        return this._events;
     }
 
     public get botsController(): InventoryBotsComponent

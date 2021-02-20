@@ -12,6 +12,7 @@ export class OutgoingHeader
     public static CATALOG_MODE                   = 1195;
     public static CATALOG_PAGE                   = 412;
     public static CATALOG_PURCHASE               = 3492;
+    public static CATALOG_PURCHASE_GIFT          = 1411;
     public static CATALOG_SEARCH                 = 2594;
     public static CLIENT_LATENCY                 = 295;
     public static CLIENT_LATENCY_MEASURE         = 96;
@@ -196,4 +197,5 @@ export class OutgoingHeader
     public static CATALOG_REDEEM_VOUCHER         = 339;
     public static ROOM_TONER_APPLY               = 2880;
     public static LOVELOCK_START_CONFIRM         = 3775;
+    public static PRESENT_OPEN_PRESENT           = 3558;
 }

@@ -13,7 +13,7 @@ export class RoomWidgetPresentOpenMessage extends RoomWidgetMessage
         this._objectId = _arg_2;
     }
 
-    public get _Str_1577(): number
+    public get objectId(): number
     {
         return this._objectId;
     }

@@ -1,6 +1,8 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
+import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
+import { CatalogGiftUsernameUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
 import { CatalogGroupsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGroupsEvent';
 import { CatalogModeEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogModeEvent';
 import { CatalogPageEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPageEvent';
@@ -16,6 +18,8 @@ import { CatalogGroupsComposer } from '../../../../client/nitro/communication/me
 import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
+import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseGiftComposer';
+import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
@@ -29,9 +33,11 @@ import { FurnitureType } from '../../../../client/nitro/session/furniture/Furnit
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
+import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
 import { CatalogLayoutGuildCustomFurniComponent } from '../components/layouts/guild-custom-furni/guild-custom-furni.component';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
 import { CatalogMainComponent } from '../components/main/main.component';
+import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
 
 @Injectable()
@@ -41,6 +47,7 @@ export class CatalogService implements OnDestroy
 
     private _messages: IMessageEvent[] = [];
     private _component: CatalogMainComponent = null;
+    private _giftConfiguratorComponent: CatalogCustomizeGiftComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
     private _activePage: CatalogPageParser = null;
@@ -53,6 +60,8 @@ export class CatalogService implements OnDestroy
     private _groupFurniTemplate: CatalogLayoutGuildCustomFurniComponent = null;
     private _loaded: boolean = false;
     
+    private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
+
     constructor(
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
@@ -85,10 +94,15 @@ export class CatalogService implements OnDestroy
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
                 new CatalogGroupsEvent(this.onCatalogGroupsEvent.bind(this)),
-                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this))
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
+                new CatalogGiftConfigurationEvent(this.onGiftConfigurationEvent.bind(this)),
+                new CatalogGiftUsernameUnavailableEvent(this.onGiftUsernameUnavailableEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+
+            Nitro.instance.communication.connection.send(new CatalogRequestGiftConfigurationComposer());
         });
     }
 
@@ -119,6 +133,16 @@ export class CatalogService implements OnDestroy
     public registerGroupFurniTemplate(template: CatalogLayoutGuildCustomFurniComponent)
     {
         this._groupFurniTemplate = template;
+    }
+
+    private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
+    {
+        this._giftWrappingConfiguration = new GiftWrappingConfiguration(event);
+    }
+
+    private onGiftUsernameUnavailableEvent(event: CatalogGiftUsernameUnavailableEvent): void
+    {
+        this._giftConfiguratorComponent && this._giftConfiguratorComponent.showUsernameNotFoundDialog();
     }
 
     private onCatalogModeEvent(event: CatalogModeEvent): void
@@ -364,7 +388,7 @@ export class CatalogService implements OnDestroy
     {
         if(!furniData) return null;
 
-        const assetUrl = Nitro.instance.roomEngine.roomContentLoader.getAssetUrls(furniData.className, (furniData.colorId.toString()), true);
+        const assetUrl = Nitro.instance.roomEngine.roomContentLoader.getAssetUrls(furniData.className, (furniData.colorIndex.toString()), true);
 
         return ((assetUrl && assetUrl[0]) || null);
     }
@@ -374,6 +398,11 @@ export class CatalogService implements OnDestroy
         if(!page || !offer || !quantity) return;
 
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
+    }
+
+    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift ));
     }
 
     public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)
@@ -419,6 +448,11 @@ export class CatalogService implements OnDestroy
         this._component = component;
     }
 
+    public set giftConfiguratorComponent(component: CatalogCustomizeGiftComponent)
+    {
+        this._giftConfiguratorComponent = component;
+    }
+
     public get catalogMode(): number
     {
         return this._catalogMode;
@@ -453,4 +487,11 @@ export class CatalogService implements OnDestroy
     {
         return this._clubOffers;
     }
+
+    public get giftWrapperConfiguration(): GiftWrappingConfiguration
+    {
+        return this._giftWrappingConfiguration;
+    }
+
+
 }
