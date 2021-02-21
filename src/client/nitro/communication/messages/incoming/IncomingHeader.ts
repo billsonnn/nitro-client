@@ -218,4 +218,8 @@ export class IncomingHeader
     public static HOTEL_WILL_SHUTDOWN              = 1050;
     public static FLOOD_CONTROL                    = 566;
     public static REMAINING_MUTE                   = 826;
+    public static USER_EFFECT_LIST                 = 340;
+    public static USER_EFFECT_LIST_ADD             = 2867;
+    public static USER_EFFECT_LIST_REMOVE          = 2228;
+    public static USER_EFFECT_ACTIVATE             = 1959;
 }

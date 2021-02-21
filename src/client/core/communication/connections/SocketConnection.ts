@@ -291,7 +291,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         if(!events || !events.length)
         {
-            console.log(`IncomingMessage: [${ wrapper.header }] UNREGISTERED`, wrapper);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log'))
+            {
+                console.log(`IncomingMessage: [${ wrapper.header }] UNREGISTERED`, wrapper);
+            }
 
             return;
         }

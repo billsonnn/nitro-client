@@ -1,10 +1,10 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { _Str_5511 } from '../../../incoming/inventory/avatareffect/_Str_5511';
+import { AvatarEffect } from '../../../incoming/inventory/avatareffect/AvatarEffect';
 
-export class _Str_5747 implements IMessageParser
+export class AvatarEffectsParser implements IMessageParser
 {
-    private _effects: _Str_5511[];
+    private _effects: AvatarEffect[];
 
     public flush(): boolean
     {
@@ -21,7 +21,7 @@ export class _Str_5747 implements IMessageParser
 
         while(totalEffects > 0)
         {
-            const effect = new _Str_5511();
+            const effect = new AvatarEffect();
 
             effect.type         = wrapper.readInt();
             effect._Str_3882    = wrapper.readInt();
@@ -38,7 +38,7 @@ export class _Str_5747 implements IMessageParser
         return true;
     }
 
-    public get effects(): _Str_5511[]
+    public get effects(): AvatarEffect[]
     {
         return this._effects;
     }

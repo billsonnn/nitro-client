@@ -14,7 +14,6 @@ import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
 import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
-import { LoadingComponent } from './components/loading/loading.component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
@@ -65,7 +64,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BadgeComponent,
         CurrencyIconComponent,
         FurnitureImageComponent,
-        LoadingComponent,
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,
@@ -89,7 +87,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BadgeComponent,
         CurrencyIconComponent,
         FurnitureImageComponent,
-        LoadingComponent,
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,

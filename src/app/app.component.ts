@@ -15,7 +15,7 @@ import { SettingsService } from './core/settings/service';
 })
 export class AppComponent implements OnInit, OnDestroy
 {
-    public message: string              = null;
+    public message: string              = 'Getting Ready';
     public percentage: number           = 0;
     public hideProgress: boolean        = true;
     public isLocalizationReady: boolean = false;
@@ -144,6 +144,11 @@ export class AppComponent implements OnInit, OnDestroy
                 });
                 return;
             case NitroCommunicationDemoEvent.CONNECTION_AUTHENTICATED:
+                this._ngZone.run(() =>
+                {
+                    this.message = 'Finishing Up';
+                });
+
                 Nitro.instance.init();
 
                 clearTimeout(this._connectionTimeout);
@@ -176,6 +181,11 @@ export class AppComponent implements OnInit, OnDestroy
                 {
                     if(status)
                     {
+                        this._ngZone.run(() =>
+                        {
+                            this.message = 'Connecting';
+                        });
+
                         Nitro.instance.communication.init();
                     }
                     else

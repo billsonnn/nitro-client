@@ -39,6 +39,10 @@ import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
 import { AchievementsEvent } from './messages/incoming/inventory/achievements/AchievementsEvent';
 import { AchievementsScoreEvent } from './messages/incoming/inventory/achievements/AchievementsScoreEvent';
+import { AvatarEffectActivatedEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectActivatedEvent';
+import { AvatarEffectAddedEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectAddedEvent';
+import { AvatarEffectExpiredEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectExpiredEvent';
+import { AvatarEffectsEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectsEvent';
 import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
 import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
 import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
@@ -359,6 +363,17 @@ export class NitroMessages implements IMessageConfiguration
 
         // INVENTORY
 
+        // ACHIEVEMENTS
+        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
+        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
+        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
+
+        // EFFECTS
+        this._events.set(IncomingHeader.USER_EFFECT_ACTIVATE, AvatarEffectActivatedEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST_ADD, AvatarEffectAddedEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST_REMOVE, AvatarEffectExpiredEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST, AvatarEffectsEvent);
+
         // CLOTHES
         this._events.set(IncomingHeader.USER_CLOTHING, FigureSetIdsMessageEvent);
 
@@ -528,6 +543,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // INVENTORY
         this._events.set(IncomingHeader.GIFT_RECEIVER_NOT_FOUND, CatalogGiftUsernameUnavailableEvent);
+
         // BOTS
         this._events.set(IncomingHeader.USER_BOTS, BotInventoryMessageEvent);
         this._events.set(IncomingHeader.REMOVE_BOT_FROM_INVENTORY, BotRemovedFromInventoryEvent);
@@ -543,11 +559,6 @@ export class NitroMessages implements IMessageConfiguration
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
-
-        // ACHIEVEMENTS
-        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
-        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
-        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
     }
 
     private registerComposers(): void
