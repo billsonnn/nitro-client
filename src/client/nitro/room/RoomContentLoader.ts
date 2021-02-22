@@ -543,7 +543,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
         }
 
         else if(resource.type === LoaderResource.TYPE.JSON)
