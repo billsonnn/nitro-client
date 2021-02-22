@@ -224,4 +224,5 @@ export class IncomingHeader
     public static USER_EFFECT_LIST_ADD             = 2867;
     public static USER_EFFECT_LIST_REMOVE          = 2228;
     public static USER_EFFECT_ACTIVATE             = 1959;
+    public static CATALOG_CLUB_GIFTS               = 619;
 }

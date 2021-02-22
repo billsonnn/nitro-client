@@ -9,6 +9,7 @@ export class OutgoingHeader
     public static CAMERA_SAVE                    = 3226;
     public static CAMERA_THUMBNAIL               = 1982;
     public static CATALOG_CLUB                   = 3285;
+    public static CATALOG_CLUB_GIFTS             = 487;
     public static CATALOG_MODE                   = 1195;
     public static CATALOG_PAGE                   = 412;
     public static CATALOG_PURCHASE               = 3492;
@@ -200,4 +201,5 @@ export class OutgoingHeader
     public static MANNEQUIN_SAVE_NAME            = 2850;
     public static MANNEQUIN_SAVE_LOOK            = 2209;
     public static PRESENT_OPEN_PRESENT           = 3558;
+    public static CATALOG_SELECT_VIP_GIFT        = 2276;
 }

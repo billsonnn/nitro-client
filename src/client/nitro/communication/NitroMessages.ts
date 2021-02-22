@@ -319,6 +319,9 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { CatalogRequestVipGiftsComposer } from './messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
+import { CatalogClubGiftsEvent } from './messages/incoming/catalog/CatalogClubGiftsEvent';
+import { CatalogSelectClubGiftComposer } from './messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -354,6 +357,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_SEARCH, CatalogSearchEvent);
         this._events.set(IncomingHeader.CATALOG_SOLD_OUT, CatalogSoldOutEvent);
         this._events.set(IncomingHeader.CATALOG_UPDATED, CatalogUpdatedEvent);
+        this._events.set(IncomingHeader.CATALOG_CLUB_GIFTS, CatalogClubGiftsEvent);
         this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
         this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
 
@@ -602,10 +606,12 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_PURCHASE_GIFT, CatalogPurchaseGiftComposer);
         this._composers.set(OutgoingHeader.CATALOG_SEARCH, CatalogSearchComposer);
         this._composers.set(OutgoingHeader.CATALOG_CLUB, CatalogRequestVipOffersComposer);
+        this._composers.set(OutgoingHeader.CATALOG_CLUB_GIFTS, CatalogRequestVipGiftsComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
         this._composers.set(OutgoingHeader.LOVELOCK_START_CONFIRM, LoveLockStartConfirmComposer);
         this._composers.set(OutgoingHeader.GROUP_MEMBERSHIPS, CatalogGroupsComposer);
         this._composers.set(OutgoingHeader.GIFT_CONFIG, CatalogRequestGiftConfigurationComposer);
+        this._composers.set(OutgoingHeader.CATALOG_SELECT_VIP_GIFT, CatalogSelectClubGiftComposer);
 
         // CLIENT
         this._composers.set(OutgoingHeader.CLIENT_PONG, ClientPongComposer);
