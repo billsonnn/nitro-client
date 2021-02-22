@@ -3,6 +3,7 @@ import { IMessageEvent } from '../../../../client/core/communication/messages/IM
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
 import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogGiftUsernameUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
+import { CatalogGroupsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGroupsEvent';
 import { CatalogModeEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogModeEvent';
 import { CatalogPageEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPageEvent';
 import { CatalogPagesEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPagesEvent';
@@ -13,6 +14,7 @@ import { CatalogSearchEvent } from '../../../../client/nitro/communication/messa
 import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
 import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { CatalogGroupsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogGroupsComposer';
 import { CatalogModeComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
@@ -32,6 +34,7 @@ import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurn
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
+import { CatalogLayoutGuildCustomFurniComponent } from '../components/layouts/guild-custom-furni/guild-custom-furni.component';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
@@ -58,6 +61,9 @@ export class CatalogService implements OnDestroy
     private _purse: Purse = new Purse();
     private _clubOffers: CatalogClubOfferData[] = [];
     private _vipTemplate: CatalogLayoutVipBuyComponent = null;
+    private _groupFurniTemplate: CatalogLayoutGuildCustomFurniComponent = null;
+    private _loaded: boolean = false;
+
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
 
     constructor(
@@ -73,6 +79,7 @@ export class CatalogService implements OnDestroy
         this.unregisterMessages();
 
         this._vipTemplate = null;
+        this._groupFurniTemplate = null;
     }
 
     private registerMessages(): void
@@ -90,6 +97,8 @@ export class CatalogService implements OnDestroy
                 new CatalogSearchEvent(this.onCatalogSearchEvent.bind(this)),
                 new CatalogSoldOutEvent(this.onCatalogSoldOutEvent.bind(this)),
                 new CatalogUpdatedEvent(this.onCatalogUpdatedEvent.bind(this)),
+                new CatalogGroupsEvent(this.onCatalogGroupsEvent.bind(this)),
+                new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this)),
                 new CatalogGiftConfigurationEvent(this.onGiftConfigurationEvent.bind(this)),
                 new CatalogGiftUsernameUnavailableEvent(this.onGiftUsernameUnavailableEvent.bind(this)),
@@ -135,6 +144,11 @@ export class CatalogService implements OnDestroy
     public registerVipBuyTemplate(template: CatalogLayoutVipBuyComponent)
     {
         this._vipTemplate = template;
+    }
+
+    public registerGroupFurniTemplate(template: CatalogLayoutGuildCustomFurniComponent)
+    {
+        this._groupFurniTemplate = template;
     }
 
     private onGiftConfigurationEvent(event: CatalogGiftConfigurationEvent): void
@@ -250,6 +264,20 @@ export class CatalogService implements OnDestroy
         if(!parser) return;
     }
 
+    private onCatalogGroupsEvent(event: CatalogGroupsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._groupFurniTemplate.groups = parser.groups;
+        });
+    }
+
     private onUserSubscriptionEvent(event: UserSubscriptionEvent): void
     {
         if(!event) return;
@@ -306,6 +334,11 @@ export class CatalogService implements OnDestroy
         (this._component && this._component.reset());
 
         Nitro.instance.communication.connection.send(new CatalogModeComposer(mode));
+    }
+
+    public requestGroups(): void
+    {
+        Nitro.instance.communication.connection.send(new CatalogGroupsComposer());
     }
 
     public requestPage(page: CatalogPageData): void

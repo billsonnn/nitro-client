@@ -1,0 +1,46 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-group-members-component" dragHandle=".drag-handler">
+    <div class="card">
+        <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+            <h6 class="m-0">{{ ('group.members.title') | translate:'groupName':groupName }}</h6>
+            <button type="button" class="close" (click)="clear()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3">
+            <div class="d-flex flex-row justify-content-between w-100 mb-2">
+                <div class="mr-3">
+                    <nitro-badge [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                </div>
+                <div class="w-100">
+                    <input type="text" class="form-control form-control-sm mb-1" [placeholder]="('group.members.searchinfo') | translate" [(ngModel)]="query" (keyup.enter)="searchMembers()">
+                    <select class="form-control form-control-sm" [(ngModel)]="level" (ngModelChange)="searchMembers()">
+                        <option value="0">{{ ('group.members.search.all') | translate }}</option>
+                        <option value="1">{{ ('group.members.search.admins') | translate }}</option>
+                        <option *ngIf="admin" value="2">{{ ('group.members.search.pending') | translate }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-container mt-3">
+                <div class="grid-items grid-3">
+                    <div *ngFor="let member of result" class="d-flex flex-row justify-content-between item-detail">
+                        <div class="bg-emperor w-100 p-2 rounded">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="w-100" (click)="openProfile(member.id)"><i *ngIf="member.rank < 3" class="mr-2" [ngClass]="getRankIcon(member.rank)"></i>{{ member.name }}</div>
+                                <div *ngIf="admin && member.rank > 0" (click)="removeOrDeclineMember(member.id, member.rank)"><i class="fas fa-times"></i></div>
+                            </div>
+                            <button *ngIf="member.rank === 0" class="btn btn-primary btn-sm w-100 mt-1">{{ ('group.members.owner') | translate }}</button>
+                            <button *ngIf="admin && member.id !== myId && member.rank !== 0" class="btn btn-primary btn-sm w-100 mt-1">
+                                <span *ngIf="member.rank === 1" (click)="takeAdmin(member.id)">{{ ('group.members.removerights') | translate }}</span>
+                                <span *ngIf="member.rank === 2" (click)="giveAdmin(member.id)">{{ ('group.members.giverights') | translate }}</span>
+                                <span *ngIf="member.rank === 3" (click)="acceptMembership(member.id)">{{ ('group.members.accept') | translate }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-between mt-3">
+                <button class="btn btn-primary btn-sm" (click)="previousPage()" [disabled]="pageIndex === 0"><i class="fas fa-chevron-left"></i></button>
+                <div class="text-center w-100 pagination-counter">{{ ('group.members.pageinfo') | translate:['amount', 'page', 'totalPages']:[totalMembersCount, pageIndex + 1, totalPages] }}</div>
+                <button class="btn btn-primary btn-sm" (click)="nextPage()" [disabled]="pageIndex + 1 === totalPages"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>

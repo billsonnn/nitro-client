@@ -1,0 +1,20 @@
+<div class="mb-3">{{ ('group.create.stepcaption.4') | translate }}</div>
+<div class="row">
+    <div class="col-4">
+        <div class="mb-1">{{ ('group.create.confirm.guildbadge') | translate }}</div>
+        <button class="btn btn-primary mb-3" style="width: 120px;height: 67px;">
+            <nitro-badge [badge]="groupSettings.currentBadgeCode" [isGroup]="true"></nitro-badge>
+        </button>
+        <div class="mb-1">{{ ('group.create.confirm.guildcolors') | translate }}</div>
+        <div class="btn-group" style="height: 67px;width: 120px;">
+            <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsA.get(groupSettings.colorA)}"></button>
+            <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsB.get(groupSettings.colorB)}"></button>
+        </div>
+    </div>
+    <div class="col-8">
+        <div>{{ groupSettings.name }}</div>
+        <div class="small mb-3">{{ groupSettings.description }}</div>
+        <div class="mb-2" [innerHtml]="('group.create.confirm.info') | translate"></div>
+        <div>{{ ('group.create.confirm.buyinfo') | translate:'amount':groupCost }}</div>
+    </div>
+</div>

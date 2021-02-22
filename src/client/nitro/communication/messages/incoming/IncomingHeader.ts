@@ -50,7 +50,9 @@ export class IncomingHeader
     public static GROUP_MEMBER                     = 265;
     public static GROUP_MEMBERS                    = 1200;
     public static GROUP_MEMBERS_REFRESH            = 2445;
+    public static GROUP_MEMBER_REMOVE_CONFIRM      = 1876;
     public static GROUP_SETTINGS                   = 3965;
+    public static GROUP_BADGE_PARTS                = 2238;
     public static ITEM_DIMMER_SETTINGS             = 2710;
     public static ITEM_STACK_HELPER                = 2816;
     public static ITEM_WALL                        = 1369;
@@ -218,5 +220,9 @@ export class IncomingHeader
     public static HOTEL_WILL_SHUTDOWN              = 1050;
     public static FLOOD_CONTROL                    = 566;
     public static REMAINING_MUTE                   = 826;
+    public static USER_EFFECT_LIST                 = 340;
+    public static USER_EFFECT_LIST_ADD             = 2867;
+    public static USER_EFFECT_LIST_REMOVE          = 2228;
+    public static USER_EFFECT_ACTIVATE             = 1959;
     public static CATALOG_CLUB_GIFTS               = 619;
 }

@@ -4,6 +4,7 @@ import { ChangeNameUpdateEvent } from './messages/incoming/avatar/ChangeNameUpda
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
 import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogGiftUsernameUnavailableEvent } from './messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
+import { CatalogGroupsEvent } from './messages/incoming/catalog/CatalogGroupsEvent';
 import { CatalogModeEvent } from './messages/incoming/catalog/CatalogModeEvent';
 import { CatalogPageEvent } from './messages/incoming/catalog/CatalogPageEvent';
 import { CatalogPagesEvent } from './messages/incoming/catalog/CatalogPagesEvent';
@@ -33,12 +34,21 @@ import { RoomInviteErrorEvent } from './messages/incoming/friendlist/RoomInviteE
 import { RoomInviteEvent } from './messages/incoming/friendlist/RoomInviteEvent';
 import { LoadGameUrlEvent } from './messages/incoming/game/LoadGameUrlEvent';
 import { GenericErrorEvent } from './messages/incoming/generic/GenericErrorEvent';
+import { GroupBadgePartsEvent } from './messages/incoming/group/GroupBadgePartsEvent';
+import { GroupBuyDataEvent } from './messages/incoming/group/GroupBuyDataEvent';
+import { GroupConfirmMemberRemoveEvent } from './messages/incoming/group/GroupConfirmMemberRemoveEvent';
 import { GroupInformationEvent } from './messages/incoming/group/GroupInformationEvent';
+import { GroupMembersEvent } from './messages/incoming/group/GroupMembersEvent';
+import { GroupSettingsEvent } from './messages/incoming/group/GroupSettingsEvent';
 import { CallForHelpResultMessageEvent } from './messages/incoming/help/CallForHelpResultMessageEvent';
 import { IncomingHeader } from './messages/incoming/IncomingHeader';
 import { AchievementEvent } from './messages/incoming/inventory/achievements/AchievementEvent';
 import { AchievementsEvent } from './messages/incoming/inventory/achievements/AchievementsEvent';
 import { AchievementsScoreEvent } from './messages/incoming/inventory/achievements/AchievementsScoreEvent';
+import { AvatarEffectActivatedEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectActivatedEvent';
+import { AvatarEffectAddedEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectAddedEvent';
+import { AvatarEffectExpiredEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectExpiredEvent';
+import { AvatarEffectsEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectsEvent';
 import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
 import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
 import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
@@ -162,6 +172,7 @@ import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/U
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
 import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
+import { CatalogGroupsComposer } from './messages/outgoing/catalog/CatalogGroupsComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
 import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComposer';
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
@@ -188,7 +199,24 @@ import { SendMessageComposer } from './messages/outgoing/friendlist/SendMessageC
 import { SendRoomInviteComposer } from './messages/outgoing/friendlist/SendRoomInviteComposer';
 import { SetRelationshipStatusComposer } from './messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { VisitUserComposer } from './messages/outgoing/friendlist/VisitUserComposer';
+import { GroupAdminGiveComposer } from './messages/outgoing/group/GroupAdminGiveComposer';
+import { GroupAdminTakeComposer } from './messages/outgoing/group/GroupAdminTakeComposer';
+import { GroupBadgePartsComposer } from './messages/outgoing/group/GroupBadgePartsComposer';
+import { GroupBuyComposer } from './messages/outgoing/group/GroupBuyComposer';
+import { GroupBuyDataComposer } from './messages/outgoing/group/GroupBuyDataComposer';
+import { GroupConfirmRemoveMemberComposer } from './messages/outgoing/group/GroupConfirmRemoveMemberComposer';
+import { GroupDeleteComposer } from './messages/outgoing/group/GroupDeleteComposer';
 import { GroupInformationComposer } from './messages/outgoing/group/GroupInformationComposer';
+import { GroupJoinComposer } from './messages/outgoing/group/GroupJoinComposer';
+import { GroupMembersComposer } from './messages/outgoing/group/GroupMembersComposer';
+import { GroupMembershipAcceptComposer } from './messages/outgoing/group/GroupMembershipAcceptComposer';
+import { GroupMembershipDeclineComposer } from './messages/outgoing/group/GroupMembershipDeclineComposer';
+import { GroupRemoveMemberComposer } from './messages/outgoing/group/GroupRemoveMemberComposer';
+import { GroupSaveBadgeComposer } from './messages/outgoing/group/GroupSaveBadgeComposer';
+import { GroupSaveColorsComposer } from './messages/outgoing/group/GroupSaveColorsComposer';
+import { GroupSaveInformationComposer } from './messages/outgoing/group/GroupSaveInformationComposer';
+import { GroupSavePreferencesComposer } from './messages/outgoing/group/GroupSavePreferencesComposer';
+import { GroupSettingsComposer } from './messages/outgoing/group/GroupSettingsComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
@@ -328,6 +356,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_SOLD_OUT, CatalogSoldOutEvent);
         this._events.set(IncomingHeader.CATALOG_UPDATED, CatalogUpdatedEvent);
         this._events.set(IncomingHeader.CATALOG_CLUB_GIFTS, CatalogClubGiftsEvent);
+        this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
         this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
 
         // CLIENT
@@ -357,11 +386,27 @@ export class NitroMessages implements IMessageConfiguration
 
         // GROUP
         this._events.set(IncomingHeader.GROUP_INFO, GroupInformationEvent);
+        this._events.set(IncomingHeader.GROUP_MEMBER_REMOVE_CONFIRM, GroupConfirmMemberRemoveEvent);
+        this._events.set(IncomingHeader.GROUP_MEMBERS, GroupMembersEvent);
+        this._events.set(IncomingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataEvent);
+        this._events.set(IncomingHeader.GROUP_BADGE_PARTS, GroupBadgePartsEvent);
+        this._events.set(IncomingHeader.GROUP_SETTINGS, GroupSettingsEvent);
 
         // HELP
         this._events.set(IncomingHeader.CFH_RESULT_MESSAGE, CallForHelpResultMessageEvent);
 
         // INVENTORY
+
+        // ACHIEVEMENTS
+        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
+        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
+        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
+
+        // EFFECTS
+        this._events.set(IncomingHeader.USER_EFFECT_ACTIVATE, AvatarEffectActivatedEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST_ADD, AvatarEffectAddedEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST_REMOVE, AvatarEffectExpiredEvent);
+        this._events.set(IncomingHeader.USER_EFFECT_LIST, AvatarEffectsEvent);
 
         // CLOTHES
         this._events.set(IncomingHeader.USER_CLOTHING, FigureSetIdsMessageEvent);
@@ -532,6 +577,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // INVENTORY
         this._events.set(IncomingHeader.GIFT_RECEIVER_NOT_FOUND, CatalogGiftUsernameUnavailableEvent);
+
         // BOTS
         this._events.set(IncomingHeader.USER_BOTS, BotInventoryMessageEvent);
         this._events.set(IncomingHeader.REMOVE_BOT_FROM_INVENTORY, BotRemovedFromInventoryEvent);
@@ -547,11 +593,6 @@ export class NitroMessages implements IMessageConfiguration
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
-
-        // ACHIEVEMENTS
-        this._events.set(IncomingHeader.ACHIEVEMENT_PROGRESSED, AchievementEvent);
-        this._events.set(IncomingHeader.ACHIEVEMENT_LIST, AchievementsEvent);
-        this._events.set(IncomingHeader.USER_ACHIEVEMENT_SCORE,AchievementsScoreEvent);
     }
 
     private registerComposers(): void
@@ -566,6 +607,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CATALOG_CLUB_GIFTS, CatalogRequestVipGiftsComposer);
         this._composers.set(OutgoingHeader.CATALOG_REDEEM_VOUCHER, CatalogRedeemVoucherComposer);
         this._composers.set(OutgoingHeader.LOVELOCK_START_CONFIRM, LoveLockStartConfirmComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBERSHIPS, CatalogGroupsComposer);
         this._composers.set(OutgoingHeader.GIFT_CONFIG, CatalogRequestGiftConfigurationComposer);
         this._composers.set(OutgoingHeader.CATALOG_SELECT_VIP_GIFT, CatalogSelectClubGiftComposer);
 
@@ -594,6 +636,23 @@ export class NitroMessages implements IMessageConfiguration
 
         // GROUP
         this._composers.set(OutgoingHeader.GROUP_INFO, GroupInformationComposer);
+        this._composers.set(OutgoingHeader.GROUP_REQUEST, GroupJoinComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBER_REMOVE_CONFIRM, GroupConfirmRemoveMemberComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBER_REMOVE, GroupRemoveMemberComposer);
+        this._composers.set(OutgoingHeader.GROUP_MEMBERS, GroupMembersComposer);
+        this._composers.set(OutgoingHeader.GROUP_ADMIN_ADD, GroupAdminGiveComposer);
+        this._composers.set(OutgoingHeader.GROUP_ADMIN_REMOVE, GroupAdminTakeComposer);
+        this._composers.set(OutgoingHeader.GROUP_REQUEST_ACCEPT, GroupMembershipAcceptComposer);
+        this._composers.set(OutgoingHeader.GROUP_REQUEST_DECLINE, GroupMembershipDeclineComposer);
+        this._composers.set(OutgoingHeader.GROUP_DELETE, GroupDeleteComposer);
+        this._composers.set(OutgoingHeader.GROUP_CREATE_OPTIONS, GroupBuyDataComposer);
+        this._composers.set(OutgoingHeader.GROUP_PARTS, GroupBadgePartsComposer);
+        this._composers.set(OutgoingHeader.GROUP_BUY, GroupBuyComposer);
+        this._composers.set(OutgoingHeader.GROUP_SETTINGS, GroupSettingsComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_BADGE, GroupSaveBadgeComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_COLORS, GroupSaveColorsComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_INFORMATION, GroupSaveInformationComposer);
+        this._composers.set(OutgoingHeader.GROUP_SAVE_PREFERENCES, GroupSavePreferencesComposer);
 
         // SECURITY
         this._composers.set(OutgoingHeader.SECURITY_TICKET, SecurityTicketComposer);

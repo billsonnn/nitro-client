@@ -6,16 +6,20 @@ export interface ISpritesheetFrame
         w: number;
         h: number;
     };
-    sourceSize: {
-        w: number;
-        h: number;
-    };
-    spritesheetSourceSize: {
+    rotated: boolean;
+    trimmed: boolean;
+    spriteSourceSize: {
         x: number;
         y: number;
         w: number;
         h: number;
     };
-    rotated: boolean;
-    trimmed: boolean;
+    sourceSize: {
+        w: number;
+        h: number;
+    };
+    pivot: {
+        x: number;
+        y: number;
+    };
 }
