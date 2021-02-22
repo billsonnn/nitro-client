@@ -55,6 +55,7 @@ import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCredit
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
+import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
 import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
@@ -511,6 +512,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
+                break;
+            case RoomWidgetEnum.MANNEQUIN:
+                widgetHandler = new FurnitureMannequinWidgetHandler();
                 break;
             case RoomWidgetEnum.ROOM_BACKGROUND_COLOR:
                 widgetHandler = new FurnitureBackgroundColorWidgetHandler();

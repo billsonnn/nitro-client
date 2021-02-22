@@ -116,6 +116,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
             if(!flag)
             {
+                console.log(resource);
                 this._logger.error('Failed to download asset: ' + resource.url);
 
                 cb(false);
@@ -222,7 +223,7 @@ export class AssetManager extends Disposable implements IAssetManager
 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
         }
 
         else if(resource.type === LoaderResource.TYPE.JSON)

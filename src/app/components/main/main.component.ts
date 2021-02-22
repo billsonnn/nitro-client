@@ -38,6 +38,7 @@ import { RoomInfoStandMainComponent } from '../room/widgets/infostand/components
 import { DoorbellWidgetComponent } from '../room/widgets/navigator/doorbell/doorbell.component';
 import { RoomChatComponent } from '../room/widgets/roomchat/component';
 import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.component';
+import { MannequinWidget } from '../room/widgets/furniture/mannequin/mannequin.component';
 
 @Component({
     selector: 'nitro-main-component',
@@ -112,6 +113,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_DIMMER, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, this.onRoomEngineObjectEvent);
             }
 
@@ -232,6 +234,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_CONFIRM, FriendsFurniConfirmWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_FURNI_ENGRAVING, FriendFurniEngravingWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.MANNEQUIN, MannequinWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_PRESENT_WIDGET, PresentFurniWidget);
 
                     if(!this.roomComponent.roomSession.isSpectator)
