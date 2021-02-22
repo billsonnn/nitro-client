@@ -3,7 +3,7 @@
         <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
         <div *ngIf="activeOffer" class="d-flex position-relative w-100 h-100">
             <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="243" [height]="240"></div>
-            <div class="bg-secondary rounded py-2 px-3 ml-2" nitro-catalog-purchase-component [vertical]="true" [activePage]="activePage" [activeOffer]="activeOffer"></div>
+            <div class="d-flex bg-secondary rounded py-2 px-3 ml-2" nitro-catalog-purchase-component [vertical]="true" [activePage]="activePage" [activeOffer]="activeOffer"></div>
         </div>
         <div class="d-flex justify-content-center align-items-cente btn-group mt-2">
             <button type="button" class="btn btn-primary btn-sm" [ngClass]="{ 'active': (activeGroupIndex === 0) }" (click)="switchCategory('walls')">{{ ('catalog.spaces.tab.walls') | translate }}</button>

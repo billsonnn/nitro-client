@@ -6,7 +6,7 @@ export interface IFurnitureItem
     ref: number;
     type: number;
     stuffData: IObjectData;
-    _Str_2794: number;
+    extra: number;
     category: number;
     _Str_16260: boolean;
     isTradable: boolean;

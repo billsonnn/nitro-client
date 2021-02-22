@@ -1,0 +1,34 @@
+<div class="d-flex flex-column w-100 h-100">
+    <div *ngIf="!activeOffer" class="d-flex flex-column justify-content-center align-items-center w-100 h-100 mb-2">
+        <img *ngIf="getImage(1)" [src]="getImage(1)" />
+    </div>
+    <div *ngIf="activeOffer" class="position-relative mb-2">
+        <nitro-badge class="position-absolute" style="right: 10px; z-index: 1;" [badge]="selectedGroup.badge" [isGroup]="true"></nitro-badge>
+        <div class="position-absolute bg-secondary rounded text-center px-2" style="z-index:1;">{{ offerName(activeOffer) }}</div>
+        <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="364" [height]="182"></div>
+    </div>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <button class="btn btn-primary" [ngStyle]="{backgroundColor: '#' + selectedGroupColorA}"></button>
+            <button class="btn btn-primary" [ngStyle]="{backgroundColor: '#' + selectedGroupColorB}"></button>
+        </div>
+        <select class="form-control form-control-sm" [(ngModel)]="selectedGroupId">
+            <option *ngFor="let group of groups" [value]="group.id">{{ group.title }}</option>
+        </select>
+    </div>
+    <perfect-scrollbar class="grid-container w-100" style="min-height:156px;max-height:156px;height:156px;">
+        <div class="grid-items grid-6">
+            <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let offer of offers" (click)="selectOffer(offer)">
+                <button type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'active': (activeOffer === offer)}">
+                    <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + offerImage(offer) + ')' }"></div>
+                    <div class="position-absolute bg-danger px-1 py-0 rounded shadow count" *ngIf="(offerCount(offer) > 1)">{{ offerCount(offer) }}</div>
+                </button>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <div *ngIf="activeOffer" class="d-flex align-items-center mt-2 flex-grow-1 w-100" nitro-catalog-purchase-component
+    [activePage]="activePage"
+    [activeOffer]="activeOffer"
+    [quantityEnabled]="activeOffer.bundlePurchaseAllowed"
+    [forcedExtra]="selectedGroupId"></div>
+</div>
