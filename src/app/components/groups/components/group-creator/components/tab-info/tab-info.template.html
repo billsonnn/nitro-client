@@ -1,0 +1,18 @@
+<div class="mb-3">{{ ('group.edit.tabcaption.1') | translate }}</div>
+<small *ngIf="showNameError || showRoomError" class="form-text text-muted invalid-feedback mb-3">{{ ('group.edit.error.no.name.or.room.selected') | translate }}</small>
+<div class="form-group">
+    <label>{{ ('group.edit.name') | translate }}</label>
+    <input type="text" class="form-control form-control-sm" [ngClass]="{'is-invalid': showNameError}" [(ngModel)]="groupSettings.name">
+</div>
+<div class="form-group">
+    <label>{{ ('group.edit.desc') | translate }}</label>
+    <textarea class="form-control form-control-sm" [ngClass]="{'is-invalid': showDescriptionError}" [(ngModel)]="groupSettings.description"></textarea>
+</div>
+<div class="form-group">
+    <label>{{ ('group.edit.base') | translate }}</label>
+    <select class="form-control form-control-sm" [ngClass]="{'is-invalid': showRoomError}" [(ngModel)]="groupSettings.roomId">
+        <option selected disabled value="0">{{ ('group.edit.base.select.room') | translate }}</option>
+        <option *ngFor="let room of availableRooms | keyvalue" [value]="room.key">{{ room.value }}</option>
+    </select>
+    <small class="form-text text-muted">{{ ('group.edit.base.warning') | translate }}</small>
+</div>

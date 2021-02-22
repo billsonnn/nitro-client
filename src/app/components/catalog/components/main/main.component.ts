@@ -4,6 +4,7 @@ import { CatalogClubOfferData } from '../../../../../client/nitro/communication/
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { IObjectData } from '../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../../../core/settings/service';
@@ -28,6 +29,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public layoutsContainer: ViewContainerRef;
 
     private _roomPreviewer: RoomPreviewer = null;
+    private _previewStuffData: IObjectData = null;
     private _lastComponent: ComponentRef<CatalogLayout> = null;
     private _layoutFactory: CatalogLayoutFactory = null;
 
@@ -282,7 +284,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                         }
                         else
                         {
-                            this._roomPreviewer.addFurnitureIntoRoom(product.furniClassId, new Vector3d(90));
+                            this._roomPreviewer.addFurnitureIntoRoom(product.furniClassId, new Vector3d(90), this._previewStuffData);
                         }
                         return;
                     case ProductTypeEnum.WALL:
@@ -367,6 +369,16 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
 
         this._purchaseVipSubscription = subscription;
+    }
+
+    public get previewStuffData(): IObjectData
+    {
+        return this._previewStuffData;
+    }
+
+    public set previewStuffData(previewStuffData: IObjectData)
+    {
+        this._previewStuffData = previewStuffData;
     }
 
     public get roomPreviewer(): RoomPreviewer

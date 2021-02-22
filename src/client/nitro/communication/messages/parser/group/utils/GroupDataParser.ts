@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class GroupData
+export class GroupDataParser
 {
     private _id: number;
     private _title: string;
