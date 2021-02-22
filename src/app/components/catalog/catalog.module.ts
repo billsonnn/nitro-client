@@ -6,6 +6,8 @@ import { CatalogConfirmVipSubscriptionComponent } from './components/confirm-vip
 import { CatalogLayoutDefaultComponent } from './components/layouts/default/default.component';
 import { CatalogLayoutFrontPageFeaturedComponent } from './components/layouts/frontpage-featured/frontpage-featured.component';
 import { CatalogLayoutFrontPage4Component } from './components/layouts/frontpage4/frontpage4.component';
+import { CatalogLayoutGuildCustomFurniComponent } from './components/layouts/guild-custom-furni/guild-custom-furni.component';
+import { CatalogLayoutGuildFrontPageComponent } from './components/layouts/guild-frontpage/guild-frontpage.component';
 import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.component';
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
@@ -22,6 +24,7 @@ import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redee
 import { CatalogService } from './services/catalog.service';
 import { CatalogCustomizeGiftComponent } from './components/customize-gift/customize-gift.component';
 import { CatalogLayoutSearchResultsComponent } from './components/layouts/search-results/search-results.component';
+import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 
 @NgModule({
     imports: [
@@ -41,6 +44,8 @@ import { CatalogLayoutSearchResultsComponent } from './components/layouts/search
         CatalogLayoutTrophiesComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,
+        CatalogLayoutGuildFrontPageComponent,
+        CatalogLayoutGuildCustomFurniComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
@@ -48,7 +53,8 @@ import { CatalogLayoutSearchResultsComponent } from './components/layouts/search
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
         CatalogCustomizeGiftComponent,
-        CatalogLayoutSearchResultsComponent
+        CatalogLayoutSearchResultsComponent,
+        CatalogLayoutVipGiftsComponent
     ],
     providers: [
         CatalogService
@@ -67,6 +73,8 @@ import { CatalogLayoutSearchResultsComponent } from './components/layouts/search
         CatalogLayoutTrophiesComponent,
         CatalogLayoutUnsupportedComponent,
         CatalogLayoutVipBuyComponent,
+        CatalogLayoutGuildFrontPageComponent,
+        CatalogLayoutGuildCustomFurniComponent,
         CatalogMainComponent,
         CatalogNavigationComponent,
         CatalogNavigationItemComponent,
@@ -74,7 +82,8 @@ import { CatalogLayoutSearchResultsComponent } from './components/layouts/search
         CatalogPurchaseComponent,
         CatalogRedeemVoucherComponent,
         CatalogCustomizeGiftComponent,
-        CatalogLayoutSearchResultsComponent
+        CatalogLayoutSearchResultsComponent,
+        CatalogLayoutVipGiftsComponent
     ]
 })
 export class CatalogModule

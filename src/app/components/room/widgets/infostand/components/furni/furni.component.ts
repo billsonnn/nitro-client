@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { StringDataType } from '../../../../../../../client/nitro/room/object/data/type/StringDataType';
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { RoomWidgetEnumItemExtradataParameter } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
 import { RoomWidgetFurniInfoUsagePolicyEnum } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetFurniInfoUsagePolicyEnum';
@@ -161,6 +163,20 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         }
 
         return data;
+    }
+
+    public openFurniGroupInfo(): void
+    {
+        if(!this.furniData.groupId) return;
+
+        Nitro.instance.createLinkEvent('groups/info/' + this.furniData.groupId);
+    }
+
+    public get getStuffDataAsStringDataType(): StringDataType
+    {
+        if(!this.furniData) return null;
+
+        return (this.furniData.stuffData as StringDataType);
     }
 
     public get type(): number

@@ -9,6 +9,7 @@ export class OutgoingHeader
     public static CAMERA_SAVE                    = 3226;
     public static CAMERA_THUMBNAIL               = 1982;
     public static CATALOG_CLUB                   = 3285;
+    public static CATALOG_CLUB_GIFTS             = 487;
     public static CATALOG_MODE                   = 1195;
     public static CATALOG_PAGE                   = 412;
     public static CATALOG_PURCHASE               = 3492;
@@ -45,13 +46,21 @@ export class OutgoingHeader
     public static GROUP_FORUM_LIST               = 873;
     public static GROUP_FORUM_THREADS            = 436;
     public static GROUP_INFO                     = 2991;
-    public static GROUP_MEMBER_REMOVE            = 3593;
+    public static GROUP_DELETE                   = 1134;
+    public static GROUP_MEMBER_REMOVE_CONFIRM    = 3593;
+    public static GROUP_MEMBER_REMOVE            = 593;
     public static GROUP_MEMBERS                  = 312;
     public static GROUP_MEMBERSHIPS              = 367;
     public static GROUP_REQUEST                  = 998;
     public static GROUP_REQUEST_ACCEPT           = 3386;
     public static GROUP_REQUEST_DECLINE          = 1894;
     public static GROUP_SETTINGS                 = 1004;
+    public static GROUP_PARTS                    = 813;
+    public static GROUP_BUY                      = 230;
+    public static GROUP_SAVE_INFORMATION         = 3137;
+    public static GROUP_SAVE_BADGE               = 1991;
+    public static GROUP_SAVE_COLORS              = 1764;
+    public static GROUP_SAVE_PREFERENCES         = 3435;
     public static INVENTORY_UNKNOWN              = 1371;
     public static ITEM_CLOTHING_REDEEM           = 3374;
     public static ITEM_COLOR_WHEEL_CLICK         = 2144;
@@ -189,5 +198,8 @@ export class OutgoingHeader
     public static CATALOG_REDEEM_VOUCHER         = 339;
     public static ROOM_TONER_APPLY               = 2880;
     public static LOVELOCK_START_CONFIRM         = 3775;
+    public static MANNEQUIN_SAVE_NAME            = 2850;
+    public static MANNEQUIN_SAVE_LOOK            = 2209;
     public static PRESENT_OPEN_PRESENT           = 3558;
+    public static CATALOG_SELECT_VIP_GIFT        = 2276;
 }

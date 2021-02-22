@@ -162,7 +162,9 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
 
         const parser = event.getParser();
 
-        if(!parser || parser.flag) return;
+        if(!parser) return;
+
+        if(this._selectedGroup && parser.id !== this._selectedGroup.id) return;
 
         this._ngZone.run(() => (this._selectedGroup = parser));
     }

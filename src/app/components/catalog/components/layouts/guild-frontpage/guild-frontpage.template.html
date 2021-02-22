@@ -1,0 +1,10 @@
+<div class="nitro-catalog-layout-guildfrontpage-component">
+    <div class="mb-2" [innerHtml]="getText(2)"></div>
+    <div class="small mb-2" [innerHtml]="getText(0)"></div>
+    <div class="small mb-3" [innerHtml]="getText(1)"></div>
+    
+    <div class="text-center">
+        <button class="btn btn-primary mb-3" (click)="openGroupCreator()">{{ ('catalog.start.guild.purchase.button') | translate }}</button>
+        <img [src]="getImage(1)">
+    </div>
+</div>
