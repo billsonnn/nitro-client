@@ -284,6 +284,8 @@ import { FurnitureRandomStateComposer } from './messages/outgoing/room/furniture
 import { FurnitureStackHeightComposer } from './messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
 import { FurnitureWallMultiStateComposer } from './messages/outgoing/room/furniture/logic/FurnitureWallMultiStateComposer';
 import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
+import { FurnitureMannequinSaveLookComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
+import { FurnitureMannequinSaveNameComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
 import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { ApplyTonerComposer } from './messages/outgoing/room/furniture/toner/ApplyTonerComposer';
 import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
@@ -317,15 +319,6 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { ApplyTonerComposer } from './messages/outgoing/room/furniture/toner/ApplyTonerComposer';
-import { LoveLockFurniFinishedEvent } from './messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
-import { LoveLockFurniFriendConfirmedEvent } from './messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
-import { LoveLockFurniStartEvent } from './messages/incoming/room/furniture/LoveLockFurniStartEvent';
-import { LoveLockStartConfirmComposer } from './messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
-import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
-import { FurnitureMannequinSaveNameComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
-import { FurnitureMannequinSaveLookComposer } from './messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
-import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {

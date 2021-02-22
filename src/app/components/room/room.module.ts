@@ -18,6 +18,8 @@ import { CustomStackHeightComponent } from './widgets/furniture/customstackheigh
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.component';
 import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
+import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
+import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.component';
 import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
 import { RoomInfoStandBotComponent } from './widgets/infostand/components/bot/bot.component';
@@ -29,10 +31,7 @@ import { RoomInfoStandUserComponent } from './widgets/infostand/components/user/
 import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.component';
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
-import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
-import { RoomEventViewComponent } from './widgets/roomtools/room-event-view/room-event-view.component';
-import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.component';
 
 @NgModule({
     imports: [
@@ -71,7 +70,6 @@ import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.compone
         DoorbellWidgetComponent,
         BackgroundColorFurniWidget,
         RoomToolsMainComponent,
-        RoomEventViewComponent,
         DoorbellWidgetComponent,
         MannequinWidget,
         RoomToolsMainComponent
@@ -107,7 +105,6 @@ import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.compone
         DoorbellWidgetComponent,
         BackgroundColorFurniWidget,
         RoomToolsMainComponent,
-        RoomEventViewComponent,
         DoorbellWidgetComponent,
         MannequinWidget,
         DoorbellWidgetComponent,

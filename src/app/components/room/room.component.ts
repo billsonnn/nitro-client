@@ -55,6 +55,7 @@ import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCredit
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
+import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
 import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
@@ -64,11 +65,6 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
-import { RoomEngine } from '../../../client/nitro/room/RoomEngine';
-import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
-import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
-import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
