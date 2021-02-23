@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { CrackableDataType } from '../../../../../../../client/nitro/room/object/data/type/CrackableDataType';
 import { StringDataType } from '../../../../../../../client/nitro/room/object/data/type/StringDataType';
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { RoomWidgetEnumItemExtradataParameter } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
@@ -25,15 +26,20 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
     public canMove      = false;
     public canRotate    = false;
     public canUse       = false;
-    public updateCount  = 0;
 
     public furniSettingsKeys: string[]      = [];
     public furniSettingsValues: string[]    = [];
+    public isCrackable: boolean             = false;
+    public crackableHits: number            = 0;
+    public crackableTarget: number          = 0;
 
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
         this.furniSettingsKeys      = [];
         this.furniSettingsValues    = [];
+        this.isCrackable            = false;
+        this.crackableHits          = 0;
+        this.crackableTarget        = 0;
 
         let canMove     = false;
         let canRotate   = false;
@@ -55,22 +61,36 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             canUse = true;
         }
 
-        if(godMode && event.extraParam)
+        if(event.extraParam)
         {
-            const extraParam = event.extraParam.substr(RoomWidgetEnumItemExtradataParameter.BRANDING_OPTIONS.length);
-
-            if(extraParam)
+            if(event.extraParam === RoomWidgetEnumItemExtradataParameter.CRACKABLE_FURNI)
             {
-                const parts = extraParam.split('\t');
+                const stuffData = (event.stuffData as CrackableDataType);
 
-                for(const part of parts)
+                canUse  = true;
+
+                this.isCrackable        = true;
+                this.crackableHits      = stuffData.hits;
+                this.crackableTarget    = stuffData.target;
+            }
+
+            if(godMode)
+            {
+                const extraParam = event.extraParam.substr(RoomWidgetEnumItemExtradataParameter.BRANDING_OPTIONS.length);
+
+                if(extraParam)
                 {
-                    const value = part.split('=');
+                    const parts = extraParam.split('\t');
 
-                    if(value && (value.length === 2))
+                    for(const part of parts)
                     {
-                        this.furniSettingsKeys.push(value[0]);
-                        this.furniSettingsValues.push(value[1]);
+                        const value = part.split('=');
+
+                        if(value && (value.length === 2))
+                        {
+                            this.furniSettingsKeys.push(value[0]);
+                            this.furniSettingsValues.push(value[1]);
+                        }
                     }
                 }
             }
@@ -81,8 +101,6 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         this.canUse     = canUse;
 
         this.togglePickupButton(event);
-
-        this.updateCount++;
     }
 
     private togglePickupButton(event: RoomWidgetFurniInfostandUpdateEvent): void
