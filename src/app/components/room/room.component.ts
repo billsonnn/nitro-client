@@ -24,6 +24,7 @@ import { ISessionDataManager } from '../../../client/nitro/session/ISessionDataM
 import { IRoomWidgetHandler } from '../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { MouseEventType } from '../../../client/nitro/ui/MouseEventType';
+import { TouchEventType } from '../../../client/nitro/ui/TouchEventType';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { IRoomWidget } from '../../../client/nitro/ui/widget/IRoomWidget';
@@ -54,6 +55,8 @@ import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCredit
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
+import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
+import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 import { FurnitureRoomLinkHandler } from './widgets/handlers/FurnitureRoomLinkHandler';
 import { FurnitureStickieHandler } from './widgets/handlers/FurnitureStickieHandler';
 import { FurnitureTrophyWidgetHandler } from './widgets/handlers/FurnitureTrophyWidgetHandler';
@@ -62,7 +65,6 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
 
 @Component({
     selector: 'nitro-room-component',
@@ -227,6 +229,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         canvas.onmousedown      = this.onMouseEvent.bind(this);
         canvas.onmouseup        = this.onMouseEvent.bind(this);
 
+        canvas.ontouchstart     = this.onTouchEvent.bind(this);
+        canvas.ontouchmove      = this.onTouchEvent.bind(this);
+        canvas.ontouchend       = this.onTouchEvent.bind(this);
+        canvas.ontouchcancel    = this.onTouchEvent.bind(this);
+
         window.onresize     = this.onWindowResizeEvent.bind(this);
         window.onmousewheel = this.onWindowMouseWheelEvent.bind(this);
 
@@ -243,6 +250,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         canvas.onmousemove      = null;
         canvas.onmousedown      = null;
         canvas.onmouseup        = null;
+
+        canvas.ontouchstart     = null;
+        canvas.ontouchmove      = null;
+        canvas.ontouchend       = null;
+        canvas.ontouchcancel    = null;
 
         window.onresize     = null;
         window.onmousewheel = null;
@@ -294,6 +306,72 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
             case MouseEventType.MOUSE_UP:
                 break;
             default: return;
+        }
+
+        Nitro.instance.roomEngine.setActiveRoomId(this._roomSession.roomId);
+        Nitro.instance.roomEngine.dispatchMouseEvent(this.getFirstCanvasId(), x, y, eventType, event.altKey, (event.ctrlKey || event.metaKey), event.shiftKey, false);
+    }
+
+    private onTouchEvent(event: TouchEvent): void
+    {
+        if(!event || !this._roomSession) return;
+
+        let eventType = event.type;
+
+        if(eventType === TouchEventType.TOUCH_END && !this._didMouseMove)
+        {
+            eventType = MouseEventType.MOUSE_CLICK;
+
+            if(this._lastClick)
+            {
+                this._clickCount = 1;
+
+                if(this._lastClick >= Date.now() - 300) this._clickCount++;
+            }
+
+            this._lastClick = Date.now();
+
+            if(this._clickCount === 2)
+            {
+                eventType = MouseEventType.DOUBLE_CLICK;
+
+                this._clickCount    = 0;
+                this._lastClick     = null;
+            }
+        }
+
+        switch(eventType)
+        {
+            case MouseEventType.MOUSE_CLICK:
+                break;
+            case MouseEventType.DOUBLE_CLICK:
+                break;
+            case TouchEventType.TOUCH_START:
+                eventType = MouseEventType.MOUSE_DOWN;
+
+                this._didMouseMove = false;
+                break;
+            case TouchEventType.TOUCH_MOVE:
+                eventType = MouseEventType.MOUSE_MOVE;
+
+                this._didMouseMove = true;
+                break;
+            default: return;
+        }
+
+        let x = 0;
+        let y = 0;
+
+        if(event.touches[0])
+        {
+            x = event.touches[0].clientX;
+            y = event.touches[0].clientY;
+        }
+
+        else if(event.changedTouches[0])
+        {
+            x = event.changedTouches[0].clientX;
+            y = event.changedTouches[0].clientY;
         }
 
         Nitro.instance.roomEngine.setActiveRoomId(this._roomSession.roomId);
@@ -434,6 +512,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNITURE_CONTEXT_MENU:
                 widgetHandler = new FurnitureContextMenuWidgetHandler();
+                break;
+            case RoomWidgetEnum.MANNEQUIN:
+                widgetHandler = new FurnitureMannequinWidgetHandler();
                 break;
             case RoomWidgetEnum.ROOM_BACKGROUND_COLOR:
                 widgetHandler = new FurnitureBackgroundColorWidgetHandler();
