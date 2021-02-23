@@ -263,8 +263,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         if(!this.canPlace || this.tradeRunning) return;
 
         this._ngZone.runOutsideAngular(() => this._inventoryService.controller.furnitureService.attemptItemPlacement());
-
-        this._inventoryService.hideWindow();
     }
 
     public attemptItemOffer(count: number = 1): void

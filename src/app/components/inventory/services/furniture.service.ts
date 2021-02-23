@@ -546,6 +546,8 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
+            this._inventoryService.hideWindow();
+
             this.startRoomObjectPlacement(item);
         }
 
