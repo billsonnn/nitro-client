@@ -29,6 +29,13 @@ export class CatalogLayoutSearchResultsComponent extends CatalogLayoutDefaultCom
         this._catalogService.requestOfferData(item.purchaseOfferId);
     }
 
+    public get searchOffer(): CatalogPageOfferData
+    {
+        if(!(this._catalogService.activePage instanceof SearchResultsPage)) return null;
+
+        return (this._catalogService.activePage as SearchResultsPage).searchOffer;
+    }
+
     public searchItemImage(item: IFurnitureData): string
     {
         if(!item) return '';

@@ -60,7 +60,6 @@ export class CatalogService implements OnDestroy
     private _catalogRoot: CatalogPageData = null;
     private _activePage: ICatalogPageParser = null;
     private _clubGiftsParser: CatalogClubGiftsParser = null;
-    private _activePage: CatalogPageParser = null;
     private _activePageData: CatalogPageData = null;
     private _manuallyCollapsed: CatalogPageData[] = [];
     private _isLoading: boolean = false;
@@ -257,6 +256,8 @@ export class CatalogService implements OnDestroy
 
     private onCatalogSearchEvent(event: CatalogSearchEvent): void
     {
+        if(!(this._activePage instanceof SearchResultsPage)) return;
+
         if(!event) return;
 
         const parser = event.getParser();
@@ -298,7 +299,9 @@ export class CatalogService implements OnDestroy
             local5.push(local8);
         }
 
-        debugger;
+        this._ngZone.run(() => (this._activePage as SearchResultsPage).selectSearchResult(local5[0], parser));
+
+
 
     }
 

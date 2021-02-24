@@ -5,14 +5,28 @@ import { CatalogLocalizationData } from '../../../../../../client/nitro/communic
 import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { ICatalogLocalizationData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogLocalizationData';
 import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
+import { CatalogSearchParser } from '../../../../../../client/nitro/communication/messages/parser/catalog/CatalogSearchParser';
 
 export class SearchResultsPage implements ICatalogPageParser
 {
     private _furni: IFurnitureData[] = null;
+    private _offer: CatalogPageOfferData = null;
+
     constructor(furni: IFurnitureData[])
     {
         console.log('Constructor SearchResultsPage');
         this._furni = furni;
+    }
+
+
+    public get searchOffer(): CatalogPageOfferData
+    {
+        return this._offer;
+    }
+
+    public selectSearchResult(data: IFurnitureData, parser: CatalogSearchParser): void
+    {
+        if(parser) this._offer = parser.offer;
     }
 
     public get acceptSeasonCurrencyAsCredits(): boolean
