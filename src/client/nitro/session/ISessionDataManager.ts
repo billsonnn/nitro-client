@@ -25,6 +25,7 @@ export interface ISessionDataManager extends INitroManager
     giveRespect(userId: number): void;
     givePetRespect(petId: number): void;
     sendSpecialCommandMessage(text: string, styleId?: number): void;
+    sendChatStyleUpdate(styleId: number): void;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;
@@ -44,5 +45,6 @@ export interface ISessionDataManager extends INitroManager
     isAuthenticHabbo: boolean;
     isModerator: boolean;
     isCameraFollowDisabled: boolean;
+    chatStyle: number;
     uiFlags: number;
 }

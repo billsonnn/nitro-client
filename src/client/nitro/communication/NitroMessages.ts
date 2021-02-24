@@ -2,6 +2,7 @@ import { IMessageConfiguration } from '../../core/communication/messages/IMessag
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ChangeNameUpdateEvent } from './messages/incoming/avatar/ChangeNameUpdateEvent';
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
+import { CatalogClubGiftsEvent } from './messages/incoming/catalog/CatalogClubGiftsEvent';
 import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogGiftUsernameUnavailableEvent } from './messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
 import { CatalogGroupsEvent } from './messages/incoming/catalog/CatalogGroupsEvent';
@@ -178,8 +179,10 @@ import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComp
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogPurchaseGiftComposer } from './messages/outgoing/catalog/CatalogPurchaseGiftComposer';
 import { CatalogRequestGiftConfigurationComposer } from './messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { CatalogRequestVipGiftsComposer } from './messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { CatalogSelectClubGiftComposer } from './messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 import { RedeemItemClothingComposer } from './messages/outgoing/catalog/RedeemItemClothingComposer';
 import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
@@ -293,6 +296,7 @@ import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelCom
 import { RoomCreateComposer } from './messages/outgoing/room/RoomCreateComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
+import { RoomUnitChatStyleComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
 import { RoomUnitChatWhisperComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
 import { RoomUnitTypingStartComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
 import { RoomUnitTypingStopComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
@@ -319,9 +323,6 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { CatalogRequestVipGiftsComposer } from './messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
-import { CatalogClubGiftsEvent } from './messages/incoming/catalog/CatalogClubGiftsEvent';
-import { CatalogSelectClubGiftComposer } from './messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -778,6 +779,7 @@ export class NitroMessages implements IMessageConfiguration
         // CHAT
         this._composers.set(OutgoingHeader.UNIT_CHAT, RoomUnitChatComposer);
         this._composers.set(OutgoingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_CHAT_STYLE, RoomUnitChatStyleComposer);
         this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
         this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
         this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
