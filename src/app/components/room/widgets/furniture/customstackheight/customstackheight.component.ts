@@ -6,30 +6,7 @@ import { FurnitureCustomStackHeightWidgetHandler } from '../../handlers/Furnitur
 
 @Component({
     selector: 'nitro-room-furniture-customstackheight-component',
-    template: `
-    <div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-room-furniture-customstackheight-component">
-        <div *ngIf="isLoading" class="card-loading-overlay"></div>
-        <div class="card-header-container">
-            <div class="card-header-overlay"></div>
-            <div class="card-header">
-                <div class="header-title">{{ ('widget.custom.stack.height.title') | translate }}</div>
-                <div class="header-close" (click)="hide()"><i class="fas fa-times"></i></div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="d-flex">
-                <div class="m-2 custom-slider">
-                    <ngx-slider name="heightRange" [options]="sliderOptions" [(ngModel)]="heightRange" (mouseup)="onHeightChange()"></ngx-slider>
-                </div>
-                <div class="p-2 flex-grow-1">
-                    <p class="text-justify">{{ ('widget.custom.stack.height.text') | translate }}</p>
-                    <input name="heightInput" type="number" class="form-control form-control-sm" [(ngModel)]="heightInput" [min]="minHeight" [max]="maxHeight" (keydown.enter)="onHeightChange()">
-                    <button type="button" class="btn btn-green" (click)="placeAboveStack()">{{ 'furniture.above.stack' | translate }}</button>
-                    <button type="button" class="btn btn-green" (click)="placeAtFloor()">{{ 'furniture.floor.level' | translate }}</button>
-                </div>
-            </div>
-        </div>
-    </div>`
+    templateUrl: './customstackheight.template.html'
 })
 export class CustomStackHeightComponent extends ConversionTrackingWidget
 {
@@ -149,6 +126,8 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
         if((value === null) || (value === '') || isNaN(value)) return;
 
         this._heightInput = value;
+
+        this.onHeightChange();
     }
 
     public get heightRange(): string
@@ -181,7 +160,7 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
             step: CustomStackHeightComponent.STEP_VALUE,
             hidePointerLabels: true,
             hideLimitLabels: true,
-            vertical: true
+            vertical: false
         };
     }
 }

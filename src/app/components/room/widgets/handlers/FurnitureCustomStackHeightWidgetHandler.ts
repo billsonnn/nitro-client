@@ -9,7 +9,7 @@ import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/Room
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
-import { CustomStackHeightComponent } from '../furniture/customstackheight/component';
+import { CustomStackHeightComponent } from '../furniture/customstackheight/customstackheight.component';
 
 export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler
 {
