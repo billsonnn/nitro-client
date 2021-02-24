@@ -1,18 +1,10 @@
 import { Component } from '@angular/core';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { SessionService } from '../../security/services/session.service';
+import { Nitro } from '../../../../../client/nitro/Nitro';
+import { SessionService } from '../../../../security/services/session.service';
 
 @Component({
     selector: 'nitro-hotelview-component',
-    template: `
-    <div class="nitro-hotelview-component" [ngStyle]="{background: backgroundColour}">
-        <div [ngStyle]="{backgroundImage: 'url('+background+')'}" class="background position-absolute"></div>
-        <img [src]="sun" class="sun position-absolute">
-        <img [src]="drape" class="drape position-absolute">
-        <img [src]="left" class="left position-absolute">
-        <img [src]="rightRepeat" class="rightRepeat position-absolute">
-        <img [src]="right" class="right position-absolute">
-    </div>`
+    templateUrl: './hotelview.template.html'
 })
 export class HotelViewComponent
 {
