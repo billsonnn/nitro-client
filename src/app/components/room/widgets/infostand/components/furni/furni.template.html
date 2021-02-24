@@ -11,6 +11,7 @@
             <div class="d-flex flex-column mt-2">
                 <p class="badge badge-secondary mb-0 text-wrap">{{ furniData.description }}</p>
                 <p class="badge badge-secondary mt-2 mb-0 text-wrap">{{ ('furni.owner') | translate: 'name': furniData.ownerName }}</p>
+                <p *ngIf="isCrackable" class="badge badge-secondary mt-2 mb-0 text-wrap">{{ ('infostand.crackable_furni.hits_remaining') | translate:['hits', 'target']:[ crackableHits, crackableTarget ] }}</p>
                 <div *ngIf="furniData.groupId" class="badge badge-secondary mt-2 mb-0" (click)="openFurniGroupInfo()">
                     <nitro-badge [badge]="getStuffDataAsStringDataType.getValue(2)" [isGroup]="true"></nitro-badge>
                 </div>

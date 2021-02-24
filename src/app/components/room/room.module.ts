@@ -14,7 +14,7 @@ import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/
 import { FurnitureContextMenuWidget } from './widgets/furniture/context-menu/components/main/main.component';
 import { PurchaseClothingComponent } from './widgets/furniture/context-menu/components/purchasable-clothing/purchasable-clothing.component';
 import { FurnitureWidgetCreditComponent } from './widgets/furniture/credit/credit.component';
-import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/component';
+import { CustomStackHeightComponent } from './widgets/furniture/customstackheight/customstackheight.component';
 import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.component';
 import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
