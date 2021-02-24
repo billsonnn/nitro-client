@@ -1,6 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
+import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
 import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogGiftUsernameUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
 import { CatalogGroupsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGroupsEvent';
@@ -20,8 +21,10 @@ import { CatalogPageComposer } from '../../../../client/nitro/communication/mess
 import { CatalogPurchaseComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseGiftComposer';
 import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
+import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogClubOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
@@ -39,9 +42,6 @@ import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
-import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
-import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
-import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -183,8 +183,6 @@ export class CatalogService implements OnDestroy
         this._ngZone.run(() =>
         {
             this._activePage = parser;
-
-            this._manuallyCollapsed = [];
 
             if(this._component) this._component.setupLayout();
 
