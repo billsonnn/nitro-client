@@ -308,13 +308,19 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPlaceholderName(type: string): string
     {
-        if(this._activeObjects[type] !== undefined) return RoomContentLoader.PLACE_HOLDER;
+        const category = this.getCategoryForType(type);
 
-        if(this._wallItems[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_WALL;
+        switch(category)
+        {
+            case RoomObjectCategory.FLOOR:
+                return RoomContentLoader.PLACE_HOLDER;
+            case RoomObjectCategory.WALL:
+                return RoomContentLoader.PLACE_HOLDER_WALL;
+            default:
+                if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
 
-        if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
-
-        return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+                return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+        }
     }
 
     public getCategoryForType(type: string): number
