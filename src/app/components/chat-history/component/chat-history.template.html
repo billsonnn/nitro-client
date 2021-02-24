@@ -3,9 +3,9 @@
         <h6 class="m-0">{{ ('room.chathistory.button.text') | translate }}</h6>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
-    <perfect-scrollbar #historyScroller class="position-relative w-100 mb-1" style="height:100%;">
-        <div *ngFor="let set of historySets;trackBy:trackById" class="d-flex flex-column pt-3 px-3">
-            <ng-container *ngFor="let item of set.items;trackBy:trackById">
+    <perfect-scrollbar #historyScroller class="position-relative w-100 h-100 mb-1">
+        <div class="d-flex flex-column pt-3 px-3">
+            <ng-container *ngFor="let item of historyItems;trackBy:trackById">
                 <div class="row mb-2">
                     <div class="d-flex col-3 justify-content-end align-items-center">
                         <div class="badge badge-secondary badge-sm">{{ item.date | date:'hh:mm:ss' }}</div>
