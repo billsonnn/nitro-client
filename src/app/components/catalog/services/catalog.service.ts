@@ -1,5 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
 import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
 import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
@@ -23,6 +24,7 @@ import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communicat
 import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
+import { CatalogSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogSearchComposer';
 import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
@@ -30,6 +32,7 @@ import { CatalogClubOfferData } from '../../../../client/nitro/communication/mes
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogProductOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
@@ -38,18 +41,11 @@ import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
 import { CatalogLayoutGuildCustomFurniComponent } from '../components/layouts/guild-custom-furni/guild-custom-furni.component';
+import { SearchResultsPage } from '../components/layouts/search-results/SearchResultsPage';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
-import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { SearchResultsPage } from '../components/layouts/search-results/SearchResultsPage';
-import { CatalogSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogSearchComposer';
-import { ProductTypeEnum } from '../enums/ProductTypeEnum';
-import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
-import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
-import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -211,8 +207,9 @@ export class CatalogService implements OnDestroy
         this._ngZone.run(() =>
         {
             this._catalogRoot = parser.root;
+
             this.setOffersToNodes(this._catalogRoot);
-            console.log('done');
+
             this._isLoading = false;
 
             (this._component && this._component.selectFirstTab());
@@ -265,45 +262,9 @@ export class CatalogService implements OnDestroy
 
         if(!parser) return;
 
-        if(!parser.offer || !parser.offer.products || parser.offer.products.length == 0) return;
+        if(!parser.offer) return;
 
-        const product = parser.offer.products[0];
-
-        if(product.uniqueLimitedItem)
-        {
-            // this._catalogViewer._Str_3854._Str_19621(_local_3._Str_2451, _local_4.uniqueLimitedItemsLeft);
-        }
-        let local6;
-        const local5 = [];
-        switch(product.productType)
-        {
-            case ProductTypeEnum.FLOOR:
-                local6 = Nitro.instance.sessionDataManager.getFloorItemData(product.furniClassId);
-                break;
-            case ProductTypeEnum.WALL:
-                local6 = Nitro.instance.sessionDataManager.getWallItemData(product.furniClassId);
-                break;
-        }
-
-        for(const productItem of parser.offer.products)
-        {
-            let local8:IFurnitureData = null;
-            switch(productItem.productType)
-            {
-                case ProductTypeEnum.FLOOR:
-                    local8 = Nitro.instance.sessionDataManager.getFloorItemData(product.furniClassId);
-                    break;
-                case ProductTypeEnum.WALL:
-                    local8 = Nitro.instance.sessionDataManager.getWallItemData(product.furniClassId);
-                    break;
-            }
-            local5.push(local8);
-        }
-
-        this._ngZone.run(() => (this._activePage as SearchResultsPage).selectSearchResult(local5[0], parser));
-
-
-
+        this._ngZone.run(() => (this._component && this._component.selectOffer(parser.offer)));
     }
 
     private onCatalogSoldOutEvent(event: CatalogSoldOutEvent): void
@@ -566,71 +527,56 @@ export class CatalogService implements OnDestroy
         return this._giftWrappingConfiguration;
     }
 
-    public hasOffer(offerId: number, arg2: boolean = false)
+    public getOfferPages(offerId: number): CatalogPageData[]
     {
-        if(!this._catalogRoot) return;
+        if(!this._catalogRoot || !this._offersToRoots) return null;
 
-        if(arg2)
+        const pages = this._offersToRoots.getValue(offerId);
+
+        if(!pages || !pages.length) return null;
+
+        const allowedPages: CatalogPageData[] = [];
+
+        for(const page of pages)
         {
-            const pages = [];
-            if(!this._offersToRoots.hasKey(offerId))
-            {
-                return null;
-            }
+            if(!page || !page.visible) continue;
 
-            const pagesForOffer = this._offersToRoots.getValue(offerId);
-            for(const page of pagesForOffer)
-            {
-                if(page.visible)
-                {
-                    pages.push(page);
-                }
-            }
-
-            if(pages.length > 0)
-            {
-                return pages;
-            }
-
-            return null;
+            allowedPages.push(page);
         }
 
-        return this._offersToRoots.getValue(offerId);
+        if(!allowedPages.length) return null;
+
+        return allowedPages;
     }
 
-
-    private setOffersToNodes(_catalogRoot: CatalogPageData)
+    private setOffersToNodes(pageData: CatalogPageData): void
     {
-        if(!_catalogRoot) return;
+        if(!pageData) return;
+
         if(!this._offersToRoots) this._offersToRoots = new AdvancedMap<number, CatalogPageData[]>();
 
-
-        if(_catalogRoot.offerIds && _catalogRoot.offerIds.length > 0)
+        if(pageData.offerIds && pageData.offerIds.length)
         {
-            for(const offerId of _catalogRoot.offerIds)
+            for(const offerId of pageData.offerIds)
             {
-                if(this._offersToRoots.hasKey(offerId))
-                {
-                    const offerIdData = this._offersToRoots.getValue(offerId);
+                let existing = this._offersToRoots.getValue(offerId);
 
-                    if(!offerIdData.includes(_catalogRoot))
-                    {
-                        offerIdData.push(_catalogRoot);
-                    }
-                }
-                else
+                if(!existing)
                 {
-                    this._offersToRoots.add(offerId, [_catalogRoot]);
+                    existing = [];
+
+                    this._offersToRoots.add(offerId, existing);
                 }
+
+                if(existing.indexOf(pageData) >= 0) continue;
+
+                existing.push(pageData);
             }
         }
 
-        if(_catalogRoot.children && _catalogRoot.children.length > 0)
+        if(pageData.children && pageData.children.length)
         {
-            for(const child of _catalogRoot.children)
-            {
-                this.setOffersToNodes(child);
-            }
+            for(const child of pageData.children) (child && this.setOffersToNodes(child));
         }
     }
 
