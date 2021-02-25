@@ -353,7 +353,6 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
     public close(): void
     {
-        console.log('close');
         this.removeView(this.view, false);
     }
 
