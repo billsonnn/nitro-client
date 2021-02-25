@@ -1,4 +1,4 @@
-﻿import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfostandUpdateEvent';
+﻿import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
 
 export class PetInfoData
 {

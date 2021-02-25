@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
+﻿import { RoomWidgetUpdateInfostandUserEvent } from '../../events/RoomWidgetUpdateInfostandUserEvent';
 
 export class AvatarInfoData
 {

@@ -1,34 +1,19 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AvatarAction } from '../../../../../../client/nitro/avatar/enum/AvatarAction';
-import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { AvatarExpressionEnum } from '../../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetMessage } from '../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetAvatarExpressionMessage } from '../../messages/RoomWidgetAvatarExpressionMessage';
-import { RoomWidgetChangePostureMessage } from '../../messages/RoomWidgetChangePostureMessage';
-import { RoomWidgetDanceMessage } from '../../messages/RoomWidgetDanceMessage';
-import { RoomWidgetUserActionMessage } from '../../messages/RoomWidgetUserActionMessage';
-import { AvatarContextInfoView } from '../AvatarContextInfoView';
-import { AvatarInfoData } from '../AvatarInfoData';
-import { RoomAvatarInfoComponent } from '../component';
+import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/AvatarAction';
+import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
+import { AvatarExpressionEnum } from '../../../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
+import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
+import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';
+import { RoomWidgetDanceMessage } from '../../../messages/RoomWidgetDanceMessage';
+import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
+import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
+import { AvatarInfoData } from '../../common/AvatarInfoData';
+import { RoomAvatarInfoComponent } from '../main/main.component';
 
 @Component({
     selector: 'nitro-room-avatarinfo-ownavatar-component',
-    template: `
-    <div #activeView class="nitro-room-avatarinfo-ownavatar-component context-menu">
-        <div class="card align-items-center">
-            <div class="d-flex card-header align-items-center w-100">{{ userName }}</div>
-            <div class="card-body">
-                <ng-container *ngFor="let entry of menu">
-                    <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush" [ngClass]="{ 'columns-3': (entry.mode === 4) }">
-                        <ng-container *ngFor="let item of entry.items">
-                            <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item" [innerHTML]="(((item.name === '11') || (item.name === '12') || (item.name === '13') || (item.name === '14') || (item.name === '15')) ? (item.localization | keepHtml) : (item.localization | translate))"></li>
-                        </ng-container>
-                    </ul>
-                </ng-container>
-            </div>
-            <div class="card-pointer"></div>
-        </div>
-    </div>`
+    templateUrl: './ownavatar.template.html'
 })
 export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
 {
@@ -299,6 +284,10 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                 switch(name)
                 {
                     case 'decorate':
+                        if(this.widget.hasClub)
+                        {
+                            this.widget.isDecorating = true;
+                        }
                         break;
                     case 'change_looks':
                         this.widget.openAvatarEditor();

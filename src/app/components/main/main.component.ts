@@ -20,7 +20,7 @@ import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidget
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { SettingsService } from '../../core/settings/service';
 import { RoomComponent } from '../room/room.component';
-import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/component';
+import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/components/main/main.component';
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';

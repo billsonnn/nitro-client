@@ -1,42 +1,41 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
-import { AvatarAction } from '../../../../../client/nitro/avatar/enum/AvatarAction';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
-import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
-import { RoomEnterEffect } from '../../../../../client/room/utils/RoomEnterEffect';
-import { SettingsService } from '../../../../core/settings/service';
-import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
-import { ContextInfoView } from '../contextmenu/ContextInfoView';
-import { IContextMenuParentWidget } from '../contextmenu/IContextMenuParentWidget';
-import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
-import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
-import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
-import { RoomWidgetRoomEngineUpdateEvent } from '../events/RoomWidgetRoomEngineUpdateEvent';
-import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
-import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
-import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
-import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
-import { AvatarInfoWidgetHandler } from '../handlers/AvatarInfoWidgetHandler';
-import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
-import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
-import { RoomAvatarInfoAvatarComponent } from './avatar/component';
-import { AvatarContextInfoView } from './AvatarContextInfoView';
-import { AvatarInfoData } from './AvatarInfoData';
-import { RoomAvatarInfoNameComponent } from './name/component';
-import { RoomAvatarInfoOwnAvatarComponent } from './ownavatar/component';
-import { PetInfoData } from './PetInfoData';
+import { IEventDispatcher } from '../../../../../../../client/core/events/IEventDispatcher';
+import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/AvatarAction';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { RoomObjectCategory } from '../../../../../../../client/nitro/room/object/RoomObjectCategory';
+import { RoomObjectUserType } from '../../../../../../../client/nitro/room/object/RoomObjectUserType';
+import { RoomObjectVariable } from '../../../../../../../client/nitro/room/object/RoomObjectVariable';
+import { HabboClubLevelEnum } from '../../../../../../../client/nitro/session/HabboClubLevelEnum';
+import { ConversionTrackingWidget } from '../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { RoomWidgetUpdateEvent } from '../../../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { IRoomObject } from '../../../../../../../client/room/object/IRoomObject';
+import { RoomEnterEffect } from '../../../../../../../client/room/utils/RoomEnterEffect';
+import { SettingsService } from '../../../../../../core/settings/service';
+import { AvatarEditorService } from '../../../../../avatar-editor/services/avatar-editor.service';
+import { ContextInfoView } from '../../../contextmenu/ContextInfoView';
+import { IContextMenuParentWidget } from '../../../contextmenu/IContextMenuParentWidget';
+import { RoomObjectNameEvent } from '../../../events/RoomObjectNameEvent';
+import { RoomWidgetAvatarInfoEvent } from '../../../events/RoomWidgetAvatarInfoEvent';
+import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
+import { RoomWidgetRoomEngineUpdateEvent } from '../../../events/RoomWidgetRoomEngineUpdateEvent';
+import { RoomWidgetRoomObjectUpdateEvent } from '../../../events/RoomWidgetRoomObjectUpdateEvent';
+import { RoomWidgetUpdateInfostandUserEvent } from '../../../events/RoomWidgetUpdateInfostandUserEvent';
+import { RoomWidgetUserDataUpdateEvent } from '../../../events/RoomWidgetUserDataUpdateEvent';
+import { RoomWidgetUserLocationUpdateEvent } from '../../../events/RoomWidgetUserLocationUpdateEvent';
+import { AvatarInfoWidgetHandler } from '../../../handlers/AvatarInfoWidgetHandler';
+import { RoomWidgetGetObjectLocationMessage } from '../../../messages/RoomWidgetGetObjectLocationMessage';
+import { RoomWidgetRoomObjectMessage } from '../../../messages/RoomWidgetRoomObjectMessage';
+import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
+import { AvatarInfoData } from '../../common/AvatarInfoData';
+import { PetInfoData } from '../../common/PetInfoData';
+import { RoomAvatarInfoAvatarComponent } from '../avatar/avatar.component';
+import { RoomAvatarInfoDecorateComponent } from '../decorate/decorate.component';
+import { RoomAvatarInfoNameComponent } from '../name/name.component';
+import { RoomAvatarInfoOwnAvatarComponent } from '../ownavatar/ownavatar.component';
 
 @Component({
     selector: 'nitro-room-avatarinfo-component',
-    template: `
-    <div class="nitro-room-avatarinfo-component">
-        <ng-template #contextsContainer></ng-template>
-    </div>`
+    templateUrl: './main.template.html'
 })
 export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements IContextMenuParentWidget, OnDestroy
 {
@@ -53,6 +52,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public cachedNameView: ComponentRef<RoomAvatarInfoNameComponent> = null;
     public cachedOwnAvatarMenuView: ComponentRef<RoomAvatarInfoOwnAvatarComponent> = null;
     public cachedAvatarMenuView: ComponentRef<RoomAvatarInfoAvatarComponent> = null;
+    public cachedDecorateModeView: ComponentRef<RoomAvatarInfoDecorateComponent> = null;
     public cachedNameBubbles: Map<string, ComponentRef<RoomAvatarInfoNameComponent>> = new Map();
 
     public lastRollOverId: number       = -1;
@@ -256,7 +256,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 {
                     if(avatarData._Str_11453)
                     {
-                        if(this.isDecorting) return;
+                        if(this.isDecorating) return;
 
                         if(RoomEnterEffect.isRunning())
                         {
@@ -353,6 +353,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
     public close(): void
     {
+        console.log('close');
         this.removeView(this.view, false);
     }
 
@@ -384,7 +385,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
     public toggleUpdateReceiver(): void
     {
-        if(this.view || (this.cachedNameBubbles.size > 0))
+        if(this.view || (this.cachedNameBubbles.size > 0) || this.cachedDecorateModeView)
         {
             Nitro.instance.ticker.add(this.update, this);
         }
@@ -399,6 +400,15 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         if(this.view)
         {
             const viewInstance = this.view.instance;
+
+            const message = (this.messageListener.processWidgetMessage(new RoomWidgetGetObjectLocationMessage(RoomWidgetGetObjectLocationMessage.RWGOI_MESSAGE_GET_OBJECT_LOCATION, viewInstance.userId, viewInstance.userType)) as RoomWidgetUserLocationUpdateEvent);
+
+            if(message) viewInstance.update(message.rectangle, message._Str_9337, time);
+        }
+
+        if(this.cachedDecorateModeView)
+        {
+            const viewInstance = this.cachedDecorateModeView.instance;
 
             const message = (this.messageListener.processWidgetMessage(new RoomWidgetGetObjectLocationMessage(RoomWidgetGetObjectLocationMessage.RWGOI_MESSAGE_GET_OBJECT_LOCATION, viewInstance.userId, viewInstance.userType)) as RoomWidgetUserLocationUpdateEvent);
 
@@ -539,9 +549,34 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         return (this.widgetHandler as AvatarInfoWidgetHandler);
     }
 
-    public get isDecorting(): boolean
+    public get isDecorating(): boolean
     {
         return this.handler.roomSession.isDecorating;
+    }
+
+    public set isDecorating(flag: boolean)
+    {
+        this.handler.roomSession.isDecorating = flag;
+
+        if(flag)
+        {
+            if(!this.cachedDecorateModeView) this.cachedDecorateModeView = this.createView(RoomAvatarInfoDecorateComponent);
+
+            const userId = this.handler.container.sessionDataManager.userId;
+            const userName = this.handler.container.sessionDataManager.userName;
+            const roomIndex = this.handler.roomSession.ownRoomIndex;
+
+            RoomAvatarInfoDecorateComponent.setup(this.cachedDecorateModeView.instance, userId, userName, RoomObjectUserType.getTypeNumber(RoomObjectUserType.USER), roomIndex);
+        }
+        else
+        {
+            if(this.cachedDecorateModeView)
+            {
+                this.removeView(this.cachedDecorateModeView, false);
+
+                this.cachedDecorateModeView = null;
+            }
+        }
     }
 
     public get hasClub(): boolean
