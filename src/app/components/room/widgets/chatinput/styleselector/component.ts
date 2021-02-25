@@ -39,6 +39,8 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     public ngOnInit(): void
     {
+        this.lastSelectedId = Nitro.instance.sessionDataManager.chatStyle;
+
         const styles = Nitro.instance.getConfiguration<{ styleId: number, minRank: number, isSystemStyle: boolean, isHcOnly: boolean, isAmbassadorOnly: boolean }[]>('chat.styles');
 
         for(const style of styles)

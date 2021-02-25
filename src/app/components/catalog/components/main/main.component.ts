@@ -224,18 +224,19 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._catalogService.requestPage(page);
     }
 
-    private selectFirstPage(page: CatalogPageData): void
+    private selectFirstPage(page: CatalogPageData, skipChildren: boolean = false): void
     {
         if(!page) return;
 
-        if(page.children.length === 0)
-        {
-            this.selectPage(page);
-        }
-        else
+        if(!skipChildren && page.children.length)
         {
             this.selectPage((page.children && page.children[0]));
+
+            return;
         }
+
+        this.selectPage(page);
+
     }
 
     public selectFirstTab(): void

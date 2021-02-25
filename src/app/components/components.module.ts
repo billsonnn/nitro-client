@@ -8,7 +8,7 @@ import { ChatHistoryModule } from './chat-history/chat-history.module';
 import { FriendListModule } from './friendlist/friendlist.module';
 import { GroupsModule } from './groups/groups.module';
 import { HabbopediaModule } from './habbopedia/habbopedia.module';
-import { HotelViewModule } from './hotelview';
+import { HotelViewModule } from './hotelview/hotelview.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { MainComponent } from './main/main.component';
 import { NavigatorModule } from './navigator/navigator.module';

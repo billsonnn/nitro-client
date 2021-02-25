@@ -9,7 +9,9 @@
             <p *ngIf="showOwner" class="h6 m-0">{{ ('navigator.roomownercaption') | translate }} {{ ownerName }}</p>
             <p class="h6 m-0">{{ ('navigator.roomrating') | translate }} {{ roomData.ranking }}</p>
         </div>
-        <div class="room-thumbnail"><img src=""></div>
+        <div class="room-thumbnail">
+            <img src="" image-placeholder />
+        </div>
         <div class="btn-group-vertical w-100 mt-2">
             <button *ngIf="roomSettingsVisible" type="button" class="btn btn-secondary mb-1" (click)="handleButton('settings')">{{ ('navigator.room.popup.info.room.settings') | translate }}</button>
             <button *ngIf="roomFilterVisible" type="button" class="btn btn-secondary mb-1" disabled (click)="handleButton('filter')">{{ ('navigator.roomsettings.roomfilter') | translate }}</button>

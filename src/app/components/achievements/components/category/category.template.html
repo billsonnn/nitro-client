@@ -11,14 +11,14 @@
 <div class="bg-secondary mb-auto w-100 p-1 rounded d-flex flex-row" *ngIf="selectedAchievement">
     <div class="text-center">
         <div class="badge_preview flex-shrink-0 justify-content-center d-flex">
-            <img class="badge_preview_image align-self-center" [ngClass]="[selectedAchievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(selectedAchievement)"/>
+            <img class="badge_preview_image align-self-center" [ngClass]="[selectedAchievement._Str_10438 ? '' : 'greyscale']" [src]="getBadgeImageUrl(selectedAchievement)" image-placeholder />
         </div>
         <span class="font-weight-bolder text-center small">{{ getBadgeLevelString(selectedAchievement) }}</span>
     </div>
     <div class="badge_info w-100 small">
         <span class="mb-1 font-weight-bolder">{{ getBadgeText(selectedAchievement) }}</span>
         <span class="mb-1 d-block" style="min-height:42px;">{{ getBadgeText(selectedAchievement,true) }}</span>
-        <span *ngIf="!selectedAchievement._Str_7518" class="mb-1 d-block">{{'achievements.details.reward' | translate}} <b>{{selectedAchievement.rewardAmount}}</b> <img class="pl-1" [src]="getCurrencyUrl(selectedAchievement.rewardType)"/></span>
+        <span *ngIf="!selectedAchievement._Str_7518" class="mb-1 d-block">{{'achievements.details.reward' | translate}} <b>{{selectedAchievement.rewardAmount}}</b> <img class="pl-1" [src]="getCurrencyUrl(selectedAchievement.rewardType)" image-placeholder /></span>
         <div *ngIf="!selectedAchievement._Str_7518" class="achievement-progress-bar bg-primary rounded p-1 position-relative">
             <div class="achievement-progress-bar-inner bg-success rounded py-3" [ngStyle]="{width: getProgress(selectedAchievement)}">
             </div>

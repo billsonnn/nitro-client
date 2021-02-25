@@ -1,15 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AvatarContextInfoView } from '../AvatarContextInfoView';
+import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 
 @Component({
     selector: 'nitro-room-avatarinfo-name-component',
-    template: `
-    <div #activeView class="nitro-room-avatarinfo-name-component context-menu">
-        <div class="card align-items-center">
-            <div class="d-flex card-header border-0 align-items-center w-100">{{ userName }}</div>
-            <div class="card-pointer"></div>
-        </div>
-    </div>`
+    templateUrl: './name.template.html'
 })
 export class RoomAvatarInfoNameComponent extends AvatarContextInfoView
 {

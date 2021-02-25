@@ -1,0 +1,15 @@
+<div #activeView class="nitro-room-avatarinfo-ownavatar-component context-menu">
+    <div class="card align-items-center">
+        <div class="d-flex card-header align-items-center w-100">{{ userName }}</div>
+        <div class="card-body">
+            <ng-container *ngFor="let entry of menu">
+                <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush" [ngClass]="{ 'columns-3': (entry.mode === 4) }">
+                    <ng-container *ngFor="let item of entry.items">
+                        <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item" [innerHTML]="(((item.name === '11') || (item.name === '12') || (item.name === '13') || (item.name === '14') || (item.name === '15')) ? (item.localization | keepHtml) : (item.localization | translate))"></li>
+                    </ng-container>
+                </ul>
+            </ng-container>
+        </div>
+        <div class="card-pointer"></div>
+    </div>
+</div>

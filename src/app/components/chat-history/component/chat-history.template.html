@@ -8,7 +8,7 @@
             <ng-container *ngFor="let item of historyItems;trackBy:trackById">
                 <div class="row mb-2">
                     <div class="d-flex col-3 justify-content-end align-items-center">
-                        <div class="badge badge-secondary badge-sm">{{ item.date | date:'hh:mm:ss' }}</div>
+                        <div class="badge badge-secondary badge-sm">{{ item.date | date:'HH:mm:ss' }}</div>
                     </div>
                     <div class="d-flex col-9 align-items-center pl-0">
                         <div *ngIf="(item.senderId !== -1)" class="bubble-container" (click)="selectUser(item.senderId)">
