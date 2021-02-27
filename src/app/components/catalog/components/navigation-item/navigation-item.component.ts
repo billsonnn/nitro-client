@@ -5,6 +5,7 @@ import { ICatalogPageData } from '../../../../../client/nitro/communication/mess
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
 import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { CatalogSearchData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogSearchData';
 
 @Component({
     selector: 'nitro-catalog-navigation-item-component',
@@ -66,6 +67,6 @@ export class CatalogNavigationItemComponent
 
     public get isInSearchView(): boolean
     {
-        return this._catalogService.searchResults !== null;
+        return this._catalogService.searchResults instanceof CatalogSearchData;
     }
 }
