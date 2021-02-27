@@ -8,6 +8,7 @@ import { InventoryTradingComponent } from './components/trading/trading.componen
 import { InventoryFurnitureService } from './services/furniture.service';
 import { InventoryService } from './services/inventory.service';
 import { InventoryTradingService } from './services/trading.service';
+import { InventoryBadgesComponent } from './components/badges/badges.component';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { InventoryTradingService } from './services/trading.service';
     ],
     exports: [
         InventoryBotsComponent,
+        InventoryBadgesComponent,
         InventoryFurnitureComponent,
         InventoryMainComponent,
         InventoryPetsComponent,
@@ -27,6 +29,7 @@ import { InventoryTradingService } from './services/trading.service';
     ],
     declarations: [
         InventoryBotsComponent,
+        InventoryBadgesComponent,
         InventoryFurnitureComponent,
         InventoryMainComponent,
         InventoryPetsComponent,
