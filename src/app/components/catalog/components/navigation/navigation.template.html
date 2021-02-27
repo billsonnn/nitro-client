@@ -1,6 +1,16 @@
 <div class="nitro-catalog-navigation-component overflow-hidden">
-    <input type="text" placeholder="{{ 'catalog.search' | translate }}" class="form-control form-control-sm bg-secondary rounded border-0 shadow-none text-white mb-2" [formControl]="searchControl" />
+    <div class="input-group">
+        <input type="text" placeholder="{{ 'catalog.search' | translate }}"
+               class="form-control form-control-sm bg-secondary rounded border-0 shadow-none text-white mb-2"
+               [formControl]="searchControl"/>
+        <div class="input-group-append">
+            <button type="button" (click)="clearResults()" class="btn btn-outline-secondary btn-sm">X</button>
+        </div>
+    </div>
     <perfect-scrollbar class="bg-secondary rounded" style="min-height:450px;max-height:450px;height:450px;">
-        <nitro-catalog-navigation-set-component *ngIf="catalogPage" [catalogPage]="catalogPage"></nitro-catalog-navigation-set-component>
+        <nitro-catalog-navigation-set-component *ngIf="!hasSearchResults && catalogPage"
+                                                [catalogPage]="catalogPage"></nitro-catalog-navigation-set-component>
+        <nitro-catalog-navigation-set-component *ngIf="hasSearchResults && searchResults"
+                                                [catalogPage]="searchResults"></nitro-catalog-navigation-set-component>
     </perfect-scrollbar>
 </div>

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
+import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
 import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
@@ -12,7 +13,7 @@ import { ICatalogPageParser } from '../../../../../client/nitro/communication/me
 export class CatalogNavigationItemComponent
 {
     @Input()
-    public catalogPage: CatalogPageData = null;
+    public catalogPage: ICatalogPageData = null;
 
     constructor(private _catalogService: CatalogService)
     {}
@@ -29,7 +30,7 @@ export class CatalogNavigationItemComponent
         return this._catalogService.activePage;
     }
 
-    public get activePageData(): CatalogPageData
+    public get activePageData(): ICatalogPageData
     {
         return this._catalogService.activePageData;
     }

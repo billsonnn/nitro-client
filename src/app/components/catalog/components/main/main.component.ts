@@ -3,6 +3,7 @@ import { CatalogPageParser } from '../../../../../client/nitro/communication/mes
 import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { IObjectData } from '../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
@@ -217,7 +218,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this.selectFirstPage(tab);
     }
 
-    public selectPage(page: CatalogPageData): void
+    public selectPage(page: ICatalogPageData): void
     {
         if(!page) return;
 
@@ -411,7 +412,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._catalogService.activePage;
     }
 
-    public get activePageData(): CatalogPageData
+    public get activePageData(): ICatalogPageData
     {
         return this._catalogService.activePageData;
     }

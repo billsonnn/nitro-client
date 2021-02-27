@@ -3,10 +3,12 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
+import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
 import { IFurnitureDataListener } from '../../../../../client/nitro/session/furniture/IFurnitureDataListener';
 import { CatalogService } from '../../services/catalog.service';
+import { SearchResultsPage } from '../layouts/search-results/SearchResultsPage';
 
 @Component({
     selector: '[nitro-catalog-navigation-component]',
@@ -86,8 +88,26 @@ export class CatalogNavigationComponent implements OnInit, OnDestroy, IFurniture
 
     }
 
+    public get hasSearchResults(): boolean
+    {
+        return this._catalogService.activePage instanceof SearchResultsPage;
+    }
+
     public get catalogPage(): CatalogPageData
     {
         return ((this._catalogService.component && this._catalogService.component.activeTab) || null);
     }
+
+    public get searchResults(): ICatalogPageData
+    {
+        return this._catalogService.searchResults;
+    }
+
+    public clearResults(): void
+    {
+        //
+        //
+        ///
+    }
+
 }

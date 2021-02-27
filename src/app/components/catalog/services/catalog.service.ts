@@ -32,6 +32,8 @@ import { CatalogClubOfferData } from '../../../../client/nitro/communication/mes
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogProductOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { CatalogSearchData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogSearchData';
+import { ICatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
@@ -59,8 +61,8 @@ export class CatalogService implements OnDestroy
     private _catalogRoot: CatalogPageData = null;
     private _activePage: ICatalogPageParser = null;
     private _clubGiftsParser: CatalogClubGiftsParser = null;
-    private _activePageData: CatalogPageData = null;
-    private _manuallyCollapsed: CatalogPageData[] = [];
+    private _activePageData: ICatalogPageData = null;
+    private _manuallyCollapsed: ICatalogPageData[] = [];
     private _isLoading: boolean = false;
     private _purse: Purse = new Purse();
     private _clubOffers: CatalogClubOfferData[] = [];
@@ -71,6 +73,7 @@ export class CatalogService implements OnDestroy
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
 
     private _offersToRoots: AdvancedMap<number, CatalogPageData[]> = null;
+    private _searchResultsPages: CatalogSearchData;
 
     constructor(
         private _settingsService: SettingsService,
@@ -353,7 +356,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogGroupsComposer());
     }
 
-    public requestPage(page: CatalogPageData): void
+    public requestPage(page: ICatalogPageData): void
     {
         if(!page || !this.canSelectPage(page)) return;
 
@@ -371,7 +374,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogPageComposer(pageId, offerId, catalogType));
     }
 
-    public isDescendant(page: CatalogPageData, descendant: CatalogPageData): boolean
+    public isDescendant(page: ICatalogPageData, descendant: ICatalogPageData): boolean
     {
         if(!page || !descendant) return false;
 
@@ -457,7 +460,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogRedeemVoucherComposer(voucherCode));
     }
 
-    public manuallyCollapsePage(page: CatalogPageData): void
+    public manuallyCollapsePage(page: ICatalogPageData): void
     {
         const index = this._manuallyCollapsed.indexOf(page);
 
@@ -465,7 +468,7 @@ export class CatalogService implements OnDestroy
         else this._manuallyCollapsed.splice(index, 1);
     }
 
-    private canSelectPage(page: CatalogPageData): boolean
+    private canSelectPage(page: ICatalogPageData): boolean
     {
         if(!page || !page.visible) return false;
 
@@ -502,12 +505,12 @@ export class CatalogService implements OnDestroy
         return this._activePage;
     }
 
-    public get activePageData(): CatalogPageData
+    public get activePageData(): ICatalogPageData
     {
         return this._activePageData;
     }
 
-    public get manuallyCollapsed(): CatalogPageData[]
+    public get manuallyCollapsed(): ICatalogPageData[]
     {
         return this._manuallyCollapsed;
     }
@@ -582,6 +585,30 @@ export class CatalogService implements OnDestroy
 
     public setSearchPage(furni: IFurnitureData[]): void
     {
+        const pages = new AdvancedMap<number, CatalogPageData>();
+
+        for(const furniItem of furni)
+        {
+            const hasOffer      = this.getOfferPages(furniItem.purchaseOfferId);
+            const hasRentOffer  = this.getOfferPages(furniItem.rentOfferId);
+
+            const combinedOfferPages = [hasOffer, hasRentOffer];
+
+            for(const offerSection of combinedOfferPages)
+            {
+                if(offerSection && offerSection.length > 0)
+                {
+                    for(const page of offerSection)
+                    {
+                        if(pages.hasKey(page.pageId)) continue;
+
+                        pages.add(page.pageId, page);
+                    }
+                }
+            }
+        }
+
+        this._searchResultsPages = new CatalogSearchData(pages.getValues());
         this._activePage = new SearchResultsPage(furni);
     }
 
@@ -600,5 +627,10 @@ export class CatalogService implements OnDestroy
         if(!this._purse) return false;
 
         return this._purse.clubDays > 0;
+    }
+
+    public get searchResults(): ICatalogPageData
+    {
+        return this._searchResultsPages;
     }
 }
