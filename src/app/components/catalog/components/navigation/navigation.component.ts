@@ -54,7 +54,11 @@ export class CatalogNavigationComponent implements OnInit, OnDestroy, IFurniture
 
     private search(value: string): void
     {
-        if(!value || !value.length) return;
+        if(!value || !value.length)
+        {
+            this._catalogService.clearSearchResults();
+            return;
+        }
 
         value = value.toLocaleLowerCase();
 
@@ -105,9 +109,8 @@ export class CatalogNavigationComponent implements OnInit, OnDestroy, IFurniture
 
     public clearResults(): void
     {
-        //
-        //
-        ///
+        this._catalogService.clearSearchResults();
+        this.searchControl.setValue('');
     }
 
 }

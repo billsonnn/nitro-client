@@ -115,6 +115,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public hide(): void
     {
         this._settingsService.hideCatalog();
+        this._catalogService.clearSearchResults();
     }
 
     public hidePurchaseConfirmation(): void
@@ -216,6 +217,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._activeTab = tab;
 
         this.selectFirstPage(tab);
+    }
+
+    public reselectCurrentTab(): void
+    {
+        this.selectFirstPage(this._activeTab);
     }
 
     public selectPage(page: ICatalogPageData): void

@@ -633,4 +633,10 @@ export class CatalogService implements OnDestroy
     {
         return this._searchResultsPages;
     }
+
+    public  clearSearchResults(): void
+    {
+        this._searchResultsPages = null;
+        this.component && this.component.reselectCurrentTab();
+    }
 }

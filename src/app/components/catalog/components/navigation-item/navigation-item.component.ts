@@ -63,4 +63,9 @@ export class CatalogNavigationItemComponent
     {
         return (Nitro.instance.getConfiguration<string>('catalog.asset.icon.url').replace('%name%', (this.catalogPage.icon || 0).toString()));
     }
+
+    public get isInSearchView(): boolean
+    {
+        return this._catalogService.searchResults !== null;
+    }
 }
