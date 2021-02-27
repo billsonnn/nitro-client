@@ -79,6 +79,8 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     {
         this._inventoryService.furnitureVisible = false;
         this._inventoryService.botsVisible = true;
+
+        this._inventoryService.selectFirstBot();
     }
 
     public updateItemLocking(): void

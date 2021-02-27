@@ -295,4 +295,9 @@ export class InventoryService implements OnDestroy
     {
         return this._boundFurnitureNames;
     }
+
+    public selectFirstBot(): void
+    {
+        this._botsController && this._botsController.selectFirstBot();
+    }
 }

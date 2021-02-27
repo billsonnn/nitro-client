@@ -11,12 +11,13 @@ import { GroupItem } from '../../items/GroupItem';
 import { IFurnitureItem } from '../../items/IFurnitureItem';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
+import { InventorySharedComponent } from '../shared/inventory-shared.component';
 
 @Component({
     selector: '[nitro-inventory-furniture-component]',
     templateUrl: './furniture.template.html'
 })
-export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
+export class InventoryFurnitureComponent extends InventorySharedComponent implements OnInit, OnChanges, OnDestroy
 {
     @Input()
     public visible: boolean = false;
@@ -35,9 +36,11 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     constructor(
         private _notificationService: NotificationService,
-        private _inventoryService: InventoryService,
-        private _ngZone: NgZone)
-    {}
+        protected _inventoryService: InventoryService,
+        protected _ngZone: NgZone)
+    {
+        super(_inventoryService, _ngZone);
+    }
 
     public ngOnInit(): void
     {
@@ -258,13 +261,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         this.attemptItemPlacement();
     }
 
-    public attemptItemPlacement(): void
-    {
-        if(!this.canPlace || this.tradeRunning) return;
-
-        this._ngZone.runOutsideAngular(() => this._inventoryService.controller.furnitureService.attemptItemPlacement());
-    }
-
     public attemptItemOffer(count: number = 1): void
     {
         if(!this.selectedGroup || !this.tradeRunning) return;
@@ -325,15 +321,9 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         return this._filteredItems;
     }
 
-    public get tradeRunning(): boolean
-    {
-        return this._inventoryService.controller.tradeService.running;
-    }
 
-    public get canPlace(): boolean
-    {
-        return !!this._inventoryService.roomSession;
-    }
+
+
 
     public get paginateConfig(): PaginationInstance
     {

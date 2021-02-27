@@ -8,7 +8,7 @@
             <button (click)="showFurniture()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
             <button (click)="showBots()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': botsVisible }">{{ 'inventory.bots' | translate }}</button>
         </div>
-        <div nitro-inventory-bots-component [visible]="botsVisible"></div>
+        <div nitro-inventory-bots-component [visible]="botsVisible" [roomPreviewer]="roomPreviewer"></div>
         <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
         <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
     </div>
