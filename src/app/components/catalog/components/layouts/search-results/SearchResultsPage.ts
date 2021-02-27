@@ -14,7 +14,6 @@ export class SearchResultsPage implements ICatalogPageParser
 
     constructor(furni: IFurnitureData[])
     {
-        console.log('Constructor SearchResultsPage');
         this._furni = furni;
     }
 
