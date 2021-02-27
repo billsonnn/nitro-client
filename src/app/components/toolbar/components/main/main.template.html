@@ -1,5 +1,5 @@
-<div class="nitro-toolbar-component">
-    <div class="card p-0" [@inOutAnimation]>
+<div class="nitro-toolbar-component" [@inOutAnimation]>
+    <div class="card p-0 overflow-hidden">
         <ul #navigationList class="list-group list-group-horizontal p-1">
             <li class="list-group-item" *ngIf="isInRoom" (click)="clickIcon('hotel_view')"><i class="icon icon-hotelview icon-nitro-light"></i></li>
             <li class="list-group-item" *ngIf="!isInRoom" (click)="clickIcon('home_room')"><i class="icon icon-house"></i></li>

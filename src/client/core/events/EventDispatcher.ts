@@ -100,7 +100,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
             catch (err)
             {
-                this._logger.error(err);
+                this._logger.error(err.stack);
 
                 return;
             }

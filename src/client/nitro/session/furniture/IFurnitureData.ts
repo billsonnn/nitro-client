@@ -1,24 +1,33 @@
-import { IFurnitureDimension } from './IFurnitureDimension';
-
 export interface IFurnitureData
 {
     type: string;
     id: number;
-    fullName: string;
     className: string;
-    colorId: number;
+    fullName: string;
+    category: string;
+    hasIndexedColor: boolean;
+    colorIndex: number;
+    revision: number;
+    tileSizeX: number;
+    tileSizeY: number;
+    tileSizeZ: number;
+    colors: number[];
     name: string;
     description: string;
-    furniLine: string;
-    colors: number[];
-    dimensions: IFurnitureDimension;
+    adUrl: string;
+    purchaseOfferId: number;
+    rentOfferId: number;
+    customParams: string;
+    specialType: number;
+    purchaseCouldBeUsedForBuyout: boolean;
+    rentCouldBeUsedForBuyout: boolean;
+    availableForBuildersClub: boolean;
     canStandOn: boolean;
     canSitOn: boolean;
     canLayOn: boolean;
-    offerId: number;
-    adUrl: string;
-    excludeDynamic: boolean;
-    specialType: number;
-    customParams: string;
     isExternalImage: boolean;
+    excludeDynamic: boolean;
+    furniLine: string;
+    environment: string;
+    rare: boolean;
 }

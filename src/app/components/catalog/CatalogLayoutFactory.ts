@@ -2,6 +2,8 @@ import { CatalogLayout } from './CatalogLayout';
 import { CatalogLayoutDefaultComponent } from './components/layouts/default/default.component';
 import { CatalogLayoutFrontPageFeaturedComponent } from './components/layouts/frontpage-featured/frontpage-featured.component';
 import { CatalogLayoutFrontPage4Component } from './components/layouts/frontpage4/frontpage4.component';
+import { CatalogLayoutGuildCustomFurniComponent } from './components/layouts/guild-custom-furni/guild-custom-furni.component';
+import { CatalogLayoutGuildFrontPageComponent } from './components/layouts/guild-frontpage/guild-frontpage.component';
 import { CatalogLayoutPetsComponent } from './components/layouts/pets/pets.component';
 import { CatalogLayoutPets2Component } from './components/layouts/pets2/pets2.component';
 import { CatalogLayoutPets3Component } from './components/layouts/pets3/pets3.component';
@@ -10,6 +12,7 @@ import { CatalogLayoutTrophiesComponent } from './components/layouts/trophies/tr
 import { CatalogLayoutUnsupportedComponent } from './components/layouts/unsupported/unsupported.component';
 import { CatalogLayoutVipBuyComponent } from './components/layouts/vip-buy/vip-buy.component';
 import { CatalogLayoutBotsComponent } from './components/layouts/bots/bots.component';
+import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 
 export class CatalogLayoutFactory
 {
@@ -35,8 +38,14 @@ export class CatalogLayoutFactory
                 return CatalogLayoutDefaultComponent;
             case CatalogLayoutVipBuyComponent.CODE:
                 return CatalogLayoutVipBuyComponent;
+            case CatalogLayoutGuildFrontPageComponent.CODE:
+                return CatalogLayoutGuildFrontPageComponent;
+            case CatalogLayoutGuildCustomFurniComponent.CODE:
+                return CatalogLayoutGuildCustomFurniComponent;
             case CatalogLayoutTrophiesComponent.CODE:
                 return CatalogLayoutTrophiesComponent;
+            case CatalogLayoutVipGiftsComponent.CODE:
+                return CatalogLayoutVipGiftsComponent;
             default:
                 return CatalogLayoutUnsupportedComponent;
         }

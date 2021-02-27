@@ -1,5 +1,7 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { RespectReceivedEvent } from '../../communication/messages/incoming/notifications/RespectReceivedEvent';
+import { FloodControlEvent } from '../../communication/messages/incoming/room/unit/chat/FloodControlEvent';
+import { RemainingMuteEvent } from '../../communication/messages/incoming/room/unit/chat/RemainingMuteEvent';
 import { RoomUnitChatEvent } from '../../communication/messages/incoming/room/unit/chat/RoomUnitChatEvent';
 import { RoomUnitChatShoutEvent } from '../../communication/messages/incoming/room/unit/chat/RoomUnitChatShoutEvent';
 import { RoomUnitChatWhisperEvent } from '../../communication/messages/incoming/room/unit/chat/RoomUnitChatWhisperEvent';
@@ -18,6 +20,8 @@ export class RoomChatHandler extends BaseHandler
         connection.addMessageEvent(new RoomUnitChatShoutEvent(this.onRoomUnitChatEvent.bind(this)));
         connection.addMessageEvent(new RoomUnitChatWhisperEvent(this.onRoomUnitChatEvent.bind(this)));
         connection.addMessageEvent(new RespectReceivedEvent(this.onRespectReceivedEvent.bind(this)));
+        connection.addMessageEvent(new FloodControlEvent(this.onFloodControlEvent.bind(this)));
+        connection.addMessageEvent(new RemainingMuteEvent(this.onRemainingMuteEvent.bind(this)));
     }
 
     private onRoomUnitChatEvent(event: RoomUnitChatEvent): void
@@ -59,5 +63,39 @@ export class RoomChatHandler extends BaseHandler
         if(!userData) return;
 
         this.listener.events.dispatchEvent(new RoomSessionChatEvent(RoomSessionChatEvent.CHAT_EVENT, session, userData.roomIndex, '', RoomSessionChatEvent._Str_5821, SystemChatStyleEnum.GENERIC));
+    }
+
+    private onFloodControlEvent(event: FloodControlEvent): void
+    {
+        if(!this.listener) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const seconds = parser.seconds;
+
+        this.listener.events.dispatchEvent(new RoomSessionChatEvent(RoomSessionChatEvent.FLOOD_EVENT, session, -1, seconds.toString(), 0, 0));
+    }
+
+    private onRemainingMuteEvent(event: RemainingMuteEvent): void
+    {
+        if(!this.listener) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const seconds = parser.seconds;
+
+        this.listener.events.dispatchEvent(new RoomSessionChatEvent(RoomSessionChatEvent.CHAT_EVENT, session, session.ownRoomIndex, '', RoomSessionChatEvent._Str_8971, SystemChatStyleEnum.GENERIC, null, seconds));
     }
 }

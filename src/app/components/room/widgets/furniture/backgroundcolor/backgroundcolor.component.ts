@@ -37,11 +37,7 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
             this.saturation = Math.max(sat, 0);
             this.lightness  = Math.max(light, 0);
 
-            console.log(this.hue, ((this.hue / 255) * 360), this.saturation, this.lightness);
-
             this.hsl = { h: ((this.hue / 255) * 360), s: (this.saturation / 255), l: (this.lightness / 255) };
-
-            console.log(this.hsl);
         });
     }
 
@@ -96,4 +92,3 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
         };
     }
 }
-

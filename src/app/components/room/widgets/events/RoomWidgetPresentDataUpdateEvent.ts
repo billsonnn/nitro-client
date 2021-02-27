@@ -1,5 +1,4 @@
-﻿import { Texture } from 'pixi.js';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -11,107 +10,107 @@ export class RoomWidgetPresentDataUpdateEvent extends RoomWidgetUpdateEvent
     public static RWPDUE_CONTENTS_WALLPAPER: string = 'RWPDUE_CONTENTS_WALLPAPER';
     public static RWPDUE_CONTENTS_IMAGE: string = 'RWPDUE_CONTENTS_IMAGE';
 
-    private _Str_2319: number = -1;
-    private _Str_2825: number = 0;
-    private _Str_2625: string = '';
-    private _text: string;
-    private _controller: boolean;
-    private _Str_12168: Texture;
-    private _Str_19174: string;
-    private _Str_19510: string;
-    private _Str_3054: number = -1;
-    private _Str_3970: string = '';
-    private _Str_3224: boolean;
+    private _objectId: number = -1;
+    private _classId: number = 0;
+    private _itemType: string = '';
+    private _giftMessage: string = '';
+    private _extra: string = null;
+    private _isController: boolean;
+    private _purchaserName: string;
+    private _purchaserFigure: string;
+    private _placedItemId: number = -1;
+    private _placedItemType: string = '';
+    private _placedInRoom: boolean;
 
-    constructor(k: string, _arg_2: number, _arg_3: string, _arg_4: boolean = false, _arg_5: Texture = null, _arg_6: string = null, _arg_7: string = null)
+    constructor(type: string, objectId: number, giftMessage: string, isOwnerOfFurniture: boolean = false, extra: string = null, purchaserName: string = null, purchaserFigure: string = null)
     {
-        super(k);
+        super(type);
 
-        this._Str_2319 = _arg_2;
-        this._text = _arg_3;
-        this._controller = _arg_4;
-        this._Str_12168 = _arg_5;
-        this._Str_19174 = _arg_6;
-        this._Str_19510 = _arg_7;
+        this._objectId          = objectId;
+        this._giftMessage       = giftMessage;
+        this._extra             = extra;
+        this._isController      = isOwnerOfFurniture;
+        this._purchaserName     = purchaserName;
+        this._purchaserFigure   = purchaserFigure;
     }
 
-    public get _Str_1577(): number
+    public get objectId(): number
     {
-        return this._Str_2319;
+        return this._objectId;
     }
 
-    public get _Str_2706(): number
+    public get classId(): number
     {
-        return this._Str_2825;
+        return this._classId;
     }
 
-    public set _Str_2706(k: number)
+    public set classId(k: number)
     {
-        this._Str_2825 = k;
+        this._classId = k;
     }
 
-    public get _Str_2887(): string
+    public get itemType(): string
     {
-        return this._Str_2625;
+        return this._itemType;
     }
 
-    public set _Str_2887(k: string)
+    public set itemType(k: string)
     {
-        this._Str_2625 = k;
+        this._itemType = k;
     }
 
-    public get text(): string
+    public get giftMessage(): string
     {
-        return this._text;
+        return this._giftMessage;
     }
 
-    public get controller(): boolean
+    public get extra(): string
     {
-        return this._controller;
+        return this._extra;
     }
 
-    public get _Str_11625(): Texture
+    public get isController(): boolean
     {
-        return this._Str_12168;
+        return this._isController;
     }
 
-    public get _Str_22956(): string
+    public get purchaserName(): string
     {
-        return this._Str_19174;
+        return this._purchaserName;
     }
 
-    public get _Str_23105(): string
+    public get purchaserFigure(): string
     {
-        return this._Str_19510;
+        return this._purchaserFigure;
     }
 
-    public get _Str_5200(): number
+    public get placedItemId(): number
     {
-        return this._Str_3054;
+        return this._placedItemId;
     }
 
-    public set _Str_5200(k: number)
+    public set placedItemId(k: number)
     {
-        this._Str_3054 = k;
+        this._placedItemId = k;
     }
 
-    public get _Str_4057(): boolean
+    public get placedInRoom(): boolean
     {
-        return this._Str_3224;
+        return this._placedInRoom;
     }
 
-    public set _Str_4057(k: boolean)
+    public set placedInRoom(k: boolean)
     {
-        this._Str_3224 = k;
+        this._placedInRoom = k;
     }
 
-    public get _Str_5057(): string
+    public get placedItemType(): string
     {
-        return this._Str_3970;
+        return this._placedItemType;
     }
 
-    public set _Str_5057(k: string)
+    public set placedItemType(k: string)
     {
-        this._Str_3970 = k;
+        this._placedItemType = k;
     }
 }

@@ -189,16 +189,17 @@ export class SocketConnection extends EventDispatcher implements IConnection
                 continue;
             }
 
-            const encoded = this._codec.encode(header, composer.getMessageArray());
+            const message   = composer.getMessageArray();
+            const encoded   = this._codec.encode(header, message);
 
             if(!encoded)
             {
-                if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`Encoding Failed: ${ composer.constructor.name }`);
+                if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) console.log(`Encoding Failed: ${ composer.constructor.name }`);
 
                 continue;
             }
 
-            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`OutgoingComposer: ${ composer.constructor.name }`);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) console.log(`OutgoingComposer: [${ header }] ${ composer.constructor.name }`, message);
 
             this.write(encoded.getBuffer());
         }
@@ -256,7 +257,10 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
             if(!messages || !messages.length) continue;
 
-            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log')) NitroLogger.log(`IncomingMessage: ${ messages[0].constructor.name } [${ wrapper.header }]`);
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log'))
+            {
+                console.log(`IncomingMessage: [${ wrapper.header }] ${ messages[0].constructor.name }`, messages[0].parser);
+            }
 
             this.handleMessages(...messages);
         }
@@ -285,7 +289,15 @@ export class SocketConnection extends EventDispatcher implements IConnection
 
         const events = this._messages.getEvents(wrapper.header);
 
-        if(!events || !events.length) return null;
+        if(!events || !events.length)
+        {
+            if(Nitro.instance.getConfiguration<boolean>('communication.packet.log'))
+            {
+                console.log(`IncomingMessage: [${ wrapper.header }] UNREGISTERED`, wrapper);
+            }
+
+            return;
+        }
 
         try
         {
