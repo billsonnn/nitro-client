@@ -5,11 +5,15 @@ import { CatalogPageOfferData } from '../../../../../../client/nitro/communicati
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
 import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { AvatarScaleType } from '../../../../../../client/nitro/avatar/enum/AvatarScaleType';
+import { AvatarSetType } from '../../../../../../client/nitro/avatar/enum/AvatarSetType';
+import { IAvatarImageListener } from '../../../../../../client/nitro/avatar/IAvatarImageListener';
 
 @Component({
     templateUrl: './bots.template.html'
 })
-export class CatalogLayoutBotsComponent extends CatalogLayout
+export class CatalogLayoutBotsComponent extends CatalogLayout implements IAvatarImageListener
 {
     public static CODE: string = 'bots';
 
@@ -27,7 +31,7 @@ export class CatalogLayoutBotsComponent extends CatalogLayout
         (this._catalogService.component && this._catalogService.component.selectOffer(offer));
     }
 
-    public getFigureForBot(offer: CatalogPageOfferData): string
+    public getBotImage(offer: CatalogPageOfferData): string
     {
         if(!offer) return '';
 
@@ -35,7 +39,20 @@ export class CatalogLayoutBotsComponent extends CatalogLayout
 
         if(!product) return '';
 
-        return product.extraParam;
+        const avatarImage = Nitro.instance.avatar.createAvatarImage(product.extraParam, AvatarScaleType.LARGE, 'M', this, null);
+
+        if(avatarImage)
+        {
+            avatarImage.setDirection(AvatarSetType.HEAD, 2);
+
+            const image = avatarImage.getCroppedImage(AvatarSetType.HEAD, 4);
+
+            const src = image.src;
+            avatarImage.dispose();
+            if(src) return src;
+        }
+
+        return '';
     }
 
     public offerImage(offer: CatalogPageOfferData): string
@@ -65,5 +82,15 @@ export class CatalogLayoutBotsComponent extends CatalogLayout
         if(!product) return null;
 
         return this._catalogService.getFurnitureDataForProductOffer(product);
+    }
+
+    disposed: boolean;
+
+    dispose(): void
+    {
+    }
+
+    resetFigure(figure: string): void
+    {
     }
 }

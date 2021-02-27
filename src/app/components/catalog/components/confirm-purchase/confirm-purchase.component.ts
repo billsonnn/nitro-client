@@ -6,6 +6,7 @@ import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
+import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 
 @Component({
     selector: 'nitro-catalog-confirm-purchase-component',
@@ -141,6 +142,17 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     public get imageUrl(): string
     {
         return this._imageUrl;
+    }
+
+    public getOfferTitle(): string
+    {
+        const localization = this.offer.localizationId;
+
+        const productData = Nitro.instance.sessionDataManager.getProductData(localization);
+        if(productData) return productData.name;
+
+        return localization;
+
     }
 
 

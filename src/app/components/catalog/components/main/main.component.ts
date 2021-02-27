@@ -260,12 +260,20 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
             const furniData = this._catalogService.getFurnitureDataForProductOffer(product);
 
-            if(!furniData) return;
+            if(!furniData && product.productType !== ProductTypeEnum.ROBOT) return;
 
             this._ngZone.runOutsideAngular(() =>
             {
+
                 switch(product.productType)
                 {
+                    case ProductTypeEnum.ROBOT: {
+                        this._roomPreviewer.updateObjectRoom('default', 'default', 'default');
+                        const figure = Nitro.instance.avatar.getFigureStringWithFigureIds(product.extraParam, 'm', []);
+
+                        this._roomPreviewer.addAvatarIntoRoom(figure, 0);
+                    }
+                        break;
                     case ProductTypeEnum.FLOOR:
                         this._roomPreviewer.updateObjectRoom('default', 'default', 'default');
 
