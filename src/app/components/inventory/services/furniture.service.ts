@@ -26,6 +26,8 @@ import { BotInventoryMessageEvent } from '../../../../client/nitro/communication
 import { BotData } from '../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { RoomObjectType } from '../../../../client/nitro/room/object/RoomObjectType';
+import { BotRemovedFromInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
+import { BotAddedToInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotAddedToInventoryEvent';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
@@ -69,7 +71,9 @@ export class InventoryFurnitureService implements OnDestroy
                 new FurnitureListInvalidateEvent(this.onFurnitureListInvalidateEvent.bind(this)),
                 new FurnitureListRemovedEvent(this.onFurnitureListRemovedEvent.bind(this)),
                 new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this)),
-                new BotInventoryMessageEvent(this.onBotInventoryMessageEvent.bind(this))
+                new BotInventoryMessageEvent(this.onBotInventoryMessageEvent.bind(this)),
+                new BotRemovedFromInventoryEvent(this.onBotRemovedFromInventoryEvent.bind(this)),
+                new BotAddedToInventoryEvent(this.onBotAddedToInventoryEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -169,6 +173,34 @@ export class InventoryFurnitureService implements OnDestroy
         if(!parser) return;
 
         this._botsFragments = parser.items;
+
+    }
+
+    private onBotRemovedFromInventoryEvent(event: BotRemovedFromInventoryEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._botsFragments) return;
+
+        this._ngZone.run(() => this._botsFragments.remove(parser.itemId));
+
+    }
+
+    private onBotAddedToInventoryEvent(event: BotAddedToInventoryEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._botsFragments) this._botsFragments = new AdvancedMap<number, BotData>();
+
+        this._ngZone.run(() => this._botsFragments.add(parser.item.id, parser.item));
 
     }
 
