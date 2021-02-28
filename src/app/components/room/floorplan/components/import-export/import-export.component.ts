@@ -19,10 +19,11 @@ export class FloorPlanImportExportComponent
         private _floorPlanService: FloorPlanService,
         private _ngZone: NgZone)
     {}
-    
+
     public revert(): void
     {
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._map = this._backupMap;
         });
     }

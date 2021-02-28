@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 @Injectable()
 export class SettingsService
@@ -15,7 +15,9 @@ export class SettingsService
     private _chatHistoryVisible: boolean;
     private _floorPlanVisible: boolean;
 
-    constructor()
+    constructor(
+        private _ngZone: NgZone
+    )
     {
         this._isReady               = false;
         this._avatarEditorVisible   = false;
@@ -222,6 +224,11 @@ export class SettingsService
 
     public set floorPlanVisible(visible: boolean)
     {
-        this._floorPlanVisible = visible;
+        this._ngZone.run(() => this._floorPlanVisible = visible);
+    }
+
+    public get floorPlanVisible(): boolean
+    {
+        return this._floorPlanVisible;
     }
 }

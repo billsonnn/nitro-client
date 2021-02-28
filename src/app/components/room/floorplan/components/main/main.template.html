@@ -1,4 +1,4 @@
-<div [bringToTop] [draggable] class="card nitro-floorplan-editor-component" [ngClass]="{'minimized': minimize}" dragHandle=".card-header">
+<div *ngIf="visible" [bringToTop] [draggable] class="card nitro-floorplan-editor-component" [ngClass]="{'minimized': minimize}" dragHandle=".card-header">
     <div class="card-header">
         <i class="fas" [ngClass]="minimize ? 'fa-plus-square' : 'fa-minus-square'" (click)="toggleEditor()"></i> {{ ('floor.plan.editor.title') | translate }}
         <div class="close" (click)="close()"><i class="fas fa-times"></i></div>

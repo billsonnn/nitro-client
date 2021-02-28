@@ -15,7 +15,7 @@ import { FloorplanMainComponent } from '../components/main/main.component';
 export class FloorPlanService implements OnDestroy
 {
     public component: FloorplanMainComponent;
-    
+
     private _messages: IMessageEvent[];
 
     private _model: string;
@@ -43,7 +43,7 @@ export class FloorPlanService implements OnDestroy
         this._blockedTilesMap           = [];
         this._thicknessWall             = 0;
         this._thicknessFloor            = 0;
-        
+
         this._doorSettingsReceived      = false;
         this._blockedTilesMapReceived   = false;
         this._RoomThicknessReceived     = false;
@@ -128,7 +128,7 @@ export class FloorPlanService implements OnDestroy
 
         this._blockedTilesMap           = parser.blockedTilesMap;
         this._blockedTilesMapReceived   = true;
-        
+
         this.tryEmit();
     }
 
@@ -149,7 +149,7 @@ export class FloorPlanService implements OnDestroy
 
     private tryEmit(): void
     {
-        if(this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
+        if(this.component && this.component.visible && this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
         {
             this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall.toString(), this._thicknessFloor.toString());
         }
@@ -162,7 +162,7 @@ export class FloorPlanService implements OnDestroy
 
     public save(settings: FloorMapSettings)
     {
-        console.log(settings, parseInt(settings.thicknessWall),parseInt(settings.thicknessFloor) )
+        console.log(settings, parseInt(settings.thicknessWall),parseInt(settings.thicknessFloor) );
         Nitro.instance.communication.connection.send(new RoomModelSaveComposer(
             settings.heightMapString,
             settings.doorX,
@@ -171,6 +171,6 @@ export class FloorPlanService implements OnDestroy
             parseInt(settings.thicknessWall),
             parseInt(settings.thicknessFloor),
             settings.wallHeight
-            ));
+        ));
     }
 }

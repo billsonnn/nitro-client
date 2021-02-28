@@ -71,7 +71,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
     selector: 'nitro-room-component',
     template: `
         <div class="nitro-room-component">
-            <nitro-floorplan-main-component *ngIf="floorPlanVisible"></nitro-floorplan-main-component>
+            <nitro-floorplan-main-component [visible]="floorPlanVisible"></nitro-floorplan-main-component>
             <div #roomCanvas class="room-view"></div>
             <ng-template #widgetContainer></ng-template>
         </div>`

@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Application, Container, Graphics } from 'pixi.js';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
@@ -8,16 +8,21 @@ import FloorMapTile from '../../common/FloorMapTile';
 import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
 import { SettingsService } from '../../../../../core/settings/service';
+import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
+import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 
 @Component({
     selector: 'nitro-floorplan-main-component',
     templateUrl: './main.template.html'
 })
 
-export class FloorplanMainComponent implements OnInit
+export class FloorplanMainComponent implements OnInit, OnChanges
 {
     @ViewChild('floorplanElement')
     public floorplanElement: ElementRef<HTMLDivElement>;
+
+    @Input('visible')
+    public visible: boolean = false;
 
     public minimize: boolean;
 
@@ -68,6 +73,21 @@ export class FloorplanMainComponent implements OnInit
 
     }
 
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        const next = changes.visible.currentValue;
+        if(next)
+        {
+            Nitro.instance.communication.connection.send(new RoomDoorSettingsComposer());
+            Nitro.instance.communication.connection.send(new RoomBlockedTilesComposer());
+        }
+        else
+        {
+            this._clear();
+        }
+    }
+
+
     private _clear(): void
     {
         this._spriteMap         = [];
@@ -86,6 +106,17 @@ export class FloorplanMainComponent implements OnInit
 
         this._roomPreviewer     = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
         this._importExportModal = null;
+        //
+        // if(this._app && this._container)
+        // {
+        //     for(let i = this._container.children.length - 1; i >= 0; i--)
+        //     {
+        //         this._container.removeChild(this._container.children[i]);
+        //     }
+        // }
+        this._container = null;
+        this._app && this._app.destroy();
+        this._app = null;
     }
 
     public close(): void
@@ -130,11 +161,14 @@ export class FloorplanMainComponent implements OnInit
 
     private _buildApp(width: number, height: number): void
     {
-        if(this._app && this._container)
+        console.log('building app');
+        if(this._app &&  this._container && this.floorplanElement.nativeElement.children.length > 0)
         {
             for(let i = this._container.children.length - 1; i >= 0; i--)
             {
-                this._container.removeChild(this._container.children[i]);
+                console.log('removing at index ' + i);
+                // this._container.removeChild(this._container.children[i]);
+                // this.floorplanElement.nativeElement.removeChild(this.floorplanElement.nativeElement.children[i]);
             }
         }
         else
@@ -147,8 +181,18 @@ export class FloorplanMainComponent implements OnInit
                 autoDensity: true
             });
 
-            this.floorplanElement.nativeElement.append(this._app.view);
 
+            for(let i = 0; i < this.floorplanElement.nativeElement.children.length; i++)
+            {
+                console.log('removing at index ' + i);
+                //this._container.removeChild(this._container.children[i]);
+                this.floorplanElement.nativeElement.removeChild(this.floorplanElement.nativeElement.children[i]);
+            }
+
+            // if(this.floorplanElement.nativeElement.children.length == 0)
+            // {
+            this.floorplanElement.nativeElement.append(this._app.view);
+            // }
             if(!this._container)
             {
                 this._container = new Container();
@@ -173,6 +217,7 @@ export class FloorplanMainComponent implements OnInit
         {
             this._isHolding = false;
         });
+
     }
 
     private _readTileMapString(tileMapString: string): any[]
