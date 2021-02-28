@@ -170,18 +170,18 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(object.mouseHandler) object.mouseHandler.mouseEvent(event, geometry);
     }
 
-    public processRoomObjectPlacement(placementSource: string, roomId: number, id: number, category: number, typeId: number, legacyString: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
+    public processRoomObjectPlacement(placementSource: string, roomId: number, id: number, category: number, typeId: number, extra: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): boolean
     {
         this._objectPlacementSource = placementSource;
 
         const location  = new Vector3d(-100, -100);
         const direction = new Vector3d(0);
 
-        this.setSelectedRoomObjectData(roomId, id, category, location, direction, RoomObjectOperationType.OBJECT_PLACE, typeId, legacyString, stuffData, state, frameNumber, posture);
+        this.setSelectedRoomObjectData(roomId, id, category, location, direction, RoomObjectOperationType.OBJECT_PLACE, typeId, extra, stuffData, state, frameNumber, posture);
 
         if(this._roomEngine)
         {
-            this._roomEngine._Str_16645(typeId, category, false, legacyString, stuffData, state, frameNumber, posture);
+            this._roomEngine._Str_16645(typeId, category, false, extra, stuffData, state, frameNumber, posture);
             this._roomEngine._Str_7972(false);
         }
 
@@ -416,6 +416,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 {
                     this._Str_17481(roomId, event.objectId, category);
 
+                    didMove = false;
+
                     if(category === RoomObjectCategory.UNIT)
                     {
                         if(event.ctrlKey && !event.altKey && !event.shiftKey && (event.objectType === RoomObjectUserType.RENTABLE_BOT))
@@ -433,7 +435,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                             this.processRoomObjectOperation(roomId, event.objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                         }
 
-                        didWalk = true;
+                        if(!this._roomEngine.isPlayingGame())
+                        {
+                            didWalk = true;
+                        }
+                        else
+                        {
+                            didMove = true;
+                        }
                     }
 
                     else if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
@@ -456,7 +465,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                                 this.processRoomObjectOperation(roomId, event.objectId, category, RoomObjectOperationType.OBJECT_PICKUP);
                             }
 
-                            didWalk = true;
+                            if(!this._roomEngine.isPlayingGame())
+                            {
+                                didWalk = true;
+                            }
+                            else
+                            {
+                                didMove = true;
+                            }
                         }
                     }
 
@@ -465,6 +481,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         if(didWalk)
                         {
                             this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event.eventId);
+                        }
+
+                        if(didMove)
+                        {
+                            this._Str_11142(RoomObjectCategory.MINIMUM, MouseEventType.MOUSE_CLICK, event.eventId);
                         }
                     }
                 }
@@ -716,12 +737,21 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectWidgetRequestEvent.MONSTERPLANT_SEED_PLANT_CONFIRMATION_DIALOG:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_MONSTERPLANT_SEED_PLANT_CONFIRMATION_DIALOG, roomId, objectId, objectCategory));
                 break;
+            case RoomObjectWidgetRequestEvent.MANNEQUIN:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN, roomId, objectId, objectCategory));
+                break;
+
             case RoomObjectWidgetRequestEvent.BACKGROUND_COLOR:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, roomId, objectId, objectCategory));
                 break;
             case RoomObjectWidgetRequestEvent.FRIEND_FURNITURE_ENGRAVING:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, roomId, objectId, objectCategory));
                 break;
+            case RoomObjectWidgetRequestEvent.PRESENT:
+                eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, roomId, objectId, objectCategory));
+                break;
+
+
         }
     }
 
@@ -1775,12 +1805,12 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             }
         }
 
-        const _local_7 = this._roomEngine.getRoomObjectSelectionArrow(k);
+        const selectionArrow = this._roomEngine.getRoomObjectSelectionArrow(k);
 
-        if(_local_7 && _local_7.logic)
+        if(selectionArrow && selectionArrow.logic)
         {
-            if(_local_6) _local_7.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.ENABLED));
-            else _local_7.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.DISABLED));
+            if(_local_6 && !this._roomEngine.isPlayingGame()) selectionArrow.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.ENABLED));
+            else selectionArrow.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.DISABLED));
         }
     }
 

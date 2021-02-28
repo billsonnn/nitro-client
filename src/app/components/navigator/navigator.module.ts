@@ -4,6 +4,7 @@ import { NavigatorCreatorComponent } from './components/creator/creator.componen
 import { NavigatorDoorbellComponent } from './components/doorbell/doorbell.component';
 import { NavigatorMainComponent } from './components/main/main.component';
 import { NavigatorPasswordComponent } from './components/password/password.component';
+import { NavigatorRoomInfoComponent } from './components/room-info/room-info.component';
 import { NavigatorRoomSettingsTabAccessComponent } from './components/roomsettings/components/tab-access/roomsettings-tab-access.component';
 import { NavigatorRoomSettingsTabBasicComponent } from './components/roomsettings/components/tab-basic/roomsettings-tab-basic.component';
 import { NavigatorRoomSettingsTabModComponent } from './components/roomsettings/components/tab-mod/roomsettings-tab-mod.component';
@@ -14,7 +15,6 @@ import { NavigatorSearchComponent } from './components/search/search.component';
 import { NavigatorSearchItemComponent } from './components/searchitem/searchitem.component';
 import { NavigatorSearchResultComponent } from './components/searchresult/searchresult.component';
 import { NavigatorSliderComponent } from './components/slider/slider.component';
-import { NavigatorDataService } from './services/navigator-data.service';
 import { NavigatorService } from './services/navigator.service';
 
 @NgModule({
@@ -26,6 +26,7 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorDoorbellComponent,
         NavigatorMainComponent,
         NavigatorPasswordComponent,
+        NavigatorRoomInfoComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
         NavigatorSearchResultComponent,
@@ -38,14 +39,14 @@ import { NavigatorService } from './services/navigator.service';
         NavigatorRoomSettingsTabModComponent
     ],
     providers: [
-        NavigatorService,
-        NavigatorDataService
+        NavigatorService
     ],
     declarations: [
         NavigatorCreatorComponent,
         NavigatorDoorbellComponent,
         NavigatorMainComponent,
         NavigatorPasswordComponent,
+        NavigatorRoomInfoComponent,
         NavigatorSearchComponent,
         NavigatorSearchItemComponent,
         NavigatorSearchResultComponent,

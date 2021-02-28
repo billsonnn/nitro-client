@@ -1,4 +1,8 @@
 <div id="nitro">
-    <nitro-loading *ngIf="!isReady || isError" [message]="message" [percentage]="percentage" [hideProgress]="hideProgress"></nitro-loading>
+    <div *ngIf="!isReady" class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+        <div class="logo mb-4"></div>
+        <div *ngIf="message && message.length" class="h4 m-0">{{ message }}</div>
+        <div *ngIf="!isError" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
     <nitro-main-component *ngIf="isReady && !isError"></nitro-main-component>
 </div>

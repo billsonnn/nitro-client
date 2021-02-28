@@ -1,12 +1,12 @@
 export interface ISpritesheetMeta
 {
     app: string;
-    format: string;
+    version: string;
     image: string;
-    scale: string;
+    format: string;
     size: {
         w: number;
         h: number;
     };
-    version: string;
+    scale: string;
 }

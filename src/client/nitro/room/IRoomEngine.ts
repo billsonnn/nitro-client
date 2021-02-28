@@ -75,6 +75,7 @@ export interface IRoomEngine extends INitroManager
     getFurnitureFloorName(typeId: number): string;
     useRoomObject(objectId: number, category: number): boolean;
     objectInitialized(roomId: string, objectId: number, category: number): void;
+    changeObjectModelData(roomId: number, objectId: number, category: number, numberKey: string, numberValue: number): boolean;
     changeObjectState(roomId: number, objectId: number, category: number): void;
     processRoomObjectWallOperation(objectId: number, category: number, operation: string, data: Map<string, string>): boolean;
     processRoomObjectFloorOperation(objectId: number, category: number, operation: string, data: string): boolean;

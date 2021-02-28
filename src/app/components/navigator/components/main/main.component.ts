@@ -215,4 +215,9 @@ export class NavigatorMainComponent implements OnInit, OnChanges, OnDestroy
     {
         return Nitro.instance.core.configuration.getValue<boolean>('navigator.slider.enabled');
     }
+
+    public get roomInfoShowing(): boolean
+    {
+        return this._navigatorService.roomInfoShowing;
+    }
 }

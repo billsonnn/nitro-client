@@ -22,7 +22,6 @@ import { RoomInviteEvent } from '../../../../client/nitro/communication/messages
 import { AcceptFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/AcceptFriendComposer';
 import { DeclineFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/DeclineFriendComposer';
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
-import { RemoveFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
 import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { SoundService } from '../../../shared/services/sound.service';
@@ -155,6 +154,8 @@ export class FriendListService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._friendListReady = false;
 
         this._ngZone.run(() =>
         {
@@ -396,8 +397,6 @@ export class FriendListService implements OnDestroy
     public removeFriend(id: number): void
     {
         this._friends.delete(id);
-
-        Nitro.instance.communication.connection.send(new RemoveFriendComposer(id));
     }
 
     private updateFriendRequest(data: FriendRequestData): void

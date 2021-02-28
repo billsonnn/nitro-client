@@ -1,0 +1,21 @@
+<div *ngIf="visible" class="nitro-group-room-info-component mb-2 float-right">
+    <div class="card w-100">
+        <div class="d-flex flex-column p-2 w-100">
+            <div class="d-flex flex-row justify-content-between w-100" (click)="toggleOpen()">
+                <div class="w-100"><i class="fas fa-users mr-2"></i>{{ ('group.homeroominfo.title') | translate }}</div>
+                <div class="toggler"><i class="fas" [ngClass]="open ? 'fa-chevron-down' : 'fa-chevron-left'"></i></div>
+            </div>
+            <div class="d-flex flex-column w-100 mt-2" *ngIf="open">
+                <div class="d-flex flex-row justify-content-between w-100" (click)="openInfo()">
+                    <nitro-badge class="mr-2" [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                    <div class="group-name w-100">{{ groupName }}</div>
+                </div>
+                <button *ngIf="groupType === 0 && groupMembershipType === 0" class="btn btn-success btn-block btn-sm mt-2" (click)="join()">{{ ('group.join') | translate }}</button>
+                <div *ngIf="groupType === 1">
+                    <button *ngIf="groupMembershipType === 0" class="btn btn-success btn-block btn-sm mt-2" (click)="join()">{{ ('group.requestmembership') | translate }}</button>
+                    <button *ngIf="groupMembershipType === 2" class="btn btn-primary disabled btn-block btn-sm mt-2" disabled>{{ ('group.membershippending') | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

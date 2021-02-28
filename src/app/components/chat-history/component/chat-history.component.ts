@@ -60,8 +60,8 @@ export class ChatHistoryComponent implements OnChanges
         this.historyScroller.directiveRef.scrollToBottom(0);
     }
 
-    public get historySets(): ChatHistorySet[]
+    public get historyItems(): ChatHistoryItem[]
     {
-        return this._chatHistoryService.historySets;
+        return this._chatHistoryService.historyItems;
     }
 }

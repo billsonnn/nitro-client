@@ -1,4 +1,4 @@
-import { IAssetAnimation } from '../../../../../core/asset/interfaces/visualization';
+import { IAssetVisualAnimation } from '../../../../../core/asset/interfaces/visualization';
 import { AnimationData } from './AnimationData';
 import { AnimationFrame } from './AnimationFrame';
 import { SizeData } from './SizeData';
@@ -32,7 +32,7 @@ export class AnimationSizeData extends SizeData
         this._animationIds = [];
     }
 
-    public defineAnimations(animations: { [index: string]: IAssetAnimation }): boolean
+    public defineAnimations(animations: { [index: string]: IAssetVisualAnimation }): boolean
     {
         if(!animations) return true;
 
@@ -67,6 +67,23 @@ export class AnimationSizeData extends SizeData
                 animationData.dispose();
 
                 return false;
+            }
+
+            const immediateChangeFrom = animation.immediateChangeFrom;
+
+            if(immediateChangeFrom !== undefined)
+            {
+                const changes   = immediateChangeFrom.split(',');
+                const changeIds = [];
+
+                for(const change of changes)
+                {
+                    const changeId = parseInt(change);
+
+                    if(changeIds.indexOf(changeId) === -1) changeIds.push(changeId);
+                }
+
+                animationData.setImmediateChanges(changeIds);
             }
 
             this._animations.set(animationId, animationData);

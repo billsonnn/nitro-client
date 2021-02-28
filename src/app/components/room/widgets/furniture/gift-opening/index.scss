@@ -1,0 +1,20 @@
+
+.nitro-furniture-gift-opening {
+    position: absolute;
+    width: 350px;
+    max-width: 350px;
+
+    .anonymous-face {
+        background-image: url('^assets/images/catalog/incognito.png');
+        height: 48px;
+        width: 48px;
+        background-repeat: no-repeat;
+    }
+
+    .gift-picture-container {
+        min-width: 120px;
+        min-height: 150px;
+        max-width: 120px;
+        max-height: 150px;
+    }
+}

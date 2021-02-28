@@ -4,6 +4,7 @@ import { NitroBundle } from '../../core/asset/NitroBundle';
 import { INitroLogger } from '../../core/common/logger/INitroLogger';
 import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { NitroEvent } from '../../core/events/NitroEvent';
 import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
@@ -29,6 +30,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     private static TILE_CURSOR: string          = 'tile_cursor';
     private static SELECTION_ARROW: string      = 'selection_arrow';
 
+    public static LOADER_READY: string          = 'RCL_LOADER_READY';
     public static MANDATORY_LIBRARIES: string[] = [ RoomContentLoader.PLACE_HOLDER, RoomContentLoader.PLACE_HOLDER_WALL, RoomContentLoader.PLACE_HOLDER_PET, RoomContentLoader.ROOM, RoomContentLoader.TILE_CURSOR, RoomContentLoader.SELECTION_ARROW ];
 
     private _logger: INitroLogger;
@@ -47,11 +49,13 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _wallItems: { [index: string]: number };
     private _wallItemTypes: Map<number, string>;
     private _wallItemTypeIds: Map<string, number>;
+    private _furniRevisions: Map<string, number>;
     private _pets: { [index: string]: number };
     private _objectAliases: Map<string, string>;
     private _objectOriginalNames: Map<string, string>;
 
     private _pendingContentTypes: string[];
+    private _dataInitialized: boolean;
 
     constructor()
     {
@@ -71,11 +75,13 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._wallItems                     = {};
         this._wallItemTypes                 = new Map();
         this._wallItemTypeIds               = new Map();
+        this._furniRevisions                = new Map();
         this._pets                          = {};
         this._objectAliases                 = new Map();
         this._objectOriginalNames           = new Map();
 
         this._pendingContentTypes           = [];
+        this._dataInitialized               = false;
     }
 
     public initialize(events: IEventDispatcher): void
@@ -125,6 +131,8 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._sessionDataManager.removePendingFurniDataListener(this);
 
         this.processFurnitureData(furnitureData);
+
+        this._stateEvents.dispatchEvent(new NitroEvent(RoomContentLoader.LOADER_READY));
     }
 
     private processFurnitureData(furnitureData: IFurnitureData[]): void
@@ -137,41 +145,51 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             const id = furniture.id;
 
-            let name        = furniture.className;
-            let className   = furniture.className;
+            let className = furniture.className;
 
-            if(furniture.colorId) name = (name + '*' + furniture.colorId);
+            if(furniture.hasIndexedColor) className = ((className + '*') + furniture.colorIndex);
 
-            const adUrl = furniture.adUrl;
+            const revision  = furniture.revision;
+            const adUrl     = furniture.adUrl;
 
-            if(adUrl && adUrl.length > 0) this._objectTypeAdUrls.set(name, adUrl);
+            if(adUrl && adUrl.length > 0) this._objectTypeAdUrls.set(className, adUrl);
+
+            let name = furniture.className;
 
             if(furniture.type === FurnitureType.FLOOR)
             {
-                this._activeObjectTypes.set(id, name);
-                this._activeObjectTypeIds.set(name, id);
+                this._activeObjectTypes.set(id, className);
+                this._activeObjectTypeIds.set(className, id);
 
-                if(!this._activeObjects[className]) this._activeObjects[className] = 1;
+                if(!this._activeObjects[name]) this._activeObjects[name] = 1;
             }
 
             else if(furniture.type === FurnitureType.WALL)
             {
                 if(name === 'post.it')
                 {
-                    name        = 'post_it';
                     className   = 'post_it';
+                    name        = 'post_it';
                 }
 
                 if(name === 'post.it.vd')
                 {
-                    name        = 'post_it_vd';
-                    className   = 'post_id_vd';
+                    className   = 'post_it_vd';
+                    name        = 'post_id_vd';
                 }
 
-                this._wallItemTypes.set(id, name);
-                this._wallItemTypeIds.set(name, id);
+                this._wallItemTypes.set(id, className);
+                this._wallItemTypeIds.set(className, id);
 
-                if(!this._wallItems[className]) this._wallItems[className] = 1;
+                if(!this._wallItems[name]) this._wallItems[name] = 1;
+            }
+
+            const existingRevision = this._furniRevisions.get(name);
+
+            if(revision > existingRevision)
+            {
+                this._furniRevisions.delete(name);
+                this._furniRevisions.set(name, revision);
             }
         }
     }
@@ -290,13 +308,19 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPlaceholderName(type: string): string
     {
-        if(this._activeObjects[type] !== undefined) return RoomContentLoader.PLACE_HOLDER;
+        const category = this.getCategoryForType(type);
 
-        if(this._wallItems[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_WALL;
+        switch(category)
+        {
+            case RoomObjectCategory.FLOOR:
+                return RoomContentLoader.PLACE_HOLDER;
+            case RoomObjectCategory.WALL:
+                return RoomContentLoader.PLACE_HOLDER_WALL;
+            default:
+                if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
 
-        if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
-
-        return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+                return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+        }
     }
 
     public getCategoryForType(type: string): number
@@ -467,7 +491,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             const nitroBundle   = new NitroBundle(resource.data);
             const assetData     = (nitroBundle.jsonFile as IAssetData);
 
-            if(!assetData.type)
+            if(!assetData || !assetData.type)
             {
                 onDownloaded(loader, resource, false);
 
@@ -476,20 +500,13 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageData = nitroBundle.image;
-
-                let baseTexture = nitroBundle.baseTexture;
+                const baseTexture = nitroBundle.baseTexture;
 
                 if(!baseTexture)
                 {
-                    if(imageData) baseTexture = new BaseTexture('data:image/png;base64,' + imageData);
+                    onDownloaded(loader, resource, false);
 
-                    if(!baseTexture)
-                    {
-                        onDownloaded(loader, resource, false);
-
-                        return;
-                    }
+                    return;
                 }
 
                 if(baseTexture.valid)
@@ -532,7 +549,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
         }
 
         else if(resource.type === LoaderResource.TYPE.JSON)
@@ -608,7 +625,7 @@ export class RoomContentLoader implements IFurnitureDataListener
         }
     }
 
-    public _Str_12966(name: string, originalName: string): void
+    public setAssetAliasName(name: string, originalName: string): void
     {
         this._objectAliases.set(name, originalName);
         this._objectOriginalNames.set(originalName, name);

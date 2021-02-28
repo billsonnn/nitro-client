@@ -8,6 +8,7 @@ import { AvatarLogic } from './object/logic/avatar/AvatarLogic';
 import { FurnitureBadgeDisplayLogic } from './object/logic/furniture/FurnitureBadgeDisplayLogic';
 import { FurnitureChangeStateWhenStepOnLogic } from './object/logic/furniture/FurnitureChangeStateWhenStepOnLogic';
 import { FurnitureCounterClockLogic } from './object/logic/furniture/FurnitureCounterClockLogic';
+import { FurnitureCrackableLogic } from './object/logic/furniture/FurnitureCrackableLogic';
 import { FurnitureCreditLogic } from './object/logic/furniture/FurnitureCreditLogic';
 import { FurnitureCustomStackHeightLogic } from './object/logic/furniture/FurnitureCustomStackHeightLogic';
 import { FurnitureDiceLogic } from './object/logic/furniture/FurnitureDiceLogic';
@@ -16,6 +17,7 @@ import { FurnitureEditableRoomLinkLogic } from './object/logic/furniture/Furnitu
 import { FurnitureExternalImageLogic } from './object/logic/furniture/FurnitureExternalImageLogic';
 import { FurnitureFireworksLogic } from './object/logic/furniture/FurnitureFireworksLogic';
 import { FurnitureFloorHoleLogic } from './object/logic/furniture/FurnitureFloorHoleLogic';
+import { FurnitureFriendLogic } from './object/logic/furniture/FurnitureFriendLogic';
 import { FurnitureGuildCustomizedLogic } from './object/logic/furniture/FurnitureGuildCustomizedLogic';
 import { FurnitureHighScoreLogic } from './object/logic/furniture/FurnitureHighScoreLogic';
 import { FurnitureHockeyScoreLogic } from './object/logic/furniture/FurnitureHockeyScoreLogic';
@@ -45,7 +47,6 @@ import { RoomLogic } from './object/logic/room/RoomLogic';
 import { SelectionArrowLogic } from './object/logic/room/SelectionArrowLogic';
 import { TileCursorLogic } from './object/logic/room/TileCursorLogic';
 import { RoomObjectLogicType } from './object/RoomObjectLogicType';
-import { FurnitureFriendLogic } from './object/logic/furniture/FurnitureFriendLogic';
 
 export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
 {
@@ -177,6 +178,9 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_COUNTER_CLOCK:
                 logic = FurnitureCounterClockLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_CRACKABLE:
+                logic = FurnitureCrackableLogic;
                 break;
             case RoomObjectLogicType.FURNITURE_CREDIT:
                 logic = FurnitureCreditLogic;
