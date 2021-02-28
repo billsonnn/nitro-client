@@ -5,6 +5,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { Badge } from '../../models/badge';
 import { InventoryBadgeService } from '../../services/badge.service';
 import { SetActivatedBadgesComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
+import { AchievementsService } from '../../../achievements/services/achievements.service';
 
 @Component({
     selector: '[nitro-inventory-badges-component]',
@@ -20,7 +21,8 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
     constructor(
         protected _inventoryService: InventoryService,
         protected _ngZone: NgZone,
-        private _badgesService: InventoryBadgeService)
+        private _badgesService: InventoryBadgeService,
+        private _achievementsService: AchievementsService)
     {
         super(_inventoryService, _ngZone);
     }
@@ -96,7 +98,11 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
         if(this.isWearingBadge(this.selectedBadge)) return false;
 
         return limitReached;
+    }
 
+    public get achievementsScore(): number
+    {
+        return this._achievementsService.achievementScore;
     }
 
 
