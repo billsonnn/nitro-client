@@ -364,7 +364,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
         this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
         this._events.set(IncomingHeader.REDEEM_VOUCHER_ERROR, CatalogRedeemVoucherErrorEvent);
-        this._events.set(IncomingHeader.REDEDEM_VOUCHER_OK, CatalogRedeemVoucherOkEvent);
+        this._events.set(IncomingHeader.REDEEM_VOUCHER_OK, CatalogRedeemVoucherOkEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);

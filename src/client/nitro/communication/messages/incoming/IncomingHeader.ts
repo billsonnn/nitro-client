@@ -226,5 +226,5 @@ export class IncomingHeader
     public static USER_EFFECT_ACTIVATE             = 1959;
     public static CATALOG_CLUB_GIFTS               = 619;
     public static REDEEM_VOUCHER_ERROR             = 714;
-    public static REDEDEM_VOUCHER_OK               = 3336;
+    public static REDEEM_VOUCHER_OK               = 3336;
 }
