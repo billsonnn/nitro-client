@@ -7,6 +7,7 @@ import FloorMapSettings from '../../common/FloorMapSettings';
 import FloorMapTile from '../../common/FloorMapTile';
 import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
+import { SettingsService } from '../../../../../core/settings/service';
 
 @Component({
     selector: 'nitro-floorplan-main-component',
@@ -36,8 +37,8 @@ export class FloorplanMainComponent implements OnInit
     private _isHolding: boolean;
     private _coloredTilesCount: number;
 
-    private _heightScheme: string = "x0123456789abcdefghijklmnopq";
-    private _colorMap: object = {"x": "0x101010","0": "0x0065ff","1": "0x0091ff","2": "0x00bcff","3": "0x00e8ff","4": "0x00ffea","5": "0x00ffbf","6": "0x00ff93","7": "0x00ff68","8": "0x00ff3d","9": "0x19ff00","a": "0x44ff00","b": "0x70ff00","c": "0x9bff00","d": "0xf2ff00","e": "0xffe000","f": "0xffb500","g": "0xff8900","h": "0xff5e00","i": "0xff3200","j": "0xff0700","k": "0xff0023","l": "0xff007a","m": "0xff00a5","n": "0xff00d1","o": "0xff00fc","p": "0xd600ff","q": "0xaa00ff"};
+    private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
+    private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
     private _maxFloorLength: number = 64;
     private _tileSize: number = 18;
 
@@ -47,10 +48,11 @@ export class FloorplanMainComponent implements OnInit
     constructor(
         private _ngZone: NgZone,
         private _floorPlanService: FloorPlanService,
-        private _modalService: NgbModal)
+        private _modalService: NgbModal,
+        private _settingsService: SettingsService)
     {
         this._floorPlanService.component = this;
-        
+
         this._clear();
     }
 
@@ -63,7 +65,7 @@ export class FloorplanMainComponent implements OnInit
 
     ngAfterViewInit(): void
     {
-        
+
     }
 
     private _clear(): void
@@ -86,6 +88,11 @@ export class FloorplanMainComponent implements OnInit
         this._importExportModal = null;
     }
 
+    public close(): void
+    {
+        this._settingsService.floorPlanVisible = false;
+    }
+
     public preview(mapString: string)
     {
         this.init(mapString, this._blockedTilesMap, this._floorMapSettings.doorX, this._floorMapSettings.doorY, this._floorMapSettings.doorDirection, this._floorMapSettings.thicknessWall, this._floorMapSettings.thicknessFloor);
@@ -94,7 +101,7 @@ export class FloorplanMainComponent implements OnInit
     public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: string, thicknessFloor: string)
     {
         this._clear();
-        
+
         this._floorMapSettings.heightMapString   = mapString;
         this._floorMapSettings.doorX             = doorX;
         this._floorMapSettings.doorY             = doorY;
@@ -103,7 +110,8 @@ export class FloorplanMainComponent implements OnInit
         this._floorMapSettings.thicknessWall     = thicknessWall.toString();
         this._floorMapSettings.thicknessFloor    = thicknessFloor.toString();
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             this._floorMapSettings.doorDirection = doorDirection;
         });
 
@@ -124,7 +132,7 @@ export class FloorplanMainComponent implements OnInit
     {
         if(this._app && this._container)
         {
-            for (var i = this._container.children.length - 1; i >= 0; i--)
+            for(let i = this._container.children.length - 1; i >= 0; i--)
             {
                 this._container.removeChild(this._container.children[i]);
             }
@@ -150,24 +158,27 @@ export class FloorplanMainComponent implements OnInit
         }
 
         this.floorplanElement.nativeElement.scrollTo(width/3, 0);
-       
-        this._app.view.addEventListener("mousedown", () => {
+
+        this._app.view.addEventListener('mousedown', () =>
+        {
             this._isHolding = true;
         });
 
-        this._app.view.addEventListener("mouseup", () => {
+        this._app.view.addEventListener('mouseup', () =>
+        {
             this._isHolding = false;
         });
 
-        this._app.view.addEventListener("mouseout", () => {
+        this._app.view.addEventListener('mouseout', () =>
+        {
             this._isHolding = false;
         });
     }
 
     private _readTileMapString(tileMapString: string): any[]
     {
-        let roomMapStringSplit = tileMapString.split("\r");
-        let roomMap = [];
+        let roomMapStringSplit = tileMapString.split('\r');
+        const roomMap = [];
 
         let y = 0, x = 0;
         while(y < roomMapStringSplit.length)
@@ -179,7 +190,7 @@ export class FloorplanMainComponent implements OnInit
                 continue;
             }
 
-            const originalRow = roomMapStringSplit[y].split("");
+            const originalRow = roomMapStringSplit[y].split('');
             roomMap[y] = [];
 
             x = 0;
@@ -198,21 +209,21 @@ export class FloorplanMainComponent implements OnInit
                 roomMap[y][x] = new FloorMapTile('x', false);
                 x++;
             }
-            
+
             y++;
         }
 
         while(y < this._maxFloorLength)
         {
             roomMap[y] = [];
-            
+
             x = 0;
             while(x < this._maxFloorLength)
             {
                 roomMap[y][x] = new FloorMapTile('x', false);
                 x++;
             }
-            
+
             y++;
         }
 
@@ -238,9 +249,9 @@ export class FloorplanMainComponent implements OnInit
                 for(let x = this._maxFloorLength - 1; x >= 0; x--)
                 {
                     if(!this._floorMapSettings.heightMap[y][x]) continue;
-                    
+
                     const tile = this._floorMapSettings.heightMap[y][x];
-    
+
                     if(tile.height !== 'x')
                     {
                         if(x > this._highestX)
@@ -252,12 +263,12 @@ export class FloorplanMainComponent implements OnInit
                 }
             }
         }
-        
-        let rows = [];
+
+        const rows = [];
 
         for(let y = 0; y <= this._highestY; y++)
         {
-            let row = [];
+            const row = [];
 
             for(let x = 0; x <= this._highestX; x++)
             {
@@ -266,38 +277,39 @@ export class FloorplanMainComponent implements OnInit
                 row[x] = tile.height;
             }
 
-            rows[y] = row.join("");
+            rows[y] = row.join('');
         }
 
-        return rows.join("\r");
+        return rows.join('\r');
     }
 
     private _renderTileMap(): void
     {
-        for(var y = 0; y < this._floorMapSettings.heightMap.length; y++)
+        for(let y = 0; y < this._floorMapSettings.heightMap.length; y++)
         {
             this._spriteMap[y] = [];
 
-            for(var x = 0; x < this._floorMapSettings.heightMap[y].length; x++)
+            for(let x = 0; x < this._floorMapSettings.heightMap[y].length; x++)
             {
                 const tile = this._floorMapSettings.heightMap[y][x];
 
                 let isDoor = false;
 
                 if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) isDoor = true;
-                
-                let positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
-                let positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y * 1;
+
+                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
+                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y * 1;
 
                 let color = this._colorMap[tile.height];
 
                 if(tile.height !== 'x')
                 {
-                    this._ngZone.run(() => {
+                    this._ngZone.run(() =>
+                    {
                         this._coloredTilesCount++;
                     });
                 }
-                
+
                 if(tile.blocked)
                 {
                     color = '0x435e87';
@@ -315,7 +327,7 @@ export class FloorplanMainComponent implements OnInit
 
     private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Graphics
     {
-        var tile = new Graphics();
+        const tile = new Graphics();
 
         tile.beginFill(0xffffff);
         tile.lineStyle(1, 0x000000, 1, 0);
@@ -326,11 +338,13 @@ export class FloorplanMainComponent implements OnInit
         tile.tint = color;
         tile.interactive = true;
 
-        tile.on('mousedown', () => {
+        tile.on('mousedown', () =>
+        {
             this._handleTileClick(x, y);
         });
 
-        tile.on('mouseover', () => {
+        tile.on('mouseover', () =>
+        {
             if(this._isHolding)
                 this._handleTileClick(x, y);
         });
@@ -341,7 +355,7 @@ export class FloorplanMainComponent implements OnInit
     private _setDoor(x: number, y: number): void
     {
         if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) return;
-        
+
         if(!this._floorMapSettings.heightMap[this._floorMapSettings.doorY] || !this._spriteMap[this._floorMapSettings.doorY] || !this._floorMapSettings.heightMap[y] || !this._spriteMap[y]) return;
 
         const tile = this._floorMapSettings.heightMap[this._floorMapSettings.doorY][this._floorMapSettings.doorX];
@@ -370,8 +384,8 @@ export class FloorplanMainComponent implements OnInit
     private _handleTileClick(x: number, y: number): void
     {
         const tile = this._floorMapSettings.heightMap[y][x];
-        let heightIndex = this._heightScheme.indexOf(tile.height);
-        
+        const heightIndex = this._heightScheme.indexOf(tile.height);
+
         if(this._currentAction === 'door')
         {
             this._setDoor(x, y);
@@ -386,7 +400,7 @@ export class FloorplanMainComponent implements OnInit
             case 'down': futureHeightIndex = heightIndex - 1; break;
             case 'set': futureHeightIndex = this._heightScheme.indexOf(this._currentHeight); break;
             case 'unset': futureHeightIndex = 0; break;
-        }       
+        }
 
         if(futureHeightIndex === -1) return;
 
@@ -405,9 +419,10 @@ export class FloorplanMainComponent implements OnInit
 
         if(newHeight === 'x' && tile.blocked) return;
 
-        this._floorMapSettings.heightMap[y][x].height = newHeight;        
+        this._floorMapSettings.heightMap[y][x].height = newHeight;
 
-        this._ngZone.run(() => {
+        this._ngZone.run(() =>
+        {
             if(newHeight === 'x')
             {
                 this._coloredTilesCount--;
@@ -439,7 +454,7 @@ export class FloorplanMainComponent implements OnInit
 
     public getColor(hex: string): string
     {
-        return hex.replace("0x", "#");
+        return hex.replace('0x', '#');
     }
 
     public save(): void
@@ -502,7 +517,7 @@ export class FloorplanMainComponent implements OnInit
     public openImportExport(): void
     {
         this._floorMapSettings.heightMapString = this._generateTileMapString();
-        
+
         let modal = this._importExportModal;
 
         if(!modal)
@@ -533,7 +548,7 @@ export class FloorplanMainComponent implements OnInit
     {
         this.minimize = !this.minimize;
     }
-    
+
     public livePreview(): void
     {
         this.toggleEditor();
@@ -542,11 +557,12 @@ export class FloorplanMainComponent implements OnInit
     public get colorMap(): object
     {
         return Object.keys(this._colorMap)
-        .filter(key => key !== 'x')
-        .reduce((obj, key) => {
-          obj[key] = this._colorMap[key];
-          return obj;
-        }, {});
+            .filter(key => key !== 'x')
+            .reduce((obj, key) =>
+            {
+                obj[key] = this._colorMap[key];
+                return obj;
+            }, {});
     }
 
     public get currentAction(): string

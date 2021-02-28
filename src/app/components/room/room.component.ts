@@ -71,7 +71,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
     selector: 'nitro-room-component',
     template: `
         <div class="nitro-room-component">
-            <nitro-floorplan-main-component></nitro-floorplan-main-component>
+            <nitro-floorplan-main-component *ngIf="floorPlanVisible"></nitro-floorplan-main-component>
             <div #roomCanvas class="room-view"></div>
             <ng-template #widgetContainer></ng-template>
         </div>`
@@ -125,6 +125,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this.endRoom();
 
         this._events.dispose();
+    }
+
+    public get floorPlanVisible(): boolean
+    {
+        return this._settingsService.floorPlanVisible;
     }
 
     public prepareRoom(session: IRoomSession): void
