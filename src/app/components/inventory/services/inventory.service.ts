@@ -269,6 +269,11 @@ export class InventoryService implements OnDestroy
         return this._furnitureVisible;
     }
 
+    public set furnitureVisible(flag: boolean)
+    {
+        this._furnitureVisible = flag;
+    }
+
     public get badgesVisible(): boolean
     {
         return this._badgesVisible;
@@ -277,11 +282,6 @@ export class InventoryService implements OnDestroy
     public set badgesVisible(flag: boolean)
     {
         this._badgesVisible = flag;
-    }
-
-    public set furnitureVisible(flag: boolean)
-    {
-        this._furnitureVisible = flag;
     }
 
     public get petsVisible(): boolean
