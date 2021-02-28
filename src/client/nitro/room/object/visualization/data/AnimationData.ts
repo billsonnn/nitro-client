@@ -1,4 +1,4 @@
-import { IAssetAnimation, IAssetAnimationLayer, IAssetAnimationSequenceFrame } from '../../../../../core/asset/interfaces/visualization';
+import { IAssetVisualAnimation, IAssetVisualAnimationLayer, IAssetVisualAnimationSequenceFrame } from '../../../../../core/asset/interfaces';
 import { AnimationFrame } from './AnimationFrame';
 import { AnimationLayerData } from './AnimationLayerData';
 import { DirectionalOffsetData } from './DirectionalOffsetData';
@@ -76,14 +76,9 @@ export class AnimationData
         return Math.random() * this._frameCount;
     }
 
-    public initialize(k: IAssetAnimation): boolean
+    public initialize(k: IAssetVisualAnimation): boolean
     {
-        this._randomStart = false;
-
-        // if (int(k.@randomStart) != 0)
-        // {
-        //     this._randomStart = true;
-        // }
+        if(k.randomStart) this._randomStart = true;
 
         if(k.layers)
         {
@@ -106,7 +101,7 @@ export class AnimationData
         return true;
     }
 
-    private addLayer(animationId: number, loopCount: number, frameRepeat: number, isRandom: boolean, layer: IAssetAnimationLayer): boolean
+    private addLayer(animationId: number, loopCount: number, frameRepeat: number, isRandom: boolean, layer: IAssetVisualAnimationLayer): boolean
     {
         const layerData = new AnimationLayerData(loopCount, frameRepeat, isRandom);
 
@@ -136,7 +131,7 @@ export class AnimationData
                             return false;
                         }
 
-                        frame.addFrame(animationFrame.id, animationFrame.x || 0, animationFrame.y || 0, animationFrame.randomX || 0, animationFrame.randomY || 0, this.readDirectionalOffsets(animationFrame));
+                        frame.addFrame(animationFrame.id, (animationFrame.x || 0), (animationFrame.y || 0), (animationFrame.randomX || 0), (animationFrame.randomY || 0), this.readDirectionalOffsets(animationFrame));
                     }
                 }
 
@@ -155,7 +150,7 @@ export class AnimationData
         return true;
     }
 
-    private readDirectionalOffsets(frame: IAssetAnimationSequenceFrame): DirectionalOffsetData
+    private readDirectionalOffsets(frame: IAssetVisualAnimationSequenceFrame): DirectionalOffsetData
     {
         let directionalOffset: DirectionalOffsetData = null;
 

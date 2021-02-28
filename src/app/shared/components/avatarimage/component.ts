@@ -8,7 +8,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 @Component({
     selector: '[nitro-avatar-image]',
     template: `
-    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" />`
+    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" image-placeholder />`
 })
 export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvatarImageListener
 {

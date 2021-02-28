@@ -4,6 +4,9 @@ import { CatalogPageOfferData } from '../../../client/nitro/communication/messag
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
 import { CatalogService } from './services/catalog.service';
+import { ProductTypeEnum } from './enums/ProductTypeEnum';
+import { CatalogProductOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
 
 @Directive()
 export class CatalogLayout
@@ -19,9 +22,9 @@ export class CatalogLayout
     {
         let message = (this.activePage.localization.texts[index] || null);
 
-        message = message.replace(/\r\n|\r|\n/g, '<br />');
+        if(message) message = message.replace(/\r\n|\r|\n/g, '<br />');
 
-        return message;
+        return (message || '');
     }
 
     public getImage(index: number = 0): string
@@ -33,7 +36,7 @@ export class CatalogLayout
         return imageUrl;
     }
 
-    public get headerText(): string
+    protected get headerText(): string
     {
         return (this._catalogService.catalogRoot.localization || null);
     }
@@ -58,5 +61,36 @@ export class CatalogLayout
         const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
 
         return url.replace('%type%', type.toString());
+    }
+
+    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
+    {
+        if(!product) return null;
+
+        return this._catalogService.getFurnitureDataForProductOffer(product);
+    }
+
+
+    public offerImage(offer: CatalogPageOfferData): string
+    {
+        if(!offer) return '';
+
+        const product = offer.products[0];
+
+        if(!product) return '';
+
+        const furniData = this.getProductFurniData(product);
+
+        if(!furniData) return '';
+
+        switch(product.productType)
+        {
+            case ProductTypeEnum.FLOOR:
+                return this._catalogService.getFurnitureDataIconUrl(furniData);
+            case ProductTypeEnum.WALL:
+                return this._catalogService.getFurnitureDataIconUrl(furniData);
+        }
+
+        return '';
     }
 }

@@ -1,6 +1,5 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-// see _Str_2370
 export class RoomDataParser
 {
     public static THUMBNAIL_BITMASK         = 1;
@@ -13,6 +12,7 @@ export class RoomDataParser
     public static OPEN_STATE                = 0;
     public static DOORBELL_STATE            = 1;
     public static PASSWORD_STATE            = 2;
+    public static INVISIBLE_STATE           = 4;
 
     private _roomId: number;
     private _roomName: string;
@@ -165,6 +165,11 @@ export class RoomDataParser
     public get roomName(): string
     {
         return this._roomName;
+    }
+
+    public set roomName(name: string)
+    {
+        this._roomName = name;
     }
 
     public get ownerId(): number

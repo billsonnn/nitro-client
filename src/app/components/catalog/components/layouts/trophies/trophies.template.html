@@ -7,7 +7,7 @@
                     class="btn btn-sm btn-secondary align-self-end">Previous</button>
             </div>
             <div class="col-sm d-flex flex-row justify-content-center">
-                <img class="align-self-center" [src]="imageUrl" />
+                <img class="align-self-center" [src]="imageUrl" image-placeholder />
             </div>
             <div class="col-sm d-flex flex-row">
                 <button type="button" (click)="handleButton('next')"
@@ -26,10 +26,8 @@
             [(ngModel)]="enteredText">{{ enteredText }}</textarea>
         <div class="d-flex flex-row justify-content-between px-2 py-1 bg-emperor rounded mt-auto">
             <div class="align-self-center">
-                <b *ngIf="currentTrophyOffer.priceCredits">{{ currentTrophyOffer.priceCredits }} <img class="pl-1"
-                        [src]="getCurrencyUrl(-1)"></b>
-                <b *ngIf="currentTrophyOffer.priceActivityPoints"> + {{ currentTrophyOffer.priceActivityPoints }} <img
-                        class="pl-1" [src]="getCurrencyUrl(currentTrophyOffer.priceActivityPointsType)"></b>
+                <b *ngIf="currentTrophyOffer.priceCredits">{{ currentTrophyOffer.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)" image-placeholder /></b>
+                <b *ngIf="currentTrophyOffer.priceActivityPoints"> + {{ currentTrophyOffer.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(currentTrophyOffer.priceActivityPointsType)" image-placeholder /></b>
             </div>
             <div class="d-flex flex-row">
                 <button type="button" class="btn btn-success btn-sm" (click)="buyCurrentItem()">{{'buy' |

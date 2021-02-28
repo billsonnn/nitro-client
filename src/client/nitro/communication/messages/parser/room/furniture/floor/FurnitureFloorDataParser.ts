@@ -12,7 +12,7 @@ export class FurnitureFloorDataParser
     private _direction: number;
     private _z: number;
     private _stackHeight: number;
-    private _type: number;
+    private _extra: number;
     private _data: IObjectData;
     private _state: number;
     private _expires: number;
@@ -38,7 +38,7 @@ export class FurnitureFloorDataParser
         this._direction     = 0;
         this._z             = 0;
         this._stackHeight   = 0;
-        this._type          = 0;
+        this._extra         = 0;
         this._data          = null;
         this._state         = 0;
         this._expires       = 0;
@@ -60,7 +60,7 @@ export class FurnitureFloorDataParser
         this._direction     = ((wrapper.readInt() % 8) * 45);
         this._z             = parseFloat(wrapper.readString());
         this._stackHeight   = parseFloat(wrapper.readString());
-        this._type          = wrapper.readInt();
+        this._extra         = wrapper.readInt();
         this._data          = FurnitureDataParser.parseObjectData(wrapper);
         this._state         = parseFloat(this._data && this._data.getLegacyString()) || 0;
         this._expires       = wrapper.readInt();
@@ -108,9 +108,9 @@ export class FurnitureFloorDataParser
         return ((isNaN(this._stackHeight)) ? 0 : this._stackHeight);
     }
 
-    public get type(): number
+    public get extra(): number
     {
-        return this._type;
+        return this._extra;
     }
 
     public get data(): IObjectData

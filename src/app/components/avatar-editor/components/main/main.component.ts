@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Sprite } from 'pixi.js';
 import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
 import { AvatarDirectionAngle } from '../../../../../client/nitro/avatar/enum/AvatarDirectionAngle';
 import { AvatarEditorFigureCategory } from '../../../../../client/nitro/avatar/enum/AvatarEditorFigureCategory';
@@ -247,12 +246,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         {
             const partItem = new AvatarEditorGridPartItem(k, null, null, false);
 
-            const texture = Nitro.instance.core.asset.getTexture('clear_icon');
-
-            if(texture)
-            {
-                partItem.iconImage = new Sprite(texture);
-            }
+            partItem.isClear = true;
 
             _local_3.push(partItem);
         }

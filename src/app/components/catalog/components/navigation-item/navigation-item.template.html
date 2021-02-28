@@ -2,7 +2,7 @@
     <li class="d-flex list-group-item align-items-center" [ngClass]="{ 'active': isActive }" (click)="selectPage()">
         <div class="d-flex flex-grow-1">
             <div class="icon-container">
-                <img class="icon" [src]="iconUrl" />
+                <img class="icon" [src]="iconUrl" image-placeholder />
             </div>
             <p class="flex-grow-1 mb-0">{{ catalogPage.localization }}</p>
         </div>

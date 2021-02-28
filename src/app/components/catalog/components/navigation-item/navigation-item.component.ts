@@ -18,12 +18,7 @@ export class CatalogNavigationItemComponent
 
     public selectPage(): void
     {
-        if(this.isActive)
-        {
-            this._catalogService.manuallyCollapsePage(this.catalogPage);
-
-            return;
-        }
+        if(this.isActive) this._catalogService.manuallyCollapsePage(this.catalogPage);
 
         (this._catalogService.component && this._catalogService.component.selectPage(this.catalogPage));
     }
@@ -50,7 +45,7 @@ export class CatalogNavigationItemComponent
 
     public get isCollapsed(): boolean
     {
-        return !!(this._catalogService.manuallyCollapsed.indexOf(this.catalogPage) >= 0);
+        return (this._catalogService.manuallyCollapsed.indexOf(this.catalogPage) >= 0);
     }
 
     public get isToggled(): boolean
