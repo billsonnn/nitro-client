@@ -1,0 +1,40 @@
+<div class="nitro-group-creator-component">
+    <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ ('group.window.title') | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="p-3">
+        <div class="btn-group mb-3 w-100">
+            <button class="btn btn-primary" [disabled]="currentStep !== 1">{{ ('group.create.steplabel.1') | translate }}</button>
+            <button class="btn btn-primary" [disabled]="currentStep !== 2">{{ ('group.create.steplabel.2') | translate }}</button>
+            <button class="btn btn-primary" [disabled]="currentStep !== 3">{{ ('group.create.steplabel.3') | translate }}</button>
+            <button class="btn btn-success" [disabled]="currentStep !== 4">{{ ('group.create.steplabel.4') | translate }}</button>
+        </div>
+
+        <nitro-group-creator-tab-info-component *ngIf="currentStep === 1"
+        [(groupSettings)]="groupSettings"
+        [showNameError]="showNameError"
+        [showDescriptionError]="showDescriptionError"
+        [showRoomError]="showRoomError"
+        [availableRooms]="availableRooms"></nitro-group-creator-tab-info-component>
+
+        <nitro-group-creator-tab-badge-component *ngIf="currentStep === 2"
+        [(groupSettings)]="groupSettings"
+        [setDefaultValues]="true"></nitro-group-creator-tab-badge-component>
+
+        <nitro-group-creator-tab-colors-component *ngIf="currentStep === 3"
+        [(groupSettings)]="groupSettings"
+        [setDefaultValues]="true"></nitro-group-creator-tab-colors-component>
+
+        <nitro-group-creator-tab-confirmation-component *ngIf="currentStep === 4"
+        [groupSettings]="groupSettings"
+        [groupCost]="groupCost"></nitro-group-creator-tab-confirmation-component>
+
+        <div class="d-flex flex-row justify-content-between">
+            <button *ngIf="currentStep === 1" class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
+            <button *ngIf="currentStep > 1" class="btn btn-primary" (click)="previousStep()">{{ ('group.create.previousstep') | translate }}</button>
+            <button *ngIf="currentStep < 4" class="btn btn-primary" (click)="nextStep()">{{ ('group.create.nextstep') | translate }}</button>
+            <button *ngIf="currentStep === 4" class="btn btn-success" (click)="buyGroup()">{{ ('group.create.confirm.buy') | translate }}</button>
+        </div>
+    </div>    
+</div>

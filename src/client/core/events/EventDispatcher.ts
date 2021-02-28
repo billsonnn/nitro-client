@@ -5,6 +5,7 @@ import { INitroLogger } from '../common/logger/INitroLogger';
 import { NitroLogger } from '../common/logger/NitroLogger';
 import { IEventDispatcher } from './IEventDispatcher';
 import { RoomSessionDimmerPresetsEvent } from '../../nitro/session/events/RoomSessionDimmerPresetsEvent';
+import { RoomEngineTriggerWidgetEvent } from '../../nitro/room/events/RoomEngineTriggerWidgetEvent';
 
 export class EventDispatcher extends Disposable implements IEventDispatcher, IDisposable
 {
@@ -99,7 +100,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
             catch (err)
             {
-                this._logger.error(err);
+                this._logger.error(err.stack);
 
                 return;
             }

@@ -1,18 +1,25 @@
 <div *ngIf="visible" class="row nitro-inventory-furni-component" (mouseup)="onMouseUp()">
-    <div class="col-12" *ngIf="!groupItems.length">
+    <div class="col-12" *ngIf="!hasGroupItems">
         {{ ('inventory.empty.title') | translate }}
         {{ ('inventory.empty.desc') | translate }}
     </div>
-    <ng-container *ngIf="groupItems.length">
+    <ng-container *ngIf="hasGroupItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
+            <div class="d-flex mb-2">
+                <div class="d-flex justify-content-center align-items-center bg-secondary border shadow px-2"><i class="fas fa-search"></i></div>
+                <input type="text" class="form-control form-control-sm flex-grow-1" [(ngModel)]="search" />
+                <select class="form-control form-control-sm w-auto" [(ngModel)]="searchType">
+                    <option [value]="''">{{ ('inventory.filter.option.everything') | translate }}</option>
+                    <option [value]="'s'">{{ ('inventory.furni.tab.floor') | translate }}</option>
+                    <option [value]="'i'">{{ ('inventory.furni.tab.wall') | translate }}</option>
+                </select>
+            </div>
             <perfect-scrollbar class="grid-container w-100" style="min-height: 209px;max-height: 209px;height:209px;">
                 <div class="grid-items grid-5">
                     <div class="d-flex flex-column item-detail justify-content-center align-items-center"
-                        *ngFor="let groupItem of groupItems | paginate: paginateConfig"
-                        [ngClass]="{ 'unseen': groupItem.hasUnseenItems, 'active': (groupItem === selectedGroup) }"
-                        [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }"
+                        *ngFor="let groupItem of groupItems;trackBy:trackByType | paginate: paginateConfig" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }"
                         (mousedown)="onMouseDown(groupItem)" (mouseout)="onMouseOut(groupItem)">
-                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedGroup === groupItem) }" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }">
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedGroup === groupItem), 'bg-success': groupItem.hasUnseenItems }" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }">
                             <div class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count" *ngIf="!groupItem.stuffData.uniqueNumber">{{ groupItem.getUnlockedCount() }}</div>
                             <div *ngIf="groupItem.stuffData.uniqueNumber" class="badge badge-primary w-100">{{ groupItem.stuffData.uniqueNumber }}</div>
                         </button>

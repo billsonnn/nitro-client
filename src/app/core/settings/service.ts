@@ -9,8 +9,10 @@ export class SettingsService
     private _catalogVisible: boolean;
     private _inventoryVisible: boolean;
     private _friendlistVisible: boolean;
+    private _userProfileVisible: boolean;
     private _achievementsVisible: boolean;
     private _meMenuVisible: boolean;
+    private _chatHistoryVisible: boolean;
     private _floorPlanVisible: boolean;
 
     constructor()
@@ -21,8 +23,10 @@ export class SettingsService
         this._catalogVisible        = false;
         this._inventoryVisible      = false;
         this._friendlistVisible     = false;
+        this._userProfileVisible    = false;
         this._achievementsVisible   = false;
         this._meMenuVisible         = false;
+        this._chatHistoryVisible    = false;
         this._floorPlanVisible      = false;
     }
 
@@ -101,6 +105,21 @@ export class SettingsService
         this._friendlistVisible = !this._friendlistVisible;
     }
 
+    public showUserProfile(): void
+    {
+        this._userProfileVisible = true;
+    }
+
+    public hideUserProfile(): void
+    {
+        this._userProfileVisible = false;
+    }
+
+    public toggleUserProfile(): void
+    {
+        this._userProfileVisible = !this._userProfileVisible;
+    }
+
     public showAchievements(): void
     {
         this._achievementsVisible = true;
@@ -131,6 +150,21 @@ export class SettingsService
         this._meMenuVisible = !this._meMenuVisible;
     }
 
+    public showChatHistory(): void
+    {
+        this._chatHistoryVisible = true;
+    }
+
+    public hideChatHistory(): void
+    {
+        this._chatHistoryVisible = false;
+    }
+
+    public toggleChatHistory(): void
+    {
+        this._chatHistoryVisible = !this._chatHistoryVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -156,6 +190,11 @@ export class SettingsService
         return this._friendlistVisible;
     }
 
+    public get userProfileVisible(): boolean
+    {
+        return this._userProfileVisible;
+    }
+
     public get achievementsVisible(): boolean
     {
         return this._achievementsVisible;
@@ -164,6 +203,11 @@ export class SettingsService
     public get meMenuVisible(): boolean
     {
         return this._meMenuVisible;
+    }
+
+    public get chatHistoryVisible(): boolean
+    {
+        return this._chatHistoryVisible;
     }
 
     public set isReady(isReady: boolean)

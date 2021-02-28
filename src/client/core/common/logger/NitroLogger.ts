@@ -17,29 +17,43 @@ export class NitroLogger implements INitroLogger
 
     public log(message: string): void
     {
-        this.printMessage(message);
+        this.printMessage(message, 'log');
     }
 
     public error(message: string, trace?: string): void
     {
-        this.printMessage(trace || message);
+        this.printMessage(trace || message, 'error');
     }
 
     public warn(message: string): void
     {
-        this.printMessage(message);
+        this.printMessage(message, 'warn');
     }
 
-    public printMessage(message: string): void
+    public printMessage(message: string, modus: string): void
     {
         if(!this._print) return;
 
-        NitroLogger.log(message, this._name);
+        NitroLogger.log(message, this._name, modus);
     }
 
-    public static log(message: string, name: string = 'Nitro'): void
+    public static log(message: string, name: string = 'Nitro', modus: string = null): void
     {
-        console.log(`[Nitro] ${ new Date().toDateString() } [${ name }] ${ message } ${ this.getTimestamp() }`);
+        const logString = `[Nitro] ${ new Date().toDateString() } [${ name }] ${ message } ${ this.getTimestamp() }`;
+
+        switch(modus)
+        {
+            case 'error':
+                console.error(logString);
+                break;
+            case 'warn':
+                console.warn(logString);
+                break;
+            case 'log':
+            default:
+                console.log(logString);
+                break;
+        }
     }
 
     public static getTimestamp(): string

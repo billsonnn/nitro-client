@@ -1,6 +1,8 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
+import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
 import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
@@ -9,6 +11,7 @@ import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/Room
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomChatInputComponent } from '../chatinput/component';
+import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
@@ -157,6 +160,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                             this._container.notificationService.alertWithScrollableMessages([
                                 '<div class="d-flex flex-column justify-content-center align-items-center"><div style="width: 350px; height: 120px; margin: 10px; background: transparent url(\'https://assets-1.nitrots.co/nitro-dark.svg\') no-repeat center; filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
                             return null;
+                        case ':settings':
+                            if(this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isModerator)
+                            {
+                                Nitro.instance.communication.connection.send(new RoomSettingsComposer(this._container.roomSession.roomId));
+                            }
+                            return null;
                     }
                 }
 
@@ -190,6 +199,18 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
     public processEvent(event: NitroEvent): void
     {
         if(!event || this._disposed) return;
+
+        switch(event.type)
+        {
+            case RoomSessionChatEvent.FLOOD_EVENT: {
+                const floodEvent = (event as RoomSessionChatEvent);
+
+                const seconds = parseInt(floodEvent.message);
+
+                this._container.events.dispatchEvent(new RoomWidgetFloodControlEvent(seconds));
+                return;
+            }
+        }
     }
 
     public get type(): string
@@ -204,7 +225,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
 
     public get eventTypes(): string[]
     {
-        return [ ];
+        return [ RoomSessionChatEvent.FLOOD_EVENT ];
     }
 
     public get container(): IRoomWidgetHandlerContainer

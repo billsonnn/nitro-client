@@ -329,10 +329,10 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if((this._width !== this._renderedWidth) || (this._height !== this._renderedHeight)) update = true;
 
-        if((this._display.x !== ~~(this._screenOffsetX)) || (this._display.y !== ~~(this._screenOffsetY)))
+        if((this._display.x !== this._screenOffsetX) || (this._display.y !== this._screenOffsetY))
         {
-            this._display.x = ~~(this._screenOffsetX);
-            this._display.y = ~~(this._screenOffsetY);
+            this._display.x = this._screenOffsetX;
+            this._display.y = this._screenOffsetY;
 
             update = true;
         }
@@ -459,8 +459,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         if(x > 0) z = (z + (x * 1.2E-7));
         else z = (z + (-(x) * 1.2E-7));
 
-        x = (x + (this._width / 2));
-        y = (y + (this._height / 2));
+        x = (x + Math.trunc(this._width / 2));
+        y = (y + Math.trunc(this._height / 2));
 
         let spriteCount = 0;
 
@@ -631,8 +631,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
             this._Str_21914(extendedSprite, objectSprite);
         }
 
-        if(extendedSprite.x !== sprite.x) extendedSprite.x = ~~(sprite.x);
-        if(extendedSprite.y !== sprite.y) extendedSprite.y = ~~(sprite.y);
+        if(extendedSprite.x !== sprite.x) extendedSprite.x = sprite.x;
+        if(extendedSprite.y !== sprite.y) extendedSprite.y = sprite.y;
 
         extendedSprite.offsetX = objectSprite.offsetX;
         extendedSprite.offsetY = objectSprite.offsetY;
@@ -658,8 +658,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         extendedSprite.alphaTolerance   = sprite.alphaTolerance;
         extendedSprite.alpha            = (sprite.alpha / 255);
         extendedSprite.tint             = sprite.color;
-        extendedSprite.x                = ~~(sortableSprite.x);
-        extendedSprite.y                = ~~(sortableSprite.y);
+        extendedSprite.x                = sortableSprite.x;
+        extendedSprite.y                = sortableSprite.y;
         extendedSprite.offsetX          = sprite.offsetX;
         extendedSprite.offsetY          = sprite.offsetY;
         extendedSprite.name             = sprite.name;
@@ -804,7 +804,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
         if((this._mouseCheckCount > 0) && (type == MouseEventType.MOUSE_MOVE)) return this._mouseSpriteWasHit;
 
-        this._mouseSpriteWasHit = this._Str_19207((x / this._scale), (y / this._scale), type, altKey, ctrlKey, shiftKey, buttonDown);
+        this._mouseSpriteWasHit = this._Str_19207(Math.trunc(x / this._scale), Math.trunc(y / this._scale), type, altKey, ctrlKey, shiftKey, buttonDown);
 
         this._mouseCheckCount++;
 
@@ -1032,6 +1032,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetX(x: number)
     {
+        x = Math.trunc(x);
+
         this._mouseLocation.x   = (this._mouseLocation.x - (x - this._screenOffsetX));
         this._screenOffsetX     = x;
     }
@@ -1043,6 +1045,8 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
 
     public set screenOffsetY(y: number)
     {
+        y = Math.trunc(y);
+
         this._mouseLocation.y   = (this._mouseLocation.y - (y - this._screenOffsetY));
         this._screenOffsetY     = y;
     }

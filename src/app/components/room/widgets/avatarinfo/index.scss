@@ -2,9 +2,9 @@
     
     .context-menu {
         position: absolute;
+        z-index: $context-menu-zindex;
 
         .card {
-            z-index: 301;
 
             .card-header {
                 padding: 5px 15px;

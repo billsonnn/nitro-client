@@ -6,18 +6,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { ColorChromeModule } from 'ngx-color/chrome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
-import { LoadingComponent } from './components/loading/component';
+import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
+import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
 import { RoomPreviewComponent } from './components/roompreview/component';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/directive';
+import { ImagePlaceholderDirective } from './directives/image-placeholder/image-placeholder.directive';
+import { EmojiPipe } from './pipes/emoji.pipe';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
+import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
+import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
 import { SoundService } from './services/sound.service';
 
@@ -39,7 +45,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule.forRoot()
+        MDBBootstrapModule.forRoot(),
+        ColorChromeModule
     ],
     exports: [
         CommonModule,
@@ -53,16 +60,22 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxSliderModule,
         PerfectScrollbarModule,
         MDBBootstrapModule,
+        ColorChromeModule,
         AvatarImageComponent,
         BadgeComponent,
-        LoadingComponent,
+        CurrencyIconComponent,
+        FurnitureImageComponent,
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,
+        ImagePlaceholderDirective,
+        EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
-        ShortNumberPipe
+        ShortNumberPipe,
+        TimeAgoPipe,
+        RoomObjectItemSearchPipe
     ],
     providers: [
         {
@@ -74,14 +87,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     declarations: [
         AvatarImageComponent,
         BadgeComponent,
-        LoadingComponent,
+        CurrencyIconComponent,
+        FurnitureImageComponent,
         RoomPreviewComponent,
         DraggableDirective,
         BringToTopDirective,
+        ImagePlaceholderDirective,
+        EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,
         FormatShortPipe,
-        ShortNumberPipe
+        ShortNumberPipe,
+        TimeAgoPipe,
+        RoomObjectItemSearchPipe
     ]
 })
 export class SharedModule

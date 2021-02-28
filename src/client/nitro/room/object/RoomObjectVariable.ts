@@ -20,6 +20,8 @@ export class RoomObjectVariable
     public static FIGURE_POSTURE_PARAMETER: string                   = 'figure_posture_parameter';
     public static FIGURE_HIGHLIGHT_ENABLE: string                    = 'figure_highlight_enable';
     public static FIGURE_HIGHLIGHT: string                           = 'figure_highlight';
+    public static FURNITURE_PURCHASER_NAME: string                   = 'furniture_purchaser_name';
+    public static FURNITURE_PURCHASER_FIGURE: string                 = 'furniture_purchaser_figure';
     public static STD: string                                        = 'std';
     public static FIGURE_SIGN: string                                = 'figure_sign';
     public static FIGURE_FLAT_CONTROL: string                        = 'figure_flat_control';
@@ -129,4 +131,5 @@ export class RoomObjectVariable
     public static ROOM_SELECTED_Z: string                            = 'room_selected_z';
     public static ROOM_SELECTED_PLANE: string                        = 'room_selected_plane';
     public static IMAGE_QUERY_SCALE: string                          = 'image_query_scale';
+    public static FURNITURE_FRIENDFURNI_ENGRAVING: string      = 'furniture_friendfurni_engraving_type';
 }

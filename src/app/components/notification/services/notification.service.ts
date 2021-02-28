@@ -7,8 +7,10 @@ import { MOTDNotificationEvent } from '../../../../client/nitro/communication/me
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { AlertCenterComponent } from '../components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
+import { NotificationChoice } from '../components/choices/choices.component';
 import { NotificationCenterComponent } from '../components/notification-center/notification-center.component';
 import { NotificationDialogComponent } from '../components/notification-dialog/notification-dialog.component';
+import { HotelWillShutdownEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/HotelWillShutdownEvent';
 
 @Injectable()
 export class NotificationService implements OnDestroy
@@ -41,7 +43,8 @@ export class NotificationService implements OnDestroy
                 new HabboBroadcastMessageEvent(this.onHabboBroadcastMessageEvent.bind(this)),
                 new ModeratorMessageEvent(this.onModeratorMessageEvent.bind(this)),
                 new MOTDNotificationEvent(this.onMOTDNotificationEvent.bind(this)),
-                new NotificationDialogMessageEvent(this.onNotificationDialogMessageEvent.bind(this))
+                new NotificationDialogMessageEvent(this.onNotificationDialogMessageEvent.bind(this)),
+                new HotelWillShutdownEvent(this.onHotelWillShutdownEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -102,6 +105,19 @@ export class NotificationService implements OnDestroy
         this._ngZone.run(() => this.alertWithScrollableMessages(parser.messages));
     }
 
+    private onHotelWillShutdownEvent(event: HotelWillShutdownEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const message = Nitro.instance.localization.getValueWithParameter('opening.hours.shutdown', 'm', parser.minutes.toString());
+
+        this._ngZone.run(() => this.alert(message));
+    }
+
     public alert(message: string, title: string = null): NotificationBroadcastMessageComponent
     {
         if(!this._alertCenter) return null;
@@ -121,6 +137,13 @@ export class NotificationService implements OnDestroy
         if(!this._alertCenter) return null;
 
         return this._alertCenter.alertWithConfirm(message, title, callback);
+    }
+
+    public alertWithChoices(message: string, choices: NotificationChoice[], title: string = null): NotificationBroadcastMessageComponent
+    {
+        if(!this._alertCenter) return null;
+
+        return this._alertCenter.alertWithChoices(message, choices, title);
     }
 
     public alertWithScrollableMessages(messages: string[], title: string = null): NotificationBroadcastMessageComponent

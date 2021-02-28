@@ -11,8 +11,8 @@
             <h6>{{ getSubscriptionHeader() }}</h6>
             <p>{{ getSubscriptionText() }}</p>
             <div class="d-flex align-items-center justify-content-center bg-secondary rounded p-1">
-                <p class="mb-0" *ngIf="subscription.priceCredits">{{ subscription.priceCredits }} <img class="px-1" [src]="getCurrencyUrl(-1)"></p>
-                <p class="mb-0" *ngIf="subscription.priceActivityPoints"> + {{ subscription.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(subscription.priceActivityPointsType)"></p>
+                <p class="mb-0" *ngIf="subscription.priceCredits">{{ subscription.priceCredits }} <img class="px-1" [src]="getCurrencyUrl(-1)" image-placeholder /></p>
+                <p class="mb-0" *ngIf="subscription.priceActivityPoints"> + {{ subscription.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(subscription.priceActivityPointsType)" image-placeholder /></p>
             </div>
         </div>
     </div>

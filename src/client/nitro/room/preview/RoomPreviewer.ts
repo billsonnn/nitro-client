@@ -236,7 +236,7 @@ export class RoomPreviewer
         this._currentPreviewObjectCategory = RoomObjectCategory.MINIMUM;
     }
 
-    public addFurnitureIntoRoom(classId: number, direction: IVector3D, objectData: IObjectData = null, extras: string = null): number
+    public addFurnitureIntoRoom(classId: number, direction: IVector3D, objectData: IObjectData = null, extra: string = null): number
     {
         if(!objectData) objectData = new LegacyDataType();
 
@@ -255,12 +255,9 @@ export class RoomPreviewer
                 this._previousAutomaticStateChangeTime  = Nitro.instance.time;
                 this._automaticStateChange              = true;
 
-                if(extras)
-                {
-                    const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
+                const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
 
-                    if(roomObject) roomObject.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, extras);
-                }
+                if(roomObject && extra) roomObject.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, extra);
 
                 this.updatePreviewRoomView();
 

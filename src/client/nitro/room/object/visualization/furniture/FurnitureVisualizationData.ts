@@ -32,7 +32,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         this.reset();
 
-        if(!asset || (!asset.type || !asset.type.length)) return false;
+        if(!asset) return false;
 
         this._type = asset.name;
 
@@ -84,11 +84,14 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         if(!visualizations) return false;
 
-        for(const visualization of visualizations)
+        for(const visualizationId in visualizations)
         {
+            const visualization = visualizations[visualizationId];
+
             const layerCount    = visualization.layerCount;
             const angle         = visualization.angle;
-            let size          = visualization.size;
+
+            let size = visualization.size;
 
             if(size < 1) size = 1;
 

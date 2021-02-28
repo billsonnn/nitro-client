@@ -1,4 +1,5 @@
-﻿import { ActiveActionData } from '../actions/ActiveActionData';
+﻿import { IAssetAnimationFramePart } from '../../../core/asset/interfaces/animation/IAssetAnimationFramePart';
+import { ActiveActionData } from '../actions/ActiveActionData';
 import { IActionDefinition } from '../actions/IActionDefinition';
 import { IActiveActionData } from '../actions/IActiveActionData';
 import { IAnimationLayerData } from './IAnimationLayerData';
@@ -19,14 +20,14 @@ export class AnimationLayerData implements IAnimationLayerData
     private _base: string;
     private _items: Map<string, string>;
 
-    constructor(k: any, _arg_2: string, _arg_3: IActionDefinition)
+    constructor(k: IAssetAnimationFramePart, _arg_2: string, _arg_3: IActionDefinition)
     {
         this._id                = k.id;
-        this._animationFrame    = parseInt(k.frame) || 0;
-        this._dx                = ((k.dx !== undefined) ? parseInt(k.dx) : 0);
-        this._dy                = ((k.dy !== undefined) ? parseInt(k.dy) : 0);
-        this._dz                = ((k.dz !== undefined) ? parseInt(k.dz) : 0);
-        this._directionOffset   = ((k.dd !== undefined) ? parseInt(k.dd) : 0);
+        this._animationFrame    = (k.frame || 0);
+        this._dx                = (k.dx || 0);
+        this._dy                = (k.dy || 0);
+        this._dz                = (k.dz || 0);
+        this._directionOffset   = (k.dd || 0);
         this._type              = _arg_2;
         this._base              = (k.base || '');
         this._items             = new Map();
@@ -104,7 +105,7 @@ export class AnimationLayerData implements IAnimationLayerData
         return this._base;
     }
 
-    public get action():IActiveActionData
+    public get action(): IActiveActionData
     {
         return this._action;
     }

@@ -213,7 +213,8 @@ export class FurnitureLogic extends MovingObjectLogic
 
         if(message.data) message.data.writeRoomObjectModel(this.object.model);
 
-        this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra);
+        if(!isNaN(message.extra)) this.object.model.setValue(RoomObjectVariable.FURNITURE_EXTRAS, message.extra.toString());
+
         this.object.model.setValue(RoomObjectVariable.FURNITURE_STATE_UPDATE_TIME, this.lastUpdateTime);
     }
 

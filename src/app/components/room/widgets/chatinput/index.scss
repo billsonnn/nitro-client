@@ -1,9 +1,10 @@
 .nitro-room-chatinput-component {
     position: fixed;
     display: flex;
-    bottom: 20px;
-    left:70px;
+    bottom: 19px;
+    left: 375px;
     pointer-events: none;
+    z-index: $chatinput-zindex;
 
     .chatinput-container {
         position: relative;
