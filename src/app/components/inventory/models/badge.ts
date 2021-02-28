@@ -1,6 +1,6 @@
 export class Badge
 {
-    private _badgeId: string;
+    private readonly _badgeId: string;
     private _isUnseen: boolean;
     private _isInUse: boolean;
     private _isSelected: boolean;
@@ -21,14 +21,14 @@ export class Badge
         return this._isInUse;
     }
 
-    public get _Str_2365(): boolean
-    {
-        return this._isSelected;
-    }
-
     public set _Str_3222(k: boolean)
     {
         this._isInUse = k;
+    }
+
+    public get _Str_2365(): boolean
+    {
+        return this._isSelected;
     }
 
     public set _Str_2365(k: boolean)

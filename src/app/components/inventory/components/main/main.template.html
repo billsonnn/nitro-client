@@ -7,7 +7,7 @@
         <div class="btn-group w-100 mb-3">
             <button (click)="showFurniture()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
             <button (click)="showBots()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': botsVisible }">{{ 'inventory.bots' | translate }}</button>
-            <button (click)="showBadges()" type="button" class="btn btn-secondary" [ngClass]="{'active' : badgesVisible}">{{ 'inventory.bots' | translate }}</button>
+            <button (click)="showBadges()" type="button" class="btn btn-secondary" [ngClass]="{'active' : badgesVisible}">{{ 'inventory.badges' | translate }}</button>
         </div>
         <div nitro-inventory-bots-component [visible]="botsVisible" [roomPreviewer]="roomPreviewer"></div>
         <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>

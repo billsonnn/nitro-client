@@ -1,11 +1,10 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { InventoryService } from '../../services/inventory.service';
-import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
-import { BotData } from '../../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
-import { InventoryFurnitureService } from '../../services/furniture.service';
-import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { InventorySharedComponent } from '../shared/inventory-shared.component';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Badge } from '../../models/badge';
+import { InventoryBadgeService } from '../../services/badge.service';
+import { SetActivatedBadgesComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 
 @Component({
     selector: '[nitro-inventory-badges-component]',
@@ -16,10 +15,12 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
     @Input()
     public visible: boolean = false;
 
+    public selectedBadge: Badge = null;
+
     constructor(
         protected _inventoryService: InventoryService,
         protected _ngZone: NgZone,
-        private _furniService: InventoryFurnitureService)
+        private _badgesService: InventoryBadgeService)
     {
         super(_inventoryService, _ngZone);
     }
@@ -34,9 +35,68 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
         this._inventoryService.badgesController = null;
     }
 
-    public get badges()
+    public get badges(): Badge[]
     {
-        //
+        const badges = this._badgesService.availableBadges;
+        return badges.getValues();
+    }
+
+    public get wearableBadgesWithoutCurrentBadges(): Badge[]
+    {
+        const badges = this._badgesService.availableBadges.getValues();
+
+        const returnBadges = [];
+
+        for(const badge of badges)
+        {
+            if(!this._badgesService.isWearingBadge(badge)) returnBadges.push(badge);
+        }
+
+        return returnBadges;
+    }
+
+    public get wearing(): Badge[]
+    {
+        const badges = this._badgesService.currentBadges;
+        return badges.getValues();
+    }
+
+    public get hasBadges(): boolean
+    {
+        return this.badges && this.badges.length > 0;
+    }
+
+    public isWearingBadge(badge: Badge): boolean
+    {
+        return this._badgesService.isWearingBadge(badge);
+    }
+
+    public get selectedBadgeName(): string
+    {
+        return Nitro.instance.localization.getBadgeName(this.selectedBadge.badgeId);
+    }
+
+    public handleClick(badge: Badge): void
+    {
+        this._badgesService.wearOrClearBadge(badge);
+        const wearingBadges = this._badgesService.currentBadges.getValues();
+        const composer = new SetActivatedBadgesComposer();
+        for(const badge of wearingBadges)
+        {
+            composer.addActivatedBadge(badge.badgeId);
+        }
+
+        Nitro.instance.communication.connection.send(composer);
+    }
+
+    public get badgeButtonDisabled(): boolean
+    {
+        const limitReached = this._badgesService.badgeLimitReached();
+
+        if(this.isWearingBadge(this.selectedBadge)) return false;
+
+        return limitReached;
+
     }
 
 

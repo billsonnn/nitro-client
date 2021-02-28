@@ -9,6 +9,7 @@ import { InventoryFurnitureService } from './services/furniture.service';
 import { InventoryService } from './services/inventory.service';
 import { InventoryTradingService } from './services/trading.service';
 import { InventoryBadgesComponent } from './components/badges/badges.component';
+import { InventoryBadgeService } from './services/badge.service';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { InventoryBadgesComponent } from './components/badges/badges.component';
     providers: [
         InventoryService,
         InventoryFurnitureService,
-        InventoryTradingService
+        InventoryTradingService,
+        InventoryBadgeService
     ],
     declarations: [
         InventoryBotsComponent,

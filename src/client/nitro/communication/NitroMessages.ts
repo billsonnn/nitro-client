@@ -325,6 +325,7 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
 import { _Str_5147 } from './messages/incoming/inventory/badges/_Str_5147';
+import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -821,6 +822,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // BADGES
         this._composers.set(OutgoingHeader.USER_BADGES, RequestBadgesComposer);
+        this._composers.set(OutgoingHeader.USER_BADGES_CURRENT_UPDATE, SetActivatedBadgesComposer);
 
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);

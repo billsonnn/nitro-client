@@ -77,8 +77,7 @@ export class InventoryFurnitureService implements OnDestroy
                 new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this)),
                 new BotInventoryMessageEvent(this.onBotInventoryMessageEvent.bind(this)),
                 new BotRemovedFromInventoryEvent(this.onBotRemovedFromInventoryEvent.bind(this)),
-                new BotAddedToInventoryEvent(this.onBotAddedToInventoryEvent.bind(this)),
-                new _Str_5147(this.onBadgesListEvent.bind(this)),
+                new BotAddedToInventoryEvent(this.onBotAddedToInventoryEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -193,91 +192,6 @@ export class InventoryFurnitureService implements OnDestroy
 
         this._ngZone.run(() => this._botsFragments.remove(parser.itemId));
 
-    }
-
-    private onBadgesListEvent(event: _Str_5147): void
-    {
-        if(!event) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        const local6 = parser._Str_21415();
-        const local7 = parser._Str_23681();
-        for(const badgeId of local6)
-        {
-            const isWearingBadge = local7.indexOf(badgeId) > -1;
-            const local9 = parser._Str_17775(badgeId);
-            this.updateBadge(badgeId, isWearingBadge, local9);
-        }
-    }
-
-
-    private _badgeIds: AdvancedMap<string, number> = new AdvancedMap<string, number>();
-
-    public get badgeIds(): AdvancedMap<string, number>
-    {
-        return this._badgeIds;
-    }
-    private _badges: Badge[] = [];
-    private _badgesInUse: Badge[] = [];
-    private updateBadge(k: string, arg2: boolean, arg3: number = 0): void
-    {
-        if(arg3 > 0)
-        {
-            this._badgeIds.add(k, arg3);
-        }
-
-        const local4 = this._Str_19103(k);
-        if(local4 != null)
-        {
-            if(local4._Str_3222 != arg2)
-            {
-                this._Str_17363(local4);
-            }
-            else
-            {
-                this._Str_16521(local4);
-            }
-        }
-        else
-        {
-            //
-
-        }
-    }
-
-    private _Str_16521(k: Badge): void
-    {
-        let local2 = 0;
-        while(local2 < this._badgesInUse.length)
-        {
-            if(this._badgesInUse[local2] == k)
-            {
-                this._badgesInUse.splice(local2, 1);
-                k._Str_3222 = false;
-                return;
-            }
-            local2++;
-        }
-    }
-
-    private _Str_17363(k: Badge): void
-    {
-        this._badgesInUse.push(k);
-        k._Str_3222 = true;
-    }
-
-    // get badge by name
-    private _Str_19103(k: string)
-    {
-        for(const badge of this._badges)
-        {
-            if(badge.badgeId === k) return badge;
-        }
-
-        return null;
     }
 
     private onBotAddedToInventoryEvent(event: BotAddedToInventoryEvent): void
