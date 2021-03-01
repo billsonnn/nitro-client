@@ -5,9 +5,9 @@ export class UniqueNumberPipe implements PipeTransform
 {
     public transform(number: number): string
     {
-        const numbers = number.toString().split("");
+        const numbers = number.toString().split('');
 
-        let result = "";
+        let result = '';
 
         for(let i = 0; i < numbers.length; i++)
         {
