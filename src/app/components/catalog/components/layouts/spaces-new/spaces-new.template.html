@@ -11,7 +11,7 @@
             <button type="button" class="btn btn-primary btn-sm" [ngClass]="{ 'active': (activeGroupIndex === 2) }" (click)="switchCategory('landscape')">{{ ('catalog.spaces.tab.views') | translate }}</button>
         </div>
     </div>
-    <perfect-scrollbar class="grid-container w-100" style="min-height:156px;max-height:156px;height:156px;">
+    <perfect-scrollbar class="grid-container w-100" style="min-height:209px;max-height:209px;height:209px;">
         <div class="grid-items grid-6">
             <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let offer of groups[activeGroupIndex]" (click)="selectOffer(offer)">
                 <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (activeOffer === offer) }" [ngStyle]="{ 'background-image': 'url(' + offerImage(offer) + ')' }">

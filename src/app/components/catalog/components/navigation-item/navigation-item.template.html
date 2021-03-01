@@ -1,10 +1,10 @@
 <div class="nav-item">
-    <li class="d-flex list-group-item align-items-center" [ngClass]="{ 'active': isActive }" (click)="selectPage()">
+    <li class="d-flex list-group-item align-items-center bg-secondary rounded mb-1" [ngClass]="{ 'bg-dark': isActive }" (click)="selectPage()">
         <div class="d-flex flex-grow-1">
             <div class="icon-container">
-                <img class="icon" [src]="iconUrl" image-placeholder />
+                <img class="icon" [src]="iconUrl" />
             </div>
-            <p class="flex-grow-1 mb-0">{{ catalogPage.localization }}</p>
+            <p class="flex-grow-1 mb-0 w-100">{{ catalogPage.localization }}</p>
         </div>
         <i *ngIf="!isInSearchView && catalogPage.children && catalogPage.children.length" class="fas" [ngClass]="{ 'fa-sort-down': !isToggled, 'fa-sort-up': isToggled }"></i>
     </li>

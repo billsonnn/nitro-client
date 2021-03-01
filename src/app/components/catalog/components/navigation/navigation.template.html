@@ -4,13 +4,8 @@
                class="form-control form-control-sm bg-secondary rounded border-0 shadow-none text-white"
                [formControl]="searchControl"/>
         <i *ngIf="searchControl.value" (click)="clearResults()" class="d-flex justify-content-center align-items-center mr-2 fas fa-times-circle"></i>
-
-
     </div>
     <perfect-scrollbar class="bg-secondary rounded" style="min-height:450px;max-height:450px;height:450px;">
-        <nitro-catalog-navigation-set-component *ngIf="!searchResults"
-                                                [catalogPage]="catalogPage"></nitro-catalog-navigation-set-component>
-        <nitro-catalog-navigation-set-component *ngIf="searchResults"
-                                                [catalogPage]="searchResults"></nitro-catalog-navigation-set-component>
+        <nitro-catalog-navigation-set-component [catalogPage]="searchResults || catalogPage"></nitro-catalog-navigation-set-component>
     </perfect-scrollbar>
 </div>
