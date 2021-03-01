@@ -134,6 +134,7 @@ export class OutgoingHeader
     public static ROOM_RIGHTS_REMOVE_OWN         = 3182;
     public static ROOM_SETTINGS                  = 3129;
     public static ROOM_SETTINGS_SAVE             = 1969;
+    public static ROOM_STAFF_PICK                = 1918;
     public static SECURITY_MACHINE               = 2490;
     public static SECURITY_TICKET                = 2419;
     public static TRADE                          = 1481;

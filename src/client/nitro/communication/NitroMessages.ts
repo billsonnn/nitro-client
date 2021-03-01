@@ -258,6 +258,7 @@ import { RoomGiveRightsComposer } from './messages/outgoing/room/action/RoomGive
 import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
+import { RoomStaffPickComposer } from './messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnbanUserComposer } from './messages/outgoing/room/action/RoomUnbanUserComposer';
 import { RoomBannedUsersComposer } from './messages/outgoing/room/data/RoomBannedUsersComposer';
@@ -731,6 +732,7 @@ export class NitroMessages implements IMessageConfiguration
 
         this._composers.set(OutgoingHeader.ROOM_LIKE, RoomLikeRoomComposer);
         this._composers.set(OutgoingHeader.ROOM_DELETE, RoomDeleteComposer);
+        this._composers.set(OutgoingHeader.ROOM_STAFF_PICK, RoomStaffPickComposer);
 
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
