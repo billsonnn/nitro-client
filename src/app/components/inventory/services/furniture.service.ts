@@ -21,6 +21,17 @@ import { GroupItem } from '../items/GroupItem';
 import { IFurnitureItem } from '../items/IFurnitureItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
+import { GetBotInventoryComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/bots/GetBotInventoryComposer';
+import { BotInventoryMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotInventoryMessageEvent';
+import { BotData } from '../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
+import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+import { RoomObjectType } from '../../../../client/nitro/room/object/RoomObjectType';
+import { BotRemovedFromInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
+import { BotAddedToInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotAddedToInventoryEvent';
+import { RequestBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { _Str_5147 } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/_Str_5147';
+import { Badge } from '../models/badge';
+import { isWarningEnabled } from '@angular/cli/utilities/config';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
@@ -31,6 +42,7 @@ export class InventoryFurnitureService implements OnDestroy
 
     private _messages: IMessageEvent[]                                  = [];
     private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
+    private _botsFragments: AdvancedMap<number, BotData>                = null;
     private _groupItems: GroupItem[]                                    = [];
     private _itemIdInFurniPlacing: number                               = -1;
     private _isObjectMoverRequested: boolean                            = false;
@@ -62,7 +74,10 @@ export class InventoryFurnitureService implements OnDestroy
                 new FurnitureListEvent(this.onFurnitureListEvent.bind(this)),
                 new FurnitureListInvalidateEvent(this.onFurnitureListInvalidateEvent.bind(this)),
                 new FurnitureListRemovedEvent(this.onFurnitureListRemovedEvent.bind(this)),
-                new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this))
+                new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this)),
+                new BotInventoryMessageEvent(this.onBotInventoryMessageEvent.bind(this)),
+                new BotRemovedFromInventoryEvent(this.onBotRemovedFromInventoryEvent.bind(this)),
+                new BotAddedToInventoryEvent(this.onBotAddedToInventoryEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -152,6 +167,47 @@ export class InventoryFurnitureService implements OnDestroy
 
         this._furniMsgFragments = null;
     }
+
+    private onBotInventoryMessageEvent(event: BotInventoryMessageEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._botsFragments = parser.items;
+
+    }
+
+    private onBotRemovedFromInventoryEvent(event: BotRemovedFromInventoryEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._botsFragments) return;
+
+        this._ngZone.run(() => this._botsFragments.remove(parser.itemId));
+
+    }
+
+    private onBotAddedToInventoryEvent(event: BotAddedToInventoryEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!this._botsFragments) this._botsFragments = new AdvancedMap<number, BotData>();
+
+        this._ngZone.run(() => this._botsFragments.add(parser.item.id, parser.item));
+
+    }
+
 
     private onFurnitureListInvalidateEvent(event: FurnitureListInvalidateEvent): void
     {
@@ -554,6 +610,24 @@ export class InventoryFurnitureService implements OnDestroy
         return true;
     }
 
+    public attemptBotPlacement(bot: BotData, flag: boolean = false): boolean
+    {
+
+        if(!bot) return false;
+
+
+        this._inventoryService.hideWindow();
+
+        const session = Nitro.instance.roomSessionManager.getSession(1);
+
+        if(!session) return false;
+        if(!session.isRoomOwner) return false;
+
+        const negativeBotId = (bot.id * -1);
+
+        return Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, negativeBotId, RoomObjectCategory.UNIT, RoomObjectType.RENTABLE_BOT, bot.figure);
+    }
+
     public startRoomObjectPlacementWithoutRequest(item: IFurnitureItem): boolean
     {
         let category    = 0;
@@ -674,6 +748,8 @@ export class InventoryFurnitureService implements OnDestroy
         this._needsUpdate = false;
 
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
+        Nitro.instance.communication.connection.send(new GetBotInventoryComposer());
+        Nitro.instance.communication.connection.send(new RequestBadgesComposer());
     }
 
     private setObjectMoverRequested(flag: boolean)
@@ -706,5 +782,10 @@ export class InventoryFurnitureService implements OnDestroy
     public get isObjectMoverRequested(): boolean
     {
         return this._isObjectMoverRequested;
+    }
+
+    public getBots(): AdvancedMap<number, BotData>
+    {
+        return this._botsFragments;
     }
 }

@@ -184,6 +184,8 @@ export class OutgoingHeader
     public static USER_SETTINGS_OLD_CHAT         = 1262;
     public static USER_SETTINGS_VOLUME           = 1367;
     public static USER_SUBSCRIPTION              = 3166;
+    public static USER_WARDROBE_PAGE             = 2742;
+    public static USER_WARDROBE_SAVE             = 800;
     public static USER_TAGS                      = 17;
     public static USER_VISIT                     = 2970;
     public static WIRED_ACTION_SAVE              = 2281;

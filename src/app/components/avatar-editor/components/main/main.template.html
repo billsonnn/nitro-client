@@ -26,5 +26,6 @@
             </div>
             <button type="button" class="btn btn-sm btn-success" (click)="saveFigure()">{{ ('avatareditor.save') | translate }}</button>
         </div>
+        <div *ngIf="figureData" nitro-avatar-wardrobe-component class="col-12 nitro-avatar-wardrobe-component" [figureData]="figureData"></div>
     </div>
 </div>

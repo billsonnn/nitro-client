@@ -200,6 +200,7 @@ export class IncomingHeader
     public static USER_SANCTION_STATUS             = 3679;
     public static USER_SETTINGS                    = 513;
     public static USER_SUBSCRIPTION                = 954;
+    public static USER_WARDROBE_PAGE               = 3315;
     public static WIRED_ACTION                     = 1434;
     public static WIRED_CONDITION                  = 1108;
     public static WIRED_ERROR                      = 156;
@@ -225,4 +226,6 @@ export class IncomingHeader
     public static USER_EFFECT_LIST_REMOVE          = 2228;
     public static USER_EFFECT_ACTIVATE             = 1959;
     public static CATALOG_CLUB_GIFTS               = 619;
+    public static REDEEM_VOUCHER_ERROR             = 714;
+    public static REDEEM_VOUCHER_OK               = 3336;
 }

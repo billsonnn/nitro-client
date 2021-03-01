@@ -13,7 +13,7 @@ import { FurnitureType } from '../../../../../../client/nitro/session/furniture/
 export class CatalogLayoutDefaultComponent extends CatalogLayout
 {
     public static CODE: string = 'default_3x3';
-    public roomPreviewerVisible: boolean = true;
+
 
     public selectOffer(offer: CatalogPageOfferData): void
     {
@@ -30,41 +30,6 @@ export class CatalogLayoutDefaultComponent extends CatalogLayout
         (this._catalogService.component && this._catalogService.component.selectOffer(offer));
     }
 
-    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
-    {
-        return ((offer && offer.products[0]) || null);
-    }
-
-    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
-    {
-        return (offer.products.length > 1);
-    }
-
-    public offerName(offer: CatalogPageOfferData): string
-    {
-        let key = '';
-
-        const product = this.getFirstProduct(offer);
-
-        if(product)
-        {
-            switch(product.productType)
-            {
-                case ProductTypeEnum.FLOOR:
-                    key = 'roomItem.name.' + product.furniClassId;
-                    break;
-                case ProductTypeEnum.WALL:
-                    key = 'wallItem.name.' + product.furniClassId;
-                    break;
-                case ProductTypeEnum.BADGE:
-                    return offer.localizationId;
-            }
-        }
-
-        if(key === '') return key;
-
-        return Nitro.instance.getLocalization(key);
-    }
 
     public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
     {
