@@ -12,6 +12,7 @@ import { CatalogService } from './services/catalog.service';
 export class CatalogLayout
 {
     public activePage: ICatalogPageParser = null;
+    public roomPreviewerVisible: boolean = true;
 
     constructor(
         protected _catalogService: CatalogService,
@@ -97,4 +98,46 @@ export class CatalogLayout
 
         return '';
     }
+
+    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
+    {
+        return (offer.products.length > 1);
+    }
+
+    public offerName(offer: CatalogPageOfferData): string
+    {
+        let key = '';
+
+        const product = this.getFirstProduct(offer);
+
+        if(product)
+        {
+            switch(product.productType)
+            {
+                case ProductTypeEnum.FLOOR:
+                    key = 'roomItem.name.' + product.furniClassId;
+                    break;
+                case ProductTypeEnum.WALL:
+                    key = 'wallItem.name.' + product.furniClassId;
+                    break;
+                case ProductTypeEnum.BADGE:
+                    return offer.localizationId;
+                case ProductTypeEnum.ROBOT: {
+                    const productData = Nitro.instance.sessionDataManager.getProductData(offer.localizationId);
+                    if(productData) return productData.name;
+                }
+                    break;
+            }
+        }
+
+        if(key === '') return key;
+
+        return Nitro.instance.getLocalization(key);
+    }
+
+    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
+    {
+        return ((offer && offer.products[0]) || null);
+    }
+
 }

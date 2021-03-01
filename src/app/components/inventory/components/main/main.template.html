@@ -5,8 +5,10 @@
     </div>
     <div class="d-flex flex-column p-3">
         <div class="btn-group w-100 mb-3">
-            <button type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
+            <button (click)="showFurniture()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
+            <button (click)="showBots()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': botsVisible }">{{ 'inventory.bots' | translate }}</button>
         </div>
+        <div nitro-inventory-bots-component [visible]="botsVisible" [roomPreviewer]="roomPreviewer"></div>
         <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
         <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
     </div>

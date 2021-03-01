@@ -4,6 +4,7 @@ import { RoomWidgetRentableBotInfostandUpdateEvent } from '../../../events/RoomW
 import { InfoStandRentableBotData } from '../../data/InfoStandRentableBotData';
 import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
+import { RemoveBotFromFlatComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/room/engine/RemoveBotFromFlatComposer';
 
 @Component({
     templateUrl: './rentablebot.template.html'
@@ -28,4 +29,11 @@ export class RoomInfoStandRentableBotComponent extends RoomInfoStandBaseComponen
     {
         return InfoStandType.RENTABLE_BOT;
     }
+
+    public pickup(): void
+    {
+        this.hide();
+        Nitro.instance.communication.connection.send(new RemoveBotFromFlatComposer(this.botData.id));
+    }
+
 }
