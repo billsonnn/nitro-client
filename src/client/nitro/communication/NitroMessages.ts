@@ -172,6 +172,7 @@ import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/Us
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { UserWardrobePageEvent } from './messages/incoming/user/wardrobe/UserWardrobePageEvent';
 import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
 import { CatalogGroupsComposer } from './messages/outgoing/catalog/CatalogGroupsComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
@@ -322,6 +323,8 @@ import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRel
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
+import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
+import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
 import { _Str_5147 } from './messages/incoming/inventory/badges/_Str_5147';
@@ -602,6 +605,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
+
+        // WARDROBE
+        this._events.set(IncomingHeader.USER_WARDROBE_PAGE, UserWardrobePageEvent);
     }
 
     private registerComposers(): void
@@ -829,6 +835,10 @@ export class NitroMessages implements IMessageConfiguration
 
         // SUBSCRIPTION
         this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
+
+        // WARDROBE
+        this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);
+        this._composers.set(OutgoingHeader.USER_WARDROBE_SAVE, UserWardrobeSaveComposer);
     }
 
     public get events(): Map<number, Function>
