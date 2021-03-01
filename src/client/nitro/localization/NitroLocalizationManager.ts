@@ -193,4 +193,39 @@ export class NitroLocalizationManager extends NitroManager implements INitroLoca
 
         existing.set(parameter, value);
     }
+
+    public getBadgeName(key: string): string
+    {
+        const local2 = new BadgeBaseAndLevel(key);
+        const keys = ['badge_name_' + key, 'badge_name_' + local2.base];
+        const local3 = this._Str_2103(this.getExistingKey(keys))
+            .replace('%roman%', this.getRomanNumeral(local2.level));
+
+
+
+        return local3;
+    }
+
+    public getBadgeDesc(key: string): string
+    {
+        return '';
+    }
+
+    private getExistingKey(keys: string[]): string
+    {
+        for(const entry of keys)
+        {
+            const item = this.getValue(entry);
+            if(item != entry) return item;
+        }
+
+        return '';
+    }
+
+    private  _Str_2103(k: string): string
+    {
+        return k.replace('${', '$')
+            .replace('{', '$')
+            .replace('}', '$');
+    }
 }

@@ -134,6 +134,7 @@ export class OutgoingHeader
     public static ROOM_RIGHTS_REMOVE_OWN         = 3182;
     public static ROOM_SETTINGS                  = 3129;
     public static ROOM_SETTINGS_SAVE             = 1969;
+    public static ROOM_STAFF_PICK                = 1918;
     public static SECURITY_MACHINE               = 2490;
     public static SECURITY_TICKET                = 2419;
     public static TRADE                          = 1481;
@@ -184,6 +185,8 @@ export class OutgoingHeader
     public static USER_SETTINGS_OLD_CHAT         = 1262;
     public static USER_SETTINGS_VOLUME           = 1367;
     public static USER_SUBSCRIPTION              = 3166;
+    public static USER_WARDROBE_PAGE             = 2742;
+    public static USER_WARDROBE_SAVE             = 800;
     public static USER_TAGS                      = 17;
     public static USER_VISIT                     = 2970;
     public static WIRED_ACTION_SAVE              = 2281;

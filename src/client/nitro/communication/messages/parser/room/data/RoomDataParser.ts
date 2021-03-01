@@ -41,6 +41,7 @@ export class RoomDataParser
     private _adExpiresIn: number;
     private _allMuted: boolean;
     private _canMute: boolean;
+    private _roomPicker: boolean;
     private _officialRoomPicRef: string;
 
     constructor(wrapper: IMessageDataWrapper)
@@ -80,6 +81,7 @@ export class RoomDataParser
         this._adExpiresIn           = 0;
         this._allMuted              = false;
         this._canMute               = false;
+        this._roomPicker            = false;
         this._officialRoomPicRef    = null;
 
         return true;
@@ -275,5 +277,15 @@ export class RoomDataParser
     public get displayRoomEntryAd(): boolean
     {
         return this._displayAd;
+    }
+
+    public get roomPicker(): boolean
+    {
+        return this._roomPicker;
+    }
+
+    public set roomPicker(k: boolean)
+    {
+        this._roomPicker = k;
     }
 }

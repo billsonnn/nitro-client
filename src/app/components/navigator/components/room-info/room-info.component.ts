@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RoomStaffPickComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { Nitro } from '../../../../../client/nitro/Nitro';
@@ -35,8 +36,7 @@ export class NavigatorRoomInfoComponent
             case 'floor-plan':
                 return;
             case 'staff-pick':
-                return;
-            case 'staff-unpick':
+                this.staffPick();
                 return;
             case 'report':
                 return;
@@ -46,6 +46,15 @@ export class NavigatorRoomInfoComponent
     private openRoomSettings(): void
     {
         Nitro.instance.communication.connection.send(new RoomSettingsComposer(this.roomData.roomId));
+    }
+
+    private staffPick(): void
+    {
+        if(!this.roomData) return;
+
+        this.roomData.roomPicker = !this.roomData.roomPicker;
+
+        Nitro.instance.communication.connection.send(new RoomStaffPickComposer(this.roomData.roomId));
     }
 
     public get data(): NavigatorData
@@ -111,5 +120,12 @@ export class NavigatorRoomInfoComponent
         if(!this.roomData) return false;
 
         return this.roomData.showOwner;
+    }
+
+    public get staffPickVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.roomPicker;
     }
 }
