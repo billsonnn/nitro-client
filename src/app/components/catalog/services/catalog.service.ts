@@ -1,5 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
 import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
 import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
@@ -23,6 +24,7 @@ import { CatalogPurchaseGiftComposer } from '../../../../client/nitro/communicat
 import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { CatalogRequestVipGiftsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 import { CatalogRequestVipOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
+import { CatalogSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogSearchComposer';
 import { CatalogRedeemVoucherComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
 import { CatalogClubGiftsParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
 import { CatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
@@ -30,6 +32,9 @@ import { CatalogClubOfferData } from '../../../../client/nitro/communication/mes
 import { CatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogProductOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { CatalogSearchData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogSearchData';
+import { ICatalogPageData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
+import { ICatalogPageParser } from '../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
@@ -38,6 +43,7 @@ import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
 import { CatalogLayoutGuildCustomFurniComponent } from '../components/layouts/guild-custom-furni/guild-custom-furni.component';
+import { SearchResultsPage } from '../components/layouts/search-results/SearchResultsPage';
 import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-buy.component';
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
@@ -53,10 +59,10 @@ export class CatalogService implements OnDestroy
     private _giftConfiguratorComponent: CatalogCustomizeGiftComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
+    private _activePage: ICatalogPageParser = null;
     private _clubGiftsParser: CatalogClubGiftsParser = null;
-    private _activePage: CatalogPageParser = null;
-    private _activePageData: CatalogPageData = null;
-    private _manuallyCollapsed: CatalogPageData[] = [];
+    private _activePageData: ICatalogPageData = null;
+    private _manuallyCollapsed: ICatalogPageData[] = [];
     private _isLoading: boolean = false;
     private _purse: Purse = new Purse();
     private _clubOffers: CatalogClubOfferData[] = [];
@@ -65,6 +71,9 @@ export class CatalogService implements OnDestroy
     private _loaded: boolean = false;
 
     private _giftWrappingConfiguration: GiftWrappingConfiguration = null;
+
+    private _offersToRoots: AdvancedMap<number, CatalogPageData[]> = null;
+    private _searchResultsPages: CatalogSearchData;
 
     constructor(
         private _settingsService: SettingsService,
@@ -202,6 +211,8 @@ export class CatalogService implements OnDestroy
         {
             this._catalogRoot = parser.root;
 
+            this.setOffersToNodes(this._catalogRoot);
+
             this._isLoading = false;
 
             (this._component && this._component.selectFirstTab());
@@ -246,11 +257,17 @@ export class CatalogService implements OnDestroy
 
     private onCatalogSearchEvent(event: CatalogSearchEvent): void
     {
+        if(!(this._activePage instanceof SearchResultsPage)) return;
+
         if(!event) return;
 
         const parser = event.getParser();
 
         if(!parser) return;
+
+        if(!parser.offer) return;
+
+        this._ngZone.run(() => (this._component && this._component.selectOffer(parser.offer)));
     }
 
     private onCatalogSoldOutEvent(event: CatalogSoldOutEvent): void
@@ -339,7 +356,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogGroupsComposer());
     }
 
-    public requestPage(page: CatalogPageData): void
+    public requestPage(page: ICatalogPageData): void
     {
         if(!page || !this.canSelectPage(page)) return;
 
@@ -357,7 +374,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogPageComposer(pageId, offerId, catalogType));
     }
 
-    public isDescendant(page: CatalogPageData, descendant: CatalogPageData): boolean
+    public isDescendant(page: ICatalogPageData, descendant: ICatalogPageData): boolean
     {
         if(!page || !descendant) return false;
 
@@ -415,7 +432,7 @@ export class CatalogService implements OnDestroy
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
     }
 
-    public purchaseGiftOffer(activePage: CatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
+    public purchaseGiftOffer(activePage: ICatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
     {
         Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift ));
     }
@@ -443,7 +460,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogRedeemVoucherComposer(voucherCode));
     }
 
-    public manuallyCollapsePage(page: CatalogPageData): void
+    public manuallyCollapsePage(page: ICatalogPageData): void
     {
         const index = this._manuallyCollapsed.indexOf(page);
 
@@ -451,7 +468,7 @@ export class CatalogService implements OnDestroy
         else this._manuallyCollapsed.splice(index, 1);
     }
 
-    private canSelectPage(page: CatalogPageData): boolean
+    private canSelectPage(page: ICatalogPageData): boolean
     {
         if(!page || !page.visible) return false;
 
@@ -483,17 +500,17 @@ export class CatalogService implements OnDestroy
         return this._catalogRoot;
     }
 
-    public get activePage(): CatalogPageParser
+    public get activePage(): ICatalogPageParser
     {
         return this._activePage;
     }
 
-    public get activePageData(): CatalogPageData
+    public get activePageData(): ICatalogPageData
     {
         return this._activePageData;
     }
 
-    public get manuallyCollapsed(): CatalogPageData[]
+    public get manuallyCollapsed(): ICatalogPageData[]
     {
         return this._manuallyCollapsed;
     }
@@ -513,6 +530,93 @@ export class CatalogService implements OnDestroy
         return this._giftWrappingConfiguration;
     }
 
+    public getOfferPages(offerId: number): CatalogPageData[]
+    {
+        if(!this._catalogRoot || !this._offersToRoots) return null;
+
+        const pages = this._offersToRoots.getValue(offerId);
+
+        if(!pages || !pages.length) return null;
+
+        const allowedPages: CatalogPageData[] = [];
+
+        for(const page of pages)
+        {
+            if(!page || !page.visible) continue;
+
+            allowedPages.push(page);
+        }
+
+        if(!allowedPages.length) return null;
+
+        return allowedPages;
+    }
+
+    private setOffersToNodes(pageData: CatalogPageData): void
+    {
+        if(!pageData) return;
+
+        if(!this._offersToRoots) this._offersToRoots = new AdvancedMap<number, CatalogPageData[]>();
+
+        if(pageData.offerIds && pageData.offerIds.length)
+        {
+            for(const offerId of pageData.offerIds)
+            {
+                let existing = this._offersToRoots.getValue(offerId);
+
+                if(!existing)
+                {
+                    existing = [];
+
+                    this._offersToRoots.add(offerId, existing);
+                }
+
+                if(existing.indexOf(pageData) >= 0) continue;
+
+                existing.push(pageData);
+            }
+        }
+
+        if(pageData.children && pageData.children.length)
+        {
+            for(const child of pageData.children) (child && this.setOffersToNodes(child));
+        }
+    }
+
+    public setSearchPage(furni: IFurnitureData[]): void
+    {
+        const pages = new AdvancedMap<number, CatalogPageData>();
+
+        for(const furniItem of furni)
+        {
+            const hasOffer      = this.getOfferPages(furniItem.purchaseOfferId);
+            const hasRentOffer  = this.getOfferPages(furniItem.rentOfferId);
+
+            const combinedOfferPages = [hasOffer, hasRentOffer];
+
+            for(const offerSection of combinedOfferPages)
+            {
+                if(offerSection && offerSection.length > 0)
+                {
+                    for(const page of offerSection)
+                    {
+                        if(pages.hasKey(page.pageId)) continue;
+
+                        pages.add(page.pageId, page);
+                    }
+                }
+            }
+        }
+
+        this._searchResultsPages = new CatalogSearchData(pages.getValues());
+        this._activePage = new SearchResultsPage(furni);
+    }
+
+    public requestOfferData(purchaseOfferId: number)
+    {
+        Nitro.instance.communication.connection.send(new CatalogSearchComposer(purchaseOfferId));
+    }
+
     public get clubGiftsParser(): CatalogClubGiftsParser
     {
         return this._clubGiftsParser;
@@ -523,5 +627,16 @@ export class CatalogService implements OnDestroy
         if(!this._purse) return false;
 
         return this._purse.clubDays > 0;
+    }
+
+    public get searchResults(): ICatalogPageData
+    {
+        return this._searchResultsPages;
+    }
+
+    public  clearSearchResults(): void
+    {
+        this._searchResultsPages = null;
+        this.component && this.component.reselectCurrentTab();
     }
 }

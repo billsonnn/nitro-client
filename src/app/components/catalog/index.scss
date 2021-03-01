@@ -2,7 +2,8 @@
     position: absolute;
     width: 600px;
     max-width: 600px;
-    min-height: 570px;
+    min-height: 639px;
+    max-height: 639px;
 
     .grid-container {
 
@@ -27,6 +28,10 @@
 
             .nav-item {
 
+                .list-group {
+                    padding-left: 10px;
+                }
+
                 .list-group-item {
                     padding: 4px 10px;
                     font-weight: 300;
@@ -44,41 +49,6 @@
                         align-items: center;
                         width: 20px;
                         margin-right: 3px;
-                    }
-                }
-
-                .nav-item {
-
-                    .list-group-item {
-                        padding-left: 18px;
-                    }
-
-                    .nav-item {
-
-                        .list-group-item {
-                            padding-left: 26px;
-                        }
-
-                        .nav-item {
-
-                            .list-group-item {
-                                padding-left: 34px;
-                            }
-
-                            .nav-item {
-
-                                .list-group-item {
-                                    padding-left: 42px;
-                                }
-
-                                .nav-item {
-
-                                    .list-group-item {
-                                        padding-left: 50px;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
