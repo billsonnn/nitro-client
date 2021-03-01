@@ -1,14 +1,18 @@
 import { Directive, NgZone } from '@angular/core';
-import { CatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { CatalogProductOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { ICatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
+import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
+import { ProductTypeEnum } from './enums/ProductTypeEnum';
 import { CatalogService } from './services/catalog.service';
 
 @Directive()
 export class CatalogLayout
 {
-    public activePage: CatalogPageParser = null;
+    public activePage: ICatalogPageParser = null;
+    public roomPreviewerVisible: boolean = true;
 
     constructor(
         protected _catalogService: CatalogService,
@@ -17,23 +21,27 @@ export class CatalogLayout
 
     public getText(index: number = 0): string
     {
-        let message = (this.activePage.localization.texts[index] || null);
+        let message = (this.activePage.localization.texts[index] || '');
 
-        message = message.replace(/\r\n|\r|\n/g, '<br />');
+        if(message && message.length) message = message.replace(/\r\n|\r|\n/g, '<br />');
 
-        return message;
+        return (message || '');
     }
 
     public getImage(index: number = 0): string
     {
-        let imageUrl = Nitro.instance.getConfiguration<string>('catalog.asset.image.url');
+        const imageName = this.activePage.localization.images && this.activePage.localization.images[index];
 
-        imageUrl = imageUrl.replace('%name%', this.activePage.localization.images[index]);
+        if(!imageName || !imageName.length) return null;
 
-        return imageUrl;
+        let assetUrl = Nitro.instance.getConfiguration<string>('catalog.asset.image.url');
+
+        assetUrl = assetUrl.replace('%name%', imageName);
+
+        return assetUrl;
     }
 
-    public get headerText(): string
+    protected get headerText(): string
     {
         return (this._catalogService.catalogRoot.localization || null);
     }
@@ -59,4 +67,77 @@ export class CatalogLayout
 
         return url.replace('%type%', type.toString());
     }
+
+    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
+    {
+        if(!product) return null;
+
+        return this._catalogService.getFurnitureDataForProductOffer(product);
+    }
+
+
+    public offerImage(offer: CatalogPageOfferData): string
+    {
+        if(!offer) return '';
+
+        const product = offer.products[0];
+
+        if(!product) return '';
+
+        const furniData = this.getProductFurniData(product);
+
+        if(!furniData) return '';
+
+        switch(product.productType)
+        {
+            case ProductTypeEnum.FLOOR:
+                return this._catalogService.getFurnitureDataIconUrl(furniData);
+            case ProductTypeEnum.WALL:
+                return this._catalogService.getFurnitureDataIconUrl(furniData);
+        }
+
+        return '';
+    }
+
+    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
+    {
+        return (offer.products.length > 1);
+    }
+
+    public offerName(offer: CatalogPageOfferData): string
+    {
+        let key = '';
+
+        const product = this.getFirstProduct(offer);
+
+        if(product)
+        {
+            switch(product.productType)
+            {
+                case ProductTypeEnum.FLOOR:
+                    key = 'roomItem.name.' + product.furniClassId;
+                    break;
+                case ProductTypeEnum.WALL:
+                    key = 'wallItem.name.' + product.furniClassId;
+                    break;
+                case ProductTypeEnum.BADGE:
+                    return offer.localizationId;
+                case ProductTypeEnum.ROBOT: {
+                    const productData = Nitro.instance.sessionDataManager.getProductData(offer.localizationId);
+                    if(productData) return productData.name;
+                }
+                    break;
+            }
+        }
+
+        if(key === '') return key;
+
+        return Nitro.instance.getLocalization(key);
+    }
+
+    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
+    {
+        return ((offer && offer.products[0]) || null);
+    }
+
 }

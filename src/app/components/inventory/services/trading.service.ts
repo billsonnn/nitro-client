@@ -136,8 +136,6 @@ export class InventoryTradingService implements OnDestroy
     {
         if(!event) return;
 
-        console.log(event);
-
         const parser = event.getParser();
 
         if(!parser) return;
@@ -160,13 +158,13 @@ export class InventoryTradingService implements OnDestroy
         switch(type)
         {
             case InventoryTradingComponent.ALERT_SCAM:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.warning.other_not_offering}');
+                this._notificationService.alert('${inventory.trading.warning.other_not_offering}', '${inventory.trading.notification.title}');
                 return;
             case InventoryTradingComponent.ALERT_OTHER_CANCELLED:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.info.closed}');
+                this._notificationService.alert('${inventory.trading.info.closed}', '${inventory.trading.notification.title}');
                 return;
             case InventoryTradingComponent.ALERT_ALREADY_OPEN:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.info.already_open}');
+                this._notificationService.alert('${inventory.trading.info.already_open}', '${inventory.trading.notification.title}');
                 return;
         }
     }
@@ -756,8 +754,6 @@ export class InventoryTradingService implements OnDestroy
                 }
                 break;
         }
-
-        console.log(oldState, this._state);
 
         if(didAssign)
         {

@@ -30,7 +30,7 @@ export class FurnitureExternalImageVisualization extends FurnitureDynamicThumbna
 
         const json = JSON.parse(jsonString);
 
-        let url = json.w;
+        let url = (json.w || '');
 
         url = this._Str_18056(url);
 

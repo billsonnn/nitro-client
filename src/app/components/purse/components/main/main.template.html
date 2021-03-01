@@ -7,8 +7,7 @@
                         {{ currency.value | shortNumber }}</div>
                     <div class="detail-icon bg-secondary" 
                     [ngClass]="{ 'bg-pink' : currency.key == 0, 'bg-warning': currency.key == -1, 'bg-skyBlue': currency.key == 5 }">
-                        <div class="currency-icon"
-                            [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl(currency.key.toString()) + ')' }"></div>
+                        <div class="w-100 h-100" nitro-currency-icon [type]="currency.key"></div>
                     </div>
                 </div>
             </ng-container>
@@ -17,7 +16,7 @@
                     {{ hcDay }}
                 </div>
                 <div class="detail-icon bg-orange">
-                    <div class="currency-icon" [ngStyle]="{ 'background-image': 'url(' + getCurrencyUrl('hc') + ')' }"></div>
+                    <div class="w-100 h-100" nitro-currency-icon [type]="'hc'"></div>
                 </div>
             </div>
         </div>

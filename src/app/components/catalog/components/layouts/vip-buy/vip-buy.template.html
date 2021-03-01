@@ -1,7 +1,7 @@
 <div class="w-100 h-100 nitro-catalog-layout-default-component">
     <div class="row">
         <div class="col-5">
-            <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" />
+            <img *ngIf="!activeOffer && getImage(1)" [src]="getImage(1)" image-placeholder />
         </div>
         <div class="col-7">
             <h6>{{ ('catalog.vip.extend.title') | translate }}</h6>
@@ -16,9 +16,9 @@
                     </div>
                     <div class="d-flex flex-row justify-content-between px-2 py-1">
                         <div class="align-self-center">
-                            <b *ngIf="vipItem.priceCredits">{{ vipItem.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)"></b>
-                            <b *ngIf="vipItem.priceActivityPoints && vipItem.priceCredits"> + {{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>
-                            <b *ngIf="vipItem.priceActivityPoints && !vipItem.priceCredits">{{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)"></b>
+                            <b *ngIf="vipItem.priceCredits">{{ vipItem.priceCredits }} <img class="pl-1" [src]="getCurrencyUrl(-1)" image-placeholder /></b>
+                            <b *ngIf="vipItem.priceActivityPoints && vipItem.priceCredits"> + {{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)" image-placeholder /></b>
+                            <b *ngIf="vipItem.priceActivityPoints && !vipItem.priceCredits">{{ vipItem.priceActivityPoints }} <img class="pl-1" [src]="getCurrencyUrl(vipItem.priceActivityPointsType)" image-placeholder /></b>
                         </div>
                         <div class="d-flex flex-row">
                             <button *ngIf="vipItem.giftable" type="button" class="btn btn-success btn-sm mr-1" (click)="buyVip(vipItem)">{{'catalog.purchase_confirmation.gift' | translate}}</button>

@@ -6,6 +6,7 @@ import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
+import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 
 @Component({
     selector: 'nitro-catalog-confirm-purchase-component',
@@ -20,6 +21,9 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     public offer: CatalogPageOfferData = null;
 
     @Input()
+    public giftOffer: CatalogPageOfferData = null;
+
+    @Input()
     public quantity: number = 1;
 
     @Input()
@@ -27,6 +31,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     @Input()
     public completed: boolean = false;
+
 
     @ViewChild('imageElement')
     public imageElement: ElementRef<HTMLDivElement>;
@@ -84,7 +89,14 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     public purchase(): void
     {
-        this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        if(!this.giftOffer)
+        {
+            this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        }
+        else
+        {
+            this._catalogService.component && this._catalogService.component.makeGiftConfiguratorVisible();
+        }
     }
 
     private completePurchase(): void
@@ -131,4 +143,17 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     {
         return this._imageUrl;
     }
+
+    public getOfferTitle(): string
+    {
+        const localization = this.offer.localizationId;
+
+        const productData = Nitro.instance.sessionDataManager.getProductData(localization);
+        if(productData) return productData.name;
+
+        return localization;
+
+    }
+
+
 }

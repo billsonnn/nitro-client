@@ -1,4 +1,5 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
 import { FigureSetIdsMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
@@ -12,13 +13,16 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
+import { InventoryBadgesComponent } from '../components/badges/badges.component';
 
 @Injectable()
 export class InventoryService implements OnDestroy
 {
     private _messages: IMessageEvent[] = [];
+    private _events: Subject<string> = null;
 
     private _botsController: InventoryBotsComponent = null;
+    private _badgesController: InventoryBadgesComponent = null;
     private _furniController: InventoryFurnitureComponent = null;
     private _controller: InventoryMainComponent = null;
     private _petsController: InventoryPetsComponent = null;
@@ -29,6 +33,7 @@ export class InventoryService implements OnDestroy
     private _unseenCounts: Map<number, number>;
     private _botsVisible: boolean = false;
     private _furnitureVisible: boolean = false;
+    private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;
 
@@ -39,6 +44,7 @@ export class InventoryService implements OnDestroy
         private _settingsService: SettingsService,
         private _ngZone: NgZone)
     {
+        this._events            = new EventEmitter();
         this._unseenTracker     = new UnseenItemTracker(Nitro.instance.communication, this);
         this._unseenCounts      = new Map();
 
@@ -173,6 +179,11 @@ export class InventoryService implements OnDestroy
         return (this._boundFurnitureNames.indexOf(k) > -1);
     }
 
+    public get events(): Subject<string>
+    {
+        return this._events;
+    }
+
     public get botsController(): InventoryBotsComponent
     {
         return this._botsController;
@@ -181,6 +192,11 @@ export class InventoryService implements OnDestroy
     public set botsController(controller: InventoryBotsComponent)
     {
         this._botsController = controller;
+    }
+
+    public set badgesController(controller: InventoryBadgesComponent)
+    {
+        this._badgesController = controller;
     }
 
     public get furniController(): InventoryFurnitureComponent
@@ -258,6 +274,16 @@ export class InventoryService implements OnDestroy
         this._furnitureVisible = flag;
     }
 
+    public get badgesVisible(): boolean
+    {
+        return this._badgesVisible;
+    }
+
+    public set badgesVisible(flag: boolean)
+    {
+        this._badgesVisible = flag;
+    }
+
     public get petsVisible(): boolean
     {
         return this._petsVisible;
@@ -286,5 +312,10 @@ export class InventoryService implements OnDestroy
     public get boundFurnitureNames(): string[]
     {
         return this._boundFurnitureNames;
+    }
+
+    public selectFirstBot(): void
+    {
+        this._botsController && this._botsController.selectFirstBot();
     }
 }

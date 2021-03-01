@@ -3,22 +3,21 @@
         <h6 class="m-0">{{ ('catalog.title') | translate }}</h6>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
-    <div *ngIf="catalogRoot && (catalogRoot.children.length > 0)" class="row px-3 pt-3">
-        <div class="col-12 d-flex">
-            <div class="btn-group w-100">
-                <ng-container *ngFor="let child of catalogRoot.children">
-                    <button type="button" class="btn btn-secondary btn-sm" [ngClass]="{ 'active': (activeTab === child) }" (click)="selectTab(child)">{{ child.localization }}</button>
-                </ng-container>
-            </div>
+    <div *ngIf="catalogRoot && (catalogRoot.children.length > 0)" class="d-flex px-3 pt-3">
+        <div class="btn-group w-100">
+            <ng-container *ngFor="let child of catalogRoot.children">
+                <button type="button" class="btn btn-secondary btn-sm" [ngClass]="{ 'active': (activeTab === child) }" (click)="selectTab(child)">{{ child.localization }}</button>
+            </ng-container>
         </div>
     </div>
-    <div class="row p-3">
+    <div class="row p-3 h-100">
         <div *ngIf="activeTab && (activeTab.children.length > 0)" nitro-catalog-navigation-component class="col-4"></div>
         <div class="col">
             <ng-template #layoutsContainer></ng-template>
         </div>
     </div>
 </div>
-<nitro-catalog-confirm-purchase-component *ngIf="purchaseOffer !== null" [page]="purchaseOfferPage" [offer]="purchaseOffer" [quantity]="purchaseOfferQuantity" [extra]="purchaseOfferExtra" [completed]="purchaseCompleted"></nitro-catalog-confirm-purchase-component>
+<nitro-catalog-confirm-purchase-component *ngIf="(purchaseOffer !== null || giftOffer !== null) && !showGiftConfigurator" [giftOffer]="giftOffer" [page]="purchaseOfferPage" [offer]="purchaseOffer" [quantity]="purchaseOfferQuantity" [extra]="purchaseOfferExtra" [completed]="purchaseCompleted"></nitro-catalog-confirm-purchase-component>
 <nitro-catalog-confirm-vip-subscription-component *ngIf="purchaseVipSubscription !== null" [subscription]="purchaseVipSubscription"></nitro-catalog-confirm-vip-subscription-component>
 <nitro-catalog-confirm-purchase-insufficient-funds *ngIf="showInsufficientFunds"></nitro-catalog-confirm-purchase-insufficient-funds>
+<nitro-catalog-customize-gift-component *ngIf="giftOffer !== null && showGiftConfigurator"></nitro-catalog-customize-gift-component>

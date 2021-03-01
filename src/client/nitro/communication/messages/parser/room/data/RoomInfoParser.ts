@@ -31,15 +31,15 @@ export class RoomInfoParser implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._roomEnter           = wrapper.readBoolean();
-        this._data                = new RoomDataParser(wrapper);
-        this._roomForward         = wrapper.readBoolean();
-        this._staffPick           = wrapper.readBoolean();
-        this._isGroupMember       = wrapper.readBoolean();
-        this.data.allInRoomMuted  = wrapper.readBoolean();
-        this._moderation          = new RoomModerationParser(wrapper);
-        this._data.canMute        =  wrapper.readBoolean();
-        this._chat                = new RoomChatParser(wrapper);
+        this._roomEnter      = wrapper.readBoolean();
+        this._data           = new RoomDataParser(wrapper);
+        this._roomForward    = wrapper.readBoolean();
+        this.data.roomPicker = wrapper.readBoolean();
+        this._isGroupMember  = wrapper.readBoolean();
+        this.data.allInRoomMuted          = wrapper.readBoolean();
+        this._moderation     = new RoomModerationParser(wrapper);
+        this.data.canMute   = wrapper.readBoolean();
+        this._chat           = new RoomChatParser(wrapper);
 
         return true;
     }
@@ -52,11 +52,6 @@ export class RoomInfoParser implements IMessageParser
     public get roomForward(): boolean
     {
         return this._roomForward;
-    }
-
-    public get staffPick(): boolean
-    {
-        return this._staffPick;
     }
 
     public get data(): RoomDataParser

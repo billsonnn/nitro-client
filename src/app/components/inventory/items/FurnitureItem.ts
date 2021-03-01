@@ -89,7 +89,7 @@ export class FurnitureItem implements IFurnitureItem
         this._stuffData = k;
     }
 
-    public get _Str_2794(): number
+    public get extra(): number
     {
         return this._extra;
     }

@@ -78,3 +78,14 @@
 .search-result-item {
     cursor: pointer;
 }
+
+.nitro-avatar-wardrobe-component {
+    .nitro-avatar-image {
+        width: 50px;
+        overflow: hidden;
+
+        img {
+            margin-top: -20px;
+        }
+    }
+}

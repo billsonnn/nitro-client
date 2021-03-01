@@ -1,6 +1,5 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 
-// see _Str_2370
 export class RoomDataParser
 {
     public static THUMBNAIL_BITMASK         = 1;
@@ -13,6 +12,7 @@ export class RoomDataParser
     public static OPEN_STATE                = 0;
     public static DOORBELL_STATE            = 1;
     public static PASSWORD_STATE            = 2;
+    public static INVISIBLE_STATE           = 4;
 
     private _roomId: number;
     private _roomName: string;
@@ -41,6 +41,7 @@ export class RoomDataParser
     private _adExpiresIn: number;
     private _allInRoomMuted: boolean;
     private _canMute: boolean;
+    private _roomPicker: boolean;
     private _officialRoomPicRef: string;
 
     constructor(wrapper: IMessageDataWrapper)
@@ -80,6 +81,7 @@ export class RoomDataParser
         this._adExpiresIn           = 0;
         this._allInRoomMuted        = false;
         this._canMute               = false;
+        this._roomPicker            = false;
         this._officialRoomPicRef    = null;
 
         return true;
@@ -165,6 +167,11 @@ export class RoomDataParser
     public get roomName(): string
     {
         return this._roomName;
+    }
+
+    public set roomName(name: string)
+    {
+        this._roomName = name;
     }
 
     public get ownerId(): number
@@ -270,6 +277,16 @@ export class RoomDataParser
     public get displayRoomEntryAd(): boolean
     {
         return this._displayAd;
+    }
+
+    public get roomPicker(): boolean
+    {
+        return this._roomPicker;
+    }
+
+    public set roomPicker(k: boolean)
+    {
+        this._roomPicker = k;
     }
 
     public get canMute(): boolean
