@@ -28,6 +28,10 @@ import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { RoomObjectType } from '../../../../client/nitro/room/object/RoomObjectType';
 import { BotRemovedFromInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
 import { BotAddedToInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotAddedToInventoryEvent';
+import { RequestBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { _Str_5147 } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/_Str_5147';
+import { Badge } from '../models/badge';
+import { isWarningEnabled } from '@angular/cli/utilities/config';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
@@ -745,6 +749,7 @@ export class InventoryFurnitureService implements OnDestroy
 
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
         Nitro.instance.communication.connection.send(new GetBotInventoryComposer());
+        Nitro.instance.communication.connection.send(new RequestBadgesComposer());
     }
 
     private setObjectMoverRequested(flag: boolean)

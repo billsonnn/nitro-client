@@ -323,6 +323,9 @@ import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currenc
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { _Str_5147 } from './messages/incoming/inventory/badges/_Str_5147';
+import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -561,6 +564,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);
 
         // USER
+
+        // BADGEs
+        this._events.set(IncomingHeader.USER_BADGES, _Str_5147);
 
         // ACCESS
         this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);
@@ -813,6 +819,10 @@ export class NitroMessages implements IMessageConfiguration
 
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);
+
+        // BADGES
+        this._composers.set(OutgoingHeader.USER_BADGES, RequestBadgesComposer);
+        this._composers.set(OutgoingHeader.USER_BADGES_CURRENT_UPDATE, SetActivatedBadgesComposer);
 
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);

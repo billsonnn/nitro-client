@@ -13,6 +13,7 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
+import { InventoryBadgesComponent } from '../components/badges/badges.component';
 
 @Injectable()
 export class InventoryService implements OnDestroy
@@ -21,6 +22,7 @@ export class InventoryService implements OnDestroy
     private _events: Subject<string> = null;
 
     private _botsController: InventoryBotsComponent = null;
+    private _badgesController: InventoryBadgesComponent = null;
     private _furniController: InventoryFurnitureComponent = null;
     private _controller: InventoryMainComponent = null;
     private _petsController: InventoryPetsComponent = null;
@@ -31,6 +33,7 @@ export class InventoryService implements OnDestroy
     private _unseenCounts: Map<number, number>;
     private _botsVisible: boolean = false;
     private _furnitureVisible: boolean = false;
+    private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;
 
@@ -191,6 +194,11 @@ export class InventoryService implements OnDestroy
         this._botsController = controller;
     }
 
+    public set badgesController(controller: InventoryBadgesComponent)
+    {
+        this._badgesController = controller;
+    }
+
     public get furniController(): InventoryFurnitureComponent
     {
         return this._furniController;
@@ -264,6 +272,16 @@ export class InventoryService implements OnDestroy
     public set furnitureVisible(flag: boolean)
     {
         this._furnitureVisible = flag;
+    }
+
+    public get badgesVisible(): boolean
+    {
+        return this._badgesVisible;
+    }
+
+    public set badgesVisible(flag: boolean)
+    {
+        this._badgesVisible = flag;
     }
 
     public get petsVisible(): boolean
