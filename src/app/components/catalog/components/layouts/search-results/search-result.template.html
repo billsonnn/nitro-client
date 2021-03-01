@@ -8,14 +8,13 @@
         <div *ngIf="!roomPreviewerVisible" class="d-flex justify-content-center align-items-center h-100 w-100">
             <img [src]="offerImage(activeOffer)" image-placeholder />
         </div>
-        <div class="d-flex align-items-center bg-secondary rounded mt-2 py-2 px-3 flex-grow-1 w-100" nitro-catalog-purchase-component [activePage]="activePage" [activeOffer]="activeOffer"
-        [quantityEnabled]="activeOffer.bundlePurchaseAllowed"></div>
     </div>
-    <perfect-scrollbar class="grid-container w-100" style="min-height:156px;max-height:156px;height:156px;">
+    <perfect-scrollbar class="grid-container w-100" style="min-height:209px;max-height:209px;height:209px;">
         <div class="grid-items grid-6">
-            <div class="d-flex flex-column item-detail justify-content-center align-items-center" (click)="requestOfferData(offer)" *ngFor="let offer of searchItems">
-                <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"  [ngStyle]="{ 'background-image': 'url(' + searchItemImage(offer) + ')' }"></button>
+            <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let offer of searchItems" (click)="requestOfferData(offer)">
+                <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + searchItemImage(offer) + ')' }"></button>
             </div>
         </div>
     </perfect-scrollbar>
+    <div *ngIf="activeOffer" class="d-flex align-items-center flex-grow-1 w-100 mt-1" nitro-catalog-purchase-component [activePage]="activePage" [activeOffer]="activeOffer" [quantityEnabled]="activeOffer.bundlePurchaseAllowed"></div>
 </div>
