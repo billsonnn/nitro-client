@@ -3,6 +3,7 @@ import { CatalogPageParser } from '../../../../../client/nitro/communication/mes
 import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { IObjectData } from '../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
@@ -15,6 +16,8 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -36,7 +39,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     private _activeTab: CatalogPageData = null;
     private _activeOffer: CatalogPageOfferData = null;
 
-    private _purchaseOfferPage: CatalogPageParser = null;
+    private _purchaseOfferPage: ICatalogPageParser = null;
     private _purchaseOffer: CatalogPageOfferData = null;
     private _purchaseGiftOffer: CatalogPageOfferData = null;
     private _purchaseVipSubscription: CatalogClubOfferData = null;
@@ -112,6 +115,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public hide(): void
     {
         this._settingsService.hideCatalog();
+        this._catalogService.clearSearchResults();
     }
 
     public hidePurchaseConfirmation(): void
@@ -215,25 +219,31 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this.selectFirstPage(tab);
     }
 
-    public selectPage(page: CatalogPageData): void
+    public reselectCurrentTab(): void
+    {
+        this.selectFirstPage(this._activeTab);
+    }
+
+    public selectPage(page: ICatalogPageData): void
     {
         if(!page) return;
 
         this._catalogService.requestPage(page);
     }
 
-    private selectFirstPage(page: CatalogPageData): void
+    private selectFirstPage(page: CatalogPageData, skipChildren: boolean = false): void
     {
         if(!page) return;
 
-        if(page.children.length === 0)
-        {
-            this.selectPage(page);
-        }
-        else
+        if(!skipChildren && page.children.length)
         {
             this.selectPage((page.children && page.children[0]));
+
+            return;
         }
+
+        this.selectPage(page);
+
     }
 
     public selectFirstTab(): void
@@ -259,12 +269,20 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
             const furniData = this._catalogService.getFurnitureDataForProductOffer(product);
 
-            if(!furniData) return;
+            if(!furniData && product.productType !== ProductTypeEnum.ROBOT) return;
 
             this._ngZone.runOutsideAngular(() =>
             {
+
                 switch(product.productType)
                 {
+                    case ProductTypeEnum.ROBOT: {
+                        this._roomPreviewer.updateObjectRoom('default', 'default', 'default');
+                        const figure = Nitro.instance.avatar.getFigureStringWithFigureIds(product.extraParam, 'm', []);
+
+                        this._roomPreviewer.addAvatarIntoRoom(figure, 0);
+                    }
+                        break;
                     case ProductTypeEnum.FLOOR:
                         this._roomPreviewer.updateObjectRoom('default', 'default', 'default');
 
@@ -344,7 +362,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: CatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
+    public confirmPurchase(page: ICatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -403,17 +421,17 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._activeOffer;
     }
 
-    public get activePage(): CatalogPageParser
+    public get activePage(): ICatalogPageParser
     {
         return this._catalogService.activePage;
     }
 
-    public get activePageData(): CatalogPageData
+    public get activePageData(): ICatalogPageData
     {
         return this._catalogService.activePageData;
     }
 
-    public get purchaseOfferPage(): CatalogPageParser
+    public get purchaseOfferPage(): ICatalogPageParser
     {
         return this._purchaseOfferPage;
     }
@@ -466,5 +484,13 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get showInsufficientFunds(): boolean
     {
         return this._showInsufficientFunds;
+    }
+
+    public handleSearchResults(foundFurni: IFurnitureData[])
+    {
+        this._catalogService.setSearchPage(foundFurni);
+
+        this.setupLayout();
+
     }
 }

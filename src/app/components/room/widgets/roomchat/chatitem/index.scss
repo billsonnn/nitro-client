@@ -559,6 +559,14 @@
             border-image-width: 7px 6px 6px 39px;
             border-image-outset: 2px 0px 0px 0px;
 
+            &.type-1 {
+
+                .message {
+                    font-style: unset;
+                    color: inherit;
+                }
+            }
+
             .user-container {
                 display: none;
             }

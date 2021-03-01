@@ -67,6 +67,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
         this._chatModeIdShout   = Nitro.instance.getLocalization('widgets.chatinput.mode.shout');
         this._chatModeIdSpeak   = Nitro.instance.getLocalization('widgets.chatinput.mode.speak');
         this._maxChatLength     = Nitro.instance.getConfiguration<number>('chat.input.maxlength', 100);
+        this.currentStyle       = Nitro.instance.sessionDataManager.chatStyle;
     }
 
     public ngAfterViewInit(): void
@@ -308,7 +309,17 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         if(this.idleTimer) this.resetIdleTimer();
 
-        if(text.length <= this._maxChatLength) this.sendChat(text, chatType, recipientName, this.currentStyle);
+        if(text.length <= this._maxChatLength)
+        {
+            if(this.needsStyleUpdate)
+            {
+                Nitro.instance.sessionDataManager.sendChatStyleUpdate(this.currentStyle);
+
+                this.needsStyleUpdate = false;
+            }
+
+            this.sendChat(text, chatType, recipientName, this.currentStyle);
+        }
 
         this.isTyping = false;
 

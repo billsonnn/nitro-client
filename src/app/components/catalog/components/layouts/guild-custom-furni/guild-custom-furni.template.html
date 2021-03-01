@@ -1,6 +1,6 @@
 <div class="d-flex flex-column w-100 h-100">
     <div *ngIf="!activeOffer" class="d-flex flex-column justify-content-center align-items-center w-100 h-100 mb-2">
-        <img *ngIf="getImage(1)" [src]="getImage(1)" />
+        <img *ngIf="getImage(1)" [src]="getImage(1)" image-placeholder />
     </div>
     <div *ngIf="activeOffer" class="position-relative mb-2">
         <nitro-badge class="position-absolute" style="right: 10px; z-index: 1;" [badge]="selectedGroup.badge" [isGroup]="true"></nitro-badge>

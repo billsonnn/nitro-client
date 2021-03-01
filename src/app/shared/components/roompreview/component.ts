@@ -6,7 +6,7 @@ import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRend
 
 @Component({
     selector: '[nitro-room-preview-component]',
-    template: '<img class="room-preview-image" #previewImage />'
+    template: '<img class="room-preview-image" #previewImage image-placeholder />'
 })
 export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 {

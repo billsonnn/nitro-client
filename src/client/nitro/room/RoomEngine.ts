@@ -852,9 +852,18 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         }
     }
 
+    public isRoomIdPlayingGame(roomId: number): boolean
+    {
+        const roomInstance = this.getRoomInstance(roomId);
+
+        if(!roomInstance) return false;
+
+        return (roomInstance.model.getValue<number>(RoomVariableEnum.IS_PLAYING_GAME) > 0);
+    }
+
     public isPlayingGame(): boolean
     {
-        return this.getRoomInstance(this._activeRoomId).model.getValue<number>(RoomVariableEnum.IS_PLAYING_GAME) > 0;
+        return this.isRoomIdPlayingGame(this._activeRoomId);
     }
 
     public disableUpdate(flag: boolean): void

@@ -136,8 +136,6 @@ export class InventoryTradingService implements OnDestroy
     {
         if(!event) return;
 
-        console.log(event);
-
         const parser = event.getParser();
 
         if(!parser) return;
@@ -756,8 +754,6 @@ export class InventoryTradingService implements OnDestroy
                 }
                 break;
         }
-
-        console.log(oldState, this._state);
 
         if(didAssign)
         {

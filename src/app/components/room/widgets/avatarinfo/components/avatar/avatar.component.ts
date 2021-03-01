@@ -1,34 +1,16 @@
 import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { RoomObjectCategory } from '../../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomWidgetMessage } from '../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetUserActionMessage } from '../../messages/RoomWidgetUserActionMessage';
-import { AvatarContextInfoView } from '../AvatarContextInfoView';
-import { AvatarInfoData } from '../AvatarInfoData';
-import { RoomAvatarInfoComponent } from '../component';
+import { RoomObjectCategory } from '../../../../../../../client/nitro/room/object/RoomObjectCategory';
+import { RoomObjectVariable } from '../../../../../../../client/nitro/room/object/RoomObjectVariable';
+import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
+import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
+import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
+import { AvatarInfoData } from '../../common/AvatarInfoData';
+import { RoomAvatarInfoComponent } from '../main/main.component';
 
 @Component({
     selector: 'nitro-room-avatarinfo-avatar-component',
-    template: `
-    <div #activeView class="nitro-room-avatarinfo-avatar-component context-menu">
-        <div class="card align-items-center">
-            <div class="d-flex card-header align-items-center w-100">{{ userName }}</div>
-            <div class="card-body">
-                <ng-container *ngFor="let entry of menu">
-                    <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush">
-                        <ng-container *ngFor="let item of entry.items">
-                            <ng-container *ngIf="item.visible" [ngSwitch]="item.name">
-                                <li *ngSwitchCase="'respect'" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate:'count':avatarData._Str_3577 }}</li>
-                                <li *ngSwitchDefault (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
-                            </ng-container>
-                        </ng-container>
-                    </ul>
-                </ng-container>
-            </div>
-            <div class="card-pointer"></div>
-        </div>
-    </div>`
+    templateUrl: './avatar.template.html'
 })
 export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
 {

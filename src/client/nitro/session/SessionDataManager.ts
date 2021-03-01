@@ -13,11 +13,13 @@ import { UserNameChangeMessageEvent } from '../communication/messages/incoming/u
 import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
 import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
+import { RoomUnitChatStyleComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
 import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
 import { Nitro } from '../Nitro';
 import { HabboWebTools } from '../utils/HabboWebTools';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
+import { SessionDataPreferencesEvent } from './events/SessionDataPreferencesEvent';
 import { UserNameUpdateEvent } from './events/UserNameUpdateEvent';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
 import { IFurnitureData } from './furniture/IFurnitureData';
@@ -49,6 +51,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _systemShutdown: boolean;
     private _isAuthenticHabbo: boolean;
     private _isRoomCameraFollowDisabled: boolean;
+    private _chatStyle: number;
     private _uiFlags: number;
 
     private _floorItems: Map<number, IFurnitureData>;
@@ -81,6 +84,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemShutdown                = false;
         this._isAuthenticHabbo              = false;
         this._isRoomCameraFollowDisabled    = false;
+        this._chatStyle                     = 0;
         this._uiFlags                       = 0;
 
         this._floorItems                    = new Map();
@@ -274,7 +278,10 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if(!parser) return;
 
         this._isRoomCameraFollowDisabled    = parser.cameraFollow;
+        this._chatStyle                     = parser.chatType;
         this._uiFlags                       = parser.flags;
+
+        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
     }
 
     private onChangeNameUpdateEvent(event: ChangeNameUpdateEvent): void
@@ -479,6 +486,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new RoomUnitChatComposer(text));
     }
 
+    public sendChatStyleUpdate(styleId: number): void
+    {
+        this._chatStyle = styleId;
+
+        this.send(new RoomUnitChatStyleComposer(styleId));
+    }
+
     private send(composer: IMessageComposer<unknown[]>): void
     {
         this._communication.connection.send(composer);
@@ -574,10 +588,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this.securityLevel >= SecurityLevel.MODERATOR;
     }
 
-
     public get isCameraFollowDisabled(): boolean
     {
         return this._isRoomCameraFollowDisabled;
+    }
+
+    public get chatStyle(): number
+    {
+        return this._chatStyle;
     }
 
     public get uiFlags(): number

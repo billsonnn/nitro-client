@@ -416,6 +416,8 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 {
                     this._Str_17481(roomId, event.objectId, category);
 
+                    didMove = false;
+
                     if(category === RoomObjectCategory.UNIT)
                     {
                         if(event.ctrlKey && !event.altKey && !event.shiftKey && (event.objectType === RoomObjectUserType.RENTABLE_BOT))
@@ -433,7 +435,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                             this.processRoomObjectOperation(roomId, event.objectId, category, RoomObjectOperationType.OBJECT_ROTATE_POSITIVE);
                         }
 
-                        didWalk = true;
+                        if(!this._roomEngine.isPlayingGame())
+                        {
+                            didWalk = true;
+                        }
+                        else
+                        {
+                            didMove = true;
+                        }
                     }
 
                     else if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
@@ -456,7 +465,14 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                                 this.processRoomObjectOperation(roomId, event.objectId, category, RoomObjectOperationType.OBJECT_PICKUP);
                             }
 
-                            didWalk = true;
+                            if(!this._roomEngine.isPlayingGame())
+                            {
+                                didWalk = true;
+                            }
+                            else
+                            {
+                                didMove = true;
+                            }
                         }
                     }
 
@@ -465,6 +481,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                         if(didWalk)
                         {
                             this._Str_11142(RoomObjectCategory.ROOM, MouseEventType.MOUSE_CLICK, event.eventId);
+                        }
+
+                        if(didMove)
+                        {
+                            this._Str_11142(RoomObjectCategory.MINIMUM, MouseEventType.MOUSE_CLICK, event.eventId);
                         }
                     }
                 }
@@ -1784,12 +1805,12 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             }
         }
 
-        const _local_7 = this._roomEngine.getRoomObjectSelectionArrow(k);
+        const selectionArrow = this._roomEngine.getRoomObjectSelectionArrow(k);
 
-        if(_local_7 && _local_7.logic)
+        if(selectionArrow && selectionArrow.logic)
         {
-            if(_local_6) _local_7.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.ENABLED));
-            else _local_7.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.DISABLED));
+            if(_local_6 && !this._roomEngine.isPlayingGame()) selectionArrow.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.ENABLED));
+            else selectionArrow.logic.processUpdateMessage(new ObjectVisibilityUpdateMessage(ObjectVisibilityUpdateMessage.DISABLED));
         }
     }
 

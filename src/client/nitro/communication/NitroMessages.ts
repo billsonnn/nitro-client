@@ -2,6 +2,7 @@ import { IMessageConfiguration } from '../../core/communication/messages/IMessag
 import { AvailabilityStatusMessageEvent } from './messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ChangeNameUpdateEvent } from './messages/incoming/avatar/ChangeNameUpdateEvent';
 import { CatalogClubEvent } from './messages/incoming/catalog/CatalogClubEvent';
+import { CatalogClubGiftsEvent } from './messages/incoming/catalog/CatalogClubGiftsEvent';
 import { CatalogGiftConfigurationEvent } from './messages/incoming/catalog/CatalogGiftConfigurationEvent';
 import { CatalogGiftUsernameUnavailableEvent } from './messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
 import { CatalogGroupsEvent } from './messages/incoming/catalog/CatalogGroupsEvent';
@@ -11,6 +12,8 @@ import { CatalogPagesEvent } from './messages/incoming/catalog/CatalogPagesEvent
 import { CatalogPurchaseEvent } from './messages/incoming/catalog/CatalogPurchaseEvent';
 import { CatalogPurchaseFailedEvent } from './messages/incoming/catalog/CatalogPurchaseFailedEvent';
 import { CatalogPurchaseUnavailableEvent } from './messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogRedeemVoucherErrorEvent } from './messages/incoming/catalog/CatalogRedeemVoucherErrorEvent';
+import { CatalogRedeemVoucherOkEvent } from './messages/incoming/catalog/CatalogRedeemVoucherOkEvent';
 import { CatalogSearchEvent } from './messages/incoming/catalog/CatalogSearchEvent';
 import { CatalogSoldOutEvent } from './messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from './messages/incoming/catalog/CatalogUpdatedEvent';
@@ -171,6 +174,7 @@ import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/Us
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
 import { UserSubscriptionEvent } from './messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { UserWardrobePageEvent } from './messages/incoming/user/wardrobe/UserWardrobePageEvent';
 import { RequestAchievementsMessageComposer } from './messages/outgoing/achievements/RequestAchievementsMessageComposer';
 import { CatalogGroupsComposer } from './messages/outgoing/catalog/CatalogGroupsComposer';
 import { CatalogModeComposer } from './messages/outgoing/catalog/CatalogModeComposer';
@@ -178,8 +182,10 @@ import { CatalogPageComposer } from './messages/outgoing/catalog/CatalogPageComp
 import { CatalogPurchaseComposer } from './messages/outgoing/catalog/CatalogPurchaseComposer';
 import { CatalogPurchaseGiftComposer } from './messages/outgoing/catalog/CatalogPurchaseGiftComposer';
 import { CatalogRequestGiftConfigurationComposer } from './messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
+import { CatalogRequestVipGiftsComposer } from './messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
 import { CatalogRequestVipOffersComposer } from './messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogSearchComposer } from './messages/outgoing/catalog/CatalogSearchComposer';
+import { CatalogSelectClubGiftComposer } from './messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 import { RedeemItemClothingComposer } from './messages/outgoing/catalog/RedeemItemClothingComposer';
 import { CatalogRedeemVoucherComposer } from './messages/outgoing/catalog/RedeemVoucherComposer';
 import { ClientPongComposer } from './messages/outgoing/client/ClientPongComposer';
@@ -252,6 +258,7 @@ import { RoomGiveRightsComposer } from './messages/outgoing/room/action/RoomGive
 import { RoomKickUserComposer } from './messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomLikeRoomComposer } from './messages/outgoing/room/action/RoomLikeRoomComposer';
 import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUserComposer';
+import { RoomStaffPickComposer } from './messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnbanUserComposer } from './messages/outgoing/room/action/RoomUnbanUserComposer';
 import { RoomBannedUsersComposer } from './messages/outgoing/room/data/RoomBannedUsersComposer';
@@ -293,6 +300,7 @@ import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelCom
 import { RoomCreateComposer } from './messages/outgoing/room/RoomCreateComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
+import { RoomUnitChatStyleComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
 import { RoomUnitChatWhisperComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
 import { RoomUnitTypingStartComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStartComposer';
 import { RoomUnitTypingStopComposer } from './messages/outgoing/room/unit/chat/RoomUnitTypingStopComposer';
@@ -318,10 +326,12 @@ import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRel
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
+import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
+import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { CatalogRequestVipGiftsComposer } from './messages/outgoing/catalog/CatalogRequestVipGiftsComposer';
-import { CatalogClubGiftsEvent } from './messages/incoming/catalog/CatalogClubGiftsEvent';
-import { CatalogSelectClubGiftComposer } from './messages/outgoing/catalog/CatalogSelectClubGiftComposer';
+import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { _Str_5147 } from './messages/incoming/inventory/badges/_Str_5147';
+import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -360,6 +370,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_CLUB_GIFTS, CatalogClubGiftsEvent);
         this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
         this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
+        this._events.set(IncomingHeader.REDEEM_VOUCHER_ERROR, CatalogRedeemVoucherErrorEvent);
+        this._events.set(IncomingHeader.REDEEM_VOUCHER_OK, CatalogRedeemVoucherOkEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
@@ -561,6 +573,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // USER
 
+        // BADGEs
+        this._events.set(IncomingHeader.USER_BADGES, _Str_5147);
+
         // ACCESS
         this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);
         this._events.set(IncomingHeader.USER_PERMISSIONS, UserPermissionsEvent);
@@ -595,6 +610,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // GAMES
         this._events.set(IncomingHeader.LOAD_GAME_URL, LoadGameUrlEvent);
+
+        // WARDROBE
+        this._events.set(IncomingHeader.USER_WARDROBE_PAGE, UserWardrobePageEvent);
     }
 
     private registerComposers(): void
@@ -714,6 +732,7 @@ export class NitroMessages implements IMessageConfiguration
 
         this._composers.set(OutgoingHeader.ROOM_LIKE, RoomLikeRoomComposer);
         this._composers.set(OutgoingHeader.ROOM_DELETE, RoomDeleteComposer);
+        this._composers.set(OutgoingHeader.ROOM_STAFF_PICK, RoomStaffPickComposer);
 
         // DATA
         this._composers.set(OutgoingHeader.ROOM_INFO, RoomInfoComposer);
@@ -778,6 +797,7 @@ export class NitroMessages implements IMessageConfiguration
         // CHAT
         this._composers.set(OutgoingHeader.UNIT_CHAT, RoomUnitChatComposer);
         this._composers.set(OutgoingHeader.UNIT_CHAT_SHOUT, RoomUnitChatShoutComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_CHAT_STYLE, RoomUnitChatStyleComposer);
         this._composers.set(OutgoingHeader.UNIT_CHAT_WHISPER, RoomUnitChatWhisperComposer);
         this._composers.set(OutgoingHeader.UNIT_TYPING, RoomUnitTypingStartComposer);
         this._composers.set(OutgoingHeader.UNIT_TYPING_STOP, RoomUnitTypingStopComposer);
@@ -812,11 +832,19 @@ export class NitroMessages implements IMessageConfiguration
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);
 
+        // BADGES
+        this._composers.set(OutgoingHeader.USER_BADGES, RequestBadgesComposer);
+        this._composers.set(OutgoingHeader.USER_BADGES_CURRENT_UPDATE, SetActivatedBadgesComposer);
+
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);
 
         // SUBSCRIPTION
         this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
+
+        // WARDROBE
+        this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);
+        this._composers.set(OutgoingHeader.USER_WARDROBE_SAVE, UserWardrobeSaveComposer);
     }
 
     public get events(): Map<number, Function>

@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogService } from '../../services/catalog.service';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: '[nitro-catalog-purchase-component]',
@@ -10,7 +11,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogPurchaseComponent implements OnChanges
 {
     @Input()
-    public activePage: CatalogPageParser = null;
+    public activePage: ICatalogPageParser = null;
 
     @Input()
     public activeOffer: CatalogPageOfferData = null;

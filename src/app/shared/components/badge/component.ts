@@ -4,7 +4,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 @Component({
     selector: 'nitro-badge',
     template: `
-    <img [src]="badgeUrl" />`
+    <img [src]="badgeUrl" image-placeholder />`
 })
 export class BadgeComponent
 {
