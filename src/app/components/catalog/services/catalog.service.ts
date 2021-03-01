@@ -12,6 +12,8 @@ import { CatalogPagesEvent } from '../../../../client/nitro/communication/messag
 import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
 import { CatalogPurchaseFailedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseFailedEvent';
 import { CatalogPurchaseUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogRedeemVoucherErrorEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherErrorEvent';
+import { CatalogRedeemVoucherOkEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherOkEvent';
 import { CatalogSearchEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSearchEvent';
 import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
@@ -112,6 +114,8 @@ export class CatalogService implements OnDestroy
                 new CatalogGiftConfigurationEvent(this.onGiftConfigurationEvent.bind(this)),
                 new CatalogGiftUsernameUnavailableEvent(this.onGiftUsernameUnavailableEvent.bind(this)),
                 new CatalogClubGiftsEvent(this.onCatalogClubGiftsEvent.bind(this)),
+                new CatalogRedeemVoucherErrorEvent(this.onCatalogRedeemVoucherError.bind(this)),
+                new CatalogRedeemVoucherOkEvent(this.onCatalogRedeemVoucherOk.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -335,6 +339,43 @@ export class CatalogService implements OnDestroy
                 this._notificationService.alert('${catalog.alert.published.description}', '${catalog.alert.published.title}');
             }
         });
+    }
+
+    private onCatalogRedeemVoucherError(event: CatalogRedeemVoucherErrorEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._settingsService.catalogVisible)
+            this._notificationService.alert('${catalog.alert.voucherredeem.error.description.' + parser.errorCode + '}', '${catalog.alert.voucherredeem.error.title}');
+    }
+
+    private onCatalogRedeemVoucherOk(event: CatalogRedeemVoucherOkEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(this._settingsService.catalogVisible)
+        {
+            const description = '${catalog.alert.voucherredeem.ok.description}';
+            if(parser.productName !== '')
+            {
+                //TODO: Don't have any use (emulator-side is always empty, but leave this code to use in the future)
+                /*description = 'catalog.alert.voucherredeem.ok.description.furni';
+
+                Nitro.instance.localization.registerParameter(description, 'productName', parser.productName);
+
+                description = '${' + description + '}';*/
+            }
+
+            this._notificationService.alert(description, '${catalog.alert.voucherredeem.ok.title}');
+        }
     }
 
     public setupCatalog(mode: string): void

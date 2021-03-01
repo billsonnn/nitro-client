@@ -12,6 +12,8 @@ import { CatalogPagesEvent } from './messages/incoming/catalog/CatalogPagesEvent
 import { CatalogPurchaseEvent } from './messages/incoming/catalog/CatalogPurchaseEvent';
 import { CatalogPurchaseFailedEvent } from './messages/incoming/catalog/CatalogPurchaseFailedEvent';
 import { CatalogPurchaseUnavailableEvent } from './messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
+import { CatalogRedeemVoucherErrorEvent } from './messages/incoming/catalog/CatalogRedeemVoucherErrorEvent';
+import { CatalogRedeemVoucherOkEvent } from './messages/incoming/catalog/CatalogRedeemVoucherOkEvent';
 import { CatalogSearchEvent } from './messages/incoming/catalog/CatalogSearchEvent';
 import { CatalogSoldOutEvent } from './messages/incoming/catalog/CatalogSoldOutEvent';
 import { CatalogUpdatedEvent } from './messages/incoming/catalog/CatalogUpdatedEvent';
@@ -367,6 +369,8 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.CATALOG_CLUB_GIFTS, CatalogClubGiftsEvent);
         this._events.set(IncomingHeader.GROUP_LIST, CatalogGroupsEvent);
         this._events.set(IncomingHeader.GIFT_CONFIG, CatalogGiftConfigurationEvent);
+        this._events.set(IncomingHeader.REDEEM_VOUCHER_ERROR, CatalogRedeemVoucherErrorEvent);
+        this._events.set(IncomingHeader.REDEEM_VOUCHER_OK, CatalogRedeemVoucherOkEvent);
 
         // CLIENT
         this._events.set(IncomingHeader.CLIENT_PING, ClientPingEvent);
