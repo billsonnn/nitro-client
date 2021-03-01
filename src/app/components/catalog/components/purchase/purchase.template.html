@@ -1,4 +1,4 @@
-<div class="d-flex w-100" [ngClass]="{ 'flex-column h-100 ': vertical, 'justify-content-between': quantityEnabled }">
+<div *ngIf="!activeOffer.products[0].uniqueLimitedItem || activeOffer.products[0].uniqueLimitedItemsLeft > 0" class="d-flex w-100" [ngClass]="{ 'flex-column h-100 ': vertical, 'justify-content-between': quantityEnabled }">
     <div *ngIf="quantityEnabled" class="d-flex flex-column justify-content-end mr-3 quantity-area">
         <p class="mb-1">{{ ('catalog.bundlewidget.quantity') | translate }}</p>
         <div class="d-flex input-group">
@@ -31,4 +31,7 @@
             <button type="button" class="btn btn-secondary btn-sm" (click)="purchase(true)">{{ ('catalog.purchase_confirmation.gift') | translate }}</button>
         </div>
     </div>
+</div>
+<div *ngIf="activeOffer.products[0].uniqueLimitedItem && activeOffer.products[0].uniqueLimitedItemsLeft === 0" class="text-center w-100">
+    <div>{{ ('sold.ltd.not.available') | translate }}</div>
 </div>
