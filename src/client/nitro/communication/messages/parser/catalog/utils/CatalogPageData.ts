@@ -1,6 +1,7 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
+import { ICatalogPageData } from './ICatalogPageData';
 
-export class CatalogPageData
+export class CatalogPageData implements ICatalogPageData
 {
     private _visible: boolean;
     private _icon: number;
