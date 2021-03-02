@@ -1,23 +1,25 @@
 import FloorMapTile from './FloorMapTile';
 
-export default class FloorMapSettings {
+export default class FloorMapSettings
+{
     public heightMap: FloorMapTile[][];
     public heightMapString: string;
     public doorX: number;
     public doorY: number;
     public doorDirection: number;
     public wallHeight: number;
-    public thicknessWall: string;
-    public thicknessFloor: string;
+    public thicknessWall: number;
+    public thicknessFloor: number;
 
-    constructor(){
+    constructor()
+    {
         this.heightMap          = [];
         this.heightMapString    = null;
         this.doorX              = 0;
         this.doorY              = 0;
         this.doorDirection      = 0;
         this.wallHeight         = 1;
-        this.thicknessWall      = '0';
-        this.thicknessFloor     = '0';
+        this.thicknessWall      = 0;
+        this.thicknessFloor     = 0;
     }
 }

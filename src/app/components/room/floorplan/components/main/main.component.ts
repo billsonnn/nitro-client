@@ -29,22 +29,18 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     private _spriteMap: Graphics[][];
     private _blockedTilesMap: boolean[][];
 
-    private _floorMapSettings: FloorMapSettings;
-    private _originalFloorMapSettings: FloorMapSettings;
-
     private _app: Application;
     private _container: Container;
     private _extraX: number;
     private _currentAction: string;
     private _currentHeight: string;
-    private _highestX: number;
-    private _highestY: number;
+
     private _isHolding: boolean;
     private _coloredTilesCount: number;
 
     private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
     private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
-    private _maxFloorLength: number = 64;
+
     private _tileSize: number = 18;
 
     private _roomPreviewer: RoomPreviewer;
@@ -93,14 +89,13 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         this._spriteMap         = [];
         this._blockedTilesMap   = [];
 
-        this._floorMapSettings = new FloorMapSettings();
-        this._originalFloorMapSettings = new FloorMapSettings();
+        this._floorPlanService.clear();
+
 
         this._extraX            = 0;
         this._currentAction     = 'set';
         this._currentHeight     = this._heightScheme[1];
-        this._highestX          = 0;
-        this._highestY          = 0;
+
         this._isHolding         = false;
         this._coloredTilesCount = 0;
 
@@ -126,34 +121,35 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public preview(mapString: string)
     {
-        this.init(mapString, this._blockedTilesMap, this._floorMapSettings.doorX, this._floorMapSettings.doorY, this._floorMapSettings.doorDirection, this._floorMapSettings.thicknessWall, this._floorMapSettings.thicknessFloor);
+        const { doorX, doorY, doorDirection, thicknessWall, thicknessFloor } = this._floorPlanService.floorMapSettings;
+        this.init(mapString, this._blockedTilesMap, doorX, doorY, doorDirection, thicknessWall, thicknessFloor);
     }
 
-    public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: string, thicknessFloor: string)
+    public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
     {
         this._clear();
 
-        this._floorMapSettings.heightMapString   = mapString;
-        this._floorMapSettings.doorX             = doorX;
-        this._floorMapSettings.doorY             = doorY;
-        this._floorMapSettings.doorDirection     = doorDirection;
+        this._floorPlanService.floorMapSettings.heightMapString   = mapString;
+        this._floorPlanService.floorMapSettings.doorX             = doorX;
+        this._floorPlanService.floorMapSettings.doorY             = doorY;
+        this._floorPlanService.floorMapSettings.doorDirection     = doorDirection;
         this._blockedTilesMap                    = blockedTilesMap;
-        this._floorMapSettings.thicknessWall     = thicknessWall.toString();
-        this._floorMapSettings.thicknessFloor    = thicknessFloor.toString();
+        this._floorPlanService.floorMapSettings.thicknessWall     = thicknessWall;
+        this._floorPlanService.floorMapSettings.thicknessFloor    = thicknessFloor;
 
         this._ngZone.run(() =>
         {
-            this._floorMapSettings.doorDirection = doorDirection;
+            this._floorPlanService.floorMapSettings.doorDirection = doorDirection;
         });
 
-        this._floorMapSettings.heightMap = this._readTileMapString(mapString);
+        this._floorPlanService.floorMapSettings.heightMap = this._floorPlanService.readTileMapString(mapString);
 
-        const width = this._tileSize * this._floorMapSettings.heightMap.length + 20;
-        const height = (this._tileSize * this._floorMapSettings.heightMap.length) / 2 + 100;
+        const width = this._tileSize * this._floorPlanService.floorMapSettings.heightMap.length + 20;
+        const height = (this._tileSize * this._floorPlanService.floorMapSettings.heightMap.length) / 2 + 100;
 
-        this._extraX = this._tileSize /2 * this._floorMapSettings.heightMap.length;
+        this._extraX = this._tileSize /2 * this._floorPlanService.floorMapSettings.heightMap.length;
 
-        this._originalFloorMapSettings = this._floorMapSettings;
+        this._floorPlanService.originalMapSettings = this._floorPlanService.floorMapSettings;
 
         this._buildApp(width, height);
         this._renderTileMap();
@@ -220,130 +216,22 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     }
 
-    private _readTileMapString(tileMapString: string): any[]
-    {
-        let roomMapStringSplit = tileMapString.split('\r');
-        const roomMap = [];
-
-        let y = 0, x = 0;
-        while(y < roomMapStringSplit.length)
-        {
-            if(roomMapStringSplit[y].length === 0)
-            {
-                y--;
-                roomMapStringSplit = roomMapStringSplit.splice(y, 1);
-                continue;
-            }
-
-            const originalRow = roomMapStringSplit[y].split('');
-            roomMap[y] = [];
-
-            x = 0;
-            while(x < originalRow.length)
-            {
-                let blocked = false;
-
-                if(this._blockedTilesMap[y] && this._blockedTilesMap[y][x]) blocked = true;
-
-                roomMap[y][x] = new FloorMapTile(originalRow[x], blocked);
-                x++;
-            }
-
-            while(x < this._maxFloorLength)
-            {
-                roomMap[y][x] = new FloorMapTile('x', false);
-                x++;
-            }
-
-            y++;
-        }
-
-        while(y < this._maxFloorLength)
-        {
-            roomMap[y] = [];
-
-            x = 0;
-            while(x < this._maxFloorLength)
-            {
-                roomMap[y][x] = new FloorMapTile('x', false);
-                x++;
-            }
-
-            y++;
-        }
-
-        this._highestY = roomMapStringSplit.length - 1;
-        this._highestX = roomMapStringSplit[this._highestY].length - 1;
-
-        return roomMap;
-    }
-
-    private _generateTileMapString(): string
-    {
-        const highestTile = this._floorMapSettings.heightMap[this._highestY][this._highestX];
-
-        if(highestTile.height === 'x')
-        {
-            this._highestX = -1;
-            this._highestY = -1;
-
-            for(let y = this._maxFloorLength - 1; y >= 0; y--)
-            {
-                if(!this._floorMapSettings.heightMap[y]) continue;
-
-                for(let x = this._maxFloorLength - 1; x >= 0; x--)
-                {
-                    if(!this._floorMapSettings.heightMap[y][x]) continue;
-
-                    const tile = this._floorMapSettings.heightMap[y][x];
-
-                    if(tile.height !== 'x')
-                    {
-                        if(x > this._highestX)
-                            this._highestX = x;
-
-                        if(y > this._highestY)
-                            this._highestY = y;
-                    }
-                }
-            }
-        }
-
-        const rows = [];
-
-        for(let y = 0; y <= this._highestY; y++)
-        {
-            const row = [];
-
-            for(let x = 0; x <= this._highestX; x++)
-            {
-                const tile = this._floorMapSettings.heightMap[y][x];
-
-                row[x] = tile.height;
-            }
-
-            rows[y] = row.join('');
-        }
-
-        return rows.join('\r');
-    }
-
     private _renderTileMap(): void
     {
-        for(let y = 0; y < this._floorMapSettings.heightMap.length; y++)
+        for(let y = 0; y < this._floorPlanService.floorMapSettings.heightMap.length; y++)
         {
             this._spriteMap[y] = [];
 
-            for(let x = 0; x < this._floorMapSettings.heightMap[y].length; x++)
+            for(let x = 0; x < this._floorPlanService.floorMapSettings.heightMap[y].length; x++)
             {
-                const tile = this._floorMapSettings.heightMap[y][x];
+                const tile = this._floorPlanService.floorMapSettings.heightMap[y][x];
 
                 let isDoor = false;
 
-                if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) isDoor = true;
+                if(x === this._floorPlanService.floorMapSettings.doorX && y === this._floorPlanService.floorMapSettings.doorY) isDoor = true;
 
                 const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
-                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y * 1;
+                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y;
 
                 let color = this._colorMap[tile.height];
 
@@ -399,13 +287,16 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     private _setDoor(x: number, y: number): void
     {
-        if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) return;
+        if(x === this._floorPlanService.floorMapSettings.doorX && y === this._floorPlanService.floorMapSettings.doorY) return;
 
-        if(!this._floorMapSettings.heightMap[this._floorMapSettings.doorY] || !this._spriteMap[this._floorMapSettings.doorY] || !this._floorMapSettings.heightMap[y] || !this._spriteMap[y]) return;
+        if(!this._floorPlanService.floorMapSettings.heightMap[this._floorPlanService.floorMapSettings.doorY] ||
+            !this._spriteMap[this._floorPlanService.floorMapSettings.doorY] ||
+            !this._floorPlanService.floorMapSettings.heightMap[y] ||
+            !this._spriteMap[y]) return;
 
-        const tile = this._floorMapSettings.heightMap[this._floorMapSettings.doorY][this._floorMapSettings.doorX];
-        const sprite = this._spriteMap[this._floorMapSettings.doorY][this._floorMapSettings.doorX];
-        const futureTile = this._floorMapSettings.heightMap[y][x];
+        const tile = this._floorPlanService.floorMapSettings.heightMap[this._floorPlanService.floorMapSettings.doorY][this._floorPlanService.floorMapSettings.doorX];
+        const sprite = this._floorPlanService.floorMapSettings[this._floorPlanService.floorMapSettings.doorY][this._floorPlanService.floorMapSettings.doorX];
+        const futureTile = this._floorPlanService.floorMapSettings.heightMap[y][x];
         const futureSprite = this._spriteMap[y][x];
 
         if(!tile || !sprite || !futureTile || !futureSprite) return;
@@ -422,13 +313,13 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         }
 
         futureSprite.tint = 0xffffff;
-        this._floorMapSettings.doorX = x;
-        this._floorMapSettings.doorY = y;
+        this._floorPlanService.floorMapSettings.doorX = x;
+        this._floorPlanService.floorMapSettings.doorY = y;
     }
 
     private _handleTileClick(x: number, y: number): void
     {
-        const tile = this._floorMapSettings.heightMap[y][x];
+        const tile = this._floorPlanService.floorMapSettings.heightMap[y][x];
         const heightIndex = this._heightScheme.indexOf(tile.height);
 
         if(this._currentAction === 'door')
@@ -453,9 +344,9 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
         if(futureHeightIndex > 0)
         {
-            if(x > this._highestX) this._highestX = x;
+            if(x > this._floorPlanService.highestX) this._floorPlanService.highestX = x;
 
-            if(y > this._highestY) this._highestY = y;
+            if(y > this._floorPlanService.highestY) this._floorPlanService.highestY = y;
         }
 
         const newHeight = this._heightScheme[futureHeightIndex];
@@ -464,7 +355,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
         if(newHeight === 'x' && tile.blocked) return;
 
-        this._floorMapSettings.heightMap[y][x].height = newHeight;
+        this._floorPlanService.floorMapSettings.heightMap[y][x].height = newHeight;
 
         this._ngZone.run(() =>
         {
@@ -480,7 +371,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
         let isDoor = false;
 
-        if(x === this._floorMapSettings.doorX && y === this._floorMapSettings.doorY) isDoor = true;
+        if(x === this._floorPlanService.floorMapSettings.doorX && y === this._floorPlanService.floorMapSettings.doorY) isDoor = true;
 
         if(!isDoor)
             this._spriteMap[y][x].tint = this._colorMap[newHeight];
@@ -504,9 +395,9 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public save(): void
     {
-        this._floorMapSettings.heightMapString = this._generateTileMapString();
+        this._floorPlanService.floorMapSettings.heightMapString = this._floorPlanService.generateTileMapString();
 
-        this._floorPlanService.save(this._floorMapSettings);
+        this._floorPlanService.save(this._floorPlanService.floorMapSettings);
     }
 
     public decrementHeight(): void
@@ -529,39 +420,39 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public decrementDoorDirection(): void
     {
-        if(this._floorMapSettings.doorDirection === 0)
-            this._floorMapSettings.doorDirection = 7;
+        if(this._floorPlanService.floorMapSettings.doorDirection === 0)
+            this._floorPlanService.floorMapSettings.doorDirection = 7;
         else
-            this._floorMapSettings.doorDirection--;
+            this._floorPlanService.floorMapSettings.doorDirection--;
     }
 
     public incrementDoorDirection(): void
     {
-        if(this._floorMapSettings.doorDirection === 7)
-            this._floorMapSettings.doorDirection = 0;
+        if(this._floorPlanService.floorMapSettings.doorDirection === 7)
+            this._floorPlanService.floorMapSettings.doorDirection = 0;
         else
-            this._floorMapSettings.doorDirection++;
+            this._floorPlanService.floorMapSettings.doorDirection++;
     }
 
     public decrementWallheight(): void
     {
-        if(this._floorMapSettings.wallHeight === 1)
-            this._floorMapSettings.wallHeight = 16;
+        if(this._floorPlanService.floorMapSettings.wallHeight === 1)
+            this._floorPlanService.floorMapSettings.wallHeight = 16;
         else
-            this._floorMapSettings.wallHeight--;
+            this._floorPlanService.floorMapSettings.wallHeight--;
     }
 
     public incrementWallheight(): void
     {
-        if(this._floorMapSettings.wallHeight === 16)
-            this._floorMapSettings.wallHeight = 1;
+        if(this._floorPlanService.floorMapSettings.wallHeight === 16)
+            this._floorPlanService.floorMapSettings.wallHeight = 1;
         else
-            this._floorMapSettings.wallHeight++;
+            this._floorPlanService.floorMapSettings.wallHeight++;
     }
 
     public openImportExport(): void
     {
-        this._floorMapSettings.heightMapString = this._generateTileMapString();
+        this._floorPlanService.floorMapSettings.heightMapString = this._floorPlanService.generateTileMapString();
 
         let modal = this._importExportModal;
 
@@ -627,7 +518,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public get maxTilesCount(): number
     {
-        return this._maxFloorLength*this._maxFloorLength;
+        return this._floorPlanService.maxTilesCount;
     }
 
     public get roomPreviewer(): RoomPreviewer
@@ -637,36 +528,35 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public get currentModel(): string
     {
-        return this._floorMapSettings.heightMapString;
+        return this._floorPlanService.floorMapSettings.heightMapString;
     }
 
     public get doorDirection(): number
     {
-        return this._floorMapSettings.doorDirection;
+        return this._floorPlanService.floorMapSettings.doorDirection;
     }
 
     public get wallHeight(): number
     {
-        return this._floorMapSettings.wallHeight;
+        return this._floorPlanService.floorMapSettings.wallHeight;
     }
 
-    public get thicknessWall(): string
+    public get thicknessWall(): number
     {
-        return this._floorMapSettings.thicknessWall;
+        return this._floorPlanService.floorMapSettings.thicknessWall;
     }
 
-    public set thicknessWall(tickness: string)
+    public set thicknessWall(tickness: number)
     {
-        this._floorMapSettings.thicknessWall = tickness;
+        this._floorPlanService.floorMapSettings.thicknessWall = tickness;
+    }
+    public get thicknessFloor(): number
+    {
+        return this._floorPlanService.floorMapSettings.thicknessFloor;
     }
 
-    public get thicknessFloor(): string
+    public set thicknessFloor(tickness: number)
     {
-        return this._floorMapSettings.thicknessFloor;
-    }
-
-    public set thicknessFloor(tickness: string)
-    {
-        this._floorMapSettings.thicknessFloor = tickness;
+        this._floorPlanService.floorMapSettings.thicknessFloor = tickness;
     }
 }
