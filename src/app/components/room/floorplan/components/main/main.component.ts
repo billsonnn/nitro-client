@@ -36,7 +36,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     private _currentHeight: string;
 
     private _isHolding: boolean;
-    private _coloredTilesCount: number;
+
 
     private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
     private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
@@ -97,7 +97,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         this._currentHeight     = this._heightScheme[1];
 
         this._isHolding         = false;
-        this._coloredTilesCount = 0;
+
 
         this._roomPreviewer     = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
         this._importExportModal = null;
@@ -239,7 +239,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
                 {
                     this._ngZone.run(() =>
                     {
-                        this._coloredTilesCount++;
+                        this._floorPlanService.increaseColoredTilesCount();
                     });
                 }
 
@@ -361,11 +361,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         {
             if(newHeight === 'x')
             {
-                this._coloredTilesCount--;
+                this._floorPlanService.decreaseColoredTilesCount();
             }
             else
             {
-                this._coloredTilesCount++;
+                this._floorPlanService.increaseColoredTilesCount();
             }
         });
 
@@ -420,34 +420,22 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public decrementDoorDirection(): void
     {
-        if(this._floorPlanService.floorMapSettings.doorDirection === 0)
-            this._floorPlanService.floorMapSettings.doorDirection = 7;
-        else
-            this._floorPlanService.floorMapSettings.doorDirection--;
+        this._floorPlanService.decrementDoorDirection();
     }
 
     public incrementDoorDirection(): void
     {
-        if(this._floorPlanService.floorMapSettings.doorDirection === 7)
-            this._floorPlanService.floorMapSettings.doorDirection = 0;
-        else
-            this._floorPlanService.floorMapSettings.doorDirection++;
+        this._floorPlanService.incrementDoorDirection();
     }
 
     public decrementWallheight(): void
     {
-        if(this._floorPlanService.floorMapSettings.wallHeight === 1)
-            this._floorPlanService.floorMapSettings.wallHeight = 16;
-        else
-            this._floorPlanService.floorMapSettings.wallHeight--;
+        this._floorPlanService.decrementWallheight();
     }
 
     public incrementWallheight(): void
     {
-        if(this._floorPlanService.floorMapSettings.wallHeight === 16)
-            this._floorPlanService.floorMapSettings.wallHeight = 1;
-        else
-            this._floorPlanService.floorMapSettings.wallHeight++;
+        this._floorPlanService.incrementWallheight();
     }
 
     public openImportExport(): void
@@ -513,7 +501,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public get coloredTilesCount(): number
     {
-        return this._coloredTilesCount;
+        return this._floorPlanService.coloredTilesCount;
     }
 
     public get maxTilesCount(): number

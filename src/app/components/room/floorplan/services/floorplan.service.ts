@@ -29,6 +29,7 @@ export class FloorPlanService implements OnDestroy
     private _blockedTilesMap: boolean[][];
     private _thicknessWall: number;
     private _thicknessFloor: number;
+    private _coloredTilesCount: number;
 
     private _doorSettingsReceived: boolean;
     private _blockedTilesMapReceived: boolean;
@@ -191,6 +192,7 @@ export class FloorPlanService implements OnDestroy
 
         this._highestX          = 0;
         this._highestY          = 0;
+        this._coloredTilesCount = 0;
     }
 
     public generateTileMapString(): string
@@ -364,6 +366,51 @@ export class FloorPlanService implements OnDestroy
     }
 
 
+    public decrementDoorDirection(): void
+    {
+        if(this.floorMapSettings.doorDirection === 0)
+            this.floorMapSettings.doorDirection = 7;
+        else
+            this.floorMapSettings.doorDirection--;
+    }
+
+    public incrementDoorDirection(): void
+    {
+        if(this.floorMapSettings.doorDirection === 7)
+            this.floorMapSettings.doorDirection = 0;
+        else
+            this.floorMapSettings.doorDirection++;
+    }
+
+    public decrementWallheight(): void
+    {
+        if(this.floorMapSettings.wallHeight === 1)
+            this.floorMapSettings.wallHeight = 16;
+        else
+            this.floorMapSettings.wallHeight--;
+    }
+
+    public incrementWallheight(): void
+    {
+        if(this.floorMapSettings.wallHeight === 16)
+            this.floorMapSettings.wallHeight = 1;
+        else
+            this.floorMapSettings.wallHeight++;
+    }
+
+    public increaseColoredTilesCount(): void
+    {
+        this._coloredTilesCount++;
+    }
+    public decreaseColoredTilesCount(): void
+    {
+        this._coloredTilesCount--;
+    }
+
+    public get coloredTilesCount(): number
+    {
+        return this._coloredTilesCount;
+    }
 
 
 
