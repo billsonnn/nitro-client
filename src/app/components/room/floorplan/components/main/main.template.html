@@ -71,7 +71,7 @@
             </div>
         </div>
         <div class="d-flex flex-row justify-content-between w-100">
-            <button class="btn btn-secondary" disabled>{{ ('floor.plan.editor.reload') | translate }}</button>
+            <button class="btn btn-secondary" (click)="revertChanges()" [disabled]="!ableToRevertChanges">{{ ('floor.plan.editor.reload') | translate }}</button>
             <div class="btn-group">
                 <button class="btn btn-primary" (click)="openImportExport()" disabled>{{ ('floor.plan.editor.import.export') | translate }}</button>
                 <button class="btn btn-primary" (click)="livePreview()">Live Preview</button>

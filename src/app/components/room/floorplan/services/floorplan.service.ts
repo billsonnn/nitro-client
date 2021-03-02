@@ -23,9 +23,6 @@ export class FloorPlanService implements OnDestroy
 
 
     private _spriteMap: Graphics[][];
-
-
-
     public component: FloorplanMainComponent;
 
     private _messages: IMessageEvent[];
@@ -53,6 +50,8 @@ export class FloorPlanService implements OnDestroy
     private _currentHeight: string;
     private _extraX: number;
 
+    private _changesMade: boolean;
+
     constructor(
         private _ngZone: NgZone)
     {
@@ -70,6 +69,7 @@ export class FloorPlanService implements OnDestroy
         this._doorSettingsReceived      = false;
         this._blockedTilesMapReceived   = false;
         this._RoomThicknessReceived     = false;
+        this._changesMade               = false;
 
         this.registerMessages();
     }
@@ -209,6 +209,7 @@ export class FloorPlanService implements OnDestroy
         this._spriteMap         = [];
         this._isHolding         = false;
         this._blockedTilesMap   = [];
+        this._changesMade       = false;
 
         this._currentAction = 'set';
         this._currentHeight = this._heightScheme[1];
@@ -339,21 +340,6 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    public unconvertSettingToNumber(value: number): number
-    {
-        switch(value)
-        {
-            case 0:
-                return -2;
-            case 1:
-                return -1;
-            case 3:
-                return 1;
-            default:
-                return 0;
-        }
-    }
-
     public renderTileMap(container: Container): void
     {
         for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
@@ -428,16 +414,14 @@ export class FloorPlanService implements OnDestroy
         const tile = this.floorMapSettings.heightMap[y][x];
         const heightIndex = this._heightScheme.indexOf(tile.height);
 
-        if(this._currentAction === 'door')
-        {
-            this._setDoor(x, y);
-            return;
-        }
 
         let futureHeightIndex = 0;
 
         switch(this._currentAction)
         {
+            case 'door':
+                this._setDoor(x,y,);
+                return;
             case 'up':
                 futureHeightIndex = heightIndex + 1;
                 break;
@@ -471,6 +455,8 @@ export class FloorPlanService implements OnDestroy
 
         this.floorMapSettings.heightMap[y][x].height = newHeight;
 
+        this._changesMade = true;
+
         this._ngZone.run(() =>
         {
             if(newHeight === 'x')
@@ -488,7 +474,13 @@ export class FloorPlanService implements OnDestroy
         if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
 
         if(!isDoor)
-            this._spriteMap[y][x].tint = this._colorMap[newHeight];
+            this.setTint(y,x,newHeight);
+
+    }
+
+    private setTint(y,x, height)
+    {
+        this._spriteMap[y][x].tint = this._colorMap[height];
     }
 
     private _setDoor(x: number, y: number): void
@@ -699,5 +691,16 @@ export class FloorPlanService implements OnDestroy
         if(colorIndex === this._heightScheme.length - 1) return;
 
         this.selectHeight(this._heightScheme[colorIndex + 1]);
+    }
+
+    public get changesMade(): boolean
+    {
+        return this._changesMade;
+    }
+
+    public revertChanges(): void
+    {
+        this._floorMapSettings = this.__originalFloorMapSettings;
+        this.tryEmit();
     }
 }

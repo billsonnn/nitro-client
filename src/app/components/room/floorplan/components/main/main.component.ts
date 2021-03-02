@@ -259,6 +259,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         }
     }
 
+    public revertChanges(): void
+    {
+        this.floorPlanService.revertChanges();
+    }
+
     public toggleEditor(): void
     {
         this.minimize = !this.minimize;
@@ -338,5 +343,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     public set thicknessFloor(tickness: number)
     {
         this.floorPlanService.floorMapSettings.thicknessFloor = tickness;
+    }
+
+    public get ableToRevertChanges(): boolean
+    {
+        return this.floorPlanService.changesMade;
     }
 }
