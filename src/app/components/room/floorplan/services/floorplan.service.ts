@@ -21,6 +21,7 @@ export class FloorPlanService implements OnDestroy
     private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
     private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
 
+
     private _spriteMap: Graphics[][];
 
 
@@ -162,8 +163,8 @@ export class FloorPlanService implements OnDestroy
 
         if(!parser) return;
 
-        this._thicknessFloor            = parser.thicknessFloor;
-        this._thicknessWall             = parser.thicknessWall;
+        this._thicknessFloor            = this.convertSettingnToNumber(parser.thicknessFloor);
+        this._thicknessWall             = this.convertSettingnToNumber(parser.thicknessWall);
         this._RoomThicknessReceived   = true;
 
         this.tryEmit();
@@ -207,6 +208,7 @@ export class FloorPlanService implements OnDestroy
         this._coloredTilesCount = 0;
         this._spriteMap         = [];
         this._isHolding         = false;
+        this._blockedTilesMap   = [];
 
         this._currentAction = 'set';
         this._currentHeight = this._heightScheme[1];
@@ -334,6 +336,21 @@ export class FloorPlanService implements OnDestroy
                 return 3;
             default:
                 return 2;
+        }
+    }
+
+    public unconvertSettingToNumber(value: number): number
+    {
+        switch(value)
+        {
+            case 0:
+                return -2;
+            case 1:
+                return -1;
+            case 3:
+                return 1;
+            default:
+                return 0;
         }
     }
 
@@ -644,5 +661,43 @@ export class FloorPlanService implements OnDestroy
         this._extraX = x;
     }
 
+    public get colorMap(): object
+    {
+        return this._colorMap;
+    }
 
+    public get blockedTilesMap(): boolean[][]
+    {
+        return this._blockedTilesMap;
+    }
+
+    public set blockedTilesMap(tiles: boolean[][])
+    {
+        this._blockedTilesMap = tiles;
+    }
+
+    public decrementHeight(): void
+    {
+        const colorIndex = this._heightScheme.indexOf(this.currentHeight);
+
+        if(colorIndex === 1) return;
+
+        this.selectHeight(this._heightScheme[colorIndex - 1]);
+    }
+
+
+    public selectHeight(heightIndex: string): void
+    {
+        this.currentHeight = heightIndex;
+        this.currentAction = 'set';
+    }
+
+    public incrementHeight(): void
+    {
+        const colorIndex = this._heightScheme.indexOf(this.currentHeight);
+
+        if(colorIndex === this._heightScheme.length - 1) return;
+
+        this.selectHeight(this._heightScheme[colorIndex + 1]);
+    }
 }

@@ -26,48 +26,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public minimize: boolean;
 
-
-    private _blockedTilesMap: boolean[][];
-
     private _app: Application;
     private _container: Container;
-
-
-
-
-    private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
-    private _colorMap: object = {
-        'x': '0x101010',
-        '0': '0x0065ff',
-        '1': '0x0091ff',
-        '2': '0x00bcff',
-        '3': '0x00e8ff',
-        '4': '0x00ffea',
-        '5': '0x00ffbf',
-        '6': '0x00ff93',
-        '7': '0x00ff68',
-        '8': '0x00ff3d',
-        '9': '0x19ff00',
-        'a': '0x44ff00',
-        'b': '0x70ff00',
-        'c': '0x9bff00',
-        'd': '0xf2ff00',
-        'e': '0xffe000',
-        'f': '0xffb500',
-        'g': '0xff8900',
-        'h': '0xff5e00',
-        'i': '0xff3200',
-        'j': '0xff0700',
-        'k': '0xff0023',
-        'l': '0xff007a',
-        'm': '0xff00a5',
-        'n': '0xff00d1',
-        'o': '0xff00fc',
-        'p': '0xd600ff',
-        'q': '0xaa00ff'
-    };
-
-
     private _roomPreviewer: RoomPreviewer;
     private _importExportModal: NgbModalRef;
 
@@ -84,14 +44,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     ngOnInit(): void
     {
-        /*const roomMapString = "xxxxxxxxxxxxx\rxxxxlllcccccx\rxxxx55555555x\rxxxx22222222x\rxxxxl00xxx22x\rxxx0000xxx22x\rxxxx000xxx22x\rxxxx000xxxppx\rxxxx000xxxppp\rxxxx000xxxppp\rxxxx000xxx2px\rxxxx000xxx2px\rxxxxh00xxx22x\rxxxxh00xxx22x\rxxxxxxxxxxxxx\rxxxxxxxxxxxxx";
-
-        this.init(roomMapString, 3, 5);*/
-    }
-
-    ngAfterViewInit(): void
-    {
-
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -112,21 +64,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     private _clear(): void
     {
 
-        this._blockedTilesMap = [];
-
         this.floorPlanService.clear();
-
 
         this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
         this._importExportModal = null;
-        //
-        // if(this._app && this._container)
-        // {
-        //     for(let i = this._container.children.length - 1; i >= 0; i--)
-        //     {
-        //         this._container.removeChild(this._container.children[i]);
-        //     }
-        // }
         this._container = null;
         this._app && this._app.destroy();
         this._app = null;
@@ -140,7 +81,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     public preview(mapString: string)
     {
         const { doorX, doorY, doorDirection, thicknessWall, thicknessFloor } = this.floorPlanService.floorMapSettings;
-        this.init(mapString, this._blockedTilesMap, doorX, doorY, doorDirection, thicknessWall, thicknessFloor);
+        this.init(mapString, this.floorPlanService.blockedTilesMap, doorX, doorY, doorDirection, thicknessWall, thicknessFloor);
     }
 
     public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
@@ -151,7 +92,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         this.floorPlanService.floorMapSettings.doorX = doorX;
         this.floorPlanService.floorMapSettings.doorY = doorY;
         this.floorPlanService.floorMapSettings.doorDirection = doorDirection;
-        this._blockedTilesMap = blockedTilesMap;
+        this.floorPlanService.blockedTilesMap = blockedTilesMap;
         this.floorPlanService.floorMapSettings.thicknessWall = thicknessWall;
         this.floorPlanService.floorMapSettings.thicknessFloor = thicknessFloor;
 
@@ -200,14 +141,12 @@ export class FloorplanMainComponent implements OnInit, OnChanges
             for(let i = 0; i < this.floorplanElement.nativeElement.children.length; i++)
             {
                 console.log('removing at index ' + i);
-                //this._container.removeChild(this._container.children[i]);
                 this.floorplanElement.nativeElement.removeChild(this.floorplanElement.nativeElement.children[i]);
             }
 
-            // if(this.floorplanElement.nativeElement.children.length == 0)
-            // {
+
             this.floorplanElement.nativeElement.append(this._app.view);
-            // }
+
             if(!this._container)
             {
                 this._container = new Container();
@@ -236,9 +175,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     }
 
 
-
-
-
     public changeAction(action: string): void
     {
         this.floorPlanService.currentAction = action;
@@ -264,20 +200,13 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public decrementHeight(): void
     {
-        const colorIndex = this._heightScheme.indexOf(this.floorPlanService.currentHeight);
-
-        if(colorIndex === 1) return;
-
-        this.selectHeight(this._heightScheme[colorIndex - 1]);
+        this.floorPlanService.decrementHeight();
     }
 
     public incrementHeight(): void
     {
-        const colorIndex = this._heightScheme.indexOf(this.floorPlanService.currentHeight);
+        this.floorPlanService.incrementHeight();
 
-        if(colorIndex === this._heightScheme.length - 1) return;
-
-        this.selectHeight(this._heightScheme[colorIndex + 1]);
     }
 
     public decrementDoorDirection(): void
@@ -342,11 +271,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public get colorMap(): object
     {
-        return Object.keys(this._colorMap)
+        return Object.keys(this.floorPlanService.colorMap)
             .filter(key => key !== 'x')
             .reduce((obj, key) =>
             {
-                obj[key] = this._colorMap[key];
+                obj[key] = this.floorPlanService.colorMap[key];
                 return obj;
             }, {});
     }
@@ -398,7 +327,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public set thicknessWall(tickness: number)
     {
-        this.floorPlanService.floorMapSettings.thicknessWall = tickness;
+        this.floorPlanService.floorMapSettings.thicknessWall =tickness;
     }
 
     public get thicknessFloor(): number
