@@ -11,11 +11,18 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import FloorMapSettings from '../common/FloorMapSettings';
 import { FloorplanMainComponent } from '../components/main/main.component';
 import FloorMapTile from '../common/FloorMapTile';
+import { Container, Graphics } from 'pixi.js';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
 {
     private _maxFloorLength: number = 64;
+    private _tileSize: number = 18;
+    private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
+    private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
+
+    private _spriteMap: Graphics[][];
+
 
 
     public component: FloorplanMainComponent;
@@ -40,6 +47,10 @@ export class FloorPlanService implements OnDestroy
 
     private _highestX: number;
     private _highestY: number;
+    private _isHolding: boolean;
+    private _currentAction: string;
+    private _currentHeight: string;
+    private _extraX: number;
 
     constructor(
         private _ngZone: NgZone)
@@ -190,9 +201,15 @@ export class FloorPlanService implements OnDestroy
         this._floorMapSettings = new FloorMapSettings();
         this.__originalFloorMapSettings = new FloorMapSettings();
 
+        this._extraX            = 0;
         this._highestX          = 0;
         this._highestY          = 0;
         this._coloredTilesCount = 0;
+        this._spriteMap         = [];
+        this._isHolding         = false;
+
+        this._currentAction = 'set';
+        this._currentHeight = this._heightScheme[1];
     }
 
     public generateTileMapString(): string
@@ -320,6 +337,176 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
+    public renderTileMap(container: Container): void
+    {
+        for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
+        {
+            this._spriteMap[y] = [];
+
+            for(let x = 0; x < this.floorMapSettings.heightMap[y].length; x++)
+            {
+                const tile = this.floorMapSettings.heightMap[y][x];
+
+                let isDoor = false;
+
+                if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
+
+                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
+                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4 + y;
+
+                let color = this._colorMap[tile.height];
+
+                if(tile.height !== 'x')
+                {
+                    this._ngZone.run(() =>
+                    {
+                        this.increaseColoredTilesCount();
+                    });
+                }
+
+                if(tile.blocked)
+                {
+                    color = '0x435e87';
+                }
+
+                if(isDoor)
+                {
+                    color = '0xffffff';
+                }
+
+                this._spriteMap[y][x] = container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color));
+            }
+        }
+    }
+
+    private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Graphics
+    {
+        const tile = new Graphics();
+
+        tile.beginFill(0xffffff);
+        tile.lineStyle(1, 0x000000, 1, 0);
+        tile.drawRect(0, 0, this._tileSize, this._tileSize);
+        tile.endFill();
+        tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+
+        tile.tint = color;
+        tile.interactive = true;
+
+        tile.on('mousedown', () =>
+        {
+            this._handleTileClick(x, y);
+        });
+
+        tile.on('mouseover', () =>
+        {
+            if(this._isHolding)
+                this._handleTileClick(x, y);
+        });
+
+        return tile;
+    }
+
+    private _handleTileClick(x: number, y: number): void
+    {
+        const tile = this.floorMapSettings.heightMap[y][x];
+        const heightIndex = this._heightScheme.indexOf(tile.height);
+
+        if(this._currentAction === 'door')
+        {
+            this._setDoor(x, y);
+            return;
+        }
+
+        let futureHeightIndex = 0;
+
+        switch(this._currentAction)
+        {
+            case 'up':
+                futureHeightIndex = heightIndex + 1;
+                break;
+            case 'down':
+                futureHeightIndex = heightIndex - 1;
+                break;
+            case 'set':
+                futureHeightIndex = this._heightScheme.indexOf(this._currentHeight);
+                break;
+            case 'unset':
+                futureHeightIndex = 0;
+                break;
+        }
+
+        if(futureHeightIndex === -1) return;
+
+        if(heightIndex === futureHeightIndex) return;
+
+        if(futureHeightIndex > 0)
+        {
+            if(x > this.highestX) this.highestX = x;
+
+            if(y > this.highestY) this.highestY = y;
+        }
+
+        const newHeight = this._heightScheme[futureHeightIndex];
+
+        if(!newHeight) return;
+
+        if(newHeight === 'x' && tile.blocked) return;
+
+        this.floorMapSettings.heightMap[y][x].height = newHeight;
+
+        this._ngZone.run(() =>
+        {
+            if(newHeight === 'x')
+            {
+                this.decreaseColoredTilesCount();
+            }
+            else
+            {
+                this.increaseColoredTilesCount();
+            }
+        });
+
+        let isDoor = false;
+
+        if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
+
+        if(!isDoor)
+            this._spriteMap[y][x].tint = this._colorMap[newHeight];
+    }
+
+    private _setDoor(x: number, y: number): void
+    {
+        if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) return;
+
+        if(!this.floorMapSettings.heightMap[this.floorMapSettings.doorY] ||
+            !this._spriteMap[this.floorMapSettings.doorY] ||
+            !this.floorMapSettings.heightMap[y] ||
+            !this._spriteMap[y]) return;
+
+        const tile = this.floorMapSettings.heightMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
+        const sprite = this.floorMapSettings[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
+        const futureTile = this.floorMapSettings.heightMap[y][x];
+        const futureSprite = this._spriteMap[y][x];
+
+        if(!tile || !sprite || !futureTile || !futureSprite) return;
+
+        if(futureTile.height === 'x') return;
+
+        if(tile.blocked)
+        {
+            sprite.tint = 0x435e87;
+        }
+        else
+        {
+            sprite.tint = this._colorMap[tile.height];
+        }
+
+        futureSprite.tint = 0xffffff;
+        this.floorMapSettings.doorX = x;
+        this.floorMapSettings.doorY = y;
+    }
+
+
     public set floorMapSettings(settings: FloorMapSettings)
     {
         this._floorMapSettings = settings;
@@ -412,7 +599,50 @@ export class FloorPlanService implements OnDestroy
         return this._coloredTilesCount;
     }
 
+    public get isHolding(): boolean
+    {
+        return this._isHolding;
+    }
 
+    public set isHolding(holding: boolean)
+    {
+        this._isHolding = holding;
+    }
+
+    public get tileSize(): number
+    {
+        return this._tileSize;
+    }
+
+    public get currentAction(): string
+    {
+        return this._currentAction;
+    }
+
+    public set currentAction(action: string)
+    {
+        this._currentAction = action;
+    }
+
+    public get currentHeight(): string
+    {
+        return this._currentHeight;
+    }
+
+    public set currentHeight(height: string)
+    {
+        this._currentHeight = height;
+    }
+
+    public get extraX(): number
+    {
+        return this._extraX;
+    }
+
+    public set extraX(x: number)
+    {
+        this._extraX = x;
+    }
 
 
 }
