@@ -133,21 +133,21 @@ export class InventoryService implements OnDestroy
             {
                 let count = 0;
 
-                const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+                const furniCount = this.furniUnseenCount;
 
                 count += furniCount;
 
-                const botCount = this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
+                const botCount = this.botUnseenCount;
 
                 count += botCount;
 
-                const badgeCount = this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
-
-                count += badgeCount;
-
-                const petCount = this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+                const petCount = this.petUnseenCount;
 
                 count += petCount;
+
+                const badgeCount = this.badgeUnseenCount;
+
+                count += badgeCount;
 
                 this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
                 this._unseenCounts.set(UnseenItemCategory.BOT, botCount);
@@ -256,6 +256,26 @@ export class InventoryService implements OnDestroy
     public get roomSession(): IRoomSession
     {
         return this._roomSession;
+    }
+
+    public get furniUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
     }
 
     public get unseenCount(): number

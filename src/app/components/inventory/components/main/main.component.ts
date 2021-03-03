@@ -160,4 +160,24 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     {
         return this._inventoryTradingService;
     }
+
+    public get furniUnseenCount(): number
+    {
+        return this._inventoryService.furniUnseenCount;
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._inventoryService.botUnseenCount;
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._inventoryService.petUnseenCount;
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._inventoryService.badgeUnseenCount;
+    }
 }
