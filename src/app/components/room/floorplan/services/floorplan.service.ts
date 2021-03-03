@@ -291,10 +291,11 @@ export class FloorPlanService implements OnDestroy
             x = 0;
             while(x < originalRow.length)
             {
-                let blocked = false;
-
-                if(this._blockedTilesMap[y] && this._blockedTilesMap[y][x]) blocked = true;
-
+                const blocked = this._blockedTilesMap[y] && this._blockedTilesMap[y][x];
+                if(blocked)
+                {
+                    //  debugger;
+                }
                 roomMap[y][x] = new FloorMapTile(originalRow[x], blocked);
                 x++;
             }
@@ -486,7 +487,35 @@ export class FloorPlanService implements OnDestroy
     {
         this._spriteMap[y][x].tint = this._colorMap[height];
     }
+    public revertChanges(): void
+    {
+        this._floorMapSettings = JSON.parse(JSON.stringify(this.__originalFloorMapSettings));
+        this._spriteMap.forEach((y, index) =>
+        {
+            y.forEach((x, indexX) =>
+            {
+                const floormap = this.floorMapSettings.heightMap[index][indexX];
+                if(index == 1 && indexX ==4 )
+                {
+                //    debugger;
+                }
+                let color = this._colorMap[ floormap.height];
+                if(floormap.blocked)
+                {
 
+                    color = '0x435e87';
+                }
+
+                if(floormap)
+                {
+                    //  color = '0xffffff';
+                }
+                x.tint = color;
+
+
+            });
+        });
+    }
     private _setDoor(x: number, y: number): void
     {
         if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) return;
@@ -532,7 +561,7 @@ export class FloorPlanService implements OnDestroy
 
     public set originalMapSettings(settings: FloorMapSettings)
     {
-        this.__originalFloorMapSettings = settings;
+        this.__originalFloorMapSettings = JSON.parse(JSON.stringify(settings));
     }
 
     public get originalMapSettings(): FloorMapSettings
@@ -702,11 +731,7 @@ export class FloorPlanService implements OnDestroy
         return this._changesMade;
     }
 
-    public revertChanges(): void
-    {
-        this._floorMapSettings = this.__originalFloorMapSettings;
-        this.tryEmit();
-    }
+
 
     public set container(container: Container)
     {
