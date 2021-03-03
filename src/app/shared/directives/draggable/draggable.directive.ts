@@ -57,7 +57,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
         if(this.topCenter)
         {
-            element.style.top = `50px`;
+            element.style.top = '50px';
             element.style.left = `calc(50vw - ${ (element.offsetWidth / 2) }px)`;
         }
 

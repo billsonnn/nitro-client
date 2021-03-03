@@ -2738,7 +2738,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         sprite = Sprite.from(_arg_3);
 
         sprite.name = _arg_2;
-        
+
         sprite.scale.set(scale);
 
         k.addChild(sprite);
@@ -2775,9 +2775,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public _Str_16645(objectId: number, category: number, _arg_3: boolean, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): void
     {
         let type: string                = null;
-        let colorIndex: number          = 0;
+        let colorIndex          = 0;
         let imageResult: ImageResult    = null;
-        let scale: number               = 1;
+        const scale               = 1;
 
         if(_arg_3)
         {
