@@ -159,6 +159,11 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         return this._inventoryService.botsVisible;
     }
 
+    public get petsVisible(): boolean
+    {
+        return this._inventoryService.petsVisible;
+    }
+
     public get furnitureService(): InventoryFurnitureService
     {
         return this._inventoryFurnitureService;

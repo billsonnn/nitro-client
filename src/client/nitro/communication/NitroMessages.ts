@@ -332,6 +332,8 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { RequestPetsComposer } from './messages/outgoing/inventory/pets/RequestPetsComposer';
+import { PetsReceivedMessageEvent } from './messages/incoming/inventory/pets/PetsReceivedMessageEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -613,6 +615,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // WARDROBE
         this._events.set(IncomingHeader.USER_WARDROBE_PAGE, UserWardrobePageEvent);
+
+        // PETS
+        this._events.set(IncomingHeader.USER_PETS, PetsReceivedMessageEvent);
     }
 
     private registerComposers(): void
@@ -835,6 +840,9 @@ export class NitroMessages implements IMessageConfiguration
         // BADGES
         this._composers.set(OutgoingHeader.USER_BADGES, RequestBadgesComposer);
         this._composers.set(OutgoingHeader.USER_BADGES_CURRENT_UPDATE, SetActivatedBadgesComposer);
+
+        // PETS
+        this._composers.set(OutgoingHeader.USER_PETS, RequestPetsComposer);
 
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);

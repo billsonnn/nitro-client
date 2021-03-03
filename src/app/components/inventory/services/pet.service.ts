@@ -16,6 +16,8 @@ import { InventoryMainComponent } from '../components/main/main.component';
 import { BotItem } from '../items/BotItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
+import { RequestPetsComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/pets/RequestPetsComposer';
+import { PetsReceivedMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetsReceivedMessageEvent';
 
 @Injectable()
 export class InventoryPetService implements OnDestroy
@@ -52,9 +54,7 @@ export class InventoryPetService implements OnDestroy
             Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             this._messages = [
-                new BotInventoryMessageEvent(this.onBotInventoryMessageEvent.bind(this)),
-                new BotRemovedFromInventoryEvent(this.onBotRemovedFromInventoryEvent.bind(this)),
-                new BotAddedToInventoryEvent(this.onBotAddedToInventoryEvent.bind(this))
+                new PetsReceivedMessageEvent(this.onPetsReceivedEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -88,7 +88,7 @@ export class InventoryPetService implements OnDestroy
         }
     }
 
-    private onBotInventoryMessageEvent(event: BotInventoryMessageEvent): void
+    private onPetsReceivedEvent(event: PetsReceivedMessageEvent): void
     {
         if(!event) return;
 
@@ -96,43 +96,8 @@ export class InventoryPetService implements OnDestroy
 
         if(!parser) return;
 
-        this._ngZone.run(() =>
-        {
-            for(const botData of parser.items.values()) this.addSinglePetItem(botData);
-
-            this._isInitialized = true;
-
-            if(this._inventoryService.petsController) this._inventoryService.petsController.selectExistingGroupOrDefault();
-        });
+        debugger;
     }
-
-    private onBotRemovedFromInventoryEvent(event: BotRemovedFromInventoryEvent): void
-    {
-        if(!event) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this._ngZone.run(() => this.removeItemById(parser.itemId));
-    }
-
-    private onBotAddedToInventoryEvent(event: BotAddedToInventoryEvent): void
-    {
-        if(!event) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this._ngZone.run(() =>
-        {
-            const botItem = this.addSinglePetItem(parser.item);
-
-            if(botItem) botItem.isUnseen = true;
-        });
-    }
-
     private getAllItemIds(): number[]
     {
         const itemIds: number[] = [];
@@ -183,7 +148,7 @@ export class InventoryPetService implements OnDestroy
         if(this._petIdInPetPlacing === petItem.id)
         {
             this.cancelRoomObjectPlacement();
-            
+
             this._inventoryService.showWindow();
         }
 
@@ -192,7 +157,7 @@ export class InventoryPetService implements OnDestroy
 
     private isPetUnseen(item: BotData): boolean
     {
-        let category = UnseenItemCategory.PET;
+        const category = UnseenItemCategory.PET;
 
         return this._inventoryService.unseenTracker._Str_3613(category, item.id);
     }
@@ -237,7 +202,7 @@ export class InventoryPetService implements OnDestroy
 
     private startRoomObjectPlacement(petData: BotData): void
     {
-        let isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, -(petData.id), RoomObjectCategory.UNIT, RoomObjectType.PET, petData.figure);
+        const isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, -(petData.id), RoomObjectCategory.UNIT, RoomObjectType.PET, petData.figure);
 
         if(isMoving)
         {
@@ -299,7 +264,7 @@ export class InventoryPetService implements OnDestroy
     {
         this._needsUpdate = false;
 
-        Nitro.instance.communication.connection.send(new GetBotInventoryComposer());
+        Nitro.instance.communication.connection.send(new RequestPetsComposer());
     }
 
     private setObjectMoverRequested(flag: boolean)
