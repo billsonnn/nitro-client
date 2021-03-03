@@ -27,6 +27,7 @@ import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
 import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
+import { UniqueNumberPipe } from './pipes/unique-number';
 import { SoundService } from './services/sound.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -79,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        UniqueNumberPipe
     ],
     providers: [
         {
@@ -105,7 +107,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        UniqueNumberPipe
     ]
 })
 export class SharedModule
