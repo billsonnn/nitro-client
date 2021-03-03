@@ -2,7 +2,7 @@
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 import { BotData } from './BotData';
 
-export class BotReceivedMessageParser implements IMessageParser
+export class BotInventoryParser implements IMessageParser
 {
     private _boughtAsGift: boolean;
     private _item: BotData;

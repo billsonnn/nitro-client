@@ -692,7 +692,7 @@
                 height: 130px;
                 background-repeat: no-repeat;
                 background-position: center;
-                transform: scale(0.5);
+                transform: scale(0.5) translateZ(0);
                 overflow: hidden;
             }
         }

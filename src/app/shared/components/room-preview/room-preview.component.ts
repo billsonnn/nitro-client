@@ -1,17 +1,18 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import { DisplayObject } from 'pixi.js';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
 import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRenderingCanvas';
+import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
 
 @Component({
     selector: '[nitro-room-preview-component]',
-    template: '<img class="room-preview-image" #previewImage image-placeholder />'
+    templateUrl: './room-preview.template.html'
 })
-export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
+export class RoomPreviewComponent implements OnDestroy, AfterViewInit
 {
     @ViewChild('previewImage')
-    public previewImage: ElementRef<HTMLImageElement>;
+    public previewImage: ElementRef<HTMLDivElement>;
 
     @Input()
     public roomPreviewer: RoomPreviewer = null;
@@ -34,17 +35,6 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         this.onClick = this.onClick.bind(this);
     }
 
-    public ngOnInit(): void
-    {
-        if(!this.roomPreviewer) return;
-
-        if(this.width === 1) this.width 	= (Math.trunc(this._elementRef.nativeElement.offsetWidth));
-        if(this.height === 1) this.height	= (Math.trunc(this._elementRef.nativeElement.offsetHeight));
-
-        this._elementRef.nativeElement.style.minWidth = (this.width + 'px');
-        this._elementRef.nativeElement.style.minHeight = (this.height + 'px');
-    }
-
     public ngOnDestroy(): void
     {
         this.stop();
@@ -52,8 +42,23 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
 
     public ngAfterViewInit(): void
     {
+        if(!this.roomPreviewer) return;
+
+        if(this.width === 1) this.width 	= (Math.trunc(this.previewImageElement.offsetWidth));
+        if(this.height === 1) this.height	= (Math.trunc(this.previewImageElement.offsetHeight));
+
+        this.previewImageElement.style.minWidth     = (this.width + 'px');
+        this.previewImageElement.style.minHeight    = (this.height + 'px');
+
         if(this.roomPreviewer)
         {
+            let backgroundColor = document.defaultView.getComputedStyle(this.previewImageElement, null)['backgroundColor'];
+
+            backgroundColor = ColorConverter.rgbStringToHex(backgroundColor);
+            backgroundColor = backgroundColor.replace('#', '0x');
+
+            this.roomPreviewer.backgroundColor = parseInt(backgroundColor, 16);
+
             this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
             this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
         }
@@ -99,7 +104,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
             {
                 const imageUrl = Nitro.instance.renderer.extract.base64(this.displayObject);
 
-                this.previewImageElement.src = imageUrl;
+                this.previewImageElement.style.backgroundImage = `url(${ imageUrl })`;
             }
         }
     }
@@ -118,7 +123,7 @@ export class RoomPreviewComponent implements OnInit, OnDestroy, AfterViewInit
         }
     }
 
-    public get previewImageElement(): HTMLImageElement
+    public get previewImageElement(): HTMLDivElement
     {
         return ((this.previewImage && this.previewImage.nativeElement) || null);
     }

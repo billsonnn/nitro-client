@@ -14,12 +14,13 @@ import { AvatarImageComponent } from './components/avatarimage/component';
 import { BadgeComponent } from './components/badge/component';
 import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
-import { RoomPreviewComponent } from './components/roompreview/component';
+import { RoomPreviewComponent } from './components/room-preview/room-preview.component';
 import { AvatarImageDirective } from './directives/avatar-image/avatar-image.directive';
 import { BadgeImageDirective } from './directives/badge-image/badge-image.directive';
 import { BringToTopDirective } from './directives/bringtotop/directive';
 import { DraggableDirective } from './directives/draggable/draggable.directive';
 import { ImagePlaceholderDirective } from './directives/image-placeholder/image-placeholder.directive';
+import { PetImageDirective } from './directives/pet-image/pet-image.directive';
 import { EmojiPipe } from './pipes/emoji.pipe';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
@@ -74,6 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         ImagePlaceholderDirective,
+        PetImageDirective,
         EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,
@@ -101,6 +103,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DraggableDirective,
         BringToTopDirective,
         ImagePlaceholderDirective,
+        PetImageDirective,
         EmojiPipe,
         EscapeHtmlPipe,
         TranslatePipe,

@@ -1,10 +1,9 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
 
-export class _Str_7183 implements IMessageParser
+export class PetRemovedFromInventoryParser implements IMessageParser
 {
-    private _Str_2388: number;
-
+    private _petId: number;
 
     public flush(): boolean
     {
@@ -15,13 +14,13 @@ export class _Str_7183 implements IMessageParser
     {
         if(!wrapper) return false;
 
-        this._Str_2388 = wrapper.readInt();
+        this._petId = wrapper.readInt();
 
         return true;
     }
 
-    public get _Str_2508(): number
+    public get petId(): number
     {
-        return this._Str_2388;
+        return this._petId;
     }
 }
