@@ -63,6 +63,9 @@ import { FurnitureListInvalidateEvent } from './messages/incoming/inventory/furn
 import { FurnitureListRemovedEvent } from './messages/incoming/inventory/furni/FurnitureListRemovedEvent';
 import { FurniturePostItPlacedEvent } from './messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
 import { FurnitureGiftOpenedEvent } from './messages/incoming/inventory/furni/gifts/FurnitureGiftOpenedEvent';
+import { PetAddedToInventoryEvent } from './messages/incoming/inventory/pets/PetAddedToInventoryEvent';
+import { PetInventoryEvent } from './messages/incoming/inventory/pets/PetInventoryEvent';
+import { PetRemovedFromInventory } from './messages/incoming/inventory/pets/PetRemovedFromInventoryEvent';
 import { TradingAcceptEvent } from './messages/incoming/inventory/trading/TradingAcceptEvent';
 import { TradingCloseEvent } from './messages/incoming/inventory/trading/TradingCloseEvent';
 import { TradingCompletedEvent } from './messages/incoming/inventory/trading/TradingCompletedEvent';
@@ -231,6 +234,7 @@ import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
+import { RequestPetsComposer } from './messages/outgoing/inventory/pets/RequestPetsComposer';
 import { TradingAcceptComposer } from './messages/outgoing/inventory/trading/TradingAcceptComposer';
 import { TradingCancelComposer } from './messages/outgoing/inventory/trading/TradingCancelComposer';
 import { TradingCloseComposer } from './messages/outgoing/inventory/trading/TradingCloseComposer';
@@ -332,10 +336,6 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { RequestPetsComposer } from './messages/outgoing/inventory/pets/RequestPetsComposer';
-import { PetsReceivedMessageEvent } from './messages/incoming/inventory/pets/PetsReceivedMessageEvent';
-import { PetRemovedEvent } from './messages/incoming/inventory/pets/PetRemovedEvent';
-import { PetAddedEvent } from './messages/incoming/inventory/pets/PetAddedEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -619,9 +619,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_WARDROBE_PAGE, UserWardrobePageEvent);
 
         // PETS
-        this._events.set(IncomingHeader.USER_PETS, PetsReceivedMessageEvent);
-        this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedEvent);
-        this._events.set(IncomingHeader.USER_PET_ADD, PetAddedEvent);
+        this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
+        this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
+        this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
     }
 
     private registerComposers(): void

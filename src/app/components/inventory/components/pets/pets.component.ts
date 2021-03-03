@@ -3,7 +3,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { NotificationService } from '../../../notification/services/notification.service';
-import { BotItem } from '../../items/BotItem';
+import { PetItem } from '../../items/PetItem';
 import { InventoryService } from '../../services/inventory.service';
 import { InventorySharedComponent } from '../shared/inventory-shared.component';
 
@@ -16,7 +16,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
     @Input()
     public roomPreviewer: RoomPreviewer = null;
 
-    public selectedItem: BotItem = null;
+    public selectedItem: PetItem = null;
     public mouseDown: boolean = false;
 
     constructor(
@@ -74,7 +74,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
 
     public selectFirstPet(): void
     {
-        let pet: BotItem = null;
+        let pet: PetItem = null;
 
         for(const petItem of this.petItems)
         {
@@ -88,7 +88,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
         this.selectPetItem(pet);
     }
 
-    private selectPetItem(petItem: BotItem): void
+    private selectPetItem(petItem: PetItem): void
     {
         if(this.selectedItem === petItem) return;
 
@@ -102,9 +102,9 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
 
             if(this.selectedItem.isUnseen) this.selectedItem.isUnseen = false;
 
-            const botData = this.selectedItem.botData;
+            const petData = this.selectedItem.petData;
 
-            if(!botData) return;
+            if(!petData) return;
 
             this._ngZone.runOutsideAngular(() =>
             {
@@ -120,7 +120,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
 
                     this.roomPreviewer.reset(false);
                     this.roomPreviewer.updateObjectRoom(floorType, wallType, landscapeType);
-                    this.roomPreviewer.addPetIntoRoom(botData.figure);
+                    this.roomPreviewer.addPetIntoRoom(petData.figureData.figuredata);
                 }
             });
         }
@@ -130,7 +130,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
         }
     }
 
-    public onMouseDown(petItem: BotItem): void
+    public onMouseDown(petItem: PetItem): void
     {
         if(!petItem) return;
 
@@ -144,21 +144,21 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
         this.mouseDown = false;
     }
 
-    public onMouseOut(petItem: BotItem): void
+    public onMouseOut(petItem: PetItem): void
     {
         if(!this.mouseDown) return;
 
         if(this.selectedItem !== petItem) return;
 
-        this.attemptBotPlacement();
+        this.attemptPetPlacement();
     }
 
-    public trackByType(index: number, item: BotItem): number
+    public trackByType(index: number, item: PetItem): number
     {
         return item.id;
     }
 
-    public get petItems(): BotItem[]
+    public get petItems(): PetItem[]
     {
         return this._inventoryService.controller.petService.pets;
     }

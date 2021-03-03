@@ -188,6 +188,14 @@ export class InventoryService implements OnDestroy
         return (this._boundFurnitureNames.indexOf(k) > -1);
     }
 
+    public hideAllControllers(): void
+    {
+        this.furnitureVisible = false;
+        this.botsVisible      = false;
+        this.petsVisible      = false;
+        this.badgesVisible    = false;
+    }
+
     public get events(): Subject<string>
     {
         return this._events;

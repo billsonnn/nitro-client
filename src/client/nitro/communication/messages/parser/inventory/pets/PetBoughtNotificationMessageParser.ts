@@ -1,11 +1,11 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { _Str_2848 } from './_Str_2848';
+import { PetData } from './PetData';
 
 export class PetBoughtNotificationMessageParser implements IMessageParser
 {
     private _gift: boolean;
-    private _pet: _Str_2848;
+    private _pet: PetData;
 
     public flush(): boolean
     {
@@ -15,7 +15,7 @@ export class PetBoughtNotificationMessageParser implements IMessageParser
     public parse(k: IMessageDataWrapper): boolean
     {
         this._gift  = k.readBoolean();
-        this._pet   = new _Str_2848(k);
+        this._pet   = new PetData(k);
 
         return true;
     }
@@ -25,7 +25,7 @@ export class PetBoughtNotificationMessageParser implements IMessageParser
         return this._gift;
     }
 
-    public get pet(): _Str_2848
+    public get pet(): PetData
     {
         return this._pet;
     }
