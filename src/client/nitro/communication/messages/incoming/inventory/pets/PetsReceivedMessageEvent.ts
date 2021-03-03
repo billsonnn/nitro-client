@@ -1,6 +1,5 @@
 import { IMessageEvent } from '../../../../../../core/communication/messages/IMessageEvent';
 import { MessageEvent } from '../../../../../../core/communication/messages/MessageEvent';
-import { BotReceivedMessageParser } from '../../../parser/inventory/bots/BotReceivedMessageParser';
 import { _Str_8090 } from '../../../parser/inventory/pets/_Str_8090';
 
 export class PetsReceivedMessageEvent extends MessageEvent implements IMessageEvent

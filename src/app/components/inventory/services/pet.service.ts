@@ -18,6 +18,8 @@ import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
 import { RequestPetsComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/pets/RequestPetsComposer';
 import { PetsReceivedMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetsReceivedMessageEvent';
+import { PetRemovedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetRemovedEvent';
+import { PetAddedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetAddedEvent';
 
 @Injectable()
 export class InventoryPetService implements OnDestroy
@@ -54,7 +56,9 @@ export class InventoryPetService implements OnDestroy
             Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             this._messages = [
-                new PetsReceivedMessageEvent(this.onPetsReceivedEvent.bind(this))
+                new PetsReceivedMessageEvent(this.onPetsReceivedEvent.bind(this)),
+                new PetRemovedEvent(this.onPetRemovedEvent.bind(this)),
+                new PetAddedEvent(this.onPetAddedEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -98,6 +102,25 @@ export class InventoryPetService implements OnDestroy
 
         debugger;
     }
+
+    private onPetRemovedEvent(event: PetRemovedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+    }
+
+    private onPetAddedEvent(event: PetAddedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+    }
+
     private getAllItemIds(): number[]
     {
         const itemIds: number[] = [];

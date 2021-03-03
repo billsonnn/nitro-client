@@ -334,6 +334,8 @@ import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/User
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
 import { RequestPetsComposer } from './messages/outgoing/inventory/pets/RequestPetsComposer';
 import { PetsReceivedMessageEvent } from './messages/incoming/inventory/pets/PetsReceivedMessageEvent';
+import { PetRemovedEvent } from './messages/incoming/inventory/pets/PetRemovedEvent';
+import { PetAddedEvent } from './messages/incoming/inventory/pets/PetAddedEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -618,6 +620,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // PETS
         this._events.set(IncomingHeader.USER_PETS, PetsReceivedMessageEvent);
+        this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedEvent);
+        this._events.set(IncomingHeader.USER_PET_ADD, PetAddedEvent);
     }
 
     private registerComposers(): void
