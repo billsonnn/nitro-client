@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared';
+import { SharedModule } from '../shared/shared.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { AvatarEditorModule } from './avatar-editor/avatar-editor.module';
 import { CallForHelpModule } from './call-for-help/call-for-help.module';

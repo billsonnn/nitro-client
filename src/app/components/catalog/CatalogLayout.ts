@@ -4,6 +4,7 @@ import { CatalogProductOfferData } from '../../../client/nitro/communication/mes
 import { ICatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
+import { FurnitureType } from '../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
 import { ProductTypeEnum } from './enums/ProductTypeEnum';
 import { CatalogService } from './services/catalog.service';
@@ -41,6 +42,66 @@ export class CatalogLayout
         return assetUrl;
     }
 
+    public getCurrencyUrl(type: number): string
+    {
+        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
+
+        return url.replace('%type%', type.toString());
+    }
+
+    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
+    {
+        if(!product) return null;
+
+        return this._catalogService.getFurnitureDataForProductOffer(product);
+    }
+
+    public offerImage(offer: CatalogPageOfferData): string
+    {
+        if(!offer) return '';
+
+        const product = offer.products[0];
+
+        if(!product) return '';
+
+        if(product.productType.toUpperCase() == FurnitureType.BADGE)
+        {
+            return Nitro.instance.sessionDataManager.getBadgeUrl(product.extraParam);
+        }
+
+        const furniData = this.getProductFurniData(product);
+
+        if(!furniData) return '';
+
+        switch(product.productType)
+        {
+            case ProductTypeEnum.FLOOR:
+            case ProductTypeEnum.WALL:
+                return this._catalogService.getFurnitureDataIconUrl(furniData);
+        }
+
+        return '';
+    }
+
+    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
+    {
+        return (offer.products.length > 1);
+    }
+
+    public offerName(offer: CatalogPageOfferData): string
+    {
+        const productData = this._catalogService.getProductDataForLocalization(offer.localizationId);
+
+        if(productData) return productData.name;
+
+        return offer.localizationId;
+    }
+
+    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
+    {
+        return ((offer && offer.products[0]) || null);
+    }
+
     protected get headerText(): string
     {
         return (this._catalogService.catalogRoot.localization || null);
@@ -60,84 +121,4 @@ export class CatalogLayout
     {
         return ((this._catalogService.component && this._catalogService.component.roomPreviewer) || null);
     }
-
-    public getCurrencyUrl(type: number): string
-    {
-        const url = Nitro.instance.getConfiguration<string>('currency.asset.icon.url');
-
-        return url.replace('%type%', type.toString());
-    }
-
-    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
-    {
-        if(!product) return null;
-
-        return this._catalogService.getFurnitureDataForProductOffer(product);
-    }
-
-
-    public offerImage(offer: CatalogPageOfferData): string
-    {
-        if(!offer) return '';
-
-        const product = offer.products[0];
-
-        if(!product) return '';
-
-        const furniData = this.getProductFurniData(product);
-
-        if(!furniData) return '';
-
-        switch(product.productType)
-        {
-            case ProductTypeEnum.FLOOR:
-                return this._catalogService.getFurnitureDataIconUrl(furniData);
-            case ProductTypeEnum.WALL:
-                return this._catalogService.getFurnitureDataIconUrl(furniData);
-        }
-
-        return '';
-    }
-
-    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
-    {
-        return (offer.products.length > 1);
-    }
-
-    public offerName(offer: CatalogPageOfferData): string
-    {
-        let key = '';
-
-        const product = this.getFirstProduct(offer);
-
-        if(product)
-        {
-            switch(product.productType)
-            {
-                case ProductTypeEnum.FLOOR:
-                    key = 'roomItem.name.' + product.furniClassId;
-                    break;
-                case ProductTypeEnum.WALL:
-                    key = 'wallItem.name.' + product.furniClassId;
-                    break;
-                case ProductTypeEnum.BADGE:
-                    return offer.localizationId;
-                case ProductTypeEnum.ROBOT: {
-                    const productData = Nitro.instance.sessionDataManager.getProductData(offer.localizationId);
-                    if(productData) return productData.name;
-                }
-                    break;
-            }
-        }
-
-        if(key === '') return key;
-
-        return Nitro.instance.getLocalization(key);
-    }
-
-    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
-    {
-        return ((offer && offer.products[0]) || null);
-    }
-
 }

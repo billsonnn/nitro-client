@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { HotelViewComponent } from './components/main/hotelview.component';
 
 @NgModule({

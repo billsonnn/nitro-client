@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { ToolbarMainComponent } from './components/main/main.component';
 import { MeMenuComponent } from './components/me-menu/me-menu.component';
 

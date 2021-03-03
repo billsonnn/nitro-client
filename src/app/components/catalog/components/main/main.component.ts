@@ -1,12 +1,13 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { IObjectData } from '../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
+import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
@@ -16,8 +17,6 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -186,7 +185,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     private createComponent(layoutType: typeof CatalogLayout): void
     {
-        if(!layoutType) return;
+        if(!layoutType || !this.layoutsContainer) return;
 
         this.removeLastComponent();
 

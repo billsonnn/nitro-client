@@ -2727,20 +2727,23 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
         this._roomObjectEventHandler._Str_8675(this._activeRoomId);
     }
 
-    private _Str_24651(k: Sprite, _arg_2: string, _arg_3: Texture): Sprite
+    private _Str_24651(k: Sprite, _arg_2: string, _arg_3: Texture, scale: number = 1): Sprite
     {
         if(!k || !_arg_3) return;
 
-        let _local_4 = this._Str_16498(k, _arg_2);
+        let sprite = this._Str_16498(k, _arg_2);
 
-        if(_local_4) return null;
+        if(sprite) return null;
 
-        _local_4 = Sprite.from(_arg_3);
-        _local_4.name = _arg_2;
+        sprite = Sprite.from(_arg_3);
 
-        k.addChild(_local_4);
+        sprite.name = _arg_2;
+        
+        sprite.scale.set(scale);
 
-        return _local_4;
+        k.addChild(sprite);
+
+        return sprite;
     }
 
     public onRoomContentLoaded(id: number, assetName: string, success: boolean): void
@@ -2772,8 +2775,9 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public _Str_16645(objectId: number, category: number, _arg_3: boolean, instanceData: string = null, stuffData: IObjectData = null, state: number = -1, frameNumber: number = -1, posture: string = null): void
     {
         let type: string                = null;
-        let colorIndex                  = 0;
+        let colorIndex: number          = 0;
         let imageResult: ImageResult    = null;
+        let scale: number               = 1;
 
         if(_arg_3)
         {
@@ -2809,7 +2813,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
                     }
                     else
                     {
-                        imageResult = this.getGenericRoomObjectImage(type, instanceData, new Vector3d(180), 1, null, 0, null, stuffData, state, frameNumber, posture);
+                        imageResult = this.getGenericRoomObjectImage(type, instanceData, new Vector3d(180), 64, null, 0, null, stuffData, state, frameNumber, posture);
                     }
                 }
                 else
@@ -2829,7 +2833,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
 
         this._Str_21215(overlay, RoomEngine.OBJECT_ICON_SPRITE);
 
-        const _local_15 = this._Str_24651(overlay, RoomEngine.OBJECT_ICON_SPRITE, imageResult.data);
+        const _local_15 = this._Str_24651(overlay, RoomEngine.OBJECT_ICON_SPRITE, imageResult.data, scale);
 
         if(_local_15)
         {

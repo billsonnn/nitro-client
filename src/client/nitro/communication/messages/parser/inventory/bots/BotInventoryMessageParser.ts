@@ -1,33 +1,29 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { AdvancedMap } from '../../../../../../core/utils/AdvancedMap';
 import { BotData } from './BotData';
 
 export class BotInventoryMessageParser implements IMessageParser
 {
-    private _items: AdvancedMap<number, BotData>;
+    private _items: Map<number, BotData>;
 
     public flush(): boolean
     {
-        if(this._items)
-        {
-            this._items.dispose();
-            this._items = null;
-        }
+        this._items = null;
 
         return true;
     }
 
-    public parse(k: IMessageDataWrapper): boolean
+    public parse(wrapper: IMessageDataWrapper): boolean
     {
-        this._items = new AdvancedMap();
-        let count = k.readInt();
+        this._items = new Map();
+
+        let count = wrapper.readInt();
 
         while(count > 0)
         {
-            const data = new BotData(k);
+            const data = new BotData(wrapper);
 
-            this._items.add(data.id, data);
+            this._items.set(data.id, data);
 
             count--;
         }
@@ -35,7 +31,7 @@ export class BotInventoryMessageParser implements IMessageParser
         return true;
     }
 
-    public get items(): AdvancedMap<number, BotData>
+    public get items(): Map<number, BotData>
     {
         return this._items;
     }

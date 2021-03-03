@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { NavigatorCreatorComponent } from './components/creator/creator.component';
 import { NavigatorDoorbellComponent } from './components/doorbell/doorbell.component';
 import { NavigatorMainComponent } from './components/main/main.component';

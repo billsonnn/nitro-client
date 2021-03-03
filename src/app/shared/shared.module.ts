@@ -15,8 +15,10 @@ import { BadgeComponent } from './components/badge/component';
 import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
 import { RoomPreviewComponent } from './components/roompreview/component';
+import { AvatarImageDirective } from './directives/avatar-image/avatar-image.directive';
+import { BadgeImageDirective } from './directives/badge-image/badge-image.directive';
 import { BringToTopDirective } from './directives/bringtotop/directive';
-import { DraggableDirective } from './directives/draggable/directive';
+import { DraggableDirective } from './directives/draggable/draggable.directive';
 import { ImagePlaceholderDirective } from './directives/image-placeholder/image-placeholder.directive';
 import { EmojiPipe } from './pipes/emoji.pipe';
 import { FormatShortPipe } from './pipes/format-short.pipe';
@@ -25,6 +27,7 @@ import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
 import { TimeAgoPipe } from './pipes/time-ago';
 import { TranslatePipe } from './pipes/translate';
+import { UniqueNumberPipe } from './pipes/unique-number';
 import { SoundService } from './services/sound.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -66,6 +69,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CurrencyIconComponent,
         FurnitureImageComponent,
         RoomPreviewComponent,
+        AvatarImageDirective,
+        BadgeImageDirective,
         DraggableDirective,
         BringToTopDirective,
         ImagePlaceholderDirective,
@@ -75,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        UniqueNumberPipe
     ],
     providers: [
         {
@@ -90,6 +96,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CurrencyIconComponent,
         FurnitureImageComponent,
         RoomPreviewComponent,
+        AvatarImageDirective,
+        BadgeImageDirective,
         DraggableDirective,
         BringToTopDirective,
         ImagePlaceholderDirective,
@@ -99,7 +107,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormatShortPipe,
         ShortNumberPipe,
         TimeAgoPipe,
-        RoomObjectItemSearchPipe
+        RoomObjectItemSearchPipe,
+        UniqueNumberPipe
     ]
 })
 export class SharedModule

@@ -1,19 +1,23 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { _Str_5147 } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/_Str_5147';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
-import { Badge } from '../models/badge';
-
+import { BadgesEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/BadgesEvent';
+import { RequestBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { Nitro } from '../../../../client/nitro/Nitro';
+import { InventoryMainComponent } from '../components/main/main.component';
+import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
+import { InventoryService } from './inventory.service';
 
 @Injectable()
 export class InventoryBadgeService implements OnDestroy
 {
-    private _messages: IMessageEvent[] = [];
-    private _availableBadges: AdvancedMap<string, Badge> = new AdvancedMap<string, Badge>();
-    private _badgesInUse: AdvancedMap<string, Badge> = new AdvancedMap<string, Badge>();
+    private _messages: IMessageEvent[]  = [];
+    private _badges: string[]           = [];
+    private _badgesInUse: string[]      = [];
+    private _isInitialized: boolean     = false;
+    private _needsUpdate: boolean       = false;
 
     constructor(
+        private _inventoryService: InventoryService,
         private _ngZone: NgZone)
     {
         this.registerMessages();
@@ -28,9 +32,8 @@ export class InventoryBadgeService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-
             this._messages = [
-                new _Str_5147(this.onBadgesListEvent.bind(this)),
+                new BadgesEvent(this.onBadgesListEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -47,8 +50,7 @@ export class InventoryBadgeService implements OnDestroy
         });
     }
 
-
-    private onBadgesListEvent(event: _Str_5147): void
+    private onBadgesListEvent(event: BadgesEvent): void
     {
         if(!event) return;
 
@@ -56,58 +58,96 @@ export class InventoryBadgeService implements OnDestroy
 
         if(!parser) return;
 
-        const local6 = parser._Str_21415();
-        const local7 = parser._Str_23681();
-        for(const badgeId of local6)
+        this._ngZone.run(() =>
         {
-            const isWearingBadge = local7.indexOf(badgeId) > -1;
-            const local9 = parser._Str_17775(badgeId);
-            this.updateBadge(badgeId, isWearingBadge, local9, isWearingBadge);
-        }
+            this._badgesInUse   = [];
+            this._badges        = [];
+
+            const badgeCodes        = parser.getAllBadgeCodes();
+            const activeBadgeCodes  = parser.getActiveBadgeCodes();
+    
+            for(const badgeCode of badgeCodes)
+            {
+                const wearingIndex = activeBadgeCodes.indexOf(badgeCode);
+
+                if(wearingIndex === -1) this._badges.push(badgeCode);
+                else this._badgesInUse.push(badgeCode);
+            }
+    
+            this._isInitialized = true;
+
+            if(this._inventoryService.badgesController) this._inventoryService.badgesController.selectExistingGroupOrDefault();
+        });
     }
 
-    public isWearingBadge(badge: Badge): boolean
+    public setAllBadgesSeen(): void
     {
-        return this._badgesInUse.hasKey(badge.badgeId);
+        this._inventoryService.unseenTracker._Str_8813(UnseenItemCategory.BADGE);
+
+        this._inventoryService.updateUnseenCount();
     }
 
-    public get availableBadges(): AdvancedMap<string, Badge>
+    public isWearingBadge(badge: string): boolean
     {
-        return this._availableBadges;
-    }
-
-    public get currentBadges(): AdvancedMap<string, Badge>
-    {
-        return this._badgesInUse;
-    }
-
-    private updateBadge(k: string, arg2: boolean, arg3: number, isWearing: boolean): void
-    {
-        if(arg3 > 0)
-        {
-            this._availableBadges.add(k, new Badge(k, false));
-        }
-
-        if(isWearing)
-        {
-            this._badgesInUse.add(k, new Badge(k, false));
-        }
-    }
-
-    public wearOrClearBadge(badge: Badge)
-    {
-        if(this.isWearingBadge(badge))
-        {
-            this._badgesInUse.remove(badge.badgeId);
-        }
-        else
-        {
-            this._badgesInUse.add(badge.badgeId, badge);
-        }
+        return (this._badgesInUse.indexOf(badge) >= 0);
     }
 
     public badgeLimitReached(): boolean
     {
-        return this._badgesInUse.length == 5;
+        return (this._badgesInUse.length === 5);
+    }
+
+    public wearOrClearBadge(badge: string)
+    {
+        const wearingIndex = this._badgesInUse.indexOf(badge);
+
+        if(wearingIndex === -1)
+        {
+            this._badgesInUse.push(badge);
+
+            const index = this._badges.indexOf(badge);
+
+            if(index >= 0) this._badges.splice(index, 1);
+        }
+        else
+        {
+            this._badgesInUse.splice(wearingIndex, 1);
+
+            const index = this._badges.indexOf(badge);
+
+            if(index === -1) this._badges.push(badge);
+        }
+    }
+
+    public requestLoad(): void
+    {
+        this._needsUpdate = false;
+
+        Nitro.instance.communication.connection.send(new RequestBadgesComposer());
+    }
+
+    public get controller(): InventoryMainComponent
+    {
+        return this._inventoryService.controller;
+    }
+
+    public get isInitalized(): boolean
+    {
+        return this._isInitialized;
+    }
+
+    public get needsUpdate(): boolean
+    {
+        return this._needsUpdate;
+    }
+
+    public get badges(): string[]
+    {
+        return this._badges;
+    }
+
+    public get activeBadges(): string[]
+    {
+        return this._badgesInUse;
     }
 }

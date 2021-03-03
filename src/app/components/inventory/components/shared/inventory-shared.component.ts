@@ -1,14 +1,12 @@
-import { InventoryService } from '../../services/inventory.service';
 import { NgZone } from '@angular/core';
+import { InventoryService } from '../../services/inventory.service';
 
 export class InventorySharedComponent
 {
-    constructor(protected _inventoryService: InventoryService,
-                protected _ngZone: NgZone)
-    {
-
-
-    }
+    constructor(
+        protected _inventoryService: InventoryService,
+        protected _ngZone: NgZone)
+    {}
 
     public get canPlace(): boolean
     {
@@ -27,4 +25,10 @@ export class InventorySharedComponent
         this._ngZone.runOutsideAngular(() => this._inventoryService.controller.furnitureService.attemptItemPlacement());
     }
 
+    public attemptBotPlacement(): void
+    {
+        if(!this.canPlace || this.tradeRunning) return;
+
+        this._ngZone.runOutsideAngular(() => this._inventoryService.controller.botService.attemptBotPlacement());
+    }
 }

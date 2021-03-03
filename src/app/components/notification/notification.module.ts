@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/index';
+import { SharedModule } from '../../shared/shared.module';
 import { AlertCenterComponent } from './components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from './components/broadcast-message/broadcast-message.component';
 import { NotificationChoicesComponent } from './components/choices/choices.component';
