@@ -41,6 +41,7 @@ import { UserSubscriptionParser } from '../../../../client/nitro/communication/m
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
+import { IProductData } from '../../../../client/nitro/session/product/IProductData';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
@@ -455,6 +456,13 @@ export class CatalogService implements OnDestroy
         }
 
         return furniData;
+    }
+
+    public getProductDataForLocalization(localizationId: string): IProductData
+    {
+        if(!localizationId) return null;
+
+        return Nitro.instance.sessionDataManager.getProductData(localizationId);
     }
 
     public getFurnitureDataIconUrl(furniData: IFurnitureData): string
