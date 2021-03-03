@@ -912,23 +912,26 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(!roomObject)
         {
-            if((selectedData.category === RoomObjectCategory.FLOOR) && (event instanceof RoomObjectTileMouseEvent))
+            if(event instanceof RoomObjectTileMouseEvent)
             {
-                this._roomEngine.addFurnitureFloor(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData.stuffData, parseInt(selectedData._Str_4766), -1, 0, 0, '', false);
+                if(selectedData.category === RoomObjectCategory.FLOOR)
+                {
+                    this._roomEngine.addFurnitureFloor(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData.stuffData, parseInt(selectedData._Str_4766), -1, 0, 0, '', false);
+                }
+
+                else if(selectedData.category === RoomObjectCategory.UNIT)
+                {
+                    this._roomEngine.addRoomObjectUser(roomId, selectedData.id, new Vector3d(), new Vector3d(180), 180, selectedData.typeId, selectedData._Str_4766);
+
+                    const roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
+
+                    (roomObject && selectedData.posture && roomObject.model.setValue(RoomObjectVariable.FIGURE_POSTURE, selectedData.posture));
+                }
             }
 
-            else if((selectedData.category === RoomObjectCategory.WALL) && (event instanceof RoomObjectWallMouseEvent))
+            else if(event instanceof RoomObjectWallMouseEvent)
             {
                 this._roomEngine.addFurnitureWall(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData._Str_4766, 0);
-            }
-
-            else if((selectedData.category === RoomObjectCategory.UNIT) && (event instanceof RoomObjectTileMouseEvent))
-            {
-                this._roomEngine.addRoomObjectUser(roomId, selectedData.id, new Vector3d(), new Vector3d(180), 180, selectedData.typeId, selectedData._Str_4766);
-
-                const roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
-
-                (roomObject && selectedData.posture && roomObject.model.setValue(RoomObjectVariable.FIGURE_POSTURE, selectedData.posture));
             }
 
             this._roomEngine._Str_7972(true);
@@ -941,7 +944,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             if(selectedData.category === RoomObjectCategory.FLOOR)
             {
-                if(!((event instanceof RoomObjectTileMouseEvent) && this._Str_18155(roomObject, selectedData, event._Str_16836, event._Str_17676, stackingHeightMap)))
+                if(!((event instanceof RoomObjectTileMouseEvent) && this._Str_18155(roomObject, selectedData, Math.trunc(event.tileX + 0.5), Math.trunc(event.tileY + 0.5), stackingHeightMap)))
                 {
                     this._roomEngine.removeRoomObjectFloor(roomId, selectedData.id);
 
@@ -978,7 +981,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             else if(selectedData.category === RoomObjectCategory.UNIT)
             {
-                if((event instanceof RoomObjectTileMouseEvent) && !this._Str_25586(roomObject, Math.floor(event.tileX + 0.5), Math.floor(event.tileY + 0.5), this._roomEngine.getLegacyWallGeometry(roomId)))
+                if(!((event instanceof RoomObjectTileMouseEvent) && this._Str_25586(roomObject, Math.trunc(event._Str_16836), Math.trunc(event._Str_17676), this._roomEngine.getLegacyWallGeometry(roomId))))
                 {
                     this._roomEngine.removeRoomObjectUser(roomId, selectedData.id);
 

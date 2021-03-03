@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/index';
+import { SharedModule } from '../../shared/shared.module';
 import { GroupCreatorImageSelectorComponent } from './components/group-creator/components/image-selector/image-selector.component';
 import { GroupCreatorComponent } from './components/group-creator/components/main/group-creator.component';
 import { GroupCreatorTabBadgeComponent } from './components/group-creator/components/tab-badge/tab-badge.component';

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { AvatarEditorMainComponent } from './components/main/main.component';
 import { AvatarEditorModelViewerComponent } from './components/model-viewer/model-viewer.component';
 import { AvatarEditorPaletteViewerComponent } from './components/palette-viewer/palette-viewer.component';

@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../../../core/settings/service';
+import { InventoryBadgeService } from '../../services/badge.service';
+import { InventoryBotService } from '../../services/bot.service';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryTradingService } from '../../services/trading.service';
@@ -21,6 +23,8 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _settingsService: SettingsService,
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
+        private _inventoryBotService: InventoryBotService,
+        private _inventoryBadgeService: InventoryBadgeService,
         private _inventoryTradingService: InventoryTradingService)
     {}
 
@@ -51,16 +55,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
 
         if(next !== prev)
         {
-            if(next)
-            {
-                this.showFurniture();
-            }
-            else
-            {
-                this._inventoryTradingService.close();
-
-                this.setAllFurnitureSeen();
-            }
+            if(!next) this._inventoryTradingService.close();
         }
     }
 
@@ -72,24 +67,22 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public showFurniture(): void
     {
         this._inventoryService.furnitureVisible = true;
-        this._inventoryService.botsVisible = false;
-        this._inventoryService.badgesVisible = false;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.badgesVisible    = false;
     }
 
     public showBots(): void
     {
         this._inventoryService.furnitureVisible = false;
-        this._inventoryService.botsVisible = true;
-        this._inventoryService.badgesVisible = false;
-
-        this._inventoryService.selectFirstBot();
+        this._inventoryService.botsVisible      = true;
+        this._inventoryService.badgesVisible    = false;
     }
 
     public showBadges(): void
     {
         this._inventoryService.furnitureVisible = false;
-        this._inventoryService.botsVisible = false;
-        this._inventoryService.badgesVisible = true;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.badgesVisible    = true;
     }
 
     public updateItemLocking(): void
@@ -111,6 +104,16 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public setAllFurnitureSeen(): void
     {
         this._inventoryFurnitureService.setAllFurnitureSeen();
+    }
+
+    public setAllBotsSeen(): void
+    {
+        this._inventoryBotService.setAllBotsSeen();
+    }
+
+    public setAllBadgesSeen(): void
+    {
+        this._inventoryBadgeService.setAllBadgesSeen();
     }
 
     public get roomPreviewer(): RoomPreviewer
@@ -143,8 +146,38 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         return this._inventoryFurnitureService;
     }
 
+    public get botService(): InventoryBotService
+    {
+        return this._inventoryBotService;
+    }
+
+    public get badgeService(): InventoryBadgeService
+    {
+        return this._inventoryBadgeService;
+    }
+
     public get tradeService(): InventoryTradingService
     {
         return this._inventoryTradingService;
+    }
+
+    public get furniUnseenCount(): number
+    {
+        return this._inventoryService.furniUnseenCount;
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._inventoryService.botUnseenCount;
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._inventoryService.petUnseenCount;
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._inventoryService.badgeUnseenCount;
     }
 }

@@ -1,4 +1,4 @@
-<div *ngIf="visible" class="row nitro-inventory-furni-component" (mouseup)="onMouseUp()">
+<div class="row nitro-inventory-furni-component" (mouseup)="onMouseUp()">
     <div class="col-12" *ngIf="!hasGroupItems">
         {{ ('inventory.empty.title') | translate }}
         {{ ('inventory.empty.desc') | translate }}
@@ -19,9 +19,10 @@
                     <div class="d-flex flex-column item-detail justify-content-center align-items-center"
                         *ngFor="let groupItem of groupItems;trackBy:trackByType | paginate: paginateConfig" [ngStyle]="{ 'opacity': (!groupItem.getUnlockedCount() ? '0.5' : '1') }"
                         (mousedown)="onMouseDown(groupItem)" (mouseout)="onMouseOut(groupItem)">
-                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedGroup === groupItem), 'bg-success': groupItem.hasUnseenItems }" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }">
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'active': (selectedGroup === groupItem), 'bg-success': groupItem.hasUnseenItems, 'unique': groupItem.stuffData.uniqueNumber }">
+                            <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(groupItem) + ')' }"></div>
                             <div class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count" *ngIf="!groupItem.stuffData.uniqueNumber">{{ groupItem.getUnlockedCount() }}</div>
-                            <div *ngIf="groupItem.stuffData.uniqueNumber" class="badge badge-primary w-100">{{ groupItem.stuffData.uniqueNumber }}</div>
+                            <div *ngIf="groupItem.stuffData.uniqueNumber" class="position-absolute unique-counter" [innerHtml]="groupItem.stuffData.uniqueNumber | uniqueNumber"></div>
                         </button>
                     </div>
                 </div>
@@ -38,6 +39,10 @@
             </pagination-template>
         </div>
         <div class="col-5 d-flex flex-column">
+            <div *ngIf="selectedGroup && selectedGroup.stuffData.uniqueNumber" class="unique-counter-compact">
+                <div [innerHTML]="selectedGroup.stuffData.uniqueNumber | uniqueNumber"></div>
+                <div [innerHTML]="selectedGroup.stuffData.uniqueSeries | uniqueNumber"></div>
+            </div>
             <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
             <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedGroup"
                 style="z-index: 1;">

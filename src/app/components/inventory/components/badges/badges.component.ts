@@ -1,11 +1,10 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { SetActivatedBadgesComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
+import { Nitro } from '../../../../../client/nitro/Nitro';
+import { AchievementsService } from '../../../achievements/services/achievements.service';
+import { NotificationService } from '../../../notification/services/notification.service';
 import { InventoryService } from '../../services/inventory.service';
 import { InventorySharedComponent } from '../shared/inventory-shared.component';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { Badge } from '../../models/badge';
-import { InventoryBadgeService } from '../../services/badge.service';
-import { SetActivatedBadgesComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
-import { AchievementsService } from '../../../achievements/services/achievements.service';
 
 @Component({
     selector: '[nitro-inventory-badges-component]',
@@ -13,16 +12,13 @@ import { AchievementsService } from '../../../achievements/services/achievements
 })
 export class InventoryBadgesComponent extends InventorySharedComponent implements OnInit, OnDestroy
 {
-    @Input()
-    public visible: boolean = false;
-
-    public selectedBadge: Badge = null;
+    public selectedBadge: string = null;
 
     constructor(
+        private _notificationService: NotificationService,
+        private _achievementService: AchievementsService,
         protected _inventoryService: InventoryService,
-        protected _ngZone: NgZone,
-        private _badgesService: InventoryBadgeService,
-        private _achievementsService: AchievementsService)
+        protected _ngZone: NgZone)
     {
         super(_inventoryService, _ngZone);
     }
@@ -30,80 +26,122 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
     public ngOnInit(): void
     {
         this._inventoryService.badgesController = this;
+
+        if(this._inventoryService.controller.botService.isInitalized) this.selectExistingGroupOrDefault();
+
+        this.prepareInventory();
     }
 
     public ngOnDestroy(): void
     {
+        this._inventoryService.controller.setAllBadgesSeen();
+
         this._inventoryService.badgesController = null;
     }
 
-    public get badges(): Badge[]
+    private prepareInventory(): void
     {
-        const badges = this._badgesService.availableBadges;
-        return badges.getValues();
+        if(!this._inventoryService.controller.badgeService.isInitalized || this._inventoryService.controller.badgeService.needsUpdate)
+        {
+            this._inventoryService.controller.badgeService.requestLoad();
+        }
+        else
+        {
+            this.selectExistingGroupOrDefault();
+        }
     }
 
-    public get wearableBadgesWithoutCurrentBadges(): Badge[]
+    public selectExistingGroupOrDefault(): void
     {
-        const badges = this._badgesService.availableBadges.getValues();
-
-        const returnBadges = [];
-
-        for(const badge of badges)
+        if(this.selectedBadge)
         {
-            if(!this._badgesService.isWearingBadge(badge)) returnBadges.push(badge);
+            const index = this.badges.indexOf(this.selectedBadge);
+
+            if(index > -1)
+            {
+                this.selectBadge(this.selectedBadge);
+
+                return;
+            }
         }
 
-        return returnBadges;
+        this.selectFirstBadge();
     }
 
-    public get wearing(): Badge[]
+    public selectFirstBadge(): void
     {
-        const badges = this._badgesService.currentBadges;
-        return badges.getValues();
+        let badge: string = null;
+
+        for(const badgeCode of this.badges)
+        {
+            if(!badge) continue;
+
+            badge = badgeCode;
+
+            break;
+        }
+
+        this.selectBadge(badge);
     }
 
-    public get hasBadges(): boolean
+    public selectBadge(badge: string): void
     {
-        return this.badges && this.badges.length > 0;
+        if(this.selectedBadge === badge) return;
+
+        this.selectedBadge = badge;
     }
 
-    public isWearingBadge(badge: Badge): boolean
+    public wearBadge(): void
     {
-        return this._badgesService.isWearingBadge(badge);
-    }
+        const badge = this.selectedBadge
 
-    public get selectedBadgeName(): string
-    {
-        return Nitro.instance.localization.getBadgeName(this.selectedBadge.badgeId);
-    }
+        if(!badge) return;
 
-    public handleClick(badge: Badge): void
-    {
-        this._badgesService.wearOrClearBadge(badge);
-        const wearingBadges = this._badgesService.currentBadges.getValues();
+        this._inventoryService.controller.badgeService.wearOrClearBadge(badge);
+
         const composer = new SetActivatedBadgesComposer();
-        for(const badge of wearingBadges)
-        {
-            composer.addActivatedBadge(badge.badgeId);
-        }
+
+        for(const badgeCode of this.activeBadges) composer.addActivatedBadge(badgeCode);
 
         Nitro.instance.communication.connection.send(composer);
     }
 
+    public isWearingBadge(badge: string): boolean
+    {
+        return this._inventoryService.controller.badgeService.isWearingBadge(badge);
+    }
+
+    public get hasBadgeItems(): boolean
+    {
+        return (this.badges && (this.badges.length > 0));
+    }
+
+    public get badges(): string[]
+    {
+        return this._inventoryService.controller.badgeService.badges;
+    }
+
+    public get activeBadges(): string[]
+    {
+        return this._inventoryService.controller.badgeService.activeBadges;
+    }
+
+    public get selectedBadgeName(): string
+    {
+        return ((this.selectedBadge && Nitro.instance.localization.getBadgeName(this.selectedBadge)) || null);
+    }
+
     public get badgeButtonDisabled(): boolean
     {
-        const limitReached = this._badgesService.badgeLimitReached();
+        const limitReached = this._inventoryService.controller.badgeService.badgeLimitReached();
 
-        if(this.isWearingBadge(this.selectedBadge)) return false;
+        if(this.selectedBadge && this.isWearingBadge(this.selectedBadge)) return false;
 
         return limitReached;
     }
 
     public get achievementsScore(): number
     {
-        return this._achievementsService.achievementScore;
+        return this._achievementService.achievementScore;
     }
-
-
 }

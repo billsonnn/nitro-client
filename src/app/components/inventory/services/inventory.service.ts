@@ -6,6 +6,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { IRoomSession } from '../../../../client/nitro/session/IRoomSession';
 import { SettingsService } from '../../../core/settings/service';
+import { InventoryBadgesComponent } from '../components/badges/badges.component';
 import { InventoryBotsComponent } from '../components/bots/bots.component';
 import { InventoryFurnitureComponent } from '../components/furniture/furniture.component';
 import { InventoryMainComponent } from '../components/main/main.component';
@@ -13,7 +14,6 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
-import { InventoryBadgesComponent } from '../components/badges/badges.component';
 
 @Injectable()
 export class InventoryService implements OnDestroy
@@ -32,7 +32,7 @@ export class InventoryService implements OnDestroy
     private _unseenCount: number = 0;
     private _unseenCounts: Map<number, number>;
     private _botsVisible: boolean = false;
-    private _furnitureVisible: boolean = false;
+    private _furnitureVisible: boolean = true;
     private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;
@@ -127,27 +127,36 @@ export class InventoryService implements OnDestroy
 
     public updateUnseenCount(): void
     {
-        function run()
+        setTimeout(() =>
         {
-            let count = 0;
+            this._ngZone.run(() =>
+            {
+                let count = 0;
 
-            const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+                const furniCount = this.furniUnseenCount;
 
-            count += furniCount;
+                count += furniCount;
 
-            this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                const botCount = this.botUnseenCount;
 
-            this._unseenCount = count;
-        }
+                count += botCount;
 
-        if(!NgZone.isInAngularZone())
-        {
-            this._ngZone.run(() => run.apply(this));
-        }
-        else
-        {
-            run.apply(this);
-        }
+                const petCount = this.petUnseenCount;
+
+                count += petCount;
+
+                const badgeCount = this.badgeUnseenCount;
+
+                count += badgeCount;
+
+                this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                this._unseenCounts.set(UnseenItemCategory.BOT, botCount);
+                this._unseenCounts.set(UnseenItemCategory.BADGE, badgeCount);
+                this._unseenCounts.set(UnseenItemCategory.PET, petCount);
+
+                this._unseenCount = count;
+            });
+        });
     }
 
     public updateItemLocking(): void
@@ -249,6 +258,26 @@ export class InventoryService implements OnDestroy
         return this._roomSession;
     }
 
+    public get furniUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
+    }
+
     public get unseenCount(): number
     {
         return this._unseenCount;
@@ -312,10 +341,5 @@ export class InventoryService implements OnDestroy
     public get boundFurnitureNames(): string[]
     {
         return this._boundFurnitureNames;
-    }
-
-    public selectFirstBot(): void
-    {
-        this._botsController && this._botsController.selectFirstBot();
     }
 }

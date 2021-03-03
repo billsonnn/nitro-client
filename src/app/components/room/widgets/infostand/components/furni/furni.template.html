@@ -5,7 +5,11 @@
             <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
         </div>
         <div class="d-flex flex-column p-3 w-100">
-            <div class="w-100">
+            <div class="w-100" style="min-height: 50px">
+                <div *ngIf="furniData.stuffData.isUnique" class="unique-counter-compact">
+                    <div [innerHTML]="furniData.stuffData.uniqueNumber | uniqueNumber"></div>
+                    <div [innerHTML]="furniData.stuffData.uniqueSeries | uniqueNumber"></div>
+                </div>
                 <img class="d-block mx-auto" [src]="furniData.imageUrl" image-placeholder />
             </div>
             <div class="d-flex flex-column mt-2">

@@ -16,7 +16,10 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     public dragTarget: string;
 
     @Input()
-    public center: boolean = true;
+    public center: boolean = false;
+
+    @Input()
+    public topCenter: boolean = true;
 
     @Input()
     public noMemory: boolean = false;
@@ -30,7 +33,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
     constructor(
         private _viewContainerRef: ViewContainerRef,
-        private _elementRef: ElementRef,
+        private _elementRef: ElementRef<HTMLDivElement>,
         private _ngZone: NgZone)
     {}
 
@@ -50,6 +53,12 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
             this._handle.classList.add('header-draggable');
 
             this._handle.parentElement.classList.add('header-draggable');
+        }
+
+        if(this.topCenter)
+        {
+            element.style.top = `50px`;
+            element.style.left = `calc(50vw - ${ (element.offsetWidth / 2) }px)`;
         }
 
         if(this.center)

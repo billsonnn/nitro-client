@@ -91,8 +91,6 @@ export class CatalogCustomizeGiftComponent implements OnDestroy
                 this._ribbonIndex++;
                 this.updateIndexesAndSetUI();
                 break;
-            case 'close':
-                break;
             case 'give_gift':
                 this.giveGift();
                 break;
