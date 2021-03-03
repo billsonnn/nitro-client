@@ -342,7 +342,7 @@ export class FloorPlanService implements OnDestroy
             case 2:
                 return 3;
             default:
-                return 2;
+                return 1;
         }
     }
 

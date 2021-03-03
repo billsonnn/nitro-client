@@ -48,11 +48,12 @@
                 <div class="mb-1">{{ ('floor.plan.editor.room.options') | translate }}</div>
                 <div class="row mb-3">
                     <div class="col-6">
-                        <select class="form-control form-control-sm" [(ngModel)]="thicknessWall">
-                            <option value="0">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
-                            <option value="1">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
-                            <option value="-1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
-                            <option value="-2">{{ ('navigator.roomsettings.wall_thickness.thinnest') | translate }}</option>
+                        <p>{{ thicknessWall }}</p>
+                            <select class="form-control form-control-sm" [(ngModel)]="thicknessWall">
+                            <option [value]="0">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
+                            <option [value]="1">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
+                            <option [value]="-1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
+                            <option [value]="-2">{{ ('navigator.roomsettings.wall_thickness.thinnest') | translate }}</option>
                         </select>
                     </div>
                     <div class="col-6">

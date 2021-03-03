@@ -93,6 +93,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         this.floorPlanService.floorMapSettings.doorY = doorY;
         this.floorPlanService.floorMapSettings.doorDirection = doorDirection;
         this.floorPlanService.blockedTilesMap = blockedTilesMap;
+        if(thicknessWall == 2)
+        {
+            debugger;
+        }
         this.floorPlanService.floorMapSettings.thicknessWall = thicknessWall;
         this.floorPlanService.floorMapSettings.thicknessFloor = thicknessFloor;
 
@@ -334,6 +338,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public set thicknessWall(tickness: number)
     {
+        if(tickness == 2)
+        {
+            debugger;
+        }
         this.floorPlanService.floorMapSettings.thicknessWall =tickness;
     }
 
