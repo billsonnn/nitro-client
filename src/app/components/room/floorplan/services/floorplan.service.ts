@@ -166,6 +166,8 @@ export class FloorPlanService implements OnDestroy
 
         if(!parser) return;
 
+        console.log('floor = ' + parser.thicknessFloor + ' will become ' + this.convertSettingnToNumber(parser.thicknessFloor));
+        console.log('wall = ' + parser.thicknessWall + ' will become ' + this.convertSettingnToNumber(parser.thicknessWall));
         this._thicknessFloor            = this.convertSettingnToNumber(parser.thicknessFloor);
         this._thicknessWall             = this.convertSettingnToNumber(parser.thicknessWall);
         this._RoomThicknessReceived   = true;
@@ -342,7 +344,7 @@ export class FloorPlanService implements OnDestroy
             case 2:
                 return 3;
             default:
-                return 1;
+                return 2;
         }
     }
 
