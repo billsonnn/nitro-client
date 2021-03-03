@@ -21,7 +21,8 @@ export class FloorPlanService implements OnDestroy
     private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
     private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
 
-
+    private static readonly  COLOR_BLOCKED = '0x435e87';
+    private static readonly COLOR_DOOR = '0xffffff';
     private _spriteMap: Graphics[][];
     public component: FloorplanMainComponent;
 
@@ -374,12 +375,12 @@ export class FloorPlanService implements OnDestroy
 
                 if(tile.blocked)
                 {
-                    color = '0x435e87';
+                    color = FloorPlanService.COLOR_BLOCKED;
                 }
 
                 if(isDoor)
                 {
-                    color = '0xffffff';
+                    color = FloorPlanService.COLOR_DOOR;
                 }
 
                 this._spriteMap[y][x] = this._container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color));
@@ -495,24 +496,18 @@ export class FloorPlanService implements OnDestroy
             y.forEach((x, indexX) =>
             {
                 const floormap = this.floorMapSettings.heightMap[index][indexX];
-                if(index == 1 && indexX ==4 )
-                {
-                //    debugger;
-                }
+
                 let color = this._colorMap[ floormap.height];
                 if(floormap.blocked)
                 {
-
-                    color = '0x435e87';
+                    color = FloorPlanService.COLOR_BLOCKED;
                 }
-
-                if(floormap)
+                if(indexX === this.floorMapSettings.doorX && index === this.floorMapSettings.doorY)
                 {
-                    //  color = '0xffffff';
+                    color = FloorPlanService.COLOR_DOOR;
                 }
+
                 x.tint = color;
-
-
             });
         });
     }
