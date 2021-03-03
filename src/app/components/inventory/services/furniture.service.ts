@@ -35,6 +35,8 @@ export class InventoryFurnitureService implements OnDestroy
     private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
     private _botsFragments: AdvancedMap<number, BotData>                = null;
     private _groupItems: GroupItem[]                                    = [];
+    private _search: string                                             = '';
+    private _searchType: string                                         = '';
     private _itemIdInFurniPlacing: number                               = -1;
     private _isObjectMoverRequested: boolean                            = false;
     private _isInitialized: boolean                                     = false;
@@ -709,5 +711,25 @@ export class InventoryFurnitureService implements OnDestroy
     public get isObjectMoverRequested(): boolean
     {
         return this._isObjectMoverRequested;
+    }
+
+    public get search(): string
+    {
+        return this._search;
+    }
+
+    public set search(search: string)
+    {
+        this._search = search;
+    }
+
+    public get searchType(): string
+    {
+        return this._searchType;
+    }
+
+    public set searchType(type: string)
+    {
+        this._searchType = type;
     }
 }

@@ -26,8 +26,6 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
     public mouseDown: boolean = false;
 
     private _filteredItems: GroupItem[] = [];
-    private _search: string = '';
-    private _searchType: string = '';
     private _subscription: Subscription = null;
     private _hasGroupItems: boolean = false;
 
@@ -78,18 +76,18 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
 
         if(groupItems.length) this._hasGroupItems = true;
 
-        if((this._search && this._search.length) || (this._searchType && this._searchType.length))
+        if((this.search && this.search.length) || (this.searchType && this.searchType.length))
         {
-            const comparison = this._search.toLocaleLowerCase();
+            const comparison = this.search.toLocaleLowerCase();
 
             groupItems = groupItems.filter(item =>
             {
                 let found = true;
 
-                if(this._searchType && this._searchType.length === 1)
+                if(this.searchType && this.searchType.length === 1)
                 {
-                    if(this._searchType === 's') found = !item.isWallItem;
-                    else if(this._searchType === 'i') found = item.isWallItem;
+                    if(this.searchType === 's') found = !item.isWallItem;
+                    else if(this.searchType === 'i') found = item.isWallItem;
                 }
 
                 if(comparison && comparison.length)
@@ -318,24 +316,24 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
 
     public get search(): string
     {
-        return this._search;
+        return this._inventoryService.controller.furnitureService.search;
     }
 
     public set search(search: string)
     {
-        this._search = search;
+        this._inventoryService.controller.furnitureService.search = search;
 
         this.refreshInventory();
     }
 
     public get searchType(): string
     {
-        return this._searchType;
+        return this._inventoryService.controller.furnitureService.searchType;
     }
 
     public set searchType(type: string)
     {
-        this._searchType = type;
+        this._inventoryService.controller.furnitureService.searchType = type;
 
         this.refreshInventory();
     }

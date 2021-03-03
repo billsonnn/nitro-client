@@ -32,7 +32,7 @@ export class InventoryService implements OnDestroy
     private _unseenCount: number = 0;
     private _unseenCounts: Map<number, number>;
     private _botsVisible: boolean = false;
-    private _furnitureVisible: boolean = false;
+    private _furnitureVisible: boolean = true;
     private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;

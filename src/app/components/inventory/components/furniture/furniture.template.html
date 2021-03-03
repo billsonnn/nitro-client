@@ -39,7 +39,7 @@
             </pagination-template>
         </div>
         <div class="col-5 d-flex flex-column">
-            <div *ngIf="selectedGroup.stuffData.uniqueNumber" class="unique-counter-compact">
+            <div *ngIf="selectedGroup && selectedGroup.stuffData.uniqueNumber" class="unique-counter-compact">
                 <div [innerHTML]="selectedGroup.stuffData.uniqueNumber | uniqueNumber"></div>
                 <div [innerHTML]="selectedGroup.stuffData.uniqueSeries | uniqueNumber"></div>
             </div>

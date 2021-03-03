@@ -55,14 +55,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
 
         if(next !== prev)
         {
-            if(next)
-            {
-                this.showFurniture();
-            }
-            else
-            {
-                this._inventoryTradingService.close();
-            }
+            if(!next) this._inventoryTradingService.close();
         }
     }
 
@@ -74,22 +67,22 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public showFurniture(): void
     {
         this._inventoryService.furnitureVisible = true;
-        this._inventoryService.botsVisible = false;
-        this._inventoryService.badgesVisible = false;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.badgesVisible    = false;
     }
 
     public showBots(): void
     {
         this._inventoryService.furnitureVisible = false;
-        this._inventoryService.botsVisible = true;
-        this._inventoryService.badgesVisible = false;
+        this._inventoryService.botsVisible      = true;
+        this._inventoryService.badgesVisible    = false;
     }
 
     public showBadges(): void
     {
         this._inventoryService.furnitureVisible = false;
-        this._inventoryService.botsVisible = false;
-        this._inventoryService.badgesVisible = true;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.badgesVisible    = true;
     }
 
     public updateItemLocking(): void
