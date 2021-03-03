@@ -457,7 +457,7 @@ export class FloorPlanService implements OnDestroy
 
         if(!newHeight) return;
 
-        if(newHeight === 'x' && tile.blocked) return;
+        if(newHeight === 'x' || tile.blocked) return;
 
         this.floorMapSettings.heightMap[y][x].height = newHeight;
 
