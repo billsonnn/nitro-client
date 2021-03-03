@@ -54,6 +54,7 @@ export class FloorPlanService implements OnDestroy
     private _container: Container;
 
     private _changesMade: boolean;
+    private _wallHeight: number;
 
     constructor(
         private _ngZone: NgZone)
@@ -121,7 +122,7 @@ export class FloorPlanService implements OnDestroy
         if(!parser) return;
 
         this._model = parser.model;
-
+        this._wallHeight = parser.wallHeight + 1;
         Nitro.instance.communication.connection.send(new RoomDoorSettingsComposer());
         Nitro.instance.communication.connection.send(new RoomBlockedTilesComposer());
 
@@ -523,7 +524,7 @@ export class FloorPlanService implements OnDestroy
             !this._spriteMap[y]) return;
 
         const tile = this.floorMapSettings.heightMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
-        const sprite = this.floorMapSettings[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
+        const sprite = this._spriteMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
         const futureTile = this.floorMapSettings.heightMap[y][x];
         const futureSprite = this._spriteMap[y][x];
 
@@ -610,18 +611,18 @@ export class FloorPlanService implements OnDestroy
 
     public decrementWallheight(): void
     {
-        if(this.floorMapSettings.wallHeight === 1)
-            this.floorMapSettings.wallHeight = 16;
+        if(this.wallHeight === 1)
+            this.wallHeight = 16;
         else
-            this.floorMapSettings.wallHeight--;
+            this.wallHeight--;
     }
 
     public incrementWallheight(): void
     {
-        if(this.floorMapSettings.wallHeight === 16)
-            this.floorMapSettings.wallHeight = 1;
+        if(this.wallHeight === 16)
+            this.wallHeight = 1;
         else
-            this.floorMapSettings.wallHeight++;
+            this.wallHeight++;
     }
 
     public increaseColoredTilesCount(): void
@@ -733,5 +734,15 @@ export class FloorPlanService implements OnDestroy
     public set container(container: Container)
     {
         this._container = container;
+    }
+
+    public get wallHeight(): number
+    {
+        return this._wallHeight;
+    }
+
+    public set wallHeight(height: number)
+    {
+        this._wallHeight = height;
     }
 }

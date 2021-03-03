@@ -325,7 +325,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     public get wallHeight(): number
     {
-        return this.floorPlanService.floorMapSettings.wallHeight;
+        return this.floorPlanService.wallHeight;
     }
 
     public get thicknessWall(): number
@@ -352,4 +352,5 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     {
         return this.floorPlanService.changesMade;
     }
+
 }
