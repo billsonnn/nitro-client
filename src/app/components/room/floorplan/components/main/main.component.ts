@@ -111,8 +111,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
         this.floorPlanService.originalMapSettings = this.floorPlanService.floorMapSettings;
 
+
         this._buildApp(width, height);
-        this.floorPlanService.renderTileMap(this._container);
+        this.floorPlanService.container = this._container;
+        this.floorPlanService.renderTileMap();
     }
 
     private _buildApp(width: number, height: number): void

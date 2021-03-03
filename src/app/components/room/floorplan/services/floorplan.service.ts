@@ -50,6 +50,8 @@ export class FloorPlanService implements OnDestroy
     private _currentHeight: string;
     private _extraX: number;
 
+    private _container: Container;
+
     private _changesMade: boolean;
 
     constructor(
@@ -246,6 +248,8 @@ export class FloorPlanService implements OnDestroy
             }
         }
 
+
+
         const rows = [];
 
         for(let y = 0; y <= this._highestY; y++)
@@ -320,7 +324,7 @@ export class FloorPlanService implements OnDestroy
 
         this._highestY = roomMapStringSplit.length - 1;
         this._highestX = roomMapStringSplit[this._highestY].length - 1;
-
+        console.log('highest X: ' + this._highestX + ', highestY: ' + this._highestY);
         return roomMap;
     }
 
@@ -340,7 +344,7 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    public renderTileMap(container: Container): void
+    public renderTileMap(): void
     {
         for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
         {
@@ -377,7 +381,7 @@ export class FloorPlanService implements OnDestroy
                     color = '0xffffff';
                 }
 
-                this._spriteMap[y][x] = container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color));
+                this._spriteMap[y][x] = this._container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color));
             }
         }
     }
@@ -702,5 +706,10 @@ export class FloorPlanService implements OnDestroy
     {
         this._floorMapSettings = this.__originalFloorMapSettings;
         this.tryEmit();
+    }
+
+    public set container(container: Container)
+    {
+        this._container = container;
     }
 }
