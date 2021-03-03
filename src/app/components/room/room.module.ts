@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { RoomComponent } from './room.component';
 import { RoomAvatarInfoAvatarComponent } from './widgets/avatarinfo/components/avatar/avatar.component';
 import { RoomAvatarInfoDecorateComponent } from './widgets/avatarinfo/components/decorate/decorate.component';

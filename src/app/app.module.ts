@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { CoreModule } from './core';
 import { SecurityModule } from './security';
-import { SharedModule } from './shared';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
     imports: [

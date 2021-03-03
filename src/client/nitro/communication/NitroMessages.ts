@@ -52,6 +52,7 @@ import { AvatarEffectActivatedEvent } from './messages/incoming/inventory/avatar
 import { AvatarEffectAddedEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectAddedEvent';
 import { AvatarEffectExpiredEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectExpiredEvent';
 import { AvatarEffectsEvent } from './messages/incoming/inventory/avatareffect/AvatarEffectsEvent';
+import { BadgesEvent } from './messages/incoming/inventory/badges/BadgesEvent';
 import { BotAddedToInventoryEvent } from './messages/incoming/inventory/bots/BotAddedToInventoryEvent';
 import { BotInventoryMessageEvent } from './messages/incoming/inventory/bots/BotInventoryMessageEvent';
 import { BotRemovedFromInventoryEvent } from './messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
@@ -225,6 +226,8 @@ import { GroupSavePreferencesComposer } from './messages/outgoing/group/GroupSav
 import { GroupSettingsComposer } from './messages/outgoing/group/GroupSettingsComposer';
 import { InfoRetrieveBaseMessageComposer } from './messages/outgoing/handshake/InfoRetrieveBaseMessageComposer';
 import { SecurityTicketComposer } from './messages/outgoing/handshake/SecurityTicketComposer';
+import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
@@ -329,9 +332,6 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { RequestBadgesComposer } from './messages/outgoing/inventory/badges/RequestBadgesComposer';
-import { _Str_5147 } from './messages/incoming/inventory/badges/_Str_5147';
-import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -574,7 +574,7 @@ export class NitroMessages implements IMessageConfiguration
         // USER
 
         // BADGEs
-        this._events.set(IncomingHeader.USER_BADGES, _Str_5147);
+        this._events.set(IncomingHeader.USER_BADGES, BadgesEvent);
 
         // ACCESS
         this._events.set(IncomingHeader.USER_PERKS, UserPerksEvent);

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { WiredActionBaseComponent } from './components/actions/action-base/action-base.component';
 import { BotChangeFigureComponent } from './components/actions/bot-change-figure/bot-change-figure.component';
 import { BotFollowAvatarComponent } from './components/actions/bot-follow-avatar/bot-follow-avatar.component';

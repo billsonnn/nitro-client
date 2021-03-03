@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/index';
+import { SharedModule } from '../../shared/shared.module';
 import { FriendListFriendsListComponent } from './components/friends-list/friends-list.component';
 import { FriendListFriendsViewerComponent } from './components/friends-viewer/friends-viewer.component';
 import { FriendListMainComponent } from './components/main/main.component';

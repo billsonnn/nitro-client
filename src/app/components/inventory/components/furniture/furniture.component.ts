@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { Subscription } from 'rxjs';
 import { Nitro } from '../../../../../client/nitro/Nitro';
@@ -17,11 +17,8 @@ import { InventorySharedComponent } from '../shared/inventory-shared.component';
     selector: '[nitro-inventory-furniture-component]',
     templateUrl: './furniture.template.html'
 })
-export class InventoryFurnitureComponent extends InventorySharedComponent implements OnInit, OnChanges, OnDestroy
+export class InventoryFurnitureComponent extends InventorySharedComponent implements OnInit, OnDestroy
 {
-    @Input()
-    public visible: boolean = false;
-
     @Input()
     public roomPreviewer: RoomPreviewer = null;
 
@@ -57,28 +54,14 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
                     return;
             }
         });
-    }
 
-    public ngOnChanges(changes: SimpleChanges): void
-    {
-        const prev = (changes.visible.previousValue || false);
-        const next = changes.visible.currentValue;
-
-        if(next !== prev)
-        {
-            if(next)
-            {
-                this.prepareInventory();
-            }
-            else
-            {
-                this._inventoryService.controller.setAllFurnitureSeen();
-            }
-        }
+        this.prepareInventory();
     }
 
     public ngOnDestroy(): void
     {
+        this._inventoryService.controller.setAllFurnitureSeen();
+
         if(this._subscription)
         {
             this._subscription.unsubscribe();
@@ -170,6 +153,8 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
 
     private selectGroup(groupItem: GroupItem): void
     {
+        if(this.selectedGroup === groupItem) return;
+        
         this._inventoryService.controller.furnitureService.unselectAllGroupItems();
 
         this.selectedGroup = groupItem;
@@ -234,7 +219,7 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
         }
         else
         {
-            this._ngZone.runOutsideAngular(() => this.roomPreviewer && this.roomPreviewer.reset(false));
+            this._ngZone.runOutsideAngular(() => (this.roomPreviewer && this.roomPreviewer.reset(false)));
         }
     }
 
@@ -247,7 +232,7 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
         this.mouseDown = true;
     }
 
-    public onMouseUp(groupItem: GroupItem): void
+    public onMouseUp(): void
     {
         this.mouseDown = false;
     }
@@ -320,9 +305,6 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
     {
         return this._filteredItems;
     }
-
-
-
 
 
     public get paginateConfig(): PaginationInstance

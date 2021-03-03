@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../../../core/settings/service';
+import { InventoryBadgeService } from '../../services/badge.service';
+import { InventoryBotService } from '../../services/bot.service';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryTradingService } from '../../services/trading.service';
@@ -21,6 +23,8 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _settingsService: SettingsService,
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
+        private _inventoryBotService: InventoryBotService,
+        private _inventoryBadgeService: InventoryBadgeService,
         private _inventoryTradingService: InventoryTradingService)
     {}
 
@@ -58,8 +62,6 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
             else
             {
                 this._inventoryTradingService.close();
-
-                this.setAllFurnitureSeen();
             }
         }
     }
@@ -81,8 +83,6 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         this._inventoryService.furnitureVisible = false;
         this._inventoryService.botsVisible = true;
         this._inventoryService.badgesVisible = false;
-
-        this._inventoryService.selectFirstBot();
     }
 
     public showBadges(): void
@@ -113,6 +113,16 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         this._inventoryFurnitureService.setAllFurnitureSeen();
     }
 
+    public setAllBotsSeen(): void
+    {
+        this._inventoryBotService.setAllBotsSeen();
+    }
+
+    public setAllBadgesSeen(): void
+    {
+        this._inventoryBadgeService.setAllBadgesSeen();
+    }
+
     public get roomPreviewer(): RoomPreviewer
     {
         return this._roomPreviewer;
@@ -141,6 +151,16 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public get furnitureService(): InventoryFurnitureService
     {
         return this._inventoryFurnitureService;
+    }
+
+    public get botService(): InventoryBotService
+    {
+        return this._inventoryBotService;
+    }
+
+    public get badgeService(): InventoryBadgeService
+    {
+        return this._inventoryBadgeService;
     }
 
     public get tradeService(): InventoryTradingService

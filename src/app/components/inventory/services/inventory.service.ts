@@ -6,6 +6,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { IRoomSession } from '../../../../client/nitro/session/IRoomSession';
 import { SettingsService } from '../../../core/settings/service';
+import { InventoryBadgesComponent } from '../components/badges/badges.component';
 import { InventoryBotsComponent } from '../components/bots/bots.component';
 import { InventoryFurnitureComponent } from '../components/furniture/furniture.component';
 import { InventoryMainComponent } from '../components/main/main.component';
@@ -13,7 +14,6 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
-import { InventoryBadgesComponent } from '../components/badges/badges.component';
 
 @Injectable()
 export class InventoryService implements OnDestroy
@@ -127,27 +127,36 @@ export class InventoryService implements OnDestroy
 
     public updateUnseenCount(): void
     {
-        function run()
+        setTimeout(() =>
         {
-            let count = 0;
+            this._ngZone.run(() =>
+            {
+                let count = 0;
 
-            const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+                const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
 
-            count += furniCount;
+                count += furniCount;
 
-            this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                const botCount = this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
 
-            this._unseenCount = count;
-        }
+                count += botCount;
 
-        if(!NgZone.isInAngularZone())
-        {
-            this._ngZone.run(() => run.apply(this));
-        }
-        else
-        {
-            run.apply(this);
-        }
+                const badgeCount = this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
+
+                count += badgeCount;
+
+                const petCount = this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+
+                count += petCount;
+
+                this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                this._unseenCounts.set(UnseenItemCategory.BOT, botCount);
+                this._unseenCounts.set(UnseenItemCategory.BADGE, badgeCount);
+                this._unseenCounts.set(UnseenItemCategory.PET, petCount);
+
+                this._unseenCount = count;
+            });
+        });
     }
 
     public updateItemLocking(): void
@@ -312,10 +321,5 @@ export class InventoryService implements OnDestroy
     public get boundFurnitureNames(): string[]
     {
         return this._boundFurnitureNames;
-    }
-
-    public selectFirstBot(): void
-    {
-        this._botsController && this._botsController.selectFirstBot();
     }
 }

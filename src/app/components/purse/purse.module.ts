@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { PurseMainComponent } from './components/main/main.component';
 import { PurseService } from './services/purse.service';
 

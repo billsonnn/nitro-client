@@ -1,11 +1,11 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { InventoryService } from '../../services/inventory.service';
-import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
-import { BotData } from '../../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
-import { InventoryFurnitureService } from '../../services/furniture.service';
-import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
-import { InventorySharedComponent } from '../shared/inventory-shared.component';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
+import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
+import { NotificationService } from '../../../notification/services/notification.service';
+import { BotItem } from '../../items/BotItem';
+import { InventoryService } from '../../services/inventory.service';
+import { InventorySharedComponent } from '../shared/inventory-shared.component';
 
 @Component({
     selector: '[nitro-inventory-bots-component]',
@@ -14,18 +14,15 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 export class InventoryBotsComponent extends InventorySharedComponent implements OnInit, OnDestroy
 {
     @Input()
-    public visible: boolean = false;
-
-    @Input()
     public roomPreviewer: RoomPreviewer = null;
 
-
-    public selectedBot: BotData = null;
+    public selectedItem: BotItem = null;
+    public mouseDown: boolean = false;
 
     constructor(
+        private _notificationService: NotificationService,
         protected _inventoryService: InventoryService,
-        protected _ngZone: NgZone,
-        private _furniService: InventoryFurnitureService)
+        protected _ngZone: NgZone)
     {
         super(_inventoryService, _ngZone);
     }
@@ -33,63 +30,141 @@ export class InventoryBotsComponent extends InventorySharedComponent implements 
     public ngOnInit(): void
     {
         this._inventoryService.botsController = this;
+
+        if(this._inventoryService.controller.botService.isInitalized) this.selectExistingGroupOrDefault();
+
+        this.prepareInventory();
     }
 
     public ngOnDestroy(): void
     {
+        this._inventoryService.controller.setAllBotsSeen();
+
         this._inventoryService.botsController = null;
     }
 
-    public get bots(): AdvancedMap<number, BotData>
+    private prepareInventory(): void
     {
-        return this._furniService.getBots();
-    }
-
-    public get hasBots(): boolean
-    {
-        return this.bots && this.bots.length > 0;
-    }
-
-    public selectBot(bot: BotData)
-    {
-        this.selectedBot = bot;
-        this.setRoomPreviewer();
-    }
-
-    private setRoomPreviewer(): void
-    {
-
-        if(!this.selectedBot) return;
-
-        this._ngZone.runOutsideAngular(() =>
+        if(!this._inventoryService.controller.botService.isInitalized || this._inventoryService.controller.botService.needsUpdate)
         {
-            if(this.roomPreviewer)
+            this._inventoryService.controller.botService.requestLoad();
+        }
+        else
+        {
+            this.selectExistingGroupOrDefault();
+        }
+    }
+
+    public selectExistingGroupOrDefault(): void
+    {
+        if(this.selectedItem)
+        {
+            const index = this.botItems.indexOf(this.selectedItem);
+
+            if(index > -1)
             {
-                this.roomPreviewer.updateObjectRoom('default', 'default', 'default');
-                const figure = Nitro.instance.avatar.getFigureStringWithFigureIds(this.selectedBot.figure, this.selectedBot.gender, []);
+                this.selectBotItem(this.selectedItem);
 
-                this.roomPreviewer.addAvatarIntoRoom(figure, 0);
-
+                return;
             }
-        });
+        }
 
+        this.selectFirstBot();
     }
 
     public selectFirstBot(): void
     {
-        if(this.bots.length > 0)
+        let bot: BotItem = null;
+
+        for(const botItem of this.botItems)
         {
-            this.selectedBot = this.bots.getWithIndex(0);
-            this.setRoomPreviewer();
+            if(!botItem) continue;
+
+            bot = botItem;
+
+            break;
+        }
+
+        this.selectBotItem(bot);
+    }
+
+    private selectBotItem(botItem: BotItem): void
+    {
+        if(this.selectedItem === botItem) return;
+
+        this._inventoryService.controller.botService.unselectAllBotItems();
+
+        this.selectedItem = botItem;
+
+        if(this.selectedItem)
+        {
+            this.selectedItem.selected = true;
+
+            if(this.selectedItem.isUnseen) this.selectedItem.isUnseen = false;
+
+            const botData = this.selectedItem.botData;
+
+            if(!botData) return;
+
+            this._ngZone.runOutsideAngular(() =>
+            {
+                if(this.roomPreviewer)
+                {
+                    let wallType        = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_WALL_TYPE);
+                    let floorType       = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_FLOOR_TYPE);
+                    let landscapeType   = Nitro.instance.roomEngine.getRoomInstanceVariable<string>(Nitro.instance.roomEngine.activeRoomId, RoomObjectVariable.ROOM_LANDSCAPE_TYPE);
+
+                    wallType        = (wallType && wallType.length) ? wallType : '101';
+                    floorType       = (floorType && floorType.length) ? floorType : '101';
+                    landscapeType   = (landscapeType && landscapeType.length) ? landscapeType : '1.1';
+
+                    this.roomPreviewer.reset(false);
+                    this.roomPreviewer.updateObjectRoom(floorType, wallType, landscapeType);
+                    this.roomPreviewer.addAvatarIntoRoom(botData.figure, 0);
+                }
+            });
+        }
+        else
+        {
+            this._ngZone.runOutsideAngular(() => this.roomPreviewer && this.roomPreviewer.reset(false));
         }
     }
 
-    public attemptBotPlacement(): void
+    public onMouseDown(botItem: BotItem): void
     {
-        if(!this.canPlace || this.tradeRunning) return;
+        if(!botItem) return;
 
-        this._ngZone.runOutsideAngular(() => this._inventoryService.controller.furnitureService.attemptBotPlacement(this.selectedBot));
+        this.selectBotItem(botItem);
+
+        this.mouseDown = true;
     }
 
+    public onMouseUp(): void
+    {
+        this.mouseDown = false;
+    }
 
+    public onMouseOut(botItem: BotItem): void
+    {
+        if(!this.mouseDown) return;
+
+        if(this.selectedItem !== botItem) return;
+
+        this.attemptBotPlacement();
+    }
+
+    public trackByType(index: number, item: BotItem): number
+    {
+        return item.id;
+    }
+
+    public get botItems(): BotItem[]
+    {
+        return this._inventoryService.controller.botService.bots;
+    }
+
+    public get hasBotItems(): boolean
+    {
+        return !!this.botItems.length;
+    }
 }

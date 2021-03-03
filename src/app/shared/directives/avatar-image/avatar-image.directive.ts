@@ -1,17 +1,14 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
 import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
 import { Nitro } from '../../../../client/nitro/Nitro';
 
-@Component({
-    selector: '[nitro-avatar-image]',
-    template: `
-    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" image-placeholder />`,
-    encapsulation: ViewEncapsulation.None
+@Directive({
+    selector: '[avatar-image]'
 })
-export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvatarImageListener
+export class AvatarImageDirective implements OnInit, OnChanges, IAvatarImageListener
 {
     private static MAX_CACHE_SIZE: number = 10;
 
@@ -30,24 +27,21 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
     @Input()
     public scale: number = 1;
 
+    @Input()
+    public asBackground: boolean = false;
+
     private _avatarImageCache: AdvancedMap<string, string> = new AdvancedMap();
 
     public avatarUrl: string	= null;
     public disposed: boolean	= false;
     public needsUpdate: boolean	= true;
 
-    constructor(
-        private _ngZone: NgZone)
+    constructor(private elementRef: ElementRef<HTMLDivElement>)
     {}
 
     public ngOnInit(): void
     {
         if(this.needsUpdate) this.buildAvatar();
-    }
-
-    public ngOnDestroy(): void
-    {
-        this.dispose();
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -97,17 +91,42 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 
     private buildAvatar(): void
     {
-        this._ngZone.runOutsideAngular(() =>
+        this.needsUpdate = false;
+        
+        const imageUrl = this.getUserImageUrl();
+
+        if(!imageUrl || !imageUrl.length) return;
+
+        const element = this.elementRef.nativeElement;
+
+        if(!element) return;
+
+        if(this.asBackground)
         {
-            this.needsUpdate = false;
+            element.style.backgroundImage = `url(${ imageUrl })`;
+            element.style.backgroundPositionY = '-31px';
+        }
+        else
+        {
+            const existingImages = element.getElementsByClassName('avatar-image');
 
-            const imageUrl = this.getUserImageUrl();
+            let i = existingImages.length;
 
-            if(imageUrl)
+            while(i < 0)
             {
-                this._ngZone.run(() => (this.avatarUrl = imageUrl));
+                const imageElement = (existingImages[i] as HTMLImageElement);
+
+                imageElement.remove();
+
+                i--;
             }
-        });
+
+            const imageElement = document.createElement('img');
+
+            imageElement.className = `avatar-image scale-${ this.scale }`;
+
+            imageElement.src = imageUrl;
+        }
     }
 
     private getUserImageUrl(): string
@@ -135,7 +154,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
                 avatarImage.dispose();
             }
 
-            if(existing) this.putInCache(build, existing);
+            if(existing && existing.length) this.putInCache(build, existing);
         }
 
         return existing;
@@ -143,7 +162,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 
     private putInCache(build: string, url: string): void
     {
-        if(this._avatarImageCache.length === AvatarImageComponent.MAX_CACHE_SIZE) this._avatarImageCache.remove(this._avatarImageCache.getKey(0));
+        if(this._avatarImageCache.length === AvatarImageDirective.MAX_CACHE_SIZE) this._avatarImageCache.remove(this._avatarImageCache.getKey(0));
 
         this._avatarImageCache.add(build, url);
     }
