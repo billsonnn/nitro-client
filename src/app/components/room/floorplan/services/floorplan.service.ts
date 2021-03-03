@@ -426,7 +426,7 @@ export class FloorPlanService implements OnDestroy
         switch(this._currentAction)
         {
             case 'door':
-                this._setDoor(x,y,);
+                this._setDoor(x,y);
                 return;
             case 'up':
                 futureHeightIndex = heightIndex + 1;
