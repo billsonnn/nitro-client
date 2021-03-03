@@ -13,6 +13,7 @@ import { IRoomEngine } from '../IRoomEngine';
 import { IObjectData } from '../object/data/IObjectData';
 import { LegacyDataType } from '../object/data/type/LegacyDataType';
 import { RoomObjectCategory } from '../object/RoomObjectCategory';
+import { RoomObjectUserType } from '../object/RoomObjectUserType';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 import { RoomPlaneParser } from '../object/RoomPlaneParser';
 
@@ -192,13 +193,40 @@ export class RoomPreviewer
             this._currentPreviewObjectCategory  = RoomObjectCategory.UNIT;
             this._currentPreviewObjectData      = figure;
 
-            if(this._roomEngine.addRoomObjectUser(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y, 0), new Vector3d(90, 0, 0), 135, 1, figure))
+            if(this._roomEngine.addRoomObjectUser(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y, 0), new Vector3d(90, 0, 0), 135, RoomObjectUserType.getTypeNumber(RoomObjectUserType.USER), figure))
             {
                 this._previousAutomaticStateChangeTime  = Nitro.instance.time;
                 this._automaticStateChange              = true;
 
                 this.updateUserGesture(1);
                 this.updateUserEffect(effect);
+                this.updateUserPosture('std');
+            }
+
+            this.updatePreviewRoomView();
+
+            return RoomPreviewer.PREVIEW_OBJECT_ID;
+        }
+
+        return -1;
+    }
+
+    public addPetIntoRoom(figure: string): number
+    {
+        if(this.isRoomEngineReady)
+        {
+            this.reset(false);
+
+            this._currentPreviewObjectType      = 1;
+            this._currentPreviewObjectCategory  = RoomObjectCategory.UNIT;
+            this._currentPreviewObjectData      = figure;
+
+            if(this._roomEngine.addRoomObjectUser(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, new Vector3d(RoomPreviewer.PREVIEW_OBJECT_LOCATION_X, RoomPreviewer.PREVIEW_OBJECT_LOCATION_Y, 0), new Vector3d(90, 0, 0), 135, RoomObjectUserType.getTypeNumber(RoomObjectUserType.PET), figure))
+            {
+                this._previousAutomaticStateChangeTime  = Nitro.instance.time;
+                this._automaticStateChange              = true;
+
+                this.updateUserGesture(1);
                 this.updateUserPosture('std');
             }
 

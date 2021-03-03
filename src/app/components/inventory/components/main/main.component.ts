@@ -6,6 +6,7 @@ import { InventoryBadgeService } from '../../services/badge.service';
 import { InventoryBotService } from '../../services/bot.service';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
+import { InventoryPetService } from '../../services/pet.service';
 import { InventoryTradingService } from '../../services/trading.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
         private _inventoryBotService: InventoryBotService,
+        private _inventoryPetService: InventoryPetService,
         private _inventoryBadgeService: InventoryBadgeService,
         private _inventoryTradingService: InventoryTradingService)
     {}
@@ -68,6 +70,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     {
         this._inventoryService.furnitureVisible = true;
         this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = false;
         this._inventoryService.badgesVisible    = false;
     }
 
@@ -75,6 +78,15 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     {
         this._inventoryService.furnitureVisible = false;
         this._inventoryService.botsVisible      = true;
+        this._inventoryService.petsVisible      = false;
+        this._inventoryService.badgesVisible    = false;
+    }
+
+    public showPets(): void
+    {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = true;
         this._inventoryService.badgesVisible    = false;
     }
 
@@ -82,6 +94,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     {
         this._inventoryService.furnitureVisible = false;
         this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = false;
         this._inventoryService.badgesVisible    = true;
     }
 
@@ -109,6 +122,11 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public setAllBotsSeen(): void
     {
         this._inventoryBotService.setAllBotsSeen();
+    }
+
+    public setAllPetsSeen(): void
+    {
+        this._inventoryPetService.setAllPetsSeen();
     }
 
     public setAllBadgesSeen(): void
@@ -149,6 +167,11 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public get botService(): InventoryBotService
     {
         return this._inventoryBotService;
+    }
+
+    public get petService(): InventoryPetService
+    {
+        return this._inventoryPetService;
     }
 
     public get badgeService(): InventoryBadgeService

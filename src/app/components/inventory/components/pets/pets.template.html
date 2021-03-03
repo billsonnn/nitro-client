@@ -1,5 +1,27 @@
-<div *ngIf="visible" class="nitro-inventory-pets-component">
-    <div class="container">
-        pets
+<div class="row nitro-inventory-pets-component" (mouseup)="onMouseUp()">
+    <div class="col-12" *ngIf="!hasPetItems">
+        {{ ('inventory.empty.title') | translate }}
+        {{ ('inventory.empty.desc') | translate }}
     </div>
+    <ng-container *ngIf="hasPetItems">
+        <div class="col-7 d-flex flex-column" style="z-index: 1;">
+            <perfect-scrollbar class="grid-container w-100" style="min-height: 209px;max-height: 209px;height:209px;">
+                <div class="grid-items grid-5">
+                    <div *ngFor="let petItem of petItems;trackBy:trackByType" class="d-flex flex-column item-detail justify-content-center align-items-center" (mousedown)="onMouseDown(petItem)" (mouseout)="onMouseOut(petItem)">
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedItem === petItem), 'bg-success': petItem.isUnseen }"></button>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+        <div class="col-5 d-flex flex-column">
+            <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [height]="140"></div>
+            <div class="d-flex flex-column flex-grow-1 justify-content-between" *ngIf="selectedItem"
+                style="z-index: 1;">
+                <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedItem.botData.name }}</div>
+                <div class="btn-group-vertical w-100">
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100" (click)="attemptPetPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
 </div>
