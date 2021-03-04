@@ -179,6 +179,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
         this.insertCanvas();
 
+        this.onWindowResizeEvent(null);
+
         Nitro.instance.ticker.add(this.update, this);
     }
 
@@ -390,7 +392,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     private onWindowResizeEvent(event: UIEvent): void
     {
-        if(!event || !this._roomSession) return;
+        if(!this._roomSession) return;
 
         if(this._resizeTimer) clearTimeout(this._resizeTimer);
 

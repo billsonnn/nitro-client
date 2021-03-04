@@ -1,8 +1,8 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RemoveBotFromFlatComposer implements IMessageComposer<ConstructorParameters<typeof RemoveBotFromFlatComposer>>
+export class BotRemoveComposer implements IMessageComposer<ConstructorParameters<typeof BotRemoveComposer>>
 {
-    private _data: ConstructorParameters<typeof RemoveBotFromFlatComposer>;
+    private _data: ConstructorParameters<typeof BotRemoveComposer>;
 
     constructor(botId: number)
     {

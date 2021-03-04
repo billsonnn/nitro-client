@@ -1,7 +1,7 @@
 ﻿import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { PetFigureData } from './PetFigureData';
 
-export class _Str_2848
+export class PetData
 {
     private _id: number;
     private _name: string;

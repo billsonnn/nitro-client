@@ -92,7 +92,7 @@ export class AvatarImageDirective implements OnInit, OnChanges, IAvatarImageList
     private buildAvatar(): void
     {
         this.needsUpdate = false;
-        
+
         const imageUrl = this.getUserImageUrl();
 
         if(!imageUrl || !imageUrl.length) return;

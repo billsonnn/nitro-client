@@ -93,7 +93,7 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
 
     public wearBadge(): void
     {
-        const badge = this.selectedBadge
+        const badge = this.selectedBadge;
 
         if(!badge) return;
 

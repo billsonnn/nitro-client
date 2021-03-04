@@ -183,7 +183,7 @@ export class InventoryBotService implements OnDestroy
         if(this._botIdInBotPlacing === botItem.id)
         {
             this.cancelRoomObjectPlacement();
-            
+
             this._inventoryService.showWindow();
         }
 
@@ -192,7 +192,7 @@ export class InventoryBotService implements OnDestroy
 
     private isBotUnseen(item: BotData): boolean
     {
-        let category = UnseenItemCategory.BOT;
+        const category = UnseenItemCategory.BOT;
 
         return this._inventoryService.unseenTracker._Str_3613(category, item.id);
     }
@@ -232,7 +232,7 @@ export class InventoryBotService implements OnDestroy
 
     private startRoomObjectPlacement(botData: BotData): void
     {
-        let isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, -(botData.id), RoomObjectCategory.UNIT, RoomObjectType.RENTABLE_BOT, botData.figure);
+        const isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, -(botData.id), RoomObjectCategory.UNIT, RoomObjectType.RENTABLE_BOT, botData.figure);
 
         if(isMoving)
         {

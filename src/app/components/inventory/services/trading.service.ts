@@ -290,6 +290,7 @@ export class InventoryTradingService implements OnDestroy
 
         this._ngZone.run(() =>
         {
+            this._inventoryService.hideAllControllers();
             this._inventoryService.showWindow();
 
             this._inventoryService.furnitureVisible = true;

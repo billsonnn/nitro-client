@@ -152,7 +152,7 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
     private selectGroup(groupItem: GroupItem): void
     {
         if(this.selectedGroup === groupItem) return;
-        
+
         this._inventoryService.controller.furnitureService.unselectAllGroupItems();
 
         this.selectedGroup = groupItem;
