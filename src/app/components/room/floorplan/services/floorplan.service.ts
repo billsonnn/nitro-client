@@ -197,10 +197,27 @@ export class FloorPlanService implements OnDestroy
             settings.doorX,
             settings.doorY,
             settings.doorDirection,
-            settings.thicknessWall,
-            settings.thicknessFloor,
-            settings.wallHeight
+            this.convertNumbersForSaving(settings.thicknessWall),
+            this.convertNumbersForSaving(settings.thicknessFloor),
+            (this._wallHeight - 1)
         ));
+    }
+
+    private convertNumbersForSaving(value: number): number
+    {
+        value = parseInt(value.toString());
+        switch(value)
+        {
+            case 0:
+                return -2;
+            case 1:
+                return -1;
+            case 3:
+                return 1;
+            default:
+                return 0;
+
+        }
     }
 
     public clear(): void
