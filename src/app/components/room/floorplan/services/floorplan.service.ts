@@ -530,6 +530,8 @@ export class FloorPlanService implements OnDestroy
                 x.tint = color;
             });
         });
+
+        this._changesMade = false;
     }
     private _setDoor(x: number, y: number): void
     {
