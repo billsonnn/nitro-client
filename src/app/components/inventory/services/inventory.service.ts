@@ -133,19 +133,19 @@ export class InventoryService implements OnDestroy
             {
                 let count = 0;
 
-                const furniCount = this.furniUnseenCount;
+                const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
 
                 count += furniCount;
 
-                const botCount = this.botUnseenCount;
+                const botCount = this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
 
                 count += botCount;
 
-                const petCount = this.petUnseenCount;
+                const petCount = this._unseenTracker._Str_5621(UnseenItemCategory.PET);
 
                 count += petCount;
 
-                const badgeCount = this.badgeUnseenCount;
+                const badgeCount = this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
 
                 count += badgeCount;
 
@@ -156,7 +156,7 @@ export class InventoryService implements OnDestroy
 
                 this._unseenCount = count;
             });
-        });
+        }, 1);
     }
 
     public updateItemLocking(): void
@@ -268,22 +268,22 @@ export class InventoryService implements OnDestroy
 
     public get furniUnseenCount(): number
     {
-        return this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+        return this._unseenCounts.get(UnseenItemCategory.FURNI);
     }
 
     public get botUnseenCount(): number
     {
-        return this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
+        return this._unseenCounts.get(UnseenItemCategory.BOT);
     }
 
     public get petUnseenCount(): number
     {
-        return this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+        return this._unseenCounts.get(UnseenItemCategory.PET);
     }
 
     public get badgeUnseenCount(): number
     {
-        return this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
+        return this._unseenCounts.get(UnseenItemCategory.BADGE);
     }
 
     public get unseenCount(): number
