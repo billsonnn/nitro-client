@@ -4,7 +4,7 @@
     bottom: 10px;
     pointer-events: none;
 
-    .infostand {
+    .nitro-infostand {
         min-width: 200px;
         max-width: 200px;
         z-index: $infostand-zindex;
@@ -30,9 +30,13 @@
                 margin-right: 0;
             }
 
-            img {
+            .avatar-image {
                 position: relative;
-                bottom: 10px;
+                width: 90px;
+                height: 130px;
+                background-repeat: no-repeat;
+                background-position-x: center;
+                background-position-y: -8px !important;
             }
         }
 
