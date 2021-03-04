@@ -254,7 +254,6 @@ import { NavigatorSearchSaveComposer } from './messages/outgoing/navigator/Navig
 import { NavigatorSettingsComposer } from './messages/outgoing/navigator/NavigatorSettingsComposer';
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
-import { PetPickUpComposer } from './messages/outgoing/pet/PetPickUpComposer';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
@@ -273,10 +272,13 @@ import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer
 import { RoomSettingsComposer } from './messages/outgoing/room/data/RoomSettingsComposer';
 import { RoomUsersWithRightsComposer } from './messages/outgoing/room/data/RoomUsersWithRightsComposer';
 import { SaveRoomSettingsComposer } from './messages/outgoing/room/data/SaveRoomSettingsComposer';
+import { BotPlaceComposer } from './messages/outgoing/room/engine/BotPlaceComposer';
+import { BotRemoveComposer } from './messages/outgoing/room/engine/BotRemoveComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
-import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { PetMoveComposer } from './messages/outgoing/room/engine/PetMoveComposer';
+import { PetPlaceComposer } from './messages/outgoing/room/engine/PetPlaceComposer';
+import { PetRemoveComposer } from './messages/outgoing/room/engine/PetRemoveComposer';
 import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { RoomAdsUpdateComposer } from './messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { MoodlightSettingsComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
@@ -721,7 +723,6 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
-        this._composers.set(OutgoingHeader.PET_PICKUP, PetPickUpComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
@@ -754,8 +755,11 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
         this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
         this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
-        this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
-        this._composers.set(OutgoingHeader.BOT_PICKUP, RemoveBotFromFlatComposer);
+        this._composers.set(OutgoingHeader.BOT_PLACE, BotPlaceComposer);
+        this._composers.set(OutgoingHeader.BOT_PICKUP, BotRemoveComposer);
+        this._composers.set(OutgoingHeader.PET_PLACE, PetPlaceComposer);
+        this._composers.set(OutgoingHeader.PET_MOVE, PetMoveComposer);
+        this._composers.set(OutgoingHeader.PET_PICKUP, PetRemoveComposer);
 
         // FURNITURE
         this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);

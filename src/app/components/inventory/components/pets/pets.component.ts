@@ -119,6 +119,7 @@ export class InventoryPetsComponent extends InventorySharedComponent implements 
                     landscapeType   = (landscapeType && landscapeType.length) ? landscapeType : '1.1';
 
                     this.roomPreviewer.reset(false);
+                    this.roomPreviewer.updateRoomWallsAndFloorVisibility(false, true);
                     this.roomPreviewer.updateObjectRoom(floorType, wallType, landscapeType);
                     this.roomPreviewer.addPetIntoRoom(petData.figureData.figuredata);
                 }

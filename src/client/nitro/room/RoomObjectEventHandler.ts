@@ -11,9 +11,11 @@ import { IRoomGeometry } from '../../room/utils/IRoomGeometry';
 import { IVector3D } from '../../room/utils/IVector3D';
 import { RoomEnterEffect } from '../../room/utils/RoomEnterEffect';
 import { Vector3d } from '../../room/utils/Vector3d';
+import { BotPlaceComposer } from '../communication/messages/outgoing/room/engine/BotPlaceComposer';
 import { GetItemDataComposer } from '../communication/messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from '../communication/messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { PlaceBotComposer } from '../communication/messages/outgoing/room/engine/PlaceBotComposer';
+import { PetMoveComposer } from '../communication/messages/outgoing/room/engine/PetMoveComposer';
+import { PetPlaceComposer } from '../communication/messages/outgoing/room/engine/PetPlaceComposer';
 import { RemoveWallItemComposer } from '../communication/messages/outgoing/room/engine/RemoveWallItemComposer';
 import { FurnitureFloorUpdateComposer } from '../communication/messages/outgoing/room/furniture/floor/FurnitureFloorUpdateComposer';
 import { FurniturePickupComposer } from '../communication/messages/outgoing/room/furniture/FurniturePickupComposer';
@@ -1412,12 +1414,12 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                     {
                         if(selectedData.typeId === RoomObjectType.PET)
                         {
-                            // this._roomEngine.connection.send(new _Str_8042(_local_5, int(_local_9), int(_local_10)));
+                            this._roomEngine.connection.send(new PetPlaceComposer(objectId, Math.trunc(x), Math.trunc(y)));
                         }
 
                         else if(selectedData.typeId === RoomObjectType.RENTABLE_BOT)
                         {
-                            this._roomEngine.connection.send(new PlaceBotComposer(objectId, Math.floor(x), Math.floor(y)));
+                            this._roomEngine.connection.send(new BotPlaceComposer(objectId, Math.trunc(x), Math.trunc(y)));
                         }
                     }
 
@@ -1428,7 +1430,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                     else
                     {
-                        this._roomEngine.connection.send(new FurniturePlaceComposer(objectId, category, wallLocation, x, y, direction));
+                        this._roomEngine.connection.send(new FurniturePlaceComposer(objectId, category, wallLocation, Math.trunc(x), Math.trunc(y), direction));
                     }
                 }
             }
@@ -1512,15 +1514,15 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                         if(roomObject.type === RoomObjectUserType.MONSTER_PLANT)
                         {
-                            const _local_10 = this._roomEngine.roomSessionManager.getSession(roomId);
+                            const roomSession = this._roomEngine.roomSessionManager.getSession(roomId);
 
-                            if(_local_10)
+                            if(roomSession)
                             {
-                                const _local_11 = _local_10.userDataManager.getUserDataByIndex(objectId);
+                                const userData = roomSession.userDataManager.getUserDataByIndex(objectId);
 
-                                if(_local_11)
+                                if(userData)
                                 {
-                                    //this._roomEngine.connection.send(new _Str_8026(_local_11._Str_2394, _local_6, _local_7, _local_8));
+                                    this._roomEngine.connection.send(new PetMoveComposer(userData.webID, Math.trunc(x), Math.trunc(y), direction));
                                 }
                             }
                         }
@@ -1601,9 +1603,21 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
                     else if(category === RoomObjectCategory.UNIT)
                     {
-                        //
+                        const angle         = ((roomObject.getDirection().x) % 360);
+                        const location      = roomObject.getLocation();
+                        const direction     = (angle / 45);
+                        const race          = parseInt(roomObject.model.getValue<string>(RoomObjectVariable.RACE));
+                        const roomSession   = this._roomEngine.roomSessionManager.getSession(roomId);
+
+                        if(roomSession)
+                        {
+                            const userData = roomSession.userDataManager.getUserDataByIndex(objectId);
+
+                            if(userData) this._roomEngine.connection.send(new PetMoveComposer(userData.webID, location.x, location.y, direction));
+                        }
                     }
                 }
+
                 break;
             }
         }
