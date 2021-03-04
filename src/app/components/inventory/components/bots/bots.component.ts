@@ -119,6 +119,7 @@ export class InventoryBotsComponent extends InventorySharedComponent implements 
                     landscapeType   = (landscapeType && landscapeType.length) ? landscapeType : '1.1';
 
                     this.roomPreviewer.reset(false);
+                    this.roomPreviewer.updateRoomWallsAndFloorVisibility(false, true);
                     this.roomPreviewer.updateObjectRoom(floorType, wallType, landscapeType);
                     this.roomPreviewer.addAvatarIntoRoom(botData.figure, 0);
                 }

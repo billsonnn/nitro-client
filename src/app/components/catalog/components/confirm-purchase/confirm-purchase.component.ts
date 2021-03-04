@@ -6,7 +6,6 @@ import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
-import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 
 @Component({
     selector: 'nitro-catalog-confirm-purchase-component',
@@ -31,7 +30,6 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     @Input()
     public completed: boolean = false;
-
 
     @ViewChild('imageElement')
     public imageElement: ElementRef<HTMLDivElement>;

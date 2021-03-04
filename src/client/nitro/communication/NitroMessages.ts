@@ -63,6 +63,9 @@ import { FurnitureListInvalidateEvent } from './messages/incoming/inventory/furn
 import { FurnitureListRemovedEvent } from './messages/incoming/inventory/furni/FurnitureListRemovedEvent';
 import { FurniturePostItPlacedEvent } from './messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
 import { FurnitureGiftOpenedEvent } from './messages/incoming/inventory/furni/gifts/FurnitureGiftOpenedEvent';
+import { PetAddedToInventoryEvent } from './messages/incoming/inventory/pets/PetAddedToInventoryEvent';
+import { PetInventoryEvent } from './messages/incoming/inventory/pets/PetInventoryEvent';
+import { PetRemovedFromInventory } from './messages/incoming/inventory/pets/PetRemovedFromInventoryEvent';
 import { TradingAcceptEvent } from './messages/incoming/inventory/trading/TradingAcceptEvent';
 import { TradingCloseEvent } from './messages/incoming/inventory/trading/TradingCloseEvent';
 import { TradingCompletedEvent } from './messages/incoming/inventory/trading/TradingCompletedEvent';
@@ -231,6 +234,7 @@ import { SetActivatedBadgesComposer } from './messages/outgoing/inventory/badges
 import { GetBotInventoryComposer } from './messages/outgoing/inventory/bots/GetBotInventoryComposer';
 import { FurnitureList2Composer } from './messages/outgoing/inventory/furni/FurnitureList2Composer';
 import { FurnitureListComposer } from './messages/outgoing/inventory/furni/FurnitureListComposer';
+import { RequestPetsComposer } from './messages/outgoing/inventory/pets/RequestPetsComposer';
 import { TradingAcceptComposer } from './messages/outgoing/inventory/trading/TradingAcceptComposer';
 import { TradingCancelComposer } from './messages/outgoing/inventory/trading/TradingCancelComposer';
 import { TradingCloseComposer } from './messages/outgoing/inventory/trading/TradingCloseComposer';
@@ -250,7 +254,6 @@ import { NavigatorSearchSaveComposer } from './messages/outgoing/navigator/Navig
 import { NavigatorSettingsComposer } from './messages/outgoing/navigator/NavigatorSettingsComposer';
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
-import { PetPickUpComposer } from './messages/outgoing/pet/PetPickUpComposer';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
@@ -269,10 +272,13 @@ import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer
 import { RoomSettingsComposer } from './messages/outgoing/room/data/RoomSettingsComposer';
 import { RoomUsersWithRightsComposer } from './messages/outgoing/room/data/RoomUsersWithRightsComposer';
 import { SaveRoomSettingsComposer } from './messages/outgoing/room/data/SaveRoomSettingsComposer';
+import { BotPlaceComposer } from './messages/outgoing/room/engine/BotPlaceComposer';
+import { BotRemoveComposer } from './messages/outgoing/room/engine/BotRemoveComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
-import { PlaceBotComposer } from './messages/outgoing/room/engine/PlaceBotComposer';
-import { RemoveBotFromFlatComposer } from './messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { PetMoveComposer } from './messages/outgoing/room/engine/PetMoveComposer';
+import { PetPlaceComposer } from './messages/outgoing/room/engine/PetPlaceComposer';
+import { PetRemoveComposer } from './messages/outgoing/room/engine/PetRemoveComposer';
 import { RemoveWallItemComposer } from './messages/outgoing/room/engine/RemoveWallItemComposer';
 import { RoomAdsUpdateComposer } from './messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { MoodlightSettingsComposer } from './messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
@@ -613,6 +619,11 @@ export class NitroMessages implements IMessageConfiguration
 
         // WARDROBE
         this._events.set(IncomingHeader.USER_WARDROBE_PAGE, UserWardrobePageEvent);
+
+        // PETS
+        this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
+        this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
+        this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
     }
 
     private registerComposers(): void
@@ -712,7 +723,6 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
-        this._composers.set(OutgoingHeader.PET_PICKUP, PetPickUpComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
@@ -745,8 +755,11 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
         this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
         this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
-        this._composers.set(OutgoingHeader.BOT_PLACE, PlaceBotComposer);
-        this._composers.set(OutgoingHeader.BOT_PICKUP, RemoveBotFromFlatComposer);
+        this._composers.set(OutgoingHeader.BOT_PLACE, BotPlaceComposer);
+        this._composers.set(OutgoingHeader.BOT_PICKUP, BotRemoveComposer);
+        this._composers.set(OutgoingHeader.PET_PLACE, PetPlaceComposer);
+        this._composers.set(OutgoingHeader.PET_MOVE, PetMoveComposer);
+        this._composers.set(OutgoingHeader.PET_PICKUP, PetRemoveComposer);
 
         // FURNITURE
         this._composers.set(OutgoingHeader.FURNITURE_ALIASES, FurnitureAliasesComposer);
@@ -835,6 +848,9 @@ export class NitroMessages implements IMessageConfiguration
         // BADGES
         this._composers.set(OutgoingHeader.USER_BADGES, RequestBadgesComposer);
         this._composers.set(OutgoingHeader.USER_BADGES_CURRENT_UPDATE, SetActivatedBadgesComposer);
+
+        // PETS
+        this._composers.set(OutgoingHeader.USER_PETS, RequestPetsComposer);
 
         // CURRENCY
         this._composers.set(OutgoingHeader.USER_CURRENCY, UserCurrencyComposer);

@@ -10,6 +10,7 @@ import { InventoryBadgeService } from './services/badge.service';
 import { InventoryBotService } from './services/bot.service';
 import { InventoryFurnitureService } from './services/furniture.service';
 import { InventoryService } from './services/inventory.service';
+import { InventoryPetService } from './services/pet.service';
 import { InventoryTradingService } from './services/trading.service';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { InventoryTradingService } from './services/trading.service';
         InventoryBotService,
         InventoryFurnitureService,
         InventoryService,
+        InventoryPetService,
         InventoryTradingService
     ],
     declarations: [

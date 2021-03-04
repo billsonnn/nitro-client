@@ -65,7 +65,7 @@ export class InventoryBadgeService implements OnDestroy
 
             const badgeCodes        = parser.getAllBadgeCodes();
             const activeBadgeCodes  = parser.getActiveBadgeCodes();
-    
+
             for(const badgeCode of badgeCodes)
             {
                 const wearingIndex = activeBadgeCodes.indexOf(badgeCode);
@@ -73,7 +73,7 @@ export class InventoryBadgeService implements OnDestroy
                 if(wearingIndex === -1) this._badges.push(badgeCode);
                 else this._badgesInUse.push(badgeCode);
             }
-    
+
             this._isInitialized = true;
 
             if(this._inventoryService.badgesController) this._inventoryService.badgesController.selectExistingGroupOrDefault();

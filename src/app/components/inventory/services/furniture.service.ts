@@ -1,6 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { FurnitureListAddOrUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListAddOrUpdateEvent';
 import { FurnitureListEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListEvent';
 import { FurnitureListInvalidateEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurnitureListInvalidateEvent';
@@ -8,7 +7,6 @@ import { FurnitureListRemovedEvent } from '../../../../client/nitro/communicatio
 import { FurniturePostItPlacedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/FurniturePostItPlacedEvent';
 import { FurnitureListComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/furni/FurnitureListComposer';
 import { FurniturePlacePaintComposer } from '../../../../client/nitro/communication/messages/outgoing/room/furniture/FurniturePlacePaintComposer';
-import { BotData } from '../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
 import { FurnitureListItemParser } from '../../../../client/nitro/communication/messages/parser/inventory/furniture/utils/FurnitureListItemParser';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomObjectPlacementSource } from '../../../../client/nitro/room/enums/RoomObjectPlacementSource';
@@ -33,7 +31,6 @@ export class InventoryFurnitureService implements OnDestroy
 
     private _messages: IMessageEvent[]                                  = [];
     private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
-    private _botsFragments: AdvancedMap<number, BotData>                = null;
     private _groupItems: GroupItem[]                                    = [];
     private _search: string                                             = '';
     private _searchType: string                                         = '';

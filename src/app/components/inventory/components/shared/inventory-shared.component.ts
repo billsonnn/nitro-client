@@ -31,4 +31,11 @@ export class InventorySharedComponent
 
         this._ngZone.runOutsideAngular(() => this._inventoryService.controller.botService.attemptBotPlacement());
     }
+
+    public attemptPetPlacement(): void
+    {
+        if(!this.canPlace || this.tradeRunning) return;
+
+        this._ngZone.runOutsideAngular(() => this._inventoryService.controller.petService.attemptPetPlacement());
+    }
 }

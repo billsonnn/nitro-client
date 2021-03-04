@@ -47,7 +47,7 @@ export class BadgeImageDirective implements OnInit, OnChanges
     private buildBadge(): void
     {
         this.needsUpdate = false;
-        
+
         const imageUrl = this.badgeUrl;
 
         if(!imageUrl || !imageUrl.length) return;
@@ -77,7 +77,7 @@ export class BadgeImageDirective implements OnInit, OnChanges
 
             const imageElement = document.createElement('img');
 
-            imageElement.className = `badge-image`;
+            imageElement.className = 'badge-image';
 
             imageElement.src = imageUrl;
         }
