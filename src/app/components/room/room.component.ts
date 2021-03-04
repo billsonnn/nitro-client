@@ -129,6 +129,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     public get floorPlanVisible(): boolean
     {
+        return true;
+
         return this._settingsService.floorPlanVisible;
     }
 
