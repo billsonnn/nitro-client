@@ -188,6 +188,7 @@ export class IncomingHeader
     public static USER_FURNITURE_REMOVE            = 159;
     public static USER_HOME_ROOM                   = 2875;
     public static USER_IGNORED                     = 126;
+    public static USER_IGNORED_RESULT              = 207;
     public static USER_INFO                        = 2725;
     public static USER_OUTFITS                     = 3315;
     public static USER_PERKS                       = 2586;

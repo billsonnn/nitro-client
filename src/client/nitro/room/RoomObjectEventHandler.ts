@@ -906,11 +906,11 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
         if(!eventDispatcher) return;
 
-        const selectedData = this.getSelectedRoomObjectData(roomId);
+        let selectedData = this.getSelectedRoomObjectData(roomId);
 
         if(!selectedData) return;
 
-        const roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
+        let roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
 
         if(!roomObject)
         {
@@ -918,7 +918,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             {
                 if(selectedData.category === RoomObjectCategory.FLOOR)
                 {
-                    this._roomEngine.addFurnitureFloor(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData.stuffData, parseInt(selectedData._Str_4766), -1, 0, 0, '', false);
+                    this._roomEngine.addFurnitureFloor(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData.stuffData, parseFloat(selectedData._Str_4766), -1, 0, 0, '', false);
                 }
 
                 else if(selectedData.category === RoomObjectCategory.UNIT)
@@ -933,12 +933,40 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             else if(event instanceof RoomObjectWallMouseEvent)
             {
-                this._roomEngine.addFurnitureWall(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData._Str_4766, 0);
+                if(selectedData.category === RoomObjectCategory.WALL)
+                {
+                    this._roomEngine.addFurnitureWall(roomId, selectedData.id, selectedData.typeId, selectedData.loc, selectedData.dir, 0, selectedData._Str_4766, 0);
+                }
             }
 
+            roomObject = this._roomEngine.getRoomObject(roomId, selectedData.id, selectedData.category);
+
+            if(roomObject)
+            {
+                if(selectedData.category === RoomObjectCategory.FLOOR)
+                {
+                    const allowedDirections = roomObject.model.getValue<number[]>(RoomObjectVariable.FURNITURE_ALLOWED_DIRECTIONS);
+
+                    if(allowedDirections && allowedDirections.length)
+                    {
+                        const direction = new Vector3d(allowedDirections[0]);
+
+                        roomObject.setDirection(direction);
+
+                        this._Str_16022(roomId, selectedData.id, selectedData.category, selectedData.loc, direction, selectedData.operation, selectedData.typeId, selectedData._Str_4766, selectedData.stuffData, selectedData.state, selectedData._Str_15896, selectedData.posture);
+
+                        selectedData = this.getSelectedRoomObjectData(roomId);
+
+                        if(!selectedData) return;
+                    }
+                }
+            }
+
+            this.setFurnitureAlphaMultiplier(roomObject, 0.5);
             this._roomEngine._Str_7972(true);
         }
-        else
+
+        if(roomObject)
         {
             let _local_12 = true;
 
@@ -983,7 +1011,7 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
 
             else if(selectedData.category === RoomObjectCategory.UNIT)
             {
-                if(!((event instanceof RoomObjectTileMouseEvent) && this._Str_25586(roomObject, Math.trunc(event._Str_16836), Math.trunc(event._Str_17676), this._roomEngine.getLegacyWallGeometry(roomId))))
+                if(!((event instanceof RoomObjectTileMouseEvent) && this._Str_25586(roomObject, Math.trunc(event.tileX + 0.5), Math.trunc(event.tileY + 0.5), this._roomEngine.getLegacyWallGeometry(roomId))))
                 {
                     this._roomEngine.removeRoomObjectUser(roomId, selectedData.id);
 
