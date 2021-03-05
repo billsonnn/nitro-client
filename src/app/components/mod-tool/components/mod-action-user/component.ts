@@ -3,9 +3,14 @@ import { ModTool } from '../tool.component';
 import { ModToolService } from '../../services/mod-tool.service';
 import { UserToolUser } from '../user-tool/user-tool-user';
 import { ModActionDefinition } from './mod-action-definition';
-import { CallForHelpCategoryData } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { NotificationService } from '../../../notification/services/notification.service';
+import { ModtoolSanctionBanComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionBanComposer';
+import { ModtoolSanctionKickComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionKickComposer';
+import { ModtoolSanctionTradelockComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
+import { ModtoolEventAlertComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { ModtoolSanctionAlertComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionAlertComposer';
+import { ModtoolSanctionMuteComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionMuteComposer';
 
 @Component({
     selector: 'nitro-mod-tool-mod-action-user-component',
@@ -71,16 +76,67 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
 
         switch(sanction.actionType)
         {
-            case ModActionDefinition.ALERT: {
-                if(!this._modToolService._Str_3325._Str_18465)
+            case ModActionDefinition.ALERT:
                 {
-                    this._notifications.alert('You have insufficient permissions.');
-                    return;
+                    if(!this._modToolService._Str_3325._Str_18465)
+                    {
+                        this._notifications.alert('You have insufficient permissions.');
+                        return;
+                    }
+                    Nitro.instance.communication.connection.send(new ModtoolSanctionAlertComposer(this.user.id, this.message, parseInt(this.cfhType)));
                 }
-
+                break;
+            case ModActionDefinition.MUTE: {
+                Nitro.instance.communication.connection.send(new ModtoolSanctionMuteComposer(this.user.id, this.message, parseInt(this.cfhType)));
             }
                 break;
+            case ModActionDefinition.BAN:
+                {
+                    if(!this._modToolService._Str_3325._Str_21242)
+                    {
+                        this._notifications.alert('You have insufficient permissions.');
+                        return;
+                    }
+
+                    Nitro.instance.communication.connection.send(new ModtoolSanctionBanComposer(this.user.id, this.message, parseInt(this.cfhType), parseInt(this.sanction), (sanction.actionId == 106)));
+                }
+                break;
+
+            case ModActionDefinition.KICK:
+                {
+                    if(!this._modToolService._Str_3325._Str_20397)
+                    {
+                        this._notifications.alert('You have insufficient permissions.');
+                        return;
+                    }
+
+                    Nitro.instance.communication.connection.send(new ModtoolSanctionKickComposer(this.user.id, this.message, parseInt(this.cfhType)));
+
+                }
+                break;
+
+            case ModActionDefinition.TRADE_LOCK:
+                {
+                    const local6 = sanction._Str_25670 * 60;
+                    Nitro.instance.communication.connection.send(new ModtoolSanctionTradelockComposer(this.user.id, this.message, local6, parseInt(this.cfhType)));
+                }
+                break;
+
+            case ModActionDefinition.MESSAGE:
+                {
+                    if(this.message.trim().length == 0)
+                    {
+                        this._notifications.alert('Please write a message to user.');
+                        return;
+                    }
+
+                    Nitro.instance.communication.connection.send(new ModtoolEventAlertComposer(this.user.id, this.message,  parseInt(this.cfhType)));
+                }
+                break;
         }
+
+        this._modToolService.showModActionOnUser = false;
+
     }
 
     public close(): void
@@ -107,5 +163,5 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
     {
         return this._actions;
     }
-}
 
+}

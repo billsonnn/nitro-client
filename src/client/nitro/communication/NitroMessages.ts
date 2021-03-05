@@ -355,6 +355,12 @@ import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/Modt
 import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
 import { ModtoolCallForHelpTopicsEvent } from './messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
 import { ModtoolMainEvent } from './messages/incoming/modtool/ModtoolMainEvent';
+import { ModtoolSanctionBanComposer } from './messages/outgoing/modtool/ModtoolSanctionBanComposer';
+import { ModtoolSanctionKickComposer } from './messages/outgoing/modtool/ModtoolSanctionKickComposer';
+import { ModtoolSanctionAlertComposer } from './messages/outgoing/modtool/ModtoolSanctionAlertComposer';
+import { ModtoolSanctionTradelockComposer } from './messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
+import { ModtoolEventAlertComposer } from './messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { ModtoolSanctionMuteComposer } from './messages/outgoing/modtool/ModtoolSanctionMuteComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -897,6 +903,12 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_CHATLOG, ModtoolRequestUserChatlogComposer);
         this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_CHATLOG, ModtoolRequestRoomChatlogComposer);
         this._composers.set(OutgoingHeader.MOD_TOOL_USER_INFO, ModtoolRequestUserInfoComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_ALERT, ModtoolSanctionAlertComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_BAN, ModtoolSanctionBanComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_KICK, ModtoolSanctionKickComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_TRADELOCK, ModtoolSanctionTradelockComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_ALERTEVENT, ModtoolEventAlertComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_MUTE, ModtoolSanctionMuteComposer);
 
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);

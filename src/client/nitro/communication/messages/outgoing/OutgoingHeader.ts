@@ -213,4 +213,10 @@ export class OutgoingHeader
     public static MODTOOL_CHANGE_ROOM_SETTINGS   = 3260;
     public static MODTOOL_REQUEST_USER_CHATLOG   = 1391;
     public static MODTOOL_REQUEST_ROOM_CHATLOG   = 2587;
+    public static MODTOOL_SANCTION_ALERT         = 229;
+    public static MODTOOL_SANCTION_BAN           = 2766;
+    public static MODTOOL_SANCTION_KICK          = 2582;
+    public static MODTOOL_SANCTION_TRADELOCK     = 3742;
+    public static MODTOOL_ALERTEVENT             = 1840;
+    public static MODTOOL_SANCTION_MUTE          = 1945;
 }
