@@ -104,4 +104,9 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     {
         return this._modToolService.showVisitedRoomsForUser;
     }
+
+    public get showSendUserMessage(): boolean
+    {
+        return this._modToolService.showSendUserMessage;
+    }
 }

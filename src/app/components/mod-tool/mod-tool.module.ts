@@ -11,6 +11,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ModToolUserInfoService } from './services/mod-tool-user-info.service';
 import { ModToolModActionUserComponent } from './components/mod-action-user/component';
 import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/component';
+import { ModToolUserSendMessageComponent } from './components/user-send-message/component';
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/
         ModToolUserComponent,
         ModToolReportsComponent,
         ModToolModActionUserComponent,
-        ModToolUserVisitedRoomsComponent
+        ModToolUserVisitedRoomsComponent,
+        ModToolUserSendMessageComponent
     ],
     providers: [
         ModToolService,
@@ -38,7 +40,8 @@ import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/
         ModToolReportsComponent,
         ModTool,
         ModToolModActionUserComponent,
-        ModToolUserVisitedRoomsComponent
+        ModToolUserVisitedRoomsComponent,
+        ModToolUserSendMessageComponent
     ]
 })
 export class ModToolModule

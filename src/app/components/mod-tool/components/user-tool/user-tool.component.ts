@@ -131,6 +131,8 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         {
             case 'roomchat':
             case 'send_message':
+                this._modToolService.showSendUserMessage = true;
+                break;
             case 'room_visits':
                 this._modToolService.showVisitedRoomsForUser = true;
                 Nitro.instance.communication.connection.send(new ModtoolRequestUserRoomsComposer(this.user.id));

@@ -38,7 +38,9 @@ export class ModToolService implements OnDestroy
 
     private _showModActionOnUser: boolean = false;
     private _showVisitedRoomsForUser: boolean = false;
-    private _showUserInfo: boolean = false;
+    private _showSendUserMessage: boolean = false;
+
+
     private _Str_20687: _Str_5018 = null;
     private _userRoomVisitedData: ModtoolRoomVisitedData;
 
@@ -280,6 +282,16 @@ export class ModToolService implements OnDestroy
     public set showVisitedRoomsForUser(show: boolean)
     {
         this._showVisitedRoomsForUser = show;
+    }
+
+    public get showSendUserMessage(): boolean
+    {
+        return this._showSendUserMessage;
+    }
+
+    public set showSendUserMessage(show: boolean)
+    {
+        this._showSendUserMessage = show;
     }
 
     public get callForHelpCategories(): CallForHelpCategoryData[]
