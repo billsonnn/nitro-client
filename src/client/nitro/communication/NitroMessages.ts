@@ -361,6 +361,8 @@ import { ModtoolSanctionAlertComposer } from './messages/outgoing/modtool/Modtoo
 import { ModtoolSanctionTradelockComposer } from './messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
 import { ModtoolEventAlertComposer } from './messages/outgoing/modtool/ModtoolEventAlertComposer';
 import { ModtoolSanctionMuteComposer } from './messages/outgoing/modtool/ModtoolSanctionMuteComposer';
+import { ModtoolRequestUserRoomsComposer } from './messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
+import { ModtoolReceivedRoomsUserEvent } from './messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -659,6 +661,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MODERATION_USER_INFO, ModtoolUserInfoEvent);
         this._events.set(IncomingHeader.MODERATION_TOPICS, ModtoolCallForHelpTopicsEvent);
         this._events.set(IncomingHeader.MODERATION_TOOL, ModtoolMainEvent);
+        this._events.set(IncomingHeader.MODTOOL_VISITED_ROOMS_USER, ModtoolReceivedRoomsUserEvent);
     }
 
     private registerComposers(): void
@@ -909,6 +912,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MODTOOL_SANCTION_TRADELOCK, ModtoolSanctionTradelockComposer);
         this._composers.set(OutgoingHeader.MODTOOL_ALERTEVENT, ModtoolEventAlertComposer);
         this._composers.set(OutgoingHeader.MODTOOL_SANCTION_MUTE, ModtoolSanctionMuteComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_ROOMS, ModtoolRequestUserRoomsComposer);
 
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);

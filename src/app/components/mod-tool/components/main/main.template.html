@@ -26,8 +26,9 @@
     </div>
     <nitro-mod-tool-room-component *ngFor="let room of rooms; let index = index" [room]="room" [index]="index"></nitro-mod-tool-room-component>
     <nitro-mod-tool-chatlog-component *ngFor="let chatlog of chatlogs; let index = index" [roomChatlogs]="chatlog" [index]="index"></nitro-mod-tool-chatlog-component>
-    <nitro-mod-tool-user-component *ngIf="clickedUser" [user]="clickedUser"></nitro-mod-tool-user-component>
+    <nitro-mod-tool-user-component *ngIf="userToolVisible" [user]="clickedUser"></nitro-mod-tool-user-component>
     <nitro-mod-tool-reports-component [(visible)]="reportsToolVisible"></nitro-mod-tool-reports-component>
     <nitro-mod-tool-mod-action-user-component *ngIf="showModActionOnUser" [user]="clickedUser"></nitro-mod-tool-mod-action-user-component>
+    <nitro-mod-tool-user-visited-rooms-component *ngIf="showVisitedRoomsForUser" [user]="clickedUser" ></nitro-mod-tool-user-visited-rooms-component>
 </div>
 

@@ -10,6 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../../shared/shared.module';
 import { ModToolUserInfoService } from './services/mod-tool-user-info.service';
 import { ModToolModActionUserComponent } from './components/mod-action-user/component';
+import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/component';
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { ModToolModActionUserComponent } from './components/mod-action-user/comp
         ModToolChatlogComponent,
         ModToolUserComponent,
         ModToolReportsComponent,
-        ModToolModActionUserComponent
+        ModToolModActionUserComponent,
+        ModToolUserVisitedRoomsComponent
     ],
     providers: [
         ModToolService,
@@ -35,7 +37,8 @@ import { ModToolModActionUserComponent } from './components/mod-action-user/comp
         ModToolUserComponent,
         ModToolReportsComponent,
         ModTool,
-        ModToolModActionUserComponent
+        ModToolModActionUserComponent,
+        ModToolUserVisitedRoomsComponent
     ]
 })
 export class ModToolModule

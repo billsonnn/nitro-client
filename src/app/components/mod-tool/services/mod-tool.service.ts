@@ -19,6 +19,8 @@ import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communic
 import { CallForHelpCategoryData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
 import { ModtoolMainEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
 import { _Str_5018 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5018';
+import { ModtoolReceivedRoomsUserEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
+import { ModtoolRoomVisitedData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomVisitedData';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -35,7 +37,10 @@ export class ModToolService implements OnDestroy
     private _currentSelectedUser: UserToolUser = null;
 
     private _showModActionOnUser: boolean = false;
+    private _showVisitedRoomsForUser: boolean = false;
+    private _showUserInfo: boolean = false;
     private _Str_20687: _Str_5018 = null;
+    private _userRoomVisitedData: ModtoolRoomVisitedData;
 
     constructor(
         private _notificationService: NotificationService,
@@ -61,7 +66,8 @@ export class ModToolService implements OnDestroy
             new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
             new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
             new ModtoolCallForHelpTopicsEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
-            new ModtoolMainEvent(this.onModtoolsMainEvent.bind(this))
+            new ModtoolMainEvent(this.onModtoolsMainEvent.bind(this)),
+            new ModtoolReceivedRoomsUserEvent(this.onRoomsReceivedForUserEvent.bind(this))
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -94,6 +100,17 @@ export class ModToolService implements OnDestroy
         if(!parser) return;
 
         this._Str_20687 = parser.data;
+    }
+
+    private onRoomsReceivedForUserEvent(event: ModtoolReceivedRoomsUserEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._userRoomVisitedData = parser.data;
     }
 
     private onModToolsCFHCategoriesEvent(event: ModtoolCallForHelpTopicsEvent): void
@@ -202,7 +219,12 @@ export class ModToolService implements OnDestroy
     {
         if(!this._component) return;
 
-        this._component.clickedUser = null;
+        this._component.userToolVisible = false;
+    }
+
+    public closeRoomVisitedTool(): void
+    {
+        this._showVisitedRoomsForUser = false;
     }
 
     public get rooms(): RoomToolRoom[]
@@ -250,6 +272,16 @@ export class ModToolService implements OnDestroy
         this._showModActionOnUser = show;
     }
 
+    public get showVisitedRoomsForUser(): boolean
+    {
+        return this._showVisitedRoomsForUser;
+    }
+
+    public set showVisitedRoomsForUser(show: boolean)
+    {
+        this._showVisitedRoomsForUser = show;
+    }
+
     public get callForHelpCategories(): CallForHelpCategoryData[]
     {
         return this._callForHelpCategories;
@@ -258,5 +290,10 @@ export class ModToolService implements OnDestroy
     public get _Str_3325():_Str_5018
     {
         return this._Str_20687;
+    }
+
+    public get roomUserVisitedData(): ModtoolRoomVisitedData
+    {
+        return this._userRoomVisitedData;
     }
 }

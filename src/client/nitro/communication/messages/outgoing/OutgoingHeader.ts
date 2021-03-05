@@ -219,4 +219,5 @@ export class OutgoingHeader
     public static MODTOOL_SANCTION_TRADELOCK     = 3742;
     public static MODTOOL_ALERTEVENT             = 1840;
     public static MODTOOL_SANCTION_MUTE          = 1945;
+    public static MODTOOL_REQUEST_USER_ROOMS     = 3526;
 }

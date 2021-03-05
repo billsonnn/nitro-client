@@ -30,7 +30,8 @@ export class ModToolMainComponent implements OnInit, OnDestroy
         private _modToolService: ModToolService,
         private _modToolsUserService: ModToolUserInfoService,
         private _ngZone: NgZone)
-    {}
+    {
+    }
 
     public ngOnInit(): void
     {
@@ -61,6 +62,7 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     {
         this.clickedUser = this.selectedUser;
         this._modToolsUserService.load(this.selectedUser.id);
+        this.userToolVisible = true;
     }
 
     public toggleReportsTool(): void
@@ -96,5 +98,10 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     public get showModActionOnUser(): boolean
     {
         return this._modToolService.showModActionOnUser;
+    }
+
+    public get showVisitedRoomsForUser(): boolean
+    {
+        return this._modToolService.showVisitedRoomsForUser;
     }
 }
