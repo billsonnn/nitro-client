@@ -15,6 +15,10 @@ import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/comm
 import { ModtoolRoomChatlogParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomChatlogParser';
 import { ChatlogToolChatlog } from '../components/chatlog-tool/chatlog-tool-chatlog';
 import { ModtoolRequestUserChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
+import { CallForHelpCategoryData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
+import { ModtoolMainEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
+import { _Str_5018 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5018';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -25,9 +29,13 @@ export class ModToolService implements OnDestroy
     private _rooms: RoomToolRoom[] = [];
     private _users: UserToolUser[] = [];
     private _roomVisits: ModtoolUserChatlogParserVisit[];
+    private _callForHelpCategories: CallForHelpCategoryData[];
     private _roomChatlogs: ChatlogToolChatlog[] = [];
 
     private _currentSelectedUser: UserToolUser = null;
+
+    private _showModActionOnUser: boolean = false;
+    private _Str_20687: _Str_5018 = null;
 
     constructor(
         private _notificationService: NotificationService,
@@ -51,7 +59,9 @@ export class ModToolService implements OnDestroy
             new ModtoolRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
             new UserInfoEvent(this.onUserInfoEvent.bind(this)),
             new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
-            new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this))
+            new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
+            new ModtoolCallForHelpTopicsEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
+            new ModtoolMainEvent(this.onModtoolsMainEvent.bind(this))
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -73,6 +83,28 @@ export class ModToolService implements OnDestroy
     public set component(component: ModToolMainComponent)
     {
         this._component = component;
+    }
+
+    private onModtoolsMainEvent(event: ModtoolMainEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._Str_20687 = parser.data;
+    }
+
+    private onModToolsCFHCategoriesEvent(event: ModtoolCallForHelpTopicsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._callForHelpCategories = parser.callForHelpCategories;
     }
 
     private onRoomInfoEvent(event: ModtoolRoomInfoEvent): void
@@ -206,5 +238,25 @@ export class ModToolService implements OnDestroy
     public get selectedUser(): UserToolUser
     {
         return this._currentSelectedUser;
+    }
+
+    public get showModActionOnUser(): boolean
+    {
+        return this._showModActionOnUser;
+    }
+
+    public set showModActionOnUser(show: boolean)
+    {
+        this._showModActionOnUser = show;
+    }
+
+    public get callForHelpCategories(): CallForHelpCategoryData[]
+    {
+        return this._callForHelpCategories;
+    }
+
+    public get _Str_3325():_Str_5018
+    {
+        return this._Str_20687;
     }
 }

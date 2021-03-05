@@ -92,4 +92,9 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     {
         return this._modToolService.selectedUser;
     }
+
+    public get showModActionOnUser(): boolean
+    {
+        return this._modToolService.showModActionOnUser;
+    }
 }

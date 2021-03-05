@@ -4,8 +4,7 @@ import { ModToolService } from '../../services/mod-tool.service';
 import { UserToolUser } from './user-tool-user';
 import { ModToolUserInfoService } from '../../services/mod-tool-user-info.service';
 import { _Str_5467 } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { NitroLogger } from '../../../../../client/core/common/logger/NitroLogger';
+
 
 @Component({
     selector: 'nitro-mod-tool-user-component',
@@ -15,7 +14,7 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 {
     @Input()
     public user: UserToolUser = null;
-    private _logger: NitroLogger;
+
 
     constructor(
         private _modToolService: ModToolService,
@@ -23,7 +22,6 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
     )
     {
         super();
-        this._logger = new NitroLogger(this.constructor.name);
     }
 
     public ngOnInit(): void
@@ -124,16 +122,18 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         ];
     }
 
-    public getTranslatedForKey(nameKey: string, fallback: string): string
+
+    public handleClick(button: string): void
     {
-        const newKey = `modtools.nitro.${nameKey}`;
-        const value = Nitro.instance.localization.getValue(newKey);
-
-        if(value !== newKey) return value;
-
-        this._logger.warn(`Text for MODTools not found, key: '${newKey}', returning default value.`);
-
-        return fallback;
+        switch(button)
+        {
+            case 'roomchat':
+            case 'send_message':
+            case 'room_visits':
+            case 'mod_action':
+                this._modToolService.showModActionOnUser = true;
+                break;
+        }
     }
 
 

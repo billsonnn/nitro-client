@@ -1,20 +1,28 @@
 <div [draggable] [center]="false" dragHandle=".card-header" class="card user-tool-card">
-	<div class="card-header">
+    <div class="card-header">
 			<span>
 			<i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
-			{{user.username}}
+                {{user.username}}
 			</span>
-		<button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
-	</div>
-	<div class="card-body">
-        <table class="table table-striped table-sm">
-            <tbody>
-            <tr *ngFor="let item of userProperties">
-                <th scope="row">{{ getTranslatedForKey(item.nameKey, item.nameKeyFallback)}}</th>
-                <td>{{ item.value }}</td>
-            </tr>
+        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <table class="col-6 d-flex flex-column table table-striped table-sm">
+                <tbody>
+                <tr *ngFor="let item of userProperties">
+                    <th scope="row">{{ getTranslatedForKey(item.nameKey, item.nameKeyFallback)}}</th>
+                    <td>{{ item.value }}</td>
+                </tr>
 
-            </tbody>
-        </table>
-	</div>
+                </tbody>
+            </table>
+        </div>
+        <div class="row btn-group w-100 p-3">
+            <button type="button" (click)="handleClick('roomchat')" class="btn btn-sm btn-primary">{{ getTranslatedForKey('roomchat', 'Room Chat') }}</button>
+            <button type="button" (click)="handleClick('send_message')" class="btn btn-sm btn-primary">{{ getTranslatedForKey('send_message', 'Send Message') }}</button>
+            <button type="button" (click)="handleClick('room_visits')" class="btn btn-sm btn-primary">{{ getTranslatedForKey('room_visits', 'Room Visits') }}</button>
+            <button type="button" (click)="handleClick('mod_action')" class="btn btn-sm btn-primary">{{ getTranslatedForKey('mod_action', 'Mod Action') }}</button>
+        </div>
+    </div>
 </div>

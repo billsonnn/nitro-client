@@ -353,6 +353,8 @@ import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/M
 import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
 import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
 import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
+import { ModtoolCallForHelpTopicsEvent } from './messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
+import { ModtoolMainEvent } from './messages/incoming/modtool/ModtoolMainEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -649,6 +651,8 @@ export class NitroMessages implements IMessageConfiguration
 
         // MOD TOOL
         this._events.set(IncomingHeader.MODERATION_USER_INFO, ModtoolUserInfoEvent);
+        this._events.set(IncomingHeader.MODERATION_TOPICS, ModtoolCallForHelpTopicsEvent);
+        this._events.set(IncomingHeader.MODERATION_TOOL, ModtoolMainEvent);
     }
 
     private registerComposers(): void

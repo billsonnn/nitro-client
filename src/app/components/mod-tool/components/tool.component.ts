@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Nitro } from '../../../../client/nitro/Nitro';
+import { NitroLogger } from '../../../../client/core/common/logger/NitroLogger';
 
 @Component({
     template: ''
@@ -10,9 +12,12 @@ export class ModTool implements OnInit, OnDestroy
 
     @Output()
     visibleChange = new EventEmitter<boolean>();
+    private _logger: NitroLogger;
 
     constructor()
-    {}
+    {
+        this._logger = new NitroLogger(this.constructor.name);
+    }
 
     public ngOnInit(): void
     {
@@ -26,4 +31,17 @@ export class ModTool implements OnInit, OnDestroy
     {
         this.visible = false;
     }
+
+    public getTranslatedForKey(nameKey: string, fallback: string): string
+    {
+        const newKey = `modtools.nitro.${nameKey}`;
+        const value = Nitro.instance.localization.getValue(newKey);
+
+        if(value !== newKey) return value;
+
+        this._logger.warn(`Text for MODTools not found, key: '${newKey}', returning default value.`);
+
+        return fallback;
+    }
+
 }
