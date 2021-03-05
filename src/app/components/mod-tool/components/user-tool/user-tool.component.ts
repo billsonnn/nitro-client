@@ -17,7 +17,7 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 
     constructor(private _modToolService: ModToolService)
     {
-	    super();
+        super();
     }
 
     public ngOnInit(): void

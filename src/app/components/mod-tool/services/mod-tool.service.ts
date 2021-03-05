@@ -93,6 +93,7 @@ export class ModToolService implements OnDestroy
     private onUserInfoEvent(event: UserInfoEvent): void
     {
         const userInfo = event.getParser().userInfo;
+        debugger;
         this._ngZone.run(() =>
         {
             this._users.push(new UserToolUser(userInfo.userId, userInfo.username));

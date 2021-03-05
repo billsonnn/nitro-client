@@ -5,26 +5,26 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 })
 export class ModTool implements OnInit, OnDestroy
 {
-	@Input()
-	public visible: boolean = false;
+    @Input()
+    public visible: boolean = false;
 
-	@Output()
-	visibleChange = new EventEmitter<boolean>();
+    @Output()
+    visibleChange = new EventEmitter<boolean>();
 
-	constructor()
-	{}
+    constructor()
+    {}
 
-	public ngOnInit(): void
-	{
-	}
+    public ngOnInit(): void
+    {
+    }
 
-	public ngOnDestroy(): void
-	{
-	}
+    public ngOnDestroy(): void
+    {
+    }
 
-	public hideTool(): void
-	{
-	    this.visible = false;
-	    this.visibleChange.emit(this.visible);
-	}
+    public hideTool(): void
+    {
+        this.visible = false;
+        this.visibleChange.emit(this.visible);
+    }
 }

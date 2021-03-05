@@ -12,8 +12,8 @@ export class ModToolReportsComponent extends ModTool implements OnInit, OnDestro
 
     constructor()
     {
-	    super();
-	    this._tab = 0;
+        super();
+        this._tab = 0;
     }
 
     public ngOnInit(): void

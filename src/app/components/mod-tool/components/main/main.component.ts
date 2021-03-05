@@ -14,77 +14,77 @@ import { ChatlogToolChatlog } from '../chatlog-tool/chatlog-tool-chatlog';
 })
 export class ModToolMainComponent implements OnInit, OnDestroy
 {
-	@Input()
-	public visible: boolean = false;
+    @Input()
+    public visible: boolean = false;
 
-	public roomToolVisible: boolean = false;
-	public chatlogToolVisible: boolean = false;
-	public userToolVisible: boolean = false;
-	public reportsToolVisible: boolean = false;
+    public roomToolVisible: boolean = false;
+    public chatlogToolVisible: boolean = false;
+    public userToolVisible: boolean = false;
+    public reportsToolVisible: boolean = false;
 
-	constructor(
-		private _settingsService: SettingsService,
+    constructor(
+        private _settingsService: SettingsService,
         private _modToolService: ModToolService,
         private _ngZone: NgZone)
-	{}
+    {}
 
-	public ngOnInit(): void
-	{
-	    this._modToolService.component = this;
-	}
+    public ngOnInit(): void
+    {
+        this._modToolService.component = this;
+    }
 
-	public ngOnDestroy(): void
-	{
-	    this._modToolService.component = null;
-	}
+    public ngOnDestroy(): void
+    {
+        this._modToolService.component = null;
+    }
 
-	public toggleRoomTool(): void
-	{
-	    this.roomToolVisible = !this.roomToolVisible;
-	}
+    public toggleRoomTool(): void
+    {
+        this.roomToolVisible = !this.roomToolVisible;
+    }
 
-	public openRoomTool(): void
-	{
-	    this._modToolService.openRoomTool();
-	}
+    public openRoomTool(): void
+    {
+        this._modToolService.openRoomTool();
+    }
 
-	public openChatlogTool(): void
-	{
-	    this._modToolService.openChatlogTool();
-	}
+    public openChatlogTool(): void
+    {
+        this._modToolService.openChatlogTool();
+    }
 
-	public openUserTool(): void
-	{
-	    this._modToolService.openUserTool();
-	}
+    public openUserTool(): void
+    {
+        this._modToolService.openUserTool();
+    }
 
-	public toggleReportsTool(): void
-	{
-	    this.reportsToolVisible = !this.reportsToolVisible;
-	}
+    public toggleReportsTool(): void
+    {
+        this.reportsToolVisible = !this.reportsToolVisible;
+    }
 
-	public get inRoom(): boolean
-	{
-	    return Nitro.instance.roomSessionManager.viewerSession !== null;
-	}
+    public get inRoom(): boolean
+    {
+        return Nitro.instance.roomSessionManager.viewerSession !== null;
+    }
 
-	public get rooms(): RoomToolRoom[]
-	{
-	    return this._modToolService.rooms;
-	}
+    public get rooms(): RoomToolRoom[]
+    {
+        return this._modToolService.rooms;
+    }
 
-	public get chatlogs(): ChatlogToolChatlog[]
-	{
-	    return this._modToolService.roomChatlogs;
-	}
+    public get chatlogs(): ChatlogToolChatlog[]
+    {
+        return this._modToolService.roomChatlogs;
+    }
 
-	public get users(): UserToolUser[]
-	{
-	    return this._modToolService.users;
-	}
+    public get users(): UserToolUser[]
+    {
+         return this._modToolService.users;
+    }
 
-	public get user(): UserToolUser
-	{
-	    return this._modToolService.users[0];
-	}
+    public get user(): UserToolUser
+    {
+        return this._modToolService.users[0];
+    }
 }
