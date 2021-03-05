@@ -69,6 +69,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
         if(this.cfhType == '-1')
         {
             this._notifications.alert('Please select a topic.');
+            return;
         }
 
         const category = this.categories[parseInt(this.cfhType)];
