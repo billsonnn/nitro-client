@@ -7,11 +7,15 @@ import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/
 import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { ModtoolRequestUserInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { ModtoolUserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
+import { _Str_5467 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
 
 @Injectable()
 export class ModToolUserInfoService implements OnDestroy
 {
     private _messages: IMessageEvent[];
+
+    private _currentUserInfo: _Str_5467;
 
     constructor(
         private _notificationService: NotificationService,
@@ -31,6 +35,7 @@ export class ModToolUserInfoService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
+            new ModtoolUserInfoEvent(this.onUserInfoEvent.bind(this)),
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -47,6 +52,22 @@ export class ModToolUserInfoService implements OnDestroy
     public load(userId: number): void
     {
         Nitro.instance.communication.connection.send(new ModtoolRequestUserInfoComposer(userId));
+    }
+
+    private onUserInfoEvent(event: ModtoolUserInfoEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+        if(!parser || !parser.data) return;
+
+        this._ngZone.run(() =>this._currentUserInfo = parser.data);
+
+    }
+
+    public get currentUserInfo(): _Str_5467
+    {
+        return this._currentUserInfo;
     }
 
 }

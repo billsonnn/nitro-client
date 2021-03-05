@@ -352,6 +352,7 @@ import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUser
 import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
 import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -645,6 +646,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
         this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
         this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
+
+        // MOD TOOL
+        this._events.set(IncomingHeader.MODERATION_USER_INFO, ModtoolUserInfoEvent);
     }
 
     private registerComposers(): void
