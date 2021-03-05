@@ -128,10 +128,10 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 this._container.events.dispatchEvent(new RoomWidgetChatInputContentUpdateEvent(RoomWidgetChatInputContentUpdateEvent.WHISPER, userData.name));
                 break;
             case RoomWidgetUserActionMessage.RWUAM_IGNORE_USER:
-                //this._container.sessionDataManager._Str_10249(_local_3.name);
+                this._container.sessionDataManager.ignoreUser(userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_UNIGNORE_USER:
-                //this._container.sessionDataManager._Str_14353(_local_3.name);
+                this._container.sessionDataManager.unignoreUser(userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_KICK_USER:
                 this._container.roomSession.sendKickMessage((message as RoomWidgetUserActionMessage).userId);
