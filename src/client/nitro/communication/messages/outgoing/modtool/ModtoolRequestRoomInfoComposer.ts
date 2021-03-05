@@ -6,16 +6,16 @@ export class ModtoolRequestRoomInfoComposer implements IMessageComposer<Construc
 
 	constructor(roomId: number)
 	{
-		this._data = [ roomId ];
+	    this._data = [ roomId ];
 	}
 
 	public getMessageArray()
 	{
-		return this._data;
+	    return this._data;
 	}
 
 	public dispose(): void
 	{
-		return;
+	    return;
 	}
 }

@@ -51,11 +51,11 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     }
 
     public get inRoom(): boolean
-	{
-		return Nitro.instance.roomSessionManager.viewerSession !== null;
-	}
+    {
+        return Nitro.instance.roomSessionManager.viewerSession !== null;
+    }
 
-	public get housekeepingUrl(): string
+    public get housekeepingUrl(): string
     {
         return this._housekeepingUrl;
     }

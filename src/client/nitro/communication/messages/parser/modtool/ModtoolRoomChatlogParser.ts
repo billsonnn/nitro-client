@@ -29,21 +29,21 @@ export class ModtoolRoomChatlogParser implements IMessageParser
 	    this._name = wrapper.readString();
 	    wrapper.readString();
 	    wrapper.readByte();
-        this._id   = wrapper.readInt();
-        this._chatlogCount = wrapper.readShort();
+	    this._id   = wrapper.readInt();
+	    this._chatlogCount = wrapper.readShort();
 
-        for(let i = 0; i < this._chatlogCount; i++)
-        {
-            const timestamp = wrapper.readString();
-            const habboId = wrapper.readInt();
-            const username = wrapper.readString();
-            const message = wrapper.readString();
-            const boolean = wrapper.readBoolean();
+	    for(let i = 0; i < this._chatlogCount; i++)
+	    {
+	        const timestamp = wrapper.readString();
+	        const habboId = wrapper.readInt();
+	        const username = wrapper.readString();
+	        const message = wrapper.readString();
+	        const boolean = wrapper.readBoolean();
 
-           this._chatlogs.push(new ModtoolRoomChatlogLine(timestamp, habboId, username, message, boolean));
-        }
+	        this._chatlogs.push(new ModtoolRoomChatlogLine(timestamp, habboId, username, message, boolean));
+	    }
 
-        return true;
+	    return true;
 	}
 
 	public get id(): number
@@ -52,13 +52,13 @@ export class ModtoolRoomChatlogParser implements IMessageParser
 	}
 
 	public get name(): string
-    {
-        return this._name;
-    }
+	{
+	    return this._name;
+	}
 
-    public get chatlogs(): ModtoolRoomChatlogLine[]
-    {
-        return this._chatlogs;
-    }
+	public get chatlogs(): ModtoolRoomChatlogLine[]
+	{
+	    return this._chatlogs;
+	}
 
 }

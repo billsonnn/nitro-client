@@ -40,23 +40,23 @@ export class ModToolMainComponent implements OnInit, OnDestroy
 
 	public toggleRoomTool(): void
 	{
-		this.roomToolVisible = !this.roomToolVisible;
+	    this.roomToolVisible = !this.roomToolVisible;
 	}
 
 	public openRoomTool(): void
-    {
-        this._modToolService.openRoomTool();
-    }
+	{
+	    this._modToolService.openRoomTool();
+	}
 
-    public openChatlogTool(): void
-    {
-        this._modToolService.openChatlogTool();
-    }
+	public openChatlogTool(): void
+	{
+	    this._modToolService.openChatlogTool();
+	}
 
-    public openUserTool(): void
-    {
-        this._modToolService.openUserTool();
-    }
+	public openUserTool(): void
+	{
+	    this._modToolService.openUserTool();
+	}
 
 	public toggleReportsTool(): void
 	{
@@ -64,24 +64,24 @@ export class ModToolMainComponent implements OnInit, OnDestroy
 	}
 
 	public get inRoom(): boolean
-    {
-        return Nitro.instance.roomSessionManager.viewerSession !== null;
-    }
+	{
+	    return Nitro.instance.roomSessionManager.viewerSession !== null;
+	}
 
 	public get rooms(): RoomToolRoom[]
-    {
-        return this._modToolService.rooms;
-    }
+	{
+	    return this._modToolService.rooms;
+	}
 
-    public get chatlogs(): ChatlogToolChatlog[]
-    {
-        return this._modToolService.roomChatlogs;
-    }
+	public get chatlogs(): ChatlogToolChatlog[]
+	{
+	    return this._modToolService.roomChatlogs;
+	}
 
-    public get users(): UserToolUser[]
-    {
-        return this._modToolService.users;
-    }
+	public get users(): UserToolUser[]
+	{
+	    return this._modToolService.users;
+	}
 
 	public get user(): UserToolUser
 	{

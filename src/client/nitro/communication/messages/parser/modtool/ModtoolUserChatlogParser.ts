@@ -32,28 +32,28 @@ export class ModtoolUserChatlogParser implements IMessageParser
 	        wrapper.readByte();
 	        wrapper.readShort();
 	        wrapper.readString();
-            wrapper.readByte();
-            const roomName = wrapper.readString();
-            wrapper.readString();
-            wrapper.readByte();
-            const roomId = wrapper.readInt();
+	        wrapper.readByte();
+	        const roomName = wrapper.readString();
+	        wrapper.readString();
+	        wrapper.readByte();
+	        const roomId = wrapper.readInt();
 
-            const chatlogs = [];
+	        const chatlogs = [];
 
-            const chatlogSize = wrapper.readShort();
+	        const chatlogSize = wrapper.readShort();
 
 	        for(let i = 0; i < chatlogSize; i++)
-            {
-                const timestamp = wrapper.readString();
+	        {
+	            const timestamp = wrapper.readString();
 	            const userId = wrapper.readInt();
 	            const userName = wrapper.readString();
-                const message = wrapper.readString();
-                const bool = wrapper.readBoolean();
-                chatlogs.push(new ModtoolUserChatlogParserChatlog(timestamp, userId, userName, message, bool));
-            }
+	            const message = wrapper.readString();
+	            const bool = wrapper.readBoolean();
+	            chatlogs.push(new ModtoolUserChatlogParserChatlog(timestamp, userId, userName, message, bool));
+	        }
 
-            this._roomVisits.push(new ModtoolUserChatlogParserVisit(roomName, roomId, chatlogs));
-        }
+	        this._roomVisits.push(new ModtoolUserChatlogParserVisit(roomName, roomId, chatlogs));
+	    }
 
 	    return true;
 	}
@@ -64,13 +64,13 @@ export class ModtoolUserChatlogParser implements IMessageParser
 	}
 
 	public get username(): string
-    {
-        return this._username;
-    }
+	{
+	    return this._username;
+	}
 
-    public get roomVisits(): ModtoolUserChatlogParserVisit[]
-    {
-        return this._roomVisits;
-    }
+	public get roomVisits(): ModtoolUserChatlogParserVisit[]
+	{
+	    return this._roomVisits;
+	}
 
 }

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/index';
 import { ModToolMainComponent } from './components/main/main.component';
 import { ModToolRoomComponent } from './components/room-tool/room-tool.component';
 import { ModToolService } from './services/mod-tool.service';
@@ -8,6 +7,7 @@ import { ModToolUserComponent } from './components/user-tool/user-tool.component
 import { ModToolReportsComponent } from './components/reports-tool/reports-tool.component';
 import { ModTool } from './components/tool.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
     imports: [
@@ -17,9 +17,9 @@ import { BrowserModule } from '@angular/platform-browser';
     exports: [
         ModToolMainComponent,
         ModToolRoomComponent,
-		ModToolChatlogComponent,
-		ModToolUserComponent,
-		ModToolReportsComponent
+        ModToolChatlogComponent,
+        ModToolUserComponent,
+        ModToolReportsComponent
     ],
     providers: [
         ModToolService
@@ -27,10 +27,10 @@ import { BrowserModule } from '@angular/platform-browser';
     declarations: [
         ModToolMainComponent,
         ModToolRoomComponent,
-		ModToolChatlogComponent,
-		ModToolUserComponent,
-		ModToolReportsComponent,
-		ModTool
+        ModToolChatlogComponent,
+        ModToolUserComponent,
+        ModToolReportsComponent,
+        ModTool
     ]
 })
 export class ModToolModule
