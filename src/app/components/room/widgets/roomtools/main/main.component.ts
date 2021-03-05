@@ -1,41 +1,63 @@
-import { Component, ComponentFactoryResolver, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, ComponentFactoryResolver, NgZone, OnDestroy } from '@angular/core';
 import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { SettingsService } from '../../../../../core/settings/service';
-import { NavigatorDataService } from '../../../../navigator/services/navigator-data.service';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { RoomToolsWidgetHandler } from '../../handlers/RoomToolsWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 
 @Component({
     selector: 'nitro-room-tools-component',
-    templateUrl: './main.template.html'
+    templateUrl: './main.template.html',
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter',
+                    [
+                        style({ transform: 'translateX(-50%)' }),
+                        animate('.1s ease-in',
+                            style({ transform: 'translateX(0%)' })
+                        )
+                    ]
+                ),
+                transition(
+                    ':leave',
+                    [
+                        style({ transform: 'translateX(0%)' }),
+                        animate('.1s ease-out',
+                            style({ transform: 'translateX(-50%)' })
+                        )
+                    ]
+                )
+            ]
+        )
+    ]
 })
-export class RoomToolsMainComponent extends ConversionTrackingWidget
+export class RoomToolsMainComponent extends ConversionTrackingWidget implements OnDestroy
 {
-    @ViewChild('componentContainer', { read: ViewContainerRef })
-    public componentContainer: ViewContainerRef;
+    private static VISITED_ROOMS: RoomDataParser[]  = [];
+    private static MAX_VISIT_HISTORY: number        = 10;
 
-    // Widget
-    private _open: boolean = true;
+    private _lastRoomId: number = -1;
+    private _roomData: RoomDataParser = null;
 
-    // Roomtools
-    private _roomEventViewVisible: boolean = false;
+    private _currentRoomIndex: number = -1;
+    private _roomName: string = '';
+    private _ownerName: string = '';
+    private _tags: string[] = [];
+    private _zoomed: boolean = true;
 
-    // Shared
-    private _roomData: RoomDataParser;
-    private _formattedRoomOwner: string;
+    private _roomOptionsVisible: boolean = false;
+    private _roomToolsVisible: boolean = false;
 
-    public roomName: string;
-    public roomOwner: string;
-    public ranking: number;
-    public tags: string[] = [];
-
+    private _roomOptionsTimeout: ReturnType<typeof setTimeout> = null;
 
     constructor(
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone,
-        private _navigatorDataService: NavigatorDataService,
         private _settingsService: SettingsService,
         private _navigatorService: NavigatorService
     )
@@ -43,127 +65,80 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         super();
     }
 
-    public loadRoomData(roomData: RoomDataParser, formattedRoomOwner: string)
+    public ngOnDestroy(): void
     {
+        this._navigatorService.roomInfoShowing = false;
+
+        this.stopRoomOptionsTimeout();
+    }
+
+    public updateRoomInfo(roomData: RoomDataParser): void
+    {
+        if(!roomData) return;
+
         this._ngZone.run(() =>
         {
-            this._formattedRoomOwner = formattedRoomOwner;
-            this._roomData = roomData;
-            this.roomName = roomData.roomName;
-            this.ranking = roomData.ranking;
-            this.tags = roomData.tags;
+            for(const visited of RoomToolsMainComponent.VISITED_ROOMS)
+            {
+                if(visited.roomId === roomData.roomId)
+                {
+                    visited.roomName = roomData.roomName;
+                }
+            }
         });
     }
 
-    public _Str_22970(data: RoomDataParser): void
+    public updateRoomTools(roomName: string, ownerName: string, tags: string[]): void
     {
-        const visitedRooms = this._navigatorDataService.getVisitedRooms();
-        for(const visitedRoom of visitedRooms)
+        this._ngZone.run(() =>
         {
-            if(visitedRoom.roomId == data.roomId)
+            this._roomName  = roomName;
+            this._ownerName = ownerName;
+            this._tags      = tags;
+
+            this.showRoomOptions();
+        });
+    }
+
+    public addVisitedRoom(data: RoomDataParser): void
+    {
+        this._ngZone.run(() =>
+        {
+            for(const visited of RoomToolsMainComponent.VISITED_ROOMS)
             {
+                if(!visited || (visited.roomId !== data.roomId)) continue;
+
                 return;
             }
-        }
 
-        this._navigatorDataService.addRoomToVisitedRooms(data);
+            RoomToolsMainComponent.VISITED_ROOMS.push(data);
 
+            if(RoomToolsMainComponent.VISITED_ROOMS.length > RoomToolsMainComponent.MAX_VISIT_HISTORY) RoomToolsMainComponent.VISITED_ROOMS.shift();
+
+            this._currentRoomIndex = (RoomToolsMainComponent.VISITED_ROOMS.length - 1);
+        });
     }
 
-    public _Str_23696(k: number): void
+    public updateRoomCurrentIndex(roomId: number): void
     {
-        this._navigatorDataService.setCurrentIndexToRoomId(k);
-    }
-
-    public toggle(): void
-    {
-        this._open = !this._open;
-    }
-
-    public get open(): boolean
-    {
-        return this._open;
-    }
-
-    public toggleRoomEventView(): void
-    {
-        this._roomEventViewVisible = !this._roomEventViewVisible;
-    }
-
-    public get roomEventViewVisible(): boolean
-    {
-        return this._roomEventViewVisible;
-    }
-
-    public get shareRoomViewVisible(): boolean
-    {
-        return true;
-    }
-
-    public toggleRoomShareVisible(): void
-    {
-
-    }
-
-    public get roomData(): RoomDataParser
-    {
-        return this._roomData;
-    }
-
-    public get formattedRoomOwner(): string
-    {
-        return this._formattedRoomOwner;
-    }
-
-    public toggleZoom(): void
-    {
-        this.widgetHandler.processWidgetMessage(new RoomWidgetZoomToggleMessage());
-    }
-
-    public canGo(direction: string): boolean
-    {
-        switch(direction)
+        this._ngZone.run(() =>
         {
-            case 'back':
-                return this._navigatorDataService.canGoBack();
-            case 'forward':
-                return this._navigatorDataService.canGoForward();
-        }
+            let i = 0;
 
-        return false;
-    }
+            while(i < RoomToolsMainComponent.VISITED_ROOMS.length)
+            {
+                const roomData = RoomToolsMainComponent.VISITED_ROOMS[i];
 
-    public goInDirection(direction: string): void
-    {
-        if(!this.canGo(direction)) return;
+                if(roomData && roomData.roomId === roomId)
+                {
+                    this._currentRoomIndex = i;
 
-        let roomId: number = null;
-        switch(direction)
-        {
-            case 'back': {
-                roomId = this._navigatorDataService.getPreviousRoomId();
+                    return;
+                }
+
+                i++;
             }
-                break;
-            case 'forward': {
-                roomId = this._navigatorDataService.getNextRoomId();
-            }
-
-                break;
-        }
-
-        if(!roomId) return;
-
-        this._navigatorService.goToPrivateRoom(roomId);
-    }
-
-    public isLikeable(): boolean
-    {
-        return this._navigatorService.canRate;
-    }
-
-    public get handler(): RoomToolsWidgetHandler
-    {
-        return (this.widgetHandler as RoomToolsWidgetHandler);
+        });
     }
 
     public likeRoom(): void
@@ -171,8 +146,125 @@ export class RoomToolsMainComponent extends ConversionTrackingWidget
         this.handler.rateRoom();
     }
 
+    public hasDirection(direction: number): boolean
+    {
+        const requestedIndex = (this._currentRoomIndex + direction);
+
+        if((requestedIndex >= 0) && (requestedIndex < RoomToolsMainComponent.VISITED_ROOMS.length)) return true;
+
+        return false;
+    }
+
+    public goInDirection(direction: number): void
+    {
+        const requestedIndex = (this._currentRoomIndex + direction);
+
+        if((requestedIndex < 0) || (requestedIndex > (RoomToolsMainComponent.VISITED_ROOMS.length - 1))) return;
+
+        const roomData = RoomToolsMainComponent.VISITED_ROOMS[requestedIndex];
+
+        if(!roomData) return;
+
+        this._navigatorService.goToPrivateRoom(roomData.roomId);
+    }
+
     public toggleChatHistory(): void
     {
         this._settingsService.toggleChatHistory();
+    }
+
+    public toggleZoom(): void
+    {
+        this.widgetHandler.processWidgetMessage(new RoomWidgetZoomToggleMessage());
+
+        this._zoomed = !this._zoomed;
+    }
+
+    public toggleRoomOptions(): void
+    {
+        this._roomOptionsVisible = !this._roomOptionsVisible;
+
+        if(this._roomOptionsVisible) this.showRoomOptions(false);
+    }
+
+    public showRoomOptions(autoHide: boolean = true): void
+    {
+        this._roomOptionsVisible = true;
+
+        this.stopRoomOptionsTimeout();
+
+        if(autoHide)
+        {
+            this._roomOptionsTimeout = setTimeout(() =>
+            {
+                this.stopRoomOptionsTimeout();
+
+                this._roomOptionsVisible = false;
+            }, 5000);
+        }
+    }
+
+    private stopRoomOptionsTimeout(): void
+    {
+        if(!this._roomOptionsTimeout) return;
+
+        clearTimeout(this._roomOptionsTimeout);
+
+        this._roomOptionsTimeout = null;
+    }
+
+    public toggleRoomTools(): void
+    {
+        this._navigatorService.toggleRoomInfo();
+    }
+
+    public get handler(): RoomToolsWidgetHandler
+    {
+        return (this.widgetHandler as RoomToolsWidgetHandler);
+    }
+
+    public get roomName(): string
+    {
+        return this._roomName;
+    }
+
+    public get ownerName(): string
+    {
+        return this._ownerName;
+    }
+
+    public get tags(): string[]
+    {
+        return this._tags;
+    }
+
+    public get zoomed(): boolean
+    {
+        return this._zoomed;
+    }
+
+    public get roomOptionsVisible(): boolean
+    {
+        return this._roomOptionsVisible;
+    }
+
+    public get roomToolsVisible(): boolean
+    {
+        return this._roomToolsVisible;
+    }
+
+    public set roomToolsVisible(flag: boolean)
+    {
+        this._roomToolsVisible = flag;
+    }
+
+    public get roomData(): RoomDataParser
+    {
+        return this._roomData;
+    }
+
+    public get canRate(): boolean
+    {
+        return this._navigatorService.data.canRate;
     }
 }

@@ -1,18 +1,17 @@
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
 import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomToolsMainComponent } from '../roomtools/main/main.component';
-import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
+import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
@@ -33,17 +32,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._disposed = false;
 
         this.onRoomInfoEvent = this.onRoomInfoEvent.bind(this);
-    }
-
-
-    public set widget(widget: RoomToolsMainComponent)
-    {
-        this._widget = widget;
-    }
-
-    public get widget(): RoomToolsMainComponent
-    {
-        return this._widget;
     }
 
     public dispose(): void
@@ -75,8 +63,8 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         {
             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, this._zoomed ? 1 : 0, false));
             this._zoomed = !this._zoomed;
-
         }
+
         return null;
     }
 
@@ -85,7 +73,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(!event || this._disposed) return;
     }
 
-    // _Str_4428
     private onRoomInfoEvent(event: RoomInfoEvent): void
     {
         if(!event) return;
@@ -98,13 +85,16 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         if(!roomData) return;
 
-        const roomOwner = parser.staffPick || parser.data.officialRoomPicRef ?
-            Nitro.instance.localization.getValue('room.tool.public.room')
-            : Nitro.instance.localization.getValue('room.tool.room.owner.prefix') + ' ' + roomData.ownerName;
+        if(parser.roomEnter)
+        {
+            this._widget.updateRoomInfo(roomData);
 
-        this._widget.loadRoomData(roomData, roomOwner);
-        this._widget._Str_22970(roomData);
-        this._widget._Str_23696(roomData.roomId);
+            const ownerName = (roomData.showOwner ? (Nitro.instance.getLocalization('room.tool.room.owner.prefix') + ' ' + roomData.ownerName) : Nitro.instance.getLocalization('room.tool.public.room'));
+
+            this._widget.updateRoomTools(roomData.roomName, ownerName, roomData.tags);
+            this._widget.addVisitedRoom(roomData);
+            this._widget.updateRoomCurrentIndex(roomData.roomId);
+        }
     }
 
     public rateRoom(): void
@@ -114,20 +104,24 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._container.connection.send(new RoomLikeRoomComposer(1));
     }
 
-    // Done
+    public get disposed(): boolean
+    {
+        return this._disposed;
+    }
+
     public get type(): string
     {
         return RoomWidgetEnum.ROOM_TOOLS;
     }
 
-    public get messageTypes(): string[]
+    public get widget(): RoomToolsMainComponent
     {
-        return [ ];
+        return this._widget;
     }
 
-    public get eventTypes(): string[]
+    public set widget(widget: RoomToolsMainComponent)
     {
-        return [ ];
+        this._widget = widget;
     }
 
     public get container(): IRoomWidgetHandlerContainer
@@ -137,7 +131,6 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
     public set container(container: IRoomWidgetHandlerContainer)
     {
-
         this._container = container;
 
         if(this._container)
@@ -151,8 +144,13 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         }
     }
 
-    public get disposed(): boolean
+    public get messageTypes(): string[]
     {
-        return this._disposed;
+        return [];
+    }
+
+    public get eventTypes(): string[]
+    {
+        return [];
     }
 }

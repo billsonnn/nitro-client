@@ -3,6 +3,20 @@ import { Vector3d } from './Vector3d';
 
 export class ColorConverter
 {
+    private static HEX_DIGITS = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ];
+
+    public static rgbStringToHex(rgb: string): string
+    {
+        const extracted = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+        return '#' + ColorConverter.getHex(extracted[1]) + ColorConverter.getHex(extracted[2]) + ColorConverter.getHex(extracted[3]);
+    }
+
+    public static getHex(x: any)
+    {
+        return isNaN(x) ? '00' : ColorConverter.HEX_DIGITS[(x - x % 16) / 16] + ColorConverter.HEX_DIGITS[x % 16];
+    }
+
     public static int2rgb(color: number): string
     {
         color >>>= 0;

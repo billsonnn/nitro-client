@@ -1,6 +1,7 @@
 import { Texture } from 'pixi.js';
 import { NitroManager } from '../../core/common/NitroManager';
 import { IMessageComposer } from '../../core/communication/messages/IMessageComposer';
+import { NitroEvent } from '../../core/events/NitroEvent';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { AvailabilityStatusMessageEvent } from '../communication/messages/incoming/availability/AvailabilityStatusMessageEvent';
 import { ChangeNameUpdateEvent } from '../communication/messages/incoming/avatar/ChangeNameUpdateEvent';
@@ -12,16 +13,22 @@ import { UserNameChangeMessageEvent } from '../communication/messages/incoming/u
 import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
 import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
+import { RoomUnitChatStyleComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
 import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
 import { Nitro } from '../Nitro';
 import { HabboWebTools } from '../utils/HabboWebTools';
 import { BadgeImageManager } from './BadgeImageManager';
 import { SecurityLevel } from './enum/SecurityLevel';
+import { SessionDataPreferencesEvent } from './events/SessionDataPreferencesEvent';
 import { UserNameUpdateEvent } from './events/UserNameUpdateEvent';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
 import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
+import { IgnoredUsersManager } from './IgnoredUsersManager';
 import { ISessionDataManager } from './ISessionDataManager';
+import { IProductData } from './product/IProductData';
+import { IProductDataListener } from './product/IProductDataListener';
+import { ProductDataParser } from './product/ProductDataParser';
 
 export class SessionDataManager extends NitroManager implements ISessionDataManager
 {
@@ -37,6 +44,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _respectsPetLeft: number;
     private _canChangeName: boolean;
 
+    private _ignoredUsersManager: IgnoredUsersManager;
+
     private _clubLevel: number;
     private _securityLevel: number;
     private _isAmbassador: boolean;
@@ -45,15 +54,20 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _systemShutdown: boolean;
     private _isAuthenticHabbo: boolean;
     private _isRoomCameraFollowDisabled: boolean;
+    private _chatStyle: number;
     private _uiFlags: number;
 
     private _floorItems: Map<number, IFurnitureData>;
     private _wallItems: Map<number, IFurnitureData>;
+    private _products: Map<string, IProductData>;
     private _furnitureData: FurnitureDataParser;
+    private _productData: ProductDataParser;
 
     private _furnitureReady: boolean;
+    private _productsReady: boolean;
     private _furnitureListenersNotified: boolean;
     private _pendingFurnitureListeners: IFurnitureDataListener[];
+    private _pendingProductListeners: IProductDataListener[];
 
     private _badgeImageManager: BadgeImageManager;
 
@@ -65,6 +79,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this.resetUserInfo();
 
+        this._ignoredUsersManager           = new IgnoredUsersManager(this);
+
         this._clubLevel                     = 0;
         this._securityLevel                 = 0;
         this._isAmbassador                  = false;
@@ -73,25 +89,33 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemShutdown                = false;
         this._isAuthenticHabbo              = false;
         this._isRoomCameraFollowDisabled    = false;
+        this._chatStyle                     = 0;
         this._uiFlags                       = 0;
 
         this._floorItems                    = new Map();
         this._wallItems                     = new Map();
+        this._products                      = new Map();
         this._furnitureData                 = null;
 
         this._furnitureReady                = false;
+        this._productsReady                 = false;
         this._furnitureListenersNotified    = false;
         this._pendingFurnitureListeners     = [];
+        this._pendingProductListeners       = [];
 
         this._badgeImageManager             = null;
 
-        this.onFurnitureDataReadyEvent = this.onFurnitureDataReadyEvent.bind(this);
+        this.onFurnitureDataReadyEvent  = this.onFurnitureDataReadyEvent.bind(this);
+        this.onProductDataReadyEvent    = this.onProductDataReadyEvent.bind(this);
     }
 
     protected onInit(): void
     {
         this.loadFurnitureData();
+        this.loadProductData();
         this.loadBadgeImageManager();
+
+        (this._ignoredUsersManager && this._ignoredUsersManager.init());
 
         this._communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
@@ -106,6 +130,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     protected onDispose(): void
     {
         this.destroyFurnitureData();
+
+        if(this._ignoredUsersManager)
+        {
+            this._ignoredUsersManager.dispose();
+
+            this._ignoredUsersManager = null;
+        }
 
         super.onDispose();
     }
@@ -131,6 +162,17 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.loadFurnitureData(Nitro.instance.getConfiguration<string>('furnidata.url'));
     }
 
+    private loadProductData(): void
+    {
+        this.destroyProductData();
+
+        this._productData = new ProductDataParser(this._products);
+
+        this._productData.addEventListener(ProductDataParser.PDP_PRODUCT_DATA_READY, this.onProductDataReadyEvent);
+
+        this._productData.loadProductData(Nitro.instance.getConfiguration<string>('productdata.url'));
+    }
+
     private loadBadgeImageManager(): void
     {
         if(this._badgeImageManager) return;
@@ -138,13 +180,22 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._badgeImageManager = new BadgeImageManager(Nitro.instance.core.asset, this.events);
     }
 
+    public hasProductData(listener: IProductDataListener): boolean
+    {
+        if(this._productsReady) return true;
+
+        if(listener && (this._pendingProductListeners.indexOf(listener) === -1)) this._pendingProductListeners.push(listener);
+
+        return false;
+    }
+
     public getAllFurnitureData(listener: IFurnitureDataListener): IFurnitureData[]
     {
-        if(!this._floorItems || !this._floorItems.size)
+        if(!this._furnitureReady)
         {
             if(this._pendingFurnitureListeners.indexOf(listener) === -1) this._pendingFurnitureListeners.push(listener);
 
-            return;
+            return null;
         }
 
         const furnitureData: IFurnitureData[] = [];
@@ -208,6 +259,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._respectsLeft      = userInfo.respectsRemaining;
         this._respectsPetLeft   = userInfo.respectsPetRemaining;
         this._canChangeName     = userInfo.canChangeName;
+
+        (this._ignoredUsersManager && this._ignoredUsersManager.requestIgnoredUsers());
     }
 
     private onUserPermissionsEvent(event: UserPermissionsEvent): void
@@ -230,16 +283,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemOpen        = parser.isOpen;
         this._systemShutdown    = parser.onShutdown;
         this._isAuthenticHabbo  = parser.isAuthenticUser;
-
-        if(this._isAuthenticHabbo && this._furnitureReady && !this._furnitureListenersNotified)
-        {
-            this._furnitureListenersNotified = true;
-
-            if(this._pendingFurnitureListeners && this._pendingFurnitureListeners.length)
-            {
-                for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
-            }
-        }
     }
 
     private onUserSettingsEvent(event: UserSettingsEvent): void
@@ -251,7 +294,10 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if(!parser) return;
 
         this._isRoomCameraFollowDisabled    = parser.cameraFollow;
+        this._chatStyle                     = parser.chatType;
         this._uiFlags                       = parser.flags;
+
+        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
     }
 
     private onChangeNameUpdateEvent(event: ChangeNameUpdateEvent): void
@@ -296,13 +342,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         HabboWebTools.roomVisited(parser.roomId);
     }
 
-    private onFurnitureDataReadyEvent(event: Event): void
+    private onFurnitureDataReadyEvent(event: NitroEvent): void
     {
         this._furnitureData.removeEventListener(FurnitureDataParser.FURNITURE_DATA_READY, this.onFurnitureDataReadyEvent);
 
         this._furnitureReady = true;
 
-        if(this._isAuthenticHabbo && !this._furnitureListenersNotified)
+        if(!this._furnitureListenersNotified)
         {
             this._furnitureListenersNotified = true;
 
@@ -311,6 +357,19 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
                 for(const listener of this._pendingFurnitureListeners) listener && listener.loadFurnitureData();
             }
         }
+
+        this._pendingProductListeners = [];
+    }
+
+    private onProductDataReadyEvent(event: NitroEvent): void
+    {
+        this._productData.removeEventListener(ProductDataParser.PDP_PRODUCT_DATA_READY, this.onProductDataReadyEvent);
+
+        this._productsReady = true;
+
+        for(const listener of this._pendingProductListeners) listener && listener.loadProductData();
+
+        this._pendingProductListeners = [];
     }
 
     private destroyFurnitureData(): void
@@ -320,6 +379,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._furnitureData.dispose();
 
         this._furnitureData = null;
+    }
+
+    private destroyProductData(): void
+    {
+        if(!this._productData) return;
+
+        this._productData.dispose();
+
+        this._productData = null;
     }
 
     public getFloorItemData(id: number): IFurnitureData
@@ -364,6 +432,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         }
     }
 
+    public getProductData(type: string): IProductData
+    {
+        if(!this._productsReady) this.loadProductData();
+
+        return this._products.get(type);
+    }
+
     public getBadgeUrl(name: string): string
     {
         return this._badgeImageManager.getBadgeUrl(name);
@@ -394,11 +469,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this._badgeImageManager.loadBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }
 
-    public isUserIgnored(userName: string): boolean
-    {
-        return false;
-    }
-
     public hasSecurity(level: number): boolean
     {
         return this._securityLevel >= level;
@@ -427,7 +497,29 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new RoomUnitChatComposer(text));
     }
 
-    private send(composer: IMessageComposer<unknown[]>): void
+    public sendChatStyleUpdate(styleId: number): void
+    {
+        this._chatStyle = styleId;
+
+        this.send(new RoomUnitChatStyleComposer(styleId));
+    }
+
+    public ignoreUser(name: string): void
+    {
+        (this._ignoredUsersManager && this._ignoredUsersManager.ignoreUser(name));
+    }
+
+    public unignoreUser(name: string): void
+    {
+        (this._ignoredUsersManager && this._ignoredUsersManager.unignoreUser(name));
+    }
+
+    public isUserIgnored(name: string): boolean
+    {
+        return (this._ignoredUsersManager && this._ignoredUsersManager.isIgnored(name));
+    }
+
+    public send(composer: IMessageComposer<unknown[]>): void
     {
         this._communication.connection.send(composer);
     }
@@ -460,6 +552,11 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public get realName(): string
     {
         return this._realName;
+    }
+
+    public get ignoredUsersManager(): IgnoredUsersManager
+    {
+        return this._ignoredUsersManager;
     }
 
     public get respectsReceived(): number
@@ -522,10 +619,14 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this.securityLevel >= SecurityLevel.MODERATOR;
     }
 
-
     public get isCameraFollowDisabled(): boolean
     {
         return this._isRoomCameraFollowDisabled;
+    }
+
+    public get chatStyle(): number
+    {
+        return this._chatStyle;
     }
 
     public get uiFlags(): number

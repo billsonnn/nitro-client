@@ -2,8 +2,11 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../../../core/settings/service';
+import { InventoryBadgeService } from '../../services/badge.service';
+import { InventoryBotService } from '../../services/bot.service';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
+import { InventoryPetService } from '../../services/pet.service';
 import { InventoryTradingService } from '../../services/trading.service';
 
 @Component({
@@ -21,6 +24,9 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         private _settingsService: SettingsService,
         private _inventoryService: InventoryService,
         private _inventoryFurnitureService: InventoryFurnitureService,
+        private _inventoryBotService: InventoryBotService,
+        private _inventoryPetService: InventoryPetService,
+        private _inventoryBadgeService: InventoryBadgeService,
         private _inventoryTradingService: InventoryTradingService)
     {}
 
@@ -51,16 +57,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
 
         if(next !== prev)
         {
-            if(next)
-            {
-                this.showFurniture();
-            }
-            else
-            {
-                this._inventoryTradingService.close();
-
-                this.setAllFurnitureSeen();
-            }
+            if(!next) this._inventoryTradingService.close();
         }
     }
 
@@ -72,6 +69,33 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public showFurniture(): void
     {
         this._inventoryService.furnitureVisible = true;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = false;
+        this._inventoryService.badgesVisible    = false;
+    }
+
+    public showBots(): void
+    {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.botsVisible      = true;
+        this._inventoryService.petsVisible      = false;
+        this._inventoryService.badgesVisible    = false;
+    }
+
+    public showPets(): void
+    {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = true;
+        this._inventoryService.badgesVisible    = false;
+    }
+
+    public showBadges(): void
+    {
+        this._inventoryService.furnitureVisible = false;
+        this._inventoryService.botsVisible      = false;
+        this._inventoryService.petsVisible      = false;
+        this._inventoryService.badgesVisible    = true;
     }
 
     public updateItemLocking(): void
@@ -95,6 +119,21 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         this._inventoryFurnitureService.setAllFurnitureSeen();
     }
 
+    public setAllBotsSeen(): void
+    {
+        this._inventoryBotService.setAllBotsSeen();
+    }
+
+    public setAllPetsSeen(): void
+    {
+        this._inventoryPetService.setAllPetsSeen();
+    }
+
+    public setAllBadgesSeen(): void
+    {
+        this._inventoryBadgeService.setAllBadgesSeen();
+    }
+
     public get roomPreviewer(): RoomPreviewer
     {
         return this._roomPreviewer;
@@ -105,9 +144,24 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         return this._inventoryService.furnitureVisible;
     }
 
+    public get badgesVisible(): boolean
+    {
+        return this._inventoryService.badgesVisible;
+    }
+
     public get tradingVisible(): boolean
     {
         return this._inventoryService.tradingVisible;
+    }
+
+    public get botsVisible(): boolean
+    {
+        return this._inventoryService.botsVisible;
+    }
+
+    public get petsVisible(): boolean
+    {
+        return this._inventoryService.petsVisible;
     }
 
     public get furnitureService(): InventoryFurnitureService
@@ -115,8 +169,43 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
         return this._inventoryFurnitureService;
     }
 
+    public get botService(): InventoryBotService
+    {
+        return this._inventoryBotService;
+    }
+
+    public get petService(): InventoryPetService
+    {
+        return this._inventoryPetService;
+    }
+
+    public get badgeService(): InventoryBadgeService
+    {
+        return this._inventoryBadgeService;
+    }
+
     public get tradeService(): InventoryTradingService
     {
         return this._inventoryTradingService;
+    }
+
+    public get furniUnseenCount(): number
+    {
+        return this._inventoryService.furniUnseenCount;
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._inventoryService.botUnseenCount;
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._inventoryService.petUnseenCount;
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._inventoryService.badgeUnseenCount;
     }
 }

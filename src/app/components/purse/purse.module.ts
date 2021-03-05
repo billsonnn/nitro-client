@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
-import { PurseCurrencyComponent } from './components/currency/currency.component';
+import { SharedModule } from '../../shared/shared.module';
 import { PurseMainComponent } from './components/main/main.component';
 import { PurseService } from './services/purse.service';
 
@@ -9,15 +8,13 @@ import { PurseService } from './services/purse.service';
         SharedModule
     ],
     exports: [
-        PurseMainComponent,
-        PurseCurrencyComponent
+        PurseMainComponent
     ],
     providers: [
         PurseService
     ],
     declarations: [
-        PurseMainComponent,
-        PurseCurrencyComponent
+        PurseMainComponent
     ]
 })
 export class PurseModule

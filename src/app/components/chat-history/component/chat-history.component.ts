@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../client/nitro/room/object/RoomObjectCategory';
 import { SettingsService } from '../../../core/settings/service';
@@ -58,13 +57,11 @@ export class ChatHistoryComponent implements OnChanges
     {
         if(!this.historyScroller) return;
 
-        console.log('scroll');
-
         this.historyScroller.directiveRef.scrollToBottom(0);
     }
 
-    public get historySets(): AdvancedMap<number, ChatHistorySet>
+    public get historyItems(): ChatHistoryItem[]
     {
-        return this._chatHistoryService.historySets;
+        return this._chatHistoryService.historyItems;
     }
 }

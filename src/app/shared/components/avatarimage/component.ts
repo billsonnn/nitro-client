@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
@@ -8,7 +8,8 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 @Component({
     selector: '[nitro-avatar-image]',
     template: `
-    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" />`
+    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" image-placeholder />`,
+    encapsulation: ViewEncapsulation.None
 })
 export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvatarImageListener
 {

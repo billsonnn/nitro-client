@@ -1,6 +1,6 @@
 import { IMessageDataWrapper } from '../../../../../../core/communication/messages/IMessageDataWrapper';
 import { IMessageParser } from '../../../../../../core/communication/messages/IMessageParser';
-import { GroupData } from '../../group/utils/GroupData';
+import { GroupDataParser } from '../../group/utils/GroupDataParser';
 
 export class UserProfileParser implements IMessageParser
 {
@@ -14,7 +14,7 @@ export class UserProfileParser implements IMessageParser
     private _isMyFriend: boolean;
     private _requestSent: boolean;
     private _isOnline: boolean;
-    private _groups: GroupData[];
+    private _groups: GroupDataParser[];
     private _lastVisit: number;
 
     public flush(): boolean
@@ -53,7 +53,7 @@ export class UserProfileParser implements IMessageParser
 
         while(groupsCount > 0)
         {
-            this._groups.push(new GroupData(wrapper));
+            this._groups.push(new GroupDataParser(wrapper));
 
             groupsCount--;
         }
@@ -113,7 +113,7 @@ export class UserProfileParser implements IMessageParser
         return this._isOnline;
     }
 
-    public get groups(): GroupData[]
+    public get groups(): GroupDataParser[]
     {
         return this._groups;
     }

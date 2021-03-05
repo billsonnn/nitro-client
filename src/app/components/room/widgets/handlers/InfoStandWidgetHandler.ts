@@ -128,10 +128,10 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 this._container.events.dispatchEvent(new RoomWidgetChatInputContentUpdateEvent(RoomWidgetChatInputContentUpdateEvent.WHISPER, userData.name));
                 break;
             case RoomWidgetUserActionMessage.RWUAM_IGNORE_USER:
-                //this._container.sessionDataManager._Str_10249(_local_3.name);
+                this._container.sessionDataManager.ignoreUser(userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_UNIGNORE_USER:
-                //this._container.sessionDataManager._Str_14353(_local_3.name);
+                this._container.sessionDataManager.unignoreUser(userData.name);
                 break;
             case RoomWidgetUserActionMessage.RWUAM_KICK_USER:
                 this._container.roomSession.sendKickMessage((message as RoomWidgetUserActionMessage).userId);
@@ -454,13 +454,13 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(furnitureData)
             {
-                infostandEvent.name         = furnitureData.name;
-                infostandEvent.description  = furnitureData.description;
-                infostandEvent.purchaseOfferId    = furnitureData.offerId;
-                //infostandEvent.purchaseCouldBeUsedForBuyout    = furnitureData._Str_7629;
-                //infostandEvent.rentOfferId    = furnitureData._Str_3693;
-                //infostandEvent.rentCouldBeUsedForBuyout    = furnitureData._Str_8116;
-                //infostandEvent._Str_6098    = furnitureData._Str_6098;
+                infostandEvent.name                         = furnitureData.name;
+                infostandEvent.description                  = furnitureData.description;
+                infostandEvent.purchaseOfferId              = furnitureData.purchaseOfferId;
+                infostandEvent.purchaseCouldBeUsedForBuyout = furnitureData.purchaseCouldBeUsedForBuyout;
+                infostandEvent.rentOfferId                  = furnitureData.rentOfferId;
+                infostandEvent.rentCouldBeUsedForBuyout     = furnitureData.rentCouldBeUsedForBuyout;
+                infostandEvent.availableForBuildersClub     = furnitureData.availableForBuildersClub;
 
                 if(this._container.wiredService && (k.category === RoomObjectCategory.FLOOR))
                 {

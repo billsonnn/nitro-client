@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
+import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogNavigationSetComponent
 {
     @Input()
-    public catalogPage: CatalogPageData = null;
+    public catalogPage: ICatalogPageData = null;
 
     constructor(private _catalogService: CatalogService)
     {}

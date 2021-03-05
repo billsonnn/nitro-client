@@ -182,7 +182,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
     public imageFailed(id: number): void
     {
-        console.log('failed');
+
     }
 
     public hasMultipleOffers(): boolean

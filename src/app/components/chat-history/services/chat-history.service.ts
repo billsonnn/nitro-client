@@ -4,7 +4,6 @@ import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { ChatHistoryItem } from '../common/ChatHistoryItem';
-import { ChatHistorySet } from '../common/ChatHistorySet';
 
 @Injectable()
 export class ChatHistoryService implements OnDestroy
@@ -13,14 +12,15 @@ export class ChatHistoryService implements OnDestroy
 
     private _messages: IMessageEvent[];
 
-    private _lastRoomId: number  = -1;
-    private _historySets: AdvancedMap<number, ChatHistorySet>;
+    private _lastRoomId: number = -1;
+    private _maxHistoryItems: number = 100;
+    private _historyItems: ChatHistoryItem[] = [];
     private _queuedItems: AdvancedMap<number, ChatHistoryItem[]>;
 
     constructor(private _ngZone: NgZone)
     {
-        this._historySets   = new AdvancedMap();
-        this._queuedItems   = new AdvancedMap();
+        this._maxHistoryItems   = Nitro.instance.getConfiguration('chat.history.max.items', 100);
+        this._queuedItems = new AdvancedMap();
 
         this.registerMessages();
     }
@@ -89,36 +89,22 @@ export class ChatHistoryService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            const history = this.getHistorySet(roomId);
-
-            if(!history)
+            if(roomId !== this._lastRoomId)
             {
-                const queue = this.getHistoryQueue(roomId);
+                const queue = this.getQueuedSet(roomId);
 
                 if(queue) queue.push(item);
 
                 return;
             }
 
-            history.addItem(item);
+            if(this._historyItems.length >= this._maxHistoryItems) this._historyItems.shift();
+
+            this._historyItems.push(item);
         });
     }
 
-    public getHistorySet(roomId: number): ChatHistorySet
-    {
-        let existing = this._historySets.getValue(roomId);
-
-        if(!existing)
-        {
-            existing = new ChatHistorySet(roomId);
-
-            this._historySets.add(roomId, existing);
-        }
-
-        return existing;
-    }
-
-    public getHistoryQueue(roomId: number): ChatHistoryItem[]
+    public getQueuedSet(roomId: number): ChatHistoryItem[]
     {
         let existing = this._queuedItems.getValue(roomId);
 
@@ -143,8 +129,8 @@ export class ChatHistoryService implements OnDestroy
         this._queuedItems.remove(roomId);
     }
 
-    public get historySets(): AdvancedMap<number, ChatHistorySet>
+    public get historyItems(): ChatHistoryItem[]
     {
-        return this._historySets;
+        return this._historyItems;
     }
 }

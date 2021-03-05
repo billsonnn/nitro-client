@@ -1,11 +1,4 @@
 @import './avatarimage';
 @import './badge';
-@import './loading';
-@import './roompreview';
-
-.nitro-right-side {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1;
-}
+@import './currency-icon';
+@import './room-preview';

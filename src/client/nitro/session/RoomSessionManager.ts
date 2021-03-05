@@ -14,6 +14,7 @@ import { IRoomHandlerListener } from './IRoomHandlerListener';
 import { IRoomSession } from './IRoomSession';
 import { IRoomSessionManager } from './IRoomSessionManager';
 import { RoomSession } from './RoomSession';
+import { RoomPresentHandler } from './handler/RoomPresentHandler';
 
 export class RoomSessionManager extends NitroManager implements IRoomSessionManager, IRoomHandlerListener
 {
@@ -72,7 +73,8 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
             new RoomDimmerPresetsHandler(connection, this),
             new RoomPermissionsHandler(connection, this),
             new RoomSessionHandler(connection, this),
-            new RoomUsersHandler(connection, this)
+            new RoomUsersHandler(connection, this),
+            new RoomPresentHandler(connection, this),
         );
     }
 
