@@ -8,6 +8,7 @@ import { ModToolReportsComponent } from './components/reports-tool/reports-tool.
 import { ModTool } from './components/tool.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../../shared/shared.module';
+import { ModToolUserInfoService } from './services/mod-tool-user-info.service';
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { SharedModule } from '../../shared/shared.module';
         ModToolReportsComponent
     ],
     providers: [
-        ModToolService
+        ModToolService,
+        ModToolUserInfoService
     ],
     declarations: [
         ModToolMainComponent,

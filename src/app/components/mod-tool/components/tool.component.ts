@@ -25,6 +25,5 @@ export class ModTool implements OnInit, OnDestroy
     public hideTool(): void
     {
         this.visible = false;
-        this.visibleChange.emit(this.visible);
     }
 }

@@ -7,6 +7,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolRoomChatlogLine } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
 import { ModtoolRoomChatlogParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomChatlogParser';
 import { ChatlogToolChatlog } from '../chatlog-tool/chatlog-tool-chatlog';
+import { ModToolUserInfoService } from '../../services/mod-tool-user-info.service';
 
 @Component({
     selector: 'nitro-mod-tool-main-component',
@@ -22,9 +23,12 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     public userToolVisible: boolean = false;
     public reportsToolVisible: boolean = false;
 
+    public clickedUser: UserToolUser = null;
+
     constructor(
         private _settingsService: SettingsService,
         private _modToolService: ModToolService,
+        private _modToolsUserService: ModToolUserInfoService,
         private _ngZone: NgZone)
     {}
 
@@ -53,9 +57,10 @@ export class ModToolMainComponent implements OnInit, OnDestroy
         this._modToolService.openChatlogTool();
     }
 
-    public openUserTool(): void
+    public selectUser(): void
     {
-        this._modToolService.openUserTool();
+        this.clickedUser = this.selectedUser;
+        this._modToolsUserService.load(this.selectedUser.id);
     }
 
     public toggleReportsTool(): void
@@ -80,11 +85,11 @@ export class ModToolMainComponent implements OnInit, OnDestroy
 
     public get users(): UserToolUser[]
     {
-         return this._modToolService.users;
+        return this._modToolService.users;
     }
 
-    public get user(): UserToolUser
+    public get selectedUser(): UserToolUser
     {
-        return this._modToolService.users[0];
+        return this._modToolService.selectedUser;
     }
 }

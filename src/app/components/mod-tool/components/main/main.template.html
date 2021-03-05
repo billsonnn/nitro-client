@@ -13,9 +13,9 @@
                     <i class="icon modtool-chatlog-icon" style="margin-right: 5px;"></i>
                     Chatlog Tool
                 </button>
-                <button (click)="openUserTool()" class="btn btn-sm btn-primary btn-block">
+                <button [disabled]="!selectedUser" (click)="selectUser()" class="btn btn-sm btn-primary btn-block">
                     <i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
-                    User: <span class="username" *ngIf="user">{{user.username}}</span>
+                    User: <span class="username" *ngIf="selectedUser">{{selectedUser.username}}</span>
                 </button>
                 <button (click)="toggleReportsTool()" class="btn btn-sm btn-primary btn-block">
                     <i class="icon modtool-reports-icon" style="margin-right: 5px;"></i>
@@ -26,7 +26,7 @@
     </div>
     <nitro-mod-tool-room-component *ngFor="let room of rooms; let index = index" [room]="room" [index]="index"></nitro-mod-tool-room-component>
     <nitro-mod-tool-chatlog-component *ngFor="let chatlog of chatlogs; let index = index" [roomChatlogs]="chatlog" [index]="index"></nitro-mod-tool-chatlog-component>
-    <nitro-mod-tool-user-component *ngFor="let user of users; let index = index" [user]="user" [index]="index"></nitro-mod-tool-user-component>
+    <nitro-mod-tool-user-component *ngIf="clickedUser" [user]="clickedUser"></nitro-mod-tool-user-component>
     <nitro-mod-tool-reports-component [(visible)]="reportsToolVisible"></nitro-mod-tool-reports-component>
 </div>
 

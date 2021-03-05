@@ -351,6 +351,7 @@ import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInf
 import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUserChatlogEvent';
 import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
+import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -887,6 +888,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MODTOOL_CHANGE_ROOM_SETTINGS, ModtoolChangeRoomSettingsComposer);
         this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_CHATLOG, ModtoolRequestUserChatlogComposer);
         this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_CHATLOG, ModtoolRequestRoomChatlogComposer);
+        this._composers.set(OutgoingHeader.MOD_TOOL_USER_INFO, ModtoolRequestUserInfoComposer);
 
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);

@@ -27,6 +27,8 @@ export class ModToolService implements OnDestroy
     private _roomVisits: ModtoolUserChatlogParserVisit[];
     private _roomChatlogs: ChatlogToolChatlog[] = [];
 
+    private _currentSelectedUser: UserToolUser = null;
+
     constructor(
         private _notificationService: NotificationService,
         private _ngZone: NgZone)
@@ -93,7 +95,6 @@ export class ModToolService implements OnDestroy
     private onUserInfoEvent(event: UserInfoEvent): void
     {
         const userInfo = event.getParser().userInfo;
-        debugger;
         this._ngZone.run(() =>
         {
             this._users.push(new UserToolUser(userInfo.userId, userInfo.username));
@@ -165,9 +166,11 @@ export class ModToolService implements OnDestroy
         Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(1));
     }
 
-    public closeUserTool(index: number): void
+    public closeUserTool(): void
     {
-        this._users.splice(index, 1);
+        if(!this._component) return;
+
+        this._component.clickedUser = null;
     }
 
     public get rooms(): RoomToolRoom[]
@@ -193,5 +196,15 @@ export class ModToolService implements OnDestroy
     public get isInRoom(): boolean
     {
         return this._rooms !== null;
+    }
+
+    public selectUser(webID: number, name: string, figure: string = null, gender: string = null): void
+    {
+        this._currentSelectedUser = new UserToolUser(webID, name, figure, gender);
+    }
+
+    public get selectedUser(): UserToolUser
+    {
+        return this._currentSelectedUser;
     }
 }

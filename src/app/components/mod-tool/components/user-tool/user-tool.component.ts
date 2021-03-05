@@ -10,9 +10,6 @@ import { UserToolUser } from './user-tool-user';
 export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 {
     @Input()
-    public index: number = null;
-
-    @Input()
     public user: UserToolUser = null;
 
     constructor(private _modToolService: ModToolService)
@@ -30,6 +27,6 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
 
     public close(): void
     {
-        this._modToolService.closeUserTool(this.index);
+        this._modToolService.closeUserTool();
     }
 }
