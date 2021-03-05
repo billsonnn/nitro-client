@@ -1,6 +1,8 @@
 import { IRoomInstance } from '../../room/IRoomInstance';
 import { IRoomObjectController } from '../../room/object/IRoomObjectController';
 import { IVector3D } from '../../room/utils/IVector3D';
+import { IRoomSessionManager } from '../session/IRoomSessionManager';
+import { ISessionDataManager } from '../session/ISessionDataManager';
 import { IObjectData } from './object/data/IObjectData';
 import { RoomMapData } from './object/RoomMapData';
 import { FurnitureStackingHeightMap } from './utils/FurnitureStackingHeightMap';
@@ -51,4 +53,6 @@ export interface IRoomCreator
     getPetTypeId(figure: string): number;
     _Str_17722(k: number, _arg_2: string): void;
     setRoomEngineGameMode(roomId: number, isPlaying: boolean): void;
+    sessionDataManager: ISessionDataManager;
+    roomSessionManager: IRoomSessionManager;
 }

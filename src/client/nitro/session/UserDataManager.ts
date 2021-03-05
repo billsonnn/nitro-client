@@ -79,6 +79,18 @@ export class UserDataManager extends Disposable
         return existing;
     }
 
+    public getUserDataByName(name: string): RoomUserData
+    {
+        for(const userData of this._userDataByRoomIndex.values())
+        {
+            if(!userData || (userData.name !== name)) continue;
+
+            return userData;
+        }
+
+        return null;
+    }
+
     public updateUserData(data: RoomUserData): void
     {
         if(!data) return;

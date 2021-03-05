@@ -41,6 +41,7 @@ import { RoomUnitNumberEvent } from '../communication/messages/incoming/room/uni
 import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { IgnoreResultEvent } from '../communication/messages/incoming/user/IgnoreResultEvent';
 import { FurnitureAliasesComposer } from '../communication/messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
@@ -141,6 +142,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new PetFigureUpdateEvent(this.onPetFigureUpdateEvent.bind(this)));
         this._connection.addMessageEvent(new YouArePlayingGameEvent(this.onYouArePlayingGameEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureState2Event(this.onFurnitureState2Event.bind(this)));
+        this._connection.addMessageEvent(new IgnoreResultEvent(this.onIgnoreResultEvent.bind(this)));
     }
 
     public setRoomId(id: number): void
@@ -681,6 +683,8 @@ export class RoomMessageHandler extends Disposable
                     this._roomCreator.updateRoomObjectUserPosture(this._currentRoomId, user.roomIndex, user.petPosture);
                 }
             }
+
+            this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, user.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, (this._roomCreator.sessionDataManager.isUserIgnored(user.name) ? 1 : 0));
         }
     }
 
@@ -889,6 +893,34 @@ export class RoomMessageHandler extends Disposable
         const direction = new Vector3d(wallGeometry.getDirection(data.direction));
 
         this._roomCreator.addFurnitureWall(roomId, data.itemId, data.spriteId, location, direction, data.state, data.stuffData, data.secondsToExpiration, data.usagePolicy, data.userId, data.username);
+    }
+
+    private onIgnoreResultEvent(event: IgnoreResultEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const roomSession = this._roomCreator.roomSessionManager.getSession(this._currentRoomId);
+
+        if(!roomSession) return;
+
+        const userData = roomSession.userDataManager.getUserDataByName(parser.name);
+
+        if(!userData) return;
+
+        switch(parser.result)
+        {
+            case 1:
+            case 2:
+                this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, userData.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, 1);
+                return;
+            case 3:
+                this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, userData.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, 0);
+                return;
+        }
     }
 
     // public _SafeStr_10580(event:_SafeStr_2242): void

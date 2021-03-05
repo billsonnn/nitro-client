@@ -24,6 +24,7 @@ import { UserNameUpdateEvent } from './events/UserNameUpdateEvent';
 import { FurnitureDataParser } from './furniture/FurnitureDataParser';
 import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
+import { IgnoredUsersManager } from './IgnoredUsersManager';
 import { ISessionDataManager } from './ISessionDataManager';
 import { IProductData } from './product/IProductData';
 import { IProductDataListener } from './product/IProductDataListener';
@@ -42,6 +43,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     private _respectsLeft: number;
     private _respectsPetLeft: number;
     private _canChangeName: boolean;
+
+    private _ignoredUsersManager: IgnoredUsersManager;
 
     private _clubLevel: number;
     private _securityLevel: number;
@@ -75,6 +78,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._communication                 = communication;
 
         this.resetUserInfo();
+
+        this._ignoredUsersManager           = new IgnoredUsersManager(this);
 
         this._clubLevel                     = 0;
         this._securityLevel                 = 0;
@@ -110,6 +115,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.loadProductData();
         this.loadBadgeImageManager();
 
+        (this._ignoredUsersManager && this._ignoredUsersManager.init());
+
         this._communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
         this._communication.registerMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
@@ -123,6 +130,13 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     protected onDispose(): void
     {
         this.destroyFurnitureData();
+
+        if(this._ignoredUsersManager)
+        {
+            this._ignoredUsersManager.dispose();
+
+            this._ignoredUsersManager = null;
+        }
 
         super.onDispose();
     }
@@ -245,6 +259,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._respectsLeft      = userInfo.respectsRemaining;
         this._respectsPetLeft   = userInfo.respectsPetRemaining;
         this._canChangeName     = userInfo.canChangeName;
+
+        (this._ignoredUsersManager && this._ignoredUsersManager.requestIgnoredUsers());
     }
 
     private onUserPermissionsEvent(event: UserPermissionsEvent): void
@@ -453,11 +469,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         return this._badgeImageManager.loadBadgeImage(name, BadgeImageManager.GROUP_BADGE);
     }
 
-    public isUserIgnored(userName: string): boolean
-    {
-        return false;
-    }
-
     public hasSecurity(level: number): boolean
     {
         return this._securityLevel >= level;
@@ -493,7 +504,22 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.send(new RoomUnitChatStyleComposer(styleId));
     }
 
-    private send(composer: IMessageComposer<unknown[]>): void
+    public ignoreUser(name: string): void
+    {
+        (this._ignoredUsersManager && this._ignoredUsersManager.ignoreUser(name));
+    }
+
+    public unignoreUser(name: string): void
+    {
+        (this._ignoredUsersManager && this._ignoredUsersManager.unignoreUser(name));
+    }
+
+    public isUserIgnored(name: string): boolean
+    {
+        return (this._ignoredUsersManager && this._ignoredUsersManager.isIgnored(name));
+    }
+
+    public send(composer: IMessageComposer<unknown[]>): void
     {
         this._communication.connection.send(composer);
     }
@@ -526,6 +552,11 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public get realName(): string
     {
         return this._realName;
+    }
+
+    public get ignoredUsersManager(): IgnoredUsersManager
+    {
+        return this._ignoredUsersManager;
     }
 
     public get respectsReceived(): number

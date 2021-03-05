@@ -173,7 +173,7 @@ export class OutgoingHeader
     public static USER_HOME_ROOM                 = 1740;
     public static USER_INFO                      = 357;
     public static USER_MOTTO                     = 2228;
-    public static USER_ONLINE                    = 3878;
+    public static USER_IGNORED                   = 3878;
     public static USER_OUTFIT_SAVE               = 800;
     public static USER_OUTFITS                   = 2742;
     public static USER_PETS                      = 3095;
@@ -206,4 +206,7 @@ export class OutgoingHeader
     public static MANNEQUIN_SAVE_LOOK            = 2209;
     public static PRESENT_OPEN_PRESENT           = 3558;
     public static CATALOG_SELECT_VIP_GIFT        = 2276;
+    public static USER_IGNORE_ID                 = 3314;
+    public static USER_IGNORE                    = 1117;
+    public static USER_UNIGNORE                  = 2061;
 }

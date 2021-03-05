@@ -174,6 +174,8 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
+import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
+import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
@@ -326,6 +328,10 @@ import { OpenMessageComposer } from './messages/outgoing/roomevents/OpenMessageC
 import { UpdateActionMessageComposer } from './messages/outgoing/roomevents/UpdateActionMessageComposer';
 import { UpdateConditionMessageComposer } from './messages/outgoing/roomevents/UpdateConditionMessageComposer';
 import { UpdateTriggerMessageComposer } from './messages/outgoing/roomevents/UpdateTriggerMessageComposer';
+import { GetIgnoredUsersComposer } from './messages/outgoing/user/data/GetIgnoredUsersComposer';
+import { IgnoreUserComposer } from './messages/outgoing/user/data/IgnoreUserComposer';
+import { IgnoreUserIdComposer } from './messages/outgoing/user/data/IgnoreUserIdComposer';
+import { UnignoreUserComposer } from './messages/outgoing/user/data/UnignoreUserComposer';
 import { UserCurrentBadgesComposer } from './messages/outgoing/user/data/UserCurrentBadgesComposer';
 import { UserFigureComposer } from './messages/outgoing/user/data/UserFigureComposer';
 import { UserHomeRoomComposer } from './messages/outgoing/user/data/UserHomeRoomComposer';
@@ -578,8 +584,10 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);
 
         // USER
+        this._events.set(IncomingHeader.USER_IGNORED, IgnoredUsersEvent);
+        this._events.set(IncomingHeader.USER_IGNORED_RESULT, IgnoreResultEvent);
 
-        // BADGEs
+        // BADGES
         this._events.set(IncomingHeader.USER_BADGES, BadgesEvent);
 
         // ACCESS
@@ -826,6 +834,10 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);
 
         // DATA
+        this._composers.set(OutgoingHeader.USER_IGNORED, GetIgnoredUsersComposer);
+        this._composers.set(OutgoingHeader.USER_IGNORE, IgnoreUserComposer);
+        this._composers.set(OutgoingHeader.USER_IGNORE_ID, IgnoreUserIdComposer);
+        this._composers.set(OutgoingHeader.USER_UNIGNORE, UnignoreUserComposer);
         this._composers.set(OutgoingHeader.USER_BADGES_CURRENT, UserCurrentBadgesComposer);
         this._composers.set(OutgoingHeader.USER_FIGURE, UserFigureComposer);
         this._composers.set(OutgoingHeader.USER_HOME_ROOM, UserHomeRoomComposer);
