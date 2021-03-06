@@ -109,4 +109,9 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     {
         return this._modToolService.showSendUserMessage;
     }
+
+    public get showSendUserChatlogs(): boolean
+    {
+        return this._modToolService.showSendUserChatlogs;
+    }
 }

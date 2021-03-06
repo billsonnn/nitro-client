@@ -39,6 +39,7 @@ export class ModToolService implements OnDestroy
     private _showModActionOnUser: boolean = false;
     private _showVisitedRoomsForUser: boolean = false;
     private _showSendUserMessage: boolean = false;
+    private _showSendUserChatlogs: boolean = false;
 
 
     private _Str_20687: _Str_5018 = null;
@@ -112,7 +113,7 @@ export class ModToolService implements OnDestroy
 
         if(!parser) return;
 
-        this._userRoomVisitedData = parser.data;
+        this._ngZone.run(() => this._userRoomVisitedData = parser.data);
     }
 
     private onModToolsCFHCategoriesEvent(event: ModtoolCallForHelpTopicsEvent): void
@@ -154,9 +155,16 @@ export class ModToolService implements OnDestroy
 
     private onModtoolUserChatlogEvent(event: ModtoolUserChatlogEvent): void
     {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
         this._ngZone.run(() =>
         {
-            this._roomVisits = event.getParser().roomVisits;
+            this._roomVisits = parser.roomVisits;
+            console.log(parser.roomVisits);
         });
     }
 
@@ -212,10 +220,6 @@ export class ModToolService implements OnDestroy
         this._roomChatlogs.splice(index, 1);
     }
 
-    public openUserTool(): void
-    {
-        Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(1));
-    }
 
     public closeUserTool(): void
     {
@@ -292,6 +296,16 @@ export class ModToolService implements OnDestroy
     public set showSendUserMessage(show: boolean)
     {
         this._showSendUserMessage = show;
+    }
+
+    public get showSendUserChatlogs(): boolean
+    {
+        return this._showSendUserChatlogs;
+    }
+
+    public set showSendUserChatlogs(show: boolean)
+    {
+        this._showSendUserChatlogs = show;
     }
 
     public get callForHelpCategories(): CallForHelpCategoryData[]

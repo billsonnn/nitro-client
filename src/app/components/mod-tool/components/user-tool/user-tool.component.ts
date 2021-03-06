@@ -6,6 +6,7 @@ import { ModToolUserInfoService } from '../../services/mod-tool-user-info.servic
 import { _Str_5467 } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolRequestUserRoomsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
+import { ModtoolRequestUserChatlogComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
 
 
 @Component({
@@ -130,6 +131,9 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         switch(button)
         {
             case 'roomchat':
+                this._modToolService.showSendUserChatlogs = true;
+                Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(this.user.id));
+                break;
             case 'send_message':
                 this._modToolService.showSendUserMessage = true;
                 break;

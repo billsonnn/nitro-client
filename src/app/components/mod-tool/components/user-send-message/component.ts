@@ -41,6 +41,7 @@ export class ModToolUserSendMessageComponent extends ModTool implements OnInit, 
 
     public close(): void
     {
+        this._modToolService.showSendUserMessage = false;
     }
 
     public get options(): string[]

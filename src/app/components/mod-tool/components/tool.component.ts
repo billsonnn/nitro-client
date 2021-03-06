@@ -39,7 +39,7 @@ export class ModTool implements OnInit, OnDestroy
 
         if(value !== newKey) return value;
 
-        this._logger.warn(`Text for MODTools not found, key: '${newKey}', returning default value.`);
+        //this._logger.warn(`Text for MODTools not found, key: '${newKey}', returning default value.`);
 
         return fallback;
     }

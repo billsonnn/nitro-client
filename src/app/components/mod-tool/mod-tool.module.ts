@@ -12,6 +12,7 @@ import { ModToolUserInfoService } from './services/mod-tool-user-info.service';
 import { ModToolModActionUserComponent } from './components/mod-action-user/component';
 import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/component';
 import { ModToolUserSendMessageComponent } from './components/user-send-message/component';
+import { ModToolUserChatlogsComponent } from './components/user-chatlogs/component';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import { ModToolUserSendMessageComponent } from './components/user-send-message/
         ModToolReportsComponent,
         ModToolModActionUserComponent,
         ModToolUserVisitedRoomsComponent,
-        ModToolUserSendMessageComponent
+        ModToolUserSendMessageComponent,
+        ModToolUserChatlogsComponent
     ],
     providers: [
         ModToolService,
@@ -41,7 +43,8 @@ import { ModToolUserSendMessageComponent } from './components/user-send-message/
         ModTool,
         ModToolModActionUserComponent,
         ModToolUserVisitedRoomsComponent,
-        ModToolUserSendMessageComponent
+        ModToolUserSendMessageComponent,
+        ModToolUserChatlogsComponent
     ]
 })
 export class ModToolModule
