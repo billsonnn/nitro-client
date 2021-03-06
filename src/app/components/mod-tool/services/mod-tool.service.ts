@@ -20,6 +20,7 @@ import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messa
 import { RoomInfoOwnerParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
 import { ModtoolRoomInfoParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
 import { ModtoolRoomChatlogLine } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
+import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -209,11 +210,11 @@ export class ModToolService implements OnDestroy
 
     public openChatlogTool(): void
     {
-
+        this._modToolRoomInfo = null;
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(this._currentRoomInfo.roomId));
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(this._currentRoomInfo.roomId));
+        this.showRoomChatLogs = true;
     }
-
-
-
 
     public closeUserTool(): void
     {
