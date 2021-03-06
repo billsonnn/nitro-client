@@ -197,11 +197,11 @@ export class ModToolService implements OnDestroy
         });
     }
 
-    public openRoomTool(): void
+    public openRoomTool(roomId: number = null): void
     {
-
         if(!this._currentRoomInfo) return;
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(this._currentRoomInfo.roomId));
+
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer((roomId ? roomId : this._currentRoomInfo.roomId)));
         this._showRoomTools = true;
     }
 

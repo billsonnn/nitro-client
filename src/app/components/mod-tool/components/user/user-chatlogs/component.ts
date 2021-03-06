@@ -53,6 +53,11 @@ export class ModToolUserChatlogsComponent extends ModTool implements OnInit, OnD
         this._navigatorService.goToPrivateRoom(roomId);
     }
 
+    public openRoomTools(roomId: number): void
+    {
+        this._modToolService.openRoomTool(roomId);
+    }
+
 
 
 }

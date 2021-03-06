@@ -6,7 +6,7 @@
 			</span>
 		<button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
 	</div>
-	<div class="card-body pl-3 pr-3" *ngIf="inRoom">
+	<div class="card-body pl-3 pr-3">
         <div class="row">
             <div class="col pr-2">
                 <div class="row">
@@ -28,7 +28,7 @@
                     <div class="col">
                         <div class="badge badge-secondary mb-1">
                             <div>
-                                <span class="font-weight-bold mr-2">Players in room:</span> {{room.playerAmount + 1}}
+                                <span class="font-weight-bold mr-2">Players in room:</span> {{room.playerAmount }}
                             </div>
                             <div>
                                 <span class="font-weight-bold mr-2">Owner in room:</span> {{room.owner ? 'yes' : 'no'}}
@@ -36,12 +36,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col pl-2">
                 <div class="row">
                     <div class="col">
                         <div class="badge badge-secondary mb-1">
-                            <div class="btn-group btn-group-vertical w-100">
+                            <div class="btn-group btn-group-vertical">
                                 <div class="mb-1">
                                     <input [(ngModel)]="changeTitle" class="form-check-input" id="change-title" type="checkbox">
                                     <label for="change-title" class="form-check-label">Change title to inappropriate</label>
@@ -54,6 +52,18 @@
                                     <input [(ngModel)]="lockDoor" class="form-check-input" id="lock-room" type="checkbox">
                                     <label for="lock-room" class="form-check-label">Lock room</label>
                                 </div>
+                                <div class="mb-1">
+                                    <div class="form-group mb-2">
+                                        <select [(ngModel)]="optionId"  (change)="selectMessage(optionId)"
+                                                class="form-control form-control-sm">
+                                            <option [value]="-1">Select from messsage templates</option>
+                                            <option *ngFor="let item of options; let i = index" [value]="i">{{ item }}</option>
+                                        </select></div>
+
+                                    <div class="form-group mb-2">
+                                        <textarea [(ngModel)]="message" class="form-control"></textarea>
+                                    </div>
+                                </div>
                                 <button (click)="saveRoom()" class="btn btn-sm btn-primary btn-block">
                                     <i class="icon modtool-key-icon" style="margin-right: 5px;"></i>
                                     Save room
@@ -65,7 +75,5 @@
             </div>
         </div>
 	</div>
-	<div class="card-body" *ngIf="!inRoom">
-		Not in a room
-	</div>
+
 </div>

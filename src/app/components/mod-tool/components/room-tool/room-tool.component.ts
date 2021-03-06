@@ -15,12 +15,13 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     public lockDoor: boolean = false;
     public changeTitle: boolean = false;
     public kickUsers: boolean = false;
-    private _housekeepingUrl: string;
+
+    public optionId: string = '-1';
+    public message: string = '';
 
     constructor(private _modToolService: ModToolService)
     {
         super();
-        this._housekeepingUrl = Nitro.instance.getConfiguration<string>('modtools.housekeeping.url', 'http://localhost');
     }
 
     public ngOnInit(): void
@@ -38,21 +39,38 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public saveRoom(): void
     {
-        const roomId = Nitro.instance.roomSessionManager.viewerSession.roomId;
+        const roomId = this.room.id;
         const lockDoor = this.lockDoor ? 1 : 0;
         const changeTitle = this.changeTitle ? 1 : 0;
         const kickUsers = this.kickUsers ? 1 : 0;
         Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers ));
     }
 
-    public get inRoom(): boolean
-    {
-        return Nitro.instance.roomSessionManager.viewerSession !== null;
-    }
-
     public get room(): ModtoolRoomInfoParser
     {
         return this._modToolService.currentRoomModData;
     }
+
+    public get options(): string[]
+    {
+        if(!this._modToolService._Str_3325) return [];
+
+        return this._modToolService._Str_3325._Str_18336;
+    }
+
+    public selectMessage(id: string)
+    {
+        if(id == '-1')
+        {
+            this.message = '';
+            return;
+        }
+
+        const idNumber = parseInt(id);
+
+        this.message = this.options[idNumber];
+
+    }
+
 
 }
