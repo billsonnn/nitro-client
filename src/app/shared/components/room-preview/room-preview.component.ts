@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { DisplayObject } from 'pixi.js';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
@@ -9,7 +9,7 @@ import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
     selector: '[nitro-room-preview-component]',
     templateUrl: './room-preview.template.html'
 })
-export class RoomPreviewComponent implements OnDestroy, AfterViewInit
+export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 {
     @ViewChild('previewImage')
     public previewImage: ElementRef<HTMLDivElement>;
@@ -44,6 +44,14 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
         this.onClick = this.onClick.bind(this);
     }
 
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        const prev = changes.model.previousValue;
+        const next = changes.model.currentValue;
+
+        if(next && (next !== prev)) this.updateModel();
+    }
+
     public ngOnDestroy(): void
     {
         this.stop();
@@ -67,6 +75,8 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
             backgroundColor = backgroundColor.replace('#', '0x');
 
             this.roomPreviewer.backgroundColor = parseInt(backgroundColor, 16);
+
+            if(this.model) this.updateModel();
 
             this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
             this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
@@ -137,6 +147,13 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
         {
             this.roomPreviewer.changeRoomObjectState();
         }
+    }
+
+    private updateModel(): void
+    {
+        if(!this.roomPreviewer) return;
+
+        this.roomPreviewer.updatePreviewModel(this.model, this.wallHeight, this.modelScale);
     }
 
     public get previewImageElement(): HTMLDivElement

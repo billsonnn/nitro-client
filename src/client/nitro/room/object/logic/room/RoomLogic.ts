@@ -13,10 +13,10 @@ import { RoomObjectTileMouseEvent } from '../../../events/RoomObjectTileMouseEve
 import { RoomObjectWallMouseEvent } from '../../../events/RoomObjectWallMouseEvent';
 import { ObjectRoomColorUpdateMessage } from '../../../messages/ObjectRoomColorUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from '../../../messages/ObjectRoomFloorHoleUpdateMessage';
+import { ObjectRoomMapUpdateMessage } from '../../../messages/ObjectRoomMapUpdateMessage';
 import { ObjectRoomMaskUpdateMessage } from '../../../messages/ObjectRoomMaskUpdateMessage';
 import { ObjectRoomPlanePropertyUpdateMessage } from '../../../messages/ObjectRoomPlanePropertyUpdateMessage';
 import { ObjectRoomPlaneVisibilityUpdateMessage } from '../../../messages/ObjectRoomPlaneVisibilityUpdateMessage';
-import { ObjectRoomUpdateMapMessage } from '../../../messages/ObjectRoomUpdateMapMessage';
 import { ObjectRoomUpdateMessage } from '../../../messages/ObjectRoomUpdateMessage';
 import { RoomMapData } from '../../RoomMapData';
 import { RoomObjectVariable } from '../../RoomObjectVariable';
@@ -220,11 +220,9 @@ export class RoomLogic extends RoomObjectLogicBase
             return;
         }
 
-        if(message instanceof ObjectRoomUpdateMapMessage)
+        if(message instanceof ObjectRoomMapUpdateMessage)
         {
-            this.onObjectRoomUpdateMapMessage(message);
-
-            return;
+            this.onObjectRoomMapUpdateMessage(message);
         }
     }
 
@@ -331,7 +329,7 @@ export class RoomLogic extends RoomObjectLogicBase
         model.setValue(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY, message.backgroundOnly);
     }
 
-    private onObjectRoomUpdateMapMessage(message: ObjectRoomUpdateMapMessage): void
+    private onObjectRoomMapUpdateMessage(message: ObjectRoomMapUpdateMessage): void
     {
         if(!message || !message.mapData) return;
 

@@ -13,7 +13,7 @@ import { IGetImageListener } from '../IGetImageListener';
 import { ImageResult } from '../ImageResult';
 import { IRoomCreator } from '../IRoomCreator';
 import { IRoomEngine } from '../IRoomEngine';
-import { ObjectRoomUpdateMapMessage } from '../messages/ObjectRoomUpdateMapMessage';
+import { ObjectRoomMapUpdateMessage } from '../messages/ObjectRoomMapUpdateMessage';
 import { IObjectData } from '../object/data/IObjectData';
 import { LegacyDataType } from '../object/data/type/LegacyDataType';
 import { RoomObjectCategory } from '../object/RoomObjectCategory';
@@ -90,6 +90,54 @@ export class RoomPreviewer
 
             this._planeParser = null;
         }
+    }
+
+    private createRoomForPreview(): void
+    {
+        if(this.isRoomEngineReady)
+        {
+            const size = 7;
+
+            const planeParser = new RoomPlaneParser();
+
+            planeParser.initializeTileMap((size + 2), (size + 2));
+
+            let y = 1;
+
+            while(y < (1 + size))
+            {
+                let x = 1;
+
+                while(x < (1 + size))
+                {
+                    planeParser.setTileHeight(x, y, 0);
+
+                    x++;
+                }
+
+                y++;
+            }
+
+            planeParser.initializeFromTileData();
+
+            this._roomEngine.createRoomInstance(this._previewRoomId, planeParser.getMapData());
+
+            planeParser.dispose();
+        }
+    }
+
+    public reset(k: boolean): void
+    {
+        if(this.isRoomEngineReady)
+        {
+            this._roomEngine.removeRoomObjectFloor(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
+            this._roomEngine.removeRoomObjectWall(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
+            this._roomEngine.removeRoomObjectUser(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
+
+            if(!k) this.updatePreviewRoomView();
+        }
+
+        this._currentPreviewObjectCategory = RoomObjectCategory.MINIMUM;
     }
 
     public updatePreviewModel(model: string, wallHeight: number, scale: boolean = true): void
@@ -187,55 +235,7 @@ export class RoomPreviewer
 
         const roomObject = this.getRoomPreviewObject();
 
-        if(roomObject) roomObject.processUpdateMessage(new ObjectRoomUpdateMapMessage(roomMap));
-    }
-
-    private createRoomForPreview(): void
-    {
-        if(this.isRoomEngineReady)
-        {
-            const size = 7;
-
-            const planeParser = new RoomPlaneParser();
-
-            planeParser.initializeTileMap((size + 2), (size + 2));
-
-            let y = 1;
-
-            while(y < (1 + size))
-            {
-                let x = 1;
-
-                while(x < (1 + size))
-                {
-                    planeParser.setTileHeight(x, y, 0);
-
-                    x++;
-                }
-
-                y++;
-            }
-
-            planeParser.initializeFromTileData();
-
-            this._roomEngine.createRoomInstance(this._previewRoomId, planeParser.getMapData());
-
-            planeParser.dispose();
-        }
-    }
-
-    public reset(k: boolean): void
-    {
-        if(this.isRoomEngineReady)
-        {
-            this._roomEngine.removeRoomObjectFloor(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
-            this._roomEngine.removeRoomObjectWall(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
-            this._roomEngine.removeRoomObjectUser(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID);
-
-            if(!k) this.updatePreviewRoomView();
-        }
-
-        this._currentPreviewObjectCategory = RoomObjectCategory.MINIMUM;
+        if(roomObject) roomObject.processUpdateMessage(new ObjectRoomMapUpdateMessage(roomMap));
     }
 
     public addFurnitureIntoRoom(classId: number, direction: IVector3D, objectData: IObjectData = null, extra: string = null): number
