@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ModToolMainComponent } from './components/main/main.component';
-import { ModToolRoomComponent } from './components/room-tool/room-tool.component';
+import { ModToolRoomComponent } from './components/room/room-tool/room-tool.component';
 import { ModToolService } from './services/mod-tool.service';
-import { ModToolChatlogComponent } from './components/chatlog-tool/chatlog-tool.component';
 import { ModToolUserComponent } from './components/user/user-tool/user-tool.component';
 import { ModToolReportsComponent } from './components/reports-tool/reports-tool.component';
 import { ModTool } from './components/tool.component';
@@ -13,6 +12,8 @@ import { ModToolModActionUserComponent } from './components/user/mod-action-user
 import { ModToolUserVisitedRoomsComponent } from './components/user/user-room-visits/component';
 import { ModToolUserSendMessageComponent } from './components/user/user-send-message/component';
 import { ModToolUserChatlogsComponent } from './components/user/user-chatlogs/component';
+import { ModToolRoomChatlogsComponent } from './components/room/room-chatlogs/component';
+import { ModToolChatlogsComponent } from './components/shared/chatlogs/component';
 
 @NgModule({
     imports: [
@@ -22,7 +23,7 @@ import { ModToolUserChatlogsComponent } from './components/user/user-chatlogs/co
     exports: [
         ModToolMainComponent,
         ModToolRoomComponent,
-        ModToolChatlogComponent,
+        ModToolRoomChatlogsComponent,
         ModToolUserComponent,
         ModToolReportsComponent,
         ModToolModActionUserComponent,
@@ -37,7 +38,7 @@ import { ModToolUserChatlogsComponent } from './components/user/user-chatlogs/co
     declarations: [
         ModToolMainComponent,
         ModToolRoomComponent,
-        ModToolChatlogComponent,
+        ModToolRoomChatlogsComponent,
         ModToolUserComponent,
         ModToolReportsComponent,
         ModTool,

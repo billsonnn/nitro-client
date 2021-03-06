@@ -2,11 +2,6 @@ import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ModToolService } from '../../services/mod-tool.service';
 import { SettingsService } from '../../../../core/settings/service';
 import { UserToolUser } from '../user/user-tool/user-tool-user';
-import { RoomToolRoom } from '../room-tool/room-tool-room';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ModtoolRoomChatlogLine } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
-import { ModtoolRoomChatlogParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomChatlogParser';
-import { ChatlogToolChatlog } from '../chatlog-tool/chatlog-tool-chatlog';
 import { ModToolUserInfoService } from '../../services/mod-tool-user-info.service';
 
 @Component({
@@ -73,11 +68,6 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     public hasRoomInfo(): boolean
     {
         return !!this._modToolService.currentRoom;
-    }
-
-    public get chatlogs(): ChatlogToolChatlog[]
-    {
-        return this._modToolService.roomChatlogs;
     }
 
     public get users(): UserToolUser[]

@@ -5,16 +5,11 @@ import { NotificationService } from '../../notification/services/notification.se
 import { ModToolMainComponent } from '../components/main/main.component';
 import { ModtoolRoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
 import { ModtoolRequestRoomInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
-import { RoomToolRoom } from '../components/room-tool/room-tool-room';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { UserToolUser } from '../components/user/user-tool/user-tool-user';
 import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
 import { ModtoolUserChatlogParserVisit } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
-import { ModtoolRoomChatlogParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomChatlogParser';
-import { ChatlogToolChatlog } from '../components/chatlog-tool/chatlog-tool-chatlog';
-import { ModtoolRequestUserChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
 import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
 import { CallForHelpCategoryData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
 import { ModtoolMainEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
@@ -35,7 +30,6 @@ export class ModToolService implements OnDestroy
     private _users: UserToolUser[] = [];
     private _roomVisits: ModtoolUserChatlogParserVisit[];
     private _callForHelpCategories: CallForHelpCategoryData[];
-    private _roomChatlogs: ChatlogToolChatlog[] = [];
 
     private _currentSelectedUser: UserToolUser = null;
 
@@ -44,6 +38,7 @@ export class ModToolService implements OnDestroy
     private _showSendUserMessage: boolean = false;
     private _showSendUserChatlogs: boolean = false;
     private _showRoomTools: boolean = false;
+    private _showRoomChatLogs: boolean = false;
 
 
     private _Str_20687: _Str_5018 = null;
@@ -192,8 +187,6 @@ export class ModToolService implements OnDestroy
     {
         this._ngZone.run(() =>
         {
-            const parser = event.getParser();
-            this._roomChatlogs.push(new ChatlogToolChatlog(parser.id, parser.name, parser.chatlogs));
         });
     }
 
@@ -207,26 +200,10 @@ export class ModToolService implements OnDestroy
 
     public openChatlogTool(): void
     {
-        const viewerSession = Nitro.instance.roomSessionManager.viewerSession;
-        if(viewerSession != null)
-        {
-            const found = this._roomChatlogs.find(c => c.id === viewerSession.roomId);
-            if(found)
-            {
-                const index = this._roomChatlogs.indexOf(found);
-                this.closeChatlogTool(index);
-            }
-            else
-            {
-                Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(viewerSession.roomId));
-            }
-        }
+
     }
 
-    public closeChatlogTool(index: number): void
-    {
-        this._roomChatlogs.splice(index, 1);
-    }
+
 
 
     public closeUserTool(): void
@@ -250,11 +227,6 @@ export class ModToolService implements OnDestroy
     public get roomVisits(): ModtoolUserChatlogParserVisit[]
     {
         return this._roomVisits;
-    }
-
-    public get roomChatlogs(): ChatlogToolChatlog[]
-    {
-        return this._roomChatlogs;
     }
 
     public selectUser(webID: number, name: string, figure: string = null, gender: string = null): void
@@ -315,6 +287,16 @@ export class ModToolService implements OnDestroy
     public set showRoomTools(show: boolean)
     {
         this._showRoomTools = show;
+    }
+
+    public get showRoomChatLogs(): boolean
+    {
+        return this._showRoomChatLogs;
+    }
+
+    public set showRoomChatLogs(show: boolean)
+    {
+        this._showRoomChatLogs = show;
     }
 
     public get callForHelpCategories(): CallForHelpCategoryData[]

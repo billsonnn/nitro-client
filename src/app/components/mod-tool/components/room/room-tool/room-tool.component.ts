@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../tool.component';
-import { ModToolService } from '../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { ModToolService } from '../../../services/mod-tool.service';
 import { RoomToolRoom } from './room-tool-room';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
-import { ModtoolRoomInfoParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
-import { NavigatorService } from '../../../navigator/services/navigator.service';
-import { NotificationService } from '../../../notification/services/notification.service';
-import { ModtoolRoomAlertComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { ModtoolChangeRoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolRoomInfoParser } from '../../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { NotificationService } from '../../../../notification/services/notification.service';
+import { ModtoolRoomAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
+import { ModtoolRequestRoomChatlogComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',
@@ -78,7 +79,8 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public openChatlog(): void
     {
-
+        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(this.room.id));
+        this._modToolService.showRoomChatLogs = true;
     }
 
     public get room(): ModtoolRoomInfoParser
