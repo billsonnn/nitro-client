@@ -5,11 +5,11 @@
         </div>
         <div class="card-body">
             <div class="btn-group btn-group-vertical w-100">
-                <button (click)="openRoomTool()" [disabled]="!inRoom"  class="btn btn-sm btn-primary btn-block">
+                <button (click)="openRoomTool()" [disabled]="!hasRoomInfo()"  class="btn btn-sm btn-primary btn-block">
                     <i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
                     Room Tool
                 </button>
-                <button (click)="openChatlogTool()" [disabled]="!inRoom" class="btn btn-sm btn-primary btn-block">
+                <button (click)="openChatlogTool()" [disabled]="!hasRoomInfo()" class="btn btn-sm btn-primary btn-block">
                     <i class="icon modtool-chatlog-icon" style="margin-right: 5px;"></i>
                     Chatlog Tool
                 </button>
@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    <nitro-mod-tool-room-component *ngFor="let room of rooms; let index = index" [room]="room" [index]="index"></nitro-mod-tool-room-component>
+    <nitro-mod-tool-room-component *ngIf="showRoomTool"></nitro-mod-tool-room-component>
     <nitro-mod-tool-chatlog-component *ngFor="let chatlog of chatlogs; let index = index" [roomChatlogs]="chatlog" [index]="index"></nitro-mod-tool-chatlog-component>
     <nitro-mod-tool-user-component *ngIf="userToolVisible" [user]="clickedUser"></nitro-mod-tool-user-component>
     <nitro-mod-tool-reports-component [(visible)]="reportsToolVisible"></nitro-mod-tool-reports-component>

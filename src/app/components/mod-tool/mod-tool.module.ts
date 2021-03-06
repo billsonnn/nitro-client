@@ -3,16 +3,16 @@ import { ModToolMainComponent } from './components/main/main.component';
 import { ModToolRoomComponent } from './components/room-tool/room-tool.component';
 import { ModToolService } from './services/mod-tool.service';
 import { ModToolChatlogComponent } from './components/chatlog-tool/chatlog-tool.component';
-import { ModToolUserComponent } from './components/user-tool/user-tool.component';
+import { ModToolUserComponent } from './components/user/user-tool/user-tool.component';
 import { ModToolReportsComponent } from './components/reports-tool/reports-tool.component';
 import { ModTool } from './components/tool.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../../shared/shared.module';
 import { ModToolUserInfoService } from './services/mod-tool-user-info.service';
-import { ModToolModActionUserComponent } from './components/mod-action-user/component';
-import { ModToolUserVisitedRoomsComponent } from './components/user-room-visits/component';
-import { ModToolUserSendMessageComponent } from './components/user-send-message/component';
-import { ModToolUserChatlogsComponent } from './components/user-chatlogs/component';
+import { ModToolModActionUserComponent } from './components/user/mod-action-user/component';
+import { ModToolUserVisitedRoomsComponent } from './components/user/user-room-visits/component';
+import { ModToolUserSendMessageComponent } from './components/user/user-send-message/component';
+import { ModToolUserChatlogsComponent } from './components/user/user-chatlogs/component';
 
 @NgModule({
     imports: [

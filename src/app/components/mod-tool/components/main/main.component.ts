@@ -1,7 +1,7 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ModToolService } from '../../services/mod-tool.service';
 import { SettingsService } from '../../../../core/settings/service';
-import { UserToolUser } from '../user-tool/user-tool-user';
+import { UserToolUser } from '../user/user-tool/user-tool-user';
 import { RoomToolRoom } from '../room-tool/room-tool-room';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolRoomChatlogLine } from '../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
@@ -70,14 +70,9 @@ export class ModToolMainComponent implements OnInit, OnDestroy
         this.reportsToolVisible = !this.reportsToolVisible;
     }
 
-    public get inRoom(): boolean
+    public hasRoomInfo(): boolean
     {
-        return Nitro.instance.roomSessionManager.viewerSession !== null;
-    }
-
-    public get rooms(): RoomToolRoom[]
-    {
-        return this._modToolService.rooms;
+        return !!this._modToolService.currentRoom;
     }
 
     public get chatlogs(): ChatlogToolChatlog[]
@@ -113,5 +108,10 @@ export class ModToolMainComponent implements OnInit, OnDestroy
     public get showSendUserChatlogs(): boolean
     {
         return this._modToolService.showSendUserChatlogs;
+    }
+
+    public get showRoomTool(): boolean
+    {
+        return this._modToolService.showRoomTools;
     }
 }

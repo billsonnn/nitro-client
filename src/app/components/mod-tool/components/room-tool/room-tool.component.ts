@@ -4,6 +4,7 @@ import { ModToolService } from '../../services/mod-tool.service';
 import { RoomToolRoom } from './room-tool-room';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolRoomInfoParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',
@@ -11,12 +12,6 @@ import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/c
 })
 export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 {
-    @Input()
-    public index: number = null;
-
-    @Input()
-    public room: RoomToolRoom = null;
-
     public lockDoor: boolean = false;
     public changeTitle: boolean = false;
     public kickUsers: boolean = false;
@@ -38,7 +33,7 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public close(): void
     {
-        this._modToolService.closeRoomTool(this.index);
+        this._modToolService.showRoomTools = false;
     }
 
     public saveRoom(): void
@@ -55,8 +50,9 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
         return Nitro.instance.roomSessionManager.viewerSession !== null;
     }
 
-    public get housekeepingUrl(): string
+    public get room(): ModtoolRoomInfoParser
     {
-        return this._housekeepingUrl;
+        return this._modToolService.currentRoomModData;
     }
+
 }
