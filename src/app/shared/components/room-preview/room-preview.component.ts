@@ -76,6 +76,8 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 
             this.roomPreviewer.backgroundColor = parseInt(backgroundColor, 16);
 
+            if(this.model) this.updateModel();
+
             this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
             this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
         }
