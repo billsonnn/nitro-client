@@ -89,6 +89,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     {
         this._clear();
 
+
         this._roomPreviewer.updatePreviewModel(mapString, 3, true);
         this.floorPlanService.floorMapSettings.heightMapString = mapString;
         this.floorPlanService.floorMapSettings.doorX = doorX;
