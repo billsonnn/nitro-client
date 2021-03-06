@@ -8,19 +8,22 @@
     </div>
     <div class="card-body">
         <perfect-scrollbar class="position-relative w-100" style="min-height:200px;max-height:200px;height:200px;">
-            <div *ngFor="let room of roomsVisited" class="d-flex flex-row justify-content-between w-100">
-                <div class="d-flex flex-row justify-content-between w-100">
+            <div *ngFor="let room of roomsVisited" class="d-flex flex-column justify-content-between w-100">
+                <div class="d-flex bg-secondary flex-row justify-content-between w-100">
                     <div>
                         Room: {{ room.roomName }}
                     </div>
                     <div class="d-flex flex-row">
-                        <button type="button" class="btn btn-sm btn-secondary">View Room</button>
+                        <button (click)="goToRoom(room.roomId)" type="button" class="btn btn-sm btn-secondary">View Room</button>
                         <button type="button" class="btn btn-sm btn-secondary">Room Tools</button>
                     </div>
                 </div>
-
                 <div *ngFor="let message of room.chatlogs" class="d-flex flex-row justify-content-between w-100">
-                    <div>Time</div> <div>User</div> <div>Chatlog</div>
+                    <div class="d-flex flex-row mr-2">
+                        <div class="mr-2">{{ message.timestamp }}</div>
+                        <div>{{ message.userName }}</div>
+                    </div>
+                    <div>{{ message.message }}</div>
                 </div>
 
             </div>

@@ -48,6 +48,11 @@ export class ModToolUserChatlogsComponent extends ModTool implements OnInit, OnD
     }
 
 
+    public goToRoom(roomId: number): void
+    {
+        this._navigatorService.goToPrivateRoom(roomId);
+    }
+
 
 
 }
