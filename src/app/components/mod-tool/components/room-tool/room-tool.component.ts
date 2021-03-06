@@ -6,6 +6,8 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
 import { ModtoolRoomInfoParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
+import { NotificationService } from '../../../notification/services/notification.service';
+import { ModtoolRoomAlertComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',
@@ -22,7 +24,8 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     constructor(
         private _modToolService: ModToolService,
-        private _navigatorService: NavigatorService
+        private _navigatorService: NavigatorService,
+        private _notificationService: NotificationService
     )
     {
         super();
@@ -41,13 +44,31 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
         this._modToolService.showRoomTools = false;
     }
 
-    public saveRoom(): void
+    public send(): void
     {
-        const roomId = this.room.id;
-        const lockDoor = this.lockDoor ? 1 : 0;
-        const changeTitle = this.changeTitle ? 1 : 0;
-        const kickUsers = this.kickUsers ? 1 : 0;
-        Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers ));
+        if(this.message.trim().length == 0)
+        {
+            this._notificationService.alert('You must input a message to the user');
+            return;
+        }
+
+        Nitro.instance.communication.connection.send(new ModtoolRoomAlertComposer(1, this.message, ''));
+
+        if(this.kickUsers || this.changeTitle || this.lockDoor)
+        {
+            const roomId = this.room.id;
+            const lockDoor = this.lockDoor ? 1 : 0;
+            const changeTitle = this.changeTitle ? 1 : 0;
+            const kickUsers = this.kickUsers ? 1 : 0;
+            Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers));
+        }
+
+        this._modToolService.showRoomTools = false;
+    }
+
+    public isInCurrentRoom(): boolean
+    {
+        return this._modToolService.currentRoom.roomId == this._modToolService.currentRoomModData.id;
     }
 
     public enterRoom(): void

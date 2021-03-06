@@ -1,12 +1,12 @@
 <div *ngIf="room" [draggable] [center]="false" dragHandle=".card-header" class="card room-tool-card">
-	<div class="card-header">
+    <div class="card-header">
 			<span>
 			<i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
 			Room Tool
 			</span>
-		<button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
-	</div>
-	<div class="card-body pl-3 pr-3">
+        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body pl-3 pr-3">
         <div class="row">
             <div class="col pr-2">
                 <div class="row">
@@ -43,10 +43,12 @@
                     <div class="col">
                         <div class="mb-1 d-flex flex-column justify-content-between w-100">
                             <div class="d-flex flex-row  justify-content-between">
-                                <button (click)="enterRoom()" class="btn btn-primary btn-sm" type="button">Enter</button>
+                                <button (click)="enterRoom()" class="btn btn-primary btn-sm" type="button">Enter
+                                </button>
                             </div>
                             <div class="d-flex flex-row  justify-content-between">
-                                <button (click)="openChatlog()" class="btn btn-primary btn-sm" type="button">Chatlogs</button>
+                                <button (click)="openChatlog()" class="btn btn-primary btn-sm" type="button">Chatlogs
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -56,39 +58,45 @@
                         <div class="badge badge-secondary mb-1">
                             <div class="btn-group btn-group-vertical">
                                 <div class="mb-1">
-                                    <input [(ngModel)]="changeTitle" class="form-check-input" id="change-title" type="checkbox">
-                                    <label for="change-title" class="form-check-label">Change title to inappropriate</label>
+                                    <input [(ngModel)]="changeTitle" class="form-check-input" id="change-title"
+                                           type="checkbox">
+                                    <label for="change-title" class="form-check-label">Change title to
+                                        inappropriate</label>
                                 </div>
                                 <div class="mb-1">
-                                    <input [(ngModel)]="kickUsers" class="form-check-input" id="kick-users" type="checkbox">
+                                    <input [(ngModel)]="kickUsers" class="form-check-input" id="kick-users"
+                                           type="checkbox">
                                     <label for="kick-users" class="form-check-label">Kick users(stops event)</label>
                                 </div>
                                 <div class="mb-1">
-                                    <input [(ngModel)]="lockDoor" class="form-check-input" id="lock-room" type="checkbox">
+                                    <input [(ngModel)]="lockDoor" class="form-check-input" id="lock-room"
+                                           type="checkbox">
                                     <label for="lock-room" class="form-check-label">Lock room</label>
                                 </div>
                                 <div class="mb-1">
                                     <div class="form-group mb-2">
-                                        <select [(ngModel)]="optionId"  (change)="selectMessage(optionId)"
+                                        <select [(ngModel)]="optionId" (change)="selectMessage(optionId)"
                                                 class="form-control form-control-sm">
                                             <option [value]="-1">Select from messsage templates</option>
-                                            <option *ngFor="let item of options; let i = index" [value]="i">{{ item }}</option>
+                                            <option *ngFor="let item of options; let i = index"
+                                                    [value]="i">{{ item }}</option>
                                         </select></div>
 
                                     <div class="form-group mb-2">
                                         <textarea [(ngModel)]="message" class="form-control"></textarea>
                                     </div>
                                 </div>
-                                <button (click)="saveRoom()" class="btn btn-sm btn-primary btn-block">
-                                    <i class="icon modtool-key-icon" style="margin-right: 5px;"></i>
-                                    Save room
-                                </button>
+                                <div class="btn-group w-100">
+                                    <button [disabled]="!isInCurrentRoom()" (click)="send()" class="btn btn-sm btn-primary">
+                                        Send caution
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 
 </div>
