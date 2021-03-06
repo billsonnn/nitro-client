@@ -37,7 +37,7 @@ export class ModToolUserChatlogsComponent extends ModTool implements OnInit, OnD
 
     public close(): void
     {
-        this._modToolService.closeRoomVisitedTool();
+        this._modToolService.showSendUserChatlogs = false;
     }
 
     public get roomsVisited(): ModtoolUserChatlogParserVisit[]

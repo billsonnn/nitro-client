@@ -5,6 +5,7 @@ import { RoomToolRoom } from './room-tool-room';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ModtoolChangeRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
 import { ModtoolRoomInfoParser } from '../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { NavigatorService } from '../../../navigator/services/navigator.service';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',
@@ -19,7 +20,10 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     public optionId: string = '-1';
     public message: string = '';
 
-    constructor(private _modToolService: ModToolService)
+    constructor(
+        private _modToolService: ModToolService,
+        private _navigatorService: NavigatorService
+    )
     {
         super();
     }
@@ -44,6 +48,16 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
         const changeTitle = this.changeTitle ? 1 : 0;
         const kickUsers = this.kickUsers ? 1 : 0;
         Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers ));
+    }
+
+    public enterRoom(): void
+    {
+        this._navigatorService.goToPrivateRoom(this.room.id);
+    }
+
+    public openChatlog(): void
+    {
+
     }
 
     public get room(): ModtoolRoomInfoParser

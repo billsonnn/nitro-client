@@ -11,27 +11,42 @@
             <div class="col pr-2">
                 <div class="row">
                     <div class="col">
-                        <div class="badge badge-secondary mb-1">
-                            <div>
-                                <span class="font-weight-bold mr-2">Name:</span> {{room.name}}
+                        <div class="badge badge-secondary mb-1 d-flex flex-column justify-content-between w-100">
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="font-weight-bold mr-2">Name:</span>
+                                <div>{{room.name}}</div>
                             </div>
-                            <div>
-                                <span class="font-weight-bold mr-2">Description:</span> {{room.description}}
-                            </div>
-                            <div>
-                                <span class="font-weight-bold mr-2">Owner:</span> {{room.ownerName}}
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="font-weight-bold mr-2">Description:</span>
+                                <div>{{room.description}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="badge badge-secondary mb-1">
-                            <div>
-                                <span class="font-weight-bold mr-2">Players in room:</span> {{room.playerAmount }}
+                        <div class="badge badge-secondary mb-1 d-flex flex-column justify-content-between w-100">
+                            <div class="d-flex flex-row  justify-content-between">
+                                <span class="font-weight-bold mr-2">Owner:</span>
+                                <div>{{room.ownerName}}</div>
                             </div>
-                            <div>
-                                <span class="font-weight-bold mr-2">Owner in room:</span> {{room.owner ? 'yes' : 'no'}}
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="font-weight-bold mr-2">Players in room:</span>
+                                <div>{{room.playerAmount }}</div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="font-weight-bold mr-2">Owner in room:</span>
+                                <div>{{room.owner ? 'yes' : 'no'}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-1 d-flex flex-column justify-content-between w-100">
+                            <div class="d-flex flex-row  justify-content-between">
+                                <button (click)="enterRoom()" class="btn btn-primary btn-sm" type="button">Enter</button>
+                            </div>
+                            <div class="d-flex flex-row  justify-content-between">
+                                <button (click)="openChatlog()" class="btn btn-primary btn-sm" type="button">Chatlogs</button>
                             </div>
                         </div>
                     </div>
