@@ -100,6 +100,11 @@ export class ModToolMainComponent implements OnInit, OnDestroy
         return this._modToolService.showSendUserChatlogs;
     }
 
+    public get showRoomChatlogs(): boolean
+    {
+        return this._modToolService.showRoomChatLogs;
+    }
+
     public get showRoomTool(): boolean
     {
         return this._modToolService.showRoomTools;

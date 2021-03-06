@@ -1,4 +1,6 @@
-export class ModtoolRoomChatlogLine
+import { IChatlog } from './IChatlog';
+
+export class ModtoolRoomChatlogLine implements IChatlog
 {
     private readonly _timestamp: string;
     private readonly _habboId: number;
@@ -20,12 +22,12 @@ export class ModtoolRoomChatlogLine
         return this._timestamp;
     }
 
-    public get habboId(): number
+    public get userId(): number
     {
         return this._habboId;
     }
 
-    public get username(): string
+    public get userName(): string
     {
         return this._username;
     }

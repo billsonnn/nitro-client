@@ -19,6 +19,7 @@ import { ModtoolRoomVisitedData } from '../../../../client/nitro/communication/m
 import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
 import { RoomInfoOwnerParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
 import { ModtoolRoomInfoParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { ModtoolRoomChatlogLine } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -41,10 +42,12 @@ export class ModToolService implements OnDestroy
     private _showRoomChatLogs: boolean = false;
 
 
+
     private _Str_20687: _Str_5018 = null;
     private _userRoomVisitedData: ModtoolRoomVisitedData;
     private _currentRoomInfo: RoomInfoOwnerParser;
     private _modToolRoomInfo: ModtoolRoomInfoParser;
+    private _userChatlogs: ModtoolRoomChatlogLine[];
 
     constructor(
         private _notificationService: NotificationService,
@@ -179,14 +182,20 @@ export class ModToolService implements OnDestroy
         this._ngZone.run(() =>
         {
             this._roomVisits = parser.roomVisits;
-            console.log(parser.roomVisits);
         });
     }
 
     private onModtoolRoomChatlogEvent(event: ModtoolRoomChatlogEvent): void
     {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
         this._ngZone.run(() =>
         {
+            this._userChatlogs = parser.chatlogs;
         });
     }
 

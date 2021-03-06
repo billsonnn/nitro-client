@@ -1,5 +1,6 @@
+import { IChatlog } from './IChatlog';
 
-export class ModtoolUserChatlogParserChatlog
+export class ModtoolUserChatlogParserChatlog implements IChatlog
 {
     private readonly _timestamp: string;
     private readonly _userId: number;
