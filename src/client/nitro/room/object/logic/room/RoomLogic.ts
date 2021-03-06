@@ -13,6 +13,7 @@ import { RoomObjectTileMouseEvent } from '../../../events/RoomObjectTileMouseEve
 import { RoomObjectWallMouseEvent } from '../../../events/RoomObjectWallMouseEvent';
 import { ObjectRoomColorUpdateMessage } from '../../../messages/ObjectRoomColorUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from '../../../messages/ObjectRoomFloorHoleUpdateMessage';
+import { ObjectRoomMapUpdateMessage } from '../../../messages/ObjectRoomMapUpdateMessage';
 import { ObjectRoomMaskUpdateMessage } from '../../../messages/ObjectRoomMaskUpdateMessage';
 import { ObjectRoomPlanePropertyUpdateMessage } from '../../../messages/ObjectRoomPlanePropertyUpdateMessage';
 import { ObjectRoomPlaneVisibilityUpdateMessage } from '../../../messages/ObjectRoomPlaneVisibilityUpdateMessage';
@@ -219,6 +220,11 @@ export class RoomLogic extends RoomObjectLogicBase
 
             return;
         }
+
+        if(message instanceof ObjectRoomMapUpdateMessage)
+        {
+            this.onObjectRoomMapUpdateMessage(message);
+        }
     }
 
     private onObjectRoomUpdateMessage(message: ObjectRoomUpdateMessage, model: IRoomObjectModel): void
@@ -322,6 +328,16 @@ export class RoomLogic extends RoomObjectLogicBase
         this._Str_17191 = 1500;
 
         model.setValue(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY, message.backgroundOnly);
+    }
+
+    private onObjectRoomMapUpdateMessage(message: ObjectRoomMapUpdateMessage): void
+    {
+        if(!message || !message.mapData) return;
+
+        this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, message.mapData);
+        this.object.model.setValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME, this.time);
+
+        this._planeParser.initializeFromMapData(message.mapData);
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
