@@ -1,12 +1,13 @@
 import { ModtoolUserChatlogParserChatlog } from './ModtoolUserChatlogParserChatlog';
+import { IChatlog } from './IChatlog';
 
 export class ModtoolUserChatlogParserVisit
 {
     private readonly _roomName: string;
     private readonly _roomId: number;
-    private readonly _chatlogs: ModtoolUserChatlogParserChatlog[];
+    private readonly _chatlogs: IChatlog[];
 
-    constructor(roomName: string, roomId: number, chatlogs: ModtoolUserChatlogParserChatlog[])
+    constructor(roomName: string, roomId: number, chatlogs: IChatlog[])
     {
         this._roomName = roomName;
         this._roomId = roomId;
@@ -23,7 +24,7 @@ export class ModtoolUserChatlogParserVisit
         return this._roomId;
     }
 
-    public get chatlogs(): ModtoolUserChatlogParserChatlog[]
+    public get chatlogs(): IChatlog[]
     {
         return this._chatlogs;
     }

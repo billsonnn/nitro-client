@@ -24,15 +24,26 @@ export class ModToolRoomChatlogsComponent extends ModToolChatlogsComponent
 
     public get title(): string
     {
-        return '';
-    }
+        if(!this._modToolService.currentRoomModData) return '';
 
+
+        return `Room Chatlog: ${this._modToolService.currentRoomModData.name}`;
+    }
 
     public getData(): ModtoolUserChatlogParserVisit[]
     {
-        if(!this._modToolService.roomVisits) return [];
 
-        return this._modToolService.roomVisits;
+        if(!this._modToolService.userChatlogs) return [];
+
+        if(!this._modToolService.currentRoomModData) return [];
+
+        return [
+            new ModtoolUserChatlogParserVisit(
+                this._modToolService.currentRoomModData.name,
+                this._modToolService.currentRoom.roomId,
+                this._modToolService.userChatlogs
+            )
+        ];
     }
 
     public close(): void

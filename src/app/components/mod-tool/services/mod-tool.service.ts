@@ -154,7 +154,6 @@ export class ModToolService implements OnDestroy
         if(!parser) return;
 
 
-
         this._ngZone.run(() =>
         {
             this._modToolRoomInfo = parser;
@@ -203,6 +202,7 @@ export class ModToolService implements OnDestroy
     {
         if(!this._currentRoomInfo) return;
 
+        this._modToolRoomInfo = null;
         Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer((roomId ? roomId : this._currentRoomInfo.roomId)));
         this._showRoomTools = true;
     }
@@ -236,6 +236,11 @@ export class ModToolService implements OnDestroy
     public get roomVisits(): ModtoolUserChatlogParserVisit[]
     {
         return this._roomVisits;
+    }
+
+    public get userChatlogs(): ModtoolRoomChatlogLine[]
+    {
+        return this._userChatlogs;
     }
 
     public selectUser(webID: number, name: string, figure: string = null, gender: string = null): void

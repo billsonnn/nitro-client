@@ -16,7 +16,7 @@ import { ModToolChatlogsComponent } from '../../shared/chatlogs/component';
 export class ModToolUserChatlogsComponent extends ModToolChatlogsComponent
 {
     @Input()
-    public user: UserToolUser = null;
+    public user: UserToolUser;
 
 
     constructor(
