@@ -30,7 +30,7 @@
     "ngx-perfect-scrollbar": "^10.0.1",
     "ngx-toastr": "^13.0.0",
     "pako": "^2.0.3",
-    "pixi.js": "^5.3.3",
+    "pixi.js": "^5.3.8",
     "rxjs": "~6.5.5",
     "stream": "0.0.2",
     "timers": "^0.1.1",

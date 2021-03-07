@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -403,11 +403,13 @@ export class FloorPlanService implements OnDestroy
                     color = FloorPlanService.COLOR_DOOR;
                 }
 
-                this._spriteMap[y][x] = this._container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color));
+                this._ngZone.runOutsideAngular(() =>  this._spriteMap[y][x] = this._container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color)));
+
             }
         }
     }
 
+    private static baseGraphic: Graphics;
     private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Graphics
     {
         const tile = new Graphics();
@@ -416,24 +418,48 @@ export class FloorPlanService implements OnDestroy
         tile.lineStyle(1, 0x000000, 1, 0);
         tile.drawRect(0, 0, this._tileSize, this._tileSize);
         tile.endFill();
-
+        // tile.cacheAsBitmap = true;
         tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
 
         tile.tint = color;
         tile.interactive = true;
 
-        tile.on('mousedown', () =>
-        {
-            this._handleTileClick(x, y);
-        });
-
-        tile.on('mouseover', () =>
-        {
-            if(this._isHolding)
-                this._handleTileClick(x, y);
-        });
-
         return tile;
+        // if(!FloorPlanService.baseGraphic)
+        // {
+        //     const tile = new Graphics();
+        //
+        //     tile.beginFill(0xffffff);
+        //     tile.lineStyle(1, 0x000000, 1, 0);
+        //     tile.drawRect(0, 0, this._tileSize, this._tileSize);
+        //     tile.endFill();
+        //     // tile.cacheAsBitmap = true;
+        //     tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+        //
+        //     tile.tint = color;
+        //     tile.interactive = true;
+        //
+        //     FloorPlanService.baseGraphic = tile;
+        // }
+
+
+        // const texture = this.component.app.renderer.generateTexture(FloorPlanService.baseGraphic, SCALE_MODES.NEAREST, 1);
+        // const spriteTile = new Sprite(texture);
+        //
+        // return spriteTile;
+
+        // tile.on('mousedown', () =>
+        // {
+        //     this._handleTileClick(x, y);
+        // });
+        //
+        // tile.on('mouseover', () =>
+        // {
+        //     if(this._isHolding)
+        //         this._handleTileClick(x, y);
+        // });
+
+        // return tile;
     }
 
     private _handleTileClick(x: number, y: number): void

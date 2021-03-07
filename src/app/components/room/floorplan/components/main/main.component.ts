@@ -1,4 +1,14 @@
-import { Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    Input,
+    NgZone,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Application, Container } from 'pixi.js';
 import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
@@ -76,15 +86,18 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     {
         this.floorPlanService.clear();
 
-        this._container         = null;
-        this._importExportModal = null;
-
-        if(this._app)
+        this._ngZone.runOutsideAngular(() =>
         {
-            this._app.destroy(true);
+            this._container = null;
+            this._importExportModal = null;
 
-            this._app = null;
-        }
+            if(this._app)
+            {
+                this._app.destroy(true);
+
+                this._app = null;
+            }
+        });
     }
 
     public close(): void
@@ -129,51 +142,66 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         this.floorPlanService.originalMapSettings = this.floorPlanService.floorMapSettings;
 
 
-        this._buildApp(width, height);
-        this.floorPlanService.container = this._container;
-        this.floorPlanService.renderTileMap();
+        this._ngZone.runOutsideAngular(() =>
+        {
+            this._buildApp(width, height);
+            this.floorPlanService.container = this._container;
+            this.floorPlanService.renderTileMap();
+        });
+
     }
 
     private _buildApp(width: number, height: number): void
     {
         if(!this._app)
         {
+
+
             this._app = new Application({
                 width: width,
                 height: height,
                 backgroundColor: 0x2b2b2b,
                 antialias: true,
-                autoDensity: true
+                autoDensity: true,
             });
+
+
+            const ticker = this._app.ticker;
+            ticker.autoStart = false;
+            ticker.stop();
+
 
             const canvas = this._app.renderer.view;
 
-            canvas.addEventListener('mousedown', () =>
-            {
-                this.floorPlanService.isHolding = true;
-            });
-
-            canvas.addEventListener('mouseup', () =>
-            {
-                this.floorPlanService.isHolding = false;
-            });
-
-            canvas.addEventListener('mouseout', () =>
-            {
-                this.floorPlanService.isHolding = false;
-            });
-
+            // canvas.addEventListener('mousedown', () =>
+            // {
+            //     this.floorPlanService.isHolding = true;
+            // });
+            //
+            // canvas.addEventListener('mouseup', () =>
+            // {
+            //     this.floorPlanService.isHolding = false;
+            // });
+            //
+            // canvas.addEventListener('mouseout', () =>
+            // {
+            //     this.floorPlanService.isHolding = false;
+            // });
             this.floorplanElement.nativeElement.appendChild(canvas);
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
 
-        if(!this._container)
-        {
-            this._container = new Container();
 
-            this._app.stage.addChild(this._container);
-        }
+        this._ngZone.runOutsideAngular(() =>
+        {
+            if(!this._container)
+            {
+                this._container = new Container();
+
+                this._app.stage.addChild(this._container);
+            }
+        });
     }
 
 
@@ -350,6 +378,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get ableToRevertChanges(): boolean
     {
         return this.floorPlanService.changesMade;
+    }
+
+    public get app(): Application
+    {
+        return this._app;
     }
 
 }
