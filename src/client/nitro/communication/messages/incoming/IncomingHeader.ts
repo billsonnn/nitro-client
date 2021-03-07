@@ -230,4 +230,5 @@ export class IncomingHeader
     public static REDEEM_VOUCHER_ERROR             = 714;
     public static REDEEM_VOUCHER_OK                = 3336;
     public static IN_CLIENT_LINK                   = 2023;
+    public static PET_PLACING_ERROR                = 2913;
 }

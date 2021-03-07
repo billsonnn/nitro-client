@@ -91,6 +91,7 @@ import { HabboBroadcastMessageEvent } from './messages/incoming/notifications/Ha
 import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
 import { NotificationDialogMessageEvent } from './messages/incoming/notifications/NotificationDialogMessageEvent';
+import { PetPlacingErrorEvent } from './messages/incoming/notifications/PetPlacingErrorEvent';
 import { RespectReceivedEvent } from './messages/incoming/notifications/RespectReceivedEvent';
 import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
 import { RoomDoorbellAcceptedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
@@ -175,9 +176,9 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
-import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
 import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
+import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
@@ -638,6 +639,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
         this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
         this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
+        this._events.set(IncomingHeader.PET_PLACING_ERROR, PetPlacingErrorEvent);
     }
 
     private registerComposers(): void

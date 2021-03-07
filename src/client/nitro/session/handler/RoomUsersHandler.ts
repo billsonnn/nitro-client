@@ -1,6 +1,7 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { FriendRequestsEvent } from '../../communication/messages/incoming/friendlist/FriendRequestsEvent';
 import { NewFriendRequestEvent } from '../../communication/messages/incoming/friendlist/NewFriendRequestEvent';
+import { PetPlacingErrorEvent } from '../../communication/messages/incoming/notifications/PetPlacingErrorEvent';
 import { RoomDoorbellEvent } from '../../communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
 import { RoomUnitDanceEvent } from '../../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
 import { RoomUnitEvent } from '../../communication/messages/incoming/room/unit/RoomUnitEvent';
@@ -10,6 +11,7 @@ import { UserCurrentBadgesEvent } from '../../communication/messages/incoming/us
 import { UserNameChangeMessageEvent } from '../../communication/messages/incoming/user/data/UserNameChangeMessageEvent';
 import { RoomSessionDanceEvent } from '../events/RoomSessionDanceEvent';
 import { RoomSessionDoorbellEvent } from '../events/RoomSessionDoorbellEvent';
+import { RoomSessionErrorMessageEvent } from '../events/RoomSessionErrorMessageEvent';
 import { RoomSessionFriendRequestEvent } from '../events/RoomSessionFriendRequestEvent';
 import { RoomSessionUserBadgesEvent } from '../events/RoomSessionUserBadgesEvent';
 import { RoomSessionUserDataUpdateEvent } from '../events/RoomSessionUserDataUpdateEvent';
@@ -32,6 +34,7 @@ export class RoomUsersHandler extends BaseHandler
         connection.addMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
         connection.addMessageEvent(new FriendRequestsEvent(this.onFriendRequestsEvent.bind(this)));
         connection.addMessageEvent(new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)));
+        connection.addMessageEvent(new PetPlacingErrorEvent(this.onPetPlacingError.bind(this)));
     }
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
@@ -209,5 +212,45 @@ export class RoomUsersHandler extends BaseHandler
         const request = parser.request;
 
         this.listener.events.dispatchEvent(new RoomSessionFriendRequestEvent(session, request.requestId, request.requesterUserId, request.requesterName));
+    }
+
+    private onPetPlacingError(event: PetPlacingErrorEvent): void
+    {
+        if(!this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        let type = '';
+
+        switch(parser.errorCode)
+        {
+            case 0:
+                type = RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL;
+                break;
+            case 1:
+                type = RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT;
+                break;
+            case 2:
+                type = RoomSessionErrorMessageEvent.RSEME_MAX_PETS;
+                break;
+            case 3:
+                type = RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET;
+                break;
+            case 4:
+                type = RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET;
+                break;
+            case 5:
+                type = RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS;
+                break;
+        }
+
+        if(type && type.length)
+            this.listener.events.dispatchEvent(new RoomSessionErrorMessageEvent(type, session));
     }
 }
