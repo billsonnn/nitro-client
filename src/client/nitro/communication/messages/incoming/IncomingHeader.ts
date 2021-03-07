@@ -116,7 +116,7 @@ export class IncomingHeader
     public static ROOM_MODEL_BLOCKED_TILES         = 3990;
     public static ROOM_MODEL_DOOR                  = 1664;
     public static ROOM_MODEL_NAME                  = 2031;
-    public static ROOM_MUTE                        = 2533;
+    public static ROOM_MUTED                       = 2533;
     public static ROOM_MUTE_USER                   = 826;
     public static ROOM_PAINT                       = 2454;
     public static ROOM_PROMOTION                   = 2274;

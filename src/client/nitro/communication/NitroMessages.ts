@@ -157,6 +157,7 @@ import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEve
 import { RoomUnitNumberEvent } from './messages/incoming/room/unit/RoomUnitNumberEvent';
 import { RoomUnitRemoveEvent } from './messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from './messages/incoming/room/unit/RoomUnitStatusEvent';
+import { RoomMutedEvent } from './messages/incoming/roomevents/RoomMutedEvent';
 import { WiredFurniActionEvent } from './messages/incoming/roomevents/WiredFurniActionEvent';
 import { WiredFurniConditionEvent } from './messages/incoming/roomevents/WiredFurniConditionEvent';
 import { WiredFurniTriggerEvent } from './messages/incoming/roomevents/WiredFurniTriggerEvent';
@@ -325,6 +326,7 @@ import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSign
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { ApplySnapshotMessageComposer } from './messages/outgoing/roomevents/ApplySnapshotMessageComposer';
 import { OpenMessageComposer } from './messages/outgoing/roomevents/OpenMessageComposer';
+import { RoomMuteComposer } from './messages/outgoing/roomevents/RoomMuteComposer';
 import { UpdateActionMessageComposer } from './messages/outgoing/roomevents/UpdateActionMessageComposer';
 import { UpdateConditionMessageComposer } from './messages/outgoing/roomevents/UpdateConditionMessageComposer';
 import { UpdateTriggerMessageComposer } from './messages/outgoing/roomevents/UpdateTriggerMessageComposer';
@@ -579,6 +581,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.WIRED_REWARD, WiredRewardResultMessageEvent);
         this._events.set(IncomingHeader.WIRED_SAVE, WiredSaveSuccessEvent);
         this._events.set(IncomingHeader.WIRED_ERROR, WiredValidationErrorEvent);
+        this._events.set(IncomingHeader.ROOM_MUTED, RoomMutedEvent);
 
         // SECURITY
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);
@@ -829,6 +832,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_ACTION_SAVE, UpdateActionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
+        this._composers.set(OutgoingHeader.ROOM_MUTE, RoomMuteComposer);
 
         // USER
         this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);
