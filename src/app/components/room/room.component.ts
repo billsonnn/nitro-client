@@ -118,7 +118,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _settingsService: SettingsService,
         private _ngZone: NgZone
     )
-    {}
+    {
+        this._settingsService.floorPlanVisible = true;
+    }
 
     public ngOnDestroy(): void
     {
@@ -129,8 +131,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
 
     public get floorPlanVisible(): boolean
     {
-        return true;
-
         return this._settingsService.floorPlanVisible;
     }
 
