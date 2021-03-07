@@ -1,5 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { EventDispatcher } from '../../../../client/core/events/EventDispatcher';
+import { IEventDispatcher } from '../../../../client/core/events/IEventDispatcher';
 import { AcceptFriendResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/AcceptFriendResultEvent';
 import { FindFriendsProcessResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FindFriendsProcessResultEvent';
 import { FollowFriendFailedEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FollowFriendFailedEvent';
@@ -31,12 +33,14 @@ import { MessengerFriend } from '../common/MessengerFriend';
 import { MessengerRequest } from '../common/MessengerRequest';
 import { MessengerThread } from '../common/MessengerThread';
 import { FriendListMainComponent } from '../components/main/main.component';
+import { FriendRequestEvent } from '../events/FriendRequestEvent';
 
 @Injectable()
 export class FriendListService implements OnDestroy
 {
     private _component: FriendListMainComponent;
     private _messages: IMessageEvent[];
+    private _events: EventDispatcher;
 
     private _friends: Map<number, MessengerFriend>;
     private _requests: Map<number, MessengerRequest>;
@@ -54,6 +58,7 @@ export class FriendListService implements OnDestroy
         private _ngZone: NgZone)
     {
         this._component = null;
+        this._events = new EventDispatcher();
 
         this._friends               = new Map();
         this._requests              = new Map();
@@ -419,18 +424,37 @@ export class FriendListService implements OnDestroy
     {
         this._requests.delete(request.requestId);
 
+        this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.ACCEPTED, request.requestId));
+
         Nitro.instance.communication.connection.send(new AcceptFriendComposer(request.requestId));
+    }
+
+    public acceptFriendRequestById(id: number): void
+    {
+        this.acceptFriendRequest(this._requests.get(id));
     }
 
     public removeFriendRequest(request: MessengerRequest): void
     {
         this._requests.delete(request.requestId);
 
+        this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.DECLINED, request.requestId));
+
         Nitro.instance.communication.connection.send(new DeclineFriendComposer(false, request.requestId));
+    }
+
+    public removeFriendRequestById(id: number): void
+    {
+        this.removeFriendRequest(this._requests.get(id));
     }
 
     public removeAllFriendRequests(): void
     {
+        for(const request of this._requests.values())
+        {
+            (request && this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.DECLINED, request.requestId)));
+        }
+
         this._requests.clear();
 
         Nitro.instance.communication.connection.send(new DeclineFriendComposer(true));
@@ -475,6 +499,11 @@ export class FriendListService implements OnDestroy
         if(existing) return;
 
         Nitro.instance.communication.connection.send(new RequestFriendComposer(username));
+    }
+
+    public get events(): IEventDispatcher
+    {
+        return this._events;
     }
 
     public get component(): FriendListMainComponent

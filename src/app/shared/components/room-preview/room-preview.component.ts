@@ -46,10 +46,13 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 
     public ngOnChanges(changes: SimpleChanges): void
     {
-        const prev = changes.model.previousValue;
-        const next = changes.model.currentValue;
+        if(changes.model)
+        {
+            const prev = changes.model.previousValue;
+            const next = changes.model.currentValue;
 
-        if(next && (next !== prev)) this.updateModel();
+            if(next && (next !== prev)) this.updateModel();
+        }
     }
 
     public ngOnDestroy(): void

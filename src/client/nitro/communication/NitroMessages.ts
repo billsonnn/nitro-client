@@ -158,6 +158,7 @@ import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEve
 import { RoomUnitNumberEvent } from './messages/incoming/room/unit/RoomUnitNumberEvent';
 import { RoomUnitRemoveEvent } from './messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from './messages/incoming/room/unit/RoomUnitStatusEvent';
+import { RoomMutedEvent } from './messages/incoming/roomevents/RoomMutedEvent';
 import { WiredFurniActionEvent } from './messages/incoming/roomevents/WiredFurniActionEvent';
 import { WiredFurniConditionEvent } from './messages/incoming/roomevents/WiredFurniConditionEvent';
 import { WiredFurniTriggerEvent } from './messages/incoming/roomevents/WiredFurniTriggerEvent';
@@ -175,6 +176,7 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
+import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
 import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
@@ -247,6 +249,7 @@ import { TradingListAddItemsComposer } from './messages/outgoing/inventory/tradi
 import { TradingListItemRemoveComposer } from './messages/outgoing/inventory/trading/TradingListRemoveItemComposer';
 import { TradingOpenComposer } from './messages/outgoing/inventory/trading/TradingOpenComposer';
 import { TradingUnacceptComposer } from './messages/outgoing/inventory/trading/TradingUnacceptComposer';
+import { ConvertGlobalRoomIdMessageComposer } from './messages/outgoing/navigator/ConvertGlobalRoomIdComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
 import { NavigatorInitComposer } from './messages/outgoing/navigator/NavigatorInitComposer';
@@ -329,6 +332,7 @@ import { RoomUnitSignComposer } from './messages/outgoing/room/unit/RoomUnitSign
 import { RoomUnitWalkComposer } from './messages/outgoing/room/unit/RoomUnitWalkComposer';
 import { ApplySnapshotMessageComposer } from './messages/outgoing/roomevents/ApplySnapshotMessageComposer';
 import { OpenMessageComposer } from './messages/outgoing/roomevents/OpenMessageComposer';
+import { RoomMuteComposer } from './messages/outgoing/roomevents/RoomMuteComposer';
 import { UpdateActionMessageComposer } from './messages/outgoing/roomevents/UpdateActionMessageComposer';
 import { UpdateConditionMessageComposer } from './messages/outgoing/roomevents/UpdateConditionMessageComposer';
 import { UpdateTriggerMessageComposer } from './messages/outgoing/roomevents/UpdateTriggerMessageComposer';
@@ -584,11 +588,13 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.WIRED_REWARD, WiredRewardResultMessageEvent);
         this._events.set(IncomingHeader.WIRED_SAVE, WiredSaveSuccessEvent);
         this._events.set(IncomingHeader.WIRED_ERROR, WiredValidationErrorEvent);
+        this._events.set(IncomingHeader.ROOM_MUTED, RoomMutedEvent);
 
         // SECURITY
         this._events.set(IncomingHeader.AUTHENTICATED, AuthenticatedEvent);
 
         // USER
+        this._events.set(IncomingHeader.IN_CLIENT_LINK, InClientLinkEvent);
         this._events.set(IncomingHeader.USER_IGNORED, IgnoredUsersEvent);
         this._events.set(IncomingHeader.USER_IGNORED_RESULT, IgnoreResultEvent);
 
@@ -712,6 +718,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS, NavigatorSettingsComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_SETTINGS_SAVE, NavigatorSettingsSaveComposer);
         this._composers.set(OutgoingHeader.NAVIGATOR_CATEGORY_LIST_MODE, NavigatorCategoryListModeComposer);
+        this._composers.set(OutgoingHeader.CONVERT_GLOBAL_ROOM_ID, ConvertGlobalRoomIdMessageComposer);
 
         // INVENTORY
 
@@ -837,6 +844,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.WIRED_ACTION_SAVE, UpdateActionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_CONDITION_SAVE, UpdateConditionMessageComposer);
         this._composers.set(OutgoingHeader.WIRED_TRIGGER_SAVE, UpdateTriggerMessageComposer);
+        this._composers.set(OutgoingHeader.ROOM_MUTE, RoomMuteComposer);
 
         // USER
         this._composers.set(OutgoingHeader.USER_RESPECT, UserRespectComposer);

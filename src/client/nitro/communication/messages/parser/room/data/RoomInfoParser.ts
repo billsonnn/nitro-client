@@ -11,9 +11,7 @@ export class RoomInfoParser implements IMessageParser
     private _staffPick: boolean;
     private _data: RoomDataParser;
     private _isGroupMember: boolean;
-    private _isMuted: boolean;
     private _moderation: RoomModerationParser;
-    private _allowMuteAll: boolean;
     private _chat: RoomChatParser;
 
     public flush(): boolean
@@ -23,9 +21,7 @@ export class RoomInfoParser implements IMessageParser
         this._staffPick     = false;
         this._data          = null;
         this._isGroupMember = false;
-        this._isMuted       = false;
         this._moderation    = null;
-        this._allowMuteAll  = false;
         this._chat          = null;
 
         return true;
@@ -40,9 +36,9 @@ export class RoomInfoParser implements IMessageParser
         this._roomForward    = wrapper.readBoolean();
         this.data.roomPicker = wrapper.readBoolean();
         this._isGroupMember  = wrapper.readBoolean();
-        this._isMuted        = wrapper.readBoolean();
+        this.data.allInRoomMuted          = wrapper.readBoolean();
         this._moderation     = new RoomModerationParser(wrapper);
-        this._allowMuteAll   = wrapper.readBoolean();
+        this.data.canMute   = wrapper.readBoolean();
         this._chat           = new RoomChatParser(wrapper);
 
         return true;
@@ -68,19 +64,9 @@ export class RoomInfoParser implements IMessageParser
         return this._isGroupMember;
     }
 
-    public get isMuted(): boolean
-    {
-        return this._isMuted;
-    }
-
     public get moderation(): RoomModerationParser
     {
         return this._moderation;
-    }
-
-    public get allowMuteAll(): boolean
-    {
-        return this._allowMuteAll;
     }
 
     public get chat(): RoomChatParser

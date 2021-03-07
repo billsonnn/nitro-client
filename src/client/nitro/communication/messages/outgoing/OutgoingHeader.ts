@@ -209,4 +209,5 @@ export class OutgoingHeader
     public static USER_IGNORE_ID                 = 3314;
     public static USER_IGNORE                    = 1117;
     public static USER_UNIGNORE                  = 2061;
+    public static CONVERT_GLOBAL_ROOM_ID         = 314;
 }

@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterContentInit, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ILinkEventTracker } from '../../../client/core/events/ILinkEventTracker';
 import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomBackgroundColorEvent } from '../../../client/nitro/room/events/RoomBackgroundColorEvent';
 import { RoomEngineDimmerStateEvent } from '../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
@@ -14,9 +15,11 @@ import { RoomSessionDanceEvent } from '../../../client/nitro/session/events/Room
 import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
+import { RoomSessionFriendRequestEvent } from '../../../client/nitro/session/events/RoomSessionFriendRequestEvent';
 import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/RoomSessionPresentEvent';
 import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
+import { HabboWebTools } from '../../../client/nitro/utils/HabboWebTools';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { SettingsService } from '../../core/settings/service';
 import { RoomComponent } from '../room/room.component';
@@ -24,6 +27,7 @@ import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/components/m
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';
+import { FriendRequestMainComponent } from '../room/widgets/friendrequest/components/main/main.component';
 import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
@@ -59,7 +63,7 @@ import { RoomToolsMainComponent } from '../room/widgets/roomtools/main/main.comp
         )
     ]
 })
-export class MainComponent implements OnInit, OnDestroy, AfterContentInit
+export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILinkEventTracker
 {
     @ViewChild(RoomComponent)
     public roomComponent: RoomComponent = null;
@@ -74,6 +78,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
         this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
         this.onRoomEngineObjectEvent    = this.onRoomEngineObjectEvent.bind(this);
         this.onRoomSessionEvent         = this.onRoomSessionEvent.bind(this);
+        Nitro.instance.addLinkEventTracker(this);
     }
 
     public ngOnInit(): void
@@ -131,6 +136,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
             }
         });
@@ -189,9 +195,12 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
             }
         });
+
+        Nitro.instance.removeLinkEventTracker(this);
     }
 
     public ngAfterContentInit(): void
@@ -236,6 +245,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.MANNEQUIN, MannequinWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_PRESENT_WIDGET, PresentFurniWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_REQUEST, FriendRequestMainComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {
@@ -334,6 +344,37 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 (this.roomComponent && this.roomComponent.processEvent(event));
                 return;
         }
+    }
+
+    linkReceived(link: string): void
+    {
+        const parts = link.split('/');
+
+        if(parts.length < 2) return;
+
+        switch(parts[1])
+        {
+            case 'open':
+                if(parts.length > 2)
+                {
+                    switch(parts[2])
+                    {
+                        case 'credits':
+                            //HabboWebTools.openWebPageAndMinimizeClient(this._windowManager.getProperty(ExternalVariables.WEB_SHOP_RELATIVE_URL));
+                            break;
+                        default: {
+                            const name = parts[2];
+                            HabboWebTools.openHabblet(name);
+                        }
+                    }
+                }
+                return;
+        }
+    }
+
+    public get eventUrlPrefix(): string
+    {
+        return 'habblet';
     }
 
     public get landingViewVisible(): boolean

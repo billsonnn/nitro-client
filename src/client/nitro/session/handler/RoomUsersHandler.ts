@@ -1,4 +1,6 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
+import { FriendRequestsEvent } from '../../communication/messages/incoming/friendlist/FriendRequestsEvent';
+import { NewFriendRequestEvent } from '../../communication/messages/incoming/friendlist/NewFriendRequestEvent';
 import { RoomDoorbellEvent } from '../../communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
 import { RoomUnitDanceEvent } from '../../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
 import { RoomUnitEvent } from '../../communication/messages/incoming/room/unit/RoomUnitEvent';
@@ -8,6 +10,7 @@ import { UserCurrentBadgesEvent } from '../../communication/messages/incoming/us
 import { UserNameChangeMessageEvent } from '../../communication/messages/incoming/user/data/UserNameChangeMessageEvent';
 import { RoomSessionDanceEvent } from '../events/RoomSessionDanceEvent';
 import { RoomSessionDoorbellEvent } from '../events/RoomSessionDoorbellEvent';
+import { RoomSessionFriendRequestEvent } from '../events/RoomSessionFriendRequestEvent';
 import { RoomSessionUserBadgesEvent } from '../events/RoomSessionUserBadgesEvent';
 import { RoomSessionUserDataUpdateEvent } from '../events/RoomSessionUserDataUpdateEvent';
 import { IRoomHandlerListener } from '../IRoomHandlerListener';
@@ -27,6 +30,8 @@ export class RoomUsersHandler extends BaseHandler
         connection.addMessageEvent(new UserCurrentBadgesEvent(this.onUserCurrentBadgesEvent.bind(this)));
         connection.addMessageEvent(new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)));
         connection.addMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
+        connection.addMessageEvent(new FriendRequestsEvent(this.onFriendRequestsEvent.bind(this)));
+        connection.addMessageEvent(new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)));
     }
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
@@ -172,5 +177,37 @@ export class RoomUsersHandler extends BaseHandler
         if(!session) return;
 
         session.userDataManager.updateName(parser.id, parser.newName);
+    }
+
+    private onFriendRequestsEvent(event: FriendRequestsEvent): void
+    {
+        if(!this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        for(const request of parser.requests) this.listener.events.dispatchEvent(new RoomSessionFriendRequestEvent(session, request.requestId, request.requesterUserId, request.requesterName));
+    }
+
+    private onNewFriendRequestEvent(event: NewFriendRequestEvent): void
+    {
+        if(!this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        const request = parser.request;
+
+        this.listener.events.dispatchEvent(new RoomSessionFriendRequestEvent(session, request.requestId, request.requesterUserId, request.requesterName));
     }
 }

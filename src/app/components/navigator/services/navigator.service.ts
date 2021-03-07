@@ -24,6 +24,7 @@ import { RoomSettingsUpdatedEvent } from '../../../../client/nitro/communication
 import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
 import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { DesktopViewComposer } from '../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
+import { ConvertGlobalRoomIdMessageComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/ConvertGlobalRoomIdComposer';
 import { NavigatorCategoriesComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorInitComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorInitComposer';
 import { NavigatorSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSearchComposer';
@@ -39,6 +40,7 @@ import { NitroToolbarEvent } from '../../../../client/nitro/events/NitroToolbarE
 import { LegacyExternalInterface } from '../../../../client/nitro/externalInterface/LegacyExternalInterface';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
+import { HabboWebTools } from '../../../../client/nitro/utils/HabboWebTools';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorData } from '../common/NavigatorData';
@@ -124,6 +126,11 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         this.registerMessages();
 
         Nitro.instance.addLinkEventTracker(this);
+
+        if(LegacyExternalInterface.available)
+        {
+            LegacyExternalInterface.addCallback(HabboWebTools.OPENROOM, this.enterRoomWebRequest);
+        }
     }
 
     public ngOnDestroy(): void
@@ -709,6 +716,13 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 }
                 return;
         }
+    }
+
+    public enterRoomWebRequest(k: string, _arg_2:boolean=false, _arg_3:string=null)
+    {
+        //this._webRoomReport = _arg_2;
+        //this._webRoomReportedName = _arg_3;
+        Nitro.instance.communication.connection.send(new ConvertGlobalRoomIdMessageComposer(k));
     }
 
     public get eventUrlPrefix(): string

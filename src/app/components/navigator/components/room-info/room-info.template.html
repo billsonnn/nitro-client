@@ -18,7 +18,7 @@
             <button *ngIf="floorPlanVisible" type="button" class="btn btn-secondary mb-1" disabled (click)="handleButton('floor-plan')">{{ ('open.floor.plan.editor') | translate }}</button>
             <button type="button" *ngIf="addStaffPickedVisible" class="btn btn-secondary" (click)="handleButton('staff-pick')">{{ (staffPickVisible ? 'navigator.staffpicks.unpick' : 'navigator.staffpicks.pick') | translate }}</button>
             <button type="button" class="btn btn-danger mb-1" disabled (click)="handleButton('report')">{{ ('help.emergency.main.report.room') | translate }}</button>
-            <button type="button" class="btn btn-secondary" disabled>{{ ('navigator.muteall_off') | translate }}</button>
+            <button type="button" *ngIf="canMuteVisible" class="btn btn-secondary mb-1" (click)="handleButton('room-mute')"> {{ (mutedVisible ? 'navigator.muteall_on' : 'navigator.muteall_off') | translate }}</button>
         </div>
     </div>
 </div>

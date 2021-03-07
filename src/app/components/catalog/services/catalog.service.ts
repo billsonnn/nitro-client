@@ -282,6 +282,13 @@ export class CatalogService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._notificationService.alert('${catalog.alert.limited_edition_sold_out.message}', '${catalog.alert.limited_edition_sold_out.title}');
+
+            (this._component && this._component.hidePurchaseConfirmation());
+        });
     }
 
     private onCatalogGroupsEvent(event: CatalogGroupsEvent): void

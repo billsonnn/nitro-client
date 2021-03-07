@@ -36,6 +36,7 @@ import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
 import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
+import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
 import { SettingsService } from '../../core/settings/service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
@@ -49,6 +50,7 @@ import { ChatWidgetHandler } from './widgets/handlers/ChatWidgetHandler';
 import { DoorbellWidgetHandler } from './widgets/handlers/DoorbellWidgetHandler';
 import { FriendFurniConfirmWidgetHandler } from './widgets/handlers/FriendFurniConfirmWidgetHandler';
 import { FriendFurniEngravingWidgetHandler } from './widgets/handlers/FriendFurniEngravingWidgetHandler';
+import { FriendRequestHandler } from './widgets/handlers/FriendRequestHandler';
 import { FurniChooserWidgetHandler } from './widgets/handlers/FurniChooserWidgetHandler';
 import { FurnitureBackgroundColorWidgetHandler } from './widgets/handlers/FurnitureBackgroundColorWidgetHandler';
 import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureContextMenuWidgetHandler';
@@ -120,6 +122,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     )
     {
         this._settingsService.floorPlanVisible = true;
+        this.processEvent = this.processEvent.bind(this);
     }
 
     public ngOnDestroy(): void
@@ -182,11 +185,17 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this.onWindowResizeEvent(null);
 
         Nitro.instance.ticker.add(this.update, this);
+
+        this._friendService.events.addEventListener(FriendRequestEvent.ACCEPTED, this.processEvent);
+        this._friendService.events.addEventListener(FriendRequestEvent.DECLINED, this.processEvent);
     }
 
     public endRoom(): void
     {
         if(!this._roomSession) return;
+
+        this._friendService.events.removeEventListener(FriendRequestEvent.ACCEPTED, this.processEvent);
+        this._friendService.events.removeEventListener(FriendRequestEvent.DECLINED, this.processEvent);
 
         Nitro.instance.ticker.remove(this.update, this);
 
@@ -542,6 +551,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FURNI_PRESENT_WIDGET:
                 widgetHandler = new FurniturePresentWidgetHandler();
+                break;
+            case RoomWidgetEnum.FRIEND_REQUEST:
+                widgetHandler = new FriendRequestHandler();
                 break;
         }
 
