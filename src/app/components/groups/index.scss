@@ -1,0 +1,66 @@
+.nitro-group-room-info-component {
+    width: 200px;
+    font-size: 14px;
+
+    nitro-badge, .group-name {
+        cursor: pointer;
+    }
+}
+
+.nitro-group-info-component {
+    position: absolute;
+    width: 360px;
+
+    nitro-badge {
+        img {
+            width: 78px;
+        }
+    }
+
+    .group-creation-date {
+        font-size: 13px;
+    }
+
+    .group-members-count {
+        font-size: 13px;
+        cursor: pointer;
+    }
+}
+
+.nitro-group-members-component {
+    position: absolute;
+    width: 500px;
+
+    .grid-container .grid-items .item-detail {
+        height: unset;
+        max-height: unset;
+    }
+
+    .pagination-counter {
+        font-size: 14px;
+    }
+}
+
+.nitro-group-creator-component {
+    .grid-container .grid-items .item-detail {
+        height: 20px;
+        max-height: 20px;
+    }
+}
+
+.nitro-group-manager-component {
+    position: absolute;
+    width: 498px;
+
+    .grid-container .grid-items .item-detail {
+        height: 20px;
+        max-height: 20px;
+    }
+}
+
+.nitro-group-image-selector-component {
+    .grid-container .grid-items .item-detail {
+        height: 41px;
+        max-height: 41px;
+    }
+}

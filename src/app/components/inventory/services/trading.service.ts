@@ -136,8 +136,6 @@ export class InventoryTradingService implements OnDestroy
     {
         if(!event) return;
 
-        console.log(event);
-
         const parser = event.getParser();
 
         if(!parser) return;
@@ -292,6 +290,7 @@ export class InventoryTradingService implements OnDestroy
 
         this._ngZone.run(() =>
         {
+            this._inventoryService.hideAllControllers();
             this._inventoryService.showWindow();
 
             this._inventoryService.furnitureVisible = true;
@@ -756,8 +755,6 @@ export class InventoryTradingService implements OnDestroy
                 }
                 break;
         }
-
-        console.log(oldState, this._state);
 
         if(didAssign)
         {

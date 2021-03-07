@@ -82,4 +82,9 @@ export class StringDataType extends ObjectDataBase
     {
         return this._data[index] || '';
     }
+
+    public setValue(data: string[]): void
+    {
+        this._data = data;
+    }
 }

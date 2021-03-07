@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
 import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { CatalogService } from '../../services/catalog.service';
+import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
 
 @Component({
     selector: '[nitro-catalog-purchase-component]',
@@ -10,7 +11,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogPurchaseComponent implements OnChanges
 {
     @Input()
-    public activePage: CatalogPageParser = null;
+    public activePage: ICatalogPageParser = null;
 
     @Input()
     public activeOffer: CatalogPageOfferData = null;
@@ -23,11 +24,16 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public quantity: number = 1;
 
+    @Input()
+    public forcedExtra: string = null;
+
     constructor(private _catalogService: CatalogService)
     {}
 
     public ngOnChanges(changes: SimpleChanges): void
     {
+        if(!changes.activeOffer) return;
+
         const prev = changes.activeOffer.previousValue;
         const next = changes.activeOffer.currentValue;
 
@@ -39,9 +45,9 @@ export class CatalogPurchaseComponent implements OnChanges
         this.quantity = 1;
     }
 
-    public purchase(): void
+    public purchase(asGift: boolean = false): void
     {
-        this._catalogService.component && this._catalogService.component.confirmPurchase(this.activePage, this.activeOffer, this.quantity, this.extra);
+        this._catalogService.component && this._catalogService.component.confirmPurchase(this.activePage, this.activeOffer, this.quantity, this.extra, asGift);
     }
 
     public increase(): void
@@ -75,6 +81,8 @@ export class CatalogPurchaseComponent implements OnChanges
 
     public get extra(): string
     {
+        if(this.forcedExtra) return this.forcedExtra;
+
         return (this.activeOffer.products[0] && this.activeOffer.products[0].extraParam);
     }
 

@@ -20,6 +20,8 @@ export class RoomObjectVariable
     public static FIGURE_POSTURE_PARAMETER: string                   = 'figure_posture_parameter';
     public static FIGURE_HIGHLIGHT_ENABLE: string                    = 'figure_highlight_enable';
     public static FIGURE_HIGHLIGHT: string                           = 'figure_highlight';
+    public static FURNITURE_PURCHASER_NAME: string                   = 'furniture_purchaser_name';
+    public static FURNITURE_PURCHASER_FIGURE: string                 = 'furniture_purchaser_figure';
     public static STD: string                                        = 'std';
     public static FIGURE_SIGN: string                                = 'figure_sign';
     public static FIGURE_FLAT_CONTROL: string                        = 'figure_flat_control';

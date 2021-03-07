@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { RoomStaffPickComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
+import { RoomMuteComposer } from '../../../../../client/nitro/communication/messages/outgoing/roomevents/RoomMuteComposer';
 import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
@@ -35,9 +37,11 @@ export class NavigatorRoomInfoComponent
             case 'floor-plan':
                 return;
             case 'staff-pick':
+                this.staffPick();
                 return;
-            case 'staff-unpick':
-                return;
+            case 'room-mute':
+                this.muteRoom();
+                break;
             case 'report':
                 return;
         }
@@ -46,6 +50,24 @@ export class NavigatorRoomInfoComponent
     private openRoomSettings(): void
     {
         Nitro.instance.communication.connection.send(new RoomSettingsComposer(this.roomData.roomId));
+    }
+
+    private staffPick(): void
+    {
+        if(!this.roomData) return;
+
+        this.roomData.roomPicker = !this.roomData.roomPicker;
+
+        Nitro.instance.communication.connection.send(new RoomStaffPickComposer(this.roomData.roomId));
+    }
+
+    private muteRoom(): void
+    {
+        if(!this.roomData) return;
+
+        this.roomData.allInRoomMuted = !this.roomData.allInRoomMuted;
+
+        Nitro.instance.communication.connection.send(new RoomMuteComposer());
     }
 
     public get data(): NavigatorData
@@ -111,5 +133,26 @@ export class NavigatorRoomInfoComponent
         if(!this.roomData) return false;
 
         return this.roomData.showOwner;
+    }
+
+    public get staffPickVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.roomPicker;
+    }
+
+    public get canMuteVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.canMute;
+    }
+
+    public get mutedVisible(): boolean
+    {
+        if(!this.roomData) return false;
+
+        return this.roomData.allInRoomMuted;
     }
 }

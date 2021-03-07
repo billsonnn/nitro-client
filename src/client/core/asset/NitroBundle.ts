@@ -1,8 +1,6 @@
 import { Data, inflate } from 'pako';
 import { BaseTexture } from 'pixi.js';
-import { NitroLogger } from '../common/logger/NitroLogger';
 import { BinaryReader } from '../communication/codec/BinaryReader';
-import { IAssetData } from './interfaces';
 
 export class NitroBundle
 {
@@ -23,11 +21,10 @@ export class NitroBundle
         let binary = '';
 
         const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-        for(let i = 0; i < len; i++)
-        {
-            binary += String.fromCharCode(bytes[i]);
-        }
+        const len   = bytes.byteLength;
+
+        for(let i = 0; i < len; i++) (binary += String.fromCharCode(bytes[i]));
+
         return window.btoa(binary);
     }
 
@@ -52,55 +49,19 @@ export class NitroBundle
             }
             else
             {
-                const decompressed = inflate((buffer.toArrayBuffer() as Data));
+                const decompressed  = inflate((buffer.toArrayBuffer() as Data));
+                const base64        = NitroBundle.arrayBufferToBase64(decompressed);
 
-                this._imageData = decompressed;
-
-                this._image = NitroBundle.arrayBufferToBase64(this._imageData);
-
-                this._imageData = null;
+                this._baseTexture = new BaseTexture('data:image/png;base64,' + base64);
             }
 
             fileCount--;
         }
-
-        //this.buildTexture();
-    }
-
-    private buildTexture(): void
-    {
-        if(!this._imageData) return;
-
-        const json = (this._jsonFile as IAssetData);
-
-        if(!json) return;
-
-        const width = json.spritesheet.meta.size.w;
-        const height = json.spritesheet.meta.size.h;
-
-        try
-        {
-            //@ts-ignore
-            const baseTexture = BaseTexture.fromBuffer(this._imageData, 1, 1);
-
-            this._baseTexture = baseTexture;
-        }
-        catch (e)
-        {
-            NitroLogger.log(e);
-        }
-
-        this._imageData = null;
     }
 
     get jsonFile(): Object
     {
         return this._jsonFile;
-    }
-
-    get image(): string
-    {
-        return this._image;
     }
 
     public get baseTexture(): BaseTexture

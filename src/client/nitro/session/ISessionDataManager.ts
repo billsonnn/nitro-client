@@ -3,6 +3,8 @@ import { INitroManager } from '../../core/common/INitroManager';
 import { INitroCommunicationManager } from '../communication/INitroCommunicationManager';
 import { IFurnitureData } from './furniture/IFurnitureData';
 import { IFurnitureDataListener } from './furniture/IFurnitureDataListener';
+import { IgnoredUsersManager } from './IgnoredUsersManager';
+import { IProductData } from './product/IProductData';
 
 export interface ISessionDataManager extends INitroManager
 {
@@ -12,17 +14,21 @@ export interface ISessionDataManager extends INitroManager
     getFloorItemDataByName(name: string): IFurnitureData;
     getWallItemData(id: number): IFurnitureData;
     getWallItemDataByName(name: string): IFurnitureData;
+    getProductData(type: string): IProductData;
     getBadgeUrl(name: string): string;
     getGroupBadgeUrl(name: string): string;
     getBadgeImage(name: string): Texture;
     loadBadgeImage(name: string): string;
     getGroupBadgeImage(name: string): Texture;
     loadGroupBadgeImage(name: string): string;
-    isUserIgnored(userName: string): boolean;
     hasSecurity(level: number): boolean;
     giveRespect(userId: number): void;
     givePetRespect(petId: number): void;
     sendSpecialCommandMessage(text: string, styleId?: number): void;
+    sendChatStyleUpdate(styleId: number): void;
+    ignoreUser(name: string): void;
+    unignoreUser(name: string): void;
+    isUserIgnored(name: string): boolean;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;
@@ -30,6 +36,7 @@ export interface ISessionDataManager extends INitroManager
     gender: string;
     isGodMode: boolean;
     realName: string;
+    ignoredUsersManager: IgnoredUsersManager;
     respectsReceived: number;
     respectsLeft: number;
     respectsPetLeft: number;
@@ -42,5 +49,6 @@ export interface ISessionDataManager extends INitroManager
     isAuthenticHabbo: boolean;
     isModerator: boolean;
     isCameraFollowDisabled: boolean;
+    chatStyle: number;
     uiFlags: number;
 }

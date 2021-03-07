@@ -1,12 +1,12 @@
-<div class="infostand d-flex flex-column btn btn-primary rounded p-0 nohover">
-    <div class="d-flex align-items-center justify-content-between pt-3 px-3 w-100">
-        {{ botData.name }}
+<div class="nitro-infostand card">
+    <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ botData.name }}</h6>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="d-flex flex-column p-3 w-100">
         <div class="d-flex flex-nowrap">
-            <div class="body-image bot">
-                <div nitro-avatar-image [figure]="botData.figure" [direction]="4"></div>
+            <div class="body-image bot overflow-hidden">
+                <div class="avatar-image" avatar-image [figure]="botData.figure" [direction]="4" [asBackground]="true"></div>
             </div>
             <div class="flex-grow-1">
                 <div class="badge-container">
@@ -23,7 +23,7 @@
         </div>
         <div class="d-flex flex-column mt-2">
             <p *ngIf="(botData.ownerId > 0)" class="badge badge-secondary mb-0">{{ ('infostand.text.botowner') | translate }}</p>
-            <p *ngIf="(botData.carryItem > 0)" class="badge badge-secondary mt-0 mb-0">{{ ('infostand.text.handitem') | translate }}</p>
+            <p *ngIf="(botData.carryItem > 0)" class="badge badge-secondary mb-0">{{ ('infostand.text.handitem') | translate }}</p>
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/index';
+import { SharedModule } from '../../shared/shared.module';
 import { ChatHistoryComponent } from './component/chat-history.component';
 import { ChatHistoryService } from './services/chat-history.service';
 

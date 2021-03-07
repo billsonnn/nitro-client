@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { Subscription } from 'rxjs';
 import { Nitro } from '../../../../../client/nitro/Nitro';
@@ -11,16 +11,14 @@ import { GroupItem } from '../../items/GroupItem';
 import { IFurnitureItem } from '../../items/IFurnitureItem';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
+import { InventorySharedComponent } from '../shared/inventory-shared.component';
 
 @Component({
     selector: '[nitro-inventory-furniture-component]',
     templateUrl: './furniture.template.html'
 })
-export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
+export class InventoryFurnitureComponent extends InventorySharedComponent implements OnInit, OnDestroy
 {
-    @Input()
-    public visible: boolean = false;
-
     @Input()
     public roomPreviewer: RoomPreviewer = null;
 
@@ -28,16 +26,16 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
     public mouseDown: boolean = false;
 
     private _filteredItems: GroupItem[] = [];
-    private _search: string = '';
-    private _searchType: string = '';
     private _subscription: Subscription = null;
     private _hasGroupItems: boolean = false;
 
     constructor(
         private _notificationService: NotificationService,
-        private _inventoryService: InventoryService,
-        private _ngZone: NgZone)
-    {}
+        protected _inventoryService: InventoryService,
+        protected _ngZone: NgZone)
+    {
+        super(_inventoryService, _ngZone);
+    }
 
     public ngOnInit(): void
     {
@@ -54,28 +52,14 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                     return;
             }
         });
-    }
 
-    public ngOnChanges(changes: SimpleChanges): void
-    {
-        const prev = (changes.visible.previousValue || false);
-        const next = changes.visible.currentValue;
-
-        if(next !== prev)
-        {
-            if(next)
-            {
-                this.prepareInventory();
-            }
-            else
-            {
-                this._inventoryService.controller.setAllFurnitureSeen();
-            }
-        }
+        this.prepareInventory();
     }
 
     public ngOnDestroy(): void
     {
+        this._inventoryService.controller.setAllFurnitureSeen();
+
         if(this._subscription)
         {
             this._subscription.unsubscribe();
@@ -92,18 +76,18 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
         if(groupItems.length) this._hasGroupItems = true;
 
-        if((this._search && this._search.length) || (this._searchType && this._searchType.length))
+        if((this.search && this.search.length) || (this.searchType && this.searchType.length))
         {
-            const comparison = this._search.toLocaleLowerCase();
+            const comparison = this.search.toLocaleLowerCase();
 
             groupItems = groupItems.filter(item =>
             {
                 let found = true;
 
-                if(this._searchType && this._searchType.length === 1)
+                if(this.searchType && this.searchType.length === 1)
                 {
-                    if(this._searchType === 's') found = !item.isWallItem;
-                    else if(this._searchType === 'i') found = item.isWallItem;
+                    if(this.searchType === 's') found = !item.isWallItem;
+                    else if(this.searchType === 'i') found = item.isWallItem;
                 }
 
                 if(comparison && comparison.length)
@@ -167,6 +151,8 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     private selectGroup(groupItem: GroupItem): void
     {
+        if(this.selectedGroup === groupItem) return;
+
         this._inventoryService.controller.furnitureService.unselectAllGroupItems();
 
         this.selectedGroup = groupItem;
@@ -177,7 +163,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
             if(this.selectedGroup.hasUnseenItems) this.selectedGroup.hasUnseenItems = false;
 
-            const furnitureItem = this.selectedGroup.getItemByIndex(0);
+            const furnitureItem = this.selectedGroup.getLastItem();
 
             if(!furnitureItem) return;
 
@@ -223,7 +209,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
                         else
                         {
                             this.roomPreviewer.updateRoomWallsAndFloorVisibility(false, true);
-                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (this.selectedGroup.extra.toString()));
+                            this.roomPreviewer.addFurnitureIntoRoom(this.selectedGroup.type, new Vector3d(90), this.selectedGroup.stuffData, (furnitureItem.extra.toString()));
                         }
                     }
                 }
@@ -231,7 +217,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         }
         else
         {
-            this._ngZone.runOutsideAngular(() => this.roomPreviewer && this.roomPreviewer.reset(false));
+            this._ngZone.runOutsideAngular(() => (this.roomPreviewer && this.roomPreviewer.reset(false)));
         }
     }
 
@@ -244,7 +230,7 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         this.mouseDown = true;
     }
 
-    public onMouseUp(groupItem: GroupItem): void
+    public onMouseUp(): void
     {
         this.mouseDown = false;
     }
@@ -256,15 +242,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         if(this.selectedGroup !== groupItem) return;
 
         this.attemptItemPlacement();
-    }
-
-    public attemptItemPlacement(): void
-    {
-        if(!this.canPlace || this.tradeRunning) return;
-
-        this._ngZone.runOutsideAngular(() => this._inventoryService.controller.furnitureService.attemptItemPlacement());
-
-        this._inventoryService.hideWindow();
     }
 
     public attemptItemOffer(count: number = 1): void
@@ -327,15 +304,6 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
         return this._filteredItems;
     }
 
-    public get tradeRunning(): boolean
-    {
-        return this._inventoryService.controller.tradeService.running;
-    }
-
-    public get canPlace(): boolean
-    {
-        return !!this._inventoryService.roomSession;
-    }
 
     public get paginateConfig(): PaginationInstance
     {
@@ -348,24 +316,24 @@ export class InventoryFurnitureComponent implements OnInit, OnChanges, OnDestroy
 
     public get search(): string
     {
-        return this._search;
+        return this._inventoryService.controller.furnitureService.search;
     }
 
     public set search(search: string)
     {
-        this._search = search;
+        this._inventoryService.controller.furnitureService.search = search;
 
         this.refreshInventory();
     }
 
     public get searchType(): string
     {
-        return this._searchType;
+        return this._inventoryService.controller.furnitureService.searchType;
     }
 
     public set searchType(type: string)
     {
-        this._searchType = type;
+        this._inventoryService.controller.furnitureService.searchType = type;
 
         this.refreshInventory();
     }

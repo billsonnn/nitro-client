@@ -255,7 +255,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
             if(parser.roomEnter)
             {
                 this._data.enteredGuestRoom = parser.data;
-                this._data.staffPick        = parser.staffPick;
+                this._data.staffPick        = parser.data.roomPicker;
 
                 const isCreatedRoom = (this._data.createdRoomId === parser.data.roomId);
 
@@ -288,7 +288,7 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
                 else
                 {
                     this._data.enteredGuestRoom = parser.data;
-                    this._data.staffPick        = parser.staffPick;
+                    this._data.staffPick        = parser.data.roomPicker;
                 }
             }
         });

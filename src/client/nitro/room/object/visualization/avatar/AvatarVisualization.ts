@@ -18,6 +18,7 @@ import { RoomObjectVariable } from '../../RoomObjectVariable';
 import { ExpressionAdditionFactory } from './additions/ExpressionAdditionFactory';
 import { FloatingIdleZAddition } from './additions/FloatingIdleZAddition';
 import { IAvatarAddition } from './additions/IAvatarAddition';
+import { MutedBubbleAddition } from './additions/MutedBubbleAddition';
 import { NumberBubbleAddition } from './additions/NumberBubbleAddition';
 import { TypingBubbleAddition } from './additions/TypingBubbleAddition';
 import { AvatarVisualizationData } from './AvatarVisualizationData';
@@ -29,6 +30,7 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
     private static TYPING_BUBBLE_ID: number         = 2;
     private static EXPRESSION_ID: number            = 3;
     private static NUMBER_BUBBLE_ID: number         = 4;
+    private static MUTED_BUBBLE_ID: number          = 6;
     private static OWN_USER_ID: number              = 4;
     private static UPDATE_TIME_INCREASER: number    = 41;
     private static OFFSET_MULTIPLIER: number        = 1000;
@@ -725,19 +727,39 @@ export class AvatarVisualization extends RoomObjectSpriteVisualization implement
             if(idleAddition) this.removeAddition(AvatarVisualization.FLOATING_IDLE_Z_ID);
         }
 
-        const isTyping = (model.getValue<number>(RoomObjectVariable.FIGURE_IS_TYPING) > 0);
+        const isMuted = (model.getValue<number>(RoomObjectVariable.FIGURE_IS_MUTED) > 0);
 
-        let typingAddition = this.getAddition(AvatarVisualization.TYPING_BUBBLE_ID);
+        let mutedAddition = this.getAddition(AvatarVisualization.MUTED_BUBBLE_ID);
 
-        if(isTyping)
+        if(isMuted)
         {
-            if(!typingAddition) typingAddition = this.addAddition(new TypingBubbleAddition(AvatarVisualization.TYPING_BUBBLE_ID, this));
+            if(!mutedAddition) mutedAddition = this.addAddition(new MutedBubbleAddition(AvatarVisualization.MUTED_BUBBLE_ID, this));
 
             needsUpdate = true;
         }
         else
         {
-            if(typingAddition) this.removeAddition(AvatarVisualization.TYPING_BUBBLE_ID);
+            if(mutedAddition)
+            {
+                this.removeAddition(AvatarVisualization.MUTED_BUBBLE_ID);
+
+                needsUpdate = true;
+            }
+
+            const isTyping = (model.getValue<number>(RoomObjectVariable.FIGURE_IS_TYPING) > 0);
+
+            let typingAddition = this.getAddition(AvatarVisualization.TYPING_BUBBLE_ID);
+
+            if(isTyping)
+            {
+                if(!typingAddition) typingAddition = this.addAddition(new TypingBubbleAddition(AvatarVisualization.TYPING_BUBBLE_ID, this));
+
+                needsUpdate = true;
+            }
+            else
+            {
+                if(typingAddition) this.removeAddition(AvatarVisualization.TYPING_BUBBLE_ID);
+            }
         }
 
         const numberValue = model.getValue<number>(RoomObjectVariable.FIGURE_NUMBER_VALUE);

@@ -8,10 +8,12 @@ import { RoomGiveRightsComposer } from '../communication/messages/outgoing/room/
 import { RoomKickUserComposer } from '../communication/messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomMuteUserComposer } from '../communication/messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from '../communication/messages/outgoing/room/action/RoomTakeRightsComposer';
-import { RemoveBotFromFlatComposer } from '../communication/messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { BotRemoveComposer } from '../communication/messages/outgoing/room/engine/BotRemoveComposer';
+import { PetRemoveComposer } from '../communication/messages/outgoing/room/engine/PetRemoveComposer';
 import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
 import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
 import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
+import { OpenPresentComposer } from '../communication/messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -238,14 +240,14 @@ export class RoomSession extends Disposable implements IRoomSession
     {
         if(!this._connection) return;
 
-        //this._connection.send();
+        this._connection.send(new PetRemoveComposer(id));
     }
 
     public pickupBot(id: number): void
     {
         if(!this._connection) return;
 
-        this._connection.send(new RemoveBotFromFlatComposer(id));
+        this._connection.send(new BotRemoveComposer(id));
     }
 
     public requestMoodlightSettings(): void
@@ -255,6 +257,10 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new MoodlightSettingsComposer());
     }
 
+    public openGift(_Str_1577: number): void
+    {
+        this._connection.send(new OpenPresentComposer(_Str_1577));
+    }
 
     public get connection(): IConnection
     {

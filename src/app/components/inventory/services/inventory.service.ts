@@ -6,6 +6,7 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
 import { IRoomSession } from '../../../../client/nitro/session/IRoomSession';
 import { SettingsService } from '../../../core/settings/service';
+import { InventoryBadgesComponent } from '../components/badges/badges.component';
 import { InventoryBotsComponent } from '../components/bots/bots.component';
 import { InventoryFurnitureComponent } from '../components/furniture/furniture.component';
 import { InventoryMainComponent } from '../components/main/main.component';
@@ -21,6 +22,7 @@ export class InventoryService implements OnDestroy
     private _events: Subject<string> = null;
 
     private _botsController: InventoryBotsComponent = null;
+    private _badgesController: InventoryBadgesComponent = null;
     private _furniController: InventoryFurnitureComponent = null;
     private _controller: InventoryMainComponent = null;
     private _petsController: InventoryPetsComponent = null;
@@ -30,7 +32,8 @@ export class InventoryService implements OnDestroy
     private _unseenCount: number = 0;
     private _unseenCounts: Map<number, number>;
     private _botsVisible: boolean = false;
-    private _furnitureVisible: boolean = false;
+    private _furnitureVisible: boolean = true;
+    private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;
 
@@ -124,27 +127,36 @@ export class InventoryService implements OnDestroy
 
     public updateUnseenCount(): void
     {
-        function run()
+        setTimeout(() =>
         {
-            let count = 0;
+            this._ngZone.run(() =>
+            {
+                let count = 0;
 
-            const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
+                const furniCount = this._unseenTracker._Str_5621(UnseenItemCategory.FURNI);
 
-            count += furniCount;
+                count += furniCount;
 
-            this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                const botCount = this._unseenTracker._Str_5621(UnseenItemCategory.BOT);
 
-            this._unseenCount = count;
-        }
+                count += botCount;
 
-        if(!NgZone.isInAngularZone())
-        {
-            this._ngZone.run(() => run.apply(this));
-        }
-        else
-        {
-            run.apply(this);
-        }
+                const petCount = this._unseenTracker._Str_5621(UnseenItemCategory.PET);
+
+                count += petCount;
+
+                const badgeCount = this._unseenTracker._Str_5621(UnseenItemCategory.BADGE);
+
+                count += badgeCount;
+
+                this._unseenCounts.set(UnseenItemCategory.FURNI, furniCount);
+                this._unseenCounts.set(UnseenItemCategory.BOT, botCount);
+                this._unseenCounts.set(UnseenItemCategory.BADGE, badgeCount);
+                this._unseenCounts.set(UnseenItemCategory.PET, petCount);
+
+                this._unseenCount = count;
+            });
+        }, 1);
     }
 
     public updateItemLocking(): void
@@ -176,6 +188,14 @@ export class InventoryService implements OnDestroy
         return (this._boundFurnitureNames.indexOf(k) > -1);
     }
 
+    public hideAllControllers(): void
+    {
+        this.furnitureVisible = false;
+        this.botsVisible      = false;
+        this.petsVisible      = false;
+        this.badgesVisible    = false;
+    }
+
     public get events(): Subject<string>
     {
         return this._events;
@@ -189,6 +209,11 @@ export class InventoryService implements OnDestroy
     public set botsController(controller: InventoryBotsComponent)
     {
         this._botsController = controller;
+    }
+
+    public set badgesController(controller: InventoryBadgesComponent)
+    {
+        this._badgesController = controller;
     }
 
     public get furniController(): InventoryFurnitureComponent
@@ -241,6 +266,26 @@ export class InventoryService implements OnDestroy
         return this._roomSession;
     }
 
+    public get furniUnseenCount(): number
+    {
+        return this._unseenCounts.get(UnseenItemCategory.FURNI);
+    }
+
+    public get botUnseenCount(): number
+    {
+        return this._unseenCounts.get(UnseenItemCategory.BOT);
+    }
+
+    public get petUnseenCount(): number
+    {
+        return this._unseenCounts.get(UnseenItemCategory.PET);
+    }
+
+    public get badgeUnseenCount(): number
+    {
+        return this._unseenCounts.get(UnseenItemCategory.BADGE);
+    }
+
     public get unseenCount(): number
     {
         return this._unseenCount;
@@ -264,6 +309,16 @@ export class InventoryService implements OnDestroy
     public set furnitureVisible(flag: boolean)
     {
         this._furnitureVisible = flag;
+    }
+
+    public get badgesVisible(): boolean
+    {
+        return this._badgesVisible;
+    }
+
+    public set badgesVisible(flag: boolean)
+    {
+        this._badgesVisible = flag;
     }
 
     public get petsVisible(): boolean

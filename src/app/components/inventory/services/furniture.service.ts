@@ -18,6 +18,7 @@ import { InventoryMainComponent } from '../components/main/main.component';
 import { FurniCategory } from '../items/FurniCategory';
 import { FurnitureItem } from '../items/FurnitureItem';
 import { GroupItem } from '../items/GroupItem';
+import { IFurnitureItem } from '../items/IFurnitureItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
 
@@ -31,6 +32,8 @@ export class InventoryFurnitureService implements OnDestroy
     private _messages: IMessageEvent[]                                  = [];
     private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
     private _groupItems: GroupItem[]                                    = [];
+    private _search: string                                             = '';
+    private _searchType: string                                         = '';
     private _itemIdInFurniPlacing: number                               = -1;
     private _isObjectMoverRequested: boolean                            = false;
     private _isInitialized: boolean                                     = false;
@@ -291,6 +294,20 @@ export class InventoryFurnitureService implements OnDestroy
         return itemIds;
     }
 
+    public getFurnitureItem(id: number): IFurnitureItem
+    {
+        for(const furniture of this._groupItems)
+        {
+            if(!furniture) continue;
+
+            const item = furniture.getItemById(id);
+
+            if(item) return item;
+        }
+
+        return null;
+    }
+
     private addFurnitureItem(item: FurnitureItem, flag: boolean): void
     {
         let groupItem: GroupItem = null;
@@ -322,7 +339,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         const unseen    = this.isFurnitureUnseen(item);
-        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
+        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
 
         groupItem.push(item, unseen);
 
@@ -393,7 +410,7 @@ export class InventoryFurnitureService implements OnDestroy
             return existingGroup;
         }
 
-        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
+        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
 
         existingGroup.push(item, unseen);
 
@@ -531,10 +548,32 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
+            this._inventoryService.hideWindow();
+
             this.startRoomObjectPlacement(item);
         }
 
         return true;
+    }
+
+    public startRoomObjectPlacementWithoutRequest(item: IFurnitureItem): boolean
+    {
+        let category    = 0;
+        let isMoving    = false;
+
+        if(item.isWallItem) category = RoomObjectCategory.WALL;
+        else category = RoomObjectCategory.FLOOR;
+
+        if((item.category === FurniCategory._Str_5186))
+        {
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString());
+        }
+        else
+        {
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.extra.toString(), item.stuffData);
+        }
+
+        return isMoving;
     }
 
     private startRoomObjectPlacement(item: FurnitureItem): void
@@ -551,7 +590,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
-            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString(), item.stuffData);
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.extra.toString(), item.stuffData);
         }
 
         if(isMoving)
@@ -669,5 +708,25 @@ export class InventoryFurnitureService implements OnDestroy
     public get isObjectMoverRequested(): boolean
     {
         return this._isObjectMoverRequested;
+    }
+
+    public get search(): string
+    {
+        return this._search;
+    }
+
+    public set search(search: string)
+    {
+        this._search = search;
+    }
+
+    public get searchType(): string
+    {
+        return this._searchType;
+    }
+
+    public set searchType(type: string)
+    {
+        this._searchType = type;
     }
 }

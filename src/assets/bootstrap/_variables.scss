@@ -80,7 +80,7 @@ $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $gray-100 !default;
-$dark:          $gray-800 !default;
+$dark:          #353535 !default;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -484,10 +484,10 @@ $input-padding-x-lg:                    $input-btn-padding-x-lg !default;
 $input-font-size-lg:                    $input-btn-font-size-lg !default;
 $input-line-height-lg:                  $input-btn-line-height-lg !default;
 
-$input-bg:                              rgba($secondary, 1) !default;
+$input-bg:                              rgba($white, 1) !default;
 $input-disabled-bg:                     $gray-200 !default;
 
-$input-color:                           $white !default;
+$input-color:                           rgba($black, 1) !default;
 $input-border-color:                    rgba($black, 1) !default;
 $input-border-width:                    $input-btn-border-width !default;
 $input-box-shadow:                      $btn-box-shadow !default;

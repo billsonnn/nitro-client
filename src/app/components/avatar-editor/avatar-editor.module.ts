@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '../../shared/shared.module';
 import { AvatarEditorMainComponent } from './components/main/main.component';
 import { AvatarEditorModelViewerComponent } from './components/model-viewer/model-viewer.component';
 import { AvatarEditorPaletteViewerComponent } from './components/palette-viewer/palette-viewer.component';
 import { AvatarEditorSetViewerComponent } from './components/set-viewer/set-viewer.component';
+import { AvatarEditorWardrobeComponent } from './components/wardrobe/wardrobe.component';
 import { AvatarEditorService } from './services/avatar-editor.service';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { AvatarEditorService } from './services/avatar-editor.service';
         AvatarEditorMainComponent,
         AvatarEditorModelViewerComponent,
         AvatarEditorPaletteViewerComponent,
-        AvatarEditorSetViewerComponent
+        AvatarEditorSetViewerComponent,
+        AvatarEditorWardrobeComponent
     ],
     providers: [
         AvatarEditorService
@@ -23,7 +25,8 @@ import { AvatarEditorService } from './services/avatar-editor.service';
         AvatarEditorMainComponent,
         AvatarEditorModelViewerComponent,
         AvatarEditorPaletteViewerComponent,
-        AvatarEditorSetViewerComponent
+        AvatarEditorSetViewerComponent,
+        AvatarEditorWardrobeComponent
     ]
 })
 export class AvatarEditorModule

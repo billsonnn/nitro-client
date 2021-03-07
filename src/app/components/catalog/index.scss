@@ -2,7 +2,6 @@
     position: absolute;
     width: 600px;
     max-width: 600px;
-    min-height: 570px;
 
     .grid-container {
 
@@ -27,6 +26,10 @@
 
             .nav-item {
 
+                .list-group {
+                    padding-left: 10px;
+                }
+
                 .list-group-item {
                     padding: 4px 10px;
                     font-weight: 300;
@@ -44,41 +47,6 @@
                         align-items: center;
                         width: 20px;
                         margin-right: 3px;
-                    }
-                }
-
-                .nav-item {
-
-                    .list-group-item {
-                        padding-left: 18px;
-                    }
-
-                    .nav-item {
-
-                        .list-group-item {
-                            padding-left: 26px;
-                        }
-
-                        .nav-item {
-
-                            .list-group-item {
-                                padding-left: 34px;
-                            }
-
-                            .nav-item {
-
-                                .list-group-item {
-                                    padding-left: 42px;
-                                }
-
-                                .nav-item {
-
-                                    .list-group-item {
-                                        padding-left: 50px;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -203,6 +171,26 @@
         &:focus {
             outline:0;
             box-shadow: 0;
+        }
+    }
+}
+
+.nitro-catalog-customize-gift-component {
+    position: absolute;
+    width: 450px;
+
+
+}
+
+
+.nitro-catalog-layout-vip-gifts-component {
+
+    .gift-item {
+        .gift-image {
+            width: 30px;
+            height: 30px;
+            background-repeat: no-repeat;
+
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Point } from 'pixi.js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
+import { IAssetAnimation } from '../../core/asset/interfaces';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { ActionDefinition } from './actions/ActionDefinition';
 import { AvatarActionManager } from './actions/AvatarActionManager';
@@ -138,14 +139,14 @@ export class AvatarStructure extends EventDispatcher
             {
                 const animationData = collection.data;
 
-                this._animationManager._Str_2061(this, animationData);
+                this._animationManager._Str_2061(this, animationData.animations);
             }
 
             index++;
         }
     }
 
-    public _Str_2061(data: any): void
+    public _Str_2061(data: { [index: string]: IAssetAnimation }): void
     {
         this._animationManager._Str_2061(this, data);
     }

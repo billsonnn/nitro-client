@@ -18,8 +18,10 @@ import { ObjectAvatarExpressionUpdateMessage } from '../../../messages/ObjectAva
 import { ObjectAvatarFigureUpdateMessage } from '../../../messages/ObjectAvatarFigureUpdateMessage';
 import { ObjectAvatarFlatControlUpdateMessage } from '../../../messages/ObjectAvatarFlatControlUpdateMessage';
 import { ObjectAvatarGestureUpdateMessage } from '../../../messages/ObjectAvatarGestureUpdateMessage';
+import { ObjectAvatarMutedUpdateMessage } from '../../../messages/ObjectAvatarMutedUpdateMessage';
 import { ObjectAvatarOwnMessage } from '../../../messages/ObjectAvatarOwnMessage';
 import { ObjectAvatarPlayerValueUpdateMessage } from '../../../messages/ObjectAvatarPlayerValueUpdateMessage';
+import { ObjectAvatarPlayingGameUpdateMessage } from '../../../messages/ObjectAvatarPlayingGameUpdateMessage';
 import { ObjectAvatarPostureUpdateMessage } from '../../../messages/ObjectAvatarPostureUpdateMessage';
 import { ObjectAvatarSelectedMessage } from '../../../messages/ObjectAvatarSelectedMessage';
 import { ObjectAvatarSignUpdateMessage } from '../../../messages/ObjectAvatarSignUpdateMessage';
@@ -273,6 +275,20 @@ export class AvatarLogic extends MovingObjectLogic
         if(message instanceof ObjectAvatarTypingUpdateMessage)
         {
             model.setValue(RoomObjectVariable.FIGURE_IS_TYPING, message.isTyping ? 1 : 0);
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarMutedUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_IS_MUTED, (message.isMuted ? 1 : 0));
+
+            return;
+        }
+
+        if(message instanceof ObjectAvatarPlayingGameUpdateMessage)
+        {
+            model.setValue(RoomObjectVariable.FIGURE_IS_PLAYING_GAME, (message.isPlayingGame ? 1 : 0));
 
             return;
         }

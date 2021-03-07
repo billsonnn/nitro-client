@@ -1,3 +1,4 @@
+import { IAssetAnimation } from '../../../core/asset/interfaces';
 import { AvatarStructure } from '../AvatarStructure';
 import { Animation } from './Animation';
 import { IAnimation } from './IAnimation';
@@ -13,7 +14,7 @@ export class AnimationManager implements IAnimationManager
         this._animations = new Map();
     }
 
-    public _Str_2061(structure: AvatarStructure, _arg_2: any): boolean
+    public _Str_2061(structure: AvatarStructure, _arg_2: { [index: string]: IAssetAnimation }): boolean
     {
         const animationData = _arg_2[Object.keys(_arg_2)[0]];
 
