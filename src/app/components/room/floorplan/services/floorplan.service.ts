@@ -1,4 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Container, Graphics } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -9,9 +10,8 @@ import { RoomDoorSettingsComposer } from '../../../../../client/nitro/communicat
 import { RoomModelSaveComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomModelSaveComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import FloorMapSettings from '../common/FloorMapSettings';
-import { FloorplanMainComponent } from '../components/main/main.component';
 import FloorMapTile from '../common/FloorMapTile';
-import { Container, Graphics } from 'pixi.js';
+import { FloorplanMainComponent } from '../components/main/main.component';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
@@ -180,7 +180,7 @@ export class FloorPlanService implements OnDestroy
     {
         if(this.component && this.component.visible && this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
         {
-            this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall, this._thicknessFloor);
+            this._ngZone.run(() => this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall, this._thicknessFloor));
         }
     }
 
@@ -416,6 +416,7 @@ export class FloorPlanService implements OnDestroy
         tile.lineStyle(1, 0x000000, 1, 0);
         tile.drawRect(0, 0, this._tileSize, this._tileSize);
         tile.endFill();
+
         tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
 
         tile.tint = color;

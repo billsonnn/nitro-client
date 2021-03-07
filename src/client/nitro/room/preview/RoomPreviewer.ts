@@ -20,8 +20,8 @@ import { RoomObjectCategory } from '../object/RoomObjectCategory';
 import { RoomObjectUserType } from '../object/RoomObjectUserType';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 import { RoomPlaneParser } from '../object/RoomPlaneParser';
-import { LegacyWallGeometry } from '../utils/LegacyWallGeometry';
 import { RoomEngine } from '../RoomEngine';
+import { LegacyWallGeometry } from '../utils/LegacyWallGeometry';
 
 export class RoomPreviewer
 {

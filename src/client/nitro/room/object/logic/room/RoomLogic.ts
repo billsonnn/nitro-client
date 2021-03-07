@@ -119,6 +119,8 @@ export class RoomLogic extends RoomObjectLogicBase
                 model.setValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME, time);
 
                 this._planeParser.initializeFromMapData(mapData);
+
+                console.log('do');
             }
 
             this._lastHoleUpdate    = 0;
@@ -333,10 +335,11 @@ export class RoomLogic extends RoomObjectLogicBase
     {
         if(!message || !message.mapData) return;
 
-        this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, message.mapData);
-        this.object.model.setValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME, this.time);
+        console.log('do it');
 
         this._planeParser.initializeFromMapData(message.mapData);
+
+        this._needsMapUpdate = true;
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void

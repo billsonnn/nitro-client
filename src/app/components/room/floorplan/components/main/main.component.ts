@@ -1,22 +1,20 @@
-import { Component, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Application, Container, Graphics } from 'pixi.js';
+import { Application, Container } from 'pixi.js';
+import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
+import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
-import FloorMapSettings from '../../common/FloorMapSettings';
-import FloorMapTile from '../../common/FloorMapTile';
+import { SettingsService } from '../../../../../core/settings/service';
 import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
-import { SettingsService } from '../../../../../core/settings/service';
-import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
-import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 
 @Component({
     selector: 'nitro-floorplan-main-component',
     templateUrl: './main.template.html'
 })
 
-export class FloorplanMainComponent implements OnInit, OnChanges
+export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 {
     @ViewChild('floorplanElement')
     public floorplanElement: ElementRef<HTMLDivElement>;
@@ -43,13 +41,15 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     }
 
-    ngOnInit(): void
+    public ngOnInit(): void
     {
+        this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
     }
 
     public ngOnChanges(changes: SimpleChanges): void
     {
         const next = changes.visible.currentValue;
+
         if(next)
         {
             Nitro.instance.communication.connection.send(new RoomDoorSettingsComposer());
@@ -61,17 +61,30 @@ export class FloorplanMainComponent implements OnInit, OnChanges
         }
     }
 
+    public ngOnDestroy(): void
+    {
+        if(this._roomPreviewer)
+        {
+            this._roomPreviewer.dispose();
+
+            this._roomPreviewer = null;
+        }
+    }
+
 
     private _clear(): void
     {
-
         this.floorPlanService.clear();
 
-        this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
+        this._container         = null;
         this._importExportModal = null;
-        this._container = null;
-        this._app && this._app.destroy();
-        this._app = null;
+
+        if(this._app)
+        {
+            this._app.destroy(true);
+
+            this._app = null;
+        }
     }
 
     public close(): void
@@ -89,8 +102,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
     {
         this._clear();
 
-
-        this._roomPreviewer.updatePreviewModel(mapString, 3, true);
+        //this._roomPreviewer.updatePreviewModel(mapString, 3, true);
         this.floorPlanService.floorMapSettings.heightMapString = mapString;
         this.floorPlanService.floorMapSettings.doorX = doorX;
         this.floorPlanService.floorMapSettings.doorY = doorY;
@@ -123,17 +135,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges
 
     private _buildApp(width: number, height: number): void
     {
-        console.log('building app');
-        if(this._app && this._container && this.floorplanElement.nativeElement.children.length > 0)
-        {
-            for(let i = this._container.children.length - 1; i >= 0; i--)
-            {
-                console.log('removing at index ' + i);
-                // this._container.removeChild(this._container.children[i]);
-                // this.floorplanElement.nativeElement.removeChild(this.floorplanElement.nativeElement.children[i]);
-            }
-        }
-        else
+        if(!this._app)
         {
             this._app = new Application({
                 width: width,
@@ -143,41 +145,34 @@ export class FloorplanMainComponent implements OnInit, OnChanges
                 autoDensity: true
             });
 
+            const canvas = this._app.renderer.view;
 
-            for(let i = 0; i < this.floorplanElement.nativeElement.children.length; i++)
+            canvas.addEventListener('mousedown', () =>
             {
-                console.log('removing at index ' + i);
-                this.floorplanElement.nativeElement.removeChild(this.floorplanElement.nativeElement.children[i]);
-            }
+                this.floorPlanService.isHolding = true;
+            });
 
-
-            this.floorplanElement.nativeElement.append(this._app.view);
-
-            if(!this._container)
+            canvas.addEventListener('mouseup', () =>
             {
-                this._container = new Container();
+                this.floorPlanService.isHolding = false;
+            });
 
-                this._app.stage.addChild(this._container);
-            }
+            canvas.addEventListener('mouseout', () =>
+            {
+                this.floorPlanService.isHolding = false;
+            });
+
+            this.floorplanElement.nativeElement.appendChild(canvas);
+
+            this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
 
-        this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
-
-        this._app.view.addEventListener('mousedown', () =>
+        if(!this._container)
         {
-            this.floorPlanService.isHolding = true;
-        });
+            this._container = new Container();
 
-        this._app.view.addEventListener('mouseup', () =>
-        {
-            this.floorPlanService.isHolding = false;
-        });
-
-        this._app.view.addEventListener('mouseout', () =>
-        {
-            this.floorPlanService.isHolding = false;
-        });
-
+            this._app.stage.addChild(this._container);
+        }
     }
 
 

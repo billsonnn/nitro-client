@@ -454,6 +454,8 @@ export class RoomVisualization extends RoomObjectSpriteVisualization implements 
 
         const mapData = this.object.model.getValue<RoomMapData>(RoomObjectVariable.ROOM_MAP_DATA);
 
+        console.log(this.object, mapData);
+
         if(!this._roomPlaneParser.initializeFromMapData(mapData)) return;
 
         const _local_3 = this._Str_23949();
