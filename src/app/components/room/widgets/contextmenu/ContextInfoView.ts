@@ -9,7 +9,7 @@ export class ContextInfoView
 {
     private static LOCATION_STACK_SIZE: number  = 25;
     private static BUBBLE_DROP_SPEED: number    = 3;
-    private static SPACE_AROUND_EDGES: number   = 5;
+    public static SPACE_AROUND_EDGES: number   = 5;
 
     public parent: IContextMenuParentWidget                 = null;
     public componentRef: ComponentRef<ContextInfoView>      = null;

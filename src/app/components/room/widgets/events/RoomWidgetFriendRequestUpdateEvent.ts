@@ -5,22 +5,22 @@ export class RoomWidgetFriendRequestUpdateEvent extends RoomWidgetUpdateEvent
     public static RWFRUE_SHOW_FRIEND_REQUEST: string = 'RWFRUE_SHOW_FRIEND_REQUEST';
     public static RWFRUE_HIDE_FRIEND_REQUEST: string = 'RWFRUE_HIDE_FRIEND_REQUEST';
 
-    private _Str_2914: number;
+    private _requestId: number;
     private _userId: number;
     private _userName: string;
 
-    constructor(k: string, _arg_2: number, _arg_3: number = 0, _arg_4: string = null)
+    constructor(type: string, requestId: number, userId: number = 0, userName: string = null)
     {
-        super(k);
+        super(type);
 
-        this._Str_2914 = _arg_2;
-        this._userId = _arg_3;
-        this._userName = _arg_4;
+        this._requestId = requestId;
+        this._userId = userId;
+        this._userName = userName;
     }
 
-    public get _Str_2951(): number
+    public get requestId(): number
     {
-        return this._Str_2914;
+        return this._requestId;
     }
 
     public get userId(): number

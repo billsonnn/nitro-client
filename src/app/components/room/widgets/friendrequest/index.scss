@@ -1,0 +1,21 @@
+.nitro-widget-friendrequest {
+    
+    .context-menu {
+        position: absolute;
+        width: 100%;
+        max-width: 220px;
+        z-index: $context-menu-zindex;
+    }
+
+    .card {
+
+        .card-pointer {
+            position: absolute;
+            top: 100%;
+            width: 0;
+            border-top: 8px solid $card-bg;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+        }
+    }
+}

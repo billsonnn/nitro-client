@@ -14,6 +14,7 @@ import { RoomSessionDanceEvent } from '../../../client/nitro/session/events/Room
 import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
 import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/RoomSessionDoorbellEvent';
 import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
+import { RoomSessionFriendRequestEvent } from '../../../client/nitro/session/events/RoomSessionFriendRequestEvent';
 import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/RoomSessionPresentEvent';
 import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
 import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
@@ -24,6 +25,7 @@ import { RoomAvatarInfoComponent } from '../room/widgets/avatarinfo/components/m
 import { RoomChatInputComponent } from '../room/widgets/chatinput/component';
 import { ChooserWidgetFurniComponent } from '../room/widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from '../room/widgets/choosers/user/user.component';
+import { FriendRequestMainComponent } from '../room/widgets/friendrequest/components/main/main.component';
 import { BackgroundColorFurniWidget } from '../room/widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FurnitureContextMenuWidget } from '../room/widgets/furniture/context-menu/components/main/main.component';
 import { FurnitureWidgetCreditComponent } from '../room/widgets/furniture/credit/credit.component';
@@ -131,6 +133,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
             }
         });
@@ -189,6 +192,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
             }
         });
@@ -236,6 +240,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit
                     this.roomComponent.createWidget(RoomWidgetEnum.ROOM_TOOLS, RoomToolsMainComponent);
                     this.roomComponent.createWidget(RoomWidgetEnum.MANNEQUIN, MannequinWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_PRESENT_WIDGET, PresentFurniWidget);
+                    this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_REQUEST, FriendRequestMainComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {

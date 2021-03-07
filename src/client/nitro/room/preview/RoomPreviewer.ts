@@ -20,6 +20,7 @@ import { RoomObjectCategory } from '../object/RoomObjectCategory';
 import { RoomObjectUserType } from '../object/RoomObjectUserType';
 import { RoomObjectVariable } from '../object/RoomObjectVariable';
 import { RoomPlaneParser } from '../object/RoomPlaneParser';
+import { RoomEngine } from '../RoomEngine';
 import { LegacyWallGeometry } from '../utils/LegacyWallGeometry';
 
 export class RoomPreviewer
@@ -233,7 +234,7 @@ export class RoomPreviewer
             dir: doorDirection
         });
 
-        const roomObject = this.getRoomPreviewObject();
+        const roomObject = this.getRoomPreviewOwnRoomObject();
 
         if(roomObject) roomObject.processUpdateMessage(new ObjectRoomMapUpdateMessage(roomMap));
     }
@@ -811,6 +812,18 @@ export class RoomPreviewer
         if(this.isRoomEngineReady)
         {
             const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomPreviewer.PREVIEW_OBJECT_ID, this._currentPreviewObjectCategory);
+
+            if(roomObject) return roomObject;
+        }
+
+        return null;
+    }
+
+    public getRoomPreviewOwnRoomObject(): IRoomObjectController
+    {
+        if(this.isRoomEngineReady)
+        {
+            const roomObject = this._roomEngine.getRoomObject(this._previewRoomId, RoomEngine.ROOM_OBJECT_ID, RoomObjectCategory.ROOM);
 
             if(roomObject) return roomObject;
         }
