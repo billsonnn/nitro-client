@@ -81,7 +81,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
         this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
         this.onRoomEngineObjectEvent    = this.onRoomEngineObjectEvent.bind(this);
         this.onRoomSessionEvent         = this.onRoomSessionEvent.bind(this);
-        this._Str_4868                  = this._Str_4868.bind(this);
+        this.onRoomErrorEvent                  = this.onRoomErrorEvent.bind(this);
         Nitro.instance.addLinkEventTracker(this);
     }
 
@@ -142,18 +142,18 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_PETS, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_HOTEL, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_FLAT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_LIMIT_REACHED, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_BOT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_NAME_NOT_ACCEPTED, this._Str_4868);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_PETS, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_HOTEL, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_FLAT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_LIMIT_REACHED, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_BOT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_NAME_NOT_ACCEPTED, this.onRoomErrorEvent);
             }
         });
     }
@@ -213,18 +213,18 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_PETS, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_HOTEL, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_FLAT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_LIMIT_REACHED, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_BOT, this._Str_4868);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_NAME_NOT_ACCEPTED, this._Str_4868);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_PETS, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_HOTEL, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_FLAT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_LIMIT_REACHED, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_BOT, this.onRoomErrorEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_BOT_NAME_NOT_ACCEPTED, this.onRoomErrorEvent);
             }
         });
 
@@ -342,7 +342,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
         (this.roomComponent && this.roomComponent.onRoomEngineObjectEvent(event));
     }
 
-    private _Str_4868(event: RoomSessionEvent):void
+    private onRoomErrorEvent(event: RoomSessionEvent):void
     {
         if(!event) return;
 

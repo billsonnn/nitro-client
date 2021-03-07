@@ -216,6 +216,8 @@ export class RoomUsersHandler extends BaseHandler
 
     private onPetPlacingError(event: PetPlacingErrorEvent): void
     {
+        if(!event) return;
+
         if(!this.listener) return;
 
         const parser = event.getParser();
@@ -226,7 +228,7 @@ export class RoomUsersHandler extends BaseHandler
 
         if(!session) return;
 
-        let type = '';
+        let type: string = null;
 
         switch(parser.errorCode)
         {
@@ -250,7 +252,8 @@ export class RoomUsersHandler extends BaseHandler
                 break;
         }
 
-        if(type && type.length)
-            this.listener.events.dispatchEvent(new RoomSessionErrorMessageEvent(type, session));
+        if(!type || type.length == 0) return;
+
+        this.listener.events.dispatchEvent(new RoomSessionErrorMessageEvent(type, session));
     }
 }
