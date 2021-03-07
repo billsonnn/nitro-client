@@ -100,7 +100,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
     {
-
+        console.log('INIT!!!!!');
         this._clear();
 
         //this._roomPreviewer.updatePreviewModel(mapString, 3, true);
@@ -163,7 +163,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
                 this.floorPlanService.isHolding = false;
             });
 
-            //   this.floorplanElement.nativeElement.appendChild(canvas);
+            this.floorplanElement.nativeElement.appendChild(canvas);
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
