@@ -81,7 +81,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
         this.onInterstitialEvent        = this.onInterstitialEvent.bind(this);
         this.onRoomEngineObjectEvent    = this.onRoomEngineObjectEvent.bind(this);
         this.onRoomSessionEvent         = this.onRoomSessionEvent.bind(this);
-        this.onRoomErrorEvent                  = this.onRoomErrorEvent.bind(this);
+        this.onRoomErrorEvent           = this.onRoomErrorEvent.bind(this);
         Nitro.instance.addLinkEventTracker(this);
     }
 
