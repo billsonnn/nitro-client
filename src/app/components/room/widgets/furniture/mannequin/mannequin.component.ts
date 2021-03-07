@@ -240,6 +240,9 @@ export class MannequinWidget extends ConversionTrackingWidget
                 this.handler.container.connection.send(new FurnitureMannequinSaveLookComposer(this._furniId));
                 this._visible = false;
                 break;
+            case 'main':
+                this.setView(MannequinWidget.EditorView);
+                break;
             case 'close':
                 this._visible = false;
                 break;
