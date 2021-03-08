@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Container, Graphics, SCALE_MODES, Sprite } from 'pixi.js';
+import { Container, Graphics, RenderTexture, SCALE_MODES, Sprite } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -410,10 +410,10 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    private _baseGraphic: Graphics = null;
+    private _baseTexture: RenderTexture = null;
     private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Sprite
     {
-        if(!this._baseGraphic)
+        if(!this._baseTexture)
         {
             const tile = new Graphics();
 
@@ -422,15 +422,19 @@ export class FloorPlanService implements OnDestroy
             tile.drawRect(0, 0, this._tileSize, this._tileSize);
             tile.endFill();
 
-            tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+
 
             tile.tint = color;
             tile.interactive = true;
-            this._baseGraphic = tile;
+            this._baseTexture = this.component.app.renderer.generateTexture(tile, SCALE_MODES.LINEAR, 100);
         }
 
-        const texture = this.component.app.renderer.generateTexture(this._baseGraphic, SCALE_MODES.NEAREST, 16);
-        return new Sprite(texture);
+
+        const sprite = new Sprite(this._baseTexture);
+        sprite.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+        sprite.tint = color;
+        sprite.interactive = true;
+        return sprite;
 
 
 
