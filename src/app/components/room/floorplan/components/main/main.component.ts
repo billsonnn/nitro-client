@@ -10,7 +10,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Application, Container } from 'pixi.js';
+import { Application, Container, ParticleContainer } from 'pixi.js';
 import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
@@ -166,10 +166,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             });
 
 
-            const ticker = this._app.ticker;
-            ticker.autoStart = false;
-            ticker.stop();
-
 
             const canvas = this._app.renderer.view;
 
@@ -197,7 +193,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         {
             if(!this._container)
             {
-                this._container = new Container();
+                this._container = new ParticleContainer();
+
 
                 this._app.stage.addChild(this._container);
             }

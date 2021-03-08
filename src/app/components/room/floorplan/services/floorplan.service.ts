@@ -12,6 +12,7 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
+import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
@@ -23,7 +24,7 @@ export class FloorPlanService implements OnDestroy
 
     private static readonly  COLOR_BLOCKED = '0x435e87';
     private static readonly COLOR_DOOR = '0xffffff';
-    private _spriteMap: Graphics[][];
+    private _spriteMap: Sprite[][];
     public component: FloorplanMainComponent;
 
     private _messages: IMessageEvent[];
@@ -409,22 +410,41 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    private static baseGraphic: Graphics;
-    private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Graphics
+    private _baseGraphic: Graphics = null;
+    private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number): Sprite
     {
-        const tile = new Graphics();
+        if(!this._baseGraphic)
+        {
+            const tile = new Graphics();
 
-        tile.beginFill(0xffffff);
-        tile.lineStyle(1, 0x000000, 1, 0);
-        tile.drawRect(0, 0, this._tileSize, this._tileSize);
-        tile.endFill();
-        // tile.cacheAsBitmap = true;
-        tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+            tile.beginFill(0xffffff);
+            tile.lineStyle(1, 0x000000, 1, 0);
+            tile.drawRect(0, 0, this._tileSize, this._tileSize);
+            tile.endFill();
 
-        tile.tint = color;
-        tile.interactive = true;
+            tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
 
-        return tile;
+            tile.tint = color;
+            tile.interactive = true;
+            this._baseGraphic = tile;
+        }
+
+        const texture = this.component.app.renderer.generateTexture(this._baseGraphic, SCALE_MODES.NEAREST, 16);
+        return new Sprite(texture);
+
+
+
+
+        // this._cacheGraphics.add(color, tile);
+        // }
+        // else
+        // {
+        //     tile = this._cacheGraphics.getValue(color).clone();
+        //     tile.setTransform(posX, posY + this._tileSize * 0.5, 1, 1, 0, 1.1, -0.5, 0, 0);
+        //     tile.tint = color;
+        //
+        // }
+        // return tile;
         // if(!FloorPlanService.baseGraphic)
         // {
         //     const tile = new Graphics();
