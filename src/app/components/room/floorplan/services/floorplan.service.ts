@@ -424,7 +424,7 @@ export class FloorPlanService implements OnDestroy
 
 
 
-            tile.tint = color;
+            //  tile.tint = color;
             tile.interactive = true;
             this._baseTexture = this.component.app.renderer.generateTexture(tile, SCALE_MODES.LINEAR, 100);
         }
