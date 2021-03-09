@@ -52,8 +52,6 @@ export class FloorPlanService implements OnDestroy
     private _currentHeight: string;
     private _extraX: number;
 
-    private _container: Container;
-
     private _changesMade: boolean;
     private _wallHeight: number;
 
@@ -404,7 +402,7 @@ export class FloorPlanService implements OnDestroy
                     color = FloorPlanService.COLOR_DOOR;
                 }
 
-                this._ngZone.runOutsideAngular(() =>  this._spriteMap[y][x] = this._container.addChild(this._renderIsometricTile(x, y, positionX, positionY, color)));
+                this._ngZone.runOutsideAngular(() =>  this._spriteMap[y][x] = this.component.app.stage.addChild(this._renderIsometricTile(x, y, positionX, positionY, color)));
 
             }
         }
@@ -797,13 +795,6 @@ export class FloorPlanService implements OnDestroy
     public get changesMade(): boolean
     {
         return this._changesMade;
-    }
-
-
-
-    public set container(container: Container)
-    {
-        this._container = container;
     }
 
     public get wallHeight(): number

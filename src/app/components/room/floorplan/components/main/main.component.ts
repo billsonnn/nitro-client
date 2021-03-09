@@ -35,7 +35,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public minimize: boolean;
 
     private _app: Application;
-    private _container: Container;
     private _roomPreviewer: RoomPreviewer;
     private _importExportModal: NgbModalRef;
 
@@ -88,7 +87,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
         this._ngZone.runOutsideAngular(() =>
         {
-            this._container = null;
             this._importExportModal = null;
 
             if(this._app)
@@ -145,7 +143,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             this._buildApp(width, height);
-            this.floorPlanService.container = this._container;
             this.floorPlanService.renderTileMap();
         });
 
@@ -187,18 +184,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
-
-
-        this._ngZone.runOutsideAngular(() =>
-        {
-            if(!this._container)
-            {
-                this._container = new ParticleContainer();
-
-
-                this._app.stage.addChild(this._container);
-            }
-        });
     }
 
 
