@@ -4,15 +4,21 @@ import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
 
 @Component({
-    selector: 'nitro-room-infostand-pet-component',
-    template: `
-    <div class="nitro-room-infostand-pet-component">
-        pet
-    </div>`
+    templateUrl: './pet.template.html'
 })
 export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
 {
     public petData: InfoStandPetData;
+
+    public processButtonAction(action: string)
+    {
+        if(!action || !action.length) return;
+
+        switch(action)
+        {
+
+        }
+    }
 
     public get type(): number
     {

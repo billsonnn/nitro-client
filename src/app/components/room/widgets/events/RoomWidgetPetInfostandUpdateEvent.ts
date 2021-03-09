@@ -30,7 +30,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _saddle: boolean;
     private _rider: boolean;
     private _breedable: boolean;
-    private _Str_4460: string[];
+    private _Str_4460: number[];
     private _publiclyRideable: number;
     private _fullyGrown: boolean;
     private _dead: boolean;
@@ -256,12 +256,12 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._breedable = k;
     }
 
-    public get _Str_3307(): string[]
+    public get _Str_3307(): number[]
     {
         return this._Str_4460;
     }
 
-    public set _Str_3307(k: string[])
+    public set _Str_3307(k: number[])
     {
         this._Str_4460 = k;
     }

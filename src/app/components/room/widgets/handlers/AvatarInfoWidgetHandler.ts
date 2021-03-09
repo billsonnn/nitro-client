@@ -70,6 +70,9 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO:
                 this.getOwnCharacterInfo();
                 break;
+            case RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE:
+                this._widget.handlePetInfo = false;
+                break;
             case RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE: {
                 const danceMessage = (message as RoomWidgetDanceMessage);
 
@@ -195,7 +198,8 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
             RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO,
             RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE,
             RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION,
-            RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE
+            RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE,
+            RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE
         ];
     }
 

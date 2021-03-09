@@ -140,6 +140,7 @@ import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNa
 import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { PetFigureUpdateEvent } from './messages/incoming/room/pet/PetFigureUpdateEvent';
+import { PetInfoEvent } from './messages/incoming/room/pet/PetInfoEvent';
 import { YouArePlayingGameEvent } from './messages/incoming/room/session/YouArePlayingGameEvent';
 import { FloodControlEvent } from './messages/incoming/room/unit/chat/FloodControlEvent';
 import { RemainingMuteEvent } from './messages/incoming/room/unit/chat/RemainingMuteEvent';
@@ -175,9 +176,9 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
-import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
 import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
+import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
@@ -260,6 +261,7 @@ import { NavigatorSettingsComposer } from './messages/outgoing/navigator/Navigat
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
+import { RequestPetInfoComposer } from './messages/outgoing/pet/RequestPetInfoComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
@@ -551,6 +553,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
+        this._events.set(IncomingHeader.PET_INFO, PetInfoEvent);
 
         // SESSION
         this._events.set(IncomingHeader.PLAYING_GAME, YouArePlayingGameEvent);
@@ -738,6 +741,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
+        this._composers.set(OutgoingHeader.PET_INFO, RequestPetInfoComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);

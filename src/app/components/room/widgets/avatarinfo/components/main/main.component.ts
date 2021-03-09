@@ -3,6 +3,7 @@ import { IEventDispatcher } from '../../../../../../../client/core/events/IEvent
 import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/AvatarAction';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { RoomObjectCategory } from '../../../../../../../client/nitro/room/object/RoomObjectCategory';
+import { RoomObjectType } from '../../../../../../../client/nitro/room/object/RoomObjectType';
 import { RoomObjectUserType } from '../../../../../../../client/nitro/room/object/RoomObjectUserType';
 import { RoomObjectVariable } from '../../../../../../../client/nitro/room/object/RoomObjectVariable';
 import { HabboClubLevelEnum } from '../../../../../../../client/nitro/session/HabboClubLevelEnum';
@@ -17,6 +18,8 @@ import { IContextMenuParentWidget } from '../../../contextmenu/IContextMenuParen
 import { RoomObjectNameEvent } from '../../../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../../../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
+import { RoomWidgetPetInfostandUpdateEvent } from '../../../events/RoomWidgetPetInfostandUpdateEvent';
+import { RoomWidgetRentableBotInfostandUpdateEvent } from '../../../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { RoomWidgetRoomEngineUpdateEvent } from '../../../events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../../../events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../../../events/RoomWidgetUpdateInfostandUserEvent';
@@ -28,10 +31,12 @@ import { RoomWidgetRoomObjectMessage } from '../../../messages/RoomWidgetRoomObj
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { AvatarInfoData } from '../../common/AvatarInfoData';
 import { PetInfoData } from '../../common/PetInfoData';
+import { RentableBotInfoData } from '../../common/RentableBotInfoData';
 import { RoomAvatarInfoAvatarComponent } from '../avatar/avatar.component';
 import { RoomAvatarInfoDecorateComponent } from '../decorate/decorate.component';
 import { RoomAvatarInfoNameComponent } from '../name/name.component';
 import { RoomAvatarInfoOwnAvatarComponent } from '../ownavatar/ownavatar.component';
+import { RoomAvatarInfoRentableBotComponent } from '../rentablebot/rentablebot.component';
 
 @Component({
     selector: 'nitro-room-avatarinfo-component',
@@ -53,12 +58,15 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public cachedOwnAvatarMenuView: ComponentRef<RoomAvatarInfoOwnAvatarComponent> = null;
     public cachedAvatarMenuView: ComponentRef<RoomAvatarInfoAvatarComponent> = null;
     public cachedDecorateModeView: ComponentRef<RoomAvatarInfoDecorateComponent> = null;
+    public cachedRentableBotMenuView: ComponentRef<RoomAvatarInfoRentableBotComponent> = null;
     public cachedNameBubbles: Map<string, ComponentRef<RoomAvatarInfoNameComponent>> = new Map();
 
-    public lastRollOverId: number       = -1;
-    public userInfoData: AvatarInfoData = new AvatarInfoData();
-    public petInfoData: PetInfoData     = new PetInfoData();
-    public isDancing: boolean           = false;
+    public lastRollOverId: number                   = -1;
+    public userInfoData: AvatarInfoData             = new AvatarInfoData();
+    public petInfoData: PetInfoData                 = new PetInfoData();
+    public rentableBotInfoData: RentableBotInfoData = new RentableBotInfoData();
+    public isDancing: boolean                       = false;
+    public handlePetInfo: boolean                   = true;
 
     private _isInitialized: boolean             = false;
     private _isRoomEnteredOwnAvatarHighlight    = false;
@@ -85,6 +93,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
+        eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
@@ -106,6 +115,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
+        eventDispatcher.removeEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
@@ -159,6 +169,36 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                 this._Str_12674(infostandEvent.webID, infostandEvent.name, infostandEvent.userType, infostandEvent.roomIndex, false, userData);
                 break;
             }
+            case RoomWidgetPetInfostandUpdateEvent.PET_INFO: {
+                if(this.handlePetInfo)
+                {
+                    const infostandEvent = (event as RoomWidgetPetInfostandUpdateEvent);
+
+                    this.petInfoData.populate(infostandEvent);
+                }
+
+                break;
+            }
+            case RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT: {
+                const infostandEvent = (event as RoomWidgetRentableBotInfostandUpdateEvent);
+
+                if(!this.rentableBotInfoData) this.rentableBotInfoData = new RentableBotInfoData();
+
+                this.rentableBotInfoData.populate(infostandEvent);
+
+                const session = this.handler.container.roomSessionManager.getSession(0);
+
+                if(!session) return;
+
+                const userData = session.userDataManager.getRentableBotData(infostandEvent.id);
+
+                if(!userData) return;
+
+                if(this.rentableBotInfoData && userData.botSkills) this.rentableBotInfoData._Str_19891(userData.botSkills);
+
+                this._Str_16991(infostandEvent.id, infostandEvent.name, infostandEvent.roomIndex, this.rentableBotInfoData);
+                break;
+            }
             case RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED: {
                 if(!this._isInitialized)
                 {
@@ -188,6 +228,16 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
             case RoomWidgetFurniInfostandUpdateEvent.FURNI:
                 if(this.view) this.removeView(this.view, false);
                 break;
+            case RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED: {
+                const selectedEvent = (event as RoomWidgetRoomObjectUpdateEvent);
+
+                if(selectedEvent.category === RoomObjectCategory.UNIT)
+                {
+                    this.handlePetInfo = true;
+                }
+
+                break;
+            }
             case RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED:
                 if(this.view) this.removeView(this.view, false);
                 break;
@@ -196,7 +246,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 const rollOverEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
-                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent)))
+                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
                 {
                     this.lastRollOverId = rollOverEvent.id;
                     this.messageListener.processWidgetMessage(new RoomWidgetRoomObjectMessage(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME, rollOverEvent.id, rollOverEvent.category));
@@ -208,7 +258,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 const rollOutEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
-                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent)))
+                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
                 {
                     if(rollOutEvent.id === this.lastRollOverId)
                     {
@@ -328,6 +378,48 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         }
     }
 
+    private _Str_16991(userId: number, userName: string, roomIndex: number, avatarData: RentableBotInfoData): void
+    {
+        const isAvatarMenu = !!avatarData;
+
+        let viewInstance = (this.view && this.view.instance);
+
+        if(isAvatarMenu && viewInstance)
+        {
+            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
+            {
+                this.removeView(this.view, false);
+
+                viewInstance = null;
+            }
+        }
+
+        if(!viewInstance || (viewInstance.userId !== userId) || (viewInstance.userName !== userName) || (viewInstance.userType !== RoomObjectType.RENTABLE_BOT) || (viewInstance.roomIndex !== roomIndex))
+        {
+            if(this.view) this.removeView(this.view, false);
+
+            if(!this._isGameMode)
+            {
+                if(isAvatarMenu)
+                {
+                    if(!this.cachedRentableBotMenuView) this.cachedRentableBotMenuView = this.createView(RoomAvatarInfoRentableBotComponent);
+
+                    this.view = this.cachedRentableBotMenuView;
+
+                    this._ngZone.run(() => RoomAvatarInfoRentableBotComponent.setup((this.view.instance as RoomAvatarInfoRentableBotComponent), userId, userName, RoomObjectType.RENTABLE_BOT, roomIndex, avatarData));
+                }
+            }
+        }
+        else
+        {
+            console.log('here');
+            if(viewInstance && (viewInstance instanceof RoomAvatarInfoRentableBotComponent))
+            {
+                if(viewInstance.userId === userId) this.removeView(this.view, false);
+            }
+        }
+    }
+
     private createView<T extends ContextInfoView>(component: Type<T>): ComponentRef<T>
     {
         if(!component) return null;
@@ -369,6 +461,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         this.cachedNameView             = null;
         this.cachedOwnAvatarMenuView    = null;
         this.cachedAvatarMenuView       = null;
+        this.cachedRentableBotMenuView  = null;
 
         if(view === this.view) this.view = null;
 
