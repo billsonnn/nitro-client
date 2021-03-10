@@ -14,7 +14,7 @@
         margin-left: 10px;
     }
 
-    .floorplan-height-option {    
+    .floorplan-height-option {
         &.selected {
             box-shadow: 0px 2px #fff;
         }
@@ -31,11 +31,11 @@
             width: 5px;
             height: 5px;
         }
-        
+
         &::-webkit-scrollbar-track {
             background: transparent;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: #aaa;
             border-radius: 100px;

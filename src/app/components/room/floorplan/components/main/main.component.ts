@@ -38,6 +38,12 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     private _roomPreviewer: RoomPreviewer;
     private _importExportModal: NgbModalRef;
 
+    public scaleX: string = '0.9';
+    public scaleY: string = '0.9';
+    public skewX: string = '1.11';
+    public skewY: string = '-0.46';
+
+
     constructor(
         private _ngZone: NgZone,
         private floorPlanService: FloorPlanService,
@@ -89,12 +95,12 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         {
             this._importExportModal = null;
 
-            if(this._app)
-            {
-                this._app.destroy(true);
-
-                this._app = null;
-            }
+            // if(this._app)
+            // {
+            //     this._app.destroy(true);
+            //
+            //     this._app = null;
+            // }
         });
     }
 
@@ -107,6 +113,20 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     {
         const { doorX, doorY, doorDirection, thicknessWall, thicknessFloor } = this.floorPlanService.floorMapSettings;
         this.init(mapString, this.floorPlanService.blockedTilesMap, doorX, doorY, doorDirection, thicknessWall, thicknessFloor);
+    }
+
+    public render() : void
+    {
+        if(this._app)
+        {
+            this._app.stage.removeChildren();
+        }
+        this._ngZone.runOutsideAngular(() =>
+        {
+
+
+        });
+        this.floorPlanService.render();
     }
 
     public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
@@ -143,7 +163,12 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             this._buildApp(width, height);
-            this.floorPlanService.renderTileMap();
+            this.floorPlanService.renderTileMap({
+                scaleX: this.scaleX,
+                scaleY: this.scaleY,
+                skewX: this.skewX,
+                skewY: this.skewY
+            });
         });
 
     }
@@ -153,18 +178,18 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         if(!this._app)
         {
 
-
             this._app = new Application({
                 width: width,
                 height: height,
                 backgroundColor: 0x2b2b2b,
                 antialias: true,
                 autoDensity: true,
+                resolution: 2
             });
 
 
 
-            const canvas = this._app.renderer.view;
+
 
             // canvas.addEventListener('mousedown', () =>
             // {
@@ -180,7 +205,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             // {
             //     this.floorPlanService.isHolding = false;
             // });
-            this.floorplanElement.nativeElement.appendChild(canvas);
+            this.floorplanElement.nativeElement.appendChild(this._app.view);
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
