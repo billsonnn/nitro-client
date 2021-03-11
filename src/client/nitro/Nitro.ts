@@ -1,4 +1,4 @@
-import { Application, settings } from 'pixi.js';
+import { Application, SCALE_MODES, settings } from 'pixi.js';
 import { ConfigurationEvent } from '../core/configuration/ConfigurationEvent';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
@@ -31,6 +31,7 @@ import { HabboWebTools } from './utils/HabboWebTools';
 LegacyExternalInterface.available;
 
 settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
+settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
 export class Nitro extends Application implements INitro
 {

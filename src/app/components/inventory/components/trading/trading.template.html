@@ -5,9 +5,10 @@
             <div class="grid-container position-relative">
                 <div class="grid-items grid-3">
                     <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;" (click)="removeItem(i)">
-                        <button *ngIf="ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(ownUserItems[i]) + ')' }">
-                            <div class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ ownUserItems[i].getUnlockedCount() }}</div>
-                            <div *ngIf="ownUserItems[i].stuffData.uniqueNumber" class="badge badge-primary w-100">{{ ownUserItems[i].stuffData.uniqueNumber }}</div>
+                        <button *ngIf="ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'unique': ownUserItems[i].stuffData.uniqueNumber }">
+                            <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(ownUserItems[i]) + ')' }"></div>
+                            <div *ngIf="!ownUserItems[i].stuffData.uniqueNumber" class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ ownUserItems[i].getUnlockedCount() }}</div>
+                            <div *ngIf="ownUserItems[i].stuffData.uniqueNumber" class="position-absolute unique-counter" [innerHtml]="ownUserItems[i].stuffData.uniqueNumber | uniqueNumber"></div>
                         </button>
                         <button *ngIf="!ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"></button>
                     </div>
@@ -25,10 +26,11 @@
         <div class="d-flex mb-1">
             <div class="grid-container position-relative">
                 <div class="grid-items grid-3">
-                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;">
-                        <button *ngIf="otherUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(otherUserItems[i]) + ')' }">
-                            <div class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ otherUserItems[i].getUnlockedCount() }}</div>
-                            <div *ngIf="otherUserItems[i].stuffData.uniqueNumber" class="badge badge-primary w-100">{{ otherUserItems[i].stuffData.uniqueNumber }}</div>
+                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;" (click)="removeItem(i)">
+                        <button *ngIf="ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'unique': otherUserItems[i].stuffData.uniqueNumber }">
+                            <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(otherUserItems[i]) + ')' }"></div>
+                            <div *ngIf="!otherUserItems[i].stuffData.uniqueNumber" class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ otherUserItems[i].getUnlockedCount() }}</div>
+                            <div *ngIf="ownUserItems[i].stuffData.uniqueNumber" class="position-absolute unique-counter" [innerHtml]="otherUserItems[i].stuffData.uniqueNumber | uniqueNumber"></div>
                         </button>
                         <button *ngIf="!otherUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"></button>
                     </div>

@@ -3,6 +3,7 @@
     .context-menu {
         position: absolute;
         z-index: $context-menu-zindex;
+        font-size: $font-size-sm;
         min-width: 70px;
     }
 
