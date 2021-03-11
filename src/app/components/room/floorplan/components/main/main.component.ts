@@ -179,15 +179,13 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         {
 
             this._app = new Application({
-                width: width,
-                height: height,
+                width: 2086,
+                height: 1124,
                 backgroundColor: 0x2b2b2b,
                 antialias: true,
                 autoDensity: true,
                 resolution: 2
             });
-
-
 
 
 

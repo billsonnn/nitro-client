@@ -1,5 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Container, Graphics, RenderTexture, SCALE_MODES, Sprite } from 'pixi.js';
+
+import { Graphics, RenderTexture, SCALE_MODES, settings, Sprite } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -12,7 +13,6 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
-import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
@@ -241,6 +241,7 @@ export class FloorPlanService implements OnDestroy
 
     public generateTileMapString(): string
     {
+
         const highestTile = this.floorMapSettings.heightMap[this._highestY][this._highestX];
 
         if(highestTile.height === 'x')
@@ -367,13 +368,19 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
+    private _pythagoras()
+    {
+        return Math.sqrt((this._tileSize * this._tileSize) + (this._tileSize * this._tileSize));
+    }
+
     public renderTileMap(options): void
     {
-        for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
+        const pythagoras = this._pythagoras();
+        for(let y = 0; y < (this.floorMapSettings.heightMap.length /2) ; y++)
         {
             this._spriteMap[y] = [];
 
-            for(let x = 0; x < this.floorMapSettings.heightMap[y].length; x++)
+            for(let x = 0; x < (this.floorMapSettings.heightMap[y].length /2); x++)
             {
 
                 const tile = this.floorMapSettings.heightMap[y][x];
@@ -382,8 +389,13 @@ export class FloorPlanService implements OnDestroy
 
                 if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
 
-                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
-                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
+                const positionX = x * pythagoras / 2 - y * pythagoras / 2;
+                const positionY = x * pythagoras / 4 + y * pythagoras / 4;
+
+                if(x % 2 === 0 || y %2 === 0)
+                {
+                    //  continue;
+                }
 
                 let color = this._colorMap[tile.height];
 
@@ -430,14 +442,18 @@ export class FloorPlanService implements OnDestroy
             //  tile.tint = color;
             //
             //  tile.interactive = true;
-            this._baseTexture = this.component.app.renderer.generateTexture(tile, SCALE_MODES.LINEAR, 1);
-        }
+            this._baseTexture = this.component.app.renderer.generateTexture(tile, SCALE_MODES.NEAREST, 1);
 
+
+        }
+        const _colorMap = [ 0x101010,0x0065ff, 0x0091ff, 0x00bcff,0x00e8ff, 0x00ffea, 0x00ffbf, 0x00ff93];
         const sprite = new Sprite(this._baseTexture);
-        sprite.setTransform(posX + sprite.width, posY, parseFloat(options.scaleX), parseFloat(options.scaleY), 0, parseFloat(options.skewX), parseFloat(options.skewY), 0, 0);
+        sprite.setTransform(posX + sprite.width, posY, 0.9, 0.9,0, 1.11, -0.46,0,0);
+        const color2 = _colorMap[Math.floor(Math.random() * _colorMap.length)];
         //sprite.setTransform(posX, posY, 0.55, 0.55, 0, 1.11, -0.46, 0, 0);
-        sprite.tint = color;
-        sprite.interactive = true;
+        sprite.tint = color2;
+        sprite.roundPixels = true;
+        //  sprite.interactive = true;
         return sprite;
 
 
