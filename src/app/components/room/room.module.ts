@@ -6,6 +6,8 @@ import { RoomAvatarInfoDecorateComponent } from './widgets/avatarinfo/components
 import { RoomAvatarInfoComponent } from './widgets/avatarinfo/components/main/main.component';
 import { RoomAvatarInfoNameComponent } from './widgets/avatarinfo/components/name/name.component';
 import { RoomAvatarInfoOwnAvatarComponent } from './widgets/avatarinfo/components/ownavatar/ownavatar.component';
+import { RoomAvatarInfoOwnPetComponent } from './widgets/avatarinfo/components/ownpet/ownpet.component';
+import { RoomAvatarInfoPetComponent } from './widgets/avatarinfo/components/pet/pet.component';
 import { RoomAvatarInfoRentableBotComponent } from './widgets/avatarinfo/components/rentablebot/rentablebot.component';
 import { RoomChatInputComponent } from './widgets/chatinput/component';
 import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/styleselector/component';
@@ -58,6 +60,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         RoomAvatarInfoComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        RoomAvatarInfoOwnPetComponent,
+        RoomAvatarInfoPetComponent,
         RoomAvatarInfoRentableBotComponent,
         FriendRequestDialogComponent,
         FriendRequestMainComponent,
@@ -99,6 +103,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         RoomAvatarInfoComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        RoomAvatarInfoOwnPetComponent,
+        RoomAvatarInfoPetComponent,
         RoomAvatarInfoRentableBotComponent,
         FriendRequestDialogComponent,
         FriendRequestMainComponent,

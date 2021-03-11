@@ -97,7 +97,7 @@ export class ContextInfoView
         this.currentDeltaY = deltaY;
 
         let left    = (Math.round(point.x - (this.activeViewElement.offsetWidth / 2)));
-        let top     = ((Math.round(_local_7 + offset)));
+        let top     = (((Math.round(_local_7 + offset))) - 5);
 
         if(top <= 0) top = ContextInfoView.SPACE_AROUND_EDGES;
 

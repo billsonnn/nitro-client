@@ -102,6 +102,7 @@ import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/Roo
 import { RoomEnterErrorEvent } from './messages/incoming/room/access/RoomEnterErrorEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
 import { RoomForwardEvent } from './messages/incoming/room/access/RoomForwardEvent';
+import { BotCommandConfigurationEvent } from './messages/incoming/room/bots/BotCommandConfigurationEvent';
 import { RoomBannedUsersEvent } from './messages/incoming/room/data/RoomBannedUsersEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
 import { RoomInfoEvent } from './messages/incoming/room/data/RoomInfoEvent';
@@ -274,6 +275,7 @@ import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUs
 import { RoomStaffPickComposer } from './messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnbanUserComposer } from './messages/outgoing/room/action/RoomUnbanUserComposer';
+import { RequestBotCommandConfigurationComposer } from './messages/outgoing/room/bots/RequestBotConfigurationComposer';
 import { RoomBannedUsersComposer } from './messages/outgoing/room/data/RoomBannedUsersComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { RoomSettingsComposer } from './messages/outgoing/room/data/RoomSettingsComposer';
@@ -281,6 +283,7 @@ import { RoomUsersWithRightsComposer } from './messages/outgoing/room/data/RoomU
 import { SaveRoomSettingsComposer } from './messages/outgoing/room/data/SaveRoomSettingsComposer';
 import { BotPlaceComposer } from './messages/outgoing/room/engine/BotPlaceComposer';
 import { BotRemoveComposer } from './messages/outgoing/room/engine/BotRemoveComposer';
+import { BotSkillSaveComposer } from './messages/outgoing/room/engine/BotSkillSaveComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
 import { PetMoveComposer } from './messages/outgoing/room/engine/PetMoveComposer';
@@ -517,6 +520,9 @@ export class NitroMessages implements IMessageConfiguration
         // ENGINE
         this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
         this._events.set(IncomingHeader.ROOM_CREATED, RoomCreatedEvent);
+
+        // BOTS
+        this._events.set(IncomingHeader.BOT_COMMAND_CONFIGURATION, BotCommandConfigurationEvent);
 
         // FURNITURE
         this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
@@ -770,12 +776,16 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_LIST, RoomUsersWithRightsComposer);
         this._composers.set(OutgoingHeader.ROOM_BAN_LIST, RoomBannedUsersComposer);
 
+        // BOTS
+        this._composers.set(OutgoingHeader.BOT_CONFIGURATION, RequestBotCommandConfigurationComposer);
+
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
         this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
         this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
         this._composers.set(OutgoingHeader.BOT_PLACE, BotPlaceComposer);
         this._composers.set(OutgoingHeader.BOT_PICKUP, BotRemoveComposer);
+        this._composers.set(OutgoingHeader.BOT_SKILL_SAVE, BotSkillSaveComposer);
         this._composers.set(OutgoingHeader.PET_PLACE, PetPlaceComposer);
         this._composers.set(OutgoingHeader.PET_MOVE, PetMoveComposer);
         this._composers.set(OutgoingHeader.PET_PICKUP, PetRemoveComposer);

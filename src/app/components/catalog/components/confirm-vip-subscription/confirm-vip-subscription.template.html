@@ -8,7 +8,7 @@
     <div class="d-flex card-body flex-row">
         <i class="icon icon-catalogue-hc_big"></i>
         <div class="ml-3">
-            <h6>{{ getSubscriptionHeader() }}</h6>
+            <h5>{{ getSubscriptionHeader() }}</h5>
             <p>{{ getSubscriptionText() }}</p>
             <div class="d-flex align-items-center justify-content-center bg-secondary rounded p-1">
                 <p class="mb-0" *ngIf="subscription.priceCredits">{{ subscription.priceCredits }} <img class="px-1" [src]="getCurrencyUrl(-1)" image-placeholder /></p>

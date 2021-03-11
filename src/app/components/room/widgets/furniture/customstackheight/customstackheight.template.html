@@ -1,19 +1,17 @@
 <div *ngIf="visible" [bringToTop] [draggable] class="nitro-furniture-customstackheight card">
     <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
-        <h6 class="m-0">{{ ('widget.custom.stack.height.title') | translate }}</h6>
+        <h5 class="m-0">{{ ('widget.custom.stack.height.title') | translate }}</h5>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
     <div class="d-flex flex-column p-3">
-        <div class="m-2 custom-slider">
-            <ngx-slider name="heightRange" [options]="sliderOptions" [(value)]="heightInput"></ngx-slider>
+        <p class="text-justify mb-2">{{ ('widget.custom.stack.height.text') | translate }}</p>
+        <div class="d-flex justify-content-center align-items-center mb-2">
+            <input type="range" class="custom-range ml-1" value="{{ height }}" [min]="minHeight" [max]="maxHeight" (input)="slideToHeight($event.target.value)" />
+            <input name="heightInput" type="number" class="form-control form-control-sm" [(ngModel)]="height" [min]="minHeight" [max]="maxHeight">
         </div>
-        <div class="p-2 flex-grow-1">
-            <p class="text-justify">{{ ('widget.custom.stack.height.text') | translate }}</p>
-            <input name="heightInput" type="number" class="form-control form-control-sm" [(ngModel)]="heightInput" [min]="minHeight" [max]="maxHeight">
-            <div class="btn-group-vertical">
-                <button type="button" class="btn btn-secondary" (click)="placeAboveStack()">{{ 'furniture.above.stack' | translate }}</button>
-                <button type="button" class="btn btn-secondary" (click)="placeAtFloor()">{{ 'furniture.floor.level' | translate }}</button>
-            </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="placeAboveStack()">{{ 'furniture.above.stack' | translate }}</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="placeAtFloor()">{{ 'furniture.floor.level' | translate }}</button>
         </div>
     </div>
 </div>

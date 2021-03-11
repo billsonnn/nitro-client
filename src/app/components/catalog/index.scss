@@ -33,7 +33,6 @@
                 .list-group-item {
                     padding: 4px 10px;
                     font-weight: 300;
-                    font-size: 14px;
                     width: 100%;
 
                     &:hover {
@@ -56,17 +55,11 @@
     .quantity-area,
     .purchase-area {
 
-        p {
-            font-size: 14px;
-        }
     }
 
     .quantity-area,
     .price-area {
 
-        p {
-            font-size: 14px;
-        }
 
         input {
             width: 60px;

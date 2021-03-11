@@ -1,6 +1,5 @@
 .nitro-group-room-info-component {
     width: 200px;
-    font-size: 14px;
 
     nitro-badge, .group-name {
         cursor: pointer;
@@ -34,10 +33,6 @@
     .grid-container .grid-items .item-detail {
         height: unset;
         max-height: unset;
-    }
-
-    .pagination-counter {
-        font-size: 14px;
     }
 }
 

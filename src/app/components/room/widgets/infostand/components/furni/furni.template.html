@@ -1,7 +1,7 @@
 <div class="d-flex flex-column align-items-end">
     <div class="nitro-infostand card">
         <div class="d-flex justify-content-between align-items-center px-3 pt-3">
-            <h6 class="m-0">{{ furniData.name }}</h6>
+            <h5 class="m-0">{{ furniData.name | translate }}</h5>
             <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
         </div>
         <div class="d-flex flex-column p-3 w-100">
@@ -13,7 +13,7 @@
                 <img class="d-block mx-auto" [src]="furniData.imageUrl" image-placeholder />
             </div>
             <div class="d-flex flex-column mt-2">
-                <p class="badge badge-secondary mb-0 text-wrap">{{ furniData.description }}</p>
+                <p class="badge badge-secondary mb-0 text-wrap">{{ furniData.description | translate }}</p>
                 <p class="badge badge-secondary mt-2 mb-0 text-wrap">{{ ('furni.owner') | translate: 'name': furniData.ownerName }}</p>
                 <p *ngIf="isCrackable" class="badge badge-secondary mt-2 mb-0 text-wrap">{{ ('infostand.crackable_furni.hits_remaining') | translate:['hits', 'target']:[ crackableHits, crackableTarget ] }}</p>
                 <div *ngIf="furniData.groupId" class="badge badge-secondary mt-2 mb-0" (click)="openFurniGroupInfo()">

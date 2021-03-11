@@ -324,7 +324,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
                                 break;
                             default:
                                 this._roomPreviewer.updateObjectRoom('default', 'default', 'default');
-                                this._roomPreviewer.addWallItemIntoRoom(product.furniClassId, new Vector3d(90), null);
+                                this._roomPreviewer.addWallItemIntoRoom(product.furniClassId, new Vector3d(90), product.extraParam);
                                 return;
                         }
 

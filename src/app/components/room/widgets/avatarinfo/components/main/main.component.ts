@@ -36,6 +36,8 @@ import { RoomAvatarInfoAvatarComponent } from '../avatar/avatar.component';
 import { RoomAvatarInfoDecorateComponent } from '../decorate/decorate.component';
 import { RoomAvatarInfoNameComponent } from '../name/name.component';
 import { RoomAvatarInfoOwnAvatarComponent } from '../ownavatar/ownavatar.component';
+import { RoomAvatarInfoOwnPetComponent } from '../ownpet/ownpet.component';
+import { RoomAvatarInfoPetComponent } from '../pet/pet.component';
 import { RoomAvatarInfoRentableBotComponent } from '../rentablebot/rentablebot.component';
 
 @Component({
@@ -59,6 +61,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public cachedAvatarMenuView: ComponentRef<RoomAvatarInfoAvatarComponent> = null;
     public cachedDecorateModeView: ComponentRef<RoomAvatarInfoDecorateComponent> = null;
     public cachedRentableBotMenuView: ComponentRef<RoomAvatarInfoRentableBotComponent> = null;
+    public cachedPetMenuView: ComponentRef<RoomAvatarInfoPetComponent> = null;
+    public cachedOwnPetMenuView: ComponentRef<RoomAvatarInfoOwnPetComponent> = null;
     public cachedNameBubbles: Map<string, ComponentRef<RoomAvatarInfoNameComponent>> = new Map();
 
     public lastRollOverId: number                   = -1;
@@ -93,7 +97,6 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
@@ -101,6 +104,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.addEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetUpdateInfostandUserEvent.BOT, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
+        eventDispatcher.addEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557);
         eventDispatcher.addEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557);
@@ -115,7 +121,6 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(!eventDispatcher) return;
 
-        eventDispatcher.removeEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.OWN_USER, this._Str_2557);
@@ -123,6 +128,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.removeEventListener(RoomWidgetUserDataUpdateEvent.RWUDUE_USER_DATA_UPDATED, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.USER_REMOVED, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetFurniInfostandUpdateEvent.FURNI, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetUpdateInfostandUserEvent.BOT, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetRentableBotInfostandUpdateEvent.RENTABLE_BOT, this._Str_2557);
+        eventDispatcher.removeEventListener(RoomWidgetPetInfostandUpdateEvent.PET_INFO, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, this._Str_2557);
         eventDispatcher.removeEventListener(RoomWidgetRoomObjectUpdateEvent.OBJECT_ROLL_OVER, this._Str_2557);
@@ -175,6 +183,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                     const infostandEvent = (event as RoomWidgetPetInfostandUpdateEvent);
 
                     this.petInfoData.populate(infostandEvent);
+
+                    this._Str_24751(infostandEvent.id, infostandEvent.name, infostandEvent._Str_2707, this.petInfoData);
                 }
 
                 break;
@@ -246,7 +256,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 const rollOverEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
-                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
+                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent) || (viewInstance instanceof RoomAvatarInfoOwnPetComponent)))
                 {
                     this.lastRollOverId = rollOverEvent.id;
                     this.messageListener.processWidgetMessage(new RoomWidgetRoomObjectMessage(RoomWidgetRoomObjectMessage.GET_OBJECT_NAME, rollOverEvent.id, rollOverEvent.category));
@@ -258,7 +268,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
                 const rollOutEvent = (event as RoomWidgetRoomObjectUpdateEvent);
 
-                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
+                if(!viewInstance || !((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent) || (viewInstance instanceof RoomAvatarInfoOwnPetComponent)))
                 {
                     if(rollOutEvent.id === this.lastRollOverId)
                     {
@@ -288,7 +298,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
         if(isAvatarMenu && viewInstance)
         {
-            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent)))
+            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoPetComponent) || (viewInstance instanceof RoomAvatarInfoOwnPetComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
             {
                 this.removeView(this.view, false);
 
@@ -353,7 +363,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                         {
                             if(this.handler.container.sessionDataManager.userId === userId)
                             {
-                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex);
+                                this._ngZone.run(() => RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex));
 
                                 if(this._isRoomEnteredOwnAvatarHighlight)
                                 {
@@ -362,7 +372,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
                             }
                             else
                             {
-                                RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true);
+                                this._ngZone.run(() => RoomAvatarInfoNameComponent.setup(this.view.instance, userId, userName, userType, roomIndex, true));
                             }
                         });
                     }
@@ -386,7 +396,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
         if(isAvatarMenu && viewInstance)
         {
-            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
+            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent) || (viewInstance instanceof RoomAvatarInfoPetComponent) || (viewInstance instanceof RoomAvatarInfoOwnPetComponent)))
             {
                 this.removeView(this.view, false);
 
@@ -412,8 +422,59 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         }
         else
         {
-            console.log('here');
             if(viewInstance && (viewInstance instanceof RoomAvatarInfoRentableBotComponent))
+            {
+                if(viewInstance.userId === userId) this.removeView(this.view, false);
+            }
+        }
+    }
+
+    private _Str_24751(userId: number, userName: string, roomIndex: number, avatarData: PetInfoData): void
+    {
+        const isAvatarMenu = !!avatarData;
+
+        let viewInstance = (this.view && this.view.instance);
+
+        if(isAvatarMenu && viewInstance)
+        {
+            if(!((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent) || (viewInstance instanceof RoomAvatarInfoPetComponent) || (viewInstance instanceof RoomAvatarInfoOwnPetComponent) || (viewInstance instanceof RoomAvatarInfoRentableBotComponent)))
+            {
+                this.removeView(this.view, false);
+
+                viewInstance = null;
+            }
+        }
+
+        if(!viewInstance || (viewInstance.userId !== userId) || (viewInstance.userName !== userName) || (viewInstance.userType !== RoomObjectType.PET) || (viewInstance.roomIndex !== roomIndex))
+        {
+            if(this.view) this.removeView(this.view, false);
+
+            if(!this._isGameMode)
+            {
+                if(isAvatarMenu)
+                {
+                    if(avatarData._Str_5175)
+                    {
+                        if(!this.cachedOwnPetMenuView) this.cachedOwnPetMenuView = this.createView(RoomAvatarInfoOwnPetComponent);
+
+                        this.view = this.cachedOwnPetMenuView;
+
+                        this._ngZone.run(() => RoomAvatarInfoOwnPetComponent.setup((this.view.instance as RoomAvatarInfoOwnPetComponent), userId, userName, RoomObjectType.PET, roomIndex, avatarData));
+                    }
+                    else
+                    {
+                        if(!this.cachedPetMenuView) this.cachedPetMenuView = this.createView(RoomAvatarInfoPetComponent);
+
+                        this.view = this.cachedPetMenuView;
+
+                        this._ngZone.run(() => RoomAvatarInfoPetComponent.setup((this.view.instance as RoomAvatarInfoPetComponent), userId, userName, RoomObjectType.PET, roomIndex, avatarData));
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(viewInstance && ((viewInstance instanceof RoomAvatarInfoAvatarComponent) || (viewInstance instanceof RoomAvatarInfoOwnAvatarComponent)))
             {
                 if(viewInstance.userId === userId) this.removeView(this.view, false);
             }
@@ -462,6 +523,8 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         this.cachedOwnAvatarMenuView    = null;
         this.cachedAvatarMenuView       = null;
         this.cachedRentableBotMenuView  = null;
+        this.cachedPetMenuView          = null;
+        this.cachedOwnPetMenuView       = null;
 
         if(view === this.view) this.view = null;
 

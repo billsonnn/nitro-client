@@ -16,7 +16,8 @@ export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
 
         switch(action)
         {
-
+            case '':
+                break;
         }
     }
 
