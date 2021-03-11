@@ -189,20 +189,20 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
 
 
-            // canvas.addEventListener('mousedown', () =>
-            // {
-            //     this.floorPlanService.isHolding = true;
-            // });
-            //
-            // canvas.addEventListener('mouseup', () =>
-            // {
-            //     this.floorPlanService.isHolding = false;
-            // });
-            //
-            // canvas.addEventListener('mouseout', () =>
-            // {
-            //     this.floorPlanService.isHolding = false;
-            // });
+            this._app.view.addEventListener('mousedown', () =>
+            {
+                this.floorPlanService.isHolding = true;
+            });
+
+            this._app.view.addEventListener('mouseup', () =>
+            {
+                this.floorPlanService.isHolding = false;
+            });
+
+            this._app.view.addEventListener('mouseout', () =>
+            {
+                this.floorPlanService.isHolding = false;
+            });
             this.floorplanElement.nativeElement.appendChild(this._app.view);
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);

@@ -432,23 +432,19 @@ export class FloorPlanService implements OnDestroy
         sprite.tint = color;
 
         sprite.interactive = true;
+
+        sprite.on('mousedown', () =>
+        {
+            this._handleTileClick(x, y);
+        });
+
+        sprite.on('mouseover', () =>
+        {
+            if(this._isHolding)
+                this._handleTileClick(x, y);
+        });
+
         return sprite;
-
-
-
-
-        // tile.on('mousedown', () =>
-        // {
-        //     this._handleTileClick(x, y);
-        // });
-        //
-        // tile.on('mouseover', () =>
-        // {
-        //     if(this._isHolding)
-        //         this._handleTileClick(x, y);
-        // });
-
-        // return tile;
     }
 
     private _handleTileClick(x: number, y: number): void
