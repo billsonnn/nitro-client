@@ -116,7 +116,7 @@ export class IncomingHeader
     public static ROOM_MODEL_BLOCKED_TILES         = 3990;
     public static ROOM_MODEL_DOOR                  = 1664;
     public static ROOM_MODEL_NAME                  = 2031;
-    public static ROOM_MUTE                        = 2533;
+    public static ROOM_MUTED                       = 2533;
     public static ROOM_MUTE_USER                   = 826;
     public static ROOM_PAINT                       = 2454;
     public static ROOM_PROMOTION                   = 2274;
@@ -233,4 +233,5 @@ export class IncomingHeader
     public static REDEEM_VOUCHER_ERROR             = 714;
     public static REDEEM_VOUCHER_OK                = 3336;
     public static MODTOOL_VISITED_ROOMS_USER       = 1752;
+    public static IN_CLIENT_LINK                   = 2023;
 }

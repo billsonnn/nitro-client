@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { DisplayObject } from 'pixi.js';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
@@ -9,7 +9,7 @@ import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
     selector: '[nitro-room-preview-component]',
     templateUrl: './room-preview.template.html'
 })
-export class RoomPreviewComponent implements OnDestroy, AfterViewInit
+export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 {
     @ViewChild('previewImage')
     public previewImage: ElementRef<HTMLDivElement>;
@@ -23,6 +23,15 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
     @Input()
     public height: number = 1;
 
+    @Input()
+    public model: string = null;
+
+    @Input()
+    public wallHeight: number = -1;
+
+    @Input()
+    public modelScale: boolean = true;
+
     public renderingCanvas: IRoomRenderingCanvas = null;
     public displayObject: DisplayObject = null;
     public imageUrl: string = null;
@@ -33,6 +42,17 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
         private ngZone: NgZone)
     {
         this.onClick = this.onClick.bind(this);
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        if(changes.model)
+        {
+            const prev = changes.model.previousValue;
+            const next = changes.model.currentValue;
+
+            if(next && (next !== prev)) this.updateModel();
+        }
     }
 
     public ngOnDestroy(): void
@@ -58,6 +78,8 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
             backgroundColor = backgroundColor.replace('#', '0x');
 
             this.roomPreviewer.backgroundColor = parseInt(backgroundColor, 16);
+
+            if(this.model) this.updateModel();
 
             this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
             this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
@@ -121,6 +143,13 @@ export class RoomPreviewComponent implements OnDestroy, AfterViewInit
         {
             this.roomPreviewer.changeRoomObjectState();
         }
+    }
+
+    private updateModel(): void
+    {
+        if(!this.roomPreviewer) return;
+
+        this.roomPreviewer.updatePreviewModel(this.model, this.wallHeight, this.modelScale);
     }
 
     public get previewImageElement(): HTMLDivElement

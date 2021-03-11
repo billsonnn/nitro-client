@@ -39,7 +39,7 @@ export class RoomDataParser
     private _adName: string;
     private _adDescription: string;
     private _adExpiresIn: number;
-    private _allMuted: boolean;
+    private _allInRoomMuted: boolean;
     private _canMute: boolean;
     private _roomPicker: boolean;
     private _officialRoomPicRef: string;
@@ -79,7 +79,7 @@ export class RoomDataParser
         this._adName                = null;
         this._adDescription         = null;
         this._adExpiresIn           = 0;
-        this._allMuted              = false;
+        this._allInRoomMuted        = false;
         this._canMute               = false;
         this._roomPicker            = false;
         this._officialRoomPicRef    = null;
@@ -287,5 +287,25 @@ export class RoomDataParser
     public set roomPicker(k: boolean)
     {
         this._roomPicker = k;
+    }
+
+    public get canMute(): boolean
+    {
+        return this._canMute;
+    }
+
+    public set canMute(k: boolean)
+    {
+        this._canMute = k;
+    }
+
+    public get allInRoomMuted(): boolean
+    {
+        return this._allInRoomMuted;
+    }
+
+    public set allInRoomMuted(k: boolean)
+    {
+        this._allInRoomMuted = k;
     }
 }

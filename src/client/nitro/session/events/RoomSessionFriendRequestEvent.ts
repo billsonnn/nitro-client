@@ -9,16 +9,16 @@ export class RoomSessionFriendRequestEvent extends RoomSessionEvent
     private _userId: number = 0;
     private _userName: string;
 
-    constructor(k: IRoomSession, _arg_2: number, _arg_3: number, _arg_4: string)
+    constructor(session: IRoomSession, requestId: number, userId: number, userName: string)
     {
-        super(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, k);
+        super(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, session);
 
-        this._requestId = _arg_2;
-        this._userId = _arg_3;
-        this._userName = _arg_4;
+        this._requestId = requestId;
+        this._userId    = userId;
+        this._userName  = userName;
     }
 
-    public get _Str_2951(): number
+    public get requestId(): number
     {
         return this._requestId;
     }

@@ -10,7 +10,7 @@
                 {{ ('unique.items.left') | translate }}
             </div>
             <div>
-                <div [innerHtml]="(activeOffer.products[0].uniqueLimitedSeriesSize - activeOffer.products[0].uniqueLimitedItemsLeft) | uniqueNumber"></div>
+                <div [innerHtml]="activeOffer.products[0].uniqueLimitedSeriesSize | uniqueNumber"></div>
                 {{ ('unique.items.number.sold') | translate }}
             </div>
         </div>

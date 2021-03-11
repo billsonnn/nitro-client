@@ -11,6 +11,8 @@ import { RoomChatInputStyleSelectorComponent } from './widgets/chatinput/stylese
 import { ChooserWidgetBaseComponent } from './widgets/choosers/base/base.component';
 import { ChooserWidgetFurniComponent } from './widgets/choosers/furni/furni.component';
 import { ChooserWidgetUserComponent } from './widgets/choosers/user/user.component';
+import { FriendRequestDialogComponent } from './widgets/friendrequest/components/dialog/dialog.component';
+import { FriendRequestMainComponent } from './widgets/friendrequest/components/main/main.component';
 import { BackgroundColorFurniWidget } from './widgets/furniture/backgroundcolor/backgroundcolor.component';
 import { FurnitureContextMenuWidget } from './widgets/furniture/context-menu/components/main/main.component';
 import { PurchaseClothingComponent } from './widgets/furniture/context-menu/components/purchasable-clothing/purchasable-clothing.component';
@@ -55,6 +57,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         RoomAvatarInfoComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        FriendRequestDialogComponent,
+        FriendRequestMainComponent,
         FurnitureContextMenuWidget,
         PurchaseClothingComponent,
         CustomStackHeightComponent,
@@ -93,6 +97,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         RoomAvatarInfoComponent,
         RoomAvatarInfoNameComponent,
         RoomAvatarInfoOwnAvatarComponent,
+        FriendRequestDialogComponent,
+        FriendRequestMainComponent,
         FurnitureContextMenuWidget,
         PurchaseClothingComponent,
         CustomStackHeightComponent,

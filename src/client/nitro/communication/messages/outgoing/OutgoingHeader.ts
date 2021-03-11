@@ -221,4 +221,5 @@ export class OutgoingHeader
     public static MODTOOL_SANCTION_MUTE          = 1945;
     public static MODTOOL_REQUEST_USER_ROOMS     = 3526;
     public static MODTOOL_ROOM_ALERT             = 3842;
+    public static CONVERT_GLOBAL_ROOM_ID         = 314;
 }
