@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
-import { Graphics, RenderTexture, SCALE_MODES, settings, Sprite } from 'pixi.js';
+import { Graphics, RenderTexture, SCALE_MODES, settings, Sprite, Texture } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -389,13 +389,9 @@ export class FloorPlanService implements OnDestroy
 
                 if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
 
-                const positionX = x * pythagoras / 2 - y * pythagoras / 2;
-                const positionY = x * pythagoras / 4 + y * pythagoras / 4;
+                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
+                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
 
-                if(x % 2 === 0 || y %2 === 0)
-                {
-                    //  continue;
-                }
 
                 let color = this._colorMap[tile.height];
 
@@ -425,45 +421,21 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    private _baseTexture: RenderTexture = null;
     private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number, options): Sprite
     {
-        if(!this._baseTexture)
-        {
-            const tile = new Graphics();
-
-            tile.beginFill(0xffffff);
-            tile.lineStyle(1, 0x000000, 1, 0);
-            tile.drawRect(0, 0, this._tileSize, this._tileSize);
-            tile.endFill();
 
 
+        const sprite = Sprite.from('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAARCAYAAAC4qX7BAAAAWUlEQVR42s3WMQoAMAgDQN/i//9Y6eDiIhI1BlzLga1WBIyqvl/CigM866AIiBkHZYBxUBXQDkIBMKgbUAZNA1LQNuAciN4i+qWlP2P6YKOPevryO/MdQM8xzX/d5jc1THsAAAAASUVORK5CYII=');
+        //sprite.setTransform(posX + sprite.width, posY, 0.9, 0.9,0, 1.11, -0.46,0,0);
+        sprite.setTransform(posX + sprite.width, posY);
 
-            //  tile.tint = color;
-            //
-            //  tile.interactive = true;
-            this._baseTexture = this.component.app.renderer.generateTexture(tile, SCALE_MODES.NEAREST, 1);
+        sprite.tint = color;
 
-
-        }
-        const _colorMap = [ 0x101010,0x0065ff, 0x0091ff, 0x00bcff,0x00e8ff, 0x00ffea, 0x00ffbf, 0x00ff93];
-        const sprite = new Sprite(this._baseTexture);
-        sprite.setTransform(posX + sprite.width, posY, 0.9, 0.9,0, 1.11, -0.46,0,0);
-        const color2 = _colorMap[Math.floor(Math.random() * _colorMap.length)];
-        //sprite.setTransform(posX, posY, 0.55, 0.55, 0, 1.11, -0.46, 0, 0);
-        sprite.tint = color2;
-        sprite.roundPixels = true;
-        //  sprite.interactive = true;
+        sprite.interactive = true;
         return sprite;
 
 
 
-
-
-        // const texture = this.component.app.renderer.generateTexture(FloorPlanService.baseGraphic, SCALE_MODES.NEAREST, 1);
-        // const spriteTile = new Sprite(texture);
-        //
-        // return spriteTile;
 
         // tile.on('mousedown', () =>
         // {
