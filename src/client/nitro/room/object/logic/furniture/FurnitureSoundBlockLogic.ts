@@ -82,7 +82,7 @@ export class FurnitureSoundBlockLogic extends FurnitureMultiStateLogic
 
         if(this._state !== FurnitureSoundBlockLogic.STATE_UNINITIALIZED && model.getValue<number>(RoomObjectVariable.FURNITURE_REAL_ROOM_OBJECT) === 1)
         {
-            if (this._lastLocZ !== location.z)
+            if(this._lastLocZ !== location.z)
             {
                 this._lastLocZ = location.z;
                 this.eventDispatcher.dispatchEvent(new RoomObjectSamplePlaybackEvent(RoomObjectSamplePlaybackEvent.CHANGE_PITCH, this.object, this._sampleId, this._Str_17428(location.z)));
@@ -114,7 +114,7 @@ export class FurnitureSoundBlockLogic extends FurnitureMultiStateLogic
         if(!model) return;
 
         const _local_2: number = this._Str_17428(k);
-        
+
         model.setValue(RoomObjectVariable.FURNITURE_SOUNDBLOCK_RELATIVE_ANIMATION_SPEED, _local_2);
         this.eventDispatcher.dispatchEvent(new RoomObjectSamplePlaybackEvent(RoomObjectSamplePlaybackEvent.PLAY_SAMPLE, this.object, this._sampleId, _local_2));
     }
@@ -122,7 +122,7 @@ export class FurnitureSoundBlockLogic extends FurnitureMultiStateLogic
     private _Str_17428(k: number): number
     {
         let _local_2: number = (k * 2);
-        if (_local_2 > FurnitureSoundBlockLogic.HIGHEST_SEMITONE)
+        if(_local_2 > FurnitureSoundBlockLogic.HIGHEST_SEMITONE)
         {
             _local_2 = Math.min(0, (FurnitureSoundBlockLogic.LOWEST_SEMITONE + ((_local_2 - FurnitureSoundBlockLogic.HIGHEST_SEMITONE) - 1)));
         }

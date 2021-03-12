@@ -9,7 +9,7 @@ export class SoundService implements OnDestroy
 {
     private _internalSamples: AdvancedMap<string, HTMLAudioElement>;
     private _externalSamples: AdvancedMap<number, HTMLAudioElement>;
-    
+
     constructor(
         private _ngZone: NgZone,
         private _userSettingsService: UserSettingsService)
@@ -18,7 +18,7 @@ export class SoundService implements OnDestroy
         this._externalSamples                = new AdvancedMap();
 
         this.onRoomEngineSamplePlaybackEvent = this.onRoomEngineSamplePlaybackEvent.bind(this);
-        
+
         this.registerMessages();
     }
 
@@ -54,14 +54,14 @@ export class SoundService implements OnDestroy
     {
         if(!this._internalSamples.hasKey(sampleId))
         {
-            this._internalSamples.add(sampleId, new Audio("assets/sounds/" + sampleId + ".mp3"));
+            this._internalSamples.add(sampleId, new Audio('assets/sounds/' + sampleId + '.mp3'));
         }
 
         this._playAudio(this._internalSamples.getValue(sampleId), this.volumeSystem);
     }
 
     public playExternalSample(sampleId: number, volume: number, pitch: number = 1): void
-    {        
+    {
         if(!this._externalSamples.hasKey(sampleId))
         {
             const samplesUrl = Nitro.instance.getConfiguration<string>('external.samples.url');

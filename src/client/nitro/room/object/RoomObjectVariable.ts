@@ -88,7 +88,7 @@ export class RoomObjectVariable
     public static FURNITURE_IS_VARIABLE_HEIGHT: string                  = 'furniture_is_variable_height';
     public static FURNITURE_VOTE_MAJORITY_RESULT: string                = 'furniture_vote_majority_result';
     public static FURNITURE_VOTE_COUNTER_COUNT: string                  = 'furniture_vote_counter_count';
-    public static FURNITURE_SOUNDBLOCK_RELATIVE_ANIMATION_SPEED: string = "furniture_soundblock_relative_animation_speed";
+    public static FURNITURE_SOUNDBLOCK_RELATIVE_ANIMATION_SPEED: string = 'furniture_soundblock_relative_animation_speed';
     public static FURNITURE_MANNEQUIN_NAME: string                      = 'furniture_mannequin_name';
     public static FURNITURE_MANNEQUIN_GENDER: string                    = 'furniture_mannequin_gender';
     public static FURNITURE_MANNEQUIN_FIGURE: string                    = 'furniture_mannequin_figure';
