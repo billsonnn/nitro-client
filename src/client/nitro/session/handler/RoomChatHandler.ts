@@ -52,8 +52,6 @@ export class RoomChatHandler extends BaseHandler
     {
         if(!this.listener) return;
 
-        console.log(event);
-
         const session = this.listener.getSession(this.roomId);
 
         if(!session) return;
