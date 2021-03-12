@@ -246,8 +246,25 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
                         switch(chatType)
                         {
                             case RoomSessionChatEvent._Str_5821:
-                                text = Nitro.instance.localization.getValueWithParameter('widgets.chatbubble.respect', 'username', username);
+                                text = Nitro.instance.getLocalizationWithParameter('widgets.chatbubble.respect', 'username', username);
                                 break;
+                            case RoomSessionChatEvent._Str_6081:
+                                text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.petrespect', 'petname', username);
+                                break;
+                            case RoomSessionChatEvent._Str_5958:
+                                text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.pettreat', 'petname', username);
+                                break;
+                            case RoomSessionChatEvent._Str_8971:
+                                text = Nitro.instance.getLocalizationWithParameters('widget.chatbubble.handitem', [ 'username', 'handitem' ], [ username, Nitro.instance.getLocalization(('handitem' + chatEvent.extraParam))]);
+                                break;
+                            case RoomSessionChatEvent._Str_8909: {
+                                const hours     = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam / 3600)) : 0).toString();
+                                const minutes   = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam % 3600) / 60) : 0).toString();
+                                const seconds   = (chatEvent.extraParam % 60).toString();
+
+                                text = Nitro.instance.getLocalizationWithParameters('widget.chatbubble.mutetime', [ 'hours', 'minutes', 'seconds' ], [ hours, minutes, seconds ]);
+                                break;
+                            }
                         }
 
                         const historyEntry = new ChatHistoryItem();
