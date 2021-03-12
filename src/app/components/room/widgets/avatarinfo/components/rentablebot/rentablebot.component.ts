@@ -124,42 +124,42 @@ export class RoomAvatarInfoRentableBotComponent extends AvatarContextInfoView im
                     {
                         name: 'donate_to_all',
                         localization: 'avatar.widget.donate_to_all',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.DONATE_TO_ALL) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.DONATE_TO_ALL) >= 0) && canControl)
                     },
                     {
                         name: 'donate_to_user',
                         localization: 'avatar.widget.donate_to_user',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.DONATE_TO_USER) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.DONATE_TO_USER) >= 0) && canControl)
                     },
                     {
                         name: 'change_bot_name',
                         localization: 'avatar.widget.change_bot_name',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.CHANGE_BOT_NAME) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.CHANGE_BOT_NAME) >= 0) && canControl)
                     },
                     {
                         name: 'change_bot_motto',
                         localization: 'avatar.widget.change_bot_motto',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.CHANGE_BOT_MOTTO) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.CHANGE_BOT_MOTTO) >= 0) && canControl)
                     },
                     {
                         name: 'dress_up',
                         localization: 'avatar.widget.dress_up',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.DRESS_UP) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.DRESS_UP) >= 0) && canControl)
                     },
                     {
                         name: 'random_walk',
                         localization: 'avatar.widget.random_walk',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.RANDOM_WALK) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.RANDOM_WALK) >= 0) && canControl)
                     },
                     {
                         name: 'setup_chat',
                         localization: 'avatar.widget.setup_chat',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.SETUP_CHAT) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.SETUP_CHAT) >= 0) && canControl)
                     },
                     {
                         name: 'dance',
                         localization: 'avatar.widget.dance',
-                        visible: (this.avatarData._Str_2899.indexOf(BotSkillsEnum.DANCE) >= 0)
+                        visible: ((this.avatarData._Str_2899.indexOf(BotSkillsEnum.DANCE) >= 0) && canControl)
                     },
                     {
                         name: 'pick',
