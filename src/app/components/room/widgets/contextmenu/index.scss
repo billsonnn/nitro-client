@@ -1,13 +1,10 @@
-.nitro-room-avatarinfo-component {
+.context-menu {
+    position: absolute;
+    z-index: $context-menu-zindex;
+    font-size: $font-size-sm;
+    min-width: 70px;
     
-    .context-menu {
-        position: absolute;
-        z-index: $context-menu-zindex;
-        font-size: $font-size-sm;
-        min-width: 70px;
-    }
-
-    .card {
+    &.card {
 
         .list-group {
                 
@@ -25,19 +22,6 @@
                 }
             }
         }
-
-        .form-group {
-
-        }
-
-        // .card-pointer {
-        //     position: absolute;
-        //     top: 100%;
-        //     width: 0;
-        //     border-top: 8px solid $card-bg;
-        //     border-left: 8px solid transparent;
-        //     border-right: 8px solid transparent;
-        // }
 
         &:after {
             content: "";
