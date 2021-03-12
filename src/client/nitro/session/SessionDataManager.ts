@@ -110,10 +110,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this.onProductDataReadyEvent    = this.onProductDataReadyEvent.bind(this);
         this.onNitroSettingsEvent       = this.onNitroSettingsEvent.bind(this);
     }
-    updateSettings(cameraFollow: boolean, chatType: number, flags: number): void
-    {
-        throw new Error('Method not implemented.');
-    }
 
     protected onInit(): void
     {
