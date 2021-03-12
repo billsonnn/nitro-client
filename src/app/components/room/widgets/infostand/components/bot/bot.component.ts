@@ -12,13 +12,15 @@ export class RoomInfoStandBotComponent extends RoomInfoStandBaseComponent
 {
     public userData: InfoStandUserData = null;
 
+    public carryText: string = '';
+
     public update(event: RoomWidgetUpdateInfostandUserEvent): void
     {
         if(!event) return;
 
         if(event.carryId > 0)
         {
-            Nitro.instance.localization.registerParameter('infostand.text.handitem', 'item', Nitro.instance.getLocalization('handitem' + event.carryId));
+            this.carryText = Nitro.instance.getLocalizationWithParameter('infostand.text.handitem', 'item', Nitro.instance.getLocalization('handitem' + event.carryId));
         }
     }
 
