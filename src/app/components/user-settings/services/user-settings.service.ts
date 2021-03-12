@@ -5,6 +5,7 @@ import { UserSettingsCameraFollowComposer } from '../../../../client/nitro/commu
 import { UserSettingsOldChatComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsOldChatComposer';
 import { UserSettingsRoomInvitesComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
 import { UserSettingsSoundComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsSoundComposer';
+import { NitroSettingsEvent } from '../../../../client/nitro/events/NitroSettingsEvent';
 import { Nitro } from '../../../../client/nitro/Nitro';
 
 @Injectable()
@@ -27,10 +28,9 @@ export class UserSettingsService implements OnDestroy
     {
         this._messages      = [];
 
-        this._volumeSystem  = 0.3;
-        this._volumeFurni   = 0.3;
-        this._volumeTrax    = 0.3;
-
+        this._volumeSystem  = 0;
+        this._volumeFurni   = 0;
+        this._volumeTrax    = 0;
         this._oldChat       = false;
         this._roomInvites   = false;
         this._cameraFollow  = true;
@@ -83,19 +83,13 @@ export class UserSettingsService implements OnDestroy
         this._volumeSystem  = parser.volumeSystem / 100;
         this._volumeFurni   = parser.volumeFurni / 100;
         this._volumeTrax    = parser.volumeTrax / 100;
-
         this._oldChat       = parser.oldChat;
         this._roomInvites   = parser.roomInvites;
         this._cameraFollow  = parser.cameraFollow;
         this._flags         = parser.flags;
         this._chatType      = parser.chatType;
 
-        this._updateSessionDataManager();
-    }
-
-    private _updateSessionDataManager(): void
-    {
-        Nitro.instance.sessionDataManager.updateSettings(this._cameraFollow, this._chatType, this._flags);
+        this.sendUpdateEvent();
     }
 
     public sendSound(): void
@@ -118,6 +112,21 @@ export class UserSettingsService implements OnDestroy
         Nitro.instance.communication.connection.send(new UserSettingsCameraFollowComposer(this._cameraFollow));
     }
 
+    private sendUpdateEvent(): void
+    {
+        const event = new NitroSettingsEvent(NitroSettingsEvent.SETTINGS_UPDATED);
+        event.volumeSystem  = this._volumeSystem;
+        event.volumeFurni   = this._volumeFurni;
+        event.volumeTrax    = this._volumeTrax;
+        event.oldChat       = this._oldChat;
+        event.roomInvites   = this._roomInvites;
+        event.cameraFollow  = this._cameraFollow;
+        event.flags         = this._flags;
+        event.chatType      = this._chatType;
+
+        Nitro.instance.events.dispatchEvent(event);
+    }
+
     public get volumeSystem(): number
     {
         return this._volumeSystem;
@@ -130,6 +139,7 @@ export class UserSettingsService implements OnDestroy
         if(volume < 0) volume = 0;
 
         this._volumeSystem = volume;
+        this.sendUpdateEvent();
     }
 
     public get volumeFurni(): number
@@ -144,6 +154,7 @@ export class UserSettingsService implements OnDestroy
         if(volume < 0) volume = 0;
 
         this._volumeFurni = volume;
+        this.sendUpdateEvent();
     }
 
     public get volumeTrax(): number
@@ -158,6 +169,7 @@ export class UserSettingsService implements OnDestroy
         if(volume < 0) volume = 0;
 
         this._volumeTrax = volume;
+        this.sendUpdateEvent();
     }
 
     public get oldChat(): boolean
@@ -191,7 +203,7 @@ export class UserSettingsService implements OnDestroy
     {
         this._cameraFollow = value;
         this._sendCameraFollow();
-        this._updateSessionDataManager();
+        this.sendUpdateEvent();
     }
 
     public get flags(): number
@@ -202,7 +214,7 @@ export class UserSettingsService implements OnDestroy
     public set flags(value: number)
     {
         this._flags = value;
-        this._updateSessionDataManager();
+        this.sendUpdateEvent();
     }
 
     public get chatType(): number
@@ -213,6 +225,6 @@ export class UserSettingsService implements OnDestroy
     public set chatType(value: number)
     {
         this._chatType = value;
-        this._updateSessionDataManager();
+        this.sendUpdateEvent();
     }
 }

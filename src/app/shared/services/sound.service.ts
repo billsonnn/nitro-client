@@ -1,23 +1,39 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { AdvancedMap } from '../../../client/core/utils/AdvancedMap';
+import { NitroSettingsEvent } from '../../../client/nitro/events/NitroSettingsEvent';
 import { Nitro } from '../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
+import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineSamplePlaybackEvent } from '../../../client/nitro/room/events/RoomEngineSamplePlaybackEvent';
-import { UserSettingsService } from '../../components/user-settings/services/user-settings.service';
 
 @Injectable()
 export class SoundService implements OnDestroy
 {
+    private _volumeSystem: number;
+    private _volumeFurni: number;
+    private _volumeTrax: number;
+
     private _internalSamples: AdvancedMap<string, HTMLAudioElement>;
     private _externalSamples: AdvancedMap<number, HTMLAudioElement>;
 
-    constructor(
-        private _ngZone: NgZone,
-        private _userSettingsService: UserSettingsService)
-    {
-        this._internalSamples                = new AdvancedMap();
-        this._externalSamples                = new AdvancedMap();
+    private _furniSoundObjects: AdvancedMap<number, HTMLAudioElement>;
 
-        this.onRoomEngineSamplePlaybackEvent = this.onRoomEngineSamplePlaybackEvent.bind(this);
+    constructor(
+        private _ngZone: NgZone)
+    {
+        this._volumeSystem                      = 0;
+        this._volumeFurni                       = 0;
+        this._volumeTrax                        = 0;
+
+        this._internalSamples                   = new AdvancedMap();
+        this._externalSamples                   = new AdvancedMap();
+
+        this._furniSoundObjects                 = new AdvancedMap();
+
+        this.onRoomEngineSamplePlaybackEvent    = this.onRoomEngineSamplePlaybackEvent.bind(this);
+        this.onRoomEngineObjectRemovedEvent     = this.onRoomEngineObjectRemovedEvent.bind(this);
+        this.onRoomEngineDisposedEvent          = this.onRoomEngineDisposedEvent.bind(this);
+        this.onNitroSettingsEvent               = this.onNitroSettingsEvent.bind(this);
 
         this.registerMessages();
     }
@@ -32,14 +48,20 @@ export class SoundService implements OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             Nitro.instance.roomEngine.events.addEventListener(RoomEngineSamplePlaybackEvent.PLAY_SAMPLE, this.onRoomEngineSamplePlaybackEvent);
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectRemovedEvent);
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
+            Nitro.instance.events.addEventListener(NitroSettingsEvent.SETTINGS_UPDATED, this.onNitroSettingsEvent);
         });
     }
 
-    public unregisterMessages(): void
+    private unregisterMessages(): void
     {
         this._ngZone.runOutsideAngular(() =>
         {
             Nitro.instance.roomEngine.events.removeEventListener(RoomEngineSamplePlaybackEvent.PLAY_SAMPLE, this.onRoomEngineSamplePlaybackEvent);
+            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectRemovedEvent);
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
+            Nitro.instance.events.removeEventListener(NitroSettingsEvent.SETTINGS_UPDATED, this.onNitroSettingsEvent);
         });
     }
 
@@ -47,7 +69,37 @@ export class SoundService implements OnDestroy
     {
         if(!event) return;
 
-        this.playExternalSample(event.sampleId, this.volumeFurni, event.pitch);
+        this.playFurniSample(event.objectId, event.sampleId, this._volumeFurni, event.pitch);
+    }
+
+    private onRoomEngineObjectRemovedEvent(event: RoomEngineObjectEvent): void
+    {
+        if(!event) return;
+
+        this.killFurniAudio(event.objectId);
+    }
+
+    private onRoomEngineDisposedEvent(event: RoomEngineEvent): void
+    {
+        if(!event) return;
+
+        this._furniSoundObjects.getKeys().forEach((objectId) =>
+        {
+            this.killFurniAudio(objectId);
+        });
+    }
+
+    private onNitroSettingsEvent(event: NitroSettingsEvent): void
+    {
+        if(!event) return;
+
+        const volumeFurniUpdated = event.volumeFurni !== this._volumeFurni;
+
+        this._volumeSystem  = event.volumeSystem;
+        this._volumeFurni   = event.volumeFurni;
+        this._volumeTrax    = event.volumeTrax;
+
+        if(volumeFurniUpdated) this.updateFurniSoundObjectsVolume();
     }
 
     public playInternalSample(sampleId: string): void
@@ -57,10 +109,11 @@ export class SoundService implements OnDestroy
             this._internalSamples.add(sampleId, new Audio('assets/sounds/' + sampleId + '.mp3'));
         }
 
-        this._playAudio(this._internalSamples.getValue(sampleId), this.volumeSystem);
+        const audio = this.generateAudio(this._internalSamples.getValue(sampleId), this._volumeSystem);
+        audio.play();
     }
 
-    public playExternalSample(sampleId: number, volume: number, pitch: number = 1): void
+    private playFurniSample(objectId: number, sampleId: number, volume: number, pitch: number = 1): void
     {
         if(!this._externalSamples.hasKey(sampleId))
         {
@@ -69,28 +122,36 @@ export class SoundService implements OnDestroy
             this._externalSamples.add(sampleId, new Audio(samplesUrl.replace('%sample%', sampleId.toString())));
         }
 
-        this._playAudio(this._externalSamples.getValue(sampleId), volume, pitch);
+        this.killFurniAudio(objectId);
+
+        const audio = this.generateAudio(this._externalSamples.getValue(sampleId), volume, pitch);
+        this._furniSoundObjects.add(objectId, audio);
+
+        audio.play();
     }
 
-    private _playAudio(audio: HTMLAudioElement, volume: number, pitch: number = 1): void
+    private generateAudio(audio: HTMLAudioElement, volume: number, pitch: number = 1): HTMLAudioElement
     {
         const clonedAudio = <HTMLAudioElement>audio.cloneNode();
         clonedAudio.volume = volume;
-        clonedAudio.play();
+
+        return clonedAudio;
     }
 
-    public get volumeSystem(): number
+    private killFurniAudio(objectId: number): void
     {
-        return this._userSettingsService.volumeSystem;
+        if(this._furniSoundObjects.hasKey(objectId))
+        {
+            this._furniSoundObjects.getValue(objectId).pause();
+            this._furniSoundObjects.remove(objectId);
+        }
     }
 
-    public get volumeFurni(): number
+    private updateFurniSoundObjectsVolume(): void
     {
-        return this._userSettingsService.volumeFurni;
-    }
-
-    public get volumeTrax(): number
-    {
-        return this._userSettingsService.volumeTrax;
+        this._furniSoundObjects.getKeys().forEach((objectId) =>
+        {
+            this._furniSoundObjects.getValue(objectId).volume = this._volumeFurni;
+        });
     }
 }
