@@ -21,7 +21,7 @@ export class UserSettingsService implements OnDestroy
     private _cameraFollow: boolean;
     private _flags: number;
     private _chatType: number;
-    
+
     constructor(
         private _ngZone: NgZone)
     {
@@ -128,7 +128,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-        
+
         this._volumeSystem = volume;
     }
 
@@ -142,7 +142,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-        
+
         this._volumeFurni = volume;
     }
 
@@ -156,7 +156,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-        
+
         this._volumeTrax = volume;
     }
 
