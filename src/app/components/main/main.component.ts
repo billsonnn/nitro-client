@@ -416,4 +416,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
     {
         return this._settingsService.chatHistoryVisible;
     }
+
+    public get userSettingsVisible(): boolean
+    {
+        return this._settingsService.userSettingsVisible;
+    }
 }

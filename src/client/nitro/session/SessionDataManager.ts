@@ -10,7 +10,6 @@ import { UserPermissionsEvent } from '../communication/messages/incoming/user/ac
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
 import { UserNameChangeMessageEvent } from '../communication/messages/incoming/user/data/UserNameChangeMessageEvent';
-import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
 import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatStyleComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
@@ -122,7 +121,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
         this._communication.registerMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
         this._communication.registerMessageEvent(new AvailabilityStatusMessageEvent(this.onAvailabilityStatusMessageEvent.bind(this)));
-        this._communication.registerMessageEvent(new UserSettingsEvent(this.onUserSettingsEvent.bind(this)));
         this._communication.registerMessageEvent(new ChangeNameUpdateEvent(this.onChangeNameUpdateEvent.bind(this)));
         this._communication.registerMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
         this._communication.registerMessageEvent(new RoomModelNameEvent(this.onRoomModelNameEvent.bind(this)));
@@ -285,21 +283,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._systemOpen        = parser.isOpen;
         this._systemShutdown    = parser.onShutdown;
         this._isAuthenticHabbo  = parser.isAuthenticUser;
-    }
-
-    private onUserSettingsEvent(event: UserSettingsEvent): void
-    {
-        if(!event || !event.connection) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this._isRoomCameraFollowDisabled    = parser.cameraFollow;
-        this._chatStyle                     = parser.chatType;
-        this._uiFlags                       = parser.flags;
-
-        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
     }
 
     private onChangeNameUpdateEvent(event: ChangeNameUpdateEvent): void
@@ -530,6 +513,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
     public isUserIgnored(name: string): boolean
     {
         return (this._ignoredUsersManager && this._ignoredUsersManager.isIgnored(name));
+    }
+
+    public updateSettings(cameraFollow: boolean, chatType: number, flags: number): void
+    {
+        this._isRoomCameraFollowDisabled    = cameraFollow;
+        this._chatStyle                     = chatType;
+        this._uiFlags                       = flags;
+
+        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
     }
 
     public send(composer: IMessageComposer<unknown[]>): void

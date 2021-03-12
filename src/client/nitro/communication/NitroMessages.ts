@@ -175,9 +175,9 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
-import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
 import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
+import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
@@ -344,6 +344,10 @@ import { UserProfileComposer } from './messages/outgoing/user/data/UserProfileCo
 import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRelationshipsComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
+import { UserSettingsCameraFollowComposer } from './messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
+import { UserSettingsOldChatComposer } from './messages/outgoing/user/settings/UserSettingsOldChatComposer';
+import { UserSettingsRoomInvitesComposer } from './messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
+import { UserSettingsSoundComposer } from './messages/outgoing/user/settings/UserSettingsSoundComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
@@ -881,6 +885,12 @@ export class NitroMessages implements IMessageConfiguration
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);
         this._composers.set(OutgoingHeader.USER_WARDROBE_SAVE, UserWardrobeSaveComposer);
+
+        // SETTINGS
+        this._composers.set(OutgoingHeader.USER_SETTINGS_CAMERA, UserSettingsCameraFollowComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_OLD_CHAT, UserSettingsOldChatComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_INVITES, UserSettingsRoomInvitesComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_VOLUME, UserSettingsSoundComposer);
     }
 
     public get events(): Map<number, Function>
