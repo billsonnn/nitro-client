@@ -154,6 +154,7 @@ import { RoomUnitEffectEvent } from './messages/incoming/room/unit/RoomUnitEffec
 import { RoomUnitEvent } from './messages/incoming/room/unit/RoomUnitEvent';
 import { RoomUnitExpressionEvent } from './messages/incoming/room/unit/RoomUnitExpressionEvent';
 import { RoomUnitHandItemEvent } from './messages/incoming/room/unit/RoomUnitHandItemEvent';
+import { RoomUnitHandItemReceivedEvent } from './messages/incoming/room/unit/RoomUnitHandItemReceivedEvent';
 import { RoomUnitIdleEvent } from './messages/incoming/room/unit/RoomUnitIdleEvent';
 import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitNumberEvent } from './messages/incoming/room/unit/RoomUnitNumberEvent';
@@ -575,6 +576,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.UNIT_NUMBER, RoomUnitNumberEvent);
         this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
         this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
+        this._events.set(IncomingHeader.HAND_ITEM_RECEIVED, RoomUnitHandItemReceivedEvent);
 
         // CHAT
         this._events.set(IncomingHeader.FLOOD_CONTROL, FloodControlEvent);
