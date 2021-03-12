@@ -22,7 +22,7 @@ export class UserSettingsService implements OnDestroy
     private _cameraFollow: boolean;
     private _flags: number;
     private _chatType: number;
-
+    
     constructor(
         private _ngZone: NgZone)
     {
@@ -97,21 +97,6 @@ export class UserSettingsService implements OnDestroy
         Nitro.instance.communication.connection.send(new UserSettingsSoundComposer(Math.round(this._volumeSystem * 100), Math.round(this._volumeFurni * 100), Math.round(this._volumeTrax * 100)));
     }
 
-    private _sendOldChat(): void
-    {
-        Nitro.instance.communication.connection.send(new UserSettingsOldChatComposer(this._oldChat));
-    }
-
-    private _sendRoomInvites(): void
-    {
-        Nitro.instance.communication.connection.send(new UserSettingsRoomInvitesComposer(this._roomInvites));
-    }
-
-    private _sendCameraFollow(): void
-    {
-        Nitro.instance.communication.connection.send(new UserSettingsCameraFollowComposer(this._cameraFollow));
-    }
-
     private sendUpdateEvent(): void
     {
         const event = new NitroSettingsEvent(NitroSettingsEvent.SETTINGS_UPDATED);
@@ -127,6 +112,22 @@ export class UserSettingsService implements OnDestroy
         Nitro.instance.events.dispatchEvent(event);
     }
 
+
+    private _sendOldChat(): void
+    {
+        Nitro.instance.communication.connection.send(new UserSettingsOldChatComposer(this._oldChat));
+    }
+
+    private _sendRoomInvites(): void
+    {
+        Nitro.instance.communication.connection.send(new UserSettingsRoomInvitesComposer(this._roomInvites));
+    }
+
+    private _sendCameraFollow(): void
+    {
+        Nitro.instance.communication.connection.send(new UserSettingsCameraFollowComposer(this._cameraFollow));
+    }
+
     public get volumeSystem(): number
     {
         return this._volumeSystem;
@@ -137,7 +138,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-
+        
         this._volumeSystem = volume;
         this.sendUpdateEvent();
     }
@@ -152,7 +153,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-
+        
         this._volumeFurni = volume;
         this.sendUpdateEvent();
     }
@@ -167,7 +168,7 @@ export class UserSettingsService implements OnDestroy
         if(volume > 1) volume = 1;
 
         if(volume < 0) volume = 0;
-
+        
         this._volumeTrax = volume;
         this.sendUpdateEvent();
     }
