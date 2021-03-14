@@ -91,6 +91,12 @@ i {
             width: 27px;
             height: 30px;
         }
+
+        &.icon-me-settings {
+            background-image: url('^assets/images/toolbar/icons/me-menu/cog.png');
+            width: 28px;
+            height: 34px;
+        }
             
         &.icon-joinroom {
             background-image: url('^assets/images/toolbar/icons/joinroom.png');
