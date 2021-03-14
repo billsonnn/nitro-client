@@ -26,6 +26,7 @@ import { DeclineFriendComposer } from '../../../../client/nitro/communication/me
 import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
 import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
 import { Nitro } from '../../../../client/nitro/Nitro';
+import { SoundConstants } from '../../../shared/commons/SoundConstants';
 import { SoundService } from '../../../shared/services/sound.service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { MessengerChat } from '../common/MessengerChat';
@@ -326,7 +327,7 @@ export class FriendListService implements OnDestroy
             }
         });
 
-        this._soundService.playMessengerSound();
+        this._soundService.playInternalSample(SoundConstants.MESSAGE_RECEIVED);
     }
 
     private onNewFriendRequestEvent(event: NewFriendRequestEvent): void
@@ -473,6 +474,7 @@ export class FriendListService implements OnDestroy
             existing = new MessengerThread(friend);
 
             this._threads.set(id, existing);
+            this._soundService.playInternalSample(SoundConstants.MESSAGE_SENT);
         }
 
         return existing;

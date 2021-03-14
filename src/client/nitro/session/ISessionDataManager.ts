@@ -29,7 +29,6 @@ export interface ISessionDataManager extends INitroManager
     ignoreUser(name: string): void;
     unignoreUser(name: string): void;
     isUserIgnored(name: string): boolean;
-    updateSettings(cameraFollow: boolean, chatType: number, flags: number): void;
     communication: INitroCommunicationManager;
     userId: number;
     userName: string;

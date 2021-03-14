@@ -43,6 +43,8 @@ import { FurnitureType } from '../../../../client/nitro/session/furniture/Furnit
 import { IFurnitureData } from '../../../../client/nitro/session/furniture/IFurnitureData';
 import { IProductData } from '../../../../client/nitro/session/product/IProductData';
 import { SettingsService } from '../../../core/settings/service';
+import { SoundConstants } from '../../../shared/commons/SoundConstants';
+import { SoundService } from '../../../shared/services/sound.service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CatalogCustomizeGiftComponent } from '../components/customize-gift/customize-gift.component';
 import { CatalogLayoutGuildCustomFurniComponent } from '../components/layouts/guild-custom-furni/guild-custom-furni.component';
@@ -81,6 +83,7 @@ export class CatalogService implements OnDestroy
     constructor(
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
+        private _soundService: SoundService,
         private _ngZone: NgZone)
     {
         this.registerMessages();
@@ -233,6 +236,7 @@ export class CatalogService implements OnDestroy
         if(!parser) return;
 
         this._ngZone.run(() => (this._component && this._component.hidePurchaseConfirmation()));
+        this._soundService.playInternalSample(SoundConstants.CATALOG_PURCHASE);
     }
 
     private onCatalogPurchaseFailedEvent(event: CatalogPurchaseFailedEvent): void

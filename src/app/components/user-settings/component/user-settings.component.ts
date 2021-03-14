@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SettingsService } from '../../../core/settings/service';
 import { UserSettingsService } from '../services/user-settings.service';
 
@@ -6,38 +6,15 @@ import { UserSettingsService } from '../services/user-settings.service';
     selector: 'nitro-user-settings-component',
     templateUrl: './user-settings.template.html'
 })
-export class UserSettingsComponent implements OnChanges
+export class UserSettingsComponent
 {
     @Input()
     public visible: boolean = false;
 
-    public volumeSystem: number = 0;
-    public volumeFurni: number = 0;
-    public volumeTrax: number = 0;
-
     constructor(
-        private _ngZone: NgZone,
         private _userSettingsService: UserSettingsService,
         private _settingsService: SettingsService)
     {}
-
-    public ngOnChanges(changes: SimpleChanges): void
-    {
-        const prev = (changes.visible.previousValue || false);
-        const next = changes.visible.currentValue;
-
-        if(next && (next !== prev)) this._getSound();
-    }
-
-    private _getSound(): void
-    {
-        this._ngZone.run(() =>
-        {
-            this.volumeSystem = this._userSettingsService.volumeSystem * 100;
-            this.volumeFurni = this._userSettingsService.volumeFurni * 100;
-            this.volumeTrax = this._userSettingsService.volumeTrax * 100;
-        });
-    }
 
     public hide(): void
     {
@@ -46,10 +23,37 @@ export class UserSettingsComponent implements OnChanges
 
     public saveSound(): void
     {
-        this._userSettingsService.volumeSystem = this.volumeSystem / 100;
-        this._userSettingsService.volumeFurni = this.volumeFurni / 100;
-        this._userSettingsService.volumeTrax = this.volumeTrax / 100;
         this._userSettingsService.sendSound();
+    }
+
+    public get volumeSystem(): number
+    {
+        return this._userSettingsService.volumeSystem * 100;
+    }
+
+    public set volumeSystem(volume: number)
+    {
+        this._userSettingsService.volumeSystem = volume / 100;
+    }
+
+    public get volumeFurni(): number
+    {
+        return this._userSettingsService.volumeFurni * 100;
+    }
+
+    public set volumeFurni(volume: number)
+    {
+        this._userSettingsService.volumeFurni = volume / 100;
+    }
+
+    public get volumeTrax(): number
+    {
+        return this._userSettingsService.volumeTrax * 100;
+    }
+
+    public set volumeTrax(volume: number)
+    {
+        this._userSettingsService.volumeTrax = volume / 100;
     }
 
     public get oldChat(): boolean
