@@ -1,15 +1,15 @@
 import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
+import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
+import * as sorting from '../../../../../utils/sorting';
 import { RoomObjectItem } from '../events/RoomObjectItem';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
-import * as sorting from '../../../../../utils/sorting';
 
 export class UserChooserWidgetHandler implements IRoomWidgetHandler
 {
@@ -19,7 +19,8 @@ export class UserChooserWidgetHandler implements IRoomWidgetHandler
     public dispose(): void
     {
         this._isDisposed = true;
-        this._container = null;
+
+        this.container = null;
     }
 
     public processWidgetMessage(k: RoomWidgetMessage): RoomWidgetUpdateEvent

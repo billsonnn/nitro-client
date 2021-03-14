@@ -219,8 +219,6 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
     {
         if(!event) return;
 
-        console.log(event);
-
         this._ngZone.run(() =>
         {
             this._petData.populate(event);

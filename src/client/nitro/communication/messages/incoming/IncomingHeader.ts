@@ -230,4 +230,6 @@ export class IncomingHeader
     public static REDEEM_VOUCHER_ERROR             = 714;
     public static REDEEM_VOUCHER_OK                = 3336;
     public static IN_CLIENT_LINK                   = 2023;
+    public static BOT_COMMAND_CONFIGURATION        = 1618;
+    public static HAND_ITEM_RECEIVED               = 354;
 }

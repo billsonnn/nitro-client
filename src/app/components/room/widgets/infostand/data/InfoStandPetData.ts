@@ -24,7 +24,7 @@ export class InfoStandPetData
     private _roomIndex: number;
     private _age: number;
     private _breedId: number;
-    private _skillTresholds: string[];
+    private _skillTresholds: number[];
     private _accessRights: number;
     private _rarityLevel: number;
     private _hasBreedingPermission: boolean;
@@ -87,7 +87,7 @@ export class InfoStandPetData
         return this._breedId;
     }
 
-    public get _Str_3307(): string[]
+    public get _Str_3307(): number[]
     {
         return this._skillTresholds;
     }

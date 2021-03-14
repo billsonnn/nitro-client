@@ -1,4 +1,3 @@
-import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
 import { FurnitureStackHeightComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
@@ -14,11 +13,11 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
     private static MAX_RANGE_HEIGHT: number = 10;
     private static STEP_VALUE: number       = 0.01;
 
-    private _visible: boolean       = false;
-    private _furniId: number        = -1;
-    private _height: number         = 0;
-    private _heightRange: string    = '0';
-    private _heightInput: string    = '0';
+    private _visible: boolean   = false;
+    private _furniId: number    = -1;
+    private _height: number     = 0;
+
+    private _saveTimeout: ReturnType<typeof setTimeout> = null;
 
     constructor(
         private _ngZone: NgZone)
@@ -50,17 +49,6 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
         this._height    = 0;
     }
 
-    public onHeightChange(): void
-    {
-        const stringValue = this._heightInput;
-        let numberValue = 0;
-
-        if((stringValue === null) || (stringValue === '')) numberValue = this._height;
-        else numberValue = parseFloat(stringValue);
-
-        this.setHeight(numberValue);
-    }
-
     private setHeight(height: number, fromServer: boolean = false): void
     {
         height = Math.abs(height);
@@ -69,10 +57,24 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
 
         this._height = parseFloat(height.toFixed(2));
 
-        this._heightRange   = this._height.toString();
-        this._heightInput   = this._height.toString();
+        if(!fromServer) this.scheduleUpdate(this._height * 100);
+    }
 
-        if(!fromServer) this.sendUpdate((this._height * 100));
+    private scheduleUpdate(height: number)
+    {
+        if(this._saveTimeout)
+        {
+            clearTimeout(this._saveTimeout);
+
+            this._saveTimeout = null;
+        }
+
+        this._saveTimeout = setTimeout(() => this.sendUpdate(height), 5);
+    }
+
+    private sendUpdate(height: number): void
+    {
+        this.widgetHandler.container.connection.send(new FurnitureStackHeightComposer(this._furniId, ~~(height)));
     }
 
     public placeAboveStack(): void
@@ -85,9 +87,9 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
         this.sendUpdate(0);
     }
 
-    private sendUpdate(height: number): void
+    public slideToHeight(height: number): void
     {
-        this.widgetHandler.container.connection.send(new FurnitureStackHeightComposer(this._furniId, ~~(height)));
+        this.height = height;
     }
 
     public get handler(): FurnitureCustomStackHeightWidgetHandler
@@ -115,31 +117,9 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
         return this._height;
     }
 
-    public get heightInput(): string
+    public set height(value: number)
     {
-        return this._heightInput;
-    }
-
-    public set heightInput(value: string)
-    {
-        //@ts-ignore
-        if((value === null) || (value === '') || isNaN(value)) return;
-
-        this._heightInput = value;
-
-        this.onHeightChange();
-    }
-
-    public get heightRange(): string
-    {
-        return this._heightRange;
-    }
-
-    public set heightRange(value: string)
-    {
-        this._heightRange = value;
-
-        this.heightInput = this.heightRange;
+        this.setHeight(value, false);
     }
 
     public get minHeight(): number
@@ -150,17 +130,5 @@ export class CustomStackHeightComponent extends ConversionTrackingWidget
     public get maxHeight(): number
     {
         return CustomStackHeightComponent.MAX_HEIGHT;
-    }
-
-    public get sliderOptions(): Options
-    {
-        return {
-            floor: 0,
-            ceil: CustomStackHeightComponent.MAX_RANGE_HEIGHT,
-            step: CustomStackHeightComponent.STEP_VALUE,
-            hidePointerLabels: true,
-            hideLimitLabels: true,
-            vertical: false
-        };
     }
 }
