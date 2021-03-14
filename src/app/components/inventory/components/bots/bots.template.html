@@ -1,7 +1,7 @@
 <div class="row nitro-inventory-bots-component" (mouseup)="onMouseUp()">
     <div class="col-12" *ngIf="!hasBotItems">
-        {{ ('inventory.empty.title') | translate }}
-        {{ ('inventory.empty.desc') | translate }}
+        {{ ('inventory.empty.bots.title') | translate }}
+        {{ ('inventory.empty.bots.desc') | translate }}
     </div>
     <ng-container *ngIf="hasBotItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
