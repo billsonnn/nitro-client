@@ -91,8 +91,8 @@ export class CatalogPurchaseComponent implements OnChanges
         return 99;
     }
 	
-	public get isGiftable(): boolean
-	{
-		return this.activeOffer.giftable;
-	}
+    public get isGiftable(): boolean
+    {
+        return this.activeOffer.giftable;
+    }
 }
