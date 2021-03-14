@@ -13,6 +13,7 @@ export class SettingsService
     private _achievementsVisible: boolean;
     private _meMenuVisible: boolean;
     private _chatHistoryVisible: boolean;
+    private _userSettingsVisible: boolean;
 
     constructor()
     {
@@ -26,6 +27,7 @@ export class SettingsService
         this._achievementsVisible   = false;
         this._meMenuVisible         = false;
         this._chatHistoryVisible    = false;
+        this._userSettingsVisible   = false;
     }
 
     public showAvatarEditor(): void
@@ -163,6 +165,21 @@ export class SettingsService
         this._chatHistoryVisible = !this._chatHistoryVisible;
     }
 
+    public showUserSettings(): void
+    {
+        this._userSettingsVisible = true;
+    }
+
+    public hideUserSettings(): void
+    {
+        this._userSettingsVisible = false;
+    }
+
+    public toggleUserSettings(): void
+    {
+        this._userSettingsVisible = !this._userSettingsVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -206,6 +223,11 @@ export class SettingsService
     public get chatHistoryVisible(): boolean
     {
         return this._chatHistoryVisible;
+    }
+
+    public get userSettingsVisible(): boolean
+    {
+        return this._userSettingsVisible;
     }
 
     public set isReady(isReady: boolean)

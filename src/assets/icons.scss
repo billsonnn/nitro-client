@@ -98,6 +98,12 @@ i {
             height: 30px;
         }
 
+        &.icon-me-settings {
+            background-image: url('^assets/images/toolbar/icons/me-menu/cog.png');
+            width: 28px;
+            height: 34px;
+        }
+
         &.icon-joinroom {
             background-image: url('^assets/images/toolbar/icons/joinroom.png');
             width: 21px;
@@ -368,6 +374,18 @@ i {
             height:15px;
         }
 
+        &.icon-catalogue-hc_small {
+            height:17px;
+            width:31px;
+            background-image: url('^assets/images/catalog/hc_small.png');
+        }
+
+        &.icon-catalogue-hc_big {
+            width:68px;
+            height:40px;
+            background: url('^assets/images/catalog/hc_big.png');
+        }
+
         &.spin {
             animation: rotating 1s linear infinite;
         }
@@ -380,17 +398,6 @@ i {
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        &.icon-catalogue-hc_small {
-            height:17px;
-            width:31px;
-            background-image: url('^assets/images/catalog/hc_small.png');
-        }
-        &.icon-catalogue-hc_big {
-            width:68px;
-            height:40px;
-            background: url('^assets/images/catalog/hc_big.png');
         }
     }
 }

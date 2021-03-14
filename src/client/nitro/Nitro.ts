@@ -30,8 +30,8 @@ import { HabboWebTools } from './utils/HabboWebTools';
 
 LegacyExternalInterface.available;
 
-settings.SCALE_MODE                         = SCALE_MODES.NEAREST;
-settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT   = false;
+settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
+settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
 export class Nitro extends Application implements INitro
 {

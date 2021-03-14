@@ -715,7 +715,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             assetUrls = this.getAssetUrls(type, colorIndex, true);
         }
 
-        if(assetUrls.length) return assetUrls[0];
+        if(assetUrls && assetUrls.length) return assetUrls[0];
 
         return null;
     }

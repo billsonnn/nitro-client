@@ -102,6 +102,7 @@ import { RoomRightsOwnerEvent } from './messages/incoming/room/access/rights/Roo
 import { RoomEnterErrorEvent } from './messages/incoming/room/access/RoomEnterErrorEvent';
 import { RoomEnterEvent } from './messages/incoming/room/access/RoomEnterEvent';
 import { RoomForwardEvent } from './messages/incoming/room/access/RoomForwardEvent';
+import { BotCommandConfigurationEvent } from './messages/incoming/room/bots/BotCommandConfigurationEvent';
 import { RoomBannedUsersEvent } from './messages/incoming/room/data/RoomBannedUsersEvent';
 import { RoomChatSettingsEvent } from './messages/incoming/room/data/RoomChatSettingsEvent';
 import { RoomInfoEvent } from './messages/incoming/room/data/RoomInfoEvent';
@@ -140,6 +141,7 @@ import { RoomModelNameEvent } from './messages/incoming/room/mapping/RoomModelNa
 import { RoomPaintEvent } from './messages/incoming/room/mapping/RoomPaintEvent';
 import { RoomThicknessEvent } from './messages/incoming/room/mapping/RoomThicknessEvent';
 import { PetFigureUpdateEvent } from './messages/incoming/room/pet/PetFigureUpdateEvent';
+import { PetInfoEvent } from './messages/incoming/room/pet/PetInfoEvent';
 import { YouArePlayingGameEvent } from './messages/incoming/room/session/YouArePlayingGameEvent';
 import { FloodControlEvent } from './messages/incoming/room/unit/chat/FloodControlEvent';
 import { RemainingMuteEvent } from './messages/incoming/room/unit/chat/RemainingMuteEvent';
@@ -152,6 +154,7 @@ import { RoomUnitEffectEvent } from './messages/incoming/room/unit/RoomUnitEffec
 import { RoomUnitEvent } from './messages/incoming/room/unit/RoomUnitEvent';
 import { RoomUnitExpressionEvent } from './messages/incoming/room/unit/RoomUnitExpressionEvent';
 import { RoomUnitHandItemEvent } from './messages/incoming/room/unit/RoomUnitHandItemEvent';
+import { RoomUnitHandItemReceivedEvent } from './messages/incoming/room/unit/RoomUnitHandItemReceivedEvent';
 import { RoomUnitIdleEvent } from './messages/incoming/room/unit/RoomUnitIdleEvent';
 import { RoomUnitInfoEvent } from './messages/incoming/room/unit/RoomUnitInfoEvent';
 import { RoomUnitNumberEvent } from './messages/incoming/room/unit/RoomUnitNumberEvent';
@@ -175,9 +178,9 @@ import { UserNameChangeMessageEvent } from './messages/incoming/user/data/UserNa
 import { UserProfileEvent } from './messages/incoming/user/data/UserProfileEvent';
 import { UserRelationshipsEvent } from './messages/incoming/user/data/UserRelationshipsEvent';
 import { UserSettingsEvent } from './messages/incoming/user/data/UserSettingsEvent';
-import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { IgnoredUsersEvent } from './messages/incoming/user/IgnoredUsersEvent';
 import { IgnoreResultEvent } from './messages/incoming/user/IgnoreResultEvent';
+import { InClientLinkEvent } from './messages/incoming/user/InClientLinkEvent';
 import { UserCreditsEvent } from './messages/incoming/user/inventory/currency/UserCreditsEvent';
 import { UserCurrencyEvent } from './messages/incoming/user/inventory/currency/UserCurrencyEvent';
 import { UserCurrencyUpdateEvent } from './messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
@@ -260,6 +263,7 @@ import { NavigatorSettingsComposer } from './messages/outgoing/navigator/Navigat
 import { NavigatorSettingsSaveComposer } from './messages/outgoing/navigator/NavigatorSettingsSaveComposer';
 import { OutgoingHeader } from './messages/outgoing/OutgoingHeader';
 import { PetRespectComposer } from './messages/outgoing/pet/PetRespectComposer';
+import { RequestPetInfoComposer } from './messages/outgoing/pet/RequestPetInfoComposer';
 import { RoomDoorbellAccessComposer } from './messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from './messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from './messages/outgoing/room/action/RoomAmbassadorAlertComposer';
@@ -272,6 +276,7 @@ import { RoomMuteUserComposer } from './messages/outgoing/room/action/RoomMuteUs
 import { RoomStaffPickComposer } from './messages/outgoing/room/action/RoomStaffPickComposer';
 import { RoomTakeRightsComposer } from './messages/outgoing/room/action/RoomTakeRightsComposer';
 import { RoomUnbanUserComposer } from './messages/outgoing/room/action/RoomUnbanUserComposer';
+import { RequestBotCommandConfigurationComposer } from './messages/outgoing/room/bots/RequestBotConfigurationComposer';
 import { RoomBannedUsersComposer } from './messages/outgoing/room/data/RoomBannedUsersComposer';
 import { RoomInfoComposer } from './messages/outgoing/room/data/RoomInfoComposer';
 import { RoomSettingsComposer } from './messages/outgoing/room/data/RoomSettingsComposer';
@@ -279,6 +284,7 @@ import { RoomUsersWithRightsComposer } from './messages/outgoing/room/data/RoomU
 import { SaveRoomSettingsComposer } from './messages/outgoing/room/data/SaveRoomSettingsComposer';
 import { BotPlaceComposer } from './messages/outgoing/room/engine/BotPlaceComposer';
 import { BotRemoveComposer } from './messages/outgoing/room/engine/BotRemoveComposer';
+import { BotSkillSaveComposer } from './messages/outgoing/room/engine/BotSkillSaveComposer';
 import { GetItemDataComposer } from './messages/outgoing/room/engine/GetItemDataComposer';
 import { ModifyWallItemDataComposer } from './messages/outgoing/room/engine/ModifyWallItemDataComposer';
 import { PetMoveComposer } from './messages/outgoing/room/engine/PetMoveComposer';
@@ -344,6 +350,10 @@ import { UserProfileComposer } from './messages/outgoing/user/data/UserProfileCo
 import { UserRelationshipsComposer } from './messages/outgoing/user/data/UserRelationshipsComposer';
 import { UserCurrencyComposer } from './messages/outgoing/user/inventory/currency/UserCurrencyComposer';
 import { UserSubscriptionComposer } from './messages/outgoing/user/inventory/subscription/UserSubscriptionComposer';
+import { UserSettingsCameraFollowComposer } from './messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
+import { UserSettingsOldChatComposer } from './messages/outgoing/user/settings/UserSettingsOldChatComposer';
+import { UserSettingsRoomInvitesComposer } from './messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
+import { UserSettingsSoundComposer } from './messages/outgoing/user/settings/UserSettingsSoundComposer';
 import { UserRespectComposer } from './messages/outgoing/user/UserRespectComposer';
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
@@ -541,6 +551,9 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.ROOM_ROLLING, ObjectsRollingEvent);
         this._events.set(IncomingHeader.ROOM_CREATED, RoomCreatedEvent);
 
+        // BOTS
+        this._events.set(IncomingHeader.BOT_COMMAND_CONFIGURATION, BotCommandConfigurationEvent);
+
         // FURNITURE
         this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
         this._events.set(IncomingHeader.FURNITURE_DATA, FurnitureDataEvent);
@@ -576,6 +589,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
+        this._events.set(IncomingHeader.PET_INFO, PetInfoEvent);
 
         // SESSION
         this._events.set(IncomingHeader.PLAYING_GAME, YouArePlayingGameEvent);
@@ -591,6 +605,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.UNIT_NUMBER, RoomUnitNumberEvent);
         this._events.set(IncomingHeader.UNIT_REMOVE, RoomUnitRemoveEvent);
         this._events.set(IncomingHeader.UNIT_STATUS, RoomUnitStatusEvent);
+        this._events.set(IncomingHeader.HAND_ITEM_RECEIVED, RoomUnitHandItemReceivedEvent);
 
         // CHAT
         this._events.set(IncomingHeader.FLOOD_CONTROL, FloodControlEvent);
@@ -769,6 +784,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // PET
         this._composers.set(OutgoingHeader.PET_RESPECT, PetRespectComposer);
+        this._composers.set(OutgoingHeader.PET_INFO, RequestPetInfoComposer);
 
         // ROOM
         this._composers.set(OutgoingHeader.ROOM_CREATE, RoomCreateComposer);
@@ -797,12 +813,16 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.ROOM_RIGHTS_LIST, RoomUsersWithRightsComposer);
         this._composers.set(OutgoingHeader.ROOM_BAN_LIST, RoomBannedUsersComposer);
 
+        // BOTS
+        this._composers.set(OutgoingHeader.BOT_CONFIGURATION, RequestBotCommandConfigurationComposer);
+
         // ENGINE
         this._composers.set(OutgoingHeader.GET_ITEM_DATA, GetItemDataComposer);
         this._composers.set(OutgoingHeader.REMOVE_WALL_ITEM, RemoveWallItemComposer);
         this._composers.set(OutgoingHeader.MODIFY_WALL_ITEM_DATA, ModifyWallItemDataComposer);
         this._composers.set(OutgoingHeader.BOT_PLACE, BotPlaceComposer);
         this._composers.set(OutgoingHeader.BOT_PICKUP, BotRemoveComposer);
+        this._composers.set(OutgoingHeader.BOT_SKILL_SAVE, BotSkillSaveComposer);
         this._composers.set(OutgoingHeader.PET_PLACE, PetPlaceComposer);
         this._composers.set(OutgoingHeader.PET_MOVE, PetMoveComposer);
         this._composers.set(OutgoingHeader.PET_PICKUP, PetRemoveComposer);
@@ -927,6 +947,12 @@ export class NitroMessages implements IMessageConfiguration
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);
         this._composers.set(OutgoingHeader.USER_WARDROBE_SAVE, UserWardrobeSaveComposer);
+
+        // SETTINGS
+        this._composers.set(OutgoingHeader.USER_SETTINGS_CAMERA, UserSettingsCameraFollowComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_OLD_CHAT, UserSettingsOldChatComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_INVITES, UserSettingsRoomInvitesComposer);
+        this._composers.set(OutgoingHeader.USER_SETTINGS_VOLUME, UserSettingsSoundComposer);
     }
 
     public get events(): Map<number, Function>

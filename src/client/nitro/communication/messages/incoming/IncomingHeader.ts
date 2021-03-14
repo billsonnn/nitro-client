@@ -234,4 +234,6 @@ export class IncomingHeader
     public static REDEEM_VOUCHER_OK                = 3336;
     public static MODTOOL_VISITED_ROOMS_USER       = 1752;
     public static IN_CLIENT_LINK                   = 2023;
+    public static BOT_COMMAND_CONFIGURATION        = 1618;
+    public static HAND_ITEM_RECEIVED               = 354;
 }

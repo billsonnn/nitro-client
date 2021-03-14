@@ -49,7 +49,9 @@ export interface IRoomEngine extends INitroManager
     getRoomObjectBoundingRectangle(roomId: number, objectId: number, category: number, canvasId: number): Rectangle;
     getRoomObjectScreenLocation(roomId: number, objectId: number, objectType: number, canvasId?: number): Point;
     getGenericRoomObjectImage(type: string, value: string, direction: IVector3D, scale: number, listener: IGetImageListener, bgColor?: number, extras?: string, objectData?: IObjectData, state?: number, frameCount?: number, posture?: string, originalId?: number): ImageResult;
+    getFurnitureFloorIconUrl(typeId: number): string;
     getFurnitureFloorIcon(typeId: number, listener: IGetImageListener, extras?: string, objectData?: IObjectData): ImageResult;
+    getFurnitureWallIconUrl(typeId: number, extra?: string): string;
     getFurnitureWallIcon(typeId: number, listener: IGetImageListener, extras?: string): ImageResult;
     updateRoomObjectWallLocation(roomId: number, objectId: number, location: IVector3D): boolean;
     addRoomObjectUser(roomId: number, objectId: number, location: IVector3D, direction: IVector3D, headDirection: number, type: number, figure: string): boolean;

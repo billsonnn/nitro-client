@@ -72,6 +72,11 @@ export class MeMenuComponent implements OnInit, OnDestroy
         this.navigatorService.setCurrentContextByCode('myworld_view');
     }
 
+    public toggleUserSettings(): void
+    {
+        this.settingsService.toggleUserSettings();
+    }
+
     public get unseenAchievementsCount(): number
     {
         return this._achievementService.unseenCount;

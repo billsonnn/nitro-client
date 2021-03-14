@@ -24,8 +24,8 @@
                 <button type="button" class="btn btn-sm btn-secondary" (click)="resetFigure()"><i class="fas fa-undo"></i></button>
                 <button type="button" class="btn btn-sm btn-secondary" (click)="clearFigure()"><i class="fas fa-trash"></i></button>
             </div>
-            <button type="button" class="btn btn-sm btn-success" (click)="saveFigure()">{{ ('avatareditor.save') | translate }}</button>
+            <button type="button" class="btn btn-sm btn-success mb-1" (click)="saveFigure()">{{ ('avatareditor.save') | translate }}</button>
         </div>
-        <div *ngIf="figureData" nitro-avatar-wardrobe-component class="col-12 nitro-avatar-wardrobe-component" [figureData]="figureData"></div>
+        <div *ngIf="figureData" nitro-avatar-wardrobe-component class="col-12 nitro-avatar-wardrobe-component mt-1" [figureData]="figureData"></div>
     </div>
 </div>

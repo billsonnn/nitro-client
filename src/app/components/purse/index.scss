@@ -3,7 +3,7 @@
     pointer-events: none;
 
     .item-detail {
-        flex:46%;
+        flex: 46%;
         margin-bottom: 3px;
         padding: 0.23rem;
         margin-right: 3px;
@@ -14,8 +14,8 @@
         }
 
         .detail-value {
+            font-size: $font-size-sm;
             padding: 2px 5px;
-            font-size: 14px;
         }
 
         .detail-icon {
@@ -44,7 +44,6 @@
             
                     .detail-value {
                         padding: 2px 5px;
-                        font-size: 14px;
                     }
             
                     .detail-icon {

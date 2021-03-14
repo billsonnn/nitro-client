@@ -43,7 +43,7 @@ export class ExtendedSprite extends Sprite
         try
         {
             //@ts-ignore
-            (this._texture && this._texture._uvs.uvsFloat32);
+            if(!this._texture || !this._texture._uvs || !this._texture._uvs.uvsFloat32) return;
         }
 
         catch (err)

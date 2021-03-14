@@ -288,10 +288,6 @@ export class InventoryFurnitureComponent extends InventorySharedComponent implem
         const imageUrl = ((groupItem && groupItem.iconUrl) || null);
 
         return imageUrl;
-
-        // if(imageUrl && (imageUrl !== '')) return `url('${ imageUrl }')`;
-
-        // return null;
     }
 
     public trackByType(index: number, item: GroupItem): number

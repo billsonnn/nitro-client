@@ -1,0 +1,42 @@
+.context-menu {
+    position: absolute;
+    z-index: $context-menu-zindex;
+    font-size: $font-size-sm;
+    min-width: 70px;
+    
+    &.card {
+
+        .list-group {
+                
+            .list-group-item {
+                padding: 3px 10px;
+                font-weight: 300;
+                font-size: 12px;
+                text-align: center;
+                width: 100%;
+                z-index: 1;
+
+                &:hover {
+                    background: rgba($secondary, 1);
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: -5.5px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            height: 10px;
+            width: 10px;
+            background: $card-bg;
+            transform: rotate(45deg);
+            border-right: $card-border-width solid $card-border-color;
+            border-bottom: $card-border-width solid $card-border-color;
+            box-shadow: 2px 2px 0px rgb($black, .45), inset -2px -2px 0px rgb($white, .1);
+        }
+    }
+}

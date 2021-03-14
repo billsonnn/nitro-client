@@ -8,6 +8,7 @@
     width:230px;
     margin-bottom: 5px;
     padding: 0.23rem;
+    font-size: $font-size-sm;
     cursor: pointer;
 
     -webkit-animation-duration: 0.4s;
@@ -21,13 +22,11 @@
         cursor: default;
     }
 
-    .bubble-message {
-        font-size: 14px;
-    }
-
     .bubble-image {
-        min-width: 50px;
-        min-height: 50px;
+        width: 50px;
+        max-width: 50px;
+        height: 50px;
+        max-height: 50px;
         display: flex;
         justify-content: center;
         background-position: center;
