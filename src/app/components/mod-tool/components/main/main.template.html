@@ -1,27 +1,25 @@
-<div *ngIf="visible" class="card nitro-mod-tool-component">
-    <div [draggable] [center]="false" dragHandle=".card-header" class="card mod-tool-card">
-        <div class="card-header">
-            <span>Modtools</span>
-        </div>
-        <div class="card-body">
-            <div class="btn-group btn-group-vertical w-100">
-                <button (click)="openRoomTool()" [disabled]="!hasRoomInfo()"  class="btn btn-sm btn-primary btn-block">
-                    <i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
-                    Room Tool
-                </button>
-                <button (click)="openChatlogTool()" [disabled]="!hasRoomInfo()" class="btn btn-sm btn-primary btn-block">
-                    <i class="icon modtool-chatlog-icon" style="margin-right: 5px;"></i>
-                    Chatlog Tool
-                </button>
-                <button [disabled]="!selectedUser" (click)="selectUser()" class="btn btn-sm btn-primary btn-block">
-                    <i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
-                    User: <span class="username" *ngIf="selectedUser">{{selectedUser.username}}</span>
-                </button>
-                <button (click)="toggleReportsTool()" class="btn btn-sm btn-primary btn-block">
-                    <i class="icon modtool-reports-icon" style="margin-right: 5px;"></i>
-                    Reports Tool
-                </button>
-            </div>
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-mod-tool-component card" [topCenter]="false">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">Mod tools</h6>
+    </div>
+    <div class="d-flex flex-column p-3">
+        <div class="btn-group btn-group-vertical w-100">
+            <button class="btn btn-sm btn-secondary" (click)="openRoomTool()" [disabled]="!hasRoomInfo()">
+                <i class="icon modtool-room-icon mr-1"></i>
+                Room Tool
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="openChatlogTool()" [disabled]="!hasRoomInfo()">
+                <i class="icon modtool-chatlog-icon mr-1"></i>
+                Chatlog Tool
+            </button>
+            <button class="btn btn-sm btn-secondary" [disabled]="!selectedUser" (click)="selectUser()">
+                <i class="icon modtool-user-icon mr-1"></i>
+                User: <span class="username" *ngIf="selectedUser">{{selectedUser.username}}</span>
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="toggleReportsTool()">
+                <i class="icon modtool-reports-icon mr-1"></i>
+                Reports Tool
+            </button>
         </div>
     </div>
     <nitro-mod-tool-room-component *ngIf="showRoomTool"></nitro-mod-tool-room-component>
@@ -33,4 +31,3 @@
     <nitro-mod-tool-user-send-message-component *ngIf="showSendUserMessage" [user]="clickedUser"></nitro-mod-tool-user-send-message-component>
     <nitro-mod-tool-user-chatlogs-component  *ngIf="showSendUserChatlogs" [user]="clickedUser"></nitro-mod-tool-user-chatlogs-component>
 </div>
-
