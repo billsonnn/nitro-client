@@ -1,10 +1,10 @@
 export class OutgoingHeader
 {
     public static ACHIEVEMENT_LIST               = 219;
-    public static BOT_INFO                       = 1986;
+    public static BOT_CONFIGURATION              = 1986;
     public static BOT_PICKUP                     = 3323;
     public static BOT_PLACE                      = 1592;
-    public static BOT_SETTINGS_SAVE              = 2624;
+    public static BOT_SKILL_SAVE                 = 2624;
     public static CAMERA_PRICE                   = 796;
     public static CAMERA_SAVE                    = 3226;
     public static CAMERA_THUMBNAIL               = 1982;
@@ -209,5 +209,17 @@ export class OutgoingHeader
     public static USER_IGNORE_ID                 = 3314;
     public static USER_IGNORE                    = 1117;
     public static USER_UNIGNORE                  = 2061;
+	public static MODTOOL_REQUEST_ROOM_INFO      = 707;
+    public static MODTOOL_CHANGE_ROOM_SETTINGS   = 3260;
+    public static MODTOOL_REQUEST_USER_CHATLOG   = 1391;
+    public static MODTOOL_REQUEST_ROOM_CHATLOG   = 2587;
+    public static MODTOOL_SANCTION_ALERT         = 229;
+    public static MODTOOL_SANCTION_BAN           = 2766;
+    public static MODTOOL_SANCTION_KICK          = 2582;
+    public static MODTOOL_SANCTION_TRADELOCK     = 3742;
+    public static MODTOOL_ALERTEVENT             = 1840;
+    public static MODTOOL_SANCTION_MUTE          = 1945;
+    public static MODTOOL_REQUEST_USER_ROOMS     = 3526;
+    public static MODTOOL_ROOM_ALERT             = 3842;
     public static CONVERT_GLOBAL_ROOM_ID         = 314;
 }

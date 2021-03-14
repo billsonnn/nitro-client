@@ -1,10 +1,7 @@
-<div #activeView class="nitro-room-avatarinfo-decorate-component context-menu">
-    <div class="card align-items-center">
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" (click)="stopDecorating()">{{ ('widget.avatar.stop_decorating') | translate }}</li>
-            </ul>
-        </div>
-        <div class="card-pointer"></div>
+<div #activeView class="nitro-room-avatarinfo-component context-menu card align-items-center">
+    <div class="d-flex flex-column w-100 py-1">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" (click)="stopDecorating()">{{ ('widget.avatar.stop_decorating') | translate }}</li>
+        </ul>
     </div>
 </div>

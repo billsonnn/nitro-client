@@ -27,7 +27,7 @@ export class PetInfoData
     public breedable: boolean = false;
     public fullyGrown: boolean = false;
     public dead: boolean = false;
-    public _Str_3307: string[];
+    public _Str_3307: number[];
     public publiclyRideable: number = 0;
     public maximumTimeToLive: number = 0;
     public remainingTimeToLive: number = 0;

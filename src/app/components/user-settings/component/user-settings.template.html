@@ -1,0 +1,69 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-user-settings-component card position-absolute">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ 'widget.memenu.settings.title' | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex flex-column p-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="oldChat" [(ngModel)]="oldChat">
+            <label class="form-check-label" for="oldChat">
+            {{ ('memenu.settings.chat.prefer.old.chat') | translate }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="roomInvites" [(ngModel)]="roomInvites">
+            <label class="form-check-label" for="roomInvites">
+            {{ ('memenu.settings.other.ignore.room.invites') | translate }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="cameraFollow" [(ngModel)]="cameraFollow">
+            <label class="form-check-label" for="cameraFollow">
+            {{ ('memenu.settings.other.disable.room.camera.follow') | translate }}
+            </label>
+        </div>
+        <div class="mt-3 mb-2">{{ ('widget.memenu.settings.volume') | translate }}</div>
+        <div class="mb-2">
+            <label for="volumeSystem">{{ ('widget.memenu.settings.volume.ui') | translate }}</label>
+            <div class="d-flex flex-row">
+                <div [ngClass]="{'text-muted': volumeSystem >= 50}">
+                    <i class="fas" [ngClass]="{'fa-volume-mute': volumeSystem === 0, 'fa-volume-down': volumeSystem > 0}"></i>
+                </div>
+                <div class="w-100 ml-2 mr-2">
+                    <input type="range" class="custom-range" min="0" max="100" step="1" id="volumeSystem" [(ngModel)]="volumeSystem" (mouseup)="saveSound()">
+                </div>
+                <div [ngClass]="{'text-muted': volumeSystem < 50}">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <label for="volumeFurni">{{ ('widget.memenu.settings.volume.furni') | translate }}</label>
+            <div class="d-flex flex-row">
+                <div [ngClass]="{'text-muted': volumeFurni >= 50}">
+                    <i class="fas" [ngClass]="{'fa-volume-mute': volumeFurni === 0, 'fa-volume-down': volumeFurni > 0}"></i>
+                </div>
+                <div class="w-100 ml-2 mr-2">
+                    <input type="range" class="custom-range" min="0" max="100" step="1" id="volumeFurni" [(ngModel)]="volumeFurni" (mouseup)="saveSound()">
+                </div>
+                <div [ngClass]="{'text-muted': volumeFurni < 50}">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="volumeTrax">{{ ('widget.memenu.settings.volume.trax') | translate }}</label>
+            <div class="d-flex flex-row">
+                <div [ngClass]="{'text-muted': volumeTrax >= 50}">
+                    <i class="fas" [ngClass]="{'fa-volume-mute': volumeTrax === 0, 'fa-volume-down': volumeTrax > 0}"></i>
+                </div>
+                <div class="w-100 ml-2 mr-2">
+                    <input type="range" class="custom-range" min="0" max="100" step="1" id="volumeTrax" [(ngModel)]="volumeTrax" (mouseup)="saveSound()">
+                </div>
+                <div [ngClass]="{'text-muted': volumeTrax < 50}">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

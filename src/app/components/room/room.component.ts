@@ -67,6 +67,8 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { ModToolService } from '../mod-tool/services/mod-tool.service';
+import { RoomObjectType } from '../../../client/nitro/room/object/RoomObjectType';
 
 @Component({
     selector: 'nitro-room-component',
@@ -115,6 +117,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _friendService: FriendListService,
         private _chatHistoryService: ChatHistoryService,
         private _componentFactoryResolver: ComponentFactoryResolver,
+        private _modToolsService: ModToolService,
         private _ngZone: NgZone
     )
     {
@@ -703,6 +706,15 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         {
             case RoomEngineObjectEvent.SELECTED:
                 if(!this.isFurnitureSelectionDisabled(event)) updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_SELECTED, objectId, category, event.roomId);
+
+                if(category == RoomObjectCategory.UNIT)
+                {
+                    const user =  this._roomSession.userDataManager.getUserDataByIndex(objectId);
+                    if(user && user.type == RoomObjectType.USER)
+                    {
+                        this._modToolsService.selectUser(user.webID, user.name);
+                    }
+                }
                 break;
             case RoomEngineObjectEvent.DESELECTED:
                 updateEvent = new RoomWidgetRoomObjectUpdateEvent(RoomWidgetRoomObjectUpdateEvent.OBJECT_DESELECTED, objectId, category, event.roomId);

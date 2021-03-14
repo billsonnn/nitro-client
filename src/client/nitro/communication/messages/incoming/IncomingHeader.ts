@@ -214,6 +214,9 @@ export class IncomingHeader
     public static REMOVE_BOT_FROM_INVENTORY        = 233;
     public static ADD_BOT_TO_INVENTORY             = 1352;
     public static ACHIEVEMENT_PROGRESSED           = 2107;
+    public static MODTOOL_ROOM_INFO                = 1333;
+    public static MODTOOL_USER_CHATLOG             = 3377;
+    public static MODTOOL_ROOM_CHATLOG             = 3434;
     public static LOVELOCK_FURNI_START             = 3753;
     public static LOVELOCK_FURNI_FRIEND_COMFIRMED  = 382;
     public static LOVELOCK_FURNI_FINISHED          = 770;
@@ -229,6 +232,9 @@ export class IncomingHeader
     public static CATALOG_CLUB_GIFTS               = 619;
     public static REDEEM_VOUCHER_ERROR             = 714;
     public static REDEEM_VOUCHER_OK                = 3336;
+    public static MODTOOL_VISITED_ROOMS_USER       = 1752;
     public static IN_CLIENT_LINK                   = 2023;
+    public static BOT_COMMAND_CONFIGURATION        = 1618;
+    public static HAND_ITEM_RECEIVED               = 354;
     public static PET_PLACING_ERROR                = 2913;
 }

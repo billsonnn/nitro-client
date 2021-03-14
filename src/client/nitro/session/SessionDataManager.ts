@@ -10,11 +10,11 @@ import { UserPermissionsEvent } from '../communication/messages/incoming/user/ac
 import { UserFigureEvent } from '../communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
 import { UserNameChangeMessageEvent } from '../communication/messages/incoming/user/data/UserNameChangeMessageEvent';
-import { UserSettingsEvent } from '../communication/messages/incoming/user/data/UserSettingsEvent';
 import { PetRespectComposer } from '../communication/messages/outgoing/pet/PetRespectComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatStyleComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatStyleComposer';
 import { UserRespectComposer } from '../communication/messages/outgoing/user/UserRespectComposer';
+import { NitroSettingsEvent } from '../events/NitroSettingsEvent';
 import { Nitro } from '../Nitro';
 import { HabboWebTools } from '../utils/HabboWebTools';
 import { InClientLinkEvent } from './../communication/messages/incoming/user/InClientLinkEvent';
@@ -108,6 +108,7 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
         this.onFurnitureDataReadyEvent  = this.onFurnitureDataReadyEvent.bind(this);
         this.onProductDataReadyEvent    = this.onProductDataReadyEvent.bind(this);
+        this.onNitroSettingsEvent       = this.onNitroSettingsEvent.bind(this);
     }
 
     protected onInit(): void
@@ -122,11 +123,12 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
         this._communication.registerMessageEvent(new UserPermissionsEvent(this.onUserPermissionsEvent.bind(this)));
         this._communication.registerMessageEvent(new AvailabilityStatusMessageEvent(this.onAvailabilityStatusMessageEvent.bind(this)));
-        this._communication.registerMessageEvent(new UserSettingsEvent(this.onUserSettingsEvent.bind(this)));
         this._communication.registerMessageEvent(new ChangeNameUpdateEvent(this.onChangeNameUpdateEvent.bind(this)));
         this._communication.registerMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
         this._communication.registerMessageEvent(new RoomModelNameEvent(this.onRoomModelNameEvent.bind(this)));
         this._communication.registerMessageEvent(new InClientLinkEvent(this.onInClientLinkEvent.bind(this)));
+
+        Nitro.instance.events.addEventListener(NitroSettingsEvent.SETTINGS_UPDATED, this.onNitroSettingsEvent);
     }
 
     protected onDispose(): void
@@ -139,6 +141,8 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
 
             this._ignoredUsersManager = null;
         }
+
+        Nitro.instance.events.removeEventListener(NitroSettingsEvent.SETTINGS_UPDATED, this.onNitroSettingsEvent);
 
         super.onDispose();
     }
@@ -287,21 +291,6 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         this._isAuthenticHabbo  = parser.isAuthenticUser;
     }
 
-    private onUserSettingsEvent(event: UserSettingsEvent): void
-    {
-        if(!event || !event.connection) return;
-
-        const parser = event.getParser();
-
-        if(!parser) return;
-
-        this._isRoomCameraFollowDisabled    = parser.cameraFollow;
-        this._chatStyle                     = parser.chatType;
-        this._uiFlags                       = parser.flags;
-
-        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
-    }
-
     private onChangeNameUpdateEvent(event: ChangeNameUpdateEvent): void
     {
         if(!event || !event.connection) return;
@@ -383,6 +372,15 @@ export class SessionDataManager extends NitroManager implements ISessionDataMana
         if(!parser) return;
 
         Nitro.instance.createLinkEvent(parser.link);
+    }
+
+    private onNitroSettingsEvent(event: NitroSettingsEvent): void
+    {
+        this._isRoomCameraFollowDisabled    = event.cameraFollow;
+        this._chatStyle                     = event.chatType;
+        this._uiFlags                       = event.flags;
+
+        this.events.dispatchEvent(new SessionDataPreferencesEvent(this._uiFlags));
     }
 
     private destroyFurnitureData(): void

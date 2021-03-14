@@ -37,6 +37,7 @@ import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent'
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomEngineObjectPlacedEvent } from './events/RoomEngineObjectPlacedEvent';
 import { RoomEngineObjectPlacedOnUserEvent } from './events/RoomEngineObjectPlacedOnUserEvent';
+import { RoomEngineSamplePlaybackEvent } from './events/RoomEngineSamplePlaybackEvent';
 import { RoomEngineTriggerWidgetEvent } from './events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectBadgeAssetEvent } from './events/RoomObjectBadgeAssetEvent';
 import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
@@ -45,6 +46,7 @@ import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActi
 import { RoomObjectHSLColorEnabledEvent } from './events/RoomObjectHSLColorEnabledEvent';
 import { RoomObjectHSLColorEnableEvent } from './events/RoomObjectHSLColorEnableEvent';
 import { RoomObjectMoveEvent } from './events/RoomObjectMoveEvent';
+import { RoomObjectSamplePlaybackEvent } from './events/RoomObjectSamplePlaybackEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { RoomObjectTileMouseEvent } from './events/RoomObjectTileMouseEvent';
 import { RoomObjectWallMouseEvent } from './events/RoomObjectWallMouseEvent';
@@ -299,6 +301,12 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectFurnitureActionEvent.MOUSE_ARROW:
             case RoomObjectFurnitureActionEvent.MOUSE_BUTTON:
                 this.handleMousePointer(event as RoomObjectFurnitureActionEvent, roomId);
+                return;
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED:
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_DISPOSED:
+            case RoomObjectSamplePlaybackEvent.PLAY_SAMPLE:
+            case RoomObjectSamplePlaybackEvent.CHANGE_PITCH:
+                this.handleRoomObjectSamplePlaybackEvent(event as RoomObjectSamplePlaybackEvent, roomId);
                 return;
             case RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR:
                 this.onHSLColorEnableEvent(event as RoomObjectHSLColorEnableEvent, roomId);
@@ -801,6 +809,29 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         if(!event) return;
 
         this._roomEngine.updateMousePointer(event.type, event.objectId, event.objectType);
+    }
+
+    private handleRoomObjectSamplePlaybackEvent(event: RoomObjectSamplePlaybackEvent, roomId: number): void
+    {
+        if(!event) return;
+
+        const objectCategory = this._roomEngine.getRoomObjectCategoryForType(event.objectType);
+
+        switch(event.type)
+        {
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_DISPOSED:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.ROOM_OBJECT_DISPOSED, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.PLAY_SAMPLE:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.PLAY_SAMPLE, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.CHANGE_PITCH:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.CHANGE_PITCH, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+        }
     }
 
     private onHSLColorEnableEvent(event: RoomObjectHSLColorEnableEvent, roomId: number): void
