@@ -120,7 +120,8 @@ export class GroupManagerComponent implements OnInit, OnDestroy
                 this.hide();
                 this._groupService.groupInfoComponent.clear();
             }, ['btn-danger']),
-            new NotificationChoice('generic.close', () => {}, ['btn-primary'])
+            new NotificationChoice('generic.close', () =>
+            {}, ['btn-primary'])
         ];
 
         this._notificationService.alertWithChoices(message, choices, title);
