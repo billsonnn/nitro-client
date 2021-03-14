@@ -20,7 +20,7 @@
                 </div>
             </div>
            <div class="mt-3">
-                <button *ngIf="groupMembershipType === 1" class="btn btn-danger btn-block" (click)="leave()">{{ ('group.leave') | translate }}</button>
+                <button *ngIf="groupMembershipType === 1" class="btn btn-danger btn-block" [disabled]="isOwner" (click)="leave()">{{ ('group.leave') | translate }}</button>
                 <button *ngIf="groupType === 0 && groupMembershipType === 0" class="btn btn-success btn-block" (click)="join()">{{ ('group.join') | translate }}</button>
                 <div *ngIf="groupType === 1">
                     <button *ngIf="groupMembershipType === 0" class="btn btn-success btn-block" (click)="join()">{{ ('group.requestmembership') | translate }}</button>
