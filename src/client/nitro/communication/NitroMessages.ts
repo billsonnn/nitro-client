@@ -94,6 +94,7 @@ import { NavigatorOpenRoomCreatorEvent } from './messages/incoming/navigator/Nav
 import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
+import { BotErrorEvent } from './messages/incoming/notifications/BotErrorEvent';
 import { HabboBroadcastMessageEvent } from './messages/incoming/notifications/HabboBroadcastMessageEvent';
 import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
@@ -554,6 +555,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // BOTS
         this._events.set(IncomingHeader.BOT_COMMAND_CONFIGURATION, BotCommandConfigurationEvent);
+        this._events.set(IncomingHeader.BOT_ERROR, BotErrorEvent);
 
         // FURNITURE
         this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
