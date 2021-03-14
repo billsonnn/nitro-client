@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
-import { Graphics, RenderTexture, SCALE_MODES, settings, Sprite, Texture } from 'pixi.js';
+import { Graphics, Polygon, RenderTexture, SCALE_MODES, settings, Sprite, Texture } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -368,19 +368,14 @@ export class FloorPlanService implements OnDestroy
         }
     }
 
-    private _pythagoras()
-    {
-        return Math.sqrt((this._tileSize * this._tileSize) + (this._tileSize * this._tileSize));
-    }
 
     public renderTileMap(options): void
     {
-        const pythagoras = this._pythagoras();
-        for(let y = 0; y < (this.floorMapSettings.heightMap.length /2) ; y++)
+        for(let y = 0; y < this.floorMapSettings.heightMap.length ; y++)
         {
             this._spriteMap[y] = [];
 
-            for(let x = 0; x < (this.floorMapSettings.heightMap[y].length /2); x++)
+            for(let x = 0; x < this.floorMapSettings.heightMap[y].length; x++)
             {
 
                 const tile = this.floorMapSettings.heightMap[y][x];
@@ -423,15 +418,19 @@ export class FloorPlanService implements OnDestroy
 
     private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number, options): Sprite
     {
-
-
         const sprite = Sprite.from('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAARCAYAAAC4qX7BAAAAWUlEQVR42s3WMQoAMAgDQN/i//9Y6eDiIhI1BlzLga1WBIyqvl/CigM866AIiBkHZYBxUBXQDkIBMKgbUAZNA1LQNuAciN4i+qWlP2P6YKOPevryO/MdQM8xzX/d5jc1THsAAAAASUVORK5CYII=');
         //sprite.setTransform(posX + sprite.width, posY, 0.9, 0.9,0, 1.11, -0.46,0,0);
-        sprite.setTransform(posX + sprite.width, posY);
+        sprite.setTransform(posX, posY);
 
         sprite.tint = color;
 
         sprite.interactive = true;
+        sprite.hitArea = new Polygon([
+            17, 17,
+            0,8.5,
+            17,0,
+            34,8.5
+        ]);
 
         sprite.on('mousedown', () =>
         {
