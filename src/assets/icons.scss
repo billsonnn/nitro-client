@@ -50,6 +50,12 @@ i {
             width: 44px;
         }
 
+        &.icon-modtools {
+            background-image: url('^assets/images/toolbar/icons/modtools.png');
+            height: 34px;
+            width: 29px;
+        }
+
         &.icon-friendall {
             background-image: url('^assets/images/toolbar/icons/friend_all.png');
             height: 33px;
@@ -97,7 +103,7 @@ i {
             width: 28px;
             height: 34px;
         }
-            
+
         &.icon-joinroom {
             background-image: url('^assets/images/toolbar/icons/joinroom.png');
             width: 21px;
@@ -332,6 +338,54 @@ i {
             height: 43px;
         }
 
+		&.modtool-room-icon {
+			background-image: url('./images/modtool/room.png');
+			width:20px;
+			height:15px;
+		}
+
+		&.modtool-chatlog-icon {
+			background-image: url('./images/modtool/chatlog.gif');
+			width:20px;
+			height:15px;
+		}
+
+		&.modtool-user-icon{
+			background-image: url('./images/modtool/user.gif');
+			width:20px;
+			height:15px;
+		}
+
+		&.modtool-reports-icon {
+			background-image: url('./images/modtool/reports.png');
+			width:20px;
+			height:15px;
+		}
+
+        &.modtool-wrench-icon {
+            background-image: url('./images/modtool/wrench.gif');
+            width:20px;
+            height:15px;
+        }
+
+        &.modtool-key-icon {
+            background-image: url('./images/modtool/key.gif');
+            width:20px;
+            height:15px;
+        }
+
+        &.icon-catalogue-hc_small {
+            height:17px;
+            width:31px;
+            background-image: url('^assets/images/catalog/hc_small.png');
+        }
+
+        &.icon-catalogue-hc_big {
+            width:68px;
+            height:40px;
+            background: url('^assets/images/catalog/hc_big.png');
+        }
+
         &.spin {
             animation: rotating 1s linear infinite;
         }
@@ -340,21 +394,10 @@ i {
             from {
                 transform: rotate(0);
             }
-            
+
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        &.icon-catalogue-hc_small {
-            height:17px;
-            width:31px;
-            background-image: url('^assets/images/catalog/hc_small.png');
-        }
-        &.icon-catalogue-hc_big {
-            width:68px;
-            height:40px;
-            background: url('^assets/images/catalog/hc_big.png');
         }
     }
 }

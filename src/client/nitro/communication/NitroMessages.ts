@@ -358,6 +358,26 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { ModtoolRequestRoomInfoComposer } from './messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
+import { ModtoolChangeRoomSettingsComposer } from './messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolRequestUserChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInfoEvent';
+import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUserChatlogEvent';
+import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
+import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
+import { ModtoolCallForHelpTopicsEvent } from './messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
+import { ModtoolMainEvent } from './messages/incoming/modtool/ModtoolMainEvent';
+import { ModtoolSanctionBanComposer } from './messages/outgoing/modtool/ModtoolSanctionBanComposer';
+import { ModtoolSanctionKickComposer } from './messages/outgoing/modtool/ModtoolSanctionKickComposer';
+import { ModtoolSanctionAlertComposer } from './messages/outgoing/modtool/ModtoolSanctionAlertComposer';
+import { ModtoolSanctionTradelockComposer } from './messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
+import { ModtoolEventAlertComposer } from './messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { ModtoolSanctionMuteComposer } from './messages/outgoing/modtool/ModtoolSanctionMuteComposer';
+import { ModtoolRequestUserRoomsComposer } from './messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
+import { ModtoolReceivedRoomsUserEvent } from './messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
+import { ModtoolRoomAlertComposer } from './messages/outgoing/modtool/ModtoolRoomAlertComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -472,6 +492,11 @@ export class NitroMessages implements IMessageConfiguration
 
         // MODERATION
         this._events.set(IncomingHeader.GENERIC_ALERT_LINK, ModeratorMessageEvent);
+
+        // MODTOOL
+        this._events.set(IncomingHeader.MODTOOL_ROOM_INFO, ModtoolRoomInfoEvent);
+        this._events.set(IncomingHeader.MODTOOL_USER_CHATLOG, ModtoolUserChatlogEvent);
+        this._events.set(IncomingHeader.MODTOOL_ROOM_CHATLOG, ModtoolRoomChatlogEvent);
 
         // NAVIGATOR
         this._events.set(IncomingHeader.NAVIGATOR_CATEGORIES, NavigatorCategoriesEvent);
@@ -653,6 +678,12 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
         this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
         this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
+
+        // MOD TOOL
+        this._events.set(IncomingHeader.MODERATION_USER_INFO, ModtoolUserInfoEvent);
+        this._events.set(IncomingHeader.MODERATION_TOPICS, ModtoolCallForHelpTopicsEvent);
+        this._events.set(IncomingHeader.MODERATION_TOOL, ModtoolMainEvent);
+        this._events.set(IncomingHeader.MODTOOL_VISITED_ROOMS_USER, ModtoolReceivedRoomsUserEvent);
     }
 
     private registerComposers(): void
@@ -897,6 +928,21 @@ export class NitroMessages implements IMessageConfiguration
 
         // SUBSCRIPTION
         this._composers.set(OutgoingHeader.USER_SUBSCRIPTION, UserSubscriptionComposer);
+
+        // MODTOOL
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_INFO, ModtoolRequestRoomInfoComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_CHANGE_ROOM_SETTINGS, ModtoolChangeRoomSettingsComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_CHATLOG, ModtoolRequestUserChatlogComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_ROOM_CHATLOG, ModtoolRequestRoomChatlogComposer);
+        this._composers.set(OutgoingHeader.MOD_TOOL_USER_INFO, ModtoolRequestUserInfoComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_ALERT, ModtoolSanctionAlertComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_BAN, ModtoolSanctionBanComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_KICK, ModtoolSanctionKickComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_TRADELOCK, ModtoolSanctionTradelockComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_ALERTEVENT, ModtoolEventAlertComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_SANCTION_MUTE, ModtoolSanctionMuteComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_REQUEST_USER_ROOMS, ModtoolRequestUserRoomsComposer);
+        this._composers.set(OutgoingHeader.MODTOOL_ROOM_ALERT, ModtoolRoomAlertComposer);
 
         // WARDROBE
         this._composers.set(OutgoingHeader.USER_WARDROBE_PAGE, UserWardrobePageComposer);

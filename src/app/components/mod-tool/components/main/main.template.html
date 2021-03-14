@@ -1,0 +1,36 @@
+<div *ngIf="visible" class="card nitro-mod-tool-component">
+    <div [draggable] [center]="false" dragHandle=".card-header" class="card mod-tool-card">
+        <div class="card-header">
+            <span>Modtools</span>
+        </div>
+        <div class="card-body">
+            <div class="btn-group btn-group-vertical w-100">
+                <button (click)="openRoomTool()" [disabled]="!hasRoomInfo()"  class="btn btn-sm btn-primary btn-block">
+                    <i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
+                    Room Tool
+                </button>
+                <button (click)="openChatlogTool()" [disabled]="!hasRoomInfo()" class="btn btn-sm btn-primary btn-block">
+                    <i class="icon modtool-chatlog-icon" style="margin-right: 5px;"></i>
+                    Chatlog Tool
+                </button>
+                <button [disabled]="!selectedUser" (click)="selectUser()" class="btn btn-sm btn-primary btn-block">
+                    <i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
+                    User: <span class="username" *ngIf="selectedUser">{{selectedUser.username}}</span>
+                </button>
+                <button (click)="toggleReportsTool()" class="btn btn-sm btn-primary btn-block">
+                    <i class="icon modtool-reports-icon" style="margin-right: 5px;"></i>
+                    Reports Tool
+                </button>
+            </div>
+        </div>
+    </div>
+    <nitro-mod-tool-room-component *ngIf="showRoomTool"></nitro-mod-tool-room-component>
+    <nitro-mod-tool-room-chatlogs-component *ngIf="showRoomChatlogs" ></nitro-mod-tool-room-chatlogs-component>
+    <nitro-mod-tool-user-component *ngIf="userToolVisible" [user]="clickedUser"></nitro-mod-tool-user-component>
+    <nitro-mod-tool-reports-component [(visible)]="reportsToolVisible"></nitro-mod-tool-reports-component>
+    <nitro-mod-tool-mod-action-user-component *ngIf="showModActionOnUser" [user]="clickedUser"></nitro-mod-tool-mod-action-user-component>
+    <nitro-mod-tool-user-visited-rooms-component *ngIf="showVisitedRoomsForUser" [user]="clickedUser" ></nitro-mod-tool-user-visited-rooms-component>
+    <nitro-mod-tool-user-send-message-component *ngIf="showSendUserMessage" [user]="clickedUser"></nitro-mod-tool-user-send-message-component>
+    <nitro-mod-tool-user-chatlogs-component  *ngIf="showSendUserChatlogs" [user]="clickedUser"></nitro-mod-tool-user-chatlogs-component>
+</div>
+

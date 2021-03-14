@@ -14,6 +14,7 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
+import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
 
 @Injectable()
 export class InventoryService implements OnDestroy

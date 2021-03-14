@@ -346,7 +346,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
         }
     }
 
-    linkReceived(link: string): void
+    public linkReceived(link: string): void
     {
         const parts = link.split('/');
 
@@ -415,6 +415,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
     public get chatHistoryVisible(): boolean
     {
         return this._settingsService.chatHistoryVisible;
+    }
+
+    public get modToolVisible(): boolean
+    {
+        return Nitro.instance.sessionDataManager.isModerator;
     }
 
     public get userSettingsVisible(): boolean
