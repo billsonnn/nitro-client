@@ -25,6 +25,7 @@ import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.componen
 import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
 import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
+import { HighscoreComponent } from './widgets/furniture/highscore/highscore.component';
 import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.component';
 import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
@@ -86,7 +87,8 @@ import { FloorplanModule } from './floorplan/floorplan.module';
         RoomToolsMainComponent,
         DoorbellWidgetComponent,
         MannequinWidget,
-        RoomToolsMainComponent
+        RoomToolsMainComponent,
+        HighscoreComponent
     ],
     declarations: [
         RoomComponent,
@@ -129,7 +131,8 @@ import { FloorplanModule } from './floorplan/floorplan.module';
         MannequinWidget,
         DoorbellWidgetComponent,
         PresentFurniWidget,
-        RoomToolsMainComponent
+        RoomToolsMainComponent,
+        HighscoreComponent
     ]
 })
 export class RoomModule
