@@ -24,6 +24,7 @@ import { PetImageDirective } from './directives/pet-image/pet-image.directive';
 import { EmojiPipe } from './pipes/emoji.pipe';
 import { FormatShortPipe } from './pipes/format-short.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
+import { RoomChatFormatterPipe } from './pipes/room-chat-formatter.pipe';
 import { RoomObjectItemSearchPipe } from './pipes/room-object-item-search.pipe';
 import { ShortNumberPipe } from './pipes/short-number';
 import { TimeAgoPipe } from './pipes/time-ago';
@@ -83,14 +84,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShortNumberPipe,
         TimeAgoPipe,
         RoomObjectItemSearchPipe,
-        UniqueNumberPipe
+        UniqueNumberPipe,
+        RoomChatFormatterPipe
     ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
-        SoundService
+        SoundService,
+        EmojiPipe
     ],
     declarations: [
         AvatarImageComponent,
@@ -111,7 +114,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShortNumberPipe,
         TimeAgoPipe,
         RoomObjectItemSearchPipe,
-        UniqueNumberPipe
+        UniqueNumberPipe,
+        RoomChatFormatterPipe
     ]
 })
 export class SharedModule
