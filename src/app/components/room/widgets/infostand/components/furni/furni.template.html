@@ -10,7 +10,7 @@
                     <div [innerHTML]="furniData.stuffData.uniqueNumber | uniqueNumber"></div>
                     <div [innerHTML]="furniData.stuffData.uniqueSeries | uniqueNumber"></div>
                 </div>
-                <img class="d-block mx-auto" [src]="furniData.imageUrl" image-placeholder />
+                <img *ngIf="furniData.imageUrl" class="d-block mx-auto" [src]="furniData.imageUrl" image-placeholder />
             </div>
             <div class="d-flex flex-column mt-2">
                 <p class="badge badge-secondary mb-0 text-wrap">{{ furniData.description | translate }}</p>
