@@ -77,6 +77,13 @@ import { TradingOpenFailedEvent } from './messages/incoming/inventory/trading/Tr
 import { TradingOtherNotAllowedEvent } from './messages/incoming/inventory/trading/TradingOtherNotAllowedEvent';
 import { TradingYouAreNotAllowedEvent } from './messages/incoming/inventory/trading/TradingYouAreNotAllowedEvent';
 import { ModeratorMessageEvent } from './messages/incoming/moderation/ModeratorMessageEvent';
+import { ModtoolCallForHelpTopicsEvent } from './messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
+import { ModtoolMainEvent } from './messages/incoming/modtool/ModtoolMainEvent';
+import { ModtoolReceivedRoomsUserEvent } from './messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
+import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
+import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInfoEvent';
+import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUserChatlogEvent';
+import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
 import { NavigatorCategoriesEvent } from './messages/incoming/navigator/NavigatorCategoriesEvent';
 import { NavigatorCollapsedEvent } from './messages/incoming/navigator/NavigatorCollapsedEvent';
 import { NavigatorEventCategoriesEvent } from './messages/incoming/navigator/NavigatorEventCategoriesEvent';
@@ -87,10 +94,12 @@ import { NavigatorOpenRoomCreatorEvent } from './messages/incoming/navigator/Nav
 import { NavigatorSearchesEvent } from './messages/incoming/navigator/NavigatorSearchesEvent';
 import { NavigatorSearchEvent } from './messages/incoming/navigator/NavigatorSearchEvent';
 import { NavigatorSettingsEvent } from './messages/incoming/navigator/NavigatorSettingsEvent';
+import { BotErrorEvent } from './messages/incoming/notifications/BotErrorEvent';
 import { HabboBroadcastMessageEvent } from './messages/incoming/notifications/HabboBroadcastMessageEvent';
 import { HotelWillShutdownEvent } from './messages/incoming/notifications/HotelWillShutdownEvent';
 import { MOTDNotificationEvent } from './messages/incoming/notifications/MOTDNotificationEvent';
 import { NotificationDialogMessageEvent } from './messages/incoming/notifications/NotificationDialogMessageEvent';
+import { PetPlacingErrorEvent } from './messages/incoming/notifications/PetPlacingErrorEvent';
 import { RespectReceivedEvent } from './messages/incoming/notifications/RespectReceivedEvent';
 import { UnseenItemsEvent } from './messages/incoming/notifications/UnseenItemsEvent';
 import { RoomDoorbellAcceptedEvent } from './messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
@@ -251,6 +260,19 @@ import { TradingListAddItemsComposer } from './messages/outgoing/inventory/tradi
 import { TradingListItemRemoveComposer } from './messages/outgoing/inventory/trading/TradingListRemoveItemComposer';
 import { TradingOpenComposer } from './messages/outgoing/inventory/trading/TradingOpenComposer';
 import { TradingUnacceptComposer } from './messages/outgoing/inventory/trading/TradingUnacceptComposer';
+import { ModtoolChangeRoomSettingsComposer } from './messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolEventAlertComposer } from './messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModtoolRequestRoomInfoComposer } from './messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
+import { ModtoolRequestUserChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { ModtoolRequestUserRoomsComposer } from './messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
+import { ModtoolRoomAlertComposer } from './messages/outgoing/modtool/ModtoolRoomAlertComposer';
+import { ModtoolSanctionAlertComposer } from './messages/outgoing/modtool/ModtoolSanctionAlertComposer';
+import { ModtoolSanctionBanComposer } from './messages/outgoing/modtool/ModtoolSanctionBanComposer';
+import { ModtoolSanctionKickComposer } from './messages/outgoing/modtool/ModtoolSanctionKickComposer';
+import { ModtoolSanctionMuteComposer } from './messages/outgoing/modtool/ModtoolSanctionMuteComposer';
+import { ModtoolSanctionTradelockComposer } from './messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
 import { ConvertGlobalRoomIdMessageComposer } from './messages/outgoing/navigator/ConvertGlobalRoomIdComposer';
 import { NavigatorCategoriesComposer } from './messages/outgoing/navigator/NavigatorCategoriesComposer';
 import { NavigatorCategoryListModeComposer } from './messages/outgoing/navigator/NavigatorCategoryListModeComposer';
@@ -358,26 +380,6 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
-import { ModtoolRequestRoomInfoComposer } from './messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
-import { ModtoolChangeRoomSettingsComposer } from './messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
-import { ModtoolRequestUserChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
-import { ModtoolRoomInfoEvent } from './messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { ModtoolUserChatlogEvent } from './messages/incoming/modtool/ModtoolUserChatlogEvent';
-import { ModtoolRequestRoomChatlogComposer } from './messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
-import { ModtoolRoomChatlogEvent } from './messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { ModtoolRequestUserInfoComposer } from './messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
-import { ModtoolUserInfoEvent } from './messages/incoming/modtool/ModtoolUserInfoEvent';
-import { ModtoolCallForHelpTopicsEvent } from './messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
-import { ModtoolMainEvent } from './messages/incoming/modtool/ModtoolMainEvent';
-import { ModtoolSanctionBanComposer } from './messages/outgoing/modtool/ModtoolSanctionBanComposer';
-import { ModtoolSanctionKickComposer } from './messages/outgoing/modtool/ModtoolSanctionKickComposer';
-import { ModtoolSanctionAlertComposer } from './messages/outgoing/modtool/ModtoolSanctionAlertComposer';
-import { ModtoolSanctionTradelockComposer } from './messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
-import { ModtoolEventAlertComposer } from './messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { ModtoolSanctionMuteComposer } from './messages/outgoing/modtool/ModtoolSanctionMuteComposer';
-import { ModtoolRequestUserRoomsComposer } from './messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
-import { ModtoolReceivedRoomsUserEvent } from './messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
-import { ModtoolRoomAlertComposer } from './messages/outgoing/modtool/ModtoolRoomAlertComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -553,6 +555,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // BOTS
         this._events.set(IncomingHeader.BOT_COMMAND_CONFIGURATION, BotCommandConfigurationEvent);
+        this._events.set(IncomingHeader.BOT_ERROR, BotErrorEvent);
 
         // FURNITURE
         this._events.set(IncomingHeader.FURNITURE_ALIASES, FurnitureAliasesEvent);
@@ -678,6 +681,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.USER_PETS, PetInventoryEvent);
         this._events.set(IncomingHeader.USER_PET_REMOVE, PetRemovedFromInventory);
         this._events.set(IncomingHeader.USER_PET_ADD, PetAddedToInventoryEvent);
+        this._events.set(IncomingHeader.PET_PLACING_ERROR, PetPlacingErrorEvent);
 
         // MOD TOOL
         this._events.set(IncomingHeader.MODERATION_USER_INFO, ModtoolUserInfoEvent);

@@ -1,5 +1,7 @@
 import { IConnection } from '../../../core/communication/connections/IConnection';
 import { NewFriendRequestEvent } from '../../communication/messages/incoming/friendlist/NewFriendRequestEvent';
+import { BotErrorEvent } from '../../communication/messages/incoming/notifications/BotErrorEvent';
+import { PetPlacingErrorEvent } from '../../communication/messages/incoming/notifications/PetPlacingErrorEvent';
 import { RoomDoorbellEvent } from '../../communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
 import { PetInfoEvent } from '../../communication/messages/incoming/room/pet/PetInfoEvent';
 import { RoomUnitDanceEvent } from '../../communication/messages/incoming/room/unit/RoomUnitDanceEvent';
@@ -10,6 +12,7 @@ import { UserCurrentBadgesEvent } from '../../communication/messages/incoming/us
 import { UserNameChangeMessageEvent } from '../../communication/messages/incoming/user/data/UserNameChangeMessageEvent';
 import { RoomSessionDanceEvent } from '../events/RoomSessionDanceEvent';
 import { RoomSessionDoorbellEvent } from '../events/RoomSessionDoorbellEvent';
+import { RoomSessionErrorMessageEvent } from '../events/RoomSessionErrorMessageEvent';
 import { RoomSessionFriendRequestEvent } from '../events/RoomSessionFriendRequestEvent';
 import { RoomSessionPetInfoUpdateEvent } from '../events/RoomSessionPetInfoUpdateEvent';
 import { RoomSessionUserBadgesEvent } from '../events/RoomSessionUserBadgesEvent';
@@ -34,6 +37,8 @@ export class RoomUsersHandler extends BaseHandler
         connection.addMessageEvent(new UserNameChangeMessageEvent(this.onUserNameChangeMessageEvent.bind(this)));
         connection.addMessageEvent(new NewFriendRequestEvent(this.onNewFriendRequestEvent.bind(this)));
         connection.addMessageEvent(new PetInfoEvent(this.onPetInfoEvent.bind(this)));
+        connection.addMessageEvent(new PetPlacingErrorEvent(this.onPetPlacingError.bind(this)));
+        connection.addMessageEvent(new BotErrorEvent(this.onBotError.bind(this)));
     }
 
     private onRoomUnitEvent(event: RoomUnitEvent): void
@@ -240,5 +245,88 @@ export class RoomUsersHandler extends BaseHandler
         petData.publiclyBreedable   = parser.publiclyBreedable;
 
         this.listener.events.dispatchEvent(new RoomSessionPetInfoUpdateEvent(session, petData));
+    }
+
+    private onPetPlacingError(event: PetPlacingErrorEvent): void
+    {
+        if(!event) return;
+
+        if(!this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        let type: string = null;
+
+        switch(parser.errorCode)
+        {
+            case 0:
+                type = RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_HOTEL;
+                break;
+            case 1:
+                type = RoomSessionErrorMessageEvent.RSEME_PETS_FORBIDDEN_IN_FLAT;
+                break;
+            case 2:
+                type = RoomSessionErrorMessageEvent.RSEME_MAX_PETS;
+                break;
+            case 3:
+                type = RoomSessionErrorMessageEvent.RSEME_NO_FREE_TILES_FOR_PET;
+                break;
+            case 4:
+                type = RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_PET;
+                break;
+            case 5:
+                type = RoomSessionErrorMessageEvent.RSEME_MAX_NUMBER_OF_OWN_PETS;
+                break;
+        }
+
+        if(!type || type.length == 0) return;
+
+        this.listener.events.dispatchEvent(new RoomSessionErrorMessageEvent(type, session));
+    }
+
+    private onBotError(event: BotErrorEvent): void
+    {
+        if(!event) return;
+
+        if(!this.listener) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const session = this.listener.getSession(this.roomId);
+
+        if(!session) return;
+
+        let type: string = null;
+
+        switch(parser.errorCode)
+        {
+            case 0:
+                type = RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_HOTEL;
+                break;
+            case 1:
+                type = RoomSessionErrorMessageEvent.RSEME_BOTS_FORBIDDEN_IN_FLAT;
+                break;
+            case 2:
+                type = RoomSessionErrorMessageEvent.RSEME_BOT_LIMIT_REACHED;
+                break;
+            case 3:
+                type = RoomSessionErrorMessageEvent.RSEME_SELECTED_TILE_NOT_FREE_FOR_BOT;
+                break;
+            case 4:
+                type = RoomSessionErrorMessageEvent.RSEME_BOT_NAME_NOT_ACCEPTED;
+                break;
+        }
+
+        if(!type || type.length == 0) return;
+
+        this.listener.events.dispatchEvent(new RoomSessionErrorMessageEvent(type, session));
     }
 }
