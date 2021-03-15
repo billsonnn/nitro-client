@@ -40,6 +40,7 @@ import { FurnitureVisualizationData } from './visualization/furniture/FurnitureV
 import { FurnitureVoteCounterVisualization } from './visualization/furniture/FurnitureVoteCounterVisualization';
 import { FurnitureVoteMajorityVisualization } from './visualization/furniture/FurnitureVoteMajorityVisualization';
 import { FurnitureWaterAreaVisualization } from './visualization/furniture/FurnitureWaterAreaVisualization';
+import { FurnitureYoutubeVisualization } from './visualization/furniture/FurnitureYouTubeVisualization';
 import { PetVisualization } from './visualization/pet/PetVisualization';
 import { PetVisualizationData } from './visualization/pet/PetVisualizationData';
 import { RoomVisualization } from './visualization/room/RoomVisualization';
@@ -174,6 +175,9 @@ export class RoomObjectVisualizationFactory implements IRoomObjectVisualizationF
                 break;
             case RoomObjectVisualizationType.FURNITURE_WATER_AREA:
                 visualization = FurnitureWaterAreaVisualization;
+                break;
+            case RoomObjectVisualizationType.FURNITURE_YOUTUBE:
+                visualization = FurnitureYoutubeVisualization;
                 break;
         }
 
