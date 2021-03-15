@@ -18,7 +18,7 @@
                                     <div *ngIf="item.senderImageUrl" class="user-image" [ngStyle]="{ 'background-image': 'url(' + item.senderImageUrl + ')' }"></div>
                                 </div>
                                 <div class="chat-content">
-                                    <b class="username-container" [innerHTML]="item.senderName"></b> <span class="message"> {{ item.content }}</span>
+                                    <b class="username-container mr-1" [innerHTML]="item.senderName"></b> <span class="message" [innerHTML]="item.content | roomChatFormatter"></span>
                                 </div>
                             </div>
                         </div>
