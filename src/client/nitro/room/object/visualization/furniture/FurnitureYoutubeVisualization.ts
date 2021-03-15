@@ -6,7 +6,9 @@ export class FurnitureYoutubeVisualization extends FurnitureDynamicThumbnailVisu
 
     protected getThumbnailURL(): string
     {
-        // if(!this.object) return null;
+        if(!this.object) return null;
+
+        return null;
 
         // const data = this.object.model.getValue<any>(RoomObjectVariable.FURNITURE_DATA);
         // const url   = this.object.model.getValue<string>(RoomObjectVariable.SESSION_URL_PREFIX);
