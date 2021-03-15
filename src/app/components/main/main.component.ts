@@ -36,6 +36,7 @@ import { DimmerFurniComponent } from '../room/widgets/furniture/dimmer/dimmer.co
 import { FriendsFurniConfirmWidget } from '../room/widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from '../room/widgets/furniture/friendfurni/friendfurni.component';
 import { PresentFurniWidget } from '../room/widgets/furniture/gift-opening/present.component';
+import { HighscoreComponent } from '../room/widgets/furniture/highscore/highscore.component';
 import { MannequinWidget } from '../room/widgets/furniture/mannequin/mannequin.component';
 import { StickieFurniComponent } from '../room/widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from '../room/widgets/furniture/trophies/trophy.component';
@@ -120,6 +121,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_MANNEQUIN, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_HIGH_SCORE_DISPLAY, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.addEventListener(RoomEngineTriggerWidgetEvent.REQUEST_HIDE_HIGH_SCORE_DISPLAY, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -180,6 +183,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_BACKGROUND_COLOR, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_FRIEND_FURNITURE_ENGRAVING, this.onRoomEngineObjectEvent);
                 Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_HIGH_SCORE_DISPLAY, this.onRoomEngineObjectEvent);
+                Nitro.instance.roomEngine.events.removeEventListener(RoomEngineTriggerWidgetEvent.REQUEST_HIDE_HIGH_SCORE_DISPLAY, this.onRoomEngineObjectEvent);
             }
 
             if(Nitro.instance.roomSessionManager.events)
@@ -246,6 +251,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                     this.roomComponent.createWidget(RoomWidgetEnum.MANNEQUIN, MannequinWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FURNI_PRESENT_WIDGET, PresentFurniWidget);
                     this.roomComponent.createWidget(RoomWidgetEnum.FRIEND_REQUEST, FriendRequestMainComponent);
+                    this.roomComponent.createWidget(RoomWidgetEnum.HIGH_SCORE_DISPLAY, HighscoreComponent);
 
                     if(!this.roomComponent.roomSession.isSpectator)
                     {

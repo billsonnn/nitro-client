@@ -5,8 +5,6 @@ import { FurnitureLogic } from './FurnitureLogic';
 
 export class FurnitureYoutubeLogic extends FurnitureLogic
 {
-    private static STICKIE_COLORS: string[] = [ '9CCEFF', 'FF9CFF', '9CFF9C', 'FFFF33' ];
-
     public getEventTypes(): string[]
     {
         const types = [
