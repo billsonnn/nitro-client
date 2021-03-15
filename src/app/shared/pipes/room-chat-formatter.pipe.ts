@@ -46,7 +46,7 @@ export class RoomChatFormatterPipe implements PipeTransform
         {
             let match = null;
 
-            while ((match = /@[a-zA-Z]+@/g.exec(content)) !== null)
+            while((match = /@[a-zA-Z]+@/g.exec(content)) !== null)
             {
                 const colorTag = match[0].toString();
                 const colorName = colorTag.substr(1, colorTag.length - 2);
