@@ -40,7 +40,7 @@ import { FurnitureVisualizationData } from './visualization/furniture/FurnitureV
 import { FurnitureVoteCounterVisualization } from './visualization/furniture/FurnitureVoteCounterVisualization';
 import { FurnitureVoteMajorityVisualization } from './visualization/furniture/FurnitureVoteMajorityVisualization';
 import { FurnitureWaterAreaVisualization } from './visualization/furniture/FurnitureWaterAreaVisualization';
-import { FurnitureYoutubeVisualization } from './visualization/furniture/FurnitureYouTubeVisualization';
+import { FurnitureYoutubeVisualization } from './visualization/furniture/FurnitureYoutubeVisualization';
 import { PetVisualization } from './visualization/pet/PetVisualization';
 import { PetVisualizationData } from './visualization/pet/PetVisualizationData';
 import { RoomVisualization } from './visualization/room/RoomVisualization';
