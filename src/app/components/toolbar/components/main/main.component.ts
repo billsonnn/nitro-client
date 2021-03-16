@@ -17,8 +17,8 @@ import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
-import { NavigatorService } from '../../../navigator/services/navigator.service';
 import { ModToolService } from '../../../mod-tool/services/mod-tool.service';
+import { NavigatorService } from '../../../navigator/services/navigator.service';
 
 @Component({
     selector: 'nitro-toolbar-component',
@@ -219,6 +219,11 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
 
             Nitro.instance.roomSessionManager.removeSession(-1);
         }
+    }
+
+    public goToRoom(id: number)
+    {
+        Nitro.instance.createLinkEvent('navigator/goto/' + id);
     }
 
     public visitHomeRoom(): void

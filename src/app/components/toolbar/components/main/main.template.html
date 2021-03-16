@@ -12,6 +12,7 @@
                 <div class="position-absolute bg-danger px-1 py-0 rounded shadow count" *ngIf="unseenAchievementsCount">{{ unseenAchievementsCount }}</div>
             </li>
         </ul>
+        <input type="number" placeholder="Room id" (keydown.enter)="goToRoom($event.target.value)" />
     </div>
     <nitro-toolbar-me-menu-component></nitro-toolbar-me-menu-component>
 </div>
