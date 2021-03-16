@@ -1,4 +1,6 @@
 import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { HighScoreData } from '../../../../../../client/nitro/room/object/data/type/HighScoreData';
 import { HighScoreDataType } from '../../../../../../client/nitro/room/object/data/type/HighScoreDataType';
 import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
 import { FurnitureHighScoreWidgetHandler } from '../../handlers/FurnitureHighScoreWidgetHandler';
@@ -12,12 +14,17 @@ export class HighscoreComponent extends ConversionTrackingWidget
     @ViewChild('activeView')
     public view: ElementRef<HTMLDivElement> = null;
 
-    private _visible: boolean   = false;
-    private _objectId: number   = -1;
-    private _roomId: number     = -1;
+    private _visible: boolean               = false;
+    private _toggled: boolean               = false;
+    private _objectId: number               = -1;
+    private _roomId: number                 = -1;
+    private _stuffData: HighScoreDataType   = null;
 
-    public topValue: number = 0;
-    public leftValue: number = 0;
+    public topValue: number                 = 0;
+    public leftValue: number                = 0;
+
+    public scoreTypes: string[]             = ['perteam', 'mostwins', 'classic'];
+    public clearTypes: string[]             = ['alltime', 'daily', 'weekly', 'monthly'];
 
     constructor(
         private _ngZone: NgZone)
@@ -31,6 +38,7 @@ export class HighscoreComponent extends ConversionTrackingWidget
         {
             this._objectId  = objectId;
             this._roomId    = roomId;
+            this._stuffData = stuffData;
             this._visible   = true;
         });
     }
@@ -50,6 +58,20 @@ export class HighscoreComponent extends ConversionTrackingWidget
         });
     }
 
+    public openProfile(username: string): void
+    {
+        Nitro.instance.createLinkEvent('profile/name/' + username);
+    }
+
+    public toggle(): void
+
+    {
+        this._ngZone.run(() =>
+        {
+            this._toggled = !this._toggled;
+        });
+    }
+
     public hide(): void
     {
         this._ngZone.run(() =>
@@ -57,6 +79,7 @@ export class HighscoreComponent extends ConversionTrackingWidget
             this._visible   = false;
             this._objectId  = -1;
             this._roomId    = -1;
+            this._stuffData = null;
         });
     }
 
@@ -75,6 +98,11 @@ export class HighscoreComponent extends ConversionTrackingWidget
         this._visible = flag;
     }
 
+    public get toggled(): boolean
+    {
+        return this._toggled;
+    }
+
     public get objectId(): number
     {
         return this._objectId;
@@ -83,5 +111,36 @@ export class HighscoreComponent extends ConversionTrackingWidget
     public get roomId(): number
     {
         return this._roomId;
+    }
+
+    public get entries(): HighScoreData[]
+    {
+        if(!this._stuffData) return [];
+
+        return this._stuffData.entries;
+    }
+
+    public get clearTypeCode(): string
+    {
+        if(!this._stuffData) return null;
+
+        return 'high.score.display.cleartype.' + this.clearTypes[this._stuffData.clearType];
+    }
+
+    public get scoreTypeCode(): string
+    {
+        if(!this._stuffData) return null;
+
+        return 'high.score.display.scoretype.' + this.scoreTypes[this._stuffData.scoreType];
+    }
+
+    public get title(): string
+    {
+        if(!this.scoreTypeCode || !this.clearTypeCode) return null;
+
+        const scoreTypeLocalization = Nitro.instance.getLocalization(this.scoreTypeCode);
+        const clearTypeLocalization = Nitro.instance.getLocalization(this.clearTypeCode);
+
+        return Nitro.instance.getLocalizationWithParameters('high.score.display.caption', ['scoretype', 'cleartype'], [scoreTypeLocalization, clearTypeLocalization]);
     }
 }
