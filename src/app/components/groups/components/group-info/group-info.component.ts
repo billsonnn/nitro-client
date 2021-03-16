@@ -77,7 +77,7 @@ export class GroupInfoComponent
 
     public leave(): void
     {
-        if(!this.groupId || this._groupMembershipType !== 1) return;
+        if(!this.groupId || this._groupMembershipType !== 1 || this.isOwner) return;
 
         this._groupService.removeMember(this.groupId, Nitro.instance.sessionDataManager.userId);
     }

@@ -31,7 +31,7 @@
             <div class="d-flex flex-row justify-content-between">
                 <div class="btn-group">
                     <button class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
-                    <button class="btn btn-danger" disabled>{{ ('group.delete') | translate }}</button>
+                    <button class="btn btn-danger" (click)="delete()">{{ ('group.delete') | translate }}</button>
                 </div>
                 <button class="btn btn-success" (click)="save()">{{ ('save') | translate }}</button>
             </div>
