@@ -1,4 +1,4 @@
-import { FriendRequestData } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendRequestData';
+import { FriendRequestData } from 'nitro-renderer/src/nitro/communication/messages/incoming/friendlist/FriendRequestData';
 
 export class MessengerRequest
 {

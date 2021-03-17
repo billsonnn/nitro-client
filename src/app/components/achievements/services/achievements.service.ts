@@ -1,11 +1,11 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { Achievement } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
-import { AchievementEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementEvent';
-import { AchievementsEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsEvent';
-import { AchievementsScoreEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsScoreEvent';
-import { RequestAchievementsMessageComposer } from '../../../../client/nitro/communication/messages/outgoing/achievements/RequestAchievementsMessageComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { Achievement } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/Achievement';
+import { AchievementEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementEvent';
+import { AchievementsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementsEvent';
+import { AchievementsScoreEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementsScoreEvent';
+import { RequestAchievementsMessageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/achievements/RequestAchievementsMessageComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../core/settings/service';
 import { AchievementCategory } from '../common/AchievementCategory';
 

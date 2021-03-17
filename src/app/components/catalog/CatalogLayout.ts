@@ -1,11 +1,11 @@
 import { Directive, NgZone } from '@angular/core';
-import { CatalogPageOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { ICatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
-import { FurnitureType } from '../../../client/nitro/session/furniture/FurnitureType';
-import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
+import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { CatalogProductOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { FurnitureType } from 'nitro-renderer/src/nitro/session/furniture/FurnitureType';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { CatalogService } from './services/catalog.service';
 
 @Directive()

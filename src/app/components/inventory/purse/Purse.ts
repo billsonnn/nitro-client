@@ -1,4 +1,4 @@
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 export class Purse
 {

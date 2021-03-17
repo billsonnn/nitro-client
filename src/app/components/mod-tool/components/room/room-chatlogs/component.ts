@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
-import { ModtoolUserChatlogParserVisit } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModToolService } from '../../../services/mod-tool.service';
 import { ModToolChatlogsComponent } from '../../shared/chatlogs/component';
 
 

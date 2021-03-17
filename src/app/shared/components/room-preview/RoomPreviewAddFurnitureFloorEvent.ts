@@ -1,5 +1,5 @@
-import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
-import { IVector3D } from '../../../../client/room/utils/IVector3D';
+import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
+import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
 import { RoomPreviewAddFurnitureEvent } from './RoomPreviewAddFurnitureEvent';
 
 export class RoomPreviewAddFurnitureFloorEvent extends RoomPreviewAddFurnitureEvent

@@ -1,4 +1,4 @@
-﻿import { IObjectData } from '../../../../../../client/nitro/room/object/data/IObjectData';
+﻿import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../events/RoomWidgetFurniInfostandUpdateEvent';
 
 export class InfoStandFurniData

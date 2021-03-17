@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FigureData } from '../../../../../client/nitro/avatar/figuredata/FigureData';
+import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { AvatarEditorService } from '../../services/avatar-editor.service';
 
 @Component({

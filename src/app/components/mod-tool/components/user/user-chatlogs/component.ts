@@ -1,12 +1,10 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { UserToolUser } from '../user-tool/user-tool-user';
-import { ModtoolUserVisitedRoomsRoom } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserVisitedRoomsRoom';
+import { Component, Input } from '@angular/core';
+import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
-import { ModtoolUserChatlogParserVisit } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModToolService } from '../../../services/mod-tool.service';
 import { ModToolChatlogsComponent } from '../../shared/chatlogs/component';
+import { UserToolUser } from '../user-tool/user-tool-user';
 
 
 @Component({

@@ -1,12 +1,12 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ConfigurationEvent } from '../client/core/configuration/ConfigurationEvent';
-import { NitroEvent } from '../client/core/events/NitroEvent';
-import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/NitroCommunicationDemoEvent';
-import { LegacyExternalInterface } from '../client/nitro/externalInterface/LegacyExternalInterface';
-import { NitroLocalizationEvent } from '../client/nitro/localization/NitroLocalizationEvent';
-import { Nitro } from '../client/nitro/Nitro';
-import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
-import { WebGL } from '../client/nitro/utils/WebGL';
+import { ConfigurationEvent } from 'nitro-renderer/src/core/configuration/ConfigurationEvent';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { NitroCommunicationDemoEvent } from 'nitro-renderer/src/nitro/communication/demo/NitroCommunicationDemoEvent';
+import { LegacyExternalInterface } from 'nitro-renderer/src/nitro/externalInterface/LegacyExternalInterface';
+import { NitroLocalizationEvent } from 'nitro-renderer/src/nitro/localization/NitroLocalizationEvent';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomEngineEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineEvent';
+import { WebGL } from 'nitro-renderer/src/nitro/utils/WebGL';
 import { SettingsService } from './core/settings/service';
 
 @Component({

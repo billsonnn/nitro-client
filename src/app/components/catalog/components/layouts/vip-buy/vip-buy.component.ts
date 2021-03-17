@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
-import { CatalogClubOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { CatalogService } from '../../../services/catalog.service';
 

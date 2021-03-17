@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
+import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { CatalogProductOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListener';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
+import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { RenderTexture } from 'pixi.js';
-import { AdvancedMap } from '../../../../../../client/core/utils/AdvancedMap';
-import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../../client/nitro/room/IGetImageListener';
-import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
-import { Vector3d } from '../../../../../../client/room/utils/Vector3d';
 import { CatalogLayout } from '../../../CatalogLayout';
 
 

@@ -1,11 +1,10 @@
-import { ICatalogPageParser } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { CatalogSearchParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogSearchParser';
+import { CatalogFrontPageItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogFrontPageItem';
+import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { ICatalogLocalizationData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogLocalizationData';
+import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { CatalogLayoutSearchResultsComponent } from './search-results.component';
-import { CatalogFrontPageItem } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogFrontPageItem';
-import { CatalogLocalizationData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogLocalizationData';
-import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ICatalogLocalizationData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogLocalizationData';
-import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
-import { CatalogSearchParser } from '../../../../../../client/nitro/communication/messages/parser/catalog/CatalogSearchParser';
 
 export class SearchResultsPage implements ICatalogPageParser
 {

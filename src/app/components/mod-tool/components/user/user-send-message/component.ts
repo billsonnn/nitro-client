@@ -1,13 +1,11 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { UserToolUser } from '../user-tool/user-tool-user';
-import { ModtoolUserVisitedRoomsRoom } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserVisitedRoomsRoom';
-import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ModtoolEventAlertComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../../../notification/services/notification.service';
-import { ModtoolEventAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { UserToolUser } from '../user-tool/user-tool-user';
 
 
 @Component({

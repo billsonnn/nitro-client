@@ -1,4 +1,4 @@
-import { hex2rgb, rgb2hex } from '@pixi/utils';
+import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
 import { Filter } from 'pixi.js';
 
 const vertex = `
@@ -55,7 +55,7 @@ export class WiredSelectionFilter extends Filter
 
         if(typeof value === 'number')
         {
-            hex2rgb(value, arr);
+            ColorConverter.hex2rgb(value, arr);
 
             this._lineColor = value;
         }
@@ -65,7 +65,7 @@ export class WiredSelectionFilter extends Filter
             arr[1] = value[1];
             arr[2] = value[2];
 
-            this._lineColor = rgb2hex(arr);
+            this._lineColor = ColorConverter.rgb2hex(arr);
         }
     }
 
@@ -80,7 +80,7 @@ export class WiredSelectionFilter extends Filter
 
         if(typeof value === 'number')
         {
-            hex2rgb(value, arr);
+            ColorConverter.hex2rgb(value, arr);
 
             this._color = value;
         }
@@ -90,7 +90,7 @@ export class WiredSelectionFilter extends Filter
             arr[1] = value[1];
             arr[2] = value[2];
 
-            this._color = rgb2hex(arr);
+            this._color = ColorConverter.rgb2hex(arr);
         }
     }
 }

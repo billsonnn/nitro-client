@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AdvancedMap } from '../../../../../client/core/utils/AdvancedMap';
+import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
 import { CategoryData } from '../../common/CategoryData';
 import { IAvatarEditorCategoryModel } from '../../common/IAvatarEditorCategoryModel';
 import { AvatarEditorService } from '../../services/avatar-editor.service';

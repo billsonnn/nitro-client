@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-
-import { ModToolService } from '../../../services/mod-tool.service';
+import { Component } from '@angular/core';
+import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
-import { ModtoolUserChatlogParserVisit } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';
+
 
 
 @Component({

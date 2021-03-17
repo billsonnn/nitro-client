@@ -1,7 +1,7 @@
 import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { RoomObjectCategory } from '../../../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { PetInfoData } from '../../common/PetInfoData';

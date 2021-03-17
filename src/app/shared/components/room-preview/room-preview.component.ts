@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { IRoomRenderingCanvas } from 'nitro-renderer/src/room/renderer/IRoomRenderingCanvas';
+import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
 import { DisplayObject } from 'pixi.js';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
-import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRenderingCanvas';
-import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
 
 @Component({
     selector: '[nitro-room-preview-component]',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomWidgetUpdateInfostandUserEvent } from '../../../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomWidgetChangeMottoMessage } from '../../../messages/RoomWidgetChangeMottoMessage';
 import { InfoStandUserData } from '../../data/InfoStandUserData';

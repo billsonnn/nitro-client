@@ -1,14 +1,14 @@
 import { Component, NgZone } from '@angular/core';
-import { AvatarFigureContainer } from '../../../../../../client/nitro/avatar/AvatarFigureContainer';
-import { AvatarFigurePartType } from '../../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { IAvatarFigureContainer } from '../../../../../../client/nitro/avatar/IAvatarFigureContainer';
-import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { FurnitureMannequinSaveLookComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
-import { FurnitureMannequinSaveNameComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { AvatarFigureContainer } from 'nitro-renderer/src/nitro/avatar/AvatarFigureContainer';
+import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
+import { IAvatarFigureContainer } from 'nitro-renderer/src/nitro/avatar/IAvatarFigureContainer';
+import { FurnitureMultiStateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { FurnitureMannequinSaveLookComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
+import { FurnitureMannequinSaveNameComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
 
 @Component({

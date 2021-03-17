@@ -1,45 +1,47 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { AdjustmentFilter } from '@pixi/filter-adjustment';
+import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
+import { EventDispatcher } from 'nitro-renderer/src/core/events/EventDispatcher';
+import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
+import { LegacyExternalInterface } from 'nitro-renderer/src/nitro/externalInterface/LegacyExternalInterface';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomEngineEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineEvent';
+import { RoomEngineObjectEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEvent';
+import { IRoomEngine } from 'nitro-renderer/src/nitro/room/IRoomEngine';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectOperationType } from 'nitro-renderer/src/nitro/room/object/RoomObjectOperationType';
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomVariableEnum } from 'nitro-renderer/src/nitro/room/RoomVariableEnum';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { IRoomSession } from 'nitro-renderer/src/nitro/session/IRoomSession';
+import { IRoomSessionManager } from 'nitro-renderer/src/nitro/session/IRoomSessionManager';
+import { ISessionDataManager } from 'nitro-renderer/src/nitro/session/ISessionDataManager';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { MouseEventType } from 'nitro-renderer/src/nitro/ui/MouseEventType';
+import { TouchEventType } from 'nitro-renderer/src/nitro/ui/TouchEventType';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { IRoomWidget } from 'nitro-renderer/src/nitro/ui/widget/IRoomWidget';
+import { IRoomWidgetMessageListener } from 'nitro-renderer/src/nitro/ui/widget/IRoomWidgetMessageListener';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
+import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
+import { RoomGeometry } from 'nitro-renderer/src/room/utils/RoomGeometry';
+import { RoomId } from 'nitro-renderer/src/room/utils/RoomId';
+import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
-import { IConnection } from '../../../client/core/communication/connections/IConnection';
-import { EventDispatcher } from '../../../client/core/events/EventDispatcher';
-import { IEventDispatcher } from '../../../client/core/events/IEventDispatcher';
-import { NitroEvent } from '../../../client/core/events/NitroEvent';
-import { IAvatarRenderManager } from '../../../client/nitro/avatar/IAvatarRenderManager';
-import { LegacyExternalInterface } from '../../../client/nitro/externalInterface/LegacyExternalInterface';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
-import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
-import { IRoomEngine } from '../../../client/nitro/room/IRoomEngine';
-import { RoomObjectCategory } from '../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectOperationType } from '../../../client/nitro/room/object/RoomObjectOperationType';
-import { RoomObjectVariable } from '../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomVariableEnum } from '../../../client/nitro/room/RoomVariableEnum';
-import { RoomControllerLevel } from '../../../client/nitro/session/enum/RoomControllerLevel';
-import { IRoomSession } from '../../../client/nitro/session/IRoomSession';
-import { IRoomSessionManager } from '../../../client/nitro/session/IRoomSessionManager';
-import { ISessionDataManager } from '../../../client/nitro/session/ISessionDataManager';
-import { IRoomWidgetHandler } from '../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { MouseEventType } from '../../../client/nitro/ui/MouseEventType';
-import { TouchEventType } from '../../../client/nitro/ui/TouchEventType';
-import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { IRoomWidget } from '../../../client/nitro/ui/widget/IRoomWidget';
-import { IRoomWidgetMessageListener } from '../../../client/nitro/ui/widget/IRoomWidgetMessageListener';
-import { RoomWidgetMessage } from '../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IRoomObject } from '../../../client/room/object/IRoomObject';
-import { ColorConverter } from '../../../client/room/utils/ColorConverter';
-import { RoomGeometry } from '../../../client/room/utils/RoomGeometry';
-import { RoomId } from '../../../client/room/utils/RoomId';
-import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
 import { FriendListService } from '../friendlist/services/friendlist.service';
+import { ModToolService } from '../mod-tool/services/mod-tool.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
+import { IRoomWidgetManager } from './IRoomWidgetManager';
 import { RoomWidgetRoomEngineUpdateEvent } from './widgets/events/RoomWidgetRoomEngineUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from './widgets/events/RoomWidgetRoomObjectUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from './widgets/events/RoomWidgetRoomViewUpdateEvent';
@@ -67,8 +69,6 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { ModToolService } from '../mod-tool/services/mod-tool.service';
-import { RoomObjectType } from '../../../client/nitro/room/object/RoomObjectType';
 
 @Component({
     selector: 'nitro-room-component',
@@ -78,7 +78,7 @@ import { RoomObjectType } from '../../../client/nitro/room/object/RoomObjectType
             <ng-template #widgetContainer></ng-template>
         </div>`
 })
-export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IRoomWidgetMessageListener
+export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidgetMessageListener
 {
     private static COLOR_ADJUSTMENT: AdjustmentFilter = new AdjustmentFilter();
 

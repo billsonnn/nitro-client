@@ -1,5 +1,5 @@
-﻿import { Texture } from 'pixi.js';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { Texture } from 'pixi.js';
 
 export class RoomWidgetPetPackageUpdateEvent extends RoomWidgetUpdateEvent
 {

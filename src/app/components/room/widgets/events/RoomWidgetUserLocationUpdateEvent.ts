@@ -1,5 +1,5 @@
-﻿import { Point, Rectangle } from 'pixi.js';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { Point, Rectangle } from 'pixi.js';
 
 export class RoomWidgetUserLocationUpdateEvent extends RoomWidgetUpdateEvent
 {

@@ -1,14 +1,14 @@
-﻿import { Container, Sprite } from 'pixi.js';
-import { AvatarFigurePartType } from '../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
-import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
-import { IAvatarRenderManager } from '../../../../client/nitro/avatar/IAvatarRenderManager';
-import { IFigurePart } from '../../../../client/nitro/avatar/structure/figure/IFigurePart';
-import { IFigurePartSet } from '../../../../client/nitro/avatar/structure/figure/IFigurePartSet';
-import { IPartColor } from '../../../../client/nitro/avatar/structure/figure/IPartColor';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { IGraphicAsset } from '../../../../client/room/object/visualization/utils/IGraphicAsset';
-import { TextureUtils } from '../../../../client/room/utils/TextureUtils';
+﻿import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
+import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
+import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
+import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
+import { IFigurePart } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePart';
+import { IFigurePartSet } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePartSet';
+import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IGraphicAsset } from 'nitro-renderer/src/room/object/visualization/utils/IGraphicAsset';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
+import { Container, Sprite } from 'pixi.js';
 import { CategoryBaseModel } from './CategoryBaseModel';
 
 export class AvatarEditorGridPartItem implements IAvatarImageListener

@@ -1,8 +1,8 @@
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
+import { IRoomObjectSpriteVisualization } from 'nitro-renderer/src/room/object/visualization/IRoomObjectSpriteVisualization';
 import { BLEND_MODES, Filter } from 'pixi.js';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../client/nitro/room/object/RoomObjectCategory';
-import { IRoomObject } from '../../../client/room/object/IRoomObject';
-import { IRoomObjectSpriteVisualization } from '../../../client/room/object/visualization/IRoomObjectSpriteVisualization';
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredSelectionFilter } from './WiredSelectionFilter';
 

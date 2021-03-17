@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ModtoolEventAlertComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { ModtoolSanctionAlertComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionAlertComposer';
+import { ModtoolSanctionBanComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionBanComposer';
+import { ModtoolSanctionKickComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionKickComposer';
+import { ModtoolSanctionMuteComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionMuteComposer';
+import { ModtoolSanctionTradelockComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
 import { UserToolUser } from '../user-tool/user-tool-user';
 import { ModActionDefinition } from './mod-action-definition';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { NotificationService } from '../../../../notification/services/notification.service';
-import { ModtoolSanctionBanComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionBanComposer';
-import { ModtoolSanctionKickComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionKickComposer';
-import { ModtoolSanctionTradelockComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
-import { ModtoolEventAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { ModtoolSanctionAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionAlertComposer';
-import { ModtoolSanctionMuteComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolSanctionMuteComposer';
 
 @Component({
     selector: 'nitro-mod-tool-mod-action-user-component',

@@ -1,14 +1,10 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { ModtoolUserInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
+import { ModtoolRequestUserInfoComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { _Str_5467 } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/_Str_5467';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
-import { ModtoolRoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
-import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { ModtoolRequestUserInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
-import { ModtoolUserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
-import { _Str_5467 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
 
 @Injectable()
 export class ModToolUserInfoService implements OnDestroy

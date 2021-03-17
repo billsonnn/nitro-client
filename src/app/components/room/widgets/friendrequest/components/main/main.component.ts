@@ -1,8 +1,8 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../../client/core/events/IEventDispatcher';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
-import { RoomObjectType } from '../../../../../../../client/nitro/room/object/RoomObjectType';
-import { ConversionTrackingWidget } from '../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomWidgetFriendRequestUpdateEvent } from '../../../events/RoomWidgetFriendRequestUpdateEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../../../events/RoomWidgetUserLocationUpdateEvent';
 import { FriendRequestHandler } from '../../../handlers/FriendRequestHandler';

@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
-import { GroupRemoveMemberComposer } from '../../../../../client/nitro/communication/messages/outgoing/group/GroupRemoveMemberComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { GroupRemoveMemberComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/group/GroupRemoveMemberComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
 import { NotificationChoice } from '../../../notification/components/choices/choices.component';
 import { GroupsService } from '../../services/groups.service';

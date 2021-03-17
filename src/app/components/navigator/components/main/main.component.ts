@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Nitro } from 'src/client/nitro/Nitro';
-import { NavigatorSearchResultList } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
-import { NavigatorTopLevelContext } from '../../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { NavigatorSearchResultList } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
+import { NavigatorTopLevelContext } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
+import { RoomDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
 import { NavigatorService } from '../../services/navigator.service';
 import { NavigatorCreatorComponent } from '../creator/creator.component';

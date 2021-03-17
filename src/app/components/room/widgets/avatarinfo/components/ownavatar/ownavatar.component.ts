@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/AvatarAction';
-import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { AvatarExpressionEnum } from '../../../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { AvatarAction } from 'nitro-renderer/src/nitro/avatar/enum/AvatarAction';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { AvatarExpressionEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../../../messages/RoomWidgetDanceMessage';

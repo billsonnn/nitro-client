@@ -1,12 +1,11 @@
 import { Component, NgZone } from '@angular/core';
-import { CatalogClubOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { CatalogSelectClubGiftComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/CatalogSelectClubGiftComposer';
+import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
+import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { CatalogService } from '../../../services/catalog.service';
-import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { Vector3d } from '../../../../../../client/room/utils/Vector3d';
-import { CatalogPurchaseComposer } from '../../../../../../client/nitro/communication/messages/outgoing/catalog/CatalogPurchaseComposer';
-import { CatalogSelectClubGiftComposer } from '../../../../../../client/nitro/communication/messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 
 
 @Component({

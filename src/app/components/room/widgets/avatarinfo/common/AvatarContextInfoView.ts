@@ -1,5 +1,5 @@
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
 import { Rectangle } from 'pixi.js';
-import { RoomObjectType } from '../../../../../../client/nitro/room/object/RoomObjectType';
 import { ContextInfoView } from '../../contextmenu/ContextInfoView';
 
 export class AvatarContextInfoView extends ContextInfoView

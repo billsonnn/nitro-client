@@ -1,19 +1,19 @@
-﻿import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { FurnitureStackHeightEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/FurnitureStackHeightEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
+﻿import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { FurnitureStackHeightEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/FurnitureStackHeightEvent';
+import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { CustomStackHeightComponent } from '../furniture/customstackheight/customstackheight.component';
 
 export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _widget: CustomStackHeightComponent     = null;
     private _lastFurniId: number                    = -1;
     private _messages: IMessageEvent[]              = [];
@@ -79,12 +79,12 @@ export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandl
         return RoomWidgetEnum.CUSTOM_STACK_HEIGHT;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         if(container !== this._container)
         {

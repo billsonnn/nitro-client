@@ -1,34 +1,34 @@
+import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
+import { AvatarScaleType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarScaleType';
+import { AvatarSetType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarSetType';
+import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
+import { PetFigureData } from 'nitro-renderer/src/nitro/avatar/pets/PetFigureData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { SystemChatStyleEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/SystemChatStyleEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
+import { PointMath } from 'nitro-renderer/src/room/utils/PointMath';
+import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Point } from 'pixi.js';
-import { IConnection } from '../../../../../client/core/communication/connections/IConnection';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { AvatarFigurePartType } from '../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { AvatarScaleType } from '../../../../../client/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '../../../../../client/nitro/avatar/enum/AvatarSetType';
-import { IAvatarImageListener } from '../../../../../client/nitro/avatar/IAvatarImageListener';
-import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { SystemChatStyleEnum } from '../../../../../client/nitro/ui/widget/enums/SystemChatStyleEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IVector3D } from '../../../../../client/room/utils/IVector3D';
-import { PointMath } from '../../../../../client/room/utils/PointMath';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { ChatHistoryItem } from '../../../chat-history/common/ChatHistoryItem';
 import { ChatHistoryService } from '../../../chat-history/services/chat-history.service';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
 import { RoomChatComponent } from '../roomchat/component';
 
 export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListener
 {
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomChatComponent;
 
     private _connection: IConnection;
@@ -361,12 +361,12 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         return [ RoomSessionChatEvent.CHAT_EVENT ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
     }

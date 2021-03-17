@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { DesktopViewComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
+import { RoomDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NavigatorService } from '../../services/navigator.service';
 
 @Component({

@@ -1,21 +1,21 @@
-﻿import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { NitroToolbarEvent } from '../../../../../client/nitro/events/NitroToolbarEvent';
-import { IRoomEngine } from '../../../../../client/nitro/room/IRoomEngine';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionDanceEvent } from '../../../../../client/nitro/session/events/RoomSessionDanceEvent';
-import { RoomSessionUserDataUpdateEvent } from '../../../../../client/nitro/session/events/RoomSessionUserDataUpdateEvent';
-import { UserNameUpdateEvent } from '../../../../../client/nitro/session/events/UserNameUpdateEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IRoomSession } from '../../../../../client/nitro/session/IRoomSession';
-import { RoomUserData } from '../../../../../client/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
+﻿import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { NitroToolbarEvent } from 'nitro-renderer/src/nitro/events/NitroToolbarEvent';
+import { IRoomEngine } from 'nitro-renderer/src/nitro/room/IRoomEngine';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomSessionDanceEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionDanceEvent';
+import { RoomSessionUserDataUpdateEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionUserDataUpdateEvent';
+import { UserNameUpdateEvent } from 'nitro-renderer/src/nitro/session/events/UserNameUpdateEvent';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { IRoomSession } from 'nitro-renderer/src/nitro/session/IRoomSession';
+import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomAvatarInfoComponent } from '../avatarinfo/components/main/main.component';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
@@ -27,7 +27,7 @@ import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMes
 
 export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _widget: RoomAvatarInfoComponent;
 
     private _disposed: boolean;
@@ -211,12 +211,12 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
         ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         if(this._container)
         {

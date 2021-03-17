@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { CatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
+import { ICatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { IFurnitureDataListener } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureDataListener';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
-import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IFurnitureDataListener } from '../../../../../client/nitro/session/furniture/IFurnitureDataListener';
 import { CatalogService } from '../../services/catalog.service';
 import { SearchResultsPage } from '../layouts/search-results/SearchResultsPage';
 

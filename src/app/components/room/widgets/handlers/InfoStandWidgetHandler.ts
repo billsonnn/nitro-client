@@ -1,28 +1,28 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { PetType } from '../../../../../client/nitro/avatar/pets/PetType';
-import { RoomAdsUpdateComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
-import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
-import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
-import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ObjectDataFactory } from '../../../../../client/nitro/room/object/data/ObjectDataFactory';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectOperationType } from '../../../../../client/nitro/room/object/RoomObjectOperationType';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomTradingLevelEnum } from '../../../../../client/nitro/session/enum/RoomTradingLevelEnum';
-import { RoomSessionPetInfoUpdateEvent } from '../../../../../client/nitro/session/events/RoomSessionPetInfoUpdateEvent';
-import { RoomSessionUserBadgesEvent } from '../../../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { RoomUserData } from '../../../../../client/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetEnumItemExtradataParameter } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { PetType } from 'nitro-renderer/src/nitro/avatar/pets/PetType';
+import { RoomAdsUpdateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
+import { RoomUnitDropHandItemComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
+import { RoomUnitGiveHandItemComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
+import { RoomModerationParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomModerationParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { ObjectDataFactory } from 'nitro-renderer/src/nitro/room/object/data/ObjectDataFactory';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectOperationType } from 'nitro-renderer/src/nitro/room/object/RoomObjectOperationType';
+import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { RoomTradingLevelEnum } from 'nitro-renderer/src/nitro/session/enum/RoomTradingLevelEnum';
+import { RoomSessionPetInfoUpdateEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionPetInfoUpdateEvent';
+import { RoomSessionUserBadgesEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionUserBadgesEvent';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetEnumItemExtradataParameter } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
@@ -39,7 +39,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 {
     private static ACTIVITY_POINTS_DISPLAY_ENABLED: boolean = true;
 
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomInfoStandMainComponent;
 
     private _disposed: boolean;
@@ -986,12 +986,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         return [ RoomSessionUserBadgesEvent.RSUBE_BADGES ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         if(this._container)
         {

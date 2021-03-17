@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { NitroLogger } from '../../../../client/core/common/logger/NitroLogger';
+import { NitroLogger } from 'nitro-renderer/src/core/common/logger/NitroLogger';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Component({
     template: ''
