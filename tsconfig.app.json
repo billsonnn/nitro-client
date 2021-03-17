@@ -8,8 +8,7 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "node_modules/nitro-renderer/src/*.ts",
-    "node_modules/nitro-renderer/src/**/*.ts",
+    "../nitro-renderer/**/*",
     "src/main.ts",
     "src/polyfills.ts"
   ]
