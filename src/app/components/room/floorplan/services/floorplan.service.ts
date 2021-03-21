@@ -474,7 +474,15 @@ export class FloorPlanService implements OnDestroy
         switch(this._currentAction)
         {
             case 'door':
-                this._setDoor(x, y);
+
+                if(tile.height != 'x')
+                {
+                    this.floorMapSettings.doorX = x;
+                    this.floorMapSettings.doorY = y;
+                    this._changesMade = true;
+
+                    this.renderTileMap();
+                }
                 return;
             case 'up':
                 futureHeightIndex = heightIndex + 1;
@@ -516,66 +524,17 @@ export class FloorPlanService implements OnDestroy
     }
 
 
-
     public revertChanges(): void
     {
-        this._floorMapSettings = JSON.parse(JSON.stringify(this.__originalFloorMapSettings));
-        // this._spriteMap.forEach((y, index) =>
-        // {
-        //     y.forEach((x, indexX) =>
-        //     {
-        //         const floormap = this.floorMapSettings.heightMap[index][indexX];
-        //
-        //         let color = this._colorMap[ floormap.height];
-        //         if(floormap.blocked)
-        //         {
-        //             color = FloorPlanService.TILE_BLOCKED;
-        //         }
-        //         if(indexX === this.floorMapSettings.doorX && index === this.floorMapSettings.doorY)
-        //         {
-        //             color = FloorPlanService.TILE_DOOR;
-        //         }
-        //
-        //         x.tint = color;
-        //     });
-        // });
+        this._ngZone.runOutsideAngular(() =>
+        {
+            this._floorMapSettings = JSON.parse(JSON.stringify(this.__originalFloorMapSettings));
+            this.renderTileMap();
 
+        });
         this._changesMade = false;
     }
 
-    private _setDoor(x: number, y: number): void
-    {
-        if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) return;
-
-        // if(!this.floorMapSettings.heightMap[this.floorMapSettings.doorY] ||
-        //     !this._spriteMap[this.floorMapSettings.doorY] ||
-        //     !this.floorMapSettings.heightMap[y] ||
-        //     !this._spriteMap[y]) return;
-
-        return;
-
-        // const tile = this.floorMapSettings.heightMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
-        // const sprite = this._spriteMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
-        // const futureTile = this.floorMapSettings.heightMap[y][x];
-        // const futureSprite = this._spriteMap[y][x];
-        //
-        // if(!tile || !sprite || !futureTile || !futureSprite) return;
-        //
-        // if(futureTile.height === 'x') return;
-        //
-        // if(tile.blocked)
-        // {
-        //     sprite.tint = 0x435e87;
-        // }
-        // else
-        // {
-        //     sprite.tint = this._colorMap[tile.height];
-        // }
-        //
-        // futureSprite.tint = 0xffffff;
-        // this.floorMapSettings.doorX = x;
-        // this.floorMapSettings.doorY = y;
-    }
 
 
     public set floorMapSettings(settings: FloorMapSettings)
@@ -814,7 +773,6 @@ export class FloorPlanService implements OnDestroy
                             };
 
                             this._handleTileClick(realX, realY);
-
 
 
                             //   this.renderTileMap();
