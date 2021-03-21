@@ -97,12 +97,16 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         {
             this._importExportModal = null;
 
-            // if(this._app)
-            // {
-            //     this._app.destroy(true);
-            //
-            //     this._app = null;
-            // }
+            if(this._app)
+            {
+                this._app.destroy(true);
+
+                this._app = null;
+
+                this._tileMap.destroy();
+
+                this._tileMap = null;
+            }
         });
     }
 
@@ -192,24 +196,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             this._ngZone.runOutsideAngular(() => this.floorPlanService.detectPoints());
 
             this._app.stage.addChild(this._tileMap);
-            //
-            // this._app.view.addEventListener('mousedown', () =>
-            // {
-            //     this.floorPlanService.isHolding = true;
-            // });
-            //
-            // this._app.view.addEventListener('mouseup', () =>
-            // {
-            //     this.floorPlanService.isHolding = false;
-            // });
-            //
-            // this._app.view.addEventListener('mouseout', () =>
-            // {
-            //     this.floorPlanService.isHolding = false;
-            // });
+
             this.floorplanElement.nativeElement.appendChild(this._app.view);
 
-            // this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
+            this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
     }
 

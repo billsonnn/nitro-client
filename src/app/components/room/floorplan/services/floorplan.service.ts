@@ -59,7 +59,7 @@ export class FloorPlanService implements OnDestroy
 
     private static readonly TILE_BLOCKED = 'r_blocked';
     private static readonly TILE_DOOR = 'r_door';
-    //private _spriteMap: Sprite[][];
+
     public component: FloorplanMainComponent;
 
     private _messages: IMessageEvent[];
@@ -452,7 +452,7 @@ export class FloorPlanService implements OnDestroy
 
                 this._ngZone.runOutsideAngular(() =>
                 {
-                    this.component.tileMap.addFrame(tileAsset + '.png', positionX + 300, positionY, null, null, null, null, 1, y, x);
+                    this.component.tileMap.addFrame(tileAsset + '.png', positionX+ 1024, positionY, null, null, null, null, 1, y, x);
                 });
             }
         }
@@ -467,9 +467,7 @@ export class FloorPlanService implements OnDestroy
         const tile = this.floorMapSettings.heightMap[y][x];
         const heightIndex = this._heightScheme.indexOf(tile.height);
 
-
         let futureHeightIndex = 0;
-
 
         switch(this._currentAction)
         {
