@@ -1,8 +1,8 @@
 import { IMessageComposer } from '../../../../../../core/communication/messages/IMessageComposer';
 
-export class RoomUsersWithRightsComposer implements IMessageComposer<[ number ]>
+export class RoomUsersWithRightsComposer implements IMessageComposer<ConstructorParameters<typeof RoomUsersWithRightsComposer>>
 {
-    private _data: [ number ];
+    private _data: ConstructorParameters<typeof RoomUsersWithRightsComposer>;
 
     constructor(roomId: number)
     {

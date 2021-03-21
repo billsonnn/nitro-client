@@ -1,0 +1,23 @@
+<div [draggable] [center]="false" dragHandle=".card-header" class="card user-tool-card">
+    <div class="card-header">
+			<span>
+			<i class="icon modtool-user-icon" style="margin-right: 5px;"></i>
+                Room visits: {{user.username}}
+			</span>
+        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="card-body">
+        <perfect-scrollbar class="position-relative w-100" style="min-height:200px;max-height:200px;height:200px;">
+            <div *ngFor="let room of roomVisitedForUser" class="d-flex flex-row justify-content-between w-100">
+                <div>
+                    {{ room.roomName }}
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="mr-2">{{ showTime(room) }}</div>  <button (click)="goToRoom(room)" type="button" class="btn btn-sm btn-secondary">Enter</button>
+                </div>
+
+            </div>
+        </perfect-scrollbar>
+
+    </div>
+</div>

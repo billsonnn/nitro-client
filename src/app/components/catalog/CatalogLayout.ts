@@ -6,7 +6,6 @@ import { Nitro } from '../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
 import { FurnitureType } from '../../../client/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
-import { ProductTypeEnum } from './enums/ProductTypeEnum';
 import { CatalogService } from './services/catalog.service';
 
 @Directive()
@@ -64,20 +63,16 @@ export class CatalogLayout
 
         if(!product) return '';
 
-        if(product.productType.toUpperCase() == FurnitureType.BADGE)
+        const productType = product.productType.toUpperCase();
+
+        switch(productType)
         {
-            return Nitro.instance.sessionDataManager.getBadgeUrl(product.extraParam);
-        }
-
-        const furniData = this.getProductFurniData(product);
-
-        if(!furniData) return '';
-
-        switch(product.productType)
-        {
-            case ProductTypeEnum.FLOOR:
-            case ProductTypeEnum.WALL:
-                return this._catalogService.getFurnitureDataIconUrl(furniData);
+            case FurnitureType.BADGE:
+                return Nitro.instance.sessionDataManager.getBadgeUrl(product.extraParam);
+            case FurnitureType.FLOOR:
+                return Nitro.instance.roomEngine.getFurnitureFloorIconUrl(product.furniClassId);
+            case FurnitureType.WALL:
+                return Nitro.instance.roomEngine.getFurnitureWallIconUrl(product.furniClassId, product.extraParam);
         }
 
         return '';

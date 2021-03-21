@@ -4,17 +4,18 @@ import { RoomEngineEvent } from '../room/events/RoomEngineEvent';
 import { IRoomEngine } from '../room/IRoomEngine';
 import { RoomSessionEvent } from './events/RoomSessionEvent';
 import { BaseHandler } from './handler/BaseHandler';
+import { GenericErrorHandler } from './handler/GenericErrorHandler';
 import { RoomChatHandler } from './handler/RoomChatHandler';
 import { RoomDataHandler } from './handler/RoomDataHandler';
 import { RoomDimmerPresetsHandler } from './handler/RoomDimmerPresetsHandler';
 import { RoomPermissionsHandler } from './handler/RoomPermissionsHandler';
+import { RoomPresentHandler } from './handler/RoomPresentHandler';
 import { RoomSessionHandler } from './handler/RoomSessionHandler';
 import { RoomUsersHandler } from './handler/RoomUsersHandler';
 import { IRoomHandlerListener } from './IRoomHandlerListener';
 import { IRoomSession } from './IRoomSession';
 import { IRoomSessionManager } from './IRoomSessionManager';
 import { RoomSession } from './RoomSession';
-import { RoomPresentHandler } from './handler/RoomPresentHandler';
 
 export class RoomSessionManager extends NitroManager implements IRoomSessionManager, IRoomHandlerListener
 {
@@ -75,6 +76,7 @@ export class RoomSessionManager extends NitroManager implements IRoomSessionMana
             new RoomSessionHandler(connection, this),
             new RoomUsersHandler(connection, this),
             new RoomPresentHandler(connection, this),
+            new GenericErrorHandler(connection, this),
         );
     }
 

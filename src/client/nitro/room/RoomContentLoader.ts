@@ -676,7 +676,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                     if(icon)
                     {
-                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null));
+                        const active = (param && (param !== '') && (this._activeObjectTypeIds.has((name + '*' + param))));
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
                     }
@@ -715,7 +715,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             assetUrls = this.getAssetUrls(type, colorIndex, true);
         }
 
-        if(assetUrls.length) return assetUrls[0];
+        if(assetUrls && assetUrls.length) return assetUrls[0];
 
         return null;
     }

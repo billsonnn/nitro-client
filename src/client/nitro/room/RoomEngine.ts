@@ -2916,7 +2916,7 @@ export class RoomEngine extends NitroManager implements IRoomEngine, IRoomCreato
     public getFurnitureWallIconUrl(typeId: number, extra: string = null): string
     {
         let type: string    = null;
-        let color   = '';
+        let color           = '';
 
         if(this._roomContentLoader)
         {

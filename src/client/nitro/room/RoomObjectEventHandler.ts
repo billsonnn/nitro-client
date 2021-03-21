@@ -31,20 +31,24 @@ import { FurnitureWallMultiStateComposer } from '../communication/messages/outgo
 import { FurnitureWallUpdateComposer } from '../communication/messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
 import { RoomUnitLookComposer } from '../communication/messages/outgoing/room/unit/RoomUnitLookComposer';
 import { RoomUnitWalkComposer } from '../communication/messages/outgoing/room/unit/RoomUnitWalkComposer';
+import { Nitro } from '../Nitro';
 import { MouseEventType } from '../ui/MouseEventType';
 import { RoomObjectPlacementSource } from './enums/RoomObjectPlacementSource';
 import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent';
 import { RoomEngineObjectEvent } from './events/RoomEngineObjectEvent';
 import { RoomEngineObjectPlacedEvent } from './events/RoomEngineObjectPlacedEvent';
 import { RoomEngineObjectPlacedOnUserEvent } from './events/RoomEngineObjectPlacedOnUserEvent';
+import { RoomEngineSamplePlaybackEvent } from './events/RoomEngineSamplePlaybackEvent';
 import { RoomEngineTriggerWidgetEvent } from './events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectBadgeAssetEvent } from './events/RoomObjectBadgeAssetEvent';
+import { RoomObjectDataRequestEvent } from './events/RoomObjectDataRequestEvent';
 import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
 import { RoomObjectFloorHoleEvent } from './events/RoomObjectFloorHoleEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
 import { RoomObjectHSLColorEnabledEvent } from './events/RoomObjectHSLColorEnabledEvent';
 import { RoomObjectHSLColorEnableEvent } from './events/RoomObjectHSLColorEnableEvent';
 import { RoomObjectMoveEvent } from './events/RoomObjectMoveEvent';
+import { RoomObjectSamplePlaybackEvent } from './events/RoomObjectSamplePlaybackEvent';
 import { RoomObjectStateChangedEvent } from './events/RoomObjectStateChangedEvent';
 import { RoomObjectTileMouseEvent } from './events/RoomObjectTileMouseEvent';
 import { RoomObjectWallMouseEvent } from './events/RoomObjectWallMouseEvent';
@@ -300,8 +304,18 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectFurnitureActionEvent.MOUSE_BUTTON:
                 this.handleMousePointer(event as RoomObjectFurnitureActionEvent, roomId);
                 return;
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED:
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_DISPOSED:
+            case RoomObjectSamplePlaybackEvent.PLAY_SAMPLE:
+            case RoomObjectSamplePlaybackEvent.CHANGE_PITCH:
+                this.handleRoomObjectSamplePlaybackEvent(event as RoomObjectSamplePlaybackEvent, roomId);
+                return;
             case RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR:
                 this.onHSLColorEnableEvent(event as RoomObjectHSLColorEnableEvent, roomId);
+                return;
+            case RoomObjectDataRequestEvent.RODRE_CURRENT_USER_ID:
+            case RoomObjectDataRequestEvent.RODRE_URL_PREFIX:
+                this.onRoomObjectDataRequestEvent(event as RoomObjectDataRequestEvent, roomId);
                 return;
             default:
                 NitroLogger.log(`Unhandled Event: ${ event.constructor.name }`, `Object ID: ${ event.object.id }`);
@@ -803,6 +817,29 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         this._roomEngine.updateMousePointer(event.type, event.objectId, event.objectType);
     }
 
+    private handleRoomObjectSamplePlaybackEvent(event: RoomObjectSamplePlaybackEvent, roomId: number): void
+    {
+        if(!event) return;
+
+        const objectCategory = this._roomEngine.getRoomObjectCategoryForType(event.objectType);
+
+        switch(event.type)
+        {
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.ROOM_OBJECT_INITIALIZED, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.ROOM_OBJECT_DISPOSED:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.ROOM_OBJECT_DISPOSED, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.PLAY_SAMPLE:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.PLAY_SAMPLE, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+            case RoomObjectSamplePlaybackEvent.CHANGE_PITCH:
+                this._roomEngine.events.dispatchEvent(new RoomEngineSamplePlaybackEvent(RoomEngineSamplePlaybackEvent.CHANGE_PITCH, roomId, event.objectId, objectCategory, event.sampleId, event.pitch));
+                break;
+        }
+    }
+
     private onHSLColorEnableEvent(event: RoomObjectHSLColorEnableEvent, roomId: number): void
     {
         if(!event || !this._roomEngine) return;
@@ -811,6 +848,21 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             case RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR:
                 this._roomEngine.events.dispatchEvent(new RoomObjectHSLColorEnabledEvent(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, roomId, event.enable, event.hue, event.saturation, event.lightness));
+                return;
+        }
+    }
+
+    private onRoomObjectDataRequestEvent(event: RoomObjectDataRequestEvent, roomId: number): void
+    {
+        if(!event || !this._roomEngine || !event.object) return;
+
+        switch(event.type)
+        {
+            case RoomObjectDataRequestEvent.RODRE_CURRENT_USER_ID:
+                event.object.model.setValue(RoomObjectVariable.SESSION_CURRENT_USER_ID, this._roomEngine.sessionDataManager.userId);
+                return;
+            case RoomObjectDataRequestEvent.RODRE_URL_PREFIX:
+                event.object.model.setValue(RoomObjectVariable.SESSION_CURRENT_USER_ID, Nitro.instance.getConfiguration('url.prefix'));
                 return;
         }
     }

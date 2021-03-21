@@ -2,12 +2,12 @@
     "socket.url": "WEBSOCKET_URL",
     "asset.url": "ASSET_URL",
     "image.library.url": "C_IMAGES_WITH_SLASH/",
+    "external.samples.url": "FLASH_FURNITURE_FOLDER/mp3/sound_machine_sample_%sample%.mp3",
     "image.library.notifications.url": "${image.library.url}notifications/%image%.png",
     "achievements.images.url": "${image.library.url}Quests/%image%.png",
     "thumbnails.url": "${image.library.url}camera/thumbnails/%thumbnail%.png",
     "images.url": "${asset.url}/images",
     "gamedata.url": "${asset.url}/gamedata",
-    "sounds.url": "${asset.url}/sounds",
     "external.texts.url": "${gamedata.url}/json/ExternalTexts.json",
     "furnidata.url": "${gamedata.url}/json/FurnitureData.json",
     "productdata.url": "${gamedata.url}/json/ProductData.json",
@@ -19,6 +19,7 @@
     "avatar.asset.effect.url": "${asset.url}/effect/%libname%/%libname%.json",
     "navigator.slider.enabled": true,
     "furni.extras.url": "${asset.url}/images/furniextras/%image%.png",
+    "url.prefix": "",
     "chat.viewer.height.percentage": 0.40,
     "navigator.slider.content": [
         {

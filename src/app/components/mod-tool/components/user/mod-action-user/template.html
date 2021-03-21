@@ -1,0 +1,35 @@
+<div [draggable] [center]="false" dragHandle=".card-header" class="card room-tool-card">
+    <div class="card-header">
+			<span>
+			<i class="icon modtool-room-icon" style="margin-right: 5px;"></i>
+			Mod Actions on {{ user.username }}
+			</span>
+        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <select [(ngModel)]="cfhType"
+                class="form-control form-control-sm">
+                <option [value]="-1">CFH Topic:</option>
+                <option *ngFor="let item of categories; let i = index" [value]="i">{{ item }}</option>
+            </select></div>
+
+        <div class="form-group mb-2">
+            <select [(ngModel)]="sanction"
+                class="form-control form-control-sm">
+                <option [value]="-1">Sanction type:</option>
+                <option *ngFor="let item of actions; let i = index" [value]="i">{{ item.name }}</option>
+            </select></div>
+
+        <div class="form-group mb-2">
+            <label>Optional message type, overrides default</label>
+            <textarea [(ngModel)]="message" class="form-control"></textarea>
+            </div>
+
+        <div class="form-group mb-2">
+            <button (click)="sendSanction()" type="button" class="btn btn-primary">Sanction</button>
+        </div>
+    </div>
+
+</div>

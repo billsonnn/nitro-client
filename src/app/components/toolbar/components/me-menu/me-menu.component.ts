@@ -17,13 +17,13 @@ import { NavigatorService } from '../../../navigator/services/navigator.service'
                     [
                         style({ bottom: 10, opacity: 0 }),
                         animate('.3s ease-out',
-                            style({ bottom: 87, opacity: 1 }))
+                            style({ bottom: 77, opacity: 1 }))
                     ]
                 ),
                 transition(
                     ':leave',
                     [
-                        style({ bottom: 87, opacity: 1 }),
+                        style({ bottom: 77, opacity: 1 }),
                         animate('.3s ease-in',
                             style({ bottom: 10, opacity: 0 }))
                     ]
@@ -70,6 +70,11 @@ export class MeMenuComponent implements OnInit, OnDestroy
         this.settingsService.toggleNavigator();
 
         this.navigatorService.setCurrentContextByCode('myworld_view');
+    }
+
+    public toggleUserSettings(): void
+    {
+        this.settingsService.toggleUserSettings();
     }
 
     public get unseenAchievementsCount(): number

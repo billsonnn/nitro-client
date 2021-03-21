@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewCh
 import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { SystemChatStyleEnum } from '../../../../../client/nitro/ui/widget/enums/SystemChatStyleEnum';
 import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';
@@ -30,7 +29,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public selectedUsername: string                         = '';
     public floodBlocked: boolean                            = false;
-    public floodBlockedTime: number                      = 0;
+    public floodBlockedSeconds: number                         = 0;
     public lastContent: string                              = '';
     public isTyping: boolean                                = false;
     public typingStartedSent: boolean                       = false;
@@ -47,7 +46,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     private _maxChatLength: number                          = 0;
 
     constructor(
-        private ngZone: NgZone
+        private _ngZone: NgZone
     )
     {
         super();
@@ -72,7 +71,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public ngAfterViewInit(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             document.body.addEventListener('keydown', this.onKeyDownEvent);
 
@@ -86,7 +85,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
     public ngOnDestroy(): void
     {
-        this.ngZone.runOutsideAngular(() =>
+        this._ngZone.runOutsideAngular(() =>
         {
             document.body.removeEventListener('keydown', this.onKeyDownEvent);
 
@@ -145,7 +144,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
             case RoomWidgetChatInputContentUpdateEvent.WHISPER: {
                 const localization = Nitro.instance.getLocalization('widgets.chatinput.mode.whisper');
 
-                this.inputView.value = localization + ' ' + event.userName + ' ';
+                this.changeInputValue(localization + ' ' + event.userName + ' ');
                 return;
             }
             case RoomWidgetChatInputContentUpdateEvent.SHOUT:
@@ -157,33 +156,51 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
     {
         if(!event) return;
 
-        this.floodBlocked       = true;
-        this.floodBlockedTime   = (event.seconds * 1000);
+        this._ngZone.run(() =>
+        {
+            this.floodBlocked           = true;
+            this.floodBlockedSeconds    = event.seconds;
 
-        this.startFloodInterval();
+            this.changeInputValue(Nitro.instance.getLocalizationWithParameter('chat.input.alert.flood', 'time', this.floodBlockedSeconds.toString()));
+
+            this.startFloodInterval();
+        });
     }
 
     private decreaseFloodBlockSeconds(): void
     {
-        if(!this.floodBlockedTime)
+        if(!this.floodBlockedSeconds)
         {
             this.resetFloodInterval();
 
             this.floodBlocked = false;
 
+            this.changeInputValue('');
+
             return;
         }
 
-        this.floodBlockedTime = (this.floodBlockedTime - 1);
+        this.floodBlockedSeconds = (this.floodBlockedSeconds - 1);
+
+        this.changeInputValue(Nitro.instance.getLocalizationWithParameter('chat.input.alert.flood', 'time', this.floodBlockedSeconds.toString()));
     }
 
     public sendChat(text: string, chatType: number, recipientName: string = '', styleId: number = 0): void
     {
         if(this.floodBlocked || !this.messageListener) return;
 
-        this.chatInputView.nativeElement.parentElement.dataset.value = this.chatInputView.nativeElement.value = '';
+        this.changeInputValue('');
 
         this.messageListener.processWidgetMessage(new RoomWidgetChatMessage(RoomWidgetChatMessage.MESSAGE_CHAT, text, chatType, recipientName, styleId));
+    }
+
+    private changeInputValue(value: string): void
+    {
+        const inputView = ((this.chatInputView && this.chatInputView.nativeElement) || null);
+
+        if(!inputView) return;
+
+        inputView.parentElement.dataset.value = inputView.value = value;
     }
 
     private onKeyDownEvent(event: KeyboardEvent): void
@@ -215,7 +232,8 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
                     if((parts[0] === this._chatModeIdWhisper) && (parts.length === 3) && (parts[2] === ''))
                     {
-                        this.inputView.value    = '';
+                        this.changeInputValue('');
+
                         this.lastContent        = '';
                     }
                 }
@@ -303,8 +321,6 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         text = parts.join(' ');
 
-        const chatStyle = SystemChatStyleEnum.NORMAL;
-
         if(this.typingTimer) this.resetTypingTimer();
 
         if(this.idleTimer) this.resetIdleTimer();
@@ -327,8 +343,9 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         this.typingStartedSent = false;
 
-        this.inputView.value    = append;
-        this.lastContent        = append;
+        this.changeInputValue(append);
+
+        this.lastContent = append;
     }
 
     private sendTypingMessage(): void
@@ -373,7 +390,7 @@ export class RoomChatInputComponent extends ConversionTrackingWidget implements 
 
         if((text !== this._chatModeIdWhisper) || (selectedUsername.length === 0)) return;
 
-        inputView.value = `${ inputView.value } ${ this.selectedUsername }`;
+        this.changeInputValue(`${ inputView.value } ${ this.selectedUsername }`);
     }
 
     private startIdleTimer(): void

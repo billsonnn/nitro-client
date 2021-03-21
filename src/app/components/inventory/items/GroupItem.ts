@@ -1,15 +1,12 @@
-﻿import { Texture } from 'pixi.js';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
+﻿import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { Nitro } from '../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../client/nitro/room/IGetImageListener';
-import { ImageResult } from '../../../../client/nitro/room/ImageResult';
 import { IRoomEngine } from '../../../../client/nitro/room/IRoomEngine';
 import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 import { FurniCategory } from './FurniCategory';
 import { FurnitureItem } from './FurnitureItem';
 import { IFurnitureItem } from './IFurnitureItem';
 
-export class GroupItem implements IGetImageListener
+export class GroupItem
 {
     private static INVENTORY_THUMB_XML: string = 'inventory_thumb_xml';
     private static _Str_4072: number = 0xCCCCCC;
@@ -268,51 +265,20 @@ export class GroupItem implements IGetImageListener
     {
         if(this._iconUrl) return;
 
-        let imageResult: ImageResult = null;
+        let url = null;
 
         if(this.isWallItem)
         {
-            imageResult = this._roomEngine.getFurnitureWallIcon(this._type, this, this._stuffData.getLegacyString());
+            url = this._roomEngine.getFurnitureWallIconUrl(this._type, this._stuffData.getLegacyString());
         }
         else
         {
-            imageResult = this._roomEngine.getFurnitureFloorIcon(this._type, this, (this._extra.toString()), this._stuffData);
+            url = this._roomEngine.getFurnitureFloorIconUrl(this._type);
         }
 
-        if(imageResult.image || imageResult.data)
-        {
-            if(!imageResult.image)
-            {
-                this.setIconUrl(imageResult.getImage().src);
-            }
-            else
-            {
-                this.setIconUrl(imageResult.image.src);
-            }
-        }
-    }
-
-    private setIconUrl(url: string): void
-    {
         if(!url) return;
 
         this._iconUrl = url;
-    }
-
-    public imageReady(id: number, texture: Texture, image: HTMLImageElement = null): void
-    {
-        if((id === -1) || !image) return;
-
-        const url = image.src;
-
-        if((this._iconUrl && this._iconUrl.length) && (url === this._iconUrl)) return;
-
-        this.setIconUrl(image.src);
-    }
-
-    public imageFailed(id: number): void
-    {
-
     }
 
     public get type(): number

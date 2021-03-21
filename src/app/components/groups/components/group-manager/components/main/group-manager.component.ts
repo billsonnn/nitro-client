@@ -1,5 +1,8 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GroupSettingsParser } from '../../../../../../../client/nitro/communication/messages/parser/group/GroupSettingsParser';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { NotificationChoice } from '../../../../../notification/components/choices/choices.component';
+import { NotificationService } from '../../../../../notification/services/notification.service';
 import GroupSettings from '../../../../common/GroupSettings';
 import { GroupsService } from '../../../../services/groups.service';
 
@@ -18,6 +21,7 @@ export class GroupManagerComponent implements OnInit, OnDestroy
 
     constructor(
         private _groupService: GroupsService,
+        private _notificationService: NotificationService,
         private _ngZone: NgZone)
     {
         this._groupService.groupManagerComponent = this;
@@ -102,6 +106,25 @@ export class GroupManagerComponent implements OnInit, OnDestroy
         }
 
         this._groupService.save(this.groupSettings);
+    }
+
+    public delete(): void
+    {
+        const title = Nitro.instance.localization.getValue('group.deleteconfirm.title');
+        const message = Nitro.instance.localization.getValue('group.deleteconfirm.desc');
+
+        const choices = [
+            new NotificationChoice('group.delete', () =>
+            {
+                this._groupService.deleteGroup(this.groupSettings.id);
+                this.hide();
+                this._groupService.groupInfoComponent.clear();
+            }, ['btn-danger']),
+            new NotificationChoice('generic.close', () =>
+            {}, ['btn-primary'])
+        ];
+
+        this._notificationService.alertWithChoices(message, choices, title);
     }
 
     public get currentTab(): number

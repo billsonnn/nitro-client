@@ -17,7 +17,9 @@ import { PurseModule } from './purse/purse.module';
 import { RoomModule } from './room/room.module';
 import { ToolbarModule } from './toolbar/toolbar.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 import { WiredModule } from './wired/wired.module';
+import { ModToolModule } from './mod-tool/mod-tool.module';
 
 @NgModule({
     imports: [
@@ -35,10 +37,13 @@ import { WiredModule } from './wired/wired.module';
         PurseModule,
         RoomModule,
         ToolbarModule,
+        WiredModule,
+        ModToolModule,
         UserProfileModule,
         WiredModule,
         ChatHistoryModule,
-        GroupsModule
+        GroupsModule,
+        UserSettingsModule
     ],
     exports: [
         MainComponent

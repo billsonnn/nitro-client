@@ -18,6 +18,7 @@ import { AchievementsService } from '../../../achievements/services/achievements
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
+import { ModToolService } from '../../../mod-tool/services/mod-tool.service';
 
 @Component({
     selector: 'nitro-toolbar-component',
@@ -53,6 +54,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         private _achievementService: AchievementsService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
+        private _modToolsService: ModToolService,
         private ngZone: NgZone)
     {
         this.onNitroToolbarEvent = this.onNitroToolbarEvent.bind(this);

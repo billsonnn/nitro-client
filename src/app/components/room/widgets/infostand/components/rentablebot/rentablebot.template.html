@@ -22,8 +22,8 @@
             </div>
         </div>
         <div class="d-flex flex-column mt-2">
-            <p *ngIf="(botData.ownerId > 0)" class="badge badge-secondary mb-0">{{ ('infostand.text.botowner') | translate }}</p>
-            <p *ngIf="(botData.carryItem > 0)" class="badge badge-secondary mb-0">{{ ('infostand.text.handitem') | translate }}</p>
+            <p *ngIf="(botData.ownerId > 0)" class="badge badge-secondary mb-0">{{ ownerText }}</p>
+            <p *ngIf="(botData.carryItem > 0)" class="badge badge-secondary mb-0">{{ carryText }}</p>
         </div>
     </div>
 </div>
