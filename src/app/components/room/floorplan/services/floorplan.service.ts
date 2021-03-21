@@ -1,16 +1,9 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
 import {
-    Graphics,
     InteractionEvent,
     Loader,
     Point,
-    Polygon,
-    RenderTexture,
-    SCALE_MODES,
-    settings,
-    Sprite,
-    Texture
 } from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
@@ -423,30 +416,21 @@ export class FloorPlanService implements OnDestroy
 
     public renderTileMap(): void
     {
+        console.log('renderTileMap');
         this.component.tileMap.clear();
+
+        let amountOfTilesUsed = 0;
         for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
         {
-            // this._spriteMap[y] = [];
-
             for(let x = 0; x < this.floorMapSettings.heightMap[y].length; x++)
             {
-
                 const tile = this.floorMapSettings.heightMap[y][x];
 
                 let isDoor = false;
 
                 if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
 
-
                 let tileAsset = tile.height;
-
-                // if(tile.height !== 'x')
-                // {
-                //     this._ngZone.run(() =>
-                //     {
-                //         this.increaseColoredTilesCount();
-                //     });
-                // }
 
                 if(tile.blocked)
                 {
@@ -458,6 +442,11 @@ export class FloorPlanService implements OnDestroy
                     tileAsset = FloorPlanService.TILE_DOOR;
                 }
 
+                if(tileAsset !== 'x')
+                {
+                    amountOfTilesUsed++;
+                }
+
                 const positionX = x * this._tileSize / 2 - y * this._tileSize / 2;
                 const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
 
@@ -465,10 +454,10 @@ export class FloorPlanService implements OnDestroy
                 {
                     this.component.tileMap.addFrame(tileAsset + '.png', positionX + 300, positionY, null, null, null, null, 1, y, x);
                 });
-
-
             }
         }
+
+        this._ngZone.run(() => this._coloredTilesCount = amountOfTilesUsed);
     }
 
 
@@ -524,32 +513,9 @@ export class FloorPlanService implements OnDestroy
 
         this.renderTileMap();
 
-
-        // this._ngZone.run(() =>
-        // {
-        //     if(newHeight === 'x')
-        //     {
-        //         // this.decreaseColoredTilesCount();
-        //     }
-        //     else
-        //     {
-        //         //   this.increaseColoredTilesCount();
-        //     }
-        // });
-        //
-        // let isDoor = false;
-        //
-        // if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
-        //
-        // if(!isDoor)
-        //     this.setTint(y, x, newHeight);
-
     }
 
-    private setTint(y, x, height)
-    {
-        //this._spriteMap[y][x].tint = this._colorMap[height];
-    }
+
 
     public revertChanges(): void
     {
@@ -690,15 +656,6 @@ export class FloorPlanService implements OnDestroy
             this.wallHeight++;
     }
 
-    public increaseColoredTilesCount(): void
-    {
-        this._coloredTilesCount++;
-    }
-
-    public decreaseColoredTilesCount(): void
-    {
-        this._coloredTilesCount--;
-    }
 
     public get coloredTilesCount(): number
     {
@@ -914,19 +871,12 @@ export class FloorPlanService implements OnDestroy
 
                     const realY = data[13];
                     const realX = data[14];
-                    //    if(this._lastUsedTile.x !== realX || this._lastUsedTile.y !== realY)
-                    //   {
-                    console.log({
-                        realX,
-                        realY
-                    });
-
-                    this._handleTileClick(realX, realY);
-                    this._lastUsedTile.x = realX;
-                    this._lastUsedTile.y = realY;
-
-
-                    //  }
+                    if(this._lastUsedTile.x !== realX || this._lastUsedTile.y !== realY)
+                    {
+                        this._handleTileClick(realX, realY);
+                        this._lastUsedTile.x = realX;
+                        this._lastUsedTile.y = realY;
+                    }
                 }
 
             }
