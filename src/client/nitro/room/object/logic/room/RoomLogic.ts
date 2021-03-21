@@ -120,7 +120,6 @@ export class RoomLogic extends RoomObjectLogicBase
 
                 this._planeParser.initializeFromMapData(mapData);
 
-                console.log('do');
             }
 
             this._lastHoleUpdate    = 0;
@@ -334,8 +333,6 @@ export class RoomLogic extends RoomObjectLogicBase
     private onObjectRoomMapUpdateMessage(message: ObjectRoomMapUpdateMessage): void
     {
         if(!message || !message.mapData) return;
-
-        console.log('do it');
 
         this._planeParser.initializeFromMapData(message.mapData);
 

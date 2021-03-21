@@ -23,6 +23,9 @@ import {
     POINT_STRUCT_SIZE_TWO,
     RectTileLayer
 } from '../../../../../client/room/floorplan/pixi-tilemap';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
@@ -67,6 +70,7 @@ export class FloorPlanService implements OnDestroy
     public component: FloorplanMainComponent;
 
     private _messages: IMessageEvent[];
+    private _updates: number = 0;
 
     private _model: string;
     private _doorX: number;
@@ -99,6 +103,8 @@ export class FloorPlanService implements OnDestroy
     };
     private readonly loader: PIXI.Loader;
 
+    private preveiwerUpdate = new Subject<string>();
+
     constructor(
         private _ngZone: NgZone)
     {
@@ -123,6 +129,14 @@ export class FloorPlanService implements OnDestroy
         this.loader = new Loader();
         this.loader.add('atlas', 'assets/images/floorplaneditor/tiles.json');
         this.loader.load();
+
+        this.preveiwerUpdate.pipe(
+            debounceTime(500),
+            distinctUntilChanged())
+            .subscribe(value =>
+            {
+                this._updatePreviewer();
+            });
     }
 
     public ngOnDestroy(): void
@@ -213,8 +227,7 @@ export class FloorPlanService implements OnDestroy
 
         if(!parser) return;
 
-        console.log('floor = ' + parser.thicknessFloor + ' will become ' + this.convertSettingnToNumber(parser.thicknessFloor));
-        console.log('wall = ' + parser.thicknessWall + ' will become ' + this.convertSettingnToNumber(parser.thicknessWall));
+
         this._thicknessFloor = this.convertSettingnToNumber(parser.thicknessFloor);
         this._thicknessWall = this.convertSettingnToNumber(parser.thicknessWall);
         this._RoomThicknessReceived = true;
@@ -242,7 +255,6 @@ export class FloorPlanService implements OnDestroy
 
     public save(settings: FloorMapSettings)
     {
-        console.log(settings, settings.thicknessWall, settings.thicknessFloor);
         Nitro.instance.communication.connection.send(new RoomModelSaveComposer(
             settings.heightMapString,
             settings.doorX,
@@ -396,7 +408,7 @@ export class FloorPlanService implements OnDestroy
 
         this._highestY = roomMapStringSplit.length - 1;
         this._highestX = roomMapStringSplit[this._highestY].length - 1;
-        console.log('highest X: ' + this._highestX + ', highestY: ' + this._highestY);
+
         return roomMap;
     }
 
@@ -419,7 +431,6 @@ export class FloorPlanService implements OnDestroy
 
     public renderTileMap(): void
     {
-        console.log('renderTileMap');
         this.component.tileMap.clear();
 
         let amountOfTilesUsed = 0;
@@ -461,7 +472,18 @@ export class FloorPlanService implements OnDestroy
         }
 
         this._ngZone.run(() => this._coloredTilesCount = amountOfTilesUsed);
+
+        this._updates++;
+        this.preveiwerUpdate.next(this._updates.toString());
     }
+
+
+    private _updatePreviewer(): void
+    {
+        console.log('updating previewer');
+        this._ngZone.run(() => this.floorMapSettings.heightMapString = this.generateTileMapString());
+    }
+
 
 
     private _handleTileClick(x: number, y: number): void
