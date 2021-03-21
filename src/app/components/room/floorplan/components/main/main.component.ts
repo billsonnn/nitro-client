@@ -161,8 +161,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         const width = tileSize * this.floorPlanService.floorMapSettings.heightMap.length + 20;
         const height = (tileSize * this.floorPlanService.floorMapSettings.heightMap.length) / 2 + 100;
 
-        this.floorPlanService.extraX = tileSize / 2 * this.floorPlanService.floorMapSettings.heightMap.length;
-
         this.floorPlanService.originalMapSettings = this.floorPlanService.floorMapSettings;
 
 
@@ -181,8 +179,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         {
 
             this._app = new Application({
-                width: 2086,
-                height: 1124,
+                width: width,
+                height: height,
                 backgroundColor: 0x2b2b2b,
                 antialias: true,
                 autoDensity: true,

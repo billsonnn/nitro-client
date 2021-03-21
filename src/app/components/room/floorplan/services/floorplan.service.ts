@@ -85,7 +85,7 @@ export class FloorPlanService implements OnDestroy
     private _isHolding: boolean;
     private _currentAction: string;
     private _currentHeight: string;
-    private _extraX: number;
+
 
     private _changesMade: boolean;
     private _wallHeight: number;
@@ -272,11 +272,10 @@ export class FloorPlanService implements OnDestroy
         this._floorMapSettings = new FloorMapSettings();
         this.__originalFloorMapSettings = new FloorMapSettings();
 
-        this._extraX = 0;
         this._highestX = 0;
         this._highestY = 0;
         this._coloredTilesCount = 0;
-        //    this._spriteMap         = [];
+
         this._isHolding = false;
         this._blockedTilesMap = [];
         this._changesMade = false;
@@ -619,16 +618,6 @@ export class FloorPlanService implements OnDestroy
         return this._coloredTilesCount;
     }
 
-    public get isHolding(): boolean
-    {
-        return this._isHolding;
-    }
-
-    public set isHolding(holding: boolean)
-    {
-        this._isHolding = holding;
-    }
-
     public get tileSize(): number
     {
         return this._tileSize;
@@ -652,16 +641,6 @@ export class FloorPlanService implements OnDestroy
     public set currentHeight(height: string)
     {
         this._currentHeight = height;
-    }
-
-    public get extraX(): number
-    {
-        return this._extraX;
-    }
-
-    public set extraX(x: number)
-    {
-        this._extraX = x;
     }
 
     public get colorMap(): object
@@ -783,7 +762,7 @@ export class FloorPlanService implements OnDestroy
             return false;
         };
 
-        tileMap.on('pointerup', (event: InteractionEvent) =>
+        tileMap.on('pointerup', () =>
         {
             this._isHolding = false;
         });
