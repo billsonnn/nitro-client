@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 window.PIXI = PIXI;
-
+import { Renderer } from '@pixi/core'; // Renderer is the class that is going to register plugins
 
 export class CanvasTileRenderer
 {
@@ -14,10 +14,9 @@ export class CanvasTileRenderer
         this.tileAnim = [0, 0];
     }
 }
-
 const cr = (window.PIXI as any).CanvasRenderer;
-
 if(cr)
 {
+    console.warn('REGISTER');
     cr.registerPlugin('tilemap', CanvasTileRenderer);
 }

@@ -1,6 +1,17 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
-import { Graphics, Polygon, RenderTexture, SCALE_MODES, settings, Sprite, Texture } from 'pixi.js';
+import {
+    Graphics,
+    InteractionEvent,
+    Loader,
+    Point,
+    Polygon,
+    RenderTexture,
+    SCALE_MODES,
+    settings,
+    Sprite,
+    Texture
+} from 'pixi.js';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
@@ -13,18 +24,49 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
+import PIXI from 'pixi.js';
+import { POINT_STRUCT_SIZE_TWO, RectTileLayer } from '../../../../../client/room/floorplan/pixi-tilemap';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
 {
     private _maxFloorLength: number = 64;
     private _tileSize: number = 32;
-    private _colorMap: object = { 'x': '0x101010','0': '0x0065ff','1': '0x0091ff','2': '0x00bcff','3': '0x00e8ff','4': '0x00ffea','5': '0x00ffbf','6': '0x00ff93','7': '0x00ff68','8': '0x00ff3d','9': '0x19ff00','a': '0x44ff00','b': '0x70ff00','c': '0x9bff00','d': '0xf2ff00','e': '0xffe000','f': '0xffb500','g': '0xff8900','h': '0xff5e00','i': '0xff3200','j': '0xff0700','k': '0xff0023','l': '0xff007a','m': '0xff00a5','n': '0xff00d1','o': '0xff00fc','p': '0xd600ff','q': '0xaa00ff' };
+    private _colorMap: object = {
+        'x': '0x101010',
+        '0': '0x0065ff',
+        '1': '0x0091ff',
+        '2': '0x00bcff',
+        '3': '0x00e8ff',
+        '4': '0x00ffea',
+        '5': '0x00ffbf',
+        '6': '0x00ff93',
+        '7': '0x00ff68',
+        '8': '0x00ff3d',
+        '9': '0x19ff00',
+        'a': '0x44ff00',
+        'b': '0x70ff00',
+        'c': '0x9bff00',
+        'd': '0xf2ff00',
+        'e': '0xffe000',
+        'f': '0xffb500',
+        'g': '0xff8900',
+        'h': '0xff5e00',
+        'i': '0xff3200',
+        'j': '0xff0700',
+        'k': '0xff0023',
+        'l': '0xff007a',
+        'm': '0xff00a5',
+        'n': '0xff00d1',
+        'o': '0xff00fc',
+        'p': '0xd600ff',
+        'q': '0xaa00ff'
+    };
     private _heightScheme: string = 'x0123456789abcdefghijklmnopq';
 
-    private static readonly  COLOR_BLOCKED = '0x435e87';
-    private static readonly COLOR_DOOR = '0xffffff';
-    private _spriteMap: Sprite[][];
+    private static readonly TILE_BLOCKED = 'r_blocked';
+    private static readonly TILE_DOOR = 'r_door';
+    //private _spriteMap: Sprite[][];
     public component: FloorplanMainComponent;
 
     private _messages: IMessageEvent[];
@@ -54,27 +96,36 @@ export class FloorPlanService implements OnDestroy
 
     private _changesMade: boolean;
     private _wallHeight: number;
+    private _lastUsedTile: LastUsedTile = {
+        x: -1,
+        y: -1
+    };
+    private readonly loader: PIXI.Loader;
 
     constructor(
         private _ngZone: NgZone)
     {
-        this.component                  = null;
-        this._messages                  = [];
+        this.component = null;
+        this._messages = [];
 
-        this._model                     = null;
-        this._doorX                     = 0;
-        this._doorY                     = 0;
-        this._doorDirection             = 0;
-        this._blockedTilesMap           = [];
-        this._thicknessWall             = 0;
-        this._thicknessFloor            = 0;
+        this._model = null;
+        this._doorX = 0;
+        this._doorY = 0;
+        this._doorDirection = 0;
+        this._blockedTilesMap = [];
+        this._thicknessWall = 0;
+        this._thicknessFloor = 0;
 
-        this._doorSettingsReceived      = false;
-        this._blockedTilesMapReceived   = false;
-        this._RoomThicknessReceived     = false;
-        this._changesMade               = false;
+        this._doorSettingsReceived = false;
+        this._blockedTilesMapReceived = false;
+        this._RoomThicknessReceived = false;
+        this._changesMade = false;
 
         this.registerMessages();
+
+        this.loader = new Loader();
+        this.loader.add('atlas', 'assets/images/floorplaneditor/tiles.json');
+        this.loader.load();
     }
 
     public ngOnDestroy(): void
@@ -135,10 +186,10 @@ export class FloorPlanService implements OnDestroy
 
         if(!parser) return;
 
-        this._doorX                 = parser.x;
-        this._doorY                 = parser.y;
-        this._doorDirection         = parser.direction;
-        this._doorSettingsReceived  = true;
+        this._doorX = parser.x;
+        this._doorY = parser.y;
+        this._doorDirection = parser.direction;
+        this._doorSettingsReceived = true;
 
         this.tryEmit();
     }
@@ -151,8 +202,8 @@ export class FloorPlanService implements OnDestroy
 
         if(!parser) return;
 
-        this._blockedTilesMap           = parser.blockedTilesMap;
-        this._blockedTilesMapReceived   = true;
+        this._blockedTilesMap = parser.blockedTilesMap;
+        this._blockedTilesMapReceived = true;
 
         this.tryEmit();
     }
@@ -167,9 +218,9 @@ export class FloorPlanService implements OnDestroy
 
         console.log('floor = ' + parser.thicknessFloor + ' will become ' + this.convertSettingnToNumber(parser.thicknessFloor));
         console.log('wall = ' + parser.thicknessWall + ' will become ' + this.convertSettingnToNumber(parser.thicknessWall));
-        this._thicknessFloor            = this.convertSettingnToNumber(parser.thicknessFloor);
-        this._thicknessWall             = this.convertSettingnToNumber(parser.thicknessWall);
-        this._RoomThicknessReceived   = true;
+        this._thicknessFloor = this.convertSettingnToNumber(parser.thicknessFloor);
+        this._thicknessWall = this.convertSettingnToNumber(parser.thicknessWall);
+        this._RoomThicknessReceived = true;
 
         this.tryEmit();
     }
@@ -181,10 +232,12 @@ export class FloorPlanService implements OnDestroy
             this._ngZone.run(() => this.component.init(this._model, this._blockedTilesMap, this._doorX, this._doorY, this._doorDirection, this._thicknessWall, this._thicknessFloor));
         }
     }
+
     public render(): void
     {
         this.tryEmit();
     }
+
     public importFloorPlan(model: string)
     {
         this.component.preview(model);
@@ -226,14 +279,14 @@ export class FloorPlanService implements OnDestroy
         this._floorMapSettings = new FloorMapSettings();
         this.__originalFloorMapSettings = new FloorMapSettings();
 
-        this._extraX            = 0;
-        this._highestX          = 0;
-        this._highestY          = 0;
+        this._extraX = 0;
+        this._highestX = 0;
+        this._highestY = 0;
         this._coloredTilesCount = 0;
-        this._spriteMap         = [];
-        this._isHolding         = false;
-        this._blockedTilesMap   = [];
-        this._changesMade       = false;
+        //    this._spriteMap         = [];
+        this._isHolding = false;
+        this._blockedTilesMap = [];
+        this._changesMade = false;
 
         this._currentAction = 'set';
         this._currentHeight = this._heightScheme[1];
@@ -270,7 +323,6 @@ export class FloorPlanService implements OnDestroy
                 }
             }
         }
-
 
 
         const rows = [];
@@ -369,11 +421,12 @@ export class FloorPlanService implements OnDestroy
     }
 
 
-    public renderTileMap(options): void
+    public renderTileMap(): void
     {
-        for(let y = 0; y < this.floorMapSettings.heightMap.length ; y++)
+        this.component.tileMap.clear();
+        for(let y = 0; y < this.floorMapSettings.heightMap.length; y++)
         {
-            this._spriteMap[y] = [];
+            // this._spriteMap[y] = [];
 
             for(let x = 0; x < this.floorMapSettings.heightMap[y].length; x++)
             {
@@ -384,80 +437,55 @@ export class FloorPlanService implements OnDestroy
 
                 if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
 
-                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2 + this._extraX;
-                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
 
+                let tileAsset = tile.height;
 
-                let color = this._colorMap[tile.height];
-
-                if(tile.height !== 'x')
-                {
-                    this._ngZone.run(() =>
-                    {
-                        this.increaseColoredTilesCount();
-                    });
-                }
+                // if(tile.height !== 'x')
+                // {
+                //     this._ngZone.run(() =>
+                //     {
+                //         this.increaseColoredTilesCount();
+                //     });
+                // }
 
                 if(tile.blocked)
                 {
-                    color = FloorPlanService.COLOR_BLOCKED;
+                    tileAsset = FloorPlanService.TILE_BLOCKED;
                 }
 
                 if(isDoor)
                 {
-                    color = FloorPlanService.COLOR_DOOR;
+                    tileAsset = FloorPlanService.TILE_DOOR;
                 }
 
+                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2;
+                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
 
-                this._ngZone.runOutsideAngular(() => this._spriteMap[y][x] = this.component.app.stage.addChild(this._renderIsometricTile(x, y, positionX, positionY, color, options)));
+                this._ngZone.runOutsideAngular(() =>
+                {
+                    this.component.tileMap.addFrame(tileAsset + '.png', positionX + 300, positionY, null, null, null, null, 1, y, x);
+                });
 
 
             }
         }
     }
 
-    private _renderIsometricTile(x: number, y: number, posX: number, posY: number, color: number, options): Sprite
-    {
-        const sprite = Sprite.from('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAARCAYAAAC4qX7BAAAAWUlEQVR42s3WMQoAMAgDQN/i//9Y6eDiIhI1BlzLga1WBIyqvl/CigM866AIiBkHZYBxUBXQDkIBMKgbUAZNA1LQNuAciN4i+qWlP2P6YKOPevryO/MdQM8xzX/d5jc1THsAAAAASUVORK5CYII=');
-        //sprite.setTransform(posX + sprite.width, posY, 0.9, 0.9,0, 1.11, -0.46,0,0);
-        sprite.setTransform(posX, posY);
-
-        sprite.tint = color;
-
-        sprite.interactive = true;
-        sprite.hitArea = new Polygon([
-            17, 17,
-            0,8.5,
-            17,0,
-            34,8.5
-        ]);
-
-        sprite.on('mousedown', () =>
-        {
-            this._handleTileClick(x, y);
-        });
-
-        sprite.on('mouseover', () =>
-        {
-            if(this._isHolding)
-                this._handleTileClick(x, y);
-        });
-
-        return sprite;
-    }
 
     private _handleTileClick(x: number, y: number): void
     {
+
         const tile = this.floorMapSettings.heightMap[y][x];
         const heightIndex = this._heightScheme.indexOf(tile.height);
 
 
         let futureHeightIndex = 0;
 
+
         switch(this._currentAction)
         {
             case 'door':
-                this._setDoor(x,y);
+                this._setDoor(x, y);
                 return;
             case 'up':
                 futureHeightIndex = heightIndex + 1;
@@ -494,86 +522,93 @@ export class FloorPlanService implements OnDestroy
 
         this._changesMade = true;
 
-        this._ngZone.run(() =>
-        {
-            if(newHeight === 'x')
-            {
-                this.decreaseColoredTilesCount();
-            }
-            else
-            {
-                this.increaseColoredTilesCount();
-            }
-        });
+        this.renderTileMap();
 
-        let isDoor = false;
 
-        if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
-
-        if(!isDoor)
-            this.setTint(y,x,newHeight);
+        // this._ngZone.run(() =>
+        // {
+        //     if(newHeight === 'x')
+        //     {
+        //         // this.decreaseColoredTilesCount();
+        //     }
+        //     else
+        //     {
+        //         //   this.increaseColoredTilesCount();
+        //     }
+        // });
+        //
+        // let isDoor = false;
+        //
+        // if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) isDoor = true;
+        //
+        // if(!isDoor)
+        //     this.setTint(y, x, newHeight);
 
     }
 
-    private setTint(y,x, height)
+    private setTint(y, x, height)
     {
-        this._spriteMap[y][x].tint = this._colorMap[height];
+        //this._spriteMap[y][x].tint = this._colorMap[height];
     }
+
     public revertChanges(): void
     {
         this._floorMapSettings = JSON.parse(JSON.stringify(this.__originalFloorMapSettings));
-        this._spriteMap.forEach((y, index) =>
-        {
-            y.forEach((x, indexX) =>
-            {
-                const floormap = this.floorMapSettings.heightMap[index][indexX];
-
-                let color = this._colorMap[ floormap.height];
-                if(floormap.blocked)
-                {
-                    color = FloorPlanService.COLOR_BLOCKED;
-                }
-                if(indexX === this.floorMapSettings.doorX && index === this.floorMapSettings.doorY)
-                {
-                    color = FloorPlanService.COLOR_DOOR;
-                }
-
-                x.tint = color;
-            });
-        });
+        // this._spriteMap.forEach((y, index) =>
+        // {
+        //     y.forEach((x, indexX) =>
+        //     {
+        //         const floormap = this.floorMapSettings.heightMap[index][indexX];
+        //
+        //         let color = this._colorMap[ floormap.height];
+        //         if(floormap.blocked)
+        //         {
+        //             color = FloorPlanService.TILE_BLOCKED;
+        //         }
+        //         if(indexX === this.floorMapSettings.doorX && index === this.floorMapSettings.doorY)
+        //         {
+        //             color = FloorPlanService.TILE_DOOR;
+        //         }
+        //
+        //         x.tint = color;
+        //     });
+        // });
 
         this._changesMade = false;
     }
+
     private _setDoor(x: number, y: number): void
     {
         if(x === this.floorMapSettings.doorX && y === this.floorMapSettings.doorY) return;
 
-        if(!this.floorMapSettings.heightMap[this.floorMapSettings.doorY] ||
-            !this._spriteMap[this.floorMapSettings.doorY] ||
-            !this.floorMapSettings.heightMap[y] ||
-            !this._spriteMap[y]) return;
+        // if(!this.floorMapSettings.heightMap[this.floorMapSettings.doorY] ||
+        //     !this._spriteMap[this.floorMapSettings.doorY] ||
+        //     !this.floorMapSettings.heightMap[y] ||
+        //     !this._spriteMap[y]) return;
 
-        const tile = this.floorMapSettings.heightMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
-        const sprite = this._spriteMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
-        const futureTile = this.floorMapSettings.heightMap[y][x];
-        const futureSprite = this._spriteMap[y][x];
+        return;
 
-        if(!tile || !sprite || !futureTile || !futureSprite) return;
-
-        if(futureTile.height === 'x') return;
-
-        if(tile.blocked)
-        {
-            sprite.tint = 0x435e87;
-        }
-        else
-        {
-            sprite.tint = this._colorMap[tile.height];
-        }
-
-        futureSprite.tint = 0xffffff;
-        this.floorMapSettings.doorX = x;
-        this.floorMapSettings.doorY = y;
+        // const tile = this.floorMapSettings.heightMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
+        // const sprite = this._spriteMap[this.floorMapSettings.doorY][this.floorMapSettings.doorX];
+        // const futureTile = this.floorMapSettings.heightMap[y][x];
+        // const futureSprite = this._spriteMap[y][x];
+        //
+        // if(!tile || !sprite || !futureTile || !futureSprite) return;
+        //
+        // if(futureTile.height === 'x') return;
+        //
+        // if(tile.blocked)
+        // {
+        //     sprite.tint = 0x435e87;
+        // }
+        // else
+        // {
+        //     sprite.tint = this._colorMap[tile.height];
+        // }
+        //
+        // futureSprite.tint = 0xffffff;
+        // this.floorMapSettings.doorX = x;
+        // this.floorMapSettings.doorY = y;
     }
 
 
@@ -619,7 +654,7 @@ export class FloorPlanService implements OnDestroy
 
     public get maxTilesCount(): number
     {
-        return this._maxFloorLength*this._maxFloorLength;
+        return this._maxFloorLength * this._maxFloorLength;
     }
 
 
@@ -659,6 +694,7 @@ export class FloorPlanService implements OnDestroy
     {
         this._coloredTilesCount++;
     }
+
     public decreaseColoredTilesCount(): void
     {
         this._coloredTilesCount--;
@@ -768,4 +804,138 @@ export class FloorPlanService implements OnDestroy
     {
         this._wallHeight = height;
     }
+
+    public detectPoints(): void
+    {
+        const tileMap = this.component.tileMap;
+        const tempPoint = new Point();
+        // @ts-ignore
+        tileMap.containsPoint = (position) =>
+        {
+            tileMap.worldTransform.applyInverse(position, tempPoint);
+            const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
+
+            const bufSize = POINT_STRUCT_SIZE_TWO;
+
+            const len = buffer.length;
+
+            for(let j = 0; j < len; j += bufSize)
+            {
+                const bufIndex = j + bufSize;
+                const data = buffer.slice(j, bufIndex);
+
+                const width = data[4];
+                const height = data[5];
+
+
+                const mousePositionX = Math.floor(tempPoint.x);
+                const mousePositionY = Math.floor(tempPoint.y);
+
+                const tileStartX = data[2];
+                const tileStartY = data[3];
+
+
+                const centreX = tileStartX + (width / 2);
+                const centreY = tileStartY + (height / 2);
+
+                const dx = Math.abs(mousePositionX - centreX - 2);
+                const dy = Math.abs(mousePositionY - centreY - 2);
+
+                const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
+                if(solution)
+                {
+                    if(this._isHolding)
+                    {
+                        const realY = data[13];
+                        const realX = data[14];
+
+                        if(this._lastUsedTile.x != realX || this._lastUsedTile.y != realY)
+                        {
+                            this._lastUsedTile = {
+                                'x': realX,
+                                'y': realY
+                            };
+
+                            this._handleTileClick(realX, realY);
+
+
+
+                            //   this.renderTileMap();
+                        }
+                    }
+                    return true;
+                }
+
+            }
+            return false;
+        };
+
+        tileMap.on('pointerup', (event: InteractionEvent) =>
+        {
+            this._isHolding = false;
+        });
+        tileMap.on('pointerdown', (event: InteractionEvent) =>
+        {
+            const location = event.data.global;
+
+            const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
+
+
+            const bufSize = POINT_STRUCT_SIZE_TWO;
+
+            const len = buffer.length;
+
+            this._isHolding = true;
+            for(let j = 0; j < len; j += bufSize)
+            {
+                const bufIndex = j + bufSize;
+                const data = buffer.slice(j, bufIndex);
+
+                const width = data[4];
+                const height = data[5];
+
+
+                const mousePositionX = Math.floor(location.x);
+                const mousePositionY = Math.floor(location.y);
+
+                const tileStartX = data[2];
+                const tileStartY = data[3];
+
+
+                const centreX = tileStartX + (width / 2);
+                const centreY = tileStartY + (height / 2);
+
+                const dx = Math.abs(mousePositionX - centreX);
+                const dy = Math.abs(mousePositionY - centreY);
+
+                const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
+                if(solution)
+                {
+
+                    const realY = data[13];
+                    const realX = data[14];
+                    //    if(this._lastUsedTile.x !== realX || this._lastUsedTile.y !== realY)
+                    //   {
+                    console.log({
+                        realX,
+                        realY
+                    });
+
+                    this._handleTileClick(realX, realY);
+                    this._lastUsedTile.x = realX;
+                    this._lastUsedTile.y = realY;
+
+
+                    //  }
+                }
+
+            }
+        });
+    }
+}
+
+interface LastUsedTile
+{
+    x: number;
+    y: number;
 }

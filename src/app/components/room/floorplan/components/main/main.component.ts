@@ -10,7 +10,10 @@ import {
     ViewChild
 } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Application, Container, ParticleContainer } from 'pixi.js';
+import * as PIXI from 'pixi.js';
+window.PIXI = PIXI;
+import { Application } from 'pixi.js';
+
 import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
@@ -18,6 +21,9 @@ import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomP
 import { SettingsService } from '../../../../../core/settings/service';
 import { FloorPlanService } from '../../services/floorplan.service';
 import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
+
+import { CompositeRectTileLayer } from '../../../../../../client/room/floorplan/pixi-tilemap';
+
 
 @Component({
     selector: 'nitro-floorplan-main-component',
@@ -38,10 +44,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     private _roomPreviewer: RoomPreviewer;
     private _importExportModal: NgbModalRef;
 
-    public scaleX: string = '0.9';
-    public scaleY: string = '0.9';
-    public skewX: string = '1.11';
-    public skewY: string = '-0.46';
+    private _tileMap: CompositeRectTileLayer;
 
 
     constructor(
@@ -51,7 +54,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         private _settingsService: SettingsService)
     {
         this.floorPlanService.component = this;
-
         this._clear();
 
     }
@@ -163,18 +165,14 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             this._buildApp(width, height);
-            this.floorPlanService.renderTileMap({
-                scaleX: this.scaleX,
-                scaleY: this.scaleY,
-                skewX: this.skewX,
-                skewY: this.skewY
-            });
+            this.floorPlanService.renderTileMap();
         });
 
     }
 
     private _buildApp(width: number, height: number): void
     {
+
         if(!this._app)
         {
 
@@ -188,24 +186,30 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             });
 
 
+            this._tileMap = new CompositeRectTileLayer();
+            this._tileMap.interactive = true;
 
-            this._app.view.addEventListener('mousedown', () =>
-            {
-                this.floorPlanService.isHolding = true;
-            });
+            this._ngZone.runOutsideAngular(() => this.floorPlanService.detectPoints());
 
-            this._app.view.addEventListener('mouseup', () =>
-            {
-                this.floorPlanService.isHolding = false;
-            });
-
-            this._app.view.addEventListener('mouseout', () =>
-            {
-                this.floorPlanService.isHolding = false;
-            });
+            this._app.stage.addChild(this._tileMap);
+            //
+            // this._app.view.addEventListener('mousedown', () =>
+            // {
+            //     this.floorPlanService.isHolding = true;
+            // });
+            //
+            // this._app.view.addEventListener('mouseup', () =>
+            // {
+            //     this.floorPlanService.isHolding = false;
+            // });
+            //
+            // this._app.view.addEventListener('mouseout', () =>
+            // {
+            //     this.floorPlanService.isHolding = false;
+            // });
             this.floorplanElement.nativeElement.appendChild(this._app.view);
 
-            this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
+            // this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
     }
 
@@ -388,6 +392,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get app(): Application
     {
         return this._app;
+    }
+
+    public get tileMap(): CompositeRectTileLayer
+    {
+        return this._tileMap;
     }
 
 }
