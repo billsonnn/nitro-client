@@ -18,7 +18,11 @@ import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
 import PIXI from 'pixi.js';
-import { POINT_STRUCT_SIZE_TWO, RectTileLayer } from '../../../../../client/room/floorplan/pixi-tilemap';
+import {
+    CompositeRectTileLayer,
+    POINT_STRUCT_SIZE_TWO,
+    RectTileLayer
+} from '../../../../../client/room/floorplan/pixi-tilemap';
 
 @Injectable()
 export class FloorPlanService implements OnDestroy
@@ -706,60 +710,7 @@ export class FloorPlanService implements OnDestroy
         tileMap.containsPoint = (position) =>
         {
             tileMap.worldTransform.applyInverse(position, tempPoint);
-            const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
-
-            const bufSize = POINT_STRUCT_SIZE_TWO;
-
-            const len = buffer.length;
-
-            for(let j = 0; j < len; j += bufSize)
-            {
-                const bufIndex = j + bufSize;
-                const data = buffer.slice(j, bufIndex);
-
-                const width = data[4];
-                const height = data[5];
-
-
-                const mousePositionX = Math.floor(tempPoint.x);
-                const mousePositionY = Math.floor(tempPoint.y);
-
-                const tileStartX = data[2];
-                const tileStartY = data[3];
-
-
-                const centreX = tileStartX + (width / 2);
-                const centreY = tileStartY + (height / 2);
-
-                const dx = Math.abs(mousePositionX - centreX - 2);
-                const dy = Math.abs(mousePositionY - centreY - 2);
-
-                const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
-                if(solution)
-                {
-                    if(this._isHolding)
-                    {
-                        const realY = data[13];
-                        const realX = data[14];
-
-                        if(this._lastUsedTile.x != realX || this._lastUsedTile.y != realY)
-                        {
-                            this._lastUsedTile = {
-                                'x': realX,
-                                'y': realY
-                            };
-
-                            this._handleTileClick(realX, realY);
-
-
-                            //   this.renderTileMap();
-                        }
-                    }
-                    return true;
-                }
-
-            }
-            return false;
+            return this.tileHitDettection(tileMap, tempPoint, false);
         };
 
         tileMap.on('pointerup', () =>
@@ -769,53 +720,67 @@ export class FloorPlanService implements OnDestroy
         tileMap.on('pointerdown', (event: InteractionEvent) =>
         {
             const location = event.data.global;
+            this.tileHitDettection(tileMap, location, true);
+        });
+    }
 
-            const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
+    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: PIXI.Point, setHolding: boolean): boolean
+    {
+        const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
+        const bufSize = POINT_STRUCT_SIZE_TWO;
 
+        const len = buffer.length;
 
-            const bufSize = POINT_STRUCT_SIZE_TWO;
-
-            const len = buffer.length;
-
+        if(setHolding)
+        {
             this._isHolding = true;
-            for(let j = 0; j < len; j += bufSize)
+        }
+
+        for(let j = 0; j < len; j += bufSize)
+        {
+            const bufIndex = j + bufSize;
+            const data = buffer.slice(j, bufIndex);
+
+            const width = data[4];
+            const height = data[5];
+
+
+            const mousePositionX = Math.floor(tempPoint.x);
+            const mousePositionY = Math.floor(tempPoint.y);
+
+            const tileStartX = data[2];
+            const tileStartY = data[3];
+
+
+            const centreX = tileStartX + (width / 2);
+            const centreY = tileStartY + (height / 2);
+
+            const dx = Math.abs(mousePositionX - centreX - 2);
+            const dy = Math.abs(mousePositionY - centreY - 2);
+
+            const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
+            if(solution)
             {
-                const bufIndex = j + bufSize;
-                const data = buffer.slice(j, bufIndex);
-
-                const width = data[4];
-                const height = data[5];
-
-
-                const mousePositionX = Math.floor(location.x);
-                const mousePositionY = Math.floor(location.y);
-
-                const tileStartX = data[2];
-                const tileStartY = data[3];
-
-
-                const centreX = tileStartX + (width / 2);
-                const centreY = tileStartY + (height / 2);
-
-                const dx = Math.abs(mousePositionX - centreX);
-                const dy = Math.abs(mousePositionY - centreY);
-
-                const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
-                if(solution)
+                if(this._isHolding)
                 {
-
                     const realY = data[13];
                     const realX = data[14];
-                    if(this._lastUsedTile.x !== realX || this._lastUsedTile.y !== realY)
+
+                    if(this._lastUsedTile.x != realX || this._lastUsedTile.y != realY)
                     {
+                        this._lastUsedTile = {
+                            'x': realX,
+                            'y': realY
+                        };
+
                         this._handleTileClick(realX, realY);
-                        this._lastUsedTile.x = realX;
-                        this._lastUsedTile.y = realY;
                     }
                 }
-
+                return true;
             }
-        });
+
+        }
+        return false;
     }
 }
 
