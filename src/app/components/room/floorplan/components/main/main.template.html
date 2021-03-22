@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div class="editor-area" style="text-align: center">
-                    <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="1000" [height]="1000" [model]="currentModel" [wallHeight]="1"></div>
+                    <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="1000" [height]="1000" [modelScale]="false" [model]="currentModel" [wallHeight]="1"></div>
                 </div>
             </div>
         </div>
@@ -106,7 +106,7 @@
             <div class="btn-group">
                 <button class="btn btn-primary" (click)="openImportExport()"
                         disabled>{{ ('floor.plan.editor.import.export') | translate }}</button>
-                <button class="btn btn-primary" (click)="livePreview()">Live Preview</button>
+
                 <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
             </div>
         </div>

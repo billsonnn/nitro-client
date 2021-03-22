@@ -61,6 +61,9 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public ngOnInit(): void
     {
         this._roomPreviewer = new RoomPreviewer(Nitro.instance.roomEngine, ++RoomPreviewer.PREVIEW_COUNTER);
+
+        this._roomPreviewer.zoomOut();
+        this._roomPreviewer.zoomOut();
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -184,7 +187,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
                 backgroundColor: 0x2b2b2b,
                 antialias: true,
                 autoDensity: true,
-                resolution: 2
+                resolution: 1
             });
 
 
@@ -294,11 +297,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public toggleEditor(): void
     {
         this.minimize = !this.minimize;
-    }
-
-    public livePreview(): void
-    {
-        this.toggleEditor();
     }
 
     public get colorMap(): object

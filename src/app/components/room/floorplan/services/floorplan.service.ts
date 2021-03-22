@@ -739,6 +739,12 @@ export class FloorPlanService implements OnDestroy
         {
             this._isHolding = false;
         });
+
+        tileMap.on('pointerout', () =>
+        {
+            this._isHolding = false;
+        });
+
         tileMap.on('pointerdown', (event: InteractionEvent) =>
         {
             const location = event.data.global;
