@@ -523,7 +523,7 @@ export class FloorPlanService implements OnDestroy
 
         if(futureHeightIndex === -1) return;
 
-        if(heightIndex === futureHeightIndex || futureHeightIndex <= heightIndex) return;
+        if(heightIndex === futureHeightIndex) return;
 
         if(futureHeightIndex > 0)
         {
