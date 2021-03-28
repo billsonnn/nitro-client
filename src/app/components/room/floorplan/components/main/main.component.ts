@@ -35,6 +35,9 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     @ViewChild('floorplanElement')
     public floorplanElement: ElementRef<HTMLDivElement>;
 
+    @ViewChild('floorplanPreviewer')
+    public floorplanPreviewer: ElementRef<HTMLDivElement>;
+
     @Input('visible')
     public visible: boolean = false;
 
@@ -55,7 +58,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     {
         this.floorPlanService.component = this;
         this._clear();
-
     }
 
     public ngOnInit(): void
@@ -202,7 +204,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             let pos = { top: 0, left: 0, x: 0, y: 0 };
 
             const ele = this.floorplanElement.nativeElement;
-
+            const previewerElement = this.floorplanPreviewer.nativeElement;
             const mouseDownHandler = function(e: MouseEvent)
             {
                 if(e.button !== 2) return;
@@ -218,8 +220,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
                     y: e.clientY,
                 };
 
-                document.addEventListener('mousemove', mouseMoveHandler);
-                document.addEventListener('mouseup', mouseUpHandler);
+                ele.addEventListener('mousemove', mouseMoveHandler);
+                ele.addEventListener('mouseup', mouseUpHandler);
             };
 
             const mouseMoveHandler = function(e)
@@ -237,8 +239,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             {
 
                 ele.style.cursor = 'default';
-                document.removeEventListener('mousemove', mouseMoveHandler);
-                document.removeEventListener('mouseup', mouseUpHandler);
+                ele.removeEventListener('mousemove', mouseMoveHandler);
+                ele.removeEventListener('mouseup', mouseUpHandler);
             };
 
 
@@ -248,10 +250,61 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             {
                 return false;
             };
+
+
+            let previewPosition = { top: 0, left: 0, x: 0, y: 0 };
+
+
+
+            //  debugger;
+
+            const mouseDownHandlerPreviewer = function(e: MouseEvent)
+            {
+                previewerElement.style.cursor = 'grabbing';
+                previewerElement.style.userSelect = 'none';
+
+                previewPosition = {
+                    left: previewerElement.scrollLeft,
+                    top: previewerElement.scrollTop,
+                    // Get the current mouse position
+                    x: e.clientX,
+                    y: e.clientY,
+                };
+
+                previewerElement.addEventListener('mousemove', mouseMoveHandlerPreview);
+                previewerElement.addEventListener('mouseup', mouseUpHandlerPreview);
+            };
+
+            const mouseMoveHandlerPreview = function(e)
+            {
+                // How far the mouse has been moved
+                const dx = e.clientX - previewPosition.x;
+                const dy = e.clientY - previewPosition.y;
+
+                // Scroll the element
+                previewerElement.scrollTop = previewPosition.top - dy;
+                previewerElement.scrollLeft = previewPosition.left - dx;
+            };
+
+            const mouseUpHandlerPreview = function()
+            {
+
+                previewerElement.style.cursor = 'default';
+                previewerElement.removeEventListener('mousemove', mouseMoveHandlerPreview);
+                previewerElement.removeEventListener('mouseup', mouseUpHandlerPreview);
+            };
+
+
+            previewerElement.addEventListener('mousedown', mouseDownHandlerPreviewer);
+
+            previewerElement.oncontextmenu = function()
+            {
+                return false;
+            };
+
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
     }
-
 
     public changeAction(action: string): void
     {
