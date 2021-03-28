@@ -94,16 +94,14 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-7">
+            <div [ngClass]="{'col-7': showPreviewer, 'col-12': !showPreviewer}">
 
                 <div class="text-right">
                     {{ coloredTilesCount }} / {{ maxTilesCount }}
                 </div>
                 <div #floorplanElement class="editor-area"></div>
             </div>
-            <div class="col-5">
-
-
+            <div *ngIf="showPreviewer" class="col-5">
                 <div  #floorplanPreviewer class="editor-area" style="text-align: center">
                     <div  class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="1000" [height]="1000" [modelScale]="false" [model]="currentModel" [wallHeight]="1"></div>
                 </div>
@@ -113,6 +111,8 @@
             <button class="btn btn-secondary" (click)="revertChanges()"
                     [disabled]="!ableToRevertChanges">{{ ('floor.plan.editor.reload') | translate }}</button>
             <div class="btn-group">
+                <button class="btn btn-primary" (click)="togglePreviewer()"
+                        >{{ togglePreviewButton }}</button>
                 <button class="btn btn-primary" (click)="openImportExport()"
                         disabled>{{ ('floor.plan.editor.import.export') | translate }}</button>
 

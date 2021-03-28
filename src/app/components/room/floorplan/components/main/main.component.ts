@@ -43,11 +43,15 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public minimize: boolean;
 
+    public showPreviewer: boolean = false;
+
     private _app: Application;
     private _roomPreviewer: RoomPreviewer;
     private _importExportModal: NgbModalRef;
 
     private _tileMap: CompositeRectTileLayer;
+
+    private _previewerEventsSet: boolean = false;
 
 
     constructor(
@@ -204,7 +208,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             let pos = { top: 0, left: 0, x: 0, y: 0 };
 
             const ele = this.floorplanElement.nativeElement;
-            const previewerElement = this.floorplanPreviewer.nativeElement;
+
             const mouseDownHandler = function(e: MouseEvent)
             {
                 if(e.button !== 2) return;
@@ -252,58 +256,68 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             };
 
 
-            let previewPosition = { top: 0, left: 0, x: 0, y: 0 };
-
-
-
-            //  debugger;
-
-            const mouseDownHandlerPreviewer = function(e: MouseEvent)
-            {
-                previewerElement.style.cursor = 'grabbing';
-                previewerElement.style.userSelect = 'none';
-
-                previewPosition = {
-                    left: previewerElement.scrollLeft,
-                    top: previewerElement.scrollTop,
-                    // Get the current mouse position
-                    x: e.clientX,
-                    y: e.clientY,
-                };
-
-                previewerElement.addEventListener('mousemove', mouseMoveHandlerPreview);
-                previewerElement.addEventListener('mouseup', mouseUpHandlerPreview);
-            };
-
-            const mouseMoveHandlerPreview = function(e)
-            {
-                // How far the mouse has been moved
-                const dx = e.clientX - previewPosition.x;
-                const dy = e.clientY - previewPosition.y;
-
-                // Scroll the element
-                previewerElement.scrollTop = previewPosition.top - dy;
-                previewerElement.scrollLeft = previewPosition.left - dx;
-            };
-
-            const mouseUpHandlerPreview = function()
-            {
-
-                previewerElement.style.cursor = 'default';
-                previewerElement.removeEventListener('mousemove', mouseMoveHandlerPreview);
-                previewerElement.removeEventListener('mouseup', mouseUpHandlerPreview);
-            };
-
-
-            previewerElement.addEventListener('mousedown', mouseDownHandlerPreviewer);
-
-            previewerElement.oncontextmenu = function()
-            {
-                return false;
-            };
+            this.setPreviewerEvents();
 
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
+    }
+
+    private setPreviewerEvents()
+    {
+        console.log('setPreviewerEvents 1');
+        console.log(this.showPreviewer, this._previewerEventsSet);
+        if(!this.showPreviewer || this._previewerEventsSet) return;
+        console.log('setPreviewerEvents 2');
+        const previewerElement = this.floorplanPreviewer.nativeElement;
+        let previewPosition = { top: 0, left: 0, x: 0, y: 0 };
+
+        //  debugger;
+
+        const mouseDownHandlerPreviewer = function (e: MouseEvent)
+        {
+            previewerElement.style.cursor = 'grabbing';
+            previewerElement.style.userSelect = 'none';
+
+            previewPosition = {
+                left: previewerElement.scrollLeft,
+                top: previewerElement.scrollTop,
+                // Get the current mouse position
+                x: e.clientX,
+                y: e.clientY,
+            };
+
+            previewerElement.addEventListener('mousemove', mouseMoveHandlerPreview);
+            previewerElement.addEventListener('mouseup', mouseUpHandlerPreview);
+        };
+
+        const mouseMoveHandlerPreview = function (e)
+        {
+            // How far the mouse has been moved
+            const dx = e.clientX - previewPosition.x;
+            const dy = e.clientY - previewPosition.y;
+
+            // Scroll the element
+            previewerElement.scrollTop = previewPosition.top - dy;
+            previewerElement.scrollLeft = previewPosition.left - dx;
+        };
+
+        const mouseUpHandlerPreview = function ()
+        {
+
+            previewerElement.style.cursor = 'default';
+            previewerElement.removeEventListener('mousemove', mouseMoveHandlerPreview);
+            previewerElement.removeEventListener('mouseup', mouseUpHandlerPreview);
+        };
+
+
+        previewerElement.addEventListener('mousedown', mouseDownHandlerPreviewer);
+
+        previewerElement.oncontextmenu = function ()
+        {
+            return false;
+        };
+
+        this._previewerEventsSet = true;
     }
 
     public changeAction(action: string): void
@@ -479,6 +493,31 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get tileMap(): CompositeRectTileLayer
     {
         return this._tileMap;
+    }
+
+    public togglePreviewer(): void
+    {
+        this.showPreviewer = !this.showPreviewer;
+        if(!this.showPreviewer)
+        {
+            this._previewerEventsSet = false;
+        }
+        setTimeout(() =>
+        {
+            this.setPreviewerEvents();
+        }, 200);
+    }
+
+    public get togglePreviewButton(): string
+    {
+        const key = this.showPreviewer ? 'nitro.floorplan.previewer.hide' : 'nitro.floorplan.previewer.show';
+        const fallback = this.showPreviewer ? 'Hide Preview' : 'Show Preview';
+
+        const value = Nitro.instance.localization.getValue(key);
+
+        if(value === value) return fallback;
+
+        return value;
     }
 
 }
