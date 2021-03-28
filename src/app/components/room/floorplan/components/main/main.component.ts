@@ -20,7 +20,7 @@ import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../../../../core/settings/service';
 import { FloorPlanService } from '../../services/floorplan.service';
-import { FloorPlanImportExportComponent } from '../import-export/import-export.component';
+
 
 import { CompositeRectTileLayer } from '../../../../../../client/room/floorplan/pixi-tilemap';
 
@@ -47,7 +47,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     private _app: Application;
     private _roomPreviewer: RoomPreviewer;
-    private _importExportModal: NgbModalRef;
 
     private _tileMap: CompositeRectTileLayer;
 
@@ -104,7 +103,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
         this._ngZone.runOutsideAngular(() =>
         {
-            this._importExportModal = null;
 
             if(this._app)
             {
@@ -378,32 +376,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public openImportExport(): void
     {
-        this.floorPlanService.floorMapSettings.heightMapString = this.floorPlanService.generateTileMapString();
-
-        let modal = this._importExportModal;
-
-        if(!modal)
-        {
-            modal = this._importExportModal = this._modalService.open(FloorPlanImportExportComponent, {
-                backdrop: 'static',
-                centered: true,
-                keyboard: false
-            });
-
-            modal.result.then(() => (this._importExportModal = null));
-        }
-
-        this._importExportModal = modal;
-
-        if(this._importExportModal)
-        {
-            const instance = (modal.componentInstance as FloorPlanImportExportComponent);
-
-            if(instance)
-            {
-                instance.map = this.currentModel;
-            }
-        }
+        this.floorPlanService.showImportExport = true;
     }
 
     public revertChanges(): void
@@ -495,6 +468,11 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get tileMap(): CompositeRectTileLayer
     {
         return this._tileMap;
+    }
+
+    public get showImportExport(): boolean
+    {
+        return this.floorPlanService.showImportExport;
     }
 
     public togglePreviewer(): void

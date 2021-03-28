@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FloorPlanService } from '../../services/floorplan.service';
 
 @Component({
-    selector: '[nitro-floorplan-import-export-component]',
+    selector: 'nitro-floorplan-import-export-component',
     templateUrl: './import-export.template.html'
 })
 export class FloorPlanImportExportComponent
@@ -15,7 +15,6 @@ export class FloorPlanImportExportComponent
     public letterSpacing: string = '3';
 
     constructor(
-        private _activeModal: NgbActiveModal,
         private _floorPlanService: FloorPlanService,
         private _ngZone: NgZone)
     {}
@@ -36,7 +35,7 @@ export class FloorPlanImportExportComponent
 
     public close(): void
     {
-        this._activeModal.close();
+        this._floorPlanService.showImportExport = false;
     }
 
     @Input() public set map(map: string)

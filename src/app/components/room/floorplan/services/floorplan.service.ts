@@ -94,6 +94,8 @@ export class FloorPlanService implements OnDestroy
     private _currentAction: string;
     private _currentHeight: string;
 
+    private _showImportExport: boolean = false;
+
 
     private _changesMade: boolean;
     private _wallHeight: number;
@@ -815,6 +817,16 @@ export class FloorPlanService implements OnDestroy
 
         }
         return false;
+    }
+
+    public get showImportExport(): boolean
+    {
+        return this._showImportExport;
+    }
+
+    public set showImportExport(show: boolean)
+    {
+        this._showImportExport = show;
     }
 }
 
