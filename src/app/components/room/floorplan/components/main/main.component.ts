@@ -317,6 +317,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             return false;
         };
 
+
+        previewerElement.scrollTo(250, 250);
         this._previewerEventsSet = true;
     }
 
