@@ -523,7 +523,7 @@ export class FloorPlanService implements OnDestroy
 
         if(futureHeightIndex === -1) return;
 
-        if(heightIndex === futureHeightIndex) return;
+        if(heightIndex === futureHeightIndex || futureHeightIndex <= heightIndex) return;
 
         if(futureHeightIndex > 0)
         {
@@ -747,6 +747,12 @@ export class FloorPlanService implements OnDestroy
 
         tileMap.on('pointerdown', (event: InteractionEvent) =>
         {
+            if(!(event.data.originalEvent instanceof PointerEvent)) return;
+
+            const pointerEvent = <PointerEvent>event.data.originalEvent;
+            if(pointerEvent.button === 2) return;
+
+
             const location = event.data.global;
             this.tileHitDettection(tileMap, location, true);
         });

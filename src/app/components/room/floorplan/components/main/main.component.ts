@@ -140,7 +140,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public init(mapString: string, blockedTilesMap: boolean[][], doorX: number, doorY: number, doorDirection: number, thicknessWall: number, thicknessFloor: number)
     {
-        console.log('INIT!!!!!');
         this._clear();
 
         //this._roomPreviewer.updatePreviewModel(mapString, 3, true);
@@ -200,6 +199,55 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
             this.floorplanElement.nativeElement.appendChild(this._app.view);
 
+            let pos = { top: 0, left: 0, x: 0, y: 0 };
+
+            const ele = this.floorplanElement.nativeElement;
+
+            const mouseDownHandler = function(e: MouseEvent)
+            {
+                if(e.button !== 2) return;
+
+                ele.style.cursor = 'grabbing';
+                ele.style.userSelect = 'none';
+
+                pos = {
+                    left: ele.scrollLeft,
+                    top: ele.scrollTop,
+                    // Get the current mouse position
+                    x: e.clientX,
+                    y: e.clientY,
+                };
+
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+            };
+
+            const mouseMoveHandler = function(e)
+            {
+                // How far the mouse has been moved
+                const dx = e.clientX - pos.x;
+                const dy = e.clientY - pos.y;
+
+                // Scroll the element
+                ele.scrollTop = pos.top - dy;
+                ele.scrollLeft = pos.left - dx;
+            };
+
+            const mouseUpHandler = function()
+            {
+
+                ele.style.cursor = 'default';
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+            };
+
+
+            ele.addEventListener('mousedown', mouseDownHandler);
+
+            ele.oncontextmenu = function()
+            {
+                return false;
+            };
             this.floorplanElement.nativeElement.scrollTo(width / 3, 0);
         }
     }
@@ -373,11 +421,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get ableToRevertChanges(): boolean
     {
         return this.floorPlanService.changesMade;
-    }
-
-    public get app(): Application
-    {
-        return this._app;
     }
 
     public get tileMap(): CompositeRectTileLayer
