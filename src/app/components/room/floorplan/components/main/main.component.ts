@@ -23,6 +23,7 @@ import { FloorPlanService } from '../../services/floorplan.service';
 
 
 import { CompositeRectTileLayer } from '../../../../../../client/room/floorplan/pixi-tilemap';
+import { SessionService } from '../../../../../security/services/session.service';
 
 
 @Component({
@@ -57,7 +58,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         private _ngZone: NgZone,
         private floorPlanService: FloorPlanService,
         private _modalService: NgbModal,
-        private _settingsService: SettingsService)
+        private _settingsService: SettingsService,
+        private _sessionService: SessionService)
     {
         this.floorPlanService.component = this;
         this._clear();
@@ -500,4 +502,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         return value;
     }
 
+    public get currentAvatarFigure(): string
+    {
+        return this._sessionService.figure;
+    }
 }

@@ -42,9 +42,7 @@
                         <div class="btn-group w-100" style="height: 50px">
                             <button class="btn btn-primary btn-sm" (click)="decrementDoorDirection()"><i
                                 class="fas fa-chevron-left"></i></button>
-                            <button class="btn btn-primary btn-sm w-100"><img
-                                [src]="'/assets/images/floorplaneditor/door-direction-' + doorDirection + '.png'">
-                            </button>
+                            <button class="btn btn-primary btn-sm w-100 floorplan-door-button" avatar-image [headOnly]="true" [scale]="4" [asBackground]="true" [figure]="currentAvatarFigure" [direction]="doorDirection"></button>
                             <button class="btn btn-primary btn-sm" (click)="incrementDoorDirection()"><i
                                 class="fas fa-chevron-right"></i></button>
                         </div>
