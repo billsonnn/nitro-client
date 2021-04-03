@@ -766,8 +766,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectWidgetRequestEvent.PRESENT:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, roomId, objectId, objectCategory));
                 break;
-
-
         }
     }
 

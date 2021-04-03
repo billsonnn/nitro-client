@@ -15,6 +15,7 @@ import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
 import { IRoomEngine } from '../../../client/nitro/room/IRoomEngine';
 import { RoomObjectCategory } from '../../../client/nitro/room/object/RoomObjectCategory';
 import { RoomObjectOperationType } from '../../../client/nitro/room/object/RoomObjectOperationType';
+import { RoomObjectType } from '../../../client/nitro/room/object/RoomObjectType';
 import { RoomObjectVariable } from '../../../client/nitro/room/object/RoomObjectVariable';
 import { RoomVariableEnum } from '../../../client/nitro/room/RoomVariableEnum';
 import { RoomControllerLevel } from '../../../client/nitro/session/enum/RoomControllerLevel';
@@ -38,6 +39,7 @@ import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
 import { FriendListService } from '../friendlist/services/friendlist.service';
+import { ModToolService } from '../mod-tool/services/mod-tool.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
 import { RoomWidgetRoomEngineUpdateEvent } from './widgets/events/RoomWidgetRoomEngineUpdateEvent';
@@ -56,6 +58,7 @@ import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureC
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
+import { FurnitureHighScoreWidgetHandler } from './widgets/handlers/FurnitureHighScoreWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
 import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
@@ -67,8 +70,6 @@ import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationR
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
-import { ModToolService } from '../mod-tool/services/mod-tool.service';
-import { RoomObjectType } from '../../../client/nitro/room/object/RoomObjectType';
 
 @Component({
     selector: 'nitro-room-component',
@@ -548,6 +549,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
                 break;
             case RoomWidgetEnum.FRIEND_REQUEST:
                 widgetHandler = new FriendRequestHandler();
+                break;
+            case RoomWidgetEnum.HIGH_SCORE_DISPLAY:
+                widgetHandler = new FurnitureHighScoreWidgetHandler();
                 break;
         }
 

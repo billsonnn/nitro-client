@@ -1,0 +1,33 @@
+<div #activeView *ngIf="visible" class="nitro-widget-highscore context-menu card align-items-center" [ngStyle]="{ 'top': (topValue + 'px'), 'left': (leftValue + 'px') }">
+    <div *ngIf="!toggled" class="p-2" style="padding-bottom: 0px !important">
+      <div class="drag-handler d-flex justify-content-center align-items-center mb-1" style="font-size: 14px;">
+        <p class="m-0 text-wrap text-center w-100">{{ title }}</p>
+      </div>
+      <div class="w-100">
+          <perfect-scrollbar style="min-height:255px;max-height:255px;height: 255px;width:282px">
+              <table class="table table-sm">
+                  <thead>
+                    <tr style="position: sticky">
+                      <th>#</th>
+                      <th>{{ ('high.score.display.users.header') | translate }}</th>
+                      <th>{{ ('high.score.display.score.header') | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let entry of entries; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                          <div *ngFor="let user of entry.users">{{ user }}</div>
+                      </td>
+                      <td>{{ entry.score }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+          </perfect-scrollbar>
+          <div class="mt-2 text-center">{{ ('high.score.display.congratulations.footer') | translate }}</div>
+      </div>
+    </div>  
+    <div class="text-center= px-2" [ngClass]="{'pb-1': !toggled, 'py-1': toggled}">
+      <i class="fas" (click)="toggle()" [ngClass]="{'fa-chevron-up': toggled, 'fa-chevron-down': !toggled}"></i>
+    </div>
+  </div>
