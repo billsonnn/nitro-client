@@ -25,6 +25,9 @@ import {
 } from '../../../../../client/room/floorplan/pixi-tilemap';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { RoomRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
+import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
+import { SettingsService } from '../../../../core/settings/service';
 
 
 @Injectable()
@@ -108,7 +111,8 @@ export class FloorPlanService implements OnDestroy
     private preveiwerUpdate = new Subject<string>();
 
     constructor(
-        private _ngZone: NgZone)
+        private _ngZone: NgZone,
+        private _settingsService: SettingsService)
     {
         this.component = null;
         this._messages = [];
@@ -156,7 +160,8 @@ export class FloorPlanService implements OnDestroy
                 new RoomModelEvent(this.onRoomModelEvent.bind(this)),
                 new RoomDoorEvent(this.onRoomDoorEvent.bind(this)),
                 new RoomBlockedTilesEvent(this.onRoomBlockedTilesEvent.bind(this)),
-                new RoomThicknessEvent(this.onRoomThicknessEvent.bind(this))
+                new RoomThicknessEvent(this.onRoomThicknessEvent.bind(this)),
+                new RoomRightsEvent(this.onRoomRightsEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -173,6 +178,22 @@ export class FloorPlanService implements OnDestroy
 
                 this._messages = [];
             }
+        });
+    }
+
+    private onRoomRightsEvent(event: RoomRightsEvent): void
+    {
+        if(!this._settingsService.floorPlanVisible) return;
+
+        if(!(event instanceof RoomRightsEvent)) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._settingsService.floorPlanVisible = parser.controllerLevel >= RoomControllerLevel.ROOM_OWNER;
         });
     }
 
