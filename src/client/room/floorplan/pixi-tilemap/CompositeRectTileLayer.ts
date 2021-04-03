@@ -120,7 +120,7 @@ export class CompositeRectTileLayer extends Container
         return this;
     }
 
-    addFrame(texture_: Texture | String | number, x: number, y: number, animX?: number, animY?: number, animWidth?: number, animHeight?: number, alpha?: number, yaxis?: number, xaxis?: number): this
+    addFrame(texture_: Texture | string | number, x: number, y: number, animX?: number, animY?: number, animWidth?: number, animHeight?: number, alpha?: number, yaxis?: number, xaxis?: number): this
     {
         let texture: Texture;
         let layer: RectTileLayer = null;

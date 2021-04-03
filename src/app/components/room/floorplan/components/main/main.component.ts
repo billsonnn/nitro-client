@@ -148,7 +148,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     {
         this._clear();
 
-        //this._roomPreviewer.updatePreviewModel(mapString, 3, true);
         this.floorPlanService.floorMapSettings.heightMapString = mapString;
         this.floorPlanService.floorMapSettings.doorX = doorX;
         this.floorPlanService.floorMapSettings.doorY = doorY;
@@ -264,14 +263,12 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     private setPreviewerEvents()
     {
-        console.log('setPreviewerEvents 1');
+
         console.log(this.showPreviewer, this._previewerEventsSet);
         if(!this.showPreviewer || this._previewerEventsSet) return;
-        console.log('setPreviewerEvents 2');
+
         const previewerElement = this.floorplanPreviewer.nativeElement;
         let previewPosition = { top: 0, left: 0, x: 0, y: 0 };
-
-        //  debugger;
 
         const mouseDownHandlerPreviewer = function (e: MouseEvent)
         {
@@ -353,7 +350,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public incrementHeight(): void
     {
         this.floorPlanService.incrementHeight();
-
     }
 
     public decrementDoorDirection(): void
