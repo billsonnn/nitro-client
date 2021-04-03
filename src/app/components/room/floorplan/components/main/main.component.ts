@@ -263,8 +263,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     private setPreviewerEvents()
     {
-
-        console.log(this.showPreviewer, this._previewerEventsSet);
         if(!this.showPreviewer || this._previewerEventsSet) return;
 
         const previewerElement = this.floorplanPreviewer.nativeElement;

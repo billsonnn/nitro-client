@@ -482,7 +482,6 @@ export class FloorPlanService implements OnDestroy
 
     private _updatePreviewer(): void
     {
-        console.log('updating previewer');
         this._ngZone.run(() => this.floorMapSettings.heightMapString = this.generateTileMapString());
     }
 
