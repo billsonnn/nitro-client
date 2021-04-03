@@ -124,7 +124,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _ngZone: NgZone
     )
     {
-        this._settingsService.floorPlanVisible = true;
         this.processEvent = this.processEvent.bind(this);
     }
 

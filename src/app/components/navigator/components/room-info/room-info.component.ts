@@ -8,6 +8,7 @@ import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/Ro
 import { SecurityLevel } from '../../../../../client/nitro/session/enum/SecurityLevel';
 import { NavigatorData } from '../../common/NavigatorData';
 import { NavigatorService } from '../../services/navigator.service';
+import { SettingsService } from '../../../../core/settings/service';
 
 @Component({
     selector: 'nitro-navigator-room-info-component',
@@ -15,7 +16,8 @@ import { NavigatorService } from '../../services/navigator.service';
 })
 export class NavigatorRoomInfoComponent
 {
-    constructor(private _navigatorService: NavigatorService)
+    constructor(private _navigatorService: NavigatorService,
+        private _settingsService: SettingsService)
     {}
 
     public hide(): void
@@ -35,6 +37,7 @@ export class NavigatorRoomInfoComponent
             case 'filter':
                 return;
             case 'floor-plan':
+                this._settingsService.floorPlanVisible = true;
                 return;
             case 'staff-pick':
                 this.staffPick();
