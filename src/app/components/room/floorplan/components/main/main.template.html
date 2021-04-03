@@ -111,7 +111,7 @@
             <div class="btn-group">
                 <button class="btn btn-primary" (click)="togglePreviewer()"
                         >{{ togglePreviewButton }}</button>
-                <button class="btn btn-primary" (click)="openImportExport()">{{ ('floor.plan.editor.import.export') | translate }}</button>
+                <button class="btn btn-primary" disabled (click)="openImportExport()">{{ ('floor.plan.editor.import.export') | translate }}</button>
 
                 <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
             </div>
