@@ -121,7 +121,11 @@ export class NavigatorRoomInfoComponent
     {
         if(!this.roomData) return false;
 
-        return (Nitro.instance.roomSessionManager.getSession(this.roomData.roomId).controllerLevel >= RoomControllerLevel.GUEST);
+        const session = Nitro.instance.roomSessionManager.getSession(this.roomData.roomId);
+
+        if(!session) return false;
+
+        return session.controllerLevel >= RoomControllerLevel.ROOM_OWNER;
     }
 
     public get addStaffPickedVisible(): boolean
