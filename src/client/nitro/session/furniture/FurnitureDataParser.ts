@@ -41,7 +41,7 @@ export class FurnitureDataParser extends EventDispatcher
     {
         if(!data) return;
 
-        if((typeof data.roomitemtypes == 'undefined') || (typeof data.wallitemtypes == 'undefined')) this._nitroLogger.warn('Could not find `roomitemtypes` or `wallitemtypes` in furnidata.');
+        if((typeof data.roomitemtypes == 'undefined') || (typeof data.wallitemtypes == 'undefined')) this._nitroLogger.error('There is an error with your furnidata JSON and it is preventing the client from connecting. You need to reconvert it with the node converter.');
 
         if(data.roomitemtypes) this.parseFloorItems(data.roomitemtypes);
 
