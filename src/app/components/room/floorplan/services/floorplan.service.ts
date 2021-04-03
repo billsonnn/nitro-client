@@ -258,6 +258,14 @@ export class FloorPlanService implements OnDestroy
         this.tryEmit();
     }
 
+    private reset(): void
+    {
+        this._model = null;
+        this._doorSettingsReceived = false;
+        this._blockedTilesMapReceived = false;
+    }
+
+
     private tryEmit(): void
     {
         if(this.component && this.component.visible && this._model && this._doorSettingsReceived && this._blockedTilesMapReceived)
@@ -287,7 +295,10 @@ export class FloorPlanService implements OnDestroy
             this.convertNumbersForSaving(settings.thicknessFloor),
             (this._wallHeight - 1)
         ));
+
+        this.reset();
     }
+
 
     private convertNumbersForSaving(value: number): number
     {
