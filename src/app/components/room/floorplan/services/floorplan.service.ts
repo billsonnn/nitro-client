@@ -789,9 +789,21 @@ export class FloorPlanService implements OnDestroy
             const location = event.data.global;
             this.tileHitDettection(tileMap, location, true);
         });
+
+        tileMap.on('click', (event: InteractionEvent) =>
+        {
+            if(!(event.data.originalEvent instanceof PointerEvent)) return;
+
+            const pointerEvent = <PointerEvent>event.data.originalEvent;
+            if(pointerEvent.button === 2) return;
+
+
+            const location = event.data.global;
+            this.tileHitDettection(tileMap, location, true, true);
+        });
     }
 
-    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: PIXI.Point, setHolding: boolean): boolean
+    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: PIXI.Point, setHolding: boolean, isClick: boolean = false): boolean
     {
         const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
         const bufSize = POINT_STRUCT_SIZE_TWO;
@@ -833,7 +845,11 @@ export class FloorPlanService implements OnDestroy
                     const realY = data[13];
                     const realX = data[14];
 
-                    if(this._lastUsedTile.x != realX || this._lastUsedTile.y != realY)
+                    if(isClick)
+                    {
+                        this._handleTileClick(realX, realY);
+                    }
+                    else if(this._lastUsedTile.x != realX || this._lastUsedTile.y != realY)
                     {
                         this._lastUsedTile = {
                             'x': realX,
