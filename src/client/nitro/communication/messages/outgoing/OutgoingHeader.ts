@@ -224,4 +224,5 @@ export class OutgoingHeader
     public static CONVERT_GLOBAL_ROOM_ID         = 314;
     public static REQUEST_SELL_ITEM              = 848;
     public static REQUEST_MARKETPLACE_ITEM_STATS = 3288;
+    public static MARKETPLACE_SELL_ITEM          = 3447;
 }

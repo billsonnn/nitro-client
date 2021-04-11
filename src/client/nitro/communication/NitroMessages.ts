@@ -386,6 +386,7 @@ import { MarketplaceConfigEvent } from './messages/incoming/catalog/MarketplaceC
 import { MarketplaceRequestComposer } from './messages/outgoing/catalog/MarketplaceRequestComposer';
 import { MarketplaceRequesstItemStatsComposer } from './messages/outgoing/catalog/MarketplaceRequesstItemStatsComposer';
 import { MarketplaceItemStatsEvent } from './messages/incoming/catalog/MarketplaceItemStatsEvent';
+import { MarketplaceSellItemComposer } from './messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -934,6 +935,7 @@ export class NitroMessages implements IMessageConfiguration
 
         // MARKETPLACE
         this._composers.set(OutgoingHeader.MARKETPLACE_CONFIG, MarketplaceRequestComposer);
+        this._composers.set(OutgoingHeader.MARKETPLACE_SELL_ITEM, MarketplaceSellItemComposer);
 
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);

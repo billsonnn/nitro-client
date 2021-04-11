@@ -12,6 +12,7 @@ import { RenderTexture } from 'pixi.js';
 import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
+import { MarketplaceSellItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
 
 
 @Component({
@@ -281,7 +282,10 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
 
     public doPostOffer(): void
     {
-
+        const local2 = this.item.isWallItem ? 2 : 1;
+        Nitro.instance.communication.connection.send(new MarketplaceSellItemComposer(this.askingPrice, local2, this.item.ref));
+        this.showConfirmDialog = false;
+        this.closeMainWindow();
     }
 
     public closeConfirmDialog(): void
