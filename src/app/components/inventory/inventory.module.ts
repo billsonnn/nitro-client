@@ -12,6 +12,7 @@ import { InventoryFurnitureService } from './services/furniture.service';
 import { InventoryService } from './services/inventory.service';
 import { InventoryPetService } from './services/pet.service';
 import { InventoryTradingService } from './services/trading.service';
+import { OfferMarketplaceComponent } from './components/offer-marketplace/offer-marketplace.component';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { InventoryTradingService } from './services/trading.service';
         InventoryFurnitureComponent,
         InventoryMainComponent,
         InventoryPetsComponent,
-        InventoryTradingComponent
+        InventoryTradingComponent,
+        OfferMarketplaceComponent
     ],
     providers: [
         InventoryBadgeService,
@@ -39,7 +41,8 @@ import { InventoryTradingService } from './services/trading.service';
         InventoryFurnitureComponent,
         InventoryMainComponent,
         InventoryPetsComponent,
-        InventoryTradingComponent
+        InventoryTradingComponent,
+        OfferMarketplaceComponent
     ]
 })
 export class InventoryModule

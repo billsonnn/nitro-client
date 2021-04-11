@@ -18,6 +18,11 @@ export class InventorySharedComponent
         return this._inventoryService.controller.tradeService.running;
     }
 
+    public offerOnMarketplace(): void
+    {
+        this._inventoryService.controller.furnitureService.offerOnMarketplace();
+    }
+
     public attemptItemPlacement(): void
     {
         if(!this.canPlace || this.tradeRunning) return;

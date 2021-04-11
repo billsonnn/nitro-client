@@ -380,6 +380,12 @@ import { UserRespectComposer } from './messages/outgoing/user/UserRespectCompose
 import { UserWardrobePageComposer } from './messages/outgoing/user/wardrobe/UserWardrobePageComposer';
 import { UserWardrobeSaveComposer } from './messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
 import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMailUnreadCountParser';
+import { RequestSellItemComposer } from './messages/outgoing/inventory/marketplace/RequestSellItemComposer';
+import { MarketplaceSellItemEvent } from './messages/incoming/inventory/marketplace/MarketplaceSellItemEvent';
+import { MarketplaceConfigEvent } from './messages/incoming/catalog/MarketplaceConfigEvent';
+import { MarketplaceRequestComposer } from './messages/outgoing/catalog/MarketplaceRequestComposer';
+import { MarketplaceRequesstItemStatsComposer } from './messages/outgoing/catalog/MarketplaceRequesstItemStatsComposer';
+import { MarketplaceItemStatsEvent } from './messages/incoming/catalog/MarketplaceItemStatsEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -688,6 +694,11 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MODERATION_TOPICS, ModtoolCallForHelpTopicsEvent);
         this._events.set(IncomingHeader.MODERATION_TOOL, ModtoolMainEvent);
         this._events.set(IncomingHeader.MODTOOL_VISITED_ROOMS_USER, ModtoolReceivedRoomsUserEvent);
+
+        // MARKETPLACE
+        this._events.set(IncomingHeader.MARKETPLACE_SELL_ITEM, MarketplaceSellItemEvent);
+        this._events.set(IncomingHeader.MARKETPLACE_CONFIG, MarketplaceConfigEvent);
+        this._events.set(IncomingHeader.MARKETPLACE_ITEM_STATS, MarketplaceItemStatsEvent);
     }
 
     private registerComposers(): void
@@ -766,6 +777,10 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.CONVERT_GLOBAL_ROOM_ID, ConvertGlobalRoomIdMessageComposer);
 
         // INVENTORY
+
+        // MARKETPLACE
+        this._composers.set(OutgoingHeader.REQUEST_SELL_ITEM, RequestSellItemComposer);
+        this._composers.set(OutgoingHeader.REQUEST_MARKETPLACE_ITEM_STATS, MarketplaceRequesstItemStatsComposer);
 
         // FURNI
         this._composers.set(OutgoingHeader.USER_FURNITURE, FurnitureListComposer);
@@ -916,6 +931,9 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.PRESENT_OPEN_PRESENT, OpenPresentComposer);
 
         // INVENTORY
+
+        // MARKETPLACE
+        this._composers.set(OutgoingHeader.MARKETPLACE_CONFIG, MarketplaceRequestComposer);
 
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);

@@ -50,6 +50,8 @@
                 <div class="btn-group-vertical w-100">
                     <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                    <button *ngIf="selectedGroup.isSellable" type="button" class="btn btn-secondary w-100"
+                            (click)="offerOnMarketplace()">{{ 'inventory.marketplace.sell' | translate }}</button>
                     <button *ngIf="tradeRunning" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{
                         ('inventory.trading.offer') | translate }}</button>

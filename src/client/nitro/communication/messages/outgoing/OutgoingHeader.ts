@@ -222,4 +222,6 @@ export class OutgoingHeader
     public static MODTOOL_REQUEST_USER_ROOMS     = 3526;
     public static MODTOOL_ROOM_ALERT             = 3842;
     public static CONVERT_GLOBAL_ROOM_ID         = 314;
+    public static REQUEST_SELL_ITEM              = 848;
+    public static REQUEST_MARKETPLACE_ITEM_STATS = 3288;
 }

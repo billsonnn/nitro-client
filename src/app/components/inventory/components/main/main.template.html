@@ -17,3 +17,5 @@
         <div *ngIf="tradingVisible" nitro-inventory-trading-component></div>
     </div>
 </div>
+
+<div [showMainWindow]="marketPlaceOfferVisible && offerForMarketplace && offerStatsIsCorrect" [item]="offerForMarketplace" nitro-inventory-offer-marketplace-component></div>
