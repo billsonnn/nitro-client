@@ -405,9 +405,23 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        if(parser.errorCode === -100002)
+        switch(parser.errorCode)
         {
-            this._ngZone.run(() => (this._component && this._component.openRoomPassword(null, true)));
+            case -100002:
+                this._ngZone.run(() => (this._component && this._component.openRoomPassword(null, true)));
+                break;
+            case 4009:
+                this._notificationService.alert('${navigator.alert.need.to.be.vip}', '${generic.alert.title}');
+                break;
+            case 4010:
+                this._notificationService.alert('${navigator.alert.invalid_room_name}', '${generic.alert.title}');
+                break;
+            case 4011:
+                this._notificationService.alert('${navigator.alert.cannot_perm_ban}', '${generic.alert.title}');
+                break;
+            case 4013:
+                this._notificationService.alert('${navigator.alert.room_in_maintenance}', '${generic.alert.title}');
+                break;
         }
     }
 

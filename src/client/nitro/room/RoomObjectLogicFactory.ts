@@ -42,6 +42,7 @@ import { FurnitureTrophyLogic } from './object/logic/furniture/FurnitureTrophyLo
 import { FurnitureVoteCounterLogic } from './object/logic/furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './object/logic/furniture/FurnitureVoteMajorityLogic';
 import { FurnitureWindowLogic } from './object/logic/furniture/FurnitureWindowLogic';
+import { FurnitureYoutubeLogic } from './object/logic/furniture/FurnitureYoutubeLogic';
 import { PetLogic } from './object/logic/pet/PetLogic';
 import { RoomLogic } from './object/logic/room/RoomLogic';
 import { SelectionArrowLogic } from './object/logic/room/SelectionArrowLogic';
@@ -277,6 +278,9 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_LOVELOCK:
                 logic = FurnitureFriendLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_YOUTUBE:
+                logic = FurnitureYoutubeLogic;
                 break;
             default:
                 logic = FurnitureLogic;

@@ -1,5 +1,5 @@
 <div id="nitro">
-    <div *ngIf="!isReady" class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+    <div *ngIf="!isReady || isError" class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
         <div class="logo mb-4"></div>
         <div *ngIf="message && message.length" class="h4 m-0">{{ message }}</div>
         <div *ngIf="!isError" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>

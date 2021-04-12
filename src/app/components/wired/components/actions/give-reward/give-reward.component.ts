@@ -91,10 +91,12 @@ export class GiveRewardComponent extends WiredAction
             {
                 continue;
             }
+
+            const probability = row.probability.toString();
             const stringData = [
                 row.badge ? 0 : 1,
                 row.itemCode,
-                row.probability.toString()
+                probability.length > 0 ? probability : 0
             ].join(',');
             rewards  = rewards + (rewards == '' ? '' : ';') + stringData;
         }

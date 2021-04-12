@@ -7,9 +7,11 @@
     &.has-hidden {
         width:unset;
     }
+
     .context-content {
         transition: all 1s ease-in-out linear;
     }
+    
     &.card {
         .drag-handler {
             background:$card-bg;

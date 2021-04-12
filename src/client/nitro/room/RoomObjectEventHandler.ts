@@ -31,6 +31,7 @@ import { FurnitureWallMultiStateComposer } from '../communication/messages/outgo
 import { FurnitureWallUpdateComposer } from '../communication/messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
 import { RoomUnitLookComposer } from '../communication/messages/outgoing/room/unit/RoomUnitLookComposer';
 import { RoomUnitWalkComposer } from '../communication/messages/outgoing/room/unit/RoomUnitWalkComposer';
+import { Nitro } from '../Nitro';
 import { MouseEventType } from '../ui/MouseEventType';
 import { RoomObjectPlacementSource } from './enums/RoomObjectPlacementSource';
 import { RoomEngineDimmerStateEvent } from './events/RoomEngineDimmerStateEvent';
@@ -40,6 +41,7 @@ import { RoomEngineObjectPlacedOnUserEvent } from './events/RoomEngineObjectPlac
 import { RoomEngineSamplePlaybackEvent } from './events/RoomEngineSamplePlaybackEvent';
 import { RoomEngineTriggerWidgetEvent } from './events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectBadgeAssetEvent } from './events/RoomObjectBadgeAssetEvent';
+import { RoomObjectDataRequestEvent } from './events/RoomObjectDataRequestEvent';
 import { RoomObjectDimmerStateUpdateEvent } from './events/RoomObjectDimmerStateUpdateEvent';
 import { RoomObjectFloorHoleEvent } from './events/RoomObjectFloorHoleEvent';
 import { RoomObjectFurnitureActionEvent } from './events/RoomObjectFurnitureActionEvent';
@@ -310,6 +312,10 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
                 return;
             case RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR:
                 this.onHSLColorEnableEvent(event as RoomObjectHSLColorEnableEvent, roomId);
+                return;
+            case RoomObjectDataRequestEvent.RODRE_CURRENT_USER_ID:
+            case RoomObjectDataRequestEvent.RODRE_URL_PREFIX:
+                this.onRoomObjectDataRequestEvent(event as RoomObjectDataRequestEvent, roomId);
                 return;
             default:
                 NitroLogger.log(`Unhandled Event: ${ event.constructor.name }`, `Object ID: ${ event.object.id }`);
@@ -760,8 +766,6 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
             case RoomObjectWidgetRequestEvent.PRESENT:
                 eventDispatcher.dispatchEvent(new RoomEngineTriggerWidgetEvent(RoomEngineTriggerWidgetEvent.REQUEST_PRESENT, roomId, objectId, objectCategory));
                 break;
-
-
         }
     }
 
@@ -842,6 +846,21 @@ export class RoomObjectEventHandler extends Disposable implements IRoomCanvasMou
         {
             case RoomObjectHSLColorEnableEvent.ROOM_BACKGROUND_COLOR:
                 this._roomEngine.events.dispatchEvent(new RoomObjectHSLColorEnabledEvent(RoomObjectHSLColorEnabledEvent.ROOM_BACKGROUND_COLOR, roomId, event.enable, event.hue, event.saturation, event.lightness));
+                return;
+        }
+    }
+
+    private onRoomObjectDataRequestEvent(event: RoomObjectDataRequestEvent, roomId: number): void
+    {
+        if(!event || !this._roomEngine || !event.object) return;
+
+        switch(event.type)
+        {
+            case RoomObjectDataRequestEvent.RODRE_CURRENT_USER_ID:
+                event.object.model.setValue(RoomObjectVariable.SESSION_CURRENT_USER_ID, this._roomEngine.sessionDataManager.userId);
+                return;
+            case RoomObjectDataRequestEvent.RODRE_URL_PREFIX:
+                event.object.model.setValue(RoomObjectVariable.SESSION_CURRENT_USER_ID, Nitro.instance.getConfiguration('url.prefix'));
                 return;
         }
     }
