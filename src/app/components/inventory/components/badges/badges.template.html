@@ -1,7 +1,14 @@
 <div class="row nitro-inventory-bots-component">
     <div class="col-12" *ngIf="!hasBadgeItems">
-        {{ ('inventory.empty.title') | translate }}
-        {{ ('inventory.effects.defaultdescription') | translate }}
+        <div class="row pt-2">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="empty-image"></div>
+            </div>
+            <div class="col-8 pt-3">
+                <b>{{ ('inventory.empty.title') | translate }}</b><br />
+                {{ ('inventory.effects.defaultdescription') | translate }}
+            </div>
+        </div>
     </div>
     <ng-container *ngIf="hasBadgeItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
