@@ -2,11 +2,26 @@
     position: absolute;
     z-index: $context-menu-zindex;
     font-size: $font-size-sm;
-    min-width: 20px;
+    width:100px;
+
+    &.has-hidden {
+        width:unset;
+    }
+
+    .context-content {
+        transition: all 1s ease-in-out linear;
+    }
     
     &.card {
+        .drag-handler {
+            background:$card-bg;
+            box-shadow: $box-shadow-inset;
+            border-radius: $card-inner-border-radius $card-inner-border-radius 0 0;
+            border-bottom: $card-border-width solid $card-border-color;
+        }
 
         .list-group {
+            background:$secondary;
                 
             .list-group-item {
                 padding: 3px 10px;
@@ -15,6 +30,8 @@
                 text-align: center;
                 width: 100%;
                 z-index: 1;
+                background: linear-gradient(180deg, rgba($cod-gray,.8) 0%, rgba($cod-gray,.8) 50%, $cod-gray 50%, $cod-gray 100%);
+                margin-bottom:2px;
 
                 &:hover {
                     background: rgba($secondary, 1);
@@ -38,5 +55,9 @@
             border-bottom: $card-border-width solid $card-border-color;
             box-shadow: 2px 2px 0px rgb($black, .45), inset -2px -2px 0px rgb($white, .1);
         }
+    }
+
+    .visibility-toggle {
+        cursor: pointer;
     }
 }

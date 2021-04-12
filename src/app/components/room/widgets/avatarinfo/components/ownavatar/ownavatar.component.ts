@@ -3,6 +3,7 @@ import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/Avat
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { AvatarExpressionEnum } from '../../../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
 import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../../../messages/RoomWidgetDanceMessage';
@@ -31,6 +32,13 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
     public mode: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
+
+    constructor(
+        private _settingsService: SettingsService,
+    )
+    {
+        super();
+    }
 
     public static setup(view: RoomAvatarInfoOwnAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
@@ -363,6 +371,16 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
         if(mode === this.mode) return;
 
         this.mode = mode;
+    }
+
+    public toggleVisibility(): void
+    {
+        this._settingsService.toggleUserContextVisible();
+    }
+
+    public get visible(): boolean
+    {
+        return this._settingsService.userContextVisible;
     }
 
     public get widget(): RoomAvatarInfoComponent
