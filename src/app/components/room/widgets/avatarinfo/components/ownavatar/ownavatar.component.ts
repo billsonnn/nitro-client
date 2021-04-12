@@ -206,7 +206,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_14',
-                        localization: '<i class="fas fa-futbol"></i>',
+                        localization: '<i class="icon icon-sign-soccer"></i>',
                         visible: true
                     },
                     {
@@ -226,17 +226,17 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_11',
-                        localization: '<i class="fas fa-heart"></i>',
+                        localization: '<i class="icon icon-sign-heart"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_13',
-                        localization: '<i class="fas fa-exclamation"></i>',
+                        localization: '<i class="icon icon-sign-exclamation"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_17',
-                        localization: '17',
+                        localization: '<i class="icon icon-sign-yellow"></i>',
                         visible: true
                     },
                     {
@@ -256,17 +256,17 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_12',
-                        localization: '<i class="fas fa-skull"></i>',
+                        localization: '<i class="icon icon-sign-skull"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_15',
-                        localization: '<i class="far fa-grin"></i>',
+                        localization: '<i class="icon icon-sign-smile"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_16',
-                        localization: '16',
+                        localization: '<i class="icon icon-sign-red"></i>',
                         visible: true
                     }
                 ]

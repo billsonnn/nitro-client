@@ -1,8 +1,8 @@
 <div #activeView class="nitro-room-avatarinfo-component context-menu card align-items-center">
-    <div class="drag-handler d-flex justify-content-center align-items-center p-1 w-100">
+    <div class="drag-handler d-flex justify-content-center align-items-center p-1 w-100" *ngIf="visible">
         <p class="m-0">{{ userName }}</p>
     </div>
-    <div class="d-flex flex-column mb-1 w-100">
+    <div class="d-flex flex-column mb-1 w-100" *ngIf="visible">
         <ng-container [ngSwitch]="mode">
             <ng-container *ngSwitchCase="0">
                 <ng-container *ngFor="let entry of menu">
@@ -68,4 +68,5 @@
             </ng-container>
         </ng-container>
     </div>
+    <i class="fas small visibility-toggle mb-1 w-100 text-center" [ngClass]="visible ? 'fa-chevron-down' : 'fa-chevron-up m-2'" (click)="toggleVisibility()"></i>
 </div>
