@@ -383,10 +383,12 @@ import { MiniMailUnreadCountParser } from './messages/parser/friendlist/MiniMail
 import { RequestSellItemComposer } from './messages/outgoing/inventory/marketplace/RequestSellItemComposer';
 import { MarketplaceSellItemEvent } from './messages/incoming/inventory/marketplace/MarketplaceSellItemEvent';
 import { MarketplaceConfigEvent } from './messages/incoming/catalog/MarketplaceConfigEvent';
-import { MarketplaceRequestComposer } from './messages/outgoing/catalog/MarketplaceRequestComposer';
-import { MarketplaceRequesstItemStatsComposer } from './messages/outgoing/catalog/MarketplaceRequesstItemStatsComposer';
 import { MarketplaceItemStatsEvent } from './messages/incoming/catalog/MarketplaceItemStatsEvent';
 import { MarketplaceSellItemComposer } from './messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
+import { MarketplaceRequesstItemStatsComposer } from './messages/outgoing/catalog/marketplace/MarketplaceRequesstItemStatsComposer';
+import { MarketplaceRequestComposer } from './messages/outgoing/catalog/marketplace/MarketplaceRequestComposer';
+import { MarketplaceRequestOwnItemsComposer } from './messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
+import { MarketplaceOwnItemsEvent } from './messages/incoming/catalog/marketplace/MarketplaceOwnItemsEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -700,6 +702,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MARKETPLACE_SELL_ITEM, MarketplaceSellItemEvent);
         this._events.set(IncomingHeader.MARKETPLACE_CONFIG, MarketplaceConfigEvent);
         this._events.set(IncomingHeader.MARKETPLACE_ITEM_STATS, MarketplaceItemStatsEvent);
+        this._events.set(IncomingHeader.MARKETPLACE_OWN_ITEMS, MarketplaceOwnItemsEvent);
     }
 
     private registerComposers(): void
@@ -936,6 +939,7 @@ export class NitroMessages implements IMessageConfiguration
         // MARKETPLACE
         this._composers.set(OutgoingHeader.MARKETPLACE_CONFIG, MarketplaceRequestComposer);
         this._composers.set(OutgoingHeader.MARKETPLACE_SELL_ITEM, MarketplaceSellItemComposer);
+        this._composers.set(OutgoingHeader.MARKETPLACE_REQUEST_OWN_ITEMS, MarketplaceRequestOwnItemsComposer);
 
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);

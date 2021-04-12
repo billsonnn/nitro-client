@@ -225,4 +225,5 @@ export class OutgoingHeader
     public static REQUEST_SELL_ITEM              = 848;
     public static REQUEST_MARKETPLACE_ITEM_STATS = 3288;
     public static MARKETPLACE_SELL_ITEM          = 3447;
+    public static MARKETPLACE_REQUEST_OWN_ITEMS  = 2105;
 }

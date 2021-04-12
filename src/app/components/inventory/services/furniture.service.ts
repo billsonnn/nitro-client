@@ -26,11 +26,11 @@ import { RequestSellItemComposer } from '../../../../client/nitro/communication/
 import { MarketplaceSellItemEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/marketplace/MarketplaceSellItemEvent';
 import { NotificationService } from '../../notification/services/notification.service';
 import { MarketplaceConfigEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/MarketplaceConfigEvent';
-import { MarketplaceRequestComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/MarketplaceRequestComposer';
 import { MarketplaceConfigParser } from '../../../../client/nitro/communication/messages/parser/catalog/MarketplaceConfigParser';
-import { MarketplaceRequesstItemStatsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/MarketplaceRequesstItemStatsComposer';
 import { MarketplaceItemStatsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/MarketplaceItemStatsEvent';
 import { MarketplaceItemStatsParser } from '../../../../client/nitro/communication/messages/parser/catalog/MarketplaceItemStatsParser';
+import { MarketplaceRequestComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestComposer';
+import { MarketplaceRequesstItemStatsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequesstItemStatsComposer';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
