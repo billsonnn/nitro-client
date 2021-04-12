@@ -23,10 +23,17 @@ import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitr
 import { MarketplaceOwnItemsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOwnItemsEvent';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { MarketplaceOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 
 @Injectable()
 export class MarketplaceService implements OnDestroy
 {
+
+    public static _Str_20923:number = 1;
+    public static _Str_15376:number = 1;
+    public static _Str_8295:number = 2;
+    public static _Str_6495:number = 3;
+
 
     private _lastOwnOffers: AdvancedMap<number, MarketplaceOfferData>;
     private _creditsWaiting: number = 0;
@@ -76,20 +83,34 @@ export class MarketplaceService implements OnDestroy
 
         if(!parser) return;
 
-        this._creditsWaiting = parser.creditsWaiting;
-
-        for(const offer of parser.offers)
+        this._ngZone.run(() =>
         {
-            const data = new MarketplaceOfferData(offer.offerId, offer.furniId, offer.furniType, offer.extraData, offer.stuffData, offer.price, offer.status, offer._Str_3925);
-            data._Str_5853 = offer._Str_5853;
-            this._lastOwnOffers.add(offer.offerId, data);
-        }
+            this._creditsWaiting = parser.creditsWaiting;
 
+            for(const offer of parser.offers)
+            {
+                const data = new MarketplaceOfferData(offer.offerId, offer.furniId, offer.furniType, offer.extraData, offer.stuffData, offer.price, offer.status, offer._Str_3925);
+                data._Str_5853 = offer._Str_5853;
+                this._lastOwnOffers.add(offer.offerId, data);
+            }
+        });
 
     }
 
     public requestOwnItem(): void
     {
         Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
+    }
+
+
+
+    public get lastOwnOffers(): AdvancedMap<number, MarketplaceOfferData>
+    {
+        return this._lastOwnOffers;
+    }
+
+    public get creditsWaiting(): number
+    {
+        return this._creditsWaiting;
     }
 }

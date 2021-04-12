@@ -1,3 +1,36 @@
-<div class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets2-component">
-    hallo
+<div class="w-100 h-100 px-1 nitro-catalog-layout-marketplace-own-items-component">
+    <div class="row">
+        {{ topText }}
+        <button type="button" class="btn btn-primary"
+                disabled>{{ 'catalog.marketplace.offer.redeem' | translate }}</button>
+        {{ statusText }}
+    </div>
+
+    <div *ngIf="hasOwnOffersOnMarketplace" class="row">
+        <perfect-scrollbar style="min-height:450px;max-height:450px;height:450px;">
+            <div class="gift-item rounded bg-secondary mb-2 d-flex flex-row p-1" *ngFor="let offer of ownOffers">
+                <div class="gift-image align-self-center mr-2 flex-shrink-0"
+                     [ngStyle]="{ 'background-image': 'url(' + imageUrlOffer(offer) + ')' }"></div>
+                <div class="w-100">
+                    <div class="small">
+                        <p class="mb-0 pb-0 d-block">{{ getMarketplaceOfferTitle(offer) }}</p>
+                        <p class="mb-0 pb-0 d-block">{{ getMarketplaceOfferDescription(offer) }}</p>
+                        <p class="mb-0 pb-0 d-block">{{ getMarketplacePrice(offer) }}</p>
+                        <p *ngIf="offerIsOnGoing(offer)" class="mb-0 pb-0 d-block">{{ offerTime(offer) }}</p>
+                        <p *ngIf="offerIsSold(offer)" class="mb-0 pb-0 d-block">{{ offerSoldText(offer) }}</p>
+                        <p *ngIf="offerIsExpired(offer)" class="mb-0 pb-0 d-block">{{ offerExpiredText(offer) }}</p>
+                        <p class="mb-0 pb-0 d-block">{{ offer.status }}</p>
+                    </div>
+                    <!--                    <div *ngIf="getAvailability(gift.offerId)" class="w-100 d-flex flex-row justify-content-between">-->
+                    <!--                        <span class="w-100">{{ 'catalog.club_gift.selectable' | translate }}</span>-->
+                    <!--                        <button type="button" (click)="selectOffer(gift)"-->
+                    <!--                                class="btn btn-sm btn-primary align-self-center">{{ 'catalog.club_gift.select' | translate }}</button>-->
+                    <!--                    </div>-->
+                    <!--                    <div *ngIf="!getAvailability(gift.offerId)" class="w-100">-->
+                    <!--                        {{ nonAvailableText(gift.offerId) }}-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
 </div>
