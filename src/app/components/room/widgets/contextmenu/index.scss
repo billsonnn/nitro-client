@@ -13,6 +13,14 @@
         .list-group {
             min-width: 95px;
             background: rgba($secondary, 1);
+
+            // &:first-child {
+            //     border-top: 2px solid rgb(255 255 255 / 9%);
+            // }
+
+            // &:last-child {
+            //     border-bottom: 2px solid rgb(255 255 255 / 9%);
+            // }
                 
             .list-group-item {
                 display: flex;
@@ -48,6 +56,13 @@
             border-right: $card-border-width solid $card-border-color;
             border-bottom: $card-border-width solid $card-border-color;
             box-shadow: 2px 2px 0px rgb($black, .45), inset -2px -2px 0px rgb($white, .1);
+        }
+
+        &.bg-success {
+
+            &:after {
+                background: $success;
+            }
         }
 
         .visibility-toggle {
