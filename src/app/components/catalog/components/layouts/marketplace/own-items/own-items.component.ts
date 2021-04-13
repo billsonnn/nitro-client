@@ -1,10 +1,9 @@
-import { Component, NgZone, OnInit } from '@angular/core';
-import { CatalogLayout } from '../../../../CatalogLayout';
-import { CatalogService } from '../../../../services/catalog.service';
-import { MarketplaceService } from '../../../../services/marketplace.service';
+import { Component, OnInit } from '@angular/core';
 import { MarketplaceRequestOwnItemsComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { MarketplaceOfferData } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { CatalogLayout } from '../../../../CatalogLayout';
+import { MarketplaceService } from '../../../../services/marketplace.service';
 
 
 @Component({
@@ -14,7 +13,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 {
     public static CODE: string = 'marketplace_own_items';
 
-    public redeemButtonDisabled: boolean = true;
+    public redeemButtonActive: boolean = false;
 
     public ngOnInit(): void
     {
@@ -52,12 +51,10 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
             }
         }
 
-        this.redeemButtonDisabled = true;
-
         if(offersOnMarketplace > 0)
         {
             const credits = this._marketService.creditsWaiting;
-            this.redeemButtonDisabled = false;
+            this.redeemButtonActive = true;
 
             return Nitro.instance.localization.getValueWithParameters('catalog.marketplace.redeem.get_credits',
                 [
@@ -140,7 +137,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
         const isSold = this.offerIsSold(offer);
         const isExpired = this.offerIsExpired(offer);
 
-        return !isSold && !isExpired;
+        return !isSold || isExpired;
     }
 
     public offerExpiredText(offer: MarketplaceOfferData): string
@@ -183,7 +180,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 
     public redeemCredits(): void
     {
-        this.redeemButtonDisabled = true;
+        this.redeemButtonActive = false;
         this._marketService.redeemCredits();
     }
 
