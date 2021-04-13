@@ -227,4 +227,5 @@ export class OutgoingHeader
     public static MARKETPLACE_SELL_ITEM          = 3447;
     public static MARKETPLACE_REQUEST_OWN_ITEMS  = 2105;
     public static MARKETPLACE_TAKE_BACK_ITEM     = 434;
+    public static MARKETPLACE_REDEEM_CREDITS     = 2650;
 }

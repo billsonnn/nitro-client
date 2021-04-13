@@ -14,6 +14,8 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 {
     public static CODE: string = 'marketplace_own_items';
 
+    public redeemButtonDisabled: boolean = true;
+
     public ngOnInit(): void
     {
         Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
@@ -28,8 +30,8 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
         if(!offers || offers.length === 0) return defaultTranslation;
 
         return Nitro.instance.localization.getValueWithParameter('catalog.marketplace.items_found', 'count', offers.length.toString());
-
     }
+
 
     public get topText(): string
     {
@@ -50,9 +52,12 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
             }
         }
 
+        this.redeemButtonDisabled = true;
+
         if(offersOnMarketplace > 0)
         {
             const credits = this._marketService.creditsWaiting;
+            this.redeemButtonDisabled = false;
 
             return Nitro.instance.localization.getValueWithParameters('catalog.marketplace.redeem.get_credits',
                 [
@@ -174,6 +179,12 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
         }
 
         return Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer.time_left', 'time', text);
+    }
+
+    public redeemCredits(): void
+    {
+        this.redeemButtonDisabled = true;
+        this._marketService.redeemCredits();
     }
 
     public get hasOwnOffersOnMarketplace(): boolean

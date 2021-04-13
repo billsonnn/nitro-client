@@ -27,6 +27,7 @@ import { FurnitureType } from '../../../../client/nitro/session/furniture/Furnit
 import { MarketplaceTakeItemBackComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
 import { MarketplaceCancelItemEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
 import { NotificationService } from '../../notification/services/notification.service';
+import { MarketplaceRedeemCreditsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRedeemCreditsComposer';
 
 @Injectable()
 export class MarketplaceService implements OnDestroy
@@ -141,5 +142,26 @@ export class MarketplaceService implements OnDestroy
     public redeemExpiredMarketPlaceOffer(offerId: number)
     {
         Nitro.instance.communication.connection.send(new MarketplaceTakeItemBackComposer(offerId));
+    }
+
+    public redeemCredits(): void
+    {
+        const idsToDelete = [];
+
+        for(const offer of this._lastOwnOffers.getValues())
+        {
+            if(offer.status === MarketplaceService._Str_8295)
+            {
+                idsToDelete.push(offer.offerId);
+            }
+        }
+
+        for(const offerId of idsToDelete)
+        {
+            this._lastOwnOffers.remove(offerId);
+        }
+
+        Nitro.instance.communication.connection.send(new MarketplaceRedeemCreditsComposer());
+
     }
 }
