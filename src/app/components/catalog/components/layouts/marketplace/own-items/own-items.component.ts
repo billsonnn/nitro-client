@@ -2,11 +2,9 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { CatalogService } from '../../../../services/catalog.service';
 import { MarketplaceService } from '../../../../services/marketplace.service';
-import { AdvancedMap } from '../../../../../../../client/core/utils/AdvancedMap';
 import { MarketplaceRequestOwnItemsComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { MarketplaceOfferData } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { min } from 'rxjs/operators';
 
 
 @Component({
@@ -16,17 +14,9 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 {
     public static CODE: string = 'marketplace_own_items';
 
-    constructor(protected _catalogService: CatalogService,
-        private _marketService: MarketplaceService,
-        protected _ngZone: NgZone)
-    {
-        super(_catalogService, _ngZone);
-    }
-
     public ngOnInit(): void
     {
         Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
-
     }
 
     public get statusText(): string
@@ -138,11 +128,28 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
         return offer.status === MarketplaceService._Str_6495;
     }
 
+    public canTakeBack(offer: MarketplaceOfferData): boolean
+    {
+        if(!offer) return false;
+
+        const isSold = this.offerIsSold(offer);
+        const isExpired = this.offerIsExpired(offer);
+
+        return !isSold && !isExpired;
+    }
+
     public offerExpiredText(offer: MarketplaceOfferData): string
     {
         if(!offer) return '';
 
         return Nitro.instance.localization.getValue('catalog.marketplace.offer.expired');
+    }
+
+    public takeBack(offer: MarketplaceOfferData): void
+    {
+        if(!offer) return;
+
+        this._marketService.redeemExpiredMarketPlaceOffer(offer.offerId);
     }
 
     public offerSoldText(offer: MarketplaceOfferData): string

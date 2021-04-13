@@ -8,6 +8,7 @@ import { IFurnitureData } from '../../../../../../client/nitro/session/furniture
 import { CatalogLayout } from '../../../CatalogLayout';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogService } from '../../../services/catalog.service';
+import { MarketplaceService } from '../../../services/marketplace.service';
 
 @Component({
     templateUrl: './guild-custom-furni.template.html'
@@ -24,9 +25,10 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
 
     constructor(
         protected _catalogService: CatalogService,
+        protected _marketService: MarketplaceService,
         protected _ngZone: NgZone)
     {
-        super(_catalogService, _ngZone);
+        super(_catalogService, _marketService, _ngZone);
         _catalogService.registerGroupFurniTemplate(this);
     }
 

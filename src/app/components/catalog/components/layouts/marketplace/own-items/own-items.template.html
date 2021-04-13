@@ -9,8 +9,18 @@
     <div *ngIf="hasOwnOffersOnMarketplace" class="row">
         <perfect-scrollbar style="min-height:450px;max-height:450px;height:450px;">
             <div class="gift-item rounded bg-secondary mb-2 d-flex flex-row p-1" *ngFor="let offer of ownOffers">
-                <div class="gift-image align-self-center mr-2 flex-shrink-0"
-                     [ngStyle]="{ 'background-image': 'url(' + imageUrlOffer(offer) + ')' }"></div>
+<!--                <div class="position-relative" [ngClass]="{'unique': offer.isUniqueLimitedItem}">-->
+<!--                    <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + imageUrlOffer(offer) + ')' }"></div>-->
+<!--                    <div *ngIf="offer.isUniqueLimitedItem" class="position-absolute unique-counter" [innerHtml]="offer.stuffData.uniqueSeries | uniqueNumber"></div>-->
+<!--                </div>-->
+
+                <div class="gift-image position-relative align-self-center align-items-end mr-2 flex-shrink-0" style="width:36px; height:36px;"
+                     [ngClass]="{'unique': offer.isUniqueLimitedItem}" >
+                    <div class="position-absolute"  style="width:36px; height:36px;background-position: center; background-repeat: no-repeat" [ngStyle]="{ 'background-image': 'url(' + imageUrlOffer(offer) + ')' }"></div>
+                    <div *ngIf="offer.isUniqueLimitedItem" class="position-absolute unique-counter" style="bottom:0px;" [innerHtml]="offer.stuffData.uniqueSeries | uniqueNumber"></div>
+                </div>
+
+
                 <div class="w-100">
                     <div class="small">
                         <p class="mb-0 pb-0 d-block">{{ getMarketplaceOfferTitle(offer) }}</p>
@@ -19,6 +29,7 @@
                         <p *ngIf="offerIsOnGoing(offer)" class="mb-0 pb-0 d-block">{{ offerTime(offer) }}</p>
                         <p *ngIf="offerIsSold(offer)" class="mb-0 pb-0 d-block">{{ offerSoldText(offer) }}</p>
                         <p *ngIf="offerIsExpired(offer)" class="mb-0 pb-0 d-block">{{ offerExpiredText(offer) }}</p>
+                        <button *ngIf="canTakeBack(offer)" (click)="takeBack(offer)" class="btn btn-primary">{{ 'catalog.marketplace.offer.pick' | translate }}</button>
                         <p class="mb-0 pb-0 d-block">{{ offer.status }}</p>
                     </div>
                     <!--                    <div *ngIf="getAvailability(gift.offerId)" class="w-100 d-flex flex-row justify-content-between">-->

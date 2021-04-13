@@ -24,6 +24,7 @@ import { MarketplaceOwnItemsEvent } from '../../../../client/nitro/communication
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { MarketplaceOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
+import { MarketplaceTakeItemBackComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
 
 @Injectable()
 export class MarketplaceService implements OnDestroy
@@ -112,5 +113,10 @@ export class MarketplaceService implements OnDestroy
     public get creditsWaiting(): number
     {
         return this._creditsWaiting;
+    }
+
+    public redeemExpiredMarketPlaceOffer(offerId: number)
+    {
+        Nitro.instance.communication.connection.send(new MarketplaceTakeItemBackComposer(offerId));
     }
 }
