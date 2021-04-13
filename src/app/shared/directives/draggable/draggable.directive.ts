@@ -8,6 +8,7 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 export class DraggableDirective implements AfterViewInit, OnDestroy
 {
     private static POS_MEMORY = new Map();
+    private static BOUNDS_THRESHOLD = 5;
 
     @Input()
     public dragHandle: string = '.drag-handler';
@@ -73,8 +74,6 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
         {
             this._offset.x  = memory.offset.x;
             this._offset.y  = memory.offset.y;
-            this._delta.x   = memory.delta.x;
-            this._delta.y   = memory.delta.y;
 
             this.translate();
         }
@@ -144,16 +143,44 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
                 this._offset.y  += this._delta.y;
                 this._delta      = { x: 0, y: 0 };
 
+                const left = this._target.offsetLeft + this._offset.x;
+                const top = this._target.offsetTop + this._offset.y;
+
+                if(top !== 0)
+                {
+                    if(top < DraggableDirective.BOUNDS_THRESHOLD)
+                    {
+                        this._offset.y = -this._target.offsetTop;
+                    }
+
+                    else if(top >= (document.body.offsetHeight - DraggableDirective.BOUNDS_THRESHOLD))
+                    {
+                        this._offset.y = (document.body.offsetHeight - this._target.offsetHeight) - this._target.offsetTop;
+                    }
+                }
+
+                if(left !== 0)
+                {
+                    console.log(left);
+                    if((left + this._target.offsetWidth) < DraggableDirective.BOUNDS_THRESHOLD)
+                    {
+                        this._offset.x = -this._target.offsetLeft;
+                    }
+
+                    else if(left >= (document.body.offsetWidth - DraggableDirective.BOUNDS_THRESHOLD))
+                    {
+                        this._offset.x = (document.body.offsetWidth - this._target.offsetWidth) - this._target.offsetLeft;
+                    }
+                }
+
+                this.translate();
+
                 if(!this.noMemory)
                 {
                     DraggableDirective.POS_MEMORY.set(this._name, {
                         offset: {
                             x: this._offset.x,
                             y: this._offset.y
-                        },
-                        delta: {
-                            x: this._delta.x,
-                            y: this._delta.y
                         }
                     });
                 }
