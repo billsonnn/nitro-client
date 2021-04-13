@@ -25,6 +25,8 @@ import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { MarketplaceOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
 import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
 import { MarketplaceTakeItemBackComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
+import { MarketplaceCancelItemEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
+import { NotificationService } from '../../notification/services/notification.service';
 
 @Injectable()
 export class MarketplaceService implements OnDestroy
@@ -41,7 +43,8 @@ export class MarketplaceService implements OnDestroy
 
     private _messages: IMessageEvent[] = [];
 
-    constructor(private _ngZone: NgZone)
+    constructor(private _ngZone: NgZone,
+        private _notificationService: NotificationService)
     {
         this.registerMessages();
 
@@ -54,6 +57,7 @@ export class MarketplaceService implements OnDestroy
         {
             this._messages = [
                 new MarketplaceOwnItemsEvent(this.onMarketplaceOwnItemsEvent.bind(this)),
+                new MarketplaceCancelItemEvent(this.onMarketplaceCancelItemEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -95,7 +99,26 @@ export class MarketplaceService implements OnDestroy
                 this._lastOwnOffers.add(offer.offerId, data);
             }
         });
+    }
 
+    private onMarketplaceCancelItemEvent(event: MarketplaceCancelItemEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        if(!parser.success)
+        {
+            this._notificationService.alert(Nitro.instance.localization.getValue('catalog.marketplace.cancel_failed'), Nitro.instance.localization.getValue('catalog.marketplace.operation_failed.topic'));
+            return;
+        }
+
+        this._ngZone.run(() =>
+        {
+            this._lastOwnOffers.remove(parser.offerId);
+        });
     }
 
     public requestOwnItem(): void
