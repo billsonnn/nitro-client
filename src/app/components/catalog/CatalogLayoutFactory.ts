@@ -15,6 +15,7 @@ import { CatalogLayoutBotsComponent } from './components/layouts/bots/bots.compo
 import { CatalogLayoutSearchResultsComponent } from './components/layouts/search-results/search-results.component';
 import { CatalogLayoutVipGiftsComponent } from './components/layouts/vip-gifts/vip-gifts.component';
 import { CatalogLayoutMarketplaceOwnItemsComponent } from './components/layouts/marketplace/own-items/own-items.component';
+import { CatalogLayoutMarketplaceMarketplaceComponent } from './components/layouts/marketplace/marketplace/marketplace.component';
 
 export class CatalogLayoutFactory
 {
@@ -52,6 +53,8 @@ export class CatalogLayoutFactory
                 return CatalogLayoutVipGiftsComponent;
             case CatalogLayoutMarketplaceOwnItemsComponent.CODE:
                 return CatalogLayoutMarketplaceOwnItemsComponent;
+            case CatalogLayoutMarketplaceMarketplaceComponent.CODE:
+                return CatalogLayoutMarketplaceMarketplaceComponent;
             default:
                 return CatalogLayoutUnsupportedComponent;
         }

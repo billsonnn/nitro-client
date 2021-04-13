@@ -28,6 +28,9 @@ import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redee
 import { CatalogService } from './services/catalog.service';
 import { CatalogLayoutMarketplaceOwnItemsComponent } from './components/layouts/marketplace/own-items/own-items.component';
 import { MarketplaceService } from './services/marketplace.service';
+import { CatalogLayoutMarketplaceMarketplaceComponent } from './components/layouts/marketplace/marketplace/marketplace.component';
+import { CatalogLayoutMarketplaceMarketplaceSubActivityComponent } from './components/layouts/marketplace/marketplace/sub/by-activity.component';
+import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './components/layouts/marketplace/marketplace/sub/advanced.component';
 
 @NgModule({
     imports: [
@@ -59,7 +62,10 @@ import { MarketplaceService } from './services/marketplace.service';
         CatalogCustomizeGiftComponent,
         CatalogLayoutSearchResultsComponent,
         CatalogLayoutVipGiftsComponent,
-        CatalogLayoutMarketplaceOwnItemsComponent
+        CatalogLayoutMarketplaceOwnItemsComponent,
+        CatalogLayoutMarketplaceMarketplaceComponent,
+        CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
     ],
     providers: [
         CatalogService,
@@ -91,7 +97,10 @@ import { MarketplaceService } from './services/marketplace.service';
         CatalogCustomizeGiftComponent,
         CatalogLayoutSearchResultsComponent,
         CatalogLayoutVipGiftsComponent,
-        CatalogLayoutMarketplaceOwnItemsComponent
+        CatalogLayoutMarketplaceOwnItemsComponent,
+        CatalogLayoutMarketplaceMarketplaceComponent,
+        CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
     ]
 })
 export class CatalogModule
