@@ -20,6 +20,12 @@
         }
     }
 
+    .empty-image {
+        background: url('^assets/images/inventory/empty.png');
+            width: 129px;
+            height: 181px;
+    }
+
     .notification-count {
         font-size: 10px;
     }

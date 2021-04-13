@@ -1,7 +1,14 @@
 <div class="row nitro-inventory-furni-component" (mouseup)="onMouseUp()">
     <div class="col-12" *ngIf="!hasGroupItems">
-        {{ ('inventory.empty.title') | translate }}
-        {{ ('inventory.empty.desc') | translate }}
+        <div class="row pt-2">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="empty-image"></div>
+            </div>
+            <div class="col-8 pt-3">
+                <b>{{ ('inventory.empty.title') | translate }}</b><br />
+                {{ ('inventory.empty.desc') | translate }}
+            </div>
+        </div>
     </div>
     <ng-container *ngIf="hasGroupItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">

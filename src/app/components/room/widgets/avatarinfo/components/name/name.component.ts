@@ -10,6 +10,8 @@ export class RoomAvatarInfoNameComponent extends AvatarContextInfoView
     @ViewChild('activeView')
     public activeView: ElementRef<HTMLDivElement>;
 
+    public isFriend?: boolean = false;
+
     public static setup(view: RoomAvatarInfoNameComponent, userId: number, userName: string, userType: number, roomIndex: number, willFade: boolean = false): void
     {
         view.willFade = willFade;
