@@ -5,6 +5,7 @@ import { RequestBotCommandConfigurationComposer } from '../../../../../../../cli
 import { BotRemoveComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/room/engine/BotRemoveComposer';
 import { BotSkillSaveComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/room/engine/BotSkillSaveComposer';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { SettingsService } from '../../../../../../core/settings/service';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { BotSkillsEnum } from '../../common/BotSkillsEnum';
 import { RentableBotInfoData } from '../../common/RentableBotInfoData';
@@ -38,7 +39,9 @@ export class RoomAvatarInfoRentableBotComponent extends AvatarContextInfoView im
     public mixSentences: boolean = false;
     public chatDelay: number = 5;
 
-    constructor(private _ngZone: NgZone)
+    constructor(
+        private _settingsService: SettingsService,
+        private _ngZone: NgZone)
     {
         super();
     }
@@ -237,6 +240,16 @@ export class RoomAvatarInfoRentableBotComponent extends AvatarContextInfoView im
         if(mode === this.mode) return;
 
         this.mode = mode;
+    }
+
+    public toggleVisibility(): void
+    {
+        this._settingsService.toggleUserContextVisible();
+    }
+
+    public get visible(): boolean
+    {
+        return this._settingsService.userContextVisible;
     }
 
     public get widget(): RoomAvatarInfoComponent

@@ -370,50 +370,92 @@ i {
 
 		&.modtool-room-icon {
 			background-image: url('./images/modtool/room.png');
-			width:20px;
-			height:15px;
+			width: 20px;
+			height: 15px;
 		}
 
 		&.modtool-chatlog-icon {
 			background-image: url('./images/modtool/chatlog.gif');
-			width:20px;
-			height:15px;
+			width: 20px;
+			height: 15px;
 		}
 
 		&.modtool-user-icon{
 			background-image: url('./images/modtool/user.gif');
-			width:20px;
-			height:15px;
+			width: 20px;
+			height: 15px;
 		}
 
 		&.modtool-reports-icon {
 			background-image: url('./images/modtool/reports.png');
-			width:20px;
-			height:15px;
+			width: 20px;
+			height: 15px;
 		}
 
         &.modtool-wrench-icon {
             background-image: url('./images/modtool/wrench.gif');
-            width:20px;
-            height:15px;
+            width: 20px;
+            height: 15px;
         }
 
         &.modtool-key-icon {
             background-image: url('./images/modtool/key.gif');
-            width:20px;
-            height:15px;
+            width: 20px;
+            height: 15px;
         }
 
         &.icon-catalogue-hc_small {
-            height:17px;
-            width:31px;
             background-image: url('^assets/images/catalog/hc_small.png');
+            height: 17px;
+            width: 31px;
         }
 
         &.icon-catalogue-hc_big {
-            width:68px;
-            height:40px;
             background: url('^assets/images/catalog/hc_big.png');
+            width: 68px;
+            height: 40px;
+        }
+
+        &.icon-sign-exclamation {
+            background: url('^assets/images/icons/sign-exclamation.png');
+            width: 7px;
+            height: 17px;
+        }
+
+        &.icon-sign-heart {
+            background: url('^assets/images/icons/sign-heart.png');
+            width: 15px;
+            height: 13px;
+        }
+
+        &.icon-sign-red {
+            background: url('^assets/images/icons/sign-red.png');
+            width: 11px;
+            height: 19px;
+        }
+
+        &.icon-sign-yellow {
+            background: url('^assets/images/icons/sign-yellow.png');
+            width: 11px;
+            height: 19px;
+        }
+
+        &.icon-sign-skull {
+            background: url('^assets/images/icons/sign-skull.png');
+            width: 12px;
+            height: 12px;
+        }
+
+        &.icon-sign-smile {
+            background: url('^assets/images/icons/sign-smile.png');
+            width: 7px;
+            height: 14px;
+        }
+
+        &.icon-sign-soccer {
+            background: url('^assets/images/icons/sign-soccer.png');
+            width: 20px;
+            height: 20px;
         }
 
         &.spin {

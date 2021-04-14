@@ -986,6 +986,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this.setScale(1, null, null, true);
         this._screenOffsetX = 0;
         this._screenOffsetY = 0;
+        this._display.mask = null;
         this.render(-1, true);
 
         const bounds = this._display.getBounds();
@@ -1001,6 +1002,7 @@ export class RoomSpriteCanvas implements IRoomRenderingCanvas
         this.setScale(k, null, null, true);
         this._screenOffsetX = _local_2;
         this._screenOffsetY = _local_3;
+        this._display.mask = this._mask;
 
         return renderTexture;
     }

@@ -503,6 +503,18 @@ export class FriendListService implements OnDestroy
         Nitro.instance.communication.connection.send(new RequestFriendComposer(username));
     }
 
+    public getFriendNames(): string[]
+    {
+        const names: string[] = [];
+
+        for(const friend of this._friends.values())
+        {
+            names.push(friend.name);
+        }
+
+        return names;
+    }
+
     public get events(): IEventDispatcher
     {
         return this._events;
