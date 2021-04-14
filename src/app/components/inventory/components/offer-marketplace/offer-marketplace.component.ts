@@ -1,18 +1,17 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { RenderTexture } from 'pixi.js';
+import { MarketplaceSellItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
 import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
 import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
+import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
+import { Vector3d } from '../../../../../client/room/utils/Vector3d';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { FurnitureItem } from '../../items/FurnitureItem';
-import { Vector3D } from '../../../../../client/nitro/avatar/geometry/Vector3D';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { RenderTexture } from 'pixi.js';
-import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
-import { MarketplaceSellItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
 
 
 @Component({
@@ -145,11 +144,6 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
         const localizationKey = item.isWallItem ? 'wallItem.desc.' + item.type : 'roomItem.desc.' + item.type;
 
         return Nitro.instance.localization.getValue(localizationKey);
-    }
-
-    public getOfferTime(): string
-    {
-        return Nitro.instance.localization.getValueWithParameter('inventory.marketplace.make_offer.expiration_info', 'time', this._inventoryFurniService.marketPlaceConfig.offerTime.toString());
     }
 
     public confirmationText(): string
@@ -295,5 +289,10 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
     public closeConfirmDialog(): void
     {
         this.showConfirmDialog = false;
+    }
+
+    public get offerTime(): number
+    {
+        return this._inventoryFurniService.marketPlaceConfig.offerTime;
     }
 }

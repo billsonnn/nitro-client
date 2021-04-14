@@ -3,33 +3,27 @@
         <h6 class="m-0">{{ ( 'inventory.marketplace.make_offer.title') | translate }}</h6>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="row p-3">
-        <div class="col-6 d-flex flex-column">
-            <div #imageElement class="product-preview bg-secondary rounded" [ngStyle]="{ 'background-image': 'url(' + imageUrl + ')'}"></div>
+    <div class="p-3">
+        <div class="d-flex flex-row mb-3">
+            <div class="position-relative bg-secondary rounded">
+                <div *ngIf="item && item.stuffData.uniqueNumber" class="unique-counter-compact" style="right: 0px;">
+                    <div [innerHTML]="item.stuffData.uniqueNumber | uniqueNumber"></div>
+                    <div [innerHTML]="item.stuffData.uniqueSeries | uniqueNumber"></div>
+                </div>
+                <div #imageElement class="product-preview bg-secondary" [ngStyle]="{ 'background-image': 'url(' + imageUrl + ')'}"></div>
+            </div>
+            <div class="ml-2 align-self-center">
+                <div>{{ getFurniTitle() }}</div>
+                <div class="badge badge-secondary badge-sm text-wrap">{{ getFurniDescription() }}</div>
+            </div>
         </div>
-        <div class="col-6 d-flex flex-column align-items-center justify-content-center">
-            <div class="offer-name">{{ getFurniTitle() }}</div>
-            <div class="offer-name">{{ getFurniDescription() }}</div>
+        <div class="d-flex flex-row mb-3">
+            <div class="align-self-center" style="white-space: nowrap;">{{ 'inventory.marketplace.make_offer.price_request' | translate }}</div>
+            <input class="form-control form-control-sm w-100 ml-2" type="number" (input)="updateInterface($event)" [(ngModel)]="askingPrice" />
         </div>
-    </div>
-
-    <div class="row p-3 ml-1 mr-1">
-        <p>{{ getOfferTime() }}</p>
-    </div>
-    <div class="row p-3 ml-1 mr-1  d-flex flex-row align-items-center justify-content-center">
-        <p> {{ 'inventory.marketplace.make_offer.price_request' | translate }}</p>
-        <input class="form-control" max="9999" type="number"  (input)="updateInterface($event)" [(ngModel)]="askingPrice" />
-    </div>
-
-    <div class="row p-3 ml-1 mr-1">
-        <p>{{ getAveragePrice() }}</p>
-    </div>
-
-    <div class="row p-3 ml-1 mr-1 rounded bg-secondary">
-        <p>{{ creditsPrice() }}</p>
-    </div>
-    <div class="row align-items-end pt-0 px-3 pb-3">
-        <div class="col btn-group">
+        <div class="badge badge-secondary badge-sm text-wrap mb-2 w-100"> {{ getAveragePrice() }} </div>
+        <div class="badge badge-sm text-wrap mb-3 w-100" [ngClass]="canPostItem ? 'badge-success' : 'badge-secondary'">{{ creditsPrice() }}</div>
+        <div class="btn-group w-100">
             <button type="button" class="btn btn-success" [disabled]="!canPostItem" (click)="postOffer()">{{ 'inventory.marketplace.make_offer.post' | translate }}</button>
             <button type="button" class="btn btn-primary" (click)="hide()">{{ 'inventory.marketplace.no_credits.cancel' | translate }}</button>
         </div>
@@ -42,12 +36,9 @@
         <h6 class="m-0">{{ ( 'inventory.marketplace.confirm_offer.title') | translate }}</h6>
         <button type="button" class="close" (click)="closeConfirmDialog()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="row p-3 ml-1 mr-1">
-        <p>{{ confirmationText() }}</p>
-    </div>
-
-    <div class="row align-items-end pt-0 px-3 pb-3">
-        <div class="col btn-group">
+    <div class="p-3">
+        <div class="mb-3">{{ confirmationText() }}</div>
+        <div class="btn-group w-100">
             <button type="button" class="btn btn-success"  (click)="doPostOffer()">{{ 'inventory.marketplace.make_offer.post' | translate }}</button>
             <button type="button" class="btn btn-primary" (click)="closeConfirmDialog()">{{ 'inventory.marketplace.confirm_offer.cancel' | translate }}</button>
         </div>
