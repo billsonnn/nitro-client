@@ -31,6 +31,7 @@ import { MarketplaceItemStatsEvent } from '../../../../client/nitro/communicatio
 import { MarketplaceItemStatsParser } from '../../../../client/nitro/communication/messages/parser/catalog/MarketplaceItemStatsParser';
 import { MarketplaceRequestComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestComposer';
 import { MarketplaceRequesstItemStatsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequesstItemStatsComposer';
+import { MarketplaceItemPostedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/marketplace/MarketplaceItemPostedEvent';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
@@ -82,6 +83,7 @@ export class InventoryFurnitureService implements OnDestroy
                 new MarketplaceSellItemEvent(this.onMarketplaceSellEvent.bind(this)),
                 new MarketplaceConfigEvent(this.onMarketplaceConfigEvent.bind(this)),
                 new MarketplaceItemStatsEvent(this.onMarketplaceItemStatsEvent.bind(this)),
+                new MarketplaceItemPostedEvent(this.onMarketplaceItemPostedEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -215,6 +217,31 @@ export class InventoryFurnitureService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+    }
+
+    private onMarketplaceItemPostedEvent(event: MarketplaceItemPostedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        let title = null;
+
+        if(parser.result == 1)
+        {
+            title = 'inventory.marketplace.result.title.success';
+        }
+        else
+        {
+            title = 'inventory.marketplace.result.title.failure';
+        }
+
+        title = Nitro.instance.localization.getValue(title);
+        const message = Nitro.instance.localization.getValue(`inventory.marketplace.result.${parser.result}`);
+
+        this._notificationService.alert(message, title);
     }
 
     private onMarketplaceItemStatsEvent(event: MarketplaceItemStatsEvent): void

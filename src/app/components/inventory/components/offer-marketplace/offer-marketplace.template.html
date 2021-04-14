@@ -18,7 +18,7 @@
     </div>
     <div class="row p-3 ml-1 mr-1  d-flex flex-row align-items-center justify-content-center">
         <p> {{ 'inventory.marketplace.make_offer.price_request' | translate }}</p>
-        <input class="form-control" type="number"  (input)="updateInterface($event)" [(ngModel)]="askingPrice" />
+        <input class="form-control" max="9999" type="number"  (input)="updateInterface($event)" [(ngModel)]="askingPrice" />
     </div>
 
     <div class="row p-3 ml-1 mr-1">

@@ -392,6 +392,7 @@ import { MarketplaceOwnItemsEvent } from './messages/incoming/catalog/marketplac
 import { MarketplaceTakeItemBackComposer } from './messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
 import { MarketplaceCancelItemEvent } from './messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
 import { MarketplaceRedeemCreditsComposer } from './messages/outgoing/catalog/marketplace/MarketplaceRedeemCreditsComposer';
+import { MarketplaceItemPostedEvent } from './messages/incoming/inventory/marketplace/MarketplaceItemPostedEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -707,6 +708,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MARKETPLACE_ITEM_STATS, MarketplaceItemStatsEvent);
         this._events.set(IncomingHeader.MARKETPLACE_OWN_ITEMS, MarketplaceOwnItemsEvent);
         this._events.set(IncomingHeader.MARKETPLACE_CANCEL_SALE, MarketplaceCancelItemEvent);
+        this._events.set(IncomingHeader.MARKETPLACE_ITEM_POSTED, MarketplaceItemPostedEvent);
     }
 
     private registerComposers(): void

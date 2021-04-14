@@ -223,12 +223,16 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
     {
         const stats = this._inventoryFurniService.marketPlaceItemStats;
         const config = this._inventoryFurniService.marketPlaceConfig;
-        let price  = this.askingPrice ?? 0;
+        let price  = event ? parseInt(event.target.value) : this.askingPrice ?? 0;
 
-        if(price > config.maximumPrice)
+        const maxPrice = 9999;
+        // const maxPrice = config.maximumPrice;
+
+        if(price > maxPrice)
         {
-            this.askingPrice = config.maximumPrice;
-            price = config.maximumPrice;
+            this.askingPrice = maxPrice;
+            price = maxPrice;
+            if(event) event.target.value = maxPrice;
         }
 
         const _local_3:number = Math.max(Math.ceil(((config.commission * 0.01) * price)), 1);
