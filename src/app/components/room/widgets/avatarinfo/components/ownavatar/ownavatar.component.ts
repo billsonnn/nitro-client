@@ -3,6 +3,7 @@ import { AvatarAction } from '../../../../../../../client/nitro/avatar/enum/Avat
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { AvatarExpressionEnum } from '../../../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
 import { RoomWidgetMessage } from '../../../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../../../messages/RoomWidgetDanceMessage';
@@ -31,6 +32,13 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
     public mode: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
+
+    constructor(
+        private _settingsService: SettingsService,
+    )
+    {
+        super();
+    }
 
     public static setup(view: RoomAvatarInfoOwnAvatarComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: AvatarInfoData): void
     {
@@ -198,7 +206,7 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_14',
-                        localization: '<i class="fas fa-futbol"></i>',
+                        localization: '<i class="icon icon-sign-soccer"></i>',
                         visible: true
                     },
                     {
@@ -218,17 +226,17 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_11',
-                        localization: '<i class="fas fa-heart"></i>',
+                        localization: '<i class="icon icon-sign-heart"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_13',
-                        localization: '<i class="fas fa-exclamation"></i>',
+                        localization: '<i class="icon icon-sign-exclamation"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_17',
-                        localization: '17',
+                        localization: '<i class="icon icon-sign-yellow"></i>',
                         visible: true
                     },
                     {
@@ -248,17 +256,17 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                     },
                     {
                         name: 'sign_12',
-                        localization: '<i class="fas fa-skull"></i>',
+                        localization: '<i class="icon icon-sign-skull"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_15',
-                        localization: '<i class="far fa-grin"></i>',
+                        localization: '<i class="icon icon-sign-smile"></i>',
                         visible: true
                     },
                     {
                         name: 'sign_16',
-                        localization: '16',
+                        localization: '<i class="icon icon-sign-red"></i>',
                         visible: true
                     }
                 ]
@@ -363,6 +371,16 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
         if(mode === this.mode) return;
 
         this.mode = mode;
+    }
+
+    public toggleVisibility(): void
+    {
+        this._settingsService.toggleUserContextVisible();
+    }
+
+    public get visible(): boolean
+    {
+        return this._settingsService.userContextVisible;
     }
 
     public get widget(): RoomAvatarInfoComponent

@@ -15,6 +15,7 @@ export class SettingsService
     private _chatHistoryVisible: boolean;
     private _floorPlanVisible: boolean;
     private _userSettingsVisible: boolean;
+    private _userContextVisible: boolean;
 
     constructor(
         private _ngZone: NgZone
@@ -32,6 +33,7 @@ export class SettingsService
         this._chatHistoryVisible    = false;
         this._userSettingsVisible   = false;
         this._floorPlanVisible      = false;
+        this._userContextVisible    = true;
     }
 
     public showAvatarEditor(): void
@@ -184,6 +186,11 @@ export class SettingsService
         this._userSettingsVisible = !this._userSettingsVisible;
     }
 
+    public toggleUserContextVisible(): void
+    {
+        this._userContextVisible = !this._userContextVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -232,6 +239,11 @@ export class SettingsService
     public get userSettingsVisible(): boolean
     {
         return this._userSettingsVisible;
+    }
+
+    public get userContextVisible(): boolean
+    {
+        return this._userContextVisible;
     }
 
     public set isReady(isReady: boolean)
