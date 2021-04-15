@@ -1,11 +1,14 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-
-import {
-    InteractionEvent,
-    Loader,
-    Point,
-} from 'pixi.js';
+import
+    {
+        InteractionEvent,
+        Loader,
+        Point
+    } from 'pixi.js';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
+import { RoomRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
 import { RoomModelEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomModelEvent';
@@ -14,20 +17,19 @@ import { RoomBlockedTilesComposer } from '../../../../../client/nitro/communicat
 import { RoomDoorSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { RoomModelSaveComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomModelSaveComposer';
 import { Nitro } from '../../../../../client/nitro/Nitro';
+import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
+import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
+import
+    {
+        CompositeRectTileLayer,
+        POINT_STRUCT_SIZE_TWO,
+        RectTileLayer
+    } from '../../../../../client/room/floorplan/pixi-tilemap';
+import { SettingsService } from '../../../../core/settings/service';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
-import PIXI from 'pixi.js';
-import {
-    CompositeRectTileLayer,
-    POINT_STRUCT_SIZE_TWO,
-    RectTileLayer
-} from '../../../../../client/room/floorplan/pixi-tilemap';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { RoomRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { SettingsService } from '../../../../core/settings/service';
+
 
 
 @Injectable()
@@ -106,7 +108,7 @@ export class FloorPlanService implements OnDestroy
         x: -1,
         y: -1
     };
-    private readonly loader: PIXI.Loader;
+    private readonly loader: Loader;
 
     private preveiwerUpdate = new Subject<string>();
 
@@ -143,6 +145,8 @@ export class FloorPlanService implements OnDestroy
             {
                 this._updatePreviewer();
             });
+
+        this.onRoomEngineDisposedEvent = this.onRoomEngineDisposedEvent.bind(this);
     }
 
     public ngOnDestroy(): void
@@ -155,6 +159,8 @@ export class FloorPlanService implements OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             this.unregisterMessages();
+
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
 
             this._messages = [
                 new RoomModelEvent(this.onRoomModelEvent.bind(this)),
@@ -172,6 +178,8 @@ export class FloorPlanService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
+            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
+            
             if(this._messages && this._messages.length)
             {
                 for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
@@ -258,6 +266,15 @@ export class FloorPlanService implements OnDestroy
         this.tryEmit();
     }
 
+    private onRoomEngineDisposedEvent(event: RoomEngineEvent): void
+    {
+        if(!event) return;
+
+        if(!this.component) return;
+        
+        this.component.close();
+    }
+
     private reset(): void
     {
         this._model = null;
@@ -277,11 +294,6 @@ export class FloorPlanService implements OnDestroy
     public render(): void
     {
         this.tryEmit();
-    }
-
-    public importFloorPlan(model: string)
-    {
-        this.component.preview(model);
     }
 
     public save(settings: FloorMapSettings)
@@ -803,7 +815,7 @@ export class FloorPlanService implements OnDestroy
         });
     }
 
-    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: PIXI.Point, setHolding: boolean, isClick: boolean = false): boolean
+    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: Point, setHolding: boolean, isClick: boolean = false): boolean
     {
         const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
         const bufSize = POINT_STRUCT_SIZE_TWO;

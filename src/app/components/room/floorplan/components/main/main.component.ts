@@ -1,29 +1,29 @@
-import {
-    Component,
-    ElementRef,
-    Input,
-    NgZone,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import
+    {
+        Component,
+        ElementRef,
+        Input,
+        NgZone,
+        OnChanges,
+        OnDestroy,
+        OnInit,
+        SimpleChanges,
+        ViewChild
+    } from '@angular/core';
 import * as PIXI from 'pixi.js';
-window.PIXI = PIXI;
 import { Application } from 'pixi.js';
-
 import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
 import { RoomPreviewer } from '../../../../../../client/nitro/room/preview/RoomPreviewer';
-import { SettingsService } from '../../../../../core/settings/service';
-import { FloorPlanService } from '../../services/floorplan.service';
-
-
 import { CompositeRectTileLayer } from '../../../../../../client/room/floorplan/pixi-tilemap';
+import { SettingsService } from '../../../../../core/settings/service';
 import { SessionService } from '../../../../../security/services/session.service';
+import { FloorPlanService } from '../../services/floorplan.service';
+window.PIXI = PIXI;
+
+
+
 
 
 @Component({
@@ -57,7 +57,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private _ngZone: NgZone,
         private floorPlanService: FloorPlanService,
-        private _modalService: NgbModal,
         private _settingsService: SettingsService,
         private _sessionService: SessionService)
     {
@@ -122,6 +121,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public close(): void
     {
         this._settingsService.floorPlanVisible = false;
+        this.floorPlanService.showImportExport = false;
     }
 
     public preview(mapString: string)
@@ -385,6 +385,19 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         this.minimize = !this.minimize;
     }
 
+    public togglePreviewer(): void
+    {
+        this.showPreviewer = !this.showPreviewer;
+        if(!this.showPreviewer)
+        {
+            this._previewerEventsSet = false;
+        }
+        setTimeout(() =>
+        {
+            this.setPreviewerEvents();
+        }, 200);
+    }
+
     public get colorMap(): object
     {
         return Object.keys(this.floorPlanService.colorMap)
@@ -433,6 +446,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public get wallHeight(): number
     {
+        if(this.floorPlanService.wallHeight == 0) this.floorPlanService.wallHeight = 1;
+        
         return this.floorPlanService.wallHeight;
     }
 
@@ -471,19 +486,6 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         return this.floorPlanService.showImportExport;
     }
 
-    public togglePreviewer(): void
-    {
-        this.showPreviewer = !this.showPreviewer;
-        if(!this.showPreviewer)
-        {
-            this._previewerEventsSet = false;
-        }
-        setTimeout(() =>
-        {
-            this.setPreviewerEvents();
-        }, 200);
-    }
-
     public get togglePreviewButton(): string
     {
         const key = this.showPreviewer ? 'nitro.floorplan.previewer.hide' : 'nitro.floorplan.previewer.show';
@@ -499,5 +501,10 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get currentAvatarFigure(): string
     {
         return this._sessionService.figure;
+    }
+
+    public get heightMap(): string
+    {
+        return this.floorPlanService.floorMapSettings.heightMapString;
     }
 }

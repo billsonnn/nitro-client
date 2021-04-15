@@ -1,5 +1,4 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FloorPlanService } from '../../services/floorplan.service';
 
 @Component({
@@ -14,6 +13,8 @@ export class FloorPlanImportExportComponent
     public fontSize: string = '12';
     public letterSpacing: string = '3';
 
+    public mapChanged: boolean = false;
+    
     constructor(
         private _floorPlanService: FloorPlanService,
         private _ngZone: NgZone)
@@ -27,10 +28,10 @@ export class FloorPlanImportExportComponent
         });
     }
 
-    public preview(): void
+    public save(): void
     {
-        this._floorPlanService.importFloorPlan(this._map);
-        this.close();
+        this._floorPlanService.floorMapSettings.heightMapString = this._map.split('\n').join('\r');
+        this._floorPlanService.save(this._floorPlanService.floorMapSettings);
     }
 
     public close(): void
@@ -43,6 +44,12 @@ export class FloorPlanImportExportComponent
         this._map = map;
 
         if(!this._backupMap) this._backupMap = map.replace(/\r\n|\r|\n/g, '\r').toLowerCase();
+
+        if(this._map !== this._backupMap) {
+            this.mapChanged = true;
+        } else {
+            this.mapChanged = false;
+        }
     }
 
     public get map(): string
