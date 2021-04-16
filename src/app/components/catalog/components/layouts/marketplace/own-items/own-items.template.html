@@ -17,8 +17,12 @@
                 </div>
                 <div class="badge badge-primary badge-sm text-wrap w-100 mb-1">{{ getMarketplaceOfferDescription(offer) }}</div>
                 <div class="d-flex flex-row">
-                    <div *ngIf="offerIsOnGoing(offer)" class="badge badge-primary badge-sm text-wrap w-100" style="line-height: 26px">{{ offerTime(offer) }}</div>
-                    <div *ngIf="offerIsExpired(offer)" class="badge badge-danger badge-sm text-wrap w-100" style="line-height: 26px">{{ offerExpiredText(offer) }}</div>
+                    <div *ngIf="offerIsOnGoing(offer)" class="badge badge-primary badge-sm text-wrap w-100 d-flex">
+                        <div class="align-self-center w-100">{{ offerTime(offer) }}</div>
+                    </div>
+                    <div *ngIf="offerIsExpired(offer)" class="badge badge-danger badge-sm text-wrap w-100 d-flex">
+                        <div class="align-self-center w-100">{{ offerExpiredText(offer) }}</div>
+                    </div>
                     <button *ngIf="canTakeBack(offer)" (click)="takeBack(offer)" class="btn btn-primary btn-sm ml-2" style="white-space: nowrap;">{{ 'catalog.marketplace.offer.pick' | translate }}</button>
                 </div>
                 <div *ngIf="offerIsSold(offer)" class="badge badge-success badge-sm text-wrap w-100">{{ offerSoldText(offer) }}</div>                

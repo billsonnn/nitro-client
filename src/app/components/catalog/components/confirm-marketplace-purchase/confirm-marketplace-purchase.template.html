@@ -17,20 +17,19 @@
                 <div class="badge badge-secondary badge-sm text-wrap">{{ getFurniDescription() }}</div>
             </div>
         </div>
-
-        <div class="d-flex align-items-center justify-content-center bg-secondary rounded w-100">
-            <div class="d-flex align-items-center mb-0">
-                <div class="mr-1" style="width:20px;height:20px;" nitro-currency-icon [type]="-1"></div>
-                {{ costCredits }}
+        <div class="badge badge-secondary d-flex align-items-center justify-content-center text-wrap mb-2 w-100">
+            <div class="mr-1" style="width:20px;height:20px;" nitro-currency-icon [type]="-1"></div>
+            <div>{{ costCredits }}</div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            <div class="badge badge-secondary badge-sm text-wrap mr-2 w-100"> {{ getAveragePrice() }} </div>
+            <div class="badge badge-secondary badge-sm text-wrap w-100 d-flex">
+                <div class="align-self-center w-100">{{ getOfferCount() }}</div>
             </div>
         </div>
-        <div class="badge badge-secondary badge-sm text-wrap mb-2 w-100"> {{ getAveragePrice() }} </div>
-        <div>{{ getOfferCount() }}</div>
-
         <div class="btn-group w-100">
             <button type="button" class="btn btn-success" (click)="buy()">{{ 'catalog.purchase_confirmation.buy' | translate }}</button>
             <button type="button" class="btn btn-primary" (click)="hide()">{{ 'catalog.purchase_confirmation.cancel' | translate }}</button>
         </div>
     </div>
 </div>
-

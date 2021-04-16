@@ -1,18 +1,16 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { RenderTexture } from 'pixi.js';
+import { MarketplaceOfferItem } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
 import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
 import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
 import { Nitro } from '../../../../../client/nitro/Nitro';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
-import { CatalogService } from '../../services/catalog.service';
-import { MarketplaceOfferItem } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { MarketplaceService } from '../../services/marketplace.service';
 import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
 import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
+import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { Vector3d } from '../../../../../client/room/utils/Vector3d';
-import { RenderTexture } from 'pixi.js';
 import { InventoryFurnitureService } from '../../../inventory/services/furniture.service';
+import { CatalogService } from '../../services/catalog.service';
+import { MarketplaceService } from '../../services/marketplace.service';
 
 @Component({
     selector: 'nitro-catalog-confirm-marketplace-purchase-component',
