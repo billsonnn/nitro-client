@@ -395,6 +395,8 @@ import { MarketplaceRedeemCreditsComposer } from './messages/outgoing/catalog/ma
 import { MarketplaceItemPostedEvent } from './messages/incoming/inventory/marketplace/MarketplaceItemPostedEvent';
 import { MarketplaceRequestOffersComposer } from './messages/outgoing/catalog/marketplace/MarketplaceRequestOffersComposer';
 import { MarketplaceOffersReceivedEvent } from './messages/incoming/catalog/marketplace/MarketplaceOffersReceivedEvent';
+import { MarketplaceBuyOfferComposer } from './messages/outgoing/catalog/marketplace/MarketplaceBuyOfferComposer';
+import { MarketplaceAfterOrderStatusEvent } from './messages/incoming/catalog/marketplace/MarketplaceAfterOrderStatusEvent';
 
 export class NitroMessages implements IMessageConfiguration
 {
@@ -712,6 +714,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.MARKETPLACE_CANCEL_SALE, MarketplaceCancelItemEvent);
         this._events.set(IncomingHeader.MARKETPLACE_ITEM_POSTED, MarketplaceItemPostedEvent);
         this._events.set(IncomingHeader.MARKETPLACE_ITEMS_SEARCHED, MarketplaceOffersReceivedEvent);
+        this._events.set(IncomingHeader.MARKETPLACE_AFTER_ORDER_STATUS, MarketplaceAfterOrderStatusEvent);
     }
 
     private registerComposers(): void
@@ -952,6 +955,7 @@ export class NitroMessages implements IMessageConfiguration
         this._composers.set(OutgoingHeader.MARKETPLACE_REQUEST_OWN_ITEMS, MarketplaceRequestOwnItemsComposer);
         this._composers.set(OutgoingHeader.MARKETPLACE_TAKE_BACK_ITEM, MarketplaceTakeItemBackComposer);
         this._composers.set(OutgoingHeader.MARKETPLACE_REQUEST_OFFERS, MarketplaceRequestOffersComposer);
+        this._composers.set(OutgoingHeader.MARKETPLACE_BUY_OFFER, MarketplaceBuyOfferComposer);
 
         // BOTS
         this._composers.set(OutgoingHeader.USER_BOTS, GetBotInventoryComposer);

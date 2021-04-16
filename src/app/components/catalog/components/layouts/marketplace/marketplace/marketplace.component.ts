@@ -4,6 +4,7 @@ import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { IMarketplaceSearchOptions } from './sub/advanced.component';
 import { MarketplaceService } from '../../../../services/marketplace.service';
+import { max, min } from 'rxjs/operators';
 
 
 @Component({
@@ -30,17 +31,31 @@ export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout 
     public selectView(view: string)
     {
         this.view = view;
+
+        let forceSearch = false;
         switch(view)
         {
             case 'activity':
                 this.sortType = this.SORT_TYPES_ACTIVITY[0];
+                forceSearch = true;
                 break;
             case 'value':
                 this.sortType = this.SORT_TYPES_VALUE[0];
+                forceSearch = true;
                 break;
             case 'advanced':
                 this.sortType = this.SORT_TYPES_ADVANCED[0];
                 break;
+        }
+
+        if(forceSearch)
+        {
+            this.onSearch({
+                minPrice: -1,
+                maxPrice: -1,
+                query: '',
+                type: this.sortType
+            });
         }
     }
 
@@ -55,7 +70,10 @@ export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout 
         const minPrice = searchOptions.minPrice == 0 || !searchOptions.minPrice ? -1 : searchOptions.minPrice;
         const maxPrice = searchOptions.maxPrice == 0 || !searchOptions.maxPrice ? -1 : searchOptions.maxPrice;
 
-        this._marketService.requestOffers(minPrice, maxPrice, searchOptions.query, searchOptions.type);
+        searchOptions.minPrice = minPrice;
+        searchOptions.maxPrice = maxPrice;
+
+        this._marketService.requestOffers(searchOptions);
     }
 
     private searchOffers(): void
@@ -65,7 +83,12 @@ export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout 
         const query = '';
         const type = this.sortType;
 
-        this._marketService.requestOffers(min, max, query, type);
+        this._marketService.requestOffers({
+            minPrice: min,
+            maxPrice: max,
+            query,
+            type
+        });
     }
 
     public get marketOffers(): MarketplaceOfferItem[]

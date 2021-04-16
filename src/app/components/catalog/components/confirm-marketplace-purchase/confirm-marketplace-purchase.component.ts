@@ -185,7 +185,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
 
     public buy(): void
     {
-
+        this._marketplaceService.buyMarketplaceOffer(this.offer.offerId);
     }
 
 
