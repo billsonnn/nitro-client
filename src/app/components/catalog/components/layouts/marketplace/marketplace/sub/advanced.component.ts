@@ -1,22 +1,33 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CatalogLayout } from '../../../../../CatalogLayout';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Nitro } from '../../../../../../../../client/nitro/Nitro';
 
 @Component({
     template: `
-        <div class="rounded bg-secondary">
-
-            <p>{{ 'catalog.marketplace.search_name' | translate }}</p>
-            <input type="text" class="form-control" [(ngModel)]="searchQuery" />
-            <p>{{ 'catalog.marketplace.search_price' | translate }}</p>
-            <input type="number" class="form-control" [(ngModel)]="searchPriceBetweenStart" />
-            <input type="number" class="form-control" [(ngModel)]="searchPriceBetweenEnd" />
-            <select class="form-control" (change)="onOptionSelect($event)">
-                <option [selected]="filter.value == sortType" [value]="filter.value"
-                        *ngFor="let filter of getFilters()">{{ filter.name }}</option>
-            </select>
-            <button type="button" (click)="search()" class="btn btn-primary">{{ 'search' | translate }}</button>
-        </div>`,
+        <div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    <input type="text" class="form-control form-control-sm mb-1" [(ngModel)]="searchQuery" [placeholder]="'catalog.marketplace.search_name' | translate" />
+                </div>
+                <div class="col-6">
+                    <div class="mt-2">{{ 'catalog.marketplace.search_price' | translate }}</div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6">
+                    <select class="form-control form-control-sm w-100" (change)="onOptionSelect($event)">
+                        <option [selected]="filter.value == sortType" [value]="filter.value" *ngFor="let filter of getFilters()">{{ filter.name }}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <div class="input-group">
+                        <input type="number" placeholder="0" class="form-control form-control-sm mb-1" [(ngModel)]="searchPriceBetweenStart" />
+                        <input type="number" placeholder="0" class="form-control form-control-sm" [(ngModel)]="searchPriceBetweenEnd" />
+                    </div>
+                </div>
+            </div>
+            <button (click)="search()" class="btn btn-secondary btn-block btn-sm">{{ 'search' | translate }}</button>
+        </div>
+        `,
     selector: '[nitro-marketplace-sub-advanced]',
 })
 export class CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
@@ -81,4 +92,3 @@ interface IFilter {
     name: string,
     value: number
 }
-

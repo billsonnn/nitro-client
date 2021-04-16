@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CatalogLayout } from '../../../../../CatalogLayout';
+import { Component, Input } from '@angular/core';
 import { MarketplaceOfferItem } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { MarketplaceOfferData } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
 import { Nitro } from '../../../../../../../../client/nitro/Nitro';
 
 @Component({
@@ -13,7 +11,10 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
     @Input()
     public offer: MarketplaceOfferItem;
 
+    public buy(): void
+    {
 
+    }
 
     public get imageUrlOffer(): string
     {
@@ -80,9 +81,12 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
         return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer._Str_4121.toString());
     }
 
-    public buy(): void
+    public get description(): string
     {
+        if(!this.offer) return '';
 
+        const localizationKey =  this.offer.furniType == 2 ? 'wallItem.desc.' + this.offer.furniId : 'roomItem.desc.' + this.offer.furniId;
+
+        return Nitro.instance.localization.getValue(localizationKey);
     }
-
 }
