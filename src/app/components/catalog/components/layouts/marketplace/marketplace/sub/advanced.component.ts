@@ -5,20 +5,20 @@ import { Nitro } from '../../../../../../../../client/nitro/Nitro';
     template: `
         <div>
             <div class="row mb-1">
-                <div class="col-6">
+                <div class="col-7">
                     <input type="text" class="form-control form-control-sm mb-1" [(ngModel)]="searchQuery" [placeholder]="'catalog.marketplace.search_name' | translate" />
                 </div>
-                <div class="col-6">
+                <div class="col-5">
                     <div class="mt-2">{{ 'catalog.marketplace.search_price' | translate }}</div>
                 </div>
             </div>
             <div class="row mb-2">
-                <div class="col-6">
+                <div class="col-7">
                     <select class="form-control form-control-sm w-100" (change)="onOptionSelect($event)">
                         <option [selected]="filter.value == sortType" [value]="filter.value" *ngFor="let filter of getFilters()">{{ filter.name }}</option>
                     </select>
                 </div>
-                <div class="col-6">
+                <div class="col-5">
                     <div class="input-group">
                         <input type="number" placeholder="0" class="form-control form-control-sm mb-1" [(ngModel)]="searchPriceBetweenStart" />
                         <input type="number" placeholder="0" class="form-control form-control-sm" [(ngModel)]="searchPriceBetweenEnd" />
