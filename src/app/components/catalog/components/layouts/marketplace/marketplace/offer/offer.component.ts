@@ -1,8 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { CatalogLayout } from '../../../../../CatalogLayout';
 import { MarketplaceOfferItem } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
 import { MarketplaceOfferData } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
 import { Nitro } from '../../../../../../../../client/nitro/Nitro';
+import { MarketplaceService } from '../../../../../services/marketplace.service';
+import { NotificationService } from '../../../../../../notification/services/notification.service';
+import { Purse } from '../../../../../purse/purse';
+import { PurseService } from '../../../../../../purse/services/purse.service';
 
 @Component({
     templateUrl: './template.html',
@@ -13,6 +17,13 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
     @Input()
     public offer: MarketplaceOfferItem;
 
+    constructor(private _marketplaceService: MarketplaceService,
+        private _notificationService: NotificationService,
+        private _ngZone: NgZone,
+        private _purseService: PurseService)
+    {
+
+    }
 
 
     public get imageUrlOffer(): string
@@ -82,7 +93,17 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 
     public buy(): void
     {
+        const purseCurrencies = this._purseService.currencies;
 
+        const currentCredits = purseCurrencies.get(-1);
+
+        if(currentCredits < this.offer.price)
+        {
+            this._notificationService.alert(Nitro.instance.localization.getValue('catalog.alert.notenough.credits.description'), Nitro.instance.localization.getValue('catalog.alert.notenough.title'));
+            return;
+        }
+
+        this._ngZone.run(() => this._marketplaceService.buyOffer(this.offer));
     }
 
 }

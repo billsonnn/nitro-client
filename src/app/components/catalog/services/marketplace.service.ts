@@ -29,6 +29,8 @@ export class MarketplaceService implements OnDestroy
     private _totalOffersFound: number = 0;
     private _creditsWaiting: number = 0;
 
+    private _activeOfferToBuy: MarketplaceOfferItem = null;
+
     private _messages: IMessageEvent[] = [];
 
     constructor(private _ngZone: NgZone,
@@ -183,5 +185,15 @@ export class MarketplaceService implements OnDestroy
     public requestOffers(min: number, max: number, query: string, type: number): void
     {
         Nitro.instance.communication.connection.send(new MarketplaceRequestOffersComposer(min, max, query, type));
+    }
+
+    public buyOffer(offer: MarketplaceOfferItem): void
+    {
+        this._activeOfferToBuy = offer;
+    }
+
+    public get currentMarketplaceOfferToBuy(): MarketplaceOfferItem
+    {
+        return this._activeOfferToBuy;
     }
 }

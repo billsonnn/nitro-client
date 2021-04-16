@@ -32,6 +32,7 @@ import { CatalogLayoutMarketplaceMarketplaceComponent } from './components/layou
 import { CatalogLayoutMarketplaceMarketplaceSubActivityComponent } from './components/layouts/marketplace/marketplace/sub/by-activity.component';
 import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './components/layouts/marketplace/marketplace/sub/advanced.component';
 import { CatalogLayoutMarketplaceMarketplaceOfferComponent } from './components/layouts/marketplace/marketplace/offer/offer.component';
+import { CatalogConfirmMarketplacePurchaseComponent } from './components/confirm-marketplace-purchase/confirm-marketplace-purchase.component';
 
 @NgModule({
     imports: [
@@ -67,7 +68,8 @@ import { CatalogLayoutMarketplaceMarketplaceOfferComponent } from './components/
         CatalogLayoutMarketplaceMarketplaceComponent,
         CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
         CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
-        CatalogLayoutMarketplaceMarketplaceOfferComponent
+        CatalogLayoutMarketplaceMarketplaceOfferComponent,
+        CatalogConfirmMarketplacePurchaseComponent
     ],
     providers: [
         CatalogService,
@@ -103,7 +105,8 @@ import { CatalogLayoutMarketplaceMarketplaceOfferComponent } from './components/
         CatalogLayoutMarketplaceMarketplaceComponent,
         CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
         CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
-        CatalogLayoutMarketplaceMarketplaceOfferComponent
+        CatalogLayoutMarketplaceMarketplaceOfferComponent,
+        CatalogConfirmMarketplacePurchaseComponent
     ]
 })
 export class CatalogModule
