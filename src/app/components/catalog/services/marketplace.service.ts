@@ -2,24 +2,6 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Nitro } from '../../../../client/nitro/Nitro';
 import { MarketplaceRequestOwnItemsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
 import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { CatalogClubEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubEvent';
-import { CatalogModeEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogModeEvent';
-import { CatalogPageEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPageEvent';
-import { CatalogPagesEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPagesEvent';
-import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
-import { CatalogPurchaseFailedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseFailedEvent';
-import { CatalogPurchaseUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseUnavailableEvent';
-import { CatalogSearchEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSearchEvent';
-import { CatalogSoldOutEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogSoldOutEvent';
-import { CatalogUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogUpdatedEvent';
-import { CatalogGroupsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGroupsEvent';
-import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
-import { CatalogGiftConfigurationEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
-import { CatalogGiftUsernameUnavailableEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogGiftUsernameUnavailableEvent';
-import { CatalogClubGiftsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogClubGiftsEvent';
-import { CatalogRedeemVoucherErrorEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherErrorEvent';
-import { CatalogRedeemVoucherOkEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogRedeemVoucherOkEvent';
-import { CatalogRequestGiftConfigurationComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/CatalogRequestGiftConfigurationComposer';
 import { MarketplaceOwnItemsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOwnItemsEvent';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { MarketplaceOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
@@ -28,6 +10,9 @@ import { MarketplaceTakeItemBackComposer } from '../../../../client/nitro/commun
 import { MarketplaceCancelItemEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
 import { NotificationService } from '../../notification/services/notification.service';
 import { MarketplaceRedeemCreditsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRedeemCreditsComposer';
+import { MarketplaceRequestOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOffersComposer';
+import { MarketplaceOffersReceivedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOffersReceivedEvent';
+import { MarketplaceOfferItem } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
 
 @Injectable()
 export class MarketplaceService implements OnDestroy
@@ -40,6 +25,8 @@ export class MarketplaceService implements OnDestroy
 
 
     private _lastOwnOffers: AdvancedMap<number, MarketplaceOfferData>;
+    private _offerOnMarket: MarketplaceOfferItem[];
+    private _totalOffersFound: number = 0;
     private _creditsWaiting: number = 0;
 
     private _messages: IMessageEvent[] = [];
@@ -59,6 +46,7 @@ export class MarketplaceService implements OnDestroy
             this._messages = [
                 new MarketplaceOwnItemsEvent(this.onMarketplaceOwnItemsEvent.bind(this)),
                 new MarketplaceCancelItemEvent(this.onMarketplaceCancelItemEvent.bind(this)),
+                new MarketplaceOffersReceivedEvent(this.onMarketplaceOffersReceivedEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -102,6 +90,23 @@ export class MarketplaceService implements OnDestroy
         });
     }
 
+    private onMarketplaceOffersReceivedEvent(event: MarketplaceOffersReceivedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            this._totalOffersFound = parser.totalItemsFound;
+            this._offerOnMarket = parser.offers;
+        });
+
+
+    }
+
     private onMarketplaceCancelItemEvent(event: MarketplaceCancelItemEvent): void
     {
         if(!event) return;
@@ -134,6 +139,16 @@ export class MarketplaceService implements OnDestroy
         return this._lastOwnOffers;
     }
 
+    public get publicOffers(): MarketplaceOfferItem[]
+    {
+        return this._offerOnMarket;
+    }
+
+    public get totalOffersFound(): number
+    {
+        return this._totalOffersFound;
+    }
+
     public get creditsWaiting(): number
     {
         return this._creditsWaiting;
@@ -163,5 +178,10 @@ export class MarketplaceService implements OnDestroy
 
         Nitro.instance.communication.connection.send(new MarketplaceRedeemCreditsComposer());
 
+    }
+
+    public requestOffers(min: number, max: number, query: string, type: number): void
+    {
+        Nitro.instance.communication.connection.send(new MarketplaceRequestOffersComposer(min, max, query, type));
     }
 }

@@ -1,0 +1,23 @@
+<div class="rounded bg-secondary mb-2 p-2">
+    <div class="d-flex flex-row mb-1">
+        <div class="position-relative align-self-center align-items-end mr-2 flex-shrink-0"
+             style="width:36px; height:36px;" [ngClass]="{'unique': offer.isUniqueLimitedItem}">
+            <div class="position-absolute w-100 h-100" style="background-repeat: no-repeat;background-position: center;"
+                 [ngStyle]="{ 'background-image': 'url(' + imageUrlOffer + ')' }"></div>
+            <div *ngIf="offer.isUniqueLimitedItem" class="position-absolute unique-counter" style="bottom:0px;"
+                 [innerHtml]="offer.stuffData.uniqueSeries | uniqueNumber"></div>
+        </div>
+        <div class="align-self-center">
+            <div>{{ marketplaceOfferTitle }}</div>
+            <div class="small">{{ marketplacePrice }}</div>
+        </div>
+    </div>
+    <div class="d-flex flex-row">
+        <div class="badge badge-primary badge-sm text-wrap w-100 mb-1">{{ averagePrice }}</div>
+        <div class="badge badge-primary badge-sm text-wrap w-100 mb-1">{{ offerCount }}</div>
+
+
+        <button class="btn btn-primary btn-sm ml-2" (click)="buy()"
+                style="white-space: nowrap;">{{ 'buy' | translate }}</button>
+    </div>
+</div>

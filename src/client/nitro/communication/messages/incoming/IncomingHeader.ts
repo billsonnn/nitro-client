@@ -243,4 +243,5 @@ export class IncomingHeader
     public static MARKETPLACE_OWN_ITEMS            = 3884;
     public static MARKETPLACE_CANCEL_SALE          = 3264;
     public static MARKETPLACE_ITEM_POSTED          = 1359;
+    public static MARKETPLACE_ITEMS_SEARCHED       = 680;
 }

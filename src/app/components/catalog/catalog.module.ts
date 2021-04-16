@@ -31,6 +31,7 @@ import { MarketplaceService } from './services/marketplace.service';
 import { CatalogLayoutMarketplaceMarketplaceComponent } from './components/layouts/marketplace/marketplace/marketplace.component';
 import { CatalogLayoutMarketplaceMarketplaceSubActivityComponent } from './components/layouts/marketplace/marketplace/sub/by-activity.component';
 import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './components/layouts/marketplace/marketplace/sub/advanced.component';
+import { CatalogLayoutMarketplaceMarketplaceOfferComponent } from './components/layouts/marketplace/marketplace/offer/offer.component';
 
 @NgModule({
     imports: [
@@ -65,7 +66,8 @@ import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './compo
         CatalogLayoutMarketplaceOwnItemsComponent,
         CatalogLayoutMarketplaceMarketplaceComponent,
         CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
-        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
+        CatalogLayoutMarketplaceMarketplaceOfferComponent
     ],
     providers: [
         CatalogService,
@@ -100,7 +102,8 @@ import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './compo
         CatalogLayoutMarketplaceOwnItemsComponent,
         CatalogLayoutMarketplaceMarketplaceComponent,
         CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
-        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
+        CatalogLayoutMarketplaceMarketplaceOfferComponent
     ]
 })
 export class CatalogModule

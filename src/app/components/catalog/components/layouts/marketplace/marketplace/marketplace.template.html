@@ -5,7 +5,14 @@
         <button type="button" [ngClass]="{'active': view === 'advanced'}" (click)="selectView('advanced')" class="btn btn-primary">{{ 'catalog.marketplace.search_advanced' | translate }}</button>
     </div>
 
-    <div *ngIf="view === 'activity'" class="rounded bg-secondary w-100" nitro-marketplace-sub-activity [sortTypes]="SORT_TYPES_ACTIVITY"></div>
-    <div *ngIf="view === 'value'" class="rounded bg-secondary w-100" nitro-marketplace-sub-activity [sortTypes]="SORT_TYPES_VALUE"></div>
-    <div *ngIf="view === 'advanced'" class="rounded bg-secondary w-100" nitro-marketplace-sub-advanced></div>
+    <div *ngIf="view === 'activity'" class="rounded bg-secondary w-100" nitro-marketplace-sub-activity  (sortChanged)="onSortChanged($event)" [sortTypes]="SORT_TYPES_ACTIVITY"></div>
+    <div *ngIf="view === 'value'" class="rounded bg-secondary w-100" nitro-marketplace-sub-activity   (sortChanged)="onSortChanged($event)"  [sortTypes]="SORT_TYPES_VALUE"></div>
+    <div *ngIf="view === 'advanced'" class="rounded bg-secondary w-100" nitro-marketplace-sub-advanced (sortChanged)="onSortChanged($event)"  [sortTypes]="SORT_TYPES_ADVANCED"></div>
+
+    <div *ngIf="hasOffers">
+        <p>{{ foundText }}</p>
+        <perfect-scrollbar style="height: 381px; min-height: 381px; max-height: 381px">
+            <div nitro-marketplace-offer *ngFor="let offer of marketOffers" [offer]="offer"></div>
+        </perfect-scrollbar>
+    </div>
 </div>
