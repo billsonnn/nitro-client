@@ -7,7 +7,7 @@
 
     <div *ngIf="view === 'activity'" class="mb-2" nitro-marketplace-sub-activity  (sortChanged)="onSortChanged($event)" [sortTypes]="SORT_TYPES_ACTIVITY"></div>
     <div *ngIf="view === 'value'" class="mb-2" nitro-marketplace-sub-activity   (sortChanged)="onSortChanged($event)"  [sortTypes]="SORT_TYPES_VALUE"></div>
-    <div *ngIf="view === 'advanced'" class="mb-2" nitro-marketplace-sub-advanced (sortChanged)="onSortChanged($event)"  [sortTypes]="SORT_TYPES_ADVANCED"></div>
+    <div *ngIf="view === 'advanced'" class="mb-2" nitro-marketplace-sub-advanced (onSearch)="onSearch($event)" [sortTypes]="SORT_TYPES_ADVANCED"></div>
 
     <div *ngIf="hasOffers">
         <div class="mb-1">{{ foundText }}</div>

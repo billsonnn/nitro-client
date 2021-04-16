@@ -36,14 +36,14 @@ export class CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
     public sortTypes: number[];
 
 
-    @Output()
-    public sortChanged = new EventEmitter<number>();
-
     public sortType: number = 0;
 
     public searchQuery: string = '';
     public searchPriceBetweenStart: number = null;
     public searchPriceBetweenEnd: number = null;
+
+    @Output()
+    public onSearch = new EventEmitter<IMarketplaceSearchOptions>();
 
     public getFilters(): IFilter[]
     {
@@ -64,7 +64,6 @@ export class CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
     public ngOnInit(): void
     {
         this.sortType = this.sortTypes[0];
-        //this.sortChanged.emit(this.sortType);
     }
 
     private translateKey(key: string): string
@@ -76,17 +75,28 @@ export class CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent
     {
         const value = parseInt(event.target.value);
         this.sortType = value;
-        this.sortChanged.emit(value);
     }
 
     public search(): void
     {
+        const options: IMarketplaceSearchOptions = {
+            minPrice: this.searchPriceBetweenStart,
+            maxPrice: this.searchPriceBetweenEnd,
+            query: this.searchQuery,
+            type: this.sortType
+        };
 
+        this.onSearch.emit(options);
     }
 
 }
 
-
+export interface IMarketplaceSearchOptions {
+    query: string;
+    type: number;
+    minPrice: number;
+    maxPrice: number;
+}
 
 interface IFilter {
     name: string,

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MarketplaceOfferItem } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
+import { IMarketplaceSearchOptions } from './sub/advanced.component';
+import { MarketplaceService } from '../../../../services/marketplace.service';
 
 
 @Component({
@@ -42,10 +44,18 @@ export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout 
         }
     }
 
-    public onSortChanged(option: number)
+    public onSortChanged(option: number): void
     {
         this._ngZone.run(() => this.sortType = option);
         this.searchOffers();
+    }
+
+    public onSearch(searchOptions: IMarketplaceSearchOptions): void
+    {
+        const minPrice = searchOptions.minPrice == 0 || !searchOptions.minPrice ? -1 : searchOptions.minPrice;
+        const maxPrice = searchOptions.maxPrice == 0 || !searchOptions.maxPrice ? -1 : searchOptions.maxPrice;
+
+        this._marketService.requestOffers(minPrice, maxPrice, searchOptions.query, searchOptions.type);
     }
 
     private searchOffers(): void
