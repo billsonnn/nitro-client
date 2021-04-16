@@ -1,13 +1,11 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { CatalogLayout } from '../../../../../CatalogLayout';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Nitro } from '../../../../../../../../client/nitro/Nitro';
 
 @Component({
     template: `
-        <div class="rounded bg-secondary">
-
-            <p class="text-center">{{ 'catalog.marketplace.sort_order' | translate }}</p>
-            <select class="form-control"  (change)="onOptionSelect($event)">
+        <div class="d-flex flex-row">
+            <div class="mr-2 align-self-center" style="white-space: nowrap">{{ 'catalog.marketplace.sort_order' | translate }}</div>
+            <select class="form-control form-control-sm" (change)="onOptionSelect($event)">
                 <option [selected]="filter.value == sortType" [value]="filter.value" *ngFor="let filter of getFilters()">{{ filter.name }}</option>
             </select>
         </div>`,
@@ -67,5 +65,3 @@ interface IFilter {
     name: string,
     value: number
 }
-
-

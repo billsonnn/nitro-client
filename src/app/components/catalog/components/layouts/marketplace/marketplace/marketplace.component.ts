@@ -1,15 +1,12 @@
-import { Component, NgZone, OnInit, Output } from '@angular/core';
-import { CatalogLayout } from '../../../../CatalogLayout';
-import { CatalogService } from '../../../../services/catalog.service';
-import { MarketplaceService } from '../../../../services/marketplace.service';
-import { MarketplaceRequestOwnItemsComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
-import { MarketplaceOfferData } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { Component, OnInit } from '@angular/core';
 import { MarketplaceOfferItem } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { CatalogLayout } from '../../../../CatalogLayout';
 
 
 @Component({
-    templateUrl: './marketplace.template.html'
+    templateUrl: './marketplace.template.html',
+    styleUrls: ['./index.scss']
 })
 export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout implements OnInit
 {

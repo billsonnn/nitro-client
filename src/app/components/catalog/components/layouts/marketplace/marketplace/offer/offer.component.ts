@@ -91,6 +91,15 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
         return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer._Str_4121.toString());
     }
 
+    public get description(): string
+    {
+        if(!this.offer) return '';
+
+        const localizationKey =  this.offer.furniType == 2 ? 'wallItem.desc.' + this.offer.furniId : 'roomItem.desc.' + this.offer.furniId;
+
+        return Nitro.instance.localization.getValue(localizationKey);
+    }
+
     public buy(): void
     {
         const purseCurrencies = this._purseService.currencies;
@@ -105,5 +114,4 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 
         this._ngZone.run(() => this._marketplaceService.buyOffer(this.offer));
     }
-
 }
