@@ -25,7 +25,7 @@ import { Nitro } from '../../../../../../../../client/nitro/Nitro';
                     </div>
                 </div>
             </div>
-            <button (click)="search()" class="btn btn-secondary btn-block btn-sm">{{ 'search' | translate }}</button>
+            <button (click)="search()" class="btn btn-secondary btn-block btn-sm">{{ 'generic.search' | translate }}</button>
         </div>
         `,
     selector: '[nitro-marketplace-sub-advanced]',
