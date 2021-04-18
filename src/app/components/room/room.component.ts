@@ -38,6 +38,7 @@ import { RoomId } from '../../../client/room/utils/RoomId';
 import { Vector3d } from '../../../client/room/utils/Vector3d';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
+import { SettingsService } from '../../core/settings/service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { ModToolService } from '../mod-tool/services/mod-tool.service';
 import { NotificationService } from '../notification/services/notification.service';
@@ -75,6 +76,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
     selector: 'nitro-room-component',
     template: `
         <div class="nitro-room-component">
+            <nitro-floorplan-main-component [visible]="floorPlanVisible"></nitro-floorplan-main-component>
             <div #roomCanvas class="room-view"></div>
             <ng-template #widgetContainer></ng-template>
         </div>`
@@ -119,6 +121,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         private _chatHistoryService: ChatHistoryService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _modToolsService: ModToolService,
+        private _settingsService: SettingsService,
         private _ngZone: NgZone
     )
     {
@@ -130,6 +133,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
         this.endRoom();
 
         this._events.dispose();
+    }
+
+    public get floorPlanVisible(): boolean
+    {
+        return this._settingsService.floorPlanVisible;
     }
 
     public prepareRoom(session: IRoomSession): void
@@ -1029,5 +1037,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetHandlerContainer, IR
     public get friendService(): FriendListService
     {
         return this._friendService;
+    }
+
+    public get settingsService(): SettingsService
+    {
+        return this._settingsService;
     }
 }

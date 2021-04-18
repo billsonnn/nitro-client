@@ -1,0 +1,15 @@
+<div [bringToTop] [draggable] class="card nitro-floorplan-editor-import-export-component"
+     dragHandle=".card-header">
+    <div class="card-header">
+        {{ ('floor.plan.editor.import.export') | translate }}
+        <div class="close" (click)="close()"><i class="fas fa-times"></i></div>
+    </div>
+
+    <div class="card-body">
+        <textarea class="form-control mb-3" style="font-family: 'Roboto Mono', monospace; height: 350px" [ngStyle]="{'fontSize': fontSize + 'px', 'letterSpacing': letterSpacing + 'px'}" [(ngModel)]="map" spellcheck="false"></textarea>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" [disabled]="!mapChanged" (click)="revert()">{{ ('floor.plan.editor.revert.to.last.received.map') | translate }}</button>
+            <button type="button" class="btn btn-success" [disabled]="!mapChanged" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
+        </div>
+    </div>
+</div>
