@@ -1,10 +1,10 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import
-    {
-        InteractionEvent,
-        Loader,
-        Point
-    } from 'pixi.js';
+{
+    InteractionEvent,
+    Loader,
+    Point
+} from 'pixi.js';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
@@ -20,11 +20,11 @@ import { Nitro } from '../../../../../client/nitro/Nitro';
 import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
 import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
 import
-    {
-        CompositeRectTileLayer,
-        POINT_STRUCT_SIZE_TWO,
-        RectTileLayer
-    } from '../../../../../client/room/floorplan/pixi-tilemap';
+{
+    CompositeRectTileLayer,
+    POINT_STRUCT_SIZE_TWO,
+    RectTileLayer
+} from '../../../../../client/room/floorplan/pixi-tilemap';
 import { SettingsService } from '../../../../core/settings/service';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
@@ -179,7 +179,7 @@ export class FloorPlanService implements OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
-            
+
             if(this._messages && this._messages.length)
             {
                 for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
@@ -271,7 +271,7 @@ export class FloorPlanService implements OnDestroy
         if(!event) return;
 
         if(!this.component) return;
-        
+
         this.component.close();
     }
 

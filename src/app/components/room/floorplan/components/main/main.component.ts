@@ -1,15 +1,15 @@
 import
-    {
-        Component,
-        ElementRef,
-        Input,
-        NgZone,
-        OnChanges,
-        OnDestroy,
-        OnInit,
-        SimpleChanges,
-        ViewChild
-    } from '@angular/core';
+{
+    Component,
+    ElementRef,
+    Input,
+    NgZone,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import * as PIXI from 'pixi.js';
 import { Application } from 'pixi.js';
 import { RoomBlockedTilesComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
@@ -447,7 +447,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     public get wallHeight(): number
     {
         if(this.floorPlanService.wallHeight == 0) this.floorPlanService.wallHeight = 1;
-        
+
         return this.floorPlanService.wallHeight;
     }
 

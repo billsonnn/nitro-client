@@ -14,7 +14,7 @@ export class FloorPlanImportExportComponent
     public letterSpacing: string = '3';
 
     public mapChanged: boolean = false;
-    
+
     constructor(
         private _floorPlanService: FloorPlanService,
         private _ngZone: NgZone)
@@ -45,9 +45,12 @@ export class FloorPlanImportExportComponent
 
         if(!this._backupMap) this._backupMap = map.replace(/\r\n|\r|\n/g, '\r').toLowerCase();
 
-        if(this._map !== this._backupMap) {
+        if(this._map !== this._backupMap)
+        {
             this.mapChanged = true;
-        } else {
+        }
+        else
+        {
             this.mapChanged = false;
         }
     }
