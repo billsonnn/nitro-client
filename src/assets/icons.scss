@@ -132,6 +132,36 @@ i {
             }
         }
 
+        &.icon-floorplaneditor-tile-up {
+            background-image: url('^assets/images/floorplaneditor/icon-tile-up.png');
+            width: 40px;
+            height: 40px;
+        }
+
+        &.icon-floorplaneditor-tile-down {
+            background-image: url('^assets/images/floorplaneditor/icon-tile-down.png');
+            width: 40px;
+            height: 40px;
+        }
+
+        &.icon-floorplaneditor-tile-set {
+            background-image: url('^assets/images/floorplaneditor/icon-tile-set.png');
+            width: 40px;
+            height: 40px;
+        }
+
+        &.icon-floorplaneditor-tile-unset {
+            background-image: url('^assets/images/floorplaneditor/icon-tile-unset.png');
+            width: 40px;
+            height: 40px;
+        }
+
+        &.icon-floorplaneditor-door {
+            background-image: url('^assets/images/floorplaneditor/icon-door.png');
+            width: 40px;
+            height: 40px;
+        }
+
         &.icon-wired-trigger {
             background-image: url('^assets/images/wired/icon_trigger.png');
             width: 13px;

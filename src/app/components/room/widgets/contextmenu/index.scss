@@ -3,7 +3,7 @@
     z-index: $context-menu-zindex;
     font-size: $font-size-sm;
     min-width: 30px;
-    
+
     &.card {
 
         .drag-handler {
@@ -21,7 +21,7 @@
             // &:last-child {
             //     border-bottom: 2px solid rgb(255 255 255 / 9%);
             // }
-                
+
             .list-group-item {
                 display: flex;
                 justify-content: center;

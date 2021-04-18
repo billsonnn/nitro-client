@@ -1,0 +1,120 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="card nitro-floorplan-editor-component">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ ('floor.plan.editor.title') | translate }}</h6>
+        <button type="button" class="close" (click)="close()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex flex-column p-3">
+        <!--<div class="mb-2">{{ ('floor.plan.editor.subtitle') | translate }}</div>-->
+        <div class="row">
+            <div class="col-7">
+                <div class="mb-1">{{ ('floor.plan.editor.draw.mode') | translate }}</div>
+                <div class="btn-group w-100 mb-3">
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'set'}"
+                            (click)="changeAction('set')"><i class="icon icon-floorplaneditor-tile-set"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'unset'}"
+                            (click)="changeAction('unset')"><i class="icon icon-floorplaneditor-tile-unset"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'up'}"
+                            (click)="changeAction('up')"><i class="icon icon-floorplaneditor-tile-up"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'down'}"
+                            (click)="changeAction('down')"><i class="icon icon-floorplaneditor-tile-down"></i></button>
+                    <button class="btn btn-primary btn-sm" [ngClass]="{'active': currentAction === 'door'}"
+                            (click)="changeAction('door')"><i class="icon icon-floorplaneditor-door"></i></button>
+                </div>
+                <div class="mb-1">{{ ('floor.plan.editor.tile.height') | translate }}</div>
+                <div class="btn-group w-100 mb-3">
+                    <button class="btn btn-primary btn-sm" (click)="decrementHeight()"><i
+                        class="fas fa-chevron-left"></i></button>
+                    <button *ngFor="let item of colorMap | keyvalue"
+                            class="btn btn-sm btn-primary floorplan-height-option" (click)="selectHeight(item.key)"
+                            [ngClass]="{'selected': currentHeight === item.key}"
+                            [ngStyle]="{'backgroundColor': getColor(item.value)}"></button>
+                    <button class="btn btn-primary btn-sm" (click)="incrementHeight()"><i
+                        class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="mb-1">{{ ('floor.plan.editor.enter.direction') | translate }}</div>
+                        <div class="btn-group w-100" style="height: 50px">
+                            <button class="btn btn-primary btn-sm" (click)="decrementDoorDirection()"><i
+                                class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-primary btn-sm w-100 floorplan-door-button" avatar-image [headOnly]="true" [scale]="4" [asBackground]="true" [figure]="currentAvatarFigure" [direction]="doorDirection"></button>
+                            <button class="btn btn-primary btn-sm" (click)="incrementDoorDirection()"><i
+                                class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-1">{{ ('floor.editor.wall.height') | translate }}</div>
+                        <div class="btn-group w-100" style="height: 50px">
+                            <button class="btn btn-primary btn-sm" (click)="decrementWallheight()"><i
+                                class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-primary btn-sm w-100">{{ wallHeight }}</button>
+                            <button class="btn btn-primary btn-sm" (click)="incrementWallheight()"><i
+                                class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-1">{{ ('floor.plan.editor.room.options') | translate }}</div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <select class="form-control form-control-sm" [(ngModel)]="thicknessWall">
+                            <option
+                                [value]="0">{{ ('navigator.roomsettings.wall_thickness.thinnest') | translate }}</option>
+                            <option
+                                [value]="1">{{ ('navigator.roomsettings.wall_thickness.thin') | translate }}</option>
+                            <option
+                                [value]="2">{{ ('navigator.roomsettings.wall_thickness.normal') | translate }}</option>
+                            <option
+                                [value]="3">{{ ('navigator.roomsettings.wall_thickness.thick') | translate }}</option>
+
+
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control form-control-sm" [(ngModel)]="thicknessFloor">
+                            <option
+                                [value]="0">{{ ('navigator.roomsettings.floor_thickness.thinnest') | translate }}</option>
+                            <option
+                                [value]="1">{{ ('navigator.roomsettings.floor_thickness.thin') | translate }}</option>
+
+                            <option
+                                [value]="2">{{ ('navigator.roomsettings.floor_thickness.normal') | translate }}</option>
+                            <option
+                                [value]="3">{{ ('navigator.roomsettings.floor_thickness.thick') | translate }}</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div [ngClass]="{'col-7': showPreviewer, 'col-12': !showPreviewer}">
+
+                <div class="text-right">
+                    {{ coloredTilesCount }} / {{ maxTilesCount }}
+                </div>
+                <div #floorplanElement class="editor-area"></div>
+            </div>
+            <div *ngIf="showPreviewer" class="col-5">
+                <div  #floorplanPreviewer class="editor-area" style="text-align: center">
+                    <div  class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="1000" [height]="1000" [modelScale]="false" [model]="currentModel" [wallHeight]="wallHeight"></div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="revertChanges()"
+                    [disabled]="!ableToRevertChanges">{{ ('floor.plan.editor.reload') | translate }}</button>
+            <div class="btn-group">
+                <button class="btn btn-primary" (click)="togglePreviewer()"
+                        >{{ togglePreviewButton }}</button>
+                <button class="btn btn-primary" (click)="openImportExport()">{{ ('floor.plan.editor.import.export') | translate }}</button>
+
+                <button class="btn btn-success" (click)="save()">{{ ('floor.plan.editor.save') | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nitro-floorplan-import-export-component *ngIf="showImportExport" [map]="heightMap"></nitro-floorplan-import-export-component>

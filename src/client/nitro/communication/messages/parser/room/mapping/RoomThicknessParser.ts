@@ -22,11 +22,9 @@ export class RoomThicknessParser implements IMessageParser
 
         this._hideWalls         = wrapper.readBoolean();
 
-        let thicknessWall   = wrapper.readInt();
-        let thicknessFloor  = wrapper.readInt();
+        const thicknessWall   = wrapper.readInt();
+        const thicknessFloor  = wrapper.readInt();
 
-        thicknessWall   = (thicknessWall < -2) ? -2 : (thicknessWall > 1) ? 1 : thicknessWall;
-        thicknessFloor  = (thicknessFloor < -2) ? -2 : (thicknessFloor > 1) ? 1 : thicknessFloor;
 
         this._thicknessWall     = Math.pow(2, thicknessWall);
         this._thicknessFloor    = Math.pow(2, thicknessFloor);

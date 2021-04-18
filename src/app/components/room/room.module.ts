@@ -39,10 +39,12 @@ import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.c
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
+import { FloorplanModule } from './floorplan/floorplan.module';
 
 @NgModule({
     imports: [
-        SharedModule
+        SharedModule,
+        FloorplanModule
     ],
     exports: [
         RoomComponent,

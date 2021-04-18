@@ -48,10 +48,18 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
     {
         if(changes.model)
         {
-            const prev = changes.model.previousValue;
-            const next = changes.model.currentValue;
+            const prevModel = changes.model.previousValue;
+            const nextModel = changes.model.currentValue;
 
-            if(next && (next !== prev)) this.updateModel();
+            if(nextModel && (nextModel !== prevModel)) this.updateModel();
+        }
+
+        if(changes.wallHeight)
+        {
+            const prevWallHeight = changes.wallHeight.previousValue;
+            const nextWallHeight = changes.wallHeight.currentValue;
+
+            if(nextWallHeight && (nextWallHeight !== prevWallHeight)) this.updateModel();
         }
     }
 

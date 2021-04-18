@@ -142,6 +142,7 @@ import { FurnitureWallAddEvent } from './messages/incoming/room/furniture/wall/F
 import { FurnitureWallEvent } from './messages/incoming/room/furniture/wall/FurnitureWallEvent';
 import { FurnitureWallRemoveEvent } from './messages/incoming/room/furniture/wall/FurnitureWallRemoveEvent';
 import { FurnitureWallUpdateEvent } from './messages/incoming/room/furniture/wall/FurnitureWallUpdateEvent';
+import { RoomBlockedTilesEvent } from './messages/incoming/room/mapping/RoomBlockedTilesEvent';
 import { RoomDoorEvent } from './messages/incoming/room/mapping/RoomDoorEvent';
 import { RoomHeightMapEvent } from './messages/incoming/room/mapping/RoomHeightMapEvent';
 import { RoomHeightMapUpdateEvent } from './messages/incoming/room/mapping/RoomHeightMapUpdateEvent';
@@ -338,7 +339,10 @@ import { FurnitureMannequinSaveNameComposer } from './messages/outgoing/room/fur
 import { OpenPresentComposer } from './messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { ApplyTonerComposer } from './messages/outgoing/room/furniture/toner/ApplyTonerComposer';
 import { FurnitureWallUpdateComposer } from './messages/outgoing/room/furniture/wall/FurnitureWallUpdateComposer';
+import { RoomBlockedTilesComposer } from './messages/outgoing/room/mapping/RoomBlockedTilesComposer';
+import { RoomDoorSettingsComposer } from './messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { RoomModelComposer } from './messages/outgoing/room/mapping/RoomModelComposer';
+import { RoomModelSaveComposer } from './messages/outgoing/room/mapping/RoomModelSaveComposer';
 import { RoomCreateComposer } from './messages/outgoing/room/RoomCreateComposer';
 import { RoomUnitChatComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from './messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
@@ -589,6 +593,7 @@ export class NitroMessages implements IMessageConfiguration
         this._events.set(IncomingHeader.ROOM_MODEL_NAME, RoomModelNameEvent);
         this._events.set(IncomingHeader.ROOM_PAINT, RoomPaintEvent);
         this._events.set(IncomingHeader.ROOM_THICKNESS, RoomThicknessEvent);
+        this._events.set(IncomingHeader.ROOM_MODEL_BLOCKED_TILES, RoomBlockedTilesEvent);
 
         // PET
         this._events.set(IncomingHeader.PET_FIGURE_UPDATE, PetFigureUpdateEvent);
@@ -866,6 +871,9 @@ export class NitroMessages implements IMessageConfiguration
 
         // MAPPING
         this._composers.set(OutgoingHeader.ROOM_MODEL, RoomModelComposer);
+        this._composers.set(OutgoingHeader.ROOM_MODEL_BLOCKED_TILES, RoomBlockedTilesComposer);
+        this._composers.set(OutgoingHeader.ROOM_MODEL_DOOR, RoomDoorSettingsComposer);
+        this._composers.set(OutgoingHeader.ROOM_MODEL_SAVE, RoomModelSaveComposer);
 
         // UNIT
         this._composers.set(OutgoingHeader.UNIT_ACTION, RoomUnitActionComposer);
