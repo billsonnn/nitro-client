@@ -146,7 +146,7 @@ export class FloorPlanService implements OnDestroy
                 this._updatePreviewer();
             });
 
-        this.onRoomEngineDisposedEvent = this.onRoomEngineDisposedEvent.bind(this);
+        // this.onRoomEngineDisposedEvent = this.onRoomEngineDisposedEvent.bind(this);
     }
 
     public ngOnDestroy(): void
@@ -160,7 +160,7 @@ export class FloorPlanService implements OnDestroy
         {
             this.unregisterMessages();
 
-            Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
+            // Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
 
             this._messages = [
                 new RoomModelEvent(this.onRoomModelEvent.bind(this)),
@@ -178,7 +178,7 @@ export class FloorPlanService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
+            //  Nitro.instance.roomEngine.events.removeEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
 
             if(this._messages && this._messages.length)
             {
