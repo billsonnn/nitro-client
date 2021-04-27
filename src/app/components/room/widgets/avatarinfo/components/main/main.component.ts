@@ -745,6 +745,11 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         return false;
     }
 
+    public _Str_25401():void
+    {
+        // this.handler.container.events.dispatchEvent(new RoomWidgetUpdateEvent(RoomWidgetPetComm RoomWidgetPetCommandsUpdateEvent.CLOSE_PET_TRAINING));
+    }
+
     public get _Str_25831(): boolean
     {
         const roomObject = this.getOwnRoomObject();

@@ -7,6 +7,10 @@ import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserAct
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { PetInfoData } from '../../common/PetInfoData';
 import { RoomAvatarInfoComponent } from '../main/main.component';
+import { PetType } from '../../../../../../../client/nitro/avatar/pets/PetType';
+import { IFurnitureData } from '../../../../../../../client/nitro/session/furniture/IFurnitureData';
+import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { FurniCategory } from '../../../../../catalog/enums/FurniCategory';
 
 @Component({
     templateUrl: './ownpet.template.html'
@@ -18,7 +22,7 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
     @ViewChild('activeView')
     public activeView: ElementRef<HTMLDivElement>;
 
-    public avatarData: PetInfoData = null;
+    public petInfoData: PetInfoData = null;
     public mode: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
@@ -29,9 +33,9 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
         super();
     }
 
-    public static setup(view: RoomAvatarInfoOwnPetComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: PetInfoData): void
+    public static setup(view: RoomAvatarInfoOwnPetComponent, userId: number, userName: string, userType: number, roomIndex: number, petInfoData: PetInfoData): void
     {
-        view.avatarData = avatarData;
+        view.petInfoData = petInfoData;
 
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
@@ -52,14 +56,43 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
             if((carryId > 0) && (carryId < 999999)) giveHandItem = true;
         }
 
+        let buySaddleVisible = false;
+        if(this.petInfoData._Str_4355 == PetType.HORSE)
+        {
+            const stuff = this._Str_20669(FurniCategory.PET_SADDLE, PetType.HORSE);
+            buySaddleVisible = !!(stuff);
+        }
+
+        const breedEnabled = [PetType.BEAR, PetType.TERRIER, PetType.CAT, PetType.DOG, PetType.PIG].indexOf(this.petInfoData._Str_4355) > -1;
+
         this.menu = [
             {
                 mode: RoomAvatarInfoOwnPetComponent.MODE_NORMAL,
                 items: [
                     {
-                        name: 'test',
-                        localization: 'infostand.button.test',
+                        name: 'respect',
+                        localization: 'infostand.button.petrespect',
+                        visible: this.petInfoData._Str_2985 > 0
+                    },
+                    {
+                        name: 'train',
+                        localization: 'infostand.button.train',
                         visible: true
+                    },
+                    {
+                        name: 'pickup',
+                        localization: 'infostand.button.pickup',
+                        visible: true
+                    },
+                    {
+                        name: 'buy_saddle',
+                        localization: 'infostand.button.buy_saddle',
+                        visible:buySaddleVisible
+                    },
+                    {
+                        name: 'breed',
+                        localization: 'infostand.button.breed',
+                        visible: breedEnabled
                     }
                 ]
             }
@@ -70,14 +103,19 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
     {
         const messageType: string         = null;
         let message: RoomWidgetMessage  = null;
-        let hideMenu           = true;
+        const hideMenu           = true;
 
         if(name)
         {
             switch(name)
             {
-                case 'moderate':
-                    hideMenu = false;
+                case 'respect':
+                    this.petInfoData._Str_2985--;
+                    message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_RESPECT_PET, this.userId);
+                    break;
+                case 'pickup':
+                    message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_PICKUP_PET, this.userId);
+                    this.widget && this.widget._Str_25401();
                     break;
             }
 
@@ -91,6 +129,22 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
             this.parent.removeView(this.componentRef, false);
         }
     }
+
+
+    private _Str_20669(k: number, arg2: number): IFurnitureData
+    {
+        const local4 = Nitro.instance.sessionDataManager.getFloorItemsDataByCategory(k);
+
+        for(const item of local4)
+        {
+            const local6 = item.customParams.split(' ');
+            const local7 = local6 && local6.length >= 1 ? parseInt(local6[0]) : -1;
+            if(local7 == arg2)  return item;
+        }
+
+        return null;
+    }
+
 
     public toggleVisibility(): void
     {

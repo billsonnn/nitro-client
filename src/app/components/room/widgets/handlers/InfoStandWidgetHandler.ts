@@ -139,6 +139,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             case RoomWidgetUserActionMessage.RWUAM_UNIGNORE_USER:
                 this._container.sessionDataManager.unignoreUser(userData.name);
                 break;
+            case RoomWidgetUserActionMessage.RWUAM_PICKUP_PET:
+                this._container.roomSession.pickupPet(userId);
+                break;
             case RoomWidgetUserActionMessage.RWUAM_KICK_USER:
                 this._container.roomSession.sendKickMessage((message as RoomWidgetUserActionMessage).userId);
                 break;
