@@ -4,6 +4,39 @@
     bottom: 10px;
     pointer-events: none;
 
+
+    .pets-progress-bar {
+
+        .pets-progress-bar-content {
+            position: absolute;
+            top:0;
+            bottom:0;
+            margin:auto;
+            left:0;
+            right:0;
+        }
+
+        .bg-happiness {
+            background-color: #009AC0 !important;
+        }
+
+        .bg-experience {
+            background-color: #8547BE !important;
+        }
+
+        .bg-energy {
+            background-color: #5E9D00 !important;
+        }
+
+
+
+        .pets-progress-bar-inner {
+            transition: width 0.7s;
+            max-width: 100%;
+        }
+    }
+
+
     .nitro-infostand {
         min-width: 200px;
         max-width: 200px;
@@ -50,9 +83,9 @@
         }
 
         .grid-container {
-    
+
             .grid-items {
-        
+
                 .item-detail {
                     height: 40px;
                     max-height: 40px;

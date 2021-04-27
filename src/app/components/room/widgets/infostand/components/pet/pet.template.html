@@ -6,13 +6,58 @@
         </div>
         <div class="d-flex flex-column p-3 w-100">
             <div class="d-flex col-5 justify-content-center align-items-center bg-secondary rounded overflow-hidden">
-                <div class="pet-image" pet-image [petFigureData]="petData.petFigureData" [direction]="2" [asBackground]="true"></div>
+                <div class="pet-image" pet-image [petFigureData]="petData.petFigureData" [direction]="2"
+                     [asBackground]="true"></div>
             </div>
+        </div>
+        <div>
+            {{ level }}
+        </div>
+        <div>
+            {{ 'infostand.pet.text.happiness' | translate }}
+
+            <div class="pets-progress-bar bg-secondary rounded p-1 position-relative">
+                <div class="pets-progress-bar-inner bg-happiness rounded py-3"
+                     style="width: {{ happinessPercentage }}%;"></div>
+                <div class="pets-progress-bar-content text-center d-flex justify-content-center"><span
+                    class="align-self-center">{{ currentHappiness}}/{{ totalHappiness }}</span></div>
+            </div>
+        </div>
+
+        <div>
+            {{ 'infostand.pet.text.experience' | translate }}
+
+            <div class="pets-progress-bar bg-secondary rounded p-1 position-relative">
+                <div class="pets-progress-bar-inner bg-experience rounded py-3"
+                     style="width: {{ experiencePercentage }}%;"></div>
+                <div class="pets-progress-bar-content text-center d-flex justify-content-center"><span
+                    class="align-self-center">{{ currentExperience}}/{{ totalExperience }}</span></div>
+            </div>
+        </div>
+
+        <div>
+            {{ 'infostand.pet.text.energy' | translate }}
+
+            <div class="pets-progress-bar bg-secondary rounded p-1 position-relative">
+                <div class="pets-progress-bar-inner bg-energy rounded py-3"
+                     style="width: {{ energyPercentage }}%;"></div>
+                <div class="pets-progress-bar-content text-center d-flex justify-content-center"><span
+                    class="align-self-center">{{ currentEnergy}}/{{ totalEnergy }}</span></div>
+            </div>
+        </div>
+
+        <div>
+            {{ scratchedCount }} <br />
+            {{ age }} <br/>
+            {{ owner }}
         </div>
     </div>
     <div class="button-container btn-group mt-2">
-        <button type="button" class="btn btn-primary" (click)="processButtonAction('buyfood')">{{ 'infostand.button.buyfood' | translate }}</button>
-        <button type="button" class="btn btn-primary" (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':'0' }}</button>
-        <button type="button" class="btn btn-primary" (click)="processButtonAction('kick')">{{ 'infostand.button.kick' | translate }}</button>
+        <button type="button" class="btn btn-primary"
+                (click)="processButtonAction('buyfood')">{{ 'infostand.button.buyfood' | translate }}</button>
+        <button type="button" class="btn btn-primary"
+                (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':'0' }}</button>
+        <button type="button" class="btn btn-primary"
+                (click)="processButtonAction('kick')">{{ 'infostand.button.kick' | translate }}</button>
     </div>
 </div>
