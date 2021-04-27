@@ -123,6 +123,20 @@ export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
         return Nitro.instance.localization.getValueWithParameter('infostand.text.petowner', 'name', this.petData.ownerName);
     }
 
+    public get breed(): string
+    {
+        if(!this.petData) return '';
+
+        const breedData = this.getBreedName(this.petData.type, this.petData.unknownRarityLevel);
+
+        return Nitro.instance.localization.getValue(breedData);
+    }
+
+    private getBreedName(breed: number, rarity: number): string
+    {
+        return `pet.breed.${breed}.${rarity}`;
+    }
+
     public get type(): number
     {
         return InfoStandType.PET;
