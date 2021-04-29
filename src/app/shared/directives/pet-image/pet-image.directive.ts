@@ -184,6 +184,6 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
 
     public getPetBuildString(): string
     {
-        return (`${ this.petFigureData }:${ this.headOnly }:${ this.direction }`);
+        return (`${ this.petFigureData.figureString }:${ this.headOnly }:${ this.direction }`);
     }
 }
