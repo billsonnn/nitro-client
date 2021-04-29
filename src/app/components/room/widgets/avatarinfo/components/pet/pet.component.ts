@@ -18,7 +18,7 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
     @ViewChild('activeView')
     public activeView: ElementRef<HTMLDivElement>;
 
-    public avatarData: PetInfoData = null;
+    public petInfoData: PetInfoData = null;
     public mode: number = 0;
 
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
@@ -31,7 +31,7 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
 
     public static setup(view: RoomAvatarInfoPetComponent, userId: number, userName: string, userType: number, roomIndex: number, avatarData: PetInfoData): void
     {
-        view.avatarData = avatarData;
+        view.petInfoData = avatarData;
 
         AvatarContextInfoView.extendedSetup(view, userId, userName, userType, roomIndex);
 
@@ -57,10 +57,10 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
                 mode: RoomAvatarInfoPetComponent.MODE_NORMAL,
                 items: [
                     {
-                        name: 'test',
-                        localization: 'infostand.button.test',
-                        visible: true
-                    }
+                        name: 'respect',
+                        localization: 'infostand.button.petrespect',
+                        visible: this.petInfoData._Str_2985 > 0
+                    },
                 ]
             }
         ];
@@ -78,6 +78,10 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
             {
                 case 'moderate':
                     hideMenu = false;
+                    break;
+                case 'respect':
+                    this.petInfoData._Str_2985--;
+                    message = new RoomWidgetUserActionMessage(RoomWidgetUserActionMessage.RWUAM_RESPECT_PET, this.userId);
                     break;
             }
 

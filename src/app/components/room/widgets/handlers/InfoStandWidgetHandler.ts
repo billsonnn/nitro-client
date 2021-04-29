@@ -633,8 +633,9 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                 event._Str_6701 = this._Str_23573(event);
             }
 
-            event.isIgnored     = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
-            event.respectLeft   = this._container.sessionDataManager.respectsLeft;
+            event.isIgnored      = this._container.sessionDataManager.isUserIgnored(_arg_4.name);
+            event.respectLeft    = this._container.sessionDataManager.respectsLeft;
+            event.petRespectLeft = this._container.sessionDataManager.respectsPetLeft;
 
             const isShuttingDown    = this._container.sessionDataManager.isSystemShutdown;
             const tradeMode         = this._container.roomSession.tradeMode;

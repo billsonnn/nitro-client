@@ -174,7 +174,7 @@ export class InfoStandUserData
         this.groupBadgeId       = event.groupBadgeId;
         this.activityPoints     = event.activityPoints;
         this.respectLeft        = event.respectLeft;
-        this.petRespectLeft     = 0;
+        this.petRespectLeft     = event.petRespectLeft;
         this.carryItem          = event.carryId;
         this.roomIndex          = event.roomIndex;
         this.type               = event.type;

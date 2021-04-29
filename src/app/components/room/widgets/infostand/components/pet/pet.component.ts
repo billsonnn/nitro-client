@@ -5,6 +5,7 @@ import { RoomInfoStandBaseComponent } from '../base/base.component';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
 import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniActionMessage';
+import { InfoStandUserData } from '../../data/InfoStandUserData';
 
 @Component({
     templateUrl: './pet.template.html'
@@ -12,6 +13,7 @@ import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniA
 export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
 {
     public petData: InfoStandPetData;
+    public userData: InfoStandUserData;
 
     public processButtonAction(action: string)
     {

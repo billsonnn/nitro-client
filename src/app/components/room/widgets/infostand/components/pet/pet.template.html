@@ -74,10 +74,9 @@
         <button type="button" class="btn btn-primary"
                 (click)="processButtonAction('buyfood')">{{ 'infostand.button.buyfood' | translate }}</button>
         <button type="button" class="btn btn-primary"
-                (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':'0' }}</button>
+                (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':this.userData.petRespectLeft.toString() }}</button>
         <button *ngIf="petData._Str_5175" class="btn btn-primary"
                 (click)="processButtonAction('pickup')">{{ 'infostand.button.pickup' | translate }}</button>
-        <button type="button" class="btn btn-primary"
-                (click)="processButtonAction('kick')">{{ 'infostand.button.kick' | translate }}</button>
+
     </div>
 </div>

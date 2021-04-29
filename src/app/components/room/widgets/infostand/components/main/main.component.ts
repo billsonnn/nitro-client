@@ -223,11 +223,14 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
         {
             this._petData.populate(event);
 
+            if(this._userData) this._userData.petRespectLeft = event._Str_2985;
+
             const infostand = (this.getInfoStand(event) as RoomInfoStandPetComponent);
 
             if(infostand)
             {
                 infostand.petData = this._petData;
+                infostand.userData = this._userData;
 
                 infostand.update(event);
             }

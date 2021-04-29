@@ -358,4 +358,14 @@ export class RoomWidgetUpdateInfostandUserEvent extends RoomWidgetUpdateEvent
     {
         this._Str_4890 = k;
     }
+
+    public set petRespectLeft(k:number)
+    {
+        this._Str_3437 = k;
+    }
+
+    public get petRespectLeft():number
+    {
+        return this._Str_3437;
+    }
 }
