@@ -3,6 +3,8 @@ import { InfoStandPetData } from '../../data/InfoStandPetData';
 import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniActionMessage';
 
 @Component({
     templateUrl: './pet.template.html'
@@ -15,10 +17,32 @@ export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
     {
         if(!action || !action.length) return;
 
+
+        let widgetAction: string = null;
+
         switch(action)
         {
+            case 'pickup':
+                widgetAction = RoomWidgetUserActionMessage.RWUAM_PICKUP_PET;
+                break;
             case '':
                 break;
+        }
+
+
+        if(widgetAction)
+        {
+            if(widgetAction === RoomWidgetFurniActionMessage.RWFAM_MOVE || widgetAction === RoomWidgetFurniActionMessage.RWFUAM_ROTATE)
+            {
+                // stuff
+            }
+            else
+            {
+                const petId = this.petData.id;
+                const message = new RoomWidgetUserActionMessage(widgetAction, petId);
+
+                this.widget.messageListener.processWidgetMessage(message);
+            }
         }
     }
 
