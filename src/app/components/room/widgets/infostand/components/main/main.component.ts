@@ -229,6 +229,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
             if(infostand)
             {
+                debugger;
                 infostand.petData = this._petData;
                 infostand.userData = this._userData;
 

@@ -73,7 +73,7 @@
     <div class="button-container btn-group mt-2">
         <button type="button" class="btn btn-primary"
                 (click)="processButtonAction('buyfood')">{{ 'infostand.button.buyfood' | translate }}</button>
-        <button type="button" class="btn btn-primary"
+        <button *ngIf="this.userData.petRespectLeft > 0" type="button" class="btn btn-primary"
                 (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':this.userData.petRespectLeft.toString() }}</button>
         <button *ngIf="petData._Str_5175" class="btn btn-primary"
                 (click)="processButtonAction('pickup')">{{ 'infostand.button.pickup' | translate }}</button>

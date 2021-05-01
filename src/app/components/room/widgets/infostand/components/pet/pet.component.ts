@@ -27,6 +27,10 @@ export class RoomInfoStandPetComponent extends RoomInfoStandBaseComponent
             case 'pickup':
                 widgetAction = RoomWidgetUserActionMessage.RWUAM_PICKUP_PET;
                 break;
+            case 'respect':
+                this.userData.petRespectLeft--;
+                widgetAction = RoomWidgetUserActionMessage.RWUAM_RESPECT_PET;
+                break;
             case '':
                 break;
         }
