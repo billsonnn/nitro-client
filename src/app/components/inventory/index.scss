@@ -4,9 +4,9 @@
     max-width: $inventory-width;
 
     .grid-container {
-    
+
         .grid-items {
-    
+
             .item-detail {
                 height: 50px;
                 max-height: 50px;
@@ -28,5 +28,22 @@
 
     .notification-count {
         font-size: 10px;
+    }
+}
+
+.nitro-inventory-offer-marketplace-component {
+    position: absolute;
+    width: 300px;
+
+    .product-preview {
+        width: 120px;
+        height: 150px;
+        max-width: 100px;
+        max-height: 100px;
+        background-color: rgba($primary, 1);
+        background-repeat: no-repeat;
+        background-position: center;
+        overflow: hidden;
+        border-radius: $border-radius;
     }
 }

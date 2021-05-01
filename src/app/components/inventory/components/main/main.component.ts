@@ -8,6 +8,7 @@ import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryPetService } from '../../services/pet.service';
 import { InventoryTradingService } from '../../services/trading.service';
+import { FurnitureItem } from '../../items/FurnitureItem';
 
 @Component({
     selector: 'nitro-inventory-main-component',
@@ -152,6 +153,21 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
     public get tradingVisible(): boolean
     {
         return this._inventoryService.tradingVisible;
+    }
+
+    public get marketPlaceOfferVisible(): boolean
+    {
+        return this._inventoryService.marketPlaceOfferVisible;
+    }
+
+    public get offerForMarketplace(): FurnitureItem
+    {
+        return this.furnitureService.offerOnMarketPlaceItem;
+    }
+
+    public get offerStatsIsCorrect(): boolean
+    {
+        return this.offerForMarketplace && this._inventoryFurnitureService.marketPlaceItemStats && this.offerForMarketplace.type === this._inventoryFurnitureService.marketPlaceItemStats._Str_8798;
     }
 
     public get botsVisible(): boolean

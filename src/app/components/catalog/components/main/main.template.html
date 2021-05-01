@@ -17,6 +17,7 @@
         </div>
     </div>
 </div>
+<nitro-catalog-confirm-marketplace-purchase-component *ngIf="currentMarketplaceOfferToBuy" [offer]="currentMarketplaceOfferToBuy"></nitro-catalog-confirm-marketplace-purchase-component>
 <nitro-catalog-confirm-purchase-component *ngIf="(purchaseOffer !== null || giftOffer !== null) && !showGiftConfigurator" [giftOffer]="giftOffer" [page]="purchaseOfferPage" [offer]="purchaseOffer" [quantity]="purchaseOfferQuantity" [extra]="purchaseOfferExtra" [completed]="purchaseCompleted"></nitro-catalog-confirm-purchase-component>
 <nitro-catalog-confirm-vip-subscription-component *ngIf="purchaseVipSubscription !== null" [subscription]="purchaseVipSubscription"></nitro-catalog-confirm-vip-subscription-component>
 <nitro-catalog-confirm-purchase-insufficient-funds *ngIf="showInsufficientFunds"></nitro-catalog-confirm-purchase-insufficient-funds>
