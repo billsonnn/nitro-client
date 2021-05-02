@@ -1,9 +1,9 @@
-.nitro-avatar-editor-component {
+.nitro-avatar-editor {
     position: absolute;
     width: 600px;
     max-width: 600px;
 
-    .avatar-grid-container {
+    .grid-container {
 
         &.palette-grid {
 
@@ -25,69 +25,21 @@
         }
 
         .grid-items {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-content: flex-start;
-            width: 100%;
-            margin-top: -3px;
-            overflow: hidden;
-    
-            &.grid-6 {
-    
-                .item-detail {
-                    width: calc(1 / 6 * 100% - (1 - 1 / 6) * 3px);
-    
-                    &:nth-child(6n) {
-                        margin-right: 0;
-                    }
-                }
-            }
-
-            &.grid-12 {
-    
-                .item-detail {
-                    width: calc(1 / 12 * 100% - (1 - 1 / 12) * 3px);
-    
-                    &:nth-child(12n) {
-                        margin-right: 0;
-                    }
-                }
-            }
     
             .item-detail {
                 height: 50px;
                 max-height: 50px;
-                margin: 3px 3px 0 0;
-                overflow: hidden;
-    
-                .detail-info {
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-
-                    &.has-image {
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        background-image: url('../../../assets/images/icons/loading-icon.png');
-                    }
-                }
-            }
-    
-            &::after {
-                content: "";
-                flex: auto;
             }
         }
     }
 
     .avatar-spotlight {
-        top: -16px;
+        top: -51px;
         width: 130px;
         height: 305px;
-        background: transparent url('../../../assets/images/avatareditor/spotlight.png') no-repeat center;
+        background: transparent url('^assets/images/avatareditor/spotlight.png') no-repeat center;
         opacity: 0.3;
+        pointer-events: none;
     }
 
     .avatar-shadow {
@@ -95,7 +47,7 @@
         height: 45.5px;
         margin-top: 192px;
         border-radius: 100%;
-        background-color: rgba(0, 0, 0, 0.48);
+        background-color: rgba(0, 0, 0, 0.20);
     }
 
     .avatar-container {
@@ -111,7 +63,7 @@
         display: flex;
         justify-content: center;
         position: absolute;
-        bottom: 25px;
+        bottom: 23px;
 
         .icon {
             cursor: pointer;
@@ -125,4 +77,15 @@
 
 .search-result-item {
     cursor: pointer;
+}
+
+.nitro-avatar-wardrobe-component {
+    .nitro-avatar-image {
+        width: 50px;
+        overflow: hidden;
+
+        img {
+            margin-top: -20px;
+        }
+    }
 }

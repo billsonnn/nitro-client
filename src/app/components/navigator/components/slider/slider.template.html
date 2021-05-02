@@ -4,7 +4,7 @@
             <div class="nitro-navigator-slider-image-component py-2 px-0 h-100" [style]="'background:url('+con.image+')'" (click)="visit(con.roomId)">
                 <div class="johnsshitblackbar p-1 small">{{con.title}}</div>
             </div>
-            <img class="d-block w-100" [src]="con.image" (click)="con.roomId">
+            <img class="d-block w-100" [src]="con.image" (click)="con.roomId" image-placeholder />
         </mdb-carousel-item>
     </mdb-carousel>
 </div>

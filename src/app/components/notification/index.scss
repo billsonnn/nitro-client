@@ -1,12 +1,73 @@
 .nitro-alert {
     position: absolute;
-    width: 350px;
-    max-width: 350px;
-}
-
-.nitro-alert-multiple-messages-component {
-    width: 430px;
+    min-width: 350px;
     max-width: 430px;
 }
 
-@import './components/notificationdialog/index.scss'
+.nitro-notification-bubble {
+    width:230px;
+    margin-bottom: 5px;
+    padding: 0.23rem;
+    font-size: $font-size-sm;
+    cursor: pointer;
+
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s; 
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both; 
+    -webkit-animation-name: bounceIn; 
+    animation-name: bounceIn;
+
+    &.bubble-event {
+        cursor: default;
+    }
+
+    .bubble-image {
+        width: 50px;
+        max-width: 50px;
+        height: 50px;
+        max-height: 50px;
+        display: flex;
+        justify-content: center;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    &.removing {
+        animation-delay: 0s;
+        -webkit-animation-duration: 0.4s;
+        animation-duration: 0.4s; 
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both; 
+        -webkit-animation-name: scaleZero; 
+        animation-name: scaleZero;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+       opacity: 0;
+       transform: scale(.3);
+    }
+    50% {
+       opacity: 1; 
+       transform: scale(1.1);
+    }
+    70% {
+       transform: scale(.9);
+    }
+    100% {
+       transform: scale(1);
+    }
+}
+
+@keyframes scaleZero {
+    0% {
+       opacity: 1;
+       transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}

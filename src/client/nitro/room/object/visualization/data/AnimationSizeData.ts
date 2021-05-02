@@ -1,9 +1,9 @@
-import { IAssetAnimation } from '../../../../../core/asset/interfaces/visualization';
+import { IAssetVisualAnimation } from '../../../../../core/asset/interfaces/visualization';
 import { AnimationData } from './AnimationData';
 import { AnimationFrame } from './AnimationFrame';
 import { SizeData } from './SizeData';
 
-export class AnimationSizeData extends SizeData 
+export class AnimationSizeData extends SizeData
 {
     private _animations: Map<number, AnimationData>;
     private _animationIds: number[];
@@ -28,11 +28,11 @@ export class AnimationSizeData extends SizeData
         }
 
         this._animations.clear();
-        
+
         this._animationIds = [];
     }
 
-    public defineAnimations(animations: { [index: string]: IAssetAnimation }): boolean
+    public defineAnimations(animations: { [index: string]: IAssetVisualAnimation }): boolean
     {
         if(!animations) return true;
 
@@ -69,6 +69,23 @@ export class AnimationSizeData extends SizeData
                 return false;
             }
 
+            const immediateChangeFrom = animation.immediateChangeFrom;
+
+            if(immediateChangeFrom !== undefined)
+            {
+                const changes   = immediateChangeFrom.split(',');
+                const changeIds = [];
+
+                for(const change of changes)
+                {
+                    const changeId = parseInt(change);
+
+                    if(changeIds.indexOf(changeId) === -1) changeIds.push(changeId);
+                }
+
+                animationData.setImmediateChanges(changeIds);
+            }
+
             this._animations.set(animationId, animationData);
 
             if(!isTransition) this._animationIds.push(animationId);
@@ -85,7 +102,7 @@ export class AnimationSizeData extends SizeData
     public hasAnimation(animationId: number): boolean
     {
         if(!this._animations.get(animationId)) return false;
-        
+
         return true;
     }
 
@@ -99,7 +116,7 @@ export class AnimationSizeData extends SizeData
         const totalAnimations = this.getAnimationCount();
 
         if((animationId < 0) || (totalAnimations <= 0)) return 0;
-        
+
         return this._animationIds[(animationId % totalAnimations)];
     }
 
@@ -108,7 +125,7 @@ export class AnimationSizeData extends SizeData
         const animation = this._animations.get(animationId);
 
         if(!animation) return false;
-        
+
         return animation.isImmediateChange(_arg_2);
     }
 
@@ -117,7 +134,7 @@ export class AnimationSizeData extends SizeData
         const animation = this._animations.get(animationId);
 
         if(!animation) return 0;
-        
+
         return animation.getStartFrame(direction);
     }
 
@@ -126,7 +143,7 @@ export class AnimationSizeData extends SizeData
         const animation = this._animations.get(animationId);
 
         if(!animation) return null;
-        
+
         return animation.getFrame(direction, layerId, frameCount);
     }
 
@@ -135,7 +152,7 @@ export class AnimationSizeData extends SizeData
         const animation = this._animations.get(animationId);
 
         if(!animation) return null;
-        
+
         return animation.getFrameFromSequence(direction, layerId, sequenceId, offset, frameCount);
     }
 }

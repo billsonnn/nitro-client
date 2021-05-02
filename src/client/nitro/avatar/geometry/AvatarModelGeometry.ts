@@ -5,7 +5,7 @@ import { GeometryBodyPart } from './GeometryBodyPart';
 import { Matrix4x4 } from './Matrix4x4';
 import { Vector3D } from './Vector3D';
 
-export class AvatarModelGeometry 
+export class AvatarModelGeometry
 {
     private _camera: Vector3D;
     private _avatarSet: AvatarSet;
@@ -75,7 +75,7 @@ export class AvatarModelGeometry
                         const geometryBodyPart = new GeometryBodyPart(bodyPart);
 
                         bodyParts.set(geometryBodyPart.id, geometryBodyPart);
-                        
+
                         for(const part of geometryBodyPart._Str_1456(null))
                         {
                             itemIds.set(part, geometryBodyPart);
@@ -109,7 +109,7 @@ export class AvatarModelGeometry
         const avatarSet = this._avatarSet._Str_1498(k);
 
         if(!avatarSet) return [];
-        
+
         return avatarSet._Str_755();
     }
 

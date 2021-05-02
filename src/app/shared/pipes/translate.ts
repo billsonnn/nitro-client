@@ -4,10 +4,15 @@ import { Nitro } from '../../../client/nitro/Nitro';
 @Pipe({ name: 'translate' })
 export class TranslatePipe implements PipeTransform
 {
-    public transform(key: string, parameter: string = null, replacement: string = null): string
+    public transform(key: string, parameter: string | string[] = null, replacement: string | string[] = null): string
     {
-        return Nitro.instance.getLocalization(key);
+        if((parameter && Array.isArray(parameter)) && (replacement && Array.isArray(replacement)))
+        {
+            if(parameter.length === replacement.length) return Nitro.instance.getLocalizationWithParameters(key, parameter, replacement);
+        }
 
-        //return Nitro.instance.getLocalizationWithParameter(key, parameter, (replacement && replacement.toString()));
+        if(parameter && replacement) return Nitro.instance.getLocalizationWithParameter(key, (parameter as string), (replacement as string));
+
+        return Nitro.instance.getLocalization(key);
     }
 }

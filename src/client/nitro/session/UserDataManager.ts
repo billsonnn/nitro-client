@@ -1,5 +1,6 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { RequestPetInfoComposer } from '../communication/messages/outgoing/pet/RequestPetInfoComposer';
 import { UserCurrentBadgesComposer } from '../communication/messages/outgoing/user/data/UserCurrentBadgesComposer';
 import { RoomUserData } from './RoomUserData';
 
@@ -77,6 +78,18 @@ export class UserDataManager extends Disposable
         if(!existing) return null;
 
         return existing;
+    }
+
+    public getUserDataByName(name: string): RoomUserData
+    {
+        for(const userData of this._userDataByRoomIndex.values())
+        {
+            if(!userData || (userData.name !== name)) continue;
+
+            return userData;
+        }
+
+        return null;
     }
 
     public updateUserData(data: RoomUserData): void
@@ -159,6 +172,17 @@ export class UserDataManager extends Disposable
         if(!userData) return;
 
         userData.custom = custom;
+    }
+
+    public requestPetInfo(id: number): void
+    {
+        if(!this._connection) return;
+
+        const petData = this.getPetData(id);
+
+        if(!petData) return;
+
+        this._connection.send(new RequestPetInfoComposer(id));
     }
 
     public get connection(): IConnection

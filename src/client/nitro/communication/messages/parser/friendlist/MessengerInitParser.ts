@@ -17,7 +17,7 @@ export class MessengerInitParser implements IMessageParser
         this._categories            = [];
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -26,13 +26,15 @@ export class MessengerInitParser implements IMessageParser
         this._normalFriendLimit     = wrapper.readInt();
         this._extendedFriendLimit   = wrapper.readInt();
 
-        const totalCategories = wrapper.readInt();
+        let totalCategories = wrapper.readInt();
 
         while(totalCategories > 0)
         {
             this._categories.push(new FriendCategoryData(wrapper));
+
+            totalCategories--;
         }
-        
+
         return true;
     }
 

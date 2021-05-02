@@ -13,14 +13,14 @@ export class RoomInfoOwnerParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._roomId    = wrapper.readInt();
         this._isOwner   = wrapper.readBoolean();
-        
+
         return true;
     }
 

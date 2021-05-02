@@ -89,7 +89,7 @@ export class FurnitureItem implements IFurnitureItem
         this._stuffData = k;
     }
 
-    public get _Str_2794(): number
+    public get extra(): number
     {
         return this._extra;
     }
@@ -123,7 +123,7 @@ export class FurnitureItem implements IFurnitureItem
         if(this._hasRentPeriodStarted)
         {
             time = (this._secondsToExpiration - ((Nitro.instance.time - this._expirationTimeStamp) / 1000));
-            
+
             if(time < 0) time = 0;
         }
         else

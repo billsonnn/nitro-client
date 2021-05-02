@@ -1,6 +1,6 @@
 ﻿import { Point } from 'pixi.js';
 
-export interface IPlaneDrawingData 
+export interface IPlaneDrawingData
 {
     _Str_14945(): boolean;
     z: number;

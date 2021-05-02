@@ -32,7 +32,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         this.reset();
 
-        if(!asset || (!asset.type || !asset.type.length)) return false;
+        if(!asset) return false;
 
         this._type = asset.name;
 
@@ -84,12 +84,15 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
     {
         if(!visualizations) return false;
 
-        for(const visualization of visualizations)
+        for(const visualizationId in visualizations)
         {
+            const visualization = visualizations[visualizationId];
+
             const layerCount    = visualization.layerCount;
             const angle         = visualization.angle;
-            let size          = visualization.size;
-            
+
+            let size = visualization.size;
+
             if(size < 1) size = 1;
 
             if(this._sizeDatas.get(size)) return false;
@@ -102,7 +105,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
             {
                 //@ts-ignore
                 const data = visualization[key];
-                
+
                 if(!this.processVisualElement(sizeData, key, data))
                 {
                     sizeData.dispose();
@@ -239,7 +242,7 @@ export class FurnitureVisualizationData implements IObjectVisualizationData
 
         return size.getLayerAlpha(direction, layerId);
     }
-    
+
     public getLayerColor(scale: number, layerId: number, colorId: number): number
     {
         const size = this.getSizeData(scale);

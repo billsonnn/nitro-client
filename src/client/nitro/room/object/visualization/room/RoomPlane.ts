@@ -239,7 +239,7 @@ export class RoomPlane implements IRoomPlane
     public set id(k: string)
     {
         if(k === this._Str_576) return;
-        
+
         this._Str_11000();
         this._Str_576 = k;
     }
@@ -271,7 +271,7 @@ export class RoomPlane implements IRoomPlane
 
             this._Str_2708 = null;
         }
-        
+
         this._Str_5545      = null;
         this._location      = null;
         this._Str_5221      = null;
@@ -292,7 +292,7 @@ export class RoomPlane implements IRoomPlane
 
             this._Str_2730 = null;
         }
-        
+
         this._disposed = true;
     }
 
@@ -521,7 +521,7 @@ export class RoomPlane implements IRoomPlane
                             for(const cell of column._Str_22299())
                             {
                                 const name = cell._Str_2125(normal);
-                                
+
                                 if(name) assetNames.push(name);
                             }
 
@@ -768,9 +768,9 @@ export class RoomPlane implements IRoomPlane
     private draw(k: Graphics, matrix: Matrix): void
     {
         const clone = k.clone();
-        
+
         clone.transform.setFromMatrix(matrix);
-        
+
         this._Str_1049 = clone;
     }
 
@@ -787,7 +787,7 @@ export class RoomPlane implements IRoomPlane
         if(!this._Str_4542) return false;
 
         let _local_5 = 0;
-        
+
         while(_local_5 < this._Str_4047.length)
         {
             const mask = this._Str_4047[_local_5];
@@ -811,7 +811,7 @@ export class RoomPlane implements IRoomPlane
     public _Str_25934(): void
     {
         if(!this._Str_4542 || !this._Str_5088.length) return;
-        
+
         this._Str_4891 = true;
         this._Str_5088 = [];
     }
@@ -834,7 +834,7 @@ export class RoomPlane implements IRoomPlane
 
             return true;
         }
-        
+
         return false;
     }
 
@@ -860,7 +860,7 @@ export class RoomPlane implements IRoomPlane
                     if(((plane.type === mask.type) && (plane._Str_5120 === mask._Str_5120)) && (plane._Str_4659 === mask._Str_4659))
                     {
                         _local_6 = true;
-                        
+
                         break;
                     }
                 }
@@ -868,7 +868,7 @@ export class RoomPlane implements IRoomPlane
                 if(!_local_6)
                 {
                     _local_3 = false;
-                    
+
                     break;
                 }
             }
@@ -877,7 +877,7 @@ export class RoomPlane implements IRoomPlane
         {
             _local_3 = false;
         }
-        
+
         if(this._Str_5088.length > this._Str_14495.length) _local_3 = false;
 
         if(_local_3) this._Str_4891 = false;
@@ -929,7 +929,7 @@ export class RoomPlane implements IRoomPlane
             this._Str_11000(texture);
 
             const normal = geometry.getCoordinatePosition(this._normal);
-            
+
             let type: string    = null;
             let posX            = 0;
             let posY            = 0;
@@ -962,7 +962,7 @@ export class RoomPlane implements IRoomPlane
                 {
                     posX    = (this._Str_2730.width - ((this._Str_2730.width * rectMask._Str_5120) / this._Str_2920.length));
                     posY    = (this._Str_2730.height - ((this._Str_2730.height * rectMask._Str_4659) / this._Str_2943.length));
-                    
+
                     const wd  = ((this._Str_2730.width * rectMask._Str_9124) / this._Str_2920.length);
                     const ht  = ((this._Str_2730.height * rectMask._Str_12156) / this._Str_2943.length);
 
@@ -970,7 +970,7 @@ export class RoomPlane implements IRoomPlane
                         .beginFill(0xFF0000)
                         .drawRect((posX - wd), (posY - ht), wd, ht)
                         .endFill();
-                    
+
                     this._Str_14495.push(new RoomPlaneRectangleMask(rectMask._Str_9124, rectMask._Str_4659, rectMask._Str_9124, rectMask._Str_12156));
                 }
 
@@ -1011,7 +1011,7 @@ export class RoomPlane implements IRoomPlane
         const newTexture = Texture.from(textureCanvas);
 
         if(!newTexture) return;
-        
+
         texture
             .clear()
             .beginTextureFill({ texture: newTexture })

@@ -1,17 +1,22 @@
 import { Nitro } from '../../nitro/Nitro';
 import { Disposable } from '../common/disposable/Disposable';
 import { IDisposable } from '../common/disposable/IDisposable';
+import { INitroLogger } from '../common/logger/INitroLogger';
 import { NitroLogger } from '../common/logger/NitroLogger';
 import { IEventDispatcher } from './IEventDispatcher';
+import { RoomSessionDimmerPresetsEvent } from '../../nitro/session/events/RoomSessionDimmerPresetsEvent';
+import { RoomEngineTriggerWidgetEvent } from '../../nitro/room/events/RoomEngineTriggerWidgetEvent';
 
 export class EventDispatcher extends Disposable implements IEventDispatcher, IDisposable
 {
+    private _logger: INitroLogger;
     private _listeners: Map<string, Function[]>;
 
     constructor()
     {
         super();
 
+        this._logger    = new NitroLogger(this.constructor.name);
         this._listeners = new Map();
     }
 
@@ -28,7 +33,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         const existing = this._listeners.get(type);
 
-        if(existing === undefined)
+        if(!existing)
         {
             this._listeners.set(type, [ callback ]);
 
@@ -46,13 +51,13 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         if(!existing || !existing.length) return;
 
-        for(const [ index, callback ] of existing.entries())
+        for(const [ i, cb ] of existing.entries())
         {
-            if(!callback || callback !== callback) continue;
+            if(!cb || (cb !== callback)) continue;
 
-            existing.splice(index, 1);
+            existing.splice(i, 1);
 
-            if(existing.length === 0) this._listeners.delete(type);
+            if(!existing.length) this._listeners.delete(type);
 
             return;
         }
@@ -62,7 +67,7 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
     {
         if(!event) return false;
 
-        if(Nitro.instance.getConfiguration<boolean>('system.dispatcher.log')) NitroLogger.log(`DISPATCHED: ${ event.type }`, 'Event Dispatcher');
+        if(Nitro.instance.getConfiguration<boolean>('system.dispatcher.log')) this._logger.log(`DISPATCHED: ${ event.type }`);
 
         this.processEvent(event);
 
@@ -86,16 +91,16 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
         while(callbacks.length)
         {
+            const callback = callbacks.shift();
+
             try
             {
-                const callback = callbacks.shift();
-
                 callback(event);
             }
 
             catch (err)
             {
-                NitroLogger.log(err);
+                this._logger.error(err.stack);
 
                 return;
             }
@@ -104,18 +109,6 @@ export class EventDispatcher extends Disposable implements IEventDispatcher, IDi
 
     public removeAllListeners(): void
     {
-        if(!this._listeners || !this._listeners.size) return;
-
-        for(const [ type, callbacks ] of this._listeners.entries())
-        {
-            if(!type || !callbacks.length) continue;
-
-            for(const callback of callbacks)
-            {
-                if(!callback) continue;
-
-                this.removeEventListener(type, callback);
-            }
-        }
+        this._listeners.clear();
     }
 }

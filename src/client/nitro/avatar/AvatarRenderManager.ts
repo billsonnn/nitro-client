@@ -14,6 +14,7 @@ import * as HabboAvatarAnimations from './data/HabboAvatarAnimations.json';
 import * as HabboAvatarGeometry from './data/HabboAvatarGeometry.json';
 import * as HabboAvatarPartSets from './data/HabboAvatarPartSets.json';
 import { EffectAssetDownloadManager } from './EffectAssetDownloadManager';
+import { AvatarSetType } from './enum/AvatarSetType';
 import { AvatarRenderEvent } from './events/AvatarRenderEvent';
 import { IAvatarEffectListener } from './IAvatarEffectListener';
 import { IAvatarFigureContainer } from './IAvatarFigureContainer';
@@ -63,6 +64,12 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         this._partSetsReady                 = false;
         this._animationsReady               = false;
         this._isReady                       = false;
+
+        this.onAvatarAssetDownloaderReady   = this.onAvatarAssetDownloaderReady.bind(this);
+        this.onAvatarAssetDownloaded        = this.onAvatarAssetDownloaded.bind(this);
+        this.onEffectAssetDownloaderReady   = this.onEffectAssetDownloaderReady.bind(this);
+        this.onEffectAssetDownloaded        = this.onEffectAssetDownloaded.bind(this);
+        this.onAvatarStructureDownloadDone  = this.onAvatarStructureDownloadDone.bind(this);
     }
 
     public onInit(): void
@@ -83,18 +90,16 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         {
             this._avatarAssetDownloadManager = new AvatarAssetDownloadManager(Nitro.instance.core.asset, this._structure);
 
-            this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady.bind(this));
-
-            this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded.bind(this));
+            this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady);
+            this._avatarAssetDownloadManager.addEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded);
         }
 
         if(!this._effectAssetDownloadManager)
         {
             this._effectAssetDownloadManager = new EffectAssetDownloadManager(Nitro.instance.core.asset, this._structure);
 
-            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady.bind(this));
-
-            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded.bind(this));
+            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady);
+            this._effectAssetDownloadManager.addEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded);
         }
 
         this.checkReady();
@@ -104,16 +109,16 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     {
         if(this._avatarAssetDownloadManager)
         {
-            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady.bind(this));
+            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.DOWNLOADER_READY, this.onAvatarAssetDownloaderReady);
 
-            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded.bind(this));
+            this._avatarAssetDownloadManager.removeEventListener(AvatarAssetDownloadManager.LIBRARY_LOADED, this.onAvatarAssetDownloaded);
         }
 
         if(this._effectAssetDownloadManager)
         {
-            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady.bind(this));
+            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.DOWNLOADER_READY, this.onEffectAssetDownloaderReady);
 
-            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded.bind(this));
+            this._effectAssetDownloadManager.removeEventListener(EffectAssetDownloadManager.LIBRARY_LOADED, this.onEffectAssetDownloaded);
         }
     }
 
@@ -164,9 +169,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
                 this.checkReady();
             };
 
-            request.onerror = e => 
+            request.onerror = e =>
             {
-                throw new Error('invalid_avatar_actions'); 
+                throw new Error('invalid_avatar_actions');
             };
         }
 
@@ -205,7 +210,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         const structureDownloader = new AvatarStructureDownload(Nitro.instance.getConfiguration<string>('avatar.figuredata.url'), (this._structure.figureData as IFigureSetData));
 
-        structureDownloader.addEventListener(AvatarStructureDownload.AVATAR_STRUCTURE_DONE, this.onAvatarStructureDownloadDone.bind(this));
+        structureDownloader.addEventListener(AvatarStructureDownload.AVATAR_STRUCTURE_DONE, this.onAvatarStructureDownloadDone);
     }
 
     private onAvatarStructureDownloadDone(event: NitroEvent): void
@@ -349,6 +354,49 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         return !(isValid);
     }
 
+    public getFigureClubLevel(container: IAvatarFigureContainer, gender: string, searchParts: string[]): number
+    {
+        if(!this._structure) return 0;
+
+        const figureData    = this._structure.figureData;
+        const parts         = Array.from(container._Str_1016());
+
+        let clubLevel = 0;
+
+        for(const part of parts)
+        {
+            const set       = figureData._Str_740(part);
+            const setId     = container.getPartSetId(part);
+            const partSet   = set._Str_1020(setId);
+
+            if(partSet)
+            {
+                clubLevel = Math.max(partSet.clubLevel, clubLevel);
+
+                const palette   = figureData._Str_783(set._Str_734);
+                const colors   = container._Str_815(part);
+
+                for(const colorId of colors)
+                {
+                    const color = palette._Str_751(colorId);
+
+                    clubLevel = Math.max(color.clubLevel, clubLevel);
+                }
+            }
+        }
+
+        if(!searchParts) searchParts = this._structure._Str_1695(AvatarSetType.FULL);
+
+        for(const part of searchParts)
+        {
+            const set = figureData._Str_740(part);
+
+            if(parts.indexOf(part) === -1) clubLevel = Math.max(set._Str_1002(gender), clubLevel);
+        }
+
+        return clubLevel;
+    }
+
     public isValidFigureSetForGender(setId: number, gender: string): boolean
     {
         const structure = this.structureData;
@@ -391,7 +439,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     public _Str_838(k: string, _arg_2: number): string[]
     {
         if(!this._structure) return null;
-        
+
         return this._structure._Str_1733(k, _arg_2);
     }
 

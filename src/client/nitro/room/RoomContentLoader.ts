@@ -1,6 +1,10 @@
 import { BaseTexture, ILoaderOptions, Loader, LoaderResource, Spritesheet, Texture } from 'pixi.js';
 import { IAssetData } from '../../core/asset/interfaces';
+import { NitroBundle } from '../../core/asset/NitroBundle';
+import { INitroLogger } from '../../core/common/logger/INitroLogger';
+import { NitroLogger } from '../../core/common/logger/NitroLogger';
 import { IEventDispatcher } from '../../core/events/IEventDispatcher';
+import { NitroEvent } from '../../core/events/NitroEvent';
 import { RoomContentLoadedEvent } from '../../room/events/RoomContentLoadedEvent';
 import { IRoomObject } from '../../room/object/IRoomObject';
 import { GraphicAssetCollection } from '../../room/object/visualization/utils/GraphicAssetCollection';
@@ -26,8 +30,10 @@ export class RoomContentLoader implements IFurnitureDataListener
     private static TILE_CURSOR: string          = 'tile_cursor';
     private static SELECTION_ARROW: string      = 'selection_arrow';
 
+    public static LOADER_READY: string          = 'RCL_LOADER_READY';
     public static MANDATORY_LIBRARIES: string[] = [ RoomContentLoader.PLACE_HOLDER, RoomContentLoader.PLACE_HOLDER_WALL, RoomContentLoader.PLACE_HOLDER_PET, RoomContentLoader.ROOM, RoomContentLoader.TILE_CURSOR, RoomContentLoader.SELECTION_ARROW ];
 
+    private _logger: INitroLogger;
     private _stateEvents: IEventDispatcher;
     private _sessionDataManager: ISessionDataManager;
     private _waitingForSessionDataManager: boolean;
@@ -43,14 +49,17 @@ export class RoomContentLoader implements IFurnitureDataListener
     private _wallItems: { [index: string]: number };
     private _wallItemTypes: Map<number, string>;
     private _wallItemTypeIds: Map<string, number>;
+    private _furniRevisions: Map<string, number>;
     private _pets: { [index: string]: number };
     private _objectAliases: Map<string, string>;
     private _objectOriginalNames: Map<string, string>;
 
     private _pendingContentTypes: string[];
+    private _dataInitialized: boolean;
 
     constructor()
     {
+        this._logger                        = new NitroLogger(this.constructor.name);
         this._stateEvents                   = null;
         this._sessionDataManager            = null;
         this._waitingForSessionDataManager  = false;
@@ -66,11 +75,13 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._wallItems                     = {};
         this._wallItemTypes                 = new Map();
         this._wallItemTypeIds               = new Map();
+        this._furniRevisions                = new Map();
         this._pets                          = {};
         this._objectAliases                 = new Map();
         this._objectOriginalNames           = new Map();
 
         this._pendingContentTypes           = [];
+        this._dataInitialized               = false;
     }
 
     public initialize(events: IEventDispatcher): void
@@ -84,7 +95,7 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public dispose(): void
     {
-        
+
     }
 
     public setSessionDataManager(sessionData: ISessionDataManager): void
@@ -120,6 +131,8 @@ export class RoomContentLoader implements IFurnitureDataListener
         this._sessionDataManager.removePendingFurniDataListener(this);
 
         this.processFurnitureData(furnitureData);
+
+        this._stateEvents.dispatchEvent(new NitroEvent(RoomContentLoader.LOADER_READY));
     }
 
     private processFurnitureData(furnitureData: IFurnitureData[]): void
@@ -131,42 +144,52 @@ export class RoomContentLoader implements IFurnitureDataListener
             if(!furniture) continue;
 
             const id = furniture.id;
-            
-            let name        = furniture.className;
-            let className   = furniture.className;
 
-            if(furniture.colorId) name = (name + '*' + furniture.colorId);
+            let className = furniture.className;
 
-            const adUrl = furniture.adUrl;
+            if(furniture.hasIndexedColor) className = ((className + '*') + furniture.colorIndex);
 
-            if(adUrl && adUrl.length > 0) this._objectTypeAdUrls.set(name, adUrl);
+            const revision  = furniture.revision;
+            const adUrl     = furniture.adUrl;
+
+            if(adUrl && adUrl.length > 0) this._objectTypeAdUrls.set(className, adUrl);
+
+            let name = furniture.className;
 
             if(furniture.type === FurnitureType.FLOOR)
             {
-                this._activeObjectTypes.set(id, name);
-                this._activeObjectTypeIds.set(name, id);
+                this._activeObjectTypes.set(id, className);
+                this._activeObjectTypeIds.set(className, id);
 
-                if(!this._activeObjects[className]) this._activeObjects[className] = 1;
+                if(!this._activeObjects[name]) this._activeObjects[name] = 1;
             }
 
             else if(furniture.type === FurnitureType.WALL)
             {
                 if(name === 'post.it')
                 {
-                    name        = 'post_it';
                     className   = 'post_it';
+                    name        = 'post_it';
                 }
 
                 if(name === 'post.it.vd')
                 {
-                    name        = 'post_it_vd';
-                    className   = 'post_id_vd';
+                    className   = 'post_it_vd';
+                    name        = 'post_id_vd';
                 }
 
-                this._wallItemTypes.set(id, name);
-                this._wallItemTypeIds.set(name, id);
+                this._wallItemTypes.set(id, className);
+                this._wallItemTypeIds.set(className, id);
 
-                if(!this._wallItems[className]) this._wallItems[className] = 1;
+                if(!this._wallItems[name]) this._wallItems[name] = 1;
+            }
+
+            const existingRevision = this._furniRevisions.get(name);
+
+            if(revision > existingRevision)
+            {
+                this._furniRevisions.delete(name);
+                this._furniRevisions.set(name, revision);
             }
         }
     }
@@ -174,7 +197,7 @@ export class RoomContentLoader implements IFurnitureDataListener
     public getFurnitureFloorNameForTypeId(typeId: number): string
     {
         const type = this._activeObjectTypes.get(typeId);
-        
+
         return this.removeColorIndex(type);
     }
 
@@ -285,13 +308,19 @@ export class RoomContentLoader implements IFurnitureDataListener
 
     public getPlaceholderName(type: string): string
     {
-        if(this._activeObjects[type] !== undefined) return RoomContentLoader.PLACE_HOLDER;
+        const category = this.getCategoryForType(type);
 
-        if(this._wallItems[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_WALL;
+        switch(category)
+        {
+            case RoomObjectCategory.FLOOR:
+                return RoomContentLoader.PLACE_HOLDER;
+            case RoomObjectCategory.WALL:
+                return RoomContentLoader.PLACE_HOLDER_WALL;
+            default:
+                if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
 
-        if(this._pets[type] !== undefined) return RoomContentLoader.PLACE_HOLDER_PET;
-        
-        return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+                return RoomContentLoader.PLACE_HOLDER_DEFAULT;
+        }
     }
 
     public getCategoryForType(type: string): number
@@ -360,18 +389,24 @@ export class RoomContentLoader implements IFurnitureDataListener
             const url = assetUrls[0];
 
             const image = new Image();
-            
+
             image.src = url;
 
             image.onload = () =>
             {
+                image.onerror = null;
+
                 this._images.set(([ type, param ].join('_')), image);
-                
+
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), true);
             };
 
             image.onerror = () =>
             {
+                image.onload = null;
+
+                this._logger.error('Failed to download asset: ' + url);
+
                 this._iconListener.onRoomContentLoaded(id, [ type, param ].join('_'), false);
             };
 
@@ -395,26 +430,28 @@ export class RoomContentLoader implements IFurnitureDataListener
         const totalToDownload = assetUrls.length;
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader, flag: boolean) =>
+        const onDownloaded = (loader: Loader, resource: LoaderResource, flag: boolean) =>
         {
             if(loader) loader.destroy();
 
-            if(flag)
+            if(!flag)
             {
-                totalDownloaded++;
+                this._logger.error('Failed to download asset: ' + resource.url);
 
-                if(totalDownloaded === totalToDownload)
-                {
-                    const events = this._events.get(type);
-
-                    if(!events) return;
-
-                    events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
-                }
-            }
-            else
-            {
                 events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_FAILURE, type));
+
+                return;
+            }
+
+            totalDownloaded++;
+
+            if(totalDownloaded === totalToDownload)
+            {
+                const events = this._events.get(type);
+
+                if(!events) return;
+
+                events.dispatchEvent(new RoomContentLoadedEvent(RoomContentLoadedEvent.RCLE_SUCCESS, type));
             }
         };
 
@@ -425,47 +462,52 @@ export class RoomContentLoader implements IFurnitureDataListener
             const loader = new Loader();
 
             const options: ILoaderOptions = {
-                crossOrigin: false
+                crossOrigin: false,
+                xhrType: url.endsWith('.nitro') ? 'arraybuffer' : 'json'
             };
 
             loader
                 .use((resource: LoaderResource, next: Function) => this.assetLoader(loader, resource, next, onDownloaded))
-                .add(assetUrls, options)
+                .add(url, options)
                 .load();
         }
 
         return true;
     }
-    
+
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error)
         {
             if(resource && resource.texture) resource.texture.destroy(true);
-            
-            onDownloaded(loader, false);
+
+            onDownloaded(loader, resource, false);
 
             return;
         }
 
-        if(resource.type === LoaderResource.TYPE.JSON)
+        if(resource.extension === 'nitro')
         {
-            const assetData = (resource.data as IAssetData);
+            const nitroBundle   = new NitroBundle(resource.data);
+            const assetData     = (nitroBundle.jsonFile as IAssetData);
 
-            if(!assetData.type)
+            if(!assetData || !assetData.type)
             {
-                onDownloaded(loader, false);
+                onDownloaded(loader, resource, false);
 
                 return;
             }
-            
+
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
+                const baseTexture = nitroBundle.baseTexture;
 
-                if(!imageUrl) return;
+                if(!baseTexture)
+                {
+                    onDownloaded(loader, resource, false);
 
-                const baseTexture = BaseTexture.from(imageUrl);
+                    return;
+                }
 
                 if(baseTexture.valid)
                 {
@@ -475,7 +517,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                     {
                         this.createCollection(assetData, spritesheet);
 
-                        onDownloaded(loader, true);
+                        onDownloaded(loader, resource, true);
                     });
                 }
                 else
@@ -490,7 +532,7 @@ export class RoomContentLoader implements IFurnitureDataListener
                         {
                             this.createCollection(assetData, spritesheet);
 
-                            onDownloaded(loader, true);
+                            onDownloaded(loader, resource, true);
                         });
                     });
 
@@ -498,24 +540,92 @@ export class RoomContentLoader implements IFurnitureDataListener
                     {
                         baseTexture.removeAllListeners();
 
-                        onDownloaded(loader, false);
+                        onDownloaded(loader, resource, false);
                     });
                 }
 
                 return;
             }
-                
+
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
+        }
+
+        else if(resource.type === LoaderResource.TYPE.JSON)
+        {
+            const assetData = (resource.data as IAssetData);
+
+            if(!assetData.type)
+            {
+                onDownloaded(loader, resource, false);
+
+                return;
+            }
+
+            if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
+            {
+                const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
+
+                if(!imageName || !imageName.length)
+                {
+                    onDownloaded(loader, resource, false);
+
+                    return;
+                }
+
+                const imageUrl      = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + imageName);
+                const baseTexture   = BaseTexture.from(imageUrl);
+
+                if(baseTexture.valid)
+                {
+                    const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                    spritesheet.parse(textures =>
+                    {
+                        this.createCollection(assetData, spritesheet);
+
+                        onDownloaded(loader, resource, true);
+                    });
+                }
+                else
+                {
+                    baseTexture.once('loaded', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                        spritesheet.parse(textures =>
+                        {
+                            this.createCollection(assetData, spritesheet);
+
+                            onDownloaded(loader, resource, true);
+                        });
+                    });
+
+                    baseTexture.once('error', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        onDownloaded(loader, resource, false);
+                    });
+                }
+
+                return;
+            }
+
+            this.createCollection(assetData, null);
+
+            onDownloaded(loader, resource, true);
         }
         else
         {
-            onDownloaded(loader, false);
+            onDownloaded(loader, resource, false);
         }
     }
 
-    public _Str_12966(name: string, originalName: string): void
+    public setAssetAliasName(name: string, originalName: string): void
     {
         this._objectAliases.set(name, originalName);
         this._objectOriginalNames.set(originalName, name);
@@ -560,20 +670,18 @@ export class RoomContentLoader implements IFurnitureDataListener
 
                 if((category === RoomObjectCategory.FLOOR) || (category === RoomObjectCategory.WALL))
                 {
+                    const name = this.getAssetAliasName(type);
+
+                    let assetUrl = (icon ? this.getAssetUrlWithFurniIconBase(name) : this.getAssetUrlWithFurniBase(type));
+
                     if(icon)
                     {
-                        const name = this.getAssetAliasName(type);
-
-                        let assetUrl = this.getAssetUrlWithFurniIconBase(name);
-
-                        const active = (param && (param !== '') && (param !== '0') && (this._activeObjectTypeIds.get((name + '*' + param)) !== null));
+                        const active = (param && (param !== '') && (this._activeObjectTypeIds.has((name + '*' + param))));
 
                         assetUrl = (assetUrl.replace(/%param%/gi, (active ? ('_' + param) : '')));
-
-                        return [ assetUrl ];
                     }
 
-                    return [ this.getAssetUrlWithFurniBase(type) ];
+                    return [ assetUrl ];
                 }
 
                 if(category === RoomObjectCategory.UNIT)
@@ -607,7 +715,7 @@ export class RoomContentLoader implements IFurnitureDataListener
             assetUrls = this.getAssetUrls(type, colorIndex, true);
         }
 
-        if(assetUrls.length) return assetUrls[0];
+        if(assetUrls && assetUrls.length) return assetUrls[0];
 
         return null;
     }

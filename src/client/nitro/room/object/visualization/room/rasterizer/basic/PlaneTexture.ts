@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../../../../../room/utils/IVector3D';
 import { PlaneTextureBitmap } from './PlaneTextureBitmap';
 
-export class PlaneTexture 
+export class PlaneTexture
 {
     public static _Str_3268: number = -1;
     public static _Str_3271: number = 1;

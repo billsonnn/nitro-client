@@ -1,3 +1,18 @@
-<div class="card nitro-room-infostand-pet-component">
-    pet
+<div class="d-flex flex-column align-items-end">
+    <div class="nitro-infostand card">
+        <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+            <h6 class="m-0">{{ petData.name }}</h6>
+            <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="d-flex flex-column p-3 w-100">
+            <div class="d-flex col-5 justify-content-center align-items-center bg-secondary rounded overflow-hidden">
+                <div class="pet-image" pet-image [petFigureData]="petData.petFigureData" [direction]="2" [asBackground]="true"></div>
+            </div>
+        </div>
+    </div>
+    <div class="button-container btn-group mt-2">
+        <button type="button" class="btn btn-primary" (click)="processButtonAction('buyfood')">{{ 'infostand.button.buyfood' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="processButtonAction('respect')">{{ 'infostand.button.petrespect' | translate:'count':'0' }}</button>
+        <button type="button" class="btn btn-primary" (click)="processButtonAction('kick')">{{ 'infostand.button.kick' | translate }}</button>
+    </div>
 </div>

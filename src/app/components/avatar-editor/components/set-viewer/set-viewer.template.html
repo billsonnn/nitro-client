@@ -1,7 +1,12 @@
-<perfect-scrollbar class="avatar-grid-container position-relative overflow-hidden" style="min-height: 158px;max-height: 158px;">
+<perfect-scrollbar class="grid-container" style="min-height:158px;max-height:158px;height:158px;">
     <div class="grid-items grid-6">
-        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let part of partSet" (click)="selectPart(part)">
-            <button type="button" class="btn btn-primary detail-info has-image" [ngClass]="{ 'active': part.isSelected }" [ngStyle]="(part.imageUrl && { 'background-image': 'url(' + part.imageUrl + ')' })"></button>
+        <div class="d-flex flex-column item-detail justify-content-center align-items-center"
+            *ngFor="let part of partSet" (click)="selectPart(part)">
+            <button type="button" class="btn btn-secondary detail-info has-image"
+                [ngClass]="{ 'active': part.isSelected }"
+                [ngStyle]="(part.imageUrl && { 'background-image': 'url(' + part.imageUrl + ')' })">
+                <i *ngIf="part.isClear" class="fas fa-times h5 m-0"></i>
+            </button>
         </div>
     </div>
 </perfect-scrollbar>

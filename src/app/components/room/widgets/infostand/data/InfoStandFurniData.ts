@@ -1,7 +1,7 @@
 ﻿import { IObjectData } from '../../../../../../client/nitro/room/object/data/IObjectData';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../events/RoomWidgetFurniInfostandUpdateEvent';
 
-export class InfoStandFurniData 
+export class InfoStandFurniData
 {
     private _id: number = 0;
     private _category: number = 0;
@@ -153,7 +153,7 @@ export class InfoStandFurniData
         this.category                   = event.category;
         this.name                       = event.name;
         this.description                = event.description;
-        this.imageUrl                   = event.image.src;
+        this.imageUrl                   = ((event.image && event.image.src) || null);
         this.purchaseOfferId            = event.purchaseOfferId;
         this.extraParam                 = event.extraParam;
         this.stuffData                  = event.stuffData;

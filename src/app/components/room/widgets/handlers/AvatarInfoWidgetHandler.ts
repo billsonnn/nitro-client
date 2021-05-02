@@ -12,12 +12,11 @@ import { IRoomSession } from '../../../../../client/nitro/session/IRoomSession';
 import { RoomUserData } from '../../../../../client/nitro/session/RoomUserData';
 import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-//import { AvatarInfoWidget } from '../widget/avatarinfo/AvatarInfoWidget';
 import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
-import { RoomAvatarInfoComponent } from '../avatarinfo/component';
+import { RoomAvatarInfoComponent } from '../avatarinfo/components/main/main.component';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
 import { RoomWidgetAvatarExpressionMessage } from '../messages/RoomWidgetAvatarExpressionMessage';
@@ -39,12 +38,15 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
         this._widget    = null;
 
         this._disposed  = false;
+
+        this.onUserNameUpdateEvent  = this.onUserNameUpdateEvent.bind(this);
+        this.onNitroToolbarEvent    = this.onNitroToolbarEvent.bind(this);
     }
 
     public dispose(): void
     {
         if(this.disposed) return;
-        
+
         this.container  = null;
 
         this._widget    = null;
@@ -57,7 +59,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
     {
-        if(!message) return;
+        if(!message) return null;
 
         let userId = 0;
 
@@ -67,6 +69,9 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
         {
             case RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO:
                 this.getOwnCharacterInfo();
+                break;
+            case RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE:
+                this._widget.handlePetInfo = false;
                 break;
             case RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE: {
                 const danceMessage = (message as RoomWidgetDanceMessage);
@@ -193,7 +198,8 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
             RoomWidgetRoomObjectMessage.GET_OWN_CHARACTER_INFO,
             RoomWidgetDanceMessage.RWCM_MESSAGE_DANCE,
             RoomWidgetAvatarExpressionMessage.RWCM_MESSAGE_AVATAR_EXPRESSION,
-            RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE
+            RoomWidgetChangePostureMessage.RWCPM_MESSAGE_CHANGE_POSTURE,
+            RoomWidgetUserActionMessage.RWUAM_REQUEST_PET_UPDATE
         ];
     }
 
@@ -216,8 +222,8 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
         {
             if(this._container.sessionDataManager && this._container.sessionDataManager.events)
             {
-                this._container.sessionDataManager.events.removeEventListener(UserNameUpdateEvent.UNUE_NAME_UPDATED, this.onUserNameUpdateEvent.bind(this));
-                this._container.roomEngine.events.removeEventListener(NitroToolbarEvent.SELECT_OWN_AVATAR, this.onNitroToolbarEvent.bind(this));
+                this._container.sessionDataManager.events.removeEventListener(UserNameUpdateEvent.UNUE_NAME_UPDATED, this.onUserNameUpdateEvent);
+                this._container.roomEngine.events.removeEventListener(NitroToolbarEvent.SELECT_OWN_AVATAR, this.onNitroToolbarEvent);
             }
         }
 
@@ -227,8 +233,8 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
         if(this._container.sessionDataManager && this._container.sessionDataManager.events)
         {
-            this._container.sessionDataManager.events.addEventListener(UserNameUpdateEvent.UNUE_NAME_UPDATED, this.onUserNameUpdateEvent.bind(this));
-            this._container.roomEngine.events.addEventListener(NitroToolbarEvent.SELECT_OWN_AVATAR, this.onNitroToolbarEvent.bind(this));
+            this._container.sessionDataManager.events.addEventListener(UserNameUpdateEvent.UNUE_NAME_UPDATED, this.onUserNameUpdateEvent);
+            this._container.roomEngine.events.addEventListener(NitroToolbarEvent.SELECT_OWN_AVATAR, this.onNitroToolbarEvent);
         }
     }
 

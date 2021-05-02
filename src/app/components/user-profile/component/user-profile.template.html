@@ -1,0 +1,277 @@
+<div *ngIf="visible" [bringToTop] [draggable] class="card nitro-user-profile-component">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3 header-draggable">
+        <h6 class="mb-0">{{ ('extendedprofile.caption') | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex flex-column p-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="d-flex flex-row">
+                    <div class="bg-emperor w-100 mb-1 font-bold text-center"
+                        [ngClass]="[(!isMe && !isFriend) ? 'rounded-left' : 'rounded']">{{ userProfile.username }}</div>
+                    <button *ngIf="!isMe && !isFriend" class="btn btn-sm btn-success rounded-right mb-1 px-2 py-0"><i
+                            class="fas fa-user-plus"></i></button>
+                </div>
+                <div class="row mx-0">
+                    <div class="profile-avatar-container col-3 px-0 mx-0">
+                        <div class="avatar-img  bg-emperor rounded-left" nitro-avatar-image
+                            [figure]="userProfile.figure" [direction]="2"></div>
+                    </div>
+                    <div class="col-9 px-0 mx-0 bg-emperor profile-user-right p-2">
+                        <div class="profile-user-motto font-italic small">{{ userProfile.motto }}</div>
+                        <div class="mt-auto small">
+                            <div class="p-1 bg-primary rounded mb-1"
+                                [innerHTML]="('extendedprofile.created') | translate:'created':userProfile.registration">
+                            </div>
+                            <div class="p-1 bg-primary rounded mb-1"
+                                [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(userProfile.lastVisit)">
+                            </div>
+                            <div class="p-1 bg-primary rounded">
+                                {{ ('extendedprofile.achievementscore') | translate }} {{userProfile.achievementPoints}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 d-flex flex-column">
+                <div class="d-flex flex-row small">
+                    <div class="rounded-top p-1 mr-1" [ngClass]="[(tabId == 0) ? 'bg-emperor' : 'bg-secondary']"
+                        (click)="selectTab(0)">
+                        {{ 'inventory.badges.inactivebadges' | translate}}
+                    </div>
+                    <div class="rounded-top bg-secondary p-1 mr-1"
+                        [ngClass]="[(tabId == 1) ? 'bg-emperor' : 'bg-secondary']" (click)="selectTab(1)">
+                        {{ 'avatar.profile.groups' | translate }} {{ userProfile.groups.length }}
+                    </div>
+                    <div class="rounded-top bg-secondary p-1 mr-1"
+                        [ngClass]="[(tabId == 2) ? 'bg-emperor' : 'bg-secondary']" (click)="selectTab(2)">
+                        {{ 'friendlist.friends' | translate}}: {{ userProfile.friendsCount }}
+                    </div>
+                </div>
+                <div class="bg-emperor profile-info-bg p-1">
+                    <div *ngIf="tabId == 0" class="d-flex flex-row">
+                        <div *ngFor="let badge of userBadges" class="bg-primary p-1 rounded user-profile-badge">
+                            <nitro-badge [badge]="badge" class="h-100 d-flex justify-content-center"></nitro-badge>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="tabId == 1">
+                        <perfect-scrollbar class="d-flex flex-column w-100"
+                            style="min-height: 160px;height:160px;max-height: 160px;">
+                            <div class="bg-primary w-100 rounded mb-1">
+                                <div *ngFor="let group of userProfile.groups" class="item-detail"
+                                    [ngClass]="{'active': selectedGroup && selectedGroup.id === group.id}"
+                                    (click)="selectGroup(group.id)">
+                                    <nitro-badge [badge]="group.badge" [isGroup]="true"></nitro-badge>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </ng-container>
+                    <ng-container *ngIf="tabId == 2">
+                        <div class="font-weight-bold small">{{ ('extendedprofile.relstatus') | translate }}</div>
+                        <div class="profile-relationship"
+                            (click)="openRelationshipProfile(currentRandomHeartRelationship)">
+                            <div class="icon-container mr-1">
+                                <i class="fas fa-heart text-pink"></i>
+                            </div>
+                            <div class="profile-relationship-information bg-primary rounded w-100 mb-1 p-1">
+                                <div *ngIf="currentRandomHeartRelationship" class="relationship-avatar"
+                                    nitro-avatar-image [headOnly]="true"
+                                    [figure]="currentRandomHeartRelationship.figure" [direction]="4"></div>
+                                <div class="profile-relationship-name">
+                                    {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.username :
+                                    (('extendedprofile.no.friends.in.this.category') | translate) }}
+                                </div>
+                                <div class="profile-relationship-extra">
+                                    {{ heartRelationships.length > 1 ? (('extendedprofile.relstatus.others.heart') |
+                                    translate:'count':(heartRelationships.length - 1)) : '' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-relationship"
+                            (click)="openRelationshipProfile(currentRandomSmileRelationship)">
+                            <div class="icon-container mr-1">
+                                <i class="fas fa-smile text-warning"></i>
+                            </div>
+                            <div class="profile-relationship-information bg-primary rounded w-100 mb-1 p-1">
+                                <div *ngIf="currentRandomSmileRelationship" class="relationship-avatar"
+                                    nitro-avatar-image [headOnly]="true"
+                                    [figure]="currentRandomSmileRelationship.figure" [direction]="4"></div>
+                                <div class="profile-relationship-name">
+                                    {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.username :
+                                    (('extendedprofile.no.friends.in.this.category') | translate) }}
+                                </div>
+                                <div class="profile-relationship-extra">
+                                    {{ smileRelationships.length > 1 ? (('extendedprofile.relstatus.others.smile') |
+                                    translate:'count':(smileRelationships.length - 1)) : '' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-relationship"
+                            (click)="openRelationshipProfile(currentRandomBobbaRelationship)">
+                            <div class="icon-container mr-1">
+                                <i class="fas fa-skull text-black"></i>
+                            </div>
+                            <div class="profile-relationship-information bg-primary rounded w-100 p-1">
+                                <div *ngIf="currentRandomBobbaRelationship" class="relationship-avatar"
+                                    nitro-avatar-image [headOnly]="true"
+                                    [figure]="currentRandomBobbaRelationship.figure" [direction]="4"></div>
+                                <div class="profile-relationship-name">
+                                    {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.username :
+                                    (('extendedprofile.no.friends.in.this.category') | translate) }}
+                                </div>
+                                <div class="profile-relationship-extra">
+                                    {{ bobbaRelationships.length > 1 ? (('extendedprofile.relstatus.others.bobba') |
+                                    translate:'count':(bobbaRelationships.length - 1)) : '' }}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-none">
+        <div class="row">
+            <div class="col-6">
+                <div class="profile-upper-container">
+                    <div class="profile-avatar-container">
+                        <div class="avatar-img" nitro-avatar-image [figure]="userProfile.figure" [direction]="2"></div>
+                    </div>
+                    <div class="profile-info-container">
+                        <div class="font-weight-bold">{{ userProfile.username }}</div>
+                        <div class="profile-info-motto font-italic">{{ userProfile.motto }}</div>
+                        <div [innerHTML]="('extendedprofile.created') | translate:'created':userProfile.registration">
+                        </div>
+                        <div
+                            [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(userProfile.lastVisit | timeAgo)">
+                        </div>
+                        <div
+                            [innerHTML]="(('extendedprofile.activitypoints') | translate:'activitypoints':userProfile.achievementPoints)">
+                        </div>
+                        <div>
+                            <div style="float: left">
+                                <i class="icon" [ngClass]="userProfile.isOnline ? 'icon-online' : 'icon-offline'"></i>
+                            </div>
+                            <div *ngIf="isMe" class="its-me">
+                                <i class="icon icon-check"></i> {{ ('extendedprofile.me') | translate }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="badges-container">
+                </div>
+            </div>
+            <div class="col-6">
+                <div [innerHTML]="(('extendedprofile.friends.count') | translate:'count':userProfile.friendsCount)">
+                </div>
+                <div class="font-weight-bold">{{ ('extendedprofile.relstatus') | translate }}</div>
+                <div class="profile-relationship" (click)="openRelationshipProfile(currentRandomHeartRelationship)">
+                    <div class="icon-container">
+                        <i class="icon icon-relationship-heart"></i>
+                    </div>
+                    <div class="profile-relationship-information">
+                        <div *ngIf="currentRandomHeartRelationship" class="relationship-avatar" nitro-avatar-image
+                            [headOnly]="true" [figure]="currentRandomHeartRelationship.figure" [direction]="4"></div>
+                        <div class="profile-relationship-name">
+                            {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.username :
+                            (('extendedprofile.no.friends.in.this.category') | translate) }}
+                        </div>
+                        <div class="profile-relationship-extra">
+                            {{ heartRelationships.length > 1 ? (('extendedprofile.relstatus.others.heart') |
+                            translate:'count':(heartRelationships.length - 1)) : '' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-relationship" (click)="openRelationshipProfile(currentRandomSmileRelationship)">
+                    <div class="icon-container">
+                        <i class="icon icon-relationship-smile"></i>
+                    </div>
+                    <div class="profile-relationship-information">
+                        <div *ngIf="currentRandomSmileRelationship" class="relationship-avatar" nitro-avatar-image
+                            [headOnly]="true" [figure]="currentRandomSmileRelationship.figure" [direction]="4"></div>
+                        <div class="profile-relationship-name">
+                            {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.username :
+                            (('extendedprofile.no.friends.in.this.category') | translate) }}
+                        </div>
+                        <div class="profile-relationship-extra">
+                            {{ smileRelationships.length > 1 ? (('extendedprofile.relstatus.others.smile') |
+                            translate:'count':(smileRelationships.length - 1)) : '' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-relationship" (click)="openRelationshipProfile(currentRandomBobbaRelationship)">
+                    <div class="icon-container">
+                        <i class="icon icon-relationship-bobba"></i>
+                    </div>
+                    <div class="profile-relationship-information">
+                        <div *ngIf="currentRandomBobbaRelationship" class="relationship-avatar" nitro-avatar-image
+                            [headOnly]="true" [figure]="currentRandomBobbaRelationship.figure" [direction]="4"></div>
+                        <div class="profile-relationship-name">
+                            {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.username :
+                            (('extendedprofile.no.friends.in.this.category') | translate) }}
+                        </div>
+                        <div class="profile-relationship-extra">
+                            {{ bobbaRelationships.length > 1 ? (('extendedprofile.relstatus.others.bobba') |
+                            translate:'count':(bobbaRelationships.length - 1)) : '' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-3">
+                <div [innerHTML]="('extendedprofile.groups.count') | translate:'count':userProfile.groups.length"></div>
+                <perfect-scrollbar class="grid-container position-relative w-100"
+                    style="min-height: 160px;max-height: 160px;">
+                    <div class="grid-items grid-1">
+                        <div *ngFor="let group of userProfile.groups" class="item-detail"
+                            [ngClass]="{'active': selectedGroup && selectedGroup.id === group.id}"
+                            (click)="selectGroup(group.id)">
+                            <nitro-badge [badge]="group.badge" [isGroup]="true"></nitro-badge>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+            <div class="col-9">
+                <div *ngIf="selectedGroup">
+                    <div class="group-detail">
+                        <div class="left-side">
+                            <div class="group-title font-weight-bold">
+                                <i class="icon" [ngClass]="'icon-group-type-' + selectedGroup.type"></i> {{
+                                selectedGroup.title }}
+                            </div>
+                            <div class="group-created-at">{{ ('group.created') |
+                                translate:null:null:['date','owner']:[selectedGroup.createdAt, selectedGroup.ownerName]
+                                }}</div>
+                            <div class="group-description">{{ selectedGroup.description }}</div>
+                        </div>
+                        <div class="right-side">
+                            <div class="group-badge">
+                                <nitro-badge [badge]="selectedGroup.badge" [isGroup]="true"></nitro-badge>
+                            </div>
+                            <div class="group-members"><i class="icon icon-group-members"></i> {{
+                                selectedGroup.membersCount }}</div>
+                        </div>
+                    </div>
+                    <div class="group-membership-action">
+                        <div *ngIf="selectedGroup.membershipType !== 1">
+                            <button *ngIf="selectedGroup.type === 0" class="btn btn-primary btn-block">{{ ('group.join')
+                                | translate }}</button>
+                            <div *ngIf="selectedGroup.type === 1">
+                                <button *ngIf="selectedGroup.membershipType === 0" class="btn btn-primary btn-block">{{
+                                    ('group.requestmembership') | translate }}</button>
+                                <button *ngIf="selectedGroup.membershipType === 2"
+                                    class="btn btn-primary disabled btn-block">{{ ('group.membershippending') |
+                                    translate }}</button>
+                            </div>
+                        </div>
+                        <button *ngIf="selectedGroup.membershipType === 1" class="btn btn-danger btn-block">{{
+                            ('group.leave') | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

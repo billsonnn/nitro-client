@@ -10,7 +10,7 @@ export class StringDataType extends ObjectDataBase
     public static FORMAT_KEY = ObjectDataKey.STRING_KEY;
 
     private static STATE: number = 0;
-    
+
     private _data: string[];
 
     constructor()
@@ -81,5 +81,10 @@ export class StringDataType extends ObjectDataBase
     public getValue(index: number): string
     {
         return this._data[index] || '';
+    }
+
+    public setValue(data: string[]): void
+    {
+        this._data = data;
     }
 }

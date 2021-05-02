@@ -9,7 +9,7 @@ export class RoomWidgetFloodControlEvent extends RoomWidgetUpdateEvent
     constructor(k: number)
     {
         super(RoomWidgetFloodControlEvent.RWFCE_FLOOD_CONTROL);
-        
+
         this._seconds = k;
     }
 

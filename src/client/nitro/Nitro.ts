@@ -3,6 +3,7 @@ import { ConfigurationEvent } from '../core/configuration/ConfigurationEvent';
 import { EventDispatcher } from '../core/events/EventDispatcher';
 import { IEventDispatcher } from '../core/events/IEventDispatcher';
 import { ILinkEventTracker } from '../core/events/ILinkEventTracker';
+import { IWorkerEventTracker } from '../core/events/IWorkerEventTracker';
 import { NitroEvent } from '../core/events/NitroEvent';
 import { INitroCore } from '../core/INitroCore';
 import { NitroCore } from '../core/NitroCore';
@@ -29,18 +30,20 @@ import { HabboWebTools } from './utils/HabboWebTools';
 
 LegacyExternalInterface.available;
 
+settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
 export class Nitro extends Application implements INitro
 {
     public static WEBGL_CONTEXT_LOST: string    = 'NE_WEBGL_CONTEXT_LOST';
     public static WEBGL_UNAVAILABLE: string     = 'NE_WEBGL_UNAVAILABLE';
-    public static RELEASE_VERSION: string       = 'NITRO-0-4-0';
+    public static RELEASE_VERSION: string       = 'NITRO-1-0-0-STABLE';
     public static READY: string                 = 'NE_READY';
 
     private static INSTANCE: INitro         = null;
 
     private _nitroTimer: NitroTimer;
+    private _worker: Worker;
     private _core: INitroCore;
     private _events: IEventDispatcher;
     private _localization: INitroLocalizationManager;
@@ -51,6 +54,7 @@ export class Nitro extends Application implements INitro
     private _roomSessionManager: IRoomSessionManager;
     private _roomManager: IRoomManager;
     private _linkTrackers: ILinkEventTracker[];
+    private _workerTrackers: IWorkerEventTracker[];
 
     private _isReady: boolean;
     private _isDisposed: boolean;
@@ -79,6 +83,7 @@ export class Nitro extends Application implements INitro
         if(!Nitro.INSTANCE) Nitro.INSTANCE = this;
 
         this._nitroTimer                = new NitroTimer();
+        this._worker                    = new Worker('../nitro-worker.worker', { type: 'module' });
         this._core                      = core;
         this._events                    = new EventDispatcher();
         this._localization              = new NitroLocalizationManager();
@@ -89,12 +94,15 @@ export class Nitro extends Application implements INitro
         this._roomSessionManager        = new RoomSessionManager(this._communication, this._roomEngine);
         this._roomManager               = new RoomManager(this._roomEngine, this._roomEngine.visualizationFactory, this._roomEngine.logicFactory);
         this._linkTrackers              = [];
+        this._workerTrackers            = [];
 
         this._isReady       = false;
         this._isDisposed    = false;
 
         this._core.configuration.events.addEventListener(ConfigurationEvent.LOADED, this.onConfigurationLoadedEvent.bind(this));
         this._roomEngine.events.addEventListener(RoomEngineEvent.ENGINE_INITIALIZED, this.onRoomEngineReady.bind(this));
+
+        this._worker.onmessage = this.createWorkerEvent.bind(this);
     }
 
     public static bootstrap(): void
@@ -110,15 +118,13 @@ export class Nitro extends Application implements INitro
 
         canvas.id           = 'client-wrapper';
         canvas.className    = 'client-canvas';
-        
+
         const instance = new this(new NitroCore(), {
             transparent: true,
             autoDensity: true,
-            resizeTo: window,
             resolution: window.devicePixelRatio,
             width: window.innerWidth,
             height: window.innerHeight,
-            powerPreference: 'high-performance',
             view: canvas
         });
 
@@ -142,11 +148,10 @@ export class Nitro extends Application implements INitro
             this._roomEngine.roomSessionManager = this._roomSessionManager;
             this._roomEngine.roomManager        = this._roomManager;
 
-            this._roomEngine.init();
-
             if(this._sessionDataManager) this._sessionDataManager.init();
-            if(this._roomManager) this._roomManager.init();
             if(this._roomSessionManager) this._roomSessionManager.init();
+
+            this._roomEngine.init();
         }
 
         new GameMessageHandler(this._communication.connection);
@@ -169,7 +174,7 @@ export class Nitro extends Application implements INitro
 
             this._roomManager = null;
         }
-        
+
         if(this._roomSessionManager)
         {
             this._roomSessionManager.dispose();
@@ -187,7 +192,7 @@ export class Nitro extends Application implements INitro
         if(this._roomEngine)
         {
             this._roomEngine.dispose();
-            
+
             this._roomEngine = null;
         }
 
@@ -197,7 +202,7 @@ export class Nitro extends Application implements INitro
 
             this._avatar = null;
         }
-        
+
         if(this._communication)
         {
             this._communication.dispose();
@@ -237,6 +242,48 @@ export class Nitro extends Application implements INitro
     public getLocalizationWithParameter(key: string, parameter: string, replacement: string): string
     {
         return this._localization.getValueWithParameter(key, parameter, replacement);
+    }
+
+    public getLocalizationWithParameters(key: string, parameters: string[], replacements: string[]): string
+    {
+        return this._localization.getValueWithParameters(key, parameters, replacements);
+    }
+
+    public addWorkerEventTracker(tracker: IWorkerEventTracker): void
+    {
+        if(this._workerTrackers.indexOf(tracker) >= 0) return;
+
+        this._workerTrackers.push(tracker);
+    }
+
+    public removeWorkerEventTracker(tracker: IWorkerEventTracker): void
+    {
+        const index = this._workerTrackers.indexOf(tracker);
+
+        if(index === -1) return;
+
+        this._workerTrackers.splice(index, 1);
+    }
+
+    public createWorkerEvent(message: MessageEvent): void
+    {
+        if(!message) return;
+
+        const data: { [index: string]: any } = message.data;
+
+        for(const tracker of this._workerTrackers)
+        {
+            if(!tracker) continue;
+
+            tracker.workerMessageReceived(data);
+        }
+    }
+
+    public sendWorkerEvent(message: { [index: string]: any }): void
+    {
+        if(!message || !this._worker) return;
+
+        this._worker.postMessage(message);
     }
 
     public addLinkEventTracker(tracker: ILinkEventTracker): void

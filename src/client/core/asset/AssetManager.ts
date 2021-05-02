@@ -3,11 +3,15 @@ import { GraphicAssetCollection } from '../../room/object/visualization/utils/Gr
 import { IGraphicAsset } from '../../room/object/visualization/utils/IGraphicAsset';
 import { IGraphicAssetCollection } from '../../room/object/visualization/utils/IGraphicAssetCollection';
 import { Disposable } from '../common/disposable/Disposable';
+import { INitroLogger } from '../common/logger/INitroLogger';
+import { NitroLogger } from '../common/logger/NitroLogger';
 import { IAssetManager } from './IAssetManager';
 import { IAssetData } from './interfaces';
+import { NitroBundle } from './NitroBundle';
 
 export class AssetManager extends Disposable implements IAssetManager
 {
+    private _logger: INitroLogger;
     private _textures: Map<string, Texture>;
     private _collections: Map<string, GraphicAssetCollection>;
     private _pendingUrls: Map<string, Function[]>;
@@ -16,9 +20,10 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         super();
 
-        this._textures          = new Map();
-        this._collections       = new Map();
-        this._pendingUrls       = new Map();
+        this._logger        = new NitroLogger(this.constructor.name);
+        this._textures      = new Map();
+        this._collections   = new Map();
+        this._pendingUrls   = new Map();
     }
 
     public static removeFileExtension(name: string): string
@@ -30,7 +35,7 @@ export class AssetManager extends Disposable implements IAssetManager
     {
         if(!name) return null;
 
-        const existing = this._textures.get(AssetManager.removeFileExtension(name));
+        const existing = this._textures.get(name);
 
         if(!existing) return null;
 
@@ -40,8 +45,6 @@ export class AssetManager extends Disposable implements IAssetManager
     public setTexture(name: string, texture: Texture): void
     {
         if(!name || !texture) return;
-
-        name = AssetManager.removeFileExtension(name);
 
         this._textures.set(name, texture);
     }
@@ -104,15 +107,25 @@ export class AssetManager extends Disposable implements IAssetManager
         }
 
         const totalToDownload = assetUrls.length;
+
         let totalDownloaded = 0;
 
-        const onDownloaded = (loader: Loader, flag: boolean) =>
+        const onDownloaded = (loader: Loader, resource: LoaderResource, flag: boolean) =>
         {
-            totalDownloaded++;
-
             if(loader) loader.destroy();
 
-            if(totalDownloaded === totalToDownload) cb(flag);
+            if(!flag)
+            {
+                this._logger.error('Failed to download asset: ' + resource.url);
+
+                cb(false);
+
+                return;
+            }
+
+            totalDownloaded++;
+
+            if(totalDownloaded === totalToDownload) cb(true);
         };
 
         for(const url of assetUrls)
@@ -122,7 +135,8 @@ export class AssetManager extends Disposable implements IAssetManager
             const loader = new Loader();
 
             const options: ILoaderOptions = {
-                crossOrigin: false
+                crossOrigin: false,
+                xhrType: url.endsWith('.nitro') ? 'arraybuffer' : 'json'
             };
 
             loader
@@ -133,31 +147,40 @@ export class AssetManager extends Disposable implements IAssetManager
 
         return true;
     }
-    
+
     private assetLoader(loader: Loader, resource: LoaderResource, next: Function, onDownloaded: Function): void
     {
         if(!resource || resource.error)
         {
             if(resource && resource.texture) resource.texture.destroy(true);
-            
-            onDownloaded(loader, false);
+
+            onDownloaded(loader, resource, false);
 
             return;
         }
 
-        if(resource.type === LoaderResource.TYPE.JSON)
+        if(resource.extension === 'nitro')
         {
-            const assetData = (resource.data as IAssetData);
+            const nitroBundle   = new NitroBundle(resource.data);
+            const assetData     = (nitroBundle.jsonFile as IAssetData);
 
-            if(!assetData.type) return;
-            
+            if(!assetData || !assetData.type)
+            {
+                onDownloaded(loader, resource, false);
+
+                return;
+            }
+
             if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
             {
-                const imageUrl = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + assetData.spritesheet.meta.image);
+                const baseTexture = nitroBundle.baseTexture;
 
-                if(!imageUrl) return;
+                if(!baseTexture)
+                {
+                    onDownloaded(loader, resource, false);
 
-                const baseTexture = BaseTexture.from(imageUrl);
+                    return;
+                }
 
                 if(baseTexture.valid)
                 {
@@ -167,7 +190,7 @@ export class AssetManager extends Disposable implements IAssetManager
                     {
                         this.createCollection(assetData, spritesheet);
 
-                        onDownloaded(loader, true);
+                        onDownloaded(loader, resource, true);
                     });
                 }
                 else
@@ -182,7 +205,7 @@ export class AssetManager extends Disposable implements IAssetManager
                         {
                             this.createCollection(assetData, spritesheet);
 
-                            onDownloaded(loader, true);
+                            onDownloaded(loader, resource, true);
                         });
                     });
 
@@ -190,34 +213,99 @@ export class AssetManager extends Disposable implements IAssetManager
                     {
                         baseTexture.removeAllListeners();
 
-                        onDownloaded(loader, false);
+                        onDownloaded(loader, resource, false);
                     });
                 }
 
                 return;
             }
-                
+
             this.createCollection(assetData, null);
 
-            onDownloaded(loader, true);
+            onDownloaded(loader, resource, true);
+        }
+
+        else if(resource.type === LoaderResource.TYPE.JSON)
+        {
+            const assetData = (resource.data as IAssetData);
+
+            if(!assetData || !assetData.type)
+            {
+                onDownloaded(loader, resource, false);
+
+                return;
+            }
+
+            if(assetData.spritesheet && Object.keys(assetData.spritesheet).length)
+            {
+                const imageName = (assetData.spritesheet.meta && assetData.spritesheet.meta.image);
+
+                if(!imageName || !imageName.length)
+                {
+                    onDownloaded(loader, resource, false);
+
+                    return;
+                }
+
+                const imageUrl      = (resource.url.substring(0, (resource.url.lastIndexOf('/') + 1)) + imageName);
+                const baseTexture   = BaseTexture.from(imageUrl);
+
+                if(baseTexture.valid)
+                {
+                    const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                    spritesheet.parse(textures =>
+                    {
+                        this.createCollection(assetData, spritesheet);
+
+                        onDownloaded(loader, resource, true);
+                    });
+                }
+                else
+                {
+                    baseTexture.once('loaded', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        const spritesheet = new Spritesheet(baseTexture, assetData.spritesheet);
+
+                        spritesheet.parse(textures =>
+                        {
+                            this.createCollection(assetData, spritesheet);
+
+                            onDownloaded(loader, resource, true);
+                        });
+                    });
+
+                    baseTexture.once('error', () =>
+                    {
+                        baseTexture.removeAllListeners();
+
+                        onDownloaded(loader, resource, false);
+                    });
+                }
+
+                return;
+            }
+
+            this.createCollection(assetData, null);
+
+            onDownloaded(loader, resource, true);
 
             return;
         }
 
         if(resource.type === LoaderResource.TYPE.IMAGE)
         {
-            const split = resource.name.split('/');
-            const name  = split[(split.length - 1)];
-
             if(resource.texture.valid)
             {
-                this.setTexture(name, resource.texture);
+                this.setTexture(resource.name, resource.texture);
 
-                onDownloaded(loader, true);
+                onDownloaded(loader, resource, true);
             }
             else
             {
-                onDownloaded(loader, false);
+                onDownloaded(loader, resource, false);
             }
 
             return;

@@ -12,13 +12,13 @@ export class NewFriendRequestParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._request = new FriendRequestData(wrapper);
-        
+
         return true;
     }
 

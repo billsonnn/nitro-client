@@ -1,0 +1,69 @@
+<div [bringToTop] [draggable] class="nitro-catalog-customize-gift-component card" [center]="true">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ 'catalog.gift_wrapping.title' | translate }}</h6>
+        <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="d-flex flex-column p-3">
+        <input type="text" class="form-control form-control-sm"  [(ngModel)]="receiverName" placeholder="{{ 'catalog.gift_wrapping.receiver' | translate }}" />
+        <div class="d-flex mt-2">
+            <div nitro-avatar-image *ngIf="showFace" [headOnly]="true" [direction]="2" [figure]="habboFace"></div>
+            <div *ngIf="!showFace" class="ingognito"></div>
+            <div class="d-flex flex-grow-1">
+              <textarea [(ngModel)]="message" class="form-control w-200"></textarea>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center mt-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="showFace" (change)="changeCheckbox($event)">
+                <label class="form-check-label">{{ ('catalog.gift_wrapping.show_face.title') | translate }}</label>
+              </div>
+        </div>
+        <div class="d-flex justify-content-center mt-2">
+            <div nitro-furniture-image class="d-flex justify-content-center align-items-center bg-secondary rounded" style="width:100px;height:100px;" [type]="'s'" [spriteId]="boxSpriteId" [extras]="extras"></div>
+            <div class="d-flex flex-column flex-grow-1 ml-2">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-secondary" (click)="handleButton('previous_box')"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-secondary" (click)="handleButton('next_box')"><i class="fas fa-chevron-right"></i></button>
+                    <div class="d-flex flex-column ml-2">
+                        <span>{{ boxText }}</span>
+                        <span *ngIf="priceText && (priceText.length > 0)">{{ priceText }}</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-secondary" [disabled]="isDefaultBox" (click)="handleButton('previous_ribbon')"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-secondary" [disabled]="isDefaultBox" (click)="handleButton('next_ribbon')"><i class="fas fa-chevron-right"></i></button>
+                    <div class="d-flex flex-column ml-2">
+                        <span [ngClass]="{'is-unavailable': isDefaultBox}">{{ ribbonText }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column mt-2">
+            <span>{{ ('catalog.gift_wrapping.pick_color') | translate }}</span>
+            <div class="btn-group w-100">
+                <button *ngFor="let item of colors" class="btn btn-sm btn-primary" [disabled]="!hasColors" (click)="selectTypeId(item)" [ngStyle]="{'backgroundColor': getColor(item), 'height': '40px'}"></button>
+            </div>
+        </div>
+        <div class="d-flex mt-2">
+            <div class="btn-group w-100">
+                <button type="button" class="btn btn-secondary" (click)="hide()">{{ ('catalog.purchase_confirmation.cancel') | translate }}</button>
+                <button type="button" class="btn btn-success" (click)="handleButton('give_gift')">{{ 'catalog.gift_wrapping.give_gift' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="showUsernameErrorDialog" [bringToTop] [draggable] class="nitro-catalog-customize-gift-component card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ 'catalog.gift_wrapping.receiver_not_found.title' | translate }}</h6>
+        <button type="button" class="close" (click)="hideUsernameDialog()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="row p-3">
+        <p>{{ 'catalog.gift_wrapping.receiver_not_found.info' | translate }}</p>
+    </div>
+
+    <div class="row align-items-end pt-0 px-3 pb-3">
+        <div class="col btn-group">
+            <button type="button" class="btn btn-primary" (click)="hideUsernameDialog()">{{ ('generic.ok') | translate }}</button>
+        </div>
+    </div>
+</div>

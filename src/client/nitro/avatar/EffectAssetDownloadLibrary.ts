@@ -1,4 +1,5 @@
 import { IAssetManager } from '../../core/asset/IAssetManager';
+import { IAssetAnimation } from '../../core/asset/interfaces';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { AvatarRenderEffectLibraryEvent } from './events/AvatarRenderEffectLibraryEvent';
 
@@ -12,12 +13,12 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
 
     private _state: number;
     private _libraryName: string;
-    private _revision: number;
+    private _revision: string;
     private _downloadUrl: string;
     private _assets: IAssetManager;
-    private _animation: any;
+    private _animation: { [index: string]: IAssetAnimation };
 
-    constructor(id: string, revision: number, assets: IAssetManager, assetUrl: string)
+    constructor(id: string, revision: string, assets: IAssetManager, assetUrl: string)
     {
         super();
 
@@ -29,7 +30,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
         this._animation     = null;
 
         this._downloadUrl = this._downloadUrl.replace(/%libname%/gi, this._libraryName);
-        //this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision.toString());
+        this._downloadUrl = this._downloadUrl.replace(/%revision%/gi, this._revision);
 
         const asset = this._assets.getCollection(this._libraryName);
 
@@ -61,11 +62,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
 
                 const collection = this._assets.getCollection(this._libraryName);
 
-                if(collection)
-                {
-                    //@ts-ignore
-                    this._animation = collection.data.animations;
-                }
+                if(collection) this._animation = collection.data.animations;
 
                 this.dispatchEvent(new AvatarRenderEffectLibraryEvent(AvatarRenderEffectLibraryEvent.DOWNLOAD_COMPLETE, this));
             }
@@ -77,7 +74,7 @@ export class EffectAssetDownloadLibrary extends EventDispatcher
         return this._libraryName;
     }
 
-    public get animation(): any
+    public get animation(): { [index: string]: IAssetAnimation }
     {
         return this._animation;
     }

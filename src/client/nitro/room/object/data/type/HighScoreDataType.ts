@@ -9,7 +9,7 @@ import { HighScoreData } from './HighScoreData';
 export class HighScoreDataType extends ObjectDataBase implements IObjectData
 {
     public static FORMAT_KEY = ObjectDataKey.HIGHSCORE_KEY;
-    
+
     private _state: string;
     private _scoreType: number;
     private _clearType: number;
@@ -117,5 +117,15 @@ export class HighScoreDataType extends ObjectDataBase implements IObjectData
     public get entries(): HighScoreData[]
     {
         return this._entries;
+    }
+
+    public get clearType(): number
+    {
+        return this._clearType;
+    }
+
+    public get scoreType(): number
+    {
+        return this._scoreType;
     }
 }

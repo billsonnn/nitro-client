@@ -4,20 +4,20 @@ import { IMessageParser } from '../../../../../core/communication/messages/IMess
 export class FindFriendsProcessResultParser implements IMessageParser
 {
     private _success: boolean;
-    
+
     public flush(): boolean
     {
         this._success = false;
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
         this._success = wrapper.readBoolean();
-        
+
         return true;
     }
 

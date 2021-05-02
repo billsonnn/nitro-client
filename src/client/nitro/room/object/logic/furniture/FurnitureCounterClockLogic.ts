@@ -19,7 +19,7 @@ export class FurnitureCounterClockLogic extends FurnitureLogic
         if(!event|| !geometry || !this.object) return;
 
         let objectEvent: RoomObjectEvent = null;
-        
+
         switch(event.type)
         {
             case MouseEventType.DOUBLE_CLICK:

@@ -13,13 +13,15 @@ export class RoomInfoStandUserComponent extends RoomInfoStandBaseComponent
 {
     public userData: InfoStandUserData = null;
 
+    public carryText: string = '';
+
     public update(event: RoomWidgetUpdateInfostandUserEvent): void
     {
         if(!event) return;
 
         if(event.carryId > 0)
         {
-            Nitro.instance.localization.registerParameter('infostand.text.handitem', 'item', Nitro.instance.getLocalization('handitem' + event.carryId));
+            this.carryText = Nitro.instance.getLocalizationWithParameter('infostand.text.handitem', 'item', Nitro.instance.getLocalization('handitem' + event.carryId));
         }
     }
 
@@ -42,8 +44,13 @@ export class RoomInfoStandUserComponent extends RoomInfoStandBaseComponent
         const target = (event.target as HTMLInputElement);
 
         target.blur();
-        
+
         this.widget.messageListener.processWidgetMessage(new RoomWidgetChangeMottoMessage(this.userData.motto));
+    }
+
+    public visitProfile(): void
+    {
+        Nitro.instance.createLinkEvent('profile/goto/' + this.userData.id);
     }
 
     public get isOwnProfile(): boolean

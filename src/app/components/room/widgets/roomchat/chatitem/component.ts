@@ -4,16 +4,17 @@ import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEven
 
 @Component({
     template: `
-    <div #chatContainer class="nitro-room-chat-item-component chat-style-{{ chatStyle }} chat-type-{{ chatType }}" (click)="selectUser()">
-        <div class="chat-left" [ngStyle]="{ 'background-color': senderColorString }">
+    <div class="bubble-container" #chatContainer>
+        <div *ngIf="chatStyle === 0" class="user-container-bg" [ngStyle]="{'background-color': senderColorString}"></div>
+        <div class="chat-bubble bubble-{{ chatStyle }} type-{{ chatType }}" (click)="selectUser()">
             <div class="user-container">
                 <div *ngIf="senderImageUrl" class="user-image" [ngStyle]="(petType >= 0) ? { 'background-image': 'url(' + senderImageUrl + ')', 'transform': 'scale(1)', 'top': '-53px' } : { 'background-image': 'url(' + senderImageUrl + ')' }"></div>
             </div>
+            <div class="chat-content">
+                <b class="username mr-1" [innerHTML]="decoratedUsername"></b><span class="message" [innerHTML]="message | roomChatFormatter"></span>
+            </div>
+            <div class="pointer"></div>
         </div>
-        <div class="chat-right">
-            <b [innerHTML]="decoratedUsername"></b> {{ message }}
-        </div>
-        <div class="chat-pointer"></div>
     </div>`
 })
 export class RoomChatItemComponent
@@ -63,6 +64,8 @@ export class RoomChatItemComponent
     public ready(): void
     {
         this.makeVisible();
+
+        (this.chatContainerElement && (this.chatContainerElement.style.minWidth = this.width + 'px'));
     }
 
     public makeVisible(): void

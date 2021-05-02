@@ -13,7 +13,7 @@ export class NavigatorHomeRoomParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;

@@ -1,3 +1,16 @@
-<div class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets2-component">
-    
+<div class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets3-component small p-1">
+    <perfect-scrollbar class="position-relative w-100" style="min-height: 422px;max-height: 422px;height:422px;">
+        <div class="overflow-hidden d-flex flex-column" style="min-height:422px;">
+            <div class="row m-3">
+                <div class="col-sm-3 overflow-hidden d-flex justify-content-center px-1">
+                    <img class="align-self-center" [src]="getImage(1)" image-placeholder />
+                </div>
+                <div class="col-sm d-flex justify-content-center px-2">
+                    <h6 class="align-self-center" [innerHtml]="getText(1)"></h6>
+                </div>
+            </div>
+            <div class="mx-3" [innerHtml]="getText(2)"></div>
+            <span class="mx-3 mt-auto mb-3" [innerHtml]="getText(3)"></span>
+        </div>
+    </perfect-scrollbar>
 </div>

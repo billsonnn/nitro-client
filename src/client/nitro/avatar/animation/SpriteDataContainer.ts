@@ -1,4 +1,5 @@
-﻿import { IAnimation } from './IAnimation';
+﻿import { IAssetAnimationSprite } from '../../../core/asset/interfaces';
+import { IAnimation } from './IAnimation';
 import { ISpriteDataContainer } from './ISpriteDataContainer';
 
 export class SpriteDataContainer implements ISpriteDataContainer
@@ -13,7 +14,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
     private _dy: number[];
     private _dz: number[];
 
-    constructor(k: IAnimation, _arg_2: any)
+    constructor(k: IAnimation, _arg_2: IAssetAnimationSprite)
     {
         this._animation     = k;
         this._id            = _arg_2.id;
@@ -59,7 +60,7 @@ export class SpriteDataContainer implements ISpriteDataContainer
     public _Str_839(k: number): number
     {
         if(k < this._dz.length) return this._dz[k];
-        
+
         return 0;
     }
 

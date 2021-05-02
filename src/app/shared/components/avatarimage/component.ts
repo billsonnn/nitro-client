@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
 import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
 import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
@@ -8,7 +8,8 @@ import { Nitro } from '../../../../client/nitro/Nitro';
 @Component({
     selector: '[nitro-avatar-image]',
     template: `
-    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" />`
+    <img *ngIf="avatarUrl" class="avatar-image scale-{{ scale }}" [src]="avatarUrl" image-placeholder />`,
+    encapsulation: ViewEncapsulation.None
 })
 export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvatarImageListener
 {
@@ -36,7 +37,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
     public needsUpdate: boolean	= true;
 
     constructor(
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void
@@ -122,11 +123,11 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
             if(avatarImage)
             {
                 let setType = AvatarSetType.FULL;
-    
+
                 if(this.headOnly) setType = AvatarSetType.HEAD;
 
                 avatarImage.setDirection(setType, this.direction);
-                
+
                 const image = avatarImage.getCroppedImage(setType);
 
                 if(image) existing = image.src;
@@ -146,7 +147,7 @@ export class AvatarImageComponent implements OnInit, OnChanges, OnDestroy, IAvat
 
         this._avatarImageCache.add(build, url);
     }
-    
+
     public getAvatarBuildString(): string
     {
         return (`${ this.figure }:${ this.gender }:${ this.direction }:${ this.headOnly }`);

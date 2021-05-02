@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
 
 @Component({
@@ -7,14 +8,13 @@ import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/Habbo
     template: `
     <div class="nitro-room-chatinput-styleselector-component">
         <i class="icon chatstyles-icon" (click)="toggleSelector()"></i>
-        <div class="component-styles-container" [ngClass]="{ 'active': showStyles }">
-            <div class="card">
-                <div class="card-body">
-                    <div class="container-items">
-                        <div *ngFor="let styleId of styleIds" class="item-detail" [ngClass]="{ 'selected': (lastSelectedId === styleId)}">
-                            <div class="nitro-room-chat-item-component chat-style-{{ styleId }}" (click)="selectStyle(styleId)">
-                                <div class="chat-left"></div>
-                                <div class="chat-right"></div>
+        <div [bringToTop] class="nitro-chatstyle-selector card p-3" [ngClass]="{ 'active': showStyles }">
+            <div class="grid-container w-100">
+                <div class="grid-items grid-3">
+                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let styleId of styleIds">
+                        <div class="d-flex detail-info rounded justify-content-center align-items-center" [ngClass]="[ ((lastSelectedId === styleId) ? 'bg-primary' : 'bg-secondary') ]">
+                            <div class="bubble-container">
+                                <div class="chat-bubble bubble-{{ styleId }} w-100" (click)="selectStyle(styleId)">&nbsp;</div>
                             </div>
                         </div>
                     </div>
@@ -34,11 +34,13 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
 
     constructor(
         private changeDetector: ChangeDetectorRef,
-        private ngZone: NgZone) 
+        private ngZone: NgZone)
     {}
 
     public ngOnInit(): void
     {
+        this.lastSelectedId = Nitro.instance.sessionDataManager.chatStyle;
+
         const styles = Nitro.instance.getConfiguration<{ styleId: number, minRank: number, isSystemStyle: boolean, isHcOnly: boolean, isAmbassadorOnly: boolean }[]>('chat.styles');
 
         for(const style of styles)
@@ -52,7 +54,17 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
                 continue;
             }
 
-            if(style.isSystemStyle || (Nitro.instance.getConfiguration<number[]>('chat.styles.disabled').indexOf(style.styleId) >= 0)) continue;
+            if(style.isSystemStyle)
+            {
+                if(Nitro.instance.sessionDataManager.hasSecurity(RoomControllerLevel.MODERATOR))
+                {
+                    this.styleIds.push(style.styleId);
+
+                    continue;
+                }
+            }
+
+            if(Nitro.instance.getConfiguration<number[]>('chat.styles.disabled').indexOf(style.styleId) >= 0) continue;
 
             if(style.isHcOnly && (Nitro.instance.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964))
             {
@@ -87,7 +99,7 @@ export class RoomChatInputStyleSelectorComponent implements OnInit, OnDestroy
     private hideSelector(): void
     {
         this.showStyles = false;
-        
+
         //this.ngZone.runOutsideAngular(() => document.body.removeEventListener('click', this.onOutsideClick.bind(this)));
     }
 

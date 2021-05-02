@@ -30,7 +30,7 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
     constructor(
         private _navigatorService: NavigatorService,
         private _activeModal: NgbActiveModal,
-        private _formBuilder: FormBuilder) 
+        private _formBuilder: FormBuilder)
     {}
 
     public ngOnInit(): void
@@ -57,11 +57,17 @@ export class NavigatorCreatorComponent implements OnInit, OnDestroy
 
     private createForm(): void
     {
+        let categoryId = 0;
+
+        const category = this.categories[0];
+
+        if(category) categoryId = category.id;
+
         this._form = this._formBuilder.group({
             roomName: [ '', Validators.required ],
             roomDesc: [ '' ],
             roomLayout: [ this.layouts[0].name, Validators.required ],
-            roomCategory: [ (this.categories[0].id.toString()), Validators.required ],
+            roomCategory: [ categoryId.toString(), Validators.required ],
             roomVisitors: [ (this.maxVisitors[0].toString()), Validators.required ],
             roomTrade: [ '0', Validators.required ],
         });

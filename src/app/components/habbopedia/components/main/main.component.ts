@@ -18,7 +18,7 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
     constructor(
         private _habbopediaService: HabbopediaService,
         private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void

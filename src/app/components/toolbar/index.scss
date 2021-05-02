@@ -1,49 +1,86 @@
 .nitro-toolbar-component {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    pointer-events: none;
+    left: 10px;
+    bottom: 10px;
+    z-index: $toolbar-zindex;
+    pointer-events: all;
 
-    .card {
-        width: 100%;
+    .list-group {
         align-items: center;
 
-        .card-body {
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: unset;
+            min-width: 50px;
+            width: 50px;
+            margin: 0 5px;
 
-            .list-group {
-                align-items: center;
 
-                .list-group-item {
-                    display: flex;
-                    width: 65px;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    padding: unset;
-                    pointer-events: all;
+            &:active {
+                -webkit-transform: translate(0, 1px);
+                transform: translate(0, 1px);
+            }
 
-                    &:active {
-                        -webkit-transform: translate(0, 1px);
-                        transform: translate(0, 1px);
+            &.avatar-image {
+                width: 65px;
+                height: 60px;
+
+                img {
+                    position: relative;
+                    top: 12px;
+                    right: 5px;
+                }
+            }
+
+            .icon,
+            .avatar-image {
+                position: relative;
+                filter: drop-shadow(0px 2px 0px black);
+            }
+
+            .count {
+                top: 0rem;
+                right: 5px;
+                font-size: 10px;
+            }
+        }
+    }
+
+    .nitro-toolbar-me-menu {
+        bottom: 77px;
+        left: 200px;
+        position: absolute;
+        font-size: 12px;
+        z-index: $toolbar-memenu-zindex;
+    
+        .list-group {
+    
+            .list-group-item {
+                min-width: 70px;
+                transition: all .3s;
+                font-size: 10px;
+                text-align: center;
+    
+                i {
+                    filter: grayscale(1);
+                }
+    
+                &:hover {
+                    color: $cyan;
+                    text-decoration: underline;
+    
+                    i {
+                        filter: grayscale(0);
                     }
-
-                    &.avatar-image {
-                        width: 65px;
-                        height: 70px;
-
-                        img {
-                            position: relative;
-                            top: 10px;
-                        }
-                    }
-
-                    .icon,
-                    .avatar-image {
-                        position: relative;
-                        filter: drop-shadow(2px 1px 0 rgba($white, 1)) drop-shadow(-2px 1px 0 rgba($white, 1)) drop-shadow(0 -2px 0 rgba($white, 1));
-                    }
+                }
+    
+                .count {
+                    top: 0px;
+                    right: 5px;
+                    font-size: 10px;
                 }
             }
         }

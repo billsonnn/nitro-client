@@ -1,7 +1,7 @@
 ﻿import { RoomObjectMouseEvent } from '../../../room/events/RoomObjectMouseEvent';
 import { IRoomObject } from '../../../room/object/IRoomObject';
 
-export class RoomObjectTileMouseEvent extends RoomObjectMouseEvent 
+export class RoomObjectTileMouseEvent extends RoomObjectMouseEvent
 {
     private _tileX: number;
     private _tileY: number;

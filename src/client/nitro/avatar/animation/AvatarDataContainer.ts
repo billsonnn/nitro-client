@@ -1,7 +1,8 @@
 ﻿import { AdjustmentFilter } from '@pixi/filter-adjustment';
+import { IAssetAnimationAvatar } from '../../../core/asset/interfaces';
 import { IAvatarDataContainer } from './IAvatarDataContainer';
 
-export class AvatarDataContainer implements IAvatarDataContainer 
+export class AvatarDataContainer implements IAvatarDataContainer
 {
     private _ink: number;
     private _foreGround: number;
@@ -18,12 +19,12 @@ export class AvatarDataContainer implements IAvatarDataContainer
     private _colorMap: Map<string, number[]>;
     private _paletteIsGrayscale: boolean;
 
-    constructor(k: any)
+    constructor(k: IAssetAnimationAvatar)
     {
-        this._ink = parseInt(k.ink);
+        this._ink = k.ink;
 
-        let foreground = (k.foreground as string);
-        let background = (k.background as string);
+        let foreground = k.foreground;
+        let background = k.background;
 
         foreground = foreground.replace('#', '');
         background = background.replace('#', '');

@@ -20,11 +20,11 @@ export class ActorHasHandItemComponent extends WiredCondition
 
     public onEditStart(trigger: Triggerable): void
     {
-        if(trigger.intData.length > 0 && this.allowedHanditemIds.includes(trigger.intData[0].toString())) 
+        if((trigger.intData.length > 0) && this.allowedHanditemIds.includes(trigger.intData[0].toString()))
         {
             this.handitemId = trigger.intData[0].toString();
         }
-        else 
+        else
         {
             this.handitemId = '0';
         }
@@ -32,7 +32,7 @@ export class ActorHasHandItemComponent extends WiredCondition
 
     public readIntegerParamsFromForm(): number[]
     {
-        return [ Number.parseInt(this.handitemId) ];
+        return [ parseInt(this.handitemId) ];
     }
 
     public get hasSpecialInputs(): boolean

@@ -1,5 +1,6 @@
 import { Disposable } from '../../core/common/disposable/Disposable';
 import { IConnection } from '../../core/communication/connections/IConnection';
+import { RoomDoorbellAccessComposer } from '../communication/messages/outgoing/room/access/RoomDoorbellAccessComposer';
 import { RoomEnterComposer } from '../communication/messages/outgoing/room/access/RoomEnterComposer';
 import { RoomAmbassadorAlertComposer } from '../communication/messages/outgoing/room/action/RoomAmbassadorAlertComposer';
 import { RoomBanUserComposer } from '../communication/messages/outgoing/room/action/RoomBanUserComposer';
@@ -7,7 +8,12 @@ import { RoomGiveRightsComposer } from '../communication/messages/outgoing/room/
 import { RoomKickUserComposer } from '../communication/messages/outgoing/room/action/RoomKickUserComposer';
 import { RoomMuteUserComposer } from '../communication/messages/outgoing/room/action/RoomMuteUserComposer';
 import { RoomTakeRightsComposer } from '../communication/messages/outgoing/room/action/RoomTakeRightsComposer';
-import { RemoveBotFromFlatComposer } from '../communication/messages/outgoing/room/engine/RemoveBotFromFlatComposer';
+import { BotRemoveComposer } from '../communication/messages/outgoing/room/engine/BotRemoveComposer';
+import { PetRemoveComposer } from '../communication/messages/outgoing/room/engine/PetRemoveComposer';
+import { MoodlightSettingsComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsComposer';
+import { MoodlightSettingsSaveComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightSettingsSaveComposer';
+import { MoodlightTogggleStateComposer } from '../communication/messages/outgoing/room/furniture/dimmer/MoodlightTogggleStateComposer';
+import { OpenPresentComposer } from '../communication/messages/outgoing/room/furniture/presents/OpenPresentComposer';
 import { RoomUnitChatComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatComposer';
 import { RoomUnitChatShoutComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatShoutComposer';
 import { RoomUnitChatWhisperComposer } from '../communication/messages/outgoing/room/unit/chat/RoomUnitChatWhisperComposer';
@@ -185,7 +191,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendDoorbellApprovalMessage(userName: string, flag: boolean): void
     {
-        // send doorbell
+        this._connection.send(new RoomDoorbellAccessComposer(userName,flag));
     }
 
     public sendAmbassadorAlertMessage(userId: number): void
@@ -205,7 +211,7 @@ export class RoomSession extends Disposable implements IRoomSession
 
     public sendBanMessage(userId: number, type: string): void
     {
-        this._connection.send(new RoomBanUserComposer(userId, type, this._roomId));
+        this._connection.send(new RoomBanUserComposer(userId, this._roomId, type));
     }
 
     public sendGiveRightsMessage(userId: number): void
@@ -218,18 +224,42 @@ export class RoomSession extends Disposable implements IRoomSession
         this._connection.send(new RoomTakeRightsComposer(userId));
     }
 
+    public updateMoodlightData(id: number, _Str_24446: number, color: number, _Str_5123: number, apply: boolean): void
+    {
+        const local6 = '000000' + color.toString(16).toUpperCase();
+        const local7 = '#' + local6.substring((local6.length - 6));
+        this.connection.send(new MoodlightSettingsSaveComposer(id, _Str_24446, local7, _Str_5123, apply));
+    }
+
+    public toggleMoodlightState(): void
+    {
+        this.connection.send(new MoodlightTogggleStateComposer());
+    }
+
     public pickupPet(id: number): void
     {
         if(!this._connection) return;
 
-        //this._connection.send();
+        this._connection.send(new PetRemoveComposer(id));
     }
 
     public pickupBot(id: number): void
     {
         if(!this._connection) return;
 
-        this._connection.send(new RemoveBotFromFlatComposer(id));
+        this._connection.send(new BotRemoveComposer(id));
+    }
+
+    public requestMoodlightSettings(): void
+    {
+        if(!this._connection) return;
+
+        this._connection.send(new MoodlightSettingsComposer());
+    }
+
+    public openGift(_Str_1577: number): void
+    {
+        this._connection.send(new OpenPresentComposer(_Str_1577));
     }
 
     public get connection(): IConnection

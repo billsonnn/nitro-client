@@ -13,50 +13,51 @@ export class RoomSessionPresentEvent extends RoomSessionEvent
     private _placedInRoom: boolean;
     private _petFigureString: string;
 
-    constructor(k: string, _arg_2: IRoomSession, _arg_3: number, _arg_4: string, _arg_5: string, _arg_6: number, _arg_7: string, _arg_8: boolean, _arg_9: string)
+    constructor(k: string, _arg_2: IRoomSession, classId: number, itemType: string, productCode: string, placedItemId: number, placedItemType: string, placedInRoom: boolean, petFigureString: string)
     {
         super(k, _arg_2);
-        
-        this._classId = _arg_3;
-        this._itemType = _arg_4;
-        this._productCode = _arg_5;
-        this._placedItemId = _arg_6;
-        this._placedItemType = _arg_7;
-        this._placedInRoom = _arg_8;
-        this._petFigureString = _arg_9;
+
+        this._classId = classId;
+        this._itemType = itemType;
+        this._productCode = productCode;
+        this._placedItemId = placedItemId;
+        this._placedItemType = placedItemType;
+        this._placedInRoom = placedInRoom;
+        this._petFigureString = petFigureString;
     }
 
-    public get _Str_2706(): number
+    public get classId(): number
     {
         return this._classId;
     }
 
-    public get _Str_2887(): string
+
+    public get itemType(): string
     {
         return this._itemType;
     }
 
-    public get _Str_2716(): string
+    public get productCode(): string
     {
         return this._productCode;
     }
 
-    public get _Str_5200(): number
+    public get placedItemId(): number
     {
         return this._placedItemId;
     }
 
-    public get _Str_4057(): boolean
+    public get placedInRoom(): boolean
     {
         return this._placedInRoom;
     }
 
-    public get _Str_5057(): string
+    public get placedItemType(): string
     {
         return this._placedItemType;
     }
 
-    public get _Str_17075(): string
+    public get petFigureString(): string
     {
         return this._petFigureString;
     }

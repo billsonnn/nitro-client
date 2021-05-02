@@ -9,7 +9,7 @@ export class CallForHelpMainComponent implements OnInit, OnDestroy
 {
     constructor(
         private _callForHelpService: CallForHelpService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void

@@ -9,7 +9,7 @@ export class ContextInfoView
 {
     private static LOCATION_STACK_SIZE: number  = 25;
     private static BUBBLE_DROP_SPEED: number    = 3;
-    private static SPACE_AROUND_EDGES: number   = 5;
+    public static SPACE_AROUND_EDGES: number   = 5;
 
     public parent: IContextMenuParentWidget                 = null;
     public componentRef: ComponentRef<ContextInfoView>      = null;
@@ -34,6 +34,8 @@ export class ContextInfoView
         this.fadingOut         = false;
         this.opacity           = 1;
 
+        this.onTimerComplete = this.onTimerComplete.bind(this);
+
         if(this.fadeAfterDelay && this.willFade)
         {
             if(this.fadeStartTimer)
@@ -42,8 +44,8 @@ export class ContextInfoView
 
                 this.fadeStartTimer = null;
             }
-            
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
     }
 
@@ -95,7 +97,7 @@ export class ContextInfoView
         this.currentDeltaY = deltaY;
 
         let left    = (Math.round(point.x - (this.activeViewElement.offsetWidth / 2)));
-        let top     = ((Math.round(_local_7 + offset)));
+        let top     = (((Math.round(_local_7 + offset))) - 5);
 
         if(top <= 0) top = ContextInfoView.SPACE_AROUND_EDGES;
 
@@ -126,7 +128,7 @@ export class ContextInfoView
                 this.fadeStartTimer = null;
             }
 
-            this.fadeStartTimer = setTimeout(this.onTimerComplete.bind(this), this.fadeStartDelay);
+            this.fadeStartTimer = setTimeout(this.onTimerComplete, this.fadeStartDelay);
         }
         else
         {
@@ -137,7 +139,7 @@ export class ContextInfoView
     private onTimerComplete(): void
     {
         this.fadingOut = true;
-        
+
         this.hide(true);
     }
 

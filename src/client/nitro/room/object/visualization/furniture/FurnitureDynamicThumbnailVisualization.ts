@@ -1,4 +1,4 @@
-import { Texture } from 'pixi.js';
+import { SCALE_MODES, Texture } from 'pixi.js';
 import { FurnitureThumbnailVisualization } from './FurnitureThumbnailVisualization';
 
 export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVisualization
@@ -32,6 +32,8 @@ export class FurnitureDynamicThumbnailVisualization extends FurnitureThumbnailVi
                     image.onload = () =>
                     {
                         const texture = Texture.from(image);
+
+                        texture.baseTexture.scaleMode = SCALE_MODES.LINEAR;
 
                         this._Str_6645(texture);
                     };

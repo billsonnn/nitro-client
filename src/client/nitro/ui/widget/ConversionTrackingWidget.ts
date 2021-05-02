@@ -3,7 +3,7 @@ import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidget } from './IRoomWidget';
 import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';
 
-export class ConversionTrackingWidget implements IRoomWidget 
+export class ConversionTrackingWidget implements IRoomWidget
 {
     private _widgetHandler: IRoomWidgetHandler;
     private _messageListener: IRoomWidgetMessageListener;
@@ -29,7 +29,10 @@ export class ConversionTrackingWidget implements IRoomWidget
 
         this._messageListener = null;
 
-        if(this._events && !this._events.disposed) this.unregisterUpdateEvents(this._events);
+        if(this._events && !this._events.disposed)
+        {
+            this.unregisterUpdateEvents(this._events);
+        }
 
         if(this._widgetHandler)
         {
@@ -67,7 +70,7 @@ export class ConversionTrackingWidget implements IRoomWidget
         this._widgetHandler = handler;
 
         //@ts-ignore
-        if(this._widgetHandler.widget !== undefined) this._widgetHandler.widget = this;
+        if(!this._widgetHandler.widget) this._widgetHandler.widget = this;
     }
 
     public get messageListener(): IRoomWidgetMessageListener

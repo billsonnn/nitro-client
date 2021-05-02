@@ -6,7 +6,7 @@ import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events
 import { Nitro } from '../../../../../client/nitro/Nitro';
 import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
-  
+
 @Component({
     selector: 'nitro-catalog-confirm-purchase-component',
     templateUrl: './confirm-purchase.template.html'
@@ -18,6 +18,9 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     @Input()
     public offer: CatalogPageOfferData = null;
+
+    @Input()
+    public giftOffer: CatalogPageOfferData = null;
 
     @Input()
     public quantity: number = 1;
@@ -36,7 +39,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     constructor(
         private _catalogService: CatalogService,
         private _ngZone: NgZone
-    ) 
+    )
     {}
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -84,11 +87,18 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
 
     public purchase(): void
     {
-        this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        if(!this.giftOffer)
+        {
+            this._catalogService.purchase(this.page, this.offer, this.quantity, this.extra);
+        }
+        else
+        {
+            this._catalogService.component && this._catalogService.component.makeGiftConfiguratorVisible();
+        }
     }
 
     private completePurchase(): void
-    {        
+    {
         this._ngZone.runOutsideAngular(() =>
         {
             const element = new HTMLImageElement();
@@ -107,7 +117,7 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
             const event = new NitroToolbarAnimateIconEvent(element, bounds.x, bounds.y);
 
             event.iconName = ToolbarIconEnum.INVENTORY;
-            
+
             Nitro.instance.roomEngine.events.dispatchEvent(event);
         });
     }
@@ -131,4 +141,17 @@ export class CatalogConfirmPurchaseComponent implements OnChanges
     {
         return this._imageUrl;
     }
+
+    public getOfferTitle(): string
+    {
+        const localization = this.offer.localizationId;
+
+        const productData = Nitro.instance.sessionDataManager.getProductData(localization);
+        if(productData) return productData.name;
+
+        return localization;
+
+    }
+
+
 }

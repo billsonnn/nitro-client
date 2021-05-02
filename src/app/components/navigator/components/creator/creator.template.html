@@ -1,54 +1,51 @@
-<div class="modal-header">
-    {{ ('navigator.createroom.title') | translate }}
+<div class="d-flex justify-content-between align-items-center px-3 pt-3">
+    <h6 class="m-0">{{ ('navigator.createroom.title') | translate }}</h6>
     <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
 </div>
-<div class="modal-body">
-    <div class="row">
-        <div class="col-7">
-            <perfect-scrollbar style="max-height: 453px;">
-                <div class="grid-container">
-                    <div class="grid-items grid-2">
-                        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let layout of layouts" [ngClass]="{ 'active': (roomLayoutControl.value === layout.name) }" (click)="setRoomLayout(layout.name)">
-                            <div class="d-flex flex-grow-1 align-items-center detail-image" [ngStyle]="{ 'background-image': 'url(' + getRoomLayoutImageUrl(layout.name) + ')' }"></div>
-                            <div class="badge badge-secondary">{{ layout.tileSize }} {{ ('navigator.createroom.tilesize') | translate }}</div>
-                        </div>
-                    </div>
+<div class="d-flex row p-3">
+    <div class="col-7">
+        <perfect-scrollbar class="grid-container" style="height:479px;min-height:479px;max-height:479px;">
+            <div class="grid-items grid-2">
+                <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let layout of layouts" (click)="setRoomLayout(layout.name)">
+                    <button type="button" class="btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (roomLayoutControl.value === layout.name) }" [ngStyle]="{ 'background-image': 'url(' + getRoomLayoutImageUrl(layout.name) + ')' }">
+                        <div class="badge badge-primary">{{ layout.tileSize }} {{ ('navigator.createroom.tilesize') | translate }}</div>
+                    </button>
                 </div>
-            </perfect-scrollbar>
-        </div>
-        <div class="col-5">
-            <form [formGroup]="form">
-                <div class="form-group">
-                    <label>{{ ('navigator.createroom.roomnameinfo') | translate }}</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="roomName">
-                </div>
-                <div class="form-group">
-                    <label>{{ ('navigator.createroom.roomdescinfo') | translate }}</label>
-                    <textarea class="form-control form-control-sm" formControlName="roomDesc"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>{{ ('navigator.category') | translate }}</label>
-                    <select class="form-control form-control-sm" formControlName="roomCategory">
-                        <option *ngFor="let category of categories" [value]="category.id">{{ (category.name) | translate }}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>{{ ('navigator.maxvisitors') | translate }}</label>
-                    <select class="form-control form-control-sm" formControlName="roomVisitors">
-                        <option *ngFor="let amount of maxVisitors" [value]="amount">{{ amount }}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>{{ ('navigator.tradesettings') | translate }}</label>
-                    <select class="form-control form-control-sm" formControlName="roomTrade">
-                        <option *ngFor="let type of tradeSettings | keyvalue" [value]="type.key">{{ (type.value) | translate }}</option>
-                    </select>
-                </div>
-            </form>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-success" [disabled]="form.pristine || form.invalid" (click)="submit()">{{ ('navigator.createroom.create') | translate }}</button>
-                <button type="button" class="btn btn-primary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
             </div>
+        </perfect-scrollbar>
+    </div>
+    <div class="col-5">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label>{{ ('navigator.createroom.roomnameinfo') | translate }}</label>
+                <input type="text" class="form-control form-control-sm" formControlName="roomName">
+            </div>
+            <div class="form-group">
+                <label>{{ ('navigator.createroom.roomdescinfo') | translate }}</label>
+                <textarea class="form-control form-control-sm" formControlName="roomDesc"></textarea>
+            </div>
+            <div class="form-group">
+                <label>{{ ('navigator.category') | translate }}</label>
+                <select class="form-control form-control-sm" formControlName="roomCategory">
+                    <option *ngFor="let category of categories" [value]="category.id">{{ (category.name) | translate }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{ ('navigator.maxvisitors') | translate }}</label>
+                <select class="form-control form-control-sm" formControlName="roomVisitors">
+                    <option *ngFor="let amount of maxVisitors" [value]="amount">{{ amount }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{ ('navigator.tradesettings') | translate }}</label>
+                <select class="form-control form-control-sm" formControlName="roomTrade">
+                    <option *ngFor="let type of tradeSettings | keyvalue" [value]="type.key">{{ (type.value) | translate }}</option>
+                </select>
+            </div>
+        </form>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-success" [disabled]="form.pristine || form.invalid" (click)="submit()">{{ ('navigator.createroom.create') | translate }}</button>
+            <button type="button" class="btn btn-secondary" (click)="hide()">{{ ('generic.cancel') | translate }}</button>
         </div>
     </div>
 </div>

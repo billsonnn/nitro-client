@@ -8,6 +8,7 @@ import { AvatarLogic } from './object/logic/avatar/AvatarLogic';
 import { FurnitureBadgeDisplayLogic } from './object/logic/furniture/FurnitureBadgeDisplayLogic';
 import { FurnitureChangeStateWhenStepOnLogic } from './object/logic/furniture/FurnitureChangeStateWhenStepOnLogic';
 import { FurnitureCounterClockLogic } from './object/logic/furniture/FurnitureCounterClockLogic';
+import { FurnitureCrackableLogic } from './object/logic/furniture/FurnitureCrackableLogic';
 import { FurnitureCreditLogic } from './object/logic/furniture/FurnitureCreditLogic';
 import { FurnitureCustomStackHeightLogic } from './object/logic/furniture/FurnitureCustomStackHeightLogic';
 import { FurnitureDiceLogic } from './object/logic/furniture/FurnitureDiceLogic';
@@ -16,6 +17,7 @@ import { FurnitureEditableRoomLinkLogic } from './object/logic/furniture/Furnitu
 import { FurnitureExternalImageLogic } from './object/logic/furniture/FurnitureExternalImageLogic';
 import { FurnitureFireworksLogic } from './object/logic/furniture/FurnitureFireworksLogic';
 import { FurnitureFloorHoleLogic } from './object/logic/furniture/FurnitureFloorHoleLogic';
+import { FurnitureFriendLogic } from './object/logic/furniture/FurnitureFriendLogic';
 import { FurnitureGuildCustomizedLogic } from './object/logic/furniture/FurnitureGuildCustomizedLogic';
 import { FurnitureHighScoreLogic } from './object/logic/furniture/FurnitureHighScoreLogic';
 import { FurnitureHockeyScoreLogic } from './object/logic/furniture/FurnitureHockeyScoreLogic';
@@ -40,6 +42,7 @@ import { FurnitureTrophyLogic } from './object/logic/furniture/FurnitureTrophyLo
 import { FurnitureVoteCounterLogic } from './object/logic/furniture/FurnitureVoteCounterLogic';
 import { FurnitureVoteMajorityLogic } from './object/logic/furniture/FurnitureVoteMajorityLogic';
 import { FurnitureWindowLogic } from './object/logic/furniture/FurnitureWindowLogic';
+import { FurnitureYoutubeLogic } from './object/logic/furniture/FurnitureYoutubeLogic';
 import { PetLogic } from './object/logic/pet/PetLogic';
 import { RoomLogic } from './object/logic/room/RoomLogic';
 import { SelectionArrowLogic } from './object/logic/room/SelectionArrowLogic';
@@ -177,6 +180,9 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
             case RoomObjectLogicType.FURNITURE_COUNTER_CLOCK:
                 logic = FurnitureCounterClockLogic;
                 break;
+            case RoomObjectLogicType.FURNITURE_CRACKABLE:
+                logic = FurnitureCrackableLogic;
+                break;
             case RoomObjectLogicType.FURNITURE_CREDIT:
                 logic = FurnitureCreditLogic;
                 break;
@@ -269,6 +275,12 @@ export class RoomObjectLogicFactory implements IRoomObjectLogicFactory
                 break;
             case RoomObjectLogicType.FURNITURE_WINDOW:
                 logic = FurnitureWindowLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_LOVELOCK:
+                logic = FurnitureFriendLogic;
+                break;
+            case RoomObjectLogicType.FURNITURE_YOUTUBE:
+                logic = FurnitureYoutubeLogic;
                 break;
             default:
                 logic = FurnitureLogic;

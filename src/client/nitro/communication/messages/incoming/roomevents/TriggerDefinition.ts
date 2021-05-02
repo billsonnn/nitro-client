@@ -9,7 +9,7 @@ export class TriggerDefinition extends Triggerable
     constructor(wrapper: IMessageDataWrapper)
     {
         super(wrapper);
-        
+
         this._conflictingActions    = [];
         this._triggerConf           = wrapper.readInt();
 

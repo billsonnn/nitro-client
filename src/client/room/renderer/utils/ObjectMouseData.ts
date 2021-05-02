@@ -1,4 +1,4 @@
-﻿export class ObjectMouseData 
+﻿export class ObjectMouseData
 {
     private _objectId: string;
     private _spriteTag: string;

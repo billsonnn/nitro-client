@@ -41,6 +41,7 @@ import { RoomUnitNumberEvent } from '../communication/messages/incoming/room/uni
 import { RoomUnitRemoveEvent } from '../communication/messages/incoming/room/unit/RoomUnitRemoveEvent';
 import { RoomUnitStatusEvent } from '../communication/messages/incoming/room/unit/RoomUnitStatusEvent';
 import { UserInfoEvent } from '../communication/messages/incoming/user/data/UserInfoEvent';
+import { IgnoreResultEvent } from '../communication/messages/incoming/user/IgnoreResultEvent';
 import { FurnitureAliasesComposer } from '../communication/messages/outgoing/room/furniture/FurnitureAliasesComposer';
 import { RoomModelComposer } from '../communication/messages/outgoing/room/mapping/RoomModelComposer';
 import { FurnitureFloorDataParser } from '../communication/messages/parser/room/furniture/floor/FurnitureFloorDataParser';
@@ -141,6 +142,7 @@ export class RoomMessageHandler extends Disposable
         this._connection.addMessageEvent(new PetFigureUpdateEvent(this.onPetFigureUpdateEvent.bind(this)));
         this._connection.addMessageEvent(new YouArePlayingGameEvent(this.onYouArePlayingGameEvent.bind(this)));
         this._connection.addMessageEvent(new FurnitureState2Event(this.onFurnitureState2Event.bind(this)));
+        this._connection.addMessageEvent(new IgnoreResultEvent(this.onIgnoreResultEvent.bind(this)));
     }
 
     public setRoomId(id: number): void
@@ -276,10 +278,10 @@ export class RoomMessageHandler extends Disposable
 
                 x++;
             }
-            
+
             y++;
         }
-        
+
         this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), doorZ);
         this._planeParser.initializeFromTileData(parser.wallHeight);
         this._planeParser.setTileHeight(Math.floor(doorX), Math.floor(doorY), (doorZ + this._planeParser.wallHeight));
@@ -356,7 +358,7 @@ export class RoomMessageHandler extends Disposable
 
             y++;
         }
-        
+
         this._roomCreator.setFurnitureStackingHeightMap(this._currentRoomId, heightMap);
     }
 
@@ -391,7 +393,7 @@ export class RoomMessageHandler extends Disposable
         if(!parser) return;
 
         const visibleWall       = !parser.hideWalls;
-        const visibleFloor      = true; 
+        const visibleFloor      = true;
         const thicknessWall     = parser.thicknessWall;
         const thicknessFloor    = parser.thicknessFloor;
 
@@ -426,7 +428,7 @@ export class RoomMessageHandler extends Disposable
             {
                 if(!rollData) continue;
 
-                this._roomCreator.rollRoomObjectFloor(this._currentRoomId, rollData.id, rollData.location, rollData.targetLocation); 
+                this._roomCreator.rollRoomObjectFloor(this._currentRoomId, rollData.id, rollData.location, rollData.targetLocation);
             }
         }
 
@@ -451,7 +453,7 @@ export class RoomMessageHandler extends Disposable
                         posture = 'std';
                         break;
                 }
-                
+
                 this._roomCreator.updateRoomObjectUserPosture(this._currentRoomId, unitRollData.id, posture);
             }
         }
@@ -531,7 +533,7 @@ export class RoomMessageHandler extends Disposable
         const location: IVector3D   = new Vector3d(item.x, item.y, item.z);
         const direction: IVector3D  = new Vector3d(item.direction);
 
-        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, item.itemId, location, direction, item.data.state, item.data);
+        this._roomCreator.updateRoomObjectFloor(this._currentRoomId, item.itemId, location, direction, item.data.state, item.data, item.extra);
         this._roomCreator.updateRoomObjectFloorHeight(this._currentRoomId, item.itemId, item.stackHeight);
         this._roomCreator.updateRoomObjectFloorExpiration(this._currentRoomId, item.itemId, item.expires);
     }
@@ -681,6 +683,8 @@ export class RoomMessageHandler extends Disposable
                     this._roomCreator.updateRoomObjectUserPosture(this._currentRoomId, user.roomIndex, user.petPosture);
                 }
             }
+
+            this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, user.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, (this._roomCreator.sessionDataManager.isUserIgnored(user.name) ? 1 : 0));
         }
     }
 
@@ -859,11 +863,11 @@ export class RoomMessageHandler extends Disposable
 
         if(data.spriteName)
         {
-            this._roomCreator.addFurnitureFloorByTypeName(roomId, data.itemId, data.spriteName, location, direction, data.state, data.data, NaN, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
+            this._roomCreator.addFurnitureFloorByTypeName(roomId, data.itemId, data.spriteName, location, direction, data.state, data.data, data.extra, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
         }
         else
         {
-            this._roomCreator.addFurnitureFloor(roomId, data.itemId, data.spriteId, location, direction, data.state, data.data, NaN, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
+            this._roomCreator.addFurnitureFloor(roomId, data.itemId, data.spriteId, location, direction, data.state, data.data, data.extra, data.expires, data.usagePolicy, data.userId, data.username, true, true, data.stackHeight);
         }
     }
 
@@ -889,6 +893,34 @@ export class RoomMessageHandler extends Disposable
         const direction = new Vector3d(wallGeometry.getDirection(data.direction));
 
         this._roomCreator.addFurnitureWall(roomId, data.itemId, data.spriteId, location, direction, data.state, data.stuffData, data.secondsToExpiration, data.usagePolicy, data.userId, data.username);
+    }
+
+    private onIgnoreResultEvent(event: IgnoreResultEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        const roomSession = this._roomCreator.roomSessionManager.getSession(this._currentRoomId);
+
+        if(!roomSession) return;
+
+        const userData = roomSession.userDataManager.getUserDataByName(parser.name);
+
+        if(!userData) return;
+
+        switch(parser.result)
+        {
+            case 1:
+            case 2:
+                this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, userData.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, 1);
+                return;
+            case 3:
+                this._roomCreator.updateRoomObjectUserAction(this._currentRoomId, userData.roomIndex, RoomObjectVariable.FIGURE_IS_MUTED, 0);
+                return;
+        }
     }
 
     // public _SafeStr_10580(event:_SafeStr_2242): void

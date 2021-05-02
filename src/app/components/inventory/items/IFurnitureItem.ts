@@ -1,12 +1,12 @@
 ﻿import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
 
-export interface IFurnitureItem 
+export interface IFurnitureItem
 {
     id: number;
     ref: number;
     type: number;
     stuffData: IObjectData;
-    _Str_2794: number;
+    extra: number;
     category: number;
     _Str_16260: boolean;
     isTradable: boolean;

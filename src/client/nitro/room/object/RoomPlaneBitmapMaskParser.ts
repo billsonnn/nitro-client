@@ -2,7 +2,7 @@
 import { RoomMapMaskData } from './RoomMapMaskData';
 import { RoomPlaneBitmapMaskData } from './RoomPlaneBitmapMaskData';
 
-export class RoomPlaneBitmapMaskParser 
+export class RoomPlaneBitmapMaskParser
 {
     private _masks: Map<string, RoomPlaneBitmapMaskData>;
 
@@ -45,7 +45,7 @@ export class RoomPlaneBitmapMaskParser
                 this._masks.set(mask.id, new RoomPlaneBitmapMaskData(mask.type, location, mask.category));
             }
         }
-        
+
         return true;
     }
 

@@ -1,5 +1,6 @@
 import { Point } from 'pixi.js';
 import { IAssetManager } from '../../core/asset/IAssetManager';
+import { IAssetAnimation } from '../../core/asset/interfaces';
 import { EventDispatcher } from '../../core/events/EventDispatcher';
 import { ActionDefinition } from './actions/ActionDefinition';
 import { AvatarActionManager } from './actions/AvatarActionManager';
@@ -110,14 +111,14 @@ export class AvatarStructure extends EventDispatcher
     public _Str_2229(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._animationData.parse(k);
     }
 
     public _Str_1569(k: any): boolean
     {
         if(!k) return false;
-        
+
         return this._figureData.parse(k);
     }
 
@@ -138,14 +139,14 @@ export class AvatarStructure extends EventDispatcher
             {
                 const animationData = collection.data;
 
-                this._animationManager._Str_2061(this, animationData);
+                this._animationManager._Str_2061(this, animationData.animations);
             }
 
             index++;
         }
     }
 
-    public _Str_2061(data: any): void
+    public _Str_2061(data: { [index: string]: IAssetAnimation }): void
     {
         this._animationManager._Str_2061(this, data);
     }
@@ -251,7 +252,7 @@ export class AvatarStructure extends EventDispatcher
 
         const _local_4: string[]    = [];
         const _local_5              = k._Str_742._Str_868;
-        
+
         if(k._Str_742._Str_861)
         {
             const _local_7 = ((k._Str_742.state + '.') + k._Str_727);

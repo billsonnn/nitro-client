@@ -1,0 +1,11 @@
+<div [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-alert nitro-alert-generic-component" noMemory="true" center="true">
+    <div class="card-header text-center">
+        {{ title }}
+    </div>
+    <div class="card-body">
+        <div class="mb-3" [innerHTML]="message | keepHtml"></div>
+        <div class="btn-group w-100">
+            <button *ngFor="let choice of choices; let i = index" type="button" class="btn w-100" [ngClass]="choice.classes" (click)="choose(i)">{{ (choice.localizationKey) | translate }}</button>
+        </div>
+    </div>
+</div>

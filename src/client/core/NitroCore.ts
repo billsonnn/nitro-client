@@ -6,6 +6,7 @@ import { ICommunicationManager } from './communication/ICommunicationManager';
 import { ConfigurationManager } from './configuration/ConfigurationManager';
 import { IConfigurationManager } from './configuration/IConfigurationManager';
 import { INitroCore } from './INitroCore';
+import { Nitro } from '../nitro/Nitro';
 
 export class NitroCore extends Disposable implements INitroCore
 {
@@ -17,8 +18,9 @@ export class NitroCore extends Disposable implements INitroCore
     {
         super();
 
+        const version = Nitro.RELEASE_VERSION;
         window.console.log.apply(console, [
-            '\n%c       _   ___ __              \n      / | / (_) /__________    \n     /  |/ / / __/ ___/ __ \\   \n    / /|  / / /_/ /  / /_/ /   \n   /_/ |_/_/\\__/_/   \\____/    \n                               \n Thanks for using Nitro        \n To report bugs or issues      \n join us on Discord            \n https://discord.gg/66UR68FPgy \n                               \n',
+            `\n%c       _   ___ __              \n      / | / (_) /__________    \n     /  |/ / / __/ ___/ __ \\   \n    / /|  / / /_/ /  / /_/ /   \n   /_/ |_/_/\\__/_/   \\____/    \n                               \n Thanks for using Nitro        \n Ver: ${version}       \n To report bugs or issues      \n join us on Discord            \n https://discord.gg/66UR68FPgy \n                               \n`,
             'color: #FFFFFF; background: #000000; padding:0px 0;' ]);
 
         this._configuration = new ConfigurationManager();

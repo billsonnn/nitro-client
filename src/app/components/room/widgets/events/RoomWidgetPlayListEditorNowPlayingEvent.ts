@@ -13,7 +13,7 @@ export class RoomWidgetPlayListEditorNowPlayingEvent extends RoomWidgetUpdateEve
     constructor(k: string, _arg_2: number, _arg_3: number, _arg_4: number)
     {
         super(k);
-        
+
         this._id = _arg_2;
         this._position = _arg_3;
         this._priority = _arg_4;

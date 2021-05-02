@@ -18,27 +18,48 @@ import { InventoryMainComponent } from '../components/main/main.component';
 import { FurniCategory } from '../items/FurniCategory';
 import { FurnitureItem } from '../items/FurnitureItem';
 import { GroupItem } from '../items/GroupItem';
+import { IFurnitureItem } from '../items/IFurnitureItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
+import { group } from '@angular/animations';
+import { RequestSellItemComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/marketplace/RequestSellItemComposer';
+import { MarketplaceSellItemEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/marketplace/MarketplaceSellItemEvent';
+import { NotificationService } from '../../notification/services/notification.service';
+import { MarketplaceConfigEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/MarketplaceConfigEvent';
+import { MarketplaceConfigParser } from '../../../../client/nitro/communication/messages/parser/catalog/MarketplaceConfigParser';
+import { MarketplaceItemStatsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/MarketplaceItemStatsEvent';
+import { MarketplaceItemStatsParser } from '../../../../client/nitro/communication/messages/parser/catalog/MarketplaceItemStatsParser';
+import { MarketplaceRequestComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestComposer';
+import { MarketplaceRequesstItemStatsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequesstItemStatsComposer';
+import { MarketplaceItemPostedEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/marketplace/MarketplaceItemPostedEvent';
 
 @Injectable()
 export class InventoryFurnitureService implements OnDestroy
 {
+    public static INVENTORY_UPDATED: string             = 'IFS_INVENTORY_UPDATED';
     public static SELECT_FIRST_GROUP: string            = 'IFS_SELECT_FIRST_GROUP';
     public static SELECT_EXISTING_GROUP_DEFAULT: string = 'IFS_SELECT_EXISTING_GROUP_DEFAULT';
 
-    private _messages: IMessageEvent[] = [];
-    private _furniMsgFragments: Map<number, FurnitureListItemParser>[] = [];
-    private _groupItems: GroupItem[] = [];
-    private _itemIdInFurniPlacing: number = -1;
-    private _isObjectMoverRequested: boolean = false;
-    private _isInitialized: boolean = false;
-    private _needsUpdate: boolean = false;
+    private _messages: IMessageEvent[]                                  = [];
+    private _furniMsgFragments: Map<number, FurnitureListItemParser>[]  = null;
+    private _groupItems: GroupItem[]                                    = [];
+    private _search: string                                             = '';
+    private _searchType: string                                         = '';
+    private _itemIdInFurniPlacing: number                               = -1;
+    private _isObjectMoverRequested: boolean                            = false;
+    private _isInitialized: boolean                                     = false;
+    private _needsUpdate: boolean                                       = false;
+    private _offerOnMarketPlaceItem: FurnitureItem;
+    private _marketPlaceConfig: MarketplaceConfigParser;
+    private _marketPlaceItemStats: MarketplaceItemStatsParser;
 
     constructor(
         private _inventoryService: InventoryService,
+        private _notificationService: NotificationService,
         private _ngZone: NgZone)
     {
+        this.onRoomEngineObjectPlacedEvent = this.onRoomEngineObjectPlacedEvent.bind(this);
+
         this.registerMessages();
     }
 
@@ -51,17 +72,23 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             this._messages = [
                 new FurnitureListAddOrUpdateEvent(this.onFurnitureListAddOrUpdateEvent.bind(this)),
                 new FurnitureListEvent(this.onFurnitureListEvent.bind(this)),
                 new FurnitureListInvalidateEvent(this.onFurnitureListInvalidateEvent.bind(this)),
                 new FurnitureListRemovedEvent(this.onFurnitureListRemovedEvent.bind(this)),
-                new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this))
+                new FurniturePostItPlacedEvent(this.onFurniturePostItPlacedEvent.bind(this)),
+                new MarketplaceSellItemEvent(this.onMarketplaceSellEvent.bind(this)),
+                new MarketplaceConfigEvent(this.onMarketplaceConfigEvent.bind(this)),
+                new MarketplaceItemStatsEvent(this.onMarketplaceItemStatsEvent.bind(this)),
+                new MarketplaceItemPostedEvent(this.onMarketplaceItemPostedEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+
+            Nitro.instance.communication.connection.send(new MarketplaceRequestComposer());
         });
     }
 
@@ -69,7 +96,7 @@ export class InventoryFurnitureService implements OnDestroy
     {
         this._ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.PLACED, this.onRoomEngineObjectPlacedEvent);
 
             for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
 
@@ -115,7 +142,7 @@ export class InventoryFurnitureService implements OnDestroy
                     if(furnitureItem)
                     {
                         furnitureItem.update(item);
-                        
+
                         groupItem.hasUnseenItems = true;
                     }
                 }
@@ -178,7 +205,7 @@ export class InventoryFurnitureService implements OnDestroy
         this._ngZone.run(() =>
         {
             const groupItem = this.removeItemById(parser.itemId);
-        
+
             if(groupItem) this.setAllFurnitureSeen();
         });
     }
@@ -190,6 +217,85 @@ export class InventoryFurnitureService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
+    }
+
+    private onMarketplaceItemPostedEvent(event: MarketplaceItemPostedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        let title = null;
+
+        if(parser.result == 1)
+        {
+            title = 'inventory.marketplace.result.title.success';
+        }
+        else
+        {
+            title = 'inventory.marketplace.result.title.failure';
+        }
+
+        title = Nitro.instance.localization.getValue(title);
+        const message = Nitro.instance.localization.getValue(`inventory.marketplace.result.${parser.result}`);
+
+        this._notificationService.alert(message, title);
+    }
+
+    private onMarketplaceItemStatsEvent(event: MarketplaceItemStatsEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() => this._marketPlaceItemStats = parser);
+    }
+
+
+    private onMarketplaceConfigEvent(event: MarketplaceConfigEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._marketPlaceConfig = parser;
+    }
+
+    private onMarketplaceSellEvent(event: MarketplaceSellItemEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        switch(parser._Str_3278)
+        {
+            case 2:
+                this._notificationService.alert(this.getTranslation('inventory.marketplace.no_trading_privilege.info'), this.getTranslation('inventory.marketplace.no_trading_privilege.title'));
+                return;
+            case 3:
+                this._notificationService.alert(this.getTranslation('inventory.marketplace.no_trading_pass.info'), this.getTranslation('inventory.marketplace.no_trading_pass.title'));
+                return;
+            case 5:
+                return;
+            case 6:
+                this._notificationService.alert(this.getTranslation('inventory.marketplace.trading_lock.info'), this.getTranslation('inventory.marketplace.trading_lock.title'));
+                return;
+        }
+
+        this._ngZone.run(() => this._inventoryService.marketPlaceOfferVisible = true);
+    }
+
+    private getTranslation(piece: string): string
+    {
+        return Nitro.instance.localization.getValue(piece);
     }
 
     private mergeFragments(fragment: Map<number, FurnitureListItemParser>, totalFragments: number, fragmentNumber: number, fragments: Map<number, FurnitureListItemParser>[]): Map<number, FurnitureListItemParser>
@@ -260,6 +366,8 @@ export class InventoryFurnitureService implements OnDestroy
 
         this._isInitialized = true;
 
+        this._inventoryService.events.next(InventoryFurnitureService.INVENTORY_UPDATED);
+
         if(this._inventoryService.furniController) this._inventoryService.furniController.selectExistingGroupOrDefault();
     }
 
@@ -284,6 +392,20 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         return itemIds;
+    }
+
+    public getFurnitureItem(id: number): IFurnitureItem
+    {
+        for(const furniture of this._groupItems)
+        {
+            if(!furniture) continue;
+
+            const item = furniture.getItemById(id);
+
+            if(item) return item;
+        }
+
+        return null;
     }
 
     private addFurnitureItem(item: FurnitureItem, flag: boolean): void
@@ -317,7 +439,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
 
         const unseen    = this.isFurnitureUnseen(item);
-        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
+        const groupItem = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
 
         groupItem.push(item, unseen);
 
@@ -388,8 +510,8 @@ export class InventoryFurnitureService implements OnDestroy
             return existingGroup;
         }
 
-        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item._Str_2794, flag);
-        
+        existingGroup = this.createGroupItem(item.type, item.category, item.stuffData, item.extra, flag);
+
         existingGroup.push(item, unseen);
 
         if(unseen)
@@ -497,13 +619,29 @@ export class InventoryFurnitureService implements OnDestroy
     public setAllFurnitureSeen(): void
     {
         this._inventoryService.unseenTracker._Str_8813(UnseenItemCategory.FURNI);
-        
+
         for(const groupItem of this._groupItems)
         {
             if(groupItem.hasUnseenItems) groupItem.hasUnseenItems = false;
         }
 
         this._inventoryService.updateUnseenCount();
+    }
+
+    public offerOnMarketplace(): void
+    {
+        const groupItem = this.getSelectedGroup();
+
+        if(!groupItem) return;
+
+        const firstItem = groupItem.getItemByIndex(0);
+
+        if(!firstItem || !firstItem.sellable) return;
+
+        this._offerOnMarketPlaceItem = firstItem;
+
+        Nitro.instance.communication.connection.send(new RequestSellItemComposer());
+        Nitro.instance.communication.connection.send(new MarketplaceRequesstItemStatsComposer(-1, firstItem.type));
     }
 
     public attemptItemPlacement(flag: boolean = false): boolean
@@ -526,10 +664,32 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
+            this._inventoryService.hideWindow();
+
             this.startRoomObjectPlacement(item);
         }
 
         return true;
+    }
+
+    public startRoomObjectPlacementWithoutRequest(item: IFurnitureItem): boolean
+    {
+        let category    = 0;
+        let isMoving    = false;
+
+        if(item.isWallItem) category = RoomObjectCategory.WALL;
+        else category = RoomObjectCategory.FLOOR;
+
+        if((item.category === FurniCategory._Str_5186))
+        {
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString());
+        }
+        else
+        {
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.extra.toString(), item.stuffData);
+        }
+
+        return isMoving;
     }
 
     private startRoomObjectPlacement(item: FurnitureItem): void
@@ -546,7 +706,7 @@ export class InventoryFurnitureService implements OnDestroy
         }
         else
         {
-            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.stuffData.getLegacyString(), item.stuffData);
+            isMoving = Nitro.instance.roomEngine.processRoomObjectPlacement(RoomObjectPlacementSource.INVENTORY, item.id, category, item.type, item.extra.toString(), item.stuffData);
         }
 
         if(isMoving)
@@ -630,7 +790,7 @@ export class InventoryFurnitureService implements OnDestroy
     public requestLoad(): void
     {
         this._needsUpdate = false;
-        
+
         Nitro.instance.communication.connection.send(new FurnitureListComposer());
     }
 
@@ -664,5 +824,45 @@ export class InventoryFurnitureService implements OnDestroy
     public get isObjectMoverRequested(): boolean
     {
         return this._isObjectMoverRequested;
+    }
+
+    public get search(): string
+    {
+        return this._search;
+    }
+
+    public set search(search: string)
+    {
+        this._search = search;
+    }
+
+    public get searchType(): string
+    {
+        return this._searchType;
+    }
+
+    public set searchType(type: string)
+    {
+        this._searchType = type;
+    }
+
+    public get offerOnMarketPlaceItem(): FurnitureItem
+    {
+        return this._offerOnMarketPlaceItem;
+    }
+
+    public get marketPlaceConfig(): MarketplaceConfigParser
+    {
+        return this._marketPlaceConfig;
+    }
+
+    public get marketPlaceItemStats(): MarketplaceItemStatsParser
+    {
+        return this._marketPlaceItemStats;
+    }
+
+    public set marketPlaceItemStats(value: MarketplaceItemStatsParser)
+    {
+        this._marketPlaceItemStats = value;
     }
 }

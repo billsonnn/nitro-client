@@ -1,0 +1,72 @@
+<div #activeView class="nitro-room-avatarinfo-component context-menu card align-items-center">
+    <div class="drag-handler d-flex justify-content-center align-items-center p-1 px-2 w-100" *ngIf="visible">
+        <p class="m-0">{{ userName }}</p>
+    </div>
+    <div class="d-flex flex-column mb-1 w-100" *ngIf="visible">
+        <ng-container [ngSwitch]="mode">
+            <ng-container *ngSwitchCase="0">
+                <ng-container *ngFor="let entry of menu">
+                    <ul class="list-group list-group-flush">
+                        <ng-container *ngFor="let item of entry.items">
+                            <ng-container *ngIf="item.visible" [ngSwitch]="item.name">
+                                <li *ngSwitchCase="'respect'" (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate:'count':avatarData._Str_3577 }}</li>
+                                <li *ngSwitchDefault (click)="processAction(item.name)" class="list-group-item">{{ item.localization | translate }}</li>
+                            </ng-container>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="1">
+                <div class="px-2">
+                    <p class="mb-1">{{ ('bot.skill.name.configuration.new.name') | translate }}</p>
+                    <input type="text" class="form-control form-control-sm mb-2" [(ngModel)]="newName">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="processAction('')">{{ ('cancel') | translate }}</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)="processAction('save_bot_name')">{{ ('save') | translate }}</button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="2">
+                <div class="px-2">
+                    <p class="mb-1">{{ ('bot.skill.name.configuration.new.motto') | translate }}</p>
+                    <input type="text" class="form-control form-control-sm mb-2" [(ngModel)]="newMotto" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="processAction('')">{{ ('cancel') | translate }}</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)="processAction('save_bot_motto')">{{ ('save') | translate }}</button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="3">
+                <div class="px-2">
+                    <div class="d-flex flex-column">
+                        <p class="mb-1">{{ ('bot.skill.chatter.configuration.chat.text') | translate }}</p>
+                        <textarea class="form-control form-control-sm mb-2" [placeholder]="('bot.skill.chatter.configuration.text.placeholder' | translate)" [(ngModel)]="newText"></textarea>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <p class="col m-0 p-0">{{ 'bot.skill.chatter.configuration.automatic.chat' | translate }}</p>
+                        <div class="col-3 m-0 p-0">
+                            <input type="checkbox" class="form-check-input m-0" [checked]="automaticChat" (click)="(automaticChat = !automaticChat)" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <p class="col m-0 p-0">{{ ('bot.skill.chatter.configuration.markov') | translate }}</p>
+                        <div class="col-3 m-0 p-0">
+                            <input type="checkbox" class="form-check-input m-0" [checked]="mixSentences" (click)="(mixSentences = !mixSentences)" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <p class="col m-0 p-0">{{ ('bot.skill.chatter.configuration.chat.delay') | translate }}</p>
+                        <div class="col-3 m-0 p-0">
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="chatDelay" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between mt-1">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="processAction('')">{{ ('cancel') | translate }}</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)="processAction('save_bot_motto')">{{ ('save') | translate }}</button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <i class="fas small visibility-toggle mb-1 w-100 text-center" [ngClass]="visible ? 'fa-chevron-down' : 'fa-chevron-up m-2'" (click)="toggleVisibility()"></i>
+</div>

@@ -1,7 +1,7 @@
-﻿import { Texture } from 'pixi.js';
+﻿import { PetFigureData } from '../../../../../../client/nitro/avatar/pets/PetFigureData';
 import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
 
-export class InfoStandPetData 
+export class InfoStandPetData
 {
     private _level: number;
     private _levelMax: number;
@@ -16,7 +16,7 @@ export class InfoStandPetData
     private _petId: number = -1;
     private _type: number;
     private _race: number;
-    private _image: Texture;
+    private _petFigureData: PetFigureData;
     private _isOwnPet: boolean;
     private _ownerId: number;
     private _ownerName: string;
@@ -24,7 +24,7 @@ export class InfoStandPetData
     private _roomIndex: number;
     private _age: number;
     private _breedId: number;
-    private _skillTresholds: string[];
+    private _skillTresholds: number[];
     private _accessRights: number;
     private _rarityLevel: number;
     private _hasBreedingPermission: boolean;
@@ -52,9 +52,9 @@ export class InfoStandPetData
         return this._race;
     }
 
-    public get image(): Texture
+    public get petFigureData(): PetFigureData
     {
-        return this._image;
+        return this._petFigureData;
     }
 
     public get _Str_5175(): boolean
@@ -87,7 +87,7 @@ export class InfoStandPetData
         return this._breedId;
     }
 
-    public get _Str_3307(): string[]
+    public get _Str_3307(): number[]
     {
         return this._skillTresholds;
     }
@@ -178,7 +178,7 @@ export class InfoStandPetData
         this._petId = k.id;
         this._type = k._Str_4355;
         this._race = k._Str_14767;
-        this._image = k.image;
+        this._petFigureData = k.petFigureData;
         this._isOwnPet = k._Str_5175;
         this._ownerId = k.ownerId;
         this._ownerName = k.ownerName;

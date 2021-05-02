@@ -12,7 +12,7 @@ import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/eve
 import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
 import { NotificationBroadcastMessageComponent } from '../../../notification/components/broadcast-message/broadcast-message.component';
 
-export class FurnitureRoomLinkHandler implements IRoomWidgetHandler 
+export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 {
     private static INTERNALLINK: string = 'internalLink';
 

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { CrackableDataType } from '../../../../../../../client/nitro/room/object/data/type/CrackableDataType';
+import { StringDataType } from '../../../../../../../client/nitro/room/object/data/type/StringDataType';
 import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
 import { RoomWidgetEnumItemExtradataParameter } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
 import { RoomWidgetFurniInfoUsagePolicyEnum } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetFurniInfoUsagePolicyEnum';
@@ -24,27 +26,74 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
     public canMove      = false;
     public canRotate    = false;
     public canUse       = false;
-    public updateCount  = 0;
+
+    public furniSettingsKeys: string[]      = [];
+    public furniSettingsValues: string[]    = [];
+    public isCrackable: boolean             = false;
+    public crackableHits: number            = 0;
+    public crackableTarget: number          = 0;
 
     public update(event: RoomWidgetFurniInfostandUpdateEvent): void
     {
-        Nitro.instance.localization.registerParameter('furni.owner', 'name', this.furniData.ownerName);
-        
+        this.furniSettingsKeys      = [];
+        this.furniSettingsValues    = [];
+        this.isCrackable            = false;
+        this.crackableHits          = 0;
+        this.crackableTarget        = 0;
+
         let canMove     = false;
         let canRotate   = false;
         let canUse      = false;
+        let godMode     = false;
 
-        if((event.roomControllerLevel >= RoomControllerLevel.GUEST) || event.isOwner || event.isRoomOwner || event.isAnyRoomOwner)
+        const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
+
+        if(isValidController || event.isOwner || event.isRoomOwner || event.isAnyRoomOwner)
         {
             canMove     = true;
             canRotate   = (!event.isWallItem);
+
+            if(event.roomControllerLevel >= RoomControllerLevel.MODERATOR) godMode = true;
         }
-        
-        const isValidController = (event.roomControllerLevel >= RoomControllerLevel.GUEST);
 
         if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
         {
             canUse = true;
+        }
+
+        if(event.extraParam)
+        {
+            if(event.extraParam === RoomWidgetEnumItemExtradataParameter.CRACKABLE_FURNI)
+            {
+                const stuffData = (event.stuffData as CrackableDataType);
+
+                canUse  = true;
+
+                this.isCrackable        = true;
+                this.crackableHits      = stuffData.hits;
+                this.crackableTarget    = stuffData.target;
+            }
+
+            if(godMode)
+            {
+                const extraParam = event.extraParam.substr(RoomWidgetEnumItemExtradataParameter.BRANDING_OPTIONS.length);
+
+                if(extraParam)
+                {
+                    const parts = extraParam.split('\t');
+
+                    for(const part of parts)
+                    {
+                        const value = part.split('=');
+
+                        if(value && (value.length === 2))
+                        {
+                            this.furniSettingsKeys.push(value[0]);
+                            this.furniSettingsValues.push(value[1]);
+                        }
+                    }
+                }
+            }
         }
 
         this.canMove    = canMove;
@@ -52,8 +101,6 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         this.canUse     = canUse;
 
         this.togglePickupButton(event);
-
-        this.updateCount++;
     }
 
     private togglePickupButton(event: RoomWidgetFurniInfostandUpdateEvent): void
@@ -80,6 +127,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
         if(!action || (action === '')) return;
 
         let messageType: string = null;
+        let objectData: string  = null;
 
         switch(action)
         {
@@ -102,11 +150,51 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             case 'use':
                 messageType = RoomWidgetFurniActionMessage.RWFAM_USE;
                 break;
+            case 'save_branding_configuration':
+                messageType = RoomWidgetFurniActionMessage.RWFAM_SAVE_STUFF_DATA;
+                objectData = this.getSettingsAsString();
+                break;
+
         }
 
         if(!messageType) return;
 
-        this.widget.messageListener.processWidgetMessage(new RoomWidgetFurniActionMessage(messageType, this.furniData.id, this.furniData.category, this.furniData.purchaseOfferId, null));
+        this.widget.messageListener.processWidgetMessage(new RoomWidgetFurniActionMessage(messageType, this.furniData.id, this.furniData.category, this.furniData.purchaseOfferId, objectData));
+    }
+
+    private getSettingsAsString(): string
+    {
+        if(!this.furniSettingsKeys.length || !this.furniSettingsValues.length) return '';
+
+        let data = '';
+
+        let i = 0;
+
+        while(i < this.furniSettingsKeys.length)
+        {
+            const key   = this.furniSettingsKeys[i];
+            const value = this.furniSettingsValues[i];
+
+            data = (data + (key + '=' + value + '\t'));
+
+            i++;
+        }
+
+        return data;
+    }
+
+    public openFurniGroupInfo(): void
+    {
+        if(!this.furniData.groupId) return;
+
+        Nitro.instance.createLinkEvent('groups/info/' + this.furniData.groupId);
+    }
+
+    public get getStuffDataAsStringDataType(): StringDataType
+    {
+        if(!this.furniData) return null;
+
+        return (this.furniData.stuffData as StringDataType);
     }
 
     public get type(): number

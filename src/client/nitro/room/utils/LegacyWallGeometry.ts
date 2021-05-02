@@ -1,10 +1,10 @@
 import { IVector3D } from '../../../room/utils/IVector3D';
 import { Vector3d } from '../../../room/utils/Vector3d';
 
-export class LegacyWallGeometry 
+export class LegacyWallGeometry
 {
     public static DEFAULT_SCALE: number = 32;
-    
+
     private static L: string = 'l';
     private static R: string = 'r';
 
@@ -56,7 +56,7 @@ export class LegacyWallGeometry
 
             return;
         }
-        
+
         this.reset();
 
         let y = 0;
@@ -109,7 +109,7 @@ export class LegacyWallGeometry
         const heightMap = this._heightMap[y];
 
         if(!heightMap) return 0;
-        
+
         return heightMap[x];
     }
 
@@ -313,7 +313,7 @@ export class LegacyWallGeometry
     {
         const _local_3 = this.getHeight(k, _arg_2);
         const _local_4 = (_local_3 + 1);
-        
+
         return _local_3 + (((((((((Math.trunc(this.getHeight((k - 1), (_arg_2 - 1))) == _local_4) || (Math.trunc(this.getHeight(k, (_arg_2 - 1))) == _local_4)) || (Math.trunc(this.getHeight((k + 1), (_arg_2 - 1))) == _local_4)) || (Math.trunc(this.getHeight((k - 1), _arg_2)) == _local_4)) || (Math.trunc(this.getHeight((k + 1), _arg_2)) == _local_4)) || (Math.trunc(this.getHeight((k - 1), (_arg_2 + 1))) == _local_4)) || (Math.trunc(this.getHeight(k, (_arg_2 + 1))) == _local_4)) || (Math.trunc(this.getHeight((k + 1), (_arg_2 + 1))) == _local_4)) ? 0.5 : 0);
     }
 

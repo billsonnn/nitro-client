@@ -1,10 +1,10 @@
 <div class="btn-group w-100 my-1" style="min-height:45px;">
     <ng-container *ngIf="categories.length > 1">
-        <button type="button" *ngFor="let category of categories.getValues()" class="btn btn-primary d-flex justify-content-center align-items-center" [ngClass]="{ 'active': (activeCategory === category) }" (click)="selectCategory(category.name)"><i class="icon {{ category.name }}-icon" [ngClass]="{ 'selected': (activeCategory === category) }"></i></button>
+        <button type="button" *ngFor="let category of categories.getValues()" class="btn btn-secondary d-flex justify-content-center align-items-center" [ngClass]="{ 'active': (activeCategory === category) }" (click)="selectCategory(category.name)"><i class="icon {{ category.name }}-icon" [ngClass]="{ 'selected': (activeCategory === category) }"></i></button>
     </ng-container>
     <ng-container *ngIf="canSetGender">
-        <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" (click)="selectGender('M')" [ngClass]="{ 'active': (gender === 'M') }"><i class="icon male-icon" [ngClass]="{ 'selected': (gender === 'M') }"></i></button>
-        <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" (click)="selectGender('F')" [ngClass]="{ 'active': (gender === 'F') }"><i class="icon female-icon" [ngClass]="{ 'selected': (gender === 'F') }"></i></button>
+        <button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center" (click)="selectGender('M')" [ngClass]="{ 'active': (gender === 'M') }"><i class="icon male-icon" [ngClass]="{ 'selected': (gender === 'M') }"></i></button>
+        <button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center" (click)="selectGender('F')" [ngClass]="{ 'active': (gender === 'F') }"><i class="icon female-icon" [ngClass]="{ 'selected': (gender === 'F') }"></i></button>
     </ng-container>
 </div>
 <ng-container *ngIf="activeCategory">

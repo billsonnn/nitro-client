@@ -2,7 +2,7 @@
 import { IVector3D } from '../../../../../../room/utils/IVector3D';
 import { PlaneMaskVisualization } from './PlaneMaskVisualization';
 
-export class PlaneMask 
+export class PlaneMask
 {
     private _maskVisualizations: Map<number, PlaneMaskVisualization>;
     private _sizes: number[];

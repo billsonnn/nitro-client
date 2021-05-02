@@ -108,7 +108,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
     public getServerRenderData(): any[]
     {
         this.getAvatarPartsForCamera(AvatarSetType.FULL);
-        
+
         return this._cache._Str_1009();
     }
 
@@ -255,7 +255,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 {
                     return (((this._mainDirection + '_') + this._headDirection) + this._currentActionsString) + (this._frameCounter % 11);
                 }
-                
+
                 if((k._Str_695 === 'dance') && ((k._Str_727 === '1') || (k._Str_727 === '2') || (k._Str_727 === '3') || (k._Str_727 === '4')))
                 {
                     let frame = (this._frameCounter % 8);
@@ -408,10 +408,10 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         {
             //this._reusableTexture = this.applyPalette(this._reusableTexture, this._avatarSpriteData.reds);
         }
-        
+
         this._image     = this._reusableTexture;
         this._changes   = false;
-        
+
         return this._image;
     }
 
@@ -571,7 +571,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         const image = Nitro.instance.renderer.extract.image(container);
 
         if(!image) return null;
-        
+
         return image;
     }
 
@@ -601,7 +601,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         if(existing)
         {
             this._fullImageCache.remove(k);
-            
+
             existing.destroy(true);
         }
 
@@ -643,7 +643,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
         let k:ActiveActionData;
 
         if(!this.sortActions()) return;
-        
+
         for(const k of this._sortedActions)
         {
             if(k._Str_695 === AvatarAction.EFFECT)
@@ -738,7 +738,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 break;
             }
         }
-        
+
         return true;
     }
 
@@ -906,7 +906,7 @@ export class AvatarImage implements IAvatarImage, IAvatarEffectListener
                 if(k._Str_742._Str_861 && (k._Str_727 === '')) k._Str_727 = '1';
 
                 this.setActionToParts(k, _local_3);
-                
+
                 if(k._Str_742._Str_861)
                 {
                     this._isAnimating = k._Str_742._Str_801(k._Str_727);

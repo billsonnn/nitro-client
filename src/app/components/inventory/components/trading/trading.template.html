@@ -1,71 +1,59 @@
-<ng-container *ngIf="visible">
-    <div class="row">
-        <div class="col-6">
-            <div class="badge badge-secondary my-1 p-1">{{ ('inventory.trading.you') | translate }}</div>
-            <div class="d-flex">
-                <div class="grid-container position-relative" style="width:160px">
-                    <div class="grid-items grid-3">
-                        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;" (click)="removeItem(i)">
-                            <div *ngIf="ownUserItems[i]" class="d-flex flex-grow-1 align-items-center detail-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(ownUserItems[i]) + ')' }"></div>
-                            <ng-container *ngIf="ownUserItems[i]">
-                                <div class="badge badge-secondary" *ngIf="!ownUserItems[i].stuffData.uniqueNumber">x{{ ownUserItems[i].getUnlockedCount() }}</div>
-                                <div class="badge badge-secondary" *ngIf="ownUserItems[i].stuffData.uniqueNumber">{{ ownUserItems[i].stuffData.uniqueNumber }}</div>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center px-1">
-                    <i class="icon my-2" [ngClass]="{ 'trade-unlocked-icon': !ownUserAccepts, 'trade-locked-icon': ownUserAccepts }"></i>
-                    <div class="d-flex flex-column justify-content-center align-items-center badge badge-secondary my-2">
-                        <span>{{ ownUserNumItems }}</span>
-                        <span>items</span>
-                    </div>
-                    <div class="d-flex flex-column justify-content-center align-items-center badge badge-secondary my-2">
-                        <span>{{ ownUserNumCredits }}</span>
-                        <span>credits</span>
+<div class="row mt-3">
+    <div class="d-flex flex-column col-6">
+        <div class="badge badge-secondary w-100 p-1 mb-1">{{ ('inventory.trading.you') | translate }}</div>
+        <div class="d-flex mb-1">
+            <div class="grid-container position-relative">
+                <div class="grid-items grid-3">
+                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;" (click)="removeItem(i)">
+                        <button *ngIf="ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'unique': ownUserItems[i].stuffData.uniqueNumber }">
+                            <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(ownUserItems[i]) + ')' }"></div>
+                            <div *ngIf="!ownUserItems[i].stuffData.uniqueNumber" class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ ownUserItems[i].getUnlockedCount() }}</div>
+                            <div *ngIf="ownUserItems[i].stuffData.uniqueNumber" class="position-absolute unique-counter" [innerHtml]="ownUserItems[i].stuffData.uniqueNumber | uniqueNumber"></div>
+                        </button>
+                        <button *ngIf="!ownUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <div class="badge badge-secondary my-1 p-1">{{ otherUserName }}</div>
-            <div class="d-flex">
-                <div class="grid-container position-relative" style="width:160px">
-                    <div class="grid-items grid-3">
-                        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;">
-                            <div *ngIf="otherUserItems[i]" class="d-flex flex-grow-1 align-items-center detail-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(otherUserItems[i]) + ')' }"></div>
-                            <ng-container *ngIf="otherUserItems[i]">
-                                <div class="badge badge-secondary" *ngIf="!otherUserItems[i].stuffData.uniqueNumber">x{{ otherUserItems[i].getUnlockedCount() }}</div>
-                                <div class="badge badge-secondary" *ngIf="otherUserItems[i].stuffData.uniqueNumber">{{ otherUserItems[i].stuffData.uniqueNumber }}</div>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center px-1">
-                    <i class="icon my-2" [ngClass]="{ 'trade-unlocked-icon': !otherUserAccepts, 'trade-locked-icon': otherUserAccepts }"></i>
-                    <div class="d-flex flex-column justify-content-center align-items-center badge badge-secondary my-2">
-                        <span>{{ otherUserNumItems }}</span>
-                        <span>items</span>
-                    </div>
-                    <div class="d-flex flex-column justify-content-center align-items-center badge badge-secondary my-2">
-                        <span>{{ otherUserNumCredits }}</span>
-                        <span>credits</span>
+        <div class="d-flex">
+            <i class="icon w-100" [ngClass]="{ 'trade-unlocked-icon': !ownUserAccepts, 'trade-locked-icon': ownUserAccepts }"></i>
+            <div class="d-flex justify-content-center align-items-center badge badge-secondary w-100 p-1 m-1">{{ ownUserNumItems }} items</div>
+            <div class="d-flex justify-content-center align-items-center badge badge-secondary w-100 p-1 m-1">{{ ownUserNumCredits }} credits</div>
+        </div>
+    </div>
+    <div class="d-flex flex-column col-6">
+        <div class="badge badge-secondary w-100 p-1 mb-1">{{ otherUserName }}</div>
+        <div class="d-flex mb-1">
+            <div class="grid-container position-relative">
+                <div class="grid-items grid-3">
+                    <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let num of indexs; let i = index;" (click)="removeItem(i)">
+                        <button *ngIf="otherUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info" [ngClass]="{ 'unique': otherUserItems[i].stuffData.uniqueNumber }">
+                            <div class="position-absolute detail-info has-image" [ngStyle]="{ 'background-image': 'url(' + getIconUrl(otherUserItems[i]) + ')' }"></div>
+                            <div *ngIf="!otherUserItems[i].stuffData.uniqueNumber" class="position-absolute btn btn-sm btn-primary px-1 py-0 rounded count">{{ otherUserItems[i].getUnlockedCount() }}</div>
+                            <div *ngIf="otherUserItems[i].stuffData.uniqueNumber" class="position-absolute unique-counter" [innerHtml]="otherUserItems[i].stuffData.uniqueNumber | uniqueNumber"></div>
+                        </button>
+                        <button *ngIf="!otherUserItems[i]" type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image"></button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mt-2">
-        <div class="d-flex col-12 justify-content-between">
-            <ng-container [ngSwitch]="state">
-                <button *ngSwitchCase=0 type="button" class="btn btn-primary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ 'inventory.trading.accept' | translate }}</button>
-                <button *ngSwitchCase=1 type="button" class="btn btn-primary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ (ownUserAccepts ? 'inventory.trading.modify' : 'inventory.trading.accept') | translate }}</button>
-                <button *ngSwitchCase=2 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.countdown' | translate:'counter':timerTick }}</button>
-                <button *ngSwitchCase=3 type="button" class="btn btn-primary" (click)="progressTrade()">{{ 'inventory.trading.confirm' | translate }}</button>
-                <button *ngSwitchCase=4 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.info.waiting' | translate }}</button>
-                <button *ngSwitchCase=5 type="button" class="btn btn-primary" disabled>{{ 'inventory.trading.accept' | translate }}</button>
-            </ng-container>
-            <button type="button" class="btn btn-primary" (click)="cancelTrade()">{{ 'generic.cancel' | translate }}</button>
+        <div class="d-flex">
+            <i class="icon w-100" [ngClass]="{ 'trade-unlocked-icon': !otherUserAccepts, 'trade-locked-icon': otherUserAccepts }"></i>
+            <div class="d-flex justify-content-center align-items-center badge badge-secondary w-100 p-1 m-1">{{ otherUserNumItems }} items</div>
+            <div class="d-flex justify-content-center align-items-center badge badge-secondary w-100 p-1 m-1">{{ otherUserNumCredits }} credits</div>
         </div>
     </div>
-</ng-container>
+</div>
+<div class="row mt-3">
+    <div class="d-flex col-12 justify-content-between">
+        <ng-container [ngSwitch]="state">
+            <button *ngSwitchCase=0 type="button" class="btn btn-secondary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ 'inventory.trading.accept' | translate }}</button>
+            <button *ngSwitchCase=1 type="button" class="btn btn-secondary" [disabled]="(!ownUserNumItems && !otherUserNumItems)" (click)="progressTrade()">{{ (ownUserAccepts ? 'inventory.trading.modify' : 'inventory.trading.accept') | translate }}</button>
+            <button *ngSwitchCase=2 type="button" class="btn btn-secondary" disabled>{{ 'inventory.trading.countdown' | translate:'counter':timerTick }}</button>
+            <button *ngSwitchCase=3 type="button" class="btn btn-secondary" (click)="progressTrade()">{{ 'inventory.trading.confirm' | translate }}</button>
+            <button *ngSwitchCase=4 type="button" class="btn btn-secondary" disabled>{{ 'inventory.trading.info.waiting' | translate }}</button>
+            <button *ngSwitchCase=5 type="button" class="btn btn-secondary" disabled>{{ 'inventory.trading.accept' | translate }}</button>
+        </ng-container>
+        <button type="button" class="btn btn-danger" (click)="cancelTrade()">{{ 'generic.cancel' | translate }}</button>
+    </div>
+</div>

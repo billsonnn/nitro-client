@@ -4,6 +4,7 @@ import { INitroLocalizationManager } from '../../localization/INitroLocalization
 import { FurnitureData } from './FurnitureData';
 import { FurnitureType } from './FurnitureType';
 import { IFurnitureData } from './IFurnitureData';
+import { NitroLogger } from '../../../core/common/logger/NitroLogger';
 
 export class FurnitureDataParser extends EventDispatcher
 {
@@ -13,6 +14,8 @@ export class FurnitureDataParser extends EventDispatcher
     private _floorItems: Map<number, IFurnitureData>;
     private _wallItems: Map<number, IFurnitureData>;
     private _localization: INitroLocalizationManager;
+    private _nitroLogger: NitroLogger;
+
 
     constructor(floorItems: Map<number, IFurnitureData>, wallItems: Map<number, IFurnitureData>, localization: INitroLocalizationManager)
     {
@@ -21,63 +24,76 @@ export class FurnitureDataParser extends EventDispatcher
         this._floorItems    = floorItems;
         this._wallItems     = wallItems;
         this._localization  = localization;
+        this._nitroLogger = new NitroLogger(this.constructor.name);
     }
 
     public loadFurnitureData(url: string): void
     {
         if(!url) return;
 
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.addEventListener('error', this.onFurnitureDataError.bind(this, request));
-
-        request.open('GET', url);
-
-        request.send();
+        fetch(url)
+            .then(response => response.json())
+            .then(data => this.onFurnitureDataLoaded(data))
+            .catch(err => this.onFurnitureDataError(err));
     }
 
-    private onFurnitureDataLoaded(request: XMLHttpRequest): void
+    private onFurnitureDataLoaded(data: { [index: string]: any }): void
     {
-        if(!request) return;
+        if(!data) return;
 
-        request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
+        if((typeof data.roomitemtypes == 'undefined') || (typeof data.wallitemtypes == 'undefined')) this._nitroLogger.error('There is an error with your furnidata JSON and it is preventing the client from connecting. You need to reconvert it with the node converter.');
 
-        if(request.responseText)
-        {
-            const data = JSON.parse(request.responseText);
+        if(data.roomitemtypes) this.parseFloorItems(data.roomitemtypes);
 
-            if(data.floorItems)
-            {
-                this.parseFloorItems(data.floorItems);
-            }
-
-            if(data.wallItems) this.parseWallItems(data.wallItems);
-        }
+        if(data.wallitemtypes) this.parseWallItems(data.wallitemtypes);
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_READY));
     }
 
-    private onFurnitureDataError(request: XMLHttpRequest): void
+    private onFurnitureDataError(error: Error): void
     {
-        if(!request)
+        if(!error) return;
 
-            request.removeEventListener('loadend', this.onFurnitureDataLoaded.bind(this, request));
-        request.removeEventListener('error', this.onFurnitureDataError.bind(this, request));
+        console.error(error);
 
         this.dispatchEvent(new NitroEvent(FurnitureDataParser.FURNITURE_DATA_ERROR));
     }
 
-    private parseFloorItems(data: IFurnitureData[]): void
+    private parseFloorItems(data: any): void
     {
-        if(!data || !data.length) return;
+        if(!data || !data.furnitype) return;
 
-        for(const furniture of data)
+        for(const furniture of data.furnitype)
         {
             if(!furniture) continue;
 
-            const furnitureData = new FurnitureData(FurnitureType.FLOOR, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams);
+            const colors: number[] = [];
+
+            if(furniture.partcolors)
+            {
+                for(const color of furniture.partcolors.color)
+                {
+                    let colorCode = (color as string);
+
+                    if(colorCode.charAt(0) === '#')
+                    {
+                        colorCode = colorCode.replace('#', '');
+
+                        colors.push(parseInt(colorCode, 16));
+                    }
+                    else
+                    {
+                        colors.push((parseInt(colorCode, 16)));
+                    }
+                }
+            }
+
+            const classSplit    = (furniture.classname as string).split('*');
+            const className     = classSplit[0];
+            const colorIndex    = ((classSplit.length > 1) ? parseInt(classSplit[1]) : 0);
+            const hasColorIndex = (classSplit.length > 1);
+
+            const furnitureData = new FurnitureData(FurnitureType.FLOOR, furniture.id, furniture.classname, className, furniture.category, furniture.name, furniture.description, furniture.revision, furniture.xdim, furniture.ydim, 0, colors, hasColorIndex, colorIndex, furniture.adurl, furniture.offerid, furniture.buyout, furniture.rentofferid, furniture.rentbuyout, furniture.bc, furniture.customparams, furniture.specialtype, furniture.canstandon, furniture.cansiton, furniture.canlayon, furniture.excludeddynamic, furniture.furniline, furniture.environment, furniture.rare);
 
             this._floorItems.set(furnitureData.id, furnitureData);
 
@@ -85,15 +101,15 @@ export class FurnitureDataParser extends EventDispatcher
         }
     }
 
-    private parseWallItems(data: IFurnitureData[]): void
+    private parseWallItems(data: any): void
     {
-        if(!data || !data.length) return;
+        if(!data || !data.furnitype) return;
 
-        for(const furniture of data)
+        for(const furniture of data.furnitype)
         {
             if(!furniture) continue;
 
-            const furnitureData = new FurnitureData(FurnitureType.WALL, furniture.id, furniture.className, furniture.name, furniture.description, furniture.furniLine, furniture.colors, furniture.dimensions, furniture.canStandOn, furniture.canSitOn, furniture.canLayOn, furniture.offerId, furniture.adUrl, furniture.excludeDynamic, furniture.specialType, furniture.customParams);
+            const furnitureData = new FurnitureData(FurnitureType.WALL, furniture.id, furniture.classname, furniture.classname, furniture.category, furniture.name, furniture.description, furniture.revision, 0, 0, 0, null, false, 0, furniture.adurl, furniture.offerid, furniture.buyout, furniture.rentofferid, furniture.rentbuyout, furniture.bc, null, furniture.specialtype, false, false, false, furniture.excludeddynamic, furniture.furniline, furniture.environment, furniture.rare);
 
             this._wallItems.set(furnitureData.id, furnitureData);
 

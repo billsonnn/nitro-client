@@ -24,7 +24,7 @@ export class FurnitureHighScoreLogic extends FurnitureLogic
         {
             this.eventDispatcher.dispatchEvent(new RoomObjectWidgetRequestEvent(RoomObjectWidgetRequestEvent.HIDE_HIGH_SCORE_DISPLAY, this.object));
         }
-        
+
         super.tearDown();
     }
 

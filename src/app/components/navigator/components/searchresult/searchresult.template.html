@@ -1,12 +1,12 @@
-<div class="btn-group w-100">
-    <button type="button" class="btn btn-primary w-100 text-left" (click)="toggleCollapsed()">
+<div class="d-flex justify-content-between align-items-center pt-2">
+    <h6 class="m-0" (click)="toggleCollapsed()">
         <i class="fas" [ngClass]="{ 'fa-minus': isCollapsed, 'fa-plus': !isCollapsed }"></i> {{ resultCode | translate }}
-    </button>
-    <button *ngIf="(displayMode !== 2)" type="button" class="btn btn-primary" (click)="toggleListMode()">
+    </h6>
+    <h6 *ngIf="(displayMode !== 2)" class="m-0" (click)="toggleListMode()">
         <i class="fas" [ngClass]="{ 'fa-bars': (displayMode === 1), 'fa-th': (displayMode === 0) }"></i>
-    </button>
+    </h6>
 </div>
-<div *ngIf="isCollapsed && (result.rooms.length > 0)" class="navigator-grid-container position-relative mt-1">
+<div *ngIf="isCollapsed && (result.rooms.length > 0)" class="d-flex flex-column pt-2 grid-container">
     <div class="grid-items" [ngClass]="{ 'grid-2': (displayMode >= 1), 'grid-1': (displayMode === 0) }">
         <div nitro-navigator-search-result-item-component *ngFor="let room of result.rooms" class="d-flex flex-column item-detail justify-content-center align-items-center" [room]="room" [displayMode]="displayMode" [ngClass]="{ 'tall-detail': (displayMode >= 1) }"></div>
     </div>

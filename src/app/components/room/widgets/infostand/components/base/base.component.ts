@@ -12,7 +12,7 @@ export class RoomInfoStandBaseComponent
 
     public update(event: RoomWidgetUpdateEvent): void
     {
-        
+
     }
 
     public get type(): number

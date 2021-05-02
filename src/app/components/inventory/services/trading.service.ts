@@ -136,8 +136,6 @@ export class InventoryTradingService implements OnDestroy
     {
         if(!event) return;
 
-        console.log(event);
-
         const parser = event.getParser();
 
         if(!parser) return;
@@ -160,13 +158,13 @@ export class InventoryTradingService implements OnDestroy
         switch(type)
         {
             case InventoryTradingComponent.ALERT_SCAM:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.warning.other_not_offering}');
+                this._notificationService.alert('${inventory.trading.warning.other_not_offering}', '${inventory.trading.notification.title}');
                 return;
             case InventoryTradingComponent.ALERT_OTHER_CANCELLED:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.info.closed}');
+                this._notificationService.alert('${inventory.trading.info.closed}', '${inventory.trading.notification.title}');
                 return;
             case InventoryTradingComponent.ALERT_ALREADY_OPEN:
-                this._notificationService.alert('${inventory.trading.notification.title}', '${inventory.trading.info.already_open}');
+                this._notificationService.alert('${inventory.trading.info.already_open}', '${inventory.trading.notification.title}');
                 return;
         }
     }
@@ -228,7 +226,7 @@ export class InventoryTradingService implements OnDestroy
         const parser = event.getParser();
 
         if(!parser) return;
-        
+
         this._ngZone.run(() =>
         {
             const firstUserItems: AdvancedMap<string, GroupItem>    = new AdvancedMap();
@@ -260,7 +258,7 @@ export class InventoryTradingService implements OnDestroy
         if(!sessionDataManager || !roomSession) return;
 
         let ownUserId = parser._Str_4963;
-        
+
         const ownUserData = roomSession.userDataManager.getUserData(ownUserId);
 
         if(!ownUserData) return;
@@ -292,6 +290,7 @@ export class InventoryTradingService implements OnDestroy
 
         this._ngZone.run(() =>
         {
+            this._inventoryService.hideAllControllers();
             this._inventoryService.showWindow();
 
             this._inventoryService.furnitureVisible = true;
@@ -388,7 +387,7 @@ export class InventoryTradingService implements OnDestroy
     private parseItems(k: TradingListItem[], _arg_2: AdvancedMap<string, GroupItem>): void
     {
         if(!this.controller) return;
-        
+
         const totalItems = k.length;
 
         let i = 0;
@@ -589,7 +588,7 @@ export class InventoryTradingService implements OnDestroy
     public sendTradingConfirmComposer(): void
     {
         this.state = InventoryTradingService.TRADING_STATE_CONFIRMED;
-        
+
         Nitro.instance.communication.connection.send(new TradingConfirmationComposer());
     }
 
@@ -756,8 +755,6 @@ export class InventoryTradingService implements OnDestroy
                 }
                 break;
         }
-
-        console.log(oldState, this._state);
 
         if(didAssign)
         {

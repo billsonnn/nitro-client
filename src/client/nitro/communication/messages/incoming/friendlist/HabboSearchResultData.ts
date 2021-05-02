@@ -21,9 +21,11 @@ export class HabboSearchResultData
         this._avatarMotto       = wrapper.readString();
         this._isAvatarOnline    = wrapper.readBoolean();
         this._canFollow         = wrapper.readBoolean();
+
+        this._lastOnlineData    = wrapper.readString(); // this was not assigned to anything on original packet
+
         this._avatarGender      = wrapper.readInt();
         this._avatarFigure      = wrapper.readString();
-        this._lastOnlineData    = wrapper.readString();
         this._realName          = wrapper.readString();
     }
 
@@ -36,7 +38,7 @@ export class HabboSearchResultData
     {
         return this._avatarName;
     }
-    
+
     public get avatarMotto(): string
     {
         return this._avatarMotto;
@@ -51,7 +53,7 @@ export class HabboSearchResultData
     {
         return this._canFollow;
     }
-    
+
     public get avatarGender(): number
     {
         return this._avatarGender;

@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
 import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
@@ -13,13 +14,30 @@ import { Queue } from '../../../../../client/nitro/window/motion/Queue';
 import { Wait } from '../../../../../client/nitro/window/motion/Wait';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
-import { AvatarEditorService } from '../../../avatar-editor/services/avatar-editor.service';
+import { AchievementsService } from '../../../achievements/services/achievements.service';
+import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { NavigatorService } from '../../../navigator/services/navigator.service';
+import { ModToolService } from '../../../mod-tool/services/mod-tool.service';
 
 @Component({
     selector: 'nitro-toolbar-component',
-    templateUrl: './main.template.html'
+    templateUrl: './main.template.html',
+    animations: [
+        trigger(
+            'inOutAnimation',
+            [
+                transition(
+                    ':enter',
+                    [
+                        style({ bottom: '-100%' }),
+                        animate('1s ease-out',
+                            style({ bottom: 10 }))
+                    ]
+                ),
+            ]
+        )
+    ]
 })
 export class ToolbarMainComponent implements OnInit, OnDestroy
 {
@@ -30,20 +48,24 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     public navigationList: ElementRef<HTMLElement>;
 
     constructor(
-        private _avatarEditorService: AvatarEditorService,
         private _inventoryService: InventoryService,
         private _navigatorService: NavigatorService,
+        private _friendListService: FriendListService,
+        private _achievementService: AchievementsService,
         private sessionService: SessionService,
         private settingsService: SettingsService,
-        private ngZone: NgZone) 
-    {}
+        private _modToolsService: ModToolService,
+        private ngZone: NgZone)
+    {
+        this.onNitroToolbarEvent = this.onNitroToolbarEvent.bind(this);
+    }
 
     public ngOnInit(): void
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
-            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent);
+            Nitro.instance.roomEngine.events.addEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent);
         });
     }
 
@@ -51,8 +73,8 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
     {
         this.ngZone.runOutsideAngular(() =>
         {
-            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent.bind(this));
-            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent.bind(this));
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarEvent.TOOLBAR_CLICK, this.onNitroToolbarEvent);
+            Nitro.instance.roomEngine.events.removeEventListener(NitroToolbarAnimateIconEvent.ANIMATE_ICON, this.onNitroToolbarEvent);
         });
     }
 
@@ -99,8 +121,8 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
                 this.toggleFriendList();
                 return;
             case ToolbarIconEnum.ME_MENU:
-                this.toggleAvatarEditor();
-                
+                this.toggleMeMenu();
+
                 Nitro.instance.roomEngine.events.dispatchEvent(new NitroToolbarEvent(NitroToolbarEvent.SELECT_OWN_AVATAR));
                 return;
         }
@@ -113,7 +135,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         iconName  = this.getIconName(iconName);
 
         if(iconName === '') return;
-        
+
         const target = (this.navigationListElement.getElementsByClassName(iconName)[0] as HTMLElement);
 
         if(target)
@@ -142,7 +164,7 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
             }
 
             const _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
-            
+
             Motions._Str_4598(_local_19);
         }
     }
@@ -184,10 +206,9 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         this.settingsService.toggleNavigator();
     }
 
-    public toggleAvatarEditor(): void
+    public toggleMeMenu(): void
     {
-        this._avatarEditorService.loadOwnAvatarInEditor();
-        this.settingsService.toggleAvatarEditor();
+        this.settingsService.toggleMeMenu();
     }
 
     public visitDesktop(): void
@@ -215,8 +236,18 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         return ((this.navigationList && this.navigationList.nativeElement) || null);
     }
 
-    public get unseenCount(): number
+    public get unseenInventoryCount(): number
     {
         return this._inventoryService.unseenCount;
+    }
+
+    public get unseenFriendListCount(): number
+    {
+        return this._friendListService.notificationCount;
+    }
+
+    public get unseenAchievementsCount(): number
+    {
+        return this._achievementService.unseenCount;
     }
 }

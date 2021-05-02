@@ -1,4 +1,5 @@
 import { Rectangle } from 'pixi.js';
+import { FriendListService } from '../../../app/components/friendlist/services/friendlist.service';
 import { NotificationService } from '../../../app/components/notification/services/notification.service';
 import { WiredService } from '../../../app/components/wired/services/wired.service';
 import { IConnection } from '../../core/communication/connections/IConnection';
@@ -9,6 +10,9 @@ import { IRoomEngine } from '../room/IRoomEngine';
 import { IRoomSession } from '../session/IRoomSession';
 import { IRoomSessionManager } from '../session/IRoomSessionManager';
 import { ISessionDataManager } from '../session/ISessionDataManager';
+import { RoomWidgetUpdateEvent } from './widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from './widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../app/core/settings/service';
 
 export interface IRoomWidgetHandlerContainer
 {
@@ -16,6 +20,7 @@ export interface IRoomWidgetHandlerContainer
     getRoomViewRect(): Rectangle;
     checkFurniManipulationRights(roomId: number, objectId: number, category: number): boolean;
     isOwnerOfFurniture(roomObject: IRoomObject): boolean;
+    processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent;
     events: IEventDispatcher;
     connection: IConnection;
     roomEngine: IRoomEngine;
@@ -25,4 +30,6 @@ export interface IRoomWidgetHandlerContainer
     sessionDataManager: ISessionDataManager;
     notificationService: NotificationService;
     wiredService: WiredService;
+    friendService: FriendListService;
+    settingsService: SettingsService
 }

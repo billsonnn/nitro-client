@@ -34,7 +34,7 @@ export class TileCursorLogic extends RoomObjectLogicBase
     {
         if(!(message instanceof ObjectTileCursorUpdateMessage)) return;
 
-        if(!this._lastEventId && (this._lastEventId === message._Str_20637)) return;
+        if(this._lastEventId && (this._lastEventId === message._Str_20637)) return;
 
         if(message.toggleVisibility) this._isHidden = !this._isHidden;
 

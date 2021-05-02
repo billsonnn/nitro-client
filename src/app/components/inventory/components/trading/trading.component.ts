@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { GroupItem } from '../../items/GroupItem';
 import { InventoryService } from '../../services/inventory.service';
@@ -17,9 +17,6 @@ export class InventoryTradingComponent implements OnInit, OnDestroy
     public static ALERT_OTHER_CANCELLED: number = 1;
     public static ALERT_ALREADY_OPEN: number = 2;
 
-    @Input()
-    public visible: boolean = false;
-
     public indexs: number[] = [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ];
 
     private _timer: ReturnType<typeof setTimeout>;
@@ -28,7 +25,7 @@ export class InventoryTradingComponent implements OnInit, OnDestroy
     constructor(
         private _notificationService: NotificationService,
         private _inventoryService: InventoryService,
-        private _ngZone: NgZone) 
+        private _ngZone: NgZone)
     {}
 
     public ngOnInit(): void

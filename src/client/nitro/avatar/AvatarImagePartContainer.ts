@@ -3,7 +3,7 @@ import { IActionDefinition } from './actions/IActionDefinition';
 import { AnimationFrame } from './structure/animation/AnimationFrame';
 import { IPartColor } from './structure/figure/IPartColor';
 
-export class AvatarImagePartContainer 
+export class AvatarImagePartContainer
 {
     private _bodyPartId: string;
     private _partType: string;

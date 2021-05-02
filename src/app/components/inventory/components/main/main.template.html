@@ -1,13 +1,21 @@
-<div *ngIf="visible" [bringToTop] [draggable] dragHandle=".card-header" class="card nitro-inventory-component">
-    <div class="card-header">
-        {{ ('inventory.title') | translate }}
+<div *ngIf="visible" [bringToTop] [draggable] class="nitro-inventory card">
+    <div class="drag-handler d-flex justify-content-between align-items-center px-3 pt-3">
+        <h6 class="m-0">{{ ('inventory.title') | translate }}</h6>
         <button type="button" class="close" (click)="hide()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="card-body">
-        <div class="btn-group w-100 mb-3">
-            <button type="button" class="btn btn-primary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}</button>
+    <div class="d-flex flex-column p-3">
+        <div class="btn-group w-100 mb-2">
+            <button (click)="showFurniture()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': furnitureVisible || tradingVisible }">{{ 'inventory.furni' | translate }}<div class="bg-danger px-1 py-0 rounded notification-count ml-1" *ngIf="furniUnseenCount">{{ furniUnseenCount }}</div></button>
+            <button (click)="showBots()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': botsVisible }">{{ 'inventory.bots' | translate }}<div class="bg-danger px-1 py-0 rounded notification-count ml-1" *ngIf="botUnseenCount">{{ botUnseenCount }}</div></button>
+            <button (click)="showPets()" type="button" class="btn btn-secondary" [ngClass]="{ 'active': petsVisible }">{{ 'inventory.furni.tab.pets' | translate }}<div class="bg-danger px-1 py-0 rounded notification-count ml-1" *ngIf="petUnseenCount">{{ petUnseenCount }}</div></button>
+            <button (click)="showBadges()" type="button" class="btn btn-secondary" [ngClass]="{'active' : badgesVisible}">{{ 'inventory.badges' | translate }}<div class="bg-danger px-1 py-0 rounded notification-count ml-1" *ngIf="badgeUnseenCount">{{ badgeUnseenCount }}</div></button>
         </div>
-        <div nitro-inventory-furniture-component [visible]="furnitureVisible" [roomPreviewer]="roomPreviewer"></div>
-        <div nitro-inventory-trading-component [visible]="tradingVisible"></div>
+        <div *ngIf="botsVisible" nitro-inventory-bots-component [roomPreviewer]="roomPreviewer"></div>
+        <div *ngIf="petsVisible" nitro-inventory-pets-component [roomPreviewer]="roomPreviewer"></div>
+        <div *ngIf="furnitureVisible" nitro-inventory-furniture-component [roomPreviewer]="roomPreviewer"></div>
+        <div *ngIf="badgesVisible" nitro-inventory-badges-component></div>
+        <div *ngIf="tradingVisible" nitro-inventory-trading-component></div>
     </div>
 </div>
+
+<div [showMainWindow]="marketPlaceOfferVisible && offerForMarketplace && offerStatsIsCorrect" [item]="offerForMarketplace" nitro-inventory-offer-marketplace-component></div>

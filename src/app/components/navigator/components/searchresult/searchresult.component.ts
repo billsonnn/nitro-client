@@ -30,7 +30,7 @@ export class NavigatorSearchResultComponent implements OnInit
 
             return;
         }
-        
+
         this._displayMode = NavigatorDisplayMode.LIST;
     }
 
@@ -42,6 +42,11 @@ export class NavigatorSearchResultComponent implements OnInit
     public get resultCode(): string
     {
         let name = this.result.code;
+
+        if((!name || name.length == 0) && (this.result.data && this.result.data.length > 0))
+        {
+            return this.result.data;
+        }
 
         if(this.result.code.startsWith('${'))
         {

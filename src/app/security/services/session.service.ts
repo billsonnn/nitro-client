@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { IMessageEvent } from '../../../client/core/communication/messages/IMessageEvent';
 import { UserFigureEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserFigureEvent';
 import { UserInfoEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { Nitro } from '../../../client/nitro/Nitro';
@@ -6,26 +7,48 @@ import { Nitro } from '../../../client/nitro/Nitro';
 @Injectable()
 export class SessionService implements OnDestroy
 {
+    private _messages: IMessageEvent[];
     private _userId: number;
     private _userName: string;
     private _figure: string;
     private _gender: string;
 
-    constructor()
+    constructor(private _ngZone: NgZone)
     {
         this._userId    = -1;
         this._userName  = null;
         this._figure    = null;
         this._gender    = null;
 
-        Nitro.instance.communication.registerMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
-        Nitro.instance.communication.registerMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
+        this.registerMessages();
     }
 
     public ngOnDestroy(): void
     {
-        Nitro.instance.communication.removeMessageEvent(new UserInfoEvent(this.onUserInfoEvent.bind(this)));
-        Nitro.instance.communication.removeMessageEvent(new UserFigureEvent(this.onUserFigureEvent.bind(this)));
+        this.unregisterMessages();
+    }
+
+    private registerMessages(): void
+    {
+        this._ngZone.runOutsideAngular(() =>
+        {
+            this._messages = [
+                new UserInfoEvent(this.onUserInfoEvent.bind(this)),
+                new UserFigureEvent(this.onUserFigureEvent.bind(this))
+            ];
+
+            for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
+        });
+    }
+
+    public unregisterMessages(): void
+    {
+        this._ngZone.runOutsideAngular(() =>
+        {
+            for(const message of this._messages) Nitro.instance.communication.removeMessageEvent(message);
+
+            this._messages = [];
+        });
     }
 
     private onUserInfoEvent(event: UserInfoEvent): void
@@ -37,11 +60,14 @@ export class SessionService implements OnDestroy
         if(!parser) return;
 
         const userInfo = parser.userInfo;
-        
-        this._userId    = userInfo.userId;
-        this._userName  = userInfo.username;
-        this._figure    = userInfo.figure;
-        this._gender    = userInfo.gender;
+
+        this._ngZone.run(() =>
+        {
+            this._userId    = userInfo.userId;
+            this._userName  = userInfo.username;
+            this._figure    = userInfo.figure;
+            this._gender    = userInfo.gender;
+        });
     }
 
     private onUserFigureEvent(event: UserFigureEvent): void
@@ -52,8 +78,11 @@ export class SessionService implements OnDestroy
 
         if(!parser) return;
 
-        this._figure    = parser.figure;
-        this._gender    = parser.gender;
+        this._ngZone.run(() =>
+        {
+            this._figure    = parser.figure;
+            this._gender    = parser.gender;
+        });
     }
 
     public get userId(): number

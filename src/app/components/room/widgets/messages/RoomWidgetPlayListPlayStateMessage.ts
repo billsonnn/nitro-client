@@ -10,7 +10,7 @@ export class RoomWidgetPlayListPlayStateMessage extends RoomWidgetMessage
     constructor(k: string, _arg_2: number, _arg_3: number=-1)
     {
         super(k);
-        
+
         this._furniId = _arg_2;
         this._position = _arg_3;
     }

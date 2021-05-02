@@ -1,6 +1,6 @@
 ﻿import { IMessageDataWrapper } from '../../../../../core/communication/messages/IMessageDataWrapper';
 
-export class Triggerable 
+export class Triggerable
 {
     private _stuffTypeSelectionEnabled: boolean;
     private _furniLimit: number;
@@ -26,7 +26,7 @@ export class Triggerable
 
             count--;
         }
-        
+
         this._stuffTypeId   = wrapper.readInt();
         this._id            = wrapper.readInt();
         this._stringParam   = wrapper.readString();

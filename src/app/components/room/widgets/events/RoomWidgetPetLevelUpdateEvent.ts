@@ -10,7 +10,7 @@ export class RoomWidgetPetLevelUpdateEvent extends RoomWidgetUpdateEvent
     constructor(petId: number, level: number)
     {
         super(RoomWidgetPetLevelUpdateEvent.RWPLUE_PET_LEVEL_UPDATE);
-        
+
         this._petId = petId;
         this._level = level;
     }

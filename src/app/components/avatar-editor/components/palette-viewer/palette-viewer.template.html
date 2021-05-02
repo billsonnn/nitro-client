@@ -1,7 +1,9 @@
-<perfect-scrollbar class="avatar-grid-container palette-grid position-relative overflow-hidden" style="min-height: 84px;max-height: 84px;">
+<perfect-scrollbar class="grid-container palette-grid" style="min-height:84px;max-height:84px;height:84px;">
     <div class="grid-items" [ngClass]="{ 'grid-6': (maxPaletteCount >= 2), 'grid-12': (maxPaletteCount <= 1) }">
-        <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let palette of paletteSet" (click)="selectPalette(palette)">
-            <button type="button" class="btn btn-primary detail-info" [ngClass]="{ 'active': palette.isSelected }" [ngStyle]="{ 'background-color': palette.color }"></button>
+        <div class="d-flex flex-column item-detail justify-content-center align-items-center"
+            *ngFor="let palette of paletteSet" (click)="selectPalette(palette)">
+            <button type="button" class="btn btn-primary detail-info" [ngClass]="{ 'active': palette.isSelected }"
+                [ngStyle]="{ 'background-color': palette.color }"></button>
         </div>
     </div>
 </perfect-scrollbar>

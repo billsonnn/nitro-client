@@ -1,6 +1,6 @@
 import { PetCustomPart } from './PetCustomPart';
 
-export class PetFigureData 
+export class PetFigureData
 {
     private _typeId: number;
     private _paletteId: number;
@@ -31,7 +31,7 @@ export class PetFigureData
         while(i < this._customLayerIds.length)
         {
             this._customParts.push(new PetCustomPart(this._customLayerIds[i], this._customPartIds[i], this._customPaletteIds[i]));
-            
+
             i++;
         }
     }
@@ -122,7 +122,7 @@ export class PetFigureData
             {
                 const _local_6  = (3 + _local_4);
                 const _local_7  = parseInt(_local_3[_local_6]);
-                
+
                 _local_2  = _local_3.slice(_local_5, (_local_5 + (_local_7 * 3)));
             }
         }

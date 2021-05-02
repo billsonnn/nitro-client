@@ -55,6 +55,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     private _isSelected: boolean;
     private _isHC: boolean;
     private _isSellable: boolean;
+    private _isClear: boolean;
     private _disposed: boolean;
     private _isInitalized: boolean;
 
@@ -73,6 +74,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         this._isSelected            = false;
         this._isHC                  = false;
         this._isSellable            = false;
+        this._isClear               = false;
         this._disposed              = false;
         this._isInitalized          = false;
 
@@ -87,7 +89,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     public init(): void
     {
         if(this._isInitalized) return;
-        
+
         this._isInitalized = true;
 
         this.update();
@@ -317,5 +319,15 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     public get isSellable(): boolean
     {
         return this._isSellable;
+    }
+
+    public get isClear(): boolean
+    {
+        return this._isClear;
+    }
+
+    public set isClear(flag: boolean)
+    {
+        this._isClear = flag;
     }
 }

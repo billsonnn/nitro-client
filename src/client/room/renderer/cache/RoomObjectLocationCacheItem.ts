@@ -3,7 +3,7 @@ import { IRoomGeometry } from '../../utils/IRoomGeometry';
 import { IVector3D } from '../../utils/IVector3D';
 import { Vector3d } from '../../utils/Vector3d';
 
-export class RoomObjectLocationCacheItem 
+export class RoomObjectLocationCacheItem
 {
     private _roomObjectVariableAccurateZ: string;
 
@@ -87,7 +87,7 @@ export class RoomObjectLocationCacheItem
             this._screenLocation.x = Math.round(this._screenLocation.x);
             this._screenLocation.y = Math.round(this._screenLocation.y);
         }
-        
+
         return this._screenLocation;
     }
 

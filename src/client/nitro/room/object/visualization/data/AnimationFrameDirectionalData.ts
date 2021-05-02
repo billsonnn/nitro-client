@@ -20,14 +20,14 @@ export class AnimationFrameDirectionalData extends AnimationFrameData
     public getX(direction: number): number
     {
         if(!this._directionalOffsets) return super.getX(direction);
-        
+
         return this._directionalOffsets.getXOffset(direction, super.getX(direction));
     }
 
     public getY(direction: number): number
     {
         if(!this._directionalOffsets) return super.getY(direction);
-        
+
         return this._directionalOffsets.getYOffset(direction, super.getY(direction));
     }
 }

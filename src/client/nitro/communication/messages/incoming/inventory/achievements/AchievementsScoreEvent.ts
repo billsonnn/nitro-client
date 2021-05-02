@@ -2,7 +2,7 @@
 import { MessageEvent } from '../../../../../../core/communication/messages/MessageEvent';
 import { AchievementsScoreParser } from '../../../parser/inventory/achievements/AchievementsScoreParser';
 
-export class AchievementsScoreEvent extends MessageEvent implements IMessageEvent 
+export class AchievementsScoreEvent extends MessageEvent implements IMessageEvent
 {
     constructor(callBack: Function)
     {

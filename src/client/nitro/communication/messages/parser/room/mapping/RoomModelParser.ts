@@ -23,14 +23,28 @@ export class RoomModelParser implements IMessageParser
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
 
-        this._scale         = wrapper.readBoolean() ? 32 : 64;
-        this._wallHeight    = wrapper.readInt();
-        this._model         = wrapper.readString();
+        const scale         = wrapper.readBoolean();
+        const wallHeight    = wrapper.readInt();
+        const model         = wrapper.readString();
+
+        return this.parseExplicitly(model, wallHeight, scale);
+    }
+
+    public parseModel(modelString: string, wallHeight: number, scale: boolean = true): boolean
+    {
+        return this.parseExplicitly(modelString, wallHeight, scale);
+    }
+
+    private parseExplicitly(modelString: string, wallHeight: number, scale: boolean = true): boolean
+    {
+        this._scale         = scale ? 32 : 64;
+        this._wallHeight    = wallHeight;
+        this._model         = modelString;
 
         const model     = this._model.split('\r');
         const modelRows = model.length;

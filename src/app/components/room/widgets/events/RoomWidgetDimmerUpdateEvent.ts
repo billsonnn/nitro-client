@@ -1,5 +1,5 @@
 ﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { _Str_6094 } from './_Str_6094';
+import { RoomDimmerPreset } from './roomDimmerPreset';
 
 export class RoomWidgetDimmerUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -7,7 +7,7 @@ export class RoomWidgetDimmerUpdateEvent extends RoomWidgetUpdateEvent
     public static RWDUE_HIDE: string = 'RWDUE_HIDE';
 
     private _selectedPresetId: number = 0;
-    private _presets: _Str_6094[];
+    private _presets: RoomDimmerPreset[];
 
     constructor(k: string)
     {
@@ -21,32 +21,33 @@ export class RoomWidgetDimmerUpdateEvent extends RoomWidgetUpdateEvent
         return this._presets.length;
     }
 
-    public get _Str_8447(): _Str_6094[]
+    public get presets(): RoomDimmerPreset[]
     {
         return this._presets;
     }
 
-    public get _Str_6226(): number
+    public get selectedPresetId(): number
     {
         return this._selectedPresetId;
     }
 
-    public set _Str_6226(k: number)
+    public set selectedPresetId(k: number)
     {
         this._selectedPresetId = k;
     }
 
-    public _Str_17287(k: number, _arg_2: number, _arg_3: number, _arg_4: number):void
+    public setPresetValues(k: number, _arg_2: number, _arg_3: number, _arg_4: number):void
     {
-        const _local_5 = new _Str_6094(k, _arg_2, _arg_3, _arg_4);
+        const _local_5 = new RoomDimmerPreset(k, _arg_2, _arg_3, _arg_4);
 
         this._presets[(k - 1)] = _local_5;
     }
 
-    public _Str_14989(k: number): _Str_6094
+    //_Str_14989
+    public getPresetNumber(k: number): RoomDimmerPreset
     {
         if(((k < 0) || (k >= this._presets.length))) return null;
-        
+
         return this._presets[k];
     }
 }

@@ -3,15 +3,17 @@ import { IMessageParser } from '../../../../../../../core/communication/messages
 
 export class UserSubscriptionParser implements IMessageParser
 {
+    public static _Str_14729: number = 3;
+
     private _name: string;
     private _days: number;
     private _int1: number;
     private _months: number;
     private _years: number;
-    private _bool1: boolean;
-    private _bool2: boolean;
-    private _int2: number;
-    private _int3: number;
+    private _hasEverBeenMember: boolean;
+    private _isVip: boolean;
+    private _pastClubDays: number;
+    private _pastVIPDays: number;
     private _totalSeconds: number;
 
     public flush(): boolean
@@ -21,15 +23,15 @@ export class UserSubscriptionParser implements IMessageParser
         this._int1          = 0;
         this._months        = 0;
         this._years         = 0;
-        this._bool1         = false;
-        this._bool2         = false;
-        this._int2          = 0;
-        this._int3          = 0;
+        this._hasEverBeenMember         = false;
+        this._isVip         = false;
+        this._pastClubDays  = 0;
+        this._pastVIPDays          = 0;
         this._totalSeconds  = 0;
 
         return true;
     }
-    
+
     public parse(wrapper: IMessageDataWrapper): boolean
     {
         if(!wrapper) return false;
@@ -39,10 +41,10 @@ export class UserSubscriptionParser implements IMessageParser
         this._int1          = wrapper.readInt();
         this._months        = wrapper.readInt();
         this._years         = wrapper.readInt();
-        this._bool1         = wrapper.readBoolean();
-        this._bool2         = wrapper.readBoolean();
-        this._int2          = wrapper.readInt();
-        this._int3          = wrapper.readInt();
+        this._hasEverBeenMember         = wrapper.readBoolean();
+        this._isVip         = wrapper.readBoolean();
+        this._pastClubDays  = wrapper.readInt();
+        this._pastVIPDays          = wrapper.readInt();
         this._totalSeconds  = wrapper.readInt();
 
         return true;
@@ -73,24 +75,24 @@ export class UserSubscriptionParser implements IMessageParser
         return this._years;
     }
 
-    public get bool1(): boolean
+    public get hasEverBeenMember(): boolean
     {
-        return this._bool1;
+        return this._hasEverBeenMember;
     }
 
-    public get bool2(): boolean
+    public get isVip(): boolean
     {
-        return this._bool2;
+        return this._isVip;
     }
 
-    public get int2(): number
+    public get pastClubDays(): number
     {
-        return this._int2;
+        return this._pastClubDays;
     }
 
-    public get int3(): number
+    public get pastVIPDays(): number
     {
-        return this._int3;
+        return this._pastVIPDays;
     }
 
     public get totalSeconds(): number

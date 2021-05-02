@@ -1,0 +1,54 @@
+<div class="row nitro-inventory-bots-component">
+    <div class="col-12" *ngIf="!hasBadgeItems">
+        <div class="row pt-2">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="empty-image"></div>
+            </div>
+            <div class="col-8 pt-3">
+                <b>{{ ('inventory.empty.title') | translate }}</b><br />
+                {{ ('inventory.effects.defaultdescription') | translate }}
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="hasBadgeItems">
+        <div class="col-7 d-flex flex-column" style="z-index: 1;">
+            <perfect-scrollbar class="grid-container w-100" style="min-height: 209px;max-height: 209px;height:209px;">
+                <div class="grid-items grid-5">
+                    <div *ngFor="let badge of badges" class="d-flex flex-column item-detail justify-content-center align-items-center" (click)="selectBadge(badge)">
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedBadge === badge) }" badge-image [badge]="badge" [asBackground]="true"></button>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+       <div class="col-5 d-flex flex-column">
+            <p class="mb-1">{{ 'inventory.badges.activebadges' | translate }}</p>
+            <div class="grid-container w-100">
+                <div class="grid-items grid-3">
+                    <div *ngFor="let badge of activeBadges" class="d-flex flex-column item-detail justify-content-center align-items-center" (click)="selectBadge(badge)">
+                        <button type="button" class="position-relative btn btn-secondary align-items-end detail-info has-image" [ngClass]="{ 'active': (selectedBadge === badge) }" badge-image [badge]="badge" [asBackground]="true"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="selectedBadge" class="row w-100 m-0 mt-2">
+            <div class="col">
+                <div class="d-flex justify-content-between align-items-center bg-secondary rounded p-2">
+                    <div class="d-flex flex-grow-1">
+                        <nitro-badge class="d-flex justify-content-center align-items-center" [badge]="selectedBadge" [isGroup]="false" style="min-height:50px"></nitro-badge>
+                        <div class="d-flex flex-column justify-content-center flex-grow-1 ml-2">
+                            <p class="mb-0">{{ selectedBadgeName }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <button type="button" [disabled]="badgeButtonDisabled" class="btn btn-secondary" (click)="wearBadge()">{{ (isWearingBadge(selectedBadge) ? 'inventory.badges.clearbadge' : 'inventory.badges.wearbadge') | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row w-100 m-0 mt-2">
+            <div class="col">
+                <div class="d-flex justify-content-center align-items-center bg-secondary rounded text-center p-1">{{ 'achievements_score_description' | translate:'score':achievementsScore }} </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

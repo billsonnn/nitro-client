@@ -1,37 +1,55 @@
 {
-    "socket.url": "WS/WSS_URL",
-    "asset.url": "https://ASSET_URL",
-    "c.images.url": "https://ASSETS_URL/c_images",
-    "thumbnails.url": "%c.images.url%/camera/thumbnails/%thumbnail%.png",
-    "images.url": "%asset.url%/images",
-    "gamedata.url": "%asset.url%/gamedata",
-    "sounds.url": "%asset.url%/sounds",
-    "external.texts.url": "%gamedata.url%/json/ExternalTexts.json",
-    "furnidata.url": "%gamedata.url%/json/FurnitureData.json",
-    "avatar.actions.url": "%gamedata.url%/json/HabboAvatarActions.json",
-    "avatar.figuredata.url": "%gamedata.url%/habbo/figuredata.xml",
-    "avatar.figuremap.url": "%gamedata.url%/json/FigureMap.json",
-    "avatar.effectmap.url": "%gamedata.url%/json/EffectMap.json",
-    "avatar.asset.url": "%asset.url%/figure/%libname%/%libname%.json",
-    "avatar.asset.effect.url": "%asset.url%/effect/%libname%/%libname%.json",
+    "socket.url": "WEBSOCKET_URL",
+    "asset.url": "ASSET_URL",
+    "image.library.url": "C_IMAGES_WITH_SLASH/",
+    "external.samples.url": "FLASH_FURNITURE_FOLDER/mp3/sound_machine_sample_%sample%.mp3",
+    "image.library.notifications.url": "${image.library.url}notifications/%image%.png",
+    "achievements.images.url": "${image.library.url}Quests/%image%.png",
+    "thumbnails.url": "${image.library.url}camera/thumbnails/%thumbnail%.png",
+    "images.url": "${asset.url}/images",
+    "gamedata.url": "${asset.url}/gamedata",
+    "external.texts.url": "${gamedata.url}/json/ExternalTexts.json",
+    "furnidata.url": "${gamedata.url}/json/FurnitureData.json",
+    "productdata.url": "${gamedata.url}/json/ProductData.json",
+    "avatar.actions.url": "${gamedata.url}/json/HabboAvatarActions.json",
+    "avatar.figuredata.url": "${gamedata.url}/habbo/figuredata.xml",
+    "avatar.figuremap.url": "${gamedata.url}/json/FigureMap.json",
+    "avatar.effectmap.url": "${gamedata.url}/json/EffectMap.json",
+    "avatar.asset.url": "${asset.url}/figure/%libname%/%libname%.nitro",
+    "avatar.asset.effect.url": "${asset.url}/effect/%libname%/%libname%.nitro",
     "navigator.slider.enabled": true,
+    "furni.extras.url": "${asset.url}/images/furniextras/%image%.png",
+    "url.prefix": "",
+    "chat.viewer.height.percentage": 0.40,
     "navigator.slider.content": [
         {
-            "title": "Nitro TESTING 1",
-            "image": "https://cdn.discordapp.com/attachments/736997077124513982/798902170568228894/unknown.png",
-            "roomId": 201
+            "title": "Games Hub",
+            "image": "https://i.imgur.com/TFoivxi.png",
+            "roomId": 2240
         },
         {
-            "title": "NITRO TESTING 2",
-            "image": "https://cdn.discordapp.com/attachments/736997077124513982/798902336301826108/unknown.png",
-            "roomId": 202
+            "title": "Help Desk",
+            "image": "https://i.imgur.com/GO981GC.png",
+            "roomId": 2351
         },
         {
-            "title": "NITRO TESTING 3",
-            "image": "https://cdn.discordapp.com/attachments/736997077124513982/798902523347730432/unknown.png",
-            "roomId": 203
+            "title": "The Lido",
+            "image": "https://i.imgur.com/NVH38bV.png",
+            "roomId": 2346
         }
     ],
+    "hotelview.images": {
+        "background": "${asset.url}/images/reception/stretch_blue.png",
+        "background.colour": "#6eadc8",
+        "sun": "${asset.url}/images/reception/sun.png",
+        "drape": "${asset.url}/images/reception/drape.png",
+        "left": "${asset.url}/images/reception/ts.png",
+        "right": "${asset.url}/images/reception/us_right.png",
+        "right.repeat": "${asset.url}/images/reception/us_top_right.png"
+    },
+    "achievements.unseen.ignored": ["ACH_AllTimeHotelPresence"],
+    "avatareditor.show.clubitems.dimmed": true,
+    "avatareditor.show.clubitems.first": true,
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,
@@ -54,7 +72,7 @@
         "dance.3",
         "dance.4"
     ],
-    "pet.asset.url": "%asset.url%/pet/%libname%/%libname%.json",
+    "pet.asset.url": "${asset.url}/pet/%libname%/%libname%.nitro",
     "pet.types": [
         "dog",
         "cat",
@@ -96,15 +114,15 @@
         "bbwibb",
         "elephants"
     ],
-    "furni.asset.url": "%asset.url%/furniture/%libname%/%libname%.json",
-    "furni.asset.icon.url": "https://swf.hrw.pw/dcr/hof_furni/icons/%libname%%param%_icon.png",
-    "room.asset.url": "%asset.url%/room/%libname%/%libname%.json",
-    "badge.asset.url": "%c.images.url%/album1584/%badgename%.gif",
-    "badge.asset.group.url": "%asset.url%/group-badge/%badgedata%",
-    "currency.asset.icon.url": "%images.url%/currencies/%type%.png",
-    "catalog.asset.url": "%c.images.url%/catalogue",
-    "catalog.asset.image.url": "%catalog.asset.url%/%name%.gif",
-    "catalog.asset.icon.url": "%catalog.asset.url%/icon_%name%.png",
+    "furni.asset.url": "${asset.url}/furniture/%libname%/%libname%.nitro",
+    "furni.asset.icon.url": "https://swfurl/dcr/hof_furni/icons/%libname%%param%_icon.png",
+    "room.asset.url": "${asset.url}/room/%libname%/%libname%.json",
+    "badge.asset.url": "${image.library.url}album1584/%badgename%.gif",
+    "badge.asset.group.url": "${asset.url}/group-badge/%badgedata%",
+    "currency.asset.icon.url": "${images.url}/wallet/%type%.png",
+    "catalog.asset.url": "${image.library.url}catalogue",
+    "catalog.asset.image.url": "${catalog.asset.url}/%name%.gif",
+    "catalog.asset.icon.url": "${catalog.asset.url}/icon_%name%.png",
     "chat.input.maxlength": 100,
     "chat.styles.disabled": [],
     "chat.styles": [
@@ -235,6 +253,13 @@
             "isAmbassadorOnly": false
         },
         {
+            "styleId": 18,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
             "styleId": 19,
             "minRank": 0,
             "isSystemStyle": false,
@@ -264,9 +289,114 @@
         },
         {
             "styleId": 23,
-            "minRank": 4,
+            "minRank": 5,
             "isSystemStyle": false,
             "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 24,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 25,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 26,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 27,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 28,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 29,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 30,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 31,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 32,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 33,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 34,
+            "minRank": 5,
+            "isSystemStyle": true,
+            "isHcOnly": false,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 35,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 36,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
+            "isAmbassadorOnly": false
+        },
+        {
+            "styleId": 37,
+            "minRank": 5,
+            "isSystemStyle": false,
+            "isHcOnly": false,
+            "isAmbassadorOnly": true
+        },
+        {
+            "styleId": 38,
+            "minRank": 0,
+            "isSystemStyle": false,
+            "isHcOnly": true,
             "isAmbassadorOnly": false
         }
     ],
@@ -286,19 +416,19 @@
         ]
     },
     "preload.assets.urls": [
-        "%images.url%/additions/user_blowkiss.png",
-        "%images.url%/additions/user_idle_left_1.png",
-        "%images.url%/additions/user_idle_left_2.png",
-        "%images.url%/additions/user_idle_right_1.png",
-        "%images.url%/additions/user_idle_right_2.png",
-        "%images.url%/additions/user_typing.png",
-        "%images.url%/additions/number_1.png",
-        "%images.url%/additions/number_2.png",
-        "%images.url%/additions/number_3.png",
-        "%images.url%/additions/number_4.png",
-        "%images.url%/additions/number_5.png",
-        "%images.url%/loading_icon.png",
-        "%images.url%/clear_icon.png",
-        "%images.url%/big_arrow.png"
+        "${images.url}/additions/user_blowkiss.png",
+        "${images.url}/additions/user_idle_left_1.png",
+        "${images.url}/additions/user_idle_left_2.png",
+        "${images.url}/additions/user_idle_right_1.png",
+        "${images.url}/additions/user_idle_right_2.png",
+        "${images.url}/additions/user_typing.png",
+        "${images.url}/additions/number_1.png",
+        "${images.url}/additions/number_2.png",
+        "${images.url}/additions/number_3.png",
+        "${images.url}/additions/number_4.png",
+        "${images.url}/additions/number_5.png",
+        "${images.url}/loading_icon.png",
+        "${images.url}/clear_icon.png",
+        "${images.url}/big_arrow.png"
     ]
 }

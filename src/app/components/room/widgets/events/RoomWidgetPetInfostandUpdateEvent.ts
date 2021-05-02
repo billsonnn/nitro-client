@@ -1,4 +1,4 @@
-﻿import { Texture } from 'pixi.js';
+﻿import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
 import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
@@ -18,7 +18,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _age: number;
     private _name: string;
     private _id: number;
-    private _image: Texture;
+    private _petFigureData: PetFigureData;
     private _Str_6689: number;
     private _Str_20932: number;
     private _Str_10121: boolean;
@@ -30,7 +30,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _saddle: boolean;
     private _rider: boolean;
     private _breedable: boolean;
-    private _Str_4460: string[];
+    private _Str_4460: number[];
     private _publiclyRideable: number;
     private _fullyGrown: boolean;
     private _dead: boolean;
@@ -40,7 +40,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
     private _remainingGrowTime: number;
     private _publiclyBreedable: boolean;
 
-    constructor(k: number, _arg_2: number, _arg_3: string, _arg_4: number, _arg_5: Texture, _arg_6: boolean, _arg_7: number, _arg_8: string, _arg_9: number, _arg_10: number)
+    constructor(k: number, _arg_2: number, _arg_3: string, _arg_4: number, _arg_5: PetFigureData, _arg_6: boolean, _arg_7: number, _arg_8: string, _arg_9: number, _arg_10: number)
     {
         super(RoomWidgetPetInfostandUpdateEvent.PET_INFO);
 
@@ -48,7 +48,7 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._Str_20932 = _arg_2;
         this._name = _arg_3;
         this._id = _arg_4;
-        this._image = _arg_5;
+        this._petFigureData = _arg_5;
         this._Str_10121 = _arg_6;
         this._ownerId = _arg_7;
         this._ownerName = _arg_8;
@@ -61,9 +61,9 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         return this._name;
     }
 
-    public get image(): Texture
+    public get petFigureData(): PetFigureData
     {
-        return this._image;
+        return this._petFigureData;
     }
 
     public get id(): number
@@ -256,12 +256,12 @@ export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
         this._breedable = k;
     }
 
-    public get _Str_3307(): string[]
+    public get _Str_3307(): number[]
     {
         return this._Str_4460;
     }
 
-    public set _Str_3307(k: string[])
+    public set _Str_3307(k: number[])
     {
         this._Str_4460 = k;
     }

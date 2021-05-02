@@ -13,6 +13,7 @@ import { RoomObjectTileMouseEvent } from '../../../events/RoomObjectTileMouseEve
 import { RoomObjectWallMouseEvent } from '../../../events/RoomObjectWallMouseEvent';
 import { ObjectRoomColorUpdateMessage } from '../../../messages/ObjectRoomColorUpdateMessage';
 import { ObjectRoomFloorHoleUpdateMessage } from '../../../messages/ObjectRoomFloorHoleUpdateMessage';
+import { ObjectRoomMapUpdateMessage } from '../../../messages/ObjectRoomMapUpdateMessage';
 import { ObjectRoomMaskUpdateMessage } from '../../../messages/ObjectRoomMaskUpdateMessage';
 import { ObjectRoomPlanePropertyUpdateMessage } from '../../../messages/ObjectRoomPlanePropertyUpdateMessage';
 import { ObjectRoomPlaneVisibilityUpdateMessage } from '../../../messages/ObjectRoomPlaneVisibilityUpdateMessage';
@@ -36,6 +37,7 @@ export class RoomLogic extends RoomObjectLogicBase
     private _Str_16460: number;
     private _Str_9785: number;
     private _Str_17191: number;
+    private _lastHoleUpdate: number;
     private _needsMapUpdate: boolean;
 
     constructor()
@@ -52,7 +54,8 @@ export class RoomLogic extends RoomObjectLogicBase
         this._Str_16460             = 0xFF;
         this._Str_9785              = 0;
         this._Str_17191             = 1500;
-        this._needsMapUpdate             = false;
+        this._lastHoleUpdate        = 0;
+        this._needsMapUpdate        = false;
     }
 
     public getEventTypes(): string[]
@@ -86,7 +89,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(!roomMap || !this.object) return;
 
         if(!(roomMap instanceof RoomMapData)) return;
-        
+
         if(!this._planeParser.initializeFromMapData(roomMap)) return;
 
         this.object.model.setValue(RoomObjectVariable.ROOM_MAP_DATA, roomMap);
@@ -104,6 +107,8 @@ export class RoomLogic extends RoomObjectLogicBase
 
         if(this._needsMapUpdate)
         {
+            if(this._lastHoleUpdate && (time - this._lastHoleUpdate) < 5) return;
+
             const model = this.object && this.object.model;
 
             if(model)
@@ -114,11 +119,12 @@ export class RoomLogic extends RoomObjectLogicBase
                 model.setValue(RoomObjectVariable.ROOM_FLOOR_HOLE_UPDATE_TIME, time);
 
                 this._planeParser.initializeFromMapData(mapData);
+
             }
 
-            this._needsMapUpdate = false;
+            this._lastHoleUpdate    = 0;
+            this._needsMapUpdate    = false;
         }
-
     }
 
     private _Str_24703(k: number): void
@@ -145,7 +151,7 @@ export class RoomLogic extends RoomObjectLogicBase
             const _local_11 = ((this._Str_11287 >> 8) & 0xFF);
             const _local_12 = (this._Str_11287 & 0xFF);
             const _local_13 = ((k - this._Str_9785) / this._Str_17191);
-            
+
             _local_7 = (_local_7 + ((_local_10 - _local_7) * _local_13));
             _local_8 = (_local_8 + ((_local_11 - _local_8) * _local_13));
             _local_9 = (_local_9 + ((_local_12 - _local_9) * _local_13));
@@ -183,7 +189,7 @@ export class RoomLogic extends RoomObjectLogicBase
         if(message instanceof ObjectRoomMaskUpdateMessage)
         {
             this.onObjectRoomMaskUpdateMessage(message, model);
-            
+
             return;
         }
 
@@ -213,6 +219,11 @@ export class RoomLogic extends RoomObjectLogicBase
             this.onObjectRoomColorUpdateMessage(message, model);
 
             return;
+        }
+
+        if(message instanceof ObjectRoomMapUpdateMessage)
+        {
+            this.onObjectRoomMapUpdateMessage(message);
         }
     }
 
@@ -251,7 +262,7 @@ export class RoomLogic extends RoomObjectLogicBase
             case ObjectRoomMaskUpdateMessage._Str_10260:
                 update = this._planeBitmapMaskParser._Str_23574(message.maskId);
                 break;
-                
+
         }
 
         if(update) _arg_2.setValue(RoomObjectVariable.ROOM_PLANE_MASK_XML, this._planeBitmapMaskParser._Str_5598());
@@ -301,6 +312,8 @@ export class RoomLogic extends RoomObjectLogicBase
                 this._needsMapUpdate = true;
                 return;
         }
+
+        this._lastHoleUpdate = this.time;
     }
 
     private onObjectRoomColorUpdateMessage(message: ObjectRoomColorUpdateMessage, model: IRoomObjectModel): void
@@ -315,6 +328,15 @@ export class RoomLogic extends RoomObjectLogicBase
         this._Str_17191 = 1500;
 
         model.setValue(RoomObjectVariable.ROOM_COLORIZE_BG_ONLY, message.backgroundOnly);
+    }
+
+    private onObjectRoomMapUpdateMessage(message: ObjectRoomMapUpdateMessage): void
+    {
+        if(!message || !message.mapData) return;
+
+        this._planeParser.initializeFromMapData(message.mapData);
+
+        this._needsMapUpdate = true;
     }
 
     public mouseEvent(event: RoomSpriteMouseEvent, geometry: IRoomGeometry): void
@@ -389,7 +411,7 @@ export class RoomLogic extends RoomObjectLogicBase
         else
         {
             this.object.model.setValue(RoomObjectVariable.ROOM_SELECTED_PLANE, 0);
-            
+
             return;
         }
 
@@ -428,7 +450,7 @@ export class RoomLogic extends RoomObjectLogicBase
                 }
 
                 if(this.eventDispatcher) this.eventDispatcher.dispatchEvent(newEvent);
-                
+
                 return;
             }
         }

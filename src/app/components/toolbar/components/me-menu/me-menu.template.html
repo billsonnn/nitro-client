@@ -1,0 +1,20 @@
+<div *ngIf="isVisible" [@inOutAnimation] class="card bg-secondary nitro-toolbar-me-menu">
+    <ul class="list-group list-group-horizontal p-1">
+        <li class="d-flex flex-column list-group-item" (click)="toggleAvatarEditor()">
+            <i class="icon icon-me-clothing d-block"></i>
+            <span>{{ 'widget.memenu.editavatar' | translate }}</span>
+        </li>
+        <li class="d-flex flex-column list-group-item" (click)="toggleAchievements()">
+            <i class="icon icon-me-achievements d-block"></i>
+            <span>{{ 'widget.memenu.achievements' | translate }}</span>
+        </li>
+        <li class="d-flex flex-column list-group-item" (click)="toggleNavigator()">
+            <i class="icon icon-me-rooms d-block"></i>
+            <span>{{ 'widget.memenu.myrooms' | translate }}</span>
+        </li>
+        <li class="d-flex flex-column list-group-item" (click)="toggleUserSettings()">
+            <i class="icon icon-me-settings d-block"></i>
+            <span>{{ 'toolbar.icon.tooltip.settings' | translate }}</span>
+        </li>
+    </ul>
+</div>
