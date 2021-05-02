@@ -1,8 +1,8 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { ActionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/ActionDefinition';
 import { ConditionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
 import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { TriggerDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/TriggerDefinition';
+import { WiredActionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredActionDefinition';
 import { UpdateActionMessageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateActionMessageComposer';
 import { UpdateConditionMessageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateConditionMessageComposer';
 import { UpdateTriggerMessageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateTriggerMessageComposer';
@@ -87,7 +87,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         if(this._updated instanceof TriggerDefinition) return this._triggerConfs;
 
-        if(this._updated instanceof ActionDefinition) return this._actionTypes;
+        if(this._updated instanceof WiredActionDefinition) return this._actionTypes;
 
         if(this._updated instanceof ConditionDefinition) return this._conditionTypes;
 
@@ -171,7 +171,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
             return;
         }
 
-        if(this._updated instanceof ActionDefinition)
+        if(this._updated instanceof WiredActionDefinition)
         {
             Nitro.instance.communication.connection.send(new UpdateActionMessageComposer(this._updated.id, this.readIntegerParams(), this.readStringParam(), this.readFurniSelectionIds(), this.getActionDelay(), this.readFurniSelectionCode()));
 

@@ -11,9 +11,13 @@
     },
     "files": [
         "src/main.ts",
-        "src/polyfills.ts"
+        "src/polyfills.ts",
+		"node_modules/nitro-renderer/src/index.ts"
     ],
+	"include": [
+		"node_modules/nitro-renderer/src/**/*.ts",
+	],
     "exclude": [
-        "node_modules"
+        /*"node_modules"*/
     ],
 }
