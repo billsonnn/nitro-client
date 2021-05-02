@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
-  }
+    ],
+    "paths": {
+      "nitro-renderer": [
+        "node_modules/nitro-renderer/*"
+      ],
+    },
+  },
+  "include": [
+    "node_modules/nitro-renderer/src",
+  ],
 }
