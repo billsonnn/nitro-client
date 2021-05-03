@@ -69,23 +69,37 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "devel": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "namedChunks": false,
+              "showCircularDependencies": false,
+              "aot": true,
+              "extractLicenses": false,
+              "statsJson": false,
+              "progress": false,
+              "vendorChunk": true,
+              "buildOptimizer": false
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nitro:build",
+            "browserTarget": "nitro:build:devel",
             "host": "localhost",
             "port": 8080,
             "disableHostCheck": true,
+            "hmr": false,
             "allowedHosts": [
               ""
             ]
           },
           "configurations": {
             "production": {
-              "browserTarget": "nitro:build:production"
+              "browserTarget": "nitro:build:devel"
             }
           }
         }

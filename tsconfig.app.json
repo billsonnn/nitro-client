@@ -7,16 +7,17 @@
             "node"
         ],
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
     },
     "files": [
         "src/main.ts",
         "src/polyfills.ts",
-		"node_modules/nitro-renderer/src/index.ts"
+        "node_modules/nitro-renderer/src/index.ts"
     ],
-	"include": [
-		"node_modules/nitro-renderer/src/**/*.ts",
-	],
+    "include": [
+        "node_modules/nitro-renderer/src/**/*.ts",
+    ],
     "exclude": [
         /*"node_modules"*/
     ],
