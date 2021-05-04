@@ -92,7 +92,7 @@
             "host": "localhost",
             "port": 8080,
             "disableHostCheck": true,
-            "hmr": true,
+            "hmr": false,
             "allowedHosts": [
               ""
             ]
