@@ -1,9 +1,9 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
 import { EventDispatcher } from 'nitro-renderer/src/core/events/EventDispatcher';
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { NitroAdjustmentFilter } from 'nitro-renderer/src/core/utils/NitroAdjustmentFilter';
 import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
 import { LegacyExternalInterface } from 'nitro-renderer/src/nitro/externalInterface/LegacyExternalInterface';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
@@ -83,7 +83,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
 })
 export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidgetMessageListener
 {
-    private static COLOR_ADJUSTMENT: AdjustmentFilter = new AdjustmentFilter();
+    private static COLOR_ADJUSTMENT: NitroAdjustmentFilter = new NitroAdjustmentFilter();
 
     @ViewChild('roomCanvas')
     public roomCanvasReference: ElementRef<HTMLDivElement>;
@@ -99,7 +99,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
     private _widgetHandlerMessageMap: Map<string, IRoomWidgetHandler[]> = new Map();
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
 
-    private _roomColorAdjustor: AdjustmentFilter        = null;
+    private _roomColorAdjustor: NitroAdjustmentFilter   = null;
     private _roomBackground: Sprite                     = null;
     private _roomBackgroundColor: number                = 0;
     private _roomColorizerColor: number                 = 0;
@@ -905,7 +905,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         return this._roomBackground;
     }
 
-    private getRoomColorizer(): AdjustmentFilter
+    private getRoomColorizer(): NitroAdjustmentFilter
     {
         if(this._roomColorAdjustor) return this._roomColorAdjustor;
 

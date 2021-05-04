@@ -12,17 +12,17 @@ import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomEngineEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineEvent';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import
-    {
-        CompositeRectTileLayer,
-        POINT_STRUCT_SIZE_TWO,
-        RectTileLayer
-    } from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
+{
+    CompositeRectTileLayer,
+    POINT_STRUCT_SIZE_TWO,
+    RectTileLayer
+} from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
 import
-    {
-        InteractionEvent,
-        Loader,
-        Point
-    } from 'pixi.js';
+{
+    InteractionEvent,
+    Loader,
+    Point
+} from 'pixi.js';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';

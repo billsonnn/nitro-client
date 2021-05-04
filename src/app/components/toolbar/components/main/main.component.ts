@@ -221,11 +221,6 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
         }
     }
 
-    public goToRoom(id: number)
-    {
-        Nitro.instance.createLinkEvent('navigator/goto/' + id);
-    }
-
     public visitHomeRoom(): void
     {
         this._navigatorService.goToHomeRoom();
