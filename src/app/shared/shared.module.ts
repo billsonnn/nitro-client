@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModalModule, NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ColorChromeModule } from 'ngx-color/chrome';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -51,7 +51,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxSliderModule,
         PerfectScrollbarModule,
         MDBBootstrapModule.forRoot(),
-        ColorChromeModule
+        ColorChromeModule,
+        NgbModule
     ],
     exports: [
         CommonModule,
@@ -85,7 +86,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TimeAgoPipe,
         RoomObjectItemSearchPipe,
         UniqueNumberPipe,
-        RoomChatFormatterPipe
+        RoomChatFormatterPipe,
+        NgbModule,
+        BrowserModule
     ],
     providers: [
         {

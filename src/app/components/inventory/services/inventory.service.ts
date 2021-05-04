@@ -36,6 +36,7 @@ export class InventoryService implements OnDestroy
     private _badgesVisible: boolean = false;
     private _petsVisible: boolean = false;
     private _tradingVisible: boolean = false;
+    private _marketPlaceOfferVisible: boolean = false;
 
     private _figureSetIds: number[] = [];
     private _boundFurnitureNames: string[] = [];
@@ -339,6 +340,16 @@ export class InventoryService implements OnDestroy
     public set tradingVisible(flag: boolean)
     {
         this._tradingVisible = flag;
+    }
+
+    public get marketPlaceOfferVisible(): boolean
+    {
+        return this._marketPlaceOfferVisible;
+    }
+
+    public set marketPlaceOfferVisible(flag: boolean)
+    {
+        this._marketPlaceOfferVisible = flag;
     }
 
     public get figureSetIds(): number[]

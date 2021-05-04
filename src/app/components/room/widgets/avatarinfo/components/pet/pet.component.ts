@@ -1,7 +1,8 @@
-import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { PetInfoData } from '../../common/PetInfoData';
@@ -23,7 +24,7 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
 
     constructor(
-        private _applicationRef: ApplicationRef)
+        private _settingsService: SettingsService)
     {
         super();
     }
@@ -89,6 +90,16 @@ export class RoomAvatarInfoPetComponent extends AvatarContextInfoView
         {
             this.parent.removeView(this.componentRef, false);
         }
+    }
+
+    public toggleVisibility(): void
+    {
+        this._settingsService.toggleUserContextVisible();
+    }
+
+    public get visible(): boolean
+    {
+        return this._settingsService.userContextVisible;
     }
 
     public get widget(): RoomAvatarInfoComponent

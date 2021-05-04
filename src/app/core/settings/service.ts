@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 @Injectable()
 export class SettingsService
@@ -13,9 +13,13 @@ export class SettingsService
     private _achievementsVisible: boolean;
     private _meMenuVisible: boolean;
     private _chatHistoryVisible: boolean;
+    private _floorPlanVisible: boolean;
     private _userSettingsVisible: boolean;
+    private _userContextVisible: boolean;
 
-    constructor()
+    constructor(
+        private _ngZone: NgZone
+    )
     {
         this._isReady               = false;
         this._avatarEditorVisible   = false;
@@ -28,6 +32,8 @@ export class SettingsService
         this._meMenuVisible         = false;
         this._chatHistoryVisible    = false;
         this._userSettingsVisible   = false;
+        this._floorPlanVisible      = false;
+        this._userContextVisible    = true;
     }
 
     public showAvatarEditor(): void
@@ -180,6 +186,11 @@ export class SettingsService
         this._userSettingsVisible = !this._userSettingsVisible;
     }
 
+    public toggleUserContextVisible(): void
+    {
+        this._userContextVisible = !this._userContextVisible;
+    }
+
     public get avatarEditorVisible(): boolean
     {
         return this._avatarEditorVisible;
@@ -230,6 +241,11 @@ export class SettingsService
         return this._userSettingsVisible;
     }
 
+    public get userContextVisible(): boolean
+    {
+        return this._userContextVisible;
+    }
+
     public set isReady(isReady: boolean)
     {
         this._isReady = isReady;
@@ -238,5 +254,15 @@ export class SettingsService
     public get isReady(): boolean
     {
         return this._isReady;
+    }
+
+    public set floorPlanVisible(visible: boolean)
+    {
+        this._ngZone.run(() => this._floorPlanVisible = visible);
+    }
+
+    public get floorPlanVisible(): boolean
+    {
+        return this._floorPlanVisible;
     }
 }

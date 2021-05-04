@@ -2,6 +2,7 @@ import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEvent';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
 import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
 import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
@@ -147,11 +148,18 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':chooser':
                             this._container.processWidgetMessage(new RoomWidgetRequestWidgetMessage(RoomWidgetRequestWidgetMessage.RWRWM_USER_CHOOSER));
                             return null;
+                        case ':floor':
+                        case ':bcfloor':
+                            if(this._container.roomSession.controllerLevel >= RoomControllerLevel.ROOM_OWNER)
+                            {
+                                this._container.settingsService.floorPlanVisible = true;
+                            }
+                            return null;
                         case ':client':
                         case ':nitro':
                         case ':billsonnn':
                             this._container.notificationService.alertWithScrollableMessages([
-                                '<div class="d-flex flex-column justify-content-center align-items-center"><div style="width: 350px; height: 120px; margin: 10px; background: transparent url(\'https://assets-1.nitrots.co/nitro-dark.svg\') no-repeat center; filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
+                                '<div class="d-flex flex-column justify-content-center align-items-center"><div class="nitro-info-box"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
                             return null;
                         case ':settings':
                             if(this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isModerator)

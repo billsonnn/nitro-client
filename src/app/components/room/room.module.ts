@@ -25,6 +25,7 @@ import { DimmerFurniComponent } from './widgets/furniture/dimmer/dimmer.componen
 import { FriendsFurniConfirmWidget } from './widgets/furniture/friendfurni/confirm.component';
 import { FriendFurniEngravingWidget } from './widgets/furniture/friendfurni/friendfurni.component';
 import { PresentFurniWidget } from './widgets/furniture/gift-opening/present.component';
+import { HighscoreComponent } from './widgets/furniture/highscore/highscore.component';
 import { MannequinWidget } from './widgets/furniture/mannequin/mannequin.component';
 import { StickieFurniComponent } from './widgets/furniture/stickies/stickie.component';
 import { FurnitureWidgetTrophyComponent } from './widgets/furniture/trophies/trophy.component';
@@ -38,10 +39,12 @@ import { DoorbellWidgetComponent } from './widgets/navigator/doorbell/doorbell.c
 import { RoomChatItemComponent } from './widgets/roomchat/chatitem/component';
 import { RoomChatComponent } from './widgets/roomchat/component';
 import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component';
+import { FloorplanModule } from './floorplan/floorplan.module';
 
 @NgModule({
     imports: [
-        SharedModule
+        SharedModule,
+        FloorplanModule
     ],
     exports: [
         RoomComponent,
@@ -84,7 +87,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         RoomToolsMainComponent,
         DoorbellWidgetComponent,
         MannequinWidget,
-        RoomToolsMainComponent
+        RoomToolsMainComponent,
+        HighscoreComponent
     ],
     declarations: [
         RoomComponent,
@@ -127,7 +131,8 @@ import { RoomToolsMainComponent } from './widgets/roomtools/main/main.component'
         MannequinWidget,
         DoorbellWidgetComponent,
         PresentFurniWidget,
-        RoomToolsMainComponent
+        RoomToolsMainComponent,
+        HighscoreComponent
     ]
 })
 export class RoomModule

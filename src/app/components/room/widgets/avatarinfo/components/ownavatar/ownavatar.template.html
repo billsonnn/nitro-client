@@ -1,12 +1,16 @@
-<div #activeView class="nitro-room-avatarinfo-component context-menu card align-items-center">
-    <div class="drag-handler d-flex justify-content-center align-items-center p-1 w-100">
-        <p class="m-0">{{ userName }}</p>
+<div #activeView class="nitro-room-avatarinfo-component context-menu card align-items-center"
+    [ngClass]="visible ? '' : 'has-hidden'">
+    <div class="drag-handler d-flex justify-content-center align-items-center p-1 px-2 w-100" *ngIf="visible">
+        <p class="m-0 text-truncate">{{ userName }}</p>
     </div>
-    <div class="d-flex flex-column mb-1 w-100">
+    <div class="d-flex flex-column mb-1 w-100" *ngIf="visible">
         <ng-container *ngFor="let entry of menu">
-            <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush" [ngClass]="{ 'columns-3': (entry.mode === 4) }">
+            <ul *ngIf="(mode === entry.mode)" class="list-group list-group-flush"
+                [ngClass]="{ 'columns-3': (entry.mode === 4) }">
                 <ng-container *ngFor="let item of entry.items">
-                    <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item" [innerHTML]="(((item.name === '11') || (item.name === '12') || (item.name === '13') || (item.name === '14') || (item.name === '15')) ? (item.localization | keepHtml) : (item.localization | translate))"></li>
+                    <li *ngIf="item.visible" (click)="processAction(item.name)" class="list-group-item"
+                        [innerHTML]="(((item.name === '11') || (item.name === '12') || (item.name === '13') || (item.name === '14') || (item.name === '15')) ? (item.localization | keepHtml) : (item.localization | translate))">
+                    </li>
                 </ng-container>
             </ul>
         </ng-container>
@@ -14,4 +18,5 @@
             <li class="list-group-item" (click)="processAction('back')">{{ 'generic.back' | translate }}</li>
         </ul>
     </div>
+    <i class="fas small visibility-toggle mb-1 w-100 text-center" [ngClass]="visible ? 'fa-chevron-down' : 'fa-chevron-up m-2'" (click)="toggleVisibility()"></i>
 </div>

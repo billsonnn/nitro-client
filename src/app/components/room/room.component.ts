@@ -35,6 +35,7 @@ import { RoomGeometry } from 'nitro-renderer/src/room/utils/RoomGeometry';
 import { RoomId } from 'nitro-renderer/src/room/utils/RoomId';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
+import { SettingsService } from '../../core/settings/service';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
 import { FriendListService } from '../friendlist/services/friendlist.service';
@@ -58,6 +59,7 @@ import { FurnitureContextMenuWidgetHandler } from './widgets/handlers/FurnitureC
 import { FurnitureCreditWidgetHandler } from './widgets/handlers/FurnitureCreditWidgetHandler';
 import { FurnitureCustomStackHeightWidgetHandler } from './widgets/handlers/FurnitureCustomStackHeightWidgetHandler';
 import { FurnitureDimmerWidgetHandler } from './widgets/handlers/FurnitureDimmerWidgetHandler';
+import { FurnitureHighScoreWidgetHandler } from './widgets/handlers/FurnitureHighScoreWidgetHandler';
 import { FurnitureInternalLinkHandler } from './widgets/handlers/FurnitureInternalLinkHandler';
 import { FurnitureMannequinWidgetHandler } from './widgets/handlers/FurnitureMannequinWidgetHandler';
 import { FurniturePresentWidgetHandler } from './widgets/handlers/FurniturePresentWidgetHandler';
@@ -74,6 +76,7 @@ import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFur
     selector: 'nitro-room-component',
     template: `
         <div class="nitro-room-component">
+            <nitro-floorplan-main-component [visible]="floorPlanVisible"></nitro-floorplan-main-component>
             <div #roomCanvas class="room-view"></div>
             <ng-template #widgetContainer></ng-template>
         </div>`
@@ -118,6 +121,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         private _chatHistoryService: ChatHistoryService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _modToolsService: ModToolService,
+        private _settingsService: SettingsService,
         private _ngZone: NgZone
     )
     {
@@ -129,6 +133,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         this.endRoom();
 
         this._events.dispose();
+    }
+
+    public get floorPlanVisible(): boolean
+    {
+        return this._settingsService.floorPlanVisible;
     }
 
     public prepareRoom(session: IRoomSession): void
@@ -548,6 +557,9 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
                 break;
             case RoomWidgetEnum.FRIEND_REQUEST:
                 widgetHandler = new FriendRequestHandler();
+                break;
+            case RoomWidgetEnum.HIGH_SCORE_DISPLAY:
+                widgetHandler = new FurnitureHighScoreWidgetHandler();
                 break;
         }
 
@@ -1025,5 +1037,10 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
     public get friendService(): FriendListService
     {
         return this._friendService;
+    }
+
+    public get settingsService(): SettingsService
+    {
+        return this._settingsService;
     }
 }

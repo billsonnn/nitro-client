@@ -3,6 +3,7 @@ import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/mes
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { CatalogService } from '../../../services/catalog.service';
+import { MarketplaceService } from '../../../services/marketplace.service';
 
 
 @Component({
@@ -14,9 +15,10 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
     public vipOffers: CatalogClubOfferData[] = [];
     constructor(
         protected _catalogService: CatalogService,
+        protected _marketService: MarketplaceService,
         protected _ngZone: NgZone)
     {
-        super(_catalogService, _ngZone);
+        super(_catalogService, _marketService, _ngZone);
         _catalogService.registerVipBuyTemplate(this);
 
         _catalogService.requestOffers(6);

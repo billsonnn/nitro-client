@@ -1,8 +1,9 @@
-import { ApplicationRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { AvatarInfoData } from '../../common/AvatarInfoData';
@@ -30,7 +31,7 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
     public menu: { mode: number, items: { name: string, localization: string, visible: boolean }[] }[] = [];
 
     constructor(
-        private _applicationRef: ApplicationRef)
+        private _settingsService: SettingsService)
     {
         super();
     }
@@ -415,6 +416,16 @@ export class RoomAvatarInfoAvatarComponent extends AvatarContextInfoView
     private isShowRemoveRights(): boolean
     {
         return (this.avatarData._Str_3246 && (this.avatarData._Str_5599 === RoomControllerLevel.GUEST) && !this.avatarData._Str_3672);
+    }
+
+    public toggleVisibility(): void
+    {
+        this._settingsService.toggleUserContextVisible();
+    }
+
+    public get visible(): boolean
+    {
+        return this._settingsService.userContextVisible;
     }
 
     public get widget(): RoomAvatarInfoComponent

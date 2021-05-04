@@ -4,6 +4,7 @@ import { CatalogPageData } from 'nitro-renderer/src/nitro/communication/messages
 import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { ICatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
@@ -17,6 +18,7 @@ import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
+import { MarketplaceService } from '../../services/marketplace.service';
 
 @Component({
     selector: 'nitro-catalog-main-component',
@@ -52,6 +54,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _catalogService: CatalogService,
+        private _marketplaceService: MarketplaceService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _purseService: PurseService,
         private _ngZone: NgZone)
@@ -438,6 +441,11 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     public get purchaseOffer(): CatalogPageOfferData
     {
         return this._purchaseOffer;
+    }
+
+    public get currentMarketplaceOfferToBuy(): MarketplaceOfferItem
+    {
+        return this._marketplaceService.currentMarketplaceOfferToBuy;
     }
 
     public get giftOffer(): CatalogPageOfferData

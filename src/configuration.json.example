@@ -15,8 +15,8 @@
     "avatar.figuredata.url": "${gamedata.url}/habbo/figuredata.xml",
     "avatar.figuremap.url": "${gamedata.url}/json/FigureMap.json",
     "avatar.effectmap.url": "${gamedata.url}/json/EffectMap.json",
-    "avatar.asset.url": "${asset.url}/figure/%libname%/%libname%.json",
-    "avatar.asset.effect.url": "${asset.url}/effect/%libname%/%libname%.json",
+    "avatar.asset.url": "${asset.url}/figure/%libname%.nitro",
+    "avatar.asset.effect.url": "${asset.url}/effect/%libname%.nitro",
     "navigator.slider.enabled": true,
     "furni.extras.url": "${asset.url}/images/furniextras/%image%.png",
     "url.prefix": "",
@@ -72,7 +72,7 @@
         "dance.3",
         "dance.4"
     ],
-    "pet.asset.url": "${asset.url}/pet/%libname%/%libname%.json",
+    "pet.asset.url": "${asset.url}/pet/%libname%.nitro",
     "pet.types": [
         "dog",
         "cat",
@@ -114,7 +114,7 @@
         "bbwibb",
         "elephants"
     ],
-    "furni.asset.url": "${asset.url}/furniture/%libname%/%libname%.json",
+    "furni.asset.url": "${asset.url}/furniture/%libname%.nitro",
     "furni.asset.icon.url": "https://swfurl/dcr/hof_furni/icons/%libname%%param%_icon.png",
     "room.asset.url": "${asset.url}/room/%libname%/%libname%.json",
     "badge.asset.url": "${image.library.url}album1584/%badgename%.gif",

@@ -18,13 +18,6 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
 
     public vipOffers: CatalogClubOfferData[] = [];
     private _currentSelectedVipOffer: CatalogPageOfferData = null;
-    constructor(
-        protected _catalogService: CatalogService,
-        protected _ngZone: NgZone)
-    {
-        super(_catalogService, _ngZone);
-
-    }
 
     public get visible(): boolean
     {

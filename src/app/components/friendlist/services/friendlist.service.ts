@@ -35,6 +35,7 @@ import { MessengerRequest } from '../common/MessengerRequest';
 import { MessengerThread } from '../common/MessengerThread';
 import { FriendListMainComponent } from '../components/main/main.component';
 import { FriendRequestEvent } from '../events/FriendRequestEvent';
+import { AvatarSearchResults } from './../common/AvatarSearchResults';
 
 @Injectable()
 export class FriendListService implements OnDestroy
@@ -50,6 +51,8 @@ export class FriendListService implements OnDestroy
     private _userFriendLimit: number;
     private _normalFriendLimit: number;
     private _extendedFriendLimit: number;
+
+    private _avatarSearchResults: AvatarSearchResults;
 
     private _friendListReady: boolean = false;
 
@@ -68,6 +71,7 @@ export class FriendListService implements OnDestroy
         this._userFriendLimit       = 0;
         this._normalFriendLimit     = 0;
         this._extendedFriendLimit   = 0;
+        this._avatarSearchResults = new AvatarSearchResults();
 
         this.registerMessages();
     }
@@ -222,7 +226,10 @@ export class FriendListService implements OnDestroy
 
         if(!parser) return;
 
-        console.log(parser);
+        this._ngZone.run(() =>
+        {
+            this._avatarSearchResults.searchReceived(parser.friends, parser.others);
+        });
     }
 
     private onInstantMessageErrorEvent(event: InstantMessageErrorEvent): void
@@ -503,6 +510,18 @@ export class FriendListService implements OnDestroy
         Nitro.instance.communication.connection.send(new RequestFriendComposer(username));
     }
 
+    public getFriendNames(): string[]
+    {
+        const names: string[] = [];
+
+        for(const friend of this._friends.values())
+        {
+            names.push(friend.name);
+        }
+
+        return names;
+    }
+
     public get events(): IEventDispatcher
     {
         return this._events;
@@ -545,5 +564,10 @@ export class FriendListService implements OnDestroy
     public get notificationCount(): number
     {
         return (this.requests.size + this.unreadCount);
+    }
+
+    public get avatarSearchResults(): AvatarSearchResults
+    {
+        return this._avatarSearchResults;
     }
 }

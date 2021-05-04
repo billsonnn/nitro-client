@@ -2,17 +2,20 @@ import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, T
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { AvatarAction } from 'nitro-renderer/src/nitro/avatar/enum/AvatarAction';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomEngineObjectEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
 import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
 import { RoomObjectUserType } from 'nitro-renderer/src/nitro/room/object/RoomObjectUserType';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
 import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { AvatarEditorService } from '../../../../../avatar-editor/services/avatar-editor.service';
+import { FriendListService } from '../../../../../friendlist/services/friendlist.service';
 import { ContextInfoView } from '../../../contextmenu/ContextInfoView';
 import { IContextMenuParentWidget } from '../../../contextmenu/IContextMenuParentWidget';
 import { RoomObjectNameEvent } from '../../../events/RoomObjectNameEvent';
@@ -75,10 +78,12 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     private _isInitialized: boolean             = false;
     private _isRoomEnteredOwnAvatarHighlight    = false;
     private _isGameMode                         = false;
+    private _isUpdating                         = false;
 
     constructor(
         private _avatarEditorService: AvatarEditorService,
         private _settingsService: SettingsService,
+        private _friendListService: FriendListService,
         private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     )
@@ -86,6 +91,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         super();
 
         this._Str_2557 = this._Str_2557.bind(this);
+        this.onRoomEngineObjectEvent = this.onRoomEngineObjectEvent.bind(this);
     }
 
     public ngOnDestroy(): void
@@ -96,6 +102,9 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     public registerUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
+
+        Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
+        Nitro.instance.roomEngine.events.addEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent);
 
         eventDispatcher.addEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.addEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
@@ -117,9 +126,12 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         super.registerUpdateEvents(eventDispatcher);
     }
 
-    public unregisterUpdateEvents(eventDispatcher:IEventDispatcher): void
+    public unregisterUpdateEvents(eventDispatcher: IEventDispatcher): void
     {
         if(!eventDispatcher) return;
+
+        Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.ADDED, this.onRoomEngineObjectEvent);
+        Nitro.instance.roomEngine.events.removeEventListener(RoomEngineObjectEvent.REMOVED, this.onRoomEngineObjectEvent);
 
         eventDispatcher.removeEventListener(RoomWidgetAvatarInfoEvent.RWAIE_AVATAR_INFO, this._Str_2557);
         eventDispatcher.removeEventListener(RoomObjectNameEvent.RWONE_TYPE, this._Str_2557);
@@ -139,6 +151,53 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         eventDispatcher.removeEventListener(RoomWidgetRoomEngineUpdateEvent.RWREUE_GAME_MODE, this._Str_2557);
 
         super.unregisterUpdateEvents(eventDispatcher);
+    }
+
+    private onRoomEngineObjectEvent(event: RoomEngineObjectEvent): void
+    {
+        switch(event.type)
+        {
+            case RoomEngineObjectEvent.ADDED: {
+                if(event.category !== RoomObjectCategory.UNIT) return;
+
+                const userData = this.handler.roomSession.userDataManager.getUserDataByIndex(event.objectId);
+
+                if(!userData) return;
+
+                if(this._friendListService.getFriendNames().indexOf(userData.name) == -1) return;
+
+                this.showFriendNameBubble(userData, event.objectId);
+
+                return;
+            }
+            case RoomEngineObjectEvent.REMOVED: {
+                if(event.category === RoomObjectCategory.UNIT)
+                {
+                    for(const bubble of this.cachedNameBubbles.values())
+                    {
+                        if(bubble.instance.roomIndex === event.objectId) this.removeView(bubble, false);
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    private showFriendNameBubble(userData: RoomUserData, objectId: number): void
+    {
+        if(!userData) return;
+
+        if(this.cachedNameBubbles.has(userData.name)) return;
+
+        const view = this.createView(RoomAvatarInfoNameComponent);
+
+        view.instance.isFriend = true;
+
+        this._ngZone.run(() => RoomAvatarInfoNameComponent.setup(view.instance, userData.webID, userData.name, RoomObjectType.USER, objectId, true));
+
+        this.cachedNameBubbles.set(userData.name, view);
+
+        this.toggleUpdateReceiver();
     }
 
     private _Str_2557(event: RoomWidgetUpdateEvent): void
@@ -542,11 +601,17 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
     {
         if(this.view || (this.cachedNameBubbles.size > 0) || this.cachedDecorateModeView)
         {
+            if(this._isUpdating) return;
+
             Nitro.instance.ticker.add(this.update, this);
+
+            this._isUpdating = true;
         }
         else
         {
             Nitro.instance.ticker.remove(this.update, this);
+
+            this._isUpdating = false;
         }
     }
 

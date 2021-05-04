@@ -1,4 +1,5 @@
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { PetFigureData } from 'nitro-renderer/src/nitro/avatar/pets/PetFigureData';
 import { PetType } from 'nitro-renderer/src/nitro/avatar/pets/PetType';
 import { RoomAdsUpdateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { RoomUnitDropHandItemComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
@@ -833,6 +834,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(!roomUserData) return;
 
         const figure = roomUserData.figure;
+        const figureData = new PetFigureData(figure);
 
         const _local_5 = this.getPetType(figure);
         const _local_6 = this.getPetBreed(figure);
@@ -854,7 +856,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         // }
 
         const isOwner = (petData.ownerId === this._container.sessionDataManager.userId);
-        const infostandEvent = new RoomWidgetPetInfostandUpdateEvent(_local_5, _local_6, roomUserData.name, petData.id, null, isOwner, petData.ownerId, petData.ownerName, roomUserData.roomIndex, petData.rarityLevel);
+        const infostandEvent = new RoomWidgetPetInfostandUpdateEvent(_local_5, _local_6, roomUserData.name, petData.id, figureData, isOwner, petData.ownerId, petData.ownerName, roomUserData.roomIndex, petData.rarityLevel);
 
         infostandEvent.level               = petData.level;
         infostandEvent.maximumLevel        = petData.maximumLevel;

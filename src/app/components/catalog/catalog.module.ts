@@ -26,6 +26,13 @@ import { CatalogNavigationComponent } from './components/navigation/navigation.c
 import { CatalogPurchaseComponent } from './components/purchase/purchase.component';
 import { CatalogRedeemVoucherComponent } from './components/redeem-voucher/redeem-voucher.component';
 import { CatalogService } from './services/catalog.service';
+import { CatalogLayoutMarketplaceOwnItemsComponent } from './components/layouts/marketplace/own-items/own-items.component';
+import { MarketplaceService } from './services/marketplace.service';
+import { CatalogLayoutMarketplaceMarketplaceComponent } from './components/layouts/marketplace/marketplace/marketplace.component';
+import { CatalogLayoutMarketplaceMarketplaceSubActivityComponent } from './components/layouts/marketplace/marketplace/sub/by-activity.component';
+import { CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent } from './components/layouts/marketplace/marketplace/sub/advanced.component';
+import { CatalogLayoutMarketplaceMarketplaceOfferComponent } from './components/layouts/marketplace/marketplace/offer/offer.component';
+import { CatalogConfirmMarketplacePurchaseComponent } from './components/confirm-marketplace-purchase/confirm-marketplace-purchase.component';
 
 @NgModule({
     imports: [
@@ -56,10 +63,17 @@ import { CatalogService } from './services/catalog.service';
         CatalogRedeemVoucherComponent,
         CatalogCustomizeGiftComponent,
         CatalogLayoutSearchResultsComponent,
-        CatalogLayoutVipGiftsComponent
+        CatalogLayoutVipGiftsComponent,
+        CatalogLayoutMarketplaceOwnItemsComponent,
+        CatalogLayoutMarketplaceMarketplaceComponent,
+        CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
+        CatalogLayoutMarketplaceMarketplaceOfferComponent,
+        CatalogConfirmMarketplacePurchaseComponent
     ],
     providers: [
-        CatalogService
+        CatalogService,
+        MarketplaceService
     ],
     declarations: [
         CatalogConfirmPurchaseComponent,
@@ -86,7 +100,13 @@ import { CatalogService } from './services/catalog.service';
         CatalogRedeemVoucherComponent,
         CatalogCustomizeGiftComponent,
         CatalogLayoutSearchResultsComponent,
-        CatalogLayoutVipGiftsComponent
+        CatalogLayoutVipGiftsComponent,
+        CatalogLayoutMarketplaceOwnItemsComponent,
+        CatalogLayoutMarketplaceMarketplaceComponent,
+        CatalogLayoutMarketplaceMarketplaceSubActivityComponent,
+        CatalogLayoutMarketplaceMarketplaceSubAdvancedComponent,
+        CatalogLayoutMarketplaceMarketplaceOfferComponent,
+        CatalogConfirmMarketplacePurchaseComponent
     ]
 })
 export class CatalogModule

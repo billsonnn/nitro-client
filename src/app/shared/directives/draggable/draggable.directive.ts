@@ -8,6 +8,8 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 export class DraggableDirective implements AfterViewInit, OnDestroy
 {
     private static POS_MEMORY = new Map();
+    private static BOUNDS_THRESHOLD_TOP = 0;
+    private static BOUNDS_THRESHOLD_LEFT = 0;
 
     @Input()
     public dragHandle: string = '.drag-handler';
@@ -27,6 +29,7 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
     private _name: string           = null;
     private _target: HTMLElement    = null;
     private _handle: HTMLElement    = null;
+    private _isDragging: boolean    = false;
     private _delta                  = { x: 0, y: 0 };
     private _offset                 = { x: 0, y: 0 };
     private _destroy                = new Subject<void>();
@@ -73,8 +76,6 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
         {
             this._offset.x  = memory.offset.x;
             this._offset.y  = memory.offset.y;
-            this._delta.x   = memory.delta.x;
-            this._delta.y   = memory.delta.y;
 
             this.translate();
         }
@@ -84,14 +85,14 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
     public ngOnDestroy(): void
     {
+        this._destroy.next();
+
         if(this._handle)
         {
             this._handle.classList.remove('header-draggable');
 
             this._handle.parentElement.classList.remove('header-draggable');
         }
-
-        this._destroy.next();
     }
 
     private setupEvents(): void
@@ -128,6 +129,8 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
             mousedrag$.subscribe(() =>
             {
+                this._isDragging = true;
+
                 if(this._delta.x === 0 && this._delta.y === 0) return;
 
                 this.translate();
@@ -140,20 +143,45 @@ export class DraggableDirective implements AfterViewInit, OnDestroy
 
             mouseup$.subscribe(() =>
             {
+                if(!this._isDragging) return;
+
+                this._isDragging = false;
+
                 this._offset.x  += this._delta.x;
                 this._offset.y  += this._delta.y;
                 this._delta      = { x: 0, y: 0 };
+
+                const left = this._target.offsetLeft + this._offset.x;
+                const top = this._target.offsetTop + this._offset.y;
+
+                if(top < DraggableDirective.BOUNDS_THRESHOLD_TOP)
+                {
+                    this._offset.y = -this._target.offsetTop;
+                }
+
+                else if((top + this._handle.offsetHeight) >= (document.body.offsetHeight - DraggableDirective.BOUNDS_THRESHOLD_TOP))
+                {
+                    this._offset.y = (document.body.offsetHeight - this._target.offsetHeight) - this._target.offsetTop;
+                }
+
+                if((left + this._target.offsetWidth) < DraggableDirective.BOUNDS_THRESHOLD_LEFT)
+                {
+                    this._offset.x = -this._target.offsetLeft;
+                }
+
+                else if(left >= (document.body.offsetWidth - DraggableDirective.BOUNDS_THRESHOLD_LEFT))
+                {
+                    this._offset.x = (document.body.offsetWidth - this._target.offsetWidth) - this._target.offsetLeft;
+                }
+
+                this.translate();
 
                 if(!this.noMemory)
                 {
                     DraggableDirective.POS_MEMORY.set(this._name, {
                         offset: {
-                            x: this._offset.x,
-                            y: this._offset.y
-                        },
-                        delta: {
-                            x: this._delta.x,
-                            y: this._delta.y
+                            x: this._offset.x + 0,
+                            y: this._offset.y + 0
                         }
                     });
                 }

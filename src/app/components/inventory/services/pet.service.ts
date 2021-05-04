@@ -266,7 +266,7 @@ export class InventoryPetService implements OnDestroy
         {
             const petItem = this._pets[i];
 
-            if(petItem)
+            if(petItem && (petItem.id === id))
             {
                 if(this._petIdInPetPlacing === petItem.id)
                 {

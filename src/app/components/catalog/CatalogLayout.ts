@@ -7,6 +7,7 @@ import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreview
 import { FurnitureType } from 'nitro-renderer/src/nitro/session/furniture/FurnitureType';
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { CatalogService } from './services/catalog.service';
+import { MarketplaceService } from './services/marketplace.service';
 
 @Directive()
 export class CatalogLayout
@@ -14,10 +15,11 @@ export class CatalogLayout
     public activePage: ICatalogPageParser = null;
     public roomPreviewerVisible: boolean = true;
 
-    constructor(
-        protected _catalogService: CatalogService,
+    constructor(protected _catalogService: CatalogService,
+        protected _marketService: MarketplaceService,
         protected _ngZone: NgZone)
-    {}
+    {
+    }
 
     public getText(index: number = 0): string
     {

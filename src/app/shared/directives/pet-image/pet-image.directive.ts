@@ -130,7 +130,7 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
         {
             const typeId = this.petFigureData.typeId;
 
-            imageResult = Nitro.instance.roomEngine.getRoomObjectPetImage(typeId, this.petFigureData.paletteId, this.petFigureData.color, new Vector3d((this.direction * 45)), 64, this, false, 0, this.petFigureData.customParts, 'std');
+            imageResult = Nitro.instance.roomEngine.getRoomObjectPetImage(typeId, this.petFigureData.paletteId, this.petFigureData.color, new Vector3d((this.direction * 45)), 64, this, this.headOnly, 0, this.petFigureData.customParts, 'std');
 
             if(imageResult)
             {

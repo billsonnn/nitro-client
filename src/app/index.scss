@@ -94,5 +94,14 @@ body {
     }
 }
 
+.nitro-info-box {
+    width: 350px;
+    height: 85px;
+    margin: 10px;
+    background: transparent url('^assets/images/nitro/nitro-dark.svg') no-repeat center;
+    filter: drop-shadow(2px 1px 0 white) drop-shadow(-2px 1px 0 white) drop-shadow(0 -2px 0 white);
+}
+
+
 @import './shared';
 @import './components';

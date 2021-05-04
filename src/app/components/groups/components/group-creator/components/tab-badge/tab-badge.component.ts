@@ -61,7 +61,7 @@ export class GroupCreatorTabBadgeComponent implements OnInit
         if(this.setDefaultValues)
         {
             this.groupSettings.getBadgePart(0).key = this._badgeSymbols.keys().next().value;
-            this.groupSettings.setPartsColor(this._badgeSymbols.keys().next().value);
+            this.groupSettings.setPartsColor(this._badgePartColors.keys().next().value);
         }
     }
 

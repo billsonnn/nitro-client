@@ -1,7 +1,14 @@
 <div class="row nitro-inventory-furni-component" (mouseup)="onMouseUp()">
     <div class="col-12" *ngIf="!hasGroupItems">
-        {{ ('inventory.empty.title') | translate }}
-        {{ ('inventory.empty.desc') | translate }}
+        <div class="row pt-2">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="empty-image"></div>
+            </div>
+            <div class="col-8 pt-3">
+                <b>{{ ('inventory.empty.title') | translate }}</b><br />
+                {{ ('inventory.empty.desc') | translate }}
+            </div>
+        </div>
     </div>
     <ng-container *ngIf="hasGroupItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
@@ -50,6 +57,8 @@
                 <div class="btn-group-vertical w-100">
                     <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                    <button *ngIf="selectedGroup.isSellable" type="button" class="btn btn-secondary w-100"
+                            (click)="offerOnMarketplace()">{{ 'inventory.marketplace.sell' | translate }}</button>
                     <button *ngIf="tradeRunning" type="button" class="btn btn-secondary w-100"
                         (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{
                         ('inventory.trading.offer') | translate }}</button>
