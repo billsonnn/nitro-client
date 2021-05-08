@@ -121,7 +121,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
-                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
+                const _local_9 = PointMath.sub(screenPoint, PointMath.mul(this._primaryCanvasOriginPos, scale));
 
                 if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
                 {
