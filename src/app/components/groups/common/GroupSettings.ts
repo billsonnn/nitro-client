@@ -1,5 +1,4 @@
-import GroupBadgePart from './GroupBadgePart';
-
+import { GroupBadgePart } from 'nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupBadgePart';
 export default class GroupSettings
 {
     private _id: number;

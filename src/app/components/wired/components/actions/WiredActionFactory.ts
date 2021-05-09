@@ -1,5 +1,5 @@
-﻿import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
-import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
+﻿import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { WiredActionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredActionDefinition';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
 import { BotChangeFigureComponent } from './bot-change-figure/bot-change-figure.component';
@@ -97,7 +97,7 @@ export class WiredActionFactory implements IUserDefinedRoomEventsCtrl
 
     public _Str_14545(trigger: Triggerable): boolean
     {
-        return (trigger instanceof ActionDefinition);
+        return (trigger instanceof WiredActionDefinition);
     }
 
     public _Str_1196(): string

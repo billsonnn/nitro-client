@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../../client/core/events/IEventDispatcher';
-import { ConversionTrackingWidget } from '../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetUpdateEvent } from '../../../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { InventoryService } from '../../../../../inventory/services/inventory.service';
 import { InventoryTradingService } from '../../../../../inventory/services/trading.service';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';

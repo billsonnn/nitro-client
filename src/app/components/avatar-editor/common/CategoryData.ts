@@ -1,4 +1,4 @@
-﻿import { IPartColor } from '../../../../client/nitro/avatar/structure/figure/IPartColor';
+﻿import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
 import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorGridColorItem } from './AvatarEditorGridColorItem';
 import { AvatarEditorGridPartItem } from './AvatarEditorGridPartItem';

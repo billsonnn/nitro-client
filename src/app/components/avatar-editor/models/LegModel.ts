@@ -1,5 +1,5 @@
-import { AvatarEditorFigureCategory } from '../../../../client/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
+import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
+import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
 
 export class LegModel extends CategoryBaseModel

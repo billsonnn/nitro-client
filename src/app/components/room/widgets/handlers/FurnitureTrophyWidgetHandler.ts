@@ -1,16 +1,16 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetTrophyUpdateEvent } from '../events/RoomWidgetTrophyUpdateEvent';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 
 export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -72,12 +72,12 @@ export class FurnitureTrophyWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.FURNI_TROPHY_WIDGET;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
     }

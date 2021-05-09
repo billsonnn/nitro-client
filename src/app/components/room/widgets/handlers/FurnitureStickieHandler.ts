@@ -1,18 +1,18 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetStickieDataUpdateEvent } from '../events/RoomWidgetStickieDataUpdateEvent';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetStickieSendUpdateMessage } from '../messages/RoomWidgetStickieSendUpdateMessage';
 
 export class FurnitureStickieHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _isDisposed: boolean                    = false;
 
     public dispose(): void
@@ -98,7 +98,7 @@ export class FurnitureStickieHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.FURNI_STICKIE_WIDGET;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

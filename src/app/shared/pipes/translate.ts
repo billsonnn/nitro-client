@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Nitro } from '../../../client/nitro/Nitro';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Pipe({ name: 'translate' })
 export class TranslatePipe implements PipeTransform

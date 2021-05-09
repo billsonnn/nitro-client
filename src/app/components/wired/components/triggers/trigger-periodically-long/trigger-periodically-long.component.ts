@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { FriendlyTime } from '../../../../../../client/nitro/utils/FriendlyTime';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { FriendlyTime } from 'nitro-renderer/src/nitro/utils/FriendlyTime';
 import { TriggerPeriodicallyComponent } from '../trigger-periodically/trigger-periodically.component';
 import { WiredTriggerType } from '../WiredTriggerType';
 

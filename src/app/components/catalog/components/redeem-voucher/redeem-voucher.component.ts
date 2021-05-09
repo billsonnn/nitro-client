@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CatalogLocalizationData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogLocalizationData';
+import { CatalogLocalizationData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogLocalizationData';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

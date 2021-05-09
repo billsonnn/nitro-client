@@ -1,13 +1,13 @@
-﻿import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomEngineDimmerStateEvent } from '../../../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomSessionDimmerPresetsEvent } from '../../../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { RoomEngineDimmerStateEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineDimmerStateEvent';
+import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { RoomSessionDimmerPresetsEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionDimmerPresetsEvent';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetDimmerStateUpdateEvent } from '../events/RoomWidgetDimmerStateUpdateEvent';
 import { RoomWidgetDimmerUpdateEvent } from '../events/RoomWidgetDimmerUpdateEvent';
 import { RoomWidgetDimmerChangeStateMessage } from '../messages/RoomWidgetDimmerChangeStateMessage';
@@ -18,7 +18,7 @@ import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWid
 export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose():void
     {
@@ -121,7 +121,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.ROOM_DIMMER;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

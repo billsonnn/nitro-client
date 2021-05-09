@@ -1,4 +1,22 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { RoomRightsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
+import { RoomBlockedTilesEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
+import { RoomDoorEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
+import { RoomModelEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/mapping/RoomModelEvent';
+import { RoomThicknessEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/mapping/RoomThicknessEvent';
+import { RoomBlockedTilesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
+import { RoomDoorSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
+import { RoomModelSaveComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomModelSaveComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomEngineEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineEvent';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import
+{
+    CompositeRectTileLayer,
+    POINT_STRUCT_SIZE_TWO,
+    RectTileLayer
+} from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
 import
 {
     InteractionEvent,
@@ -7,24 +25,6 @@ import
 } from 'pixi.js';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { RoomRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
-import { RoomBlockedTilesEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
-import { RoomDoorEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomDoorEvent';
-import { RoomModelEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomModelEvent';
-import { RoomThicknessEvent } from '../../../../../client/nitro/communication/messages/incoming/room/mapping/RoomThicknessEvent';
-import { RoomBlockedTilesComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
-import { RoomDoorSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
-import { RoomModelSaveComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/mapping/RoomModelSaveComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomEngineEvent } from '../../../../../client/nitro/room/events/RoomEngineEvent';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import
-{
-    CompositeRectTileLayer,
-    POINT_STRUCT_SIZE_TWO,
-    RectTileLayer
-} from '../../../../../client/room/floorplan/pixi-tilemap';
 import { SettingsService } from '../../../../core/settings/service';
 import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';

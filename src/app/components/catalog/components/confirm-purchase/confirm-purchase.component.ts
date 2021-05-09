@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
+import { CatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogPageParser';
+import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
+import { ToolbarIconEnum } from 'nitro-renderer/src/nitro/enums/ToolbarIconEnum';
+import { NitroToolbarAnimateIconEvent } from 'nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

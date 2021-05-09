@@ -1,9 +1,9 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { UserWardrobePageEvent } from '../../../../client/nitro/communication/messages/incoming/user/wardrobe/UserWardrobePageEvent';
-import { UserWardrobePageComposer } from '../../../../client/nitro/communication/messages/outgoing/user/wardrobe/UserWardrobePageComposer';
-import { UserWardrobeSaveComposer } from '../../../../client/nitro/communication/messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { UserWardrobePageEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/wardrobe/UserWardrobePageEvent';
+import { UserWardrobePageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/wardrobe/UserWardrobePageComposer';
+import { UserWardrobeSaveComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/wardrobe/UserWardrobeSaveComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { AvatarEditorMainComponent } from '../components/main/main.component';

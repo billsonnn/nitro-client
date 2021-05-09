@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { UserToolUser } from './user-tool-user';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ModtoolRequestUserChatlogComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModtoolRequestUserRoomsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
+import { _Str_5467 } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/_Str_5467';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { _Str_5467 } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { ModtoolRequestUserRoomsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
-import { ModtoolRequestUserChatlogComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { UserToolUser } from './user-tool-user';
 
 
 @Component({

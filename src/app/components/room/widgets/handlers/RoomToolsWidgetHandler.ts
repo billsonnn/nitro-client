@@ -1,21 +1,21 @@
-import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
-import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { INitroCommunicationManager } from 'nitro-renderer/src/nitro/communication/INitroCommunicationManager';
+import { RoomInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
+import { RoomLikeRoomComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEvent';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
 import { RoomToolsMainComponent } from '../roomtools/main/main.component';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer; // private var _container:IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager; // private var _container:IRoomWidgetManager;
     private _communicationManager: INitroCommunicationManager; // private var _communicationManager:IHabboCommunicationManager;
     private _widget: RoomToolsMainComponent; //private var _widget:RoomToolsWidget;
     private _messages: IMessageEvent[]; //private var _communicationManagerMessageEvents:Vector.<IMessageEvent>;
@@ -124,12 +124,12 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._widget = widget;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
 

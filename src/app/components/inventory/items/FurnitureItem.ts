@@ -1,6 +1,6 @@
-﻿import { IFurnitureItemData } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/IFurnitureItemData';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
+﻿import { IFurnitureItemData } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/furni/IFurnitureItemData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { IFurnitureItem } from './IFurnitureItem';
 
 export class FurnitureItem implements IFurnitureItem

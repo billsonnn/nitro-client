@@ -1,26 +1,26 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
-import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
-import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { AvatarExpressionEnum } from '../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { RoomSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEvent';
+import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
+import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { AvatarExpressionEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomChatInputComponent;
 
     private _disposed: boolean;
@@ -229,12 +229,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
         return [ RoomSessionChatEvent.FLOOD_EVENT ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
     }

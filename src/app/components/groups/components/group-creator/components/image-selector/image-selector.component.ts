@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import GroupBadgePart from '../../../../common/GroupBadgePart';
+import { GroupBadgePart } from 'nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupBadgePart';
 
 @Component({
     selector: '[nitro-group-image-selector-component]',

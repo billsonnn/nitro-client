@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceRequestOwnItemsComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { MarketplaceOfferData } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { MarketplaceRequestOwnItemsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
+import { MarketplaceOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { MarketplaceService } from '../../../../services/marketplace.service';
 

@@ -1,8 +1,8 @@
 import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { HighScoreData } from '../../../../../../client/nitro/room/object/data/type/HighScoreData';
-import { HighScoreDataType } from '../../../../../../client/nitro/room/object/data/type/HighScoreDataType';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { HighScoreData } from 'nitro-renderer/src/nitro/room/object/data/type/HighScoreData';
+import { HighScoreDataType } from 'nitro-renderer/src/nitro/room/object/data/type/HighScoreDataType';
+import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { FurnitureHighScoreWidgetHandler } from '../../handlers/FurnitureHighScoreWidgetHandler';
 
 @Component({

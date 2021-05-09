@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceOfferItem } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { IMarketplaceSearchOptions } from './sub/advanced.component';
-import { MarketplaceService } from '../../../../services/marketplace.service';
-import { max, min } from 'rxjs/operators';
 
 
 @Component({

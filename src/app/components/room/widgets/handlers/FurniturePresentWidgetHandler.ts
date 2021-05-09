@@ -1,16 +1,16 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionPresentEvent } from '../../../../../client/nitro/session/events/RoomSessionPresentEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListener';
+import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomSessionPresentEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionPresentEvent';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetPresentOpenMessage } from '../messages/RoomWidgetPresentOpenMessage';
@@ -25,7 +25,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
     private _name: string                           = null;
     private _objectId: number                       = -1;
     private _isDisposed: boolean                    = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -212,7 +212,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
         return RoomWidgetEnum.FURNI_PRESENT_WIDGET;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

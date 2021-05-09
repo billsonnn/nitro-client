@@ -1,10 +1,10 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { IWorkerEventTracker } from 'nitro-renderer/src/core/events/IWorkerEventTracker';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
+import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
 import { Point } from 'pixi.js';
-import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
-import { IWorkerEventTracker } from '../../../../../client/core/events/IWorkerEventTracker';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomEnterEffect } from '../../../../../client/room/utils/RoomEnterEffect';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
 import { ChatWidgetHandler } from '../handlers/ChatWidgetHandler';

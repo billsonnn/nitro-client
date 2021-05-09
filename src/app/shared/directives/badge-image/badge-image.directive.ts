@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Directive({
     selector: '[badge-image]'

@@ -1,24 +1,19 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { RoomWidgetTrophyUpdateEvent } from '../events/RoomWidgetTrophyUpdateEvent';
-import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
-import { LoveLockStartConfirmComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
-import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { LoveLockFurniStartEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/LoveLockFurniStartEvent';
-import { LoveLockFurniFriendConfirmedEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
-import { LoveLockFurniFinishedEvent } from '../../../../../client/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
-
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { LoveLockFurniFinishedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
+import { LoveLockFurniFriendConfirmedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
+import { LoveLockFurniStartEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniStartEvent';
+import { LoveLockStartConfirmComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
+import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
+import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FriendsFurniConfirmWidget } from '../furniture/friendfurni/confirm.component';
+
 
 export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _disposed: boolean = false;
     private _messages: IMessageEvent[];
     private _widget: FriendsFurniConfirmWidget;
@@ -74,12 +69,12 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
         return '';
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
 

@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
-import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { CatalogSearchData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogSearchData';
+import { ICatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
+import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
-import { ICatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { CatalogSearchData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogSearchData';
 
 @Component({
     selector: 'nitro-catalog-navigation-item-component',

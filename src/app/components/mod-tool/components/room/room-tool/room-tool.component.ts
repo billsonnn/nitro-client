@@ -1,14 +1,13 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { RoomToolRoom } from './room-tool-room';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { ModtoolChangeRoomSettingsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
-import { ModtoolRoomInfoParser } from '../../../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModtoolChangeRoomSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
+import { ModtoolRequestRoomChatlogComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModtoolRoomAlertComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
+import { ModtoolRoomInfoParser } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { NotificationService } from '../../../../notification/services/notification.service';
-import { ModtoolRoomAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
-import { ModtoolRequestRoomChatlogComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
 
 @Component({
     selector: 'nitro-mod-tool-room-component',

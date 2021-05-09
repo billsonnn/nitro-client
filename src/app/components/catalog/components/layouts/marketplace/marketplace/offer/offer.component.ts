@@ -1,12 +1,9 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
-import { CatalogLayout } from '../../../../../CatalogLayout';
-import { MarketplaceOfferItem } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { MarketplaceOfferData } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { Nitro } from '../../../../../../../../client/nitro/Nitro';
-import { MarketplaceService } from '../../../../../services/marketplace.service';
+import { Component, Input, NgZone } from '@angular/core';
+import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../../../../../notification/services/notification.service';
-import { Purse } from '../../../../../purse/purse';
 import { PurseService } from '../../../../../../purse/services/purse.service';
+import { MarketplaceService } from '../../../../../services/marketplace.service';
 
 @Component({
     templateUrl: './template.html',

@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Nitro } from 'src/client/nitro/Nitro';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NavigatorService } from '../../services/navigator.service';
 
 @Component({

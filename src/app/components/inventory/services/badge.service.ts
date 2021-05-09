@@ -1,8 +1,8 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { BadgesEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/BadgesEvent';
-import { RequestBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { BadgesEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/badges/BadgesEvent';
+import { RequestBadgesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';

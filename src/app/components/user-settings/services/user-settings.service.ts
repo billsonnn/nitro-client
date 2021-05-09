@@ -1,12 +1,12 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { UserSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserSettingsEvent';
-import { UserSettingsCameraFollowComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
-import { UserSettingsOldChatComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsOldChatComposer';
-import { UserSettingsRoomInvitesComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
-import { UserSettingsSoundComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsSoundComposer';
-import { NitroSettingsEvent } from '../../../../client/nitro/events/NitroSettingsEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { UserSettingsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserSettingsEvent';
+import { UserSettingsCameraFollowComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
+import { UserSettingsOldChatComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsOldChatComposer';
+import { UserSettingsRoomInvitesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
+import { UserSettingsSoundComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsSoundComposer';
+import { NitroSettingsEvent } from 'nitro-renderer/src/nitro/events/NitroSettingsEvent';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Injectable()
 export class UserSettingsService implements OnDestroy

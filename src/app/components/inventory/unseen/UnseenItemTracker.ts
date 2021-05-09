@@ -1,6 +1,6 @@
-﻿import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { INitroCommunicationManager } from '../../../../client/nitro/communication/INitroCommunicationManager';
-import { UnseenItemsEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
+﻿import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { INitroCommunicationManager } from 'nitro-renderer/src/nitro/communication/INitroCommunicationManager';
+import { UnseenItemsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/notifications/UnseenItemsEvent';
 import { InventoryService } from '../services/inventory.service';
 import { IUnseenItemTracker } from './IUnseenItemTracker';
 

@@ -1,26 +1,26 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { ModtoolCallForHelpTopicsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
+import { ModtoolMainEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
+import { ModtoolReceivedRoomsUserEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
+import { ModtoolRoomChatlogEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
+import { ModtoolRoomInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
+import { ModtoolUserChatlogEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
+import { RoomInfoOwnerEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
+import { UserInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserInfoEvent';
+import { ModtoolRequestRoomChatlogComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
+import { ModtoolRequestRoomInfoComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
+import { ModtoolRoomInfoParser } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
+import { CallForHelpCategoryData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
+import { ModtoolRoomChatlogLine } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
+import { ModtoolRoomVisitedData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolRoomVisitedData';
+import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { _Str_5018 } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/_Str_5018';
+import { RoomInfoOwnerParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 import { ModToolMainComponent } from '../components/main/main.component';
-import { ModtoolRoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { ModtoolRequestRoomInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { UserToolUser } from '../components/user/user-tool/user-tool-user';
-import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
-import { ModtoolUserChatlogParserVisit } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
-import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
-import { CallForHelpCategoryData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
-import { ModtoolMainEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
-import { _Str_5018 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5018';
-import { ModtoolReceivedRoomsUserEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
-import { ModtoolRoomVisitedData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomVisitedData';
-import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
-import { RoomInfoOwnerParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
-import { ModtoolRoomInfoParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
-import { ModtoolRoomChatlogLine } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
-import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 
 @Injectable()
 export class ModToolService implements OnDestroy

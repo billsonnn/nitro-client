@@ -1,6 +1,6 @@
 ﻿import { Directive } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Triggerable } from '../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredService } from './services/wired.service';
 
