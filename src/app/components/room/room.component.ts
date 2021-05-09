@@ -926,7 +926,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
     public setRoomBackgroundColor(hue: number, saturation: number, lightness: number): void
     {
-        this._roomBackgroundColor = ColorConverter._Str_13949(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
+        this._roomBackgroundColor = ColorConverter.hslToRGB(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
 
         const background = this.getRoomBackground();
 
@@ -946,7 +946,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
     public setRoomColorizerColor(color: number, brightness: number): void
     {
-        this._roomColorizerColor = ColorConverter._Str_13949(((ColorConverter._Str_22130(color) & 0xFFFF00) + brightness));
+        this._roomColorizerColor = ColorConverter.hslToRGB(((ColorConverter.rgbToHSL(color) & 0xFFFF00) + brightness));
 
         this.setRoomColorizer();
     }

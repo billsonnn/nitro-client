@@ -51,7 +51,7 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
     {
         if(!event) return;
 
-        const hsl = ColorConverter._Str_22130(parseInt(event.color.hex.replace('#', ''), 16));
+        const hsl = ColorConverter.rgbToHSL(parseInt(event.color.hex.replace('#', ''), 16));
 
         this.hue        = (((hsl >> 16) & 0xFF));
         this.saturation = (((hsl >> 8) & 0xFF));
