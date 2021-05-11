@@ -28,7 +28,7 @@
     "ngx-pagination": "^5.0.0",
     "ngx-perfect-scrollbar": "^10.0.1",
     "ngx-toastr": "^13.0.0",
-    "nitro-renderer": "git+https://git@git.krews.org/nitro/nitro-renderer#master",
+    "nitro-renderer": "git+https://git@git.krews.org/nitro/nitro-renderer#main",
     "pixi.js": "^5.3.3",
     "rxjs": "~6.5.5",
     "timers": "^0.1.1",
