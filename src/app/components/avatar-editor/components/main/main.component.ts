@@ -233,11 +233,11 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         if(_local_12)
         {
             _local_24 = 2;
-            _local_14 = Nitro.instance.avatar._Str_838(this.gender, _local_24);
+            _local_14 = Nitro.instance.avatar.getMandatoryAvatarPartSetIds(this.gender, _local_24);
         }
         else
         {
-            _local_14 = Nitro.instance.avatar._Str_838(this.gender, this.clubMemberLevel);
+            _local_14 = Nitro.instance.avatar.getMandatoryAvatarPartSetIds(this.gender, this.clubMemberLevel);
         }
 
         const _local_15 = (_local_14.indexOf(_arg_2) == -1);
