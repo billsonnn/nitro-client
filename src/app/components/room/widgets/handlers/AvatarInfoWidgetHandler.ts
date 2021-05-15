@@ -87,7 +87,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
                 if(this._container && this._container.roomSession)
                 {
-                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677);
+                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation.ordinal);
                 }
                 break;
             }

@@ -97,32 +97,32 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ';d':
                             if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_7336._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.LAUGH.ordinal);
                             }
                             break;
                         case 'o/':
                         case '_o/':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6268._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.WAVE.ordinal);
                             return null;
                         case ':kiss':
                             if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_5579._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.BLOW.ordinal);
                                 return null;
                             }
                             break;
                         case ':jump':
                             if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_16682._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.JUMP.ordinal);
                                 return null;
                             }
                             break;
                         case ':idle':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6989._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.IDLE.ordinal);
                             return null;
                         case '_b':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6325._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.RESPECT.ordinal);
                             return null;
                         case ':sign':
                             this._container.roomSession.sendSignMessage(parseInt(secondPart));

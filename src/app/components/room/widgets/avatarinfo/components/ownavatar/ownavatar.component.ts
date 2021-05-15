@@ -311,16 +311,16 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                         message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_1553);
                         break;
                     case 'wave':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6268);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.WAVE);
                         break;
                     case 'blow':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_5579);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.BLOW);
                         break;
                     case 'laugh':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_7336);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.LAUGH);
                         break;
                     case 'idle':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6989);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.IDLE);
                         break;
                     case 'dance_menu':
                         hideMenu = false;
