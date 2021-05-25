@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { InfoStandPetData } from '../../data/InfoStandPetData';
 import { InfoStandType } from '../../InfoStandType';
 import { RoomInfoStandBaseComponent } from '../base/base.component';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
 import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniActionMessage';
 import { InfoStandUserData } from '../../data/InfoStandUserData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Component({
     templateUrl: './pet.template.html'

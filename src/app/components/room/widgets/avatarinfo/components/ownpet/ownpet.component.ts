@@ -7,10 +7,10 @@ import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserAct
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { PetInfoData } from '../../common/PetInfoData';
 import { RoomAvatarInfoComponent } from '../main/main.component';
-import { PetType } from '../../../../../../../client/nitro/avatar/pets/PetType';
-import { IFurnitureData } from '../../../../../../../client/nitro/session/furniture/IFurnitureData';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
 import { FurniCategory } from '../../../../../catalog/enums/FurniCategory';
+import { PetType } from 'nitro-renderer/src/nitro/avatar/pets/PetType';
+import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 
 @Component({
     templateUrl: './ownpet.template.html'
@@ -133,8 +133,8 @@ export class RoomAvatarInfoOwnPetComponent extends AvatarContextInfoView
 
     private _Str_20669(k: number, arg2: number): IFurnitureData
     {
-        const local4 = Nitro.instance.sessionDataManager.getFloorItemsDataByCategory(k);
-
+        // const local4 = Nitro.instance.sessionDataManager.getFloorItemsDataByCategory(k);
+        const local4 = [];
         for(const item of local4)
         {
             const local6 = item.customParams.split(' ');
