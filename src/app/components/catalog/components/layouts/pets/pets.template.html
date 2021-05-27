@@ -1,3 +1,23 @@
-<div class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets2-component">
-    
+<div class="d-flex flex-column w-100 h-100">
+    <div *ngIf="selectedPalette >= 0"
+         class="position-relative d-flex flex-column justify-content-center align-items-center w-100 mb-2">
+        <div class="position-absolute bg-secondary rounded text-center m-2 p-2 t-0 l-0"
+             style="z-index:1;">{{getPetBreedName() }}</div>
+        <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="366"
+             [height]="180"></div>
+    </div>
+    <div *ngIf="sellablePalettes.length > 0"
+         class="d-flex flex-column w-100 h-100 card nitro-catalog-layout-pets2-component">
+        <perfect-scrollbar class="grid-container w-100" style="min-height:209px;max-height:209px;height:209px;">
+            <div class="grid-items grid-6">
+                <div (click)="selectPalette(i)" *ngFor="let palette of sellablePalettes; let i = index;"
+                     class="d-flex flex-column item-detail justify-content-center align-items-center">
+                    <button pet-image [asBackground]="true" [paletteId]="palette.paletteId"
+                            [headOnly]="true" [direction]="2" [typeId]="petIndex" type="button"
+                            class="position-relative btn btn-secondary align-items-end detail-info has-image"></button>
+
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
 </div>

@@ -30,6 +30,15 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
     @Input()
     public asBackground: boolean = false;
 
+    @Input()
+    public typeId: number = null;
+
+    @Input()
+    public paletteId: number =null;
+
+    @Input()
+    public color: number  = 0xFFFFFF;
+
     private _petImageCache: AdvancedMap<string, string> = new AdvancedMap();
 
     public petUrl: string	= null;
@@ -82,7 +91,6 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
         this.needsUpdate = false;
 
         const imageUrl = this.getPetImageUrl();
-
         if(!imageUrl || !imageUrl.length) return;
 
         const element = this._elementRef.nativeElement;
@@ -126,11 +134,14 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
 
         let imageResult: ImageResult = null;
 
+        const typeId = this.petFigureData ? this.petFigureData.typeId : this.typeId;
+        const paletteId = this.petFigureData ? this.petFigureData.paletteId : this.paletteId;
+        const color = this.petFigureData ? this.petFigureData.color : this.color;
+
         this._ngZone.runOutsideAngular(() =>
         {
-            const typeId = this.petFigureData.typeId;
 
-            imageResult = Nitro.instance.roomEngine.getRoomObjectPetImage(typeId, this.petFigureData.paletteId, this.petFigureData.color, new Vector3d((this.direction * 45)), 64, this, this.headOnly, 0, this.petFigureData.customParts, 'std');
+            imageResult = Nitro.instance.roomEngine.getRoomObjectPetImage(typeId, paletteId, color, new Vector3d((this.direction * 45)), 64, this, this.headOnly, 0, null, 'std');
 
             if(imageResult)
             {
@@ -184,6 +195,9 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
 
     public getPetBuildString(): string
     {
+        if(!this.petFigureData) return '';
+
+
         return (`${ this.petFigureData.figureString }:${ this.headOnly }:${ this.direction }`);
     }
 }

@@ -53,6 +53,8 @@ import { CatalogLayoutVipBuyComponent } from '../components/layouts/vip-buy/vip-
 import { CatalogMainComponent } from '../components/main/main.component';
 import { GiftWrappingConfiguration } from '../gifts/gift-wrapping-configuration';
 import { Purse } from '../purse/purse';
+import { SellablePetPalettesEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/SellablePetPalettesEvent';
+import { CatalogLayoutPetsComponent } from '../components/layouts/pets/pets.component';
 
 @Injectable()
 export class CatalogService implements OnDestroy
@@ -62,6 +64,7 @@ export class CatalogService implements OnDestroy
     private _messages: IMessageEvent[] = [];
     private _component: CatalogMainComponent = null;
     private _giftConfiguratorComponent: CatalogCustomizeGiftComponent = null;
+    private _petsComponent: CatalogLayoutPetsComponent = null;
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
     private _activePage: ICatalogPageParser = null;
@@ -79,6 +82,7 @@ export class CatalogService implements OnDestroy
 
     private _offersToRoots: AdvancedMap<number, CatalogPageData[]> = null;
     private _searchResultsPages: CatalogSearchData;
+    private _petPalettes: SellablePetPalettesEvent = null;
 
     constructor(
         private _settingsService: SettingsService,
@@ -120,6 +124,7 @@ export class CatalogService implements OnDestroy
                 new CatalogClubGiftsEvent(this.onCatalogClubGiftsEvent.bind(this)),
                 new CatalogRedeemVoucherErrorEvent(this.onCatalogRedeemVoucherError.bind(this)),
                 new CatalogRedeemVoucherOkEvent(this.onCatalogRedeemVoucherOk.bind(this)),
+                new SellablePetPalettesEvent(this.onReceiveSellablePetPalettesEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -336,11 +341,11 @@ export class CatalogService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            this._isLoading         = false;
-            this._catalogMode       = -1;
-            this._catalogRoot       = null;
-            this._activePage        = null;
-            this._activePageData    = null;
+            this._isLoading = false;
+            this._catalogMode = -1;
+            this._catalogRoot = null;
+            this._activePage = null;
+            this._activePageData = null;
 
             if(this._component) this._component.reset();
 
@@ -363,6 +368,19 @@ export class CatalogService implements OnDestroy
 
         if(this._settingsService.catalogVisible)
             this._notificationService.alert('${catalog.alert.voucherredeem.error.description.' + parser.errorCode + '}', '${catalog.alert.voucherredeem.error.title}');
+    }
+
+    private onReceiveSellablePetPalettesEvent(event: SellablePetPalettesEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._petPalettes = event;
+
+        if(this._petsComponent) this._petsComponent.setPalettes(event);
     }
 
     private onCatalogRedeemVoucherOk(event: CatalogRedeemVoucherOkEvent): void
@@ -394,10 +412,10 @@ export class CatalogService implements OnDestroy
     {
         if(!mode) return;
 
-        this._isLoading         = true;
-        this._catalogRoot       = null;
-        this._activePage        = null;
-        this._activePageData    = null;
+        this._isLoading = true;
+        this._catalogRoot = null;
+        this._activePage = null;
+        this._activePageData = null;
 
         (this._component && this._component.reset());
 
@@ -492,9 +510,9 @@ export class CatalogService implements OnDestroy
         this.purchaseById(page.pageId, offer.offerId, quantity, extra);
     }
 
-    public purchaseGiftOffer(activePage: ICatalogPageParser, activeOffer: CatalogPageOfferData, extraData:string,  receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
+    public purchaseGiftOffer(activePage: ICatalogPageParser, activeOffer: CatalogPageOfferData, extraData: string, receiverName: string, giftMessage: string, spriteId: number, color: number, ribbonId: number, anonymousGift: boolean): void
     {
-        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift ));
+        Nitro.instance.communication.connection.send(new CatalogPurchaseGiftComposer(activePage.pageId, activeOffer.offerId, extraData, receiverName, giftMessage, spriteId, color, ribbonId, anonymousGift));
     }
 
     public purchaseById(pageId: number, offerId: number, quantity: number, extra: string = null)
@@ -649,8 +667,8 @@ export class CatalogService implements OnDestroy
 
         for(const furniItem of furni)
         {
-            const hasOffer      = this.getOfferPages(furniItem.purchaseOfferId);
-            const hasRentOffer  = this.getOfferPages(furniItem.rentOfferId);
+            const hasOffer = this.getOfferPages(furniItem.purchaseOfferId);
+            const hasRentOffer = this.getOfferPages(furniItem.rentOfferId);
 
             const combinedOfferPages = [hasOffer, hasRentOffer];
 
@@ -694,7 +712,12 @@ export class CatalogService implements OnDestroy
         return this._searchResultsPages;
     }
 
-    public  clearSearchResults(): void
+    public setPetsPage(page: CatalogLayoutPetsComponent): void
+    {
+        this._petsComponent = page;
+    }
+
+    public clearSearchResults(): void
     {
         this._searchResultsPages = null;
         this.component && this.component.reselectCurrentTab();
