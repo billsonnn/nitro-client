@@ -311,7 +311,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const image = avatarImage.getCroppedImage(AvatarSetType.HEAD);
         const color = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 
-        this._avatarColorCache.set(figure, ((color && color._Str_915) || 16777215));
+        this._avatarColorCache.set(figure, ((color && color.rgb) || 16777215));
 
         avatarImage.dispose();
 

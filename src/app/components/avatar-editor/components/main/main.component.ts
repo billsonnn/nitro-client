@@ -186,7 +186,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(!_local_8) return null;
 
-        const _local_9 = this._Str_783(_local_8._Str_734);
+        const _local_9 = this._Str_783(_local_8.paletteID);
 
         if(!_local_9) return null;
 
@@ -252,7 +252,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         }
 
         const _local_16 = (_arg_2 !== FigureData.FACE);
-        const _local_17 = _local_8._Str_710;
+        const _local_17 = _local_8.partSets;
         const _local_18 = _local_17.length;
 
         let _local_19 = (_local_18 - 1);
@@ -275,13 +275,13 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
                 }
             }
 
-            if((_local_6._Str_608 && _local_28) && (_local_12 || (this.clubMemberLevel >= _local_6.clubLevel)))
+            if((_local_6.isSelectable && _local_28) && (_local_12 || (this.clubMemberLevel >= _local_6.clubLevel)))
             {
                 const _local_29 = (this.clubMemberLevel < _local_6.clubLevel);
 
                 let _local_30 = true;
 
-                if(_local_6._Str_651)
+                if(_local_6.isSellable)
                 {
                     _local_30 = (this._inventoryService && this._inventoryService.hasFigureSetId(_local_6.id));
                 }
@@ -347,8 +347,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         const _local_3 = (!k.partSet ? 9999999999 : k.partSet.clubLevel);
         const _local_4 = (!_arg_2.partSet ? 9999999999 : _arg_2.partSet.clubLevel);
-        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_5 = (!k.partSet ? false : k.partSet.isSellable);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet.isSellable);
 
         if(_local_5 && !_local_6) return 1;
 
@@ -369,8 +369,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         const _local_3 = (!k.partSet ? -1 : k.partSet.clubLevel);
         const _local_4 = (!_arg_2.partSet ? -1 : _arg_2.partSet.clubLevel);
-        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_5 = (!k.partSet ? false : k.partSet.isSellable);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet.isSellable);
 
         if(_local_5 && !_local_6) return 1;
 
