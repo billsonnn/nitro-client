@@ -186,7 +186,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(!_local_8) return null;
 
-        const _local_9 = this._Str_783(_local_8.paletteID);
+        const _local_9 = this.getPalette(_local_8.paletteID);
 
         if(!_local_9) return null;
 
@@ -333,14 +333,14 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         if(!this._figureStructureData) return null;
 
-        return this._figureStructureData._Str_740(k);
+        return this._figureStructureData.getSetType(k);
     }
 
-    public _Str_783(k: number): IPalette
+    public getPalette(k: number): IPalette
     {
         if(!this._figureStructureData) return null;
 
-        return this._figureStructureData._Str_783(k);
+        return this._figureStructureData.getPalette(k);
     }
 
     private _Str_25189(k: AvatarEditorGridPartItem, _arg_2: AvatarEditorGridPartItem): number
