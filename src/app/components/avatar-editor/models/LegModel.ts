@@ -8,9 +8,9 @@ export class LegModel extends CategoryBaseModel
     {
         super.init();
 
-        this.addCategory(FigureData.LG);
-        this.addCategory(FigureData.SH);
-        this.addCategory(FigureData.WA);
+        this.addCategory(FigureData.TROUSERS);
+        this.addCategory(FigureData.SHOES);
+        this.addCategory(FigureData.TROUSER_ACCESSORIES);
 
         this._isInitalized = true;
     }

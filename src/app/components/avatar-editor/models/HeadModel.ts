@@ -8,11 +8,11 @@ export class HeadModel extends CategoryBaseModel
     {
         super.init();
 
-        this.addCategory(FigureData.HR);
-        this.addCategory(FigureData.HA);
-        this.addCategory(FigureData.HE);
-        this.addCategory(FigureData.EA);
-        this.addCategory(FigureData.FA);
+        this.addCategory(FigureData.HAIR);
+        this.addCategory(FigureData.HAT);
+        this.addCategory(FigureData.HEAD_ACCESSORIES);
+        this.addCategory(FigureData.EYE_ACCESSORIES);
+        this.addCategory(FigureData.FACE_ACCESSORIES);
 
         this._isInitalized = true;
     }

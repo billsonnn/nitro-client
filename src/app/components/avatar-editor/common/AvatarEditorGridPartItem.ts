@@ -160,7 +160,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
             while(!hasAsset && (direction < AvatarEditorGridPartItem.THUMB_DIRECTIONS.length))
             {
-                const assetName = ((((((((((FigureData.H + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData._Str_2028);
+                const assetName = ((((((((((FigureData.SCALE + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData.DEFAULT_FRAME);
 
                 asset = this._renderManager.getAssetByName(assetName);
 
