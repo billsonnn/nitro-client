@@ -95,7 +95,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                     {
                         case ':d':
                         case ';d':
-                            if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum.VIP)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.LAUGH.ordinal);
                             }
@@ -105,14 +105,14 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                             this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.WAVE.ordinal);
                             return null;
                         case ':kiss':
-                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum.VIP)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.BLOW.ordinal);
                                 return null;
                             }
                             break;
                         case ':jump':
-                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum.VIP)
                             {
                                 this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.JUMP.ordinal);
                                 return null;

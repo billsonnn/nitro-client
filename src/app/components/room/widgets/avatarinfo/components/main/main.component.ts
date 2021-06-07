@@ -801,11 +801,11 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
     public get hasClub(): boolean
     {
-        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2964);
+        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum.CLUB);
     }
 
     public get hasVip(): boolean
     {
-        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum._Str_2575);
+        return (this.handler.container.sessionDataManager.clubLevel >= HabboClubLevelEnum.VIP);
     }
 }

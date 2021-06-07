@@ -215,11 +215,11 @@ export class MannequinWidget extends ConversionTrackingWidget
     {
         switch(clubLevel)
         {
-            case HabboClubLevelEnum._Str_3159:
+            case HabboClubLevelEnum.NO_CLUB:
                 this.hasHabboClub = false;
                 break;
-            case HabboClubLevelEnum._Str_2964:
-            case HabboClubLevelEnum._Str_2575:
+            case HabboClubLevelEnum.CLUB:
+            case HabboClubLevelEnum.VIP:
                 this.hasHabboClub = true;
                 break;
         }
