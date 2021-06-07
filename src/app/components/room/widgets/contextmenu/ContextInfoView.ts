@@ -83,9 +83,9 @@ export class ContextInfoView
         const offset    = this.getOffset(rectangle);
         const _local_5  = (point.y - rectangle.top);
 
-        this.stack._Str_22775(_local_5);
+        this.stack.addValue(_local_5);
 
-        let deltaY = this.stack._Str_25797();
+        let deltaY = this.stack.getMax();
 
         if(deltaY < (this.currentDeltaY - ContextInfoView.BUBBLE_DROP_SPEED))
         {

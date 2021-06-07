@@ -2,7 +2,7 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
 import { ModtoolUserInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
 import { ModtoolRequestUserInfoComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
-import { _Str_5467 } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/_Str_5467';
+import { ModeratorUserInfoData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModeratorUserInfoData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 
@@ -11,7 +11,7 @@ export class ModToolUserInfoService implements OnDestroy
 {
     private _messages: IMessageEvent[];
 
-    private _currentUserInfo: _Str_5467;
+    private _currentUserInfo: ModeratorUserInfoData;
 
     constructor(
         private _notificationService: NotificationService,
@@ -61,7 +61,7 @@ export class ModToolUserInfoService implements OnDestroy
 
     }
 
-    public get currentUserInfo(): _Str_5467
+    public get currentUserInfo(): ModeratorUserInfoData
     {
         return this._currentUserInfo;
     }
