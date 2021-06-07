@@ -46,7 +46,7 @@ export class ModToolUserSendMessageComponent extends ModTool implements OnInit, 
     {
         if(!this._modToolService._Str_3325) return [];
 
-        return this._modToolService._Str_3325._Str_15690;
+        return this._modToolService._Str_3325.messageTemplates;
     }
 
     public selectMessage(id: string)
