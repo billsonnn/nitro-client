@@ -32,17 +32,17 @@ export class FriendFurniEngravingWidget extends ConversionTrackingWidget
     {
         switch(_arg_2)
         {
-            case FriendFurniEngravingWidgetType._Str_13451:
+            case FriendFurniEngravingWidgetType.LOVE_LOCK:
                 this.engravingView = 'engraving';
                 break;
-            case FriendFurniEngravingWidgetType._Str_17498:
+            case FriendFurniEngravingWidgetType.CARVE_A_TREE:
                 break;
-            case FriendFurniEngravingWidgetType._Str_18746:
+            case FriendFurniEngravingWidgetType.FRIENDS_PORTRAIT:
                 break;
-            case FriendFurniEngravingWidgetType._Str_15230:
+            case FriendFurniEngravingWidgetType.WILD_WEST_WANTED:
                 this.engravingView = 'wildwest';
                 break;
-            case FriendFurniEngravingWidgetType._Str_15778:
+            case FriendFurniEngravingWidgetType.HABBOWEEN:
                 this.engravingView = 'hween14';
                 break;
         }
