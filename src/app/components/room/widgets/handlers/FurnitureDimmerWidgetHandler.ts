@@ -81,7 +81,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
                 {
                     const _local_7 = presetsEvent._Str_14989(i);
 
-                    if(_local_7) updateEvent.setPresetValues(_local_7.id, _local_7.type, _local_7.color, _local_7._Str_4272);
+                    if(_local_7) updateEvent.setPresetValues(_local_7.id, _local_7.type, _local_7.color, _local_7.light);
 
                     i++;
                 }

@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { Achievement } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/Achievement';
+import { AchievementData } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
 import { AchievementEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementEvent';
 import { AchievementsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementsEvent';
 import { AchievementsScoreEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementsScoreEvent';
@@ -154,7 +154,7 @@ export class AchievementsService implements OnDestroy
         });
     }
 
-    public isIgnoredAchievement(achievement: Achievement): boolean
+    public isIgnoredAchievement(achievement: AchievementData): boolean
     {
         if(!achievement) return false;
 
