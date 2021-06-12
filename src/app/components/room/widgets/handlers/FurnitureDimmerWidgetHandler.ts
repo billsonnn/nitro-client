@@ -93,7 +93,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
             case RoomEngineDimmerStateEvent.ROOM_COLOR: {
                 const stateEvent = (event as RoomEngineDimmerStateEvent);
 
-                this._container.events.dispatchEvent(new RoomWidgetDimmerStateUpdateEvent(stateEvent.state, stateEvent._Str_14686, stateEvent._Str_6815, stateEvent.color, stateEvent._Str_5123));
+                this._container.events.dispatchEvent(new RoomWidgetDimmerStateUpdateEvent(stateEvent.state, stateEvent.presetId, stateEvent.effectId, stateEvent.color, stateEvent.brightness));
                 return;
             }
             case RoomEngineTriggerWidgetEvent.REMOVE_DIMMER:

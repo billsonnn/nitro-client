@@ -309,13 +309,13 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 {
                     const colorEvent = (event as RoomBackgroundColorEvent);
 
-                    if(colorEvent._Str_11464)
+                    if(colorEvent.bgOnly)
                     {
                         this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
                     }
                     else
                     {
-                        this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
+                        this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent.brightness);
                     }
                 }
                 return;
