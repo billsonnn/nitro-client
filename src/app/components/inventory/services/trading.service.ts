@@ -1,11 +1,11 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
+import { ItemDataStructure } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/ItemDataStructure';
 import { TradingAcceptEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingAcceptEvent';
 import { TradingCloseEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingCloseEvent';
 import { TradingCompletedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingCompletedEvent';
 import { TradingConfirmationEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingConfirmationEvent';
-import { TradingListItem } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingListItem';
 import { TradingListItemEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingListItemEvent';
 import { TradingNotOpenEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingNotOpenEvent';
 import { TradingOpenEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingOpenEvent';
@@ -384,7 +384,7 @@ export class InventoryTradingService implements OnDestroy
         this.state = InventoryTradingService.TRADING_STATE_RUNNING;
     }
 
-    private parseItems(k: TradingListItem[], _arg_2: AdvancedMap<string, GroupItem>): void
+    private parseItems(k: ItemDataStructure[], _arg_2: AdvancedMap<string, GroupItem>): void
     {
         if(!this.controller) return;
 
