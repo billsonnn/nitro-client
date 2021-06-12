@@ -227,13 +227,13 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     private readFurniSelectionCode(): number
     {
-        if(!this._updated._Str_21824) return 0;
+        if(!this._updated.stuffTypeSelectionEnabled) return 0;
 
         const wired = this._Str_3959();
 
         if(wired && ((wired.requiresFurni === WiredMainComponent._Str_4991) || (wired.requiresFurni === WiredMainComponent._Str_5430)))
         {
-            return this._updated._Str_6040;
+            return this._updated.stuffTypeSelectionCode;
         }
 
         return 0;
