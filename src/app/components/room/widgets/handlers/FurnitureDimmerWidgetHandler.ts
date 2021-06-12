@@ -55,7 +55,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
                 if(!previewMessage || !this._container.roomEngine) return null;
 
-                this._container.roomEngine._Str_17804(roomId, previewMessage.color, previewMessage._Str_5123, previewMessage._Str_11464);
+                this._container.roomEngine.updateObjectRoomColor(roomId, previewMessage.color, previewMessage._Str_5123, previewMessage._Str_11464);
                 break;
             }
         }
