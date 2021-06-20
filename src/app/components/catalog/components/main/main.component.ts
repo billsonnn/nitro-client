@@ -4,7 +4,7 @@ import { CatalogPageData } from 'nitro-renderer/src/nitro/communication/messages
 import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { ICatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
@@ -443,7 +443,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._purchaseOffer;
     }
 
-    public get currentMarketplaceOfferToBuy(): MarketplaceOfferItem
+    public get currentMarketplaceOfferToBuy(): MarketplaceOffer
     {
         return this._marketplaceService.currentMarketplaceOfferToBuy;
     }

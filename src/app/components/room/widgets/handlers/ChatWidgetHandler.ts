@@ -245,19 +245,19 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
                         switch(chatType)
                         {
-                            case RoomSessionChatEvent._Str_5821:
+                            case RoomSessionChatEvent.CHAT_TYPE_RESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widgets.chatbubble.respect', 'username', username);
                                 break;
-                            case RoomSessionChatEvent._Str_6081:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETRESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.petrespect', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_5958:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETTREAT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.pettreat', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_8971:
+                            case RoomSessionChatEvent.CHAT_TYPE_HAND_ITEM_RECEIVED:
                                 text = Nitro.instance.getLocalizationWithParameters('widget.chatbubble.handitem', [ 'username', 'handitem' ], [ username, Nitro.instance.getLocalization(('handitem' + chatEvent.extraParam))]);
                                 break;
-                            case RoomSessionChatEvent._Str_8909: {
+                            case RoomSessionChatEvent.CHAT_TYPE_MUTE_REMAINING: {
                                 const hours     = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam / 3600)) : 0).toString();
                                 const minutes   = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam % 3600) / 60) : 0).toString();
                                 const seconds   = (chatEvent.extraParam % 60).toString();
