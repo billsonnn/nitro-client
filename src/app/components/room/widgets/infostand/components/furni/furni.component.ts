@@ -56,7 +56,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             if(event.roomControllerLevel >= RoomControllerLevel.MODERATOR) godMode = true;
         }
 
-        if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
+        if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum.EVERYBODY) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum.CONTROLLER) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
         {
             canUse = true;
         }
