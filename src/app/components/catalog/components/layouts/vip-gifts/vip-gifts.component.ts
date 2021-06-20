@@ -1,11 +1,10 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { CatalogSelectClubGiftComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/CatalogSelectClubGiftComposer';
 import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { CatalogLayout } from '../../../CatalogLayout';
-import { CatalogService } from '../../../services/catalog.service';
 
 
 @Component({
@@ -89,7 +88,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     {
         const test = this._catalogService.clubGiftsParser.getOfferExtraData(offerId);
 
-        const giftAvailableInDays =  test.availableInDays - this._catalogService.purse.pastClubDays;
+        const giftAvailableInDays =  test.daysRequired - this._catalogService.purse.pastClubDays;
 
         if(giftAvailableInDays <= 0) return '';
 
@@ -97,7 +96,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
 
         let textSelector = '';
 
-        if(test._Str_12313)
+        if(test.isVip)
         {
             textSelector = 'catalog.club_gift.vip_missing';
         }
