@@ -843,7 +843,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(_local_5 === PetType.MONSTERPLANT)
         {
-            if(petData.level >= petData._Str_20651) _local_7 = 'std';
+            if(petData.level >= petData.adultLevel) _local_7 = 'std';
             else _local_7 = ('grw' + petData.level);
         }
 
@@ -875,7 +875,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         infostandEvent.fullyGrown          = petData.fullyGrown;
         infostandEvent.dead                = petData.dead;
         infostandEvent.rarityLevel         = petData.rarityLevel;
-        infostandEvent._Str_3307           = petData._Str_3307;
+        infostandEvent._Str_3307           = petData.skillTresholds;
         infostandEvent._Str_5114           = false;
         infostandEvent.publiclyRideable    = petData.publiclyRideable;
         infostandEvent.maximumTimeToLive   = petData.maximumTimeToLive;

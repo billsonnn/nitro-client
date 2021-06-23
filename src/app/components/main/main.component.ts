@@ -142,7 +142,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
@@ -215,7 +215,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
