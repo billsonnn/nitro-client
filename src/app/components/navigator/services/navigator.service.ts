@@ -33,7 +33,7 @@ import { RoomInfoComposer } from 'nitro-renderer/src/nitro/communication/message
 import { NavigatorCategoryDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
 import { NavigatorSearchResultList } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
 import { NavigatorTopLevelContext } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
-import { RoomEnterErrorParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/access/RoomEnterErrorParser';
+import { CantConnectMessageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/access/CantConnectMessageParser';
 import { RoomDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
 import { ToolbarIconEnum } from 'nitro-renderer/src/nitro/enums/ToolbarIconEnum';
 import { NitroToolbarEvent } from 'nitro-renderer/src/nitro/events/NitroToolbarEvent';
@@ -306,13 +306,13 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         {
             switch(parser.reason)
             {
-                case RoomEnterErrorParser.FULL_ERROR:
+                case CantConnectMessageParser.REASON_FULL:
                     this._notificationService.alert('${navigator.guestroomfull.text}', '${navigator.guestroomfull.title}');
                     break;
-                case RoomEnterErrorParser.QUEUE_ERROR:
+                case CantConnectMessageParser.REASON_QUEUE_ERROR:
                     this._notificationService.alert('${room.queue.error. ' + parser.parameter + '}', '${room.queue.error.title}');
                     break;
-                case RoomEnterErrorParser.BANNED:
+                case CantConnectMessageParser.REASON_BANNED:
                     this._notificationService.alert('${navigator.banned.text}', '${navigator.banned.title}');
                     break;
                 default:

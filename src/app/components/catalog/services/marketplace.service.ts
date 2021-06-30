@@ -1,7 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
-import { MarketplaceAfterOrderStatusEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceAfterOrderStatusEvent';
+import { MarketplaceBuyOfferResultEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceBuyOfferResultEvent';
 import { MarketplaceCancelItemEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
 import { MarketplaceOffersReceivedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOffersReceivedEvent';
 import { MarketplaceOwnItemsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOwnItemsEvent';
@@ -51,7 +51,7 @@ export class MarketplaceService implements OnDestroy
                 new MarketplaceOwnItemsEvent(this.onMarketplaceOwnItemsEvent.bind(this)),
                 new MarketplaceCancelItemEvent(this.onMarketplaceCancelItemEvent.bind(this)),
                 new MarketplaceOffersReceivedEvent(this.onMarketplaceOffersReceivedEvent.bind(this)),
-                new MarketplaceAfterOrderStatusEvent(this.onMarketplaceAfterOrderStatusEvent.bind(this)),
+                new MarketplaceBuyOfferResultEvent(this.onMarketplaceAfterOrderStatusEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -95,7 +95,7 @@ export class MarketplaceService implements OnDestroy
         });
     }
 
-    private onMarketplaceAfterOrderStatusEvent(event: MarketplaceAfterOrderStatusEvent): void
+    private onMarketplaceAfterOrderStatusEvent(event: MarketplaceBuyOfferResultEvent): void
     {
         if(!event) return;
 
@@ -111,7 +111,7 @@ export class MarketplaceService implements OnDestroy
 
         if(parser.result == 2)
         {
-            const offerId = parser._Str_7501;
+            const offerId = parser.requestedOfferId;
             const nonRemovedOffers = [];
             for(const offer of this._offerOnMarket)
             {

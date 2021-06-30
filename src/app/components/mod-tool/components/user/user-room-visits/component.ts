@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolUserVisitedRoomsRoom } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserVisitedRoomsRoom';
+import { RoomVisitData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/RoomVisitData';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';
@@ -39,17 +39,17 @@ export class ModToolUserVisitedRoomsComponent extends ModTool implements OnInit,
         this._modToolService.closeRoomVisitedTool();
     }
 
-    public get roomVisitedForUser(): ModtoolUserVisitedRoomsRoom[]
+    public get roomVisitedForUser(): RoomVisitData[]
     {
         if(!this._modToolService.roomUserVisitedData) return [];
 
         return this._modToolService.roomUserVisitedData.rooms;
     }
 
-    public showTime(room: ModtoolUserVisitedRoomsRoom): string
+    public showTime(room: RoomVisitData): string
     {
-        const a = room._Str_22929;
-        const b = room._Str_25550;
+        const a = room.enterHour;
+        const b = room.enterMinute;
         return this.prependZero(a) + ':' + this.prependZero(b);
     }
 
@@ -58,7 +58,7 @@ export class ModToolUserVisitedRoomsComponent extends ModTool implements OnInit,
         return (k < 10) ? `0${k}` : k.toString();
     }
 
-    public goToRoom(room: ModtoolUserVisitedRoomsRoom): void
+    public goToRoom(room: RoomVisitData): void
     {
         this._navigatorService.goToPrivateRoom(room.roomId);
     }

@@ -4,7 +4,7 @@ import { PetType } from 'nitro-renderer/src/nitro/avatar/pets/PetType';
 import { RoomAdsUpdateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
 import { RoomUnitDropHandItemComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
 import { RoomUnitGiveHandItemComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
-import { RoomModerationParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomModerationParser';
+import { RoomModerationSettings } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomModerationSettings';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { ObjectDataFactory } from 'nitro-renderer/src/nitro/room/object/data/ObjectDataFactory';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
@@ -644,14 +644,14 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 switch(tradeMode)
                 {
-                    case RoomTradingLevelEnum._Str_14475: {
+                    case RoomTradingLevelEnum.ROOM_CONTROLLER_REQUIRED: {
                         const _local_15 = ((event.roomControllerLevel !== RoomControllerLevel.NONE) && (event.roomControllerLevel !== RoomControllerLevel.GUILD_MEMBER));
                         const _local_16 = ((event.flatControl !== RoomControllerLevel.NONE) && (event.flatControl !== RoomControllerLevel.GUILD_MEMBER));
 
                         event.canTrade = ((_local_15) || (_local_16));
                         break;
                     }
-                    case RoomTradingLevelEnum._Str_9173:
+                    case RoomTradingLevelEnum.FREE_TRADING:
                         event.canTrade = true;
                         break;
                     default:
@@ -664,7 +664,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(isShuttingDown) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_14161;
 
-            if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
+            if(tradeMode !== RoomTradingLevelEnum.FREE_TRADING) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
 
             // const _local_12 = this._container.sessionDataManager.userId;
             // _local_13 = this._container.sessionDataManager._Str_18437(_local_12);
@@ -748,11 +748,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_23100(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function (event: RoomWidgetUpdateInfostandUserEvent, moderation: RoomModerationParser): boolean
+        const settingsFunction = function (event: RoomWidgetUpdateInfostandUserEvent, moderation: RoomModerationSettings): boolean
         {
             switch(moderation.allowMute)
             {
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -764,13 +764,13 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_22729(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationSettings): boolean
         {
             switch(_arg_2.allowKick)
             {
-                case RoomModerationParser._Str_11537:
+                case RoomModerationSettings.MODERATION_LEVEL_ALL:
                     return true;
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -782,11 +782,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_23573(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationSettings): boolean
         {
             switch(_arg_2.allowBan)
             {
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -825,7 +825,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
     {
         if(!event || !this._container || !this._container.events) return;
 
-        const petData = event._Str_24727;
+        const petData = event.petInfo;
 
         if(!petData) return;
 

@@ -322,7 +322,7 @@ export class CatalogService implements OnDestroy
         this._purse.clubPeriods = Math.max(0, parser.months);
         this._purse.isVip = parser.isVip;
         this._purse.pastClubDays = parser.pastVIPDays;
-        this._purse.Str_14389 = parser.years == UserSubscriptionParser._Str_14729;
+        this._purse.Str_14389 = parser.years == UserSubscriptionParser.RESPONSE_TYPE_LOGIN;
         this._purse.minutesUntilExpiration = parser.totalSeconds;
     }
 
