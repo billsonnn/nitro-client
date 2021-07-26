@@ -1,15 +1,15 @@
 import
-    {
-        Component,
-        ElementRef,
-        Input,
-        NgZone,
-        OnChanges,
-        OnDestroy,
-        OnInit,
-        SimpleChanges,
-        ViewChild
-    } from '@angular/core';
+{
+    Component,
+    ElementRef,
+    Input,
+    NgZone,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { RoomBlockedTilesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
