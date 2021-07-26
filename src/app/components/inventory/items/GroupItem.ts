@@ -258,7 +258,37 @@ export class GroupItem
 
     private setDescription(): void
     {
-        this._description = '';
+        const k = this.getLastItem();
+
+        if(!k)
+        {
+            this._description = '';
+
+            return;
+        }
+
+        let key = '';
+
+        switch(this._category)
+        {
+            case FurniCategory._Str_5186:
+                key = (('poster_' + k.stuffData.getLegacyString()) + '_desc');
+                break;
+            case FurniCategory._Str_9125:
+                this._description = 'SONG_NAME';
+                return;
+            default:
+                if(this.isWallItem)
+                {
+                    key = ('wallItem.desc.' + k.type);
+                }
+                else
+                {
+                    key = ('roomItem.desc.' + k.type);
+                }
+        }
+
+        this._description = Nitro.instance.getLocalization(key);
     }
 
     private setIcon(): void
