@@ -18,6 +18,7 @@ ESLinter:
 Build Nitro:
   stage: build
   script:
+    - rm -rf node_modules
     - npm i
     - npm update nitro-renderer
     - cp src/index.html.example src/index.html
