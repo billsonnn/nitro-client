@@ -24,10 +24,6 @@ Build Nitro:
     - cp src/index.html.example src/index.html
     - cp src/configuration.json.example src/configuration.json
     - npm run build-prod
-  cache:
-    key: ${CI_COMMIT_BRANCH}1
-    paths:
-      - node_modules
   artifacts:
     expire_in: 2 weeks
     paths:
