@@ -19,6 +19,7 @@ Build Nitro:
   stage: build
   script:
     - npm i
+    - npm update nitro-renderer
     - cp src/index.html.example src/index.html
     - cp src/configuration.json.example src/configuration.json
     - npm run build-prod
