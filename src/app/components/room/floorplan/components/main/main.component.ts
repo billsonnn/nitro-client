@@ -1,30 +1,24 @@
 import
-{
-    Component,
-    ElementRef,
-    Input,
-    NgZone,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
+    {
+        Component,
+        ElementRef,
+        Input,
+        NgZone,
+        OnChanges,
+        OnDestroy,
+        OnInit,
+        SimpleChanges,
+        ViewChild
+    } from '@angular/core';
 import { RoomBlockedTilesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
 import { CompositeRectTileLayer } from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
-import * as PIXI from 'pixi.js';
 import { Application } from 'pixi.js';
 import { SettingsService } from '../../../../../core/settings/service';
 import { SessionService } from '../../../../../security/services/session.service';
 import { FloorPlanService } from '../../services/floorplan.service';
-window.PIXI = PIXI;
-
-
-
-
 
 @Component({
     selector: 'nitro-floorplan-main-component',

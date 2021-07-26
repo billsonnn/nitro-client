@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
 import { AvatarDirectionAngle } from 'nitro-renderer/src/nitro/avatar/enum/AvatarDirectionAngle';
 import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { IPalette } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPalette';
 import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
 import { ISetType } from 'nitro-renderer/src/nitro/avatar/structure/figure/ISetType';
@@ -15,6 +14,7 @@ import { AvatarEditorGridColorItem } from '../../common/AvatarEditorGridColorIte
 import { AvatarEditorGridPartItem } from '../../common/AvatarEditorGridPartItem';
 import { CategoryBaseModel } from '../../common/CategoryBaseModel';
 import { CategoryData } from '../../common/CategoryData';
+import { FigureData } from '../../common/FigureData';
 import { BodyModel } from '../../models/BodyModel';
 import { HeadModel } from '../../models/HeadModel';
 import { LegModel } from '../../models/LegModel';

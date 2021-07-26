@@ -8,7 +8,7 @@ import { FurnitureMannequinSaveNameComposer } from 'nitro-renderer/src/nitro/com
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
 
 @Component({

@@ -4,14 +4,14 @@ import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/even
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FurnitureContextMenuWidget } from '../furniture/context-menu/components/main/main.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetUseProductMessage } from '../messages/RoomWidgetUseProductMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureContextMenuWidgetHandler implements IRoomWidgetHandler
 {

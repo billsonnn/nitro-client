@@ -3,8 +3,8 @@ import { Component, NgZone } from '@angular/core';
 import { ColorEvent } from 'ngx-color';
 import { FurnitureMultiStateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
 import { ApplyTonerComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureBackgroundColorWidgetHandler } from '../../handlers/FurnitureBackgroundColorWidgetHandler';
 
 @Component({

@@ -5,15 +5,16 @@ import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObj
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { RoomSessionPresentEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionPresentEvent';
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { Texture } from 'pixi.js';
 import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetPresentOpenMessage } from '../messages/RoomWidgetPresentOpenMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetImageListener
 {
@@ -236,7 +237,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
     {
     }
 
-    imageReady(id: number, texture: PIXI.Texture, image?: HTMLImageElement): void
+    imageReady(id: number, texture: Texture, image?: HTMLImageElement): void
     {
     }
 }

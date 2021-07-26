@@ -5,18 +5,18 @@ import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEven
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
 import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { AvatarExpressionEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {

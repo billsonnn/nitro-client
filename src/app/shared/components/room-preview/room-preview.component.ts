@@ -3,6 +3,7 @@ import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
 import { IRoomRenderingCanvas } from 'nitro-renderer/src/room/renderer/IRoomRenderingCanvas';
 import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { DisplayObject } from 'pixi.js';
 
 @Component({
@@ -132,7 +133,7 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 
             if(this.renderingCanvas.canvasUpdated)
             {
-                const imageUrl = Nitro.instance.renderer.extract.base64(this.displayObject);
+                const imageUrl = TextureUtils.generateImageUrl(this.displayObject);
 
                 this.previewImageElement.style.backgroundImage = `url(${ imageUrl })`;
             }

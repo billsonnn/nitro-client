@@ -4,11 +4,11 @@ import { LoveLockFurniFinishedEvent } from 'nitro-renderer/src/nitro/communicati
 import { LoveLockFurniFriendConfirmedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
 import { LoveLockFurniStartEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniStartEvent';
 import { LoveLockStartConfirmComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FriendsFurniConfirmWidget } from '../furniture/friendfurni/confirm.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 
 export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler

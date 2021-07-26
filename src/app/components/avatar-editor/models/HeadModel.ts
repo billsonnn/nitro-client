@@ -1,6 +1,6 @@
 import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
+import { FigureData } from '../common/FigureData';
 
 export class HeadModel extends CategoryBaseModel
 {

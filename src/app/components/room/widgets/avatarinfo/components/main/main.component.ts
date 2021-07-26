@@ -9,8 +9,6 @@ import { RoomObjectUserType } from 'nitro-renderer/src/nitro/room/object/RoomObj
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
 import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
 import { SettingsService } from '../../../../../../core/settings/service';
@@ -18,6 +16,7 @@ import { AvatarEditorService } from '../../../../../avatar-editor/services/avata
 import { FriendListService } from '../../../../../friendlist/services/friendlist.service';
 import { ContextInfoView } from '../../../contextmenu/ContextInfoView';
 import { IContextMenuParentWidget } from '../../../contextmenu/IContextMenuParentWidget';
+import { ConversionTrackingWidget } from '../../../ConversionTrackingWidget';
 import { RoomObjectNameEvent } from '../../../events/RoomObjectNameEvent';
 import { RoomWidgetAvatarInfoEvent } from '../../../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
@@ -31,6 +30,7 @@ import { RoomWidgetUserLocationUpdateEvent } from '../../../events/RoomWidgetUse
 import { AvatarInfoWidgetHandler } from '../../../handlers/AvatarInfoWidgetHandler';
 import { RoomWidgetGetObjectLocationMessage } from '../../../messages/RoomWidgetGetObjectLocationMessage';
 import { RoomWidgetRoomObjectMessage } from '../../../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetUpdateEvent } from '../../../RoomWidgetUpdateEvent';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { AvatarInfoData } from '../../common/AvatarInfoData';
 import { PetInfoData } from '../../common/PetInfoData';

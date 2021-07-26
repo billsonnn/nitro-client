@@ -17,11 +17,9 @@ import { RoomSessionPetInfoUpdateEvent } from 'nitro-renderer/src/nitro/session/
 import { RoomSessionUserBadgesEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionUserBadgesEvent';
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { RoomWidgetEnumItemExtradataParameter } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
@@ -31,10 +29,13 @@ import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfost
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomInfoStandMainComponent } from '../infostand/components/main/main.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetChangeMottoMessage } from '../messages/RoomWidgetChangeMottoMessage';
 import { RoomWidgetFurniActionMessage } from '../messages/RoomWidgetFurniActionMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class InfoStandWidgetHandler implements IRoomWidgetHandler
 {
@@ -494,7 +495,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObjectImage && roomObjectImage.data)
         {
-            const image = Nitro.instance.renderer.extract.image(roomObjectImage.data);
+            const image = TextureUtils.generateImage(roomObjectImage.data);
 
             if(image) infostandEvent.image = image;
         }

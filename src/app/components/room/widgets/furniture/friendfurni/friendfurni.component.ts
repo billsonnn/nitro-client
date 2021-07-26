@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { FriendFurniEngravingWidgetType } from 'nitro-renderer/src/nitro/room/enums/FriendFurniEngravingWidgetType';
 import { StringDataType } from 'nitro-renderer/src/nitro/room/object/data/type/StringDataType';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 
 @Component({
     templateUrl: './engraving.template.html'

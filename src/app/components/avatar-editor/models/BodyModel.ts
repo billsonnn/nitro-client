@@ -1,10 +1,10 @@
 import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
 import { AvatarScaleType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarScaleType';
 import { AvatarSetType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarSetType';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
+import { FigureData } from '../common/FigureData';
 
 export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
 {

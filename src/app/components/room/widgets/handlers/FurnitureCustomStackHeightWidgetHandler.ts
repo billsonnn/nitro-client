@@ -3,13 +3,13 @@ import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { FurnitureStackHeightEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/FurnitureStackHeightEvent';
 import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { CustomStackHeightComponent } from '../furniture/customstackheight/customstackheight.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureCustomStackHeightWidgetHandler implements IRoomWidgetHandler
 {

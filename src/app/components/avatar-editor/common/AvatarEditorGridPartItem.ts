@@ -1,5 +1,4 @@
 ﻿import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
 import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
 import { IFigurePart } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePart';
@@ -10,6 +9,7 @@ import { IGraphicAsset } from 'nitro-renderer/src/room/object/visualization/util
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Container, Sprite } from 'pixi.js';
 import { CategoryBaseModel } from './CategoryBaseModel';
+import { FigureData } from './FigureData';
 
 export class AvatarEditorGridPartItem implements IAvatarImageListener
 {

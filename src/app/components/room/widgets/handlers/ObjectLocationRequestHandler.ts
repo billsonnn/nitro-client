@@ -1,12 +1,12 @@
 ﻿import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { Point, Rectangle } from 'pixi.js';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 {

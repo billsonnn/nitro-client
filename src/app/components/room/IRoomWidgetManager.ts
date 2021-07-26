@@ -1,8 +1,8 @@
-import { IRoomWidgetHandlerContainer } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandlerContainer';
 import { SettingsService } from '../../core/settings/service';
 import { FriendListService } from '../friendlist/services/friendlist.service';
 import { NotificationService } from '../notification/services/notification.service';
 import { WiredService } from '../wired/services/wired.service';
+import { IRoomWidgetHandlerContainer } from './widgets/IRoomWidgetHandlerContainer';
 
 export interface IRoomWidgetManager extends IRoomWidgetHandlerContainer
 {

@@ -10,13 +10,11 @@ import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObj
 import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { SystemChatStyleEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/SystemChatStyleEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
 import { PointMath } from 'nitro-renderer/src/room/utils/PointMath';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Point } from 'pixi.js';
 import { ChatHistoryItem } from '../../../chat-history/common/ChatHistoryItem';
@@ -24,7 +22,10 @@ import { ChatHistoryService } from '../../../chat-history/services/chat-history.
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomChatComponent } from '../roomchat/component';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListener
 {
@@ -333,7 +334,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(image)
         {
-            existing = Nitro.instance.renderer.extract.image(image.data);
+            existing = TextureUtils.generateImage(image.data);
 
             this._petImageCache.set((figure + posture), existing);
         }

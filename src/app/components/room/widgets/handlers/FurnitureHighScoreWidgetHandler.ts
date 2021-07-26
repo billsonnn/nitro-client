@@ -2,12 +2,12 @@ import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomEngineObjectEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
 import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { HighScoreDataType } from 'nitro-renderer/src/nitro/room/object/data/type/HighScoreDataType';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandlerContainer';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { HighscoreComponent } from '../furniture/highscore/highscore.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureHighScoreWidgetHandler implements IRoomWidgetHandler
 {

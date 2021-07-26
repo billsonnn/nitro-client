@@ -318,12 +318,12 @@ export class CatalogService implements OnDestroy
         if(!parser) return;
 
         // TODO: Is this even right? 1 day too less?
-        this._purse.clubDays = Math.max(0, parser.days);
-        this._purse.clubPeriods = Math.max(0, parser.months);
+        this._purse.clubDays = Math.max(0, parser.daysToPeriodEnd);
+        this._purse.clubPeriods = Math.max(0, parser.memberPeriods);
         this._purse.isVip = parser.isVip;
-        this._purse.pastClubDays = parser.pastVIPDays;
-        this._purse.Str_14389 = parser.years == UserSubscriptionParser.RESPONSE_TYPE_LOGIN;
-        this._purse.minutesUntilExpiration = parser.totalSeconds;
+        this._purse.pastClubDays = parser.pastClubDays;
+        this._purse.Str_14389 = parser.responseType == UserSubscriptionParser.RESPONSE_TYPE_LOGIN;
+        this._purse.minutesUntilExpiration = parser.minutesUntilExpiration;
     }
 
     private onCatalogUpdatedEvent(event: CatalogUpdatedEvent): void
