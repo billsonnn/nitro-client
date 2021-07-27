@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { ToolbarIconEnum } from 'nitro-renderer/src/nitro/enums/ToolbarIconEnum';
 import { NitroToolbarAnimateIconEvent } from 'nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';

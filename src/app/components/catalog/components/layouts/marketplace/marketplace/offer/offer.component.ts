@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../../../../../notification/services/notification.service';
 import { PurseService } from '../../../../../../purse/services/purse.service';

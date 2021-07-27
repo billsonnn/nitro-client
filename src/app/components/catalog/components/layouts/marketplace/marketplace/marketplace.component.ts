@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { IMarketplaceSearchOptions } from './sub/advanced.component';

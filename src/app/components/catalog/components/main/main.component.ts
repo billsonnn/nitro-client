@@ -1,10 +1,10 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
 import { ICatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
 import { ICatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
