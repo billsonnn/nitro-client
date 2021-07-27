@@ -10,8 +10,8 @@ import { MarketplaceRedeemCreditsComposer } from 'nitro-renderer/src/nitro/commu
 import { MarketplaceRequestOffersComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOffersComposer';
 import { MarketplaceRequestOwnItemsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
 import { MarketplaceTakeItemBackComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
-import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOffer';
-import { MarketplaceOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
+import { MarketplaceOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOfferData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 import { IMarketplaceSearchOptions } from '../components/layouts/marketplace/marketplace/sub/advanced.component';
