@@ -51,6 +51,8 @@
     "avatareditor.show.clubitems.dimmed": true,
     "avatareditor.show.clubitems.first": true,
     "chat.history.max.items": 100,
+    "furni.rotation.bounce.steps": 8,
+    "furni.rotation.bounce.height": 0.0625,
     "animation.fps": 24,
     "limits.fps": true,
     "system.dispatcher.log": false,
