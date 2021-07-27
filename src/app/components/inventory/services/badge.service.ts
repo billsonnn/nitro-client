@@ -1,5 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { BadgeReceivedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/badges/BadgeReceivedEvent';
 import { BadgesEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/badges/BadgesEvent';
 import { RequestBadgesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
@@ -34,6 +35,7 @@ export class InventoryBadgeService implements OnDestroy
         {
             this._messages = [
                 new BadgesEvent(this.onBadgesListEvent.bind(this)),
+                new BadgeReceivedEvent(this.onBadgeReceivedEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -77,6 +79,21 @@ export class InventoryBadgeService implements OnDestroy
             this._isInitialized = true;
 
             if(this._inventoryService.badgesController) this._inventoryService.badgesController.selectExistingGroupOrDefault();
+        });
+    }
+
+    public onBadgeReceivedEvent(event: BadgeReceivedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            const badge = parser.badgeCode;
+            if(this._badges.indexOf(badge) === -1) this._badges.push(badge);
         });
     }
 

@@ -27,7 +27,7 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
     {
         this._inventoryService.badgesController = this;
 
-        if(this._inventoryService.controller.botService.isInitalized) this.selectExistingGroupOrDefault();
+        if(this._inventoryService.controller.badgeService.isInitalized) this.selectExistingGroupOrDefault();
 
         this.prepareInventory();
     }
