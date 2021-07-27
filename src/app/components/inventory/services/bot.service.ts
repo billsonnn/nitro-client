@@ -81,7 +81,7 @@ export class InventoryBotService implements OnDestroy
         {
             this._isObjectMoverRequested = false;
 
-            if(!event._Str_4057)
+            if(!event.placedInRoom)
             {
                 this._ngZone.run(() => this._inventoryService.showWindow());
             }

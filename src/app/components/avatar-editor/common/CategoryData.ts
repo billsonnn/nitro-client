@@ -393,7 +393,7 @@ export class CategoryData
 
         const partSet = part.partSet;
 
-        if(!partSet || !partSet._Str_651) return;
+        if(!partSet || !partSet.isSellable) return;
 
         return !inventory.hasFigureSetId(partSet.id);
     }
@@ -470,7 +470,7 @@ export class CategoryData
     //     if (((_local_2) && (_local_2.partSet)))
     //     {
     //         _local_3 = _local_2.partSet;
-    //         if (((_local_3._Str_651) && (!(k._Str_14439(_local_3.id)))))
+    //         if (((_local_3.isSellable) && (!(k._Str_14439(_local_3.id)))))
     //         {
     //             _local_4 = this._Str_8066(0);
     //             if (((!(_local_4 == null)) && (_local_4.partSet == null)))

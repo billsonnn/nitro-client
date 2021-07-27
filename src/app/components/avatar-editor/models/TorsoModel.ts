@@ -1,6 +1,6 @@
 import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
+import { FigureData } from '../common/FigureData';
 
 export class TorsoModel extends CategoryBaseModel
 {
@@ -8,9 +8,9 @@ export class TorsoModel extends CategoryBaseModel
     {
         super.init();
 
-        this.addCategory(FigureData.CH);
+        this.addCategory(FigureData.SHIRT);
         this.addCategory(FigureData.CHEST_PRINTS);
-        this.addCategory(FigureData.CC);
+        this.addCategory(FigureData.JACKET);
         this.addCategory(FigureData.CHEST_ACCESSORIES);
 
         this._isInitalized = true;

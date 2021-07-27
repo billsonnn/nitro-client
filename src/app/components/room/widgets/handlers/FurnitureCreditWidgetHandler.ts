@@ -1,14 +1,14 @@
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { FurnitureExchangeComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureExchangeComposer';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetCreditFurniUpdateEvent } from '../events/RoomWidgetCreditFurniUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetCreditFurniRedeemMessage } from '../messages/RoomWidgetCreditFurniRedeemMessage';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureCreditWidgetHandler implements IRoomWidgetHandler
 {

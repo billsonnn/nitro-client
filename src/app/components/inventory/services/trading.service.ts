@@ -1,11 +1,11 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
+import { ItemDataStructure } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/ItemDataStructure';
 import { TradingAcceptEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingAcceptEvent';
 import { TradingCloseEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingCloseEvent';
 import { TradingCompletedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingCompletedEvent';
 import { TradingConfirmationEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingConfirmationEvent';
-import { TradingListItem } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingListItem';
 import { TradingListItemEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingListItemEvent';
 import { TradingNotOpenEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingNotOpenEvent';
 import { TradingOpenEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/trading/TradingOpenEvent';
@@ -142,13 +142,13 @@ export class InventoryTradingService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            if(event._Str_4963 === this._ownUserIndex)
+            if(event.userID === this._ownUserIndex)
             {
-                this._ownUserAccepts = event._Str_15794;
+                this._ownUserAccepts = event.userAccepts;
             }
             else
             {
-                this._otherUserAccepts = event._Str_15794;
+                this._otherUserAccepts = event.userAccepts;
             }
         });
     }
@@ -181,13 +181,13 @@ export class InventoryTradingService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            if(parser.reason === TradingCloseParser._Str_16410)
+            if(parser.reason === TradingCloseParser.ERROR_WHILE_COMMIT)
             {
                 this._notificationService.alert('${inventory.trading.notification.caption}, ${inventory.trading.notification.commiterror.info}', '${inventory.trading.notification.title}');
             }
             else
             {
-                if(parser._Str_4963 !== this._ownUserIndex)
+                if(parser.userID !== this._ownUserIndex)
                 {
                     this.tradingNotificationMessage(InventoryTradingComponent.ALERT_OTHER_CANCELLED);
                 }
@@ -232,8 +232,8 @@ export class InventoryTradingService implements OnDestroy
             const firstUserItems: AdvancedMap<string, GroupItem>    = new AdvancedMap();
             const secondUserItems: AdvancedMap<string, GroupItem>   = new AdvancedMap();
 
-            this.parseItems(parser._Str_17841, firstUserItems);
-            this.parseItems(parser._Str_17465, secondUserItems);
+            this.parseItems(parser.firstUserItemArray, firstUserItems);
+            this.parseItems(parser.secondUserItemArray, secondUserItems);
 
             this.updateTrade(parser, firstUserItems, secondUserItems);
         });
@@ -257,22 +257,22 @@ export class InventoryTradingService implements OnDestroy
 
         if(!sessionDataManager || !roomSession) return;
 
-        let ownUserId = parser._Str_4963;
+        let ownUserId = parser.userID;
 
         const ownUserData = roomSession.userDataManager.getUserData(ownUserId);
 
         if(!ownUserData) return;
 
         let ownUserName     = ownUserData.name;
-        let ownUserCanTrade = parser._Str_16764;
-        let otherUserId     = parser._Str_17613;
+        let ownUserCanTrade = parser.userCanTrade;
+        let otherUserId     = parser.otherUserID;
 
         const otherUserData = roomSession.userDataManager.getUserData(otherUserId);
 
         if(!otherUserData) return;
 
         let otherUserName       = otherUserData.name;
-        let otherUserCanTrade   = parser._Str_13374;
+        let otherUserCanTrade   = parser.otherUserCanTrade;
 
         if(otherUserId === sessionDataManager.userId)
         {
@@ -308,7 +308,7 @@ export class InventoryTradingService implements OnDestroy
 
         if(!parser) return;
 
-        if((parser.reason === TradingOpenFailedParser._Str_18150) || (parser.reason === TradingOpenFailedParser._Str_18383))
+        if((parser.reason === TradingOpenFailedParser.REASON_YOU_ARE_ALREADY_TRADING) || (parser.reason === TradingOpenFailedParser.REASON_OTHER_USER_ALREADY_TRADING))
         {
             this._ngZone.run(() =>
             {
@@ -384,7 +384,7 @@ export class InventoryTradingService implements OnDestroy
         this.state = InventoryTradingService.TRADING_STATE_RUNNING;
     }
 
-    private parseItems(k: TradingListItem[], _arg_2: AdvancedMap<string, GroupItem>): void
+    private parseItems(k: ItemDataStructure[], _arg_2: AdvancedMap<string, GroupItem>): void
     {
         if(!this.controller) return;
 
@@ -446,23 +446,23 @@ export class InventoryTradingService implements OnDestroy
         if(this._ownUserItems) this._ownUserItems.reset();
         if(this._otherUserItems) this._otherUserItems.reset();
 
-        if(parser._Str_15162 === this._ownUserIndex)
+        if(parser.firstUserID === this._ownUserIndex)
         {
             this._ownUserItems          = firstUserItems;
-            this._ownUserNumItems       = parser._Str_14946;
-            this._ownUserNumCredits     = parser._Str_15709;
+            this._ownUserNumItems       = parser.firstUserNumItems;
+            this._ownUserNumCredits     = parser.firstUserNumCredits;
             this._otherUserItems        = secondUserItems;
-            this._otherUserNumItems     = parser._Str_13801;
-            this._otherUserNumCredits   = parser._Str_9138;
+            this._otherUserNumItems     = parser.secondUserNumItems;
+            this._otherUserNumCredits   = parser.secondUserNumCredits;
         }
         else
         {
             this._ownUserItems          = secondUserItems;
-            this._ownUserNumItems       = parser._Str_13801;
-            this._ownUserNumCredits     = parser._Str_9138;
+            this._ownUserNumItems       = parser.secondUserNumItems;
+            this._ownUserNumCredits     = parser.secondUserNumCredits;
             this._otherUserItems        = firstUserItems;
-            this._otherUserNumItems     = parser._Str_14946;
-            this._otherUserNumCredits   = parser._Str_15709;
+            this._otherUserNumItems     = parser.firstUserNumItems;
+            this._otherUserNumCredits   = parser.firstUserNumCredits;
         }
 
         this._ownUserAccepts    = false;

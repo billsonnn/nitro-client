@@ -1,5 +1,4 @@
 ﻿import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
 import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
 import { IFigurePart } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePart';
@@ -10,6 +9,7 @@ import { IGraphicAsset } from 'nitro-renderer/src/room/object/visualization/util
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Container, Sprite } from 'pixi.js';
 import { CategoryBaseModel } from './CategoryBaseModel';
+import { FigureData } from './FigureData';
 
 export class AvatarEditorGridPartItem implements IAvatarImageListener
 {
@@ -80,9 +80,9 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
         if(partSet)
         {
-            const colors = partSet._Str_806;
+            const colors = partSet.parts;
 
-            for(const color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color._Str_827);
+            for(const color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color.colorLayerIndex);
         }
     }
 
@@ -122,7 +122,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
     private analyzeFigure(): boolean
     {
-        if(!this._renderManager || !this._model || !this.partSet || !this.partSet._Str_806 || !this.partSet._Str_806.length) return false;
+        if(!this._renderManager || !this._model || !this.partSet || !this.partSet.parts || !this.partSet.parts.length) return false;
 
         const figureContainer = this._renderManager.createFigureContainer(((this.partSet.type + '-') + this.partSet.id));
 
@@ -147,7 +147,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
             if(!this.analyzeFigure()) return null;
         }
 
-        const parts     = this.partSet._Str_806.concat().sort(this.sortByDrawOrder);
+        const parts     = this.partSet.parts.concat().sort(this.sortByDrawOrder);
         const container = new Container();
 
         for(const part of parts)
@@ -160,7 +160,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
             while(!hasAsset && (direction < AvatarEditorGridPartItem.THUMB_DIRECTIONS.length))
             {
-                const assetName = ((((((((((FigureData.H + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData._Str_2028);
+                const assetName = ((((((((((FigureData.SCALE + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData.DEFAULT_FRAME);
 
                 asset = this._renderManager.getAssetByName(assetName);
 
@@ -180,9 +180,9 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
             const y                       = asset.offsetY;
             let partColor: IPartColor   = null;
 
-            if(this._useColors && (part._Str_827 > 0))
+            if(this._useColors && (part.colorLayerIndex > 0))
             {
-                const color = this._colors[(part._Str_827 - 1)];
+                const color = this._colors[(part.colorLayerIndex - 1)];
 
                 if(color) partColor = color;
             }
@@ -191,7 +191,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
             sprite.position.set(x, y);
 
-            if(partColor) sprite.tint = partColor._Str_915;
+            if(partColor) sprite.tint = partColor.rgb;
 
             container.addChild(sprite);
         }
@@ -212,7 +212,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         if(this._partSet)
         {
             this._isHC          = (this._partSet.clubLevel > 0);
-            this._isSellable    = this._partSet._Str_651;
+            this._isSellable    = this._partSet.isSellable;
         }
         else
         {

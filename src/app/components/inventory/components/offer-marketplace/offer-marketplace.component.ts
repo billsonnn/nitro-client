@@ -172,17 +172,17 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
         text = text.replace('%days%', days.toString());
 
 
-        const price = this._inventoryFurniService.marketPlaceItemStats._Str_3925;
+        const price = this._inventoryFurniService.marketPlaceItemStats.averagePrice;
         const priceText = price == 0 ? ' - ' : price.toString();
 
         text = text.replace('%price%', priceText);
 
-        const noCommission = Math.floor((this._inventoryFurniService.marketPlaceItemStats._Str_3925 / (1 + (commission * 0.01))));
+        const noCommission = Math.floor((this._inventoryFurniService.marketPlaceItemStats.averagePrice / (1 + (commission * 0.01))));
         const commissionText = noCommission == 0 ? ' - ' : noCommission.toString();
 
         text = text.replace('%price_no_commission%', commissionText);
 
-        const average = this._inventoryFurniService.marketPlaceItemStats._Str_3925;
+        const average = this._inventoryFurniService.marketPlaceItemStats.averagePrice;
         const averageText = average == 0 ? ' - ' : average.toString();
 
         text = text.replace('%average%', averageText);

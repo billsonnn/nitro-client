@@ -2,12 +2,12 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AvatarAction } from 'nitro-renderer/src/nitro/avatar/enum/AvatarAction';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
 import { AvatarExpressionEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../../../messages/RoomWidgetDanceMessage';
 import { RoomWidgetUserActionMessage } from '../../../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetMessage } from '../../../RoomWidgetMessage';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { AvatarInfoData } from '../../common/AvatarInfoData';
 import { RoomAvatarInfoComponent } from '../main/main.component';
@@ -311,16 +311,16 @@ export class RoomAvatarInfoOwnAvatarComponent extends AvatarContextInfoView
                         message = new RoomWidgetChangePostureMessage(RoomWidgetChangePostureMessage._Str_1553);
                         break;
                     case 'wave':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6268);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.WAVE);
                         break;
                     case 'blow':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_5579);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.BLOW);
                         break;
                     case 'laugh':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_7336);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.LAUGH);
                         break;
                     case 'idle':
-                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum._Str_6989);
+                        message = new RoomWidgetAvatarExpressionMessage(AvatarExpressionEnum.IDLE);
                         break;
                     case 'dance_menu':
                         hideMenu = false;

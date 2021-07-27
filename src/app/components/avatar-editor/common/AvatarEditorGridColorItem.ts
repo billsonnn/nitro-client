@@ -55,7 +55,7 @@ export class AvatarEditorGridColorItem
 
     public get color(): string
     {
-        return ColorConverter.int2rgb(this._partColor._Str_915);
+        return ColorConverter.int2rgb(this._partColor.rgb);
     }
 
     public get _Str_14863(): boolean

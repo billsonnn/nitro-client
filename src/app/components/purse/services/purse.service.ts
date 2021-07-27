@@ -105,7 +105,7 @@ export class PurseService implements OnDestroy
 
         if(!parser) return;
 
-        switch(parser.name)
+        switch(parser.productName)
         {
             case 'habbo_club':
                 this._habboClubSubscription = parser;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { IMarketplaceSearchOptions } from './sub/advanced.component';
@@ -89,7 +89,7 @@ export class CatalogLayoutMarketplaceMarketplaceComponent extends CatalogLayout 
         });
     }
 
-    public get marketOffers(): MarketplaceOfferItem[]
+    public get marketOffers(): MarketplaceOffer[]
     {
         return this._marketService.publicOffers;
     }

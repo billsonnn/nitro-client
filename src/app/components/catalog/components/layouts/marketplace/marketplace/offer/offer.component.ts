@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { MarketplaceOfferItem } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
+import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../../../../../notification/services/notification.service';
 import { PurseService } from '../../../../../../purse/services/purse.service';
@@ -12,7 +12,7 @@ import { MarketplaceService } from '../../../../../services/marketplace.service'
 export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 {
     @Input()
-    public offer: MarketplaceOfferItem;
+    public offer: MarketplaceOffer;
 
     constructor(private _marketplaceService: MarketplaceService,
         private _notificationService: NotificationService,
@@ -68,7 +68,7 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
     public get averagePrice(): string
     {
         const price = this.offer.price;
-        const average = this.offer._Str_3925;
+        const average = this.offer.averagePrice;
 
         const averageText = average != 0 ? average.toString() : ' - ';
 
@@ -85,7 +85,7 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 
     public get offerCount(): string
     {
-        return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer._Str_4121.toString());
+        return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer.offerCount.toString());
     }
 
     public get description(): string

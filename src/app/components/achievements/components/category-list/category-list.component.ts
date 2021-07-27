@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
-import { Achievement } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/Achievement';
+import { AchievementData } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
 import { AchievementCategory } from '../../common/AchievementCategory';
@@ -41,8 +41,8 @@ export class AchievementsCategoryListComponent
             {
                 if(!achievement) continue;
 
-                completed += (achievement._Str_7518) ? achievement.level : (achievement.level - 1);
-                total += achievement.totalLevels;
+                completed += (achievement.finalLevel) ? achievement.level : (achievement.level - 1);
+                total += achievement.levelCount;
             }
         }
 
@@ -63,7 +63,7 @@ export class AchievementsCategoryListComponent
         return (completed + '/' + total);
     }
 
-    public getCategoryImage(cat: string, achievements: Achievement[], icon: boolean = false): string
+    public getCategoryImage(cat: string, achievements: AchievementData[], icon: boolean = false): string
     {
         if(icon) return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('image.library.url') + `quests/achcategory_${cat}.png`).toString().replace('%image%',cat);
 
@@ -71,7 +71,7 @@ export class AchievementsCategoryListComponent
 
         for(const achievement of achievements)
         {
-            level = (level + ((achievement._Str_7518) ? achievement.level : (achievement.level - 1)));
+            level = (level + ((achievement.finalLevel) ? achievement.level : (achievement.level - 1)));
         }
 
         const isActive = ((level > 0) ? 'active' : 'inactive');
@@ -79,7 +79,7 @@ export class AchievementsCategoryListComponent
         return Nitro.instance.getConfiguration('achievements.images.url', Nitro.instance.core.configuration.getValue('image.library.url') + `quests/achcategory_${cat}_${isActive}.png`).toString().replace('%image%',`achcategory_${cat}_${isActive}`);
     }
 
-    public getCategoryProgress(achievements: Achievement[]): string
+    public getCategoryProgress(achievements: AchievementData[]): string
     {
         let completed   = 0;
         let total       = 0;
@@ -88,9 +88,9 @@ export class AchievementsCategoryListComponent
         {
             if(!achievement) continue;
 
-            if(achievement._Str_7518) completed = completed + 1 + achievement.level;
+            if(achievement.finalLevel) completed = completed + 1 + achievement.level;
 
-            total = (total + achievement.totalLevels);
+            total = (total + achievement.levelCount);
         }
 
         return (completed + '/' + total);

@@ -5,12 +5,12 @@ import { RoomInfoComposer } from 'nitro-renderer/src/nitro/communication/message
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { NotificationBroadcastMessageComponent } from '../../../notification/components/broadcast-message/broadcast-message.component';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 {

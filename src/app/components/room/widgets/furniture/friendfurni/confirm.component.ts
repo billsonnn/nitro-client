@@ -1,8 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { LoveLockStartConfirmComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
-
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 
 @Component({
     templateUrl: './confirm.template.html'

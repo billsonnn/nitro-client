@@ -28,8 +28,8 @@ import { CatalogRequestVipGiftsComposer } from 'nitro-renderer/src/nitro/communi
 import { CatalogRequestVipOffersComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/CatalogRequestVipOffersComposer';
 import { CatalogSearchComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/CatalogSearchComposer';
 import { CatalogRedeemVoucherComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/RedeemVoucherComposer';
-import { CatalogClubGiftsParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogClubGiftsParser';
 import { CatalogPageParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogPageParser';
+import { ClubGiftInfoParser } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/ClubGiftInfoParser';
 import { CatalogClubOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
 import { CatalogPageData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
 import { CatalogPageOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
@@ -65,7 +65,7 @@ export class CatalogService implements OnDestroy
     private _catalogMode: number = -1;
     private _catalogRoot: CatalogPageData = null;
     private _activePage: ICatalogPageParser = null;
-    private _clubGiftsParser: CatalogClubGiftsParser = null;
+    private _clubGiftsParser: ClubGiftInfoParser = null;
     private _activePageData: ICatalogPageData = null;
     private _manuallyCollapsed: ICatalogPageData[] = [];
     private _isLoading: boolean = false;
@@ -318,12 +318,12 @@ export class CatalogService implements OnDestroy
         if(!parser) return;
 
         // TODO: Is this even right? 1 day too less?
-        this._purse.clubDays = Math.max(0, parser.days);
-        this._purse.clubPeriods = Math.max(0, parser.months);
+        this._purse.clubDays = Math.max(0, parser.daysToPeriodEnd);
+        this._purse.clubPeriods = Math.max(0, parser.memberPeriods);
         this._purse.isVip = parser.isVip;
-        this._purse.pastClubDays = parser.pastVIPDays;
-        this._purse.Str_14389 = parser.years == UserSubscriptionParser._Str_14729;
-        this._purse.minutesUntilExpiration = parser.totalSeconds;
+        this._purse.pastClubDays = parser.pastClubDays;
+        this._purse.Str_14389 = parser.responseType == UserSubscriptionParser.RESPONSE_TYPE_LOGIN;
+        this._purse.minutesUntilExpiration = parser.minutesUntilExpiration;
     }
 
     private onCatalogUpdatedEvent(event: CatalogUpdatedEvent): void
@@ -677,7 +677,7 @@ export class CatalogService implements OnDestroy
         Nitro.instance.communication.connection.send(new CatalogSearchComposer(purchaseOfferId));
     }
 
-    public get clubGiftsParser(): CatalogClubGiftsParser
+    public get clubGiftsParser(): ClubGiftInfoParser
     {
         return this._clubGiftsParser;
     }

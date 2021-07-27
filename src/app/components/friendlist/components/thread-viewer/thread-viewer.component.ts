@@ -5,7 +5,7 @@ import { SendMessageComposer } from 'nitro-renderer/src/nitro/communication/mess
 import { SetRelationshipStatusComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/SetRelationshipStatusComposer';
 import { RelationshipStatusEnum } from 'nitro-renderer/src/nitro/enums/RelationshipStatusEnum';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';
 import { MessengerChat } from '../../common/MessengerChat';

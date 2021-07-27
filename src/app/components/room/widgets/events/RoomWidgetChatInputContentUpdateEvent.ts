@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomWidgetChatInputContentUpdateEvent extends RoomWidgetUpdateEvent
 {

@@ -21,14 +21,9 @@ import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomC
 import { IRoomSession } from 'nitro-renderer/src/nitro/session/IRoomSession';
 import { IRoomSessionManager } from 'nitro-renderer/src/nitro/session/IRoomSessionManager';
 import { ISessionDataManager } from 'nitro-renderer/src/nitro/session/ISessionDataManager';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { MouseEventType } from 'nitro-renderer/src/nitro/ui/MouseEventType';
 import { TouchEventType } from 'nitro-renderer/src/nitro/ui/TouchEventType';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { IRoomWidget } from 'nitro-renderer/src/nitro/ui/widget/IRoomWidget';
-import { IRoomWidgetMessageListener } from 'nitro-renderer/src/nitro/ui/widget/IRoomWidgetMessageListener';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
 import { RoomGeometry } from 'nitro-renderer/src/room/utils/RoomGeometry';
@@ -70,7 +65,12 @@ import { InfoStandWidgetHandler } from './widgets/handlers/InfoStandWidgetHandle
 import { ObjectLocationRequestHandler } from './widgets/handlers/ObjectLocationRequestHandler';
 import { RoomToolsWidgetHandler } from './widgets/handlers/RoomToolsWidgetHandler';
 import { UserChooserWidgetHandler } from './widgets/handlers/UserChooserWidgetHandler';
+import { IRoomWidget } from './widgets/IRoomWidget';
+import { IRoomWidgetHandler } from './widgets/IRoomWidgetHandler';
+import { IRoomWidgetMessageListener } from './widgets/IRoomWidgetMessageListener';
 import { RoomWidgetFurniToWidgetMessage } from './widgets/messages/RoomWidgetFurniToWidgetMessage';
+import { RoomWidgetMessage } from './widgets/RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from './widgets/RoomWidgetUpdateEvent';
 
 @Component({
     selector: 'nitro-room-component',
@@ -926,7 +926,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
     public setRoomBackgroundColor(hue: number, saturation: number, lightness: number): void
     {
-        this._roomBackgroundColor = ColorConverter._Str_13949(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
+        this._roomBackgroundColor = ColorConverter.hslToRGB(((((hue & 0xFF) << 16) + ((saturation & 0xFF) << 8)) + (lightness & 0xFF)));
 
         const background = this.getRoomBackground();
 
@@ -946,7 +946,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
     public setRoomColorizerColor(color: number, brightness: number): void
     {
-        this._roomColorizerColor = ColorConverter._Str_13949(((ColorConverter._Str_22130(color) & 0xFFFF00) + brightness));
+        this._roomColorizerColor = ColorConverter.hslToRGB(((ColorConverter.rgbToHSL(color) & 0xFFFF00) + brightness));
 
         this.setRoomColorizer();
     }

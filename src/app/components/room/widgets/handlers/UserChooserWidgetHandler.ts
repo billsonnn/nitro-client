@@ -1,15 +1,15 @@
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { dynamicSort } from '../choosers/utils/sorting';
 import { RoomObjectItem } from '../events/RoomObjectItem';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class UserChooserWidgetHandler implements IRoomWidgetHandler
 {

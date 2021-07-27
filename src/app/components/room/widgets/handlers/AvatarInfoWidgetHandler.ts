@@ -10,20 +10,20 @@ import { UserNameUpdateEvent } from 'nitro-renderer/src/nitro/session/events/Use
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { IRoomSession } from 'nitro-renderer/src/nitro/session/IRoomSession';
 import { RoomUserData } from 'nitro-renderer/src/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomAvatarInfoComponent } from '../avatarinfo/components/main/main.component';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetAvatarExpressionMessage } from '../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../messages/RoomWidgetDanceMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 {
@@ -87,7 +87,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
                 if(this._container && this._container.roomSession)
                 {
-                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677);
+                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation.ordinal);
                 }
                 break;
             }

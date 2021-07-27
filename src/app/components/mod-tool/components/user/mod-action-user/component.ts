@@ -79,7 +79,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
         {
             case ModActionDefinition.ALERT:
                 {
-                    if(!this._modToolService._Str_3325._Str_18465)
+                    if(!this._modToolService._Str_3325.alertPermission)
                     {
                         this._notifications.alert('You have insufficient permissions.');
                         return;
@@ -93,7 +93,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
                 break;
             case ModActionDefinition.BAN:
                 {
-                    if(!this._modToolService._Str_3325._Str_21242)
+                    if(!this._modToolService._Str_3325.banPermission)
                     {
                         this._notifications.alert('You have insufficient permissions.');
                         return;
@@ -105,7 +105,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
 
             case ModActionDefinition.KICK:
                 {
-                    if(!this._modToolService._Str_3325._Str_20397)
+                    if(!this._modToolService._Str_3325.kickPermission)
                     {
                         this._notifications.alert('You have insufficient permissions.');
                         return;

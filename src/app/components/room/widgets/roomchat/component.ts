@@ -2,9 +2,9 @@ import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, 
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { IWorkerEventTracker } from 'nitro-renderer/src/core/events/IWorkerEventTracker';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
 import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
 import { Point } from 'pixi.js';
+import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
 import { ChatWidgetHandler } from '../handlers/ChatWidgetHandler';

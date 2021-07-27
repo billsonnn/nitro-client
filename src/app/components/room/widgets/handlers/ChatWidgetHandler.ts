@@ -10,13 +10,11 @@ import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObj
 import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
 import { RoomSessionChatEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { SystemChatStyleEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/SystemChatStyleEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
 import { PointMath } from 'nitro-renderer/src/room/utils/PointMath';
+import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Point } from 'pixi.js';
 import { ChatHistoryItem } from '../../../chat-history/common/ChatHistoryItem';
@@ -24,7 +22,10 @@ import { ChatHistoryService } from '../../../chat-history/services/chat-history.
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomChatComponent } from '../roomchat/component';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListener
 {
@@ -121,7 +122,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
-                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
+                const _local_9 = PointMath.sub(screenPoint, PointMath.mul(this._primaryCanvasOriginPos, scale));
 
                 if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
                 {
@@ -245,19 +246,19 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
                         switch(chatType)
                         {
-                            case RoomSessionChatEvent._Str_5821:
+                            case RoomSessionChatEvent.CHAT_TYPE_RESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widgets.chatbubble.respect', 'username', username);
                                 break;
-                            case RoomSessionChatEvent._Str_6081:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETRESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.petrespect', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_5958:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETTREAT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.pettreat', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_8971:
+                            case RoomSessionChatEvent.CHAT_TYPE_HAND_ITEM_RECEIVED:
                                 text = Nitro.instance.getLocalizationWithParameters('widget.chatbubble.handitem', [ 'username', 'handitem' ], [ username, Nitro.instance.getLocalization(('handitem' + chatEvent.extraParam))]);
                                 break;
-                            case RoomSessionChatEvent._Str_8909: {
+                            case RoomSessionChatEvent.CHAT_TYPE_MUTE_REMAINING: {
                                 const hours     = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam / 3600)) : 0).toString();
                                 const minutes   = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam % 3600) / 60) : 0).toString();
                                 const seconds   = (chatEvent.extraParam % 60).toString();
@@ -311,7 +312,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const image = avatarImage.getCroppedImage(AvatarSetType.HEAD);
         const color = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 
-        this._avatarColorCache.set(figure, ((color && color._Str_915) || 16777215));
+        this._avatarColorCache.set(figure, ((color && color.rgb) || 16777215));
 
         avatarImage.dispose();
 
@@ -333,7 +334,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(image)
         {
-            existing = Nitro.instance.renderer.extract.image(image.data);
+            existing = TextureUtils.generateImage(image.data);
 
             this._petImageCache.set((figure + posture), existing);
         }

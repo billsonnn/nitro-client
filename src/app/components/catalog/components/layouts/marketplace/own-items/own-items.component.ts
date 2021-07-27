@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MarketplaceRequestOwnItemsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { MarketplaceOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
+import { MarketplaceOfferData } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOfferData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { MarketplaceService } from '../../../../services/marketplace.service';
@@ -165,7 +165,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
     {
         if(!offer) return '';
 
-        const time = Math.max(1, offer._Str_5853);
+        const time = Math.max(1, offer.timeLeftMinutes);
         const hours = Math.floor(time / 60);
         const minutes =  time - (hours * 60);
 

@@ -12,10 +12,10 @@ import { ModtoolRequestRoomChatlogComposer } from 'nitro-renderer/src/nitro/comm
 import { ModtoolRequestRoomInfoComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
 import { ModtoolRoomInfoParser } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
 import { CallForHelpCategoryData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
+import { ModeratorInitData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModeratorInitData';
 import { ModtoolRoomChatlogLine } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
 import { ModtoolRoomVisitedData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolRoomVisitedData';
 import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
-import { _Str_5018 } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/_Str_5018';
 import { RoomInfoOwnerParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -44,7 +44,7 @@ export class ModToolService implements OnDestroy
 
 
 
-    private _Str_20687: _Str_5018 = null;
+    private _Str_20687: ModeratorInitData = null;
     private _userRoomVisitedData: ModtoolRoomVisitedData;
     private _currentRoomInfo: RoomInfoOwnerParser;
     private _modToolRoomInfo: ModtoolRoomInfoParser;
@@ -319,7 +319,7 @@ export class ModToolService implements OnDestroy
         return this._callForHelpCategories;
     }
 
-    public get _Str_3325():_Str_5018
+    public get _Str_3325(): ModeratorInitData
     {
         return this._Str_20687;
     }

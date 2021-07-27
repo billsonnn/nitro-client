@@ -111,7 +111,7 @@ export class InventoryFurnitureService implements OnDestroy
         {
             this._isObjectMoverRequested = false;
 
-            if(!event._Str_4057)
+            if(!event.placedInRoom)
             {
                 this._ngZone.run(() => this._inventoryService.showWindow());
             }
@@ -274,7 +274,7 @@ export class InventoryFurnitureService implements OnDestroy
 
         if(!parser) return;
 
-        switch(parser._Str_3278)
+        switch(parser.resultCode)
         {
             case 2:
                 this._notificationService.alert(this.getTranslation('inventory.marketplace.no_trading_privilege.info'), this.getTranslation('inventory.marketplace.no_trading_privilege.title'));

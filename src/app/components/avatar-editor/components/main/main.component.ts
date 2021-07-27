@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
 import { AvatarDirectionAngle } from 'nitro-renderer/src/nitro/avatar/enum/AvatarDirectionAngle';
 import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from 'nitro-renderer/src/nitro/avatar/figuredata/FigureData';
 import { IPalette } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPalette';
 import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
 import { ISetType } from 'nitro-renderer/src/nitro/avatar/structure/figure/ISetType';
@@ -15,6 +14,7 @@ import { AvatarEditorGridColorItem } from '../../common/AvatarEditorGridColorIte
 import { AvatarEditorGridPartItem } from '../../common/AvatarEditorGridPartItem';
 import { CategoryBaseModel } from '../../common/CategoryBaseModel';
 import { CategoryData } from '../../common/CategoryData';
+import { FigureData } from '../../common/FigureData';
 import { BodyModel } from '../../models/BodyModel';
 import { HeadModel } from '../../models/HeadModel';
 import { LegModel } from '../../models/LegModel';
@@ -57,19 +57,19 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         this._figureStructureData   = Nitro.instance.avatar.structureData;
         this._categories            = new AdvancedMap();
         this._figures               = new Map();
-        this._gender                = FigureData.M;
+        this._gender                = FigureData.MALE;
         this._clubMemberLevel       = 0;
         this._lastSavedFigure       = '';
-        this._lastSavedGender       = FigureData.M;
+        this._lastSavedGender       = FigureData.MALE;
 
         const maleFigure    = new FigureData();
         const femaleFigure  = new FigureData();
 
-        maleFigure.loadAvatarData(AvatarEditorMainComponent._Str_18590, FigureData.M);
-        femaleFigure.loadAvatarData(AvatarEditorMainComponent._Str_18820, FigureData.F);
+        maleFigure.loadAvatarData(AvatarEditorMainComponent._Str_18590, FigureData.MALE);
+        femaleFigure.loadAvatarData(AvatarEditorMainComponent._Str_18820, FigureData.FEMALE);
 
-        this._figures.set(FigureData.M, maleFigure);
-        this._figures.set(FigureData.F, femaleFigure);
+        this._figures.set(FigureData.MALE, maleFigure);
+        this._figures.set(FigureData.FEMALE, femaleFigure);
 
         this._categories.add(AvatarEditorFigureCategory.GENERIC, new BodyModel(this));
         this._categories.add(AvatarEditorFigureCategory.HEAD, new HeadModel(this));
@@ -113,18 +113,18 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         switch(gender)
         {
-            case FigureData.M:
+            case FigureData.MALE:
             case 'm':
             case 'M':
-                gender = FigureData.M;
+                gender = FigureData.MALE;
                 break;
-            case FigureData.F:
+            case FigureData.FEMALE:
             case 'f':
             case 'F':
-                gender = FigureData.F;
+                gender = FigureData.FEMALE;
                 break;
             default:
-                gender = FigureData.M;
+                gender = FigureData.MALE;
         }
 
         let update = false;
@@ -186,7 +186,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         if(!_local_8) return null;
 
-        const _local_9 = this._Str_783(_local_8._Str_734);
+        const _local_9 = this.getPalette(_local_8.paletteID);
 
         if(!_local_9) return null;
 
@@ -233,11 +233,11 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         if(_local_12)
         {
             _local_24 = 2;
-            _local_14 = Nitro.instance.avatar._Str_838(this.gender, _local_24);
+            _local_14 = Nitro.instance.avatar.getMandatoryAvatarPartSetIds(this.gender, _local_24);
         }
         else
         {
-            _local_14 = Nitro.instance.avatar._Str_838(this.gender, this.clubMemberLevel);
+            _local_14 = Nitro.instance.avatar.getMandatoryAvatarPartSetIds(this.gender, this.clubMemberLevel);
         }
 
         const _local_15 = (_local_14.indexOf(_arg_2) == -1);
@@ -252,7 +252,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         }
 
         const _local_16 = (_arg_2 !== FigureData.FACE);
-        const _local_17 = _local_8._Str_710;
+        const _local_17 = _local_8.partSets;
         const _local_18 = _local_17.length;
 
         let _local_19 = (_local_18 - 1);
@@ -263,7 +263,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
             let _local_28 = false;
 
-            if(_local_6.gender === FigureData.U)
+            if(_local_6.gender === FigureData.UNISEX)
             {
                 _local_28 = true;
             }
@@ -275,13 +275,13 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
                 }
             }
 
-            if((_local_6._Str_608 && _local_28) && (_local_12 || (this.clubMemberLevel >= _local_6.clubLevel)))
+            if((_local_6.isSelectable && _local_28) && (_local_12 || (this.clubMemberLevel >= _local_6.clubLevel)))
             {
                 const _local_29 = (this.clubMemberLevel < _local_6.clubLevel);
 
                 let _local_30 = true;
 
-                if(_local_6._Str_651)
+                if(_local_6.isSellable)
                 {
                     _local_30 = (this._inventoryService && this._inventoryService.hasFigureSetId(_local_6.id));
                 }
@@ -333,22 +333,22 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         if(!this._figureStructureData) return null;
 
-        return this._figureStructureData._Str_740(k);
+        return this._figureStructureData.getSetType(k);
     }
 
-    public _Str_783(k: number): IPalette
+    public getPalette(k: number): IPalette
     {
         if(!this._figureStructureData) return null;
 
-        return this._figureStructureData._Str_783(k);
+        return this._figureStructureData.getPalette(k);
     }
 
     private _Str_25189(k: AvatarEditorGridPartItem, _arg_2: AvatarEditorGridPartItem): number
     {
         const _local_3 = (!k.partSet ? 9999999999 : k.partSet.clubLevel);
         const _local_4 = (!_arg_2.partSet ? 9999999999 : _arg_2.partSet.clubLevel);
-        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_5 = (!k.partSet ? false : k.partSet.isSellable);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet.isSellable);
 
         if(_local_5 && !_local_6) return 1;
 
@@ -369,8 +369,8 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
     {
         const _local_3 = (!k.partSet ? -1 : k.partSet.clubLevel);
         const _local_4 = (!_arg_2.partSet ? -1 : _arg_2.partSet.clubLevel);
-        const _local_5 = (!k.partSet ? false : k.partSet._Str_651);
-        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet._Str_651);
+        const _local_5 = (!k.partSet ? false : k.partSet.isSellable);
+        const _local_6 = (!_arg_2.partSet ? false : _arg_2.partSet.isSellable);
 
         if(_local_5 && !_local_6) return 1;
 
@@ -491,18 +491,18 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
 
         switch(k)
         {
-            case FigureData.M:
+            case FigureData.MALE:
             case 'm':
             case 'M':
-                k = FigureData.M;
+                k = FigureData.MALE;
                 break;
-            case FigureData.F:
+            case FigureData.FEMALE:
             case 'f':
             case 'F':
-                k = FigureData.F;
+                k = FigureData.FEMALE;
                 break;
             default:
-                k = FigureData.M;
+                k = FigureData.MALE;
         }
 
         this._gender = k;

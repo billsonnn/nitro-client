@@ -158,14 +158,14 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
 
             const motionName = (`ToolbarBouncing[${ iconName }]`);
 
-            if(!Motions._Str_19320(motionName))
+            if(!Motions.getMotionByTag(motionName))
             {
-                Motions._Str_4598(new Queue(new Wait((wait + 8)), new DropBounce(target, 400, 12))).tag = motionName;
+                Motions.runMotion(new Queue(new Wait((wait + 8)), new DropBounce(target, 400, 12))).tag = motionName;
             }
 
             const _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
 
-            Motions._Str_4598(_local_19);
+            Motions.runMotion(_local_19);
         }
     }
 

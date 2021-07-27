@@ -2,7 +2,7 @@ import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, T
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
-import { ConversionTrackingWidget } from 'nitro-renderer/src/nitro/ui/widget/ConversionTrackingWidget';
+import { ConversionTrackingWidget } from '../../../ConversionTrackingWidget';
 import { RoomWidgetFriendRequestUpdateEvent } from '../../../events/RoomWidgetFriendRequestUpdateEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../../../events/RoomWidgetUserLocationUpdateEvent';
 import { FriendRequestHandler } from '../../../handlers/FriendRequestHandler';

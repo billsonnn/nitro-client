@@ -2,12 +2,12 @@ import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
 import { StringDataType } from 'nitro-renderer/src/nitro/room/object/data/type/StringDataType';
 import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FriendFurniEngravingWidget } from '../furniture/friendfurni/friendfurni.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FriendFurniEngravingWidgetHandler implements IRoomWidgetHandler
 {

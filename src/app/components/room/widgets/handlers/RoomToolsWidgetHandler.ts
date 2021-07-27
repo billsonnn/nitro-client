@@ -5,13 +5,13 @@ import { RoomInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/i
 import { RoomLikeRoomComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomZoomEvent } from 'nitro-renderer/src/nitro/room/events/RoomZoomEvent';
-import { IRoomWidgetHandler } from 'nitro-renderer/src/nitro/ui/IRoomWidgetHandler';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from 'nitro-renderer/src/nitro/ui/widget/messages/RoomWidgetMessage';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
 import { RoomToolsMainComponent } from '../roomtools/main/main.component';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {

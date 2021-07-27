@@ -91,7 +91,7 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
     {
         if(!this._modToolService._Str_3325) return [];
 
-        return this._modToolService._Str_3325._Str_18336;
+        return this._modToolService._Str_3325.roomMessageTemplates;
     }
 
     public selectMessage(id: string)
