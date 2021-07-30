@@ -21,7 +21,8 @@ Build Nitro:
     - npm i
     - npm update nitro-renderer
     - cp src/index.html.example src/index.html
-    - cp src/configuration.json.example src/configuration.json
+    - cp src/renderer-config.json.example src/renderer-config.json
+    - cp src/ui-config.json.example src/ui-config.json
     - npm run build-prod
   cache:
     key: ${CI_COMMIT_BRANCH}

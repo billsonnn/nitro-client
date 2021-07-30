@@ -1,0 +1,333 @@
+{
+    "url.prefix": "http://localhost:3000",
+    "achievements.images.url": "${image.library.url}Quests/%image%.png",
+    "achievements.unseen.ignored": [
+        "ACH_AllTimeHotelPresence"
+    ],
+    "avatareditor.show.clubitems.dimmed": true,
+    "avatareditor.show.clubitems.first": true,
+    "catalog.asset.icon.url": "${catalog.asset.url}/icon_%name%.png",
+    "catalog.asset.image.url": "${catalog.asset.url}/%name%.gif",
+    "catalog.asset.url": "${image.library.url}catalogue",
+    "chat.history.max.items": 100,
+    "chat.input.maxlength": 100,
+    "chat.viewer.height.percentage": 0.4,
+    "currency.asset.icon.url": "${images.url}/wallet/%type%.png",
+    "displayed.currency.types": [
+        -1,
+        0,
+        5,
+        101
+    ],
+    "hotelview": {
+        "images": {
+            "background": "${asset.url}/images/reception/stretch_blue.png",
+            "background.colour": "#6eadc8",
+            "drape": "${asset.url}/images/reception/drape.png",
+            "left": "${asset.url}/images/reception/ts.png",
+            "right": "${asset.url}/images/reception/US_right.png",
+            "right.repeat": "${asset.url}/images/reception/US_top_right.png",
+            "sun": "${asset.url}/images/reception/sun.png"
+        },
+        "widgets": {
+            "slot1": "news",
+            "types": "news,"
+        }
+    },
+    "image.library.notifications.url": "${image.library.url}notifications/%image%.png",
+    "navigator.slider.content": [
+        {
+            "image": "https://i.imgur.com/TFoivxi.png",
+            "roomId": 2240,
+            "title": "Games Hub"
+        },
+        {
+            "image": "https://i.imgur.com/GO981GC.png",
+            "roomId": 2351,
+            "title": "Help Desk"
+        },
+        {
+            "image": "https://i.imgur.com/NVH38bV.png",
+            "roomId": 2346,
+            "title": "The Lido"
+        }
+    ],
+    "navigator.slider.enabled": true,
+    "thumbnails.url": "${image.library.url}camera/thumbnails/%thumbnail%.png",
+    "chat.styles.disabled": [],
+    "chat.styles": [
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 0
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 1
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 2
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 3
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 4
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 5
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 6
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 7
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 8
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 9
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 10
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 11
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 12
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 13
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 14
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 15
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 16
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 17
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 18
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 19
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 20
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 21
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 22
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 5,
+            "styleId": 23
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 24
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 25
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 26
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 27
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 28
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 29
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 30
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 31
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 32
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 33
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": false,
+            "isSystemStyle": true,
+            "minRank": 5,
+            "styleId": 34
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 35
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 36
+        },
+        {
+            "isAmbassadorOnly": true,
+            "isHcOnly": false,
+            "isSystemStyle": false,
+            "minRank": 5,
+            "styleId": 37
+        },
+        {
+            "isAmbassadorOnly": false,
+            "isHcOnly": true,
+            "isSystemStyle": false,
+            "minRank": 0,
+            "styleId": 38
+        }
+    ]
+}

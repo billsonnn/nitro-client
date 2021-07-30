@@ -36,7 +36,8 @@
                 ],
                 "output": "/assets/"
               },
-              "src/configuration.json"
+              "src/renderer-config.json",
+              "src/ui-config.json"
             ],
             "styles": [
               "src/styles.scss"
