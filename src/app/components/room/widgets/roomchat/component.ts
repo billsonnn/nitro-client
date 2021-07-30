@@ -1,9 +1,9 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { NitroPoint } from 'nitro-renderer/src';
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { IWorkerEventTracker } from 'nitro-renderer/src/core/events/IWorkerEventTracker';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
-import { Point } from 'pixi.js';
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
@@ -29,7 +29,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public chatContainer: ViewContainerRef;
 
     public timerId: number = ++RoomChatComponent.TIMER_TRACKER;
-    public cameraOffset: Point  = new Point();
+    public cameraOffset: NitroPoint  = new NitroPoint();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];
     public tempChats: ComponentRef<RoomChatItemComponent>[]     = [];

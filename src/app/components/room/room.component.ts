@@ -1,9 +1,9 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { NitroAdjustmentFilter, NitroContainer, NitroRectangle, NitroSprite, NitroTexture } from 'nitro-renderer/src';
 import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
 import { EventDispatcher } from 'nitro-renderer/src/core/events/EventDispatcher';
 import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { NitroAdjustmentFilter } from 'nitro-renderer/src/core/utils/NitroAdjustmentFilter';
 import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
 import { LegacyExternalInterface } from 'nitro-renderer/src/nitro/externalInterface/LegacyExternalInterface';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
@@ -29,7 +29,6 @@ import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
 import { RoomGeometry } from 'nitro-renderer/src/room/utils/RoomGeometry';
 import { RoomId } from 'nitro-renderer/src/room/utils/RoomId';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
-import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { SettingsService } from '../../core/settings/service';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
 import { FriendRequestEvent } from '../friendlist/events/FriendRequestEvent';
@@ -100,7 +99,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
     private _widgetHandlerEventMap: Map<string, IRoomWidgetHandler[]>   = new Map();
 
     private _roomColorAdjustor: NitroAdjustmentFilter   = null;
-    private _roomBackground: Sprite                     = null;
+    private _roomBackground: NitroSprite                     = null;
     private _roomBackgroundColor: number                = 0;
     private _roomColorizerColor: number                 = 0;
     private _roomScale: number                          = 1;
@@ -149,7 +148,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         const height    = Nitro.instance.height;
         const scale     = RoomGeometry.SCALE_ZOOMED_IN;
 
-        const displayObject = (Nitro.instance.roomEngine.getRoomInstanceDisplay(session.roomId, canvasId, width, height, scale) as Sprite);
+        const displayObject = (Nitro.instance.roomEngine.getRoomInstanceDisplay(session.roomId, canvasId, width, height, scale) as NitroSprite);
 
         if(!displayObject) return;
 
@@ -887,7 +886,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         }
     }
 
-    private getRoomBackground(): Sprite
+    private getRoomBackground(): NitroSprite
     {
         if(this._roomBackground) return this._roomBackground;
 
@@ -895,8 +894,8 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
         if(!canvas) return null;
 
-        const displayObject = (canvas.master as Container);
-        const background    = new Sprite(Texture.WHITE);
+        const displayObject = (canvas.master as NitroContainer);
+        const background    = new NitroSprite(NitroTexture.WHITE);
 
         displayObject.addChildAt(background, 0);
 
@@ -982,11 +981,11 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         return 1;
     }
 
-    public getRoomViewRect(): Rectangle
+    public getRoomViewRect(): NitroRectangle
     {
         const bounds = this.roomCanvasReference.nativeElement.getBoundingClientRect();
 
-        return new Rectangle((bounds.x || 0), (bounds.y || 0), (bounds.width || 0), (bounds.height || 0));
+        return new NitroRectangle((bounds.x || 0), (bounds.y || 0), (bounds.width || 0), (bounds.height || 0));
     }
 
     public get events(): IEventDispatcher

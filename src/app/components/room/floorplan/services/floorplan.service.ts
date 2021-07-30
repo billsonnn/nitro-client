@@ -1,4 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { NitroPoint, PixiInteractionEventProxy, PixiLoaderProxy } from 'nitro-renderer/src';
 import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
 import { RoomRightsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/access/rights/RoomRightsEvent';
 import { RoomBlockedTilesEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/mapping/RoomBlockedTilesEvent';
@@ -11,18 +12,7 @@ import { RoomModelSaveComposer } from 'nitro-renderer/src/nitro/communication/me
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomEngineEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineEvent';
 import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import
-{
-    CompositeRectTileLayer,
-    POINT_STRUCT_SIZE_TWO,
-    RectTileLayer
-} from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
-import
-{
-    InteractionEvent,
-    Loader,
-    Point
-} from 'pixi.js';
+import { CompositeRectTileLayer, POINT_STRUCT_SIZE_TWO, RectTileLayer } from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';
@@ -108,7 +98,7 @@ export class FloorPlanService implements OnDestroy
         x: -1,
         y: -1
     };
-    private readonly loader: Loader;
+    private readonly loader: PixiLoaderProxy;
 
     private preveiwerUpdate = new Subject<string>();
 
@@ -134,7 +124,7 @@ export class FloorPlanService implements OnDestroy
 
         this.registerMessages();
 
-        this.loader = new Loader();
+        this.loader = new PixiLoaderProxy();
         this.loader.add('atlas', 'assets/images/floorplaneditor/tiles.json');
         this.loader.load();
 
@@ -772,7 +762,7 @@ export class FloorPlanService implements OnDestroy
     public detectPoints(): void
     {
         const tileMap = this.component.tileMap;
-        const tempPoint = new Point();
+        const tempPoint = new NitroPoint();
         // @ts-ignore
         tileMap.containsPoint = (position) =>
         {
@@ -790,7 +780,7 @@ export class FloorPlanService implements OnDestroy
             this._isHolding = false;
         });
 
-        tileMap.on('pointerdown', (event: InteractionEvent) =>
+        tileMap.on('pointerdown', (event: PixiInteractionEventProxy) =>
         {
             if(!(event.data.originalEvent instanceof PointerEvent)) return;
 
@@ -802,7 +792,7 @@ export class FloorPlanService implements OnDestroy
             this.tileHitDettection(tileMap, location, true);
         });
 
-        tileMap.on('click', (event: InteractionEvent) =>
+        tileMap.on('click', (event: PixiInteractionEventProxy) =>
         {
             if(!(event.data.originalEvent instanceof PointerEvent)) return;
 
@@ -815,7 +805,7 @@ export class FloorPlanService implements OnDestroy
         });
     }
 
-    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: Point, setHolding: boolean, isClick: boolean = false): boolean
+    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: NitroPoint, setHolding: boolean, isClick: boolean = false): boolean
     {
         const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
         const bufSize = POINT_STRUCT_SIZE_TWO;

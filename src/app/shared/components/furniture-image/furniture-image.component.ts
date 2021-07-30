@@ -1,10 +1,10 @@
 import { Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { NitroRenderTexture } from 'nitro-renderer/src';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListener';
 import { ImageResult } from 'nitro-renderer/src/nitro/room/ImageResult';
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
-import { RenderTexture } from 'pixi.js';
 import { ProductTypeEnum } from '../../../components/catalog/enums/ProductTypeEnum';
 
 @Component({
@@ -98,7 +98,7 @@ export class FurnitureImageComponent implements OnInit, OnChanges, IGetImageList
         });
     }
 
-    public imageReady(id: number, texture: RenderTexture, image: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image: HTMLImageElement): void
     {
         if(!texture) return;
 

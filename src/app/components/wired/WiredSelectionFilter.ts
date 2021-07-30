@@ -1,5 +1,5 @@
+import { NitroFilter } from 'nitro-renderer/src';
 import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
-import { Filter } from 'pixi.js';
 
 const vertex = `
 attribute vec2 aVertexPosition;
@@ -29,7 +29,7 @@ void main(void) {
     }
 }`;
 
-export class WiredSelectionFilter extends Filter
+export class WiredSelectionFilter extends NitroFilter
 {
     private _lineColor: number;
     private _color: number;

@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { NitroRenderTexture } from 'nitro-renderer/src';
 import { MarketplaceOffer } from 'nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
 import { ToolbarIconEnum } from 'nitro-renderer/src/nitro/enums/ToolbarIconEnum';
 import { NitroToolbarAnimateIconEvent } from 'nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
@@ -7,7 +8,6 @@ import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListen
 import { ImageResult } from 'nitro-renderer/src/nitro/room/ImageResult';
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
-import { RenderTexture } from 'pixi.js';
 import { InventoryFurnitureService } from '../../../inventory/services/furniture.service';
 import { CatalogService } from '../../services/catalog.service';
 import { MarketplaceService } from '../../services/marketplace.service';
@@ -111,7 +111,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
         });
     }
 
-    public imageReady(id: number, texture: RenderTexture, image: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image: HTMLImageElement): void
     {
         if(!texture) return;
 

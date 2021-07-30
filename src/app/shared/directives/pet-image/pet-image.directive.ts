@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { NitroRenderTexture } from 'nitro-renderer/src';
 import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
 import { PetFigureData } from 'nitro-renderer/src/nitro/avatar/pets/PetFigureData';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
@@ -6,7 +7,6 @@ import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListen
 import { ImageResult } from 'nitro-renderer/src/nitro/room/ImageResult';
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
-import { RenderTexture } from 'pixi.js';
 
 @Directive({
     selector: '[pet-image]'
@@ -150,7 +150,7 @@ export class PetImageDirective implements OnInit, OnChanges, IGetImageListener
         return null;
     }
 
-    public imageReady(id: number, texture: RenderTexture, image: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image: HTMLImageElement): void
     {
         let url: string = null;
 

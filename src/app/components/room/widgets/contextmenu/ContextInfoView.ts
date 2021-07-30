@@ -1,7 +1,7 @@
 import { ComponentRef, Directive, ElementRef } from '@angular/core';
+import { NitroPoint, NitroRectangle } from 'nitro-renderer/src';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { FixedSizeStack } from 'nitro-renderer/src/nitro/utils/FixedSizeStack';
-import { Point, Rectangle } from 'pixi.js';
 import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 @Directive()
@@ -59,7 +59,7 @@ export class ContextInfoView
         }
     }
 
-    public update(rectangle: Rectangle, point: Point, time: number): void
+    public update(rectangle: NitroRectangle, point: NitroPoint, time: number): void
     {
         if(!rectangle) return;
 
@@ -143,7 +143,7 @@ export class ContextInfoView
         this.hide(true);
     }
 
-    protected getOffset(k: Rectangle): number
+    protected getOffset(k: NitroRectangle): number
     {
         let _local_2 = -(this.activeViewElement.offsetHeight);
 

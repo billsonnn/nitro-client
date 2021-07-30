@@ -1,3 +1,4 @@
+import { NitroTexture } from 'nitro-renderer/src';
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListener';
@@ -6,7 +7,6 @@ import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObj
 import { RoomSessionPresentEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionPresentEvent';
 import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { Texture } from 'pixi.js';
 import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
@@ -237,7 +237,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
     {
     }
 
-    imageReady(id: number, texture: Texture, image?: HTMLImageElement): void
+    imageReady(id: number, texture: NitroTexture, image?: HTMLImageElement): void
     {
     }
 }

@@ -127,7 +127,7 @@ export class PurseService implements OnDestroy
 
     public get visibleCurrencies(): number[]
     {
-        return Nitro.instance.getConfiguration<number[]>('system.currency.types', []);
+        return Nitro.instance.getConfiguration<number[]>('displayed.currency.types', []);
     }
 
     public get hcSub(): UserSubscriptionParser

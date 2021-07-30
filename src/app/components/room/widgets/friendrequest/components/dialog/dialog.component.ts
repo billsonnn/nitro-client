@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NitroPoint, NitroRectangle } from 'nitro-renderer/src';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { IPoint, Rectangle } from 'pixi.js';
 import { ContextInfoView } from '../../../contextmenu/ContextInfoView';
 import { FriendRequestMainComponent } from '../main/main.component';
 
@@ -18,7 +18,7 @@ export class FriendRequestDialogComponent
     public userId: number = 0;
     public userName: string = '';
 
-    public update(rectangle: Rectangle, point: IPoint): void
+    public update(rectangle: NitroRectangle, point: NitroPoint): void
     {
         if(!rectangle)
         {

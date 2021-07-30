@@ -1,3 +1,4 @@
+import { NitroPoint } from 'nitro-renderer/src';
 import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
@@ -16,7 +17,6 @@ import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
 import { PointMath } from 'nitro-renderer/src/room/utils/PointMath';
 import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
 import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
-import { Point } from 'pixi.js';
 import { ChatHistoryItem } from '../../../chat-history/common/ChatHistoryItem';
 import { ChatHistoryService } from '../../../chat-history/services/chat-history.service';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
@@ -38,7 +38,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     private _avatarImageCache: Map<string, HTMLImageElement>;
     private _petImageCache: Map<string, HTMLImageElement>;
     private _primaryCanvasScale: number;
-    private _primaryCanvasOriginPos: Point;
+    private _primaryCanvasOriginPos: NitroPoint;
     private _tempScreenPosVector: Vector3d;
 
     private _disposed: boolean;
@@ -147,7 +147,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         }
     }
 
-    private getBubbleLocation(roomId: number, userLocation: IVector3D): Point
+    private getBubbleLocation(roomId: number, userLocation: IVector3D): NitroPoint
     {
         const geometry  = this._container.roomEngine.getRoomInstanceGeometry(roomId, this._container.getFirstCanvasId());
         const scale     = this._container.roomEngine.getRoomInstanceRenderingCanvasScale(roomId, this._container.getFirstCanvasId());
@@ -174,7 +174,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
             }
         }
 
-        return new Point(x, y);
+        return new NitroPoint(x, y);
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent

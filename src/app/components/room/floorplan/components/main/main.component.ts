@@ -1,21 +1,10 @@
-import
-{
-    Component,
-    ElementRef,
-    Input,
-    NgZone,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { PixiApplicationProxy } from 'nitro-renderer/src';
 import { RoomBlockedTilesComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomBlockedTilesComposer';
 import { RoomDoorSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/mapping/RoomDoorSettingsComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
 import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
 import { CompositeRectTileLayer } from 'nitro-renderer/src/room/floorplan/pixi-tilemap';
-import { Application } from 'pixi.js';
 import { SettingsService } from '../../../../../core/settings/service';
 import { SessionService } from '../../../../../security/services/session.service';
 import { FloorPlanService } from '../../services/floorplan.service';
@@ -40,7 +29,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
     public showPreviewer: boolean = false;
 
-    private _app: Application;
+    private _app: PixiApplicationProxy;
     private _roomPreviewer: RoomPreviewer;
 
     private _tileMap: CompositeRectTileLayer;
@@ -179,7 +168,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         if(!this._app)
         {
 
-            this._app = new Application({
+            this._app = new PixiApplicationProxy({
                 width: width,
                 height: height,
                 backgroundColor: 0x2b2b2b,
