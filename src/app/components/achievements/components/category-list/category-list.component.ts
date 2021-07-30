@@ -88,7 +88,7 @@ export class AchievementsCategoryListComponent
         {
             if(!achievement) continue;
 
-            if(achievement.finalLevel) completed = completed + 1 + achievement.level;
+            if(achievement.firstLevelAchieved) completed = (completed + ((achievement.finalLevel) ? achievement.level : (achievement.level - 1)));
 
             total = (total + achievement.levelCount);
         }
