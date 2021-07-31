@@ -19,20 +19,14 @@
         5,
         101
     ],
-    "hotelview": {
-        "images": {
-            "background": "${asset.url}/images/reception/stretch_blue.png",
-            "background.colour": "#6eadc8",
-            "drape": "${asset.url}/images/reception/drape.png",
-            "left": "${asset.url}/images/reception/ts.png",
-            "right": "${asset.url}/images/reception/US_right.png",
-            "right.repeat": "${asset.url}/images/reception/US_top_right.png",
-            "sun": "${asset.url}/images/reception/sun.png"
-        },
-        "widgets": {
-            "slot1": "news",
-            "types": "news,"
-        }
+    "hotelview.images": {
+        "background": "${asset.url}/images/reception/stretch_blue.png",
+        "background.colour": "#6eadc8",
+        "drape": "${asset.url}/images/reception/drape.png",
+        "left": "${asset.url}/images/reception/ts.png",
+        "right": "${asset.url}/images/reception/US_right.png",
+        "right.repeat": "${asset.url}/images/reception/US_top_right.png",
+        "sun": "${asset.url}/images/reception/sun.png"
     },
     "image.library.notifications.url": "${image.library.url}notifications/%image%.png",
     "navigator.slider.content": [
