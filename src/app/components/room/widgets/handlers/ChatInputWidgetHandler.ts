@@ -1,3 +1,4 @@
+import { TextureUtils } from 'nitro-renderer/src';
 import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
 import { RoomSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
 import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
@@ -133,9 +134,14 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':zoom':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart), false));
                             return null;
-                        case ':screenshot':
-                            this._container.roomEngine.createRoomScreenshot(this._container.roomSession.roomId, this._container.getFirstCanvasId());
+                        case ':screenshot': {
+                            const texture = this._container.roomEngine.createTextureFromRoom(this._container.roomSession.roomId, this._container.getFirstCanvasId());
+
+                            const newWindow = window.open('');
+
+                            newWindow.document.write(TextureUtils.generateImageUrl(texture));
                             return null;
+                        }
                         case ':pickall':
                             this._container.notificationService.alertWithConfirm('${room.confirm.pick_all}', '${generic.alert.title}', () =>
                             {
