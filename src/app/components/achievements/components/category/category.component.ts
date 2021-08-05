@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AchievementData } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { AchievementData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';
 import { BadgeBaseAndLevel } from '../../utils/badge-base-and-level';

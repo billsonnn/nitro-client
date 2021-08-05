@@ -1,5 +1,5 @@
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { IVector3D } from '@nitrots/nitro-renderer/src/room/utils/IVector3D';
 
 export class RoomPreviewAddFurnitureEvent extends NitroEvent
 {

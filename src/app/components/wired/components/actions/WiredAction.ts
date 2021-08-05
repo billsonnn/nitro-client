@@ -1,5 +1,5 @@
-﻿import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { WiredActionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredActionDefinition';
+﻿import { Triggerable } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { WiredActionDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredActionDefinition';
 import { WiredFurniture } from '../../WiredFurniture';
 
 export class WiredAction extends WiredFurniture

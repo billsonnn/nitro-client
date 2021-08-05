@@ -1,9 +1,9 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
+import { FurnitureMultiStateComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
+import { ApplyTonerComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
+import { ColorConverter } from '@nitrots/nitro-renderer/src/room/utils/ColorConverter';
 import { ColorEvent } from 'ngx-color';
-import { FurnitureMultiStateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { ApplyTonerComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
-import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureBackgroundColorWidgetHandler } from '../../handlers/FurnitureBackgroundColorWidgetHandler';
 

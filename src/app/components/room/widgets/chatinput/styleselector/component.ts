@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { HabboClubLevelEnum } from '@nitrots/nitro-renderer/src/nitro/session/HabboClubLevelEnum';
 
 @Component({
     selector: 'nitro-room-chatinput-styleselector-component',

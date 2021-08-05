@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { RoomStaffPickComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
-import { RoomSettingsComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
-import { RoomMuteComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/RoomMuteComposer';
-import { RoomDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { SecurityLevel } from 'nitro-renderer/src/nitro/session/enum/SecurityLevel';
+import { RoomStaffPickComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
+import { RoomSettingsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
+import { RoomMuteComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/RoomMuteComposer';
+import { RoomDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { SecurityLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/SecurityLevel';
+import { SettingsService } from '../../../../core/settings/service';
 import { NavigatorData } from '../../common/NavigatorData';
 import { NavigatorService } from '../../services/navigator.service';
-import { SettingsService } from '../../../../core/settings/service';
 
 @Component({
     selector: 'nitro-navigator-room-info-component',

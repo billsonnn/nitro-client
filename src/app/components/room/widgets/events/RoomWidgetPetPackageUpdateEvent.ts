@@ -1,4 +1,4 @@
-﻿import { NitroTexture } from 'nitro-renderer/src';
+﻿import { NitroTexture } from '@nitrots/nitro-renderer/src';
 import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomWidgetPetPackageUpdateEvent extends RoomWidgetUpdateEvent

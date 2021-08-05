@@ -1,4 +1,4 @@
-import { HabboSearchResultData } from 'nitro-renderer/src/nitro/communication/messages/incoming/friendlist/HabboSearchResultData';
+import { HabboSearchResultData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/friendlist/HabboSearchResultData';
 
 export class AvatarSearchResults
 {

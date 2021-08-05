@@ -1,8 +1,8 @@
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { RoomEngineObjectEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { HighScoreDataType } from 'nitro-renderer/src/nitro/room/object/data/type/HighScoreDataType';
-import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { HighScoreDataType } from '@nitrots/nitro-renderer/src/nitro/room/object/data/type/HighScoreDataType';
+import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { HighscoreComponent } from '../furniture/highscore/highscore.component';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { IRoomWidgetHandlerContainer } from '../IRoomWidgetHandlerContainer';

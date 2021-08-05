@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateEvent } from 'nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '@nitrots/nitro-renderer/src/nitro/ui/widget/events/RoomWidgetUpdateEvent';
 
 export class RoomWidgetSpamWallPostItEditEvent extends RoomWidgetUpdateEvent
 {

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NitroPoint, NitroRectangle } from 'nitro-renderer/src';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { NitroPoint, NitroRectangle } from '@nitrots/nitro-renderer/src';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { ContextInfoView } from '../../../contextmenu/ContextInfoView';
 import { FriendRequestMainComponent } from '../main/main.component';
 

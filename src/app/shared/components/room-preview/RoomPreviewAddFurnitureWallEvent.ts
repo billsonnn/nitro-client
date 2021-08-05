@@ -1,4 +1,4 @@
-import { IVector3D } from 'nitro-renderer/src/room/utils/IVector3D';
+import { IVector3D } from '@nitrots/nitro-renderer/src/room/utils/IVector3D';
 import { RoomPreviewAddFurnitureEvent } from './RoomPreviewAddFurnitureEvent';
 
 export class RoomPreviewAddFurnitureWallEvent extends RoomPreviewAddFurnitureEvent

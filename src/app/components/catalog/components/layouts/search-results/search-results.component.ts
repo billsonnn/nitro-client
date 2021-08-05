@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFurnitureData } from 'nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
 import { CatalogLayoutDefaultComponent } from '../default/default.component';
 import { SearchResultsPage } from './SearchResultsPage';
 

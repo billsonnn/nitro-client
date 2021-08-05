@@ -1,11 +1,11 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { ModeratorMessageEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/moderation/ModeratorMessageEvent';
-import { HabboBroadcastMessageEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/notifications/HabboBroadcastMessageEvent';
-import { HotelWillShutdownEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/notifications/HotelWillShutdownEvent';
-import { MOTDNotificationEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/notifications/MOTDNotificationEvent';
-import { NotificationDialogMessageEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/notifications/NotificationDialogMessageEvent';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { ModeratorMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/moderation/ModeratorMessageEvent';
+import { HabboBroadcastMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/notifications/HabboBroadcastMessageEvent';
+import { HotelWillShutdownEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/notifications/HotelWillShutdownEvent';
+import { MOTDNotificationEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/notifications/MOTDNotificationEvent';
+import { NotificationDialogMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/notifications/NotificationDialogMessageEvent';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { AlertCenterComponent } from '../components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
 import { NotificationChoice } from '../components/choices/choices.component';

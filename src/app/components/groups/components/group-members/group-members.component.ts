@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
-import { GroupRemoveMemberComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/group/GroupRemoveMemberComposer';
-import GroupMemberParser from 'nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupMemberParser';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { GroupRemoveMemberComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/group/GroupRemoveMemberComposer';
+import GroupMemberParser from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupMemberParser';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { NotificationChoice } from '../../../notification/components/choices/choices.component';
 import { GroupsService } from '../../services/groups.service';
 

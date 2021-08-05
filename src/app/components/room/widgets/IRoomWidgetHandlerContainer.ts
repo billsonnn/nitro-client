@@ -1,12 +1,12 @@
-import { NitroRectangle } from 'nitro-renderer/src';
-import { IConnection } from 'nitro-renderer/src/core/communication/connections/IConnection';
-import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
-import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
-import { IRoomEngine } from 'nitro-renderer/src/nitro/room/IRoomEngine';
-import { IRoomSession } from 'nitro-renderer/src/nitro/session/IRoomSession';
-import { IRoomSessionManager } from 'nitro-renderer/src/nitro/session/IRoomSessionManager';
-import { ISessionDataManager } from 'nitro-renderer/src/nitro/session/ISessionDataManager';
-import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
+import { NitroRectangle } from '@nitrots/nitro-renderer/src';
+import { IConnection } from '@nitrots/nitro-renderer/src/core/communication/connections/IConnection';
+import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
+import { IAvatarRenderManager } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
+import { IRoomEngine } from '@nitrots/nitro-renderer/src/nitro/room/IRoomEngine';
+import { IRoomSession } from '@nitrots/nitro-renderer/src/nitro/session/IRoomSession';
+import { IRoomSessionManager } from '@nitrots/nitro-renderer/src/nitro/session/IRoomSessionManager';
+import { ISessionDataManager } from '@nitrots/nitro-renderer/src/nitro/session/ISessionDataManager';
+import { IRoomObject } from '@nitrots/nitro-renderer/src/room/object/IRoomObject';
 import { RoomWidgetMessage } from './RoomWidgetMessage';
 import { RoomWidgetUpdateEvent } from './RoomWidgetUpdateEvent';
 

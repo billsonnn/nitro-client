@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomWidgetStickieDataUpdateEvent } from '../../events/RoomWidgetStickieDataUpdateEvent';
 import { FurnitureStickieHandler } from '../../handlers/FurnitureStickieHandler';

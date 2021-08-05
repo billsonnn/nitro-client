@@ -1,5 +1,5 @@
-﻿import { ConditionDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
-import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
+﻿import { ConditionDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
+import { Triggerable } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
 import { ActorHasHandItemComponent } from './actor-has-hand-item/actor-has-hand-item.component';

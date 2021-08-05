@@ -1,8 +1,8 @@
-import { NitroFilter } from 'nitro-renderer/src';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { IRoomObject } from 'nitro-renderer/src/room/object/IRoomObject';
-import { IRoomObjectSpriteVisualization } from 'nitro-renderer/src/room/object/visualization/IRoomObjectSpriteVisualization';
+import { NitroFilter } from '@nitrots/nitro-renderer/src';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+import { IRoomObject } from '@nitrots/nitro-renderer/src/room/object/IRoomObject';
+import { IRoomObjectSpriteVisualization } from '@nitrots/nitro-renderer/src/room/object/visualization/IRoomObjectSpriteVisualization';
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredSelectionFilter } from './WiredSelectionFilter';
 

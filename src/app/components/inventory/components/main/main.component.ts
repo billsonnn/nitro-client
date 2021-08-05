@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
 import { SettingsService } from '../../../../core/settings/service';
 import { FurnitureItem } from '../../items/FurnitureItem';
 import { InventoryBadgeService } from '../../services/badge.service';

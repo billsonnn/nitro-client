@@ -1,6 +1,6 @@
-﻿import { NitroPoint, NitroRectangle } from 'nitro-renderer/src';
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { RoomObjectCategory } from 'nitro-renderer/src/nitro/room/object/RoomObjectCategory';
+﻿import { NitroPoint, NitroRectangle } from '@nitrots/nitro-renderer/src';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

@@ -1,9 +1,9 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { NitroPoint } from 'nitro-renderer/src';
-import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
-import { IWorkerEventTracker } from 'nitro-renderer/src/core/events/IWorkerEventTracker';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomEnterEffect } from 'nitro-renderer/src/room/utils/RoomEnterEffect';
+import { NitroPoint } from '@nitrots/nitro-renderer/src';
+import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
+import { IWorkerEventTracker } from '@nitrots/nitro-renderer/src/core/events/IWorkerEventTracker';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomEnterEffect } from '@nitrots/nitro-renderer/src/room/utils/RoomEnterEffect';
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';

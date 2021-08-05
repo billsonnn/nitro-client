@@ -1,5 +1,5 @@
-import { IDisposable } from 'nitro-renderer/src/core/common/disposable/IDisposable';
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { IDisposable } from '@nitrots/nitro-renderer/src/core/common/disposable/IDisposable';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
 import { IRoomWidgetHandlerContainer } from './IRoomWidgetHandlerContainer';
 import { RoomWidgetMessage } from './RoomWidgetMessage';
 import { RoomWidgetUpdateEvent } from './RoomWidgetUpdateEvent';

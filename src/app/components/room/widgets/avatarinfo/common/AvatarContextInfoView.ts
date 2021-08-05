@@ -1,5 +1,5 @@
-import { NitroRectangle } from 'nitro-renderer/src';
-import { RoomObjectType } from 'nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { NitroRectangle } from '@nitrots/nitro-renderer/src';
+import { RoomObjectType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectType';
 import { ContextInfoView } from '../../contextmenu/ContextInfoView';
 
 export class AvatarContextInfoView extends ContextInfoView

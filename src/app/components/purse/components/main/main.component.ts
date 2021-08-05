@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { FriendlyTime } from 'nitro-renderer/src/nitro/utils/FriendlyTime';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { FriendlyTime } from '@nitrots/nitro-renderer/src/nitro/utils/FriendlyTime';
 import { PurseService } from '../../services/purse.service';
 
 @Component({

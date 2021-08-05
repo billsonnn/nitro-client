@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
-import { IRoomRenderingCanvas } from 'nitro-renderer/src/room/renderer/IRoomRenderingCanvas';
-import { ColorConverter } from 'nitro-renderer/src/room/utils/ColorConverter';
-import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { IRoomRenderingCanvas } from '@nitrots/nitro-renderer/src/room/renderer/IRoomRenderingCanvas';
+import { ColorConverter } from '@nitrots/nitro-renderer/src/room/utils/ColorConverter';
+import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
 
 @Component({
     selector: '[nitro-room-preview-component]',

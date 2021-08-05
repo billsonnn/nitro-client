@@ -1,9 +1,9 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { ModtoolUserInfoEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
-import { ModtoolRequestUserInfoComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
-import { ModeratorUserInfoData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModeratorUserInfoData';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { ModtoolUserInfoEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
+import { ModtoolRequestUserInfoComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
+import { ModeratorUserInfoData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModeratorUserInfoData';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../notification/services/notification.service';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolEventAlertComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { ModtoolEventAlertComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';

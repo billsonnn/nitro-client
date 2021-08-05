@@ -1,5 +1,5 @@
 import { Component, Input, NgZone, OnDestroy } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

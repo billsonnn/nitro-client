@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AvatarAction } from 'nitro-renderer/src/nitro/avatar/enum/AvatarAction';
-import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { AvatarExpressionEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
+import { AvatarAction } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarAction';
+import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { AvatarExpressionEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { RoomWidgetAvatarExpressionMessage } from '../../../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../../../messages/RoomWidgetChangePostureMessage';

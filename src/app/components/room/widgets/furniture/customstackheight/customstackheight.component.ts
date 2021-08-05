@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { FurnitureStackHeightComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
+import { FurnitureStackHeightComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureCustomStackHeightWidgetHandler } from '../../handlers/FurnitureCustomStackHeightWidgetHandler';
 

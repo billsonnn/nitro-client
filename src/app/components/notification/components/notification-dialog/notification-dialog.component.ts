@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({

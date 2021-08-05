@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
 import { InventoryService } from '../../../../../inventory/services/inventory.service';
 import { InventoryTradingService } from '../../../../../inventory/services/trading.service';
 import { ConversionTrackingWidget } from '../../../ConversionTrackingWidget';

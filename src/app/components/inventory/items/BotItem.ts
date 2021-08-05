@@ -1,4 +1,4 @@
-import { BotData } from 'nitro-renderer/src/nitro/communication/messages/parser/inventory/bots/BotData';
+import { BotData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/inventory/bots/BotData';
 
 export class BotItem
 {

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { RoomVisitData } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/RoomVisitData';
+import { RoomVisitData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/RoomVisitData';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';

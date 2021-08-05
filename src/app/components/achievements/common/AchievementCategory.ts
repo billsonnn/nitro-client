@@ -1,4 +1,4 @@
-import { AchievementData } from 'nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
+import { AchievementData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
 
 export class AchievementCategory
 {

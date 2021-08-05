@@ -1,4 +1,4 @@
-import { PetData } from 'nitro-renderer/src/nitro/communication/messages/parser/inventory/pets/PetData';
+import { PetData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/inventory/pets/PetData';
 
 export class PetItem
 {

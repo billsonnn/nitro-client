@@ -1,4 +1,4 @@
-import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
+import { AvatarEditorFigureCategory } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
 import { FigureData } from '../common/FigureData';
 

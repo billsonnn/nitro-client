@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 
 @Component({
     template: `

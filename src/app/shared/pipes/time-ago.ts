@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, OnDestroy, Pipe, PipeTransform } from '@angular/core';
-import { FriendlyTime } from 'nitro-renderer/src/nitro/utils/FriendlyTime';
+import { FriendlyTime } from '@nitrots/nitro-renderer/src/nitro/utils/FriendlyTime';
 
 @Pipe({ name: 'timeAgo' })
 export class TimeAgoPipe implements PipeTransform, OnDestroy

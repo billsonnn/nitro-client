@@ -1,7 +1,7 @@
-﻿import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { IRoomEngine } from 'nitro-renderer/src/nitro/room/IRoomEngine';
-import { IObjectData } from 'nitro-renderer/src/nitro/room/object/data/IObjectData';
+﻿import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IRoomEngine } from '@nitrots/nitro-renderer/src/nitro/room/IRoomEngine';
+import { IObjectData } from '@nitrots/nitro-renderer/src/nitro/room/object/data/IObjectData';
 import { FurniCategory } from './FurniCategory';
 import { FurnitureItem } from './FurnitureItem';
 import { IFurnitureItem } from './IFurnitureItem';

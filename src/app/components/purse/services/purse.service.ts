@@ -1,12 +1,12 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { UserCreditsEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
-import { UserCurrencyEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
-import { UserCurrencyUpdateEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
-import { UserSubscriptionEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
-import { UserCurrencyComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
-import { UserSubscriptionParser } from 'nitro-renderer/src/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { UserCreditsEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
+import { UserCurrencyEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
+import { UserCurrencyUpdateEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
+import { UserSubscriptionEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
+import { UserCurrencyComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
+import { UserSubscriptionParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 
 @Injectable()
 export class PurseService implements OnDestroy

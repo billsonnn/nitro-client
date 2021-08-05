@@ -1,12 +1,12 @@
 import { Directive, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { NitroRenderTexture } from 'nitro-renderer/src';
-import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
-import { PetFigureData } from 'nitro-renderer/src/nitro/avatar/pets/PetFigureData';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { IGetImageListener } from 'nitro-renderer/src/nitro/room/IGetImageListener';
-import { ImageResult } from 'nitro-renderer/src/nitro/room/ImageResult';
-import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
-import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
+import { NitroRenderTexture } from '@nitrots/nitro-renderer/src';
+import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
+import { PetFigureData } from '@nitrots/nitro-renderer/src/nitro/avatar/pets/PetFigureData';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IGetImageListener } from '@nitrots/nitro-renderer/src/nitro/room/IGetImageListener';
+import { ImageResult } from '@nitrots/nitro-renderer/src/nitro/room/ImageResult';
+import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
+import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
 
 @Directive({
     selector: '[pet-image]'

@@ -1,8 +1,8 @@
-import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { AvatarScaleType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarSetType';
-import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { AvatarEditorFigureCategory } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
+import { AvatarScaleType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarScaleType';
+import { AvatarSetType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarSetType';
+import { IAvatarImageListener } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarImageListener';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
 import { FigureData } from '../common/FigureData';
 

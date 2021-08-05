@@ -1,9 +1,9 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
 import { PaginationInstance } from 'ngx-pagination';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomPreviewer } from 'nitro-renderer/src/nitro/room/preview/RoomPreviewer';
-import { Vector3d } from 'nitro-renderer/src/room/utils/Vector3d';
 import { Subscription } from 'rxjs';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { FurniCategory } from '../../items/FurniCategory';

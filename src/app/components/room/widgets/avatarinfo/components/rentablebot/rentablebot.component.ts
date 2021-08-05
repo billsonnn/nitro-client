@@ -1,10 +1,10 @@
 import { Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { BotCommandConfigurationEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/bots/BotCommandConfigurationEvent';
-import { RequestBotCommandConfigurationComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/bots/RequestBotConfigurationComposer';
-import { BotRemoveComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotRemoveComposer';
-import { BotSkillSaveComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotSkillSaveComposer';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { BotCommandConfigurationEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/bots/BotCommandConfigurationEvent';
+import { RequestBotCommandConfigurationComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/bots/RequestBotConfigurationComposer';
+import { BotRemoveComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotRemoveComposer';
+import { BotSkillSaveComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotSkillSaveComposer';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { AvatarContextInfoView } from '../../common/AvatarContextInfoView';
 import { BotSkillsEnum } from '../../common/BotSkillsEnum';

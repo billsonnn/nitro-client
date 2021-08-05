@@ -1,9 +1,9 @@
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { LoveLockFurniFinishedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
-import { LoveLockFurniFriendConfirmedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
-import { LoveLockFurniStartEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniStartEvent';
-import { LoveLockStartConfirmComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { LoveLockFurniFinishedEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFinishedEvent';
+import { LoveLockFurniFriendConfirmedEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniFriendConfirmedEvent';
+import { LoveLockFurniStartEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/furniture/LoveLockFurniStartEvent';
+import { LoveLockStartConfirmComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FriendsFurniConfirmWidget } from '../furniture/friendfurni/confirm.component';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AdvancedMap } from 'nitro-renderer/src/core/utils/AdvancedMap';
-import { AvatarDirectionAngle } from 'nitro-renderer/src/nitro/avatar/enum/AvatarDirectionAngle';
-import { AvatarEditorFigureCategory } from 'nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { IPalette } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPalette';
-import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
-import { ISetType } from 'nitro-renderer/src/nitro/avatar/structure/figure/ISetType';
-import { IStructureData } from 'nitro-renderer/src/nitro/avatar/structure/IStructureData';
-import { UserFigureComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserFigureComposer';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
+import { AvatarDirectionAngle } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarDirectionAngle';
+import { AvatarEditorFigureCategory } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarEditorFigureCategory';
+import { IPalette } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IPalette';
+import { IPartColor } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
+import { ISetType } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/ISetType';
+import { IStructureData } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/IStructureData';
+import { UserFigureComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserFigureComposer';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { AvatarEditorGridColorItem } from '../../common/AvatarEditorGridColorItem';
@@ -197,7 +197,7 @@ export class AvatarEditorMainComponent implements OnInit, OnDestroy
         const _local_11: IPartColor[]   = new Array(_local_10.length);
         const _local_12                 = this._Str_24175;
 
-        for(const _local_13 of _local_9.colors.values())
+        for(const _local_13 of _local_9.colors.getValues())
         {
             if(_local_13.isSelectable && (_local_12 || (this.clubMemberLevel >= _local_13.clubLevel)))
             {

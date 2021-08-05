@@ -1,8 +1,8 @@
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { RoomEngineObjectEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectVariable } from 'nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
+import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { MannequinWidget } from '../furniture/mannequin/mannequin.component';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserProfileComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { GroupInformationParser } from 'nitro-renderer/src/nitro/communication/messages/parser/group/GroupInformationParser';
-import { UserProfileParser } from 'nitro-renderer/src/nitro/communication/messages/parser/user/data/UserProfileParser';
-import { UserRelationshipDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { UserProfileComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
+import { GroupInformationParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/group/GroupInformationParser';
+import { UserProfileParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserProfileParser';
+import { UserRelationshipDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { SettingsService } from '../../../core/settings/service';
 import { SessionService } from '../../../security/services/session.service';
 import { UserProfileService } from '../services/user-profile.service';

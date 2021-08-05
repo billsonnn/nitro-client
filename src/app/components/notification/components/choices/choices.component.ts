@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NitroLogger } from 'nitro-renderer/src/core/common/logger/NitroLogger';
+import { NitroLogger } from '@nitrots/nitro-renderer/src/core/common/logger/NitroLogger';
 import { NotificationBroadcastMessageComponent } from '../broadcast-message/broadcast-message.component';
 
 @Component({

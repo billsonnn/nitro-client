@@ -1,13 +1,13 @@
-﻿import { NitroContainer, NitroSprite } from 'nitro-renderer/src';
-import { AvatarFigurePartType } from 'nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
-import { IAvatarImageListener } from 'nitro-renderer/src/nitro/avatar/IAvatarImageListener';
-import { IAvatarRenderManager } from 'nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
-import { IFigurePart } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePart';
-import { IFigurePartSet } from 'nitro-renderer/src/nitro/avatar/structure/figure/IFigurePartSet';
-import { IPartColor } from 'nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { IGraphicAsset } from 'nitro-renderer/src/room/object/visualization/utils/IGraphicAsset';
-import { TextureUtils } from 'nitro-renderer/src/room/utils/TextureUtils';
+﻿import { NitroContainer, NitroSprite } from '@nitrots/nitro-renderer/src';
+import { AvatarFigurePartType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
+import { IAvatarImageListener } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarImageListener';
+import { IAvatarRenderManager } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarRenderManager';
+import { IFigurePart } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IFigurePart';
+import { IFigurePartSet } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IFigurePartSet';
+import { IPartColor } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IGraphicAsset } from '@nitrots/nitro-renderer/src/room/object/visualization/utils/IGraphicAsset';
+import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
 import { CategoryBaseModel } from './CategoryBaseModel';
 import { FigureData } from './FigureData';
 

@@ -1,6 +1,6 @@
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { RoomSessionDoorbellEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionDoorbellEvent';
-import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { RoomSessionDoorbellEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionDoorbellEvent';
+import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetDoorbellEvent } from '../events/RoomWidgetDoorbellEvent';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

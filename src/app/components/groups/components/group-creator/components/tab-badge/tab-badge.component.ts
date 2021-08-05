@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { GroupBadgePart } from 'nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupBadgePart';
+import { GroupBadgePart } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/group/utils/GroupBadgePart';
 import GroupSettings from '../../../../common/GroupSettings';
 import { GroupsService } from '../../../../services/groups.service';
 

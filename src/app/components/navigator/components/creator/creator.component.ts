@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IMessageEvent } from 'nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { RoomCreatedEvent } from 'nitro-renderer/src/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
-import { RoomCreateComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/RoomCreateComposer';
-import { NavigatorCategoryDataParser } from 'nitro-renderer/src/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { HabboClubLevelEnum } from 'nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
+import { RoomCreatedEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
+import { RoomCreateComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/RoomCreateComposer';
+import { NavigatorCategoryDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { HabboClubLevelEnum } from '@nitrots/nitro-renderer/src/nitro/session/HabboClubLevelEnum';
 import { NavigatorService } from '../../services/navigator.service';
 import { RoomLayout } from './RoomLayout';
 

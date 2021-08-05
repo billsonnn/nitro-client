@@ -1,5 +1,5 @@
-﻿import { Triggerable } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { TriggerDefinition } from 'nitro-renderer/src/nitro/communication/messages/incoming/roomevents/TriggerDefinition';
+﻿import { Triggerable } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { TriggerDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/TriggerDefinition';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredFurniture } from '../../WiredFurniture';
 import { AvatarEnterRoomComponent } from './avatar-enter-room/avatar-enter-room.component';

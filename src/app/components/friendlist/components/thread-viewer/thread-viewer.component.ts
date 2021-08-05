@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { FollowFriendComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/FollowFriendComposer';
+import { SendMessageComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/SendMessageComposer';
+import { SetRelationshipStatusComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/SetRelationshipStatusComposer';
+import { RelationshipStatusEnum } from '@nitrots/nitro-renderer/src/nitro/enums/RelationshipStatusEnum';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import { FollowFriendComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/FollowFriendComposer';
-import { SendMessageComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/SendMessageComposer';
-import { SetRelationshipStatusComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/SetRelationshipStatusComposer';
-import { RelationshipStatusEnum } from 'nitro-renderer/src/nitro/enums/RelationshipStatusEnum';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';
 import { MessengerChat } from '../../common/MessengerChat';

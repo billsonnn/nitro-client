@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModtoolUserChatlogParserVisit } from 'nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModtoolUserChatlogParserVisit } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';

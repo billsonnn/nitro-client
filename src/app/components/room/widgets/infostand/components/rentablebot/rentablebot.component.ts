@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BotRemoveComposer } from 'nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotRemoveComposer';
-import { Nitro } from 'nitro-renderer/src/nitro/Nitro';
+import { BotRemoveComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/engine/BotRemoveComposer';
+import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../../../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { InfoStandRentableBotData } from '../../data/InfoStandRentableBotData';
 import { InfoStandType } from '../../InfoStandType';

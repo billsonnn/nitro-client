@@ -1,4 +1,4 @@
-import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
+import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
 
 export class RoomWidgetUpdateEvent extends NitroEvent
 {

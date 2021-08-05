@@ -1,9 +1,9 @@
-﻿import { NitroEvent } from 'nitro-renderer/src/core/events/NitroEvent';
-import { RoomEngineDimmerStateEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineDimmerStateEvent';
-import { RoomEngineTriggerWidgetEvent } from 'nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomControllerLevel } from 'nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { RoomSessionDimmerPresetsEvent } from 'nitro-renderer/src/nitro/session/events/RoomSessionDimmerPresetsEvent';
-import { RoomWidgetEnum } from 'nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+﻿import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
+import { RoomEngineDimmerStateEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineDimmerStateEvent';
+import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
+import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
+import { RoomSessionDimmerPresetsEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionDimmerPresetsEvent';
+import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetDimmerStateUpdateEvent } from '../events/RoomWidgetDimmerStateUpdateEvent';
 import { RoomWidgetDimmerUpdateEvent } from '../events/RoomWidgetDimmerUpdateEvent';

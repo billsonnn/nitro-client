@@ -1,6 +1,6 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
-import { IEventDispatcher } from 'nitro-renderer/src/core/events/IEventDispatcher';
+import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomWidgetDimmerStateUpdateEvent } from '../../events/RoomWidgetDimmerStateUpdateEvent';
 import { RoomWidgetDimmerUpdateEvent } from '../../events/RoomWidgetDimmerUpdateEvent';
