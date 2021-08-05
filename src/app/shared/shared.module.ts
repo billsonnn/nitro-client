@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbDropdownModule, NgbModalModule, NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ColorChromeModule } from 'ngx-color/chrome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -50,7 +49,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule.forRoot(),
         ColorChromeModule,
         NgbModule
     ],
@@ -65,7 +63,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule,
         ColorChromeModule,
         AvatarImageComponent,
         BadgeComponent,

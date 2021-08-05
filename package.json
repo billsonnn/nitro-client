@@ -22,7 +22,6 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
-    "angular-bootstrap-md": "^11.1.0",
     "emoji-toolkit": "^6.6.0",
     "ngx-color": "^6.2.0",
     "ngx-pagination": "^5.1.1",
