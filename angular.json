@@ -25,7 +25,6 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "showCircularDependencies": false,
-            "aot": true,
             "vendorChunk": true,
             "assets": [
               {
@@ -42,7 +41,12 @@
             "styles": [
               "src/styles.scss"
             ],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "webWorkerTsConfig": "tsconfig.worker.json",
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -56,8 +60,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": false,
-              "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -73,19 +75,15 @@
               ]
             },
             "devel": {
-              "optimization": false,
               "outputHashing": "none",
               "sourceMap": false,
               "namedChunks": false,
               "showCircularDependencies": false,
-              "aot": true,
-              "extractLicenses": false,
               "statsJson": false,
-              "progress": false,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "progress": false
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",

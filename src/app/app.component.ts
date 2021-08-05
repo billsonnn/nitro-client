@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy
 
             if(!Nitro.instance) Nitro.bootstrap();
 
-            Nitro.instance.setWorker(new Worker('../app/core/nitro-worker', { type: 'module' }));
+            Nitro.instance.setWorker(new Worker(new URL('../app/core/nitro-worker', import.meta.url), { type: 'module' }));
 
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, this.onNitroEvent);
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, this.onNitroEvent);

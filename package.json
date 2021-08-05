@@ -5,22 +5,22 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "ng build --prod",
+    "build-prod": "ng build --configuration production",
     "eslint": "eslint ./src --fix"
   },
   "private": true,
   "dependencies": {
     "@angular-slider/ngx-slider": "^2.0.3",
-    "@angular/animations": "^11.2.14",
+    "@angular/animations": "^12.2.0",
     "@angular/cdk": "^11.2.13",
-    "@angular/common": "~11.1.2",
-    "@angular/compiler": "~11.1.2",
-    "@angular/core": "~11.1.2",
-    "@angular/forms": "~11.1.2",
-    "@angular/localize": "^11.2.14",
-    "@angular/platform-browser": "~11.1.2",
-    "@angular/platform-browser-dynamic": "~11.1.2",
-    "@angular/router": "~11.1.2",
+    "@angular/common": "~12.2.0",
+    "@angular/compiler": "~12.2.0",
+    "@angular/core": "~12.2.0",
+    "@angular/forms": "~12.2.0",
+    "@angular/localize": "^12.2.0",
+    "@angular/platform-browser": "~12.2.0",
+    "@angular/platform-browser-dynamic": "~12.2.0",
+    "@angular/router": "~12.2.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "angular-bootstrap-md": "^11.1.0",
     "emoji-toolkit": "^6.6.0",
@@ -31,18 +31,18 @@
     "nitro-renderer": "git+https://git@git.krews.org/nitro/nitro-renderer#main",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1100.7",
-    "@angular/cli": "~11.1.4",
-    "@angular/compiler-cli": "~11.1.2",
+    "@angular-devkit/build-angular": "^12.2.0",
+    "@angular/cli": "~12.2.0",
+    "@angular/compiler-cli": "~12.2.0",
     "@angularclass/hmr": "^3.0.0",
     "@types/node": "^14.17.7",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
     "eslint": "^7.32.0",
     "ts-node": "~8.3.0",
-    "typescript": "^4.0.8"
+    "typescript": "^4.3.5"
   }
 }
