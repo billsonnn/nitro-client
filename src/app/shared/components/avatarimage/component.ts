@@ -1,9 +1,5 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
-import { AvatarScaleType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarSetType';
-import { IAvatarImageListener } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarImageListener';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { AdvancedMap, AvatarScaleType, AvatarSetType, IAvatarImageListener, Nitro } from '@nitrots/nitro-renderer';
 
 @Component({
     selector: '[nitro-avatar-image]',

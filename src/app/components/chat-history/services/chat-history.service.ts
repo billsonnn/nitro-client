@@ -1,8 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
-import { RoomInfoEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { AdvancedMap, IMessageEvent, Nitro, RoomInfoEvent } from '@nitrots/nitro-renderer';
 import { ChatHistoryItem } from '../common/ChatHistoryItem';
 
 @Injectable()

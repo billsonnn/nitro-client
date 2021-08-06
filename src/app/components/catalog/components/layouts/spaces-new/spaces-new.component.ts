@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { CatalogPageOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogLayoutDefaultComponent } from '../default/default.component';
 

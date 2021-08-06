@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolChangeRoomSettingsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolChangeRoomSettingsComposer';
-import { ModtoolRequestRoomChatlogComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
-import { ModtoolRoomAlertComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRoomAlertComposer';
-import { ModtoolRoomInfoParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { ModtoolChangeRoomSettingsComposer, ModtoolRequestRoomChatlogComposer, ModtoolRoomAlertComposer, ModtoolRoomInfoParser, Nitro } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';

@@ -1,17 +1,5 @@
 import { Component, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { RoomBannedUsersEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomBannedUsersEvent';
-import { RoomSettingsEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomSettingsEvent';
-import { RoomUsersWithRightsEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomUsersWithRightsEvent';
-import { RoomDeleteComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomDeleteComposer';
-import { RoomGiveRightsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomGiveRightsComposer';
-import { RoomTakeRightsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomTakeRightsComposer';
-import { RoomUnbanUserComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomUnbanUserComposer';
-import { RoomBannedUsersComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomBannedUsersComposer';
-import { RoomUsersWithRightsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomUsersWithRightsComposer';
-import { SaveRoomSettingsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/SaveRoomSettingsComposer';
-import { NavigatorCategoryDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent, NavigatorCategoryDataParser, Nitro, RoomBannedUsersComposer, RoomBannedUsersEvent, RoomDeleteComposer, RoomGiveRightsComposer, RoomSettingsEvent, RoomTakeRightsComposer, RoomUnbanUserComposer, RoomUsersWithRightsComposer, RoomUsersWithRightsEvent, SaveRoomSettingsComposer } from '@nitrots/nitro-renderer';
 import { MessengerFriend } from '../../../friendlist/common/MessengerFriend';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { NotificationChoice } from '../../../notification/components/choices/choices.component';

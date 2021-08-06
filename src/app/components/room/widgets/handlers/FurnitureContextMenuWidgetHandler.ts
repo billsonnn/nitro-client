@@ -1,11 +1,4 @@
-import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { IRoomObject } from '@nitrots/nitro-renderer/src/room/object/IRoomObject';
+import { IFurnitureData, IRoomObject, NitroEvent, RoomEngineObjectEvent, RoomEngineTriggerWidgetEvent, RoomObjectCategory, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FurnitureContextMenuWidget } from '../furniture/context-menu/components/main/main.component';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

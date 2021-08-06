@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import { HabboSearchResultData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/friendlist/HabboSearchResultData';
-import { HabboSearchComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/HabboSearchComposer';
-import { RemoveFriendComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
-import { UserProfileComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { HabboSearchComposer, HabboSearchResultData, Nitro, RemoveFriendComposer, UserProfileComposer } from '@nitrots/nitro-renderer';
 import { FriendListService } from '../../services/friendlist.service';
 
 @Component({

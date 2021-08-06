@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
-import { AchievementData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/achievements/AchievementData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { AchievementData, Nitro } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';

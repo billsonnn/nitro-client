@@ -1,11 +1,4 @@
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { INitroCommunicationManager } from '@nitrots/nitro-renderer/src/nitro/communication/INitroCommunicationManager';
-import { RoomInfoEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomLikeRoomComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomZoomEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomZoomEvent';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { IMessageEvent, INitroCommunicationManager, Nitro, NitroEvent, RoomInfoEvent, RoomLikeRoomComposer, RoomWidgetEnum, RoomZoomEvent } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';

@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserProfileComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { GroupInformationParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/group/GroupInformationParser';
-import { UserProfileParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserProfileParser';
-import { UserRelationshipDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { GroupInformationParser, Nitro, UserProfileComposer, UserProfileParser, UserRelationshipDataParser } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { SessionService } from '../../../security/services/session.service';
 import { UserProfileService } from '../services/user-profile.service';

@@ -1,8 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolRequestUserChatlogComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
-import { ModtoolRequestUserRoomsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
-import { ModeratorUserInfoData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/modtool/utils/ModeratorUserInfoData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { ModeratorUserInfoData, ModtoolRequestUserChatlogComposer, ModtoolRequestUserRoomsComposer, Nitro } from '@nitrots/nitro-renderer';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';

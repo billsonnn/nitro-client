@@ -1,5 +1,4 @@
-﻿import { IPartColor } from '@nitrots/nitro-renderer/src/nitro/avatar/structure/figure/IPartColor';
-import { ColorConverter } from '@nitrots/nitro-renderer/src/room/utils/ColorConverter';
+﻿import { ColorConverter, IPartColor } from '@nitrots/nitro-renderer';
 import { CategoryBaseModel } from './CategoryBaseModel';
 
 export class AvatarEditorGridColorItem

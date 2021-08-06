@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CatalogPageData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
-import { ICatalogPageData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { IFurnitureDataListener } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureDataListener';
+import { CatalogPageData, ICatalogPageData, IFurnitureData, IFurnitureDataListener, Nitro } from '@nitrots/nitro-renderer';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CatalogService } from '../../services/catalog.service';

@@ -1,9 +1,5 @@
 import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { FigureSetIdsMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomSessionEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionEvent';
-import { IRoomSession } from '@nitrots/nitro-renderer/src/nitro/session/IRoomSession';
+import { FigureSetIdsMessageEvent, IMessageEvent, IRoomSession, Nitro, RoomSessionEvent } from '@nitrots/nitro-renderer';
 import { Subject } from 'rxjs';
 import { SettingsService } from '../../../core/settings/service';
 import { InventoryBadgesComponent } from '../components/badges/badges.component';

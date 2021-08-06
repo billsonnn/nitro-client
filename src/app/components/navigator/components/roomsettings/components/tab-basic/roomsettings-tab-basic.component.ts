@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavigatorCategoryDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
+import { NavigatorCategoryDataParser } from '@nitrots/nitro-renderer';
 import RoomSettings from '../../common/RoomSettings';
 
 @Component({

@@ -1,14 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { ConditionDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
-import { Triggerable } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { TriggerDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/TriggerDefinition';
-import { WiredActionDefinition } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredActionDefinition';
-import { UpdateActionMessageComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateActionMessageComposer';
-import { UpdateConditionMessageComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateConditionMessageComposer';
-import { UpdateTriggerMessageComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/roomevents/UpdateTriggerMessageComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
+import { ConditionDefinition, Nitro, RoomObjectCategory, RoomObjectVariable, Triggerable, TriggerDefinition, UpdateActionMessageComposer, UpdateConditionMessageComposer, UpdateTriggerMessageComposer, WiredActionDefinition } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';

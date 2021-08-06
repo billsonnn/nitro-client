@@ -1,4 +1,4 @@
-import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
+import { IEventDispatcher } from '@nitrots/nitro-renderer';
 import { IRoomWidget } from './IRoomWidget';
 import { IRoomWidgetHandler } from './IRoomWidgetHandler';
 import { IRoomWidgetMessageListener } from './IRoomWidgetMessageListener';

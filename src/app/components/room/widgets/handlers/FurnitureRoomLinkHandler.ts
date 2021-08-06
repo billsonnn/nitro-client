@@ -1,11 +1,4 @@
-﻿import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { RoomInfoEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomInfoComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomInfoComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+﻿import { IMessageEvent, Nitro, NitroEvent, RoomEngineTriggerWidgetEvent, RoomInfoComposer, RoomInfoEvent, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { NotificationBroadcastMessageComponent } from '../../../notification/components/broadcast-message/broadcast-message.component';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';

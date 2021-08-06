@@ -1,13 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { AvatarFigureContainer } from '@nitrots/nitro-renderer/src/nitro/avatar/AvatarFigureContainer';
-import { AvatarFigurePartType } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarFigurePartType';
-import { IAvatarFigureContainer } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarFigureContainer';
-import { FurnitureMultiStateComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { FurnitureMannequinSaveLookComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
-import { FurnitureMannequinSaveNameComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { HabboClubLevelEnum } from '@nitrots/nitro-renderer/src/nitro/session/HabboClubLevelEnum';
+import { AvatarFigureContainer, AvatarFigurePartType, FurnitureMannequinSaveLookComposer, FurnitureMannequinSaveNameComposer, FurnitureMultiStateComposer, HabboClubLevelEnum, IAvatarFigureContainer, Nitro, RoomControllerLevel } from '@nitrots/nitro-renderer';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
 

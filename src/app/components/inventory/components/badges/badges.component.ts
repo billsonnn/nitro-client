@@ -1,6 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { SetActivatedBadgesComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { Nitro, SetActivatedBadgesComposer } from '@nitrots/nitro-renderer';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { InventoryService } from '../../services/inventory.service';

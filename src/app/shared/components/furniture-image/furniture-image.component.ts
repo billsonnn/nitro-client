@@ -1,10 +1,5 @@
 import { Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { NitroRenderTexture } from '@nitrots/nitro-renderer/src';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IGetImageListener } from '@nitrots/nitro-renderer/src/nitro/room/IGetImageListener';
-import { ImageResult } from '@nitrots/nitro-renderer/src/nitro/room/ImageResult';
-import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
-import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
+import { IGetImageListener, ImageResult, Nitro, NitroRenderTexture, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../components/catalog/enums/ProductTypeEnum';
 
 @Component({

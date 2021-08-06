@@ -1,10 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ToolbarIconEnum } from '@nitrots/nitro-renderer/src/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
+import { CatalogPageOfferData, CatalogPageParser, Nitro, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

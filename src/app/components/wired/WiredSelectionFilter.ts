@@ -1,5 +1,4 @@
-import { NitroFilter } from '@nitrots/nitro-renderer/src';
-import { ColorConverter } from '@nitrots/nitro-renderer/src/room/utils/ColorConverter';
+import { ColorConverter, NitroFilter } from '@nitrots/nitro-renderer';
 
 const vertex = `
 attribute vec2 aVertexPosition;

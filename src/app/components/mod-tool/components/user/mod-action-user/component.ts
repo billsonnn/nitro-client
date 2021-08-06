@@ -1,11 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolEventAlertComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { ModtoolSanctionAlertComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionAlertComposer';
-import { ModtoolSanctionBanComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionBanComposer';
-import { ModtoolSanctionKickComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionKickComposer';
-import { ModtoolSanctionMuteComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionMuteComposer';
-import { ModtoolSanctionTradelockComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/modtool/ModtoolSanctionTradelockComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { ModtoolEventAlertComposer, ModtoolSanctionAlertComposer, ModtoolSanctionBanComposer, ModtoolSanctionKickComposer, ModtoolSanctionMuteComposer, ModtoolSanctionTradelockComposer, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';

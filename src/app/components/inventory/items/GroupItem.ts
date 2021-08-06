@@ -1,7 +1,4 @@
-﻿import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IRoomEngine } from '@nitrots/nitro-renderer/src/nitro/room/IRoomEngine';
-import { IObjectData } from '@nitrots/nitro-renderer/src/nitro/room/object/data/IObjectData';
+﻿import { AdvancedMap, IObjectData, IRoomEngine, Nitro } from '@nitrots/nitro-renderer';
 import { FurniCategory } from './FurniCategory';
 import { FurnitureItem } from './FurnitureItem';
 import { IFurnitureItem } from './IFurnitureItem';

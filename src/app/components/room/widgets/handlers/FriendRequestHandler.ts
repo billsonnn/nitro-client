@@ -1,6 +1,4 @@
-import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { RoomSessionFriendRequestEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionFriendRequestEvent';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { NitroEvent, RoomSessionFriendRequestEvent, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { FriendRequestEvent } from '../../../friendlist/events/FriendRequestEvent';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetFriendRequestUpdateEvent } from '../events/RoomWidgetFriendRequestUpdateEvent';

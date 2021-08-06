@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavigatorSearchResultList } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
+import { NavigatorSearchResultList } from '@nitrots/nitro-renderer';
 import { NavigatorDisplayMode } from '../search/NavigatorDisplayMode';
 
 @Component({

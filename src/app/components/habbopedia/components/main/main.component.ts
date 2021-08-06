@@ -1,6 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
-import { ILinkEventTracker } from '@nitrots/nitro-renderer/src/core/events/ILinkEventTracker';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { ILinkEventTracker, Nitro } from '@nitrots/nitro-renderer';
 import { HabbopediaService } from '../../services/habbopedia.service';
 import { HabbopediaPageComponent } from '../page/page.component';
 

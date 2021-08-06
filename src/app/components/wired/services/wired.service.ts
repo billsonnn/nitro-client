@@ -1,17 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { DesktopViewEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/desktop/DesktopViewEvent';
-import { WiredFurniActionEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredFurniActionEvent';
-import { WiredFurniConditionEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredFurniConditionEvent';
-import { WiredFurniTriggerEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredFurniTriggerEvent';
-import { WiredOpenEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredOpenEvent';
-import { WiredRewardResultMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredRewardResultMessageEvent';
-import { WiredSaveSuccessEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredSaveSuccessEvent';
-import { WiredValidationErrorEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/WiredValidationErrorEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IRoomEngineServices } from '@nitrots/nitro-renderer/src/nitro/room/IRoomEngineServices';
-import { RoomSessionEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionEvent';
-import { IRoomSession } from '@nitrots/nitro-renderer/src/nitro/session/IRoomSession';
+import { DesktopViewEvent, IMessageEvent, IRoomEngineServices, IRoomSession, Nitro, RoomSessionEvent, WiredFurniActionEvent, WiredFurniConditionEvent, WiredFurniTriggerEvent, WiredOpenEvent, WiredRewardResultMessageEvent, WiredSaveSuccessEvent, WiredValidationErrorEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { WiredMainComponent } from '../components/main/main.component';
 

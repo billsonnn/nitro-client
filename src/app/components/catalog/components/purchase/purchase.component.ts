@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ICatalogPageParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { CatalogPageOfferData, ICatalogPageParser } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

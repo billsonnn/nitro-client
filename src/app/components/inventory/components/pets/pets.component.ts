@@ -1,7 +1,5 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
+import { Nitro, RoomObjectVariable, RoomPreviewer } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { PetItem } from '../../items/PetItem';
 import { InventoryService } from '../../services/inventory.service';

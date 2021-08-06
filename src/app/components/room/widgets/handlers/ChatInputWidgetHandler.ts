@@ -1,13 +1,4 @@
-import { TextureUtils } from '@nitrots/nitro-renderer/src';
-import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { RoomSettingsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomZoomEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomZoomEvent';
-import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { RoomSessionChatEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionChatEvent';
-import { HabboClubLevelEnum } from '@nitrots/nitro-renderer/src/nitro/session/HabboClubLevelEnum';
-import { AvatarExpressionEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+import { AvatarExpressionEnum, HabboClubLevelEnum, Nitro, NitroEvent, RoomControllerLevel, RoomSessionChatEvent, RoomSettingsComposer, RoomWidgetEnum, RoomZoomEvent, TextureUtils } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';

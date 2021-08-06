@@ -1,15 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
-import { MarketplaceOffer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
-import { CatalogClubOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { CatalogPageData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ICatalogPageData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
-import { ICatalogPageParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IObjectData } from '@nitrots/nitro-renderer/src/nitro/room/object/data/IObjectData';
-import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
+import { CatalogClubOfferData, CatalogPageData, CatalogPageOfferData, ICatalogPageData, ICatalogPageParser, IFurnitureData, IObjectData, MarketplaceOffer, Nitro, RoomPreviewer, Vector3d } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { PurseService } from '../../../purse/services/purse.service';

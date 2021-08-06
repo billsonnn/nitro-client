@@ -1,17 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DesktopViewComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
-import { ToolbarIconEnum } from '@nitrots/nitro-renderer/src/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
-import { NitroToolbarEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroToolbarEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { Dispose } from '@nitrots/nitro-renderer/src/nitro/window/motion/Dispose';
-import { DropBounce } from '@nitrots/nitro-renderer/src/nitro/window/motion/DropBounce';
-import { EaseOut } from '@nitrots/nitro-renderer/src/nitro/window/motion/EaseOut';
-import { JumpBy } from '@nitrots/nitro-renderer/src/nitro/window/motion/JumpBy';
-import { Motions } from '@nitrots/nitro-renderer/src/nitro/window/motion/Motions';
-import { Queue } from '@nitrots/nitro-renderer/src/nitro/window/motion/Queue';
-import { Wait } from '@nitrots/nitro-renderer/src/nitro/window/motion/Wait';
+import { DesktopViewComposer, Dispose, DropBounce, EaseOut, JumpBy, Motions, Nitro, NitroToolbarAnimateIconEvent, NitroToolbarEvent, Queue, ToolbarIconEnum, Wait } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/achievements.service';

@@ -1,8 +1,4 @@
-﻿import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomEngineTriggerWidgetEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
+﻿import { Nitro, NitroEvent, RoomEngineTriggerWidgetEvent, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetMessage } from '../RoomWidgetMessage';
