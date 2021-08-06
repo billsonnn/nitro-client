@@ -1,10 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { CatalogGroupData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogGroupData';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { StringDataType } from '@nitrots/nitro-renderer/src/nitro/room/object/data/type/StringDataType';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { CatalogGroupData, CatalogPageOfferData, CatalogProductOfferData, IFurnitureData, Nitro, StringDataType } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogService } from '../../../services/catalog.service';

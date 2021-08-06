@@ -1,17 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
-import { BotAddedToInventoryEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/bots/BotAddedToInventoryEvent';
-import { BotInventoryMessageEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/bots/BotInventoryMessageEvent';
-import { BotRemovedFromInventoryEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
-import { GetBotInventoryComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/inventory/bots/GetBotInventoryComposer';
-import { BotData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/inventory/bots/BotData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomObjectPlacementSource } from '@nitrots/nitro-renderer/src/nitro/room/enums/RoomObjectPlacementSource';
-import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineObjectPlacedEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectPlacedEvent';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { AdvancedMap, BotAddedToInventoryEvent, BotData, BotInventoryMessageEvent, BotRemovedFromInventoryEvent, GetBotInventoryComposer, IMessageEvent, Nitro, RoomEngineObjectEvent, RoomEngineObjectPlacedEvent, RoomObjectCategory, RoomObjectPlacementSource, RoomObjectType } from '@nitrots/nitro-renderer';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { BotItem } from '../items/BotItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';

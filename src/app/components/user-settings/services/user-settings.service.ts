@@ -1,12 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { UserSettingsEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserSettingsEvent';
-import { UserSettingsCameraFollowComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
-import { UserSettingsOldChatComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsOldChatComposer';
-import { UserSettingsRoomInvitesComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
-import { UserSettingsSoundComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/settings/UserSettingsSoundComposer';
-import { NitroSettingsEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroSettingsEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent, Nitro, NitroSettingsEvent, UserSettingsCameraFollowComposer, UserSettingsEvent, UserSettingsOldChatComposer, UserSettingsRoomInvitesComposer, UserSettingsSoundComposer } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class UserSettingsService implements OnDestroy

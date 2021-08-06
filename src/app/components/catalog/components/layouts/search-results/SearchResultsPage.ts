@@ -1,9 +1,4 @@
-import { CatalogSearchParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/CatalogSearchParser';
-import { CatalogFrontPageItem } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogFrontPageItem';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ICatalogLocalizationData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogLocalizationData';
-import { ICatalogPageParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { CatalogFrontPageItem, CatalogPageOfferData, CatalogSearchParser, ICatalogLocalizationData, ICatalogPageParser, IFurnitureData } from '@nitrots/nitro-renderer';
 import { CatalogLayoutSearchResultsComponent } from './search-results.component';
 
 export class SearchResultsPage implements ICatalogPageParser

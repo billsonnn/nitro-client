@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationBroadcastMessageComponent } from '../broadcast-message/broadcast-message.component';
 import { NotificationChoice, NotificationChoicesComponent } from '../choices/choices.component';

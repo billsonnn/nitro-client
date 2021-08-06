@@ -1,7 +1,5 @@
 import { ComponentRef, Directive, ElementRef } from '@angular/core';
-import { NitroPoint, NitroRectangle } from '@nitrots/nitro-renderer/src';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { FixedSizeStack } from '@nitrots/nitro-renderer/src/nitro/utils/FixedSizeStack';
+import { FixedSizeStack, Nitro, NitroPoint, NitroRectangle } from '@nitrots/nitro-renderer';
 import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 @Directive()

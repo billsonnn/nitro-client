@@ -1,16 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { PetAddedToInventoryEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/pets/PetAddedToInventoryEvent';
-import { PetInventoryEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/pets/PetInventoryEvent';
-import { PetRemovedFromInventory } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/inventory/pets/PetRemovedFromInventoryEvent';
-import { RequestPetsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/inventory/pets/RequestPetsComposer';
-import { PetData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/inventory/pets/PetData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomObjectPlacementSource } from '@nitrots/nitro-renderer/src/nitro/room/enums/RoomObjectPlacementSource';
-import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineObjectPlacedEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectPlacedEvent';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectType';
+import { IMessageEvent, Nitro, PetAddedToInventoryEvent, PetData, PetInventoryEvent, PetRemovedFromInventory, RequestPetsComposer, RoomEngineObjectEvent, RoomEngineObjectPlacedEvent, RoomObjectCategory, RoomObjectPlacementSource, RoomObjectType } from '@nitrots/nitro-renderer';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { PetItem } from '../items/PetItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';

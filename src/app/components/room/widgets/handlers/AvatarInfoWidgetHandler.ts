@@ -1,17 +1,4 @@
-﻿import { NitroEvent } from '@nitrots/nitro-renderer/src/core/events/NitroEvent';
-import { NitroToolbarEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroToolbarEvent';
-import { IRoomEngine } from '@nitrots/nitro-renderer/src/nitro/room/IRoomEngine';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { RoomSessionDanceEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionDanceEvent';
-import { RoomSessionUserDataUpdateEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/RoomSessionUserDataUpdateEvent';
-import { UserNameUpdateEvent } from '@nitrots/nitro-renderer/src/nitro/session/events/UserNameUpdateEvent';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
-import { IRoomSession } from '@nitrots/nitro-renderer/src/nitro/session/IRoomSession';
-import { RoomUserData } from '@nitrots/nitro-renderer/src/nitro/session/RoomUserData';
-import { RoomWidgetEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnum';
-import { IRoomObject } from '@nitrots/nitro-renderer/src/room/object/IRoomObject';
+﻿import { IFurnitureData, IRoomEngine, IRoomObject, IRoomSession, NitroEvent, NitroToolbarEvent, RoomObjectCategory, RoomObjectType, RoomObjectVariable, RoomSessionDanceEvent, RoomSessionUserDataUpdateEvent, RoomUserData, RoomWidgetEnum, UserNameUpdateEvent } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomAvatarInfoComponent } from '../avatarinfo/components/main/main.component';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';

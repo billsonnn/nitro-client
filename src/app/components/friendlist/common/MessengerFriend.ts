@@ -1,4 +1,4 @@
-import { FriendParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/friendlist/FriendParser';
+import { FriendParser } from '@nitrots/nitro-renderer';
 
 export class MessengerFriend
 {

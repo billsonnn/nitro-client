@@ -1,8 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { UserFigureEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserFigureEvent';
-import { UserInfoEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IMessageEvent, Nitro, UserFigureEvent, UserInfoEvent } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class SessionService implements OnDestroy

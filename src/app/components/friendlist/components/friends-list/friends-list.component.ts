@@ -1,7 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { RemoveFriendComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/friendlist/RemoveFriendComposer';
-import { UserProfileComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { Nitro, RemoveFriendComposer, UserProfileComposer } from '@nitrots/nitro-renderer';
 import { MessengerFriend } from '../../common/MessengerFriend';
 import { MessengerThread } from '../../common/MessengerThread';
 import { FriendListService } from '../../services/friendlist.service';

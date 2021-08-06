@@ -1,6 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { IEventDispatcher, Nitro } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
 import { CatalogService } from '../../../../catalog/services/catalog.service';
 import { FurniCategory } from '../../../../inventory/items/FurniCategory';

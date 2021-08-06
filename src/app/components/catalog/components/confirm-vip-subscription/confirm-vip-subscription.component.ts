@@ -1,6 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { CatalogClubOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { CatalogClubOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 @Component({
     selector: 'nitro-catalog-confirm-vip-subscription-component',

@@ -1,16 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '@nitrots/nitro-renderer/src/core/events/IEventDispatcher';
-import { AvatarAction } from '@nitrots/nitro-renderer/src/nitro/avatar/enum/AvatarAction';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
-import { RoomObjectCategory } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectType';
-import { RoomObjectUserType } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectUserType';
-import { RoomObjectVariable } from '@nitrots/nitro-renderer/src/nitro/room/object/RoomObjectVariable';
-import { HabboClubLevelEnum } from '@nitrots/nitro-renderer/src/nitro/session/HabboClubLevelEnum';
-import { RoomUserData } from '@nitrots/nitro-renderer/src/nitro/session/RoomUserData';
-import { IRoomObject } from '@nitrots/nitro-renderer/src/room/object/IRoomObject';
-import { RoomEnterEffect } from '@nitrots/nitro-renderer/src/room/utils/RoomEnterEffect';
+import { AvatarAction, HabboClubLevelEnum, IEventDispatcher, IRoomObject, Nitro, RoomEngineObjectEvent, RoomEnterEffect, RoomObjectCategory, RoomObjectType, RoomObjectUserType, RoomObjectVariable, RoomUserData } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { AvatarEditorService } from '../../../../../avatar-editor/services/avatar-editor.service';
 import { FriendListService } from '../../../../../friendlist/services/friendlist.service';

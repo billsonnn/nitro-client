@@ -1,4 +1,4 @@
-import { IAvatarImageListener } from '@nitrots/nitro-renderer/src/nitro/avatar/IAvatarImageListener';
+import { IAvatarImageListener } from '@nitrots/nitro-renderer';
 import { FigureDataView } from './FigureDataView';
 
 export class FigureData implements IAvatarImageListener

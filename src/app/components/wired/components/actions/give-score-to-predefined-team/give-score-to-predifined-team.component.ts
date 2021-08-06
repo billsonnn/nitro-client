@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Triggerable } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { Triggerable } from '@nitrots/nitro-renderer';
 import { GiveScoreComponent } from '../give-score/give-score.component';
 import { WiredActionType } from '../WiredActionType';
 

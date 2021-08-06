@@ -1,7 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { FriendFurniEngravingWidgetType } from '@nitrots/nitro-renderer/src/nitro/room/enums/FriendFurniEngravingWidgetType';
-import { StringDataType } from '@nitrots/nitro-renderer/src/nitro/room/object/data/type/StringDataType';
+import { FriendFurniEngravingWidgetType, Nitro, StringDataType } from '@nitrots/nitro-renderer';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 
 @Component({

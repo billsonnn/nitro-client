@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { NavigatorSearchResultList } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
-import { NavigatorTopLevelContext } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
-import { RoomDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
+import { NavigatorSearchResultList, NavigatorTopLevelContext, Nitro, RoomDataParser } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { NavigatorService } from '../../services/navigator.service';
 import { NavigatorCreatorComponent } from '../creator/creator.component';

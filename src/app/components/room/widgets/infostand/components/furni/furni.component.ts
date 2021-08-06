@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { CrackableDataType } from '@nitrots/nitro-renderer/src/nitro/room/object/data/type/CrackableDataType';
-import { StringDataType } from '@nitrots/nitro-renderer/src/nitro/room/object/data/type/StringDataType';
-import { RoomControllerLevel } from '@nitrots/nitro-renderer/src/nitro/session/enum/RoomControllerLevel';
-import { RoomWidgetEnumItemExtradataParameter } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
-import { RoomWidgetFurniInfoUsagePolicyEnum } from '@nitrots/nitro-renderer/src/nitro/ui/widget/enums/RoomWidgetFurniInfoUsagePolicyEnum';
+import { CrackableDataType, Nitro, RoomControllerLevel, RoomWidgetEnumItemExtradataParameter, RoomWidgetFurniInfoUsagePolicyEnum, StringDataType } from '@nitrots/nitro-renderer';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniActionMessage';
 import { InfoStandFurniData } from '../../data/InfoStandFurniData';

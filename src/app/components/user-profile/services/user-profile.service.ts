@@ -1,19 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '@nitrots/nitro-renderer/src/core/communication/messages/IMessageEvent';
-import { ILinkEventTracker } from '@nitrots/nitro-renderer/src/core/events/ILinkEventTracker';
-import { GroupInformationEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/group/GroupInformationEvent';
-import { UserCurrentBadgesEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserCurrentBadgesEvent';
-import { UserProfileEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserProfileEvent';
-import { UserRelationshipsEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/user/data/UserRelationshipsEvent';
-import { GroupInformationComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/group/GroupInformationComposer';
-import { UserCurrentBadgesComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserCurrentBadgesComposer';
-import { UserProfileComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { UserRelationshipsComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/user/data/UserRelationshipsComposer';
-import { GroupInformationParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/group/GroupInformationParser';
-import { UserProfileParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserProfileParser';
-import { UserRelationshipDataParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomEngineObjectEvent } from '@nitrots/nitro-renderer/src/nitro/room/events/RoomEngineObjectEvent';
+import { GroupInformationComposer, GroupInformationEvent, GroupInformationParser, ILinkEventTracker, IMessageEvent, Nitro, RoomEngineObjectEvent, UserCurrentBadgesComposer, UserCurrentBadgesEvent, UserProfileComposer, UserProfileEvent, UserProfileParser, UserRelationshipDataParser, UserRelationshipsComposer, UserRelationshipsEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { UserProfileComponent } from '../component/user-profile.component';
 

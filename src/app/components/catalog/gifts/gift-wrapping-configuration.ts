@@ -1,4 +1,4 @@
-import { CatalogGiftConfigurationEvent } from '@nitrots/nitro-renderer/src/nitro/communication/messages/incoming/catalog/CatalogGiftConfigurationEvent';
+import { CatalogGiftConfigurationEvent } from '@nitrots/nitro-renderer';
 
 
 export class GiftWrappingConfiguration

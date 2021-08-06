@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import { CatalogSelectClubGiftComposer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/outgoing/catalog/CatalogSelectClubGiftComposer';
-import { CatalogClubOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
+import { CatalogClubOfferData, CatalogPageOfferData, CatalogSelectClubGiftComposer, Nitro, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 
 

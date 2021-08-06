@@ -1,4 +1,4 @@
-﻿import { AdvancedMap } from '@nitrots/nitro-renderer/src/core/utils/AdvancedMap';
+﻿import { AdvancedMap } from '@nitrots/nitro-renderer';
 import { InventoryService } from '../../inventory/services/inventory.service';
 import { AvatarEditorMainComponent } from '../components/main/main.component';
 import { AvatarEditorModelViewerComponent } from '../components/model-viewer/model-viewer.component';

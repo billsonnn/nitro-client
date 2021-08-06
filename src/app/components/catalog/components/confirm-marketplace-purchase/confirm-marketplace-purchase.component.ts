@@ -1,13 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { NitroRenderTexture } from '@nitrots/nitro-renderer/src';
-import { MarketplaceOffer } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/marketplace/MarketplaceOffer';
-import { ToolbarIconEnum } from '@nitrots/nitro-renderer/src/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '@nitrots/nitro-renderer/src/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { IGetImageListener } from '@nitrots/nitro-renderer/src/nitro/room/IGetImageListener';
-import { ImageResult } from '@nitrots/nitro-renderer/src/nitro/room/ImageResult';
-import { TextureUtils } from '@nitrots/nitro-renderer/src/room/utils/TextureUtils';
-import { Vector3d } from '@nitrots/nitro-renderer/src/room/utils/Vector3d';
+import { IGetImageListener, ImageResult, MarketplaceOffer, Nitro, NitroRenderTexture, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum, Vector3d } from '@nitrots/nitro-renderer';
 import { InventoryFurnitureService } from '../../../inventory/services/furniture.service';
 import { CatalogService } from '../../services/catalog.service';
 import { MarketplaceService } from '../../services/marketplace.service';

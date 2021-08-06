@@ -1,11 +1,5 @@
 import { Directive, NgZone } from '@angular/core';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { ICatalogPageParser } from '@nitrots/nitro-renderer/src/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { Nitro } from '@nitrots/nitro-renderer/src/nitro/Nitro';
-import { RoomPreviewer } from '@nitrots/nitro-renderer/src/nitro/room/preview/RoomPreviewer';
-import { FurnitureType } from '@nitrots/nitro-renderer/src/nitro/session/furniture/FurnitureType';
-import { IFurnitureData } from '@nitrots/nitro-renderer/src/nitro/session/furniture/IFurnitureData';
+import { CatalogPageOfferData, CatalogProductOfferData, FurnitureType, ICatalogPageParser, IFurnitureData, Nitro, RoomPreviewer } from '@nitrots/nitro-renderer';
 import { CatalogService } from './services/catalog.service';
 import { MarketplaceService } from './services/marketplace.service';
 

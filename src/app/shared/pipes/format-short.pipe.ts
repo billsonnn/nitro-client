@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FriendlyTime } from '@nitrots/nitro-renderer/src/nitro/utils/FriendlyTime';
+import { FriendlyTime } from '@nitrots/nitro-renderer';
 
 @Pipe({ name: 'formatShort' })
 export class FormatShortPipe implements PipeTransform
