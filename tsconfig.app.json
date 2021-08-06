@@ -8,7 +8,7 @@
     "files": [
         "src/main.ts",
         "src/polyfills.ts",
-        "node_modules/@nitrots/nitro-renderer/src/index.ts"
+        "node_modules/@nitrots/nitro-renderer/index.ts"
     ],
     "include": [
         "node_modules/@nitrots/nitro-renderer/src/**/*.ts",
