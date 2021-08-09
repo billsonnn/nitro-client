@@ -1,14 +1,14 @@
 {
-    "url.prefix": "http://localhost:3000",
+    "url.prefix": "https://URL",
     "achievements.images.url": "${image.library.url}Quests/%image%.png",
     "achievements.unseen.ignored": [
         "ACH_AllTimeHotelPresence"
     ],
     "avatareditor.show.clubitems.dimmed": true,
     "avatareditor.show.clubitems.first": true,
+    "catalog.asset.url": "${image.library.url}catalogue",
     "catalog.asset.icon.url": "${catalog.asset.url}/icon_%name%.png",
     "catalog.asset.image.url": "${catalog.asset.url}/%name%.gif",
-    "catalog.asset.url": "${image.library.url}catalogue",
     "chat.history.max.items": 100,
     "chat.input.maxlength": 100,
     "chat.viewer.height.percentage": 0.4,
