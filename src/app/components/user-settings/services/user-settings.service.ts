@@ -92,7 +92,7 @@ export class UserSettingsService implements OnDestroy
 
     private sendUpdateEvent(): void
     {
-        const event = new NitroSettingsEvent(NitroSettingsEvent.SETTINGS_UPDATED);
+        const event = new NitroSettingsEvent();
         event.volumeSystem  = this._volumeSystem;
         event.volumeFurni   = this._volumeFurni;
         event.volumeTrax    = this._volumeTrax;
