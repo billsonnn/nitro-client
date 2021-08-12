@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ConfigurationEvent, LegacyExternalInterface, Nitro, NitroCommunicationDemoEvent, NitroEvent, NitroLocalizationEvent, RoomEngineEvent, WebGL } from '@nitrots/nitro-renderer';
+import { ConfigurationEvent, LegacyExternalInterface, Nitro, NitroCommunicationDemoEvent, NitroEvent, NitroLocalizationEvent, NitroVersion, RoomEngineEvent, WebGL } from '@nitrots/nitro-renderer';
 import { SettingsService } from './core/settings/service';
 
 @Component({
@@ -40,7 +40,11 @@ export class AppComponent implements OnInit, OnDestroy
                 return;
             }
 
-            if(!Nitro.instance) Nitro.bootstrap();
+            if(!Nitro.instance)
+            {
+                NitroVersion.UI_VERSION = '1.1.0';
+                Nitro.bootstrap();
+            }
 
             Nitro.instance.setWorker(new Worker(new URL('../app/core/nitro-worker', import.meta.url), { type: 'module' }));
 

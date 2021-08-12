@@ -1,4 +1,4 @@
-import { AvatarExpressionEnum, HabboClubLevelEnum, Nitro, NitroEvent, RoomControllerLevel, RoomSessionChatEvent, RoomSettingsComposer, RoomWidgetEnum, RoomZoomEvent, TextureUtils } from '@nitrots/nitro-renderer';
+import { AvatarExpressionEnum, HabboClubLevelEnum, Nitro, NitroEvent, NitroVersion, RoomControllerLevel, RoomSessionChatEvent, RoomSettingsComposer, RoomWidgetEnum, RoomZoomEvent, TextureUtils } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
@@ -156,7 +156,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':nitro':
                         case ':billsonnn':
                             this._container.notificationService.alertWithScrollableMessages([
-                                '<div class="d-flex flex-column justify-content-center align-items-center"><div class="nitro-info-box"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
+                                '<div class="d-flex flex-column justify-content-center align-items-center"><div class="nitro-info-box"></div><b>Renderer Version: ' + NitroVersion.RENDERER_VERSION + '</b><br /><b>UI Version: ' + NitroVersion.UI_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
                             return null;
                         case ':settings':
                             if(this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isModerator)
