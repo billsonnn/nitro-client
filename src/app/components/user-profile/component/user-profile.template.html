@@ -24,7 +24,7 @@
                                 [innerHTML]="('extendedprofile.created') | translate:'created':userProfile.registration">
                             </div>
                             <div class="p-1 bg-primary rounded mb-1"
-                                [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(userProfile.lastVisit)">
+                                [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(lastLogin)">
                             </div>
                             <div class="p-1 bg-primary rounded">
                                 {{ ('extendedprofile.achievementscore') | translate }} {{userProfile.achievementPoints}}

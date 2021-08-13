@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { GroupInformationParser, Nitro, UserProfileComposer, UserProfileParser, UserRelationshipDataParser } from '@nitrots/nitro-renderer';
+import { FriendlyTime, GroupInformationParser, Nitro, UserProfileComposer, UserProfileParser, UserRelationshipDataParser } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { SessionService } from '../../../security/services/session.service';
 import { UserProfileService } from '../services/user-profile.service';
@@ -81,6 +81,14 @@ export class UserProfileComponent implements OnInit, OnDestroy
             return this._sessionService.userId === this.userProfile.id;
 
         return false;
+    }
+
+    public get lastLogin(): string
+    {
+        if(this.userProfile)
+            return FriendlyTime.format(this.userProfile.lastVisit, '.ago', 2);
+
+        return '';
     }
 
     public get isFriend(): boolean
