@@ -24,7 +24,7 @@
                                 [innerHTML]="('extendedprofile.created') | translate:'created':userProfile.registration">
                             </div>
                             <div class="p-1 bg-primary rounded mb-1"
-                                [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(userProfile.lastVisit)">
+                                [innerHTML]="('extendedprofile.last.login') | translate:'lastlogin':(lastLogin)">
                             </div>
                             <div class="p-1 bg-primary rounded">
                                 {{ ('extendedprofile.achievementscore') | translate }} {{userProfile.achievementPoints}}
@@ -76,14 +76,14 @@
                             <div class="profile-relationship-information bg-primary rounded w-100 mb-1 p-1">
                                 <div *ngIf="currentRandomHeartRelationship" class="relationship-avatar"
                                     nitro-avatar-image [headOnly]="true"
-                                    [figure]="currentRandomHeartRelationship.figure" [direction]="4"></div>
+                                    [figure]="currentRandomHeartRelationship.randomFriendFigure" [direction]="4"></div>
                                 <div class="profile-relationship-name">
-                                    {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.username :
+                                    {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.randomFriendName :
                                     (('extendedprofile.no.friends.in.this.category') | translate) }}
                                 </div>
                                 <div class="profile-relationship-extra">
-                                    {{ heartRelationships.length > 1 ? (('extendedprofile.relstatus.others.heart') |
-                                    translate:'count':(heartRelationships.length - 1)) : '' }}
+                                    {{ (currentRandomHeartRelationship && currentRandomHeartRelationship.friendCount > 1) ? (('extendedprofile.relstatus.others.heart') |
+                                    translate:'count':(currentRandomHeartRelationship.friendCount - 1)) : '' }}
                                 </div>
                             </div>
                         </div>
@@ -95,14 +95,14 @@
                             <div class="profile-relationship-information bg-primary rounded w-100 mb-1 p-1">
                                 <div *ngIf="currentRandomSmileRelationship" class="relationship-avatar"
                                     nitro-avatar-image [headOnly]="true"
-                                    [figure]="currentRandomSmileRelationship.figure" [direction]="4"></div>
+                                    [figure]="currentRandomSmileRelationship.randomFriendFigure" [direction]="4"></div>
                                 <div class="profile-relationship-name">
-                                    {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.username :
+                                    {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.randomFriendName :
                                     (('extendedprofile.no.friends.in.this.category') | translate) }}
                                 </div>
                                 <div class="profile-relationship-extra">
-                                    {{ smileRelationships.length > 1 ? (('extendedprofile.relstatus.others.smile') |
-                                    translate:'count':(smileRelationships.length - 1)) : '' }}
+                                    {{ currentRandomSmileRelationship && currentRandomSmileRelationship.friendCount > 1 ? (('extendedprofile.relstatus.others.smile') |
+                                    translate:'count':(currentRandomSmileRelationship.friendCount - 1)) : '' }}
                                 </div>
                             </div>
                         </div>
@@ -114,14 +114,14 @@
                             <div class="profile-relationship-information bg-primary rounded w-100 p-1">
                                 <div *ngIf="currentRandomBobbaRelationship" class="relationship-avatar"
                                     nitro-avatar-image [headOnly]="true"
-                                    [figure]="currentRandomBobbaRelationship.figure" [direction]="4"></div>
+                                    [figure]="currentRandomBobbaRelationship.randomFriendFigure" [direction]="4"></div>
                                 <div class="profile-relationship-name">
-                                    {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.username :
+                                    {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.randomFriendName :
                                     (('extendedprofile.no.friends.in.this.category') | translate) }}
                                 </div>
                                 <div class="profile-relationship-extra">
-                                    {{ bobbaRelationships.length > 1 ? (('extendedprofile.relstatus.others.bobba') |
-                                    translate:'count':(bobbaRelationships.length - 1)) : '' }}
+                                    {{ currentRandomBobbaRelationship && currentRandomBobbaRelationship.friendCount > 1 ? (('extendedprofile.relstatus.others.bobba') |
+                                    translate:'count':(currentRandomBobbaRelationship.friendCount - 1)) : '' }}
                                 </div>
                             </div>
                         </div>
@@ -172,14 +172,14 @@
                     </div>
                     <div class="profile-relationship-information">
                         <div *ngIf="currentRandomHeartRelationship" class="relationship-avatar" nitro-avatar-image
-                            [headOnly]="true" [figure]="currentRandomHeartRelationship.figure" [direction]="4"></div>
+                            [headOnly]="true" [figure]="currentRandomHeartRelationship.randomFriendFigure" [direction]="4"></div>
                         <div class="profile-relationship-name">
-                            {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.username :
+                            {{ currentRandomHeartRelationship ? currentRandomHeartRelationship.randomFriendName :
                             (('extendedprofile.no.friends.in.this.category') | translate) }}
                         </div>
                         <div class="profile-relationship-extra">
-                            {{ heartRelationships.length > 1 ? (('extendedprofile.relstatus.others.heart') |
-                            translate:'count':(heartRelationships.length - 1)) : '' }}
+                            {{ currentRandomHeartRelationship && currentRandomHeartRelationship.friendCount > 1 ? (('extendedprofile.relstatus.others.heart') |
+                            translate:'count':(currentRandomHeartRelationship.friendCount - 1)) : '' }}
                         </div>
                     </div>
                 </div>
@@ -189,14 +189,14 @@
                     </div>
                     <div class="profile-relationship-information">
                         <div *ngIf="currentRandomSmileRelationship" class="relationship-avatar" nitro-avatar-image
-                            [headOnly]="true" [figure]="currentRandomSmileRelationship.figure" [direction]="4"></div>
+                            [headOnly]="true" [figure]="currentRandomSmileRelationship.randomFriendFigure" [direction]="4"></div>
                         <div class="profile-relationship-name">
-                            {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.username :
+                            {{ currentRandomSmileRelationship ? currentRandomSmileRelationship.randomFriendName :
                             (('extendedprofile.no.friends.in.this.category') | translate) }}
                         </div>
                         <div class="profile-relationship-extra">
-                            {{ smileRelationships.length > 1 ? (('extendedprofile.relstatus.others.smile') |
-                            translate:'count':(smileRelationships.length - 1)) : '' }}
+                            {{ currentRandomSmileRelationship && currentRandomSmileRelationship.friendCount > 1 ? (('extendedprofile.relstatus.others.smile') |
+                            translate:'count':(currentRandomSmileRelationship.friendCount - 1)) : '' }}
                         </div>
                     </div>
                 </div>
@@ -206,14 +206,14 @@
                     </div>
                     <div class="profile-relationship-information">
                         <div *ngIf="currentRandomBobbaRelationship" class="relationship-avatar" nitro-avatar-image
-                            [headOnly]="true" [figure]="currentRandomBobbaRelationship.figure" [direction]="4"></div>
+                            [headOnly]="true" [figure]="currentRandomBobbaRelationship.randomFriendFigure" [direction]="4"></div>
                         <div class="profile-relationship-name">
-                            {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.username :
+                            {{ currentRandomBobbaRelationship ? currentRandomBobbaRelationship.randomFriendName :
                             (('extendedprofile.no.friends.in.this.category') | translate) }}
                         </div>
                         <div class="profile-relationship-extra">
-                            {{ bobbaRelationships.length > 1 ? (('extendedprofile.relstatus.others.bobba') |
-                            translate:'count':(bobbaRelationships.length - 1)) : '' }}
+                            {{ currentRandomBobbaRelationship && currentRandomBobbaRelationship.friendCount > 1 ? (('extendedprofile.relstatus.others.bobba') |
+                            translate:'count':(currentRandomBobbaRelationship.friendCount - 1)) : '' }}
                         </div>
                     </div>
                 </div>
