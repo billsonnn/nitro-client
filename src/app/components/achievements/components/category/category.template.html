@@ -2,7 +2,7 @@
 <perfect-scrollbar class="grid-container w-100 mb-2" style="min-height:156px;max-height:156px;height: 156px;">
     <div class="grid-items grid-5">
         <div class="d-flex flex-column item-detail justify-content-center align-items-center" *ngFor="let achievement of category.achievements" (click)="selectAchievement(achievement)">
-            <div class="detail-info has-image rounded" [ngClass]="[ ((selectedAchievement === achievement) ? 'bg-primary' : 'bg-secondary' ), ((achievement && achievement.firstLevelAchieved) ? '' : 'greyscale') ]" [ngStyle]="{ 'background-image': 'url(' + getBadgeImageUrl(achievement) + ')' }">
+            <div class="detail-info has-image rounded" [ngClass]="[ ((selectedAchievement === achievement) ? 'bg-primary' : 'bg-secondary' ), ((achievement && achievement.unseen) ? 'achievement-leveled-up' : ''), ((achievement && achievement.firstLevelAchieved) ? '' : 'greyscale') ]" [ngStyle]="{ 'background-image': 'url(' + getBadgeImageUrl(achievement) + ')' }">
                 <div class="position-absolute btn btn-sm btn-danger px-1 py-0 rounded count" *ngIf="achievement.count">{{ achievement.count }}</div>
             </div>
         </div>
