@@ -378,60 +378,70 @@ export class FloorPlanService implements OnDestroy
 
     public readTileMapString(tileMapString: string): any[]
     {
-        let roomMapStringSplit = tileMapString.split('\r');
+        const roomMapStringSplit = tileMapString.split('\r');
         const roomMap = [];
 
-        let y = 0, x = 0;
-        while(y < roomMapStringSplit.length)
+        let width = 0;
+        let height = roomMapStringSplit.length;
+
+        // find the map width, height
+        for(let y = 0; y < height; y++)
         {
-            if(roomMapStringSplit[y].length === 0)
+            const originalRow = roomMapStringSplit[y];
+
+            if(originalRow.length === 0)
             {
+                roomMapStringSplit.splice(y, 1);
+                height = roomMapStringSplit.length;
                 y--;
-                roomMapStringSplit = roomMapStringSplit.splice(y, 1);
                 continue;
             }
 
-            const originalRow = roomMapStringSplit[y].split('');
-            roomMap[y] = [];
-
-            x = 0;
-            while(x < originalRow.length)
+            if(originalRow.length > width)
             {
-                const blocked = this._blockedTilesMap[y] && this._blockedTilesMap[y][x];
-                if(blocked)
-                {
-                    //  debugger;
-                }
-                roomMap[y][x] = new FloorMapTile(originalRow[x], blocked);
-                x++;
+                width = originalRow.length;
             }
-
-            while(x < this._maxFloorLength)
-            {
-                roomMap[y][x] = new FloorMapTile('x', false);
-                x++;
-            }
-
-            y++;
         }
 
-        while(y < this._maxFloorLength)
+        // fill map with room heightmap tiles
+        for(let y = 0; y < height; y++)
         {
             roomMap[y] = [];
+            const rowString = roomMapStringSplit[y];
 
-            x = 0;
-            while(x < this._maxFloorLength)
+            for(let x = 0; x < width; x++)
             {
-                roomMap[y][x] = new FloorMapTile('x', false);
-                x++;
+                const blocked = (this._blockedTilesMap[y] && this._blockedTilesMap[y][x]) || false;
+
+                const char = rowString[x];
+                if(((!(char === 'x')) && (!(char === 'X')) && char))
+                {
+                    roomMap[y][x] = new FloorMapTile(char, blocked);
+                }
+                else
+                {
+                    roomMap[y][x] = new FloorMapTile('x', blocked);
+                }
             }
 
-            y++;
+            for(let x = width; x < this._maxFloorLength; x++)
+            {
+                roomMap[y][x] = new FloorMapTile('x', false);
+            }
         }
 
-        this._highestY = roomMapStringSplit.length - 1;
-        this._highestX = roomMapStringSplit[this._highestY].length - 1;
+        // fill remaining map with empty tiles
+        for(let y = height; y < this._maxFloorLength; y++)
+        {
+            if(!roomMap[y]) roomMap[y] = [];
+            for(let x = 0; x < this._maxFloorLength; x++)
+            {
+                roomMap[y][x] = new FloorMapTile('x', false);
+            }
+        }
 
+        this._highestY = height - 1;
+        this._highestX = width - 1;
         return roomMap;
     }
 
