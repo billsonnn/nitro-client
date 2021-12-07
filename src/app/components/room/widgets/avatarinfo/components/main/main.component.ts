@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { AvatarAction, HabboClubLevelEnum, IEventDispatcher, IRoomObject, Nitro, RoomEngineObjectEvent, RoomEnterEffect, RoomObjectCategory, RoomObjectType, RoomObjectUserType, RoomObjectVariable, RoomUserData } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../../../core/settings/service';
 import { AvatarEditorService } from '../../../../../avatar-editor/services/avatar-editor.service';
@@ -73,7 +73,6 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
         private _avatarEditorService: AvatarEditorService,
         private _settingsService: SettingsService,
         private _friendListService: FriendListService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     )
     {
@@ -538,9 +537,7 @@ export class RoomAvatarInfoComponent extends ConversionTrackingWidget implements
 
         this._ngZone.run(() =>
         {
-            const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-
-            viewRef = this.contextsContainer.createComponent(componentFactory);
+            viewRef = this.contextsContainer.createComponent(component);
             view    = viewRef.instance;
         });
 

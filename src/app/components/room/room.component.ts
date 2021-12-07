@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { ColorConverter, EventDispatcher, IAvatarRenderManager, IConnection, IEventDispatcher, IRoomEngine, IRoomObject, IRoomSession, IRoomSessionManager, ISessionDataManager, LegacyExternalInterface, MouseEventType, Nitro, NitroAdjustmentFilter, NitroContainer, NitroEvent, NitroRectangle, NitroSprite, NitroTexture, RoomControllerLevel, RoomEngineEvent, RoomEngineObjectEvent, RoomEngineTriggerWidgetEvent, RoomGeometry, RoomId, RoomObjectCategory, RoomObjectOperationType, RoomObjectType, RoomObjectVariable, RoomVariableEnum, RoomWidgetEnum, RoomZoomEvent, TouchEventType, Vector3d } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../core/settings/service';
 import { ChatHistoryService } from '../chat-history/services/chat-history.service';
@@ -89,7 +89,6 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         private _wiredService: WiredService,
         private _friendService: FriendListService,
         private _chatHistoryService: ChatHistoryService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _modToolsService: ModToolService,
         private _settingsService: SettingsService,
         private _ngZone: NgZone
@@ -588,9 +587,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
 
                 this._ngZone.run(() =>
                 {
-                    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-
-                    widgetRef   = this.widgetContainer.createComponent(componentFactory);
+                    widgetRef   = this.widgetContainer.createComponent(component);
                     widget      = (widgetRef.instance as IRoomWidget);
                 });
 

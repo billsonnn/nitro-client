@@ -1,7 +1,6 @@
-import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { CatalogPageMessageOfferData, ClubOfferData, IFurnitureData, IObjectData, MarketplaceOffer, Nitro, NodeData, RoomPreviewer, Vector3d } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
-import { NotificationService } from '../../../notification/services/notification.service';
 import { PurseService } from '../../../purse/services/purse.service';
 import { CatalogLayout } from '../../CatalogLayout';
 import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
@@ -44,10 +43,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     constructor(
         private _settingsService: SettingsService,
-        private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _marketplaceService: MarketplaceService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _purseService: PurseService,
         private _ngZone: NgZone)
     {
@@ -184,16 +181,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
         this.removeLastComponent();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(layoutType);
-
-        let ref: ComponentRef<CatalogLayout> = null;
-
-        if(factory)
-        {
-            ref = this.layoutsContainer.createComponent(factory);
-        }
-
-        this._lastComponent = ref;
+        this._lastComponent = this.layoutsContainer.createComponent(layoutType);
     }
 
     private removeLastComponent(): void

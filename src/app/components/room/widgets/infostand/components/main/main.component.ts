@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
 import { IEventDispatcher } from '@nitrots/nitro-renderer';
 import { InventoryService } from '../../../../../inventory/services/inventory.service';
 import { InventoryTradingService } from '../../../../../inventory/services/trading.service';
@@ -40,7 +40,6 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
     constructor(
         private _inventoryService: InventoryService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     {
         super();
@@ -251,11 +250,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
         if(this.infostandsContainer.length) this.infostandsContainer.remove();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(componentType);
-
-        let ref: ComponentRef<RoomInfoStandBaseComponent> = null;
-
-        if(factory) ref = this.infostandsContainer.createComponent(factory);
+        const ref = this.infostandsContainer.createComponent(componentType);
 
         this._lastComponent = ref;
 

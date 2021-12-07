@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { Component, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationBubbleComponent } from '../notification-bubble/notification-bubble.component';
 import { NotificationDialogComponent } from '../notification-dialog/notification-dialog.component';
@@ -17,7 +17,6 @@ export class NotificationCenterComponent implements OnInit, OnDestroy
 
     constructor(
         private _notificationService: NotificationService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     { }
 
@@ -79,16 +78,9 @@ export class NotificationCenterComponent implements OnInit, OnDestroy
 
         let instance: NotificationDialogComponent = null;
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(type);
+        const ref = this.notificationsContainer.createComponent(type);
 
-        let ref: ComponentRef<NotificationDialogComponent> = null;
-
-        if(factory)
-        {
-            ref = this.notificationsContainer.createComponent(factory);
-
-            this._notifications.set(ref.instance, ref);
-        }
+        this._notifications.set(ref.instance, ref);
 
         instance = ref.instance;
 

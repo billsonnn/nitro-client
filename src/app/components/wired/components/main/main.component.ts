@@ -1,6 +1,5 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ConditionDefinition, Nitro, RoomObjectCategory, RoomObjectVariable, Triggerable, TriggerDefinition, UpdateActionMessageComposer, UpdateConditionMessageComposer, UpdateTriggerMessageComposer, WiredActionDefinition } from '@nitrots/nitro-renderer';
-import { SettingsService } from '../../../../core/settings/service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredService } from '../../services/wired.service';
@@ -35,10 +34,8 @@ export class WiredMainComponent implements OnInit, OnDestroy
     private _furniSelectedIds: number[] = [];
 
     constructor(
-        private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     {}
 
@@ -95,14 +92,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
         if(this.inputsContainer.length) this.inputsContainer.remove();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(wiredType);
-
-        let ref: ComponentRef<WiredFurniture> = null;
-
-        if(factory)
-        {
-            ref = this.inputsContainer.createComponent(factory);
-        }
+        const ref = this.inputsContainer.createComponent(wiredType);
 
         this._lastComponent = ref;
 
