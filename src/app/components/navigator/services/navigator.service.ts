@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { CantConnectMessageParser, ConvertGlobalRoomIdMessageComposer, DesktopViewComposer, GenericErrorEvent, HabboWebTools, ILinkEventTracker, IMessageEvent, LegacyExternalInterface, NavigatorCategoriesComposer, NavigatorCategoriesEvent, NavigatorCategoryDataParser, NavigatorCollapsedEvent, NavigatorEventCategoriesEvent, NavigatorHomeRoomEvent, NavigatorInitComposer, NavigatorLiftedEvent, NavigatorMetadataEvent, NavigatorOpenRoomCreatorEvent, NavigatorSearchComposer, NavigatorSearchesEvent, NavigatorSearchEvent, NavigatorSearchResultList, NavigatorSettingsComposer, NavigatorSettingsEvent, NavigatorTopLevelContext, Nitro, NitroToolbarEvent, RoomCreatedEvent, RoomDataParser, RoomDoorbellAcceptedEvent, RoomDoorbellEvent, RoomDoorbellRejectedEvent, RoomEnterErrorEvent, RoomForwardEvent, RoomInfoComposer, RoomInfoEvent, RoomInfoOwnerEvent, RoomScoreEvent, RoomSessionEvent, RoomSettingsUpdatedEvent, ToolbarIconEnum, UserInfoEvent } from '@nitrots/nitro-renderer';
+import { CantConnectMessageParser, ConvertGlobalRoomIdMessageComposer, DesktopViewComposer, GenericErrorEvent, GetGuestRoomResultEvent, HabboWebTools, ILinkEventTracker, IMessageEvent, LegacyExternalInterface, NavigatorCategoriesComposer, NavigatorCategoriesEvent, NavigatorCategoryDataParser, NavigatorCollapsedEvent, NavigatorEventCategoriesEvent, NavigatorHomeRoomEvent, NavigatorInitComposer, NavigatorLiftedEvent, NavigatorMetadataEvent, NavigatorOpenRoomCreatorEvent, NavigatorSearchComposer, NavigatorSearchesEvent, NavigatorSearchEvent, NavigatorSearchResultList, NavigatorSettingsComposer, NavigatorSettingsEvent, NavigatorTopLevelContext, Nitro, NitroToolbarEvent, RoomCreatedEvent, RoomDataParser, RoomDoorbellAcceptedEvent, RoomDoorbellEvent, RoomDoorbellRejectedEvent, RoomEnterErrorEvent, RoomEntryInfoMessageEvent, RoomForwardEvent, RoomInfoComposer, RoomScoreEvent, RoomSessionEvent, RoomSettingsUpdatedEvent, ToolbarIconEnum, UserInfoEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorData } from '../common/NavigatorData';
@@ -108,8 +108,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
             this._messages = [
                 new UserInfoEvent(this.onUserInfoEvent.bind(this)),
                 new RoomForwardEvent(this.onRoomForwardEvent.bind(this)),
-                new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
-                new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new RoomEntryInfoMessageEvent(this.onRoomEntryInfoMessageEvent.bind(this)),
+                new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)),
                 new RoomEnterErrorEvent(this.onRoomEnterErrorEvent.bind(this)),
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
@@ -181,9 +181,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, false, true));
     }
 
-    private onRoomInfoOwnerEvent(event: RoomInfoOwnerEvent): void
+    private onRoomEntryInfoMessageEvent(event: RoomEntryInfoMessageEvent): void
     {
-        if(!(event instanceof RoomInfoOwnerEvent)) return;
+        if(!(event instanceof RoomEntryInfoMessageEvent)) return;
 
         const parser = event.getParser();
 
@@ -201,9 +201,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         LegacyExternalInterface.call('legacyTrack', 'navigator', 'private', [ parser.roomId ]);
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
-        if(!(event instanceof RoomInfoEvent)) return;
+        if(!(event instanceof GetGuestRoomResultEvent)) return;
 
         const parser = event.getParser();
 

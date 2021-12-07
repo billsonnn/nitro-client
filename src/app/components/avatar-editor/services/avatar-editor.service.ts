@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent, Nitro, UserWardrobePageComposer, UserWardrobePageEvent, UserWardrobeSaveComposer } from '@nitrots/nitro-renderer';
+import { GetWardrobeMessageComposer, IMessageEvent, Nitro, SaveWardrobeOutfitMessageComposer, UserWardrobePageEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { AvatarEditorMainComponent } from '../components/main/main.component';
@@ -84,14 +84,14 @@ export class AvatarEditorService implements OnDestroy
         this._component.loadAvatarInEditor(look, gender, sessionData.clubLevel);
     }
 
-    public requestWardrobePage(pageId: number): void
+    public requestWardrobePage(): void
     {
-        Nitro.instance.communication.connection.send(new UserWardrobePageComposer(pageId));
+        Nitro.instance.communication.connection.send(new GetWardrobeMessageComposer());
     }
 
     public setWardrobeSlot(slotId: number): void
     {
-        Nitro.instance.communication.connection.send(new UserWardrobeSaveComposer(slotId, this.currentEditorLook, this.currentEditorGender));
+        Nitro.instance.communication.connection.send(new SaveWardrobeOutfitMessageComposer(slotId, this.currentEditorLook, this.currentEditorGender));
     }
 
     public get component(): AvatarEditorMainComponent

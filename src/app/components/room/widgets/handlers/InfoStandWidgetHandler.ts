@@ -1,4 +1,4 @@
-import { IFurnitureData, Nitro, NitroEvent, ObjectDataFactory, PetFigureData, PetType, RoomAdsUpdateComposer, RoomControllerLevel, RoomModerationSettings, RoomObjectCategory, RoomObjectOperationType, RoomObjectType, RoomObjectVariable, RoomSessionPetInfoUpdateEvent, RoomSessionUserBadgesEvent, RoomTradingLevelEnum, RoomUnitDropHandItemComposer, RoomUnitGiveHandItemComposer, RoomUserData, RoomWidgetEnum, RoomWidgetEnumItemExtradataParameter, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
+import { IFurnitureData, Nitro, NitroEvent, ObjectDataFactory, PetFigureData, PetType, RoomControllerLevel, RoomModerationSettings, RoomObjectCategory, RoomObjectOperationType, RoomObjectType, RoomObjectVariable, RoomSessionPetInfoUpdateEvent, RoomSessionUserBadgesEvent, RoomTradingLevelEnum, RoomUnitDropHandItemComposer, RoomUnitGiveHandItemComposer, RoomUserData, RoomWidgetEnum, RoomWidgetEnumItemExtradataParameter, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
@@ -225,8 +225,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                         }
                     }
 
-                    this._container.roomEngine.processRoomObjectWallOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
-                    this._Str_23922(_local_19);
+                    this._container.roomEngine.modifyRoomObjectDataWithMap(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
                     _local_19.clear();
                 }
                 break;
@@ -786,18 +785,6 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         if(moderationSettings) flag = _arg_2(event, moderationSettings);
 
         return (flag && (event.flatControl < RoomControllerLevel.ROOM_OWNER));
-    }
-
-    // public  _Str_23922(k:Map):void
-    public _Str_23922(k:Map<string,string>):void
-    {
-        if(!this._widget) return;
-
-        if(this._container.sessionDataManager.hasSecurity(5))
-        {
-            // TODO: Map should be `k`
-            this._container.connection.send(new RoomAdsUpdateComposer(this._widget.furniData.id, k));
-        }
     }
 
     private onRoomSessionPetInfoUpdateEvent(event: RoomSessionPetInfoUpdateEvent): void

@@ -229,7 +229,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         canvas.ontouchcancel    = this.onTouchEvent.bind(this);
 
         window.onresize     = this.onWindowResizeEvent.bind(this);
-        window.onmousewheel = this.onWindowMouseWheelEvent.bind(this);
+        window.onwheel      = this.onWindowMouseWheelEvent.bind(this);
 
         this.roomCanvasReference.nativeElement.appendChild(canvas);
     }
@@ -251,7 +251,7 @@ export class RoomComponent implements OnDestroy, IRoomWidgetManager, IRoomWidget
         canvas.ontouchcancel    = null;
 
         window.onresize     = null;
-        window.onmousewheel = null;
+        window.onwheel      = null;
 
         if(canvas.parentElement) canvas.parentElement.removeChild(canvas);
     }

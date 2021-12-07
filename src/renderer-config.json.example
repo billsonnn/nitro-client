@@ -20,7 +20,7 @@
     "furni.asset.icon.url": "${hof.furni.url}/icons/%libname%%param%_icon.png",
     "furni.extras.url": "${images.url}/furniextras/%image%.png",
     "pet.asset.url": "${asset.url}/bundled/pet/%libname%.nitro",
-    "room.asset.url": "${asset.url}/room/%libname%/%libname%.json",
+    "generic.asset.url": "${asset.url}/bundled/generic/%libname%.nitro",
     "badge.asset.url": "${image.library.url}album1584/%badgename%.gif",
     "badge.asset.group.url": "${asset.url}/group-badge/%badgedata%",
     "furni.rotation.bounce.steps": 8,

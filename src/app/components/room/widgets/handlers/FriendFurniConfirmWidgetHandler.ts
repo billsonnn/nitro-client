@@ -1,4 +1,4 @@
-import { IMessageEvent, LoveLockFurniFinishedEvent, LoveLockFurniFriendConfirmedEvent, LoveLockFurniStartEvent, LoveLockStartConfirmComposer, NitroEvent } from '@nitrots/nitro-renderer';
+import { FriendFurniConfirmLockMessageComposer, IMessageEvent, LoveLockFurniFinishedEvent, LoveLockFurniFriendConfirmedEvent, LoveLockFurniStartEvent, NitroEvent } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FriendsFurniConfirmWidget } from '../furniture/friendfurni/confirm.component';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
@@ -47,7 +47,7 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
         {
             return;
         }
-        this._container.connection.send(new LoveLockStartConfirmComposer(furniId, confirmed));
+        this._container.connection.send(new FriendFurniConfirmLockMessageComposer(furniId, confirmed));
     }
 
     public update(): void
@@ -109,7 +109,7 @@ export class FriendFurniConfirmWidgetHandler implements IRoomWidgetHandler
 
     public sendStart(furniId: number, start: boolean): void
     {
-        this._container.connection.send(new LoveLockStartConfirmComposer(furniId, start));
+        this._container.connection.send(new FriendFurniConfirmLockMessageComposer(furniId, start));
     }
 
     public get messageTypes(): string[]

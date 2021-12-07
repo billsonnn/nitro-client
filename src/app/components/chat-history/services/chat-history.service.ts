@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { AdvancedMap, IMessageEvent, Nitro, RoomInfoEvent } from '@nitrots/nitro-renderer';
+import { AdvancedMap, GetGuestRoomResultEvent, IMessageEvent, Nitro } from '@nitrots/nitro-renderer';
 import { ChatHistoryItem } from '../common/ChatHistoryItem';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class ChatHistoryService implements OnDestroy
             this.unregisterMessages();
 
             this._messages = [
-                new RoomInfoEvent(this.onRoomInfoEvent.bind(this))
+                new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -54,7 +54,7 @@ export class ChatHistoryService implements OnDestroy
         });
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 

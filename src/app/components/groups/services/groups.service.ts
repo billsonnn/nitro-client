@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CatalogPurchaseEvent, GroupAdminGiveComposer, GroupAdminTakeComposer, GroupBadgePartsComposer, GroupBadgePartsEvent, GroupBuyComposer, GroupBuyDataComposer, GroupBuyDataEvent, GroupConfirmMemberRemoveEvent, GroupConfirmRemoveMemberComposer, GroupDeleteComposer, GroupInformationComposer, GroupInformationEvent, GroupJoinComposer, GroupMembersComposer, GroupMembersEvent, GroupMembershipAcceptComposer, GroupMembershipDeclineComposer, GroupSaveBadgeComposer, GroupSaveColorsComposer, GroupSaveInformationComposer, GroupSavePreferencesComposer, GroupSettingsComposer, GroupSettingsEvent, ILinkEventTracker, IMessageEvent, Nitro, RoomInfoEvent, RoomSessionEvent, UserProfileComposer } from '@nitrots/nitro-renderer';
+import { CatalogPurchaseEvent, GetGuestRoomResultEvent, GroupAdminGiveComposer, GroupAdminTakeComposer, GroupBadgePartsComposer, GroupBadgePartsEvent, GroupBuyComposer, GroupBuyDataComposer, GroupBuyDataEvent, GroupConfirmMemberRemoveEvent, GroupConfirmRemoveMemberComposer, GroupDeleteComposer, GroupInformationComposer, GroupInformationEvent, GroupJoinComposer, GroupMembersComposer, GroupMembersEvent, GroupMembershipAcceptComposer, GroupMembershipDeclineComposer, GroupSaveBadgeComposer, GroupSaveColorsComposer, GroupSaveInformationComposer, GroupSavePreferencesComposer, GroupSettingsComposer, GroupSettingsEvent, ILinkEventTracker, IMessageEvent, Nitro, RoomSessionEvent, UserProfileComposer } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import GroupSettings from '../common/GroupSettings';
 import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
@@ -66,7 +66,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
             Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             this._messages = [
-                new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)),
                 new GroupInformationEvent(this.onGroupInformationEvent.bind(this)),
                 new GroupMembersEvent(this.onGroupMembersEvent.bind(this)),
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
@@ -110,7 +110,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         }
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 

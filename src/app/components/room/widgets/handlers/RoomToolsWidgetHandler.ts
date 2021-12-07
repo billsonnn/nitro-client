@@ -1,4 +1,4 @@
-import { IMessageEvent, INitroCommunicationManager, Nitro, NitroEvent, RoomInfoEvent, RoomLikeRoomComposer, RoomWidgetEnum, RoomZoomEvent } from '@nitrots/nitro-renderer';
+import { GetGuestRoomResultEvent, IMessageEvent, INitroCommunicationManager, Nitro, NitroEvent, RoomLikeRoomComposer, RoomWidgetEnum, RoomZoomEvent } from '@nitrots/nitro-renderer';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
@@ -24,7 +24,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._messages = [];
         this._disposed = false;
 
-        this.onRoomInfoEvent = this.onRoomInfoEvent.bind(this);
+        this.onGetGuestRoomResultEvent = this.onGetGuestRoomResultEvent.bind(this);
     }
 
     public dispose(): void
@@ -66,7 +66,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(!event || this._disposed) return;
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 
@@ -128,7 +128,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent) ];
+            this._messages = [ new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent) ];
 
             for(const message of this._messages)
             {

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { LoveLockStartConfirmComposer, Nitro } from '@nitrots/nitro-renderer';
+import { FriendFurniConfirmLockMessageComposer, Nitro } from '@nitrots/nitro-renderer';
 import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 
 @Component({
@@ -50,7 +50,7 @@ export class FriendsFurniConfirmWidget extends ConversionTrackingWidget
 
     private sendStart(furniId: number, start: boolean): void
     {
-        Nitro.instance.communication.connection.send(new LoveLockStartConfirmComposer(furniId, start));
+        Nitro.instance.communication.connection.send(new FriendFurniConfirmLockMessageComposer(furniId, start));
     }
 
     public hide(): void
