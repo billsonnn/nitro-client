@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { CompositeRectTileLayer, Nitro, PixiApplicationProxy, RoomBlockedTilesComposer, RoomDoorSettingsComposer, RoomPreviewer } from '@nitrots/nitro-renderer';
+import { GetOccupiedTilesMessageComposer, GetRoomEntryDataMessageComposer, Nitro, NitroTilemap, PixiApplicationProxy, RoomPreviewer } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../../core/settings/service';
 import { SessionService } from '../../../../../security/services/session.service';
 import { FloorPlanService } from '../../services/floorplan.service';
@@ -27,7 +27,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
     private _app: PixiApplicationProxy;
     private _roomPreviewer: RoomPreviewer;
 
-    private _tileMap: CompositeRectTileLayer;
+    private _tileMap: NitroTilemap;
 
     private _previewerEventsSet: boolean = false;
 
@@ -56,8 +56,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
         if(next)
         {
-            Nitro.instance.communication.connection.send(new RoomDoorSettingsComposer());
-            Nitro.instance.communication.connection.send(new RoomBlockedTilesComposer());
+            Nitro.instance.communication.connection.send(new GetRoomEntryDataMessageComposer());
+            Nitro.instance.communication.connection.send(new GetOccupiedTilesMessageComposer());
         }
         else
         {
@@ -142,9 +142,8 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
 
         this.floorPlanService.floorMapSettings.heightMap = this.floorPlanService.readTileMapString(mapString);
 
-        const tileSize = this.floorPlanService.tileSize;
-        const width = tileSize * this.floorPlanService.floorMapSettings.heightMap.length + 20;
-        const height = (tileSize * this.floorPlanService.floorMapSettings.heightMap.length) / 2 + 100;
+        const width = FloorPlanService.TILE_SIZE * this.floorPlanService.floorMapSettings.heightMap.length + 20;
+        const height = (FloorPlanService.TILE_SIZE * this.floorPlanService.floorMapSettings.heightMap.length) / 2 + 100;
 
         this.floorPlanService.originalMapSettings = this.floorPlanService.floorMapSettings;
 
@@ -173,7 +172,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             });
 
 
-            this._tileMap = new CompositeRectTileLayer();
+            this._tileMap = new NitroTilemap([]);
             this._tileMap.interactive = true;
 
             this._ngZone.runOutsideAngular(() => this.floorPlanService.detectPoints());
@@ -454,7 +453,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
         return this.floorPlanService.changesMade;
     }
 
-    public get tileMap(): CompositeRectTileLayer
+    public get tileMap(): NitroTilemap
     {
         return this._tileMap;
     }
