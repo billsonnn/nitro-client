@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { CallForHelpCategoryData, IMessageEvent, ModeratorInitData, ModtoolCallForHelpTopicsEvent, ModtoolMainEvent, ModtoolReceivedRoomsUserEvent, ModtoolRequestRoomChatlogComposer, ModtoolRequestRoomInfoComposer, ModtoolRoomChatlogEvent, ModtoolRoomChatlogLine, ModtoolRoomInfoEvent, ModtoolRoomInfoParser, ModtoolRoomVisitedData, ModtoolUserChatlogEvent, ModtoolUserChatlogParserVisit, Nitro, RoomInfoOwnerEvent, RoomInfoOwnerParser, UserInfoEvent } from '@nitrots/nitro-renderer';
+import { CallForHelpCategoryData, CfhTopicsInitEvent, GetRoomChatlogMessageComposer, IMessageEvent, ModeratorInitData, ModeratorRoomInfoEvent, ModtoolMainEvent, ModtoolRequestRoomInfoComposer, ModtoolRoomChatlogLine, ModtoolRoomInfoParser, ModtoolRoomVisitedData, ModtoolUserChatlogEvent, ModtoolUserChatlogParserVisit, Nitro, RoomChatlogEvent, RoomInfoOwnerEvent, RoomInfoOwnerParser, RoomVisitsEvent, UserInfoEvent } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import { ModToolMainComponent } from '../components/main/main.component';
 import { UserToolUser } from '../components/user/user-tool/user-tool-user';
@@ -51,13 +51,13 @@ export class ModToolService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
-            new ModtoolRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+            new ModeratorRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
             new UserInfoEvent(this.onUserInfoEvent.bind(this)),
             new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
-            new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
-            new ModtoolCallForHelpTopicsEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
+            new RoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
+            new CfhTopicsInitEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
             new ModtoolMainEvent(this.onModtoolsMainEvent.bind(this)),
-            new ModtoolReceivedRoomsUserEvent(this.onRoomsReceivedForUserEvent.bind(this)),
+            new RoomVisitsEvent(this.onRoomsReceivedForUserEvent.bind(this)),
             new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
         ];
 
@@ -104,7 +104,7 @@ export class ModToolService implements OnDestroy
         this._currentRoomInfo = parser;
     }
 
-    private onRoomsReceivedForUserEvent(event: ModtoolReceivedRoomsUserEvent): void
+    private onRoomsReceivedForUserEvent(event: RoomVisitsEvent): void
     {
         if(!event) return;
 
@@ -115,7 +115,7 @@ export class ModToolService implements OnDestroy
         this._ngZone.run(() => this._userRoomVisitedData = parser.data);
     }
 
-    private onModToolsCFHCategoriesEvent(event: ModtoolCallForHelpTopicsEvent): void
+    private onModToolsCFHCategoriesEvent(event: CfhTopicsInitEvent): void
     {
         if(!event) return;
 
@@ -126,7 +126,7 @@ export class ModToolService implements OnDestroy
         this._callForHelpCategories = parser.callForHelpCategories;
     }
 
-    private onRoomInfoEvent(event: ModtoolRoomInfoEvent): void
+    private onRoomInfoEvent(event: ModeratorRoomInfoEvent): void
     {
         if(!Nitro.instance.sessionDataManager.isModerator) return;
 
@@ -167,7 +167,7 @@ export class ModToolService implements OnDestroy
         });
     }
 
-    private onModtoolRoomChatlogEvent(event: ModtoolRoomChatlogEvent): void
+    private onModtoolRoomChatlogEvent(event: RoomChatlogEvent): void
     {
         if(!event) return;
 
@@ -194,7 +194,7 @@ export class ModToolService implements OnDestroy
     {
         this._modToolRoomInfo = null;
         Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(this._currentRoomInfo.roomId));
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(this._currentRoomInfo.roomId));
+        Nitro.instance.communication.connection.send(new GetRoomChatlogMessageComposer(this._currentRoomInfo.roomId));
         this.showRoomChatLogs = true;
     }
 

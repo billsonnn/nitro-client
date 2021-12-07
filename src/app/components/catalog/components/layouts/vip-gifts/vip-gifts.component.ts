@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CatalogClubOfferData, CatalogPageOfferData, CatalogSelectClubGiftComposer, Nitro, Vector3d } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData, ClubOfferData, Nitro, SelectClubGiftComposer, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 
 
@@ -11,8 +11,8 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
     public static CODE: string = 'club_gifts';
     public showPopup: boolean = false;
 
-    public vipOffers: CatalogClubOfferData[] = [];
-    private _currentSelectedVipOffer: CatalogPageOfferData = null;
+    public vipOffers: ClubOfferData[] = [];
+    private _currentSelectedVipOffer: CatalogPageMessageOfferData = null;
 
     public get visible(): boolean
     {
@@ -31,7 +31,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
         return test.isSelectable && this._catalogService.clubGiftsParser.giftsAvailable > 0;
     }
 
-    public get gifts(): CatalogPageOfferData[]
+    public get gifts(): CatalogPageMessageOfferData[]
     {
         if(!this.visible) return [];
 
@@ -43,7 +43,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
         return new Vector3d(90);
     }
 
-    public selectOffer(item :CatalogPageOfferData): void
+    public selectOffer(item :CatalogPageMessageOfferData): void
     {
         this._currentSelectedVipOffer = item;
         this.showPopup = true;
@@ -61,7 +61,7 @@ export class CatalogLayoutVipGiftsComponent extends CatalogLayout
 
     public confirmGift(): void
     {
-        Nitro.instance.communication.connection.send(new CatalogSelectClubGiftComposer(this._currentSelectedVipOffer.localizationId));
+        Nitro.instance.communication.connection.send(new SelectClubGiftComposer(this._currentSelectedVipOffer.localizationId));
         this._catalogService.clubGiftsParser.giftsAvailable--;
         this.showPopup = false;
     }

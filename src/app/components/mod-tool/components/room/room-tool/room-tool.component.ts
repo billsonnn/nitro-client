@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolChangeRoomSettingsComposer, ModtoolRequestRoomChatlogComposer, ModtoolRoomAlertComposer, ModtoolRoomInfoParser, Nitro } from '@nitrots/nitro-renderer';
+import { GetRoomChatlogMessageComposer, ModtoolChangeRoomSettingsComposer, ModtoolRoomAlertComposer, ModtoolRoomInfoParser, Nitro } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';
@@ -74,7 +74,7 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public openChatlog(): void
     {
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(this.room.id));
+        Nitro.instance.communication.connection.send(new GetRoomChatlogMessageComposer(this.room.id));
         this._modToolService.showRoomChatLogs = true;
     }
 

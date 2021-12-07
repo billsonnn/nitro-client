@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CatalogPurchaseEvent, GetGuestRoomResultEvent, GroupAdminGiveComposer, GroupAdminTakeComposer, GroupBadgePartsComposer, GroupBadgePartsEvent, GroupBuyComposer, GroupBuyDataComposer, GroupBuyDataEvent, GroupConfirmMemberRemoveEvent, GroupConfirmRemoveMemberComposer, GroupDeleteComposer, GroupInformationComposer, GroupInformationEvent, GroupJoinComposer, GroupMembersComposer, GroupMembersEvent, GroupMembershipAcceptComposer, GroupMembershipDeclineComposer, GroupSaveBadgeComposer, GroupSaveColorsComposer, GroupSaveInformationComposer, GroupSavePreferencesComposer, GroupSettingsComposer, GroupSettingsEvent, ILinkEventTracker, IMessageEvent, Nitro, RoomSessionEvent, UserProfileComposer } from '@nitrots/nitro-renderer';
+import { GetGuestRoomResultEvent, GroupAdminGiveComposer, GroupAdminTakeComposer, GroupBadgePartsComposer, GroupBadgePartsEvent, GroupBuyComposer, GroupBuyDataComposer, GroupBuyDataEvent, GroupConfirmMemberRemoveEvent, GroupConfirmRemoveMemberComposer, GroupDeleteComposer, GroupInformationComposer, GroupInformationEvent, GroupJoinComposer, GroupMembersComposer, GroupMembersEvent, GroupMembershipAcceptComposer, GroupMembershipDeclineComposer, GroupSaveBadgeComposer, GroupSaveColorsComposer, GroupSaveInformationComposer, GroupSavePreferencesComposer, GroupSettingsComposer, GroupSettingsEvent, ILinkEventTracker, IMessageEvent, Nitro, PurchaseOKMessageEvent, RoomSessionEvent, UserProfileComposer } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import GroupSettings from '../common/GroupSettings';
 import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
@@ -72,7 +72,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
                 new GroupBuyDataEvent(this.onGroupBuyDataEvent.bind(this)),
                 new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this)),
-                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this)),
+                new PurchaseOKMessageEvent(this.onCatalogPurchaseEvent.bind(this)),
                 new GroupSettingsEvent(this.onGroupSettingsEvent.bind(this))
             ];
 
@@ -249,7 +249,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         this._groupColorsB       = parser.colorsB;
     }
 
-    private onCatalogPurchaseEvent(event: CatalogPurchaseEvent): void
+    private onCatalogPurchaseEvent(event: PurchaseOKMessageEvent): void
     {
         if(!event) return;
 

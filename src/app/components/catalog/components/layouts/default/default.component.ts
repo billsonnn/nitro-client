@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CatalogPageOfferData } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 
@@ -10,7 +10,7 @@ export class CatalogLayoutDefaultComponent extends CatalogLayout
 {
     public static CODE: string = 'default_3x3';
 
-    public selectOffer(offer: CatalogPageOfferData): void
+    public selectOffer(offer: CatalogPageMessageOfferData): void
     {
         if(!offer) return;
 
@@ -25,7 +25,7 @@ export class CatalogLayoutDefaultComponent extends CatalogLayout
         (this._catalogService.component && this._catalogService.component.selectOffer(offer));
     }
 
-    public offerCount(offer: CatalogPageOfferData): number
+    public offerCount(offer: CatalogPageMessageOfferData): number
     {
         if(!this.hasMultipleProducts(offer))
         {

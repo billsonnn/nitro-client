@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent, Nitro, UserCreditsEvent, UserCurrencyComposer, UserCurrencyEvent, UserCurrencyUpdateEvent, UserSubscriptionEvent, UserSubscriptionParser } from '@nitrots/nitro-renderer';
+import { ActivityPointNotificationMessageEvent, IMessageEvent, Nitro, UserCreditsEvent, UserCurrencyComposer, UserCurrencyEvent, UserSubscriptionEvent, UserSubscriptionParser } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class PurseService implements OnDestroy
@@ -32,7 +32,7 @@ export class PurseService implements OnDestroy
             this._messages = [
                 new UserCreditsEvent(this.onUserCreditsEvent.bind(this)),
                 new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this)),
-                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this)),
+                new ActivityPointNotificationMessageEvent(this.onUserCurrencyUpdateEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this))
             ];
 
@@ -81,7 +81,7 @@ export class PurseService implements OnDestroy
         });
     }
 
-    private onUserCurrencyUpdateEvent(event: UserCurrencyUpdateEvent): void
+    private onUserCurrencyUpdateEvent(event: ActivityPointNotificationMessageEvent): void
     {
         if(!event) return;
 

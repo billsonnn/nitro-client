@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CatalogPageData, ICatalogPageData, IFurnitureData, IFurnitureDataListener, Nitro } from '@nitrots/nitro-renderer';
+import { IFurnitureData, IFurnitureDataListener, Nitro, NodeData } from '@nitrots/nitro-renderer';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ICatalogPageData } from '../../common/ICatalogPageData';
 import { CatalogService } from '../../services/catalog.service';
 import { SearchResultsPage } from '../layouts/search-results/SearchResultsPage';
 
@@ -93,7 +94,7 @@ export class CatalogNavigationComponent implements OnInit, OnDestroy, IFurniture
         return this._catalogService.activePage instanceof SearchResultsPage;
     }
 
-    public get catalogPage(): CatalogPageData
+    public get catalogPage(): NodeData
     {
         return ((this._catalogService.component && this._catalogService.component.activeTab) || null);
     }

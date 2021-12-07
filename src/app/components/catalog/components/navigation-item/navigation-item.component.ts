@@ -1,5 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { CatalogSearchData, ICatalogPageData, ICatalogPageParser, Nitro } from '@nitrots/nitro-renderer';
+import { Nitro } from '@nitrots/nitro-renderer';
+import { CatalogSearchData } from '../../common/CatalogSearchData';
+import { ICatalogPageData } from '../../common/ICatalogPageData';
+import { ICatalogPageParser } from '../../common/ICatalogPageParser';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({

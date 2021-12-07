@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdvancedMap, CatalogPageOfferData, CatalogProductOfferData, IGetImageListener, Nitro, NitroRenderTexture, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
+import { AdvancedMap, CatalogPageMessageOfferData, CatalogPageMessageProductData, IGetImageListener, Nitro, NitroRenderTexture, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 
 
@@ -12,12 +12,12 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
     public textPages: string[]                            = [];
 
-    private _allTrophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
-    public currentTrophyOffer: CatalogPageOfferData        = null;
+    private _allTrophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageMessageOfferData>>();
+    public currentTrophyOffer: CatalogPageMessageOfferData        = null;
 
     private _imageUrl: string                           = null;
 
-    private _currentTrophy: CatalogProductOfferData        = null;
+    private _currentTrophy: CatalogPageMessageProductData        = null;
     private _availableColorsForCurrentTrophy: string[] = null;
     private _currentTrophyIndex: number                       = 0;
     private readonly _orderOfColors = ['g','s','b'];
@@ -64,11 +64,11 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         if(firstOffer) this.selectOffer(firstOffer);
     }
 
-    private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageOfferData>): void
+    private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageMessageOfferData>): void
     {
         if(!availaleOffers) return;
 
-        let firstAvailableTrophyColor:CatalogPageOfferData = null;
+        let firstAvailableTrophyColor:CatalogPageMessageOfferData = null;
         const availableColorsForTrophy:string[] = [];
         this._orderOfColors.map((color) =>
         {
@@ -91,7 +91,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
     }
 
 
-    private selectTrophyColor(firstAvailableTrophyColor: CatalogPageOfferData)
+    private selectTrophyColor(firstAvailableTrophyColor: CatalogPageMessageOfferData)
     {
         if(!firstAvailableTrophyColor) return;
 

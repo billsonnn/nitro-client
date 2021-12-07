@@ -85,7 +85,7 @@ export class NotificationService implements OnDestroy
 
         if(!parser) return;
 
-        this._ngZone.run(() => this.alertWithLink(parser.message, parser.link));
+        this._ngZone.run(() => this.alertWithLink(parser.message, parser.url));
     }
 
     private onMOTDNotificationEvent(event: MOTDNotificationEvent): void
