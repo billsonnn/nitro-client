@@ -136,7 +136,7 @@ export class AchievementsService implements OnDestroy
                         {
                             if(this._selectedCategory !== category) achievement.unseen++;
                         }
-						
+
                         achievement.reset(updatedAchievement);
                     }
 
