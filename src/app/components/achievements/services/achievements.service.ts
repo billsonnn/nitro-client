@@ -132,12 +132,12 @@ export class AchievementsService implements OnDestroy
 
                     if(achievement.progress !== updatedAchievement.progress)
                     {
-                        achievement.reset(updatedAchievement);
-
-                        if(!this.isIgnoredAchievement(achievement))
+                        if(achievement.level !== updatedAchievement.level && !this.isIgnoredAchievement(achievement))
                         {
                             if(this._selectedCategory !== category) achievement.unseen++;
                         }
+						
+                        achievement.reset(updatedAchievement);
                     }
 
                     break;
