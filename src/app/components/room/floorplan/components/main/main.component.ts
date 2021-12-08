@@ -172,7 +172,7 @@ export class FloorplanMainComponent implements OnInit, OnChanges, OnDestroy
             });
 
 
-            this._tileMap = new NitroTilemap([]);
+            this._tileMap = new NitroTilemap(this.floorPlanService.tileTexture);
             this._tileMap.interactive = true;
 
             this._ngZone.runOutsideAngular(() => this.floorPlanService.detectPoints());

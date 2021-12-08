@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { FloorHeightMapEvent, GetOccupiedTilesMessageComposer, GetRoomEntryTileMessageComposer, IMessageEvent, Nitro, NitroPoint, NitroTilemap, PixiInteractionEventProxy, PixiLoaderProxy, POINT_STRUCT_SIZE, RoomControllerLevel, RoomEngineEvent, RoomEntryTileMessageEvent, RoomOccupiedTilesMessageEvent, RoomRightsEvent, RoomVisualizationSettingsEvent, UpdateFloorPropertiesMessageComposer } from '@nitrots/nitro-renderer';
+import { FloorHeightMapEvent, GetOccupiedTilesMessageComposer, GetRoomEntryTileMessageComposer, IMessageEvent, Nitro, NitroBaseTexture, NitroPoint, NitroTilemap, PixiInteractionEventProxy, PixiLoaderProxy, POINT_STRUCT_SIZE, RoomControllerLevel, RoomEngineEvent, RoomEntryTileMessageEvent, RoomOccupiedTilesMessageEvent, RoomRightsEvent, RoomVisualizationSettingsEvent, UpdateFloorPropertiesMessageComposer } from '@nitrots/nitro-renderer';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';
@@ -64,6 +64,7 @@ export class FloorPlanService implements OnDestroy
     private _doorSettingsReceived: boolean;
     private _blockedTilesMapReceived: boolean;
     private _RoomThicknessReceived: boolean;
+    private _tilesTexture: NitroBaseTexture;
 
     private _floorMapSettings: FloorMapSettings;
     private __originalFloorMapSettings: FloorMapSettings;
@@ -111,7 +112,10 @@ export class FloorPlanService implements OnDestroy
 
         this.loader = new PixiLoaderProxy();
         this.loader.add('atlas', 'assets/images/floorplaneditor/tiles.json');
-        this.loader.load();
+        this.loader.load((_, resources) =>
+        {
+            this._tilesTexture = resources['atlas'].spritesheet.baseTexture;
+        });
 
         this.preveiwerUpdate.pipe(
             debounceTime(500),
@@ -876,6 +880,11 @@ export class FloorPlanService implements OnDestroy
     public set showImportExport(show: boolean)
     {
         this._showImportExport = show;
+    }
+
+    public get tileTexture(): NitroBaseTexture
+    {
+        return this._tilesTexture;
     }
 }
 
