@@ -11,36 +11,36 @@ export class NavigatorRoomSettingsTabRightsComponent
     public roomSettings: RoomSettings;
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onGiveRights: EventEmitter<any> = new EventEmitter();
+    public onGiveRights: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onTakeRights: EventEmitter<any> = new EventEmitter();
+    public onTakeRights: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onOpenProfile: EventEmitter<any> = new EventEmitter();
+    public onOpenProfile: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}
 
-    save(): void
+    public save(): void
     {
         this.onSave.emit(this.roomSettings);
     }
 
-    giveRights(userId: number): void
+    public giveRights(userId: number): void
     {
         this.onGiveRights.emit(userId);
     }
 
-    takeRights(userId: number): void
+    public takeRights(userId: number): void
     {
         this.onTakeRights.emit(userId);
     }
 
-    openProfile(userId: number): void
+    public openProfile(userId: number): void
     {
         this.onOpenProfile.emit(userId);
     }

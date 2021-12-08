@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CatalogPageOfferData, Nitro } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogLayoutDefaultComponent } from '../default/default.component';
 
@@ -11,7 +11,7 @@ export class CatalogLayoutSpacesNewComponent extends CatalogLayoutDefaultCompone
     public static CODE: string = 'spaces_new';
 
     private _groupNames: string[] = [ 'wallpaper', 'floor', 'landscape' ];
-    private _groups: CatalogPageOfferData[][] = [];
+    private _groups: CatalogPageMessageOfferData[][] = [];
     private _activeGroupIndex: number = -1;
 
     public ngOnInit(): void
@@ -94,7 +94,7 @@ export class CatalogLayoutSpacesNewComponent extends CatalogLayoutDefaultCompone
         this.selectOffer(group[0]);
     }
 
-    public offerName(offer: CatalogPageOfferData): string
+    public offerName(offer: CatalogPageMessageOfferData): string
     {
         let key = '';
 
@@ -118,7 +118,7 @@ export class CatalogLayoutSpacesNewComponent extends CatalogLayoutDefaultCompone
         return Nitro.instance.getLocalization(key);
     }
 
-    public offerImage(offer: CatalogPageOfferData): string
+    public offerImage(offer: CatalogPageMessageOfferData): string
     {
         if(!offer) return '';
 
@@ -157,7 +157,7 @@ export class CatalogLayoutSpacesNewComponent extends CatalogLayoutDefaultCompone
         return ((assetUrl + '/' + iconName) + '.png');
     }
 
-    public get groups(): CatalogPageOfferData[][]
+    public get groups(): CatalogPageMessageOfferData[][]
     {
         return this._groups;
     }

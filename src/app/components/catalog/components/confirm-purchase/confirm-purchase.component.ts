@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageOfferData, CatalogPageParser, Nitro, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData, CatalogPageMessageParser, Nitro, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
@@ -9,13 +9,13 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogConfirmPurchaseComponent implements OnChanges
 {
     @Input()
-    public page: CatalogPageParser = null;
+    public page: CatalogPageMessageParser = null;
 
     @Input()
-    public offer: CatalogPageOfferData = null;
+    public offer: CatalogPageMessageOfferData = null;
 
     @Input()
-    public giftOffer: CatalogPageOfferData = null;
+    public giftOffer: CatalogPageMessageOfferData = null;
 
     @Input()
     public quantity: number = 1;

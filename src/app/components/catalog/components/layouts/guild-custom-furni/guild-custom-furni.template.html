@@ -3,7 +3,7 @@
         <img *ngIf="getImage(1)" [src]="getImage(1)" image-placeholder />
     </div>
     <div *ngIf="activeOffer" class="position-relative mb-2">
-        <nitro-badge class="position-absolute" style="right: 10px; z-index: 1;" [badge]="selectedGroup.badge" [isGroup]="true"></nitro-badge>
+        <div badge-image class="position-absolute" style="right: 10px; z-index: 1;" [badge]="selectedGroup.badge" [isGroup]="true" [asBackground]="true"></div>
         <div class="position-absolute bg-secondary rounded text-center px-2" style="z-index:1;">{{ offerName(activeOffer) }}</div>
         <div class="room-preview" nitro-room-preview-component [roomPreviewer]="roomPreviewer" [width]="364" [height]="182"></div>
     </div>

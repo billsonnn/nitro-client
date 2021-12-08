@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { CatalogClubOfferData, Nitro } from '@nitrots/nitro-renderer';
+import { ClubOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 @Component({
     selector: 'nitro-catalog-confirm-vip-subscription-component',
@@ -8,7 +8,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogConfirmVipSubscriptionComponent
 {
     @Input()
-    public subscription: CatalogClubOfferData = null;
+    public subscription: ClubOfferData = null;
 
 
     constructor(

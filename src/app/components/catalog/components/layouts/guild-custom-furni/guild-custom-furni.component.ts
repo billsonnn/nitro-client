@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { CatalogGroupData, CatalogPageOfferData, CatalogProductOfferData, IFurnitureData, Nitro, StringDataType } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData, CatalogPageMessageProductData, HabboGroupEntryData, IFurnitureData, Nitro, StringDataType } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { ProductTypeEnum } from '../../../enums/ProductTypeEnum';
 import { CatalogService } from '../../../services/catalog.service';
@@ -12,11 +12,11 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
 {
     public static CODE: string = 'guild_custom_furni';
 
-    private _groups: CatalogGroupData[] = [];
+    private _groups: HabboGroupEntryData[] = [];
     private _selectedGroupId: string = null;
-    private _selectedGroup: CatalogGroupData = null;
+    private _selectedGroup: HabboGroupEntryData = null;
 
-    private _lastOfferSelected: CatalogPageOfferData = null;
+    private _lastOfferSelected: CatalogPageMessageOfferData = null;
 
     constructor(
         protected _catalogService: CatalogService,
@@ -37,7 +37,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         this._catalogService.component.previewStuffData = null;
     }
 
-    public selectOffer(offer: CatalogPageOfferData): void
+    public selectOffer(offer: CatalogPageMessageOfferData): void
     {
         if(!offer)
         {
@@ -50,7 +50,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         const productData = [];
         productData.push('0');
         productData.push(this.selectedGroupId);
-        productData.push(this._selectedGroup.badge);
+        productData.push(this._selectedGroup.badgeCode);
         productData.push(this.selectedGroupColorA);
         productData.push(this.selectedGroupColorB);
 
@@ -64,17 +64,17 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         }
     }
 
-    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
+    public getFirstProduct(offer: CatalogPageMessageOfferData): CatalogPageMessageProductData
     {
         return ((offer && offer.products[0]) || null);
     }
 
-    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
+    public hasMultipleProducts(offer: CatalogPageMessageOfferData): boolean
     {
         return (offer.products.length > 1);
     }
 
-    public offerName(offer: CatalogPageOfferData): string
+    public offerName(offer: CatalogPageMessageOfferData): string
     {
         let key = '';
 
@@ -98,14 +98,14 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         return Nitro.instance.getLocalization(key);
     }
 
-    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
+    public getProductFurniData(product: CatalogPageMessageProductData): IFurnitureData
     {
         if(!product) return null;
 
         return this._catalogService.getFurnitureDataForProductOffer(product);
     }
 
-    public offerImage(offer: CatalogPageOfferData): string
+    public offerImage(offer: CatalogPageMessageOfferData): string
     {
         if(!offer) return '';
 
@@ -128,7 +128,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         return '';
     }
 
-    public offerCount(offer: CatalogPageOfferData): number
+    public offerCount(offer: CatalogPageMessageOfferData): number
     {
         if(!this.hasMultipleProducts(offer))
         {
@@ -140,12 +140,12 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         return 1;
     }
 
-    public get groups(): CatalogGroupData[]
+    public get groups(): HabboGroupEntryData[]
     {
         return this._groups;
     }
 
-    public set groups(groups: CatalogGroupData[])
+    public set groups(groups: HabboGroupEntryData[])
     {
         this._groups = groups;
 
@@ -153,12 +153,12 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
         {
             this._ngZone.run(() =>
             {
-                this.selectedGroupId = groups[0].id.toString();
+                this.selectedGroupId = groups[0].groupId.toString();
             });
         }
     }
 
-    public get selectedGroup(): CatalogGroupData
+    public get selectedGroup(): HabboGroupEntryData
     {
         return this._selectedGroup;
     }
@@ -171,7 +171,7 @@ export class CatalogLayoutGuildCustomFurniComponent extends CatalogLayout implem
     public set selectedGroupId(groupId: string)
     {
         this._selectedGroupId = groupId;
-        this._selectedGroup = this.groups.filter((group) => group.id.toString() === groupId)[0];
+        this._selectedGroup = this.groups.filter((group) => group.groupId.toString() === groupId)[0];
         this.selectOffer(null);
         this.selectOffer(this._lastOfferSelected);
     }

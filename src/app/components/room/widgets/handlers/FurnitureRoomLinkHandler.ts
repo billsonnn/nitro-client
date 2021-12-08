@@ -1,4 +1,4 @@
-﻿import { IMessageEvent, Nitro, NitroEvent, RoomEngineTriggerWidgetEvent, RoomInfoComposer, RoomInfoEvent, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+﻿import { GetGuestRoomResultEvent, IMessageEvent, Nitro, NitroEvent, RoomEngineTriggerWidgetEvent, RoomInfoComposer, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { NotificationBroadcastMessageComponent } from '../../../notification/components/broadcast-message/broadcast-message.component';
 import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
@@ -71,7 +71,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
         }
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 
@@ -156,7 +156,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
+            this._messages = [ new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)) ];
 
             for(const message of this._messages) container.connection.addMessageEvent(message);
         }

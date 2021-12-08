@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { CompositeRectTileLayer, IMessageEvent, Nitro, NitroPoint, PixiInteractionEventProxy, PixiLoaderProxy, POINT_STRUCT_SIZE_TWO, RectTileLayer, RoomBlockedTilesComposer, RoomBlockedTilesEvent, RoomControllerLevel, RoomDoorEvent, RoomDoorSettingsComposer, RoomEngineEvent, RoomModelEvent, RoomModelSaveComposer, RoomRightsEvent, RoomThicknessEvent } from '@nitrots/nitro-renderer';
+import { FloorHeightMapEvent, GetOccupiedTilesMessageComposer, GetRoomEntryTileMessageComposer, IMessageEvent, Nitro, NitroBaseTexture, NitroPoint, NitroTilemap, PixiInteractionEventProxy, PixiLoaderProxy, POINT_STRUCT_SIZE, RoomControllerLevel, RoomEngineEvent, RoomEntryTileMessageEvent, RoomOccupiedTilesMessageEvent, RoomRightsEvent, RoomVisualizationSettingsEvent, UpdateFloorPropertiesMessageComposer } from '@nitrots/nitro-renderer';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SettingsService } from '../../../../core/settings/service';
@@ -7,13 +7,11 @@ import FloorMapSettings from '../common/FloorMapSettings';
 import FloorMapTile from '../common/FloorMapTile';
 import { FloorplanMainComponent } from '../components/main/main.component';
 
-
-
 @Injectable()
 export class FloorPlanService implements OnDestroy
 {
     private _maxFloorLength: number = 64;
-    private _tileSize: number = 32;
+    public static readonly TILE_SIZE: number = 32;
     private _colorMap: object = {
         'x': '0x101010',
         '0': '0x0065ff',
@@ -66,6 +64,7 @@ export class FloorPlanService implements OnDestroy
     private _doorSettingsReceived: boolean;
     private _blockedTilesMapReceived: boolean;
     private _RoomThicknessReceived: boolean;
+    private _tilesTexture: NitroBaseTexture;
 
     private _floorMapSettings: FloorMapSettings;
     private __originalFloorMapSettings: FloorMapSettings;
@@ -113,7 +112,10 @@ export class FloorPlanService implements OnDestroy
 
         this.loader = new PixiLoaderProxy();
         this.loader.add('atlas', 'assets/images/floorplaneditor/tiles.json');
-        this.loader.load();
+        this.loader.load((_, resources) =>
+        {
+            this._tilesTexture = resources['atlas'].spritesheet.baseTexture;
+        });
 
         this.preveiwerUpdate.pipe(
             debounceTime(500),
@@ -140,10 +142,10 @@ export class FloorPlanService implements OnDestroy
             // Nitro.instance.roomEngine.events.addEventListener(RoomEngineEvent.DISPOSED, this.onRoomEngineDisposedEvent);
 
             this._messages = [
-                new RoomModelEvent(this.onRoomModelEvent.bind(this)),
-                new RoomDoorEvent(this.onRoomDoorEvent.bind(this)),
-                new RoomBlockedTilesEvent(this.onRoomBlockedTilesEvent.bind(this)),
-                new RoomThicknessEvent(this.onRoomThicknessEvent.bind(this)),
+                new FloorHeightMapEvent(this.onRoomModelEvent.bind(this)),
+                new RoomEntryTileMessageEvent(this.onRoomDoorEvent.bind(this)),
+                new RoomOccupiedTilesMessageEvent(this.onRoomBlockedTilesEvent.bind(this)),
+                new RoomVisualizationSettingsEvent(this.onRoomThicknessEvent.bind(this)),
                 new RoomRightsEvent(this.onRoomRightsEvent.bind(this))
             ];
 
@@ -182,7 +184,7 @@ export class FloorPlanService implements OnDestroy
         });
     }
 
-    private onRoomModelEvent(event: RoomModelEvent): void
+    private onRoomModelEvent(event: FloorHeightMapEvent): void
     {
         if(!event) return;
 
@@ -192,12 +194,12 @@ export class FloorPlanService implements OnDestroy
 
         this._model = parser.model;
         this._wallHeight = parser.wallHeight + 1;
-        Nitro.instance.communication.connection.send(new RoomDoorSettingsComposer());
-        Nitro.instance.communication.connection.send(new RoomBlockedTilesComposer());
+        Nitro.instance.communication.connection.send(new GetRoomEntryTileMessageComposer());
+        Nitro.instance.communication.connection.send(new GetOccupiedTilesMessageComposer());
         this.tryEmit();
     }
 
-    private onRoomDoorEvent(event: RoomDoorEvent): void
+    private onRoomDoorEvent(event: RoomEntryTileMessageEvent): void
     {
         if(!event) return;
 
@@ -213,7 +215,7 @@ export class FloorPlanService implements OnDestroy
         this.tryEmit();
     }
 
-    private onRoomBlockedTilesEvent(event: RoomBlockedTilesEvent): void
+    private onRoomBlockedTilesEvent(event: RoomOccupiedTilesMessageEvent): void
     {
         if(!event) return;
 
@@ -227,7 +229,7 @@ export class FloorPlanService implements OnDestroy
         this.tryEmit();
     }
 
-    private onRoomThicknessEvent(event: RoomThicknessEvent): void
+    private onRoomThicknessEvent(event: RoomVisualizationSettingsEvent): void
     {
         if(!event) return;
 
@@ -275,7 +277,7 @@ export class FloorPlanService implements OnDestroy
 
     public save(settings: FloorMapSettings)
     {
-        Nitro.instance.communication.connection.send(new RoomModelSaveComposer(
+        Nitro.instance.communication.connection.send(new UpdateFloorPropertiesMessageComposer(
             settings.heightMapString,
             settings.doorX,
             settings.doorY,
@@ -494,12 +496,12 @@ export class FloorPlanService implements OnDestroy
                     amountOfTilesUsed++;
                 }
 
-                const positionX = x * this._tileSize / 2 - y * this._tileSize / 2;
-                const positionY = x * this._tileSize / 4 + y * this._tileSize / 4;
+                const positionX = x * FloorPlanService.TILE_SIZE / 2 - y * FloorPlanService.TILE_SIZE / 2;
+                const positionY = x * FloorPlanService.TILE_SIZE / 4 + y * FloorPlanService.TILE_SIZE / 4;
 
                 this._ngZone.runOutsideAngular(() =>
                 {
-                    this.component.tileMap.addFrame(tileAsset + '.png', positionX+ 1024, positionY, null, null, null, null, 1, y, x);
+                    this.component.tileMap.tile(tileAsset + '.png', positionX+ 1024, positionY);
                 });
             }
         }
@@ -676,11 +678,6 @@ export class FloorPlanService implements OnDestroy
         return this._coloredTilesCount;
     }
 
-    public get tileSize(): number
-    {
-        return this._tileSize;
-    }
-
     public get currentAction(): string
     {
         return this._currentAction;
@@ -802,12 +799,16 @@ export class FloorPlanService implements OnDestroy
         });
     }
 
-    private tileHitDettection(tileMap: CompositeRectTileLayer, tempPoint: NitroPoint, setHolding: boolean, isClick: boolean = false): boolean
+    private tileHitDettection(tileMap: NitroTilemap, tempPoint: NitroPoint, setHolding: boolean, isClick: boolean = false): boolean
     {
-        const buffer = (tileMap.children[0] as RectTileLayer).pointsBuf;
-        const bufSize = POINT_STRUCT_SIZE_TWO;
+        // @ts-ignore
+        const buffer = tileMap.pointsBuf;
+        const bufSize = POINT_STRUCT_SIZE;
 
         const len = buffer.length;
+
+        const width = FloorPlanService.TILE_SIZE;
+        const height = FloorPlanService.TILE_SIZE / 2;
 
         if(setHolding)
         {
@@ -819,10 +820,6 @@ export class FloorPlanService implements OnDestroy
             const bufIndex = j + bufSize;
             const data = buffer.slice(j, bufIndex);
 
-            const width = data[4];
-            const height = data[5];
-
-
             const mousePositionX = Math.floor(tempPoint.x);
             const mousePositionY = Math.floor(tempPoint.y);
 
@@ -833,16 +830,16 @@ export class FloorPlanService implements OnDestroy
             const centreX = tileStartX + (width / 2);
             const centreY = tileStartY + (height / 2);
 
-            const dx = Math.abs(mousePositionX - centreX - 2);
-            const dy = Math.abs(mousePositionY - centreY - 2);
+            const dx = Math.abs(mousePositionX - centreX);
+            const dy = Math.abs(mousePositionY - centreY);
 
             const solution = (dx / (width * 0.5) + dy / (height * 0.5) <= 1);
             if(solution)
             {
                 if(this._isHolding)
                 {
-                    const realY = data[13];
-                    const realX = data[14];
+
+                    const [realX, realY] = this.getTileFromScreenPosition(tileStartX, tileStartY);
 
                     if(isClick)
                     {
@@ -865,6 +862,16 @@ export class FloorPlanService implements OnDestroy
         return false;
     }
 
+    public getTileFromScreenPosition(x: number, y: number): [number, number]
+    {
+        const translatedX = x - 1024; // after centering translation
+
+        const realX = ((translatedX /(FloorPlanService.TILE_SIZE / 2))  + (y / (FloorPlanService.TILE_SIZE / 4))) / 2;
+        const realY = ((y /(FloorPlanService.TILE_SIZE / 4)) - (translatedX / (FloorPlanService.TILE_SIZE / 2))) / 2;
+
+        return [realX, realY];
+    }
+
     public get showImportExport(): boolean
     {
         return this._showImportExport;
@@ -873,6 +880,11 @@ export class FloorPlanService implements OnDestroy
     public set showImportExport(show: boolean)
     {
         this._showImportExport = show;
+    }
+
+    public get tileTexture(): NitroBaseTexture
+    {
+        return this._tilesTexture;
     }
 }
 

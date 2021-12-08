@@ -1,28 +1,28 @@
-<div class="text-center" style="margin: 5px;">
-  <input type="text" (keydown.enter)="searchAvatar()" [(ngModel)]="searchQuery">
-  <button style="display: inline-block; margin-left: 5px;" type="button" class="btn btn-success btn-sm" (click)="searchAvatar()">{{ ('generic.search') | translate }}</button>
+<div class="d-flex mb-2">
+  <input type="text" class="form-control form-control-sm flex-grow-1" (keydown.enter)="searchAvatar()" [(ngModel)]="searchQuery" />
+  <button type="button" class="btn btn-secondary btn-sm" (click)="searchAvatar()"><i class="fas fa-search"></i></button>
 </div>
 
-<button class="btn btn-primary w-100" type="button" (click)="friendsCollapsed = !friendsCollapsed" [attr.aria-expanded]="!friendsCollapsed" aria-controls="collapseFriends">
+<button class="btn btn-primary w-100 mb-1" type="button" (click)="friendsCollapsed = !friendsCollapsed" [attr.aria-expanded]="!friendsCollapsed" aria-controls="collapseFriends">
   {{ ('friendlist.search.friendscaption') | translate:'cnt': (friends ? friends.length.toString() : '0')}}
 </button>
 <div id="collapseFriends" [(ngbCollapse)]="friendsCollapsed">
   <div class="btn-group w-100 mb-1" *ngFor="let friend of friends">
-    <button type="button" class="btn btn-secondary w-100">{{ friend.avatarName }}</button>
-    <button type="button" class="btn btn-primary" (click)="openProfile(friend)"><i class="fas fa-id-card"></i></button>
-    <button type="button" class="btn btn-danger" (click)="removeFriend(friend)"><i class="fas fa-times"></i></button>
+    <button type="button" class="btn btn-secondary btn-sm w-100">{{ friend.avatarName }}</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="openProfile(friend)"><i class="fas fa-id-card"></i></button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="removeFriend(friend)"><i class="fas fa-times"></i></button>
   </div>
   <p *ngIf="(friends?.length === 0)"> {{ ('friendlist.search.nofriendsfound') | translate}}</p>
 </div>
 
-<button class="btn btn-primary w-100" type="button" (click)="othersCollapsed = !othersCollapsed" [attr.aria-expanded]="!othersCollapsed" aria-controls="collapseOthers">
+<button class="btn btn-primary w-100 mb-1" type="button" (click)="othersCollapsed = !othersCollapsed" [attr.aria-expanded]="!othersCollapsed" aria-controls="collapseOthers">
   {{ ('friendlist.search.otherscaption') | translate:'cnt': (others ? others.length.toString() : '0')}}
 </button>
 <div id="collapseOthers" [(ngbCollapse)]="othersCollapsed">
   <div class="btn-group w-100 mb-1" *ngFor="let other of others">
-    <button type="button" class="btn btn-secondary w-100">{{ other.avatarName }}</button>
-    <button type="button" class="btn btn-primary" (click)="openProfile(other)"><i class="fas fa-id-card"></i></button>
-    <button type="button" class="btn btn-success" (click)="sendFriendRequest(other)" [disabled]="!isFriendRequestAllowed(other.avatarId)"><i class="fas fa-plus"></i></button>
+    <button type="button" class="btn btn-secondary btn-sm w-100">{{ other.avatarName }}</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="openProfile(other)"><i class="fas fa-id-card"></i></button>
+    <button type="button" class="btn btn-success btn-sm" (click)="sendFriendRequest(other)" [disabled]="!isFriendRequestAllowed(other.avatarId)"><i class="fas fa-plus"></i></button>
   </div>
   <p *ngIf="(others?.length === 0)"> {{ ('friendlist.search.noothersfound') | translate}}</p>
 </div>

@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent, ModeratorUserInfoData, ModtoolRequestUserInfoComposer, ModtoolUserInfoEvent, Nitro } from '@nitrots/nitro-renderer';
+import { GetModeratorUserInfoMessageComposer, IMessageEvent, ModeratorUserInfoData, ModeratorUserInfoEvent, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class ModToolUserInfoService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
-            new ModtoolUserInfoEvent(this.onUserInfoEvent.bind(this)),
+            new ModeratorUserInfoEvent(this.onUserInfoEvent.bind(this)),
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -43,10 +43,10 @@ export class ModToolUserInfoService implements OnDestroy
 
     public load(userId: number): void
     {
-        Nitro.instance.communication.connection.send(new ModtoolRequestUserInfoComposer(userId));
+        Nitro.instance.communication.connection.send(new GetModeratorUserInfoMessageComposer(userId));
     }
 
-    private onUserInfoEvent(event: ModtoolUserInfoEvent): void
+    private onUserInfoEvent(event: ModeratorUserInfoEvent): void
     {
         if(!event) return;
 

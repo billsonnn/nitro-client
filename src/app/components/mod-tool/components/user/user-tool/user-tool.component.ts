@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModeratorUserInfoData, ModtoolRequestUserChatlogComposer, ModtoolRequestUserRoomsComposer, Nitro } from '@nitrots/nitro-renderer';
+import { GetRoomVisitsMessageComposer, GetUserChatlogMessageComposer, ModeratorUserInfoData, Nitro } from '@nitrots/nitro-renderer';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';
@@ -128,14 +128,14 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         {
             case 'roomchat':
                 this._modToolService.showSendUserChatlogs = true;
-                Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(this.user.id));
+                Nitro.instance.communication.connection.send(new GetUserChatlogMessageComposer(this.user.id));
                 break;
             case 'send_message':
                 this._modToolService.showSendUserMessage = true;
                 break;
             case 'room_visits':
                 this._modToolService.showVisitedRoomsForUser = true;
-                Nitro.instance.communication.connection.send(new ModtoolRequestUserRoomsComposer(this.user.id));
+                Nitro.instance.communication.connection.send(new GetRoomVisitsMessageComposer(this.user.id));
                 break;
             case 'mod_action':
                 this._modToolService.showModActionOnUser = true;

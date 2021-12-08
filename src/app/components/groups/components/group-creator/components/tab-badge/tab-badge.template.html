@@ -1,15 +1,13 @@
 <div class="mb-3">{{ ('group.edit.badge.badge') | translate }}</div>
 <div class="row">
     <div class="col-3">
-        <button class="btn btn-primary" style="width: 120px;height: 67px;">
-            <nitro-badge [badge]="groupSettings.currentBadgeCode" [isGroup]="true"></nitro-badge>
-        </button>
+        <button badge-image class="btn btn-primary" [badge]="groupSettings.currentBadgeCode" [isGroup]="true" style="width: 120px;height: 67px;"></button>
     </div>
     <div class="col-9">
         <div *ngIf="!selectorVisible">
             <div *ngFor="let part of groupSettings.badgeParts | keyvalue" class="d-flex flex-row justify-content-between mb-3">
                 <button class="btn btn-primary" style="width: 120px;height: 67px;" (click)="openPartSelector(part.value)">
-                    <nitro-badge *ngIf="part.value.code" [badge]="part.value.code" [isGroup]="true"></nitro-badge>
+                    <div badge-image *ngIf="part.value.code" [badge]="part.value.code" [isGroup]="true" [asBackground]="true"></div>
                     <i *ngIf="!part.value.code" class="fas fa-plus" style="width: 39px"></i>
                 </button>
                 <div class="grid-container ml-3" [ngStyle]="{opacity: part.value.isBase ? 0 : 1}">

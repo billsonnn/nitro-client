@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { IEventDispatcher, IWorkerEventTracker, Nitro, NitroPoint, RoomEnterEffect } from '@nitrots/nitro-renderer';
 import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
@@ -35,8 +35,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     private _skipNextMove: boolean = false;
 
     constructor(
-        private ngZone: NgZone,
-        private componentFactoryResolver: ComponentFactoryResolver)
+        private ngZone: NgZone)
     {
         super();
 
@@ -150,9 +149,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         this.ngZone.run(() =>
         {
-            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(RoomChatItemComponent);
-
-            chatRef = this.chatContainer.createComponent(componentFactory);
+            chatRef = this.chatContainer.createComponent(RoomChatItemComponent);
             chat    = chatRef.instance;
 
             if(!chat) return;

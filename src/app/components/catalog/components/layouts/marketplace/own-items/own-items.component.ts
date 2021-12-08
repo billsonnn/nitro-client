@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceOfferData, MarketplaceRequestOwnItemsComposer, Nitro } from '@nitrots/nitro-renderer';
+import { GetMarketplaceOwnOffersMessageComposer, MarketplaceOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { MarketplaceService } from '../../../../services/marketplace.service';
 
@@ -15,7 +15,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 
     public ngOnInit(): void
     {
-        Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
+        Nitro.instance.communication.connection.send(new GetMarketplaceOwnOffersMessageComposer());
     }
 
     public get statusText(): string

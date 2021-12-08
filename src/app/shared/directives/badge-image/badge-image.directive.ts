@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer';
+import { Directive, ElementRef, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { BadgeImageReadyEvent, Nitro, NitroSprite, TextureUtils } from '@nitrots/nitro-renderer';
 
 @Directive({
     selector: '[badge-image]'
@@ -17,12 +17,16 @@ export class BadgeImageDirective implements OnInit, OnChanges
 
     public needsUpdate: boolean = true;
 
-    constructor(private elementRef: ElementRef<HTMLDivElement>)
-    {}
+    constructor(
+        private elementRef: ElementRef<HTMLDivElement>,
+        private _ngZone: NgZone)
+    {
+        this.onBadgeImageReadyEvent = this.onBadgeImageReadyEvent.bind(this);
+    }
 
     public ngOnInit(): void
     {
-        if(this.needsUpdate) this.buildBadge();
+        this.updateBadge();
     }
 
     public ngOnChanges(changes: SimpleChanges): void
@@ -41,14 +45,47 @@ export class BadgeImageDirective implements OnInit, OnChanges
             if(groupChange.previousValue !== groupChange.currentValue) this.needsUpdate = true;
         }
 
-        if(this.needsUpdate) this.buildBadge();
+        if(this.needsUpdate) this.updateBadge();
     }
 
-    private buildBadge(): void
+    public ngOnDestroy(): void
+    {
+        Nitro.instance.sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
+    }
+
+    private onBadgeImageReadyEvent(event: BadgeImageReadyEvent): void
+    {
+        if(event.badgeId !== this.badge) return;
+
+        const nitroSprite = new NitroSprite(event.image);
+
+        this._ngZone.run(() => this.buildBadgeWithUrl(TextureUtils.generateImageUrl(nitroSprite)));
+
+        Nitro.instance.sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
+    }
+
+    private updateBadge(): void
+    {
+        if(!this.badge || !this.badge.length) return;
+
+        const existing = (this.isGroup) ? Nitro.instance.sessionDataManager.loadGroupBadgeImage(this.badge) : Nitro.instance.sessionDataManager.loadBadgeImage(this.badge);
+
+        if(!existing)
+        {
+            Nitro.instance.sessionDataManager.events.addEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
+        }
+        else
+        {
+            const image = (this.isGroup) ? Nitro.instance.sessionDataManager.getGroupBadgeImage(this.badge) : Nitro.instance.sessionDataManager.getBadgeImage(this.badge);
+            const nitroSprite = new NitroSprite(image);
+
+            this._ngZone.run(() => this.buildBadgeWithUrl(TextureUtils.generateImageUrl(nitroSprite)));
+        }
+    }
+
+    private buildBadgeWithUrl(imageUrl: string): void
     {
         this.needsUpdate = false;
-
-        const imageUrl = this.badgeUrl;
 
         if(!imageUrl || !imageUrl.length) return;
 
@@ -62,36 +99,17 @@ export class BadgeImageDirective implements OnInit, OnChanges
         }
         else
         {
-            const existingImages = element.getElementsByClassName('badge-image');
+            const existingImages = [ ...element.getElementsByClassName('badge-image') ];
 
-            let i = existingImages.length;
-
-            while(i < 0)
-            {
-                const imageElement = (existingImages[i] as HTMLImageElement);
-
-                imageElement.remove();
-
-                i--;
-            }
+            for(const existingElement of existingImages) existingElement.remove();
 
             const imageElement = document.createElement('img');
 
             imageElement.className = 'badge-image';
 
             imageElement.src = imageUrl;
-        }
-    }
 
-    public get badgeUrl(): string
-    {
-        if(this.isGroup)
-        {
-            return ((Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', this.badge));
-        }
-        else
-        {
-            return ((Nitro.instance.getConfiguration<string>('badge.asset.url')).replace('%badgename%', this.badge));
+            element.appendChild(imageElement);
         }
     }
 }

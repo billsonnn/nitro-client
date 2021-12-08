@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { IGetImageListener, ImageResult, MarketplaceSellItemComposer, Nitro, NitroRenderTexture, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum, Vector3d } from '@nitrots/nitro-renderer';
+import { IGetImageListener, ImageResult, MakeOfferMessageComposer, Nitro, NitroRenderTexture, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { FurnitureItem } from '../../items/FurnitureItem';
 import { InventoryFurnitureService } from '../../services/furniture.service';
@@ -273,7 +273,7 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
     public doPostOffer(): void
     {
         const local2 = this.item.isWallItem ? 2 : 1;
-        Nitro.instance.communication.connection.send(new MarketplaceSellItemComposer(this.askingPrice, local2, this.item.ref));
+        Nitro.instance.communication.connection.send(new MakeOfferMessageComposer(this.askingPrice, local2, this.item.ref));
         this.showConfirmDialog = false;
         this.closeMainWindow();
     }

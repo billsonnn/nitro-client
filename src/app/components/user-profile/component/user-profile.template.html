@@ -51,7 +51,7 @@
                 <div class="bg-emperor profile-info-bg p-1">
                     <div *ngIf="tabId == 0" class="d-flex flex-row">
                         <div *ngFor="let badge of userBadges" class="bg-primary p-1 rounded user-profile-badge">
-                            <nitro-badge [badge]="badge" class="h-100 d-flex justify-content-center"></nitro-badge>
+                            <div badge-image [badge]="badge" class="h-100 d-flex justify-content-center"></div>
                         </div>
                     </div>
                     <ng-container *ngIf="tabId == 1">
@@ -61,7 +61,7 @@
                                 <div *ngFor="let group of userProfile.groups" class="item-detail"
                                     [ngClass]="{'active': selectedGroup && selectedGroup.id === group.id}"
                                     (click)="selectGroup(group.id)">
-                                    <nitro-badge [badge]="group.badge" [isGroup]="true"></nitro-badge>
+                                    <div badge-image [badge]="group.badge" [isGroup]="true"></div>
                                 </div>
                             </div>
                         </perfect-scrollbar>
@@ -229,7 +229,7 @@
                         <div *ngFor="let group of userProfile.groups" class="item-detail"
                             [ngClass]="{'active': selectedGroup && selectedGroup.id === group.id}"
                             (click)="selectGroup(group.id)">
-                            <nitro-badge [badge]="group.badge" [isGroup]="true"></nitro-badge>
+                            <div badge-image [badge]="group.badge" [isGroup]="true"></div>
                         </div>
                     </div>
                 </perfect-scrollbar>
@@ -249,7 +249,7 @@
                         </div>
                         <div class="right-side">
                             <div class="group-badge">
-                                <nitro-badge [badge]="selectedGroup.badge" [isGroup]="true"></nitro-badge>
+                                <div badge-image [badge]="selectedGroup.badge" [isGroup]="true"></div>
                             </div>
                             <div class="group-members"><i class="icon icon-group-members"></i> {{
                                 selectedGroup.membersCount }}</div>

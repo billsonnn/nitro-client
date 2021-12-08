@@ -1,5 +1,4 @@
-import { CatalogGiftConfigurationEvent } from '@nitrots/nitro-renderer';
-
+import { GiftWrappingConfigurationEvent } from '@nitrots/nitro-renderer';
 
 export class GiftWrappingConfiguration
 {
@@ -10,7 +9,7 @@ export class GiftWrappingConfiguration
     private readonly _ribbonTypes: number[] = null;
     private readonly _defaultStuffTypes: number[] = null;
 
-    constructor(event: CatalogGiftConfigurationEvent)
+    constructor(event: GiftWrappingConfigurationEvent)
     {
         if(!event) return;
 

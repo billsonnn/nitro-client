@@ -5,7 +5,7 @@ export class AvatarEditorGridColorItem
 {
     private _model: CategoryBaseModel;
     private _partColor: IPartColor;
-    private _isSelected: boolean
+    private _isSelected: boolean;
     private _isDisabledForWearing: boolean;
     private _isHC: boolean;
 

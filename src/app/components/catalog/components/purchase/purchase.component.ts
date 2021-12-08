@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { CatalogPageOfferData, ICatalogPageParser } from '@nitrots/nitro-renderer';
+import { CatalogPageMessageOfferData } from '@nitrots/nitro-renderer';
+import { ICatalogPageParser } from '../../common/ICatalogPageParser';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class CatalogPurchaseComponent implements OnChanges
     public activePage: ICatalogPageParser = null;
 
     @Input()
-    public activeOffer: CatalogPageOfferData = null;
+    public activeOffer: CatalogPageMessageOfferData = null;
 
     @Input()
     public quantityEnabled: boolean = false;

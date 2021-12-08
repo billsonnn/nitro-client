@@ -1,10 +1,11 @@
-import { Component, ComponentFactoryResolver, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
-import { CatalogClubOfferData, CatalogPageData, CatalogPageOfferData, ICatalogPageData, ICatalogPageParser, IFurnitureData, IObjectData, MarketplaceOffer, Nitro, RoomPreviewer, Vector3d } from '@nitrots/nitro-renderer';
+import { Component, ComponentRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { CatalogPageMessageOfferData, ClubOfferData, IFurnitureData, IObjectData, MarketplaceOffer, Nitro, NodeData, RoomPreviewer, Vector3d } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
-import { NotificationService } from '../../../notification/services/notification.service';
 import { PurseService } from '../../../purse/services/purse.service';
 import { CatalogLayout } from '../../CatalogLayout';
 import { CatalogLayoutFactory } from '../../CatalogLayoutFactory';
+import { ICatalogPageData } from '../../common/ICatalogPageData';
+import { ICatalogPageParser } from '../../common/ICatalogPageParser';
 import { FurniCategory } from '../../enums/FurniCategory';
 import { ProductTypeEnum } from '../../enums/ProductTypeEnum';
 import { CatalogService } from '../../services/catalog.service';
@@ -27,13 +28,13 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
     private _lastComponent: ComponentRef<CatalogLayout> = null;
     private _layoutFactory: CatalogLayoutFactory = null;
 
-    private _activeTab: CatalogPageData = null;
-    private _activeOffer: CatalogPageOfferData = null;
+    private _activeTab: NodeData = null;
+    private _activeOffer: CatalogPageMessageOfferData = null;
 
     private _purchaseOfferPage: ICatalogPageParser = null;
-    private _purchaseOffer: CatalogPageOfferData = null;
-    private _purchaseGiftOffer: CatalogPageOfferData = null;
-    private _purchaseVipSubscription: CatalogClubOfferData = null;
+    private _purchaseOffer: CatalogPageMessageOfferData = null;
+    private _purchaseGiftOffer: CatalogPageMessageOfferData = null;
+    private _purchaseVipSubscription: ClubOfferData = null;
     private _purchaseOfferQuantity: number = 1;
     private _purchaseOfferExtra: string = null;
     private _purchaseCompleted: boolean = false;
@@ -42,10 +43,8 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
     constructor(
         private _settingsService: SettingsService,
-        private _notificationService: NotificationService,
         private _catalogService: CatalogService,
         private _marketplaceService: MarketplaceService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _purseService: PurseService,
         private _ngZone: NgZone)
     {
@@ -182,16 +181,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
 
         this.removeLastComponent();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(layoutType);
-
-        let ref: ComponentRef<CatalogLayout> = null;
-
-        if(factory)
-        {
-            ref = this.layoutsContainer.createComponent(factory);
-        }
-
-        this._lastComponent = ref;
+        this._lastComponent = this.layoutsContainer.createComponent(layoutType);
     }
 
     private removeLastComponent(): void
@@ -202,7 +192,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._activeOffer   = null;
     }
 
-    public selectTab(tab: CatalogPageData): void
+    public selectTab(tab: NodeData): void
     {
         if(!tab) return;
 
@@ -223,7 +213,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         this._catalogService.requestPage(page);
     }
 
-    private selectFirstPage(page: CatalogPageData, skipChildren: boolean = false): void
+    private selectFirstPage(page: NodeData, skipChildren: boolean = false): void
     {
         if(!page) return;
 
@@ -247,7 +237,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         if(child) this.selectTab(child);
     }
 
-    public selectOffer(offer: CatalogPageOfferData): void
+    public selectOffer(offer: CatalogPageMessageOfferData): void
     {
         this._activeOffer = offer;
 
@@ -354,7 +344,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return true;
     }
 
-    public confirmPurchase(page: ICatalogPageParser, offer: CatalogPageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
+    public confirmPurchase(page: ICatalogPageParser, offer: CatalogPageMessageOfferData, quantity: number = 1, extra: string = null, isGift: boolean = false): void
     {
         if(!this.hasSufficientFunds(offer.priceCredits, offer.priceActivityPointsType, offer.priceActivityPoints, quantity))
         {
@@ -372,7 +362,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         }
     }
 
-    public confirmVipSubscription(subscription: CatalogClubOfferData): void
+    public confirmVipSubscription(subscription: ClubOfferData): void
     {
         if(!this.hasSufficientFunds(subscription.priceCredits, subscription.priceActivityPointsType, subscription.priceActivityPoints, 1))
         {
@@ -398,17 +388,17 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._roomPreviewer;
     }
 
-    public get catalogRoot(): CatalogPageData
+    public get catalogRoot(): NodeData
     {
         return this._catalogService.catalogRoot;
     }
 
-    public get activeTab(): CatalogPageData
+    public get activeTab(): NodeData
     {
         return this._activeTab;
     }
 
-    public get activeOffer(): CatalogPageOfferData
+    public get activeOffer(): CatalogPageMessageOfferData
     {
         return this._activeOffer;
     }
@@ -428,7 +418,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._purchaseOfferPage;
     }
 
-    public get purchaseOffer(): CatalogPageOfferData
+    public get purchaseOffer(): CatalogPageMessageOfferData
     {
         return this._purchaseOffer;
     }
@@ -438,7 +428,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._marketplaceService.currentMarketplaceOfferToBuy;
     }
 
-    public get giftOffer(): CatalogPageOfferData
+    public get giftOffer(): CatalogPageMessageOfferData
     {
         return this._purchaseGiftOffer;
     }
@@ -468,7 +458,7 @@ export class CatalogMainComponent implements OnInit, OnChanges, OnDestroy
         return this._purchaseCompleted;
     }
 
-    public get purchaseVipSubscription(): CatalogClubOfferData
+    public get purchaseVipSubscription(): ClubOfferData
     {
         return this._purchaseVipSubscription;
     }

@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { AcceptFriendComposer, AcceptFriendResultEvent, DeclineFriendComposer, EventDispatcher, FindFriendsProcessResultEvent, FollowFriendFailedEvent, FriendListFragmentEvent, FriendListUpdateEvent, FriendNotificationEvent, FriendParser, FriendRequestData, FriendRequestsEvent, GetFriendRequestsComposer, HabboSearchResultEvent, IEventDispatcher, IMessageEvent, InstantMessageErrorEvent, MessageErrorEvent, MessengerInitEvent, MiniMailNewMessageEvent, MiniMailUnreadCountEvent, NewConsoleMessageEvent, NewFriendRequestEvent, Nitro, RequestFriendComposer, RoomInviteErrorEvent, RoomInviteEvent } from '@nitrots/nitro-renderer';
+import { AcceptFriendMessageComposer, AcceptFriendResultEvent, DeclineFriendMessageComposer, EventDispatcher, FindFriendsProcessResultEvent, FollowFriendFailedEvent, FriendListFragmentEvent, FriendListUpdateEvent, FriendNotificationEvent, FriendParser, FriendRequestData, FriendRequestsEvent, GetFriendRequestsComposer, HabboSearchResultEvent, IEventDispatcher, IMessageEvent, InstantMessageErrorEvent, MessageErrorEvent, MessengerInitEvent, MiniMailNewMessageEvent, MiniMailUnreadCountEvent, NewConsoleMessageEvent, NewFriendRequestEvent, Nitro, RequestFriendComposer, RoomInviteErrorEvent, RoomInviteEvent } from '@nitrots/nitro-renderer';
 import { SoundConstants } from '../../../shared/commons/SoundConstants';
 import { SoundService } from '../../../shared/services/sound.service';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -408,7 +408,7 @@ export class FriendListService implements OnDestroy
 
         this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.ACCEPTED, request.requestId));
 
-        Nitro.instance.communication.connection.send(new AcceptFriendComposer(request.requestId));
+        Nitro.instance.communication.connection.send(new AcceptFriendMessageComposer(request.requestId));
     }
 
     public acceptFriendRequestById(id: number): void
@@ -422,7 +422,7 @@ export class FriendListService implements OnDestroy
 
         this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.DECLINED, request.requestId));
 
-        Nitro.instance.communication.connection.send(new DeclineFriendComposer(false, request.requestId));
+        Nitro.instance.communication.connection.send(new DeclineFriendMessageComposer(false, request.requestId));
     }
 
     public removeFriendRequestById(id: number): void
@@ -439,7 +439,7 @@ export class FriendListService implements OnDestroy
 
         this._requests.clear();
 
-        Nitro.instance.communication.connection.send(new DeclineFriendComposer(true));
+        Nitro.instance.communication.connection.send(new DeclineFriendMessageComposer(true));
     }
 
     public getMessageThread(id: number): MessengerThread

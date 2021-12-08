@@ -101,7 +101,7 @@ export class AvatarEditorWardrobeComponent
 
     private _requestLooks(pageId: number): void
     {
-        this._avatarEditorService.requestWardrobePage(pageId);
+        this._avatarEditorService.requestWardrobePage();
     }
 
     public get currentPage(): number

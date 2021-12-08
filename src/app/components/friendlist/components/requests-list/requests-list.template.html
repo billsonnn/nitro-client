@@ -1,10 +1,10 @@
 <ng-container *ngIf="(requests.size > 0)">
-    <button type="button" class="btn btn-danger mb-1 w-100" (click)="declineAllRequests()">{{ ('friendbar.requests.discard') | translate }}</button>
+    <button type="button" class="btn btn-danger btn-sm mb-1 w-100" (click)="declineAllRequests()">{{ ('friendbar.requests.discard') | translate }}</button>
     <ng-container *ngFor="let request of requests | keyvalue">
         <div class="btn-group w-100 mb-1">
-            <button type="button" class="btn btn-primary w-100">{{ request.value.requesterName }}</button>
-            <button type="button" class="btn btn-success" (click)="acceptRequest(request.value)"><i class="fas fa-check"></i></button>
-            <button type="button" class="btn btn-danger" (click)="declineRequest(request.value)"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-primary w-100 btn-sm">{{ request.value.requesterName }}</button>
+            <button type="button" class="btn btn-success btn-sm" (click)="acceptRequest(request.value)"><i class="fas fa-check"></i></button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="declineRequest(request.value)"><i class="fas fa-times"></i></button>
         </div>
     </ng-container>
 </ng-container>
