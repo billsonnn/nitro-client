@@ -14,11 +14,11 @@
                         <div class="badge badge-secondary mb-1 d-flex flex-column justify-content-between w-100">
                             <div class="d-flex flex-row justify-content-between">
                                 <span class="font-weight-bold mr-2">Name:</span>
-                                <div>{{room.name}}</div>
+                                <div>{{room.data.room.name}}</div>
                             </div>
                             <div class="d-flex flex-row justify-content-between">
                                 <span class="font-weight-bold mr-2">Description:</span>
-                                <div>{{room.description}}</div>
+                                <div>{{room.data.room.desc}}</div>
                             </div>
                         </div>
                     </div>
@@ -28,15 +28,15 @@
                         <div class="badge badge-secondary mb-1 d-flex flex-column justify-content-between w-100">
                             <div class="d-flex flex-row  justify-content-between">
                                 <span class="font-weight-bold mr-2">Owner:</span>
-                                <div>{{room.ownerName}}</div>
+                                <div>{{room.data.ownerName}}</div>
                             </div>
                             <div class="d-flex flex-row justify-content-between">
                                 <span class="font-weight-bold mr-2">Players in room:</span>
-                                <div>{{room.playerAmount }}</div>
+                                <div>{{room.data.userCount }}</div>
                             </div>
                             <div class="d-flex flex-row justify-content-between">
                                 <span class="font-weight-bold mr-2">Owner in room:</span>
-                                <div>{{room.owner ? 'yes' : 'no'}}</div>
+                                <div>{{room.data.ownerInRoom ? 'yes' : 'no'}}</div>
                             </div>
                         </div>
                     </div>
