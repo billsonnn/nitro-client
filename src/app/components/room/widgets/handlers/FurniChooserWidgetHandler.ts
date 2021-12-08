@@ -1,22 +1,18 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import * as sorting from '../../../../../utils/sorting';
+import { Nitro, NitroEvent, RoomObjectCategory, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { dynamicSort } from '../choosers/utils/sorting';
 import { RoomObjectItem } from '../events/RoomObjectItem';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurniChooserWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -64,7 +60,7 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
         this.processFloorFurni(roomId, furniInRoom);
         this.processWallFurni(roomId, furniInRoom);
 
-        furniInRoom.sort(sorting.dynamicSort('name'));
+        furniInRoom.sort(dynamicSort('name'));
 
         this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_FURNI_CHOOSER_CONTENT, furniInRoom, false));
     }
@@ -141,7 +137,7 @@ export class FurniChooserWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.FURNI_CHOOSER;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

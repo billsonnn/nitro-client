@@ -1,9 +1,6 @@
-import { Component, Input, NgZone } from '@angular/core';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { IRoomWidgetHandler } from '../../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { LoveLockStartConfirmComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/LoveLockStartConfirmComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-
+import { Component, NgZone } from '@angular/core';
+import { FriendFurniConfirmLockMessageComposer, Nitro } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 
 @Component({
     templateUrl: './confirm.template.html'
@@ -53,7 +50,7 @@ export class FriendsFurniConfirmWidget extends ConversionTrackingWidget
 
     private sendStart(furniId: number, start: boolean): void
     {
-        Nitro.instance.communication.connection.send(new LoveLockStartConfirmComposer(furniId, start));
+        Nitro.instance.communication.connection.send(new FriendFurniConfirmLockMessageComposer(furniId, start));
     }
 
     public hide(): void

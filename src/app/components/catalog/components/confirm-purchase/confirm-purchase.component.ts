@@ -1,10 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogPageParser } from '../../../../../client/nitro/communication/messages/parser/catalog/CatalogPageParser';
-import { CatalogPageOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
+import { CatalogPageMessageOfferData, CatalogPageMessageParser, Nitro, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 
 @Component({
@@ -14,13 +9,13 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogConfirmPurchaseComponent implements OnChanges
 {
     @Input()
-    public page: CatalogPageParser = null;
+    public page: CatalogPageMessageParser = null;
 
     @Input()
-    public offer: CatalogPageOfferData = null;
+    public offer: CatalogPageMessageOfferData = null;
 
     @Input()
-    public giftOffer: CatalogPageOfferData = null;
+    public giftOffer: CatalogPageMessageOfferData = null;
 
     @Input()
     public quantity: number = 1;

@@ -1,10 +1,6 @@
-import { AvatarEditorFigureCategory } from '../../../../client/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
-import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
-import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { AvatarEditorFigureCategory, AvatarScaleType, AvatarSetType, IAvatarImageListener, Nitro } from '@nitrots/nitro-renderer';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
+import { FigureData } from '../common/FigureData';
 
 export class BodyModel extends CategoryBaseModel implements IAvatarImageListener
 {

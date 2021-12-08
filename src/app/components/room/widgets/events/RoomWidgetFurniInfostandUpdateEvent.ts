@@ -1,5 +1,5 @@
-﻿import { IObjectData } from '../../../../../client/nitro/room/object/data/IObjectData';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { IObjectData } from '@nitrots/nitro-renderer';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomWidgetFurniInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {

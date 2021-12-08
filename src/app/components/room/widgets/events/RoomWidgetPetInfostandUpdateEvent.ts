@@ -1,5 +1,5 @@
-﻿import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { PetFigureData } from '@nitrots/nitro-renderer';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomWidgetPetInfostandUpdateEvent extends RoomWidgetUpdateEvent
 {

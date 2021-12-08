@@ -1,11 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { Achievement } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
-import { AchievementEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementEvent';
-import { AchievementsEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsEvent';
-import { AchievementsScoreEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/AchievementsScoreEvent';
-import { RequestAchievementsMessageComposer } from '../../../../client/nitro/communication/messages/outgoing/achievements/RequestAchievementsMessageComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { AchievementData, AchievementEvent, AchievementsEvent, AchievementsScoreEvent, IMessageEvent, Nitro, RequestAchievementsMessageComposer } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { AchievementCategory } from '../common/AchievementCategory';
 
@@ -138,12 +132,12 @@ export class AchievementsService implements OnDestroy
 
                     if(achievement.progress !== updatedAchievement.progress)
                     {
-                        achievement.reset(updatedAchievement);
-
-                        if(!this.isIgnoredAchievement(achievement))
+                        if(achievement.level !== updatedAchievement.level && !this.isIgnoredAchievement(achievement))
                         {
                             if(this._selectedCategory !== category) achievement.unseen++;
                         }
+
+                        achievement.reset(updatedAchievement);
                     }
 
                     break;
@@ -154,7 +148,7 @@ export class AchievementsService implements OnDestroy
         });
     }
 
-    public isIgnoredAchievement(achievement: Achievement): boolean
+    public isIgnoredAchievement(achievement: AchievementData): boolean
     {
         if(!achievement) return false;
 

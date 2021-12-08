@@ -1,18 +1,16 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-
-import { RoomSessionDoorbellEvent } from '../../../../../client/nitro/session/events/RoomSessionDoorbellEvent';
-import { RoomWidgetLetUserInMessage } from '../messages/RoomWidgetLetUserInMessage';
+import { NitroEvent, RoomSessionDoorbellEvent, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetDoorbellEvent } from '../events/RoomWidgetDoorbellEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetLetUserInMessage } from '../messages/RoomWidgetLetUserInMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
+
 
 export class DoorbellWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -70,7 +68,7 @@ export class DoorbellWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.DOORBELL;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

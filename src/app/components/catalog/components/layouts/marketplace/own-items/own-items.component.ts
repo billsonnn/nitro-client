@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketplaceRequestOwnItemsComposer } from '../../../../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { MarketplaceOfferData } from '../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { GetMarketplaceOwnOffersMessageComposer, MarketplaceOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../../CatalogLayout';
 import { MarketplaceService } from '../../../../services/marketplace.service';
 
@@ -17,7 +15,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
 
     public ngOnInit(): void
     {
-        Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
+        Nitro.instance.communication.connection.send(new GetMarketplaceOwnOffersMessageComposer());
     }
 
     public get statusText(): string
@@ -165,7 +163,7 @@ export class CatalogLayoutMarketplaceOwnItemsComponent extends CatalogLayout imp
     {
         if(!offer) return '';
 
-        const time = Math.max(1, offer._Str_5853);
+        const time = Math.max(1, offer.timeLeftMinutes);
         const hours = Math.floor(time / 60);
         const minutes =  time - (hours * 60);
 

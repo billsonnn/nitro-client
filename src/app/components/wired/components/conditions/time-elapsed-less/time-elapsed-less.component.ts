@@ -1,7 +1,6 @@
 ﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
-import { Nitro } from 'src/client/nitro/Nitro';
-import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
+import { Nitro, Triggerable } from '@nitrots/nitro-renderer';
 import { WiredCondition } from '../WiredCondition';
 import { WiredConditionType } from '../WiredConditionType';
 import { WiredFurniture } from './../../../WiredFurniture';

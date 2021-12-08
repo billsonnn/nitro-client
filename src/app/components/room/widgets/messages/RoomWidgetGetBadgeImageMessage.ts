@@ -1,4 +1,4 @@
-﻿import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { RoomWidgetMessage } from '@nitrots/nitro-renderer';
 
 export class RoomWidgetGetBadgeImageMessage extends RoomWidgetMessage
 {

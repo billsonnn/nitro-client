@@ -1,6 +1,6 @@
-import { AvatarEditorFigureCategory } from '../../../../client/nitro/avatar/enum/AvatarEditorFigureCategory';
-import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
+import { AvatarEditorFigureCategory } from '@nitrots/nitro-renderer';
 import { CategoryBaseModel } from '../common/CategoryBaseModel';
+import { FigureData } from '../common/FigureData';
 
 export class LegModel extends CategoryBaseModel
 {
@@ -8,9 +8,9 @@ export class LegModel extends CategoryBaseModel
     {
         super.init();
 
-        this.addCategory(FigureData.LG);
-        this.addCategory(FigureData.SH);
-        this.addCategory(FigureData.WA);
+        this.addCategory(FigureData.TROUSERS);
+        this.addCategory(FigureData.SHOES);
+        this.addCategory(FigureData.TROUSER_ACCESSORIES);
 
         this._isInitalized = true;
     }

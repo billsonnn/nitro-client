@@ -1,15 +1,14 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./out-tsc/worker",
-    "lib": [
-      "es2018",
-      "webworker"
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./out-tsc/worker",
+        "lib": [
+            "es2018",
+            "webworker"
+        ],
+        "types": []
+    },
+    "files": [
+        "src/app/core/nitro-worker.ts"
     ],
-    "types": []
-  },
-  "include": [
-    "src/**/*.worker.ts"
-  ]
 }

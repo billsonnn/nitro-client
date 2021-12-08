@@ -1,12 +1,11 @@
-﻿import { IPartColor } from '../../../../client/nitro/avatar/structure/figure/IPartColor';
-import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
+﻿import { ColorConverter, IPartColor } from '@nitrots/nitro-renderer';
 import { CategoryBaseModel } from './CategoryBaseModel';
 
 export class AvatarEditorGridColorItem
 {
     private _model: CategoryBaseModel;
     private _partColor: IPartColor;
-    private _isSelected: boolean
+    private _isSelected: boolean;
     private _isDisabledForWearing: boolean;
     private _isHC: boolean;
 
@@ -55,7 +54,7 @@ export class AvatarEditorGridColorItem
 
     public get color(): string
     {
-        return ColorConverter.int2rgb(this._partColor._Str_915);
+        return ColorConverter.int2rgb(this._partColor.rgb);
     }
 
     public get _Str_14863(): boolean

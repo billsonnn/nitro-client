@@ -1,31 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { EventDispatcher } from '../../../../client/core/events/EventDispatcher';
-import { IEventDispatcher } from '../../../../client/core/events/IEventDispatcher';
-import { AcceptFriendResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/AcceptFriendResultEvent';
-import { FindFriendsProcessResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FindFriendsProcessResultEvent';
-import { FollowFriendFailedEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FollowFriendFailedEvent';
-import { FriendListFragmentEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendListFragmentEvent';
-import { FriendListUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendListUpdateEvent';
-import { FriendNotificationEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendNotificationEvent';
-import { FriendParser } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendParser';
-import { FriendRequestData } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendRequestData';
-import { FriendRequestsEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/FriendRequestsEvent';
-import { HabboSearchResultEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/HabboSearchResultEvent';
-import { InstantMessageErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/InstantMessageErrorEvent';
-import { MessageErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/MessageErrorEvent';
-import { MessengerInitEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/MessengerInitEvent';
-import { MiniMailNewMessageEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/MiniMailNewMessageEvent';
-import { MiniMailUnreadCountEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/MiniMailUnreadCountEvent';
-import { NewConsoleMessageEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/NewConsoleMessageEvent';
-import { NewFriendRequestEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/NewFriendRequestEvent';
-import { RoomInviteErrorEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteErrorEvent';
-import { RoomInviteEvent } from '../../../../client/nitro/communication/messages/incoming/friendlist/RoomInviteEvent';
-import { AcceptFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/AcceptFriendComposer';
-import { DeclineFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/DeclineFriendComposer';
-import { GetFriendRequestsComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/GetFriendRequestsComposer';
-import { RequestFriendComposer } from '../../../../client/nitro/communication/messages/outgoing/friendlist/RequestFriendComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { AcceptFriendMessageComposer, AcceptFriendResultEvent, DeclineFriendMessageComposer, EventDispatcher, FindFriendsProcessResultEvent, FollowFriendFailedEvent, FriendListFragmentEvent, FriendListUpdateEvent, FriendNotificationEvent, FriendParser, FriendRequestData, FriendRequestsEvent, GetFriendRequestsComposer, HabboSearchResultEvent, IEventDispatcher, IMessageEvent, InstantMessageErrorEvent, MessageErrorEvent, MessengerInitEvent, MiniMailNewMessageEvent, MiniMailUnreadCountEvent, NewConsoleMessageEvent, NewFriendRequestEvent, Nitro, RequestFriendComposer, RoomInviteErrorEvent, RoomInviteEvent } from '@nitrots/nitro-renderer';
 import { SoundConstants } from '../../../shared/commons/SoundConstants';
 import { SoundService } from '../../../shared/services/sound.service';
 import { NotificationService } from '../../notification/services/notification.service';
@@ -434,7 +408,7 @@ export class FriendListService implements OnDestroy
 
         this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.ACCEPTED, request.requestId));
 
-        Nitro.instance.communication.connection.send(new AcceptFriendComposer(request.requestId));
+        Nitro.instance.communication.connection.send(new AcceptFriendMessageComposer(request.requestId));
     }
 
     public acceptFriendRequestById(id: number): void
@@ -448,7 +422,7 @@ export class FriendListService implements OnDestroy
 
         this._events.dispatchEvent(new FriendRequestEvent(FriendRequestEvent.DECLINED, request.requestId));
 
-        Nitro.instance.communication.connection.send(new DeclineFriendComposer(false, request.requestId));
+        Nitro.instance.communication.connection.send(new DeclineFriendMessageComposer(false, request.requestId));
     }
 
     public removeFriendRequestById(id: number): void
@@ -465,7 +439,7 @@ export class FriendListService implements OnDestroy
 
         this._requests.clear();
 
-        Nitro.instance.communication.connection.send(new DeclineFriendComposer(true));
+        Nitro.instance.communication.connection.send(new DeclineFriendMessageComposer(true));
     }
 
     public getMessageThread(id: number): MessengerThread

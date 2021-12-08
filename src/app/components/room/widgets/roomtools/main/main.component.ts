@@ -1,9 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ComponentFactoryResolver, NgZone, OnDestroy } from '@angular/core';
-import { RoomDataParser } from '../../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { RoomDataParser } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../../core/settings/service';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomToolsWidgetHandler } from '../../handlers/RoomToolsWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../../messages/RoomWidgetZoomToggleMessage';
 

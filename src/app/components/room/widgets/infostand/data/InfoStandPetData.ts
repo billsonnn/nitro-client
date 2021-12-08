@@ -1,4 +1,4 @@
-﻿import { PetFigureData } from '../../../../../../client/nitro/avatar/pets/PetFigureData';
+﻿import { PetFigureData } from '@nitrots/nitro-renderer';
 import { RoomWidgetPetInfostandUpdateEvent } from '../../events/RoomWidgetPetInfostandUpdateEvent';
 
 export class InfoStandPetData

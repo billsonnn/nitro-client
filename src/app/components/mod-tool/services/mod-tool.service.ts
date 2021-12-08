@@ -1,26 +1,8 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { CallForHelpCategoryData, CfhTopicsInitEvent, ChatRecordData, GetModeratorRoomInfoMessageComposer, GetRoomChatlogMessageComposer, IMessageEvent, ModeratorInitData, ModeratorInitMessageEvent, ModeratorRoomInfoEvent, ModeratorRoomInfoMessageParser, Nitro, RoomChatlogEvent, RoomEntryInfoMessageEvent, RoomEntryInfoMessageParser, RoomVisitsData, RoomVisitsEvent, UserChatlogEvent, UserInfoEvent } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import { ModToolMainComponent } from '../components/main/main.component';
-import { ModtoolRoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { ModtoolRequestRoomInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomInfoComposer';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
 import { UserToolUser } from '../components/user/user-tool/user-tool-user';
-import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
-import { ModtoolUserChatlogParserVisit } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
-import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
-import { CallForHelpCategoryData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/CallForHelpCategoryData';
-import { ModtoolMainEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolMainEvent';
-import { _Str_5018 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5018';
-import { ModtoolReceivedRoomsUserEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolReceivedRoomsUserEvent';
-import { ModtoolRoomVisitedData } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomVisitedData';
-import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
-import { RoomInfoOwnerParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomInfoOwnerParser';
-import { ModtoolRoomInfoParser } from '../../../../client/nitro/communication/messages/parser/modtool/ModtoolRoomInfoParser';
-import { ModtoolRoomChatlogLine } from '../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolRoomChatlogLine';
-import { ModtoolRequestRoomChatlogComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestRoomChatlogComposer';
 
 @Injectable()
 export class ModToolService implements OnDestroy
@@ -30,7 +12,7 @@ export class ModToolService implements OnDestroy
 
 
     private _users: UserToolUser[] = [];
-    private _roomVisits: ModtoolUserChatlogParserVisit[];
+    private _roomVisits: ChatRecordData[];
     private _callForHelpCategories: CallForHelpCategoryData[];
 
     private _currentSelectedUser: UserToolUser = null;
@@ -44,11 +26,11 @@ export class ModToolService implements OnDestroy
 
 
 
-    private _Str_20687: _Str_5018 = null;
-    private _userRoomVisitedData: ModtoolRoomVisitedData;
-    private _currentRoomInfo: RoomInfoOwnerParser;
-    private _modToolRoomInfo: ModtoolRoomInfoParser;
-    private _userChatlogs: ModtoolRoomChatlogLine[];
+    private _Str_20687: ModeratorInitData = null;
+    private _userRoomVisitedData: RoomVisitsData;
+    private _currentRoomInfo: RoomEntryInfoMessageParser;
+    private _modToolRoomInfo: ModeratorRoomInfoMessageParser;
+    private _userChatlogs: ChatRecordData;
 
     constructor(
         private _notificationService: NotificationService,
@@ -69,14 +51,14 @@ export class ModToolService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
-            new ModtoolRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+            new ModeratorRoomInfoEvent(this.onRoomInfoEvent.bind(this)),
             new UserInfoEvent(this.onUserInfoEvent.bind(this)),
-            new ModtoolUserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
-            new ModtoolRoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
-            new ModtoolCallForHelpTopicsEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
-            new ModtoolMainEvent(this.onModtoolsMainEvent.bind(this)),
-            new ModtoolReceivedRoomsUserEvent(this.onRoomsReceivedForUserEvent.bind(this)),
-            new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
+            new UserChatlogEvent(this.onModtoolUserChatlogEvent.bind(this)),
+            new RoomChatlogEvent(this.onModtoolRoomChatlogEvent.bind(this)),
+            new CfhTopicsInitEvent(this.onModToolsCFHCategoriesEvent.bind(this)),
+            new ModeratorInitMessageEvent(this.onModtoolsMainEvent.bind(this)),
+            new RoomVisitsEvent(this.onRoomsReceivedForUserEvent.bind(this)),
+            new RoomEntryInfoMessageEvent(this.onRoomInfoOwnerEvent.bind(this)),
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -100,7 +82,7 @@ export class ModToolService implements OnDestroy
         this._component = component;
     }
 
-    private onModtoolsMainEvent(event: ModtoolMainEvent): void
+    private onModtoolsMainEvent(event: ModeratorInitMessageEvent): void
     {
         if(!event) return;
 
@@ -111,7 +93,7 @@ export class ModToolService implements OnDestroy
         this._Str_20687 = parser.data;
     }
 
-    private onRoomInfoOwnerEvent(event: RoomInfoOwnerEvent): void
+    private onRoomInfoOwnerEvent(event: RoomEntryInfoMessageEvent): void
     {
         if(!event) return;
 
@@ -122,7 +104,7 @@ export class ModToolService implements OnDestroy
         this._currentRoomInfo = parser;
     }
 
-    private onRoomsReceivedForUserEvent(event: ModtoolReceivedRoomsUserEvent): void
+    private onRoomsReceivedForUserEvent(event: RoomVisitsEvent): void
     {
         if(!event) return;
 
@@ -133,7 +115,7 @@ export class ModToolService implements OnDestroy
         this._ngZone.run(() => this._userRoomVisitedData = parser.data);
     }
 
-    private onModToolsCFHCategoriesEvent(event: ModtoolCallForHelpTopicsEvent): void
+    private onModToolsCFHCategoriesEvent(event: CfhTopicsInitEvent): void
     {
         if(!event) return;
 
@@ -144,7 +126,7 @@ export class ModToolService implements OnDestroy
         this._callForHelpCategories = parser.callForHelpCategories;
     }
 
-    private onRoomInfoEvent(event: ModtoolRoomInfoEvent): void
+    private onRoomInfoEvent(event: ModeratorRoomInfoEvent): void
     {
         if(!Nitro.instance.sessionDataManager.isModerator) return;
 
@@ -171,7 +153,7 @@ export class ModToolService implements OnDestroy
         });
     }
 
-    private onModtoolUserChatlogEvent(event: ModtoolUserChatlogEvent): void
+    private onModtoolUserChatlogEvent(event: UserChatlogEvent): void
     {
         if(!event) return;
 
@@ -181,11 +163,11 @@ export class ModToolService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            this._roomVisits = parser.roomVisits;
+            this._roomVisits = parser.data.roomChatlogs;
         });
     }
 
-    private onModtoolRoomChatlogEvent(event: ModtoolRoomChatlogEvent): void
+    private onModtoolRoomChatlogEvent(event: RoomChatlogEvent): void
     {
         if(!event) return;
 
@@ -195,7 +177,7 @@ export class ModToolService implements OnDestroy
 
         this._ngZone.run(() =>
         {
-            this._userChatlogs = parser.chatlogs;
+            this._userChatlogs = parser.data;
         });
     }
 
@@ -204,15 +186,15 @@ export class ModToolService implements OnDestroy
         if(!this._currentRoomInfo) return;
 
         this._modToolRoomInfo = null;
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer((roomId ? roomId : this._currentRoomInfo.roomId)));
+        Nitro.instance.communication.connection.send(new GetModeratorRoomInfoMessageComposer((roomId ? roomId : this._currentRoomInfo.roomId)));
         this._showRoomTools = true;
     }
 
     public openChatlogTool(): void
     {
         this._modToolRoomInfo = null;
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomInfoComposer(this._currentRoomInfo.roomId));
-        Nitro.instance.communication.connection.send(new ModtoolRequestRoomChatlogComposer(this._currentRoomInfo.roomId));
+        Nitro.instance.communication.connection.send(new GetModeratorRoomInfoMessageComposer(this._currentRoomInfo.roomId));
+        Nitro.instance.communication.connection.send(new GetRoomChatlogMessageComposer(this._currentRoomInfo.roomId));
         this.showRoomChatLogs = true;
     }
 
@@ -234,12 +216,12 @@ export class ModToolService implements OnDestroy
         return this._users;
     }
 
-    public get roomVisits(): ModtoolUserChatlogParserVisit[]
+    public get roomVisits(): ChatRecordData[]
     {
         return this._roomVisits;
     }
 
-    public get userChatlogs(): ModtoolRoomChatlogLine[]
+    public get userChatlogs(): ChatRecordData
     {
         return this._userChatlogs;
     }
@@ -319,22 +301,22 @@ export class ModToolService implements OnDestroy
         return this._callForHelpCategories;
     }
 
-    public get _Str_3325():_Str_5018
+    public get _Str_3325(): ModeratorInitData
     {
         return this._Str_20687;
     }
 
-    public get roomUserVisitedData(): ModtoolRoomVisitedData
+    public get roomUserVisitedData(): RoomVisitsData
     {
         return this._userRoomVisitedData;
     }
 
-    public get currentRoom(): RoomInfoOwnerParser
+    public get currentRoom(): RoomEntryInfoMessageParser
     {
         return this._currentRoomInfo;
     }
 
-    public get currentRoomModData(): ModtoolRoomInfoParser
+    public get currentRoomModData(): ModeratorRoomInfoMessageParser
     {
         return this._modToolRoomInfo;
     }

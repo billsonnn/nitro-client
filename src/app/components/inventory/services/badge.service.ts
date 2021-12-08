@@ -1,8 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { BadgesEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/badges/BadgesEvent';
-import { RequestBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/badges/RequestBadgesComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { BadgeReceivedEvent, BadgesEvent, IMessageEvent, Nitro, RequestBadgesComposer } from '@nitrots/nitro-renderer';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { InventoryService } from './inventory.service';
@@ -34,6 +31,7 @@ export class InventoryBadgeService implements OnDestroy
         {
             this._messages = [
                 new BadgesEvent(this.onBadgesListEvent.bind(this)),
+                new BadgeReceivedEvent(this.onBadgeReceivedEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -80,6 +78,21 @@ export class InventoryBadgeService implements OnDestroy
         });
     }
 
+    public onBadgeReceivedEvent(event: BadgeReceivedEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        this._ngZone.run(() =>
+        {
+            const badge = parser.badgeCode;
+            if(this._badges.indexOf(badge) === -1) this._badges.push(badge);
+        });
+    }
+
     public setAllBadgesSeen(): void
     {
         this._inventoryService.unseenTracker._Str_8813(UnseenItemCategory.BADGE);
@@ -94,7 +107,7 @@ export class InventoryBadgeService implements OnDestroy
 
     public badgeLimitReached(): boolean
     {
-        return (this._badgesInUse.length === 5);
+        return (this._badgesInUse.length === this.maxBadgeCount);
     }
 
     public wearOrClearBadge(badge: string)
@@ -124,6 +137,11 @@ export class InventoryBadgeService implements OnDestroy
         this._needsUpdate = false;
 
         Nitro.instance.communication.connection.send(new RequestBadgesComposer());
+    }
+
+    public get maxBadgeCount(): number
+    {
+        return Nitro.instance.getConfiguration<number>('max.badge.count');
     }
 
     public get controller(): InventoryMainComponent

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FigureData } from '../../../../../client/nitro/avatar/figuredata/FigureData';
+import { FigureData } from '../../common/FigureData';
 import { AvatarEditorService } from '../../services/avatar-editor.service';
 
 @Component({
@@ -101,7 +101,7 @@ export class AvatarEditorWardrobeComponent
 
     private _requestLooks(pageId: number): void
     {
-        this._avatarEditorService.requestWardrobePage(pageId);
+        this._avatarEditorService.requestWardrobePage();
     }
 
     public get currentPage(): number

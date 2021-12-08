@@ -1,4 +1,4 @@
-import { RoomDataParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
+import { RoomDataParser } from '@nitrots/nitro-renderer';
 
 export class NavigatorData
 {

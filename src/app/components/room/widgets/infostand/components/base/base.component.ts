@@ -1,4 +1,4 @@
-import { RoomWidgetUpdateEvent } from '../../../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { RoomWidgetUpdateEvent } from '../../../RoomWidgetUpdateEvent';
 import { RoomInfoStandMainComponent } from '../main/main.component';
 
 export class RoomInfoStandBaseComponent

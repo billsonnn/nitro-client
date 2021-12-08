@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Nitro, RoomObjectCategory } from '@nitrots/nitro-renderer';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../client/nitro/room/object/RoomObjectCategory';
 import { SettingsService } from '../../../core/settings/service';
 import { ChatHistoryItem } from '../common/ChatHistoryItem';
 import { ChatHistorySet } from '../common/ChatHistorySet';

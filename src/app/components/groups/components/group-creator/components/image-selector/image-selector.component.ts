@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import GroupBadgePart from '../../../../common/GroupBadgePart';
+import { GroupDataBadgePart } from '@nitrots/nitro-renderer';
 
 @Component({
     selector: '[nitro-group-image-selector-component]',
@@ -11,10 +11,10 @@ export class GroupCreatorImageSelectorComponent
     public items: Map<number, string[]>;
 
     @Input()
-    public part: GroupBadgePart;
+    public part: GroupDataBadgePart;
 
     @Output()
-    onSelect: EventEmitter<any> = new EventEmitter();
+    public onSelect: EventEmitter<any> = new EventEmitter();
 
     public getBadgeCode(id: number): string
     {

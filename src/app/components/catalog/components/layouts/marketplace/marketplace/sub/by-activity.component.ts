@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Nitro } from '../../../../../../../../client/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer';
 
 @Component({
     template: `
@@ -15,9 +15,6 @@ export class CatalogLayoutMarketplaceMarketplaceSubActivityComponent implements 
 {
     @Input()
     public sortTypes: number[];
-
-
-
 
     @Output()
     public sortChanged = new EventEmitter<number>();

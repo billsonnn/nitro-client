@@ -1,16 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { PetAddedToInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetAddedToInventoryEvent';
-import { PetInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetInventoryEvent';
-import { PetRemovedFromInventory } from '../../../../client/nitro/communication/messages/incoming/inventory/pets/PetRemovedFromInventoryEvent';
-import { RequestPetsComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/pets/RequestPetsComposer';
-import { PetData } from '../../../../client/nitro/communication/messages/parser/inventory/pets/PetData';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomObjectPlacementSource } from '../../../../client/nitro/room/enums/RoomObjectPlacementSource';
-import { RoomEngineObjectEvent } from '../../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineObjectPlacedEvent } from '../../../../client/nitro/room/events/RoomEngineObjectPlacedEvent';
-import { RoomObjectCategory } from '../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../client/nitro/room/object/RoomObjectType';
+import { IMessageEvent, Nitro, PetAddedToInventoryEvent, PetData, PetInventoryEvent, PetRemovedFromInventory, RequestPetsComposer, RoomEngineObjectEvent, RoomEngineObjectPlacedEvent, RoomObjectCategory, RoomObjectPlacementSource, RoomObjectType } from '@nitrots/nitro-renderer';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { PetItem } from '../items/PetItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
@@ -81,7 +70,7 @@ export class InventoryPetService implements OnDestroy
         {
             this._isObjectMoverRequested = false;
 
-            if(!event._Str_4057)
+            if(!event.placedInRoom)
             {
                 this._ngZone.run(() => this._inventoryService.showWindow());
             }

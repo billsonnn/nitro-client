@@ -11,28 +11,28 @@ export class NavigatorRoomSettingsTabModComponent
     public roomSettings: RoomSettings;
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onUnban: EventEmitter<any> = new EventEmitter();
+    public onUnban: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onOpenProfile: EventEmitter<any> = new EventEmitter();
+    public onOpenProfile: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}
 
-    save(): void
+    public save(): void
     {
         this.onSave.emit(this.roomSettings);
     }
 
-    unban(): void
+    public unban(): void
     {
         this.onUnban.emit();
     }
 
-    openProfile(userId: number): void
+    public openProfile(userId: number): void
     {
         this.onOpenProfile.emit(userId);
     }

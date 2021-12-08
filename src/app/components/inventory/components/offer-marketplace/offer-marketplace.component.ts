@@ -1,13 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { RenderTexture } from 'pixi.js';
-import { MarketplaceSellItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/marketplace/MarketplaceSellItemComposer';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { IGetImageListener, ImageResult, MakeOfferMessageComposer, Nitro, NitroRenderTexture, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { FurnitureItem } from '../../items/FurnitureItem';
 import { InventoryFurnitureService } from '../../services/furniture.service';
@@ -172,24 +164,24 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
         text = text.replace('%days%', days.toString());
 
 
-        const price = this._inventoryFurniService.marketPlaceItemStats._Str_3925;
+        const price = this._inventoryFurniService.marketPlaceItemStats.averagePrice;
         const priceText = price == 0 ? ' - ' : price.toString();
 
         text = text.replace('%price%', priceText);
 
-        const noCommission = Math.floor((this._inventoryFurniService.marketPlaceItemStats._Str_3925 / (1 + (commission * 0.01))));
+        const noCommission = Math.floor((this._inventoryFurniService.marketPlaceItemStats.averagePrice / (1 + (commission * 0.01))));
         const commissionText = noCommission == 0 ? ' - ' : noCommission.toString();
 
         text = text.replace('%price_no_commission%', commissionText);
 
-        const average = this._inventoryFurniService.marketPlaceItemStats._Str_3925;
+        const average = this._inventoryFurniService.marketPlaceItemStats.averagePrice;
         const averageText = average == 0 ? ' - ' : average.toString();
 
         text = text.replace('%average%', averageText);
         return text;
     }
 
-    public imageReady(id: number, texture: RenderTexture, image: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image: HTMLImageElement): void
     {
         if(!texture) return;
 
@@ -281,7 +273,7 @@ export class OfferMarketplaceComponent implements OnChanges, IGetImageListener
     public doPostOffer(): void
     {
         const local2 = this.item.isWallItem ? 2 : 1;
-        Nitro.instance.communication.connection.send(new MarketplaceSellItemComposer(this.askingPrice, local2, this.item.ref));
+        Nitro.instance.communication.connection.send(new MakeOfferMessageComposer(this.askingPrice, local2, this.item.ref));
         this.showConfirmDialog = false;
         this.closeMainWindow();
     }

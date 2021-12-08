@@ -2,9 +2,7 @@
 <div class="row">
     <div class="col-4">
         <div class="mb-1">{{ ('group.create.confirm.guildbadge') | translate }}</div>
-        <button class="btn btn-primary mb-3" style="width: 120px;height: 67px;">
-            <nitro-badge [badge]="groupSettings.currentBadgeCode" [isGroup]="true"></nitro-badge>
-        </button>
+        <button badge-image class="btn btn-primary mb-3" style="width: 120px;height: 67px;" [badge]="groupSettings.currentBadgeCode" [isGroup]="true" [asBackground]="true"></button>
         <div class="mb-1">{{ ('group.create.confirm.guildcolors') | translate }}</div>
         <div class="btn-group" style="height: 67px;width: 120px;">
             <button class="btn btn-primary btn-lg" [style]="{backgroundColor: '#' + groupColorsA.get(groupSettings.colorA)}"></button>

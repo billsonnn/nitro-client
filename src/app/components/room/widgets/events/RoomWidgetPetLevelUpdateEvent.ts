@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '@nitrots/nitro-renderer';
 
 export class RoomWidgetPetLevelUpdateEvent extends RoomWidgetUpdateEvent
 {

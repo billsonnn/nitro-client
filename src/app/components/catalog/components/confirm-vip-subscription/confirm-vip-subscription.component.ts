@@ -1,6 +1,5 @@
-import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CatalogClubOfferData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Component, Input, NgZone } from '@angular/core';
+import { ClubOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogService } from '../../services/catalog.service';
 @Component({
     selector: 'nitro-catalog-confirm-vip-subscription-component',
@@ -9,7 +8,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class CatalogConfirmVipSubscriptionComponent
 {
     @Input()
-    public subscription: CatalogClubOfferData = null;
+    public subscription: ClubOfferData = null;
 
 
     constructor(

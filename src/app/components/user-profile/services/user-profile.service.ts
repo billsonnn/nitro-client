@@ -1,19 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
-import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
-import { UserCurrentBadgesEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserCurrentBadgesEvent';
-import { UserProfileEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserProfileEvent';
-import { UserRelationshipsEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserRelationshipsEvent';
-import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
-import { UserCurrentBadgesComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserCurrentBadgesComposer';
-import { UserProfileComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { UserRelationshipsComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserRelationshipsComposer';
-import { GroupInformationParser } from '../../../../client/nitro/communication/messages/parser/group/GroupInformationParser';
-import { UserProfileParser } from '../../../../client/nitro/communication/messages/parser/user/data/UserProfileParser';
-import { UserRelationshipDataParser } from '../../../../client/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomEngineObjectEvent } from '../../../../client/nitro/room/events/RoomEngineObjectEvent';
+import { GroupInformationComposer, GroupInformationEvent, GroupInformationParser, ILinkEventTracker, IMessageEvent, Nitro, RelationshipStatusEnum, RelationshipStatusInfo, RelationshipStatusInfoEvent, RoomEngineObjectEvent, UserCurrentBadgesComposer, UserCurrentBadgesEvent, UserProfileComposer, UserProfileEvent, UserProfileParser, UserRelationshipsComposer } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { UserProfileComponent } from '../component/user-profile.component';
 
@@ -24,9 +10,9 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
     private _messages: IMessageEvent[];
     private _userLoadedProfile: UserProfileParser;
     private _userBadges: string[];
-    private _heartRelationships: UserRelationshipDataParser[];
-    private _smileRelationships: UserRelationshipDataParser[];
-    private _bobbaRelationships: UserRelationshipDataParser[];
+    private _heartRelationships: RelationshipStatusInfo;
+    private _smileRelationships: RelationshipStatusInfo;
+    private _bobbaRelationships: RelationshipStatusInfo;
     private _selectedGroup: GroupInformationParser;
 
     constructor(
@@ -52,9 +38,9 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
     {
         this._userLoadedProfile  = null;
         this._userBadges         = [];
-        this._heartRelationships = [];
-        this._smileRelationships = [];
-        this._bobbaRelationships = [];
+        this._heartRelationships = null;
+        this._smileRelationships = null;
+        this._bobbaRelationships = null;
         this._selectedGroup      = null;
     }
 
@@ -69,7 +55,7 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
             this._messages = [
                 new UserProfileEvent(this.onUserProfileEvent.bind(this)),
                 new UserCurrentBadgesEvent(this.onUserCurrentBadgesEvent.bind(this)),
-                new UserRelationshipsEvent(this.onUserRelationshipsEvent.bind(this)),
+                new RelationshipStatusInfoEvent(this.onUserRelationshipsEvent.bind(this)),
                 new GroupInformationEvent(this.onGroupInformationEvent.bind(this))
             ];
 
@@ -117,7 +103,10 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
             Nitro.instance.communication.connection.send(new UserCurrentBadgesComposer(this._userLoadedProfile.id));
             Nitro.instance.communication.connection.send(new UserRelationshipsComposer(this._userLoadedProfile.id));
 
-            if(parser.groups.length > 0) Nitro.instance.communication.connection.send(new GroupInformationComposer(this._userLoadedProfile.groups[0].id, false));
+            if(parser.groups.length > 0)
+            {
+                Nitro.instance.communication.connection.send(new GroupInformationComposer(this._userLoadedProfile.groups[0].groupId, false));
+            }
 
             this._settingsService.showUserProfile();
         });
@@ -136,7 +125,7 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
         this._ngZone.run(() => (this._userBadges = parser.badges));
     }
 
-    private onUserRelationshipsEvent(event: UserRelationshipsEvent): void
+    private onUserRelationshipsEvent(event: RelationshipStatusInfoEvent): void
     {
         if(!event || !this._userLoadedProfile) return;
 
@@ -144,15 +133,13 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
 
         if(!parser) return;
 
-        if(parser.id !== this._userLoadedProfile.id) return;
+        if(parser.userId !== this._userLoadedProfile.id) return;
 
         this._ngZone.run(() =>
         {
-            this._heartRelationships = parser.hearts;
-            this._smileRelationships = parser.smiles;
-            this._bobbaRelationships = parser.bobbas;
-
-            (this._component && this._component.getRandomRelationships());
+            this._heartRelationships = parser.relationshipStatusMap.getValue(RelationshipStatusEnum.HEART);
+            this._smileRelationships = parser.relationshipStatusMap.getValue(RelationshipStatusEnum.SMILE);
+            this._bobbaRelationships = parser.relationshipStatusMap.getValue(RelationshipStatusEnum.BOBBA);
         });
     }
 
@@ -223,17 +210,17 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
         return this._userBadges;
     }
 
-    public get heartRelationships(): UserRelationshipDataParser[]
+    public get heartRelationships(): RelationshipStatusInfo
     {
         return this._heartRelationships;
     }
 
-    public get smileRelationships(): UserRelationshipDataParser[]
+    public get smileRelationships(): RelationshipStatusInfo
     {
         return this._smileRelationships;
     }
 
-    public get bobbaRelationships(): UserRelationshipDataParser[]
+    public get bobbaRelationships(): RelationshipStatusInfo
     {
         return this._bobbaRelationships;
     }

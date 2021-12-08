@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer';
 import { RoomWidgetChatUpdateEvent } from '../../events/RoomWidgetChatUpdateEvent';
 
 @Component({

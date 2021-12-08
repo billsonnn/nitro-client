@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserProfileComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { GroupInformationParser } from '../../../../client/nitro/communication/messages/parser/group/GroupInformationParser';
-import { UserProfileParser } from '../../../../client/nitro/communication/messages/parser/user/data/UserProfileParser';
-import { UserRelationshipDataParser } from '../../../../client/nitro/communication/messages/parser/user/data/UserRelationshipDataParser';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { FriendlyTime, GroupInformationParser, Nitro, RelationshipStatusInfo, UserProfileComposer, UserProfileParser } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { SessionService } from '../../../security/services/session.service';
 import { UserProfileService } from '../services/user-profile.service';
@@ -14,9 +10,6 @@ import { UserProfileService } from '../services/user-profile.service';
 })
 export class UserProfileComponent implements OnInit, OnDestroy
 {
-    private _currentRandomHeartRelationship: UserRelationshipDataParser = null;
-    private _currentRandomSmileRelationship: UserRelationshipDataParser = null;
-    private _currentRandomBobbaRelationship: UserRelationshipDataParser = null;
     private _tabId: number                                              = 0;
 
     constructor(
@@ -40,18 +33,11 @@ export class UserProfileComponent implements OnInit, OnDestroy
         this._settingsService.hideUserProfile();
     }
 
-    public openRelationshipProfile(relationship: UserRelationshipDataParser): void
+    public openRelationshipProfile(relationship: RelationshipStatusInfo): void
     {
         if(!relationship) return;
 
-        Nitro.instance.communication.connection.send(new UserProfileComposer(relationship.userId));
-    }
-
-    public getRandomRelationships(): void
-    {
-        this._currentRandomHeartRelationship = this.heartRelationships[Math.floor(Math.random() * this.heartRelationships.length)];
-        this._currentRandomSmileRelationship = this.smileRelationships[Math.floor(Math.random() * this.smileRelationships.length)];
-        this._currentRandomBobbaRelationship = this.bobbaRelationships[Math.floor(Math.random() * this.bobbaRelationships.length)];
+        Nitro.instance.communication.connection.send(new UserProfileComposer(relationship.randomFriendId));
     }
 
     public selectGroup(groupId: number): void
@@ -87,6 +73,14 @@ export class UserProfileComponent implements OnInit, OnDestroy
         return false;
     }
 
+    public get lastLogin(): string
+    {
+        if(this.userProfile)
+            return FriendlyTime.format(this.userProfile.secondsSinceLastVisit, '.ago', 2);
+
+        return '';
+    }
+
     public get isFriend(): boolean
     {
         if(this.userProfile)
@@ -95,34 +89,19 @@ export class UserProfileComponent implements OnInit, OnDestroy
         return false;
     }
 
-    public get heartRelationships(): UserRelationshipDataParser[]
+    public get currentRandomHeartRelationship(): RelationshipStatusInfo
     {
         return this._userProfileService.heartRelationships;
     }
 
-    public get currentRandomHeartRelationship(): UserRelationshipDataParser
-    {
-        return this._currentRandomHeartRelationship;
-    }
-
-    public get smileRelationships(): UserRelationshipDataParser[]
+    public get currentRandomSmileRelationship(): RelationshipStatusInfo
     {
         return this._userProfileService.smileRelationships;
     }
 
-    public get currentRandomSmileRelationship(): UserRelationshipDataParser
-    {
-        return this._currentRandomSmileRelationship;
-    }
-
-    public get bobbaRelationships(): UserRelationshipDataParser[]
+    public get currentRandomBobbaRelationship(): RelationshipStatusInfo
     {
         return this._userProfileService.bobbaRelationships;
-    }
-
-    public get currentRandomBobbaRelationship(): UserRelationshipDataParser
-    {
-        return this._currentRandomBobbaRelationship;
     }
 
     public get selectedGroup(): GroupInformationParser

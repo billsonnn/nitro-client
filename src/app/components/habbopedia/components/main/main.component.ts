@@ -1,6 +1,5 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
-import { ILinkEventTracker } from '../../../../../client/core/events/ILinkEventTracker';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Component, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { ILinkEventTracker, Nitro } from '@nitrots/nitro-renderer';
 import { HabbopediaService } from '../../services/habbopedia.service';
 import { HabbopediaPageComponent } from '../page/page.component';
 
@@ -16,9 +15,7 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
     private _pages: Map<HabbopediaPageComponent, ComponentRef<HabbopediaPageComponent>> = new Map();
 
     constructor(
-        private _habbopediaService: HabbopediaService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
-        private _ngZone: NgZone)
+        private _habbopediaService: HabbopediaService)
     {}
 
     public ngOnInit(): void
@@ -55,16 +52,9 @@ export class HabbopediaMainComponent implements OnInit, OnDestroy, ILinkEventTra
     {
         if(!type) return null;
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(type);
+        const ref = this.pagesContainer.createComponent(type);
 
-        let ref: ComponentRef<HabbopediaPageComponent> = null;
-
-        if(factory)
-        {
-            ref = this.pagesContainer.createComponent(factory);
-
-            this._pages.set(ref.instance, ref);
-        }
+        this._pages.set(ref.instance, ref);
 
         return ref.instance;
     }

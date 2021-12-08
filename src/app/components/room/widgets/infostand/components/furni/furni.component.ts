@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
-import { CrackableDataType } from '../../../../../../../client/nitro/room/object/data/type/CrackableDataType';
-import { StringDataType } from '../../../../../../../client/nitro/room/object/data/type/StringDataType';
-import { RoomControllerLevel } from '../../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomWidgetEnumItemExtradataParameter } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
-import { RoomWidgetFurniInfoUsagePolicyEnum } from '../../../../../../../client/nitro/ui/widget/enums/RoomWidgetFurniInfoUsagePolicyEnum';
+import { CrackableDataType, Nitro, RoomControllerLevel, RoomWidgetEnumItemExtradataParameter, RoomWidgetFurniInfoUsagePolicyEnum, StringDataType } from '@nitrots/nitro-renderer';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetFurniActionMessage } from '../../../messages/RoomWidgetFurniActionMessage';
 import { InfoStandFurniData } from '../../data/InfoStandFurniData';
@@ -56,7 +51,7 @@ export class RoomInfoStandFurniComponent extends RoomInfoStandBaseComponent
             if(event.roomControllerLevel >= RoomControllerLevel.MODERATOR) godMode = true;
         }
 
-        if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18353) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum._Str_18194) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
+        if((((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum.EVERYBODY) || ((event.usagePolicy === RoomWidgetFurniInfoUsagePolicyEnum.CONTROLLER) && isValidController)) || ((event.extraParam === RoomWidgetEnumItemExtradataParameter.JUKEBOX) && isValidController)) || ((event.extraParam == RoomWidgetEnumItemExtradataParameter.USABLE_PRODUCT) && isValidController))
         {
             canUse = true;
         }

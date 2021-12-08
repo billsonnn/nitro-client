@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy } from '@angular/core';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomObjectItem } from '../../events/RoomObjectItem';
 import { RoomWidgetRoomObjectMessage } from '../../messages/RoomWidgetRoomObjectMessage';
 

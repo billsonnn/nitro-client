@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { IEventDispatcher, Nitro } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../events/RoomWidgetRoomObjectUpdateEvent';

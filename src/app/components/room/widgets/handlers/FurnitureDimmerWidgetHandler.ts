@@ -1,24 +1,19 @@
-﻿import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomEngineDimmerStateEvent } from '../../../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomSessionDimmerPresetsEvent } from '../../../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { NitroEvent, RoomControllerLevel, RoomEngineDimmerStateEvent, RoomEngineTriggerWidgetEvent, RoomSessionDimmerPresetsEvent, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetDimmerStateUpdateEvent } from '../events/RoomWidgetDimmerStateUpdateEvent';
 import { RoomWidgetDimmerUpdateEvent } from '../events/RoomWidgetDimmerUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetDimmerChangeStateMessage } from '../messages/RoomWidgetDimmerChangeStateMessage';
 import { RoomWidgetDimmerPreviewMessage } from '../messages/RoomWidgetDimmerPreviewMessage';
 import { RoomWidgetDimmerSavePresetMessage } from '../messages/RoomWidgetDimmerSavePresetMessage';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose():void
     {
@@ -55,7 +50,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
                 if(!previewMessage || !this._container.roomEngine) return null;
 
-                this._container.roomEngine._Str_17804(roomId, previewMessage.color, previewMessage._Str_5123, previewMessage._Str_11464);
+                this._container.roomEngine.updateObjectRoomColor(roomId, previewMessage.color, previewMessage._Str_5123, previewMessage._Str_11464);
                 break;
             }
         }
@@ -68,7 +63,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
         switch(event.type)
         {
-            case RoomSessionDimmerPresetsEvent.RSDPE_PRESETS: {
+            case RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS: {
 
                 const presetsEvent  = (event as RoomSessionDimmerPresetsEvent);
                 const updateEvent   = new RoomWidgetDimmerUpdateEvent(RoomWidgetDimmerUpdateEvent.RWDUE_PRESETS);
@@ -77,11 +72,11 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
 
                 let i = 0;
 
-                while(i < presetsEvent._Str_10888)
+                while(i < presetsEvent.presetCount)
                 {
-                    const _local_7 = presetsEvent._Str_14989(i);
+                    const _local_7 = presetsEvent.getPreset(i);
 
-                    if(_local_7) updateEvent.setPresetValues(_local_7.id, _local_7.type, _local_7.color, _local_7._Str_4272);
+                    if(_local_7) updateEvent.setPresetValues(_local_7.id, _local_7.type, _local_7.color, _local_7.brightness);
 
                     i++;
                 }
@@ -93,7 +88,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
             case RoomEngineDimmerStateEvent.ROOM_COLOR: {
                 const stateEvent = (event as RoomEngineDimmerStateEvent);
 
-                this._container.events.dispatchEvent(new RoomWidgetDimmerStateUpdateEvent(stateEvent.state, stateEvent._Str_14686, stateEvent._Str_6815, stateEvent.color, stateEvent._Str_5123));
+                this._container.events.dispatchEvent(new RoomWidgetDimmerStateUpdateEvent(stateEvent.state, stateEvent.presetId, stateEvent.effectId, stateEvent.color, stateEvent.brightness));
                 return;
             }
             case RoomEngineTriggerWidgetEvent.REMOVE_DIMMER:
@@ -121,7 +116,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.ROOM_DIMMER;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }
@@ -139,7 +134,7 @@ export class FurnitureDimmerWidgetHandler implements IRoomWidgetHandler
     public get eventTypes(): string[]
     {
         return [
-            RoomSessionDimmerPresetsEvent.RSDPE_PRESETS,
+            RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS,
             RoomEngineDimmerStateEvent.ROOM_COLOR,
             RoomEngineTriggerWidgetEvent.REMOVE_DIMMER
         ];

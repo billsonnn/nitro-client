@@ -1,18 +1,14 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomEngineObjectEvent } from '../../../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { NitroEvent, RoomEngineObjectEvent, RoomEngineTriggerWidgetEvent, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { MannequinWidget } from '../furniture/mannequin/mannequin.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureMannequinWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _widget: MannequinWidget;
 
     public dispose():void
@@ -74,12 +70,12 @@ export class FurnitureMannequinWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.MANNEQUIN;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }

@@ -1,12 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ConfigurationEvent } from '../client/core/configuration/ConfigurationEvent';
-import { NitroEvent } from '../client/core/events/NitroEvent';
-import { NitroCommunicationDemoEvent } from '../client/nitro/communication/demo/NitroCommunicationDemoEvent';
-import { LegacyExternalInterface } from '../client/nitro/externalInterface/LegacyExternalInterface';
-import { NitroLocalizationEvent } from '../client/nitro/localization/NitroLocalizationEvent';
-import { Nitro } from '../client/nitro/Nitro';
-import { RoomEngineEvent } from '../client/nitro/room/events/RoomEngineEvent';
-import { WebGL } from '../client/nitro/utils/WebGL';
+import { ConfigurationEvent, LegacyExternalInterface, Nitro, NitroCommunicationDemoEvent, NitroEvent, NitroLocalizationEvent, NitroVersion, RoomEngineEvent, WebGL } from '@nitrots/nitro-renderer';
 import { SettingsService } from './core/settings/service';
 
 @Component({
@@ -47,7 +40,13 @@ export class AppComponent implements OnInit, OnDestroy
                 return;
             }
 
-            if(!Nitro.instance) Nitro.bootstrap();
+            if(!Nitro.instance)
+            {
+                NitroVersion.UI_VERSION = '1.2.0';
+                Nitro.bootstrap();
+            }
+
+            Nitro.instance.setWorker(new Worker(new URL('../app/core/nitro-worker', import.meta.url), { type: 'module' }));
 
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKING, this.onNitroEvent);
             Nitro.instance.events.addEventListener(NitroCommunicationDemoEvent.CONNECTION_HANDSHAKE_FAILED, this.onNitroEvent);

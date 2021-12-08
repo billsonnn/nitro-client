@@ -1,21 +1,14 @@
-import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { INitroCommunicationManager } from '../../../../../client/nitro/communication/INitroCommunicationManager';
-import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomLikeRoomComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomLikeRoomComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { GetGuestRoomResultEvent, IMessageEvent, INitroCommunicationManager, Nitro, NitroEvent, RoomLikeRoomComposer, RoomWidgetEnum, RoomZoomEvent } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetZoomToggleMessage } from '../messages/RoomWidgetZoomToggleMessage';
 import { RoomToolsMainComponent } from '../roomtools/main/main.component';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomToolsWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer; // private var _container:IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager; // private var _container:IRoomWidgetManager;
     private _communicationManager: INitroCommunicationManager; // private var _communicationManager:IHabboCommunicationManager;
     private _widget: RoomToolsMainComponent; //private var _widget:RoomToolsWidget;
     private _messages: IMessageEvent[]; //private var _communicationManagerMessageEvents:Vector.<IMessageEvent>;
@@ -31,7 +24,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._messages = [];
         this._disposed = false;
 
-        this.onRoomInfoEvent = this.onRoomInfoEvent.bind(this);
+        this.onGetGuestRoomResultEvent = this.onGetGuestRoomResultEvent.bind(this);
     }
 
     public dispose(): void
@@ -73,7 +66,7 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         if(!event || this._disposed) return;
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 
@@ -124,18 +117,18 @@ export class RoomToolsWidgetHandler implements IRoomWidgetHandler
         this._widget = widget;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent) ];
+            this._messages = [ new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent) ];
 
             for(const message of this._messages)
             {

@@ -1,15 +1,5 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { ActionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ActionDefinition';
-import { ConditionDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/ConditionDefinition';
-import { Triggerable } from '../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { TriggerDefinition } from '../../../../../client/nitro/communication/messages/incoming/roomevents/TriggerDefinition';
-import { UpdateActionMessageComposer } from '../../../../../client/nitro/communication/messages/outgoing/roomevents/UpdateActionMessageComposer';
-import { UpdateConditionMessageComposer } from '../../../../../client/nitro/communication/messages/outgoing/roomevents/UpdateConditionMessageComposer';
-import { UpdateTriggerMessageComposer } from '../../../../../client/nitro/communication/messages/outgoing/roomevents/UpdateTriggerMessageComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { SettingsService } from '../../../../core/settings/service';
+import { Component, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ConditionDefinition, Nitro, RoomObjectCategory, RoomObjectVariable, Triggerable, TriggerDefinition, UpdateActionMessageComposer, UpdateConditionMessageComposer, UpdateTriggerMessageComposer, WiredActionDefinition } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { IUserDefinedRoomEventsCtrl } from '../../IUserDefinedRoomEventsCtrl';
 import { WiredService } from '../../services/wired.service';
@@ -44,10 +34,8 @@ export class WiredMainComponent implements OnInit, OnDestroy
     private _furniSelectedIds: number[] = [];
 
     constructor(
-        private _settingsService: SettingsService,
         private _notificationService: NotificationService,
         private _wiredService: WiredService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     {}
 
@@ -87,7 +75,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
     {
         if(this._updated instanceof TriggerDefinition) return this._triggerConfs;
 
-        if(this._updated instanceof ActionDefinition) return this._actionTypes;
+        if(this._updated instanceof WiredActionDefinition) return this._actionTypes;
 
         if(this._updated instanceof ConditionDefinition) return this._conditionTypes;
 
@@ -104,14 +92,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
         if(this.inputsContainer.length) this.inputsContainer.remove();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(wiredType);
-
-        let ref: ComponentRef<WiredFurniture> = null;
-
-        if(factory)
-        {
-            ref = this.inputsContainer.createComponent(factory);
-        }
+        const ref = this.inputsContainer.createComponent(wiredType);
 
         this._lastComponent = ref;
 
@@ -171,7 +152,7 @@ export class WiredMainComponent implements OnInit, OnDestroy
             return;
         }
 
-        if(this._updated instanceof ActionDefinition)
+        if(this._updated instanceof WiredActionDefinition)
         {
             Nitro.instance.communication.connection.send(new UpdateActionMessageComposer(this._updated.id, this.readIntegerParams(), this.readStringParam(), this.readFurniSelectionIds(), this.getActionDelay(), this.readFurniSelectionCode()));
 
@@ -227,13 +208,13 @@ export class WiredMainComponent implements OnInit, OnDestroy
 
     private readFurniSelectionCode(): number
     {
-        if(!this._updated._Str_21824) return 0;
+        if(!this._updated.stuffTypeSelectionEnabled) return 0;
 
         const wired = this._Str_3959();
 
         if(wired && ((wired.requiresFurni === WiredMainComponent._Str_4991) || (wired.requiresFurni === WiredMainComponent._Str_5430)))
         {
-            return this._updated._Str_6040;
+            return this._updated.stuffTypeSelectionCode;
         }
 
         return 0;

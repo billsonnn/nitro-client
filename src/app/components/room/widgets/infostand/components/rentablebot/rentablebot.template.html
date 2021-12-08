@@ -11,7 +11,7 @@
             <div class="flex-grow-1">
                 <div class="badge-container">
                     <div *ngFor="let badge of botData.badges" class="badge-item">
-                        <nitro-badge *ngIf="(badge !== '')" [badge]="badge"></nitro-badge>
+                        <div badge-image *ngIf="(badge !== '')" [badge]="badge"></div>
                     </div>
                 </div>
             </div>

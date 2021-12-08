@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
-import { FurnitureStackHeightComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureStackHeightComposer';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { FurnitureStackHeightComposer } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureCustomStackHeightWidgetHandler } from '../../handlers/FurnitureCustomStackHeightWidgetHandler';
 
 @Component({

@@ -1,5 +1,5 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Component, ComponentRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationBroadcastMessageComponent } from '../broadcast-message/broadcast-message.component';
 import { NotificationChoice, NotificationChoicesComponent } from '../choices/choices.component';
@@ -20,7 +20,6 @@ export class AlertCenterComponent implements OnInit, OnDestroy
 
     constructor(
         private _notificationService: NotificationService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     { }
 
@@ -157,16 +156,9 @@ export class AlertCenterComponent implements OnInit, OnDestroy
 
         let instance: NotificationBroadcastMessageComponent = null;
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(type);
+        const ref = this.alertsContainer.createComponent(type);
 
-        let ref: ComponentRef<NotificationBroadcastMessageComponent> = null;
-
-        if(factory)
-        {
-            ref = this.alertsContainer.createComponent(factory);
-
-            this._alerts.set(ref.instance, ref);
-        }
+        this._alerts.set(ref.instance, ref);
 
         instance = ref.instance;
 

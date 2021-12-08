@@ -1,24 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DesktopViewComposer } from '../../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { NitroToolbarEvent } from '../../../../../client/nitro/events/NitroToolbarEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { Dispose } from '../../../../../client/nitro/window/motion/Dispose';
-import { DropBounce } from '../../../../../client/nitro/window/motion/DropBounce';
-import { EaseOut } from '../../../../../client/nitro/window/motion/EaseOut';
-import { JumpBy } from '../../../../../client/nitro/window/motion/JumpBy';
-import { Motions } from '../../../../../client/nitro/window/motion/Motions';
-import { Queue } from '../../../../../client/nitro/window/motion/Queue';
-import { Wait } from '../../../../../client/nitro/window/motion/Wait';
+import { DesktopViewComposer, Dispose, DropBounce, EaseOut, JumpBy, Motions, Nitro, NitroToolbarAnimateIconEvent, NitroToolbarEvent, Queue, ToolbarIconEnum, Wait } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { SessionService } from '../../../../security/services/session.service';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
-import { NavigatorService } from '../../../navigator/services/navigator.service';
 import { ModToolService } from '../../../mod-tool/services/mod-tool.service';
+import { NavigatorService } from '../../../navigator/services/navigator.service';
 
 @Component({
     selector: 'nitro-toolbar-component',
@@ -158,14 +147,14 @@ export class ToolbarMainComponent implements OnInit, OnDestroy
 
             const motionName = (`ToolbarBouncing[${ iconName }]`);
 
-            if(!Motions._Str_19320(motionName))
+            if(!Motions.getMotionByTag(motionName))
             {
-                Motions._Str_4598(new Queue(new Wait((wait + 8)), new DropBounce(target, 400, 12))).tag = motionName;
+                Motions.runMotion(new Queue(new Wait((wait + 8)), new DropBounce(target, 400, 12))).tag = motionName;
             }
 
             const _local_19 = new Queue(new EaseOut(new JumpBy(image, wait, ((targetBounds.x - imageBounds.x) + height), (targetBounds.y - imageBounds.y), 100, 1), 1), new Dispose(image));
 
-            Motions._Str_4598(_local_19);
+            Motions.runMotion(_local_19);
         }
     }
 

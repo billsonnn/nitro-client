@@ -1,20 +1,18 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import * as sorting from '../../../../../utils/sorting';
+import { NitroEvent, RoomObjectCategory, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { dynamicSort } from '../choosers/utils/sorting';
 import { RoomObjectItem } from '../events/RoomObjectItem';
 import { RoomWidgetChooserContentEvent } from '../events/RoomWidgetChooserContentEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class UserChooserWidgetHandler implements IRoomWidgetHandler
 {
     private _isDisposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -75,7 +73,7 @@ export class UserChooserWidgetHandler implements IRoomWidgetHandler
             units.push(new RoomObjectItem(unitData.roomIndex, categoryId, unitData.name));
         }
 
-        units.sort(sorting.dynamicSort('name'));
+        units.sort(dynamicSort('name'));
         this._container.events.dispatchEvent(new RoomWidgetChooserContentEvent(RoomWidgetChooserContentEvent.RWCCE_USER_CHOOSER_CONTENT, units));
     }
 
@@ -99,7 +97,7 @@ export class UserChooserWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.USER_CHOOSER;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }

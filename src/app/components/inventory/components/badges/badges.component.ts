@@ -1,6 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { SetActivatedBadgesComposer } from '../../../../../client/nitro/communication/messages/outgoing/inventory/badges/SetActivatedBadgesComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Nitro, SetActivatedBadgesComposer } from '@nitrots/nitro-renderer';
 import { AchievementsService } from '../../../achievements/services/achievements.service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { InventoryService } from '../../services/inventory.service';
@@ -27,7 +26,7 @@ export class InventoryBadgesComponent extends InventorySharedComponent implement
     {
         this._inventoryService.badgesController = this;
 
-        if(this._inventoryService.controller.botService.isInitalized) this.selectExistingGroupOrDefault();
+        if(this._inventoryService.controller.badgeService.isInitalized) this.selectExistingGroupOrDefault();
 
         this.prepareInventory();
     }

@@ -1,4 +1,4 @@
-﻿import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { RoomWidgetUpdateEvent } from '@nitrots/nitro-renderer';
 import { _Str_3801 } from './_Str_3801';
 
 export class RoomWidgetPetBreedingResultEvent extends RoomWidgetUpdateEvent

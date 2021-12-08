@@ -1,7 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { CallForHelpResultMessageEvent } from '../../../../client/nitro/communication/messages/incoming/help/CallForHelpResultMessageEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { CallForHelpResultMessageEvent, IMessageEvent, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import { CallForHelpMainComponent } from '../components/main/main.component';
 

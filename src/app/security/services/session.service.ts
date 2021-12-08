@@ -1,8 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../client/core/communication/messages/IMessageEvent';
-import { UserFigureEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserFigureEvent';
-import { UserInfoEvent } from '../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { Nitro } from '../../../client/nitro/Nitro';
+import { FigureUpdateEvent, IMessageEvent, Nitro, UserInfoEvent } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class SessionService implements OnDestroy
@@ -34,7 +31,7 @@ export class SessionService implements OnDestroy
         {
             this._messages = [
                 new UserInfoEvent(this.onUserInfoEvent.bind(this)),
-                new UserFigureEvent(this.onUserFigureEvent.bind(this))
+                new FigureUpdateEvent(this.onFigureUpdateEvent.bind(this))
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -70,7 +67,7 @@ export class SessionService implements OnDestroy
         });
     }
 
-    private onUserFigureEvent(event: UserFigureEvent): void
+    private onFigureUpdateEvent(event: FigureUpdateEvent): void
     {
         if(!event) return;
 

@@ -1,21 +1,14 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomEngineObjectEvent } from '../../../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
+import { IFurnitureData, IRoomObject, NitroEvent, RoomEngineObjectEvent, RoomEngineTriggerWidgetEvent, RoomObjectCategory, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { FurnitureContextMenuWidget } from '../furniture/context-menu/components/main/main.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetUseProductMessage } from '../messages/RoomWidgetUseProductMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureContextMenuWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _isDisposed: boolean                    = false;
     private _widget: FurnitureContextMenuWidget;
 
@@ -60,7 +53,7 @@ export class FurnitureContextMenuWidgetHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.FURNI_STICKIE_WIDGET;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         if(this._container)
         {
@@ -88,7 +81,7 @@ export class FurnitureContextMenuWidgetHandler implements IRoomWidgetHandler
         }
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }

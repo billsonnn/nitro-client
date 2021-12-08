@@ -1,12 +1,11 @@
 import { Component, NgZone } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../client/core/events/IEventDispatcher';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { IEventDispatcher, Nitro } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../../catalog/enums/ProductTypeEnum';
 import { CatalogService } from '../../../../catalog/services/catalog.service';
 import { FurniCategory } from '../../../../inventory/items/FurniCategory';
 import { IFurnitureItem } from '../../../../inventory/items/IFurnitureItem';
 import { InventoryService } from '../../../../inventory/services/inventory.service';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { RoomWidgetPresentDataUpdateEvent } from '../../events/RoomWidgetPresentDataUpdateEvent';
 import { RoomWidgetRoomObjectUpdateEvent } from '../../events/RoomWidgetRoomObjectUpdateEvent';
 import { FurnitureDimmerWidgetHandler } from '../../handlers/FurnitureDimmerWidgetHandler';

@@ -1,17 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { DesktopViewEvent } from '../../../../client/nitro/communication/messages/incoming/desktop/DesktopViewEvent';
-import { WiredFurniActionEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredFurniActionEvent';
-import { WiredFurniConditionEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredFurniConditionEvent';
-import { WiredFurniTriggerEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredFurniTriggerEvent';
-import { WiredOpenEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredOpenEvent';
-import { WiredRewardResultMessageEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredRewardResultMessageEvent';
-import { WiredSaveSuccessEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredSaveSuccessEvent';
-import { WiredValidationErrorEvent } from '../../../../client/nitro/communication/messages/incoming/roomevents/WiredValidationErrorEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { IRoomEngineServices } from '../../../../client/nitro/room/IRoomEngineServices';
-import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
-import { IRoomSession } from '../../../../client/nitro/session/IRoomSession';
+import { DesktopViewEvent, IMessageEvent, IRoomEngineServices, IRoomSession, Nitro, RoomSessionEvent, WiredFurniActionEvent, WiredFurniConditionEvent, WiredFurniTriggerEvent, WiredOpenEvent, WiredRewardResultMessageEvent, WiredSaveSuccessEvent, WiredValidationErrorEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { WiredMainComponent } from '../components/main/main.component';
 

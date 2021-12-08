@@ -1,12 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { UserSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserSettingsEvent';
-import { UserSettingsCameraFollowComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsCameraFollowComposer';
-import { UserSettingsOldChatComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsOldChatComposer';
-import { UserSettingsRoomInvitesComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsRoomInvitesComposer';
-import { UserSettingsSoundComposer } from '../../../../client/nitro/communication/messages/outgoing/user/settings/UserSettingsSoundComposer';
-import { NitroSettingsEvent } from '../../../../client/nitro/events/NitroSettingsEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { IMessageEvent, Nitro, NitroSettingsEvent, UserSettingsCameraFollowComposer, UserSettingsEvent, UserSettingsOldChatComposer, UserSettingsRoomInvitesComposer, UserSettingsSoundComposer } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class UserSettingsService implements OnDestroy
@@ -99,7 +92,7 @@ export class UserSettingsService implements OnDestroy
 
     private sendUpdateEvent(): void
     {
-        const event = new NitroSettingsEvent(NitroSettingsEvent.SETTINGS_UPDATED);
+        const event = new NitroSettingsEvent();
         event.volumeSystem  = this._volumeSystem;
         event.volumeFurni   = this._volumeFurni;
         event.volumeTrax    = this._volumeTrax;

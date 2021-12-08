@@ -1,12 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { UserCreditsEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCreditsEvent';
-import { UserCurrencyEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyEvent';
-import { UserCurrencyUpdateEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/currency/UserCurrencyUpdateEvent';
-import { UserSubscriptionEvent } from '../../../../client/nitro/communication/messages/incoming/user/inventory/subscription/UserSubscriptionEvent';
-import { UserCurrencyComposer } from '../../../../client/nitro/communication/messages/outgoing/user/inventory/currency/UserCurrencyComposer';
-import { UserSubscriptionParser } from '../../../../client/nitro/communication/messages/parser/user/inventory/subscription/UserSubscriptionParser';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { ActivityPointNotificationMessageEvent, IMessageEvent, Nitro, UserCreditsEvent, UserCurrencyComposer, UserCurrencyEvent, UserSubscriptionEvent, UserSubscriptionParser } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class PurseService implements OnDestroy
@@ -39,7 +32,7 @@ export class PurseService implements OnDestroy
             this._messages = [
                 new UserCreditsEvent(this.onUserCreditsEvent.bind(this)),
                 new UserCurrencyEvent(this.onUserCurrencyEvent.bind(this)),
-                new UserCurrencyUpdateEvent(this.onUserCurrencyUpdateEvent.bind(this)),
+                new ActivityPointNotificationMessageEvent(this.onUserCurrencyUpdateEvent.bind(this)),
                 new UserSubscriptionEvent(this.onUserSubscriptionEvent.bind(this))
             ];
 
@@ -88,7 +81,7 @@ export class PurseService implements OnDestroy
         });
     }
 
-    private onUserCurrencyUpdateEvent(event: UserCurrencyUpdateEvent): void
+    private onUserCurrencyUpdateEvent(event: ActivityPointNotificationMessageEvent): void
     {
         if(!event) return;
 
@@ -105,7 +98,7 @@ export class PurseService implements OnDestroy
 
         if(!parser) return;
 
-        switch(parser.name)
+        switch(parser.productName)
         {
             case 'habbo_club':
                 this._habboClubSubscription = parser;
@@ -127,7 +120,7 @@ export class PurseService implements OnDestroy
 
     public get visibleCurrencies(): number[]
     {
-        return Nitro.instance.getConfiguration<number[]>('system.currency.types', []);
+        return Nitro.instance.getConfiguration<number[]>('displayed.currency.types', []);
     }
 
     public get hcSub(): UserSubscriptionParser

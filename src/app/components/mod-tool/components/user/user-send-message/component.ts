@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { UserToolUser } from '../user-tool/user-tool-user';
-import { ModtoolUserVisitedRoomsRoom } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserVisitedRoomsRoom';
-import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ModMessageMessageComposer, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../../notification/services/notification.service';
-import { ModtoolEventAlertComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolEventAlertComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { UserToolUser } from '../user-tool/user-tool-user';
 
 
 @Component({
@@ -48,7 +45,7 @@ export class ModToolUserSendMessageComponent extends ModTool implements OnInit, 
     {
         if(!this._modToolService._Str_3325) return [];
 
-        return this._modToolService._Str_3325._Str_15690;
+        return this._modToolService._Str_3325.messageTemplates;
     }
 
     public selectMessage(id: string)
@@ -73,7 +70,7 @@ export class ModToolUserSendMessageComponent extends ModTool implements OnInit, 
             return;
         }
 
-        Nitro.instance.communication.connection.send(new ModtoolEventAlertComposer(this.user.id, this.message, -999));
+        Nitro.instance.communication.connection.send(new ModMessageMessageComposer(this.user.id, this.message, -999));
         this._modToolService.showSendUserMessage = false;
     }
 

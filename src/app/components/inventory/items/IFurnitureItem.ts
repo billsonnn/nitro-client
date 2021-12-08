@@ -1,4 +1,4 @@
-﻿import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
+﻿import { IObjectData } from '@nitrots/nitro-renderer';
 
 export interface IFurnitureItem
 {

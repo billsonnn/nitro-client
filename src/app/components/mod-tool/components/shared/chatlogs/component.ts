@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-
-import { ModToolService } from '../../../services/mod-tool.service';
+import { Component } from '@angular/core';
+import { ChatRecordData } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
-import { ModtoolUserChatlogParserVisit } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserChatlogParserVisit';
+import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';
+
 
 
 @Component({
@@ -20,7 +20,7 @@ export abstract class ModToolChatlogsComponent extends ModTool
     }
 
     protected abstract title: string;
-    abstract getData(): ModtoolUserChatlogParserVisit[];
+    abstract getData(): ChatRecordData[];
     abstract close(): void;
 
 

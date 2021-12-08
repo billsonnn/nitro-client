@@ -1,10 +1,6 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { Point } from 'pixi.js';
-import { IEventDispatcher } from '../../../../../client/core/events/IEventDispatcher';
-import { IWorkerEventTracker } from '../../../../../client/core/events/IWorkerEventTracker';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ConversionTrackingWidget } from '../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomEnterEffect } from '../../../../../client/room/utils/RoomEnterEffect';
+import { Component, ComponentRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { IEventDispatcher, IWorkerEventTracker, Nitro, NitroPoint, RoomEnterEffect } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../ConversionTrackingWidget';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
 import { ChatWidgetHandler } from '../handlers/ChatWidgetHandler';
@@ -29,7 +25,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     public chatContainer: ViewContainerRef;
 
     public timerId: number = ++RoomChatComponent.TIMER_TRACKER;
-    public cameraOffset: Point  = new Point();
+    public cameraOffset: NitroPoint  = new NitroPoint();
 
     public chats: ComponentRef<RoomChatItemComponent>[]         = [];
     public tempChats: ComponentRef<RoomChatItemComponent>[]     = [];
@@ -39,8 +35,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
     private _skipNextMove: boolean = false;
 
     constructor(
-        private ngZone: NgZone,
-        private componentFactoryResolver: ComponentFactoryResolver)
+        private ngZone: NgZone)
     {
         super();
 
@@ -154,9 +149,7 @@ export class RoomChatComponent extends ConversionTrackingWidget implements OnIni
 
         this.ngZone.run(() =>
         {
-            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(RoomChatItemComponent);
-
-            chatRef = this.chatContainer.createComponent(componentFactory);
+            chatRef = this.chatContainer.createComponent(RoomChatItemComponent);
             chat    = chatRef.instance;
 
             if(!chat) return;

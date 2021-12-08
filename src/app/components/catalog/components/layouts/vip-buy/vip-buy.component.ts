@@ -1,6 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { CatalogClubOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogClubOfferData';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { ClubOfferData, Nitro } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 import { CatalogService } from '../../../services/catalog.service';
 import { MarketplaceService } from '../../../services/marketplace.service';
@@ -12,7 +11,7 @@ import { MarketplaceService } from '../../../services/marketplace.service';
 export class CatalogLayoutVipBuyComponent extends CatalogLayout
 {
     public static CODE: string = 'vip_buy';
-    public vipOffers: CatalogClubOfferData[] = [];
+    public vipOffers: ClubOfferData[] = [];
     constructor(
         protected _catalogService: CatalogService,
         protected _marketService: MarketplaceService,
@@ -24,7 +23,7 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
         _catalogService.requestOffers(6);
     }
 
-    public setOffers(offers: CatalogClubOfferData[]): void
+    public setOffers(offers: ClubOfferData[]): void
     {
         this._ngZone.run(() =>
         {
@@ -46,12 +45,12 @@ export class CatalogLayoutVipBuyComponent extends CatalogLayout
         return Nitro.instance.localization.getValueWithParameter('catalog.vip.extend.info', 'days', value.toString());
     }
 
-    public buyVip(offer: CatalogClubOfferData): void
+    public buyVip(offer: ClubOfferData): void
     {
         this._catalogService.component && this._catalogService.component.confirmVipSubscription(offer);
     }
 
-    public getOfferText(offer: CatalogClubOfferData)
+    public getOfferText(offer: ClubOfferData)
     {
         if(offer.months > 0)
         {

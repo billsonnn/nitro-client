@@ -1,46 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
-import { GenericErrorEvent } from '../../../../client/nitro/communication/messages/incoming/generic/GenericErrorEvent';
-import { NavigatorCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCategoriesEvent';
-import { NavigatorCollapsedEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorCollapsedEvent';
-import { NavigatorEventCategoriesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorEventCategoriesEvent';
-import { NavigatorHomeRoomEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorHomeRoomEvent';
-import { NavigatorLiftedEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorLiftedEvent';
-import { NavigatorMetadataEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorMetadataEvent';
-import { NavigatorOpenRoomCreatorEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorOpenRoomCreatorEvent';
-import { NavigatorSearchesEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchesEvent';
-import { NavigatorSearchEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSearchEvent';
-import { NavigatorSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/navigator/NavigatorSettingsEvent';
-import { RoomDoorbellAcceptedEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellAcceptedEvent';
-import { RoomDoorbellEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellEvent';
-import { RoomDoorbellRejectedEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/doorbell/RoomDoorbellRejectedEvent';
-import { RoomEnterErrorEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/RoomEnterErrorEvent';
-import { RoomForwardEvent } from '../../../../client/nitro/communication/messages/incoming/room/access/RoomForwardEvent';
-import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomInfoOwnerEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoOwnerEvent';
-import { RoomScoreEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomScoreEvent';
-import { RoomSettingsUpdatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomSettingsUpdatedEvent';
-import { RoomCreatedEvent } from '../../../../client/nitro/communication/messages/incoming/room/engine/RoomCreatedEvent';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { DesktopViewComposer } from '../../../../client/nitro/communication/messages/outgoing/desktop/DesktopViewComposer';
-import { ConvertGlobalRoomIdMessageComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/ConvertGlobalRoomIdComposer';
-import { NavigatorCategoriesComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorCategoriesComposer';
-import { NavigatorInitComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorInitComposer';
-import { NavigatorSearchComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSearchComposer';
-import { NavigatorSettingsComposer } from '../../../../client/nitro/communication/messages/outgoing/navigator/NavigatorSettingsComposer';
-import { RoomInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/room/data/RoomInfoComposer';
-import { NavigatorCategoryDataParser } from '../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
-import { NavigatorSearchResultList } from '../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorSearchResultList';
-import { NavigatorTopLevelContext } from '../../../../client/nitro/communication/messages/parser/navigator/utils/NavigatorTopLevelContext';
-import { RoomEnterErrorParser } from '../../../../client/nitro/communication/messages/parser/room/access/RoomEnterErrorParser';
-import { RoomDataParser } from '../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { ToolbarIconEnum } from '../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarEvent } from '../../../../client/nitro/events/NitroToolbarEvent';
-import { LegacyExternalInterface } from '../../../../client/nitro/externalInterface/LegacyExternalInterface';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
-import { HabboWebTools } from '../../../../client/nitro/utils/HabboWebTools';
+import { CantConnectMessageParser, ConvertGlobalRoomIdMessageComposer, DesktopViewComposer, GenericErrorEvent, GetGuestRoomResultEvent, HabboWebTools, ILinkEventTracker, IMessageEvent, LegacyExternalInterface, NavigatorCategoriesComposer, NavigatorCategoriesEvent, NavigatorCategoryDataParser, NavigatorCollapsedEvent, NavigatorEventCategoriesEvent, NavigatorHomeRoomEvent, NavigatorInitComposer, NavigatorLiftedEvent, NavigatorMetadataEvent, NavigatorOpenRoomCreatorEvent, NavigatorSearchComposer, NavigatorSearchesEvent, NavigatorSearchEvent, NavigatorSearchResultList, NavigatorSettingsComposer, NavigatorSettingsEvent, NavigatorTopLevelContext, Nitro, NitroToolbarEvent, RoomCreatedEvent, RoomDataParser, RoomDoorbellAcceptedEvent, RoomDoorbellEvent, RoomDoorbellRejectedEvent, RoomEnterErrorEvent, RoomEntryInfoMessageEvent, RoomForwardEvent, RoomInfoComposer, RoomScoreEvent, RoomSessionEvent, RoomSettingsUpdatedEvent, ToolbarIconEnum, UserInfoEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../core/settings/service';
 import { NotificationService } from '../../notification/services/notification.service';
 import { NavigatorData } from '../common/NavigatorData';
@@ -149,8 +108,8 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
             this._messages = [
                 new UserInfoEvent(this.onUserInfoEvent.bind(this)),
                 new RoomForwardEvent(this.onRoomForwardEvent.bind(this)),
-                new RoomInfoOwnerEvent(this.onRoomInfoOwnerEvent.bind(this)),
-                new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new RoomEntryInfoMessageEvent(this.onRoomEntryInfoMessageEvent.bind(this)),
+                new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)),
                 new RoomEnterErrorEvent(this.onRoomEnterErrorEvent.bind(this)),
                 new RoomCreatedEvent(this.onRoomCreatedEvent.bind(this)),
                 new RoomDoorbellEvent(this.onRoomDoorbellEvent.bind(this)),
@@ -222,9 +181,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         Nitro.instance.communication.connection.send(new RoomInfoComposer(parser.roomId, false, true));
     }
 
-    private onRoomInfoOwnerEvent(event: RoomInfoOwnerEvent): void
+    private onRoomEntryInfoMessageEvent(event: RoomEntryInfoMessageEvent): void
     {
-        if(!(event instanceof RoomInfoOwnerEvent)) return;
+        if(!(event instanceof RoomEntryInfoMessageEvent)) return;
 
         const parser = event.getParser();
 
@@ -242,9 +201,9 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         LegacyExternalInterface.call('legacyTrack', 'navigator', 'private', [ parser.roomId ]);
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
-        if(!(event instanceof RoomInfoEvent)) return;
+        if(!(event instanceof GetGuestRoomResultEvent)) return;
 
         const parser = event.getParser();
 
@@ -306,13 +265,13 @@ export class NavigatorService implements OnDestroy, ILinkEventTracker
         {
             switch(parser.reason)
             {
-                case RoomEnterErrorParser.FULL_ERROR:
+                case CantConnectMessageParser.REASON_FULL:
                     this._notificationService.alert('${navigator.guestroomfull.text}', '${navigator.guestroomfull.title}');
                     break;
-                case RoomEnterErrorParser.QUEUE_ERROR:
+                case CantConnectMessageParser.REASON_QUEUE_ERROR:
                     this._notificationService.alert('${room.queue.error. ' + parser.parameter + '}', '${room.queue.error.title}');
                     break;
-                case RoomEnterErrorParser.BANNED:
+                case CantConnectMessageParser.REASON_BANNED:
                     this._notificationService.alert('${navigator.banned.text}', '${navigator.banned.title}');
                     break;
                 default:

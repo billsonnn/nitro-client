@@ -1,17 +1,5 @@
 import { Component, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { RoomBannedUsersEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomBannedUsersEvent';
-import { RoomSettingsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomSettingsEvent';
-import { RoomUsersWithRightsEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomUsersWithRightsEvent';
-import { RoomDeleteComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomDeleteComposer';
-import { RoomGiveRightsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomGiveRightsComposer';
-import { RoomTakeRightsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomTakeRightsComposer';
-import { RoomUnbanUserComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomUnbanUserComposer';
-import { RoomBannedUsersComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomBannedUsersComposer';
-import { RoomUsersWithRightsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomUsersWithRightsComposer';
-import { SaveRoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/SaveRoomSettingsComposer';
-import { NavigatorCategoryDataParser } from '../../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { IMessageEvent, NavigatorCategoryDataParser, Nitro, RoomBannedUsersComposer, RoomBannedUsersEvent, RoomDeleteComposer, RoomGiveRightsComposer, RoomSettingsEvent, RoomTakeRightsComposer, RoomUnbanUserComposer, RoomUsersWithRightsComposer, RoomUsersWithRightsEvent, SaveRoomSettingsComposer } from '@nitrots/nitro-renderer';
 import { MessengerFriend } from '../../../friendlist/common/MessengerFriend';
 import { FriendListService } from '../../../friendlist/services/friendlist.service';
 import { NotificationChoice } from '../../../notification/components/choices/choices.component';

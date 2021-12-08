@@ -11,7 +11,7 @@ export class NavigatorRoomSettingsTabAccessComponent
     public roomSettings: RoomSettings;
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}

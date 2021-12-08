@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Nitro</title>
-    <base href="/">
+    <base href="./">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, shrink-to-fit=no">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -11,7 +11,7 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            configurationUrl: '/configuration.json',
+            configurationUrls: [ 'renderer-config.json', 'ui-config.json' ],
             sso: (new URLSearchParams(window.location.search).get('sso') || null)
         };
     </script>

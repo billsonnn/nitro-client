@@ -1,4 +1,5 @@
-﻿import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { RoomWidgetMessage } from '../RoomWidgetMessage';
+
 
 export class RoomWidgetDanceMessage extends RoomWidgetMessage
 {

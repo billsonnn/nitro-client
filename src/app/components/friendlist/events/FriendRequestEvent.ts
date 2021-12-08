@@ -1,4 +1,4 @@
-import { NitroEvent } from '../../../../client/core/events/NitroEvent';
+import { NitroEvent } from '@nitrots/nitro-renderer';
 
 export class FriendRequestEvent extends NitroEvent
 {

@@ -1,7 +1,5 @@
 import { ComponentRef, Directive, ElementRef } from '@angular/core';
-import { Point, Rectangle } from 'pixi.js';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { FixedSizeStack } from '../../../../../client/nitro/utils/FixedSizeStack';
+import { FixedSizeStack, Nitro, NitroPoint, NitroRectangle } from '@nitrots/nitro-renderer';
 import { IContextMenuParentWidget } from './IContextMenuParentWidget';
 
 @Directive()
@@ -59,7 +57,7 @@ export class ContextInfoView
         }
     }
 
-    public update(rectangle: Rectangle, point: Point, time: number): void
+    public update(rectangle: NitroRectangle, point: NitroPoint, time: number): void
     {
         if(!rectangle) return;
 
@@ -83,9 +81,9 @@ export class ContextInfoView
         const offset    = this.getOffset(rectangle);
         const _local_5  = (point.y - rectangle.top);
 
-        this.stack._Str_22775(_local_5);
+        this.stack.addValue(_local_5);
 
-        let deltaY = this.stack._Str_25797();
+        let deltaY = this.stack.getMax();
 
         if(deltaY < (this.currentDeltaY - ContextInfoView.BUBBLE_DROP_SPEED))
         {
@@ -143,7 +141,7 @@ export class ContextInfoView
         this.hide(true);
     }
 
-    protected getOffset(k: Rectangle): number
+    protected getOffset(k: NitroRectangle): number
     {
         let _local_2 = -(this.activeViewElement.offsetHeight);
 

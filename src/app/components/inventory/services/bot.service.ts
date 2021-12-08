@@ -1,17 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
-import { BotAddedToInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotAddedToInventoryEvent';
-import { BotInventoryMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotInventoryMessageEvent';
-import { BotRemovedFromInventoryEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/bots/BotRemovedFromInventoryEvent';
-import { GetBotInventoryComposer } from '../../../../client/nitro/communication/messages/outgoing/inventory/bots/GetBotInventoryComposer';
-import { BotData } from '../../../../client/nitro/communication/messages/parser/inventory/bots/BotData';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomObjectPlacementSource } from '../../../../client/nitro/room/enums/RoomObjectPlacementSource';
-import { RoomEngineObjectEvent } from '../../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineObjectPlacedEvent } from '../../../../client/nitro/room/events/RoomEngineObjectPlacedEvent';
-import { RoomObjectCategory } from '../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../client/nitro/room/object/RoomObjectType';
+import { AdvancedMap, BotAddedToInventoryEvent, BotData, BotInventoryMessageEvent, BotRemovedFromInventoryEvent, GetBotInventoryComposer, IMessageEvent, Nitro, RoomEngineObjectEvent, RoomEngineObjectPlacedEvent, RoomObjectCategory, RoomObjectPlacementSource, RoomObjectType } from '@nitrots/nitro-renderer';
 import { InventoryMainComponent } from '../components/main/main.component';
 import { BotItem } from '../items/BotItem';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
@@ -81,7 +69,7 @@ export class InventoryBotService implements OnDestroy
         {
             this._isObjectMoverRequested = false;
 
-            if(!event._Str_4057)
+            if(!event.placedInRoom)
             {
                 this._ngZone.run(() => this._inventoryService.showWindow());
             }

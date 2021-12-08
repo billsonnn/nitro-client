@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
-import { RoomStaffPickComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/action/RoomStaffPickComposer';
-import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
-import { RoomMuteComposer } from '../../../../../client/nitro/communication/messages/outgoing/roomevents/RoomMuteComposer';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { SecurityLevel } from '../../../../../client/nitro/session/enum/SecurityLevel';
+import { Nitro, RoomControllerLevel, RoomDataParser, RoomMuteComposer, RoomSettingsComposer, RoomStaffPickComposer, SecurityLevel } from '@nitrots/nitro-renderer';
+import { SettingsService } from '../../../../core/settings/service';
 import { NavigatorData } from '../../common/NavigatorData';
 import { NavigatorService } from '../../services/navigator.service';
-import { SettingsService } from '../../../../core/settings/service';
 
 @Component({
     selector: 'nitro-navigator-room-info-component',

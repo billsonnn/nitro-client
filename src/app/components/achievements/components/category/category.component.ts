@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Achievement } from '../../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { AchievementData, Nitro } from '@nitrots/nitro-renderer';
 import { AchievementCategory } from '../../common/AchievementCategory';
 import { AchievementsService } from '../../services/achievements.service';
 import { BadgeBaseAndLevel } from '../../utils/badge-base-and-level';
@@ -14,7 +13,7 @@ export class AchievementsCategoryComponent implements OnChanges
     @Input()
     public category: AchievementCategory = null;
 
-    private _selectedAchievement: Achievement = null;
+    private _selectedAchievement: AchievementData = null;
 
     constructor(
         private _achivementsService: AchievementsService)
@@ -28,19 +27,19 @@ export class AchievementsCategoryComponent implements OnChanges
         if(next && (next !== prev)) this._selectedAchievement = null;
     }
 
-    public selectAchievement(achievement: Achievement)
+    public selectAchievement(achievement: AchievementData)
     {
         achievement.unseen = 0;
 
         this._selectedAchievement = achievement;
     }
 
-    private getAchievedBadgeId(achievement: Achievement): string
+    private getAchievedBadgeId(achievement: AchievementData): string
     {
-        return (achievement._Str_7518) ? achievement.badgeId : Nitro.instance.localization.getBadgeBaseAndLevel(achievement.badgeId);
+        return (achievement.finalLevel) ? achievement.badgeId : Nitro.instance.localization.getPreviousLevelBadgeId(achievement.badgeId);
     }
 
-    public getBadgeText(badge: Achievement, desc = false): string
+    public getBadgeText(badge: AchievementData, desc = false): string
     {
         const str: string = this.getAchievedBadgeId(badge);
 
@@ -59,7 +58,7 @@ export class AchievementsCategoryComponent implements OnChanges
 
         return charReplaced
             .replace('%roman%', this.getRomanNumeral(badgeBase.level))
-            .replace('%limit%',badge._Str_24142.toString());
+            .replace('%limit%',badge.scoreLimit.toString());
     }
 
     private getText(texts: string[]): string
@@ -82,7 +81,7 @@ export class AchievementsCategoryComponent implements OnChanges
         return '';
     }
 
-    public getProgress(badge: Achievement, stringify = false): string
+    public getProgress(badge: AchievementData, stringify = false): string
     {
         if(!badge) return;
 
@@ -91,14 +90,14 @@ export class AchievementsCategoryComponent implements OnChanges
         return Math.trunc(badge.progress / badge.toNextProgress * 100) + '%';
     }
 
-    public getBadgeLevelString(badge: Achievement): string
+    public getBadgeLevelString(badge: AchievementData): string
     {
         if(!badge) return;
 
         let string = Nitro.instance.getLocalization('achievements.details.level');
 
         string = string.replace('%level%', Math.max(1,badge.level - 1).toString());
-        string = string.replace('%limit%',badge.totalLevels.toString());
+        string = string.replace('%limit%',badge.levelCount.toString());
 
         return string;
     }
@@ -108,11 +107,11 @@ export class AchievementsCategoryComponent implements OnChanges
         return Nitro.instance.localization.getRomanNumeral(number);
     }
 
-    public getBadgeImageUrl(badge: Achievement): string
+    public getBadgeImageUrl(badge: AchievementData): string
     {
         let badgeId = badge.badgeId;
 
-        if(badge.totalLevels > 1)
+        if(badge.levelCount > 1)
         {
             badgeId = badgeId.replace(/[0-9]/g, '');
             badgeId = (badgeId + (((badge.level - 1) > 0) ? (badge.level - 1) : badge.level));
@@ -128,7 +127,7 @@ export class AchievementsCategoryComponent implements OnChanges
         return url.replace('%type%', type.toString());
     }
 
-    public get selectedAchievement(): Achievement
+    public get selectedAchievement(): AchievementData
     {
         return this._selectedAchievement;
     }

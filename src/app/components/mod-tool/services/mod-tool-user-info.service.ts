@@ -1,21 +1,13 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
+import { GetModeratorUserInfoMessageComposer, IMessageEvent, ModeratorUserInfoData, ModeratorUserInfoEvent, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
-import { ModtoolRoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomInfoEvent';
-import { UserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/user/data/UserInfoEvent';
-import { ModtoolUserChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserChatlogEvent';
-import { ModtoolRoomChatlogEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolRoomChatlogEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { ModtoolRequestUserInfoComposer } from '../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserInfoComposer';
-import { ModtoolUserInfoEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolUserInfoEvent';
-import { _Str_5467 } from '../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
 
 @Injectable()
 export class ModToolUserInfoService implements OnDestroy
 {
     private _messages: IMessageEvent[];
 
-    private _currentUserInfo: _Str_5467;
+    private _currentUserInfo: ModeratorUserInfoData;
 
     constructor(
         private _notificationService: NotificationService,
@@ -35,7 +27,7 @@ export class ModToolUserInfoService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
-            new ModtoolUserInfoEvent(this.onUserInfoEvent.bind(this)),
+            new ModeratorUserInfoEvent(this.onUserInfoEvent.bind(this)),
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -51,10 +43,10 @@ export class ModToolUserInfoService implements OnDestroy
 
     public load(userId: number): void
     {
-        Nitro.instance.communication.connection.send(new ModtoolRequestUserInfoComposer(userId));
+        Nitro.instance.communication.connection.send(new GetModeratorUserInfoMessageComposer(userId));
     }
 
-    private onUserInfoEvent(event: ModtoolUserInfoEvent): void
+    private onUserInfoEvent(event: ModeratorUserInfoEvent): void
     {
         if(!event) return;
 
@@ -65,7 +57,7 @@ export class ModToolUserInfoService implements OnDestroy
 
     }
 
-    public get currentUserInfo(): _Str_5467
+    public get currentUserInfo(): ModeratorUserInfoData
     {
         return this._currentUserInfo;
     }

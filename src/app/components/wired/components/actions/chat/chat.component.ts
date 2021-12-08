@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Triggerable } from '../../../../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
+import { Nitro, Triggerable } from '@nitrots/nitro-renderer';
 import { WiredActionType } from '../WiredActionType';
 import { WiredAction } from './../WiredAction';
 

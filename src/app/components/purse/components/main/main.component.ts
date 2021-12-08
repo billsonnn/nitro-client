@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { FriendlyTime } from '../../../../../client/nitro/utils/FriendlyTime';
+import { FriendlyTime, Nitro } from '@nitrots/nitro-renderer';
 import { PurseService } from '../../services/purse.service';
 
 @Component({
@@ -40,9 +39,9 @@ export class PurseMainComponent implements OnInit
     {
         if(!this._purseService.hcSub) return;
 
-        const days = FriendlyTime.shortFormat((this._purseService.hcSub.totalSeconds * 60));
+        const days = FriendlyTime.shortFormat((this._purseService.hcSub.minutesUntilExpiration * 60));
 
-        if(!this._purseService.hcSub.totalSeconds) return Nitro.instance.localization.getValue('purse.clubdays.zero.amount.text');
+        if(!this._purseService.hcSub.minutesUntilExpiration) return Nitro.instance.localization.getValue('purse.clubdays.zero.amount.text');
 
         return days;
     }

@@ -1,5 +1,5 @@
-﻿import { Texture } from 'pixi.js';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+﻿import { NitroTexture } from '@nitrots/nitro-renderer';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class RoomWidgetPetPackageUpdateEvent extends RoomWidgetUpdateEvent
 {
@@ -9,11 +9,11 @@ export class RoomWidgetPetPackageUpdateEvent extends RoomWidgetUpdateEvent
 
     private _Str_2319: number = -1;
     private _typeId: number = -1;
-    private _image: Texture = null;
+    private _image: NitroTexture = null;
     private _nameValidationStatus: number = 0;
     private _nameValidationInfo: string = null;
 
-    constructor(k: string, _arg_2: number, _arg_3: Texture, _arg_4: number, _arg_5: string, _arg_6: number)
+    constructor(k: string, _arg_2: number, _arg_3: NitroTexture, _arg_4: number, _arg_5: string, _arg_6: number)
     {
         super(k);
 
@@ -34,7 +34,7 @@ export class RoomWidgetPetPackageUpdateEvent extends RoomWidgetUpdateEvent
         return this._nameValidationInfo;
     }
 
-    public get image(): Texture
+    public get image(): NitroTexture
     {
         return this._image;
     }

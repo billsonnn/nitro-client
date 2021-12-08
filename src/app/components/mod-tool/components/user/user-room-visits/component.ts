@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { UserToolUser } from '../user-tool/user-tool-user';
-import { ModtoolUserVisitedRoomsRoom } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/ModtoolUserVisitedRoomsRoom';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { RoomVisitData } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
+import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { UserToolUser } from '../user-tool/user-tool-user';
 
 
 @Component({
@@ -39,17 +39,17 @@ export class ModToolUserVisitedRoomsComponent extends ModTool implements OnInit,
         this._modToolService.closeRoomVisitedTool();
     }
 
-    public get roomVisitedForUser(): ModtoolUserVisitedRoomsRoom[]
+    public get roomVisitedForUser(): RoomVisitData[]
     {
         if(!this._modToolService.roomUserVisitedData) return [];
 
         return this._modToolService.roomUserVisitedData.rooms;
     }
 
-    public showTime(room: ModtoolUserVisitedRoomsRoom): string
+    public showTime(room: RoomVisitData): string
     {
-        const a = room._Str_22929;
-        const b = room._Str_25550;
+        const a = room.enterHour;
+        const b = room.enterMinute;
         return this.prependZero(a) + ':' + this.prependZero(b);
     }
 
@@ -58,7 +58,7 @@ export class ModToolUserVisitedRoomsComponent extends ModTool implements OnInit,
         return (k < 10) ? `0${k}` : k.toString();
     }
 
-    public goToRoom(room: ModtoolUserVisitedRoomsRoom): void
+    public goToRoom(room: RoomVisitData): void
     {
         this._navigatorService.goToPrivateRoom(room.roomId);
     }

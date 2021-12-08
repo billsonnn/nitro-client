@@ -1,17 +1,15 @@
-﻿import { Point, Rectangle } from 'pixi.js';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { NitroEvent, NitroPoint, NitroRectangle, RoomObjectCategory } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetUserLocationUpdateEvent } from '../events/RoomWidgetUserLocationUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetGetObjectLocationMessage } from '../messages/RoomWidgetGetObjectLocationMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 {
     private _disposed: boolean = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -29,7 +27,7 @@ export class ObjectLocationRequestHandler implements IRoomWidgetHandler
         return null;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }
@@ -52,8 +50,8 @@ export class ObjectLocationRequestHandler implements IRoomWidgetHandler
 
                 const userData = session.userDataManager.getDataByType(k._Str_1577, k._Str_1723);
 
-                let objectBounds: Rectangle    = null;
-                let objectLocation: Point      = null;
+                let objectBounds: NitroRectangle    = null;
+                let objectLocation: NitroPoint      = null;
 
                 if(userData)
                 {

@@ -1,12 +1,8 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
-import { CatalogLayout } from '../../../../../CatalogLayout';
-import { MarketplaceOfferItem } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { MarketplaceOfferData } from '../../../../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { Nitro } from '../../../../../../../../client/nitro/Nitro';
-import { MarketplaceService } from '../../../../../services/marketplace.service';
+import { Component, Input, NgZone } from '@angular/core';
+import { MarketplaceOffer, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../../../../notification/services/notification.service';
-import { Purse } from '../../../../../purse/purse';
 import { PurseService } from '../../../../../../purse/services/purse.service';
+import { MarketplaceService } from '../../../../../services/marketplace.service';
 
 @Component({
     templateUrl: './template.html',
@@ -15,7 +11,7 @@ import { PurseService } from '../../../../../../purse/services/purse.service';
 export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 {
     @Input()
-    public offer: MarketplaceOfferItem;
+    public offer: MarketplaceOffer;
 
     constructor(private _marketplaceService: MarketplaceService,
         private _notificationService: NotificationService,
@@ -71,7 +67,7 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
     public get averagePrice(): string
     {
         const price = this.offer.price;
-        const average = this.offer._Str_3925;
+        const average = this.offer.averagePrice;
 
         const averageText = average != 0 ? average.toString() : ' - ';
 
@@ -88,7 +84,7 @@ export class CatalogLayoutMarketplaceMarketplaceOfferComponent
 
     public get offerCount(): string
     {
-        return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer._Str_4121.toString());
+        return  Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_count', 'count', this.offer.offerCount.toString());
     }
 
     public get description(): string

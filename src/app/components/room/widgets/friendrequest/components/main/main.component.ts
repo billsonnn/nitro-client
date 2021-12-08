@@ -1,8 +1,6 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../../client/core/events/IEventDispatcher';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
-import { RoomObjectType } from '../../../../../../../client/nitro/room/object/RoomObjectType';
-import { ConversionTrackingWidget } from '../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { Component, ComponentRef, NgZone, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { IEventDispatcher, Nitro, RoomObjectType } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../../../ConversionTrackingWidget';
 import { RoomWidgetFriendRequestUpdateEvent } from '../../../events/RoomWidgetFriendRequestUpdateEvent';
 import { RoomWidgetUserLocationUpdateEvent } from '../../../events/RoomWidgetUserLocationUpdateEvent';
 import { FriendRequestHandler } from '../../../handlers/FriendRequestHandler';
@@ -22,7 +20,6 @@ export class FriendRequestMainComponent extends ConversionTrackingWidget impleme
     public cachedFriendRequestDialogs: Map<FriendRequestDialogComponent, ComponentRef<FriendRequestDialogComponent>> = new Map();
 
     constructor(
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone
     )
     {
@@ -123,9 +120,7 @@ export class FriendRequestMainComponent extends ConversionTrackingWidget impleme
 
         this._ngZone.run(() =>
         {
-            const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-
-            viewRef = this.contextsContainer.createComponent(componentFactory);
+            viewRef = this.contextsContainer.createComponent(component);
             view    = viewRef.instance;
         });
 

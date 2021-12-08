@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer';
 
 @Component({
     selector: '[nitro-currency-icon]',

@@ -1,6 +1,6 @@
 ﻿import { Options } from '@angular-slider/ngx-slider';
 import { Component } from '@angular/core';
-import { Nitro } from 'src/client/nitro/Nitro';
+import { Nitro } from '@nitrots/nitro-renderer';
 import { TimeElapsedLessComponent } from '../time-elapsed-less/time-elapsed-less.component';
 import { WiredConditionType } from '../WiredConditionType';
 import { WiredFurniture } from './../../../WiredFurniture';

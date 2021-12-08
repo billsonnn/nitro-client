@@ -1,4 +1,4 @@
-﻿import { Triggerable } from '../../../client/nitro/communication/messages/incoming/roomevents/Triggerable';
+﻿import { Triggerable } from '@nitrots/nitro-renderer';
 import { WiredFurniture } from './WiredFurniture';
 
 export interface IUserDefinedRoomEventsCtrl

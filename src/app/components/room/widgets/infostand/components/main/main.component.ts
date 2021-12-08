@@ -1,9 +1,8 @@
-import { Component, ComponentFactoryResolver, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../../client/core/events/IEventDispatcher';
-import { ConversionTrackingWidget } from '../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { RoomWidgetUpdateEvent } from '../../../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
+import { Component, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
+import { IEventDispatcher } from '@nitrots/nitro-renderer';
 import { InventoryService } from '../../../../../inventory/services/inventory.service';
 import { InventoryTradingService } from '../../../../../inventory/services/trading.service';
+import { ConversionTrackingWidget } from '../../../ConversionTrackingWidget';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../../../events/RoomWidgetFurniInfostandUpdateEvent';
 import { RoomWidgetPetInfostandUpdateEvent } from '../../../events/RoomWidgetPetInfostandUpdateEvent';
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../../../events/RoomWidgetRentableBotInfostandUpdateEvent';
@@ -11,6 +10,7 @@ import { RoomWidgetRoomObjectUpdateEvent } from '../../../events/RoomWidgetRoomO
 import { RoomWidgetUpdateInfostandUserEvent } from '../../../events/RoomWidgetUpdateInfostandUserEvent';
 import { InfoStandWidgetHandler } from '../../../handlers/InfoStandWidgetHandler';
 import { RoomWidgetRoomObjectMessage } from '../../../messages/RoomWidgetRoomObjectMessage';
+import { RoomWidgetUpdateEvent } from '../../../RoomWidgetUpdateEvent';
 import { InfoStandFurniData } from '../../data/InfoStandFurniData';
 import { InfoStandPetData } from '../../data/InfoStandPetData';
 import { InfoStandRentableBotData } from '../../data/InfoStandRentableBotData';
@@ -40,7 +40,6 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
     constructor(
         private _inventoryService: InventoryService,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _ngZone: NgZone)
     {
         super();
@@ -251,11 +250,7 @@ export class RoomInfoStandMainComponent extends ConversionTrackingWidget
 
         if(this.infostandsContainer.length) this.infostandsContainer.remove();
 
-        const factory = this._componentFactoryResolver.resolveComponentFactory(componentType);
-
-        let ref: ComponentRef<RoomInfoStandBaseComponent> = null;
-
-        if(factory) ref = this.infostandsContainer.createComponent(factory);
+        const ref = this.infostandsContainer.createComponent(componentType);
 
         this._lastComponent = ref;
 

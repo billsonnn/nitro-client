@@ -1,19 +1,12 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionPresentEvent } from '../../../../../client/nitro/session/events/RoomSessionPresentEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { IFurnitureData, IGetImageListener, Nitro, NitroEvent, NitroTexture, RoomObjectCategory, RoomObjectVariable, RoomSessionPresentEvent, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { ProductTypeEnum } from '../../../catalog/enums/ProductTypeEnum';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetPresentDataUpdateEvent } from '../events/RoomWidgetPresentDataUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetFurniToWidgetMessage } from '../messages/RoomWidgetFurniToWidgetMessage';
 import { RoomWidgetPresentOpenMessage } from '../messages/RoomWidgetPresentOpenMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetImageListener
 {
@@ -25,7 +18,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
     private _name: string                           = null;
     private _objectId: number                       = -1;
     private _isDisposed: boolean                    = false;
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
 
     public dispose(): void
     {
@@ -212,7 +205,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
         return RoomWidgetEnum.FURNI_PRESENT_WIDGET;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         this._container = k;
     }
@@ -236,7 +229,7 @@ export class FurniturePresentWidgetHandler implements IRoomWidgetHandler, IGetIm
     {
     }
 
-    imageReady(id: number, texture: PIXI.Texture, image?: HTMLImageElement): void
+    imageReady(id: number, texture: NitroTexture, image?: HTMLImageElement): void
     {
     }
 }

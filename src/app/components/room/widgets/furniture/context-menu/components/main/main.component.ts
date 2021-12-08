@@ -1,8 +1,7 @@
-import { Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
-import { IEventDispatcher } from '../../../../../../../../client/core/events/IEventDispatcher';
-import { ConversionTrackingWidget } from '../../../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { IRoomObject } from '../../../../../../../../client/room/object/IRoomObject';
+import { Component, ComponentRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
+import { IEventDispatcher, IRoomObject } from '@nitrots/nitro-renderer';
 import { InventoryService } from '../../../../../../inventory/services/inventory.service';
+import { ConversionTrackingWidget } from '../../../../ConversionTrackingWidget';
 import { FurnitureContextMenuWidgetHandler } from '../../../../handlers/FurnitureContextMenuWidgetHandler';
 import { PurchaseClothingComponent } from '../purchasable-clothing/purchasable-clothing.component';
 
@@ -20,7 +19,6 @@ export class FurnitureContextMenuWidget extends ConversionTrackingWidget
 
     constructor(
         private _ngZone: NgZone,
-        private _resolver: ComponentFactoryResolver,
         public inventoryService: InventoryService)
     {
         super();
@@ -47,9 +45,7 @@ export class FurnitureContextMenuWidget extends ConversionTrackingWidget
         {
             this.purchaseClothingContainer.clear();
 
-            const factory: ComponentFactory<PurchaseClothingComponent> = this._resolver.resolveComponentFactory(PurchaseClothingComponent);
-
-            this._purchaseClothingContainerRef = this.purchaseClothingContainer.createComponent(factory);
+            this._purchaseClothingContainerRef = this.purchaseClothingContainer.createComponent(PurchaseClothingComponent);
             this._purchaseClothingContainerRef.instance.contextWidget = this;
             this._purchaseClothingContainerRef.instance.open(roomObject.id);
         });

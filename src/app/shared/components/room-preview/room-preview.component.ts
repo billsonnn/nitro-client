@@ -1,9 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
-import { DisplayObject } from 'pixi.js';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomPreviewer } from '../../../../client/nitro/room/preview/RoomPreviewer';
-import { IRoomRenderingCanvas } from '../../../../client/room/renderer/IRoomRenderingCanvas';
-import { ColorConverter } from '../../../../client/room/utils/ColorConverter';
+import { ColorConverter, IRoomRenderingCanvas, Nitro, RoomPreviewer, TextureUtils } from '@nitrots/nitro-renderer';
 
 @Component({
     selector: '[nitro-room-preview-component]',
@@ -33,7 +29,6 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
     public modelScale: boolean = true;
 
     public renderingCanvas: IRoomRenderingCanvas = null;
-    public displayObject: DisplayObject = null;
     public imageUrl: string = null;
     public isRunning: boolean = false;
 
@@ -89,7 +84,8 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 
             if(this.model) this.updateModel();
 
-            this.displayObject 		= this.roomPreviewer.getRoomCanvas(this.width, this.height);
+            this.roomPreviewer.getRoomCanvas(this.width, this.height);
+
             this.renderingCanvas	= this.roomPreviewer.getRenderingCanvas();
         }
 
@@ -126,13 +122,13 @@ export class RoomPreviewComponent implements OnChanges, OnDestroy, AfterViewInit
 
     public update(time: number): void
     {
-        if(this.roomPreviewer && this.renderingCanvas && this.displayObject)
+        if(this.roomPreviewer && this.renderingCanvas)
         {
             this.roomPreviewer.updatePreviewRoomView();
 
             if(this.renderingCanvas.canvasUpdated)
             {
-                const imageUrl = Nitro.instance.renderer.extract.base64(this.displayObject);
+                const imageUrl = TextureUtils.generateImageUrl(this.renderingCanvas.master);
 
                 this.previewImageElement.style.backgroundImage = `url(${ imageUrl })`;
             }

@@ -1,22 +1,15 @@
-﻿import { IMessageEvent } from '../../../../../client/core/communication/messages/IMessageEvent';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomInfoEvent } from '../../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { RoomInfoComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomInfoComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomEngineTriggerWidgetEvent } from '../../../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { GetGuestRoomResultEvent, IMessageEvent, Nitro, NitroEvent, RoomEngineTriggerWidgetEvent, RoomInfoComposer, RoomObjectVariable, RoomWidgetEnum } from '@nitrots/nitro-renderer';
 import { NotificationBroadcastMessageComponent } from '../../../notification/components/broadcast-message/broadcast-message.component';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 {
     private static INTERNALLINK: string = 'internalLink';
 
-    private _container: IRoomWidgetHandlerContainer                 = null;
+    private _container: IRoomWidgetManager                 = null;
     private _messages: IMessageEvent[]                              = [];
     private _link: string                                           = null;
     private _roomIdToEnter: number                                  = 0;
@@ -78,7 +71,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
         }
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 
@@ -142,12 +135,12 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
         return RoomWidgetEnum.ROOM_LINK;
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         if(container !== this._container)
         {
@@ -163,7 +156,7 @@ export class FurnitureRoomLinkHandler implements IRoomWidgetHandler
 
         if(this._container)
         {
-            this._messages = [ new RoomInfoEvent(this.onRoomInfoEvent.bind(this)) ];
+            this._messages = [ new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)) ];
 
             for(const message of this._messages) container.connection.addMessageEvent(message);
         }

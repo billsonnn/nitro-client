@@ -1,10 +1,6 @@
 import { EventEmitter, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { FigureSetIdsMessageEvent, IMessageEvent, IRoomSession, Nitro, RoomSessionEvent } from '@nitrots/nitro-renderer';
 import { Subject } from 'rxjs';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { FigureSetIdsMessageEvent } from '../../../../client/nitro/communication/messages/incoming/inventory/clothes/FigureSetIdsMessageEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
-import { IRoomSession } from '../../../../client/nitro/session/IRoomSession';
 import { SettingsService } from '../../../core/settings/service';
 import { InventoryBadgesComponent } from '../components/badges/badges.component';
 import { InventoryBotsComponent } from '../components/bots/bots.component';
@@ -14,7 +10,6 @@ import { InventoryPetsComponent } from '../components/pets/pets.component';
 import { InventoryTradingComponent } from '../components/trading/trading.component';
 import { UnseenItemCategory } from '../unseen/UnseenItemCategory';
 import { UnseenItemTracker } from '../unseen/UnseenItemTracker';
-import { ModtoolCallForHelpTopicsEvent } from '../../../../client/nitro/communication/messages/incoming/modtool/ModtoolCallForHelpTopicsEvent';
 
 @Injectable()
 export class InventoryService implements OnDestroy

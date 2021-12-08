@@ -1,20 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { MarketplaceRequestOwnItemsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOwnItemsComposer';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { MarketplaceOwnItemsEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOwnItemsEvent';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
-import { MarketplaceOfferData } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferData';
-import { FurnitureType } from '../../../../client/nitro/session/furniture/FurnitureType';
-import { MarketplaceTakeItemBackComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceTakeItemBackComposer';
-import { MarketplaceCancelItemEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceCancelItemEvent';
+import { AdvancedMap, BuyMarketplaceOfferMessageComposer, CancelMarketplaceOfferMessageComposer, GetMarketplaceOffersMessageComposer, GetMarketplaceOwnOffersMessageComposer, IMessageEvent, MarketplaceBuyOfferResultEvent, MarketplaceCancelOfferResultEvent, MarketplaceOffer, MarketplaceOfferData, MarketPlaceOffersEvent, MarketplaceOwnOffersEvent, Nitro, RedeemMarketplaceOfferCreditsMessageComposer } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
-import { MarketplaceRedeemCreditsComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRedeemCreditsComposer';
-import { MarketplaceRequestOffersComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceRequestOffersComposer';
-import { MarketplaceOffersReceivedEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceOffersReceivedEvent';
-import { MarketplaceOfferItem } from '../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { MarketplaceBuyOfferComposer } from '../../../../client/nitro/communication/messages/outgoing/catalog/marketplace/MarketplaceBuyOfferComposer';
-import { MarketplaceAfterOrderStatusEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/marketplace/MarketplaceAfterOrderStatusEvent';
 import { IMarketplaceSearchOptions } from '../components/layouts/marketplace/marketplace/sub/advanced.component';
 
 @Injectable()
@@ -28,11 +14,11 @@ export class MarketplaceService implements OnDestroy
 
 
     private _lastOwnOffers: AdvancedMap<number, MarketplaceOfferData>;
-    private _offerOnMarket: MarketplaceOfferItem[];
+    private _offerOnMarket: MarketplaceOffer[];
     private _totalOffersFound: number = 0;
     private _creditsWaiting: number = 0;
     private _lastSearchRequest: IMarketplaceSearchOptions = null;
-    private _activeOfferToBuy: MarketplaceOfferItem = null;
+    private _activeOfferToBuy: MarketplaceOffer = null;
 
     private _messages: IMessageEvent[] = [];
 
@@ -49,10 +35,10 @@ export class MarketplaceService implements OnDestroy
         this._ngZone.runOutsideAngular(() =>
         {
             this._messages = [
-                new MarketplaceOwnItemsEvent(this.onMarketplaceOwnItemsEvent.bind(this)),
-                new MarketplaceCancelItemEvent(this.onMarketplaceCancelItemEvent.bind(this)),
-                new MarketplaceOffersReceivedEvent(this.onMarketplaceOffersReceivedEvent.bind(this)),
-                new MarketplaceAfterOrderStatusEvent(this.onMarketplaceAfterOrderStatusEvent.bind(this)),
+                new MarketplaceOwnOffersEvent(this.onMarketplaceOwnItemsEvent.bind(this)),
+                new MarketplaceCancelOfferResultEvent(this.onMarketplaceCancelItemEvent.bind(this)),
+                new MarketPlaceOffersEvent(this.onMarketplaceOffersReceivedEvent.bind(this)),
+                new MarketplaceBuyOfferResultEvent(this.onMarketplaceAfterOrderStatusEvent.bind(this)),
             ];
 
             for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -75,7 +61,7 @@ export class MarketplaceService implements OnDestroy
         this.unregisterMessages();
     }
 
-    private onMarketplaceOwnItemsEvent(event: MarketplaceOwnItemsEvent): void
+    private onMarketplaceOwnItemsEvent(event: MarketplaceOwnOffersEvent): void
     {
         if(!event) return;
 
@@ -89,14 +75,14 @@ export class MarketplaceService implements OnDestroy
 
             for(const offer of parser.offers)
             {
-                const data = new MarketplaceOfferData(offer.offerId, offer.furniId, offer.furniType, offer.extraData, offer.stuffData, offer.price, offer.status, offer._Str_3925);
-                data._Str_5853 = offer._Str_5853;
+                const data = new MarketplaceOfferData(offer.offerId, offer.furniId, offer.furniType, offer.extraData, offer.stuffData, offer.price, offer.status, offer.averagePrice);
+                data.timeLeftMinutes = offer.timeLeftMinutes;
                 this._lastOwnOffers.add(offer.offerId, data);
             }
         });
     }
 
-    private onMarketplaceAfterOrderStatusEvent(event: MarketplaceAfterOrderStatusEvent): void
+    private onMarketplaceAfterOrderStatusEvent(event: MarketplaceBuyOfferResultEvent): void
     {
         if(!event) return;
 
@@ -112,7 +98,7 @@ export class MarketplaceService implements OnDestroy
 
         if(parser.result == 2)
         {
-            const offerId = parser._Str_7501;
+            const offerId = parser.requestedOfferId;
             const nonRemovedOffers = [];
             for(const offer of this._offerOnMarket)
             {
@@ -150,7 +136,7 @@ export class MarketplaceService implements OnDestroy
         }
     }
 
-    private onMarketplaceOffersReceivedEvent(event: MarketplaceOffersReceivedEvent): void
+    private onMarketplaceOffersReceivedEvent(event: MarketPlaceOffersEvent): void
     {
         if(!event) return;
 
@@ -167,7 +153,7 @@ export class MarketplaceService implements OnDestroy
 
     }
 
-    private onMarketplaceCancelItemEvent(event: MarketplaceCancelItemEvent): void
+    private onMarketplaceCancelItemEvent(event: MarketplaceCancelOfferResultEvent): void
     {
         if(!event) return;
 
@@ -189,7 +175,7 @@ export class MarketplaceService implements OnDestroy
 
     public requestOwnItem(): void
     {
-        Nitro.instance.communication.connection.send(new MarketplaceRequestOwnItemsComposer());
+        Nitro.instance.communication.connection.send(new GetMarketplaceOwnOffersMessageComposer());
     }
 
 
@@ -199,7 +185,7 @@ export class MarketplaceService implements OnDestroy
         return this._lastOwnOffers;
     }
 
-    public get publicOffers(): MarketplaceOfferItem[]
+    public get publicOffers(): MarketplaceOffer[]
     {
         return this._offerOnMarket;
     }
@@ -216,7 +202,7 @@ export class MarketplaceService implements OnDestroy
 
     public redeemExpiredMarketPlaceOffer(offerId: number)
     {
-        Nitro.instance.communication.connection.send(new MarketplaceTakeItemBackComposer(offerId));
+        Nitro.instance.communication.connection.send(new CancelMarketplaceOfferMessageComposer(offerId));
     }
 
     public redeemCredits(): void
@@ -236,22 +222,22 @@ export class MarketplaceService implements OnDestroy
             this._lastOwnOffers.remove(offerId);
         }
 
-        Nitro.instance.communication.connection.send(new MarketplaceRedeemCreditsComposer());
+        Nitro.instance.communication.connection.send(new RedeemMarketplaceOfferCreditsMessageComposer());
 
     }
 
     public requestOffers(values: IMarketplaceSearchOptions): void
     {
         this._lastSearchRequest = values;
-        Nitro.instance.communication.connection.send(new MarketplaceRequestOffersComposer(values.minPrice, values.maxPrice, values.query, values.type));
+        Nitro.instance.communication.connection.send(new GetMarketplaceOffersMessageComposer(values.minPrice, values.maxPrice, values.query, values.type));
     }
 
-    public buyOffer(offer: MarketplaceOfferItem): void
+    public buyOffer(offer: MarketplaceOffer): void
     {
         this._activeOfferToBuy = offer;
     }
 
-    public get currentMarketplaceOfferToBuy(): MarketplaceOfferItem
+    public get currentMarketplaceOfferToBuy(): MarketplaceOffer
     {
         return this._activeOfferToBuy;
     }
@@ -259,6 +245,6 @@ export class MarketplaceService implements OnDestroy
     public buyMarketplaceOffer(offerId: number): void
     {
         this._activeOfferToBuy = null;
-        Nitro.instance.communication.connection.send(new MarketplaceBuyOfferComposer(offerId));
+        Nitro.instance.communication.connection.send(new BuyMarketplaceOfferMessageComposer(offerId));
     }
 }

@@ -11,11 +11,15 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "target": "es2015",
     "module": "es2020",
     "lib": [
-      "es2018",
-      "dom"
+      "es2020",
+      "dom",
+      "dom.iterable"
     ]
   }
 }

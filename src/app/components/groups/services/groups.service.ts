@@ -1,35 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { ILinkEventTracker } from '../../../../client/core/events/ILinkEventTracker';
-import { CatalogPurchaseEvent } from '../../../../client/nitro/communication/messages/incoming/catalog/CatalogPurchaseEvent';
-import { GroupBadgePartsEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBadgePartsEvent';
-import { GroupBuyDataEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupBuyDataEvent';
-import { GroupConfirmMemberRemoveEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupConfirmMemberRemoveEvent';
-import { GroupInformationEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupInformationEvent';
-import { GroupMembersEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupMembersEvent';
-import { GroupSettingsEvent } from '../../../../client/nitro/communication/messages/incoming/group/GroupSettingsEvent';
-import { RoomInfoEvent } from '../../../../client/nitro/communication/messages/incoming/room/data/RoomInfoEvent';
-import { GroupAdminGiveComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminGiveComposer';
-import { GroupAdminTakeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupAdminTakeComposer';
-import { GroupBadgePartsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBadgePartsComposer';
-import { GroupBuyComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyComposer';
-import { GroupBuyDataComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupBuyDataComposer';
-import { GroupConfirmRemoveMemberComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupConfirmRemoveMemberComposer';
-import { GroupDeleteComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupDeleteComposer';
-import { GroupInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupInformationComposer';
-import { GroupJoinComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupJoinComposer';
-import { GroupMembersComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembersComposer';
-import { GroupMembershipAcceptComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipAcceptComposer';
-import { GroupMembershipDeclineComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupMembershipDeclineComposer';
-import { GroupSaveBadgeComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveBadgeComposer';
-import { GroupSaveColorsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveColorsComposer';
-import { GroupSaveInformationComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSaveInformationComposer';
-import { GroupSavePreferencesComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSavePreferencesComposer';
-import { GroupSettingsComposer } from '../../../../client/nitro/communication/messages/outgoing/group/GroupSettingsComposer';
-import { UserProfileComposer } from '../../../../client/nitro/communication/messages/outgoing/user/data/UserProfileComposer';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { RoomSessionEvent } from '../../../../client/nitro/session/events/RoomSessionEvent';
+import { GetGuestRoomResultEvent, GroupAdminGiveComposer, GroupAdminTakeComposer, GroupBadgePartsComposer, GroupBadgePartsEvent, GroupBuyComposer, GroupBuyDataComposer, GroupBuyDataEvent, GroupConfirmMemberRemoveEvent, GroupConfirmRemoveMemberComposer, GroupDeleteComposer, GroupInformationComposer, GroupInformationEvent, GroupJoinComposer, GroupMembersComposer, GroupMembersEvent, GroupMembershipAcceptComposer, GroupMembershipDeclineComposer, GroupSaveBadgeComposer, GroupSaveColorsComposer, GroupSaveInformationComposer, GroupSavePreferencesComposer, GroupSettingsComposer, GroupSettingsEvent, ILinkEventTracker, IMessageEvent, Nitro, PurchaseOKMessageEvent, RoomSessionEvent, UserProfileComposer } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
 import GroupSettings from '../common/GroupSettings';
 import { GroupCreatorComponent } from '../components/group-creator/components/main/group-creator.component';
@@ -95,13 +66,13 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
             Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionEvent.ENDED, this.onRoomSessionEvent);
 
             this._messages = [
-                new RoomInfoEvent(this.onRoomInfoEvent.bind(this)),
+                new GetGuestRoomResultEvent(this.onGetGuestRoomResultEvent.bind(this)),
                 new GroupInformationEvent(this.onGroupInformationEvent.bind(this)),
                 new GroupMembersEvent(this.onGroupMembersEvent.bind(this)),
                 new GroupConfirmMemberRemoveEvent(this.onGroupConfirmMemberRemoveEvent.bind(this)),
                 new GroupBuyDataEvent(this.onGroupBuyDataEvent.bind(this)),
                 new GroupBadgePartsEvent(this.onGroupBadgePartsEvent.bind(this)),
-                new CatalogPurchaseEvent(this.onCatalogPurchaseEvent.bind(this)),
+                new PurchaseOKMessageEvent(this.onCatalogPurchaseEvent.bind(this)),
                 new GroupSettingsEvent(this.onGroupSettingsEvent.bind(this))
             ];
 
@@ -139,7 +110,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         }
     }
 
-    private onRoomInfoEvent(event: RoomInfoEvent): void
+    private onGetGuestRoomResultEvent(event: GetGuestRoomResultEvent): void
     {
         if(!event) return;
 
@@ -278,7 +249,7 @@ export class GroupsService implements OnDestroy, ILinkEventTracker
         this._groupColorsB       = parser.colorsB;
     }
 
-    private onCatalogPurchaseEvent(event: CatalogPurchaseEvent): void
+    private onCatalogPurchaseEvent(event: PurchaseOKMessageEvent): void
     {
         if(!event) return;
 

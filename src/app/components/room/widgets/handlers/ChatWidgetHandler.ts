@@ -1,34 +1,17 @@
-import { Point } from 'pixi.js';
-import { IConnection } from '../../../../../client/core/communication/connections/IConnection';
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { AvatarFigurePartType } from '../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { AvatarScaleType } from '../../../../../client/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '../../../../../client/nitro/avatar/enum/AvatarSetType';
-import { IAvatarImageListener } from '../../../../../client/nitro/avatar/IAvatarImageListener';
-import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { SystemChatStyleEnum } from '../../../../../client/nitro/ui/widget/enums/SystemChatStyleEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IVector3D } from '../../../../../client/room/utils/IVector3D';
-import { PointMath } from '../../../../../client/room/utils/PointMath';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { AvatarFigurePartType, AvatarScaleType, AvatarSetType, IAvatarImageListener, IConnection, IVector3D, Nitro, NitroEvent, NitroPoint, PetFigureData, PointMath, RoomObjectCategory, RoomObjectType, RoomObjectVariable, RoomSessionChatEvent, RoomWidgetEnum, SystemChatStyleEnum, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
 import { ChatHistoryItem } from '../../../chat-history/common/ChatHistoryItem';
 import { ChatHistoryService } from '../../../chat-history/services/chat-history.service';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomWidgetChatUpdateEvent } from '../events/RoomWidgetChatUpdateEvent';
 import { RoomWidgetRoomViewUpdateEvent } from '../events/RoomWidgetRoomViewUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomChatComponent } from '../roomchat/component';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListener
 {
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomChatComponent;
 
     private _connection: IConnection;
@@ -37,7 +20,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
     private _avatarImageCache: Map<string, HTMLImageElement>;
     private _petImageCache: Map<string, HTMLImageElement>;
     private _primaryCanvasScale: number;
-    private _primaryCanvasOriginPos: Point;
+    private _primaryCanvasOriginPos: NitroPoint;
     private _tempScreenPosVector: Vector3d;
 
     private _disposed: boolean;
@@ -121,7 +104,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
             if(((!(screenPoint.x == this._primaryCanvasOriginPos.x)) || (!(screenPoint.y == this._primaryCanvasOriginPos.y))))
             {
-                const _local_9 = PointMath._Str_15193(screenPoint, PointMath._Str_6038(this._primaryCanvasOriginPos, scale));
+                const _local_9 = PointMath.sub(screenPoint, PointMath.mul(this._primaryCanvasOriginPos, scale));
 
                 if(((!(_local_9.x == 0)) || (!(_local_9.y == 0))))
                 {
@@ -146,7 +129,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         }
     }
 
-    private getBubbleLocation(roomId: number, userLocation: IVector3D): Point
+    private getBubbleLocation(roomId: number, userLocation: IVector3D): NitroPoint
     {
         const geometry  = this._container.roomEngine.getRoomInstanceGeometry(roomId, this._container.getFirstCanvasId());
         const scale     = this._container.roomEngine.getRoomInstanceRenderingCanvasScale(roomId, this._container.getFirstCanvasId());
@@ -173,7 +156,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
             }
         }
 
-        return new Point(x, y);
+        return new NitroPoint(x, y);
     }
 
     public processWidgetMessage(message: RoomWidgetMessage): RoomWidgetUpdateEvent
@@ -245,19 +228,19 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
                         switch(chatType)
                         {
-                            case RoomSessionChatEvent._Str_5821:
+                            case RoomSessionChatEvent.CHAT_TYPE_RESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widgets.chatbubble.respect', 'username', username);
                                 break;
-                            case RoomSessionChatEvent._Str_6081:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETRESPECT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.petrespect', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_5958:
+                            case RoomSessionChatEvent.CHAT_TYPE_PETTREAT:
                                 text = Nitro.instance.getLocalizationWithParameter('widget.chatbubble.pettreat', 'petname', username);
                                 break;
-                            case RoomSessionChatEvent._Str_8971:
+                            case RoomSessionChatEvent.CHAT_TYPE_HAND_ITEM_RECEIVED:
                                 text = Nitro.instance.getLocalizationWithParameters('widget.chatbubble.handitem', [ 'username', 'handitem' ], [ username, Nitro.instance.getLocalization(('handitem' + chatEvent.extraParam))]);
                                 break;
-                            case RoomSessionChatEvent._Str_8909: {
+                            case RoomSessionChatEvent.CHAT_TYPE_MUTE_REMAINING: {
                                 const hours     = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam / 3600)) : 0).toString();
                                 const minutes   = ((chatEvent.extraParam > 0) ? Math.floor((chatEvent.extraParam % 3600) / 60) : 0).toString();
                                 const seconds   = (chatEvent.extraParam % 60).toString();
@@ -311,7 +294,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         const image = avatarImage.getCroppedImage(AvatarSetType.HEAD);
         const color = avatarImage.getPartColor(AvatarFigurePartType.CHEST);
 
-        this._avatarColorCache.set(figure, ((color && color._Str_915) || 16777215));
+        this._avatarColorCache.set(figure, ((color && color.rgb) || 16777215));
 
         avatarImage.dispose();
 
@@ -333,7 +316,7 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
 
         if(image)
         {
-            existing = Nitro.instance.renderer.extract.image(image.data);
+            existing = TextureUtils.generateImage(image.data);
 
             this._petImageCache.set((figure + posture), existing);
         }
@@ -361,12 +344,12 @@ export class ChatWidgetHandler implements IRoomWidgetHandler, IAvatarImageListen
         return [ RoomSessionChatEvent.CHAT_EVENT ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
     }

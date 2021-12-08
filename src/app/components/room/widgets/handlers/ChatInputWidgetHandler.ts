@@ -1,26 +1,18 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { RoomSettingsComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/data/RoomSettingsComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomZoomEvent } from '../../../../../client/nitro/room/events/RoomZoomEvent';
-import { RoomSessionChatEvent } from '../../../../../client/nitro/session/events/RoomSessionChatEvent';
-import { HabboClubLevelEnum } from '../../../../../client/nitro/session/HabboClubLevelEnum';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { AvatarExpressionEnum } from '../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+import { AvatarExpressionEnum, HabboClubLevelEnum, Nitro, NitroEvent, NitroVersion, RoomControllerLevel, RoomSessionChatEvent, RoomSettingsComposer, RoomWidgetEnum, RoomZoomEvent, TextureUtils } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomChatInputComponent } from '../chatinput/component';
 import { RoomWidgetFloodControlEvent } from '../events/RoomWidgetFloodControlEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetChatMessage } from '../messages/RoomWidgetChatMessage';
 import { RoomWidgetChatSelectAvatarMessage } from '../messages/RoomWidgetChatSelectAvatarMessage';
 import { RoomWidgetChatTypingMessage } from '../messages/RoomWidgetChatTypingMessage';
 import { RoomWidgetRequestWidgetMessage } from '../messages/RoomWidgetRequestWidgetMessage';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class ChatInputWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomChatInputComponent;
 
     private _disposed: boolean;
@@ -95,34 +87,34 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                     {
                         case ':d':
                         case ';d':
-                            if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel === HabboClubLevelEnum.VIP)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_7336._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.LAUGH.ordinal);
                             }
                             break;
                         case 'o/':
                         case '_o/':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6268._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.WAVE.ordinal);
                             return null;
                         case ':kiss':
-                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum.VIP)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_5579._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.BLOW.ordinal);
                                 return null;
                             }
                             break;
                         case ':jump':
-                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum._Str_2575)
+                            if(this._container.sessionDataManager.clubLevel == HabboClubLevelEnum.VIP)
                             {
-                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_16682._Str_6677);
+                                this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.JUMP.ordinal);
                                 return null;
                             }
                             break;
                         case ':idle':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6989._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.IDLE.ordinal);
                             return null;
                         case '_b':
-                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum._Str_6325._Str_6677);
+                            this._container.roomSession.sendExpressionMessage(AvatarExpressionEnum.RESPECT.ordinal);
                             return null;
                         case ':sign':
                             this._container.roomSession.sendSignMessage(parseInt(secondPart));
@@ -133,9 +125,14 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':zoom':
                             this._container.roomEngine.events.dispatchEvent(new RoomZoomEvent(this._container.roomEngine.activeRoomId, parseInt(secondPart), false));
                             return null;
-                        case ':screenshot':
-                            this._container.roomEngine.createRoomScreenshot(this._container.roomSession.roomId, this._container.getFirstCanvasId());
+                        case ':screenshot': {
+                            const texture = this._container.roomEngine.createTextureFromRoom(this._container.roomSession.roomId, this._container.getFirstCanvasId());
+
+                            const newWindow = window.open('');
+
+                            newWindow.document.write(TextureUtils.generateImageUrl(texture));
                             return null;
+                        }
                         case ':pickall':
                             this._container.notificationService.alertWithConfirm('${room.confirm.pick_all}', '${generic.alert.title}', () =>
                             {
@@ -159,7 +156,7 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
                         case ':nitro':
                         case ':billsonnn':
                             this._container.notificationService.alertWithScrollableMessages([
-                                '<div class="d-flex flex-column justify-content-center align-items-center"><div class="nitro-info-box"></div><b>Version: ' + Nitro.RELEASE_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
+                                '<div class="d-flex flex-column justify-content-center align-items-center"><div class="nitro-info-box"></div><b>Renderer Version: ' + NitroVersion.RENDERER_VERSION + '</b><br /><b>UI Version: ' + NitroVersion.UI_VERSION + '</b><br />This client is powered by Nitro HTML5<br /><br /><div class="d-flex"><a class="btn btn-primary" href="https://discord.gg/66UR68FPgy" target="_blank">Discord</a><a class="btn btn-primary" href="https://git.krews.org/nitro" target="_blank">Git</a></div><br /></div>'], 'Nitro HTML5');
                             return null;
                         case ':settings':
                             if(this._container.roomSession.isRoomOwner || this._container.sessionDataManager.isModerator)
@@ -229,12 +226,12 @@ export class ChatInputWidgetHandler implements IRoomWidgetHandler
         return [ RoomSessionChatEvent.FLOOD_EVENT ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         this._container = container;
     }

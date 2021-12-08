@@ -1,13 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { RenderTexture } from 'pixi.js';
-import { MarketplaceOfferItem } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/MarketplaceOfferItem';
-import { ToolbarIconEnum } from '../../../../../client/nitro/enums/ToolbarIconEnum';
-import { NitroToolbarAnimateIconEvent } from '../../../../../client/nitro/events/NitroToolbarAnimateIconEvent';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../client/nitro/room/IGetImageListener';
-import { ImageResult } from '../../../../../client/nitro/room/ImageResult';
-import { TextureUtils } from '../../../../../client/room/utils/TextureUtils';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { IGetImageListener, ImageResult, MarketplaceOffer, Nitro, NitroRenderTexture, NitroToolbarAnimateIconEvent, TextureUtils, ToolbarIconEnum, Vector3d } from '@nitrots/nitro-renderer';
 import { InventoryFurnitureService } from '../../../inventory/services/furniture.service';
 import { CatalogService } from '../../services/catalog.service';
 import { MarketplaceService } from '../../services/marketplace.service';
@@ -23,7 +15,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
     public imageElement: ElementRef<HTMLDivElement>;
 
     @Input()
-    public offer: MarketplaceOfferItem;
+    public offer: MarketplaceOffer;
 
     private _imageUrl: string = '';
 
@@ -111,7 +103,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
         });
     }
 
-    public imageReady(id: number, texture: RenderTexture, image: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image: HTMLImageElement): void
     {
         if(!texture) return;
 
@@ -168,7 +160,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
     {
         let text = Nitro.instance.localization.getValue('catalog.marketplace.offer_details.average_price');
 
-        const average = this.offer._Str_3925 == 0 ? ' - ' : this.offer._Str_3925.toString();
+        const average = this.offer.averagePrice == 0 ? ' - ' : this.offer.averagePrice.toString();
 
         text = text.replace('%days%', this._inventoryFurniService.marketPlaceConfig.displayTime.toString());
         text = text.replace('%average%', average);
@@ -178,7 +170,7 @@ export class CatalogConfirmMarketplacePurchaseComponent implements OnChanges, IG
 
     public getOfferCount(): string
     {
-        return Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_details.offer_count', 'count', this.offer._Str_4121.toString());
+        return Nitro.instance.localization.getValueWithParameter('catalog.marketplace.offer_details.offer_count', 'count', this.offer.offerCount.toString());
     }
 
     public buy(): void

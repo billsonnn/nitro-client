@@ -1,6 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { RoomDataParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomDataParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { Nitro, RoomDataParser } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../services/navigator.service';
 
 @Component({

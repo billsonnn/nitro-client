@@ -1,15 +1,11 @@
-import { BLEND_MODES, Filter } from 'pixi.js';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../client/nitro/room/object/RoomObjectCategory';
-import { IRoomObject } from '../../../client/room/object/IRoomObject';
-import { IRoomObjectSpriteVisualization } from '../../../client/room/object/visualization/IRoomObjectSpriteVisualization';
+import { IRoomObject, IRoomObjectSpriteVisualization, Nitro, NitroFilter, RoomObjectCategory } from '@nitrots/nitro-renderer';
 import { WiredMainComponent } from './components/main/main.component';
 import { WiredSelectionFilter } from './WiredSelectionFilter';
 
 export class WiredSelectionVisualizer
 {
     private _component: WiredMainComponent;
-    private _selectionShader: Filter;
+    private _selectionShader: NitroFilter;
 
     constructor(component: WiredMainComponent)
     {
@@ -63,7 +59,7 @@ export class WiredSelectionVisualizer
 
         for(const sprite of visualization.sprites)
         {
-            if(sprite.blendMode === BLEND_MODES.ADD) continue;
+            if(sprite.blendMode === 1) continue; // BLEND_MODE: ADD
 
             sprite.filters = [ this._selectionShader ];
         }

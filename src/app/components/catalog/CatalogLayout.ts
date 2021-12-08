@@ -1,11 +1,6 @@
 import { Directive, NgZone } from '@angular/core';
-import { CatalogPageOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { ICatalogPageParser } from '../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomPreviewer } from '../../../client/nitro/room/preview/RoomPreviewer';
-import { FurnitureType } from '../../../client/nitro/session/furniture/FurnitureType';
-import { IFurnitureData } from '../../../client/nitro/session/furniture/IFurnitureData';
+import { CatalogPageMessageOfferData, CatalogPageMessageProductData, FurnitureType, IFurnitureData, Nitro, RoomPreviewer } from '@nitrots/nitro-renderer';
+import { ICatalogPageParser } from './common/ICatalogPageParser';
 import { CatalogService } from './services/catalog.service';
 import { MarketplaceService } from './services/marketplace.service';
 
@@ -50,14 +45,14 @@ export class CatalogLayout
         return url.replace('%type%', type.toString());
     }
 
-    public getProductFurniData(product: CatalogProductOfferData): IFurnitureData
+    public getProductFurniData(product: CatalogPageMessageProductData): IFurnitureData
     {
         if(!product) return null;
 
         return this._catalogService.getFurnitureDataForProductOffer(product);
     }
 
-    public offerImage(offer: CatalogPageOfferData): string
+    public offerImage(offer: CatalogPageMessageOfferData): string
     {
         if(!offer) return '';
 
@@ -80,12 +75,12 @@ export class CatalogLayout
         return '';
     }
 
-    public hasMultipleProducts(offer: CatalogPageOfferData): boolean
+    public hasMultipleProducts(offer: CatalogPageMessageOfferData): boolean
     {
         return (offer.products.length > 1);
     }
 
-    public offerName(offer: CatalogPageOfferData): string
+    public offerName(offer: CatalogPageMessageOfferData): string
     {
         const productData = this._catalogService.getProductDataForLocalization(offer.localizationId);
 
@@ -94,7 +89,7 @@ export class CatalogLayout
         return offer.localizationId;
     }
 
-    public getFirstProduct(offer: CatalogPageOfferData): CatalogProductOfferData
+    public getFirstProduct(offer: CatalogPageMessageOfferData): CatalogPageMessageProductData
     {
         return ((offer && offer.products[0]) || null);
     }
@@ -104,12 +99,12 @@ export class CatalogLayout
         return (this._catalogService.catalogRoot.localization || null);
     }
 
-    public get offers(): CatalogPageOfferData[]
+    public get offers(): CatalogPageMessageOfferData[]
     {
         return this._catalogService.activePage.offers;
     }
 
-    public get activeOffer(): CatalogPageOfferData
+    public get activeOffer(): CatalogPageMessageOfferData
     {
         return ((this._catalogService.component && this._catalogService.component.activeOffer) || null);
     }

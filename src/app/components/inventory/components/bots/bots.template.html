@@ -26,7 +26,7 @@
                 style="z-index: 1;">
                 <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedItem.botData.name }}</div>
                 <div class="btn-group-vertical w-100">
-                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100" (click)="attemptBotPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary btn-sm w-100" (click)="attemptBotPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
                 </div>
             </div>
         </div>

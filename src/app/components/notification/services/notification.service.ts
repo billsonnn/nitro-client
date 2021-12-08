@@ -1,16 +1,10 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { NotificationDialogMessageEvent } from 'src/client/nitro/communication/messages/incoming/notifications/NotificationDialogMessageEvent';
-import { IMessageEvent } from '../../../../client/core/communication/messages/IMessageEvent';
-import { ModeratorMessageEvent } from '../../../../client/nitro/communication/messages/incoming/moderation/ModeratorMessageEvent';
-import { HabboBroadcastMessageEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/HabboBroadcastMessageEvent';
-import { MOTDNotificationEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/MOTDNotificationEvent';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { HabboBroadcastMessageEvent, HotelWillShutdownEvent, IMessageEvent, ModeratorMessageEvent, MOTDNotificationEvent, Nitro, NotificationDialogMessageEvent } from '@nitrots/nitro-renderer';
 import { AlertCenterComponent } from '../components/alert-center/alert-center.component';
 import { NotificationBroadcastMessageComponent } from '../components/broadcast-message/broadcast-message.component';
 import { NotificationChoice } from '../components/choices/choices.component';
 import { NotificationCenterComponent } from '../components/notification-center/notification-center.component';
 import { NotificationDialogComponent } from '../components/notification-dialog/notification-dialog.component';
-import { HotelWillShutdownEvent } from '../../../../client/nitro/communication/messages/incoming/notifications/HotelWillShutdownEvent';
 
 @Injectable()
 export class NotificationService implements OnDestroy
@@ -91,7 +85,7 @@ export class NotificationService implements OnDestroy
 
         if(!parser) return;
 
-        this._ngZone.run(() => this.alertWithLink(parser.message, parser.link));
+        this._ngZone.run(() => this.alertWithLink(parser.message, parser.url));
     }
 
     private onMOTDNotificationEvent(event: MOTDNotificationEvent): void

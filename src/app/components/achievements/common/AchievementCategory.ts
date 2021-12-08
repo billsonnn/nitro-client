@@ -1,9 +1,9 @@
-import { Achievement } from '../../../../client/nitro/communication/messages/incoming/inventory/achievements/Achievement';
+import { AchievementData } from '@nitrots/nitro-renderer';
 
 export class AchievementCategory
 {
     private _name: string;
-    private _achievements: Achievement[];
+    private _achievements: AchievementData[];
 
     constructor(name: string)
     {
@@ -21,12 +21,12 @@ export class AchievementCategory
         this._name = name;
     }
 
-    public get achievements(): Achievement[]
+    public get achievements(): AchievementData[]
     {
         return this._achievements;
     }
 
-    public set achievements(achievements: Achievement[])
+    public set achievements(achievements: AchievementData[])
     {
         this._achievements = achievements;
     }

@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RedeemItemClothingComposer } from '../../../../../../../../client/nitro/communication/messages/outgoing/catalog/RedeemItemClothingComposer';
-import { UserFigureComposer } from '../../../../../../../../client/nitro/communication/messages/outgoing/user/data/UserFigureComposer';
-import { Nitro } from '../../../../../../../../client/nitro/Nitro';
-import { RoomObjectCategory } from '../../../../../../../../client/nitro/room/object/RoomObjectCategory';
-import { IFurnitureData } from '../../../../../../../../client/nitro/session/furniture/IFurnitureData';
+import { IFurnitureData, Nitro, RedeemItemClothingComposer, RoomObjectCategory, UserFigureComposer } from '@nitrots/nitro-renderer';
 import { FurniCategory } from '../../../../../../catalog/enums/FurniCategory';
 import { FurnitureContextMenuWidget } from '../main/main.component';
 

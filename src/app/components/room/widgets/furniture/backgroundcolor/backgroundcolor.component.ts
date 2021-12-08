@@ -1,10 +1,8 @@
 import { Options } from '@angular-slider/ngx-slider';
 import { Component, NgZone } from '@angular/core';
+import { ApplyTonerComposer, ColorConverter, FurnitureMultiStateComposer } from '@nitrots/nitro-renderer';
 import { ColorEvent } from 'ngx-color';
-import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { ApplyTonerComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/toner/ApplyTonerComposer';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
-import { ColorConverter } from '../../../../../../client/room/utils/ColorConverter';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureBackgroundColorWidgetHandler } from '../../handlers/FurnitureBackgroundColorWidgetHandler';
 
 @Component({
@@ -51,7 +49,7 @@ export class BackgroundColorFurniWidget extends ConversionTrackingWidget
     {
         if(!event) return;
 
-        const hsl = ColorConverter._Str_22130(parseInt(event.color.hex.replace('#', ''), 16));
+        const hsl = ColorConverter.rgbToHSL(parseInt(event.color.hex.replace('#', ''), 16));
 
         this.hue        = (((hsl >> 16) & 0xFF));
         this.saturation = (((hsl >> 8) & 0xFF));

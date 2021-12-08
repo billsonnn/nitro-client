@@ -1,6 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { GroupSettingsParser } from '../../../../../../../client/nitro/communication/messages/parser/group/GroupSettingsParser';
-import { Nitro } from '../../../../../../../client/nitro/Nitro';
+import { GroupSettingsParser, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationChoice } from '../../../../../notification/components/choices/choices.component';
 import { NotificationService } from '../../../../../notification/services/notification.service';
 import GroupSettings from '../../../../common/GroupSettings';

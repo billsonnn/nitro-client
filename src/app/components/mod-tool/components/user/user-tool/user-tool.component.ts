@@ -1,13 +1,9 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModTool } from '../../tool.component';
-import { ModToolService } from '../../../services/mod-tool.service';
-import { UserToolUser } from './user-tool-user';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { GetRoomVisitsMessageComposer, GetUserChatlogMessageComposer, ModeratorUserInfoData, Nitro } from '@nitrots/nitro-renderer';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
-import { _Str_5467 } from '../../../../../../client/nitro/communication/messages/parser/modtool/utils/_Str_5467';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { ModtoolRequestUserRoomsComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserRoomsComposer';
-import { ModtoolRequestUserChatlogComposer } from '../../../../../../client/nitro/communication/messages/outgoing/modtool/ModtoolRequestUserChatlogComposer';
-
+import { ModToolService } from '../../../services/mod-tool.service';
+import { ModTool } from '../../tool.component';
+import { UserToolUser } from './user-tool-user';
 
 @Component({
     selector: 'nitro-mod-tool-user-component',
@@ -40,7 +36,7 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         this._modToolService.closeUserTool();
     }
 
-    public userData(): _Str_5467
+    public userData(): ModeratorUserInfoData
     {
         return this._modToolUserInfoService.currentUserInfo;
     }
@@ -60,67 +56,67 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
             {
                 nameKey: 'cfhs',
                 nameKeyFallback: 'CFHs',
-                value: data._Str_24656.toString()
+                value: data.cfhCount.toString()
             },
             {
                 nameKey: 'abusive_cfhs',
                 nameKeyFallback: 'Abusive CFHs',
-                value:  data._Str_22987.toString()
+                value:  data.abusiveCfhCount.toString()
             },
             {
                 nameKey: 'cautions',
                 nameKeyFallback: 'Cautions',
-                value: data._Str_16987.toString()
+                value: data.cautionCount.toString()
             },
             {
                 nameKey: 'bans',
                 nameKeyFallback: 'Bans',
-                value: data._Str_20373.toString()
+                value: data.banCount.toString()
             },
             {
                 nameKey: 'last_sanction',
                 nameKeyFallback: 'Last sanction',
-                value: data._Str_24447
+                value: data.lastSanctionTime
             },
             {
                 nameKey: 'trade_locks',
                 nameKeyFallback: 'Trade locks',
-                value: data._Str_24526.toString()
+                value: data.tradingLockCount.toString()
             },
             {
                 nameKey: 'lock_expires',
                 nameKeyFallback: 'Lock expires',
-                value: data._Str_23969
+                value: data.tradingExpiryDate
             },
             {
                 nameKey: 'last_login',
                 nameKeyFallback: 'Last login',
-                value: ModToolUserComponent._Str_12797(data._Str_23276 * 60)
+                value: ModToolUserComponent._Str_12797(data.minutesSinceLastLogin * 60)
             },
             {
                 nameKey: 'purchase',
                 nameKeyFallback: 'Purchases',
-                value: data._Str_22786
+                value: data.lastPurchaseDate
             },
             {
                 nameKey: 'email',
                 nameKeyFallback: 'Email',
-                value: data._Str_20219
+                value: data.primaryEmailAddress
             },
             {
                 nameKey: 'acc_bans',
                 nameKeyFallback: 'Banned Accs.',
-                value: data._Str_22700.toString()
+                value: data.identityRelatedBanCount.toString()
             },
             {
                 nameKey: 'registered',
                 nameKeyFallback: 'Registered',
-                value: ModToolUserComponent._Str_12797(data._Str_24334 * 60)
+                value: ModToolUserComponent._Str_12797(data.registrationAgeInMinutes * 60)
             },
             {
                 nameKey: 'rank',
                 nameKeyFallback: 'Rank',
-                value: data._Str_22262
+                value: data.userClassification
             }
         ];
     }
@@ -132,14 +128,14 @@ export class ModToolUserComponent extends ModTool implements OnInit, OnDestroy
         {
             case 'roomchat':
                 this._modToolService.showSendUserChatlogs = true;
-                Nitro.instance.communication.connection.send(new ModtoolRequestUserChatlogComposer(this.user.id));
+                Nitro.instance.communication.connection.send(new GetUserChatlogMessageComposer(this.user.id));
                 break;
             case 'send_message':
                 this._modToolService.showSendUserMessage = true;
                 break;
             case 'room_visits':
                 this._modToolService.showVisitedRoomsForUser = true;
-                Nitro.instance.communication.connection.send(new ModtoolRequestUserRoomsComposer(this.user.id));
+                Nitro.instance.communication.connection.send(new GetRoomVisitsMessageComposer(this.user.id));
                 break;
             case 'mod_action':
                 this._modToolService.showModActionOnUser = true;

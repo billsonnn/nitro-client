@@ -1,5 +1,5 @@
-﻿import { AvatarExpressionEnum } from '../../../../../client/nitro/ui/widget/enums/AvatarExpressionEnum';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
+﻿import { AvatarExpressionEnum } from '@nitrots/nitro-renderer';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
 
 export class RoomWidgetAvatarExpressionMessage extends RoomWidgetMessage
 {

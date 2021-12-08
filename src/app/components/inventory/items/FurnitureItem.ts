@@ -1,6 +1,4 @@
-﻿import { IFurnitureItemData } from '../../../../client/nitro/communication/messages/incoming/inventory/furni/IFurnitureItemData';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { IObjectData } from '../../../../client/nitro/room/object/data/IObjectData';
+﻿import { IFurnitureItemData, IObjectData, Nitro } from '@nitrots/nitro-renderer';
 import { IFurnitureItem } from './IFurnitureItem';
 
 export class FurnitureItem implements IFurnitureItem
@@ -40,15 +38,15 @@ export class FurnitureItem implements IFurnitureItem
         this._recyclable            = parser.isRecycleable;
         this._sellable              = parser.sellable;
         this._stuffData             = parser.stuffData;
-        this._extra                 = parser._Str_2794;
+        this._extra                 = parser.extra;
         this._secondsToExpiration   = parser.secondsToExpiration;
-        this._expirationTimeStamp   = parser._Str_10616;
+        this._expirationTimeStamp   = parser.expirationTimeStamp;
         this._hasRentPeriodStarted  = parser.hasRentPeriodStarted;
-        this._creationDay           = parser._Str_8932;
-        this._creationMonth         = parser._Str_9050;
-        this._creationYear          = parser._Str_9408;
+        this._creationDay           = parser.creationDay;
+        this._creationMonth         = parser.creationMonth;
+        this._creationYear          = parser.creationYear;
         this._slotId                = parser.slotId;
-        this._songId                = parser._Str_3951;
+        this._songId                = parser.songId;
         this._flatId                = parser.flatId;
         this._isRented              = parser.rentable;
         this._isWallItem            = parser.isWallItem;
@@ -199,15 +197,15 @@ export class FurnitureItem implements IFurnitureItem
         this._recyclable            = parser.isRecycleable;
         this._sellable              = parser.sellable;
         this._stuffData             = parser.stuffData;
-        this._extra                 = parser._Str_2794;
+        this._extra                 = parser.extra;
         this._secondsToExpiration   = parser.secondsToExpiration;
-        this._expirationTimeStamp   = parser._Str_10616;
+        this._expirationTimeStamp   = parser.expirationTimeStamp;
         this._hasRentPeriodStarted  = parser.hasRentPeriodStarted;
-        this._creationDay           = parser._Str_8932;
-        this._creationMonth         = parser._Str_9050;
-        this._creationYear          = parser._Str_9408;
+        this._creationDay           = parser.creationDay;
+        this._creationMonth         = parser.creationMonth;
+        this._creationYear          = parser.creationYear;
         this._slotId                = parser.slotId;
-        this._songId                = parser._Str_3951;
+        this._songId                = parser.songId;
         this._flatId                = parser.flatId;
         this._isRented              = parser.rentable;
         this._isWallItem            = parser.isWallItem;

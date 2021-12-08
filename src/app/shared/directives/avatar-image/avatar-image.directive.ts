@@ -1,9 +1,5 @@
 import { Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AdvancedMap } from '../../../../client/core/utils/AdvancedMap';
-import { AvatarScaleType } from '../../../../client/nitro/avatar/enum/AvatarScaleType';
-import { AvatarSetType } from '../../../../client/nitro/avatar/enum/AvatarSetType';
-import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
-import { Nitro } from '../../../../client/nitro/Nitro';
+import { AdvancedMap, AvatarScaleType, AvatarSetType, IAvatarImageListener, Nitro } from '@nitrots/nitro-renderer';
 
 @Directive({
     selector: '[avatar-image]'

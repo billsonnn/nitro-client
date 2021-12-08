@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavigatorCategoryDataParser } from '../../../../../../../client/nitro/communication/messages/parser/navigator/NavigatorCategoryDataParser';
+import { NavigatorCategoryDataParser } from '@nitrots/nitro-renderer';
 import RoomSettings from '../../common/RoomSettings';
 
 @Component({
@@ -21,20 +21,20 @@ export class NavigatorRoomSettingsTabBasicComponent
     public tradeSettings: string[];
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onDeleteRoom: EventEmitter<any> = new EventEmitter();
+    public onDeleteRoom: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}
 
-    save(): void
+    public save(): void
     {
         this.onSave.emit(this.roomSettings);
     }
 
-    deleteRoom(): void
+    public deleteRoom(): void
     {
         this.onDeleteRoom.emit();
     }

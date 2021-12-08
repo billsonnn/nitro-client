@@ -1,12 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RenderTexture } from 'pixi.js';
-import { AdvancedMap } from '../../../../../../client/core/utils/AdvancedMap';
-import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { CatalogProductOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogProductOfferData';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { IGetImageListener } from '../../../../../../client/nitro/room/IGetImageListener';
-import { TextureUtils } from '../../../../../../client/room/utils/TextureUtils';
-import { Vector3d } from '../../../../../../client/room/utils/Vector3d';
+import { AdvancedMap, CatalogPageMessageOfferData, CatalogPageMessageProductData, IGetImageListener, Nitro, NitroRenderTexture, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
 import { CatalogLayout } from '../../../CatalogLayout';
 
 
@@ -19,12 +12,12 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
 
     public textPages: string[]                            = [];
 
-    private _allTrophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageOfferData>>();
-    public currentTrophyOffer: CatalogPageOfferData        = null;
+    private _allTrophyOffers                               = new AdvancedMap<string, AdvancedMap<string, CatalogPageMessageOfferData>>();
+    public currentTrophyOffer: CatalogPageMessageOfferData        = null;
 
     private _imageUrl: string                           = null;
 
-    private _currentTrophy: CatalogProductOfferData        = null;
+    private _currentTrophy: CatalogPageMessageProductData        = null;
     private _availableColorsForCurrentTrophy: string[] = null;
     private _currentTrophyIndex: number                       = 0;
     private readonly _orderOfColors = ['g','s','b'];
@@ -71,11 +64,11 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         if(firstOffer) this.selectOffer(firstOffer);
     }
 
-    private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageOfferData>): void
+    private selectOffer(availaleOffers: AdvancedMap<string, CatalogPageMessageOfferData>): void
     {
         if(!availaleOffers) return;
 
-        let firstAvailableTrophyColor:CatalogPageOfferData = null;
+        let firstAvailableTrophyColor:CatalogPageMessageOfferData = null;
         const availableColorsForTrophy:string[] = [];
         this._orderOfColors.map((color) =>
         {
@@ -98,7 +91,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
     }
 
 
-    private selectTrophyColor(firstAvailableTrophyColor: CatalogPageOfferData)
+    private selectTrophyColor(firstAvailableTrophyColor: CatalogPageMessageOfferData)
     {
         if(!firstAvailableTrophyColor) return;
 
@@ -137,7 +130,7 @@ export class CatalogLayoutTrophiesComponent extends CatalogLayout implements OnI
         return this._availableColorsForCurrentTrophy.indexOf(color) >= 0 &&  this._currentTrophyColor == color ? 'selected' : '';
     }
 
-    public imageReady(id: number, texture: RenderTexture, image?: HTMLImageElement): void
+    public imageReady(id: number, texture: NitroRenderTexture, image?: HTMLImageElement): void
     {
         if(texture)
         {

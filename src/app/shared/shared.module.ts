@@ -11,7 +11,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AvatarImageComponent } from './components/avatarimage/component';
-import { BadgeComponent } from './components/badge/component';
 import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
 import { RoomPreviewComponent } from './components/room-preview/room-preview.component';
@@ -68,7 +67,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MDBBootstrapModule,
         ColorChromeModule,
         AvatarImageComponent,
-        BadgeComponent,
         CurrencyIconComponent,
         FurnitureImageComponent,
         RoomPreviewComponent,
@@ -100,7 +98,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     declarations: [
         AvatarImageComponent,
-        BadgeComponent,
         CurrencyIconComponent,
         FurnitureImageComponent,
         RoomPreviewComponent,

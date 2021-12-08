@@ -1,16 +1,12 @@
-import { ICatalogPageParser } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageParser';
+import { CatalogPageMessageOfferData, FrontPageItem, IFurnitureData, ProductOfferMessageParser } from '@nitrots/nitro-renderer';
+import { ICatalogLocalizationData } from '../../../common/ICatalogLocalizationData';
+import { ICatalogPageParser } from '../../../common/ICatalogPageParser';
 import { CatalogLayoutSearchResultsComponent } from './search-results.component';
-import { CatalogFrontPageItem } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogFrontPageItem';
-import { CatalogLocalizationData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogLocalizationData';
-import { CatalogPageOfferData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageOfferData';
-import { ICatalogLocalizationData } from '../../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogLocalizationData';
-import { IFurnitureData } from '../../../../../../client/nitro/session/furniture/IFurnitureData';
-import { CatalogSearchParser } from '../../../../../../client/nitro/communication/messages/parser/catalog/CatalogSearchParser';
 
 export class SearchResultsPage implements ICatalogPageParser
 {
     private _furni: IFurnitureData[] = null;
-    private _offer: CatalogPageOfferData = null;
+    private _offer: CatalogPageMessageOfferData = null;
 
     constructor(furni: IFurnitureData[])
     {
@@ -18,12 +14,12 @@ export class SearchResultsPage implements ICatalogPageParser
     }
 
 
-    public get searchOffer(): CatalogPageOfferData
+    public get searchOffer(): CatalogPageMessageOfferData
     {
         return this._offer;
     }
 
-    public selectSearchResult(data: IFurnitureData, parser: CatalogSearchParser): void
+    public selectSearchResult(data: IFurnitureData, parser: ProductOfferMessageParser): void
     {
         if(parser) this._offer = parser.offer;
     }
@@ -38,7 +34,7 @@ export class SearchResultsPage implements ICatalogPageParser
         return CatalogLayoutSearchResultsComponent.CODE;
     }
 
-    public get frontPageItems(): CatalogFrontPageItem[]
+    public get frontPageItems(): FrontPageItem[]
     {
         return [];
     }
@@ -61,7 +57,7 @@ export class SearchResultsPage implements ICatalogPageParser
         return null;
     }
 
-    public get offers(): CatalogPageOfferData[]
+    public get offers(): CatalogPageMessageOfferData[]
     {
         return [];
     }

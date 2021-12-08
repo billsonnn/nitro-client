@@ -1,14 +1,6 @@
 import { Component, NgZone } from '@angular/core';
-import { AvatarFigureContainer } from '../../../../../../client/nitro/avatar/AvatarFigureContainer';
-import { AvatarFigurePartType } from '../../../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { IAvatarFigureContainer } from '../../../../../../client/nitro/avatar/IAvatarFigureContainer';
-import { FurnitureMultiStateComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/logic/FurnitureMultiStateComposer';
-import { FurnitureMannequinSaveLookComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveLookComposer';
-import { FurnitureMannequinSaveNameComposer } from '../../../../../../client/nitro/communication/messages/outgoing/room/furniture/mannequin/FurnitureMannequinSaveNameComposer';
-import { Nitro } from '../../../../../../client/nitro/Nitro';
-import { RoomControllerLevel } from '../../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { HabboClubLevelEnum } from '../../../../../../client/nitro/session/HabboClubLevelEnum';
-import { ConversionTrackingWidget } from '../../../../../../client/nitro/ui/widget/ConversionTrackingWidget';
+import { AvatarFigureContainer, AvatarFigurePartType, FurnitureMannequinSaveLookComposer, FurnitureMannequinSaveNameComposer, FurnitureMultiStateComposer, HabboClubLevelEnum, IAvatarFigureContainer, Nitro, RoomControllerLevel } from '@nitrots/nitro-renderer';
+import { ConversionTrackingWidget } from '../../ConversionTrackingWidget';
 import { FurnitureMannequinWidgetHandler } from '../../handlers/FurnitureMannequinWidgetHandler';
 
 @Component({
@@ -125,7 +117,7 @@ export class MannequinWidget extends ConversionTrackingWidget
             case MannequinWidget.WrongGender:{
                 avatarFigureContainer = avatarRenderManager.createFigureContainer(this._figure);
                 this.removeSectionsFromAvatar(avatarFigureContainer);
-                this._renderedFigure = avatarFigureContainer._Str_1008();
+                this._renderedFigure = avatarFigureContainer.getFigureString();
             }
                 break;
             case MannequinWidget.UseMannequin: {
@@ -135,7 +127,7 @@ export class MannequinWidget extends ConversionTrackingWidget
             case MannequinWidget.EditorView: {
                 avatarFigureContainer = avatarRenderManager.createFigureContainer(this._figure);
                 this.removeSectionsFromAvatar(avatarFigureContainer);
-                this._renderedFigure = avatarFigureContainer._Str_1008();
+                this._renderedFigure = avatarFigureContainer.getFigureString();
 
 
             }
@@ -158,17 +150,17 @@ export class MannequinWidget extends ConversionTrackingWidget
     private removeSectionsFromAvatar(avatar:IAvatarFigureContainer): void
     {
 
-        for(const item of avatar._Str_1016())
+        for(const item of avatar.getPartTypeIds())
         {
 
             if(MannequinWidget.parts.indexOf(item) == -1)
             {
 
-                avatar._Str_923(item);
+                avatar.removePart(item);
             }
         }
 
-        avatar._Str_830(<string>MannequinWidget._Str_10597[0], <number>MannequinWidget._Str_10597[1], <number[]>MannequinWidget._Str_10597[2]);
+        avatar.updatePart(<string>MannequinWidget._Str_10597[0], <number>MannequinWidget._Str_10597[1], <number[]>MannequinWidget._Str_10597[2]);
     }
 
 
@@ -179,15 +171,15 @@ export class MannequinWidget extends ConversionTrackingWidget
 
         for(const part of MannequinWidget.parts)
         {
-            ownContainer._Str_923(part);
+            ownContainer.removePart(part);
         }
 
-        for(const part of addedContainer._Str_1016())
+        for(const part of addedContainer.getPartTypeIds())
         {
-            ownContainer._Str_830(part, addedContainer.getPartSetId(part), addedContainer._Str_815(part));
+            ownContainer.updatePart(part, addedContainer.getPartSetId(part), addedContainer.getPartColorIds(part));
         }
 
-        return ownContainer._Str_1008();
+        return ownContainer.getFigureString();
 
     }
 
@@ -215,11 +207,11 @@ export class MannequinWidget extends ConversionTrackingWidget
     {
         switch(clubLevel)
         {
-            case HabboClubLevelEnum._Str_3159:
+            case HabboClubLevelEnum.NO_CLUB:
                 this.hasHabboClub = false;
                 break;
-            case HabboClubLevelEnum._Str_2964:
-            case HabboClubLevelEnum._Str_2575:
+            case HabboClubLevelEnum.CLUB:
+            case HabboClubLevelEnum.VIP:
                 this.hasHabboClub = true;
                 break;
         }

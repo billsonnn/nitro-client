@@ -1,10 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { AdvancedMap } from '../../../client/core/utils/AdvancedMap';
-import { NitroSettingsEvent } from '../../../client/nitro/events/NitroSettingsEvent';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
-import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineSamplePlaybackEvent } from '../../../client/nitro/room/events/RoomEngineSamplePlaybackEvent';
+import { AdvancedMap, Nitro, NitroSettingsEvent, RoomEngineEvent, RoomEngineObjectEvent, RoomEngineSamplePlaybackEvent } from '@nitrots/nitro-renderer';
 
 @Injectable()
 export class SoundService implements OnDestroy

@@ -1,16 +1,12 @@
 import { AfterViewInit, Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { FollowFriendMessageComposer, Nitro, RelationshipStatusEnum, SendMessageComposer, SetRelationshipStatusComposer } from '@nitrots/nitro-renderer';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { FollowFriendComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/FollowFriendComposer';
-import { SendMessageComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/SendMessageComposer';
-import { SetRelationshipStatusComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/SetRelationshipStatusComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
 import { SettingsService } from '../../../../core/settings/service';
 import { MessengerChat } from '../../common/MessengerChat';
 import { MessengerFriend } from '../../common/MessengerFriend';
 import { MessengerThread } from '../../common/MessengerThread';
-import { RelationshipStatusEnum } from '../../common/RelationshipStatusEnum';
 import { FriendListService } from '../../services/friendlist.service';
 
 @Component({
@@ -112,7 +108,7 @@ export class FriendListThreadViewerComponent implements OnChanges, OnDestroy, Af
 
         this._settingsService.toggleFriendList();
 
-        Nitro.instance.communication.connection.send(new FollowFriendComposer(this.participant.id));
+        Nitro.instance.communication.connection.send(new FollowFriendMessageComposer(this.participant.id));
     }
 
     public onKeyDownEvent(event: KeyboardEvent): void

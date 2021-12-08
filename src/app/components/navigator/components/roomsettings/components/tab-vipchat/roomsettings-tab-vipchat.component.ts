@@ -11,12 +11,12 @@ export class NavigatorRoomSettingsTabVipChatComponent
     public roomSettings: RoomSettings;
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}
 
-    save(): void
+    public save(): void
     {
         this.onSave.emit(this.roomSettings);
     }

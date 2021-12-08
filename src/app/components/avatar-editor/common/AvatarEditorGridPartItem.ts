@@ -1,15 +1,6 @@
-﻿import { Container, Sprite } from 'pixi.js';
-import { AvatarFigurePartType } from '../../../../client/nitro/avatar/enum/AvatarFigurePartType';
-import { FigureData } from '../../../../client/nitro/avatar/figuredata/FigureData';
-import { IAvatarImageListener } from '../../../../client/nitro/avatar/IAvatarImageListener';
-import { IAvatarRenderManager } from '../../../../client/nitro/avatar/IAvatarRenderManager';
-import { IFigurePart } from '../../../../client/nitro/avatar/structure/figure/IFigurePart';
-import { IFigurePartSet } from '../../../../client/nitro/avatar/structure/figure/IFigurePartSet';
-import { IPartColor } from '../../../../client/nitro/avatar/structure/figure/IPartColor';
-import { Nitro } from '../../../../client/nitro/Nitro';
-import { IGraphicAsset } from '../../../../client/room/object/visualization/utils/IGraphicAsset';
-import { TextureUtils } from '../../../../client/room/utils/TextureUtils';
+﻿import { AvatarFigurePartType, IAvatarImageListener, IAvatarRenderManager, IFigurePart, IFigurePartSet, IGraphicAsset, IPartColor, Nitro, NitroContainer, NitroSprite, TextureUtils } from '@nitrots/nitro-renderer';
 import { CategoryBaseModel } from './CategoryBaseModel';
+import { FigureData } from './FigureData';
 
 export class AvatarEditorGridPartItem implements IAvatarImageListener
 {
@@ -48,7 +39,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     private _colors: IPartColor[];
     private _useColors: boolean;
     private _isDisabledForWearing: boolean;
-    private _thumbContainer: Container;
+    private _thumbContainer: NitroContainer;
     private _imageUrl: string;
     private _maxColorIndex: number;
     private _isValidFigure: boolean;
@@ -80,9 +71,9 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
         if(partSet)
         {
-            const colors = partSet._Str_806;
+            const colors = partSet.parts;
 
-            for(const color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color._Str_827);
+            for(const color of colors) this._maxColorIndex = Math.max(this._maxColorIndex, color.colorLayerIndex);
         }
     }
 
@@ -122,7 +113,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
     private analyzeFigure(): boolean
     {
-        if(!this._renderManager || !this._model || !this.partSet || !this.partSet._Str_806 || !this.partSet._Str_806.length) return false;
+        if(!this._renderManager || !this._model || !this.partSet || !this.partSet.parts || !this.partSet.parts.length) return false;
 
         const figureContainer = this._renderManager.createFigureContainer(((this.partSet.type + '-') + this.partSet.id));
 
@@ -138,7 +129,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         return true;
     }
 
-    private renderThumb(): Container
+    private renderThumb(): NitroContainer
     {
         if(!this._renderManager || !this.partSet || !this._model) return null;
 
@@ -147,8 +138,8 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
             if(!this.analyzeFigure()) return null;
         }
 
-        const parts     = this.partSet._Str_806.concat().sort(this.sortByDrawOrder);
-        const container = new Container();
+        const parts     = this.partSet.parts.concat().sort(this.sortByDrawOrder);
+        const container = new NitroContainer();
 
         for(const part of parts)
         {
@@ -160,7 +151,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
 
             while(!hasAsset && (direction < AvatarEditorGridPartItem.THUMB_DIRECTIONS.length))
             {
-                const assetName = ((((((((((FigureData.H + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData._Str_2028);
+                const assetName = ((((((((((FigureData.SCALE + '_') + FigureData.STD) + '_') + part.type) + '_') + part.id) + '_') + AvatarEditorGridPartItem.THUMB_DIRECTIONS[direction]) + '_') + FigureData.DEFAULT_FRAME);
 
                 asset = this._renderManager.getAssetByName(assetName);
 
@@ -180,18 +171,18 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
             const y                       = asset.offsetY;
             let partColor: IPartColor   = null;
 
-            if(this._useColors && (part._Str_827 > 0))
+            if(this._useColors && (part.colorLayerIndex > 0))
             {
-                const color = this._colors[(part._Str_827 - 1)];
+                const color = this._colors[(part.colorLayerIndex - 1)];
 
                 if(color) partColor = color;
             }
 
-            const sprite = new Sprite(asset.texture);
+            const sprite = new NitroSprite(asset.texture);
 
             sprite.position.set(x, y);
 
-            if(partColor) sprite.tint = partColor._Str_915;
+            if(partColor) sprite.tint = partColor.rgb;
 
             container.addChild(sprite);
         }
@@ -203,7 +194,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
     {
         if(!this._isInitalized) return;
 
-        let container: Container = this._thumbContainer;
+        let container: NitroContainer = this._thumbContainer;
 
         if(!container) container = this.renderThumb();
 
@@ -212,7 +203,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         if(this._partSet)
         {
             this._isHC          = (this._partSet.clubLevel > 0);
-            this._isSellable    = this._partSet._Str_651;
+            this._isSellable    = this._partSet.isSellable;
         }
         else
         {
@@ -225,7 +216,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         this._imageUrl = TextureUtils.generateImageUrl(container);
     }
 
-    private setAlpha(container: Container, alpha: number): Container
+    private setAlpha(container: NitroContainer, alpha: number): NitroContainer
     {
         container.alpha = alpha;
 
@@ -284,7 +275,7 @@ export class AvatarEditorGridPartItem implements IAvatarImageListener
         return this._isDisabledForWearing;
     }
 
-    public set iconImage(k: Container)
+    public set iconImage(k: NitroContainer)
     {
         this._thumbContainer = k;
 

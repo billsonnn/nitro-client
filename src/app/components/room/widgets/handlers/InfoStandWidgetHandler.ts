@@ -1,29 +1,5 @@
-import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { PetFigureData } from '../../../../../client/nitro/avatar/pets/PetFigureData';
-import { PetType } from '../../../../../client/nitro/avatar/pets/PetType';
-import { RoomAdsUpdateComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/furniture/ads/RoomAdsUpdateComposer';
-import { RoomUnitDropHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitDropHandItemComposer';
-import { RoomUnitGiveHandItemComposer } from '../../../../../client/nitro/communication/messages/outgoing/room/unit/RoomUnitGiveHandItemComposer';
-import { RoomModerationParser } from '../../../../../client/nitro/communication/messages/parser/room/data/RoomModerationParser';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { ObjectDataFactory } from '../../../../../client/nitro/room/object/data/ObjectDataFactory';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectOperationType } from '../../../../../client/nitro/room/object/RoomObjectOperationType';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomControllerLevel } from '../../../../../client/nitro/session/enum/RoomControllerLevel';
-import { RoomTradingLevelEnum } from '../../../../../client/nitro/session/enum/RoomTradingLevelEnum';
-import { RoomSessionPetInfoUpdateEvent } from '../../../../../client/nitro/session/events/RoomSessionPetInfoUpdateEvent';
-import { RoomSessionUserBadgesEvent } from '../../../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { RoomUserData } from '../../../../../client/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetEnumItemExtradataParameter } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnumItemExtradataParameter';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { Vector3d } from '../../../../../client/room/utils/Vector3d';
+import { IFurnitureData, Nitro, NitroEvent, ObjectDataFactory, PetFigureData, PetType, RoomControllerLevel, RoomModerationSettings, RoomObjectCategory, RoomObjectOperationType, RoomObjectType, RoomObjectVariable, RoomSessionPetInfoUpdateEvent, RoomSessionUserBadgesEvent, RoomTradingLevelEnum, RoomUnitDropHandItemComposer, RoomUnitGiveHandItemComposer, RoomUserData, RoomWidgetEnum, RoomWidgetEnumItemExtradataParameter, TextureUtils, Vector3d } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomObjectNameEvent } from '../events/RoomObjectNameEvent';
 import { RoomWidgetChatInputContentUpdateEvent } from '../events/RoomWidgetChatInputContentUpdateEvent';
 import { RoomWidgetFurniInfostandUpdateEvent } from '../events/RoomWidgetFurniInfostandUpdateEvent';
@@ -31,16 +7,19 @@ import { RoomWidgetPetInfostandUpdateEvent } from '../events/RoomWidgetPetInfost
 import { RoomWidgetRentableBotInfostandUpdateEvent } from '../events/RoomWidgetRentableBotInfostandUpdateEvent';
 import { RoomWidgetUpdateInfostandUserEvent } from '../events/RoomWidgetUpdateInfostandUserEvent';
 import { RoomInfoStandMainComponent } from '../infostand/components/main/main.component';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetChangeMottoMessage } from '../messages/RoomWidgetChangeMottoMessage';
 import { RoomWidgetFurniActionMessage } from '../messages/RoomWidgetFurniActionMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class InfoStandWidgetHandler implements IRoomWidgetHandler
 {
     private static ACTIVITY_POINTS_DISPLAY_ENABLED: boolean = true;
 
-    private _container: IRoomWidgetHandlerContainer;
+    private _container: IRoomWidgetManager;
     private _widget: RoomInfoStandMainComponent;
 
     private _disposed: boolean;
@@ -246,8 +225,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
                         }
                     }
 
-                    this._container.roomEngine.processRoomObjectWallOperation(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
-                    this._Str_23922(_local_19);
+                    this._container.roomEngine.modifyRoomObjectDataWithMap(objectId, objectCategory, RoomObjectOperationType.OBJECT_SAVE_STUFF_DATA, _local_19);
                     _local_19.clear();
                 }
                 break;
@@ -494,7 +472,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(roomObjectImage && roomObjectImage.data)
         {
-            const image = Nitro.instance.renderer.extract.image(roomObjectImage.data);
+            const image = TextureUtils.generateImage(roomObjectImage.data);
 
             if(image) infostandEvent.image = image;
         }
@@ -644,14 +622,14 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
             {
                 switch(tradeMode)
                 {
-                    case RoomTradingLevelEnum._Str_14475: {
+                    case RoomTradingLevelEnum.ROOM_CONTROLLER_REQUIRED: {
                         const _local_15 = ((event.roomControllerLevel !== RoomControllerLevel.NONE) && (event.roomControllerLevel !== RoomControllerLevel.GUILD_MEMBER));
                         const _local_16 = ((event.flatControl !== RoomControllerLevel.NONE) && (event.flatControl !== RoomControllerLevel.GUILD_MEMBER));
 
                         event.canTrade = ((_local_15) || (_local_16));
                         break;
                     }
-                    case RoomTradingLevelEnum._Str_9173:
+                    case RoomTradingLevelEnum.FREE_TRADING:
                         event.canTrade = true;
                         break;
                     default:
@@ -664,7 +642,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
             if(isShuttingDown) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_14161;
 
-            if(tradeMode !== RoomTradingLevelEnum._Str_9173) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
+            if(tradeMode !== RoomTradingLevelEnum.FREE_TRADING) event._Str_6622 = RoomWidgetUpdateInfostandUserEvent._Str_13798;
 
             // const _local_12 = this._container.sessionDataManager.userId;
             // _local_13 = this._container.sessionDataManager._Str_18437(_local_12);
@@ -748,11 +726,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_23100(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function (event: RoomWidgetUpdateInfostandUserEvent, moderation: RoomModerationParser): boolean
+        const settingsFunction = function (event: RoomWidgetUpdateInfostandUserEvent, moderation: RoomModerationSettings): boolean
         {
             switch(moderation.allowMute)
             {
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -764,13 +742,13 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_22729(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationSettings): boolean
         {
             switch(_arg_2.allowKick)
             {
-                case RoomModerationParser._Str_11537:
+                case RoomModerationSettings.MODERATION_LEVEL_ALL:
                     return true;
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -782,11 +760,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
     private _Str_23573(userInfo:RoomWidgetUpdateInfostandUserEvent): boolean
     {
-        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationParser): boolean
+        const settingsFunction = function(event: RoomWidgetUpdateInfostandUserEvent, _arg_2: RoomModerationSettings): boolean
         {
             switch(_arg_2.allowBan)
             {
-                case RoomModerationParser._Str_5047:
+                case RoomModerationSettings.MODERATION_LEVEL_USER_WITH_RIGHTS:
                     return this._Str_9213(event);
                 default:
                     return (event.roomControllerLevel >= RoomControllerLevel.ROOM_OWNER);
@@ -809,23 +787,11 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         return (flag && (event.flatControl < RoomControllerLevel.ROOM_OWNER));
     }
 
-    // public  _Str_23922(k:Map):void
-    public _Str_23922(k:Map<string,string>):void
-    {
-        if(!this._widget) return;
-
-        if(this._container.sessionDataManager.hasSecurity(5))
-        {
-            // TODO: Map should be `k`
-            this._container.connection.send(new RoomAdsUpdateComposer(this._widget.furniData.id, k));
-        }
-    }
-
     private onRoomSessionPetInfoUpdateEvent(event: RoomSessionPetInfoUpdateEvent): void
     {
         if(!event || !this._container || !this._container.events) return;
 
-        const petData = event._Str_24727;
+        const petData = event.petInfo;
 
         if(!petData) return;
 
@@ -843,7 +809,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
 
         if(_local_5 === PetType.MONSTERPLANT)
         {
-            if(petData.level >= petData._Str_20651) _local_7 = 'std';
+            if(petData.level >= petData.adultLevel) _local_7 = 'std';
             else _local_7 = ('grw' + petData.level);
         }
 
@@ -875,7 +841,7 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         infostandEvent.fullyGrown          = petData.fullyGrown;
         infostandEvent.dead                = petData.dead;
         infostandEvent.rarityLevel         = petData.rarityLevel;
-        infostandEvent._Str_3307           = petData._Str_3307;
+        infostandEvent._Str_3307           = petData.skillTresholds;
         infostandEvent._Str_5114           = false;
         infostandEvent.publiclyRideable    = petData.publiclyRideable;
         infostandEvent.maximumTimeToLive   = petData.maximumTimeToLive;
@@ -988,12 +954,12 @@ export class InfoStandWidgetHandler implements IRoomWidgetHandler
         return [ RoomSessionUserBadgesEvent.RSUBE_BADGES ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(k: IRoomWidgetHandlerContainer)
+    public set container(k: IRoomWidgetManager)
     {
         if(this._container)
         {

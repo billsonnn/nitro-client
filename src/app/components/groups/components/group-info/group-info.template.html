@@ -7,7 +7,7 @@
         <div class="p-3">
             <div class="d-flex flex-row justify-content-between w-100 mb-2">
                 <div class="mr-3">
-                    <nitro-badge [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                    <div badge-image [badge]="groupBadgeCode" [isGroup]="true"></div>
                     <div class="group-members-count mt-3 text-center" (click)="getMembers(false)">{{ ('group.members.members') | translate:'count':groupMembersCount }}</div>
                     <div *ngIf="groupMembershipRequestsCount > 0" class="group-members-count mt-1 text-center" (click)="getMembers(true)">{{ ('group.members.pendingmembers') | translate:'count':groupMembershipRequestsCount }}</div>
                 </div>

@@ -1,27 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterContentInit, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ILinkEventTracker } from '../../../client/core/events/ILinkEventTracker';
-import { Nitro } from '../../../client/nitro/Nitro';
-import { RoomBackgroundColorEvent } from '../../../client/nitro/room/events/RoomBackgroundColorEvent';
-import { RoomEngineDimmerStateEvent } from '../../../client/nitro/room/events/RoomEngineDimmerStateEvent';
-import { RoomEngineEvent } from '../../../client/nitro/room/events/RoomEngineEvent';
-import { RoomEngineObjectEvent } from '../../../client/nitro/room/events/RoomEngineObjectEvent';
-import { RoomEngineTriggerWidgetEvent } from '../../../client/nitro/room/events/RoomEngineTriggerWidgetEvent';
-import { RoomObjectHSLColorEnabledEvent } from '../../../client/nitro/room/events/RoomObjectHSLColorEnabledEvent';
-import { RoomObjectWidgetRequestEvent } from '../../../client/nitro/room/events/RoomObjectWidgetRequestEvent';
-import { RoomZoomEvent } from '../../../client/nitro/room/events/RoomZoomEvent';
-import { RoomSessionChatEvent } from '../../../client/nitro/session/events/RoomSessionChatEvent';
-import { RoomSessionDanceEvent } from '../../../client/nitro/session/events/RoomSessionDanceEvent';
-import { RoomSessionDimmerPresetsEvent } from '../../../client/nitro/session/events/RoomSessionDimmerPresetsEvent';
-import { RoomSessionDoorbellEvent } from '../../../client/nitro/session/events/RoomSessionDoorbellEvent';
-import { RoomSessionErrorMessageEvent } from '../../../client/nitro/session/events/RoomSessionErrorMessageEvent';
-import { RoomSessionEvent } from '../../../client/nitro/session/events/RoomSessionEvent';
-import { RoomSessionFriendRequestEvent } from '../../../client/nitro/session/events/RoomSessionFriendRequestEvent';
-import { RoomSessionPresentEvent } from '../../../client/nitro/session/events/RoomSessionPresentEvent';
-import { RoomSessionUserBadgesEvent } from '../../../client/nitro/session/events/RoomSessionUserBadgesEvent';
-import { RoomWidgetEnum } from '../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { HabboWebTools } from '../../../client/nitro/utils/HabboWebTools';
-import { RoomId } from '../../../client/room/utils/RoomId';
+import { HabboWebTools, ILinkEventTracker, Nitro, RoomBackgroundColorEvent, RoomEngineDimmerStateEvent, RoomEngineEvent, RoomEngineObjectEvent, RoomEngineTriggerWidgetEvent, RoomId, RoomObjectHSLColorEnabledEvent, RoomObjectWidgetRequestEvent, RoomSessionChatEvent, RoomSessionDanceEvent, RoomSessionDimmerPresetsEvent, RoomSessionDoorbellEvent, RoomSessionErrorMessageEvent, RoomSessionEvent, RoomSessionFriendRequestEvent, RoomSessionPresentEvent, RoomSessionUserBadgesEvent, RoomWidgetEnum, RoomZoomEvent } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../core/settings/service';
 import { NotificationService } from '../notification/services/notification.service';
 import { RoomComponent } from '../room/room.component';
@@ -142,7 +121,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.addEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
@@ -215,7 +194,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.DOORBELL, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_REJECTED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDoorbellEvent.RSDE_ACCEPTED, this.onRoomSessionEvent);
-                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.RSDPE_PRESETS, this.onRoomSessionEvent);
+                Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionDimmerPresetsEvent.ROOM_DIMMER_PRESETS, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionFriendRequestEvent.RSFRE_FRIEND_REQUEST, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionPresentEvent.RSPE_PRESENT_OPENED, this.onRoomSessionEvent);
                 Nitro.instance.roomSessionManager.events.removeEventListener(RoomSessionErrorMessageEvent.RSEME_KICKED, this.onRoomErrorEvent);
@@ -309,13 +288,13 @@ export class MainComponent implements OnInit, OnDestroy, AfterContentInit, ILink
                 {
                     const colorEvent = (event as RoomBackgroundColorEvent);
 
-                    if(colorEvent._Str_11464)
+                    if(colorEvent.bgOnly)
                     {
                         this.roomComponent.setRoomColorizerColor(0xFF0000, 0xFF);
                     }
                     else
                     {
-                        this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent._Str_5123);
+                        this.roomComponent.setRoomColorizerColor(colorEvent.color, colorEvent.brightness);
                     }
                 }
                 return;

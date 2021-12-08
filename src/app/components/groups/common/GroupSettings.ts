@@ -1,5 +1,4 @@
-import GroupBadgePart from './GroupBadgePart';
-
+import { GroupDataBadgePart } from '@nitrots/nitro-renderer';
 export default class GroupSettings
 {
     private _id: number;
@@ -7,7 +6,7 @@ export default class GroupSettings
     private _description: string;
     private _roomId: string;
 
-    private _badgeParts: Map<number, GroupBadgePart>;
+    private _badgeParts: Map<number, GroupDataBadgePart>;
     private _colorA: number;
     private _colorB: number;
 
@@ -28,14 +27,14 @@ export default class GroupSettings
         this._state                 = 0;
         this._canMembersDecorate    = false;
 
-        this._badgeParts.set(0, new GroupBadgePart(true));
-        this._badgeParts.set(1, new GroupBadgePart(false));
-        this._badgeParts.set(2, new GroupBadgePart(false));
-        this._badgeParts.set(3, new GroupBadgePart(false));
-        this._badgeParts.set(4, new GroupBadgePart(false));
+        this._badgeParts.set(0, new GroupDataBadgePart(true));
+        this._badgeParts.set(1, new GroupDataBadgePart(false));
+        this._badgeParts.set(2, new GroupDataBadgePart(false));
+        this._badgeParts.set(3, new GroupDataBadgePart(false));
+        this._badgeParts.set(4, new GroupDataBadgePart(false));
     }
 
-    public getBadgePart(id: number): GroupBadgePart
+    public getBadgePart(id: number): GroupDataBadgePart
     {
         return this._badgeParts.get(id);
     }
@@ -88,12 +87,12 @@ export default class GroupSettings
         this._roomId = id;
     }
 
-    public get badgeParts(): Map<number, GroupBadgePart>
+    public get badgeParts(): Map<number, GroupDataBadgePart>
     {
         return this._badgeParts;
     }
 
-    public set badgeParts(parts: Map<number, GroupBadgePart>)
+    public set badgeParts(parts: Map<number, GroupDataBadgePart>)
     {
         this._badgeParts = parts;
     }

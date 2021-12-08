@@ -1,6 +1,5 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { MessengerInitComposer } from '../../../../../client/nitro/communication/messages/outgoing/friendlist/MessengerInitComposer';
-import { Nitro } from '../../../../../client/nitro/Nitro';
+import { MessengerInitComposer, Nitro } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
 import { MessengerThread } from '../../common/MessengerThread';
 import { FriendListService } from '../../services/friendlist.service';

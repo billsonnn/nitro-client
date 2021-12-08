@@ -1,14 +1,13 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { RoomPreviewer } from '../../../../../client/nitro/room/preview/RoomPreviewer';
+import { Nitro, RoomPreviewer } from '@nitrots/nitro-renderer';
 import { SettingsService } from '../../../../core/settings/service';
+import { FurnitureItem } from '../../items/FurnitureItem';
 import { InventoryBadgeService } from '../../services/badge.service';
 import { InventoryBotService } from '../../services/bot.service';
 import { InventoryFurnitureService } from '../../services/furniture.service';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryPetService } from '../../services/pet.service';
 import { InventoryTradingService } from '../../services/trading.service';
-import { FurnitureItem } from '../../items/FurnitureItem';
 
 @Component({
     selector: 'nitro-inventory-main-component',
@@ -167,7 +166,7 @@ export class InventoryMainComponent implements OnInit, OnDestroy, OnChanges
 
     public get offerStatsIsCorrect(): boolean
     {
-        return this.offerForMarketplace && this._inventoryFurnitureService.marketPlaceItemStats && this.offerForMarketplace.type === this._inventoryFurnitureService.marketPlaceItemStats._Str_8798;
+        return this.offerForMarketplace && this._inventoryFurnitureService.marketPlaceItemStats && this.offerForMarketplace.type === this._inventoryFurnitureService.marketPlaceItemStats.furniTypeId;
     }
 
     public get botsVisible(): boolean

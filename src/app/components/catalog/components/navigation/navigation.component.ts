@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { IFurnitureData, IFurnitureDataListener, Nitro, NodeData } from '@nitrots/nitro-renderer';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/CatalogPageData';
-import { ICatalogPageData } from '../../../../../client/nitro/communication/messages/parser/catalog/utils/ICatalogPageData';
-import { Nitro } from '../../../../../client/nitro/Nitro';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IFurnitureDataListener } from '../../../../../client/nitro/session/furniture/IFurnitureDataListener';
+import { ICatalogPageData } from '../../common/ICatalogPageData';
 import { CatalogService } from '../../services/catalog.service';
 import { SearchResultsPage } from '../layouts/search-results/SearchResultsPage';
 
@@ -97,7 +94,7 @@ export class CatalogNavigationComponent implements OnInit, OnDestroy, IFurniture
         return this._catalogService.activePage instanceof SearchResultsPage;
     }
 
-    public get catalogPage(): CatalogPageData
+    public get catalogPage(): NodeData
     {
         return ((this._catalogService.component && this._catalogService.component.activeTab) || null);
     }

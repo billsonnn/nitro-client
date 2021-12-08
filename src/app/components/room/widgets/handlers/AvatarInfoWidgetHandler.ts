@@ -1,33 +1,20 @@
-﻿import { NitroEvent } from '../../../../../client/core/events/NitroEvent';
-import { NitroToolbarEvent } from '../../../../../client/nitro/events/NitroToolbarEvent';
-import { IRoomEngine } from '../../../../../client/nitro/room/IRoomEngine';
-import { RoomObjectCategory } from '../../../../../client/nitro/room/object/RoomObjectCategory';
-import { RoomObjectType } from '../../../../../client/nitro/room/object/RoomObjectType';
-import { RoomObjectVariable } from '../../../../../client/nitro/room/object/RoomObjectVariable';
-import { RoomSessionDanceEvent } from '../../../../../client/nitro/session/events/RoomSessionDanceEvent';
-import { RoomSessionUserDataUpdateEvent } from '../../../../../client/nitro/session/events/RoomSessionUserDataUpdateEvent';
-import { UserNameUpdateEvent } from '../../../../../client/nitro/session/events/UserNameUpdateEvent';
-import { IFurnitureData } from '../../../../../client/nitro/session/furniture/IFurnitureData';
-import { IRoomSession } from '../../../../../client/nitro/session/IRoomSession';
-import { RoomUserData } from '../../../../../client/nitro/session/RoomUserData';
-import { IRoomWidgetHandler } from '../../../../../client/nitro/ui/IRoomWidgetHandler';
-import { IRoomWidgetHandlerContainer } from '../../../../../client/nitro/ui/IRoomWidgetHandlerContainer';
-import { RoomWidgetEnum } from '../../../../../client/nitro/ui/widget/enums/RoomWidgetEnum';
-import { RoomWidgetUpdateEvent } from '../../../../../client/nitro/ui/widget/events/RoomWidgetUpdateEvent';
-import { RoomWidgetMessage } from '../../../../../client/nitro/ui/widget/messages/RoomWidgetMessage';
-import { IRoomObject } from '../../../../../client/room/object/IRoomObject';
+﻿import { IFurnitureData, IRoomEngine, IRoomObject, IRoomSession, NitroEvent, NitroToolbarEvent, RoomObjectCategory, RoomObjectType, RoomObjectVariable, RoomSessionDanceEvent, RoomSessionUserDataUpdateEvent, RoomUserData, RoomWidgetEnum, UserNameUpdateEvent } from '@nitrots/nitro-renderer';
+import { IRoomWidgetManager } from '../../IRoomWidgetManager';
 import { RoomAvatarInfoComponent } from '../avatarinfo/components/main/main.component';
 import { RoomWidgetAvatarInfoEvent } from '../events/RoomWidgetAvatarInfoEvent';
 import { RoomWidgetUserDataUpdateEvent } from '../events/RoomWidgetUserDataUpdateEvent';
+import { IRoomWidgetHandler } from '../IRoomWidgetHandler';
 import { RoomWidgetAvatarExpressionMessage } from '../messages/RoomWidgetAvatarExpressionMessage';
 import { RoomWidgetChangePostureMessage } from '../messages/RoomWidgetChangePostureMessage';
 import { RoomWidgetDanceMessage } from '../messages/RoomWidgetDanceMessage';
 import { RoomWidgetRoomObjectMessage } from '../messages/RoomWidgetRoomObjectMessage';
 import { RoomWidgetUserActionMessage } from '../messages/RoomWidgetUserActionMessage';
+import { RoomWidgetMessage } from '../RoomWidgetMessage';
+import { RoomWidgetUpdateEvent } from '../RoomWidgetUpdateEvent';
 
 export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 {
-    private _container: IRoomWidgetHandlerContainer = null;
+    private _container: IRoomWidgetManager = null;
     private _widget: RoomAvatarInfoComponent;
 
     private _disposed: boolean;
@@ -87,7 +74,7 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
 
                 if(this._container && this._container.roomSession)
                 {
-                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation._Str_6677);
+                    this._container.roomSession.sendExpressionMessage(expressionMessage.animation.ordinal);
                 }
                 break;
             }
@@ -211,12 +198,12 @@ export class AvatarInfoWidgetHandler implements IRoomWidgetHandler
         ];
     }
 
-    public get container(): IRoomWidgetHandlerContainer
+    public get container(): IRoomWidgetManager
     {
         return this._container;
     }
 
-    public set container(container: IRoomWidgetHandlerContainer)
+    public set container(container: IRoomWidgetManager)
     {
         if(this._container)
         {
